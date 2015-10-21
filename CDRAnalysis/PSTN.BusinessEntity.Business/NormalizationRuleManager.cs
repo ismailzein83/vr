@@ -40,8 +40,7 @@ namespace PSTN.BusinessEntity.Business
                 NormalizationRuleAdjustNumberSettings normalizationRuleAdjustNumberSettings = matchRule_CGPN.Settings as NormalizationRuleAdjustNumberSettings;
                 foreach (var actionSettings in normalizationRuleAdjustNumberSettings.Actions)
                 {
-                    var behavior = GetAdjustNumberActionBehavior(actionSettings.ConfigId);
-                    behavior.Execute(actionSettings, cdrInfo_CGPN);
+                    actionSettings.Execute(null, cdrInfo_CGPN);
                 }
                 cdr.CGPN = cdrInfo_CGPN.PhoneNumber;
             }
@@ -54,8 +53,7 @@ namespace PSTN.BusinessEntity.Business
                 NormalizationRuleAdjustNumberSettings normalizationRuleAdjustNumberSettings = matchRule_CDPN.Settings as NormalizationRuleAdjustNumberSettings;
                 foreach (var actionSettings in normalizationRuleAdjustNumberSettings.Actions)
                 {
-                    var behavior = GetAdjustNumberActionBehavior(actionSettings.ConfigId);
-                    behavior.Execute(actionSettings, cdrInfo_CDPN);
+                    actionSettings.Execute(null, cdrInfo_CDPN);
                 }
                 cdr.CDPN = cdrInfo_CDPN.PhoneNumber;
             }
@@ -70,8 +68,7 @@ namespace PSTN.BusinessEntity.Business
                 NormalizationRuleAdjustNumberSettings normalizationRuleAdjustNumberSettings = matchRule_MSISDN.Settings as NormalizationRuleAdjustNumberSettings;
                 foreach (var actionSettings in normalizationRuleAdjustNumberSettings.Actions)
                 {
-                    var behavior = GetAdjustNumberActionBehavior(actionSettings.ConfigId);
-                    behavior.Execute(actionSettings, cdrInfo_MSISDN);
+                    actionSettings.Execute(null, cdrInfo_MSISDN);
                 }
                 cdr.MSISDN = cdrInfo_MSISDN.PhoneNumber;
             }
@@ -84,8 +81,7 @@ namespace PSTN.BusinessEntity.Business
                 NormalizationRuleAdjustNumberSettings normalizationRuleAdjustNumberSettings = matchRule_Destination.Settings as NormalizationRuleAdjustNumberSettings;
                 foreach (var actionSettings in normalizationRuleAdjustNumberSettings.Actions)
                 {
-                    var behavior = GetAdjustNumberActionBehavior(actionSettings.ConfigId);
-                    behavior.Execute(actionSettings, cdrInfo_Destination);
+                    actionSettings.Execute(null, cdrInfo_Destination);
                 }
                 cdr.Destination = cdrInfo_Destination.PhoneNumber;
             }
@@ -99,8 +95,7 @@ namespace PSTN.BusinessEntity.Business
             if (matchRule_CGPN != null)
             {
                 NormalizationRuleSetAreaSettings normalizationRuleSetAreaSettings = matchRule_CGPN.Settings as NormalizationRuleSetAreaSettings;
-                var behavior = GetSetAreaBehavior(normalizationRuleSetAreaSettings.ConfigId);
-                behavior.Execute(normalizationRuleSetAreaSettings, cdrInfo_CGPN);
+                normalizationRuleSetAreaSettings.Execute(null, cdrInfo_CGPN);
                 cdr.CGPNAreaCode = cdrInfo_CGPN.AreaCode;
             }
 
@@ -110,8 +105,7 @@ namespace PSTN.BusinessEntity.Business
             if (matchRule_CDPN != null)
             {
                 NormalizationRuleSetAreaSettings normalizationRuleSetAreaSettings = matchRule_CDPN.Settings as NormalizationRuleSetAreaSettings;
-                var behavior = GetSetAreaBehavior(normalizationRuleSetAreaSettings.ConfigId);
-                behavior.Execute(normalizationRuleSetAreaSettings, cdrInfo_CDPN);
+                normalizationRuleSetAreaSettings.Execute(null, cdrInfo_CDPN);
                 cdr.CDPNAreaCode = cdrInfo_CDPN.AreaCode;
             }
         }
@@ -123,8 +117,7 @@ namespace PSTN.BusinessEntity.Business
             if (matchRule_MSISDN != null)
             {
                 NormalizationRuleSetAreaSettings normalizationRuleSetAreaSettings = matchRule_MSISDN.Settings as NormalizationRuleSetAreaSettings;
-                var behavior = GetSetAreaBehavior(normalizationRuleSetAreaSettings.ConfigId);
-                behavior.Execute(normalizationRuleSetAreaSettings, cdrInfo_MSISDN);
+                normalizationRuleSetAreaSettings.Execute(null, cdrInfo_MSISDN);
                 cdr.MSISDNAreaCode = cdrInfo_MSISDN.AreaCode;
             }
 
@@ -134,23 +127,10 @@ namespace PSTN.BusinessEntity.Business
             if (matchRule_Destination != null)
             {
                 NormalizationRuleSetAreaSettings normalizationRuleSetAreaSettings = matchRule_Destination.Settings as NormalizationRuleSetAreaSettings;
-                var behavior = GetSetAreaBehavior(normalizationRuleSetAreaSettings.ConfigId);
-                behavior.Execute(normalizationRuleSetAreaSettings, cdrInfo_Destination);
+                normalizationRuleSetAreaSettings.Execute(null, cdrInfo_Destination);
                 cdr.DestinationAreaCode = cdrInfo_Destination.AreaCode;
             }
 
-        }
-
-        Entities.NormalizationRuleAdjustNumberActionBehavior GetAdjustNumberActionBehavior(int behaviorId)
-        {
-            Vanrise.Common.TemplateConfigManager templateConfigManager = new Vanrise.Common.TemplateConfigManager();
-            return templateConfigManager.GetBehavior<Entities.NormalizationRuleAdjustNumberActionBehavior>(behaviorId);
-        }
-
-        Entities.NormalizationRuleSetAreaBehavior GetSetAreaBehavior(int behaviorId)
-        {
-            Vanrise.Common.TemplateConfigManager templateConfigManager = new Vanrise.Common.TemplateConfigManager();
-            return templateConfigManager.GetBehavior<Entities.NormalizationRuleSetAreaBehavior>(behaviorId);
         }
 
         IEnumerable<BaseRuleStructureBehavior> GetRuleStructureBehaviors()

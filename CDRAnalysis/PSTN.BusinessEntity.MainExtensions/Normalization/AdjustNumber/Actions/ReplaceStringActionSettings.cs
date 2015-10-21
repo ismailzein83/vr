@@ -17,5 +17,10 @@ namespace PSTN.BusinessEntity.MainExtensions.Normalization.AdjustNumber
         {
             return string.Format("Replace String: String To Replace = {0}, NewString = {1}", this.StringToReplace, this.NewString);
         }
+
+        public override void Execute(INormalizationRuleAdjustNumberActionContext context, NormalizationRuleAdjustNumberTarget target)
+        {
+            target.PhoneNumber = target.PhoneNumber.Replace(this.StringToReplace, this.NewString);
+        }
     }
 }

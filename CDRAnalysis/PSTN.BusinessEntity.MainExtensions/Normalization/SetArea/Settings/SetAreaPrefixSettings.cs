@@ -19,5 +19,10 @@ namespace PSTN.BusinessEntity.MainExtensions.Normalization.SetArea
 
             return descriptions;
         }
+
+        public override void Execute(INormalizationRuleSetAreaContext context, NormalizationRuleSetAreaTarget target)
+        {
+            target.AreaCode = target.PhoneNumber.Substring(0, Math.Min(this.PrefixLength, target.PhoneNumber.Length));
+        }
     }
 }

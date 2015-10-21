@@ -51,16 +51,16 @@
   <ItemGroup>
     <Compile Include="Enums.cs" />
     <Compile Include="Normalization\NormalizationRuleDetail.cs" />
+    <Compile Include="Normalization\RuleTypes\NormalizeNumber\INormalizationRuleAdjustNumberActionContext.cs" />
+    <Compile Include="Normalization\RuleTypes\SetArea\INormalizationRuleSetAreaContext.cs" />
     <Compile Include="Query\NormalizationRuleQuery.cs" />
     <Compile Include="Normalization\NormalizationRule.cs" />
     <Compile Include="Normalization\NormalizationRuleCriteria.cs" />
     <Compile Include="Normalization\NormalizationRuleSettings.cs" />
     <Compile Include="Normalization\NormalizationRuleTarget.cs" />
-    <Compile Include="Normalization\RuleTypes\NormalizeNumber\NormalizationRuleAdjustNumberActionBehavior.cs" />
     <Compile Include="Normalization\RuleTypes\NormalizeNumber\NormalizationRuleAdjustNumberActionSettings.cs" />
     <Compile Include="Normalization\RuleTypes\NormalizeNumber\NormalizationRuleAdjustNumberSettings.cs" />
     <Compile Include="Normalization\RuleTypes\NormalizeNumber\NormalizationRuleAdjustNumberTarget.cs" />
-    <Compile Include="Normalization\RuleTypes\SetArea\NormalizationRuleSetAreaBehavior.cs" />
     <Compile Include="Normalization\RuleTypes\SetArea\NormalizationRuleSetAreaSettings.cs" />
     <Compile Include="Normalization\RuleTypes\SetArea\NormalizationRuleSetAreaTarget.cs" />
     <Compile Include="IRule\IRulePhoneNumberLengthCriteria.cs" />

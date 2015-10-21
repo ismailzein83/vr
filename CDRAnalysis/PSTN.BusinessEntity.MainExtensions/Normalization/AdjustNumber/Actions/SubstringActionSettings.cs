@@ -17,5 +17,11 @@ namespace PSTN.BusinessEntity.MainExtensions.Normalization.AdjustNumber
         {
             return string.Format("Substring: Start Index = {0}, Length = {1}", StartIndex, Length);
         }
+
+        public override void Execute(INormalizationRuleAdjustNumberActionContext context, NormalizationRuleAdjustNumberTarget target)
+        {
+            if (target.PhoneNumber.Length > this.StartIndex)
+                target.PhoneNumber = target.PhoneNumber.Substring(this.StartIndex, Math.Min(target.PhoneNumber.Length - this.StartIndex, this.Length));
+        }
     }
 }

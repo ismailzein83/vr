@@ -15,5 +15,10 @@ namespace PSTN.BusinessEntity.MainExtensions.Normalization.AdjustNumber
         {
             return string.Format("Add Prefix: Prefix = {0}", Prefix);
         }
+
+        public override void Execute(INormalizationRuleAdjustNumberActionContext context, NormalizationRuleAdjustNumberTarget target)
+        {
+            target.PhoneNumber = String.Format("{0}{1}", this.Prefix, target.PhoneNumber);
+        }
     }
 }
