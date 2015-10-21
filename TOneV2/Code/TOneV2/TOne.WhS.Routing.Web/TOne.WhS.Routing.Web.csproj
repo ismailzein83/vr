@@ -167,13 +167,19 @@
   <ItemGroup>
     <Content Include="WhS_Routing\Constant\ModuleConfig.js" />
     <Content Include="WhS_Routing\Directives\RouteRuleOptions\Templates\RouteRuleRegularDirectiveTemplate.html" />
-    <Content Include="WhS_Routing\Directives\RouteRuleOptions\vr-whs-be-routerule-block-directive.js" />
-    <Content Include="WhS_Routing\Directives\RouteRuleOptions\vr-whs-be-routerule-regular-directive.js" />
+    <Content Include="WhS_Routing\Directives\RouteRuleOptions\vr-whs-routing-routeruleoption-block-directive.js" />
+    <Content Include="WhS_Routing\Directives\RouteRuleOptions\vr-whs-routing-routeruleoption-regular-directive.js" />
+    <Content Include="WhS_Routing\Directives\RouteRuleSettings\Templates\OptionFilterRemoveLossDirectiveTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RouteRuleSettings\Templates\OptionOrderByRuleDirectiveTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RouteRuleSettings\Templates\OptionPercentageFixedDirectiveTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RouteRuleSettings\Templates\SelectiveOptionDirectiveTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-optionfilter-removeloss-directive.js" />
+    <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-optionorder-byrate-directive.js" />
+    <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-optionpercentage-fixed-directive.js" />
+    <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-options-selective-directive.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleSettingsAPIService.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WhS_Routing\Directives\RouteRuleSettings\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

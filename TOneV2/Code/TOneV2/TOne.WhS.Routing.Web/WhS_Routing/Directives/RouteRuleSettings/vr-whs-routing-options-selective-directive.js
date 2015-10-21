@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeRouteruleBlock', ['UtilsService',
+app.directive('vrWhsRoutingOptionsSelective', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {
@@ -11,8 +11,8 @@ app.directive('vrWhsBeRouteruleBlock', ['UtilsService',
 
                 var ctrl = this;
 
-                var beRouteRuleBlockCtor = new beRouteRuleBlock(ctrl, $scope);
-                beRouteRuleBlockCtor.initializeController();
+                var routingSelectiveOptionsCtor = new routingSelectiveOptions(ctrl, $scope);
+                routingSelectiveOptionsCtor.initializeController();
 
             },
             controllerAs: 'ctrl',
@@ -25,16 +25,16 @@ app.directive('vrWhsBeRouteruleBlock', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return getBeRouteRuleBlockTemplate(attrs);
+                return getRoutingSelectiveOptionsTemplate(attrs);
             }
 
         };
 
-        function getBeRouteRuleBlockTemplate(attrs) {
-            return '';
+        function getRoutingSelectiveOptionsTemplate(attrs) {
+            return '/Client/Modules/WhS_Routing/Directives/RouteRuleSettings/Templates/SelectiveOptionDirectiveTemplate.html';
         }
 
-        function beRouteRuleBlock(ctrl, $scope) {
+        function routingSelectiveOptions(ctrl, $scope) {
 
             function initializeController() {
                 defineAPI();
@@ -49,12 +49,13 @@ app.directive('vrWhsBeRouteruleBlock', ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Routing.Business.RouteRules.BlockRouteRule, TOne.WhS.Routing.Business.RouteRules"
+                        $type: "TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups.SelectiveOptions, TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups",
+                        Options: null
                     };
                 }
 
-                api.setData = function (routeRuleSettings) {
-                    
+                api.setData = function (routeOptionSettingsGroup) {
+
                 }
 
                 if (ctrl.onReady != null)

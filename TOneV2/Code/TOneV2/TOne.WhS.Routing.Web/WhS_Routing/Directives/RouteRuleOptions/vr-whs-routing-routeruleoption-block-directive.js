@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeRouteruleBlock', ['UtilsService',
+app.directive('vrWhsRoutingRouteruleoptionBlock', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {

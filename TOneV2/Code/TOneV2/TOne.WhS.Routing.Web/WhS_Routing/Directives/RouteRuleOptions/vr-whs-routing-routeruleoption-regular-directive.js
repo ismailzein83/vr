@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeRouteruleRegular', ['UtilsService', 'WhS_Routing_RoutRuleSettingsAPIService', 'VRUIUtilsService',
+app.directive('vrWhsRoutingRouteruleoptionRegular', ['UtilsService', 'WhS_Routing_RoutRuleSettingsAPIService', 'VRUIUtilsService',
     function (UtilsService, WhS_Routing_RoutRuleSettingsAPIService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
