@@ -66,7 +66,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public List<Vanrise.Entities.TemplateConfig> GetRouteRuleTypesTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.RouteRuleConfigType);
+            return manager.GetTemplateConfigurations(Constants.RouteRuleSettingsConfigType);
         }
 
         IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()

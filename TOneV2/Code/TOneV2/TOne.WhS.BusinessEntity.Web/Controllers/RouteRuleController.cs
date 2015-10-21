@@ -23,7 +23,15 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             RouteRuleManager manager = new RouteRuleManager();
             return GetWebResponse(input, manager.GetFilteredRouteRules(input));
         }
-                
+
+        [HttpGet]
+        [Route("GetRouteRuleSettingsTemplates")]
+        public List<TemplateConfig> GetRouteRuleSettingsTemplates()
+        {
+            RouteRuleManager manager = new RouteRuleManager();
+            return manager.GetRouteRuleTypesTemplates();
+        }
+
         [HttpGet]
         [Route("GetCodeCriteriaGroupTemplates")]
         public List<TemplateConfig> GetCodeCriteriaGroupTemplates()
