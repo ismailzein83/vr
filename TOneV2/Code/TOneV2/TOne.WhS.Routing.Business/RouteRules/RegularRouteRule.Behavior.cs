@@ -47,9 +47,7 @@ namespace TOne.WhS.Routing.Business.RouteRules
         }
 
         private IEnumerable<RouteOptionRuleTarget> CreateOptions(IRouteRuleExecutionContext context, RouteRuleTarget target)
-        {
-            if (context.SupplierCodeMatches == null || context.SupplierZoneRates == null)
-                return null;
+        {            
             var options = new List<RouteOptionRuleTarget>();
             if (this.OptionsSettingsGroup != null)
             {
@@ -59,8 +57,8 @@ namespace TOne.WhS.Routing.Business.RouteRules
                 {
                     foreach (var optionSettings in optionsSettings)
                     {
-                        List<SupplierCodeMatch> optionSupplierCodeMatches;
-                        if (context.SupplierCodeMatches.TryGetValue(optionSettings.SupplierId, out optionSupplierCodeMatches))
+                        List<SupplierCodeMatch> optionSupplierCodeMatches = context.GetSupplierCodeMatches(optionSettings.SupplierId);
+                        if (optionSupplierCodeMatches != null)
                         {
                             foreach (var supplierCodeMatch in optionSupplierCodeMatches)
                             {
@@ -72,9 +70,10 @@ namespace TOne.WhS.Routing.Business.RouteRules
             }
             else
             {
-                foreach (var supplierCodeMatchEntry in context.SupplierCodeMatches)
+                var allSuppliersCodeMatches = context.GetAllSuppliersCodeMatches();
+                if(allSuppliersCodeMatches != null)
                 {
-                    foreach (var supplierCodeMatch in supplierCodeMatchEntry.Value)
+                    foreach (var supplierCodeMatch in allSuppliersCodeMatches)
                     {
                         TryCreateOption(context, options, target, supplierCodeMatch, null, this.OptionFilterSettings);
                     }
@@ -85,8 +84,8 @@ namespace TOne.WhS.Routing.Business.RouteRules
 
         private void TryCreateOption(IRouteRuleExecutionContext context, List<RouteOptionRuleTarget> options, RouteRuleTarget routeRuleTarget, SupplierCodeMatch supplierCodeMatch, Decimal? percentage, RouteRuleOptionFilterSettings optionFilter)
         {
-            SupplierZoneRate supplierZoneRate;
-            if (context.SupplierZoneRates.TryGetValue(supplierCodeMatch.SupplierZoneId, out supplierZoneRate))
+            SupplierZoneRate supplierZoneRate = context.GetSupplierZoneRate(supplierCodeMatch.SupplierZoneId);
+            if (supplierZoneRate != null)
             {
                 var option = new RouteOptionWrapper
                 {

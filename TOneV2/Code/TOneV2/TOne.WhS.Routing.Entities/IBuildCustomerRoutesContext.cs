@@ -13,7 +13,9 @@ namespace TOne.WhS.Routing.Entities
 
         CustomerZoneRatesByZone CustomerZoneRates { get; }
 
-        SupplierCodeMatchBySupplier SupplierCodeMatches { get; }
+        List<SupplierCodeMatch> SupplierCodeMatches { get; }
+
+        SupplierCodeMatchBySupplier SupplierCodeMatchesBySupplier { get; }
 
         SupplierZoneRatesByZone SupplierZoneRates { get; }
 

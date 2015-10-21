@@ -10,14 +10,16 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int ConfigId { get; set; }
 
-        public virtual IEnumerable<CodeCriteria> GetCodeCriterias(CodeCriteriaGroupContext context)
-        {
-            return null;
-        }
+        public abstract IEnumerable<CodeCriteria> GetCodeCriterias(CodeCriteriaGroupContext context);
     }
 
     public class SelectiveCodeCriteriaSettings : CodeCriteriaGroupSettings
     {
         public List<CodeCriteria> Codes { get; set; }
+
+        public override IEnumerable<CodeCriteria> GetCodeCriterias(CodeCriteriaGroupContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

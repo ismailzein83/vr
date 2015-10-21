@@ -58,7 +58,6 @@
     <Compile Include="CarrierAccounts\CarrierAccountDetail.cs" />
     <Compile Include="CarrierAccounts\CarrierAccountInfo.cs" />
     <Compile Include="CarrierAccounts\CarrierAccountQuery.cs" />
-    <Compile Include="CarrierAccounts\Customer\CustomerGroupBehavior.cs" />
     <Compile Include="CarrierAccounts\Customer\CustomerGroupContext.cs" />
     <Compile Include="CarrierAccounts\Customer\CustomerGroupSettings.cs" />
     <Compile Include="CarrierAccounts\Customer\CustomerZones.cs" />
@@ -69,14 +68,12 @@
     <Compile Include="CarrierAccounts\SuppliersWithZonesGroupContext.cs" />
     <Compile Include="CarrierAccounts\SuppliersWithZones\SelectiveSuppliersWithZonesSettings.cs" />
     <Compile Include="CarrierAccounts\SupplierWithZones.cs" />
-    <Compile Include="CarrierAccounts\SuppliersWithZonesGroupBehavior.cs" />
     <Compile Include="CarrierAccounts\SuppliersWithZonesGroupSettings.cs" />
     <Compile Include="CarrierAccounts\CarrierProfileDetail.cs" />
     <Compile Include="CarrierAccounts\CarrierProfileInfo.cs" />
     <Compile Include="CarrierAccounts\CarrierProfileQuery.cs" />
     <Compile Include="CarrierAccounts\CarrierProfile.cs" />
     <Compile Include="CodeCriteria\CodeCriteria.cs" />
-    <Compile Include="CodeCriteria\CodeCriteriaGroupBehavior.cs" />
     <Compile Include="CodeCriteria\CodeCriteriaGroupContext.cs" />
     <Compile Include="CodeCriteria\CodeCriteriaGroupSettings.cs" />
     <Compile Include="CodeCriteria\IRuleCodeTarget.cs" />
@@ -99,14 +96,12 @@
     <Compile Include="PricingRules\PurchasePricingRuleQuery.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\Actions\FixedExtraChargeSettings.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\Actions\PercentageExtraChargeSettings.cs" />
-    <Compile Include="PricingRules\RuleTypes\ExtraCharge\PricingRuleExtraChargeActionBehavior.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\IPricingRuleExtraChargeActionContext.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\PricingRuleExtraChargeActionSettings.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\PricingRuleExtraChargeSettings.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\PricingRuleExtraChargeTarget.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\PurchasePricingRuleExtraChargeTarget.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\SalePricingRuleExtraChargeTarget.cs" />
-    <Compile Include="PricingRules\RuleTypes\Tariff\PricingRuleTariffBehavior.cs" />
     <Compile Include="PricingRules\RuleTypes\Tariff\IPricingRuleTariffContext.cs" />
     <Compile Include="PricingRules\RuleTypes\Tariff\PricingRuleTariffSettings.cs" />
     <Compile Include="PricingRules\RuleTypes\Tariff\PricingRuleTariffTarget.cs" />
@@ -114,7 +109,6 @@
     <Compile Include="PricingRules\RuleTypes\Tariff\SalePricingRuleTariffTarget.cs" />
     <Compile Include="PricingRules\RuleTypes\Tariff\Settings\RegularTariffSettings.cs" />
     <Compile Include="PricingRules\RuleTypes\TOD\IPricingRuleTODContext.cs" />
-    <Compile Include="PricingRules\RuleTypes\TOD\PricingRuleTODBehavior.cs" />
     <Compile Include="PricingRules\RuleTypes\TOD\PricingRuleTODSettings.cs" />
     <Compile Include="PricingRules\PurchasePricingRuleCriteria.cs" />
     <Compile Include="PricingRules\RuleTypes\TOD\PricingRuleTODTarget.cs" />
@@ -144,13 +138,11 @@
     <Compile Include="RoutingProduct\RoutingProductInfo.cs" />
     <Compile Include="RouteRules\RouteRuleQuery.cs" />
     <Compile Include="RouteOptionRules\RouteOptionRule.cs" />
-    <Compile Include="RouteOptionRules\RouteOptionRuleBehavior.cs" />
     <Compile Include="RouteOptionRules\RouteOptionRuleSettings.cs" />
     <Compile Include="RoutingProduct\RoutingProduct.cs" />
     <Compile Include="RoutingProduct\RoutingProductQuery.cs" />
     <Compile Include="RoutingProduct\RoutingProductSettings.cs" />
     <Compile Include="RouteRules\RouteRule.cs" />
-    <Compile Include="RouteRules\RouteRuleBehavior.cs" />
     <Compile Include="RouteRules\RouteRuleCriteria.cs" />
     <Compile Include="RouteRules\RouteRuleSettings.cs" />
     <Compile Include="PricingRules\SalePricingRuleDetail.cs" />
@@ -158,7 +150,6 @@
     <Compile Include="SaleZone\IRuleSaleZoneTarget.cs" />
     <Compile Include="SaleZone\SalePriceList.cs" />
     <Compile Include="SaleZone\SalePriceListRate.cs" />
-    <Compile Include="SaleZone\SaleZoneGroupBehavior.cs" />
     <Compile Include="SaleZone\SaleZoneGroupContext.cs" />
     <Compile Include="SaleZone\SaleZoneInfo.cs" />
     <Compile Include="SaleZone\SaleCode.cs" />
@@ -169,7 +160,6 @@
     <Compile Include="CarrierAccounts\CarrierAccountSupplierSettings.cs" />
     <Compile Include="CarrierAccounts\Supplier\SupplierGroupSettings.cs" />
     <Compile Include="SaleZone\SaleZoneService.cs" />
-    <Compile Include="CarrierAccounts\Supplier\SupplierGroupBehavior.cs" />
     <Compile Include="SupplierZone\IRuleSupplierZoneCriteria.cs" />
     <Compile Include="SupplierZone\IRuleSupplierZoneTarget.cs" />
     <Compile Include="SupplierZone\SupplierCode.cs" />

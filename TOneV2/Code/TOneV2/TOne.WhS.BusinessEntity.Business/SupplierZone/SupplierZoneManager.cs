@@ -29,15 +29,5 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.ReserveIDRange(numberOfIDs);
         }
 
-        public List<SupplierWithZones> GetSuppliersWithZoneIds(SuppliersWithZonesGroupSettings suppliersWithZonesGroupSettings)
-        {
-            TemplateConfigManager templateConfigManager = new TemplateConfigManager();
-            SuppliersWithZonesGroupBehavior suppliersWithZonesGroupBehavior = templateConfigManager.GetBehavior<SuppliersWithZonesGroupBehavior>(suppliersWithZonesGroupSettings.ConfigId);
-            if (suppliersWithZonesGroupBehavior != null)
-                return suppliersWithZonesGroupBehavior.GetSuppliersWithZones(suppliersWithZonesGroupSettings);
-            else
-                return null;
-        }
-
     }
 }

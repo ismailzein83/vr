@@ -51,7 +51,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RouteBuildManager.cs" />
+    <Compile Include="CodeMatchBuilder.cs" />
+    <Compile Include="RateBuilder.cs" />
+    <Compile Include="RouteBuilder.cs" />
+    <Compile Include="RouteOptionRules\BlockRouteOptionRule.cs" />
     <Compile Include="RouteOptionRules\RouteOptionRuleExecutionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteRules\BlockRouteRule.cs" />

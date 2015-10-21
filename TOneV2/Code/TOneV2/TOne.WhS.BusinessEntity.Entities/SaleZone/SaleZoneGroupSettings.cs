@@ -12,19 +12,26 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int? SaleZonePackageId { get; set; }
 
-        public virtual IEnumerable<long> GetZoneIds(SaleZoneGroupContext context)
-        {
-            return null;
-        }
+        public abstract IEnumerable<long> GetZoneIds(SaleZoneGroupContext context);
     }
 
     public class SelectiveSaleZonesSettings : SaleZoneGroupSettings
     {
         public List<long> ZoneIds { get; set; }
+
+        public override IEnumerable<long> GetZoneIds(SaleZoneGroupContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class AllExceptSaleZonesSettings : SaleZoneGroupSettings
     {
         public List<long> ZoneIds { get; set; }
+
+        public override IEnumerable<long> GetZoneIds(SaleZoneGroupContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

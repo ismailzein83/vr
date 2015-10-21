@@ -16,7 +16,8 @@ namespace TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.ExtraCharge.Ac
 
         public override void Execute(IPricingRuleExtraChargeActionContext context, PricingRuleExtraChargeTarget target)
         {
-            throw new NotImplementedException();
+            if (target.Rate >= this.FromRate && target.Rate < this.ToRate)
+                target.Rate += this.ExtraAmount;
         }
     }
 }

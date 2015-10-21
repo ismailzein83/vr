@@ -57,16 +57,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return manager.GetTemplateConfigurations(Constants.CustomerGroupConfigType);
         }
 
-        public List<int> GetCustomerIds(int customersGroupConfigId, CustomerGroupSettings customerGroupSettings)
-        {
-            TemplateConfigManager templateConfigManager = new TemplateConfigManager();
-            CustomerGroupBehavior customerGroupBehavior = templateConfigManager.GetBehavior<CustomerGroupBehavior>(customersGroupConfigId);
-            if (customerGroupBehavior != null)
-                return customerGroupBehavior.GetCustomerIds(customerGroupSettings);
-            else
-                return null;
-        }
-
         public List<Vanrise.Entities.TemplateConfig> GetSupplierGroupTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();

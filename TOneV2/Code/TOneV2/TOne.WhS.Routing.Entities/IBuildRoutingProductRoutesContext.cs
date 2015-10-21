@@ -11,7 +11,9 @@ namespace TOne.WhS.Routing.Entities
     {
         IEnumerable<int> RoutingProductIds { get; }
 
-        SupplierCodeMatchBySupplier SupplierCodeMatches { get; }
+        List<SupplierCodeMatch> SupplierCodeMatches { get; }
+
+        SupplierCodeMatchBySupplier SupplierCodeMatchesBySupplier { get; }
 
         SupplierZoneRatesByZone SupplierZoneRates { get; }
 

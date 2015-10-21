@@ -9,10 +9,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public interface IRouteRuleExecutionContext
     {
-        SupplierCodeMatchBySupplier SupplierCodeMatches { get; }
-
-        SupplierZoneRatesByZone SupplierZoneRates { get; }
-
         RouteRule RouteRule { get; }
 
         int? NumberOfOptions { get; }
@@ -20,6 +16,12 @@ namespace TOne.WhS.BusinessEntity.Entities
         bool TryAddOption(RouteOptionRuleTarget optionTarget);
 
         ReadOnlyCollection<RouteOptionRuleTarget> GetOptions();
+
+        List<SupplierCodeMatch> GetSupplierCodeMatches(int supplierId);
+
+        List<SupplierCodeMatch> GetAllSuppliersCodeMatches();
+
+        SupplierZoneRate GetSupplierZoneRate(long supplierZoneId);
     }
 
     public class SupplierCodeMatch

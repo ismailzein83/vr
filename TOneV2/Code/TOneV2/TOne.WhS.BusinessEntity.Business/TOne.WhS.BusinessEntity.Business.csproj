@@ -63,9 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AllExceptSaleZonesBehavior.cs" />
     <Compile Include="CarrierAccountManager.cs" />
-    <Compile Include="CarrierAccounts\SuppliersWithZones\SelectiveSuppliersWithZonesBehavior.cs" />
     <Compile Include="CarrierProfileManager.cs" />
     <Compile Include="CodeManager.cs" />
     <Compile Include="Constants.cs" />
@@ -79,10 +77,6 @@
     <Compile Include="PricingRules\PricingRuleTariffContext.cs" />
     <Compile Include="PricingRules\PurchasePricingRuleManager.cs" />
     <Compile Include="PricingRules\SalePricingRuleManager.cs" />
-    <Compile Include="PricingRules\RuleTypes\ExtraCharge\Actions\PercentageExtraChargeBehavior.cs" />
-    <Compile Include="PricingRules\RuleTypes\ExtraCharge\Actions\FixedExtraChargeBehavior.cs" />
-    <Compile Include="PricingRules\RuleTypes\Tariff\RegularTariffBehavior.cs" />
-    <Compile Include="PricingRules\RuleTypes\TOD\RegularTODBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteOptionRules\RouteOptionRuleManager.cs" />
     <Compile Include="Rules\StructureRulesBehaviors\RuleBehaviorBySupplier.cs" />
@@ -97,13 +91,9 @@
     <Compile Include="SaleZone\SalePriceListManager.cs" />
     <Compile Include="SaleZone\SaleRateManager.cs" />
     <Compile Include="SaleZone\SaleCodeManager.cs" />
-    <Compile Include="SelectiveCodeCriteriaBehavior.cs" />
-    <Compile Include="SelectiveCustomerBehavior.cs" />
-    <Compile Include="SelectiveSaleZonesBehavior.cs" />
     <Compile Include="SaleZone\SaleZoneManager.cs" />
     <Compile Include="SaleZone\SaleZonePackageManager.cs" />
     <Compile Include="SupplierZone\SupplierCodeManager.cs" />
-    <Compile Include="SelectiveSuppliersBehavior.cs" />
     <Compile Include="SupplierZone\SupplierPriceListManager.cs" />
     <Compile Include="SupplierZone\SupplierRateManager.cs" />
     <Compile Include="SupplierZone\SupplierZoneManager.cs" />
@@ -123,6 +113,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CarrierAccounts\" />
     <Folder Include="RouteOptionRules\StructureRuleBehaviors\" />
     <Folder Include="RouteRules\StructureRuleBehaviors\" />
   </ItemGroup>

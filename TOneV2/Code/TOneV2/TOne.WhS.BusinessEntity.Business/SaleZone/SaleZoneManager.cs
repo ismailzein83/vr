@@ -108,16 +108,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return manager.GetTemplateConfigurations(Constants.SaleZoneGroupConfigType);
         }
 
-        public List<long> GetSaleZoneIds(SaleZoneGroupSettings saleZoneGroupSettings)
-        {
-            TemplateConfigManager templateConfigManager = new TemplateConfigManager();
-            SaleZoneGroupBehavior saleZoneGroupBehavior = templateConfigManager.GetBehavior<SaleZoneGroupBehavior>(saleZoneGroupSettings.ConfigId);
-            if (saleZoneGroupBehavior != null)
-                return saleZoneGroupBehavior.GetZoneIds(saleZoneGroupSettings);
-            else
-                return null;
-        }
-
 
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(int packageId, string filter)
         {
