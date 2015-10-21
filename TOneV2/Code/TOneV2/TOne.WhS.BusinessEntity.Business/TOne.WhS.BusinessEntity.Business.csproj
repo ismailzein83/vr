@@ -44,9 +44,8 @@
     <Reference Include="Vanrise.Caching">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Vanrise\Code\Vanrise.Common\bin\Debug\Vanrise.Common.dll</HintPath>
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Data">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
