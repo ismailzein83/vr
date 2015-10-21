@@ -17,6 +17,7 @@
         var saleZoneGroupSettingsDirectiveAPI;
         var customerGroupSettingsDirectiveAPI;
         var codeCriteriaGroupSettingsDirectiveAPI;
+        var routeRuleSettingsDirectiveAPI;
 
         loadParameters();
         defineScope();
@@ -63,6 +64,15 @@
                     tryLoadAppendixDirectives();
                 else
                     VRUIUtilsService.loadDirective($scope, codeCriteriaGroupSettingsDirectiveAPI, 'codeCriteriaAppendixLoader');
+            }
+
+            $scope.onRouteRuleSettingsDirectiveReady = function (api) {
+                routeRuleSettingsDirectiveAPI = api;
+
+                if (appendixDirectiveData != undefined)
+                    tryLoadAppendixDirectives();
+                else
+                    VRUIUtilsService.loadDirective($scope, routeRuleSettingsDirectiveAPI, 'routeRuleSettingsAppendixLoader');
             }
 
             $scope.SaveRouteRule = function () {
@@ -138,6 +148,7 @@
             $scope.customerGroupTemplates = [];
             $scope.codeCriteriaGroupTemplates = [];
             $scope.routingProducts = [];
+            $scope.routeRuleSettingsTemplates = [];
 
             $scope.excludedCodes = [];
 
@@ -153,7 +164,7 @@
 
             loadEnums();
 
-            return UtilsService.waitMultipleAsyncOperations([routingProductDirectiveAPI.load, loadSaleZoneGroupTemplates, loadCustomerGroupTemplates, loadCodeCriteriaGroupTemplates]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([routingProductDirectiveAPI.load, loadSaleZoneGroupTemplates, loadCustomerGroupTemplates, loadCodeCriteriaGroupTemplates, loadRouteRuleSettingsTemplates]).then(function () {
                 if (editMode) {
                     getRouteRule();
                 }
@@ -208,6 +219,15 @@
             });
         }
 
+        function loadRouteRuleSettingsTemplates()
+        {
+            return WhS_BE_RouteRuleAPIService.GetRouteRuleSettingsTemplates().then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.routeRuleSettingsTemplates.push(item);
+                });
+            });
+        }
+
         function tryLoadAppendixDirectives() {
             
             var loadOperations = [];
@@ -238,6 +258,14 @@
 
                 loadOperations.push(codeCriteriaGroupSettingsDirectiveAPI.load);
                 setDirectivesDataOperations.push(setCodeCriteriaGroupSettingsDirective);
+            }
+
+            if ($scope.selectedrouteRuleSettingsTemplate != undefined) {
+                if (routeRuleSettingsDirectiveAPI == undefined)
+                    return;
+
+                loadOperations.push(routeRuleSettingsDirectiveAPI.load);
+                setDirectivesDataOperations.push(setRouteRuleSettingsDirective);
             }
 
             UtilsService.waitMultipleAsyncOperations(loadOperations).then(function () {
@@ -272,6 +300,11 @@
             function setCodeCriteriaGroupSettingsDirective() {
                 return codeCriteriaGroupSettingsDirectiveAPI.setData(appendixDirectiveData.Criteria.CodeCriteriaGroupSettings);
             }
+
+            function setRouteRuleSettingsDirective() {
+                return routeRuleSettingsDirectiveAPI.setData(appendixDirectiveData.Settings);
+            }
+
         }
 
         function buildRouteRuleObjFromScope() {

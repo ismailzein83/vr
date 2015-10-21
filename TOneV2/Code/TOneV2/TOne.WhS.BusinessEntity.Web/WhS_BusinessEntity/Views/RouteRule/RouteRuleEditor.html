@@ -21,7 +21,7 @@
                         <vr-section title="Sale Zone">
                             <vr-row>
                                 <vr-columns width="1/4row">
-                                    <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Filter Type" datasource="saleZoneGroupTemplates" text="No Filter"
+                                    <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Filter Type" datasource="saleZoneGroupTemplates" text="None"
                                                selectedvalues="selectedSaleZoneGroupTemplate">
                                     </vr-select>
                                 </vr-columns>
@@ -38,7 +38,7 @@
                         <vr-section title="Customers">
                             <vr-row>
                                 <vr-columns width="1/4row">
-                                    <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Filter Type" datasource="customerGroupTemplates" text="No Filter"
+                                    <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Filter Type" datasource="customerGroupTemplates" text="None"
                                                selectedvalues="selectedCustomerGroupTemplate">
                                     </vr-select>
                                 </vr-columns>
@@ -53,7 +53,7 @@
                     <vr-columns width="fullrow">
                         <vr-section title="Inlcuded Codes">
                             <vr-columns width="1/4row">
-                                <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Filter Type" datasource="codeCriteriaGroupTemplates" text="No Filter"
+                                <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Filter Type" datasource="codeCriteriaGroupTemplates" text="None"
                                            selectedvalues="selectedCodeCriteriaGroupTemplate">
                                 </vr-select>
                             </vr-columns>
@@ -96,7 +96,16 @@
                 </vr-row>
             </div>
             <div ng-show="settingsSelected">
-
+                <vr-row>
+                    <vr-columns width="1/4row">
+                        <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Rule Type" datasource="routeRuleSettingsTemplates" text="None"
+                                   selectedvalues="selectedrouteRuleSettingsTemplate">
+                        </vr-select>
+                    </vr-columns>
+                    <vr-columns width="3/4row" vr-loader="routeRuleSettingsAppendixLoader">
+                        <vr-directivewrapper directive="selectedrouteRuleSettingsTemplate.Editor" on-ready="onRouteRuleSettingsDirectiveReady" />
+                    </vr-columns>
+                </vr-row>
             </div>
             <div ng-show="schedulerSelected">
                 <vr-row>

@@ -22,22 +22,22 @@ namespace TOne.WhS.BusinessEntity.Entities
             return false;
         }
 
-        public IEnumerable<long> SaleZoneIds
+        IEnumerable<long> IRuleSaleZoneCriteria.SaleZoneIds
         {
             get { return this.Criteria != null && this.Criteria.SaleZoneGroupSettings != null ? this.Criteria.SaleZoneGroupSettings.GetZoneIds(null) : null; }
         }
 
-        public IEnumerable<CodeCriteria> CodeCriterias
+        IEnumerable<CodeCriteria> IRuleCodeCriteria.CodeCriterias
         {
             get { return this.Criteria != null && this.Criteria.CodeCriteriaGroupSettings != null ? this.Criteria.CodeCriteriaGroupSettings.GetCodeCriterias(null) : null; }
         }
 
-        public IEnumerable<int> CustomerIds
+        IEnumerable<int> IRuleCustomerCriteria.CustomerIds
         {
             get { return this.Criteria != null && this.Criteria.CustomerGroupSettings != null ? this.Criteria.CustomerGroupSettings.GetCustomerIds(null) : null; }
         }
 
-        public IEnumerable<int> RoutingProductIds
+        IEnumerable<int> IRuleRoutingProductCriteria.RoutingProductIds
         {
             get { return this.Criteria != null && this.Criteria.RoutingProductId.HasValue ? new List<int> { this.Criteria.RoutingProductId.Value} : null; }
         }

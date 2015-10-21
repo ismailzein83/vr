@@ -233,6 +233,46 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         return deferred.promise;
     }
 
+    function waitMultiplePromises(promises)    {
+        var deferred = createPromiseDeferred();
+        var pendingPromises = promises.length;
+        var isRejected = false;
+        if (pendingPromises == 0)
+            resolvePromise(deferred);
+        angular.forEach(promises, function (promise) {           
+
+                promise.then(function () {
+                    if (isRejected)
+                        return;
+                    pendingPromises--;
+
+                    if (pendingPromises == 0)
+                        resolvePromise(deferred);
+                }).catch(function (error) {
+                    rejectPromise(deferred, error);
+                    isRejected = true;
+                });            
+        });
+        return getPromiseFromDeferred(deferred);
+    }
+
+    function createPromiseDeferred() {
+        var deferred = $q.defer();
+        return deferred;
+    }
+
+    function resolvePromise(promiseDeferred) {
+        promiseDeferred.resolve();
+    }
+
+    function rejectPromise(promiseDeferred, error) {
+        promiseDeferred.reject(error);
+    }
+
+    function getPromiseFromDeferred(promiseDeferred) {
+        return promiseDeferred.promise;
+    }
+
     function getItemIndexByVal(array, value, attname) {
         for (var i = 0; i < array.length; i++) {
             if (eval('array[' + i + '].' + attname) == value) {
@@ -302,9 +342,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
 
         return min;
     }
-
-
-
+    
     function downloadFile(data, headers) {
     
         //data = new ArrayBuffer(data.length);
@@ -372,10 +410,6 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         }
     }
 
-   
-
-   
-
     function dateToServerFormat(date) {
         if (date instanceof Date)
             return dateFormat(date, dateFormat.masks.isoDateTime);
@@ -385,8 +419,6 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
     function cloneDateTime(date) {
         return new Date(date).toUTCString().replace(' GMT', '');
     }
-
-
 
     function getPeriod(periodType) {
         switch (periodType) {
@@ -428,8 +460,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         else
             return null;
     }
-
-
+    
     function getServiceURL(moduleName, controllerName, actionName) {
         return '/api/' + moduleName + '/' + controllerName + '/' + actionName;
     }
@@ -512,7 +543,12 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         guid: guid,
         escapeRegExp: escapeRegExp,
         buildTitleForAddEditor: buildTitleForAddEditor,
-        buildTitleForUpdateEditor: buildTitleForUpdateEditor
+        buildTitleForUpdateEditor: buildTitleForUpdateEditor,
+        waitMultiplePromises: waitMultiplePromises,
+        createPromiseDeferred: createPromiseDeferred,
+        resolvePromise: resolvePromise,
+        rejectPromise: rejectPromise,
+        getPromiseFromDeferred: getPromiseFromDeferred
     });
 
 }]);

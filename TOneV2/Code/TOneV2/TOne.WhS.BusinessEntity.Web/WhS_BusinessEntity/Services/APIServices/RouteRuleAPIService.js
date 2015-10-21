@@ -31,13 +31,18 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "GetCodeCriteriaGroupTemplates"));
         }
 
+        function GetRouteRuleSettingsTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "RouteRule", "GetRouteRuleSettingsTemplates"));
+        }
+
         return ({
             GetFilteredRouteRules: GetFilteredRouteRules,
             GetRule: GetRule,
             AddRule: AddRule,
             UpdateRule: UpdateRule,
             DeleteRule: DeleteRule,
-            GetCodeCriteriaGroupTemplates: GetCodeCriteriaGroupTemplates
+            GetCodeCriteriaGroupTemplates: GetCodeCriteriaGroupTemplates,
+            GetRouteRuleSettingsTemplates: GetRouteRuleSettingsTemplates
         });
     }
 

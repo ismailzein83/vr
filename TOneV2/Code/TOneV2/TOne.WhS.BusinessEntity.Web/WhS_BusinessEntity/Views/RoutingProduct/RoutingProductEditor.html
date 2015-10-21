@@ -21,7 +21,7 @@
                 </vr-row>
                 <vr-row ng-show="selectedSaleZonePackageId">
                     <vr-columns width="1/4row">
-                        <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" text="No Filter"
+                        <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" text="None"
                                    label="Filter Type" datasource="saleZoneGroupTemplates" selectedvalues="selectedSaleZoneGroupTemplate"></vr-select>
                     </vr-columns>
                     <vr-columns width="3/4row" ng-if="selectedSaleZoneGroupTemplate" vr-loader="saleZonesAppendixLoader">
@@ -33,7 +33,7 @@
             <div ng-show="suppliersSelected">
                 <vr-row>
                     <vr-columns width="1/2row">
-                        <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" text="No Filter"
+                        <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" text="None"
                                    label="Filter Type" datasource="supplierGroupTemplates" selectedvalues="selectedSupplierGroupTemplate"></vr-select>
                     </vr-columns>
                 </vr-row>
