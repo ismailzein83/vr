@@ -249,8 +249,6 @@
         function insertNormalizationRule() {
             var normalizationRuleObj = buildNormalizationRuleObjFromScope();
 
-            console.log(normalizationRuleObj);
-
             return NormalizationRuleAPIService.AddRule(normalizationRuleObj)
                 .then(function (responseObject) {
 

@@ -9,6 +9,7 @@
                      defaultsortbyfieldname="'Entity.RuleId'"
                      defaultsortdirection="'ASC'">
 
+            <vr-datagridcolumn headertext="'Type'" field="'RuleTypeDescription'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Number Type'" field="'PhoneNumberTypeDescription'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Number Prefix'" field="'Entity.Criteria.PhoneNumberPrefix'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Number Length'" field="'Entity.Criteria.PhoneNumberLength'" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
@@ -17,7 +18,6 @@
             <vr-datagridcolumn headertext="'Begin Effective Date'" field="'Entity.BeginEffectiveTime'" type="'Datetime'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'End Effective Date'" field="'Entity.EndEffectiveTime'" type="'Datetime'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Type'" field="'RuleTypeDescription'" type="'Text'"></vr-datagridcolumn>
 
             <vr-datagridexpandablerow>
                 <div ng-include="'/Client/Modules/PSTN_BusinessEntity/Views/Templates/NormalizationRuleSummaryTemplate.html'"></div>

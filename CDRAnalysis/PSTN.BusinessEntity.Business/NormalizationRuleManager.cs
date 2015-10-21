@@ -212,7 +212,7 @@ namespace PSTN.BusinessEntity.Business
                     (item.Description != null && item.Description.Contains(input.Query.Description))
                 );
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, normalizationRules.ToBigResult(input, filterExpression, NormalizationRuleDetailMapper));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, normalizationRules.ToBigResult(input, filterExpression, MapToDetails));
         }
 
         public List<TemplateConfig> GetNormalizationRuleAdjustNumberActionSettingsTemplates()
