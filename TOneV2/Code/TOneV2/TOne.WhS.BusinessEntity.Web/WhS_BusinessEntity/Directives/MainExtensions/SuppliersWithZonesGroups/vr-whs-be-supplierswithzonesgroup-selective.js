@@ -70,15 +70,13 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
                 for (var i = 0; i < $scope.suppliers.length; i++)
                 {
                     suppliersWithZones.push({
+                        $type: "TOne.WhS.BusinessEntity.Entities.SupplierWithZones,TOne.WhS.BusinessEntity.Entities",
                         SupplierId: $scope.suppliers[i].CarrierAccountId,
                         SupplierZoneIds: UtilsService.getPropValuesFromArray($scope.suppliers[i].supplierZonesDirectiveAPI.getData(), "SupplierZoneId"),
                     });
                 }
-                var obj = {
-                    $type: "TOne.WhS.BusinessEntity.MainExtensions.SuppliersWithZonesGroups.SelectiveSuppliersWithZonesGroup,TOne.WhS.BusinessEntity.MainExtensions",
-                    SuppliersWithZones: suppliersWithZones,
-                }
-                return obj;
+               
+                return suppliersWithZones;
             }
             
             api.setData = function (suppliersWithZones) {

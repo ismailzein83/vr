@@ -2,9 +2,9 @@
 
     "use strict";
 
-    pricingRuleEditorController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService',  'UtilsService', 'VRNotificationService', 'VRNavigationService','WhS_Be_PricingRuleTypeEnum','WhS_Be_PricingTypeEnum','VRUIUtilsService'];
+    pricingRuleEditorController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService',  'UtilsService', 'VRNotificationService', 'VRNavigationService','WhS_Be_PricingRuleTypeEnum','WhS_Be_PricingTypeEnum','VRUIUtilsService','WhS_BE_PurchasePricingRuleAPIService'];
 
-    function pricingRuleEditorController($scope, WhS_BE_SalePricingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_PricingRuleTypeEnum, WhS_Be_PricingTypeEnum, VRUIUtilsService) {
+    function pricingRuleEditorController($scope, WhS_BE_SalePricingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_PricingRuleTypeEnum, WhS_Be_PricingTypeEnum, VRUIUtilsService, WhS_BE_PurchasePricingRuleAPIService) {
 
         var editMode;
         var pricingRuleType;
@@ -197,7 +197,8 @@
         function insertPricingRule() {
 
             var pricingRuleObject = buildPricingRuleObjFromScope();
-            return WhS_BE_SalePricingRuleAPIService.AddRule(pricingRuleObject)
+            if ($scope.selectedPricingType.value == WhS_Be_PricingTypeEnum.Sale.value) {
+                return WhS_BE_SalePricingRuleAPIService.AddRule(pricingRuleObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded($scope.selectedPricingRuleType.title, response)) {
                     if ($scope.onPricingRuleAdded != undefined)
@@ -207,6 +208,20 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
+            }
+            else if ($scope.selectedPricingType.value == WhS_Be_PricingTypeEnum.Purchase.value) {
+                return WhS_BE_PurchasePricingRuleAPIService.AddRule(pricingRuleObject)
+           .then(function (response) {
+               if (VRNotificationService.notifyOnItemAdded($scope.selectedPricingRuleType.title, response)) {
+                   if ($scope.onPricingRuleAdded != undefined)
+                       $scope.onPricingRuleAdded(response.InsertedObject);
+                   $scope.modalContext.closeModal();
+               }
+           }).catch(function (error) {
+               VRNotificationService.notifyException(error, $scope);
+           });
+            }
+            
 
         }
 

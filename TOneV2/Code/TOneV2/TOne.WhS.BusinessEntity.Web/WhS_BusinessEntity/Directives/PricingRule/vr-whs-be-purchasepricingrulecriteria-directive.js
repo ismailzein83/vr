@@ -50,9 +50,15 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAc
             var api = {};
 
             api.getData = function () {
-                var obj = suppliersWithZonesGroupsDirectiveAPI.getData();
-                obj.ConfigId = $scope.selectedSuppliersWithZonesStettingsTemplate.TemplateConfigID;
-                return obj;
+                var obj={
+                    $type: "TOne.WhS.BusinessEntity.MainExtensions.SuppliersWithZonesGroups.SelectiveSuppliersWithZonesGroup,TOne.WhS.BusinessEntity.MainExtensions",
+                    SuppliersWithZones: suppliersWithZonesGroupsDirectiveAPI.getData(),
+                    ConfigId : $scope.selectedSuppliersWithZonesStettingsTemplate.TemplateConfigID,
+                }
+                var suppliersWithZonesGroupSettings = {
+                    SuppliersWithZonesGroupSettings: obj
+                    }
+                return suppliersWithZonesGroupSettings;
             }
             api.setData = function (settings) {
 

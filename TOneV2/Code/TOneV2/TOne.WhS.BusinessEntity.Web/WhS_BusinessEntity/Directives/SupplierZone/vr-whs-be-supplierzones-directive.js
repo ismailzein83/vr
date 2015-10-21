@@ -76,7 +76,7 @@ app.directive('vrWhsBeSupplierzone', ['WhS_BE_SupplierZoneAPIService', 'UtilsSer
                     {
                         return WhS_BE_SupplierZoneAPIService.GetSupplierZones(ctrl.supplierid).then(function (response) {
                             angular.forEach(response, function (itm) {
-                                $scope.supplierZones.push(itm);
+                                $scope.supplierZones.push(itm); 
                             });
                         });
                     }
@@ -90,12 +90,13 @@ app.directive('vrWhsBeSupplierzone', ['WhS_BE_SupplierZoneAPIService', 'UtilsSer
                 api.setData = function (selectedIds) {
                     if ($attrs.ismultipleselection) {
                         for (var i = 0; i < selectedIds.length; i++) {
-                            var selectedSupplierZones = UtilsService.getItemByVal($scope.saleZonePackages, selectedIds[i], "SupplierZoneId");
+                            
+                            var selectedSupplierZones = UtilsService.getItemByVal($scope.supplierZones, selectedIds[i], "SupplierZoneId");
                             if (selectedSupplierZones != null)
                                 $scope.selectedSupplierZones.push(selectedSupplierZones);
                         }
                     } else {
-                        var selectedSupplierZones = UtilsService.getItemByVal($scope.saleZonePackages, selectedIds, "SupplierZoneId");
+                        var selectedSupplierZones = UtilsService.getItemByVal($scope.supplierZones, selectedIds, "SupplierZoneId");
                         if (selectedSupplierZones != null)
                             $scope.selectedSupplierZones = selectedSupplierZones;
                     }
