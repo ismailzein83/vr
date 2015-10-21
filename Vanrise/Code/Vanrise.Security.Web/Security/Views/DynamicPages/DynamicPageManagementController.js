@@ -89,9 +89,12 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
 
     }
     function addPage() {
-        var settings = {};
+        var settings = {
+            useModalTemplate: true,
+            width: '95%'
+        };
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "New Dynamic Page";
+            modalScope.title = UtilsService.buildTitleForAddEditor("Dynamic Page");
             modalScope.onPageAdded = function (view) {
                 fillNeededData(view)
                 mainGridAPI.itemAdded(view);
@@ -101,10 +104,13 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
     }
 
     function updatePage(dataItem) {
-        var settings = {};
+        var settings = {
+            useModalTemplate: true,
+            width: '95%'
+        };
         
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Dynamic Page: " + dataItem.Name;
+            modalScope.title = UtilsService.buildTitleForUpdateEditor(dataItem.Name, "Dynamic Page");
             modalScope.onPageUpdated = function (view) {
                 fillNeededData(view)
                 mainGridAPI.itemUpdated(view);

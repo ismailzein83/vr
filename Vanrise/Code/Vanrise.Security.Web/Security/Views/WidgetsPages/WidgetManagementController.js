@@ -89,7 +89,7 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
     function addNewWidget() {
         var settings = {};
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "New Widget";
+            modalScope.title = UtilsService.buildTitleForAddEditor("Widget");
             modalScope.onWidgetAdded = function (widget) {
                 mainGridAPI.itemAdded(widget);
             };
@@ -101,7 +101,8 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
     function updateWidget(dataItem) {
         var settings = {};
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Update Widget:" + dataItem.Name;
+           
+            modalScope.title = UtilsService.buildTitleForUpdateEditor(dataItem.Name, "Widget");
             modalScope.onWidgetUpdated = function (widget) {
                 mainGridAPI.itemUpdated(widget);
             };

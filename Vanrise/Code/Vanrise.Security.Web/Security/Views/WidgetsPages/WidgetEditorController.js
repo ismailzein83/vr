@@ -112,6 +112,7 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsS
         $scope.isInitializing = true;
         UtilsService.waitMultipleAsyncOperations([loadWidgets]).then(function () {
             if ($scope.isEditMode == true) {
+
                 loadEditModeData();
             }
         }).finally(function () {

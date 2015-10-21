@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="Security_DynamicPageEditorController" width="'80%'">
+﻿<vr-modalcontent ng-controller="Security_DynamicPageEditorController">
     <vr-modalbody vr-loader="isGettingData" maxheight="'700px'">
         <vr-form name="formDynamicPagesEditor">
             <vr-choices selectedindex="selectedGroupKeyIndex" onselectionchanged="onSelectionChanged()">
@@ -10,7 +10,7 @@
                 <vr-row>
                     <vr-columns width="1/3row">
                         <vr-section title="Page Setting">
-                            <vr-row removeLine>
+                            <vr-row removeline>
                                 <vr-textbox value="pageName" label="Page Name" isrequired></vr-textbox>
                             </vr-row>
                             <vr-row>
@@ -34,7 +34,6 @@
 
 
                             <vr-treeview datatextfield="Name"
-                                        
                                          datavaluefield="Id"
                                          datachildrenfield="Childs"
                                          on-ready="menuReady"
@@ -57,11 +56,11 @@
                             </vr-row>
                         </vr-section>
                     </vr-columns>
-                </vr-columns>
+                    </vr-columns>
             </div>
             <div ng-show="designSelected">
                 <vr-form name="formDesigningSelectionModel">
-                    <vr-row removeLine>
+                    <vr-row removeline>
                         <vr-columns width="normal">
                             <vr-select label="Section" datatextfield="description" datavaluefield="value" label="Section" onselectionchanged="onSectionChanged"
                                        datasource="sections" selectedvalues="selectedSection" isrequired></vr-select>
@@ -88,9 +87,9 @@
                             <vr-label></vr-label>
                             <vr-button type="Add" formname="formDesigningSelectionModel" data-onclick="addViewContent" standalone></vr-button>
                         </vr-columns>
-                       
+
                     </vr-row>
-    
+
 
                     <vr-row>
                         <div ng-include="selectedWidget.Setting.DirectiveTemplateURL"></div>
@@ -110,11 +109,11 @@
                                     </div>
                                 </vr-columns>
                             </div>
-                        </vr-section> 
+                        </vr-section>
                     </vr-row>
-                    <vr-row ng-if="addedBodyWidgets.length>0">                        
+                    <vr-row ng-if="addedBodyWidgets.length>0">
                         <div class="list-group dragbelzone" ng-sortable="itemsSortable">
-                            <vr-columns ng-repeat="addedBodyWidget in addedBodyWidgets" colnum="{{addedBodyWidget.NumberOfColumns}}" >
+                            <vr-columns ng-repeat="addedBodyWidget in addedBodyWidgets" colnum="{{addedBodyWidget.NumberOfColumns}}">
                                 <div ng-class="validateWidgetError(addedBodyWidget)" style="border-radius: 4px; height: auto; padding: 0px; ">
 
 
@@ -144,4 +143,4 @@
             </div>
         </vr-actionbar>
     </div>
-</div>
+</vr-modalcontent>

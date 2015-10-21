@@ -1,5 +1,7 @@
 ﻿<div ng-controller="BI_VrSummaryDirectiveTemplateController">
-    <vr-columns width="normal">
-        <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureTypes" ismultipleselection hidefilterbox isRequired></vr-select>
-    </vr-columns>
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureTypes" ismultipleselection hidefilterbox isrequired></vr-select>
+        </vr-columns>
+    </vr-row>
 </div>
