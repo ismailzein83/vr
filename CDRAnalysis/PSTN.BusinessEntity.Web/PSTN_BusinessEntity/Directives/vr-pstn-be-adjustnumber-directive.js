@@ -45,7 +45,7 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
             $scope.actionTemplates = [];
             $scope.selectedActionTemplate = undefined;
             $scope.disableAddButton = true;
-
+            $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
             $scope.actions = [];
 
             $scope.onActionTemplateChanged = function () {
