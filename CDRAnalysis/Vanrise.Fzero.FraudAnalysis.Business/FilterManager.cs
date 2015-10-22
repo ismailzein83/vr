@@ -18,7 +18,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         private static Dictionary<int, FilterDefinition> GetCachedFilters()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetFilters",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetFilyyyyyyters",
                () =>
                {
                    IFilterDataManager dataManager = FraudDataManagerFactory.GetDataManager<IFilterDataManager>();
