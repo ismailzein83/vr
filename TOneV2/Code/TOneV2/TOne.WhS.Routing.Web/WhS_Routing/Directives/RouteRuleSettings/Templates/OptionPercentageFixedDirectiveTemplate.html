@@ -1,3 +1,19 @@
 ﻿<vr-row removeline>
-    <p>Option Percentage Fixed</p>
+    <vr-columns width="1/4row">
+        <vr-button type="Add" data-onclick="addPercentageOption" standalone></vr-button>
+    </vr-columns>
+    <vr-columns width="3/4row">
+        <div>
+            <ul class="list-group dragbelzone" ng-sortable="itemsSortable">
+                <li ng-repeat="option in percentages" class="list-group-item list-custom" style="margin: 1px; font-size: 12px;">
+                    <i class="glyphicon glyphicon-th-list handeldrag"></i>
+                    <div style="display: inline-block; max-width: 200px;">{{$index + 1}}</div>
+                    <i class="glyphicon glyphicon-remove hand-cursor" style="float: right; padding: 5px; cursor: default" ng-click="removeSupplier($event,supplier)"></i>
+                    <div style="width: 100px; float: left; margin-right: 60px; text-align: center;">
+                        <vr-numeric value="option.percentage" unit="%" isrequired></vr-numeric>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </vr-columns>
 </vr-row>

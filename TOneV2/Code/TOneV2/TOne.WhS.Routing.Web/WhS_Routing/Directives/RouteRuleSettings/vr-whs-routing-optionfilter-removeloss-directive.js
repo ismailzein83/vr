@@ -31,7 +31,7 @@ app.directive('vrWhsRoutingOptionfilterRemoveloss', ['UtilsService',
         };
 
         function getRoutingOptionFilterRemoveLossTemplate(attrs) {
-            return 'Remove Loss';
+            return '';
         }
 
         function routingOptionFilterRemoveLoss(ctrl, $scope) {

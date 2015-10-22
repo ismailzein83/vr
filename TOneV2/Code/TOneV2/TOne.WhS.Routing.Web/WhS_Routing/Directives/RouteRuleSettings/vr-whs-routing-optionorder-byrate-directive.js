@@ -31,7 +31,7 @@ app.directive('vrWhsRoutingOptionorderByrate', ['UtilsService',
         };
 
         function getRoutingOptionOrderByRateTemplate(attrs) {
-            return 'Order Settings';
+            return '';
         }
 
         function routingOptionOrderByRate(ctrl, $scope) {

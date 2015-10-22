@@ -36,26 +36,68 @@ app.directive('vrWhsRoutingOptionsSelective', ['UtilsService',
 
         function routingSelectiveOptions(ctrl, $scope) {
 
+            var carrierAccountDirectiveAPI;
+
             function initializeController() {
+                $scope.onCarrierAccountDirectiveReady = function (api) {
+                    carrierAccountDirectiveAPI = api;
+                    declareDirectiveAsReady()
+                }
+
+                $scope.removeSupplier = function ($event, supplier) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                    var index = UtilsService.getItemIndexByVal($scope.selectedSuppliers, supplier.CarrierAccountId, 'CarrierAccountId');
+                    $scope.selectedSuppliers.splice(index, 1);
+                };
+            }
+
+            function declareDirectiveAsReady() {
+                if (carrierAccountDirectiveAPI == undefined)
+                    return;
+
                 defineAPI();
             }
+
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function () {
-
+                    return carrierAccountDirectiveAPI.load();
                 }
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups.SelectiveOptions, TOne.WhS.Routing.Business",
-                        Options: null
+                        Options: getOptions()
                     };
+
+                    function getOptions() {
+                        var options = [];
+                        for (var i = 0; i < $scope.selectedSuppliers.length; i++) {
+                            options.push({
+                                SupplierId: $scope.selectedSuppliers[i].CarrierAccountId,
+                                Percentage: $scope.selectedSuppliers[i].percentage,
+                                Filter: null
+                            });
+                        }
+
+                        return options;
+                    }
                 }
 
                 api.setData = function (routeOptionSettingsGroup) {
+                    var supplierIds = [];
+                    for (var i = 0; i < routeOptionSettingsGroup.Options.length; i++) {
+                        supplierIds.push(routeOptionSettingsGroup.Options[i].SupplierId);
+                    }
 
+                    carrierAccountDirectiveAPI.setData(supplierIds);
+
+                    for (var i = 0; i < $scope.selectedSuppliers.length; i++) {
+                        $scope.selectedSuppliers[i].percentage = routeOptionSettingsGroup.Options[i].Percentage;
+                    }
                 }
 
                 if (ctrl.onReady != null)

@@ -46,43 +46,44 @@ app.directive('vrWhsRoutingRouteruleoptionRegular', ['UtilsService', 'WhS_Routin
             $scope.optionFilterSettingsGroupTemplates = [];
             $scope.optionPercentageSettingsGroupTemplates = [];
 
-            $scope.onOptionSettingsGroupDirectiveReady = function (api) {
-                routeOptionSettingsGroupDirectiveAPI = api;
-
-                if (appendixDirectiveData != undefined)
-                    tryLoadAppendixDirectives();
-                else
-                    VRUIUtilsService.loadDirective($scope, routeOptionSettingsGroupDirectiveAPI, 'optionSettingsAppendixLoader');
-            }
-
-            $scope.onOptionOrderSettingsGroupDirectiveReady = function (api) {
-                routeRuleOptionOrderSettingsDirectiveAPI = api;
-
-                if (appendixDirectiveData != undefined)
-                    tryLoadAppendixDirectives();
-                else
-                    VRUIUtilsService.loadDirective($scope, routeRuleOptionOrderSettingsDirectiveAPI, 'optionOrderSettingsAppendixLoader');
-            }
-
-            $scope.onOptionFilterSettingsGroupDirectiveReady = function (api) {
-                routeRuleOptionFilterSettingsDirectiveAPI = api;
-
-                if (appendixDirectiveData != undefined)
-                    tryLoadAppendixDirectives();
-                else
-                    VRUIUtilsService.loadDirective($scope, routeRuleOptionFilterSettingsDirectiveAPI, 'optionFilterSettingsAppendixLoader');
-            }
-
-            $scope.onOptionPercentageSettingsGroupDirectiveReady = function (api) {
-                routeRuleOptionPercentageSettingsDirectiveAPI = api;
-
-                if (appendixDirectiveData != undefined)
-                    tryLoadAppendixDirectives();
-                else
-                    VRUIUtilsService.loadDirective($scope, routeRuleOptionPercentageSettingsDirectiveAPI, 'optionPercentageSettingsAppendixLoader');
-            }
-
             function initializeController() {
+
+                $scope.onOptionSettingsGroupDirectiveReady = function (api) {
+                    routeOptionSettingsGroupDirectiveAPI = api;
+
+                    if (appendixDirectiveData != undefined)
+                        tryLoadAppendixDirectives();
+                    else
+                        VRUIUtilsService.loadDirective($scope, routeOptionSettingsGroupDirectiveAPI, 'optionSettingsAppendixLoader');
+                }
+
+                $scope.onOptionOrderSettingsGroupDirectiveReady = function (api) {
+                    routeRuleOptionOrderSettingsDirectiveAPI = api;
+
+                    if (appendixDirectiveData != undefined)
+                        tryLoadAppendixDirectives();
+                    else
+                        VRUIUtilsService.loadDirective($scope, routeRuleOptionOrderSettingsDirectiveAPI, 'optionOrderSettingsAppendixLoader');
+                }
+
+                $scope.onOptionFilterSettingsGroupDirectiveReady = function (api) {
+                    routeRuleOptionFilterSettingsDirectiveAPI = api;
+
+                    if (appendixDirectiveData != undefined)
+                        tryLoadAppendixDirectives();
+                    else
+                        VRUIUtilsService.loadDirective($scope, routeRuleOptionFilterSettingsDirectiveAPI, 'optionFilterSettingsAppendixLoader');
+                }
+
+                $scope.onOptionPercentageSettingsGroupDirectiveReady = function (api) {
+                    routeRuleOptionPercentageSettingsDirectiveAPI = api;
+
+                    if (appendixDirectiveData != undefined)
+                        tryLoadAppendixDirectives();
+                    else
+                        VRUIUtilsService.loadDirective($scope, routeRuleOptionPercentageSettingsDirectiveAPI, 'optionPercentageSettingsAppendixLoader');
+                }
+
                 defineAPI();
             }
 
@@ -161,6 +162,7 @@ app.directive('vrWhsRoutingRouteruleoptionRegular', ['UtilsService', 'WhS_Routin
             }
 
             function tryLoadAppendixDirectives() {
+                
                 var loadOperations = [];
                 var setDirectivesDataOperations = [];
 
@@ -197,15 +199,14 @@ app.directive('vrWhsRoutingRouteruleoptionRegular', ['UtilsService', 'WhS_Routin
                 }
 
                 UtilsService.waitMultipleAsyncOperations(loadOperations).then(function () {
+                    
                     setAppendixDirectives();
                 });
 
                 function setAppendixDirectives() {
-                    function setAppendixDirectives() {
-                        UtilsService.waitMultipleAsyncOperations(setDirectivesDataOperations).then(function () {
-                            appendixDirectiveData = undefined;
-                        });
-                    }
+                    UtilsService.waitMultipleAsyncOperations(setDirectivesDataOperations).then(function () {
+                        appendixDirectiveData = undefined;
+                    });
                 }
 
                 function setRouteOptionSettings() {
