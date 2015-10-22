@@ -22,9 +22,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public Func<NumberProfile, Decimal> Expression;
 
-        public float MinValue { get; set; }
+        public decimal MinValue { get; set; }
 
-        public float MaxValue { get; set; }
+        public decimal MaxValue { get; set; }
 
         public int DecimalPrecision { get; set; }
 

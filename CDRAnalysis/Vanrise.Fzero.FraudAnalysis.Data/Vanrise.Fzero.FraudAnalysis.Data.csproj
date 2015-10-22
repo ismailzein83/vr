@@ -62,6 +62,7 @@
     <Compile Include="IPeriodDataManager.cs" />
     <Compile Include="IClassDataManager.cs" />
     <Compile Include="IReportingDataManager.cs" />
+    <Compile Include="IFilterDataManager.cs" />
     <Compile Include="IStrategyExecutionDataManager.cs" />
     <Compile Include="IStrategyDataManager.cs" />
     <Compile Include="ICaseManagementDataManager.cs" />

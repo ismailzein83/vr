@@ -14,9 +14,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string Label { get; set; }
 
-        public float MinValue { get; set; }
+        public decimal MinValue { get; set; }
 
-        public float MaxValue { get; set; }
+        public decimal MaxValue { get; set; }
 
         public int DecimalPrecision { get; set; }
 
