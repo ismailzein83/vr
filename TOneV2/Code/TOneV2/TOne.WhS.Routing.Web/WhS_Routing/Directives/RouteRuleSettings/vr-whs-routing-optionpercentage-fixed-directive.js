@@ -49,7 +49,7 @@ app.directive('vrWhsRoutingOptionpercentageFixed', ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Routing.Business.RouteRules.Percentages.FixedOptionPercentage, TOne.WhS.Routing.Business.RouteRules.Percentages"
+                        $type: "TOne.WhS.Routing.Business.RouteRules.Percentages.FixedOptionPercentage, TOne.WhS.Routing.Business"
                     };
                 }
 

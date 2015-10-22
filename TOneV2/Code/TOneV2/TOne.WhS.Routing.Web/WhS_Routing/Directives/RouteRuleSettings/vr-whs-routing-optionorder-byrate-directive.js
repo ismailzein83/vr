@@ -49,7 +49,7 @@ app.directive('vrWhsRoutingOptionorderByrate', ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Routing.Business.RouteRules.Orders.OptionOrderByRate, TOne.WhS.Routing.Business.RouteRules.Orders"
+                        $type: "TOne.WhS.Routing.Business.RouteRules.Orders.OptionOrderByRate, TOne.WhS.Routing.Business"
                     };
                 }
 

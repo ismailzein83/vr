@@ -9,6 +9,8 @@ namespace TOne.WhS.Routing.Entities
 {
     public abstract class RouteRuleOptionPercentageSettings
     {
+        public int ConfigId { get; set; }
+
         public abstract void Execute(IRouteRuleExecutionContext context, RouteRuleTarget target);
     }
 }

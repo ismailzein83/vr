@@ -49,7 +49,7 @@ app.directive('vrWhsRoutingRouteruleoptionBlock', ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Routing.Business.RouteRules.BlockRouteRule, TOne.WhS.Routing.Business.RouteRules"
+                        $type: "TOne.WhS.Routing.Business.RouteRules.BlockRouteRule, TOne.WhS.Routing.Business"
                     };
                 }
 

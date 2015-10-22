@@ -313,11 +313,11 @@
                 Criteria: {
                     RoutingProductId: routingProductDirectiveAPI.getData() != undefined ? routingProductDirectiveAPI.getData().RoutingProductId : null,
                     ExcludedCodes: $scope.excludedCodes,
-                    SaleZoneGroupSettings: getSaleZoneGroupSettings(),
-                    CustomerGroupSettings: getCustomersGroupSettings(),
-                    CodeCriteriaGroupSettings: getCodeCriteriaGroupSettings()
+                    SaleZoneGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsDirectiveAPI, 'selectedSaleZoneGroupTemplate'),
+                    CustomerGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, customerGroupSettingsDirectiveAPI, 'selectedCustomerGroupTemplate'),
+                    CodeCriteriaGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, codeCriteriaGroupSettingsDirectiveAPI, 'selectedCodeCriteriaGroupTemplate')
                 },
-                //Settings: getRouteRuleSettings(),
+                Settings: VRUIUtilsService.getSettingsFromDirective($scope, routeRuleSettingsDirectiveAPI, 'selectedrouteRuleSettingsTemplate'),
                 BeginEffectiveTime: $scope.beginEffectiveDate,
                 EndEffectiveTime: $scope.endEffectiveDate
             };
@@ -381,46 +381,6 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
-        }
-
-        function getSaleZoneGroupSettings() {
-            if ($scope.selectedSaleZoneGroupTemplate != undefined) {
-                var settings = saleZoneGroupSettingsDirectiveAPI.getData();
-                settings.ConfigId = $scope.selectedSaleZoneGroupTemplate.TemplateConfigID;
-                return settings;
-            }
-            else
-                return null;
-        }
-
-        function getCustomersGroupSettings() {
-            if ($scope.selectedCustomerGroupTemplate != undefined) {
-                var settings = customerGroupSettingsDirectiveAPI.getData();
-                settings.ConfigId = $scope.selectedCustomerGroupTemplate.TemplateConfigID;
-                return settings;
-            }
-            else
-                return null;
-        }
-
-        function getCodeCriteriaGroupSettings() {
-            if ($scope.selectedCodeCriteriaGroupTemplate != undefined) {
-                var settings = codeCriteriaGroupSettingsDirectiveAPI.getData();
-                settings.ConfigId = $scope.selectedCodeCriteriaGroupTemplate.TemplateConfigID;
-                return settings;
-            }
-            else
-                return null;
-        }
-
-        function getRouteRuleSettings() {
-            if ($scope.selectedrouteRuleSettingsTemplate != undefined) {
-                var settings = routeRuleSettingsDirectiveAPI.getData();
-                settings.ConfigId = $scope.selectedrouteRuleSettingsTemplate.TemplateConfigID;
-                return settings;
-            }
-            else
-                return null;
         }
     }
 

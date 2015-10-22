@@ -49,7 +49,7 @@ app.directive('vrWhsRoutingOptionfilterRemoveloss', ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Routing.Business.RouteRules.Filters.OptionFilterLoss, TOne.WhS.Routing.Business.RouteRules.Filters"
+                        $type: "TOne.WhS.Routing.Business.RouteRules.Filters.OptionFilterLoss, TOne.WhS.Routing.Business"
                     };
                 }
 

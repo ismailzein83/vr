@@ -191,8 +191,8 @@
                     Name: $scope.routingProductName,
                     SaleZonePackageId: saleZonePackageDirectiveAPI.getData().SaleZonePackageId,
                     Settings: {
-                        SaleZoneGroupSettings: getSaleZoneGroupSettings(),
-                        SupplierGroupSettings: getSuppliersGroupSettings()
+                        SaleZoneGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsDirectiveAPI, 'selectedSaleZoneGroupTemplate'),
+                        SupplierGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, supplierGroupSettingsDirectiveAPI, 'selectedSupplierGroupTemplate')
                     }
                 };
 
@@ -242,26 +242,6 @@
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
-            }
-
-            function getSaleZoneGroupSettings() {
-                if ($scope.selectedSaleZoneGroupTemplate != undefined) {
-                    var settings = saleZoneGroupSettingsDirectiveAPI.getData();
-                    settings.ConfigId = $scope.selectedSaleZoneGroupTemplate.TemplateConfigID;
-                    return settings;
-                }
-                else
-                    return null;
-            }
-
-            function getSuppliersGroupSettings() {
-                if ($scope.selectedSupplierGroupTemplate != undefined) {
-                    var settings = supplierGroupSettingsDirectiveAPI.getData();
-                    settings.ConfigId = $scope.selectedSupplierGroupTemplate.TemplateConfigID;
-                    return settings;
-                }
-                else
-                    return null;
             }
     }
 

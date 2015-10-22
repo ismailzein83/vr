@@ -9,6 +9,8 @@ namespace TOne.WhS.Routing.Entities
 {
     public abstract class RouteRuleOptionOrderSettings
     {
+        public int ConfigId { get; set; }
+
         public abstract IEnumerable<RouteOptionRuleTarget> Execute(IRouteRuleExecutionContext context, IEnumerable<RouteOptionRuleTarget> options);
     }
 }

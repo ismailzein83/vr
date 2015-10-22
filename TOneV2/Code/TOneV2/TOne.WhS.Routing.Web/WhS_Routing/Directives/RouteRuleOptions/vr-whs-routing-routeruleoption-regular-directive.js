@@ -129,11 +129,11 @@ app.directive('vrWhsRoutingRouteruleoptionRegular', ['UtilsService', 'WhS_Routin
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Routing.Business.RouteRules.RegularRouteRule, TOne.WhS.Routing.Business.RouteRules",
-                        OptionsSettingsGroup: routeOptionSettingsGroupDirectiveAPI.getData(),
-                        OptionOrderSettings: routeRuleOptionOrderSettingsDirectiveAPI.getData(),
-                        OptionFilterSettings: routeRuleOptionFilterSettingsDirectiveAPI.getData(),
-                        OptionPercentageSettings: routeRuleOptionPercentageSettingsDirectiveAPI.getData()
+                        $type: "TOne.WhS.Routing.Business.RouteRules.RegularRouteRule, TOne.WhS.Routing.Business",
+                        OptionsSettingsGroup: VRUIUtilsService.getSettingsFromDirective($scope, routeOptionSettingsGroupDirectiveAPI, 'selectedOptionSettingsGroupTemplate'),
+                        OptionOrderSettings: VRUIUtilsService.getSettingsFromDirective($scope, routeRuleOptionOrderSettingsDirectiveAPI, 'selectedOptionOrderSettingsGroupTemplate'),
+                        OptionFilterSettings: VRUIUtilsService.getSettingsFromDirective($scope, routeRuleOptionFilterSettingsDirectiveAPI, 'selectedOptionFilterSettingsGroupTemplate'),
+                        OptionPercentageSettings: VRUIUtilsService.getSettingsFromDirective($scope, routeRuleOptionPercentageSettingsDirectiveAPI, 'selectedPercentageFilterSettingsGroupTemplate')
                     };
                 }
 
