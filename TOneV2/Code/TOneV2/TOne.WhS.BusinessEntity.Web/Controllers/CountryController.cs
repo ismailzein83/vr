@@ -10,7 +10,7 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
-    [RoutePrefix(Constants.ROUTE_PREFIX + "CountryController")]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "Country")]
     public class WhSBE_CountryController : BaseAPIController
     {
 
