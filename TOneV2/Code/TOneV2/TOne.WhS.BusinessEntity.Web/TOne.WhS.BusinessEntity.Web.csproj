@@ -216,6 +216,7 @@
     <Content Include="WhS_BusinessEntity\Directives\SaleZone\vr-whs-be-selectivesalezones-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-selectivesuppliers-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\vr-whs-be-supplierzones-directive.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\CountryAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CarrierAccountAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CarrierProfileAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerPricingProductAPIService.js" />

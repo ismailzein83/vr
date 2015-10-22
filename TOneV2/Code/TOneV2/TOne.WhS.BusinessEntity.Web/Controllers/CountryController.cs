@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     {
 
         [HttpPost]
-        [Route("GetCountries")]
+        [Route("GetFilteredCountries")]
         public object GetFilteredCountries(Vanrise.Entities.DataRetrievalInput<CountryQuery> input)
         {
             CountryManager manager = new CountryManager();
