@@ -19,7 +19,9 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         deleteSalePricingRule: deleteSalePricingRule,
         addPurchasePricingRule: addPurchasePricingRule,
         editPurchasePricingRule: editPurchasePricingRule,
-        deletePurchasePricingRule: deletePurchasePricingRule
+        deletePurchasePricingRule: deletePurchasePricingRule,
+        editCountry: editCountry
+
     });
 
     function addRouteRule(onRouteRuleAdded)
@@ -270,6 +272,24 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         };
 
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);
+    }
+
+    function editCountry(obj, onPurchasePricingRuleUpdated) {
+        var settings = {
+            useModalTemplate: true 
+
+        };
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Name, "Country");
+            modalScope.onPricingRuleUpdated = onPurchasePricingRuleUpdated;
+        };
+        var parameters = {
+            //RuleId: obj.RuleId,
+            //PricingType: obj.PricingType
+        };
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/Country/CountryEditor.html', parameters, settings);
     }
 
     function deletePurchasePricingRule($scope, purchasePricingRuleObj, onPurchasePricingRuleDeleted) {

@@ -81,7 +81,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CountryAPIService, WhS_BE_
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-               // clicked: editCarrierProfile,
+               clicked: editCountry
             }
            // ,
            //{
@@ -91,13 +91,13 @@ function (UtilsService, VRNotificationService, WhS_BE_CountryAPIService, WhS_BE_
             ];
         }
 
-        //function editCarrierProfile(carrierProfileObj) {
-        //    var onCarrierProfileUpdated = function (carrierProfile) {
-        //        gridAPI.itemUpdated(carrierProfile);
-        //    }
+        function editCountry(countryObj) {
+            var onCountryUpdated = function (countryObj) {
+                gridAPI.itemUpdated(countryObj);
+            }
 
-        //    WhS_BE_MainService.editCarrierProfile(carrierProfileObj, onCarrierProfileUpdated);
-        //}
+            WhS_BE_MainService.editCountry(countryObj, onCountryUpdated);
+        }
         //function addCarrierAccount(dataItem) {
         //    gridAPI.expandRow(dataItem);
         //    var query = {
