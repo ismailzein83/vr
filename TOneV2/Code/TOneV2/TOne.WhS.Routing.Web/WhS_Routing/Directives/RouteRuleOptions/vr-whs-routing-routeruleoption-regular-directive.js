@@ -36,6 +36,15 @@ app.directive('vrWhsRoutingRouteruleoptionRegular', ['UtilsService', 'WhS_Routin
 
         function beRouteRuleRegular(ctrl, $scope) {
             var appendixDirectiveData;
+            var routeOptionSettingsGroupDirectiveAPI;
+            var routeRuleOptionOrderSettingsDirectiveAPI;
+            var routeRuleOptionFilterSettingsDirectiveAPI;
+            var routeRuleOptionPercentageSettingsDirectiveAPI;
+
+            $scope.optionOrderSettingsGroupTemplates = [];
+            $scope.optionSettingsGroupTemplates = [];
+            $scope.optionFilterSettingsGroupTemplates = [];
+            $scope.optionPercentageSettingsGroupTemplates = [];
 
             $scope.onOptionSettingsGroupDirectiveReady = function (api) {
                 routeOptionSettingsGroupDirectiveAPI = api;
@@ -104,7 +113,7 @@ app.directive('vrWhsRoutingRouteruleoptionRegular', ['UtilsService', 'WhS_Routin
                     function loadOptionFilterSettingsGroupTemplates() {
                         return WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionFilterSettingsTemplates().then(function (response) {
                             angular.forEach(response, function (item) {
-                                $scope.optionFilterSettingsGroupTemnplates.push(item);
+                                $scope.optionFilterSettingsGroupTemplates.push(item);
                             });
                         });
                     }

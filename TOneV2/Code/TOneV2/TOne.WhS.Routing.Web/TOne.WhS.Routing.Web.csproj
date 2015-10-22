@@ -129,8 +129,6 @@
     <Content Include="WhS_Routing\Directives\RouteRuleOptions\Templates\RouteRuleRegularDirectiveTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteRuleOptions\vr-whs-routing-routeruleoption-block-directive.js" />
     <Content Include="WhS_Routing\Directives\RouteRuleOptions\vr-whs-routing-routeruleoption-regular-directive.js" />
-    <Content Include="WhS_Routing\Directives\RouteRuleSettings\Templates\OptionFilterRemoveLossDirectiveTemplate.html" />
-    <Content Include="WhS_Routing\Directives\RouteRuleSettings\Templates\OptionOrderByRuleDirectiveTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteRuleSettings\Templates\OptionPercentageFixedDirectiveTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteRuleSettings\Templates\SelectiveOptionDirectiveTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-optionfilter-removeloss-directive.js" />

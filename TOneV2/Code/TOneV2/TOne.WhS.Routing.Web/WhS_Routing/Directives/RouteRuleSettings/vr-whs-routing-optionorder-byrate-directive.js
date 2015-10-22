@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingOptionrorderByrate', ['UtilsService',
+app.directive('vrWhsRoutingOptionorderByrate', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {
@@ -24,14 +24,14 @@ app.directive('vrWhsRoutingOptionrorderByrate', ['UtilsService',
                     }
                 }
             },
-            templateUrl: function (element, attrs) {
+            template: function (element, attrs) {
                 return getRoutingOptionOrderByRateTemplate(attrs);
             }
 
         };
 
         function getRoutingOptionOrderByRateTemplate(attrs) {
-            return '/Client/Modules/WhS_Routing/Directives/RouteRuleSettings/Templates/OptionOrderByRuleDirectiveTemplate.html';
+            return 'Order Settings';
         }
 
         function routingOptionOrderByRate(ctrl, $scope) {
@@ -53,7 +53,7 @@ app.directive('vrWhsRoutingOptionrorderByrate', ['UtilsService',
                     };
                 }
 
-                api.setData = function (routeRuleOptionOrderSettings) {
+                api.setData = function (RouteRuleOptionOrderSettings) {
 
                 }
 

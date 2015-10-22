@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingOptionrfilterRemoveloss', ['UtilsService',
+app.directive('vrWhsRoutingOptionfilterRemoveloss', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {
@@ -24,14 +24,14 @@ app.directive('vrWhsRoutingOptionrfilterRemoveloss', ['UtilsService',
                     }
                 }
             },
-            templateUrl: function (element, attrs) {
+            template: function (element, attrs) {
                 return getRoutingOptionFilterRemoveLossTemplate(attrs);
             }
 
         };
 
         function getRoutingOptionFilterRemoveLossTemplate(attrs) {
-            return '/Client/Modules/WhS_Routing/Directives/RouteRuleSettings/Templates/OptionFilterRemoveLossDirectiveTemplate.html';
+            return 'Remove Loss';
         }
 
         function routingOptionFilterRemoveLoss(ctrl, $scope) {

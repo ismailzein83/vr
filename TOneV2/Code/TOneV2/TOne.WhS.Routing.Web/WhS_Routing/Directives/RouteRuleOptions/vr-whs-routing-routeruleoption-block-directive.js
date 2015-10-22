@@ -24,7 +24,7 @@ app.directive('vrWhsRoutingRouteruleoptionBlock', ['UtilsService',
                     }
                 }
             },
-            templateUrl: function (element, attrs) {
+            template: function (element, attrs) {
                 return getBeRouteRuleBlockTemplate(attrs);
             }
 

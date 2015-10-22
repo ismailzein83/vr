@@ -317,6 +317,7 @@
                     CustomerGroupSettings: getCustomersGroupSettings(),
                     CodeCriteriaGroupSettings: getCodeCriteriaGroupSettings()
                 },
+                //Settings: getRouteRuleSettings(),
                 BeginEffectiveTime: $scope.beginEffectiveDate,
                 EndEffectiveTime: $scope.endEffectiveDate
             };
@@ -345,6 +346,9 @@
                 if (routeRuleObj.Criteria.CodeCriteriaGroupSettings != null)
                     $scope.selectedCodeCriteriaGroupTemplate = UtilsService.getItemByVal($scope.codeCriteriaGroupTemplates, routeRuleObj.Criteria.CodeCriteriaGroupSettings.ConfigId, "TemplateConfigID");
             }
+
+            if (routeRuleObj.Settings != null)
+                $scope.selectedrouteRuleSettingsTemplate = UtilsService.getItemByVal($scope.routeRuleSettingsTemplates, routeRuleObj.Settings.ConfigId, "TemplateConfigID");
             
             $scope.beginEffectiveDate = routeRuleObj.BeginEffectiveTime;
             $scope.endEffectiveDate = routeRuleObj.endEffectiveTime;
@@ -403,6 +407,16 @@
             if ($scope.selectedCodeCriteriaGroupTemplate != undefined) {
                 var settings = codeCriteriaGroupSettingsDirectiveAPI.getData();
                 settings.ConfigId = $scope.selectedCodeCriteriaGroupTemplate.TemplateConfigID;
+                return settings;
+            }
+            else
+                return null;
+        }
+
+        function getRouteRuleSettings() {
+            if ($scope.selectedrouteRuleSettingsTemplate != undefined) {
+                var settings = routeRuleSettingsDirectiveAPI.getData();
+                settings.ConfigId = $scope.selectedrouteRuleSettingsTemplate.TemplateConfigID;
                 return settings;
             }
             else
