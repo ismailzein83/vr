@@ -274,7 +274,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);
     }
 
-    function editCountry(obj, onPurchasePricingRuleUpdated) {
+    function editCountry(obj, onCountryUpdated) {
         var settings = {
             useModalTemplate: true 
 
@@ -282,11 +282,10 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
 
         settings.onScopeReady = function (modalScope) {
             modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Name, "Country");
-            modalScope.onPricingRuleUpdated = onPurchasePricingRuleUpdated;
+            modalScope.onCountryUpdated = onCountryUpdated;
         };
         var parameters = {
-            //RuleId: obj.RuleId,
-            //PricingType: obj.PricingType
+            CountryId: obj.CountryId
         };
 
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/Country/CountryEditor.html', parameters, settings);

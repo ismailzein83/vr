@@ -35,10 +35,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_Country_GetAll", CountryMapper);
         }
+        public bool Update(Country country)
+        {
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_Country_Update", country.CountryId, country.Name);
+            return (recordsEffected > 0);
+        }
 
         public bool AreCountriesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.Country", ref updateHandle);
         }
+
+
     }
 }

@@ -21,7 +21,30 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCountries.ToBigResult(input, filterExpression));     
         }
+        public Country GetCountry(int countryId)
+        {
+            var countries = GetAllCountries();
+            return countries.GetRecord(countryId);
+        }
 
+        public TOne.Entities.UpdateOperationOutput<Country> UpdateCountry(Country country)
+        {
+            ICountrytDataManager dataManager = BEDataManagerFactory.GetDataManager<ICountrytDataManager>();
+
+            bool updateActionSucc = dataManager.Update(country);
+            TOne.Entities.UpdateOperationOutput<Country> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<Country>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = country;
+            }
+
+            return updateOperationOutput;
+        }
         #region Private Members
 
         public Dictionary<int, Country> GetAllCountries()

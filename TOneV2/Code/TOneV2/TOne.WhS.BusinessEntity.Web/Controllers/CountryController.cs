@@ -21,7 +21,20 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CountryManager manager = new CountryManager();
             return GetWebResponse(input, manager.GetFilteredCountries(input));
         }
-
+        [HttpGet]
+        [Route("GetCountry")]
+        public Country GetCountry(int countryId)
+        {
+            CountryManager manager = new CountryManager();
+            return manager.GetCountry(countryId);
+        }
+        [HttpPost]
+        [Route("UpdateCountry")]
+        public TOne.Entities.UpdateOperationOutput<Country> UpdateCountry(Country country)
+        {
+            CountryManager manager = new CountryManager();
+            return manager.UpdateCountry(country);
+        }
        
     }
 }
