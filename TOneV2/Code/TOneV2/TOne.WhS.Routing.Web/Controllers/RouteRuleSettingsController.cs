@@ -11,7 +11,7 @@ namespace TOne.WhS.Routing.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "RouteRuleSettings")]
     [JSONWithTypeAttribute]
-    public class RouteRuleSettingsController
+    public class RouteRuleSettingsController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
         [Route("GetRouteOptionSettingsGroupTemplates")]
