@@ -50,20 +50,29 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAc
             var api = {};
 
             api.getData = function () {
-                var obj={
-                    $type: "TOne.WhS.BusinessEntity.MainExtensions.SuppliersWithZonesGroups.SelectiveSuppliersWithZonesGroup,TOne.WhS.BusinessEntity.MainExtensions",
-                    SuppliersWithZones: suppliersWithZonesGroupsDirectiveAPI.getData(),
-                    ConfigId : $scope.selectedSuppliersWithZonesStettingsTemplate.TemplateConfigID,
-                }
-                var suppliersWithZonesGroupSettings = {
-                    SuppliersWithZonesGroupSettings: obj
+                var obj = {};
+                if ($scope.selectedSuppliersWithZonesStettingsTemplate!=undefined)
+                {
+                    obj = {
+                        $type: "TOne.WhS.BusinessEntity.MainExtensions.SuppliersWithZonesGroups.SelectiveSuppliersWithZonesGroup,TOne.WhS.BusinessEntity.MainExtensions",
+                        SuppliersWithZones: suppliersWithZonesGroupsDirectiveAPI.getData(),
+                        ConfigId: $scope.selectedSuppliersWithZonesStettingsTemplate.TemplateConfigID,
                     }
-                return suppliersWithZonesGroupSettings;
+                    var suppliersWithZonesGroupSettings = {
+                        SuppliersWithZonesGroupSettings: obj
+                    }
+                    return suppliersWithZonesGroupSettings;
+                }
+               else
+                    return obj;
             }
             api.setData = function (settings) {
-                $scope.selectedSuppliersWithZonesStettingsTemplate = UtilsService.getItemByVal($scope.suppliersWithZonesStettingsTemplates, settings.SuppliersWithZonesGroupSettings.ConfigId, "TemplateConfigID")
-                directiveAppendixData = settings.SuppliersWithZonesGroupSettings
-                tryLoadAppendixDirectives()
+                if (settings.SuppliersWithZonesGroupSettings != null) {
+                    $scope.selectedSuppliersWithZonesStettingsTemplate = UtilsService.getItemByVal($scope.suppliersWithZonesStettingsTemplates, settings.SuppliersWithZonesGroupSettings.ConfigId, "TemplateConfigID")
+                    directiveAppendixData = settings.SuppliersWithZonesGroupSettings
+                    tryLoadAppendixDirectives();
+                }
+               
             }
             api.load = function () {
                 return loadSuppliersWithZonesGroupsTemplates();

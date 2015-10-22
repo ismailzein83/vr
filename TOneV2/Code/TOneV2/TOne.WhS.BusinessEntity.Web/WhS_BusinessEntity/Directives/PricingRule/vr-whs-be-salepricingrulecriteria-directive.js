@@ -62,17 +62,22 @@ function ( UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAcco
 
             api.getData = function () {
                 var saleZoneGroupSettings;
-                if (saleZoneGroupSettingsDirectiveAPI != undefined) {
-                    saleZoneGroupSettings = saleZoneGroupSettingsDirectiveAPI.getData();
-                    saleZoneGroupSettings.ConfigId = $scope.selectedSaleZoneGroupTemplate.TemplateConfigID;
+                if ($scope.selectedSaleZoneGroupTemplate != undefined) {
+                    if (saleZoneGroupSettingsDirectiveAPI != undefined) {
+                        saleZoneGroupSettings = saleZoneGroupSettingsDirectiveAPI.getData();
+                        saleZoneGroupSettings.ConfigId = $scope.selectedSaleZoneGroupTemplate.TemplateConfigID;
+                    }
                 }
+               
                    
                 var customerGroupSettings;
-                if (customerGroupSettingsDirectiveAPI != undefined)
-                {
-                    customerGroupSettings = customerGroupSettingsDirectiveAPI.getData();
-                    customerGroupSettings.ConfigId = $scope.selectedCustomerGroupTemplate.TemplateConfigID;
+                if ($scope.selectedCustomerGroupTemplate != undefined) {
+                    if (customerGroupSettingsDirectiveAPI != undefined) {
+                        customerGroupSettings = customerGroupSettingsDirectiveAPI.getData();
+                        customerGroupSettings.ConfigId = $scope.selectedCustomerGroupTemplate.TemplateConfigID;
+                    }
                 }
+               
                 var obj={
                     SaleZoneGroupSettings: saleZoneGroupSettings,
                     CustomerGroupSettings: customerGroupSettings

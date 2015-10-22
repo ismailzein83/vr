@@ -7,7 +7,7 @@
     function purchasePricingRuleManagementController($scope, WhS_BE_MainService, UtilsService, WhS_Be_PricingRuleTypeEnum) {
         var gridAPI;
         defineScope();
-
+        load();
         function defineScope() {
             $scope.selectedPricingRuleTypes = [];
             $scope.searchClicked = function () {

@@ -16,14 +16,17 @@
             </div>
             <div ng-show="criteriaSelected">
                 <vr-row vr-loader="criteriaAppendixLoader">
-
-                    <vr-directivewrapper directive="selectedPricingType.directive" on-ready="onCriteriaDirectiveReady"></vr-directivewrapper>
+                    <vr-columns width="fullrow">
+                        <vr-directivewrapper directive="selectedPricingType.directive" on-ready="onCriteriaDirectiveReady"></vr-directivewrapper>
+                    </vr-columns>
 
                 </vr-row>
             </div>
             <div ng-show="settingsSelected">
                 <vr-row vr-loader="pricingRuleTypeAppendixLoader">
-                    <vr-directivewrapper directive="selectedPricingRuleType.directive" on-ready="onPricingRuleTypeDirectiveReady"></vr-directivewrapper>
+                    <vr-columns width="fullrow">
+                        <vr-directivewrapper directive="selectedPricingRuleType.directive" on-ready="onPricingRuleTypeDirectiveReady"></vr-directivewrapper>
+                    </vr-columns>
                 </vr-row>
 
             </div>
