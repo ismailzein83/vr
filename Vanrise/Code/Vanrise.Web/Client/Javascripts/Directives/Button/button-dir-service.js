@@ -164,6 +164,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Upload',
                     class: 'glyphicon glyphicon-upload'
                 };
+            case 'AssignZones':
+                return {
+                    text: 'Assign Zones',
+                    class: 'glyphicon glyphicon-link'
+                };
         }
     }
 }]);
