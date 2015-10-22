@@ -47,26 +47,26 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public const string _DiffSourcesZones = "Differrent Sources Zones";
 
 
-        public const string _Filter_1 = "Filter_1";
-        public const string _Filter_2 = "Filter_2";
-        public const string _Filter_3 = "Filter_3";
-        public const string _Filter_4 = "Filter_4";
-        public const string _Filter_5 = "Filter_5";
-        public const string _Filter_6 = "Filter_6";
-        public const string _Filter_7 = "Filter_7";
-        public const string _Filter_8 = "Filter_8";
-        public const string _Filter_9 = "Filter_9";
-        public const string _Filter_10 = "Filter_10";
-        public const string _Filter_11 = "Filter_11";
-        public const string _Filter_12 = "Filter_12";
-        public const string _Filter_13 = "Filter_13";
-        public const string _Filter_14 = "Filter_14";
-        public const string _Filter_15 = "Filter_15";
-        public const string _Filter_16 = "Filter_16";
-        public const string _Filter_17 = "Filter_17";
-        public const string _Filter_18 = "Filter_18";
-        public const string _Filter_19 = "Filter_19";
-        public const string _Filter_20 = "Filter_20";
+        //public const string _Filter_1 = "Filter_1";
+        //public const string _Filter_2 = "Filter_2";
+        //public const string _Filter_3 = "Filter_3";
+        //public const string _Filter_4 = "Filter_4";
+        //public const string _Filter_5 = "Filter_5";
+        //public const string _Filter_6 = "Filter_6";
+        //public const string _Filter_7 = "Filter_7";
+        //public const string _Filter_8 = "Filter_8";
+        //public const string _Filter_9 = "Filter_9";
+        //public const string _Filter_10 = "Filter_10";
+        //public const string _Filter_11 = "Filter_11";
+        //public const string _Filter_12 = "Filter_12";
+        //public const string _Filter_13 = "Filter_13";
+        //public const string _Filter_14 = "Filter_14";
+        //public const string _Filter_15 = "Filter_15";
+        //public const string _Filter_16 = "Filter_16";
+        //public const string _Filter_17 = "Filter_17";
+        //public const string _Filter_18 = "Filter_18";
+        //public const string _Filter_19 = "Filter_19";
+        //public const string _Filter_20 = "Filter_20";
 
     }
 }

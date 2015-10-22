@@ -6,11 +6,36 @@ using Vanrise.Fzero.FraudAnalysis.Aggregates;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Fzero.Entities;
 using Vanrise.Fzero.Business;
+using Vanrise.Fzero.FraudAnalysis.Data;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class AggregateManager
     {
+
+        private static Dictionary<int, AggregateDefinitionInfo> GetCachedAggregates()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAggregates",
+               () =>
+               {
+                   IAggregateDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAggregateDataManager>();
+                   IEnumerable<AggregateDefinitionInfo> aggregates = dataManager.GetAggregates();
+                   return aggregates.ToDictionary(kvp => kvp.Id, kvp => kvp);
+               });
+        }
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IAggregateDataManager _dataManager = FraudDataManagerFactory.GetDataManager<IAggregateDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreAggregatesUpdated(ref _updateHandle);
+            }
+        }
+
+
         IEnumerable<INumberProfileParameters> _parameters;
         HashSet<int> _nightCallHours = new HashSet<int>() { 0, 1, 2, 3, 4, 5 };
 
@@ -421,7 +446,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 {
                     if (i.Id == j.Id)
                     {
-                        i.Name = j.Name;
+                        i.KeyName = j.KeyName;
                         i.OperatorTypeAllowed = j.OperatorTypeAllowed;
                     }
                 }
@@ -436,34 +461,42 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         {
             List<AggregateDefinitionInfo> AggregateDefinitionsInfo = new List<AggregateDefinitionInfo>();
 
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 1, Name = Constants._CountOutCalls, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 2, Name = Constants._CountInCalls, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 3, Name = Constants._TotalDataVolume, OperatorTypeAllowed = OperatorType.Mobile, NumberPrecision = Constants._LongPrecision });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 4, Name = Constants._CountOutFails, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 5, Name = Constants._CountInFails, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 6, Name = Constants._CountOutSMSs, OperatorTypeAllowed = OperatorType.Mobile, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 7, Name = Constants._CountOutOffNets, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 8, Name = Constants._CountOutOnNets, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 9, Name = Constants._CountOutInters, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 10, Name = Constants._CountInInters, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 11, Name = Constants._CallOutDurAvg, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._LongPrecision });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 12, Name = Constants._CallInDurAvg, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._LongPrecision });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 13, Name = Constants._TotalOutVolume, OperatorTypeAllowed = OperatorType.Mobile, NumberPrecision = Constants._LongPrecision });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 14, Name = Constants._TotalInVolume, OperatorTypeAllowed = OperatorType.Mobile, NumberPrecision = Constants._LongPrecision });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 15, Name = Constants._TotalIMEI, OperatorTypeAllowed = OperatorType.Mobile, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 16, Name = Constants._TotalBTS, OperatorTypeAllowed = OperatorType.Mobile, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 17, Name = Constants._DiffOutputNumbers, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 18, Name = Constants._DiffInputNumbers, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 19, Name = Constants._CountInOffNet, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 20, Name = Constants._CountInOnNets, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 21, Name = Constants._DiffOutputNumbersNightCalls, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 22, Name = Constants._CountOutCallsPeakHours, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 23, Name = Constants._CountConsecutiveCalls, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 24, Name = Constants._CountActiveHours, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 25, Name = Constants._CountFailConsecutiveCalls, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 26, Name = Constants._CountInLowDurationCalls, OperatorTypeAllowed = OperatorType.Both, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 27, Name = Constants._DiffDestZones, OperatorTypeAllowed = OperatorType.PSTN, NumberPrecision = Constants._NoDecimal });
-            AggregateDefinitionsInfo.Add(new AggregateDefinitionInfo() { Id = 28, Name = Constants._DiffSourcesZones, OperatorTypeAllowed = OperatorType.PSTN, NumberPrecision = Constants._NoDecimal });
+
+            foreach (var i in GetCachedAggregates())
+            {
+                switch (i.Value.Id)
+                {
+                    case 1: i.Value.KeyName = Constants._CountOutCalls; break;
+                    case 2: i.Value.KeyName = Constants._CountInCalls; break;
+                    case 3: i.Value.KeyName = Constants._TotalDataVolume; break;
+                    case 4: i.Value.KeyName = Constants._CountOutFails; break;
+                    case 5: i.Value.KeyName = Constants._CountInFails; break;
+                    case 6: i.Value.KeyName = Constants._CountOutSMSs; break;
+                    case 7: i.Value.KeyName = Constants._CountOutOffNets; break;
+                    case 8: i.Value.KeyName = Constants._CountOutOnNets; break;
+                    case 9: i.Value.KeyName = Constants._CountOutInters; break;
+                    case 10: i.Value.KeyName = Constants._CountInInters; break;
+                    case 11: i.Value.KeyName = Constants._CallOutDurAvg; break;
+                    case 12: i.Value.KeyName = Constants._CallInDurAvg; break;
+                    case 13: i.Value.KeyName = Constants._TotalOutVolume; break;
+                    case 14: i.Value.KeyName = Constants._TotalInVolume; break;
+                    case 15: i.Value.KeyName = Constants._TotalIMEI; break;
+                    case 16: i.Value.KeyName = Constants._TotalBTS; break;
+                    case 17: i.Value.KeyName = Constants._DiffOutputNumbers; break;
+                    case 18: i.Value.KeyName = Constants._DiffInputNumbers; break;
+                    case 19: i.Value.KeyName = Constants._CountInOffNet; break;
+                    case 20: i.Value.KeyName = Constants._CountInOnNets; break;
+                    case 21: i.Value.KeyName = Constants._DiffOutputNumbersNightCalls; break;
+                    case 22: i.Value.KeyName = Constants._CountOutCallsPeakHours; break;
+                    case 23: i.Value.KeyName = Constants._CountConsecutiveCalls; break;
+                    case 24: i.Value.KeyName = Constants._CountActiveHours; break;
+                    case 25: i.Value.KeyName = Constants._CountFailConsecutiveCalls; break;
+                    case 26: i.Value.KeyName = Constants._CountInLowDurationCalls; break;
+                    case 27: i.Value.KeyName = Constants._DiffDestZones; break;
+                    case 28: i.Value.KeyName = Constants._DiffSourcesZones; break;
+                }
+                AggregateDefinitionsInfo.Add(i.Value);
+            }
 
 
             return AggregateDefinitionsInfo.Where(x => x.OperatorTypeAllowed == GlobalConstants._DefaultOperatorType || x.OperatorTypeAllowed == OperatorType.Both).ToList();

@@ -228,7 +228,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     };
                     foreach (var aggregateDef in AggregateDefinitions)
                     {
-                        numberProfile.AggregateValues.Add(aggregateDef.Name, aggregateDef.Aggregation.GetResult(strategyExecutionInfo.Strategy));
+                        numberProfile.AggregateValues.Add(aggregateDef.KeyName, aggregateDef.Aggregation.GetResult(strategyExecutionInfo.Strategy));
                     }
                     numberProfileBatch.Add(numberProfile);
                 }
@@ -244,7 +244,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 };
                 foreach (var aggregateDef in AggregateDefinitions)
                 {
-                    numberProfile.AggregateValues.Add(aggregateDef.Name, aggregateDef.Aggregation.GetResult(inputArgument.Parameters));
+                    numberProfile.AggregateValues.Add(aggregateDef.KeyName, aggregateDef.Aggregation.GetResult(inputArgument.Parameters));
                 }
                 numberProfileBatch.Add(numberProfile);
             }

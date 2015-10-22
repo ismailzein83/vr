@@ -18,7 +18,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         private static Dictionary<int, FilterDefinition> GetCachedFilters()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetFidddddlters",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetFilters",
                () =>
                {
                    IFilterDataManager dataManager = FraudDataManagerFactory.GetDataManager<IFilterDataManager>();
@@ -161,7 +161,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         static decimal CalculateCountofTotalIMEIPerMSISDN(NumberProfile numberProfile)
         {
-            return numberProfile.AggregateValues["TotalIMEI"];
+            return numberProfile.AggregateValues[Constants._TotalIMEI];
         }
 
         static decimal CalculateRatioAverageIncomingDurationvsAverageOutgoingDuration(NumberProfile numberProfile)

@@ -8,7 +8,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string KeyName { get; set; }
 
         public IAggregate Aggregation { get; set; }
 
