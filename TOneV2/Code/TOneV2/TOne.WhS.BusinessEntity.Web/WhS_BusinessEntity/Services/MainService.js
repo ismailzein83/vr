@@ -1,5 +1,5 @@
 ﻿
-app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_PricingProductAPIService', 'WhS_BE_CustomerPricingProductAPIService', 'VRModalService', 'VRNotificationService', 'WhS_Be_PricingTypeEnum','WhS_BE_SalePricingRuleAPIService','UtilsService', function (WhS_BE_RouteRuleAPIService, WhS_BE_PricingProductAPIService, WhS_BE_CustomerPricingProductAPIService, VRModalService, VRNotificationService, WhS_Be_PricingTypeEnum, WhS_BE_SalePricingRuleAPIService,UtilsService) {
+app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_PricingProductAPIService', 'WhS_BE_CustomerPricingProductAPIService', 'VRModalService', 'VRNotificationService', 'WhS_Be_PricingTypeEnum', 'WhS_BE_SalePricingRuleAPIService', 'UtilsService','WhS_BE_PurchasePricingRuleAPIService', function (WhS_BE_RouteRuleAPIService, WhS_BE_PricingProductAPIService, WhS_BE_CustomerPricingProductAPIService, VRModalService, VRNotificationService, WhS_Be_PricingTypeEnum, WhS_BE_SalePricingRuleAPIService, UtilsService, WhS_BE_PurchasePricingRuleAPIService) {
 
     return ({
         addRouteRule: addRouteRule,
@@ -232,7 +232,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response) {
-                    return WhS_BE_SalePricingRuleAPIService.DeleteRule(salePricingRuleObj.RuleId)
+                    return WhS_BE_SalePricingRuleAPIService.DeleteRule(salePricingRuleObj.Entity.RuleId)
                         .then(function (deletionResponse) {
                             VRNotificationService.notifyOnItemDeleted("Sale Pricing Rule", deletionResponse);
                             onSalePricingRuleDeleted(salePricingRuleObj);
@@ -296,7 +296,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response) {
-                    return WhS_BE_SalePricingRuleAPIService.DeleteRule(purchasePricingRuleObj.RuleId)
+                    return WhS_BE_PurchasePricingRuleAPIService.DeleteRule(purchasePricingRuleObj.Entity.RuleId)
                         .then(function (deletionResponse) {
                             VRNotificationService.notifyOnItemDeleted("Purchase Pricing Rule", deletionResponse);
                             onPurchasePricingRuleDeleted(purchasePricingRuleObj);
