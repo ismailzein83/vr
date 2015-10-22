@@ -172,6 +172,7 @@ font-size:12px !important;
 /*bootstrap overide */
 .form-control {   
     height: 26px ;
+    padding: 3px 12px;
 }
 textarea.form-control {   
     height: auto ;
