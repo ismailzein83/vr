@@ -72,13 +72,14 @@ function ( VRNotificationService, WhS_BE_PurchasePricingRuleAPIService, WhS_BE_M
         }
 
         function editPurchasePricingRule(purchasePricingRuleObj) {
-
             var onPricingRuleUpdated = function (purchasePricingRule) {
-
                 gridAPI.itemUpdated(purchasePricingRule);
             }
-
-            WhS_BE_MainService.editPurchasePricingRule(purchasePricingRuleObj.Entity.RuleId, onPricingRuleUpdated);
+            var obj = {
+                RuleId: purchasePricingRuleObj.Entity.RuleId,
+                PricingType: purchasePricingRuleObj.Entity.Criteria.CriteriaType
+            }
+            WhS_BE_MainService.editPurchasePricingRule(obj, onPricingRuleUpdated);
         }
         function deletePurchasePricingRule(purchasePricingRuleObj) {
             var onPurchasePricingRuleDeleted = function (purchasePricingRuleObj) {

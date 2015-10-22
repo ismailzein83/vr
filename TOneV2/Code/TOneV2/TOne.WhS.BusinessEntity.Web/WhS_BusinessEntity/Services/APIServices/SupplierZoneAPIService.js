@@ -5,14 +5,22 @@
 
     function supplierZoneAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
 
-        function GetSupplierZones(supplierId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SupplierZone", "GetSupplierZones"), {
-                supplierId: supplierId
+        function GetSupplierZonesInfo(supplierId, filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SupplierZone", "GetSupplierZonesInfo"), {
+                supplierId: supplierId,
+                filter: filter
             });
+
+        }
+        function GetSupplierZonesInfoByIds(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SupplierZone", "GetSupplierZonesInfoByIds"), input);
+        
         }
 
+
         return ({
-            GetSupplierZones: GetSupplierZones,
+            GetSupplierZonesInfo: GetSupplierZonesInfo,
+            GetSupplierZonesInfoByIds: GetSupplierZonesInfoByIds
         });
     }
 

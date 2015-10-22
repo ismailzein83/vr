@@ -96,12 +96,14 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
                 return actionList;
             }
             api.setData = function (settings) {
+                $scope.pricingRuleExtraChargeTemplates
                 for (var i = 0; i < settings.Actions.length; i++)
                 {
                     var action = settings.Actions[i];
                     for (var j = 0; j < $scope.pricingRuleExtraChargeTemplates.length; j++)
                         if (action.ConfigId == $scope.pricingRuleExtraChargeTemplates[j].TemplateConfigID)
-                            action.Editor = $scope.pricingRuleExtraChargeTemplates[j].Editor;
+                            $scope.selectedPricingRuleExtraChargeTemplate = $scope.pricingRuleExtraChargeTemplates[j];
+                    action.Editor = $scope.selectedPricingRuleExtraChargeTemplate.Editor;
                     addAPIFunction(action);
                     $scope.actions.push(action);
                 }

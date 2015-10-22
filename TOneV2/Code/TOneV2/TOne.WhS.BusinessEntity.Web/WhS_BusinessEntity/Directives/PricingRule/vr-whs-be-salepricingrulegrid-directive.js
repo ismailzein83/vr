@@ -77,8 +77,11 @@ function ( VRNotificationService, WhS_BE_SalePricingRuleAPIService, WhS_BE_MainS
 
                 gridAPI.itemUpdated(salePricingRule);
             }
-
-            WhS_BE_MainService.editSalePricingRule(salePricingRuleObj.Entity.RuleId, onPricingRuleUpdated);
+            var obj = {
+                RuleId:salePricingRuleObj.Entity.RuleId,
+                PricingType: salePricingRuleObj.Entity.Criteria.CriteriaType
+            }
+            WhS_BE_MainService.editSalePricingRule(obj, onPricingRuleUpdated);
         }
         function deleteSalePricingRule(salePricingRuleObj) {
             var onSalePricingRuleDeleted = function (salePricingRuleObj) {

@@ -26,32 +26,36 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
     function beSuppliersWithZones(ctrl, $scope, $attrs) {
         var carrierAccountDirectiveAPI;
         var supplierZonesDirectiveAPI;
+        var directiveAppendixData;
         function initializeController() {
             $scope.suppliers = [];
+            $scope.selectedSuppliers = [];
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
                 declareDirectiveAsReady()
             }
             $scope.onSelectionChanged = function () {
                 if (carrierAccountDirectiveAPI != undefined) {
-                    var obj = carrierAccountDirectiveAPI.getData();
-                    $scope.suppliers.length = 0;
-                    for (var i = 0; i < obj.length; i++) {
-                        addSupplierZoneAPIFunction(obj[i]);
+                    for (var i = 0; i < $scope.selectedSuppliers.length; i++)
+                    {
+                        addSupplierZoneAPIFunction($scope.selectedSuppliers[i]);
+                        
                     }
-                    
                 }
             };
             function addSupplierZoneAPIFunction(obj) {
                 obj.onSupplierZonesDirectiveReady = function (api) {
                     obj.supplierZonesDirectiveAPI = api;
                     obj.supplierZonesDirectiveAPI.load();
+                    if (directiveAppendixData != undefined)
+                        trySetSupplierZoneDirectiveValues();
                 }
-                $scope.suppliers.push(obj);
             }
-            $scope.removeSupplier = function (supplier) {
-                var index = UtilsService.getItemIndexByVal($scope.suppliers, supplier.CarrierAccountId, 'CarrierAccountId');
-                $scope.suppliers.splice(index, 1);
+            $scope.removeSupplier = function ($event, supplier) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                var index = UtilsService.getItemIndexByVal($scope.selectedSuppliers, supplier.CarrierAccountId, 'CarrierAccountId');
+                $scope.selectedSuppliers.splice(index, 1);
             };
             
         }
@@ -67,12 +71,12 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
 
             api.getData = function () {
                 var suppliersWithZones = [];
-                for (var i = 0; i < $scope.suppliers.length; i++)
+                for (var i = 0; i < $scope.selectedSuppliers.length; i++)
                 {
                     suppliersWithZones.push({
                         $type: "TOne.WhS.BusinessEntity.Entities.SupplierWithZones,TOne.WhS.BusinessEntity.Entities",
-                        SupplierId: $scope.suppliers[i].CarrierAccountId,
-                        SupplierZoneIds: UtilsService.getPropValuesFromArray($scope.suppliers[i].supplierZonesDirectiveAPI.getData(), "SupplierZoneId"),
+                        SupplierId: $scope.selectedSuppliers[i].CarrierAccountId,
+                        SupplierZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSuppliers[i].supplierZonesDirectiveAPI.getData(), "SupplierZoneId"),
                     });
                 }
                
@@ -84,23 +88,31 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
                 for (var i = 0; i < suppliersWithZones.length; i++) {
                     var obj = suppliersWithZones[i];
                     supplierIds.push(obj.SupplierId);
-                    carrierAccountDirectiveAPI.setData(supplierIds);
-                    addAPIFunction(obj);
                 }
-                function addAPIFunction(obj) {
-                    obj.onSupplierZonesDirectiveReady = function (api) {
-                        obj.supplierZonesDirectiveAPI = api;
-                        obj.supplierZonesDirectiveAPI.load();
-                        obj.supplierZonesDirectiveAPI.setData(obj.SupplierZoneIds);
-                    }
-                }
+                carrierAccountDirectiveAPI.setData(supplierIds);
+                directiveAppendixData = suppliersWithZones;
+                
+                trySetSupplierZoneDirectiveValues();
             }
+            
             api.load = function () {
                 return carrierAccountDirectiveAPI.load();
             }
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
+        }
+        function trySetSupplierZoneDirectiveValues() {
+            for (var i = 0; i < $scope.selectedSuppliers.length; i++) {
+                if ($scope.selectedSuppliers[i].supplierZonesDirectiveAPI == undefined)
+                     return;
+            }
+            for (var i = 0; i < directiveAppendixData.length; i++) {
+                for (var j = 0; j < $scope.selectedSuppliers.length; j++) {
+                    if ($scope.selectedSuppliers[j].CarrierAccountId == directiveAppendixData[i].SupplierId)
+                        $scope.selectedSuppliers[j].supplierZonesDirectiveAPI.setData(directiveAppendixData[i]);
+                }
+            }
         }
 
         this.initializeController = initializeController;

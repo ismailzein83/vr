@@ -74,7 +74,7 @@ app.directive('vrWhsBeAllexceptsalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.BusinessEntity.Entities.AllExceptSaleZonesSettings, TOne.WhS.BusinessEntity.Entities",
+                        $type: "TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups.AllExceptSaleZonesSettings, TOne.WhS.BusinessEntity.MainExtensions",
                         SaleZonePackageId: ctrl.salezonepackageid == undefined ? $scope.selectedSaleZonePackage.SaleZonePackageId : ctrl.salezonepackageid,
                         ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZones, "SaleZoneId")
                     };

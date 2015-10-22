@@ -62,7 +62,7 @@ app.directive('vrWhsBeSelectivecustomers', ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.BusinessEntity.Entities.SelectiveCustomersSettings, TOne.WhS.BusinessEntity.Entities",
+                        $type: "TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups.SelectiveCustomerGroup, TOne.WhS.BusinessEntity.MainExtensions",
                         CustomerIds: UtilsService.getPropValuesFromArray(carrierAccountDirectiveAPI.getData(), "CarrierAccountId")
                     };
                 }

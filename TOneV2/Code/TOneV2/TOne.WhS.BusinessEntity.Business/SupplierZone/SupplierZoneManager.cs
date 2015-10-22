@@ -12,10 +12,10 @@ namespace TOne.WhS.BusinessEntity.Business
     public class SupplierZoneManager
     {
 
-        public IEnumerable<SupplierZoneInfo> GetSupplierZones(int supplierId)
+        public IEnumerable<SupplierZoneInfo> GetSupplierZonesInfo(int supplierId,string filter)
         {
             List<SupplierZone> supplierZones = GetCachedSupplierZones();
-            return supplierZones.MapRecords(SupplierZoneInfoMapper,x => x.SupplierId == supplierId);
+            return supplierZones.MapRecords(SupplierZoneInfoMapper,x => x.SupplierId == supplierId || x.Name.Contains(filter));
            
         }
 
@@ -27,6 +27,11 @@ namespace TOne.WhS.BusinessEntity.Business
         public SupplierZone GetSupplierZone(long zoneId)
         {
             throw new NotImplementedException();
+        }
+        public IEnumerable<SupplierZoneInfo> GetSupplierZonesInfoByIds(List<long> supplierZoneIds)
+        {
+            List<SupplierZone> allSupplierZones = GetCachedSupplierZones();
+            return allSupplierZones.MapRecords(SupplierZoneInfoMapper, x => supplierZoneIds.Contains(x.SupplierZoneId));
         }
 
 

@@ -19,7 +19,7 @@
             $scope.saleZoneGroups.getData = function () {
 
                 return {
-                    $type: "TOne.WhS.BusinessEntity.Entities.SelectiveSaleZonesSettings, TOne.WhS.BusinessEntity.Entities",
+                    $type: "TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups.SelectiveSaleZoneGroup, TOne.WhS.BusinessEntity.MainExtensions",
                     SaleZonePackageId: $scope.saleZoneGroups.saleZonePackageId,
                     ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZones, "SaleZoneId")
                 };

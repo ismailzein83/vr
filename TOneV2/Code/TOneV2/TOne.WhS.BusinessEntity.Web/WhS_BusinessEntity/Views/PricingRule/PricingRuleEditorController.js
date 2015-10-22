@@ -13,6 +13,7 @@
         var pricingRuleTypeDirectiveAPI;
         var criteriaDirectiveAPI;
         var directiveAppendixData;
+        var service;
         loadParameters();
         defineScope();
 
@@ -68,6 +69,15 @@
         function load() {
             $scope.isGettingData = true;
             definePricingRuleTypes();
+            if (pricingType != undefined)
+                for (var p in WhS_Be_PricingTypeEnum)
+                    if (WhS_Be_PricingTypeEnum[p].value == pricingType)
+                        $scope.selectedPricingType = WhS_Be_PricingTypeEnum[p];
+
+            if ($scope.selectedPricingType.value == WhS_Be_PricingTypeEnum.Sale.value)
+                service = WhS_BE_SalePricingRuleAPIService;
+            else if ($scope.selectedPricingType.value == WhS_Be_PricingTypeEnum.Purchase.value)
+                service = WhS_BE_PurchasePricingRuleAPIService;
             if (editMode)
             {
                 getPricingRule();
@@ -77,6 +87,7 @@
                 $scope.isGettingData = false;
                 setDefaultValues();
             }
+
            
         }
         function setDefaultValues() {
@@ -86,10 +97,7 @@
                 }
             }
             $scope.title = UtilsService.buildTitleForAddEditor($scope.selectedPricingRuleType.title);
-            if (pricingType != undefined)
-                for (var p in WhS_Be_PricingTypeEnum)
-                    if (WhS_Be_PricingTypeEnum[p].value == pricingType)
-                        $scope.selectedPricingType = WhS_Be_PricingTypeEnum[p];
+            
         }
 
         function definePricingRuleTypes() {
@@ -99,7 +107,8 @@
         }
 
         function getPricingRule() {
-            return WhS_BE_SalePricingRuleAPIService.GetRule(ruleId).then(function (pricingRule) {
+
+            return service.GetRule(ruleId).then(function (pricingRule) {
                 directiveAppendixData = pricingRule;
                 fillScopeFromPricingRuleObj(pricingRule);
                 tryLoadAppendixDirectives();
@@ -184,21 +193,13 @@
                     $scope.selectedPricingRuleType = WhS_Be_PricingRuleTypeEnum[p];
                 }
             }
-         
-           for (var p in WhS_Be_PricingTypeEnum)
-               if (WhS_Be_PricingTypeEnum[p].value == pricingRuleObj.Criteria.CriteriaType)
-               {
-                   
-                   $scope.selectedPricingType = WhS_Be_PricingTypeEnum[p];
-               }
            $scope.title = UtilsService.buildTitleForUpdateEditor($scope.selectedPricingRuleType.title);
         }
 
         function insertPricingRule() {
 
             var pricingRuleObject = buildPricingRuleObjFromScope();
-            if ($scope.selectedPricingType.value == WhS_Be_PricingTypeEnum.Sale.value) {
-                return WhS_BE_SalePricingRuleAPIService.AddRule(pricingRuleObject)
+            return service.AddRule(pricingRuleObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded($scope.selectedPricingRuleType.title, response)) {
                     if ($scope.onPricingRuleAdded != undefined)
@@ -208,27 +209,13 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
-            }
-            else if ($scope.selectedPricingType.value == WhS_Be_PricingTypeEnum.Purchase.value) {
-                return WhS_BE_PurchasePricingRuleAPIService.AddRule(pricingRuleObject)
-           .then(function (response) {
-               if (VRNotificationService.notifyOnItemAdded($scope.selectedPricingRuleType.title, response)) {
-                   if ($scope.onPricingRuleAdded != undefined)
-                       $scope.onPricingRuleAdded(response.InsertedObject);
-                   $scope.modalContext.closeModal();
-               }
-           }).catch(function (error) {
-               VRNotificationService.notifyException(error, $scope);
-           });
-            }
-            
 
         }
 
         function updatePricingRule() {
             var pricingRuleObject = buildPricingRuleObjFromScope();
             pricingRuleObject.RuleId = ruleId;
-            WhS_BE_SalePricingRuleAPIService.UpdateRule(pricingRuleObject)
+            service.UpdateRule(pricingRuleObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated($scope.selectedPricingRuleType.title, response)) {
                     if ($scope.onPricingRuleUpdated != undefined)

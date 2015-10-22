@@ -11,6 +11,7 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
             onselectionchanged: '=',
             isrequired: '@',
             isdisabled: "=",
+            selectedvalues: "=",
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -22,6 +23,7 @@ app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'Util
             var beCarrierGroup = new BeCarrierGroup(ctrl, $scope, WhS_BE_CarrierAccountAPIService, $attrs);
             beCarrierGroup.initializeController();
             $scope.onselectionchanged = function () {
+                ctrl.selectedvalues = $scope.selectedCarrierValues;
                 if (ctrl.onselectionchanged != undefined) {
                     var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
                     if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {

@@ -13,11 +13,22 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     public class SupplierZoneController : BaseAPIController
     {
        [HttpGet]
-       [Route("GetSupplierZones")]
-       public IEnumerable<SupplierZoneInfo> GetSupplierZones(int supplierId)
+       [Route("GetSupplierZonesInfo")]
+       public IEnumerable<SupplierZoneInfo> GetSupplierZonesInfo(int supplierId,string filter)
        {
            SupplierZoneManager manager = new SupplierZoneManager();
-           return manager.GetSupplierZones(supplierId);
+           return manager.GetSupplierZonesInfo(supplierId, filter);
+       }
+       [HttpPost]
+       [Route("GetSupplierZonesInfoByIds")]
+       public IEnumerable<SupplierZoneInfo> GetSupplierZonesInfoByIds(SupplierZoneInput input)
+       {
+           SupplierZoneManager manager = new SupplierZoneManager();
+           return manager.GetSupplierZonesInfoByIds(input.SupplierZoneIds);
        }
     }
+   public class SupplierZoneInput
+   {
+       public List<long> SupplierZoneIds { get; set; }
+   }
 }

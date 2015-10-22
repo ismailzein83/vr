@@ -30,6 +30,9 @@ app.directive('vrWhsBeSupplierzone', ['WhS_BE_SupplierZoneAPIService', 'UtilsSer
                     }
 
                 }
+                $scope.searchSupplierZones = function (filter) {
+                    return WhS_BE_SupplierZoneAPIService.GetSupplierZonesInfo(ctrl.supplierid, filter);
+                }
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -58,7 +61,7 @@ app.directive('vrWhsBeSupplierzone', ['WhS_BE_SupplierZoneAPIService', 'UtilsSer
 
             return '<div>'
                +  '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SupplierZoneId" '
-            + required + ' label="Supplier Zone" datasource="supplierZones" selectedvalues="selectedSupplierZones"  onselectionchanged="onselectionchanged" entityName="Supplier Zone"></vr-select>'
+            + required + ' label="Supplier Zone" datasource="searchSupplierZones" selectedvalues="selectedSupplierZones"  onselectionchanged="onselectionchanged" entityName="Supplier Zone"></vr-select>'
             + '</div>'
         }
 
@@ -72,14 +75,14 @@ app.directive('vrWhsBeSupplierzone', ['WhS_BE_SupplierZoneAPIService', 'UtilsSer
                 var api = {};
 
                 api.load = function () {
-                    if (ctrl.supplierid != undefined)
-                    {
-                        return WhS_BE_SupplierZoneAPIService.GetSupplierZones(ctrl.supplierid).then(function (response) {
-                            angular.forEach(response, function (itm) {
-                                $scope.supplierZones.push(itm); 
-                            });
-                        });
-                    }
+                    //if (ctrl.supplierid != undefined)
+                    //{
+                    //    return WhS_BE_SupplierZoneAPIService.GetSupplierZonesInfo(ctrl.supplierid).then(function (response) {
+                    //        angular.forEach(response, function (itm) {
+                    //            $scope.supplierZones.push(itm); 
+                    //        });
+                    //    });
+                    //}
                    
                 }
 
@@ -87,18 +90,15 @@ app.directive('vrWhsBeSupplierzone', ['WhS_BE_SupplierZoneAPIService', 'UtilsSer
                     return $scope.selectedSupplierZones;
                 }
 
-                api.setData = function (selectedIds) {
-                    if ($attrs.ismultipleselection) {
-                        for (var i = 0; i < selectedIds.length; i++) {
-                            
-                            var selectedSupplierZones = UtilsService.getItemByVal($scope.supplierZones, selectedIds[i], "SupplierZoneId");
-                            if (selectedSupplierZones != null)
-                                $scope.selectedSupplierZones.push(selectedSupplierZones);
-                        }
-                    } else {
-                        var selectedSupplierZones = UtilsService.getItemByVal($scope.supplierZones, selectedIds, "SupplierZoneId");
-                        if (selectedSupplierZones != null)
-                            $scope.selectedSupplierZones = selectedSupplierZones;
+                api.setData = function (suppliersZonesGroupsSettings) {
+                    if (suppliersZonesGroupsSettings.SupplierZoneIds!=null && suppliersZonesGroupsSettings.SupplierZoneIds.length > 0) {
+                        var input = {SupplierZoneIds: suppliersZonesGroupsSettings.SupplierZoneIds };
+
+                        return WhS_BE_SupplierZoneAPIService.GetSupplierZonesInfoByIds(input).then(function (response) {
+                            angular.forEach(response, function (item) {
+                                $scope.selectedSupplierZones.push(item);
+                            });
+                        });
                     }
 
                 }

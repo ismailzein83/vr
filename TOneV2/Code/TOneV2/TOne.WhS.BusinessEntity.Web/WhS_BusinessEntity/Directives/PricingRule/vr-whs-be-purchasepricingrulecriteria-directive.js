@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBePurchasepricingrulecriteria', ['UtilsService', '$compile', 'WhS_BE_PricingRuleAPIService','WhS_BE_CarrierAccountAPIService','VRUIUtilsService',
-function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAccountAPIService, VRUIUtilsService) {
+app.directive('vrWhsBePurchasepricingrulecriteria', ['UtilsService', '$compile', 'WhS_BE_PricingRuleAPIService','WhS_BE_CarrierAccountAPIService','VRUIUtilsService','VRNotificationService',
+function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAccountAPIService, VRUIUtilsService, VRNotificationService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -61,7 +61,9 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAc
                 return suppliersWithZonesGroupSettings;
             }
             api.setData = function (settings) {
-
+                $scope.selectedSuppliersWithZonesStettingsTemplate = UtilsService.getItemByVal($scope.suppliersWithZonesStettingsTemplates, settings.SuppliersWithZonesGroupSettings.ConfigId, "TemplateConfigID")
+                directiveAppendixData = settings.SuppliersWithZonesGroupSettings
+                tryLoadAppendixDirectives()
             }
             api.load = function () {
                 return loadSuppliersWithZonesGroupsTemplates();
@@ -88,7 +90,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAc
 
                 loadOperations.push(suppliersWithZonesGroupsDirectiveAPI.load);
 
-                setDirectivesDataOperations.push(setSuppliersWithZinesStettingsDirective);
+                setDirectivesDataOperations.push(setSuppliersWithZonesStettingsDirective);
             }
 
             UtilsService.waitMultipleAsyncOperations(loadOperations).then(function () {
@@ -109,7 +111,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAc
                     $scope.isGettingData = false;
                 });
             }
-            function setSuppliersWithZinesStettingsDirective() {
+            function setSuppliersWithZonesStettingsDirective() {
                 return suppliersWithZonesGroupsDirectiveAPI.setData(directiveAppendixData.SuppliersWithZones);
             }
         }
