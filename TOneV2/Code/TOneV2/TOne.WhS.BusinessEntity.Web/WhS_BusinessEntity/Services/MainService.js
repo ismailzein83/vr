@@ -212,14 +212,15 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
         
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);
     }
-    function editSalePricingRule(ruleId, onSalePricingRuleUpdated) {
+    function editSalePricingRule(obj, onSalePricingRuleUpdated) {
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
             modalScope.onPricingRuleUpdated = onSalePricingRuleUpdated;
         };
         var parameters = {
-            RuleId: ruleId
+            RuleId: obj.RuleId,
+            PricingType: obj.PricingType
         };
 
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);
@@ -257,14 +258,15 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
 
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);
     }
-    function editPurchasePricingRule(ruleId, onPurchasePricingRuleUpdated) {
+    function editPurchasePricingRule(obj, onPurchasePricingRuleUpdated) {
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
             modalScope.onPricingRuleUpdated = onPurchasePricingRuleUpdated;
         };
         var parameters = {
-            RuleId: ruleId
+            RuleId: obj.RuleId,
+            PricingType: obj.PricingType
         };
 
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);
