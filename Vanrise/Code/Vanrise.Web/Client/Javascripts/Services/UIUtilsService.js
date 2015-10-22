@@ -17,8 +17,19 @@
             }
         }
 
+        function getSettingsFromDirective(scope, directiveAPI, templateProperty) {
+            if (scope[templateProperty] != undefined) {
+                var settings = directiveAPI.getData();
+                settings.ConfigId = scope[templateProperty].TemplateConfigID;
+                return settings;
+            }
+            else
+                return null;
+        }
+
         return ({
-            loadDirective: loadDirective
+            loadDirective: loadDirective,
+            getSettingsFromDirective: getSettingsFromDirective
         });
     }
 
