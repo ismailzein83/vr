@@ -11,7 +11,7 @@ app.directive('vrWhsRoutingRouteruleoptionRegular', ['UtilsService', 'WhS_Routin
 
                 var ctrl = this;
 
-                var beRouteRuleRegularCtor = new beRouteRuleRegularCtor(ctrl, $scope);
+                var beRouteRuleRegularCtor = new beRouteRuleRegular(ctrl, $scope);
                 beRouteRuleRegularCtor.initializeController();
 
             },
@@ -31,10 +31,10 @@ app.directive('vrWhsRoutingRouteruleoptionRegular', ['UtilsService', 'WhS_Routin
         };
 
         function getBeRouteRuleRegularTemplate(attrs) {
-            return '/Client/Modules/WhS_BusinessEntity/Directives/RouteRule/Templates/RouteRuleRegularDirectiveTemplate.html';
+            return '/Client/Modules/WhS_Routing/Directives/RouteRuleOptions/Templates/RouteRuleRegularDirectiveTemplate.html';
         }
 
-        function beRouteRuleRegularCtor(ctrl, $scope) {
+        function beRouteRuleRegular(ctrl, $scope) {
             var appendixDirectiveData;
 
             $scope.onOptionSettingsGroupDirectiveReady = function (api) {
@@ -81,9 +81,9 @@ app.directive('vrWhsRoutingRouteruleoptionRegular', ['UtilsService', 'WhS_Routin
                 var api = {};
 
                 api.load = function () {
-
-                    return UtilsService.waitMultipleAsyncOperations(loadOptionSettingsGroupTemplates, loadOptionOrderSettingsGroupTemplates,
-                        loadOptionFilterSettingsGroupTemplates, loadOptionPercentageSettingsGroupTemplates);
+                    
+                    return UtilsService.waitMultipleAsyncOperations([loadOptionSettingsGroupTemplates, loadOptionOrderSettingsGroupTemplates,
+                        loadOptionFilterSettingsGroupTemplates, loadOptionPercentageSettingsGroupTemplates]);
 
                     function loadOptionSettingsGroupTemplates() {
                         return WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionSettingsGroupTemplates().then(function (response) {

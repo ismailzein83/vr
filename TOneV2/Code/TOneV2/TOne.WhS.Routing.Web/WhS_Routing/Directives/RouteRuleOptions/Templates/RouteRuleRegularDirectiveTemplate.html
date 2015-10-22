@@ -1,7 +1,7 @@
-﻿<vr-row>
+﻿<vr-row removeline>
     <vr-columns width="1/4row">
         <vr-select datatextfield="Name" datavaluefield="TemplateConfigID"
-                   label="Option Type" datasource="optionSettingsGroupTemplates" selectedvalues="selectedOptionSettingsGroupTemplate" isrequired>
+                   label="Option Type" datasource="optionSettingsGroupTemplates" selectedvalues="selectedOptionSettingsGroupTemplate">
         </vr-select>
     </vr-columns>
     <vr-columns width="3/4row" ng-show="selectedOptionSettingsGroupTemplate" vr-loader="optionSettingsAppendixLoader">
@@ -11,7 +11,7 @@
 <vr-row>
     <vr-columns width="1/4row">
         <vr-select datatextfield="Name" datavaluefield="TemplateConfigID"
-                   label="Option Type" datasource="optionOrderSettingsGroupTemplates" selectedvalues="selectedOptionOrderSettingsGroupTemplate" isrequired>
+                   label="Option Type" datasource="optionOrderSettingsGroupTemplates" selectedvalues="selectedOptionOrderSettingsGroupTemplate">
         </vr-select>
     </vr-columns>
     <vr-columns width="3/4row" ng-show="selectedOptionOrderSettingsGroupTemplate" vr-loader="optionOrderSettingsAppendixLoader">
@@ -21,7 +21,7 @@
 <vr-row>
     <vr-columns width="1/4row">
         <vr-select datatextfield="Name" datavaluefield="TemplateConfigID"
-                   label="Option Type" datasource="optionFilterSettingsGroupTemplates" selectedvalues="selectedOptionFilterSettingsGroupTemplate" isrequired>
+                   label="Option Type" datasource="optionFilterSettingsGroupTemplates" selectedvalues="selectedOptionFilterSettingsGroupTemplate">
         </vr-select>
     </vr-columns>
     <vr-columns width="3/4row" ng-show="selectedOptionFilterSettingsGroupTemplate" vr-loader="optionFilterSettingsAppendixLoader">
@@ -31,7 +31,7 @@
 <vr-row>
     <vr-columns width="1/4row">
         <vr-select datatextfield="Name" datavaluefield="TemplateConfigID"
-                   label="Option Type" datasource="optionPercentageSettingsGroupTemplates" selectedvalues="selectedPercentageFilterSettingsGroupTemplate" isrequired>
+                   label="Option Type" datasource="optionPercentageSettingsGroupTemplates" selectedvalues="selectedPercentageFilterSettingsGroupTemplate">
         </vr-select>
     </vr-columns>
     <vr-columns width="3/4row" ng-show="selectedPercentageFilterSettingsGroupTemplate" vr-loader="optionPercentageSettingsAppendixLoader">

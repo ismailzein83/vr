@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    routRuleSettingsAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_BE_ModuleConfig'];
+    routRuleSettingsAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_Routing_ModuleConfig'];
 
-    function salePricingRuleAPIService(BaseAPIService, UtilsService, WhS_Routing_ModuleConfig) {
+    function routRuleSettingsAPIService(BaseAPIService, UtilsService, WhS_Routing_ModuleConfig) {
 
 
         function GetRouteOptionSettingsGroupTemplates() {

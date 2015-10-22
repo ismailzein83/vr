@@ -487,6 +487,18 @@
       <Project>{4810623c-c3e8-47b0-880c-68bd57d139cf}</Project>
       <Name>TOne.WhS.CodePreparation.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.Business\TOne.WhS.Routing.Business.csproj">
+      <Project>{923447e8-0d0b-4296-976a-8f486a8694d3}</Project>
+      <Name>TOne.WhS.Routing.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.Entities\TOne.WhS.Routing.Entities.csproj">
+      <Project>{b645c1d2-c038-4890-85aa-588fa3c3fc7a}</Project>
+      <Name>TOne.WhS.Routing.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.Web\TOne.WhS.Routing.Web.csproj">
+      <Project>{b6df1590-4aa6-4abd-ad8d-02e374696074}</Project>
+      <Name>TOne.WhS.Routing.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Sales.Data.SQL\TOne.WhS.Sales.Data.SQL.csproj">
       <Project>{98c7047c-bdb9-4ae1-a8ae-3b544a3bd22e}</Project>
       <Name>TOne.WhS.Sales.Data.SQL</Name>

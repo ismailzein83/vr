@@ -7,7 +7,7 @@ using TOne.WhS.Routing.Business;
 using Vanrise.Entities;
 using Vanrise.Web.Base;
 
-namespace TOne.WhS.Routing.Web
+namespace TOne.WhS.Routing.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "RouteRuleSettings")]
     [JSONWithTypeAttribute]
