@@ -11,6 +11,8 @@ namespace TOne.WhS.BusinessEntity.Data
     public interface ICountrytDataManager : IDataManager
     {
         List<Country> GetCountries();
+
+        bool AreCountriesUpdated(ref object updateHandle);
        
     }
 }

@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Http;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
+using Vanrise.Web.Base;
+
+namespace TOne.WhS.BusinessEntity.Web.Controllers
+{
+    [RoutePrefix(Constants.ROUTE_PREFIX + "CountryController")]
+    public class WhSBE_CountryController : BaseAPIController
+    {
+
+        [HttpPost]
+        [Route("GetCountries")]
+        public object GetFilteredCountries(Vanrise.Entities.DataRetrievalInput<CountryQuery> input)
+        {
+            CountryManager manager = new CountryManager();
+            return GetWebResponse(input, manager.GetFilteredCountries(input));
+        }
+
+       
+    }
+}

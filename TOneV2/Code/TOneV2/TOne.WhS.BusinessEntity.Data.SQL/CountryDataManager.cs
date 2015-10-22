@@ -36,5 +36,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_Country_GetAll", CountryMapper);
         }
 
+        public bool AreCountriesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.Country", ref updateHandle);
+        }
     }
 }

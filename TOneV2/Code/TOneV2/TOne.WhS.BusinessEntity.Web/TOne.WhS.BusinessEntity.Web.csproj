@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CarrierAccountController.cs" />
     <Compile Include="Controllers\CarrierProfileController.cs" />
     <Compile Include="Controllers\CustomerPricingProductController.cs" />
