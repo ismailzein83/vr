@@ -25,7 +25,7 @@ function (UtilsService, Common_AppendixSample_Service) {
                     setTimeout(function () {
                         if (ctrl.onReady != undefined)
                             ctrl.onReady(api);
-                    }, 500);
+                    }, 100);
               //  };
               
             },
@@ -44,10 +44,6 @@ function (UtilsService, Common_AppendixSample_Service) {
             }
 
         };
-
-        function getBeSelectiveSaleZonesTemplate(attrs) {
-            return '/Client/Modules/WhS_BusinessEntity/Directives/SaleZone/Templates/SelectiveSaleZonesDirectiveTemplate.html';
-        }
 
         
         return directiveDefinitionObject;

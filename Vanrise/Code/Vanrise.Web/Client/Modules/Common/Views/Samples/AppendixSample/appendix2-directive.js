@@ -10,24 +10,22 @@ function (UtilsService, Common_AppendixSample_Service) {
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 ctrl.dataSource = [];
-                //ctrl.selectReady = function (api) {
-                    var api = {};
-                    api.load = function (payload) {
-                        return Common_AppendixSample_Service.getRemoteData(2000)
-                            .then(function (response) {
+                var api = {};
+                api.load = function (payload) {
+                    return Common_AppendixSample_Service.getRemoteData(2000)
+                        .then(function (response) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.dataSource.push(response[i]);
                             }
                             if (payload != undefined)
                                 ctrl.selectedValue = ctrl.dataSource[0];
                         });
-                    };
-                    setTimeout(function () {
-                        if (ctrl.onReady != undefined)
-                            ctrl.onReady(api);
-                    }, 500);
-              //  };
-              
+                };
+                setTimeout(function () {
+                    if (ctrl.onReady != undefined)
+                        ctrl.onReady(api);
+                }, 100);
+
             },
             controllerAs: 'ctrl',
             bindToController: true,

@@ -63,8 +63,10 @@ function (UtilsService, Common_AppendixSample_Service, VRUIUtilsService) {
                         });
                     }
 
-                    function loadDynamicAppendixItem(appendixItem) {                       
+                    function loadDynamicAppendixItem(appendixItem) {
+                        console.log(appendixItem);
                         var matchItem = UtilsService.getItemByVal(ctrl.dynamicAppendixTemplatesToAdd, appendixItem.payload.name, "name");
+                        console.log(matchItem);
                         if (matchItem == null) 
                             return;
 
@@ -73,9 +75,9 @@ function (UtilsService, Common_AppendixSample_Service, VRUIUtilsService) {
                         };
                         var dynamicAppendixPayload = {};
 
-                        appendixItem.dynamicAppendixReady = function (api) {
+                        dynamicAppendixItem.dynamicAppendixReady = function (api) {
                             dynamicAppendixItem.dynamicAppendixAPI = api;
-                            dynamicAppendixItem.readyPromiseDeferred.resolve();
+                            appendixItem.readyPromiseDeferred.resolve();
                         };                        
 
                         appendixItem.readyPromiseDeferred.promise
@@ -95,7 +97,7 @@ function (UtilsService, Common_AppendixSample_Service, VRUIUtilsService) {
                 setTimeout(function () {
                     if (ctrl.onReady != undefined)
                         ctrl.onReady(api);
-                }, 500);
+                }, 100);
               
             },
             controllerAs: 'ctrl',
