@@ -19,6 +19,8 @@ SELECT cdrs.[CGPN]
       ,cdrs.[ConnectDateTime]
       ,cdrs.[DurationInSeconds]
       ,cdrs.[DisconnectDateTime]
+	  ,cdrs.[CGPNAreaCode]
+	  ,cdrs.[CDPNAreaCode]
 FROM	StagingCDR cdrs with(nolock,index=IX_StagingCDRS_ConnectDateTime)
 WHERE	cdrs.connectDateTime between @From and @To 
 ORDER BY cdrs.connectDateTime

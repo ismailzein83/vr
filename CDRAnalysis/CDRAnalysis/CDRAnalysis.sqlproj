@@ -154,10 +154,6 @@
     <Build Include="PSTN_BE\Stored Procedures\sp_Switch_Delete.sql" />
     <Build Include="PSTN_BE\Tables\NormalizationRule.sql" />
     <Build Include="dbo\Tables\PSTNSampleData2.sql" />
-    <Build Include="PSTN_BE\Stored Procedures\sp_NormalizationRule_Update.sql" />
-    <Build Include="PSTN_BE\Stored Procedures\sp_NormalizationRule_Insert.sql" />
-    <Build Include="PSTN_BE\Stored Procedures\sp_NormalizationRule_Delete.sql" />
-    <Build Include="PSTN_BE\Stored Procedures\sp_NormalizationRule_CreateTempByFiltered.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_DeleteByCaseIDs.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_CreateTempByFilters.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\bp_AccountStatus_GetNumbersByStatuses.sql" />
@@ -166,5 +162,10 @@
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchBrand_Update.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchBrand_GetAll.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchBrand_Delete.sql" />
+    <Build Include="FraudAnalysis\Tables\Filter.sql" />
+    <Build Include="FraudAnalysis\Tables\Aggregate.sql" />
+    <Build Include="PSTN_BE\Stored Procedures\sp_SwitchBrand_Insert.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Filter_GetAll.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Aggregate_GetAll.sql" />
   </ItemGroup>
 </Project>
