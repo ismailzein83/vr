@@ -7,7 +7,7 @@
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                color:"@"
+                color: "@"
             },
             controller: function () {
 
@@ -18,8 +18,11 @@
                 var isStandalone = tAttrs.standalone;
                 var isValue = tAttrs.isvalue != undefined;
                 var color = (tAttrs.color != undefined) ? tAttrs.color : "";
+                var hintSection = ""
+                if (tAttrs.hint != undefined)
+                    hintSection = '<vr-hint value="' + tAttrs.hint + '"></vr-hint>';
                 var newElement = '<label class="control-label vr-control-label ' + color +' " style="' + (isStandalone === "true" ? 'padding-top:6px;' : '') + (isValue ? 'font-weight:normal;' : '') + '" >'
-                    + tElement.context.innerHTML + '</label>';
+                    + tElement.context.innerHTML + '</label>' + hintSection;
                 tElement.html(newElement);
             }
 
