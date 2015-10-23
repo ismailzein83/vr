@@ -17,13 +17,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         }
 
-        public List<SaleRate> GetSaleRatesByZoneIds(List<long> zoneIds)
+        public List<SaleRate> GetSaleRatesByCustomerZoneIds(int customerId, List<long> customerZoneIds, DateTime? effectiveOn)
         {
-            string commaSeparatedZoneIds = string.Join<long>(",", zoneIds);
-            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByZoneIDs", SaleRateMapper, commaSeparatedZoneIds);
+            string commaSeparatedZoneIds = string.Join<long>(",", customerZoneIds);
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByCustomerZoneIDs", SaleRateMapper, customerId, commaSeparatedZoneIds, effectiveOn);
         }
-
-        #region Private Methods
 
         private SaleRate SaleRateMapper(IDataReader reader)
         {
@@ -44,7 +42,5 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return saleRate;
         }
-
-        #endregion
     }
 }

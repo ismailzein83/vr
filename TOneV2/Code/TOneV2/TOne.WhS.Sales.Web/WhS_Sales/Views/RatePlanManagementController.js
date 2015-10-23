@@ -35,7 +35,7 @@
                 }
             };
 
-            $scope.assignZones = function () {
+            $scope.sellNewZones = function () {
 
                 var onRatePlanUpdated = function () {
                     console.log("Rate plan has been updated");

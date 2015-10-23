@@ -117,8 +117,6 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "Cancel Selected",
                     class: "glyphicon  glyphicon-remove-circle"
                 };
-
-
             case "No":
                 return {
                     text: "No",
@@ -164,10 +162,10 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Upload',
                     class: 'glyphicon glyphicon-upload'
                 };
-            case 'AssignZones':
+            case 'SellNewZones':
                 return {
-                    text: 'Assign Zones',
-                    class: 'glyphicon glyphicon-link'
+                    text: 'Sell New Zones',
+                    class: 'glyphicon  glyphicon-plus-sign'
                 };
         }
     }

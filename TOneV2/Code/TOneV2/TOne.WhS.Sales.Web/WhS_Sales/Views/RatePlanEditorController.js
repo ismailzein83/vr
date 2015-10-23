@@ -30,7 +30,7 @@
             }
 
             $scope.close = function () {
-                
+                $scope.modalContext.closeModal();
             };
         }
 
@@ -39,11 +39,9 @@
             $scope.loadingEditor = true;
 
             WhS_BE_CustomerZoneAPIService.GetCustomerZone(customerId).then(function (response) {
-                console.log(response);
-
                 if (response != null) {
-                    for (var i = 0; i < response.Data.length; i++) {
-                        $scope.selectedSaleZones.push(response.Data[i]);
+                    for (var i = 0; i < response.Data.Zones.length; i++) {
+                        $scope.selectedSaleZones.push(response.Data.Zones[i].ZoneId);
                     }
                 }
             }).finally(function () {

@@ -27,10 +27,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (cachedCustomerZones.Count > 0)
             {
-                var filteredZones = cachedCustomerZones.Where(item => item.Value.CustomerId == customerId && item.Value.StartEffectiveTime <= effectiveOn);
+                var filteredZones = cachedCustomerZones.Where(x => x.Value.CustomerId == customerId && x.Value.StartEffectiveTime <= effectiveOn);
 
                 if (filteredZones != null && filteredZones.ToList().Count > 0)
-                    return filteredZones.OrderByDescending(item => item.Value.StartEffectiveTime).First().Value;
+                    return filteredZones.OrderByDescending(x => x.Value.StartEffectiveTime).First().Value;
             }
 
             return null;
@@ -45,8 +45,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
-        #region Private Classes
-
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ICustomerZoneDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICustomerZoneDataManager>();
@@ -57,7 +55,5 @@ namespace TOne.WhS.BusinessEntity.Business
                 return _dataManager.AreCustomerZonesUpdated(ref _updateHandle);
             }
         }
-
-        #endregion
     }
 }

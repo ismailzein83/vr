@@ -8,6 +8,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using TOne.WhS.Sales.Entities.Queries;
 using Vanrise.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business
 {
@@ -15,41 +16,44 @@ namespace TOne.WhS.Sales.Business
     {
         public IDataRetrievalResult<RatePlanItem> GetFilteredRatePlanItems(Vanrise.Entities.DataRetrievalInput<RatePlanQuery> input)
         {
-            List<SaleZone> saleZones = GetSaleZones(input.Query.CustomerId, DateTime.Now);
+            List<SaleZone> saleZones = GetSaleZones(input.Query.CustomerId);
             List<RatePlanItem> ratePlanItems = new List<RatePlanItem>();
 
             if (saleZones != null)
             {
-                List<SaleRate> saleRates = GetSaleRatesByZoneIds(saleZones.Select(item => item.SaleZoneId).ToList()); // get the sale rates
+                var saleZoneIds = saleZones.Select(item => item.SaleZoneId).ToList();
+                List<SaleRate> saleRates = GetSaleRatesByCustomerZoneIds(input.Query.CustomerId, saleZoneIds);
 
-                foreach (SaleZone zone in saleZones)
+                foreach (SaleZone saleZone in saleZones)
                 {
                     RatePlanItem ratePlanItem = new RatePlanItem();
 
-                    ratePlanItem.ZoneId = zone.SaleZoneId;
-                    ratePlanItem.ZoneName = zone.Name;
-                    ratePlanItem.Rate = saleRates.Where(item => item.ZoneId == zone.SaleZoneId).Single().NormalRate;
+                    ratePlanItem.ZoneId = saleZone.SaleZoneId;
+                    ratePlanItem.ZoneName = saleZone.Name;
+                    ratePlanItem.Rate = saleRates.Where(x => x.ZoneId == saleZone.SaleZoneId).Single().NormalRate;
 
                     ratePlanItems.Add(ratePlanItem);
                 }
             }
 
-            BigResult<RatePlanItem> bigResult = new BigResult<RatePlanItem>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bigResult);
+            // this is a dummy filter expression
+            Func<RatePlanItem, bool> filterExpression = (ratePlanItem) => (true);
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, ratePlanItems.ToBigResult(input, filterExpression));
         }
 
-        private List<SaleZone> GetSaleZones(int customerId, DateTime? effectiveOn)
+        private List<SaleZone> GetSaleZones(int customerId)
         {
-            int saleZonePackageId = GetSaleZonePackageId(customerId);
-            List<long> saleZoneIds = GetSaleZoneIds(customerId, effectiveOn);
-
+            List<long> saleZoneIds = GetSaleZoneIds(customerId);
             if (saleZoneIds == null) return null;
+
+            int sellingNumberPlanId = GetSellingNumberPlanId(customerId);
             
             SaleZoneManager saleZoneManager = new SaleZoneManager();
-            return saleZoneManager.GetSaleZonesByIds(saleZonePackageId, saleZoneIds).ToList();
+            return saleZoneManager.GetSaleZonesByIds(sellingNumberPlanId, saleZoneIds).ToList();
         }
 
-        private int GetSaleZonePackageId(int customerId)
+        private int GetSellingNumberPlanId(int customerId)
         {
             CarrierAccountManager manager = new CarrierAccountManager();
             CarrierAccountDetail customer = manager.GetCarrierAccount(customerId);
@@ -57,18 +61,18 @@ namespace TOne.WhS.Sales.Business
             return customer.CustomerSettings.SaleZonePackageId;
         }
 
-        private List<long> GetSaleZoneIds(int customerId, DateTime? effectiveOn)
+        private List<long> GetSaleZoneIds(int customerId)
         {
             CustomerZoneManager manager = new CustomerZoneManager();
-            CustomerZones customerZone = manager.GetCustomerZone(customerId, effectiveOn, false);
+            CustomerZones customerZones = manager.GetCustomerZone(customerId, DateTime.Now, false);
 
-            return (customerZone != null) ? customerZone.Zones.Select(item => item.ZoneId).ToList() : null;
+            return (customerZones != null) ? customerZones.Zones.Select(x => x.ZoneId).ToList() : null;
         }
 
-        private List<SaleRate> GetSaleRatesByZoneIds(List<long> zoneIds)
+        private List<SaleRate> GetSaleRatesByCustomerZoneIds(int customerId, List<long> customerZoneIds)
         {
             SaleRateManager manager = new SaleRateManager();
-            return manager.GetSaleRatesByZoneIds(zoneIds);
+            return manager.GetSaleRatesByCustomerZoneIds(customerId, customerZoneIds, DateTime.Now);
         }
     }
 }
