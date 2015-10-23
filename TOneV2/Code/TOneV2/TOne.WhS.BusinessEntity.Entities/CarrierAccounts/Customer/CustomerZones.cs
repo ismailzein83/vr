@@ -8,6 +8,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class CustomerZones
     {
+        public int CustomerZonesId { get; set; }
+
         public int CustomerId { get; set; }
 
         public List<CustomerZone> Zones { get; set; }

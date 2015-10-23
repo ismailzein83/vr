@@ -58,11 +58,13 @@
     <Compile Include="ICarrierAccountDataManager.cs" />
     <Compile Include="ICarrierProfileDataManager.cs" />
     <Compile Include="ICustomerPricingProductDataManager.cs" />
+    <Compile Include="ICustomerZoneDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IPricingProductDataManager.cs" />
     <Compile Include="IRouteRuleDataManager.cs" />
     <Compile Include="IRoutingProductDataManager.cs" />
     <Compile Include="ISaleCodeDataManager.cs" />
+    <Compile Include="ISaleRateDataManager.cs" />
     <Compile Include="ISaleZoneDataManager.cs" />
     <Compile Include="ISaleZonePackageDataManager.cs" />
     <Compile Include="ISupplierCodeDataManager.cs" />

@@ -1,0 +1,26 @@
+﻿<vr-panel ng-controller="WhS_Sales_RatePlanManagementController">
+
+    <vr-form name="formFilter" vr-loader="loadingFilters">
+
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-whs-be-carrieraccount type="'Customer'" on-ready="onCarrierAccountDirectiveReady" isrequired></vr-whs-be-carrieraccount>
+                </vr-columns>
+            </vr-row>
+        </div>
+
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
+                    <vr-button type="AssignZones" data-onclick="assignZones"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+
+    </vr-form>
+
+    <vr-whs-sales-rateplangrid on-ready="onRatePlanGridReady" ng-show="showRatePlanGrid"></vr-whs-sales-rateplangrid>
+
+</vr-panel>

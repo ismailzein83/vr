@@ -107,6 +107,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -116,11 +120,10 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="WhS_Sales\Views\" />
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\RatePlanController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +131,25 @@
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.Business\TOne.WhS.Sales.Business.csproj">
+      <Project>{101b3960-9114-451e-8344-4074998e32f6}</Project>
+      <Name>TOne.WhS.Sales.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.Entities\TOne.WhS.Sales.Entities.csproj">
+      <Project>{d604102b-eca7-4f50-b9a1-be46ee701dc0}</Project>
+      <Name>TOne.WhS.Sales.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WhS_Sales\Constants\ModuleConfig.js" />
+    <Content Include="WhS_Sales\Directives\Templates\RatePlanGridTemplate.html" />
+    <Content Include="WhS_Sales\Directives\vr-whs-be-rateplangrid-directive.js" />
+    <Content Include="WhS_Sales\Services\APIServices\RatePlanAPIService.js" />
+    <Content Include="WhS_Sales\Services\MainService.js" />
+    <Content Include="WhS_Sales\Views\RatePlanEditor.html" />
+    <Content Include="WhS_Sales\Views\RatePlanEditorController.js" />
+    <Content Include="WhS_Sales\Views\RatePlanManagement.html" />
+    <Content Include="WhS_Sales\Views\RatePlanManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,0 +1,15 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid on-ready="onGridReady"
+                     datasource="ratePlanItems"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     menuactions="gridMenuActions"
+                     pagingtype="'PagingOnScroll'"
+                     idfield="ZoneId">
+
+            <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'"></vr-datagridcolumn>
+
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

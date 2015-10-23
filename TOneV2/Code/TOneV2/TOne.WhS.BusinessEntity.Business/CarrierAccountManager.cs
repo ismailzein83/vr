@@ -34,7 +34,8 @@ namespace TOne.WhS.BusinessEntity.Business
         public CarrierAccountDetail GetCarrierAccount(int carrierAccountId)
         {
             List<CarrierAccountDetail> CarrierAccountsDetails = GetCachedCarrierAccounts();
-            return CarrierAccountsDetails.FindRecord(x => x.CarrierAccountId == carrierAccountId);
+            var carrierAccount = CarrierAccountsDetails.FindRecord(x => x.CarrierAccountId == carrierAccountId);
+            return carrierAccount;
         }
         public IEnumerable<CarrierAccountInfo> GetCarrierAccounts(bool getCustomers, bool getSuppliers)
         {

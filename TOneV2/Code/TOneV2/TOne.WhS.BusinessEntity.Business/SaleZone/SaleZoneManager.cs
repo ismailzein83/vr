@@ -87,6 +87,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return saleZoneDictionary;
         }
+
         public void InsertSaleZones(List<SaleZone> saleZones)
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
@@ -96,6 +97,7 @@ namespace TOne.WhS.BusinessEntity.Business
             object prepareToApplySaleZones = dataManager.FinishDBApplyStream(dbApplyStream);
              dataManager.ApplySaleZonesForDB(prepareToApplySaleZones);
         }
+
         public void DeleteSaleZones(List<SaleZone> saleZones)
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
@@ -107,7 +109,6 @@ namespace TOne.WhS.BusinessEntity.Business
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.SaleZoneGroupConfigType);
         }
-
 
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(int packageId, string filter)
         {
@@ -126,6 +127,38 @@ namespace TOne.WhS.BusinessEntity.Business
                 return allZones.Where(itm => saleZoneIds.Contains(itm.SaleZoneId)).Select(itm => new SaleZoneInfo { SaleZoneId = itm.SaleZoneId, Name = itm.Name });
             else
                 return null;
+        }
+
+        public IEnumerable<SaleZone> GetSaleZonesByIds(int packageId, List<long> saleZoneIds)
+        {
+            List<SaleZone> allZones = GetCachedSaleZones(packageId);
+
+            if (allZones != null)
+                return allZones.Where(item => saleZoneIds.Contains(item.SaleZoneId));
+
+            return null;
+        }
+
+        public IEnumerable<SaleZoneInfo> GetSaleZonesByName(int customerId, string saleZoneNameFilter)
+        {
+            int packageId = GetSaleZonePackageId(customerId);
+            List<SaleZone> allZones = GetCachedSaleZones(packageId);
+
+            if (allZones != null)
+                return allZones.Where(item => item.Name.Contains(saleZoneNameFilter))
+                    .Select(item => new SaleZoneInfo {
+                        SaleZoneId = item.SaleZoneId, Name = item.Name
+                    });
+
+            return null;
+        }
+
+        private int GetSaleZonePackageId(int customerId)
+        {
+            CarrierAccountManager manager = new CarrierAccountManager();
+            CarrierAccountDetail customer = manager.GetCarrierAccount(customerId);
+
+            return customer.CustomerSettings.SaleZonePackageId;
         }
     }
 }

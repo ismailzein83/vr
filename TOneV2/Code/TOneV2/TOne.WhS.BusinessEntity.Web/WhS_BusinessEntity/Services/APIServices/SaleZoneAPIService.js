@@ -1,10 +1,11 @@
 ﻿
 app.service('WhS_BE_SaleZoneAPIService', function (BaseAPIService) {
-
+    
     return ({
         GetSaleZonesInfo: GetSaleZonesInfo,
         GetSaleZonesInfoByIds: GetSaleZonesInfoByIds,
-        GetSaleZoneGroupTemplates: GetSaleZoneGroupTemplates
+        GetSaleZoneGroupTemplates: GetSaleZoneGroupTemplates,
+        GetSaleZonesByName: GetSaleZonesByName
     });
      
 
@@ -21,6 +22,13 @@ app.service('WhS_BE_SaleZoneAPIService', function (BaseAPIService) {
 
     function GetSaleZoneGroupTemplates() {
         return BaseAPIService.get("/api/SaleZone/GetSaleZoneGroupTemplates");
+    }
+
+    function GetSaleZonesByName(customerId, saleZoneNameFilter) {
+        return BaseAPIService.get("/api/SaleZone/GetSaleZonesByName", {
+            customerId: customerId,
+            saleZoneNameFilter: saleZoneNameFilter
+        });
     }
 
 });
