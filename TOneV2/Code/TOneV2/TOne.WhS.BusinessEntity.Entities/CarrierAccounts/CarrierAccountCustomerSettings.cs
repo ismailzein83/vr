@@ -8,7 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class CarrierAccountCustomerSettings
     {
-        public int SaleZonePackageId { get; set; }
+        public int SellingNumberPlanId { get; set; }
 
         public int? DefaultRoutingProductId { get; set; }
     }

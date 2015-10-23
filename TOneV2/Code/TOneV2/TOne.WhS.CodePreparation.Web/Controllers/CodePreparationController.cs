@@ -14,7 +14,7 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
     public class CodePreparationController:BaseAPIController
     {
         [HttpGet]
-        public CreateProcessOutput UploadSaleZonesList(int saleZonePackageId, int fileId, DateTime effectiveDate)
+        public CreateProcessOutput UploadSaleZonesList(int sellingNumberPlanId, int fileId, DateTime effectiveDate)
       {
             CodePreparationManager manager = new CodePreparationManager();
             BPClient bpClient = new BPClient();
@@ -24,11 +24,11 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
                 {
                     EffectiveDate = effectiveDate,
                     FileId = fileId,
-                    SaleZonePackageId = saleZonePackageId
+                    SellingNumberPlanId = sellingNumberPlanId
                 }
 
             });
-         //   return manager.UploadSaleZonesList(saleZonePackageId, fileId, effectiveDate);
+         //   return manager.UploadSaleZonesList(sellingNumberPlanId, fileId, effectiveDate);
       }
     }
 }

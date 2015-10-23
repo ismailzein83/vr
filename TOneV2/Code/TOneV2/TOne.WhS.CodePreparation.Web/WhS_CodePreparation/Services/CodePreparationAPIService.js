@@ -7,9 +7,9 @@ app.service('WhS_CodePrep_CodePrepAPIService', function (BaseAPIService) {
     });
      
 
-    function UploadSaleZonesList(saleZonePackageId, fileId,effectiveDate) {
+    function UploadSaleZonesList(sellingNumberPlanId, fileId,effectiveDate) {
         return BaseAPIService.get("/api/CodePreparation/UploadSaleZonesList", {
-            saleZonePackageId: saleZonePackageId,
+            sellingNumberPlanId: sellingNumberPlanId,
             fileId: fileId,
             effectiveDate: effectiveDate
         });

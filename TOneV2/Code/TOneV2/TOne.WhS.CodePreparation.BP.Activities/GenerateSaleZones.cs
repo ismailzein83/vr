@@ -14,7 +14,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
     public class GenerateSaleZones : CodeActivity
     {
         public InArgument<DateTime> EffectiveDate { get; set; }
-        public InArgument<int> SaleZonePackageId { get; set; }
+        public InArgument<int> SellingNumberPlanId { get; set; }
         public InArgument<Dictionary<string, List<SaleCode>>> NewZonesOrCodes { get; set; }
         public InArgument<Dictionary<string, List<SaleCode>>> DeletedZonesOrCodes { get; set; }
 
@@ -28,17 +28,17 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
             DateTime startReading = DateTime.Now;
             DateTime effectiveDate=EffectiveDate.Get(context);
-            int saleZonePackageId = SaleZonePackageId.Get(context);
+            int sellingNumberPlanId = SellingNumberPlanId.Get(context);
 
             SaleZoneManager saleZoneManager = new SaleZoneManager();
-            Dictionary<string, List<SaleCode>> saleZonesWithCodes = saleZoneManager.GetSaleZonesWithCodes(saleZonePackageId, effectiveDate);
+            Dictionary<string, List<SaleCode>> saleZonesWithCodes = saleZoneManager.GetSaleZonesWithCodes(sellingNumberPlanId, effectiveDate);
             List<SaleZone> saleZones = new List<SaleZone>();
 
-            saleZones = saleZoneManager.GetSaleZones(saleZonePackageId, effectiveDate);
+            saleZones = saleZoneManager.GetSaleZones(sellingNumberPlanId, effectiveDate);
             Dictionary<string, List<SaleCode>> zonesToAddDictionary = new Dictionary<string, List<SaleCode>>();
-            List<SaleZone> zonesToAdd = GetSaleZonesList(saleZonePackageId, effectiveDate, NewZonesOrCodes.Get(context), zonesToAddDictionary, ImportType.New, saleZonesWithCodes, saleZones);
+            List<SaleZone> zonesToAdd = GetSaleZonesList(sellingNumberPlanId, effectiveDate, NewZonesOrCodes.Get(context), zonesToAddDictionary, ImportType.New, saleZonesWithCodes, saleZones);
             Dictionary<string, List<SaleCode>> zonesToDeleteDictionary = new Dictionary<string, List<SaleCode>>();
-            List<SaleZone> zonesToDelete = GetSaleZonesList(saleZonePackageId, effectiveDate, DeletedZonesOrCodes.Get(context), zonesToDeleteDictionary, ImportType.Delete, saleZonesWithCodes, saleZones);
+            List<SaleZone> zonesToDelete = GetSaleZonesList(sellingNumberPlanId, effectiveDate, DeletedZonesOrCodes.Get(context), zonesToDeleteDictionary, ImportType.Delete, saleZonesWithCodes, saleZones);
             ZonesToAdd.Set(context, zonesToAdd);
             ZonesToDelete.Set(context, zonesToDelete);
             ZonesToAddDictionary.Set(context,zonesToAddDictionary);
@@ -52,7 +52,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             SaleZones.Set(context, saleZones);
             context.WriteTrackingMessage(LogEntryType.Information, "Generating SaleZones done and Takes: {0}", spent);
         }
-        private List<SaleZone> GetSaleZonesList(int saleZonePackageId, DateTime effectiveDate, Dictionary<string, List<SaleCode>> zoneByCodesDictionary, Dictionary<string,
+        private List<SaleZone> GetSaleZonesList(int sellingNumberPlanId, DateTime effectiveDate, Dictionary<string, List<SaleCode>> zoneByCodesDictionary, Dictionary<string,
             List<SaleCode>> importedList, ImportType type, Dictionary<string, List<SaleCode>> saleZonesWithCodes, List<SaleZone> saleZones)
         {
             List<SaleZone> saleZonesList = new List<SaleZone>();
@@ -66,7 +66,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                             saleZonesList.Add(new SaleZone
                             {
                                 Name = obj.Key,
-                                SaleZonePackageId = saleZonePackageId,
+                                SellingNumberPlanId = sellingNumberPlanId,
                                 BeginEffectiveDate = effectiveDate,
                                 EndEffectiveDate = null
                             });
@@ -82,7 +82,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                             {
                                 SaleZoneId = saleZone.SaleZoneId,
                                 Name = obj.Key,
-                                SaleZonePackageId = saleZonePackageId,
+                                SellingNumberPlanId = sellingNumberPlanId,
                                 EndEffectiveDate = effectiveDate
                             });
                             foreach (SaleCode deletedCode in saleCodesList)

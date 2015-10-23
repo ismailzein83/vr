@@ -13,7 +13,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
     public class GenerateSaleCodes : CodeActivity
     {
         public InArgument<DateTime> EffectiveDate { get; set; }
-        public InArgument<int> SaleZonePackageId { get; set; }
+        public InArgument<int> SellingNumberPlanId { get; set; }
         public InArgument<Dictionary<string, List<SaleCode>>> ZonesToAddDictionary { get; set; }
         public InArgument<Dictionary<string, List<SaleCode>>> ZonesToDeleteDictionary { get; set; }
          public InArgument<List<SaleZone>> SaleZones{ get; set; }
@@ -23,11 +23,11 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
             DateTime startReading = DateTime.Now;
             DateTime effectiveDate = EffectiveDate.Get(context);
-            int saleZonePackageId = SaleZonePackageId.Get(context);
+            int sellingNumberPlanId = SellingNumberPlanId.Get(context);
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             List<SaleZone> saleZones = new List<SaleZone>();
             saleZones = SaleZones.Get(context);
-            List<SaleZone> saleZonesNeeded= saleZoneManager.GetSaleZones(saleZonePackageId, effectiveDate);
+            List<SaleZone> saleZonesNeeded= saleZoneManager.GetSaleZones(sellingNumberPlanId, effectiveDate);
             foreach(SaleZone saleZone in saleZonesNeeded)
             {
                 if (!saleZones.Contains<SaleZone>(saleZone))

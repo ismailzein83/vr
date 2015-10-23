@@ -12,6 +12,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public string Name { get; set; }
 
-        public int SaleZonePackageId { get; set; }
+        public int SellingNumberPlanId { get; set; }
     }
 }

@@ -9,31 +9,31 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
-    public class CustomerPricingProductController:BaseAPIController
+    public class CustomerSellingProductController:BaseAPIController
     {
         [HttpPost]
-        public object GetFilteredCustomerPricingProducts(Vanrise.Entities.DataRetrievalInput<CustomerPricingProductQuery> input)
+        public object GetFilteredCustomerSellingProducts(Vanrise.Entities.DataRetrievalInput<CustomerSellingProductQuery> input)
         {
-            CustomerPricingProductManager manager = new CustomerPricingProductManager();
-            return GetWebResponse(input, manager.GetFilteredCustomerPricingProducts(input));
+            CustomerSellingProductManager manager = new CustomerSellingProductManager();
+            return GetWebResponse(input, manager.GetFilteredCustomerSellingProducts(input));
         }
         [HttpGet]
-        public CustomerPricingProductDetail GetCustomerPricingProduct(int customerPricingProductId)
+        public CustomerSellingProductDetail GetCustomerSellingProduct(int customerSellingProductId)
         {
-            CustomerPricingProductManager manager = new CustomerPricingProductManager();
-            return manager.GetCustomerPricingProduct(customerPricingProductId);
+            CustomerSellingProductManager manager = new CustomerSellingProductManager();
+            return manager.GetCustomerSellingProduct(customerSellingProductId);
         }
         [HttpPost]
-        public TOne.Entities.InsertOperationOutput<List<CustomerPricingProductClass>> AddCustomerPricingProduct(List<CustomerPricingProductDetail> customerPricingProducts)
+        public TOne.Entities.InsertOperationOutput<List<CustomerSellingProductClass>> AddCustomerSellingProduct(List<CustomerSellingProductDetail> customerSellingProducts)
         {
-            CustomerPricingProductManager manager = new CustomerPricingProductManager();
-            return manager.AddCustomerPricingProduct(customerPricingProducts);
+            CustomerSellingProductManager manager = new CustomerSellingProductManager();
+            return manager.AddCustomerSellingProduct(customerSellingProducts);
         }
         [HttpGet]
-        public TOne.Entities.UpdateOperationOutput<object> DeleteCustomerPricingProduct(int customerPricingProductId)
+        public TOne.Entities.UpdateOperationOutput<object> DeleteCustomerSellingProduct(int customerSellingProductId)
         {
-            CustomerPricingProductManager manager = new CustomerPricingProductManager();
-            return manager.DeleteCustomerPricingProduct(customerPricingProductId);
+            CustomerSellingProductManager manager = new CustomerSellingProductManager();
+            return manager.DeleteCustomerSellingProduct(customerSellingProductId);
         } 
     }
 }

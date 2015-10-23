@@ -49,7 +49,7 @@ namespace TestRuntime.Tasks
             //    InputArguments = new CodePreparationProcessInput{
             //        EffectiveDate=DateTime.Now,
             //        FileId=10,
-            //        SaleZonePackageId=1
+            //        SellingNumberPlanId=1
             //    }
                 
             //});

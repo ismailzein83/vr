@@ -1,0 +1,21 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="customerSellingProducts"
+                     on-ready="onGridReady"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="gridMenuActions"
+                     idfield="CustomerSellingProductId">
+
+            <vr-datagridcolumn headertext="'ID'" field="'CustomerSellingProductId'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Customer Name'" field="'CustomerName'" type="'Text'" ng-show="!hideCustomerColumn"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Selling Product Name'" field="'SellingProductName'" type="'Text'" ng-show="!hideSellingProductColumn"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'All Destinations'" field="'AllDestinations'" type="'Text'">
+                <vr-icon icontype="dataItem.AllDestinations"></vr-icon>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'BED'" field="'BED'" type="'Datetime'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'EED'" field="'EED'" type="'Datetime'"></vr-datagridcolumn>
+
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

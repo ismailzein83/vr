@@ -44,7 +44,7 @@ app.directive('vrWhsBeRoutingproduct', ['WhS_BE_RoutingProductAPIService', 'Util
                                 $scope.isLoadingDirective = true;
                                 $scope.filteredRoutingProducts.length = 0;
                                 for (var i = 0; i < $scope.routingProducts.length; i++) {
-                                    if ($scope.routingProducts[i].SaleZonePackageId == ctrl.salezonepackageid)
+                                    if ($scope.routingProducts[i].SellingNumberPlanId == ctrl.salezonepackageid)
                                         $scope.filteredRoutingProducts.push($scope.routingProducts[i]);
                                 }
                                 $scope.isLoadingDirective = false;

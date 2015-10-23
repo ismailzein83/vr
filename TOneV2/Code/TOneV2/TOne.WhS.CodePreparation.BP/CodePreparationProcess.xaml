@@ -84,7 +84,7 @@
         </OutArgument>
       </twcba1:ReadDataFromExcel.NewZonesOrCodes>
     </twcba1:ReadDataFromExcel>
-    <twcba1:GenerateSaleZones sap2010:WorkflowViewState.IdRef="GenerateSaleZones_1">
+    <twcba1:GenerateSaleZones>
       <twcba1:GenerateSaleZones.DeletedZonesOrCodes>
         <InArgument x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">
           <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">DeletedZonesOrCodes</mca:CSharpValue>
@@ -100,16 +100,16 @@
           <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">NewZonesOrCodes</mca:CSharpValue>
         </InArgument>
       </twcba1:GenerateSaleZones.NewZonesOrCodes>
-      <twcba1:GenerateSaleZones.SaleZonePackageId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SaleZonePackageId</mca:CSharpValue>
-        </InArgument>
-      </twcba1:GenerateSaleZones.SaleZonePackageId>
       <twcba1:GenerateSaleZones.SaleZones>
         <OutArgument x:TypeArguments="scg:List(twbe:SaleZone)">
           <mca:CSharpReference x:TypeArguments="scg:List(twbe:SaleZone)">SaleZones</mca:CSharpReference>
         </OutArgument>
       </twcba1:GenerateSaleZones.SaleZones>
+      <twcba1:GenerateSaleZones.SellingNumberPlanId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
+        </InArgument>
+      </twcba1:GenerateSaleZones.SellingNumberPlanId>
       <twcba1:GenerateSaleZones.ZonesToAdd>
         <OutArgument x:TypeArguments="scg:List(twbe:SaleZone)">
           <mca:CSharpReference x:TypeArguments="scg:List(twbe:SaleZone)">ZonesToAdd</mca:CSharpReference>
@@ -130,6 +130,7 @@
           <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">ZonesToDeleteDictionary</mca:CSharpReference>
         </OutArgument>
       </twcba1:GenerateSaleZones.ZonesToDeleteDictionary>
+      <sap2010:WorkflowViewState.IdRef>GenerateSaleZones_2</sap2010:WorkflowViewState.IdRef>
     </twcba1:GenerateSaleZones>
     <twcba1:ApplySaleZonesForDB sap2010:WorkflowViewState.IdRef="ApplySaleZonesForDB_1">
       <twcba1:ApplySaleZonesForDB.ZonesToAdd>
@@ -143,7 +144,7 @@
         </InArgument>
       </twcba1:ApplySaleZonesForDB.ZonesToDelete>
     </twcba1:ApplySaleZonesForDB>
-    <twcba1:GenerateSaleCodes sap2010:WorkflowViewState.IdRef="GenerateSaleCodes_1">
+    <twcba1:GenerateSaleCodes>
       <twcba1:GenerateSaleCodes.CodesToAdd>
         <OutArgument x:TypeArguments="scg:List(twbe:SaleCode)">
           <mca:CSharpReference x:TypeArguments="scg:List(twbe:SaleCode)">CodesToAdd</mca:CSharpReference>
@@ -159,16 +160,16 @@
           <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate</mca:CSharpValue>
         </InArgument>
       </twcba1:GenerateSaleCodes.EffectiveDate>
-      <twcba1:GenerateSaleCodes.SaleZonePackageId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SaleZonePackageId</mca:CSharpValue>
-        </InArgument>
-      </twcba1:GenerateSaleCodes.SaleZonePackageId>
       <twcba1:GenerateSaleCodes.SaleZones>
         <InArgument x:TypeArguments="scg:List(twbe:SaleZone)">
           <mca:CSharpValue x:TypeArguments="scg:List(twbe:SaleZone)">SaleZones</mca:CSharpValue>
         </InArgument>
       </twcba1:GenerateSaleCodes.SaleZones>
+      <twcba1:GenerateSaleCodes.SellingNumberPlanId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
+        </InArgument>
+      </twcba1:GenerateSaleCodes.SellingNumberPlanId>
       <twcba1:GenerateSaleCodes.ZonesToAddDictionary>
         <InArgument x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">
           <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">ZonesToAddDictionary</mca:CSharpValue>
@@ -179,6 +180,7 @@
           <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, scg:List(twbe:SaleCode))">ZonesToDeleteDictionary</mca:CSharpValue>
         </InArgument>
       </twcba1:GenerateSaleCodes.ZonesToDeleteDictionary>
+      <sap2010:WorkflowViewState.IdRef>GenerateSaleCodes_2</sap2010:WorkflowViewState.IdRef>
     </twcba1:GenerateSaleCodes>
     <twcba1:ApplySaleCodesForDB sap2010:WorkflowViewState.IdRef="ApplySaleCodesForDB_1">
       <twcba1:ApplySaleCodesForDB.CodesToAdd>
@@ -193,15 +195,15 @@
       </twcba1:ApplySaleCodesForDB.CodesToDelete>
     </twcba1:ApplySaleCodesForDB>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="Complete " />
-    <sads:DebugSymbol.Symbol>d1FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb25Qcm9jZXNzLnhhbWwiNAPFAQ4CAQFABUBnAwGRAkEFViADAeQBVwWFASADAYABhgEFkQEiAgFpkgEFtgEgAgEbtwEFwgEiAgEEwwEFwwFRAgECQENAZAMBkgJJC0leAwGGAlMLU4kBAwH7AU4LTlQDAfABRAtEjQEDAeUBaQtpXwMB2QFfC19eAwHOAXgLeI4BAwHDAWQLZIEBAwG4AXMLc2oDAa0BWgtahQEDAaIBggELggGRAQMBlwFuC25pAwGMAX0LfW0DAYEBiQELiQFiAgF1jgELjgFlAgFqlQELlQFqAgFemgELmgFtAgFTpAELpAFfAgFInwELnwFeAgE9rgELrgGGAQIBMrMBC7MBiQECASepAQupAWECARy6AQu6AWICARC/AQu/AWUCAQXDAUPDAU4CAQM=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb25Qcm9jZXNzLnhhbWwiNAPHAQ4CAQFABUBnAwGRAkEFViADAeQBVwWGASADAYABhwEFkgEiAgFpkwEFuAEgAgEbuQEFxAEiAgEExQEFxQFRAgECQENAZAMBkgJJC0leAwGGAlMLU4kBAwH7AU4LTlQDAfABRAtEjQEDAeUBbgtuYQMB2QFfC19eAwHOAXgLeI4BAwHDAWQLZIEBAwG4AXMLc2oDAa0BWgtahQEDAaIBggELggGRAQMBlwFpC2lpAwGMAX0LfW0DAYEBigELigFiAgF1jwELjwFlAgFqlgELlgFqAgFemwELmwFtAgFTqgELqgFhAgFIoAELoAFeAgE9rwELrwGGAQIBMrQBC7QBiQECASelAQulAWECARy8AQu8AWICARDBAQvBAWUCAQXFAUPFAU4CAQM=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="211,62" />
       <sap2010:ViewStateData Id="ReadDataFromExcel_1" sap:VirtualizedContainerService.HintSize="211,22" />
-      <sap2010:ViewStateData Id="GenerateSaleZones_1" sap:VirtualizedContainerService.HintSize="211,22" />
+      <sap2010:ViewStateData Id="GenerateSaleZones_2" sap:VirtualizedContainerService.HintSize="211,22" />
       <sap2010:ViewStateData Id="ApplySaleZonesForDB_1" sap:VirtualizedContainerService.HintSize="211,22" />
-      <sap2010:ViewStateData Id="GenerateSaleCodes_1" sap:VirtualizedContainerService.HintSize="211,22" />
+      <sap2010:ViewStateData Id="GenerateSaleCodes_2" sap:VirtualizedContainerService.HintSize="211,22" />
       <sap2010:ViewStateData Id="ApplySaleCodesForDB_1" sap:VirtualizedContainerService.HintSize="211,22" />
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="211,62" />
       <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="233,598">

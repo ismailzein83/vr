@@ -35,15 +35,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
      
         SaleZone SaleZoneMapper(IDataReader reader)
         {
-            SaleZone saleZonePackage = new SaleZone
+            SaleZone sellingNumberPlan = new SaleZone
             {
                 SaleZoneId = (long)reader["ID"],
-                SaleZonePackageId = (int)reader["PackageID"],
+                SellingNumberPlanId = (int)reader["SellingNumberPlanID"],
                 Name = reader["Name"] as string,
                 BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
                 EndEffectiveDate = GetReaderValue<DateTime>(reader, "EED")
             };
-            return saleZonePackage;
+            return sellingNumberPlan;
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
@@ -70,7 +70,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}",
                        0,
-                       record.SaleZonePackageId,
+                       record.SellingNumberPlanId,
                        record.Name,
                        record.BeginEffectiveDate,
                        record.EndEffectiveDate);

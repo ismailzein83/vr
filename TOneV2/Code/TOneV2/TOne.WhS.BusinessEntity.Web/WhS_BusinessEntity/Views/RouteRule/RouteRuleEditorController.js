@@ -116,7 +116,7 @@
                     var routingProductObj = routingProductDirectiveAPI.getData();
                     if (routingProductObj != undefined)
                     {
-                        $scope.selectedSaleZonePackageId = routingProductDirectiveAPI.getData().SaleZonePackageId;
+                        $scope.selectedSellingNumberPlanId = routingProductDirectiveAPI.getData().SellingNumberPlanId;
                         $scope.showSaleZoneSection = true;
                         $scope.showRouteRuleCriteriaTypes = $scope.showCustomerSection = $scope.showExecludedCodeSection = $scope.showIncludedCodeSection = false;
                     }
@@ -127,7 +127,7 @@
                     }
                 }
                 else {
-                    $scope.selectedSaleZonePackageId = undefined;
+                    $scope.selectedSellingNumberPlanId = undefined;
                 }
             }
 

@@ -18,15 +18,15 @@ namespace TOne.WhS.BusinessEntity.Business
             Func<RoutingProduct, bool> filterExpression = (prod) =>
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
-                 (input.Query.SaleZonePackageIds == null || input.Query.SaleZonePackageIds.Contains(prod.SaleZonePackageId));
+                 (input.Query.SellingNumberPlanIds == null || input.Query.SellingNumberPlanIds.Contains(prod.SellingNumberPlanId));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRoutingProducts.ToBigResult(input, filterExpression));
         }
 
-        public IEnumerable<RoutingProductInfo> GetRoutingProductsInfoBySaleZonePackage(int saleZonePackageId)
+        public IEnumerable<RoutingProductInfo> GetRoutingProductsInfoBySellingNumberPlan(int sellingNumberPlanId)
         {
             var routingProducts = GetAllRoutingProducts();
-            return routingProducts.MapRecords(RoutingProductInfoMapper, x => x.SaleZonePackageId == saleZonePackageId);
+            return routingProducts.MapRecords(RoutingProductInfoMapper, x => x.SellingNumberPlanId == sellingNumberPlanId);
         }
 
         public IEnumerable<RoutingProductInfo> GetRoutingProductsInfo()
@@ -118,7 +118,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 RoutingProductId = routingProduct.RoutingProductId,
                 Name = routingProduct.Name,
-                SaleZonePackageId = routingProduct.SaleZonePackageId
+                SellingNumberPlanId = routingProduct.SellingNumberPlanId
             };
         }
 

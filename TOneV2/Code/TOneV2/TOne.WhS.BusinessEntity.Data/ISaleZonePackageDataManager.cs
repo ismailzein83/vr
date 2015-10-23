@@ -7,10 +7,10 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data
 {
-    public interface ISaleZonePackageDataManager:IDataManager
+    public interface ISellingNumberPlanDataManager:IDataManager
     {
-         List<SaleZonePackage> GetSaleZonePackages();
+         List<SellingNumberPlan> GetSellingNumberPlans();
 
-         bool AreZonePackagesUpdated(ref object updateHandle);
+         bool AreSellingNumberPlansUpdated(ref object updateHandle);
     }
 }

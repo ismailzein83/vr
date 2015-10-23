@@ -2,10 +2,10 @@
 
     "use strict";
 
-    routingProductEditorController.$inject = ['$scope', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SaleZonePackageAPIService', 'WhS_BE_SaleZoneAPIService', 'WhS_BE_CarrierAccountAPIService',
+    routingProductEditorController.$inject = ['$scope', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SellingNumberPlanAPIService', 'WhS_BE_SaleZoneAPIService', 'WhS_BE_CarrierAccountAPIService',
         'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
-    function routingProductEditorController($scope, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZonePackageAPIService, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccountAPIService,
+    function routingProductEditorController($scope, WhS_BE_RoutingProductAPIService, WhS_BE_SellingNumberPlanAPIService, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccountAPIService,
         UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
             var editMode;
@@ -13,7 +13,7 @@
 
             var directiveAppendixData;
 
-            var saleZonePackageDirectiveAPI;
+            var sellingNumberPlanDirectiveAPI;
             var saleZoneGroupSettingsDirectiveAPI;
             var supplierGroupSettingsDirectiveAPI;
 
@@ -33,8 +33,8 @@
 
             function defineScope() {
 
-                $scope.onSaleZonePackagesDirectiveReady = function (api) {
-                    saleZonePackageDirectiveAPI = api;
+                $scope.onSellingNumberPlansDirectiveReady = function (api) {
+                    sellingNumberPlanDirectiveAPI = api;
                     load();
                 }
 
@@ -56,16 +56,16 @@
                         VRUIUtilsService.loadDirective($scope, supplierGroupSettingsDirectiveAPI, 'suppliersAppendixLoader');
                 }
 
-                $scope.onSaleZonePackageSelectionChanged = function () {
-                    if (saleZonePackageDirectiveAPI != undefined)
+                $scope.onSellingNumberPlanSelectionChanged = function () {
+                    if (sellingNumberPlanDirectiveAPI != undefined)
                     {
-                        var saleZonePackageObj = saleZonePackageDirectiveAPI.getData();
-                        if (saleZonePackageObj != undefined)
-                            $scope.selectedSaleZonePackageId = saleZonePackageDirectiveAPI.getData().SaleZonePackageId;
+                        var sellingNumberPlanObj = sellingNumberPlanDirectiveAPI.getData();
+                        if (sellingNumberPlanObj != undefined)
+                            $scope.selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getData().SellingNumberPlanId;
                     }
                     else
                     {
-                        $scope.selectedSaleZonePackageId = undefined;
+                        $scope.selectedSellingNumberPlanId = undefined;
                     }
                 }
 
@@ -89,10 +89,10 @@
             function load() {
                 $scope.isGettingData = true;
 
-                if (saleZonePackageDirectiveAPI == undefined)
+                if (sellingNumberPlanDirectiveAPI == undefined)
                     return;
 
-                return UtilsService.waitMultipleAsyncOperations([saleZonePackageDirectiveAPI.load, loadSaleZoneGroupTemplates, loadSupplierGroupTemplates]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([sellingNumberPlanDirectiveAPI.load, loadSaleZoneGroupTemplates, loadSupplierGroupTemplates]).then(function () {
                     if (editMode) {
                         getRoutingProduct();
                     }
@@ -189,7 +189,7 @@
                 var routingProduct = {
                     RoutingProductId: (routingProductId != null) ? routingProductId : 0,
                     Name: $scope.routingProductName,
-                    SaleZonePackageId: saleZonePackageDirectiveAPI.getData().SaleZonePackageId,
+                    SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getData().SellingNumberPlanId,
                     Settings: {
                         SaleZoneGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsDirectiveAPI, 'selectedSaleZoneGroupTemplate'),
                         SupplierGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, supplierGroupSettingsDirectiveAPI, 'selectedSupplierGroupTemplate')
@@ -201,7 +201,7 @@
 
             function fillScopeFromRoutingProductObj(routingProductObj) {
                 $scope.routingProductName = routingProductObj.Name;
-                saleZonePackageDirectiveAPI.setData(routingProductObj.SaleZonePackageId);
+                sellingNumberPlanDirectiveAPI.setData(routingProductObj.SellingNumberPlanId);
 
                 if (routingProductObj.Settings != null)
                 {

@@ -12,8 +12,8 @@
         function GetRoutingProducts() {
             return BaseAPIService.get("/api/RoutingProduct/GetRoutingProducts");
         }
-        function GetRoutingProductsInfoBySaleZonePackage(saleZonePackage) {
-            return BaseAPIService.get("/api/RoutingProduct/GetRoutingProductsInfoBySaleZonePackage", { saleZonePackage: saleZonePackage });
+        function GetRoutingProductsInfoBySellingNumberPlan(sellingNumberPlan) {
+            return BaseAPIService.get("/api/RoutingProduct/GetRoutingProductsInfoBySellingNumberPlan", { sellingNumberPlan: sellingNumberPlan });
         }
         function GetRoutingProduct(routingProductId) {
             return BaseAPIService.get("/api/RoutingProduct/GetRoutingProduct", {
@@ -41,7 +41,7 @@
             AddRoutingProduct: AddRoutingProduct,
             UpdateRoutingProduct: UpdateRoutingProduct,
             DeleteRoutingProduct: DeleteRoutingProduct,
-            GetRoutingProductsInfoBySaleZonePackage: GetRoutingProductsInfoBySaleZonePackage
+            GetRoutingProductsInfoBySellingNumberPlan: GetRoutingProductsInfoBySellingNumberPlan
         });
     }
 

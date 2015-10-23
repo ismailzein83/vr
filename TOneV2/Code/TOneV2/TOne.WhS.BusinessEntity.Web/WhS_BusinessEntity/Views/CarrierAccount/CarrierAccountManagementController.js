@@ -23,12 +23,6 @@
                 api.loadGrid(filter);
             }
 
-            $scope.onCarrierAccountDirectiveReady = function (api) {
-                carrierAccountDirectiveAPI = api;
-                load();
-                
-            }
-
             $scope.onCarrierProfileDirectiveReady = function (api) {
                 carrierProfileDirectiveAPI = api;
                 load();
@@ -49,12 +43,11 @@
 
             $scope.isGettingData = true;
 
-            if (carrierAccountDirectiveAPI == undefined || carrierProfileDirectiveAPI==undefined)
+            if ( carrierProfileDirectiveAPI==undefined)
                 return;
             defineCarrierAccountTypes();
 
-            UtilsService.waitMultipleAsyncOperations([loadCarrierAccounts, loadCarrierProfiles])
-           .finally(function () {
+           loadCarrierProfiles().finally(function () {
                $scope.isGettingData = false;
            }).catch(function (error) {
                VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -62,16 +55,12 @@
            });
 
         }
-        function loadCarrierAccounts() {
-            return carrierAccountDirectiveAPI.load();
-        }
         function loadCarrierProfiles() {
             return carrierProfileDirectiveAPI.load();
         }
 
         function getFilterObject() {
             var data = {
-                CarrierAccountsIds: UtilsService.getPropValuesFromArray(carrierAccountDirectiveAPI.getData(), "CarrierAccountId"),
                 AccountsTypes: UtilsService.getPropValuesFromArray($scope.selectedCarrierAccountTypes, "value"),
                 CarrierProfilesIds: UtilsService.getPropValuesFromArray(carrierProfileDirectiveAPI.getData(), "CarrierProfileId"),
                 Name:$scope.name,

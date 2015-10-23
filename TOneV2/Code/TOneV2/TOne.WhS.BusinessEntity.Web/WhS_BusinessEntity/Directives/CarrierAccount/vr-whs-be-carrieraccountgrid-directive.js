@@ -84,8 +84,8 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                 CustomersIds: [dataItem.CarrierAccountId],
             }
             extensionObject.onGridReady = function (api) {
-                extensionObject.custormerPricingProductGridAPI = api;
-                extensionObject.custormerPricingProductGridAPI.loadGrid(query);
+                extensionObject.custormerSellingProductGridAPI = api;
+                extensionObject.custormerSellingProductGridAPI.loadGrid(query);
                 extensionObject.onGridReady = undefined;
             };
             dataItem.extensionObject = extensionObject;
@@ -93,7 +93,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
         }
 
         function defineMenuActions() {
-            var menuActionsWithPricingProduct = [
+            var menuActionsWithSellingProduct = [
                         {
                             name: "Edit",
                             clicked: editCarrierAccount,
@@ -113,7 +113,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
             $scope.gridMenuActions = function (dataItem) {
                 if (dataItem.AccountType == WhS_Be_CarrierAccountTypeEnum.Customer.value || dataItem.AccountType == WhS_Be_CarrierAccountTypeEnum.Exchange.value)
                 {
-                    return menuActionsWithPricingProduct;
+                    return menuActionsWithSellingProduct;
                 }
                 else {  
                     return defaultMenuActions;
@@ -136,21 +136,21 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
             var query = {
                 CustomersIds: [dataItem.CarrierAccountId],
             }
-            if (dataItem.extensionObject.custormerPricingProductGridAPI != undefined)
-                dataItem.extensionObject.custormerPricingProductGridAPI.loadGrid(query);
-            var onCustomerPricingProductAdded = function (customerPricingProductObj) {
-                if (dataItem.extensionObject.custormerPricingProductGridAPI != undefined)
+            if (dataItem.extensionObject.custormerSellingProductGridAPI != undefined)
+                dataItem.extensionObject.custormerSellingProductGridAPI.loadGrid(query);
+            var onCustomerSellingProductAdded = function (customerSellingProductObj) {
+                if (dataItem.extensionObject.custormerSellingProductGridAPI != undefined)
                 {
-                    for (var i = 0; i < customerPricingProductObj.length; i++) {
-                        if (customerPricingProductObj[i].Status == 0 && gridAPI != undefined)
-                            dataItem.extensionObject.custormerPricingProductGridAPI.onCustomerPricingProductAdded(customerPricingProductObj[i]);
-                        else if (customerPricingProductObj[i].Status == 1 && gridAPI != undefined) {
-                            dataItem.extensionObject.custormerPricingProductGridAPI.onCustomerPricingProductUpdated(customerPricingProductObj[i]);
+                    for (var i = 0; i < customerSellingProductObj.length; i++) {
+                        if (customerSellingProductObj[i].Status == 0 && gridAPI != undefined)
+                            dataItem.extensionObject.custormerSellingProductGridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
+                        else if (customerSellingProductObj[i].Status == 1 && gridAPI != undefined) {
+                            dataItem.extensionObject.custormerSellingProductGridAPI.onCustomerSellingProductUpdated(customerSellingProductObj[i]);
                         }
                     }
                 }
             };
-            WhS_BE_MainService.addCustomerPricingProduct(onCustomerPricingProductAdded, dataItem);
+            WhS_BE_MainService.addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem);
         }
         function deleteCarrierAccount(carrierAccountObj) {
             var onCarrierAccountDeleted = function () {

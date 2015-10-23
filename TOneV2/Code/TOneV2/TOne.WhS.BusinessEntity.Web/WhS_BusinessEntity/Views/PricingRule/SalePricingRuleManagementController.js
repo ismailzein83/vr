@@ -46,8 +46,8 @@
         function load() {
             definePricingRuleTypes();
         }
-        function loadPricingProducts() {
-            return pricingProductsDirectiveAPI.load();
+        function loadSellingProducts() {
+            return sellingProductsDirectiveAPI.load();
         }
         function loadCarrierAccounts() {
             return carrierAccountDirectiveAPI.load();

@@ -31,7 +31,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(SaleZoneInput input)
         {
             SaleZoneManager manager = new SaleZoneManager();
-            return manager.GetSaleZonesInfoByIds(input.PackageId, input.SaleZoneIds);
+            return manager.GetSaleZonesInfoByIds(input.SellingNumberPlanId, input.SaleZoneIds);
         }
 
         [HttpGet]
@@ -51,7 +51,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
     public class SaleZoneInput
     {
-        public int PackageId { get; set; }
+        public int SellingNumberPlanId { get; set; }
 
         public List<long> SaleZoneIds { get; set; }
     }

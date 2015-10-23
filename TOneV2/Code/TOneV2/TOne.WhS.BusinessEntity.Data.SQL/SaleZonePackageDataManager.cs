@@ -9,35 +9,35 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
-    public class SaleZonePackageDataManager : BaseTOneDataManager, ISaleZonePackageDataManager
+    public class SellingNumberPlanDataManager : BaseTOneDataManager, ISellingNumberPlanDataManager
     {
-        public SaleZonePackageDataManager()
+        public SellingNumberPlanDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
 
 
-        public List<SaleZonePackage> GetSaleZonePackages()
+        public List<SellingNumberPlan> GetSellingNumberPlans()
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleZonePackage_GetAll", SaleZonePackageMapper);
+            return GetItemsSP("TOneWhS_BE.sp_SellingNumberPlan_GetAll", SellingNumberPlanMapper);
            
         }
 
-        SaleZonePackage SaleZonePackageMapper(IDataReader reader)
+        SellingNumberPlan SellingNumberPlanMapper(IDataReader reader)
         {
-            SaleZonePackage saleZonePackage = new SaleZonePackage
+            SellingNumberPlan sellingNumberPlan = new SellingNumberPlan
             {
-                SaleZonePackageId = (int)reader["ID"],
+                SellingNumberPlanId = (int)reader["ID"],
                 Name = reader["Name"] as string,
             };
-            return saleZonePackage;
+            return sellingNumberPlan;
         }
 
 
-        public bool AreZonePackagesUpdated(ref object updateHandle)
+        public bool AreSellingNumberPlansUpdated(ref object updateHandle)
         {
-            return base.IsDataUpdated("TOneWhS_BE.SaleZonePackage", ref updateHandle);
+            return base.IsDataUpdated("TOneWhS_BE.SellingNumberPlan", ref updateHandle);
         }
     }
 }

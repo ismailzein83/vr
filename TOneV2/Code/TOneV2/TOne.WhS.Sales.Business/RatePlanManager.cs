@@ -58,7 +58,7 @@ namespace TOne.WhS.Sales.Business
             CarrierAccountManager manager = new CarrierAccountManager();
             CarrierAccountDetail customer = manager.GetCarrierAccount(customerId);
 
-            return customer.CustomerSettings.SaleZonePackageId;
+            return customer.CustomerSettings.SellingNumberPlanId;
         }
 
         private List<long> GetSaleZoneIds(int customerId)

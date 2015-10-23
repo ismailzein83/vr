@@ -3,7 +3,8 @@
         <vr-form name="formCarrierAccountEditor">
             <vr-choices selectedindex="0">
                 <vr-choice isselected="criteriaSelected">Definition</vr-choice>
-                <vr-choice isselected="settingsSelected">Settings</vr-choice>
+                <vr-choice isselected="customerSettingsSelected" ng-show="customerTabShow()">Customer Settings</vr-choice>
+                <vr-choice isselected="supplierSettingsSelected" ng-show="SupplierTabShow()">Supplier Settings</vr-choice>
             </vr-choices>
             <div ng-show="criteriaSelected">
                 <vr-row>
@@ -26,7 +27,10 @@
                     </vr-columns>
                 </vr-row>
             </div>
-            <div ng-show="settingsSelected">
+            <div ng-show="customerSettingsSelected">
+
+            </div>
+            <div ng-show="supplierSettingsSelected">
 
             </div>
         </vr-form>

@@ -1,0 +1,19 @@
+﻿<vr-row>
+        <vr-columns colnum="12" simplecol>
+            <vr-datagrid datasource="sellingProducts"
+                         dataretrievalfunction="dataRetrievalFunction"
+                         pagingtype="'PagingOnScroll'"
+                         on-ready="gridReady"
+                         menuactions="gridMenuActions"
+                         idfield="SellingProductId">
+                <vr-datagridcolumn headertext="'ID'" field="'SellingProductId'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Description'" field="'Name'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Selling Number Plan'" field="'SellingNumberPlanName'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Routing Product'" field="'DefaultRoutingProductName'"></vr-datagridcolumn>
+                <vr-datagridexpandablerow>
+                    <vr-whs-be-customersellingproductgrid on-ready="dataItem.extensionObject.onGridReady" sellingproductid="dataItem.SellingProductId" hidesellingproductcolumn></vr-whs-be-customersellingproductgrid>
+                </vr-datagridexpandablerow>
+            </vr-datagrid>
+
+        </vr-columns>
+    </vr-row>

@@ -1,15 +1,15 @@
 ﻿
-app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_PricingProductAPIService', 'WhS_BE_CustomerPricingProductAPIService', 'VRModalService', 'VRNotificationService', 'WhS_Be_PricingTypeEnum', 'WhS_BE_SalePricingRuleAPIService', 'UtilsService','WhS_BE_PurchasePricingRuleAPIService', function (WhS_BE_RouteRuleAPIService, WhS_BE_PricingProductAPIService, WhS_BE_CustomerPricingProductAPIService, VRModalService, VRNotificationService, WhS_Be_PricingTypeEnum, WhS_BE_SalePricingRuleAPIService, UtilsService, WhS_BE_PurchasePricingRuleAPIService) {
+app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_SellingProductAPIService', 'WhS_BE_CustomerSellingProductAPIService', 'VRModalService', 'VRNotificationService', 'WhS_Be_PricingTypeEnum', 'WhS_BE_SalePricingRuleAPIService', 'UtilsService','WhS_BE_PurchasePricingRuleAPIService', function (WhS_BE_RouteRuleAPIService, WhS_BE_SellingProductAPIService, WhS_BE_CustomerSellingProductAPIService, VRModalService, VRNotificationService, WhS_Be_PricingTypeEnum, WhS_BE_SalePricingRuleAPIService, UtilsService, WhS_BE_PurchasePricingRuleAPIService) {
 
     return ({
         addRouteRule: addRouteRule,
         editRouteRule: editRouteRule,
         deleteRouteRule: deleteRouteRule,
-        addPricingProduct: addPricingProduct,
-        editPricingProduct: editPricingProduct,
-        deletePricingProduct: deletePricingProduct,
-        addCustomerPricingProduct: addCustomerPricingProduct,
-        deleteCustomerPricingProduct: deleteCustomerPricingProduct,
+        addSellingProduct: addSellingProduct,
+        editSellingProduct: editSellingProduct,
+        deleteSellingProduct: deleteSellingProduct,
+        addCustomerSellingProduct: addCustomerSellingProduct,
+        deleteCustomerSellingProduct: deleteCustomerSellingProduct,
         addCarrierAccount: addCarrierAccount,
         editCarrierAccount: editCarrierAccount,
         addCarrierProfile:addCarrierProfile,
@@ -66,40 +66,40 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
             });
     }
 
-    function addPricingProduct(onPricingProductAdded) {
+    function addSellingProduct(onSellingProductAdded) {
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "New Pricing Product";
-            modalScope.onPricingProductAdded = onPricingProductAdded;
+            modalScope.onSellingProductAdded = onSellingProductAdded;
         };
 
-        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingProduct/PricingProductEditor.html', null, settings);
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingProduct/SellingProductEditor.html', null, settings);
     }
 
-    function editPricingProduct(pricingProductObj, onPricingProductUpdated) {
+    function editSellingProduct(sellingProductObj, onSellingProductUpdated) {
         var modalSettings = {
         };
         var parameters = {
-            PricingProductId: pricingProductObj.PricingProductId,
+            SellingProductId: sellingProductObj.SellingProductId,
         };
 
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit Pricing Product";
-            modalScope.onPricingProductUpdated = onPricingProductUpdated;
+            modalScope.onSellingProductUpdated = onSellingProductUpdated;
         };
-        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingProduct/PricingProductEditor.html', parameters, modalSettings);
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingProduct/SellingProductEditor.html', parameters, modalSettings);
     }
 
-    function deletePricingProduct($scope, pricingProductObj, onPricingProductDeleted) {
+    function deleteSellingProduct($scope, sellingProductObj, onSellingProductDeleted) {
 
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response) {
-                    return WhS_BE_PricingProductAPIService.DeletePricingProduct(pricingProductObj.PricingProductId)
+                    return WhS_BE_SellingProductAPIService.DeleteSellingProduct(sellingProductObj.SellingProductId)
                         .then(function (deletionResponse) {
                             VRNotificationService.notifyOnItemDeleted("Pricing Product", deletionResponse);
-                            onPricingProductDeleted(pricingProductObj);
+                            onSellingProductDeleted(sellingProductObj);
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
@@ -108,32 +108,32 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
             });
     }
 
-    function addCustomerPricingProduct(onCustomerPricingProductAdded, dataItem) {
+    function addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem) {
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Customer Pricing Product";
-            modalScope.onCustomerPricingProductAdded = onCustomerPricingProductAdded;
+            modalScope.onCustomerSellingProductAdded = onCustomerSellingProductAdded;
         };
         var parameters=null;
         if (dataItem != undefined) {
              parameters = {
-                 PricingProductId: dataItem.PricingProductId,
+                 SellingProductId: dataItem.SellingProductId,
                  CarrierAccountId: dataItem.CarrierAccountId
             };
         }
             
-        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingProduct/CustomerPricingProductEditor.html', parameters, settings);
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingProduct/CustomerSellingProductEditor.html', parameters, settings);
     }
 
-    function deleteCustomerPricingProduct($scope,customerPricingProductObj, onCustomerPricingProductDeleted) {
+    function deleteCustomerSellingProduct($scope,customerSellingProductObj, onCustomerSellingProductDeleted) {
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response) {
-                    return WhS_BE_CustomerPricingProductAPIService.DeleteCustomerPricingProduct(customerPricingProductObj.CustomerPricingProductId)
+                    return WhS_BE_CustomerSellingProductAPIService.DeleteCustomerSellingProduct(customerSellingProductObj.CustomerSellingProductId)
                         .then(function (deletionResponse) {
                             VRNotificationService.notifyOnItemDeleted("Customer Pricing Product", deletionResponse);
-                            onCustomerPricingProductDeleted(deletionResponse.UpdatedObject);
+                            onCustomerSellingProductDeleted(deletionResponse.UpdatedObject);
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
@@ -276,7 +276,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Pricing
 
     function editCountry(obj, onCountryUpdated) {
         var settings = {
-            useModalTemplate: true 
+            useModalTemplate: true
 
         };
 

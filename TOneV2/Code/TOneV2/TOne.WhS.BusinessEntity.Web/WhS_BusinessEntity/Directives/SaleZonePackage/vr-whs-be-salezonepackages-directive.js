@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeSalezonepackages', ['WhS_BE_SaleZonePackageAPIService', 'UtilsService',
-    function (WhS_BE_SaleZonePackageAPIService, UtilsService) {
+app.directive('vrWhsBeSellingnumberplan', ['WhS_BE_SellingNumberPlanAPIService', 'UtilsService',
+    function (WhS_BE_SellingNumberPlanAPIService, UtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -13,12 +13,12 @@ app.directive('vrWhsBeSalezonepackages', ['WhS_BE_SaleZonePackageAPIService', 'U
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
-                $scope.selectedSaleZonePackages;
+                $scope.selectedSellingNumberPlans;
                 if ($attrs.ismultipleselection != undefined)
-                $scope.selectedSaleZonePackages = [];
-                $scope.saleZonePackages = [];
-                var beSaleZonePackageObject = new beSaleZonePackage(ctrl, $scope, $attrs);
-                beSaleZonePackageObject.initializeController();
+                $scope.selectedSellingNumberPlans = [];
+                $scope.sellingNumberPlans = [];
+                var beSellingNumberPlanObject = new beSellingNumberPlan(ctrl, $scope, $attrs);
+                beSellingNumberPlanObject.initializeController();
                 $scope.onselectionchanged = function () {
 
                     if (ctrl.onselectionchanged != undefined) {
@@ -40,13 +40,13 @@ app.directive('vrWhsBeSalezonepackages', ['WhS_BE_SaleZonePackageAPIService', 'U
                 }
             },
             template: function (element, attrs) {
-                return getBeSaleZonePackagesTemplate(attrs);
+                return getBeSellingNumberPlansTemplate(attrs);
             }
 
         };
 
 
-        function getBeSaleZonePackagesTemplate(attrs) {
+        function getBeSellingNumberPlansTemplate(attrs) {
 
             var multipleselection = "";
             if (attrs.ismultipleselection != undefined)
@@ -56,12 +56,12 @@ app.directive('vrWhsBeSalezonepackages', ['WhS_BE_SaleZonePackageAPIService', 'U
                 required = "isrequired";
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SaleZonePackageId" '
-            + required + ' label="Sale Zone Packages" datasource="saleZonePackages" selectedvalues="selectedSaleZonePackages"  onselectionchanged="onselectionchanged" entityName="Sale Zone Package"></vr-select>'
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SellingNumberPlanId" '
+            + required + ' label="Selling Number Plan" datasource="sellingNumberPlans" selectedvalues="selectedSellingNumberPlans"  onselectionchanged="onselectionchanged" entityName="Selling Number Plan"></vr-select>'
                + '</div>'
         }
 
-        function beSaleZonePackage(ctrl, $scope, $attrs) {
+        function beSellingNumberPlan(ctrl, $scope, $attrs) {
 
             function initializeController() {
                 defineAPI();
@@ -71,28 +71,28 @@ app.directive('vrWhsBeSalezonepackages', ['WhS_BE_SaleZonePackageAPIService', 'U
                 var api = {};
 
                 api.load = function () {
-                    return WhS_BE_SaleZonePackageAPIService.GetSaleZonePackages().then(function (response) {
+                    return WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlans().then(function (response) {
                         angular.forEach(response, function (itm) {
-                            $scope.saleZonePackages.push(itm);
+                            $scope.sellingNumberPlans.push(itm);
                         });
                     });
                 }
 
                 api.getData = function () {
-                    return $scope.selectedSaleZonePackages;
+                    return $scope.selectedSellingNumberPlans;
                 }
 
                 api.setData = function (selectedIds) {
                     if ($attrs.ismultipleselection) {
                         for (var i = 0; i < selectedIds.length; i++) {
-                            var selectedSaleZonePackage = UtilsService.getItemByVal($scope.saleZonePackages, selectedIds[i], "SaleZonePackageId");
-                            if (selectedSaleZonePackage != null)
-                                $scope.selectedSaleZonePackages.push(selectedSaleZonePackage);
+                            var selectedSellingNumberPlan = UtilsService.getItemByVal($scope.sellingNumberPlans, selectedIds[i], "SellingNumberPlanId");
+                            if (selectedSellingNumberPlan != null)
+                                $scope.selectedSellingNumberPlans.push(selectedSellingNumberPlan);
                         }
                     } else {
-                        var selectedSaleZonePackage = UtilsService.getItemByVal($scope.saleZonePackages, selectedIds, "SaleZonePackageId");
-                        if (selectedSaleZonePackage != null)
-                            $scope.selectedSaleZonePackages=selectedSaleZonePackage;
+                        var selectedSellingNumberPlan = UtilsService.getItemByVal($scope.sellingNumberPlans, selectedIds, "SellingNumberPlanId");
+                        if (selectedSellingNumberPlan != null)
+                            $scope.selectedSellingNumberPlans=selectedSellingNumberPlan;
                     }
                     
                 }

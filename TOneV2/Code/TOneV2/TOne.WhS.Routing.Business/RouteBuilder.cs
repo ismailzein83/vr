@@ -26,10 +26,10 @@ namespace TOne.WhS.Routing.Business
         }
 
        
-        public IEnumerable<CustomerRoute> BuildRoutes(IBuildCustomerRoutesContext context, string routeCode, out IEnumerable<PricingProductRoute> pricingProductRoutes)
+        public IEnumerable<CustomerRoute> BuildRoutes(IBuildCustomerRoutesContext context, string routeCode, out IEnumerable<SellingProductRoute> sellingProductRoutes)
         {
             List<CustomerRoute> customerRoutes = new List<CustomerRoute>();
-            Dictionary<int, PricingProductRoute> pricingProductRoutesDic = new Dictionary<int, PricingProductRoute>();
+            Dictionary<int, SellingProductRoute> sellingProductRoutesDic = new Dictionary<int, SellingProductRoute>();
 
             if (context.SaleCodeMatches != null && context.CustomerZoneRates != null)
             {                
@@ -56,7 +56,7 @@ namespace TOne.WhS.Routing.Business
                             {
                                 bool createCustomerRoute;
 
-                                CheckPricingProductRoute(out createCustomerRoute, context, routeCode, pricingProductRoutesDic, routeRuleManager, saleCodeMatch, customerZoneRate, routeRuleTarget, routeRule);
+                                CheckSellingProductRoute(out createCustomerRoute, context, routeCode, sellingProductRoutesDic, routeRuleManager, saleCodeMatch, customerZoneRate, routeRuleTarget, routeRule);
 
                                 if(createCustomerRoute)
                                 {
@@ -69,7 +69,7 @@ namespace TOne.WhS.Routing.Business
                     }
                 }
             }
-            pricingProductRoutes = pricingProductRoutesDic.Values;
+            sellingProductRoutes = sellingProductRoutesDic.Values;
             return customerRoutes;
         }
 
@@ -104,17 +104,17 @@ namespace TOne.WhS.Routing.Business
 
         #region Private Methods
 
-        private void CheckPricingProductRoute(out bool createCustomerRoute, IBuildCustomerRoutesContext context, string routeCode, Dictionary<int, PricingProductRoute> pricingProductRoutesDic, RouteRuleManager routeRuleManager, SaleCodeMatch saleCodeMatch, CustomerZoneRate customerZoneRate, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
+        private void CheckSellingProductRoute(out bool createCustomerRoute, IBuildCustomerRoutesContext context, string routeCode, Dictionary<int, SellingProductRoute> sellingProductRoutesDic, RouteRuleManager routeRuleManager, SaleCodeMatch saleCodeMatch, CustomerZoneRate customerZoneRate, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
         {
             createCustomerRoute = true;
             //if same rule and rate is inherited from Pricing, then it should be same route as pricing product
             if (routeRule.Criteria.RoutingProductId.HasValue && customerZoneRate.SellingProductId.HasValue)
             {
                 createCustomerRoute = false;
-                PricingProductRoute pricingProductRoute;
-                if (!pricingProductRoutesDic.TryGetValue(customerZoneRate.SellingProductId.Value, out pricingProductRoute))
+                SellingProductRoute sellingProductRoute;
+                if (!sellingProductRoutesDic.TryGetValue(customerZoneRate.SellingProductId.Value, out sellingProductRoute))
                 {
-                    var pricingProductRouteRuleTarget = new RouteRuleTarget
+                    var sellingProductRouteRuleTarget = new RouteRuleTarget
                     {
                         Code = routeCode,
                         SaleZoneId = saleCodeMatch.SaleZoneId,
@@ -122,23 +122,23 @@ namespace TOne.WhS.Routing.Business
                         SaleRate = customerZoneRate.Rate,
                         EffectiveOn = context.EntitiesEffectiveOn
                     };
-                    var pricingProductRouteRule = routeRuleManager.GetMatchRule(pricingProductRouteRuleTarget);
-                    if (pricingProductRouteRule != null)
+                    var sellingProductRouteRule = routeRuleManager.GetMatchRule(sellingProductRouteRuleTarget);
+                    if (sellingProductRouteRule != null)
                     {
-                        PricingProductRoute route = ExecuteRule<PricingProductRoute>(routeCode, saleCodeMatch, customerZoneRate, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, context.SupplierZoneRates, pricingProductRouteRuleTarget, pricingProductRouteRule);
-                        route.PricingProductId = customerZoneRate.SellingProductId.Value;
-                        pricingProductRoutesDic.Add(customerZoneRate.SellingProductId.Value, route);
+                        SellingProductRoute route = ExecuteRule<SellingProductRoute>(routeCode, saleCodeMatch, customerZoneRate, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, context.SupplierZoneRates, sellingProductRouteRuleTarget, sellingProductRouteRule);
+                        route.SellingProductId = customerZoneRate.SellingProductId.Value;
+                        sellingProductRoutesDic.Add(customerZoneRate.SellingProductId.Value, route);
                     }
                 }
-                if (pricingProductRoute == null)
+                if (sellingProductRoute == null)
                     createCustomerRoute = true;
                 else
                 {
                     //check if any option has a rule specific for the customer
-                    if (pricingProductRoute.Options != null)
+                    if (sellingProductRoute.Options != null)
                     {
                         RouteOptionRuleManager routeOptionRuleManager = new RouteOptionRuleManager();
-                        foreach (var option in pricingProductRoute.Options)
+                        foreach (var option in sellingProductRoute.Options)
                         {
                             RouteOptionRuleTarget routeOptionRuleTarget = new RouteOptionRuleTarget
                             {

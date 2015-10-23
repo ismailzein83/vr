@@ -141,7 +141,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<SaleZoneInfo> GetSaleZonesByName(int customerId, string saleZoneNameFilter)
         {
-            int packageId = GetSaleZonePackageId(customerId);
+            int packageId = GetSellingNumberPlanId(customerId);
             List<SaleZone> allZones = GetCachedSaleZones(packageId);
 
             if (allZones != null)
@@ -153,12 +153,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return null;
         }
 
-        private int GetSaleZonePackageId(int customerId)
+        private int GetSellingNumberPlanId(int customerId)
         {
             CarrierAccountManager manager = new CarrierAccountManager();
             CarrierAccountDetail customer = manager.GetCarrierAccount(customerId);
 
-            return customer.CustomerSettings.SaleZonePackageId;
+            return customer.CustomerSettings.SellingNumberPlanId;
         }
     }
 }

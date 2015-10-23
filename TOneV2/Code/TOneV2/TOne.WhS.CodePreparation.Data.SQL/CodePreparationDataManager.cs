@@ -15,7 +15,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
 
         }
 
-        public bool UploadSaleZonesList(int SaleZonePackageId, int fileId)
+        public bool UploadSaleZonesList(int SellingNumberPlanId, int fileId)
         {
             throw new NotImplementedException();
         }

@@ -17,7 +17,7 @@ namespace TOne.WhS.CodePreparation.Business
 {
     public class CodePreparationManager
     {
-        //public bool UploadSaleZonesList(int saleZonePackageId, int fileId,DateTime effectiveDate)
+        //public bool UploadSaleZonesList(int sellingNumberPlanId, int fileId,DateTime effectiveDate)
         //{
 
         //    VRFileManager fileManager = new VRFileManager();
@@ -76,19 +76,19 @@ namespace TOne.WhS.CodePreparation.Business
         //        count++; 
         //    }
         //    SaleZoneManager saleZoneManager = new SaleZoneManager();
-        //    Dictionary<string, List<SaleCode>> saleZonesWithCodes = saleZoneManager.GetSaleZonesWithCodes(saleZonePackageId,effectiveDate);
+        //    Dictionary<string, List<SaleCode>> saleZonesWithCodes = saleZoneManager.GetSaleZonesWithCodes(sellingNumberPlanId,effectiveDate);
         //    List<SaleZone> saleZones = new List<SaleZone>();
-        //    saleZones = saleZoneManager.GetSaleZones(saleZonePackageId,effectiveDate);
+        //    saleZones = saleZoneManager.GetSaleZones(sellingNumberPlanId,effectiveDate);
         //    Dictionary<string, List<SaleCode>> newImportedList = new Dictionary<string, List<SaleCode>>();
-        //    List<SaleZone> newSaleZones = GetSaleZonesList(saleZonePackageId, effectiveDate, newCodePreparation, newImportedList, ImportType.New, saleZonesWithCodes, saleZones);
+        //    List<SaleZone> newSaleZones = GetSaleZonesList(sellingNumberPlanId, effectiveDate, newCodePreparation, newImportedList, ImportType.New, saleZonesWithCodes, saleZones);
         //    Dictionary<string, List<SaleCode>> deletedList = new Dictionary<string, List<SaleCode>>();
-        //    List<SaleZone> deletedSaleZones = GetSaleZonesList(saleZonePackageId, effectiveDate, deletedCodePreparation, deletedList, ImportType.Delete, saleZonesWithCodes, saleZones);
+        //    List<SaleZone> deletedSaleZones = GetSaleZonesList(sellingNumberPlanId, effectiveDate, deletedCodePreparation, deletedList, ImportType.Delete, saleZonesWithCodes, saleZones);
         //    saleZoneManager.DeleteSaleZones(deletedSaleZones);
         //    saleZoneManager.InsertSaleZones(newSaleZones);
            
             
             
-        //    saleZones = saleZoneManager.GetSaleZones(saleZonePackageId, effectiveDate);
+        //    saleZones = saleZoneManager.GetSaleZones(sellingNumberPlanId, effectiveDate);
         //    List<SaleCode> newSaleCodes = new List<SaleCode>();
         //    List<SaleCode> deletedSaleCodes = new List<SaleCode>();
         //    SaleCodeManager saleCodeManager = new SaleCodeManager();
@@ -131,7 +131,7 @@ namespace TOne.WhS.CodePreparation.Business
         //    saleCodeManager.InsertSaleCodes(newSaleCodes);
         //    return true;
         //}
-        //private List<SaleZone> GetSaleZonesList(int saleZonePackageId, DateTime effectiveDate, Dictionary<string, List<SaleCode>> zoneByCodesDictionary, Dictionary<string,
+        //private List<SaleZone> GetSaleZonesList(int sellingNumberPlanId, DateTime effectiveDate, Dictionary<string, List<SaleCode>> zoneByCodesDictionary, Dictionary<string,
         //    List<SaleCode>> importedList, ImportType type, Dictionary<string, List<SaleCode>> saleZonesWithCodes, List<SaleZone> saleZones)
         //{
         //    List<SaleZone> saleZonesList = new List<SaleZone>();
@@ -145,7 +145,7 @@ namespace TOne.WhS.CodePreparation.Business
         //                    saleZonesList.Add(new SaleZone
         //                    {
         //                        Name = obj.Key,
-        //                        SaleZonePackageId = saleZonePackageId,
+        //                        SellingNumberPlanId = sellingNumberPlanId,
         //                        BeginEffectiveDate = effectiveDate,
         //                        EndEffectiveDate = null
         //                    });
@@ -161,7 +161,7 @@ namespace TOne.WhS.CodePreparation.Business
         //                        {
         //                                SaleZoneId = saleZone.SaleZoneId,
         //                                Name = obj.Key,
-        //                                SaleZonePackageId = saleZonePackageId,
+        //                                SellingNumberPlanId = sellingNumberPlanId,
         //                                EndEffectiveDate = effectiveDate
         //                        });
         //                         foreach (SaleCode deletedCode in saleCodesList)

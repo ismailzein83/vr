@@ -23,11 +23,6 @@
             }
 
             $scope.name;
-            $scope.onCarrierProfileDirectiveReady = function (api) {
-                carrierProfileDirectiveAPI = api;
-                load();
-            }
-
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid({});
@@ -37,25 +32,10 @@
         }
 
         function load() {
-
-            $scope.isGettingData = true;
-
-            if (carrierProfileDirectiveAPI == undefined)
-                return;
-
-            carrierProfileDirectiveAPI.load().then(function () {
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isGettingData = false;
-            }).finally(function () {
-                $scope.isGettingData = false;
-            });
-
         }
 
         function getFilterObject() {
             var data = {
-                CarrierProfileIds:  UtilsService.getPropValuesFromArray(carrierProfileDirectiveAPI.getData(), "CarrierProfileId"),
                 Name: $scope.name,
             };
             return data;

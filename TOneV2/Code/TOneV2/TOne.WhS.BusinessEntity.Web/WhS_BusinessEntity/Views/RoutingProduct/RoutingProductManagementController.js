@@ -2,9 +2,9 @@
 
     "use strict";
 
-    routingProductManagementController.$inject = ['$scope', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SaleZonePackageAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
+    routingProductManagementController.$inject = ['$scope', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SellingNumberPlanAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
 
-    function routingProductManagementController($scope, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZonePackageAPIService, UtilsService, VRModalService, VRNotificationService) {
+    function routingProductManagementController($scope, WhS_BE_RoutingProductAPIService, WhS_BE_SellingNumberPlanAPIService, UtilsService, VRModalService, VRNotificationService) {
         var gridApi;
 
         defineScope();
@@ -15,8 +15,8 @@
             $scope.routingProducts = [];
             $scope.gridMenuActions = [];
 
-            $scope.saleZonePackages = [];
-            $scope.selectedSaleZonePackages = [];
+            $scope.sellingNumberPlans = [];
+            $scope.selectedSellingNumberPlans = [];
 
             defineMenuActions();
 
@@ -45,9 +45,9 @@
         function load() {
             $scope.isLoadingFilterData = true;
 
-            WhS_BE_SaleZonePackageAPIService.GetSaleZonePackages().then(function (response) {
+            WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlans().then(function (response) {
                 angular.forEach(response, function (item) {
-                    $scope.saleZonePackages.push(item);
+                    $scope.sellingNumberPlans.push(item);
                 });
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -59,7 +59,7 @@
         function retrieveData() {
             var query = {
                 Name: $scope.name,
-                SaleZonePackageIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZonePackages, "SaleZonePackageId")
+                SellingNumberPlanIds: UtilsService.getPropValuesFromArray($scope.selectedSellingNumberPlans, "SellingNumberPlanId")
             };
 
             return gridApi.retrieveData(query);

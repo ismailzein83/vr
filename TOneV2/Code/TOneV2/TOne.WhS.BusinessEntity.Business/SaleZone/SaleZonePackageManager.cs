@@ -8,38 +8,38 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SaleZonePackageManager
+    public class SellingNumberPlanManager
     {
         #region Private Classes
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ISaleZonePackageDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISaleZonePackageDataManager>();
+            ISellingNumberPlanDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISellingNumberPlanDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreZonePackagesUpdated(ref _updateHandle);
+                return _dataManager.AreSellingNumberPlansUpdated(ref _updateHandle);
             }
         }
 
         #endregion
 
-        public List<SaleZonePackage> GetSaleZonePackages()
+        public List<SellingNumberPlan> GetSellingNumberPlans()
         {
-            return GetCachedSaleZonePackages();
+            return GetCachedSellingNumberPlans();
 
         }
 
         #region Private Method
 
-        List<SaleZonePackage> GetCachedSaleZonePackages()
+        List<SellingNumberPlan> GetCachedSellingNumberPlans()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSaleZonePackages",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSellingNumberPlans",
                () =>
                {
-                   ISaleZonePackageDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZonePackageDataManager>();
-                   return dataManager.GetSaleZonePackages();
+                   ISellingNumberPlanDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingNumberPlanDataManager>();
+                   return dataManager.GetSellingNumberPlans();
                });
 
         }

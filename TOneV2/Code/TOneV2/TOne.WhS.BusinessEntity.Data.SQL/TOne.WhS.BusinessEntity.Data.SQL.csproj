@@ -62,9 +62,9 @@
     <Compile Include="CountryDataManager.cs" />
     <Compile Include="CarrierAccountDataManager.cs" />
     <Compile Include="CarrierProfileDataManager.cs" />
-    <Compile Include="CustomerPricingProductDataManager.cs" />
+    <Compile Include="CustomerSellingProductDataManager.cs" />
     <Compile Include="CustomerZoneDataManager.cs" />
-    <Compile Include="PricingProductDataManager.cs" />
+    <Compile Include="SellingProductDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteRuleDataManager.cs" />
     <Compile Include="RoutingProductDataManager.cs" />

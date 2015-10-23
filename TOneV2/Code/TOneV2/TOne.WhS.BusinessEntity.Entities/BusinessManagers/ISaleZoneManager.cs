@@ -8,7 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public interface ISaleZoneManager : IBEManager
     {
-        List<SaleZone> GetPackageZones(int saleZonePackage);
+        List<SaleZone> GetPackageZones(int sellingNumberPlan);
 
         List<SaleZone> GetZones(IEnumerable<long> zoneIds);
     }

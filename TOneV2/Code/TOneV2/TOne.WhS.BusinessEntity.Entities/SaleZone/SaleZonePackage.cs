@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SaleZonePackage
+    public class SellingNumberPlan
     {
-        public int SaleZonePackageId { get; set; }
+        public int SellingNumberPlanId { get; set; }
 
         public string Name { get; set; }
     }

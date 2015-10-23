@@ -11,7 +11,7 @@
         function defineScope() {
 
             $scope.searchZones = function (filter) {
-                return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo($scope.saleZoneGroups.saleZonePackageId, filter);
+                return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo($scope.saleZoneGroups.sellingNumberPlanId, filter);
             }
 
             $scope.selectedSaleZones = [];
@@ -20,7 +20,7 @@
 
                 return {
                     $type: "TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups.SelectiveSaleZoneGroup, TOne.WhS.BusinessEntity.MainExtensions",
-                    SaleZonePackageId: $scope.saleZoneGroups.saleZonePackageId,
+                    SellingNumberPlanId: $scope.saleZoneGroups.sellingNumberPlanId,
                     ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZones, "SaleZoneId")
                 };
             };
@@ -44,7 +44,7 @@
             if (data != null) {
 
                 if ($scope.saleZoneGroups.data.ZoneIds != undefined) {
-                    var input = { PackageId: $scope.saleZoneGroups.saleZonePackageId, SaleZoneIds: $scope.saleZoneGroups.data.ZoneIds };
+                    var input = { SellingNumberPlanId: $scope.saleZoneGroups.sellingNumberPlanId, SaleZoneIds: $scope.saleZoneGroups.data.ZoneIds };
                     WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
                         angular.forEach(response, function (item) {
                             $scope.selectedSaleZones.push(item);

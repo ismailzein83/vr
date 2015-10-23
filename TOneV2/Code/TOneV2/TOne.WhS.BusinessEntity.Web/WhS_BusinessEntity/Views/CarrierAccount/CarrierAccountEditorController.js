@@ -41,7 +41,16 @@
                 $scope.modalContext.closeModal()
             };
             $scope.selectedCarrierAccountType;
-
+            $scope.customerTabShow = function () {
+                if ($scope.selectedCarrierAccountType!=undefined && $scope.selectedCarrierAccountType.value != WhS_Be_CarrierAccountTypeEnum.Supplier.value)
+                    return true;
+                return false;
+            }
+            $scope.SupplierTabShow = function () {
+                if ($scope.selectedCarrierAccountType != undefined &&  $scope.selectedCarrierAccountType.value != WhS_Be_CarrierAccountTypeEnum.Customer.value)
+                    return true;
+                return false;
+            }
 
         }
 
@@ -70,6 +79,7 @@
             });
 
         }
+
         function getCarrierAccount() {
             return WhS_BE_CarrierAccountAPIService.GetCarrierAccount(carrierAccountId).then(function (carrierAccount) {
                 fillScopeFromCarrierAccountObj(carrierAccount);

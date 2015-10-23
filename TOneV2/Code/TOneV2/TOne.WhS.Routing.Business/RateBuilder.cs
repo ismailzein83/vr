@@ -23,23 +23,23 @@ namespace TOne.WhS.Routing.Business
             SalePriceListRatesByZone customerRates;
             ratesByOwner.RatesByCustomers.TryGetValue(customerId, out customerRates);
 
-            CustomerPricingProductManager customerSellingProductManager = new CustomerPricingProductManager();
-            CustomerPricingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, isEffectiveInFuture);
+            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
+            CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, isEffectiveInFuture);
             SalePriceListRatesByZone sellingProductRates = null;
             if (customerSellingProduct != null)
-                ratesByOwner.RatesByPricingProduct.TryGetValue(customerSellingProduct.PricingProductId, out sellingProductRates);
+                ratesByOwner.RatesBySellingProduct.TryGetValue(customerSellingProduct.SellingProductId, out sellingProductRates);
 
             SalePricingRuleManager salePricingRuleManager = new SalePricingRuleManager();
             foreach (var customerZone in customerZones.Zones)
             {
-                bool isPricingProductRate = false;
+                bool isSellingProductRate = false;
                 SalePriceListRate zoneRate;
                 if (!customerRates.TryGetValue(customerZone.ZoneId, out zoneRate))
                 {
                     if (sellingProductRates != null)
                     {
                         if (sellingProductRates.TryGetValue(customerZone.ZoneId, out zoneRate))
-                            isPricingProductRate = true;
+                            isSellingProductRate = true;
                     }
                 }
                 if (zoneRate != null)
@@ -58,7 +58,7 @@ namespace TOne.WhS.Routing.Business
                     {
                         CustomerId = customerId,
                         RoutingProductId = zoneRate.RoutingProductId,
-                        SellingProductId = isPricingProductRate ? customerSellingProduct.PricingProductId : (int?)null,
+                        SellingProductId = isSellingProductRate ? customerSellingProduct.SellingProductId : (int?)null,
                         SaleZoneId = customerZone.ZoneId,
                         Rate = pricingRulesResult != null ? pricingRulesResult.Rate : zoneRate.NormalRate
                     };
@@ -119,7 +119,7 @@ namespace TOne.WhS.Routing.Business
         {
             public Dictionary<int, SalePriceListRatesByZone> RatesByCustomers { get; set; }
 
-            public Dictionary<int, SalePriceListRatesByZone> RatesByPricingProduct { get; set; }
+            public Dictionary<int, SalePriceListRatesByZone> RatesBySellingProduct { get; set; }
         }
 
         private class SalePriceListRatesByZone : Dictionary<long, SalePriceListRate>
