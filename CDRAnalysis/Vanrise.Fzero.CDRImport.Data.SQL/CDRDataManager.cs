@@ -73,7 +73,6 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                                    , record.OutTrunkSymbol
                                    , record.ServiceType
                                    , record.ServiceVASName
-                                   , record.ReleaseCode
                                    , record.InTrunkId
                                    , record.OutTrunkId
                                    , record.ReleaseCode
