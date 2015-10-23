@@ -1160,6 +1160,14 @@
     <Content Include="Client\Libraries\waves\waves.js" />
     <Content Include="Client\Modules\Common\Views\Error.html" />
     <Content Include="Client\Modules\Common\Views\ErrorController.js" />
+    <Content Include="Client\Modules\Common\Views\Samples\AppendixSample\appendix-list-directive.js" />
+    <Content Include="Client\Modules\Common\Views\Samples\AppendixSample\appendix2-directive.js" />
+    <Content Include="Client\Modules\Common\Views\Samples\AppendixSample\appendix-directive.js" />
+    <Content Include="Client\Modules\Common\Views\Samples\AppendixSample\appendix-service.js" />
+    <Content Include="Client\Modules\Common\Views\Samples\AppendixSample\Editor.html" />
+    <Content Include="Client\Modules\Common\Views\Samples\AppendixSample\EditorController.js" />
+    <Content Include="Client\Modules\Common\Views\Samples\AppendixSample\Management.html" />
+    <Content Include="Client\Modules\Common\Views\Samples\AppendixSample\ManagementController.js" />
     <Content Include="Client\Modules\Common\Views\StartupPage.html" />
     <Content Include="Client\Modules\Common\Views\Support.html" />
     <Content Include="Client\Styles\angular-motion.css" />

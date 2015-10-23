@@ -1,0 +1,53 @@
+﻿<div vr-modalcontent ng-controller="Common_AppendixSample_EditorController" vr-loader="isLoading" width="'90%'">
+    <vr-modalbody width="'50%'">
+        <vr-form name="formEditor">
+            <vr-row>
+                <vr-columns width="normal">
+                    <vr-select datatextfield="description" datavaluefield="value" label="Select 1" datasource="select1Source"
+                               selectedvalues="selectedItem1" ></vr-columns>
+                <vr-columns width="normal">
+                    <vr-common-appendixsample-appendix on-ready="appendixReady"></vr-common-appendixsample-appendix>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-common-appendixsample-appendix2 on-ready="appendix2Ready"></vr-common-appendixsample-appendix2>
+                </vr-columns>
+            </vr-row>
+            <vr-row vr-loader="isLoadingDynamicAppendix">
+                <vr-columns width="normal">
+                    <vr-select datatextfield="name" datavaluefield="name" label="Directive Template" datasource="dynamicAppendixTemplates"
+                               selectedvalues="selectedDynamicAppendix">
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-directivewrapper directive="selectedDynamicAppendix.editor" on-ready="dynamicAppendixReady"></vr-directivewrapper>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="normal">
+                    <vr-select datatextfield="name" datavaluefield="name" label="Directive Template" datasource="dynamicAppendixTemplatesToAdd"
+                               selectedvalues="selectedDynamicAppendixToAdd">
+                </vr-columns>
+                <vr-columns width="normal" withemptyline>
+                    <vr-button type="Add" standalone on-ready="addDynamicAppendixToList" vr-disabled="selectedDynamicAppendixToAdd == undefined" data-onclick="addDynamicAppendixToList"></vr-button>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="fullrow" ng-repeat="dynamicAppendixItem in dynamicAppendixList" vr-loader="dynamicAppendixItem.isLoading">
+                    <vr-directivewrapper directive="dynamicAppendixItem.editor" on-ready="dynamicAppendixItem.dynamicAppendixReady"></vr-directivewrapper>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-common-appendixsample-appendixlist on-ready="appendixListReady"></vr-common-appendixsample-appendixlist>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    VRUIUtilsService.$inject = ['VRNotificationService'];
+    VRUIUtilsService.$inject = ['VRNotificationService', 'UtilsService'];
 
-    function VRUIUtilsService(VRNotificationService) {
+    function VRUIUtilsService(VRNotificationService, UtilsService) {
 
         function loadDirective(scope, directiveAPI, loaderProperty) {
             var promise = directiveAPI.load();
@@ -14,6 +14,32 @@
                 }).finally(function () {
                     scope[loaderProperty] = false;
                 });
+            }
+        }
+
+        function callDirectiveLoad(directiveAPI, directiveLoadPayload, loadPromiseDeferred) {
+            UtilsService.convertToPromiseIfUndefined(directiveAPI.load(directiveLoadPayload))
+                .then(function () {
+                    if (loadPromiseDeferred != undefined)
+                        loadPromiseDeferred.resolve();
+                })
+                .catch(function (error) {
+                    if (loadPromiseDeferred != undefined)
+                        loadPromiseDeferred.reject(error);
+                });
+        }
+
+        function callDirectiveLoadOrResolvePromise(scope, directiveAPI, directiveLoadPayload, setLoader, loadPromiseDeferred) {
+            if (loadPromiseDeferred != undefined)
+                loadPromiseDeferred.resolve();
+            else {
+                setLoader(true);
+                UtilsService.convertToPromiseIfUndefined(directiveAPI.load(directiveLoadPayload))
+                    .catch(function (error) {
+                        VRNotificationService.notifyException(error, scope);
+                    }).finally(function () {
+                        setLoader(false);
+                    });
             }
         }
 
@@ -29,6 +55,8 @@
 
         return ({
             loadDirective: loadDirective,
+            callDirectiveLoad: callDirectiveLoad,
+            callDirectiveLoadOrResolvePromise: callDirectiveLoadOrResolvePromise,
             getSettingsFromDirective: getSettingsFromDirective
         });
     }

@@ -56,7 +56,9 @@ namespace Vanrise.Integration.Business
                     foreach (string qId in qIds)
                     {
                         long singleQueueItemId = long.Parse(qId);
-                        list.Add(dicItemExecutionStatus[singleQueueItemId]);
+                        ItemExecutionFlowInfo itemExecutionFlowInfo;
+                        if (dicItemExecutionStatus.TryGetValue(singleQueueItemId, out itemExecutionFlowInfo))
+                            list.Add(itemExecutionFlowInfo);
                     }
                     
                     batch.ExecutionStatus = qManager.GetExecutionFlowStatus(list);

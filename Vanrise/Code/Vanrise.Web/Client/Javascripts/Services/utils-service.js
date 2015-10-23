@@ -112,7 +112,6 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
     };
 
     
-
     function getEnum(enumObj,propertyFilter, valueFilter) {
         for (var item in enumObj) {
             if (enumObj.hasOwnProperty(item)) {
@@ -238,7 +237,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         var pendingPromises = promises.length;
         var isRejected = false;
         if (pendingPromises == 0)
-            resolvePromise(deferred);
+            deferred.resolve();
         angular.forEach(promises, function (promise) {           
 
                 promise.then(function () {
@@ -247,30 +246,42 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
                     pendingPromises--;
 
                     if (pendingPromises == 0)
-                        resolvePromise(deferred);
+                        deferred.resolve();
                 }).catch(function (error) {
-                    rejectPromise(deferred, error);
+                    deferred.reject(error);
                     isRejected = true;
                 });            
         });
-        return getPromiseFromDeferred(deferred);
+        return deferred.promise;
     }
 
-    function createPromiseDeferred() {
+    function PromiseClass() {
         var deferred = $q.defer();
-        return deferred;
+
+        //var deferredPromise = deferred.promise;
+
+        //this.promise2 = {
+        //    then: deferredPromise.then,
+        //    catch: deferredPromise.catch,
+        //    finally: deferredPromise.finally
+        //};
+        this.promise = deferred.promise;
+        this.resolve = deferred.resolve;
+        this.reject = deferred.reject;
+    }
+    
+    function createPromiseDeferred() {
+        return new PromiseClass();
     }
 
-    function resolvePromise(promiseDeferred) {
-        promiseDeferred.resolve();
-    }
-
-    function rejectPromise(promiseDeferred, error) {
-        promiseDeferred.reject(error);
-    }
-
-    function getPromiseFromDeferred(promiseDeferred) {
-        return promiseDeferred.promise;
+    function convertToPromiseIfUndefined(promiseOrUndefined) {
+        if (promiseOrUndefined != undefined)
+            return promiseOrUndefined;
+        else {//if value is undefined, create promise and resolve it
+            var promiseDeferred = createPromiseDeferred();
+            promiseDeferred.resolve();
+            return promiseDeferred.promise;
+        }
     }
 
     function getItemIndexByVal(array, value, attname) {
@@ -546,9 +557,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         buildTitleForUpdateEditor: buildTitleForUpdateEditor,
         waitMultiplePromises: waitMultiplePromises,
         createPromiseDeferred: createPromiseDeferred,
-        resolvePromise: resolvePromise,
-        rejectPromise: rejectPromise,
-        getPromiseFromDeferred: getPromiseFromDeferred
+        convertToPromiseIfUndefined: convertToPromiseIfUndefined
     });
 
 }]);

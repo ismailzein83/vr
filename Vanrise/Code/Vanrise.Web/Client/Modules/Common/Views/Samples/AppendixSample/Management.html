@@ -1,0 +1,19 @@
+﻿<vr-panel ng-controller="Common_AppendixSample_ManagementController">
+    <vr-form name="formFilter" vr-loader="isGettingData">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns colnum="2">
+                  
+                </vr-columns>
+
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Add" data-onclick="addNew"></vr-button>
+                    <vr-button type="Edit" data-onclick="edit"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+</vr-panel>
