@@ -181,6 +181,8 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\vr-whs-be-supplierswithzonesgroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\vr-whs-be-routingproductgrid-directive.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SaleZone\Templates\SaleZoneGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SaleZone\vr-whs-be-salezonegrid-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\SellingProduct\Templates\CustomerSellingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleExtraChargeSettings.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleFixedExtraChargeTemplate.html" />

@@ -11,6 +11,8 @@ namespace TOne.WhS.BusinessEntity.Data
     {
         List<CustomerZones> GetCustomerZones();
 
+        bool AddCustomerZones(CustomerZones customerZones, out int insertedId);
+
         bool AreCustomerZonesUpdated(ref object updateHandle);
     }
 }

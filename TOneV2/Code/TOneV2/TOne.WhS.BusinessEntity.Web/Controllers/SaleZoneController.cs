@@ -40,13 +40,6 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SaleZoneManager manager = new SaleZoneManager();
             return manager.GetSaleZoneGroupTemplates();
         }
-
-        [HttpGet]
-        public IEnumerable<SaleZoneInfo> GetSaleZonesByName(int customerId, string saleZoneNameFilter)
-        {
-            SaleZoneManager manager = new SaleZoneManager();
-            return manager.GetSaleZonesByName(customerId, saleZoneNameFilter);
-        }
     }
 
     public class SaleZoneInput

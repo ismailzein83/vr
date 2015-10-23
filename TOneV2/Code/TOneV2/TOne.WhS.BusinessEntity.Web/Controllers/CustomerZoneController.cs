@@ -19,5 +19,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CustomerZoneManager manager = new CustomerZoneManager();
             return manager.GetCustomerZone(customerId, DateTime.Now, false);
         }
+
+        [HttpPost]
+        [Route("AddCustomerZones")]
+        public TOne.Entities.InsertOperationOutput<int> AddCustomerZones(CustomerZones customerZones)
+        {
+            CustomerZoneManager manager = new CustomerZoneManager();
+            return manager.AddCustomerZones(customerZones);
+        }
     }
 }

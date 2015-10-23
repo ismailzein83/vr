@@ -22,12 +22,23 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_CustomerZone_GetAll", CustomerZoneMapper);
         }
 
+        public bool AddCustomerZones(CustomerZones customerZones, out int insertedId)
+        {
+            object customerZonesId;
+
+            string serializedZones = Vanrise.Common.Serializer.Serialize(customerZones.Zones);
+
+            int recordsAffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerZone_Insert", out customerZonesId, customerZones.CustomerId, serializedZones, customerZones.StartEffectiveTime);
+
+            insertedId = (int)customerZonesId;
+
+            return (recordsAffected > 0);
+        }
+
         public bool AreCustomerZonesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("[TOneWhS_BE].[CustomerZone]", ref updateHandle);
         }
-
-        #region Private Members
 
         private CustomerZones CustomerZoneMapper(IDataReader reader)
         {
@@ -39,7 +50,5 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return customerZone;
         }
-
-        #endregion
     }
 }

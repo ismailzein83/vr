@@ -138,27 +138,5 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return null;
         }
-
-        public IEnumerable<SaleZoneInfo> GetSaleZonesByName(int customerId, string saleZoneNameFilter)
-        {
-            int sellingNumberPlanId = GetSellingNumberPlanId(customerId);
-            List<SaleZone> allZones = GetCachedSaleZones(sellingNumberPlanId);
-
-            if (allZones != null)
-                return allZones.Where(item => item.Name.Contains(saleZoneNameFilter))
-                    .Select(item => new SaleZoneInfo {
-                        SaleZoneId = item.SaleZoneId, Name = item.Name
-                    });
-
-            return null;
-        }
-
-        private int GetSellingNumberPlanId(int customerId)
-        {
-            CarrierAccountManager manager = new CarrierAccountManager();
-            CarrierAccountDetail customer = manager.GetCarrierAccount(customerId);
-
-            return customer.CustomerSettings.SellingNumberPlanId;
-        }
     }
 }

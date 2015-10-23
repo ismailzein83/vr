@@ -36,6 +36,27 @@ namespace TOne.WhS.BusinessEntity.Business
             return null;
         }
 
+        public TOne.Entities.InsertOperationOutput<int> AddCustomerZones(CustomerZones customerZones)
+        {
+            customerZones.StartEffectiveTime = DateTime.Now;
+            TOne.Entities.InsertOperationOutput<int> insertOperationOutput = new TOne.Entities.InsertOperationOutput<int>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+
+            int customerZonesId = -1;
+
+            ICustomerZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerZoneDataManager>();
+            bool inserted = dataManager.AddCustomerZones(customerZones, out customerZonesId);
+
+            if (inserted)
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = customerZonesId;
+            }
+
+            return insertOperationOutput;
+        }
+
         #region Temp Methods
 
         public CustomerZones GetCustomerZones(int customerId, DateTime? effectiveOn, bool futureEntities)

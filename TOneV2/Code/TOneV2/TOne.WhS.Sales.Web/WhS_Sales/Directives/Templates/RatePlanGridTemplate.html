@@ -1,15 +1,23 @@
-﻿<vr-row>
-    <vr-columns width="fullrow">
-        <vr-datagrid on-ready="onGridReady"
-                     datasource="ratePlanItems"
-                     dataretrievalfunction="dataRetrievalFunction"
-                     menuactions="gridMenuActions"
-                     pagingtype="'PagingOnScroll'"
-                     idfield="ZoneId">
+﻿<vr-form name="formRatePlan">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-datagrid on-ready="onGridReady"
+                         datasource="ratePlanItems"
+                         dataretrievalfunction="dataRetrievalFunction"
+                         menuactions="gridMenuActions"
+                         pagingtype="'PagingOnScroll'"
+                         idfield="ZoneId">
 
-            <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'"></vr-datagridcolumn>
+                
+                <vr-datagridcolumn headertext="'New Rate'" type="'Number'" width="100px">
+                    <div style="width: 100px; float: right; margin-right: 5px;">
+                        <vr-textbox value="dataItem.newRate"></vr-textbox>
+                    </div>
+                </vr-datagridcolumn>
 
-        </vr-datagrid>
-    </vr-columns>
-</vr-row>
+            </vr-datagrid>
+        </vr-columns>
+    </vr-row>
+</vr-form>

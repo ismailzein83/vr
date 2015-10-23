@@ -2,9 +2,9 @@
 
     "use strict";
 
-    ratePlanEditorController.$inject = ["$scope", "WhS_BE_SaleZoneAPIService", "WhS_BE_CustomerZoneAPIService", "UtilsService", "VRNavigationService"];
+    ratePlanEditorController.$inject = ["$scope", "WhS_BE_SaleZoneAPIService", "WhS_BE_CustomerZoneAPIService", "UtilsService", "VRNavigationService", "VRNotificationService"];
 
-    function ratePlanEditorController($scope, WhS_BE_SaleZoneAPIService, WhS_BE_CustomerZoneAPIService, UtilsService, VRNavigationService) {
+    function ratePlanEditorController($scope, WhS_BE_SaleZoneAPIService, WhS_BE_CustomerZoneAPIService, UtilsService, VRNavigationService, VRNotificationService) {
 
         var customerId;
 
@@ -21,13 +21,34 @@
         }
 
         function defineScope() {
-            $scope.title = UtilsService.buildTitleForUpdateEditor("Rate Plan");
+            $scope.title = "Sell New Zones";
+            //$scope.title = UtilsService.buildTitleForUpdateEditor("Rate Plan");
 
             $scope.selectedSaleZones = [];
 
             $scope.getSaleZonesByName = function (saleZoneNameFilter) {
                 return WhS_BE_SaleZoneAPIService.GetSaleZonesByName(customerId, saleZoneNameFilter);
-            }
+            };
+
+            $scope.sellNewZones = function () {
+                var customerZonesObj = buildCutomerZonesObjFromScope();
+
+                console.log(customerZonesObj);
+
+                WhS_BE_CustomerZoneAPIService.AddCustomerZones(customerZonesObj).then(function (response) {
+                    console.log(response);
+
+                    if (VRNotificationService.notifyOnItemAdded("Customer Zones", response)) {
+                        if ($scope.onCustomerZonesAdded != undefined) {
+                            $scope.onCustomerZonesAdded();
+                        }
+
+                        $scope.modalContext.closeModal();
+                    }
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
+            };
 
             $scope.close = function () {
                 $scope.modalContext.closeModal();
@@ -39,14 +60,34 @@
             $scope.loadingEditor = true;
 
             WhS_BE_CustomerZoneAPIService.GetCustomerZone(customerId).then(function (response) {
-                if (response != null) {
-                    for (var i = 0; i < response.Data.Zones.length; i++) {
-                        $scope.selectedSaleZones.push(response.Data.Zones[i].ZoneId);
-                    }
-                }
+                console.log(response);
+                fillScopeFromCustomerZonesObj(response);
             }).finally(function () {
                 $scope.loadingEditor = false;
             });
+        }
+
+        function fillScopeFromCustomerZonesObj(customerZones) {
+        }
+
+        function buildCutomerZonesObjFromScope() {
+            return {
+                CustomerId: customerId,
+                Zones: getCustomerZoneArray(),
+                StartEffectiveTime: Date()
+            };
+        }
+
+        function getCustomerZoneArray() {
+            var customerZones = [];
+
+            for (var i = 0; i < $scope.selectedSaleZones.length; i++) {
+                customerZones.push({
+                    ZoneId: $scope.selectedSaleZones[i].SaleZoneId
+                });
+            }
+
+            return customerZones;
         }
     }
 

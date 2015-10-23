@@ -7,8 +7,8 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using TOne.WhS.Sales.Entities.Queries;
-using Vanrise.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
@@ -30,7 +30,7 @@ namespace TOne.WhS.Sales.Business
 
                     ratePlanItem.ZoneId = saleZone.SaleZoneId;
                     ratePlanItem.ZoneName = saleZone.Name;
-                    ratePlanItem.Rate = saleRates.Where(x => x.ZoneId == saleZone.SaleZoneId).Single().NormalRate;
+                    //ratePlanItem.Rate = saleRates.Where(x => x.ZoneId == saleZone.SaleZoneId).Single().NormalRate;
 
                     ratePlanItems.Add(ratePlanItem);
                 }
