@@ -179,6 +179,8 @@
     <Content Include="WhS_BusinessEntity\Directives\Country\vr-whs-be-countrygrid-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\Templates\SelectiveSuppliersWithZonesGroup.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\vr-whs-be-supplierswithzonesgroup-selective.js" />
+    <Content Include="WhS_BusinessEntity\Directives\RouteRule\Templates\RouteRuleGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\RouteRule\vr-whs-be-routerulegrid-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\vr-whs-be-routingproductgrid-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleZone\Templates\SaleZoneGridTemplate.html" />

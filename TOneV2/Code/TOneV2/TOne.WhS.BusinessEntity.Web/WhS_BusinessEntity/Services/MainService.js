@@ -100,14 +100,14 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RouteRule/RouteRuleEditor.html', parameters, modalSettings);
     }
 
-    function deleteRouteRule(scope, ruleId, onRouteRuleDeleted) {
+    function deleteRouteRule(scope, routeRuleObj, onRouteRuleDeleted) {
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response) {
-                    return WhS_BE_RouteRuleAPIService.DeleteRule(ruleId)
+                    return WhS_BE_RouteRuleAPIService.DeleteRule(routeRuleObj.ruleId)
                         .then(function (deletionResponse) {
                             VRNotificationService.notifyOnItemDeleted("Route Rule", deletionResponse);
-                            onRouteRuleDeleted();
+                            onRouteRuleDeleted(routeRuleObj);
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, scope);

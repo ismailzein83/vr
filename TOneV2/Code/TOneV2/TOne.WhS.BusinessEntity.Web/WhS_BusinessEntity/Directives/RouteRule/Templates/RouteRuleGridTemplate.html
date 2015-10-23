@@ -1,0 +1,14 @@
+﻿<vr-row>
+    <vr-columns colnum="12" simplecol>
+        <vr-datagrid datasource="routeRules"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     on-ready="onGridReady"
+                     menuactions="gridMenuActions"
+                     idfield="Entity.RuleId">
+
+            <vr-datagridcolumn headertext="'Id'" field="'Entity.RuleId'"></vr-datagridcolumn>
+            <!--<vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>-->
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

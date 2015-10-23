@@ -2,38 +2,26 @@
 
     "use strict";
 
-    routeRuleManagementController.$inject = ['$scope', 'WhS_BE_RouteRuleAPIService', 'WhS_BE_MainService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
+    routeRuleManagementController.$inject = ['$scope', 'WhS_BE_MainService'];
 
-    function routeRuleManagementController($scope, WhS_BE_RouteRuleAPIService, WhS_BE_MainService, UtilsService, VRModalService, VRNotificationService) {
+    function routeRuleManagementController($scope, WhS_BE_MainService) {
+        var gridAPI;
 
         defineScope();
         load();
 
         function defineScope() {
 
-            $scope.routeRuleGridConnector = {};
-
-            $scope.searchClicked = function () {
-                return load();
-            };
+            $scope.onGridReady = function (api) {
+                gridAPI = api;
+                api.loadGrid({});
+            }
 
             $scope.AddNewRouteRule = AddNewRouteRule;
         }
 
         function load() {
-            loadGrid();
-        }
 
-        function loadGrid() {
-            $scope.routeRuleGridConnector.data = getFilterObject();
-
-            if ($scope.routeRuleGridConnector.loadTemplateData != undefined) {
-                return $scope.routeRuleGridConnector.loadTemplateData();
-            }
-        }
-
-        function getFilterObject() {
-            return null;
         }
 
         function AddNewRouteRule() {
