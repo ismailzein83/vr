@@ -25,12 +25,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public List<SaleZone> GetSaleZones(int sellingNumberPlanId)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByPackage", SaleZoneMapper, sellingNumberPlanId);
+            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByNumberPlan", SaleZoneMapper, sellingNumberPlanId);
         }
 
         public List<SaleZone> GetSaleZones(int sellingNumberPlanId,DateTime effectiveDate)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByPackageAndEffectiveDate", SaleZoneMapper, sellingNumberPlanId, effectiveDate);
+            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByNumberPlanAndEffectiveDate", SaleZoneMapper, sellingNumberPlanId, effectiveDate);
         }
      
         SaleZone SaleZoneMapper(IDataReader reader)
@@ -135,11 +135,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public List<SaleZoneInfo> GetSaleZonesInfo(int sellingNumberPlanId, string filter)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleZoneInfo_GetFiltered", SaleZoneInfoMapper, sellingNumberPlanId, filter);
-        }
-
-        public List<SaleZoneInfo> GetSaleZonesInfoByIds(int sellingNumberPlanId, List<long> saleZoneIds)
-        {
-            return GetItemsSP("TOneWhS_BE.sp_SaleZoneInfo_GetByPackageAndZoneIds", SaleZoneInfoMapper, sellingNumberPlanId, string.Join(",", saleZoneIds));
         }
 
         SaleZoneInfo SaleZoneInfoMapper(IDataReader reader)

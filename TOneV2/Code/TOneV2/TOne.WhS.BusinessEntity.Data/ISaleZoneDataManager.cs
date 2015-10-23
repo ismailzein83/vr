@@ -20,8 +20,6 @@ namespace TOne.WhS.BusinessEntity.Data
 
         List<SaleZoneInfo> GetSaleZonesInfo(int sellingNumberPlanId, string filter);
 
-        List<SaleZoneInfo> GetSaleZonesInfoByIds(int sellingNumberPlanId, List<long> saleZoneIds);
-
 
         bool AreZonesUpdated(ref object updateHandle);
 
