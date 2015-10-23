@@ -32,19 +32,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByNumberPlanAndEffectiveDate", SaleZoneMapper, sellingNumberPlanId, effectiveDate);
         }
-     
-        SaleZone SaleZoneMapper(IDataReader reader)
-        {
-            SaleZone sellingNumberPlan = new SaleZone
-            {
-                SaleZoneId = (long)reader["ID"],
-                SellingNumberPlanId = (int)reader["SellingNumberPlanID"],
-                Name = reader["Name"] as string,
-                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
-                EndEffectiveDate = GetReaderValue<DateTime>(reader, "EED")
-            };
-            return sellingNumberPlan;
-        }
 
         public object FinishDBApplyStream(object dbApplyStream)
         {
@@ -75,12 +62,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                        record.BeginEffectiveDate,
                        record.EndEffectiveDate);
         }
+
         public void ApplySaleZonesForDB(object preparedSaleZones)
         {
             InsertBulkToTable(preparedSaleZones as BaseBulkInsertInfo);
         }
-
-
 
         public void DeleteSaleZones(List<SaleZone> saleZones)
         {
@@ -107,7 +93,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                         cmd.Parameters.Add(dtPrm);}
                     );
         }
-        
 
         DataTable GetSaleZonesTable()
         {
@@ -116,12 +101,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             dt.Columns.Add("EED", typeof(DateTime));
             return dt;
         }
+
         void FillSaleZoneRow(DataRow dr, SaleZone saleZone)
         {
             dr["ID"] = saleZone.SaleZoneId;
             dr["EED"] = saleZone.EndEffectiveDate;
         }
-
 
         public void InsertSaleZones(List<SaleZone> saleZones)
         {
@@ -137,6 +122,27 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleZoneInfo_GetFiltered", SaleZoneInfoMapper, sellingNumberPlanId, filter);
         }
 
+        public bool AreZonesUpdated(ref object lastReceivedDataInfo)
+        {
+            return IsDataUpdated("TOneWhS_BE.SaleZone", ref lastReceivedDataInfo);
+        }
+
+        #region Mappers
+
+        SaleZone SaleZoneMapper(IDataReader reader)
+        {
+            SaleZone sellingNumberPlan = new SaleZone
+            {
+                SaleZoneId = (long)reader["ID"],
+                SellingNumberPlanId = (int)reader["SellingNumberPlanID"],
+                CountryId = GetReaderValue<int?>(reader, "CountryID"),
+                Name = reader["Name"] as string,
+                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
+                EndEffectiveDate = GetReaderValue<DateTime>(reader, "EED")
+            };
+            return sellingNumberPlan;
+        }
+
         SaleZoneInfo SaleZoneInfoMapper(IDataReader reader)
         {
             SaleZoneInfo saleZoneInfo = new SaleZoneInfo
@@ -147,10 +153,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return saleZoneInfo;
         }
 
-
-        public bool AreZonesUpdated(ref object lastReceivedDataInfo)
-        {
-            return IsDataUpdated("TOneWhS_BE.SaleZone", ref lastReceivedDataInfo);
-        }
+        #endregion
     }
 }

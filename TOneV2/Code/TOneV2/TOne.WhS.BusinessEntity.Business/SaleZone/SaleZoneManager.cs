@@ -23,8 +23,17 @@ namespace TOne.WhS.BusinessEntity.Business
                 return _dataManager.AreZonesUpdated(ref _updateHandle);
             }
         }
-
+        
         #endregion
+
+        public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZoneQuery> input)
+        {
+            var allSaleZones = GetCachedSaleZones(input.Query.SellingNumberPlanId);
+
+            Func<SaleZone, bool> filterExpression = (saleZone) => (saleZone.Name.Contains(input.Query.Name));
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSaleZones.ToBigResult(input, filterExpression, SaleZoneDetailMapper));
+        }
 
         public List<SaleZone> GetSaleZones(int sellingNumberPlanId)
         {
@@ -138,5 +147,19 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return null;
         }
+
+        #region Mappers
+
+        private SaleZoneDetail SaleZoneDetailMapper(SaleZone saleZone)
+        {
+            SaleZoneDetail saleZoneDetail = new SaleZoneDetail();
+
+            saleZoneDetail.Entity = saleZone;
+            saleZoneDetail.CountryName = null;
+
+            return saleZoneDetail;
+        }
+
+        #endregion
     }
 }
