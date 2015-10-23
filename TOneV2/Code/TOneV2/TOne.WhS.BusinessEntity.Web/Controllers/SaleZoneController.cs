@@ -14,17 +14,17 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     public class SaleZoneController : BaseAPIController
     {
         //[HttpGet]
-        //public List<SaleZone> GetSaleZonesByPackage(int packageId,DateTime effectiveDate)
+        //public List<SaleZone> GetSaleZonesByPackage(int sellingNumberPlanId,DateTime effectiveDate)
         //{
         //    SaleZoneManager manager = new SaleZoneManager();
-        //    return manager.GetSaleZones(packageId, effectiveDate);
+        //    return manager.GetSaleZones(sellingNumberPlanId, effectiveDate);
         //}
 
         [HttpGet]
-        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(int packageId, string filter)
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(int sellingNumberPlanId, string filter)
         {
             SaleZoneManager manager = new SaleZoneManager();
-            return manager.GetSaleZonesInfo(packageId, filter);
+            return manager.GetSaleZonesInfo(sellingNumberPlanId, filter);
         }
 
         [HttpPost]

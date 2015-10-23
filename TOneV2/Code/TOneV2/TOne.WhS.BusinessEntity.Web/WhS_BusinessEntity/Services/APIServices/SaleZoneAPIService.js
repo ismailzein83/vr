@@ -9,9 +9,9 @@ app.service('WhS_BE_SaleZoneAPIService', function (BaseAPIService) {
     });
      
 
-    function GetSaleZonesInfo(packageId, filter) {
+    function GetSaleZonesInfo(sellingNumberPlanId, filter) {
         return BaseAPIService.get("/api/SaleZone/GetSaleZonesInfo", {
-            packageId: packageId,
+            sellingNumberPlanId: sellingNumberPlanId,
             filter: filter
         });
     }

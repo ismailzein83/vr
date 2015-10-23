@@ -9,7 +9,7 @@ app.directive('vrWhsBeRoutingproduct', ['WhS_BE_RoutingProductAPIService', 'Util
                 ismultipleselection: "@",
                 onselectionchanged: '=',
                 isrequired: "@",
-                salezonepackageid: "="
+                sellingnumberplanid: "="
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -39,12 +39,12 @@ app.directive('vrWhsBeRoutingproduct', ['WhS_BE_RoutingProductAPIService', 'Util
             compile: function (element, attrs) {
                 return {
                     pre: function ($scope, iElem, iAttrs, ctrl) {
-                        $scope.$watch('ctrl.salezonepackageid', function () {
-                            if (ctrl.salezonepackageid != undefined) { 
+                        $scope.$watch('ctrl.sellingnumberplanid', function () {
+                            if (ctrl.sellingnumberplanid != undefined) { 
                                 $scope.isLoadingDirective = true;
                                 $scope.filteredRoutingProducts.length = 0;
                                 for (var i = 0; i < $scope.routingProducts.length; i++) {
-                                    if ($scope.routingProducts[i].SellingNumberPlanId == ctrl.salezonepackageid)
+                                    if ($scope.routingProducts[i].SellingNumberPlanId == ctrl.sellingnumberplanid)
                                         $scope.filteredRoutingProducts.push($scope.routingProducts[i]);
                                 }
                                 $scope.isLoadingDirective = false;
@@ -93,7 +93,7 @@ app.directive('vrWhsBeRoutingproduct', ['WhS_BE_RoutingProductAPIService', 'Util
                         angular.forEach(response, function (itm) {
                             $scope.routingProducts.push(itm);
                         });
-                        if ($attrs.salezonepackageid == undefined)
+                        if ($attrs.sellingnumberplanid == undefined)
                             $scope.filteredRoutingProducts = $scope.routingProducts;
                     });
                 }

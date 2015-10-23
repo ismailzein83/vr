@@ -6,7 +6,7 @@ app.directive('vrWhsBeAllexceptsalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
             restrict: 'E',
             scope: {
                 onReady: '=',
-                salezonepackageid: "="
+                sellingnumberplanid: "="
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -16,7 +16,7 @@ app.directive('vrWhsBeAllexceptsalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
                 $scope.sellingNumberPlans = [];
                 $scope.selectedSellingNumberPlan = undefined;
 
-                $scope.showSellingNumberPlan = ctrl.salezonepackageid == undefined;
+                $scope.showSellingNumberPlan = ctrl.sellingnumberplanid == undefined;
                 $scope.isPackageDefined = !$scope.showSellingNumberPlan;
 
                 var beSaleZonesCtor = new beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService);
@@ -27,13 +27,13 @@ app.directive('vrWhsBeAllexceptsalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
                 }
 
                 $scope.searchZones = function (filter) {
-                    var packageId;
-                    if (ctrl.salezonepackageid == undefined)
-                        packageId = $scope.selectedSellingNumberPlan.SellingNumberPlanId;
+                    var sellingNumberPlanId;
+                    if (ctrl.sellingnumberplanid == undefined)
+                        sellingNumberPlanId = $scope.selectedSellingNumberPlan.SellingNumberPlanId;
                     else
-                        packageId = ctrl.salezonepackageid;
+                        sellingNumberPlanId = ctrl.sellingnumberplanid;
 
-                    return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(packageId, filter);
+                    return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(sellingNumberPlanId, filter);
                 }
             },
             controllerAs: 'ctrl',
@@ -75,7 +75,7 @@ app.directive('vrWhsBeAllexceptsalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups.AllExceptSaleZonesSettings, TOne.WhS.BusinessEntity.MainExtensions",
-                        SellingNumberPlanId: ctrl.salezonepackageid == undefined ? $scope.selectedSellingNumberPlan.SellingNumberPlanId : ctrl.salezonepackageid,
+                        SellingNumberPlanId: ctrl.sellingnumberplanid == undefined ? $scope.selectedSellingNumberPlan.SellingNumberPlanId : ctrl.sellingnumberplanid,
                         ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZones, "SaleZoneId")
                     };
                 }
@@ -83,12 +83,12 @@ app.directive('vrWhsBeAllexceptsalezones', ['WhS_BE_SaleZoneAPIService', 'WhS_BE
                 api.setData = function (saleZoneGroupSettings) {
                     var sellingNumberPlanId;
 
-                    if (ctrl.salezonepackageid == undefined) {
+                    if (ctrl.sellingnumberplanid == undefined) {
                         $scope.selectedSellingNumberPlan = UtilsService.getItemByVal($scope.sellingNumberPlans, saleZoneGroupSettings.SellingNumberPlanId, "SellingNumberPlanId");
                         sellingNumberPlanId = saleZoneGroupSettings.SellingNumberPlanId;
                     }
                     else {
-                        sellingNumberPlanId = ctrl.salezonepackageid;
+                        sellingNumberPlanId = ctrl.sellingnumberplanid;
                     }
 
                     if (saleZoneGroupSettings.ZoneIds.length > 0) {
