@@ -219,6 +219,7 @@
     <Content Include="Client\Javascripts\Directives\Disabled\vr-disabled-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\ChoiceFilter\vr-choice-filter-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\ChoiceFilter\vr-choices-filter-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Hint\vr-hint-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\CkeckIcon\vr-check-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\FilterEditor\vr-filtereditor-enum.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\List\vr-list-item-directive.js" />
