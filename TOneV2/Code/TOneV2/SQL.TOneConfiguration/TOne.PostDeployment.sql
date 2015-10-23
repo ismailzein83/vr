@@ -173,7 +173,19 @@ as (select * from (values
 (288,'Supplier Invoice','Supplier Invoice','#/view/Billing/Views/SupplierInvoiceManagement',11,null,null,null,0,10),
 (297,'Supplier Commission',	'Supplier Commission',	'#/view/BusinessEntity/Views/PurchaseArea/SupplierCommissionManagement',	18,	NULL,	NULL,	NULL,	0,	NULL),
 (299,'Customer Commission',	'Customer Commission',	'#/view/BusinessEntity/Views/SalesArea/CustomerCommissionManagement',	19,	NULL,	NULL,	NULL,	0,	NULL),
-(307,'Generic Analytic',	'Generic Analytic',	'#/view/Analytics/Views/GenericAnalytic/GenericAnalytic',	21,	NULL,	NULL,	NULL,	0,	12)
+(307,'Generic Analytic',	'Generic Analytic',	'#/view/Analytics/Views/GenericAnalytic/GenericAnalytic',	21,	NULL,	NULL,	NULL,	0,	12),
+(313,'G Hourly Report','G Hourly Report','#/view/Analytics/Views/GHourlyReport',4,null,null,null,0,13),
+(315,'Code Preparation','Code Preparation','#/view/WhS_CodePreparation/Views/CodePreparation',19,null,null,null,0,null),
+(323,'Routing Product','Routing Product','#/view/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductManagement',1,null,null,null,0,13),
+(325,'Supplier PriceList','Supplier PriceList','#/view/WhS_SupplierPriceList/Views/SupplierPriceList',18,null,null,null,0,null),
+(332,'G Traffic Monitor','G Traffic Monitor','#/view/Analytics/Views/GTrafficMonitor',4,null,null,null,0,14),
+(334,'Route Rule','Route Rule','#/view/WhS_BusinessEntity/Views/RouteRule/RouteRuleManagement',1,null,null,null,0,14),
+(337,'Pricing Product','Pricing Product','#/view/WhS_BusinessEntity/Views/PricingProduct/PricingProductManagement',3,null,null,null,0,null),
+(338,'Customer Pricing Product','Customer Pricing Product','#/view/WhS_BusinessEntity/Views/PricingProduct/CustomerPricingProductManagement',3,null,null,null,0,null),
+(341,'Sale Pricing Rule','Sale Pricing Rule','#/view/WhS_BusinessEntity/Views/PricingRule/SalePricingRuleManagement',19,null,null,null,0,null),
+(342,'Purchase  Pricing Rule','Purchase Pricing Rule','#/view/WhS_BusinessEntity/Views/PricingRule/PurchasePricingRuleManagement',18,null,null,null,0,null),
+(349,'Country','Country','#/view/WhS_BusinessEntity/Views/Country/CountryManagement',3,null,null,null,0,null),
+(351,'Rate Plan','Rate Plan','#/view/Whs_Sales/Views/RatePlanManagement',19,null,null,null,0,16)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank]))
 merge	[sec].[View] as t
