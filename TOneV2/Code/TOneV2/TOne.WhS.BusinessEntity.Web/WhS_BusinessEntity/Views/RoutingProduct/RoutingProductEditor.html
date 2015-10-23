@@ -15,8 +15,8 @@
             </div>
             <div ng-show="saleZonesSelected">
                 <vr-row>
-                    <vr-columns width="1/4row">
-                        <vr-whs-be-salezonepackages on-ready="onSellingNumberPlansDirectiveReady" onselectionchanged="onSellingNumberPlanSelectionChanged" isrequired />
+                    <vr-columns width="1/2row">
+                        <vr-whs-be-sellingnumberplan on-ready="onSellingNumberPlansDirectiveReady" onselectionchanged="onSellingNumberPlanSelectionChanged" isrequired />
                     </vr-columns>
                 </vr-row>
                 <vr-row ng-show="selectedSellingNumberPlanId">

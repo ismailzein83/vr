@@ -41,12 +41,12 @@ app.directive('vrWhsRoutingRouteruleoptionRegular', ['UtilsService', 'WhS_Routin
             var routeRuleOptionFilterSettingsDirectiveAPI;
             var routeRuleOptionPercentageSettingsDirectiveAPI;
 
-            $scope.optionOrderSettingsGroupTemplates = [];
-            $scope.optionSettingsGroupTemplates = [];
-            $scope.optionFilterSettingsGroupTemplates = [];
-            $scope.optionPercentageSettingsGroupTemplates = [];
-
             function initializeController() {
+
+                $scope.optionOrderSettingsGroupTemplates = [];
+                $scope.optionSettingsGroupTemplates = [];
+                $scope.optionFilterSettingsGroupTemplates = [];
+                $scope.optionPercentageSettingsGroupTemplates = [];
 
                 $scope.onOptionSettingsGroupDirectiveReady = function (api) {
                     routeOptionSettingsGroupDirectiveAPI = api;
@@ -151,7 +151,7 @@ app.directive('vrWhsRoutingRouteruleoptionRegular', ['UtilsService', 'WhS_Routin
                         if(routeRuleSettings.OptionOrderSettings != null)
                             $scope.selectedOptionOrderSettingsGroupTemplate = UtilsService.getItemByVal($scope.optionOrderSettingsGroupTemplates, routeRuleSettings.OptionOrderSettings.ConfigId, "TemplateConfigID");
                         if (routeRuleSettings.OptionFilterSettings != null)
-                            $scope.selectedOptionFilterSettingsGroupTemplate = UtilsService.getItemByVal($scope.optionFilterSettingsGroupTemnplates, routeRuleSettings.OptionFilterSettings.ConfigId, "TemplateConfigID");
+                            $scope.selectedOptionFilterSettingsGroupTemplate = UtilsService.getItemByVal($scope.optionFilterSettingsGroupTemplates, routeRuleSettings.OptionFilterSettings.ConfigId, "TemplateConfigID");
                         if (routeRuleSettings.OptionPercentageSettings != null)
                             $scope.selectedPercentageFilterSettingsGroupTemplate = UtilsService.getItemByVal($scope.optionPercentageSettingsGroupTemplates, routeRuleSettings.OptionPercentageSettings.ConfigId, "TemplateConfigID");
                     };

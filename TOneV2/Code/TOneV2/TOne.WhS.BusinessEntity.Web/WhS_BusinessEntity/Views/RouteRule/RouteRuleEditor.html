@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="WhS_BE_RouteRuleEditorController" vr-loader="isGettingData" width="'50%'">
+﻿<div vr-modalcontent ng-controller="WhS_BE_RouteRuleEditorController" vr-loader="isGettingData" width="'55%'">
     <vr-modalbody>
         <vr-form name="formRouteRuleEditor">
             <vr-choices selectedindex="0">
@@ -27,7 +27,7 @@
                                 </vr-columns>
                                 <vr-columns width="3/4row" ng-if="selectedSaleZoneGroupTemplate" vr-loader="saleZonesAppendixLoader">
                                     <vr-directivewrapper directive="selectedSaleZoneGroupTemplate.Editor" on-ready="onSaleZoneGroupSettingsDirectiveReady"
-                                                         salezonepackageid="selectedSaleZonePackageId"></vr-directivewrapper>
+                                                         sellingnumberplanid="selectedSellingNumberPlanId"></vr-directivewrapper>
                                 </vr-columns>
                             </vr-row>
                         </vr-section>
@@ -102,7 +102,9 @@
                                    selectedvalues="selectedrouteRuleSettingsTemplate">
                         </vr-select>
                     </vr-columns>
-                    <vr-columns width="3/4row" vr-loader="routeRuleSettingsAppendixLoader">
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="fullrow" vr-loader="routeRuleSettingsAppendixLoader">
                         <vr-directivewrapper directive="selectedrouteRuleSettingsTemplate.Editor" on-ready="onRouteRuleSettingsDirectiveReady" />
                     </vr-columns>
                 </vr-row>
@@ -110,10 +112,10 @@
             <div ng-show="schedulerSelected">
                 <vr-row>
                     <vr-columns width="1/2row">
-                        <vr-datetimepicker value="beginEffectiveDate" label="Begin Effective Date" isrequired></vr-datetimepicker>
+                        <vr-datetimepicker value="beginEffectiveDate" type="date" label="Begin Effective Date" isrequired></vr-datetimepicker>
                     </vr-columns>
                     <vr-columns width="1/2row">
-                        <vr-datetimepicker value="endEffectiveDate" label="End Effective Date"></vr-datetimepicker>
+                        <vr-datetimepicker value="endEffectiveDate" type="date" label="End Effective Date"></vr-datetimepicker>
                     </vr-columns>
                 </vr-row>
             </div>

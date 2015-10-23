@@ -130,7 +130,6 @@
   <ItemGroup>
     <Folder Include="WhS_BusinessEntity\Directives\PricingProduct\" />
     <Folder Include="WhS_BusinessEntity\Views\PricingProduct\Grids\" />
-    <Folder Include="WhS_BusinessEntity\Views\RoutingProduct\Grids\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
@@ -180,6 +179,8 @@
     <Content Include="WhS_BusinessEntity\Directives\Country\vr-whs-be-countrygrid-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\Templates\SelectiveSuppliersWithZonesGroup.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\vr-whs-be-supplierswithzonesgroup-selective.js" />
+    <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\vr-whs-be-routingproductgrid-directive.js" />
     <Content Include="WhS_BusinessEntity\Directives\SellingProduct\Templates\CustomerSellingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleExtraChargeSettings.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleFixedExtraChargeTemplate.html" />

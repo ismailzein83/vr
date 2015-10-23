@@ -78,7 +78,7 @@ app.directive('vrWhsRoutingOptionsSelective', ['UtilsService',
                         for (var i = 0; i < $scope.selectedSuppliers.length; i++) {
                             options.push({
                                 SupplierId: $scope.selectedSuppliers[i].CarrierAccountId,
-                                Percentage: $scope.selectedSuppliers[i].percentage,
+                                Percentage: null,
                                 Filter: null
                             });
                         }
@@ -95,9 +95,9 @@ app.directive('vrWhsRoutingOptionsSelective', ['UtilsService',
 
                     carrierAccountDirectiveAPI.setData(supplierIds);
 
-                    for (var i = 0; i < $scope.selectedSuppliers.length; i++) {
-                        $scope.selectedSuppliers[i].percentage = routeOptionSettingsGroup.Options[i].Percentage;
-                    }
+                    //for (var i = 0; i < $scope.selectedSuppliers.length; i++) {
+                    //    $scope.selectedSuppliers[i].percentage = routeOptionSettingsGroup.Options[i].Percentage;
+                    //}
                 }
 
                 if (ctrl.onReady != null)

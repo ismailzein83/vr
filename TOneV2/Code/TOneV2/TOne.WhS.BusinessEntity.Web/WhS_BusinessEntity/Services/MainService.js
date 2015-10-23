@@ -26,7 +26,8 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
 
     function addRouteRule(onRouteRuleAdded)
     {
-        var settings = {};
+        var settings = {
+        };
 
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "New Route Rule";

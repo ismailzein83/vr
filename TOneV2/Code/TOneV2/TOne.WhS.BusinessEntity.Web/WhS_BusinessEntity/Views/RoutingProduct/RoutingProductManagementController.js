@@ -18,28 +18,49 @@
             $scope.sellingNumberPlans = [];
             $scope.selectedSellingNumberPlans = [];
 
-            defineMenuActions();
+            $scope.onGridReady = function (api) {
+                gridAPI = api;
+                api.loadGrid({});
+            }
 
-            $scope.gridReady = function (api) {
-                gridApi = api;
-                return retrieveData();
-            };
-
-            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_BE_RoutingProductAPIService.GetFilteredRoutingProducts(dataRetrievalInput)
-                    .then(function (response) {
-                        onResponseReady(response);
-                    })
-                    .catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    });
-            };
+            //$scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            //    return WhS_BE_RoutingProductAPIService.GetFilteredRoutingProducts(dataRetrievalInput)
+            //        .then(function (response) {
+            //            onResponseReady(response);
+            //        })
+            //        .catch(function (error) {
+            //            VRNotificationService.notifyExceptionWithClose(error, $scope);
+            //        });
+            //};
 
             $scope.searchClicked = function () {
-                return retrieveData();
+                if (!$scope.isGettingData && gridAPI != undefined)
+                    return gridAPI.loadGrid(getFilterObject());
             };
 
             $scope.AddNewRoutingProduct = AddNewRoutingProduct;
+
+            defineMenuActions();
+
+            function getFilterObject() {
+                var data = {
+                    Name: $scope.name,
+                    SellingNumberPlanIds: UtilsService.getPropValuesFromArray($scope.selectedSellingNumberPlans, "SellingNumberPlanId")
+                };
+                return data;
+            }
+
+            function defineMenuActions() {
+                $scope.gridMenuActions = [{
+                    name: "Edit",
+                    clicked: editRoutingProduct,
+                },
+                {
+                    name: "Delete",
+                    clicked: deleteRoutingProduct,
+                }
+                ];
+            }
         }
 
         function load() {
@@ -54,27 +75,6 @@
             }).finally(function () {
                 $scope.isLoadingFilterData = false;
             });
-        }
-
-        function retrieveData() {
-            var query = {
-                Name: $scope.name,
-                SellingNumberPlanIds: UtilsService.getPropValuesFromArray($scope.selectedSellingNumberPlans, "SellingNumberPlanId")
-            };
-
-            return gridApi.retrieveData(query);
-        }
-
-        function defineMenuActions() {
-            $scope.gridMenuActions = [{
-                name: "Edit",
-                clicked: editRoutingProduct,
-            },
-            {
-                name: "Delete",
-                clicked: deleteRoutingProduct,
-            }
-            ];
         }
 
         function AddNewRoutingProduct() {

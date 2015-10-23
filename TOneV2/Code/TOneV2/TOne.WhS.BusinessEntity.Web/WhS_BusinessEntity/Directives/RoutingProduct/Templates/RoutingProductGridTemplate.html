@@ -1,0 +1,14 @@
+﻿<vr-row>
+    <vr-columns colnum="12" simplecol>
+        <vr-datagrid datasource="routingProducts"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     on-ready="gridReady"
+                     menuactions="gridMenuActions"
+                     idfield="RoutingProductId">
+
+            <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Selling Number Plan Id'" field="'SellingNumberPlanId'"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>
