@@ -92,7 +92,7 @@
     <Compile Include="SaleZone\SaleRateManager.cs" />
     <Compile Include="SaleZone\SaleCodeManager.cs" />
     <Compile Include="SaleZone\SaleZoneManager.cs" />
-    <Compile Include="SaleZone\SaleZonePackageManager.cs" />
+    <Compile Include="SaleZone\SellingNumberPlanManager.cs" />
     <Compile Include="SupplierZone\SupplierCodeManager.cs" />
     <Compile Include="SupplierZone\SupplierPriceListManager.cs" />
     <Compile Include="SupplierZone\SupplierRateManager.cs" />

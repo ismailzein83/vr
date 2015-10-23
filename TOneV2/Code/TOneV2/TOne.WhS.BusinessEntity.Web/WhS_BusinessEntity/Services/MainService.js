@@ -19,7 +19,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         addCarrierAccount: addCarrierAccount,
         editCarrierAccount: editCarrierAccount,
         addCarrierProfile:addCarrierProfile,
-        editCarrierProfile: editCarrierProfile,
+        editCarrierProfile: editCarrierProfile,  
         addSalePricingRule: addSalePricingRule,
         editSalePricingRule: editSalePricingRule,
         deleteSalePricingRule: deleteSalePricingRule,
@@ -120,7 +120,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "New Pricing Product";
+            modalScope.title = "New Selling Product";
             modalScope.onSellingProductAdded = onSellingProductAdded;
         };
 
@@ -135,7 +135,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Pricing Product";
+            modalScope.title = "Edit Selling Product";
             modalScope.onSellingProductUpdated = onSellingProductUpdated;
         };
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingProduct/SellingProductEditor.html', parameters, modalSettings);
@@ -148,7 +148,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
                 if (response) {
                     return WhS_BE_SellingProductAPIService.DeleteSellingProduct(sellingProductObj.SellingProductId)
                         .then(function (deletionResponse) {
-                            VRNotificationService.notifyOnItemDeleted("Pricing Product", deletionResponse);
+                            VRNotificationService.notifyOnItemDeleted("Selling Product", deletionResponse);
                             onSellingProductDeleted(sellingProductObj);
                         })
                         .catch(function (error) {
@@ -162,7 +162,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Customer Pricing Product";
+            modalScope.title = "Customer Selling Product";
             modalScope.onCustomerSellingProductAdded = onCustomerSellingProductAdded;
         };
         var parameters=null;
@@ -182,7 +182,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
                 if (response) {
                     return WhS_BE_CustomerSellingProductAPIService.DeleteCustomerSellingProduct(customerSellingProductObj.CustomerSellingProductId)
                         .then(function (deletionResponse) {
-                            VRNotificationService.notifyOnItemDeleted("Customer Pricing Product", deletionResponse);
+                            VRNotificationService.notifyOnItemDeleted("Customer Selling Product", deletionResponse);
                             onCustomerSellingProductDeleted(deletionResponse.UpdatedObject);
                         })
                         .catch(function (error) {

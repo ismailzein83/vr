@@ -71,7 +71,7 @@
     <Compile Include="SaleCodeDataManager.cs" />
     <Compile Include="SaleRateDataManager.cs" />
     <Compile Include="SaleZoneDataManager.cs" />
-    <Compile Include="SaleZonePackageDataManager.cs" />
+    <Compile Include="SellingNumberPlanDataManager.cs" />
     <Compile Include="SupplierCodeDataManager.cs" />
     <Compile Include="SupplierPriceListDataManager.cs" />
     <Compile Include="SupplierRateDataManager.cs" />

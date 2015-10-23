@@ -99,7 +99,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                             clicked: editCarrierAccount,
                         },
                         {
-                            name: "Assign Pricing Product",
+                            name: "Assign Selling Product",
                             clicked: assignNew
                         }
             ];

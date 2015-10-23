@@ -90,9 +90,9 @@ app.directive('vrWhsBeSupplierzone', ['WhS_BE_SupplierZoneAPIService', 'UtilsSer
                     return $scope.selectedSupplierZones;
                 }
 
-                api.setData = function (suppliersZonesGroupsSettings) {
-                    if (suppliersZonesGroupsSettings.SupplierZoneIds!=null && suppliersZonesGroupsSettings.SupplierZoneIds.length > 0) {
-                        var input = {SupplierZoneIds: suppliersZonesGroupsSettings.SupplierZoneIds };
+                api.setData = function (supplierZoneIds) {
+                    if (supplierZoneIds != null && supplierZoneIds.length > 0) {
+                        var input = {SupplierZoneIds:supplierZoneIds };
 
                         return WhS_BE_SupplierZoneAPIService.GetSupplierZonesInfoByIds(input).then(function (response) {
                             angular.forEach(response, function (item) {

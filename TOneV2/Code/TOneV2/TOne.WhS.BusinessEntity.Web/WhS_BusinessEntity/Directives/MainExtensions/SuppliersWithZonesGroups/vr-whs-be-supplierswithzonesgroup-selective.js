@@ -110,7 +110,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
             for (var i = 0; i < directiveAppendixData.length; i++) {
                 for (var j = 0; j < $scope.selectedSuppliers.length; j++) {
                     if ($scope.selectedSuppliers[j].CarrierAccountId == directiveAppendixData[i].SupplierId)
-                        $scope.selectedSuppliers[j].supplierZonesDirectiveAPI.setData(directiveAppendixData[i]);
+                        $scope.selectedSuppliers[j].supplierZonesDirectiveAPI.setData(directiveAppendixData[i].SupplierZoneIds);
                 }
             }
         }

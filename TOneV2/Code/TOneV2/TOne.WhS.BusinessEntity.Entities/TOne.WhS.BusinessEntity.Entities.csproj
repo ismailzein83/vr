@@ -159,7 +159,7 @@
     <Compile Include="SaleZone\SaleRate.cs" />
     <Compile Include="SaleZone\SaleZone.cs" />
     <Compile Include="SaleZone\SaleZoneGroupSettings.cs" />
-    <Compile Include="SaleZone\SaleZonePackage.cs" />
+    <Compile Include="SaleZone\SellingNumberPlan.cs" />
     <Compile Include="CarrierAccounts\CarrierAccountSupplierSettings.cs" />
     <Compile Include="CarrierAccounts\Supplier\SupplierGroupSettings.cs" />
     <Compile Include="SaleZone\SaleZoneQuery.cs" />
