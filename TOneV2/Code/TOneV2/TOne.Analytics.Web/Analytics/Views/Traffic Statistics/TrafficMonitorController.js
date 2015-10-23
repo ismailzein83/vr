@@ -64,7 +64,6 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
             return UtilsService.validateDates($scope.fromDate, toDate);
         };
         $scope.getColor = function (dataItem, coldef) {
-            console.log(dataItem);
             if (coldef.tag.value == TrafficMonitorMeasureEnum.ACD.value)
                 return getACDColor(dataItem.Data.ACD, dataItem.Data.Attempts);
             else if (coldef.tag.value == TrafficMonitorMeasureEnum.ASR.value)
