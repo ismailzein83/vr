@@ -1,7 +1,13 @@
 ﻿
-app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_SellingProductAPIService', 'WhS_BE_CustomerSellingProductAPIService', 'VRModalService', 'VRNotificationService', 'WhS_Be_PricingTypeEnum', 'WhS_BE_SalePricingRuleAPIService', 'UtilsService','WhS_BE_PurchasePricingRuleAPIService', function (WhS_BE_RouteRuleAPIService, WhS_BE_SellingProductAPIService, WhS_BE_CustomerSellingProductAPIService, VRModalService, VRNotificationService, WhS_Be_PricingTypeEnum, WhS_BE_SalePricingRuleAPIService, UtilsService, WhS_BE_PurchasePricingRuleAPIService) {
+app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_SellingProductAPIService', 'WhS_BE_CustomerSellingProductAPIService', 'WhS_BE_RoutingProductAPIService',
+    'VRModalService', 'VRNotificationService', 'WhS_Be_PricingTypeEnum', 'WhS_BE_SalePricingRuleAPIService', 'UtilsService', 'WhS_BE_PurchasePricingRuleAPIService',
+    function (WhS_BE_RouteRuleAPIService, WhS_BE_SellingProductAPIService, WhS_BE_CustomerSellingProductAPIService, WhS_BE_RoutingProductAPIService, VRModalService,
+        VRNotificationService, WhS_Be_PricingTypeEnum, WhS_BE_SalePricingRuleAPIService, UtilsService, WhS_BE_PurchasePricingRuleAPIService) {
 
     return ({
+        addRoutingProduct: addRoutingProduct,
+        editRoutingProduct: editRoutingProduct,
+        deleteRoutingProduct: deleteRoutingProduct,
         addRouteRule: addRouteRule,
         editRouteRule: editRouteRule,
         deleteRouteRule: deleteRouteRule,
@@ -23,6 +29,49 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         editCountry: editCountry
 
     });
+
+    function addRoutingProduct(onRoutingProductAdded) {
+        var settings = {};
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "New Routing Product";
+            modalScope.onRoutingProductAdded = onRoutingProductAdded
+        };
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductEditor.html', null, settings);
+    };
+
+    function editRoutingProduct(routingProductObj, onRoutingProductUpdated) {
+        var modalSettings = {
+        };
+
+        var parameters = {
+            routingProductId: routingProductObj.RoutingProductId
+        };
+
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Edit Routing Product: " + routingProductObj.Name;
+            modalScope.onRoutingProductUpdated = onRoutingProductUpdated;
+        };
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductEditor.html', parameters, modalSettings);
+    };
+
+    function deleteRoutingProduct(scope, routingProductObj, onRoutingProductDeleted) {
+        VRNotificationService.showConfirmation()
+                .then(function (response) {
+                    if (response) {
+
+                        return WhS_BE_RoutingProductAPIService.DeleteRoutingProduct(routingProductObj.RoutingProductId)
+                            .then(function (deletionResponse) {
+                                VRNotificationService.notifyOnItemDeleted("Routing Product", deletionResponse);
+                                onRoutingProductDeleted(routingProductObj);
+                            })
+                            .catch(function (error) {
+                                VRNotificationService.notifyException(error, scope);
+                            });
+                    }
+                });
+    };
 
     function addRouteRule(onRouteRuleAdded)
     {
