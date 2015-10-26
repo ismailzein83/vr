@@ -90,7 +90,7 @@ namespace Vanrise.Security.Business
             if (insertActionSucc)
             {
                 dataManager.AssignMembers(groupId, members);
-
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetGroups");
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 groupObj.GroupId = groupId;
                 insertOperationOutput.InsertedObject = GroupDetailMapper(groupObj);
@@ -116,7 +116,7 @@ namespace Vanrise.Security.Business
             if (updateActionSucc)
             {
                 dataManager.AssignMembers(groupObj.GroupId, members);
-
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetGroups");
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = GroupDetailMapper(groupObj);
             }
