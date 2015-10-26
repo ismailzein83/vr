@@ -131,15 +131,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         SaleZone SaleZoneMapper(IDataReader reader)
         {
-            SaleZone sellingNumberPlan = new SaleZone
-            {
-                SaleZoneId = (long)reader["ID"],
-                SellingNumberPlanId = (int)reader["SellingNumberPlanID"],
-                CountryId = GetReaderValue<int?>(reader, "CountryID"),
-                Name = reader["Name"] as string,
-                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
-                EndEffectiveDate = GetReaderValue<DateTime>(reader, "EED")
-            };
+            SaleZone sellingNumberPlan = new SaleZone();
+            
+            sellingNumberPlan.SaleZoneId = (long)reader["ID"];
+            sellingNumberPlan.SellingNumberPlanId = (int)reader["SellingNumberPlanID"];
+            sellingNumberPlan.CountryId = GetReaderValue<int?>(reader, "CountryID");
+            sellingNumberPlan.Name = reader["Name"] as string;
+            sellingNumberPlan.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED");
+            sellingNumberPlan.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED");
+
             return sellingNumberPlan;
         }
 

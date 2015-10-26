@@ -5,42 +5,78 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class CustomerZoneManager
     {
-        public Dictionary<int, CustomerZones> GetCachedCustomerZones()
+        public Dictionary<int, CustomerZones> GetAllCachedCustomerZones()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCustomerZones",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllCustomerZones",
                () =>
                {
                    ICustomerZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerZoneDataManager>();
-                   IEnumerable<CustomerZones> customerZones = dataManager.GetCustomerZones();
+                   IEnumerable<CustomerZones> customerZones = dataManager.GetAllCustomerZones();
                    return customerZones.ToDictionary(kvp => kvp.CustomerZonesId, kvp => kvp);
                });
         }
 
-        public CustomerZones GetCustomerZone(int customerId, DateTime? effectiveOn, bool futureEntities)
+        public CustomerZones GetCustomerZones(int customerId, DateTime? effectiveOn, bool futureEntities)
         {
-            var cachedCustomerZones = GetCachedCustomerZones();
+            var allCustomerZones = GetAllCachedCustomerZones();
 
-            if (cachedCustomerZones.Count > 0)
+            if (allCustomerZones.Count > 0)
             {
-                var filteredZones = cachedCustomerZones.Where(x => x.Value.CustomerId == customerId && x.Value.StartEffectiveTime <= effectiveOn);
+                var filteredCustomerZones = allCustomerZones.Where(x => x.Value.CustomerId == customerId && x.Value.StartEffectiveTime <= effectiveOn);
 
-                if (filteredZones != null && filteredZones.ToList().Count > 0)
-                    return filteredZones.OrderByDescending(x => x.Value.StartEffectiveTime).First().Value;
+                if (filteredCustomerZones != null && filteredCustomerZones.ToList().Count > 0)
+                    return filteredCustomerZones.OrderByDescending(x => x.Value.StartEffectiveTime).First().Value;
             }
 
             return null;
         }
 
-        public TOne.Entities.InsertOperationOutput<int> AddCustomerZones(CustomerZones customerZones)
+        public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZonesToSell(Vanrise.Entities.DataRetrievalInput<SaleZonesToSellQuery> input)
         {
-            customerZones.StartEffectiveTime = DateTime.Now;
-            TOne.Entities.InsertOperationOutput<int> insertOperationOutput = new TOne.Entities.InsertOperationOutput<int>();
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            IEnumerable<SaleZoneDetail> allSaleZones = saleZoneManager.GetCachedSaleZoneDetails(GetSellingNumberPlanId(input.Query.CustomerId));
+            CustomerZones customerZones = GetCustomerZones(input.Query.CustomerId, DateTime.Now, false);
 
+            Func<SaleZoneDetail, bool> filterExpression = (saleZone) => (input.Query.Name == null || saleZone.Entity.Name.Contains(input.Query.Name));
+
+            if (customerZones != null) {
+                List<long> customerZoneIds = customerZones.Zones.Select(x => x.ZoneId).ToList();
+                filterExpression = (saleZone) =>
+                    (
+                        !customerZoneIds.Contains(saleZone.Entity.SaleZoneId)
+                    )
+                    &&
+                    (
+                        input.Query.Name == null || saleZone.Entity.Name.Contains(input.Query.Name)
+                    );
+            }
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSaleZones.ToBigResult(input, filterExpression));
+        }
+
+        public TOne.Entities.InsertOperationOutput<CustomerZones> AddCustomerZones(CustomerZones customerZones)
+        {
+            CustomerZones currentCustomerZones = GetCustomerZones(customerZones.CustomerId, DateTime.Now, false);
+
+            if (currentCustomerZones != null)
+            {
+                foreach (CustomerZone customerZone in currentCustomerZones.Zones)
+                {
+                    customerZones.Zones.Add(new CustomerZone() {
+                        ZoneId = customerZone.ZoneId
+                    });
+                }
+            }
+
+            customerZones.Zones.OrderBy(x => x.ZoneId); // should i keep this?
+
+            TOne.Entities.InsertOperationOutput<CustomerZones> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CustomerZones>();
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
 
             int customerZonesId = -1;
@@ -50,21 +86,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (inserted)
             {
+                customerZones.CustomerZonesId = customerZonesId;
+                insertOperationOutput.InsertedObject = customerZones;
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = customerZonesId;
             }
 
             return insertOperationOutput;
         }
 
-        #region Temp Methods
-
-        public CustomerZones GetCustomerZones(int customerId, DateTime? effectiveOn, bool futureEntities)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
+        #region Private Classes
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
@@ -73,8 +103,22 @@ namespace TOne.WhS.BusinessEntity.Business
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreCustomerZonesUpdated(ref _updateHandle);
+                return _dataManager.AreAllCustomerZonesUpdated(ref _updateHandle);
             }
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private int GetSellingNumberPlanId(int customerId)
+        {
+            CarrierAccountManager manager = new CarrierAccountManager();
+            CarrierAccountDetail customer = manager.GetCarrierAccount(customerId);
+
+            return customer.CustomerSettings.SellingNumberPlanId;
+        }
+
+        #endregion
     }
 }

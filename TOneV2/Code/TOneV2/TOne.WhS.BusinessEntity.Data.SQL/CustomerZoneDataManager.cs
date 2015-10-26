@@ -17,9 +17,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         }
 
-        public List<CustomerZones> GetCustomerZones()
+        public List<CustomerZones> GetAllCustomerZones()
         {
-            return GetItemsSP("TOneWhS_BE.sp_CustomerZone_GetAll", CustomerZoneMapper);
+            return GetItemsSP("TOneWhS_BE.sp_CustomerZone_GetAll", CustomerZonesMapper);
         }
 
         public bool AddCustomerZones(CustomerZones customerZones, out int insertedId)
@@ -35,20 +35,25 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return (recordsAffected > 0);
         }
 
-        public bool AreCustomerZonesUpdated(ref object updateHandle)
+        public bool AreAllCustomerZonesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("[TOneWhS_BE].[CustomerZone]", ref updateHandle);
         }
 
-        private CustomerZones CustomerZoneMapper(IDataReader reader)
+        #region Mappers
+
+        private CustomerZones CustomerZonesMapper(IDataReader reader)
         {
-            CustomerZones customerZone = new CustomerZones();
+            CustomerZones customerZones = new CustomerZones();
 
-            customerZone.CustomerId = (int)reader["CustomerID"];
-            customerZone.Zones = Vanrise.Common.Serializer.Deserialize<List<CustomerZone>>(reader["Details"] as string);
-            customerZone.StartEffectiveTime = (DateTime)reader["BED"];
+            customerZones.CustomerZonesId = (int)reader["ID"];
+            customerZones.CustomerId = (int)reader["CustomerID"];
+            customerZones.Zones = Vanrise.Common.Serializer.Deserialize<List<CustomerZone>>(reader["Details"] as string);
+            customerZones.StartEffectiveTime = (DateTime)reader["BED"];
 
-            return customerZone;
+            return customerZones;
         }
+
+        #endregion
     }
 }

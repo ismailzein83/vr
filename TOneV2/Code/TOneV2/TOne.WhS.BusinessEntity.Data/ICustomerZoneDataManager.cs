@@ -9,10 +9,10 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ICustomerZoneDataManager: IDataManager
     {
-        List<CustomerZones> GetCustomerZones();
+        List<CustomerZones> GetAllCustomerZones();
 
         bool AddCustomerZones(CustomerZones customerZones, out int insertedId);
 
-        bool AreCustomerZonesUpdated(ref object updateHandle);
+        bool AreAllCustomerZonesUpdated(ref object updateHandle);
     }
 }

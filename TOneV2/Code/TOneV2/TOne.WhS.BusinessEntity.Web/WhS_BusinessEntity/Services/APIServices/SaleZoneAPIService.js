@@ -2,12 +2,16 @@
 app.service('WhS_BE_SaleZoneAPIService', function (BaseAPIService) {
     
     return ({
+        GetFilteredSaleZones: GetFilteredSaleZones,
         GetSaleZonesInfo: GetSaleZonesInfo,
         GetSaleZonesInfoByIds: GetSaleZonesInfoByIds,
         GetSaleZoneGroupTemplates: GetSaleZoneGroupTemplates,
         GetSaleZonesByName: GetSaleZonesByName
     });
-     
+
+    function GetFilteredSaleZones(input) {
+        return BaseAPIService.post("/api/SaleZone/GetFilteredSaleZones", input);
+    }
 
     function GetSaleZonesInfo(sellingNumberPlanId, filter) {
         return BaseAPIService.get("/api/SaleZone/GetSaleZonesInfo", {

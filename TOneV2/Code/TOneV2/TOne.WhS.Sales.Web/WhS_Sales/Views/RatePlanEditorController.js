@@ -2,11 +2,13 @@
 
     "use strict";
 
-    ratePlanEditorController.$inject = ["$scope", "WhS_BE_SaleZoneAPIService", "WhS_BE_CustomerZoneAPIService", "UtilsService", "VRNavigationService", "VRNotificationService"];
+    ratePlanEditorController.$inject = ["$scope", "WhS_BE_CustomerZoneAPIService", "WhS_BE_SaleZoneAPIService", "UtilsService", "VRNavigationService", "VRNotificationService"];
 
-    function ratePlanEditorController($scope, WhS_BE_SaleZoneAPIService, WhS_BE_CustomerZoneAPIService, UtilsService, VRNavigationService, VRNotificationService) {
+    function ratePlanEditorController($scope, WhS_BE_CustomerZoneAPIService, WhS_BE_SaleZoneAPIService, UtilsService, VRNavigationService, VRNotificationService) {
 
         var customerId;
+        var gridAPI;
+        var selectedSaleZones;
 
         loadParameters();
         defineScope();
@@ -24,23 +26,43 @@
             $scope.title = "Sell New Zones";
             //$scope.title = UtilsService.buildTitleForUpdateEditor("Rate Plan");
 
-            $scope.selectedSaleZones = [];
+            $scope.saleZones = [];
+            $scope.disableSaveButton = true;
 
-            $scope.getSaleZonesByName = function (saleZoneNameFilter) {
-                return WhS_BE_SaleZoneAPIService.GetSaleZonesByName(customerId, saleZoneNameFilter);
+            $scope.onGridReady = function (api) {
+                gridAPI = api;
+                return gridAPI.retrieveData(getQuery());
+            };
+
+            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                return WhS_BE_CustomerZoneAPIService.GetFilteredSaleZonesToSell(dataRetrievalInput)
+                    .then(function (response) {
+                        onResponseReady(response);
+                    })
+                    .catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    });
+            };
+
+            $scope.onSearchClicked = function () {
+                if (gridAPI != undefined) {
+                    return gridAPI.retrieveData(getQuery());
+                }
+            };
+
+            $scope.onSaleZoneCheckedChanged = function () {
+                var saleZone = UtilsService.getItemByVal($scope.saleZones, true, "isSelected");
+                // disable the add button if no sale zone is selected
+                $scope.disableSaveButton = (saleZone == undefined);
             };
 
             $scope.sellNewZones = function () {
                 var customerZonesObj = buildCutomerZonesObjFromScope();
 
-                console.log(customerZonesObj);
-
                 WhS_BE_CustomerZoneAPIService.AddCustomerZones(customerZonesObj).then(function (response) {
-                    console.log(response);
-
                     if (VRNotificationService.notifyOnItemAdded("Customer Zones", response)) {
-                        if ($scope.onCustomerZonesAdded != undefined) {
-                            $scope.onCustomerZonesAdded();
+                        if ($scope.onCustomerZonesSold != undefined) {
+                            $scope.onCustomerZonesSold(response);
                         }
 
                         $scope.modalContext.closeModal();
@@ -57,37 +79,36 @@
 
         function load() {
 
-            $scope.loadingEditor = true;
-
-            WhS_BE_CustomerZoneAPIService.GetCustomerZone(customerId).then(function (response) {
-                console.log(response);
-                fillScopeFromCustomerZonesObj(response);
-            }).finally(function () {
-                $scope.loadingEditor = false;
-            });
         }
 
-        function fillScopeFromCustomerZonesObj(customerZones) {
+        function getQuery() {
+            return {
+                CustomerId: customerId,
+                Name: $scope.name
+            };
         }
 
         function buildCutomerZonesObjFromScope() {
             return {
                 CustomerId: customerId,
-                Zones: getCustomerZoneArray(),
-                StartEffectiveTime: Date()
+                Zones: getSelectedCustomerZones(),
+                StartEffectiveTime: new Date()
             };
         }
 
-        function getCustomerZoneArray() {
-            var customerZones = [];
+        function getSelectedCustomerZones() {
+            var newCustomerZones = [];
 
-            for (var i = 0; i < $scope.selectedSaleZones.length; i++) {
-                customerZones.push({
-                    ZoneId: $scope.selectedSaleZones[i].SaleZoneId
-                });
+            for (var i = 0; i < $scope.saleZones.length; i++) {
+                if ($scope.saleZones[i].isSelected) {
+                    newCustomerZones.push({
+                        ZoneId: $scope.saleZones[i].Entity.SaleZoneId
+                    });
+                }
             }
 
-            return customerZones;
+            if (newCustomerZones.length > 0) return newCustomerZones;
+            return null;
         }
     }
 

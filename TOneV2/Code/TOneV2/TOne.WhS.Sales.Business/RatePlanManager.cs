@@ -30,17 +30,16 @@ namespace TOne.WhS.Sales.Business
 
                     ratePlanItem.ZoneId = saleZone.SaleZoneId;
                     ratePlanItem.ZoneName = saleZone.Name;
-                    //ratePlanItem.Rate = saleRates.Where(x => x.ZoneId == saleZone.SaleZoneId).Single().NormalRate;
+                    ratePlanItem.Rate = saleRates.Where(x => x.ZoneId == saleZone.SaleZoneId).Single().NormalRate;
 
                     ratePlanItems.Add(ratePlanItem);
                 }
             }
 
-            // this is a dummy filter expression
-            Func<RatePlanItem, bool> filterExpression = (ratePlanItem) => (true);
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, ratePlanItems.ToBigResult(input, filterExpression));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, ratePlanItems.ToBigResult(input, null));
         }
+
+        #region Private Methods
 
         private List<SaleZone> GetSaleZones(int customerId)
         {
@@ -48,7 +47,7 @@ namespace TOne.WhS.Sales.Business
             if (saleZoneIds == null) return null;
 
             int sellingNumberPlanId = GetSellingNumberPlanId(customerId);
-            
+
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             return saleZoneManager.GetSaleZonesByIds(sellingNumberPlanId, saleZoneIds).ToList();
         }
@@ -64,7 +63,7 @@ namespace TOne.WhS.Sales.Business
         private List<long> GetSaleZoneIds(int customerId)
         {
             CustomerZoneManager manager = new CustomerZoneManager();
-            CustomerZones customerZones = manager.GetCustomerZone(customerId, DateTime.Now, false);
+            CustomerZones customerZones = manager.GetCustomerZones(customerId, DateTime.Now, false);
 
             return (customerZones != null) ? customerZones.Zones.Select(x => x.ZoneId).ToList() : null;
         }
@@ -74,5 +73,7 @@ namespace TOne.WhS.Sales.Business
             SaleRateManager manager = new SaleRateManager();
             return manager.GetSaleRatesByCustomerZoneIds(customerId, customerZoneIds, DateTime.Now);
         }
+        
+        #endregion
     }
 }

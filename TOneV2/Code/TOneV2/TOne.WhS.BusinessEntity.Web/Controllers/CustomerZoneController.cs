@@ -13,16 +13,24 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     public class CustomerZoneController : BaseAPIController
     {
         [HttpGet]
-        [Route("GetCustomerZone")]
-        public CustomerZones GetCustomerZone(int customerId)
+        [Route("GetCustomerZones")]
+        public CustomerZones GetCustomerZones(int customerId)
         {
             CustomerZoneManager manager = new CustomerZoneManager();
-            return manager.GetCustomerZone(customerId, DateTime.Now, false);
+            return manager.GetCustomerZones(customerId, DateTime.Now, false);
+        }
+
+        [HttpPost]
+        [Route("GetFilteredSaleZonesToSell")]
+        public object GetFilteredSaleZonesToSell(Vanrise.Entities.DataRetrievalInput<SaleZonesToSellQuery> input)
+        {
+            CustomerZoneManager manager = new CustomerZoneManager();
+            return manager.GetFilteredSaleZonesToSell(input);
         }
 
         [HttpPost]
         [Route("AddCustomerZones")]
-        public TOne.Entities.InsertOperationOutput<int> AddCustomerZones(CustomerZones customerZones)
+        public TOne.Entities.InsertOperationOutput<CustomerZones> AddCustomerZones(CustomerZones customerZones)
         {
             CustomerZoneManager manager = new CustomerZoneManager();
             return manager.AddCustomerZones(customerZones);

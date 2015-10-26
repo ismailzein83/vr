@@ -11,30 +11,6 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleZoneManager
     {
-        #region Private Classes
-        
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            ISaleZoneDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired()
-            {
-                return _dataManager.AreZonesUpdated(ref _updateHandle);
-            }
-        }
-        
-        #endregion
-
-        public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZoneQuery> input)
-        {
-            var allSaleZones = GetCachedSaleZones(input.Query.SellingNumberPlanId);
-
-            Func<SaleZone, bool> filterExpression = (saleZone) => (saleZone.Name.Contains(input.Query.Name));
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSaleZones.ToBigResult(input, filterExpression, SaleZoneDetailMapper));
-        }
-
         public List<SaleZone> GetSaleZones(int sellingNumberPlanId)
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
@@ -45,6 +21,12 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             string cacheName = String.Format("GetCachedSaleZones_{0}", sellingNumberPlanId);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, () => GetSaleZones(sellingNumberPlanId));
+        }
+
+        public IEnumerable<SaleZoneDetail> GetCachedSaleZoneDetails(int sellingNumberPlanId)
+        {
+            var allSaleZones = GetCachedSaleZones(sellingNumberPlanId);
+            return allSaleZones.MapRecords(SaleZoneDetailMapper);
         }
 
         public SaleZone GetSaleZone(long saleZoneId)
@@ -155,9 +137,30 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleZoneDetail saleZoneDetail = new SaleZoneDetail();
 
             saleZoneDetail.Entity = saleZone;
-            saleZoneDetail.CountryName = null;
+
+            CountryManager manager = new CountryManager();
+            if (saleZone.CountryId != null)
+            {
+                int countryId = (int)saleZone.CountryId;
+                saleZoneDetail.CountryName = manager.GetCountry(countryId).Name;
+            }
 
             return saleZoneDetail;
+        }
+
+        #endregion
+
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ISaleZoneDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired()
+            {
+                return _dataManager.AreZonesUpdated(ref _updateHandle);
+            }
         }
 
         #endregion
