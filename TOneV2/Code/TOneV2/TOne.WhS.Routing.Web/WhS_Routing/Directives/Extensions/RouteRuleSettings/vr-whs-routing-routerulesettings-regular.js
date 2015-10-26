@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingRouteruleoptionRegular', ['UtilsService', 'WhS_Routing_RoutRuleSettingsAPIService', 'VRUIUtilsService',
+app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Routing_RoutRuleSettingsAPIService', 'VRUIUtilsService',
     function (UtilsService, WhS_Routing_RoutRuleSettingsAPIService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -31,7 +31,7 @@ app.directive('vrWhsRoutingRouteruleoptionRegular', ['UtilsService', 'WhS_Routin
         };
 
         function getBeRouteRuleRegularTemplate(attrs) {
-            return '/Client/Modules/WhS_Routing/Directives/RouteRuleOptions/Templates/RouteRuleRegularDirectiveTemplate.html';
+            return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Templates/RouteRuleRegularDirective.html';
         }
 
         function beRouteRuleRegular(ctrl, $scope) {

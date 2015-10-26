@@ -126,18 +126,20 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_Routing\Constant\ModuleConfig.js" />
-    <Content Include="WhS_Routing\Directives\RouteRuleOptions\Templates\RouteRuleRegularDirectiveTemplate.html" />
-    <Content Include="WhS_Routing\Directives\RouteRuleOptions\vr-whs-routing-routeruleoption-block.js" />
-    <Content Include="WhS_Routing\Directives\RouteRuleOptions\vr-whs-routing-routeruleoption-regular.js" />
-    <Content Include="WhS_Routing\Directives\RouteRuleSettings\Templates\OptionPercentageFixedDirectiveTemplate.html" />
-    <Content Include="WhS_Routing\Directives\RouteRuleSettings\Templates\SelectiveOptionDirectiveTemplate.html" />
-    <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-routerulesettings-filter-removeloss.js" />
-    <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-routerulesettings-order-byrate.js" />
-    <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-routerulesettings-percentage-fixed.js" />
-    <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-routerulesettings-selective.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Templates\RouteRuleRegularDirective.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-block.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-regular.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Templates\OptionPercentageFixedDirective.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Templates\SelectiveOptionDirective.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-filter-removeloss.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-order-byrate.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-percentage-fixed.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-selective.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleSettingsAPIService.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="WhS_Routing\Directives\Extensions\RouteRuleOptions\Templates\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -31,7 +31,7 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
         };
 
         function getRoutingOptionPercentageFixedTemplate(attrs) {
-            return '/Client/Modules/WhS_Routing/Directives/RouteRuleSettings/Templates/OptionPercentageFixedDirectiveTemplate.html';
+            return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Templates/OptionPercentageFixedDirective.html';
         }
 
         function routingOptionPercentageFixed(ctrl, $scope) {

@@ -31,7 +31,7 @@ app.directive('vrWhsRoutingRouterulesettingsSelective', ['UtilsService',
         };
 
         function getRoutingSelectiveOptionsTemplate(attrs) {
-            return '/Client/Modules/WhS_Routing/Directives/RouteRuleSettings/Templates/SelectiveOptionDirectiveTemplate.html';
+            return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Templates/SelectiveOptionDirective.html';
         }
 
         function routingSelectiveOptions(ctrl, $scope) {
