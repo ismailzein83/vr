@@ -62,7 +62,7 @@ namespace Vanrise.Security.Data.SQL
 
         public bool AreUsersUpdated(ref object updateHandle)
         {
-            return base.IsDataUpdated("sec.User", ref updateHandle);
+            return base.IsDataUpdated("sec.[User]", ref updateHandle);
         }
 
 

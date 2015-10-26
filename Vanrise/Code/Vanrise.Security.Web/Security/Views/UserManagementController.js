@@ -87,7 +87,7 @@ function UserManagementController($scope, UsersAPIService, VRModalService, VRNot
         var modalSettings = {
         };
         var parameters = {
-            userId: userObj.UserId
+            userId: userObj.Entity.UserId
         };
 
         modalSettings.onScopeReady = function (modalScope) {
@@ -103,7 +103,7 @@ function UserManagementController($scope, UsersAPIService, VRModalService, VRNot
         var modalSettings = {
         };
         var parameters = {
-            userId: userObj.UserId
+            userId: userObj.Entity.UserId
         };
 
         modalSettings.onScopeReady = function (modalScope) {
@@ -122,7 +122,7 @@ function UserManagementController($scope, UsersAPIService, VRModalService, VRNot
         };
         var parameters = {
             holderType: 0,
-            holderId: userObj.UserId,
+            holderId: userObj.Entity.UserId,
             notificationResponseText: "User Permissions"
         };
 

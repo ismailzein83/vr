@@ -100,25 +100,7 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
         });
     }
 
-    //$scope.CheckUserName = function (name) {
-    //    var bool = false;
-    //    if (name == undefined)
-    //        return null;
-
-    //    UsersAPIService.CheckUserName(name == undefined ? " " : name).then(function (response) {
-    //        bool = response;
-    //        //if (response == false)
-    //        //return "Invalid";
-    //        //else
-    //        //  return null;
-
-    //    }).finally(function () {
-
-    //    });
-
-    //    if (!bool)
-    //        return "Invalid";
-    //}
+   
 }
 
 appControllers.controller('Security_UserEditorController', UserEditorController);

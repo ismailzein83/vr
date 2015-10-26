@@ -27,14 +27,14 @@ namespace Vanrise.Security.Business
 
         public IDataRetrievalResult<UserDetail> GetFilteredUsers(DataRetrievalInput<UserQuery> input)
         {
-            var allSwitches = GetCachedUsers();
+            var allItems = GetCachedUsers();
 
-            Func<User, bool> filterExpression = (switchObject) =>
-                 (input.Query.Name == null || switchObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
+            Func<User, bool> filterExpression = (itemObject) =>
+                 (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
-                 (input.Query.Email == null || switchObject.Email.ToLower().Contains(input.Query.Email.ToLower()));
+                 (input.Query.Email == null || itemObject.Email.ToLower().Contains(input.Query.Email.ToLower()));
 
-            return DataRetrievalManager.Instance.ProcessResult(input, allSwitches.ToBigResult(input, filterExpression, UserDetailMapper));
+            return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, UserDetailMapper));
         }
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
