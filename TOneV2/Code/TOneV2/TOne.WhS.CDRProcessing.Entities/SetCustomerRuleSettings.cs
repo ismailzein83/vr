@@ -8,6 +8,6 @@ namespace TOne.WhS.CDRProcessing.Entities
 {
     public class SetCustomerRuleSettings
     {
-        public string CustomerId { get; set; }
+        public int CustomerId { get; set; }
     }
 }

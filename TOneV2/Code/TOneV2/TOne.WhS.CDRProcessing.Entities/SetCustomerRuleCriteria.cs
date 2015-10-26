@@ -8,7 +8,9 @@ namespace TOne.WhS.CDRProcessing.Entities
 {
     public class SetCustomerRuleCriteria
     {
-        public List<SetCustomerAction> Actions { get; set; }
+        public List<int> IN_Trunk { get; set; }
+        public List<int> IN_Carrier { get; set; }
+        public List<int> CDPN { get; set; }
       
     }
 }

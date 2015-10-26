@@ -8,6 +8,6 @@ namespace TOne.WhS.CDRProcessing.Entities
 {
     public class SetSupplierRuleSettings
     {
-        public string SupplierId { get; set; }
+        public int SupplierId { get; set; }
     }
 }

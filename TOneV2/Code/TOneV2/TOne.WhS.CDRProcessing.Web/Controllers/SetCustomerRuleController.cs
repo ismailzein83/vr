@@ -16,7 +16,7 @@ namespace TOne.WhS.CDRProcessing.Web.Controllers
     public class SetCustomerRuleController : BaseRuleController<SetCustomerRule, SetCustomerRuleDetail, SetCustomerRuleManager>
     {
         [HttpPost]
-        [Route("GetFilteredSetSupplierRules")]
+        [Route("GetFilteredSetCustomerRules")]
         public object GetFilteredSetCustomerRules(Vanrise.Entities.DataRetrievalInput<SetCustomerRuleQuery> input)
         {
             SetCustomerRuleManager manager = new SetCustomerRuleManager();
