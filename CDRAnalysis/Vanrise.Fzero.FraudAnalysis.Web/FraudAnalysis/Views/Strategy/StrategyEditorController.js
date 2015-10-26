@@ -103,7 +103,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
         $scope.showParametersHint = function (item) {
             if (item.parameters.length > 0)
-                return "This filter requires the following parameter(s)" + item.parameters.join();
+                return "This filter requires the following parameter(s): " + item.parameters.join();
         }
 
         

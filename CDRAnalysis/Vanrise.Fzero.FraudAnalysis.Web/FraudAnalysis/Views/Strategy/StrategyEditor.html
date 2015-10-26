@@ -49,7 +49,7 @@
                                         </vr-datagridcolumn>
 
                                         <vr-datagridcolumn headertext="'Hints'"  widthfactor="3" disablesorting>
-                                            <vr-textbox hint="viewScope.showParametersHint(dataItem)" ng-if="viewScope.hasParameters(dataItem)">     </vr-textbox>
+                                            <vr-hint value="{{viewScope.showParametersHint(dataItem)}}" ng-if="viewScope.hasParameters(dataItem)">     </vr-hint>
                                         </vr-datagridcolumn>
 
                                         <vr-datagridcolumn headertext="'Filter'" field="'abbreviation'" disablesorting>
