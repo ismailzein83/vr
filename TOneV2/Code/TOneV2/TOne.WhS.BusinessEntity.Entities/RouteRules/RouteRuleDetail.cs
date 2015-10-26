@@ -15,10 +15,33 @@ namespace TOne.WhS.BusinessEntity.Entities
             get
             {
                 if (this.Entity.Criteria != null && this.Entity.Criteria.CodeCriteriaGroupSettings != null)
-                    return string.Join(",", this.Entity.Criteria.CodeCriteriaGroupSettings.GetCodeCriterias(null).Select(item => item.Code));
+                    return this.Entity.Criteria.CodeCriteriaGroupSettings.GetDescription();
 
                 return string.Empty;
             }
         }
+
+        public string Customers
+        {
+            get
+            {
+                if (this.Entity.Criteria != null && this.Entity.Criteria.CustomerGroupSettings != null)
+                    return this.Entity.Criteria.CustomerGroupSettings.GetDescription();
+
+                return string.Empty;
+            }
+        }
+
+        public string SaleZones
+        {
+            get
+            {
+                if (this.Entity.Criteria != null && this.Entity.Criteria.SaleZoneGroupSettings != null)
+                    return this.Entity.Criteria.SaleZoneGroupSettings.GetDescription();
+
+                return string.Empty;
+            }
+        }
+       
     }
 }

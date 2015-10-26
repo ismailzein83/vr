@@ -64,7 +64,7 @@ app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.BusinessEntity.Entities.SelectiveCodeCriteriaSettings, TOne.WhS.BusinessEntity.Entities",
+                        $type: "TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups.SelectiveCodeCriteriaGroup, TOne.WhS.BusinessEntity.MainExtensions",
                         Codes: $scope.codeCriteriaArray
                     };
                 }

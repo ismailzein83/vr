@@ -11,6 +11,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int ConfigId { get; set; }
 
         public abstract IEnumerable<int> GetCustomerIds(CustomerGroupContext context);
+
+        public abstract string GetDescription();
     }
 
 }

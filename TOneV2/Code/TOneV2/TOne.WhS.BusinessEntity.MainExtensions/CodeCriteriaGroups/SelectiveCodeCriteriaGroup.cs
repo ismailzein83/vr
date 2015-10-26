@@ -15,5 +15,13 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups
         {
             return this.Codes;
         }
+
+        public override string GetDescription()
+        {
+            if (this.Codes != null)
+                return string.Join(",", this.Codes.Select(item => item.Code));
+
+            return string.Empty;
+        }
     }
 }

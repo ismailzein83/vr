@@ -15,5 +15,13 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups
         {
             return this.CustomerIds;
         }
+
+        public override string GetDescription()
+        {
+            if (this.CustomerIds != null)
+                return string.Join(",", this.CustomerIds);
+
+            return string.Empty;
+        }
     }
 }

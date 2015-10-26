@@ -15,5 +15,13 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups
         {
             return this.ZoneIds;
         }
+
+        public override string GetDescription()
+        {
+            if (this.ZoneIds != null)
+                return string.Join(",", this.ZoneIds);
+
+            return string.Empty;
+        }
     }
 }
