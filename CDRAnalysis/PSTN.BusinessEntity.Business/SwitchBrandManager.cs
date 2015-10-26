@@ -3,6 +3,7 @@ using PSTN.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Entities;
 
@@ -63,6 +64,7 @@ namespace PSTN.BusinessEntity.Business
 
             if (updated)
             {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetSwitchBrands");
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = brandObj;
             }
@@ -87,6 +89,7 @@ namespace PSTN.BusinessEntity.Business
 
             if (inserted)
             {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetSwitchBrands");
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 brandObj.BrandId = brandId;
                 insertOperationOutput.InsertedObject = brandObj;
@@ -108,7 +111,10 @@ namespace PSTN.BusinessEntity.Business
             bool deleted = dataManager.DeleteBrand(brandId);
 
             if (deleted)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetSwitchBrands");
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+            }
 
             return deleteOperationOutput;
         }

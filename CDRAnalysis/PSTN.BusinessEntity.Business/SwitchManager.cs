@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.Caching;
 
 namespace PSTN.BusinessEntity.Business
 {
@@ -12,7 +13,7 @@ namespace PSTN.BusinessEntity.Business
     {
         private Dictionary<int, Switch> GetCachedSwitches()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitches",
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitches",
                () =>
                {
                    ISwitchDataManager dataManager = PSTNBEDataManagerFactory.GetDataManager<ISwitchDataManager>();
@@ -78,6 +79,7 @@ namespace PSTN.BusinessEntity.Business
 
             if (inserted)
             {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetSwitches");
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 switchObj.SwitchId = switchId;
                 insertOperationOutput.InsertedObject = SwitchDetailMapper(switchObj);
@@ -102,6 +104,7 @@ namespace PSTN.BusinessEntity.Business
 
             if (updated)
             {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetSwitches");
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = SwitchDetailMapper(switchObj);
             }

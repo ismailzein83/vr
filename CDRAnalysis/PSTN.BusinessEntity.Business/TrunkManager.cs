@@ -3,6 +3,7 @@ using PSTN.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Entities;
 
@@ -105,6 +106,7 @@ namespace PSTN.BusinessEntity.Business
                 }
 
                 insertOperationOutput.InsertedObject = TrunkDetailMapper(trunkObj);
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetTrunks");
             }
             else
             {
@@ -140,6 +142,8 @@ namespace PSTN.BusinessEntity.Business
                 }
 
                 updateOperationOutput.UpdatedObject = TrunkDetailMapper(trunkObj);
+
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetTrunks");
             }
             else
             {
@@ -165,7 +169,11 @@ namespace PSTN.BusinessEntity.Business
             }
 
             if (deleted)
+            {
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetTrunks");
+            }
+
 
             return deleteOperationOutput;
         }
@@ -181,18 +189,18 @@ namespace PSTN.BusinessEntity.Business
                 return _dataManager.AreTrunksUpdated(ref _updateHandle);
             }
         }
-              
+
         TrunkDetail TrunkDetailMapper(Trunk trunkObj)
         {
-            SwitchManager manager= new SwitchManager();
+            SwitchManager manager = new SwitchManager();
             Switch currentSwitch = manager.GetSwitchById(trunkObj.SwitchId);
             Trunk currentTrunk = null;
             if (trunkObj.LinkedToTrunkId.HasValue)
-                currentTrunk=GetTrunkById(trunkObj.LinkedToTrunkId.Value);
+                currentTrunk = GetTrunkById(trunkObj.LinkedToTrunkId.Value);
 
             TrunkDetail trunkDetail = new TrunkDetail();
             trunkDetail.Entity = trunkObj;
-            trunkDetail.SwitchName = (currentSwitch !=null ?currentSwitch.Name : string.Empty );
+            trunkDetail.SwitchName = (currentSwitch != null ? currentSwitch.Name : string.Empty);
             trunkDetail.LinkedToTrunkName = (currentTrunk != null ? currentTrunk.Name : string.Empty);
             return trunkDetail;
         }
