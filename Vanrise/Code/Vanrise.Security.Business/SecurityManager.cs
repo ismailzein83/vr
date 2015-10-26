@@ -17,7 +17,9 @@ namespace Vanrise.Security.Business
         public AuthenticateOperationOutput<AuthenticationToken> Authenticate(string email, string password)
         {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            User user = dataManager.GetUserbyEmail(email);
+
+            UserManager manager = new UserManager();
+            User user = manager.GetUserbyEmail(email);
 
             AuthenticateOperationOutput<AuthenticationToken> authenticationOperationOutput = new AuthenticateOperationOutput<AuthenticationToken>();
             authenticationOperationOutput.Result = AuthenticateOperationResult.Failed;
@@ -92,12 +94,13 @@ namespace Vanrise.Security.Business
         {
             int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            UserManager manager = new UserManager();
             
             Vanrise.Entities.UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            User currentUser = dataManager.GetUserbyId(loggedInUserId);
+            User currentUser = manager.GetUserbyId(loggedInUserId);
 
             bool changePasswordActionSucc = false;
             bool oldPasswordIsCorrect = HashingUtility.VerifyHash(oldPassword, "", currentUser.Password);

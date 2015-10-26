@@ -405,9 +405,8 @@ namespace Vanrise.BI.Business
               }
               else
               {
-                  List<UserInfo> users = new List<UserInfo>();
                   UserManager userManager = new UserManager();
-                  users=userManager.GetUsers();
+                  IEnumerable<UserInfo> users = userManager.GetUsers();
                   foreach (UserInfo user in users)
                   {
                       if (!distinctUsers.Contains(user.UserId) && user.Status != UserStatus.Inactive)

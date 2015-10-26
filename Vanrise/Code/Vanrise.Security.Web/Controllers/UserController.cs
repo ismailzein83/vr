@@ -50,7 +50,7 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpPost]
         [Authorization(Permissions = "Root/Administration Module/Users:Edit")]
-        public Vanrise.Entities.UpdateOperationOutput<User> UpdateUser(User userObject)
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUser(User userObject)
         {
             UserManager manager = new UserManager();
             return manager.UpdateUser(userObject);
@@ -58,7 +58,7 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpPost]
         [Authorization(Permissions = "Root/Administration Module/Users:Add")]
-        public Vanrise.Entities.InsertOperationOutput<User> AddUser(User userObject)
+        public Vanrise.Entities.InsertOperationOutput<UserDetail> AddUser(User userObject)
         {
             UserManager manager = new UserManager();
             return manager.AddUser(userObject);

@@ -9,15 +9,7 @@ namespace Vanrise.Security.Data
 {
     public interface IUserDataManager : IDataManager
     {
-        Vanrise.Entities.BigResult<User> GetFilteredUsers(Vanrise.Entities.DataRetrievalInput<UserQuery> input);
-
-        List<UserInfo> GetUsers();
-
-        List<User> GetMembers(int roleId);
-
-        User GetUserbyId(int userId);
-
-        User GetUserbyEmail(string email);
+        List<User> GetUsers();
 
         bool AddUser(User user, out int insertedId);
 
@@ -27,10 +19,13 @@ namespace Vanrise.Security.Data
 
         bool ResetPassword(int userId, string password);
 
-        bool CheckUserName(string name);
-
         bool ChangePassword(int userId, string newPassword);
 
-        bool EditUserProfile(string name,int userId);
+        bool EditUserProfile(string name, int userId);
+
+        bool AreUsersUpdated(ref object updateHandle);
+
+        List<User> GetMembers(int roleId);
+       
     }
 }
