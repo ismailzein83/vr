@@ -75,8 +75,8 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_BE_MainSer
                     RoutingProductId: dataItem.RoutingProductId
                 }
                 extensionObject.onGridReady = function (api) {
-                    extensionObject.routingProductGridAPI = api;
-                    extensionObject.routingProductGridAPI.loadGrid(query);
+                    extensionObject.routeRuleGridAPI = api;
+                    extensionObject.routeRuleGridAPI.loadGrid(query);
                     extensionObject.onGridReady = undefined;
                 };
                 dataItem.extensionObject = extensionObject;
@@ -88,6 +88,10 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_BE_MainSer
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
+                name: "Add Route Rule",
+                clicked: addRouteRule,
+            },
+            {
                 name: "Edit",
                 clicked: editRoutingProduct,
             },
@@ -96,6 +100,22 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_BE_MainSer
                 clicked: deleteRoutingProduct,
             }
             ];
+        }
+
+        function addRouteRule(dataItem) {
+
+            gridAPI.expandRow(dataItem);
+            var query = {
+                RoutingProductId: dataItem.RoutingProductId
+            }
+
+            dataItem.extensionObject.routeRuleGridAPI.loadGrid(query);
+
+            var onRouteRuleAdded = function (addedItem) {
+                dataItem.extensionObject.routeRuleGridAPI.onRouteRuleAdded(addedItem);
+            };
+
+            WhS_BE_MainService.addRouteRule(onRouteRuleAdded);
         }
 
         function editRoutingProduct(routingProduct) {
