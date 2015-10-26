@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBePricingruleTariffsettings', ['$compile', 'WhS_BE_PricingRuleAPIService',
+app.directive('vrWhsBePricingrulesettingsTariff', ['$compile', 'WhS_BE_PricingRuleAPIService',
 function ($compile, WhS_BE_PricingRuleAPIService) {
 
     var directiveDefinitionObject = {

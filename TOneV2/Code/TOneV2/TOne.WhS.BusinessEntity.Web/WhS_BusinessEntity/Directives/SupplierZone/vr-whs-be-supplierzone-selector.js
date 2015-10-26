@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeSupplierzone', ['WhS_BE_SupplierZoneAPIService', 'UtilsService',
+app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', 'UtilsService',
     function (WhS_BE_SupplierZoneAPIService, UtilsService) {
 
         var directiveDefinitionObject = {

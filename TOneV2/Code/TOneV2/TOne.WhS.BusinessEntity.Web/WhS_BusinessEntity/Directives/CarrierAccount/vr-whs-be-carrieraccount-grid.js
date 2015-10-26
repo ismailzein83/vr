@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCarrieraccountgrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierAccountAPIService", "WhS_BE_MainService", "WhS_Be_CarrierAccountTypeEnum",
+app.directive("vrWhsBeCarrieraccountGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierAccountAPIService", "WhS_BE_MainService", "WhS_Be_CarrierAccountTypeEnum",
 function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, WhS_BE_MainService, WhS_Be_CarrierAccountTypeEnum) {
 
     var directiveDefinitionObject = {

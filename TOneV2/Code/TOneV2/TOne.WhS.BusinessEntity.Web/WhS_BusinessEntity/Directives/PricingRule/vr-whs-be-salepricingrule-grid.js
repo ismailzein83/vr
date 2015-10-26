@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBePurchasepricingrulegrid", [ "VRNotificationService", "WhS_BE_PurchasePricingRuleAPIService", "WhS_BE_MainService",
-function ( VRNotificationService, WhS_BE_PurchasePricingRuleAPIService, WhS_BE_MainService) {
+app.directive("vrWhsBeSalepricingruleGrid", ["VRNotificationService", "WhS_BE_SalePricingRuleAPIService", "WhS_BE_MainService",
+function ( VRNotificationService, WhS_BE_SalePricingRuleAPIService, WhS_BE_MainService) {
 
     var directiveDefinitionObject = {
 
@@ -12,25 +12,25 @@ function ( VRNotificationService, WhS_BE_PurchasePricingRuleAPIService, WhS_BE_M
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            var purchasePricingRuleGrid = new PurchasePricingRuleGrid($scope, ctrl, $attrs);
-            purchasePricingRuleGrid.initializeController();
+            var salePricingRuleGrid = new SalePricingRuleGrid($scope, ctrl, $attrs);
+            salePricingRuleGrid.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/PurchasePricingRuleGrid.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/SalePricingRuleGrid.html"
 
     };
 
-    function PurchasePricingRuleGrid($scope, ctrl, $attrs) {
+    function SalePricingRuleGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
         this.initializeController = initializeController;
 
         function initializeController() {
-            $scope.purchasePricingRules = [];
+            $scope.salePricingRules = [];
             $scope.gridReady = function (api) {
                 gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -40,14 +40,14 @@ function ( VRNotificationService, WhS_BE_PurchasePricingRuleAPIService, WhS_BE_M
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
                     }
-                    directiveAPI.onPricingRuleAdded = function (purchasePricingRuleObj) {
-                        gridAPI.itemAdded(purchasePricingRuleObj);
+                    directiveAPI.onPricingRuleAdded = function (salePricingRuleObj) {
+                        gridAPI.itemAdded(salePricingRuleObj);
                     }
                     return directiveAPI;
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_BE_PurchasePricingRuleAPIService.GetFilteredPurchasePricingRules(dataRetrievalInput)
+                return WhS_BE_SalePricingRuleAPIService.GetFilteredSalePricingRules(dataRetrievalInput)
                     .then(function (response) {
                         onResponseReady(response);
                     })
@@ -62,30 +62,32 @@ function ( VRNotificationService, WhS_BE_PurchasePricingRuleAPIService, WhS_BE_M
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-                clicked: editPurchasePricingRule,
+                clicked: editSalePricingRule,
             },
            {
                name: "Delete",
-               clicked: deletePurchasePricingRule
+               clicked: deleteSalePricingRule
            }
             ];
         }
 
-        function editPurchasePricingRule(purchasePricingRuleObj) {
-            var onPricingRuleUpdated = function (purchasePricingRule) {
-                gridAPI.itemUpdated(purchasePricingRule);
+        function editSalePricingRule(salePricingRuleObj) {
+           
+            var onPricingRuleUpdated = function (salePricingRule) {
+
+                gridAPI.itemUpdated(salePricingRule);
             }
             var obj = {
-                RuleId: purchasePricingRuleObj.Entity.RuleId,
-                PricingType: purchasePricingRuleObj.Entity.Criteria.CriteriaType
+                RuleId:salePricingRuleObj.Entity.RuleId,
+                PricingType: salePricingRuleObj.Entity.Criteria.CriteriaType
             }
-            WhS_BE_MainService.editPurchasePricingRule(obj, onPricingRuleUpdated);
+            WhS_BE_MainService.editSalePricingRule(obj, onPricingRuleUpdated);
         }
-        function deletePurchasePricingRule(purchasePricingRuleObj) {
-            var onPurchasePricingRuleDeleted = function (purchasePricingRuleObj) {
-                gridAPI.itemDeleted(purchasePricingRuleObj);
+        function deleteSalePricingRule(salePricingRuleObj) {
+            var onSalePricingRuleDeleted = function (salePricingRuleObj) {
+                gridAPI.itemDeleted(salePricingRuleObj);
             };
-            WhS_BE_MainService.deletePurchasePricingRule($scope, purchasePricingRuleObj, onPurchasePricingRuleDeleted);
+            WhS_BE_MainService.deleteSalePricingRule($scope, salePricingRuleObj, onSalePricingRuleDeleted);
         }
     }
 

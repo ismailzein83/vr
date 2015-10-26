@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingOptionorderByrate', ['UtilsService',
+app.directive('vrWhsRoutingRouterulesettingsOrderByrate', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {

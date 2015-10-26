@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBePricingruleRegulartariff', ['$compile',
-function ($compile) {
+app.directive('vrWhsBePricingrulesettingsTod', ['$compile', 'WhS_BE_PricingRuleAPIService',
+function ($compil, WhS_BE_PricingRuleAPIService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -10,8 +10,9 @@ function ($compile) {
         controller: function ($scope, $element, $attrs) {
 
             var ctrl = this;
-            var bePricingRuleRegulartariffObject = new bePricingRuleRegulartariff(ctrl, $scope, $attrs);
-            bePricingRuleRegulartariffObject.initializeController();
+            $scope.pricingRuleTODSettings = [];
+            var bePricingRuleTODSettingObject = new bePricingRuleTODSetting(ctrl, $scope, $attrs);
+            bePricingRuleTODSettingObject.initializeController();
             $scope.onselectionchanged = function () {
 
                 if (ctrl.onselectionchanged != undefined) {
@@ -28,12 +29,12 @@ function ($compile) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/PricingRuleRegularTariffTemplate.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/PricingRuleTODSettings.html"
 
     };
 
 
-    function bePricingRuleRegulartariff(ctrl, $scope, $attrs) {
+    function bePricingRuleTODSetting(ctrl, $scope, $attrs) {
 
         function initializeController() {
 
@@ -44,23 +45,18 @@ function ($compile) {
             var api = {};
 
             api.getData = function () {
-                var obj = {
-                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.Tariff.Settings.RegularTariffSettings, TOne.WhS.BusinessEntity.Entities",
-                    CallFee: $scope.callFee,
-                    FirstPeriod: $scope.firstPeriod,
-                    FirstPeriodRate: $scope.firstPeriodRate,
-                    FractionUnit: $scope.fractionUnit
-                }
-                return obj;
             }
 
-            api.setData = function (obj) {
-                $scope.callFee=obj.CallFee;
-                $scope.firstPeriod=obj.FirstPeriod,
-                $scope.firstPeriodRate=obj.FirstPeriodRate ,
-                $scope.fractionUnit=obj.FractionUnit
+            api.setData = function (selectedIds) {
+
+
             }
             api.load = function () {
+                return WhS_BE_PricingRuleAPIService.GetPricingRuleTODTemplates().then(function (response) {
+                    angular.forEach(response, function (itm) {
+                        $scope.pricingRuleTODSettings.push(itm);
+                    });
+                })
             }
 
             if (ctrl.onReady != null)

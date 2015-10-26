@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeSellingnumberplan', ['WhS_BE_SellingNumberPlanAPIService', 'UtilsService',
+app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIService', 'UtilsService',
     function (WhS_BE_SellingNumberPlanAPIService, UtilsService) {
 
         var directiveDefinitionObject = {

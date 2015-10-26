@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeSelectivecustomers', ['UtilsService',
+app.directive('vrWhsBeCustomergroupSelective', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {

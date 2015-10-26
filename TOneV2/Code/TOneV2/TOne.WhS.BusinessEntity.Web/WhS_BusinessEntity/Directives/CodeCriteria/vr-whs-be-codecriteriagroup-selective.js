@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeSelectivecodecriteria', ['UtilsService',
+app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {

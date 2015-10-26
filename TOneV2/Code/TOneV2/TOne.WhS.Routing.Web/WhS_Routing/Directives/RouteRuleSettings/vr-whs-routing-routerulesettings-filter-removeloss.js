@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingOptionfilterRemoveloss', ['UtilsService',
+app.directive('vrWhsRoutingRouterulesettingsFilterRemoveloss', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {

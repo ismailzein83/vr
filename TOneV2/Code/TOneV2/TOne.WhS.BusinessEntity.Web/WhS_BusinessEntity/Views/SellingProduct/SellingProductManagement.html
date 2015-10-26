@@ -7,10 +7,10 @@
                     <vr-textbox value="name" label="Name"></vr-textbox>
                 </vr-columns>
                 <vr-columns colnum="2">
-                    <vr-whs-be-sellingnumberplan on-ready="onSellingNumberPlanDirectiveReady" ismultipleselection></vr-whs-be-sellingnumberplan>
+                    <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" ismultipleselection></vr-whs-be-sellingnumberplan-selector>
                 </vr-columns>
                 <vr-columns colnum="2">
-                    <vr-whs-be-routingproduct on-ready="onRoutingProductDirectiveReady" ismultipleselection></vr-whs-be-routingproduct>
+                    <vr-whs-be-routingproduct-selector on-ready="onRoutingProductDirectiveReady" ismultipleselection></vr-whs-be-routingproduct-selector>
                 </vr-columns>
             </vr-row>
         </div>
@@ -22,7 +22,7 @@
                 </div>
             </vr-actionbar>
         </vr-row>
-        <vr-whs-be-sellingproductgrid on-ready="onGridReady"></vr-whs-be-sellingproductgrid>
+        <vr-whs-be-sellingproduct-grid on-ready="onGridReady"></vr-whs-be-sellingproduct-grid>
     </vr-form>
 
 </vr-panel>

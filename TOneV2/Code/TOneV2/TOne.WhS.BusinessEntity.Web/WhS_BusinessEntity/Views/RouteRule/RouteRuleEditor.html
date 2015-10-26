@@ -9,7 +9,7 @@
             <div ng-show="criteriaSelected">
                 <vr-row>
                     <vr-columns width="1/2row">
-                        <vr-whs-be-routingproduct on-ready="onRoutingProductDirectiveReady" onselectionchanged="onRoutingProductSelectionChanged" />
+                        <vr-whs-be-routingproduct-selector on-ready="onRoutingProductDirectiveReady" onselectionchanged="onRoutingProductSelectionChanged" />
                     </vr-columns>
                     <vr-columns width="1/2row" ng-show="showRouteRuleCriteriaTypes">
                         <vr-select datatextfield="description" datavaluefield="value" label="Filter By" datasource="routeRuleCriteriaTypes"

@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeRoutingproduct', ['WhS_BE_RoutingProductAPIService', 'UtilsService',
+app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService', 'UtilsService',
     function (WhS_BE_RoutingProductAPIService, UtilsService) {
 
         var directiveDefinitionObject = {

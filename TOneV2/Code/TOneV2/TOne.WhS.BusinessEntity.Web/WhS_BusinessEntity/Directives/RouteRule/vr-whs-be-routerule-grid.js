@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive('vrWhsBeRouterulegrid', ['VRNotificationService', 'WhS_BE_RouteRuleAPIService', 'WhS_BE_MainService',
+app.directive('vrWhsBeRouteruleGrid', ['VRNotificationService', 'WhS_BE_RouteRuleAPIService', 'WhS_BE_MainService',
 function (VRNotificationService, WhS_BE_RouteRuleAPIService, WhS_BE_MainService) {
 
     var directiveDefinitionObject = {

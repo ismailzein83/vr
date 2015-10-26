@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeCarrieraccount', ['WhS_BE_CarrierAccountAPIService', 'UtilsService', '$compile', function (WhS_BE_CarrierAccountAPIService, UtilsService, $compile) {
+app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService', 'UtilsService', '$compile', function (WhS_BE_CarrierAccountAPIService, UtilsService, $compile) {
 
     var directiveDefinitionObject = {
         restrict: 'E',

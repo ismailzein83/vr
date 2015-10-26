@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeSellingproducts', ['WhS_BE_SellingProductAPIService', 'UtilsService','$compile',
+app.directive('vrWhsBeSellingproductSelector', ['WhS_BE_SellingProductAPIService', 'UtilsService','$compile',
 function (WhS_BE_SellingProductAPIService, UtilsService,$compile) {
 
         var directiveDefinitionObject = {

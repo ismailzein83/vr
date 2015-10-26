@@ -14,11 +14,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public const string SupplierGroupConfigType = "WhS_BE_SupplierGroup";
 
-        public const string CustomerGroupConfigType = "WhS_BE_CustomersGroup";
+        public const string CustomerGroupConfigType = "WhS_BE_CustomerGroup";
 
-        public const string RouteRuleSettingsConfigType = "WhS_BE_RouteRuleSettingType";
+        public const string RouteRuleSettingsConfigType = "WhS_BE_RouteRuleSettingsType";
 
-        public const string RouteOptionRuleConfigType = "WhS_BE_RouteOptionRuleSettingType";
+        public const string RouteOptionRuleConfigType = "WhS_BE_RouteOptionRuleSettingsType";
 
         public const string CodeCriteriaGroupConfigType = "WhS_BE_CodeCriteriaGroup";
 

@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBePricingruleTodsettings', [ '$compile','WhS_BE_PricingRuleAPIService',
-function ($compil, WhS_BE_PricingRuleAPIService) {
+app.directive('vrWhsBePricingrulesettingsExtrachargePercentage', ['$compile',
+function ( $compile) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -10,9 +10,8 @@ function ($compil, WhS_BE_PricingRuleAPIService) {
         controller: function ($scope, $element, $attrs) {
 
             var ctrl = this;
-            $scope.pricingRuleTODSettings = [];
-            var bePricingRuleTODSettingObject = new bePricingRuleTODSetting(ctrl, $scope, $attrs);
-            bePricingRuleTODSettingObject.initializeController();
+            var bePricingRulePercentageExtraChargeObject = new bePricingRulePercentageExtraCharge(ctrl, $scope, $attrs);
+            bePricingRulePercentageExtraChargeObject.initializeController();
             $scope.onselectionchanged = function () {
 
                 if (ctrl.onselectionchanged != undefined) {
@@ -29,12 +28,12 @@ function ($compil, WhS_BE_PricingRuleAPIService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/PricingRuleTODSettings.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/PricingRulePercentageExtraChargeTemplate.html"
 
     };
 
 
-    function bePricingRuleTODSetting(ctrl, $scope, $attrs) {
+    function bePricingRulePercentageExtraCharge(ctrl, $scope, $attrs) {
 
         function initializeController() {
 
@@ -45,18 +44,22 @@ function ($compil, WhS_BE_PricingRuleAPIService) {
             var api = {};
 
             api.getData = function () {
+                var obj = {
+                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.ExtraCharge.Actions.PercentageExtraChargeSettings, TOne.WhS.BusinessEntity.Entities",
+                    FromRate: $scope.fromRate,
+                    ToRate: $scope.toRate,
+                    ExtraPercentage: $scope.extraPercentage
+                }
+                return obj;
             }
 
-            api.setData = function (selectedIds) {
-
+            api.setData = function (selectedobj) {
+                $scope.fromRate = selectedobj.FromRate;
+                $scope.toRate = selectedobj.ToRate
+                $scope.extraPercentage = selectedobj.ExtraPercentage
 
             }
             api.load = function () {
-                return WhS_BE_PricingRuleAPIService.GetPricingRuleTODTemplates().then(function (response) {
-                    angular.forEach(response, function (itm) {
-                        $scope.pricingRuleTODSettings.push(itm);
-                    });
-                })
             }
 
             if (ctrl.onReady != null)

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCarrierprofilegrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierProfileAPIService", "WhS_BE_MainService",
+app.directive("vrWhsBeCarrierprofileGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierProfileAPIService", "WhS_BE_MainService",
 function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, WhS_BE_MainService) {
 
     var directiveDefinitionObject = {

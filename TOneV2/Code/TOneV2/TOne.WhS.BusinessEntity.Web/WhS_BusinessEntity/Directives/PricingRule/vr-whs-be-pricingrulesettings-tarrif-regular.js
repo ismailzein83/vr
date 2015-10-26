@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBePricingrulePercentageextracharge', ['$compile',
-function ( $compile) {
+app.directive('vrWhsBePricingrulesettingsTariffRegular', ['$compile',
+function ($compile) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -10,8 +10,8 @@ function ( $compile) {
         controller: function ($scope, $element, $attrs) {
 
             var ctrl = this;
-            var bePricingRulePercentageExtraChargeObject = new bePricingRulePercentageExtraCharge(ctrl, $scope, $attrs);
-            bePricingRulePercentageExtraChargeObject.initializeController();
+            var bePricingRuleRegulartariffObject = new bePricingRuleRegulartariff(ctrl, $scope, $attrs);
+            bePricingRuleRegulartariffObject.initializeController();
             $scope.onselectionchanged = function () {
 
                 if (ctrl.onselectionchanged != undefined) {
@@ -28,12 +28,12 @@ function ( $compile) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/PricingRulePercentageExtraChargeTemplate.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/PricingRuleRegularTariffTemplate.html"
 
     };
 
 
-    function bePricingRulePercentageExtraCharge(ctrl, $scope, $attrs) {
+    function bePricingRuleRegulartariff(ctrl, $scope, $attrs) {
 
         function initializeController() {
 
@@ -45,19 +45,20 @@ function ( $compile) {
 
             api.getData = function () {
                 var obj = {
-                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.ExtraCharge.Actions.PercentageExtraChargeSettings, TOne.WhS.BusinessEntity.Entities",
-                    FromRate: $scope.fromRate,
-                    ToRate: $scope.toRate,
-                    ExtraPercentage: $scope.extraPercentage
+                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.Tariff.Settings.RegularTariffSettings, TOne.WhS.BusinessEntity.Entities",
+                    CallFee: $scope.callFee,
+                    FirstPeriod: $scope.firstPeriod,
+                    FirstPeriodRate: $scope.firstPeriodRate,
+                    FractionUnit: $scope.fractionUnit
                 }
                 return obj;
             }
 
-            api.setData = function (selectedobj) {
-                $scope.fromRate = selectedobj.FromRate;
-                $scope.toRate = selectedobj.ToRate
-                $scope.extraPercentage = selectedobj.ExtraPercentage
-
+            api.setData = function (obj) {
+                $scope.callFee=obj.CallFee;
+                $scope.firstPeriod=obj.FirstPeriod,
+                $scope.firstPeriodRate=obj.FirstPeriodRate ,
+                $scope.fractionUnit=obj.FractionUnit
             }
             api.load = function () {
             }

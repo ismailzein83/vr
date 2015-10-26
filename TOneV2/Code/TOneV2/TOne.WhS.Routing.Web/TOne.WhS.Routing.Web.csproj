@@ -127,14 +127,14 @@
   <ItemGroup>
     <Content Include="WhS_Routing\Constant\ModuleConfig.js" />
     <Content Include="WhS_Routing\Directives\RouteRuleOptions\Templates\RouteRuleRegularDirectiveTemplate.html" />
-    <Content Include="WhS_Routing\Directives\RouteRuleOptions\vr-whs-routing-routeruleoption-block-directive.js" />
-    <Content Include="WhS_Routing\Directives\RouteRuleOptions\vr-whs-routing-routeruleoption-regular-directive.js" />
+    <Content Include="WhS_Routing\Directives\RouteRuleOptions\vr-whs-routing-routeruleoption-block.js" />
+    <Content Include="WhS_Routing\Directives\RouteRuleOptions\vr-whs-routing-routeruleoption-regular.js" />
     <Content Include="WhS_Routing\Directives\RouteRuleSettings\Templates\OptionPercentageFixedDirectiveTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteRuleSettings\Templates\SelectiveOptionDirectiveTemplate.html" />
-    <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-optionfilter-removeloss-directive.js" />
-    <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-optionorder-byrate-directive.js" />
-    <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-optionpercentage-fixed-directive.js" />
-    <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-options-selective-directive.js" />
+    <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-routerulesettings-filter-removeloss.js" />
+    <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-routerulesettings-order-byrate.js" />
+    <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-routerulesettings-percentage-fixed.js" />
+    <Content Include="WhS_Routing\Directives\RouteRuleSettings\vr-whs-routing-routerulesettings-selective.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleSettingsAPIService.js" />
   </ItemGroup>
   <ItemGroup />
