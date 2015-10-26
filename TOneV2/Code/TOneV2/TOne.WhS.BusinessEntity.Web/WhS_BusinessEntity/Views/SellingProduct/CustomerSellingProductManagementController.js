@@ -69,9 +69,9 @@
                 for (var i = 0; i < customerSellingProductObj.length; i++) {
                     if (customerSellingProductObj[i].Status == 0 && gridAPI != undefined)
                         gridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
-                    else if (customerSellingProductObj[i].Status == 1 && gridAPI != undefined)
+                    else if (customerSellingProductObj[i].Status == 2 && gridAPI != undefined)
                     {
-                        gridAPI.onCustomerSellingProductUpdated(customerSellingProductObj[i]);
+                        gridAPI.onCustomerSellingProductDeleted(customerSellingProductObj[i]);
                     }
                 }
               

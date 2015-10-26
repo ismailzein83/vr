@@ -25,7 +25,6 @@
 
         }
         function defineScope() {
-            $scope.allDestinations = false;
             $scope.SaveSellingProduct = function () {
                     return insertSellingProduct();
             };
@@ -47,8 +46,6 @@
             }
 
             $scope.beginEffectiveDate = new Date();
-            $scope.endEffectiveDate;
-
            
         }
 
@@ -107,8 +104,6 @@
                     SellingProductId: selectedSellingProduct.SellingProductId,
                     SellingProductName: selectedSellingProduct.Name,
                     BED: $scope.beginEffectiveDate,
-                    EED: $scope.endEffectiveDate,
-                    AllDestinations: $scope.allDestinations
                 });
             }
             return obj;

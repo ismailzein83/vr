@@ -52,8 +52,8 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
                         directiveAPI.onCustomerSellingProductAdded = function (customerSellingProductObject) {
                             gridAPI.itemAdded(customerSellingProductObject);
                         }
-                        directiveAPI.onCustomerSellingProductUpdated = function (customerSellingProductObject) {
-                             gridAPI.itemUpdated(customerSellingProductObject);
+                        directiveAPI.onCustomerSellingProductDeleted = function (customerSellingProductObject) {
+                             gridAPI.itemDeleted(customerSellingProductObject);
                         }
 
                         return directiveAPI;
@@ -74,21 +74,21 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
                 defineMenuActions();
             }
 
-            function deleteCustomerSellingProduct(gridObject) {
-                var onCustomerSellingProductDeleted = function (gridObject) {
-                    gridAPI.itemUpdated(gridObject);
-                }
+            //function deleteCustomerSellingProduct(gridObject) {
+            //    var onCustomerSellingProductDeleted = function (gridObject) {
+            //        gridAPI.itemUpdated(gridObject);
+            //    }
 
-                WhS_BE_MainService.deleteCustomerSellingProduct($scope,gridObject, onCustomerSellingProductDeleted);
-            }
+            //    WhS_BE_MainService.deleteCustomerSellingProduct($scope,gridObject, onCustomerSellingProductDeleted);
+            //}
 
             function defineMenuActions() {
-                $scope.gridMenuActions = [
-                   {
-                       name: "Delete",
-                       clicked: deleteCustomerSellingProduct
-                   }
-                ];
+                //$scope.gridMenuActions = [
+                //   {
+                //       name: "Delete",
+                //       clicked: deleteCustomerSellingProduct
+                //   }
+                //];
             }
         }
 

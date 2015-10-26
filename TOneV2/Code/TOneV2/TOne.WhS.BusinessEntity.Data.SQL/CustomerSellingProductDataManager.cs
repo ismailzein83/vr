@@ -28,7 +28,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public bool Insert(List<CustomerSellingProductDetail> customerSellingProduct, out List<CustomerSellingProductDetail> insertedObjects)
         {
-
             DataTable table = BuildUpdatedCarriersTable(customerSellingProduct);
 
             insertedObjects = GetItemsSPCmd("TOneWhS_BE.sp_CustomerSellingProduct_Insert", CustomerSellingProductDetailMapper, (cmd) =>
@@ -38,14 +37,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 cmd.Parameters.Add(tableParameter);
 
             });
-
-            //int recordsEffected = ExecuteNonQuerySPCmd("TOneWhS_BE.sp_CustomerSellingProduct_Insert", (cmd) =>
-            //{
-            //    var tableParameter = new SqlParameter("@UpdatedCustomerSellingProducts", SqlDbType.Structured);
-            //    tableParameter.Value = table;
-            //    cmd.Parameters.Add(tableParameter);
-            //});
-
             return true;
         }
         private DataTable BuildUpdatedCarriersTable(List<CustomerSellingProductDetail> customerSellingProducts)
@@ -55,12 +46,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             table.Columns.Add("ID", typeof(int));
             table.Columns.Add("CustomerId", typeof(int));
             table.Columns.Add("SellingProductId", typeof(int));
-            table.Columns.Add("AllDestinations", typeof(bool));
             table.Columns.Add("BED", typeof(DateTime));
-            DataColumn column;
-            column = new DataColumn("EED", typeof(DateTime));
-            column.AllowDBNull = true;
-            table.Columns.Add(column);
 
             table.BeginLoadData();
             foreach (var customerSellingProduct in customerSellingProducts)
@@ -70,11 +56,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 row["ID"] = customerSellingProduct.CustomerSellingProductId == 0 ? 0 : customerSellingProduct.CustomerSellingProductId;
                 row["CustomerId"] = customerSellingProduct.CustomerId;
                 row["SellingProductId"] = customerSellingProduct.SellingProductId;
-                row["AllDestinations"] = customerSellingProduct.AllDestinations;
                 row["BED"] = customerSellingProduct.BED;
-                if (customerSellingProduct.EED.HasValue)
-                    row["EED"] = customerSellingProduct.EED.Value;
-
                 table.Rows.Add(row);
             }
 
@@ -82,16 +64,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return table;
         }
-
-
-
-
-
-        public bool Delete(int customerSellingProductId)
-        {
-            int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerSellingProduct_Delete", customerSellingProductId,DateTime.Now);
-            return (recordesEffected > 0);
-        }
+        //public bool Delete(int customerSellingProductId)
+        //{
+        //    int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerSellingProduct_Delete", customerSellingProductId,DateTime.Now);
+        //    return (recordesEffected > 0);
+        //}
         CustomerSellingProductDetail CustomerSellingProductDetailMapper(IDataReader reader)
         {
             CustomerSellingProductDetail customerSellingProductDetail = new CustomerSellingProductDetail
@@ -100,8 +77,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 CustomerId = (int)reader["CustomerID"],
                 SellingProductId = (int)reader["SellingProductID"],
                 BED = GetReaderValue<DateTime>(reader, "BED"),
-                EED = GetReaderValue<DateTime?>(reader, "EED"),
-                AllDestinations = GetReaderValue<bool>(reader, "AllDestinations"),
                 CustomerName = reader["CustomerName"] as string,
                 SellingProductName = reader["SellingProductName"] as string,
             };

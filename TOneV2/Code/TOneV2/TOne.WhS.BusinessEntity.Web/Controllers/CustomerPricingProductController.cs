@@ -29,11 +29,11 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CustomerSellingProductManager manager = new CustomerSellingProductManager();
             return manager.AddCustomerSellingProduct(customerSellingProducts);
         }
-        [HttpGet]
-        public TOne.Entities.UpdateOperationOutput<object> DeleteCustomerSellingProduct(int customerSellingProductId)
-        {
-            CustomerSellingProductManager manager = new CustomerSellingProductManager();
-            return manager.DeleteCustomerSellingProduct(customerSellingProductId);
-        } 
+        //[HttpGet]
+        //public TOne.Entities.UpdateOperationOutput<object> DeleteCustomerSellingProduct(int customerSellingProductId)
+        //{
+        //    CustomerSellingProductManager manager = new CustomerSellingProductManager();
+        //    return manager.DeleteCustomerSellingProduct(customerSellingProductId);
+        //} 
     }
 }

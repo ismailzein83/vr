@@ -11,8 +11,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int CustomerSellingProductId { get; set; }
         public int CustomerId { get; set; }
         public int SellingProductId { get; set; }
-        public bool AllDestinations { get; set; }
         public DateTime BED { get; set; }
-        public DateTime? EED { get; set; }
     }
 }
