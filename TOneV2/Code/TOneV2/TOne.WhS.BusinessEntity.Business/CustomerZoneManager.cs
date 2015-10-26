@@ -28,10 +28,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (allCustomerZones.Count > 0)
             {
-                var filteredCustomerZones = allCustomerZones.Where(x => x.Value.CustomerId == customerId && x.Value.StartEffectiveTime <= effectiveOn);
-
-                if (filteredCustomerZones != null && filteredCustomerZones.ToList().Count > 0)
-                    return filteredCustomerZones.OrderByDescending(x => x.Value.StartEffectiveTime).First().Value;
+                var filteredCustomerZones = allCustomerZones.Values.Where(x => x.CustomerId == customerId && x.StartEffectiveTime <= effectiveOn);
+                
+                if (filteredCustomerZones != null && filteredCustomerZones.Count() > 0)
+                    return filteredCustomerZones.OrderByDescending(x => x.StartEffectiveTime).FirstOrDefault();
             }
 
             return null;
@@ -86,6 +86,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (inserted)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 customerZones.CustomerZonesId = customerZonesId;
                 insertOperationOutput.InsertedObject = customerZones;
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;

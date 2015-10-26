@@ -30,7 +30,9 @@ namespace TOne.WhS.Sales.Business
 
                     ratePlanItem.ZoneId = saleZone.SaleZoneId;
                     ratePlanItem.ZoneName = saleZone.Name;
-                    ratePlanItem.Rate = saleRates.Where(x => x.ZoneId == saleZone.SaleZoneId).Single().NormalRate;
+                    var rate = saleRates.FindRecord(itm => itm.ZoneId == saleZone.SaleZoneId);
+                    if (rate != null)
+                        ratePlanItem.Rate = rate.NormalRate;
 
                     ratePlanItems.Add(ratePlanItem);
                 }
