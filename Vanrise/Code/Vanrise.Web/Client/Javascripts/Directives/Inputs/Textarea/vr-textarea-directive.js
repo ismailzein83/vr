@@ -59,9 +59,7 @@
 
                         if (attrs.hint != undefined) {
                             ctrl.hint = attrs.hint;
-                            console.log(attrs.hint);
                         }
-                            ctrl.hint = attrs.hint;
                         ctrl.getInputeStyle = function () {
                             return (attrs.hint != undefined) ? {
                                     "display": "inline-block",
@@ -100,9 +98,6 @@
                     var labelTemplate = '';
                     if (attrs.label != undefined)
                         labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
-                    if (attrs.hint != undefined) {
-                        console.log(attrs.hint);
-                    }
                     var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
                             + '<textarea  placeholder="{{ctrl.placelHolder}}" ng-readonly="ctrl.readOnly" id="mainInput" ng-style="ctrl.getInputeStyle()" ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()"rows="3" class="form-control" style="width: 100%; resize: none;" ></textarea>'
                             + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
