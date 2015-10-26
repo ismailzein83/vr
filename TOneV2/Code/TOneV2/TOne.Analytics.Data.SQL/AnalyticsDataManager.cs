@@ -27,7 +27,7 @@ namespace TOne.Analytics.Data.SQL
                     SuccessfulAttempts = Convert.ToInt32(reader["SuccessfulAttempt"]),
                     ACD = Convert.ToDecimal(reader["ACD"]),
                     DeliveredASR = Convert.ToDecimal(reader["DeliveredASR"]),
-                    AveragePDD = Convert.ToDecimal(reader["AveragePDD"]),
+                    AveragePDD = string.IsNullOrEmpty(reader["AveragePDD"] as string) ? 0 : Convert.ToDecimal(reader["AveragePDD"]),
                     CodeGroup = reader["CodeGroupName"] as string
                 };
             },
