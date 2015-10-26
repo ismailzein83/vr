@@ -41,6 +41,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return (recordsEffected > 0);
         }
 
+        public bool Insert(Country country, out int insertedId)
+        {
+            object countryId;
+
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_Country_Insert", out countryId, country.Name);
+            insertedId = (int)countryId;
+            return (recordsEffected > 0);
+        }
+
         public bool AreCountriesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.Country", ref updateHandle);

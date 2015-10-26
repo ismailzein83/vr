@@ -12,8 +12,11 @@
 
         function defineScope() {
             $scope.searchClicked = function () {
-                if (!$scope.isGettingData && gridAPI != undefined)
-                   return gridAPI.loadGrid(getFilterObject());
+                if (!$scope.isGettingData && gridAPI != undefined) {
+                   
+                    return gridAPI.loadGrid(getFilterObject());
+                }
+                    
             };
 
             $scope.onGridReady = function (api) {
@@ -32,7 +35,7 @@
             //    api.loadGrid({});
             //}
 
-            //$scope.AddNewCarrierProfile = AddNewCarrierProfile;
+            $scope.AddNewCountry = AddNewCountry;
             //$scope.country = "lebanon";
         }
 
@@ -60,12 +63,12 @@
             return data;
         }
 
-        function AddNewCarrierProfile() {
-            var onCarrierProfileAdded = function (carrierProfileObj) {
+        function AddNewCountry() {
+            var onCountryAdded = function (countryObj) {
                 if (gridAPI != undefined)
-                    gridAPI.onCarrierProfileAdded(carrierProfileObj);
+                    gridAPI.onCountryAdded(countryObj);
             };
-            WhS_BE_MainService.addCarrierProfile(onCarrierProfileAdded);
+            WhS_BE_MainService.addCountry(onCountryAdded);
         }
 
     }

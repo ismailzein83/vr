@@ -26,7 +26,8 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         addPurchasePricingRule: addPurchasePricingRule,
         editPurchasePricingRule: editPurchasePricingRule,
         deletePurchasePricingRule: deletePurchasePricingRule,
-        editCountry: editCountry
+        editCountry: editCountry,
+        addCountry: addCountry
 
     });
 
@@ -340,7 +341,20 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
 
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/Country/CountryEditor.html', parameters, settings);
     }
+    function addCountry(onCountryAdded) {
+        var settings = {
+            useModalTemplate: true
 
+        };
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = UtilsService.buildTitleForAddEditor("Country");
+            modalScope.onCountryAdded = onCountryAdded;
+        };
+        var parameters = {};
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/Country/CountryEditor.html', parameters, settings);
+    }
     function deletePurchasePricingRule($scope, purchasePricingRuleObj, onPurchasePricingRuleDeleted) {
         VRNotificationService.showConfirmation()
             .then(function (response) {

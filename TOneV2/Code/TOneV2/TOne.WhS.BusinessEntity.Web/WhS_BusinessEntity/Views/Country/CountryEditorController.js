@@ -89,20 +89,20 @@
         function fillScopeFromCountryObj(country) {
             $scope.name = country.Name;
         }
-        //function insertCarrierAccount() {
-        //    var carrierAccountObject = buildCarrierAccountObjFromScope();
-        //    return WhS_BE_CarrierAccountAPIService.AddCarrierAccount(carrierAccountObject)
-        //    .then(function (response) {
-        //        if (VRNotificationService.notifyOnItemAdded("Carrier Account", response)) {
-        //            if ($scope.onCarrierAccountAdded != undefined)
-        //                $scope.onCarrierAccountAdded(response.InsertedObject);
-        //            $scope.modalContext.closeModal();
-        //        }
-        //    }).catch(function (error) {
-        //        VRNotificationService.notifyException(error, $scope);
-        //    });
+        function insertCountry() {
+            var countryObject = buildCountryObjFromScope();
+            return WhS_BE_CountryAPIService.AddCountry(countryObject)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded("Country", response)) {
+                    if ($scope.onCountryAdded != undefined)
+                        $scope.onCountryAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
 
-        //}
+        }
         function updateCountry() {
             var countryObject = buildCountryObjFromScope();
             WhS_BE_CountryAPIService.UpdateCountry(countryObject)

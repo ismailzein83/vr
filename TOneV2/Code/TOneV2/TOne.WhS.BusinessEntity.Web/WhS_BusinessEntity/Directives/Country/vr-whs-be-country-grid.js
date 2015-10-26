@@ -11,7 +11,6 @@ function (UtilsService, VRNotificationService, WhS_BE_CountryAPIService, WhS_BE_
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-
             var countryGrid = new CountryGrid($scope, ctrl, $attrs);
             countryGrid.initializeController();
         },
@@ -30,14 +29,18 @@ function (UtilsService, VRNotificationService, WhS_BE_CountryAPIService, WhS_BE_
         this.initializeController = initializeController;
 
         function initializeController() {
+           
             $scope.countries = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
+                   
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
+                       
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onCountryAdded = function (countryObject) {

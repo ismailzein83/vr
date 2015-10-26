@@ -28,6 +28,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CountryManager manager = new CountryManager();
             return manager.GetCountry(countryId);
         }
+
+        [HttpPost]
+        [Route("AddCountry")]
+        public TOne.Entities.InsertOperationOutput<Country> AddCountry(Country country)
+        {
+            CountryManager manager = new CountryManager();
+            return manager.AddCountry(country);
+        }
         [HttpPost]
         [Route("UpdateCountry")]
         public TOne.Entities.UpdateOperationOutput<Country> UpdateCountry(Country country)

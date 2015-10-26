@@ -17,10 +17,14 @@
         function UpdateCountry(countryObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "Country", "UpdateCountry"), countryObject);
         }
+        function AddCountry(countryObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "Country", "AddCountry"), countryObject);
+        }
         return ({
             GetFilteredCountries: GetFilteredCountries,
             GetCountry: GetCountry,
-            UpdateCountry: UpdateCountry
+            UpdateCountry: UpdateCountry,
+            AddCountry: AddCountry
         });
     }
 

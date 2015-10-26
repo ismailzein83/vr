@@ -12,6 +12,7 @@ namespace TOne.WhS.BusinessEntity.Data
     {
         List<Country> GetCountries();
         bool Update(Country country);
+        bool Insert(Country country, out int insertedId);
         bool AreCountriesUpdated(ref object updateHandle);
        
     }

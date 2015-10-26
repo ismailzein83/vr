@@ -26,7 +26,26 @@ namespace TOne.WhS.BusinessEntity.Business
             var countries = GetAllCountries();
             return countries.GetRecord(countryId);
         }
+        public TOne.Entities.InsertOperationOutput<Country> AddCountry(Country country)
+        {
+            TOne.Entities.InsertOperationOutput<Country> insertOperationOutput = new TOne.Entities.InsertOperationOutput<Country>();
 
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
+            int countryId = -1;
+
+            ICountrytDataManager dataManager = BEDataManagerFactory.GetDataManager<ICountrytDataManager>();
+            bool insertActionSucc = dataManager.Insert(country, out countryId);
+            if (insertActionSucc)
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                country.CountryId = countryId;
+                insertOperationOutput.InsertedObject = country;
+            }
+
+            return insertOperationOutput;
+        } 
         public TOne.Entities.UpdateOperationOutput<Country> UpdateCountry(Country country)
         {
             ICountrytDataManager dataManager = BEDataManagerFactory.GetDataManager<ICountrytDataManager>();
