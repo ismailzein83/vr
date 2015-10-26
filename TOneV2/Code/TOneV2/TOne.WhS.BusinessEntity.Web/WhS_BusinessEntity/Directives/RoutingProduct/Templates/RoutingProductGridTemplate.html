@@ -9,6 +9,9 @@
 
             <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Selling Number Plan Id'" field="'SellingNumberPlanId'"></vr-datagridcolumn>
+            <vr-datagridexpandablerow>
+                <vr-whs-be-routerule-grid on-ready="dataItem.extensionObject.onGridReady"></vr-whs-be-routerule-grid>
+            </vr-datagridexpandablerow>
         </vr-datagrid>
     </vr-columns>
 </vr-row>

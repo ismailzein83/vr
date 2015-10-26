@@ -57,12 +57,31 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_BE_MainSer
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_RoutingProductAPIService.GetFilteredRoutingProducts(dataRetrievalInput)
                    .then(function (response) {
+                       if (response.Data != undefined) {
+                           for (var i = 0; i < response.Data.length; i++) {
+                                setDataItemExtension(response.Data[i]);
+                           }
+                       }
                        onResponseReady(response);
                    })
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    });
             };
+
+            function setDataItemExtension(dataItem) {
+                var extensionObject = {};
+                var query = {
+                    RoutingProductId: dataItem.RoutingProductId
+                }
+                extensionObject.onGridReady = function (api) {
+                    extensionObject.routingProductGridAPI = api;
+                    extensionObject.routingProductGridAPI.loadGrid(query);
+                    extensionObject.onGridReady = undefined;
+                };
+                dataItem.extensionObject = extensionObject;
+
+            }
 
             defineMenuActions();
         }

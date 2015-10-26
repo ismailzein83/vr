@@ -82,7 +82,10 @@ namespace TOne.WhS.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<RouteRuleDetail> GetFilteredRouteRules(Vanrise.Entities.DataRetrievalInput<RouteRuleQuery> input)
         {
             var routeRules = base.GetAllRules();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeRules.ToBigResult(input, null, MapToDetails));
+            Func<RouteRule, bool> filterExpression = (routeRule) =>
+                 (input.Query.RoutingProductId == null || routeRule.Criteria.RoutingProductId == input.Query.RoutingProductId);
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeRules.ToBigResult(input, filterExpression, MapToDetails));
         }
 
         protected override RouteRuleDetail MapToDetails(RouteRule rule)
