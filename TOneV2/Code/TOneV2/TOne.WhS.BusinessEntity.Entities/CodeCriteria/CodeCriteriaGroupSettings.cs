@@ -19,7 +19,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public override IEnumerable<CodeCriteria> GetCodeCriterias(CodeCriteriaGroupContext context)
         {
-            throw new NotImplementedException();
+            return this.Codes;
         }
     }
 }
