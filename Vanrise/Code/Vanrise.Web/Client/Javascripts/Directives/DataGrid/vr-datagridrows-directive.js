@@ -47,7 +47,7 @@ app.directive('vrDatagridrows', [function () {
                         var scrollPercentage = 100 * scrollTop / (gridBodyElement.height() - $(this).height());
 
                         if (scrollTop > lastScrollTop) {
-                            if (scrollPercentage > 80)
+                            if (scrollPercentage > 80 && typeof dataGridCtrl.onScrolling == 'function') 
                                 dataGridCtrl.onScrolling();
                         }
                         lastScrollTop = scrollTop;
