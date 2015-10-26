@@ -92,12 +92,9 @@
     <Build Include="sec\Stored Procedures\sp_User_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_BusinessEntityModule_ToggleBreakInheritance.sql" />
     <Build Include="sec\Stored Procedures\sp_BusinessEntity_ToggleBreakInheritance.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_GetbyId.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_CheckUserName.sql" />
     <Build Include="sec\Stored Procedures\sp_Permission_Delete.sql" />
     <Build Include="sec\Stored Procedures\sp_OrgChart_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_Permission_GetAll.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_GetbyEmail.sql" />
     <Build Include="sec\Stored Procedures\sp_OrgChart_Delete.sql" />
     <Build Include="sec\Stored Procedures\sp_Permission_Update.sql" />
     <Build Include="sec\Stored Procedures\sp_OrgChart_Update.sql" />

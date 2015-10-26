@@ -68,6 +68,7 @@ function GroupManagementController($scope, GroupAPIService, VRModalService, VRNo
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Add Group";
             modalScope.onGroupAdded = function (group) {
+                console.log(group)
                 gridApi.itemAdded(group);
             };
         };
@@ -82,7 +83,7 @@ function GroupManagementController($scope, GroupAPIService, VRModalService, VRNo
         var parameters = {
             groupId: groupObj.Entity.GroupId
         };
-
+        
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit Group: " + groupObj.Entity.Name;
             modalScope.onGroupUpdated = function (group) {
