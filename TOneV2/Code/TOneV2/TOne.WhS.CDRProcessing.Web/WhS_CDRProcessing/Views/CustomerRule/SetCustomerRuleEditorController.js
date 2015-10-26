@@ -82,7 +82,7 @@
                 getCustomerRule();
             }
             else {
-                $scope.title = UtilsService.buildTitleForUpdateEditor("New Customer Rule");
+                $scope.title = UtilsService.buildTitleForAddEditor("New Customer Rule");
                 $scope.isGettingData = false;
                 setDefaultValues();
             }

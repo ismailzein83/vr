@@ -82,7 +82,7 @@
                 getSupplierRule();
             }
             else {
-                $scope.title = UtilsService.buildTitleForUpdateEditor("New Supplier Rule");
+                $scope.title = UtilsService.buildTitleForAddEditor("New Supplier Rule");
                 $scope.isGettingData = false;
                 setDefaultValues();
             }
