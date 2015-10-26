@@ -7,14 +7,19 @@
     function customerZoneAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
 
         return ({
-            GetCustomerZone: GetCustomerZone,
+            GetCustomerZones: GetCustomerZones,
+            GetFilteredSaleZonesToSell: GetFilteredSaleZonesToSell,
             AddCustomerZones: AddCustomerZones
         });
 
-        function GetCustomerZone(customerId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CustomerZone", "GetCustomerZone"), {
+        function GetCustomerZones(customerId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CustomerZone", "GetCustomerZones"), {
                 customerId: customerId
             });
+        }
+
+        function GetFilteredSaleZonesToSell(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CustomerZone", "GetFilteredSaleZonesToSell"), input);
         }
 
         function AddCustomerZones(customerZones) {

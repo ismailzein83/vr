@@ -5,7 +5,12 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-whs-be-carrieraccount type="'Customer'" on-ready="onCarrierAccountDirectiveReady" isrequired></vr-whs-be-carrieraccount>
+                    <vr-whs-be-carrieraccount type="'Customer'"
+                                              on-ready="onCarrierAccountDirectiveReady"
+                                              onselectionchanged="onCarrierAccountChanged"
+                                              isrequired
+                                              hideremoveicon>
+                    </vr-whs-be-carrieraccount>
                 </vr-columns>
             </vr-row>
         </div>
@@ -14,7 +19,9 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
-                    <vr-button type="SellNewZones" data-onclick="sellNewZones"></vr-button>
+                    <span vr-disabled="disableSellNewZonesButton">
+                        <vr-button type="SellNewZones" data-onclick="sellNewZones"></vr-button>
+                    </span>
                 </div>
             </vr-actionbar>
         </vr-row>

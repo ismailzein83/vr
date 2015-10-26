@@ -1,10 +1,10 @@
 ﻿app.service('WhS_Sales_MainService', ["VRModalService", function (VRModalService) {
 
     return ({
-        editRatePlan: editRatePlan,
+        sellCustomerZones: sellCustomerZones,
     });
 
-    function editRatePlan(customerId, onRatePlanUpdated) {
+    function sellCustomerZones(customerId, onCustomerZonesSold) {
 
         var modalSettings = {
         };
@@ -14,7 +14,7 @@
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.onRatePlanUpdated = onRatePlanUpdated;
+            modalScope.onCustomerZonesSold = onCustomerZonesSold;
         };
 
         VRModalService.showModal('/Client/Modules/WhS_Sales/Views/RatePlanEditor.html', parameters, modalSettings);

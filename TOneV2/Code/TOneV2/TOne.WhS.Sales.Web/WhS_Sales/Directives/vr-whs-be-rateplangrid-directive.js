@@ -52,7 +52,6 @@ app.directive("vrWhsSalesRateplangrid", ["WhS_Sales_RatePlanAPIService", "VRNoti
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-
                 return WhS_Sales_RatePlanAPIService.GetFilteredRatePlanItems(dataRetrievalInput)
                     .then(function (response) {
                         onResponseReady(response);

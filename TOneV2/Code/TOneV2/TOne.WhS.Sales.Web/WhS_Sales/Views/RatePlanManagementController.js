@@ -24,24 +24,20 @@
             };
 
             $scope.search = function () {
-                if (ratePlanGridAPI != undefined) {
-                    $scope.showRatePlanGrid = true;
-
-                    var query = {
-                        CustomerId: carrierAccountDirectiveAPI.getData().CarrierAccountId
-                    };
-
-                    return ratePlanGridAPI.loadGrid(query);
-                }
+                return loadRatePlanGrid();
             };
 
             $scope.sellNewZones = function () {
-
-                var onRatePlanUpdated = function () {
-                    console.log("Rate plan has been updated");
+                var onCustomerZonesSold = function (customerZones) {
+                    loadRatePlanGrid();
                 };
                 
-                WhS_Sales_MainService.editRatePlan(carrierAccountDirectiveAPI.getData().CarrierAccountId, onRatePlanUpdated);
+                WhS_Sales_MainService.sellCustomerZones(carrierAccountDirectiveAPI.getData().CarrierAccountId, onCustomerZonesSold);
+            };
+
+            $scope.onCarrierAccountChanged = function () {
+                $scope.showRatePlanGrid = false;
+                $scope.disableSellNewZonesButton = (carrierAccountDirectiveAPI == undefined || carrierAccountDirectiveAPI.getData() == undefined);
             };
         }
 
@@ -58,6 +54,18 @@
                 .finally(function () {
                     $scope.loadingFilters = false;
                 });
+        }
+
+        function loadRatePlanGrid() {
+            if (ratePlanGridAPI != undefined) {
+                $scope.showRatePlanGrid = true;
+
+                var query = {
+                    CustomerId: carrierAccountDirectiveAPI.getData().CarrierAccountId
+                };
+
+                return ratePlanGridAPI.loadGrid(query);
+            }
         }
     }
 
