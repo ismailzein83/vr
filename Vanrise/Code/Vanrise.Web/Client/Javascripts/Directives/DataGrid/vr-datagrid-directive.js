@@ -16,7 +16,7 @@
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-
+            ctrl.itemsSortable = { handle: '.handeldrag', animation: 150 };
             var loadMoreDataFunction;
             if ($attrs.loadmoredata != undefined)
                 loadMoreDataFunction = $scope.$parent.$eval($attrs.loadmoredata);
@@ -98,6 +98,8 @@
            // ctrl.expandabelcol = $attrs.showexpand != undefined? $scope.$eval(ctrl.showexpand) : undefined;
             var hasActionMenu = $attrs.menuactions != undefined;
             var actionsAttribute = hasActionMenu ? $scope.$parent.$eval($attrs.menuactions) : undefined;
+            var enableDraggableRow = $attrs.enabledraggablerow != undefined ? $scope.$parent.$eval($attrs.enabledraggablerow) : false;
+            var deleteRowFunction = $attrs.ondeleterow != undefined ? $scope.$parent.$eval($attrs.ondeleterow) : undefined;
             var dataGridObj = new DataGrid(ctrl, $scope);
             dataGridObj.initializeController();
             if (retrieveDataFunction != undefined)
@@ -107,6 +109,8 @@
                 dataGridObj.definePagingOnScroll($scope, loadMoreDataFunction);
             dataGridObj.defineExpandableRow();
             dataGridObj.defineMenuColumn(hasActionMenu, actionsAttribute);
+            dataGridObj.defineDraggableRow(enableDraggableRow);
+            dataGridObj.defineDeleteRowAction(deleteRowFunction);
             dataGridObj.calculateDataColumnsSectionWidth();
             //dataGridObj.addActionTypeColumn();
             dataGridObj.defineAPI();
@@ -164,6 +168,9 @@
         var lastSortColumnDef;
         var actionMenuWidth;
         var expandableColumnWidth = 0;
+        var draggableRowIconWidth = 0;
+        var deleteRowColumnWidth = 0;
+        var actionTypeColumnWidth;
         var expandableRowTemplate;
         //var actionTypeColumn;
         var stopPagingOnScroll;
@@ -347,10 +354,11 @@
         }
 
         function calculateDataColumnsSectionWidth() {
-            var width = (100 - actionMenuWidth - expandableColumnWidth);
+            defineActionTypeColumn();
+            var otherSectionsWidth = actionMenuWidth + expandableColumnWidth + draggableRowIconWidth + deleteRowColumnWidth + actionTypeColumnWidth;
             //if (width < 100)
             //    width -= 1;
-            ctrl.dataColumnsSectionWidth = width + '%';
+            ctrl.dataColumnsSectionWidth = "calc(100% - " + otherSectionsWidth + "px)";
         }
 
         function initializeController() {
@@ -459,6 +467,10 @@
                         ctrl.isExporting = false;
                     });
                 }
+            };
+
+            ctrl.viewSelectionChanged = function () {
+                calculateDataColumnsSectionWidth();
             };
         }
         
@@ -631,7 +643,7 @@
                 isGridReady = true;
                 if (ctrl.onReady != null)
                     ctrl.onReady(gridApi);
-            }, 1000);
+            }, 100);
 
             gridApi.expandRow = function (dataItem) {
                 ctrl.expandRow(dataItem);
@@ -750,9 +762,9 @@
         function defineExpandableRow() {
             ctrl.setExpandableRowTemplate = function (template, isexpandble) {
                 expandableRowTemplate = template;
-                expandableColumnWidth = 2;
-                ctrl.expandableColumnWidth = expandableColumnWidth + '%';
-                ctrl.expandableSectionWidth = (100 - expandableColumnWidth) + '%';
+                expandableColumnWidth = 20;
+                ctrl.expandableColumnWidth = expandableColumnWidth + 'px';
+                ctrl.expandableSectionWidth = "calc(100% - " + expandableColumnWidth + "px)";
                 calculateDataColumnsSectionWidth();
             };
             ctrl.showExpandCollapseIcon = function (dataItem) {
@@ -777,7 +789,7 @@
 
         function defineMenuColumn(hasActionMenu, actionsAttribute) {
             actionMenuWidth = 0;//hasActionMenu ? 3 : 0;
-            ctrl.actionsColumnWidth = actionMenuWidth + '%';
+            ctrl.actionsColumnWidth = actionMenuWidth + 'px';
 
             ctrl.isActionMenuVisible = function (dataItem) {
                 if (!hasActionMenu)
@@ -786,7 +798,8 @@
                     return false;
                 var actions = ctrl.getMenuActions(dataItem);
                 return actions != undefined && actions != null && actions.length > 0;
-            }
+            };
+
             ctrl.adjustPosition = function (e) {
                 var self = angular.element(e.currentTarget);
                 var selfHeight = $(this).parent().height() + 12;
@@ -796,19 +809,16 @@
                 var selfOffsetRigth = $(document).width() - selfOffset.left - selfWidth;
                 var dropDown = self.parent().find('ul');
                 $(dropDown).css({ position: 'fixed', top: (selfOffset.top - w.scrollTop()) + selfHeight, left: 'auto' });
-            }
+            };
+
             ctrl.getMenuActions = function (dataItem) {
                 var arrayofActions = (typeof (actionsAttribute) == 'function' ? actionsAttribute(dataItem) : actionsAttribute);
 
-                if (arrayofActions != undefined && arrayofActions != null)
-                {
-                    for(var i=arrayofActions.length -1; i >= 0; i--)
-                    {
-                        if (arrayofActions[i].permissions != undefined && arrayofActions[i].permissions != null)
-                        {
+                if (arrayofActions != undefined && arrayofActions != null) {
+                    for (var i = arrayofActions.length - 1; i >= 0; i--) {
+                        if (arrayofActions[i].permissions != undefined && arrayofActions[i].permissions != null) {
                             var isAllowed = SecurityService.isAllowed(arrayofActions[i].permissions);
-                            if(!isAllowed)
-                            {
+                            if (!isAllowed) {
                                 arrayofActions.splice(i, 1);
                             }
                         }
@@ -816,11 +826,41 @@
                 }
 
                 return arrayofActions;
-            }
+            };
+
+           
 
             ctrl.menuActionClicked = function (action, dataItem) {
                 action.clicked(dataItem);
             };
+        }
+
+        function defineDraggableRow(enableDraggableRow) {
+            if (enableDraggableRow) {
+                draggableRowIconWidth = 17;
+                ctrl.draggableRowIconWidth = draggableRowIconWidth + "px";
+                ctrl.showDraggableRowSection = true;
+            }
+        }
+
+        function defineDeleteRowAction(deleteRowFunction) {
+            if (deleteRowFunction != undefined) {
+                deleteRowColumnWidth = 17;
+                ctrl.deleteRowColumnWidth = deleteRowColumnWidth + "px";
+                ctrl.showDeleteRowSection = true;
+
+                ctrl.deleteRowClicked = function (dataItem) {
+                    deleteRowFunction(dataItem);
+                };
+            }
+        }
+
+        function defineActionTypeColumn() {
+            if (ctrl.isMainItemsShown)
+                actionTypeColumnWidth = 0;
+            else
+                actionTypeColumnWidth = 60;
+            ctrl.actionTypeColumnWidth = actionTypeColumnWidth + "px";
         }
 
         //function addActionTypeColumn() {
@@ -947,9 +987,11 @@
         this.definePagingOnScroll = definePagingOnScroll;
         this.defineExpandableRow = defineExpandableRow;
         this.defineMenuColumn = defineMenuColumn;
+        this.defineDraggableRow = defineDraggableRow;
         this.calculateDataColumnsSectionWidth = calculateDataColumnsSectionWidth;
         //this.addActionTypeColumn = addActionTypeColumn;
         this.defineRetrieveData = defineRetrieveData;
+        this.defineDeleteRowAction = defineDeleteRowAction;
     }
 
 

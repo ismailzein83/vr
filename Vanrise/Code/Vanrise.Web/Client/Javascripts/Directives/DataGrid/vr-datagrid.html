@@ -1,10 +1,11 @@
-﻿<div class="vr-datagrid" vr-loader="ctrl.isLoadingMoreData" >
-    <vr-choices  ng-show="ctrl.updateItems.length > 0">
+﻿<div class="vr-datagrid" vr-loader="ctrl.isLoadingMoreData">
+    <vr-choices ng-show="ctrl.updateItems.length > 0" onselectionchanged="ctrl.viewSelectionChanged()">
         <vr-choice isselected="ctrl.isMainItemsShown">Main View</vr-choice>
         <vr-choice>Updated Items ({{ctrl.updateItems.length}})</vr-choice>
-    </vr-choices>  
-    <div class="vr-datagrid-header" ng-hide="ctrl.hideheader" ng-style="ctrl.headerStyle" ng-class="ctrl.ngClassLevel">
-        
+    </vr-choices>
+    <div class="vr-datagrid-header" ng-hide="ctrl.hideheader" ng-style="ctrl.headerStyle" style="display: flex" ng-class="ctrl.ngClassLevel">
+        <div ng-if="ctrl.showDraggableRowSection" ng-style="{'width': $parent.ctrl.draggableRowIconWidth, 'display':'inline-block'}">
+        </div>
         <div ng-show="!ctrl.hideGridMenu" class="vr-grid-menu-box hand-cursor out-div" ng-class="ctrl.updateItems.length > 0?'with-choices':''" ng-class="ctrl.showgmenu==true?'toggle-dd':''" ng-click="ctrl.toggelGridMenu($event)">
             <span class="vr-grid-menu-h-circle hand-cursor" ng-class="ctrl.ngClassLevel"></span>
             <span class="glyphicon glyphicon-wrench vr-grid-menu-h-dote hand-cursor"></span>
@@ -29,8 +30,11 @@
             <div ng-repeat="colDef in ctrl.columnDefs" ng-hide="colDef.isHidden" ng-style="{'width': colDef.width, 'display':'inline-block'}">
                 <vr-datagridcell htmltemplate='colDef.headerCellTemplate'></vr-datagridcell>
             </div>
-        </div>  
-
+        </div>
+        <div ng-if="!ctrl.isMainItemsShown" ng-style="{'width': $parent.ctrl.actionTypeColumnWidth, 'display':'inline-block'}">
+        </div>
+        <div ng-if="ctrl.showDeleteRowSection" ng-style="{'width': $parent.ctrl.deleteRowColumnWidth, 'display':'inline-block'}">
+        </div>
     </div>
 
     <div id="gridBodyContainer" ng-style="ctrl.gridStyle" ng-show="ctrl.isMainItemsShown">
@@ -38,13 +42,16 @@
             <div class="vr-datagrid-body" style="white-space: nowrap; background-color: Transparent; font-weight: bolder; border-left: 1px solid #D0D0D0; border-right: 1px solid #D0D0D0; " ng-if="ctrl.summaryRowHtml != undefined">
                 <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="ctrl.expandableColumnWidth != undefined">
                 </div>
-                <div ng-style="{'display':'inline-block', 'width': ctrl.dataColumnsSectionWidth}" >
+                <div ng-style="{'display':'inline-block', 'width': ctrl.dataColumnsSectionWidth}">
                     <div vr-htmlcompiler="ctrl.summaryRowHtml"></div>
                 </div>
             </div>
-            <div id="rowSection1" class="vr-datagrid-body" ng-repeat="dataItem in ctrl.datasource | filter:ctrl.clientSideFilterFunction">
+            <div ng-sortable="ctrl.itemsSortable">
+                <div id="rowSection1" class="vr-datagrid-body" ng-repeat="dataItem in ctrl.datasource | filter:ctrl.clientSideFilterFunction">
 
+                </div>
             </div>
+
         </div>
     </div>
     <div id="gridBodyContainer_2" ng-style="ctrl.gridStyle" ng-show="!ctrl.isMainItemsShown">
@@ -62,7 +69,10 @@
     <div class="pull-right" style="font-size: 10px; margin-right: 5px; margin-top: 5px; "> Total count ({{ctrl.pagerSettings.totalDataCount}})</div>
 </div>
 <div id="rowTemplate">
-    <div style="white-space:nowrap" ng-style="{'background-color': dataItem.isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :dataItem.isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0'}">
+    <div style="white-space:nowrap" ng-style="{'background-color': dataItem.isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :dataItem.isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0', 'display': 'flex'}">
+        <div ng-if="ctrl.showDraggableRowSection" ng-style="{'width': $parent.ctrl.draggableRowIconWidth, 'display':'inline-block'}">
+            <i class="glyphicon glyphicon-th-list handeldrag hand-cursor" style="top: calc(50% - 6px); left: 3px"></i>
+        </div>
         <div style="margin:-2px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="$parent.ctrl.expandableColumnWidth != undefined " ng-class="">
             <div ng-show="ctrl.showExpandCollapseIcon(dataItem)">
                 <label style="height: 9px;" class=" hand-cursor" ng-click="$parent.ctrl.expandRow(dataItem)" ng-show="!dataItem.isRowExpanded">
@@ -71,7 +81,7 @@
                 <label style="height: 9px;" class=" hand-cursor" ng-click="$parent.ctrl.collapseRow(dataItem)" ng-show="dataItem.isRowExpanded">
                     <span class="glyphicon glyphicon-minus" style="top: -2px; left: 4px"></span>
                 </label>
-            </div>            
+            </div>
         </div>
         <div ng-style="{'display':'inline-block', 'width': $parent.ctrl.dataColumnsSectionWidth}" class="vr-datagrid-row" ng-click="$parent.ctrl.onRowClicked($event);showMenu=$parent.ctrl.isActionMenuVisible(dataItem) ; " ng-mouseleave="showMenu = false">
             <div ng-class="$parent.ctrl.isActionMenuVisible(dataItem)?'vr-datagrid-datacells' : ''" vr-htmlcompiler="$parent.ctrl.rowHtml"></div>
@@ -83,6 +93,12 @@
                     </div>
                 </li>
             </ul>
+        </div>
+        <div ng-if="!ctrl.isMainItemsShown" ng-style="{'width': $parent.ctrl.actionTypeColumnWidth, 'display':'inline-block'}">
+            <span ng-style="::$parent.ctrl.getCellLayoutStyle()" ng-class="ctrl.getCellClass(dataItem)" style="position: relative; top: calc(50% - 9px);">  {{ dataItem.actionType}}</span>
+        </div>
+        <div ng-if="ctrl.showDeleteRowSection" ng-style="{'width': $parent.ctrl.deleteRowColumnWidth, 'display':'inline-block'}">
+            <span class="hand-cursor glyphicon glyphicon-remove" ng-click="ctrl.deleteRowClicked(dataItem)" style="top: calc(50% - 6px);"></span>
         </div>
     </div>
     <div id="divExpandableRowContent_{{$index}}" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap">
