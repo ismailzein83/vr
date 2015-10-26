@@ -103,28 +103,42 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
         $scope.showParametersHint = function (item) {
             if (item.parameters.length > 0)
-                return "This filter requires the following parameter(s): " + item.parameters.join();
+                return "This filter requires the following parameter(s): " + item.parameters.join(',');
         }
 
-        $scope.showFiltersHint = function (param) {
 
-            console.log($scope.strategyFilters);
-
-
-            //console.log('111');
-            //angular.forEach($scope.strategyFilters, function (filter) {
-            //    console.log(filter.name);
-            //    console.log(filter.parameter);
-            //});
-
-
-
-            return param;
-            //console.log(param)
-            //if (item.parameters.length > 0)
-            //    return "This filter requires the following parameter(s): " + item.parameters.join();
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            return $scope.strategyFilters;
         }
-        
+
+
+        $scope.hasFilters = function (parameter) {
+            console.log('hasFilter')
+            var found = false;
+            if ($scope.strategyFilters.length > 0) {
+                angular.forEach($scope.strategyFilters, function (filter) {
+                    if (filter.parameters.indexOf(parameter) > -1 && filter.isSelected) {
+                        found = true;
+                    }
+                });
+            }
+            console.log(found)
+            return found;
+        }
+
+
+        $scope.showFiltersHint = function (parameter) {
+            var filters = [];
+            if ($scope.strategyFilters.length > 0) {
+                angular.forEach($scope.strategyFilters, function (filter) {
+                    if (filter.parameters.indexOf(parameter) > -1) {
+                        filters.push(filter.abbreviation);
+                    }
+                });
+            }
+            return filters.join(',');
+        }
+
     }
 
     function load() {
@@ -313,7 +327,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                     filterId: filterDef.FilterId,
                     upSign: filterDef.upSign,
                     downSign: filterDef.downSign,
-                    percentage :0
+                    percentage: 0
                 };
 
                 var existingItem = UtilsService.getItemByVal(level.StrategyLevelCriterias, filterDef.filterId, "FilterId");
@@ -341,11 +355,11 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
         angular.forEach(strategyObject.StrategyLevels, function (level) {
             angular.forEach(level.StrategyLevelCriterias, function (itm) {
-                    countStrategyLevels++;
+                countStrategyLevels++;
             });
         });
 
-        
+
 
 
         if (countStrategyFilters == 0) {
@@ -360,7 +374,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
         }
 
-       
+
         return true;
     }
 

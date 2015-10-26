@@ -31,7 +31,6 @@
             <vr-row>
 
                 <vr-columns width="fullrow">
-                    <vr-label  value="'11111'">   </vr-label>
                     <vr-choices onselectionchanged="ctrl.viewVisibilityChanged">
                         <vr-choice isselected="ctrl.isFilterTabShown">Strategy Filters</vr-choice>
                         <vr-choice isselected="ctrl.isLevelsTabShow">Suspicion Rules</vr-choice>
@@ -42,20 +41,20 @@
 
                             <vr-columns width="3/4row">
                                 <div>
-                                    <vr-datagrid datasource="strategyFilters" maxheight="400px" hidepaginginfo hidegridmenu>
+                                    <vr-datagrid datasource="strategyFilters" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" hidepaginginfo hidegridmenu>
 
                                         <vr-datagridcolumn headertext="''" widthfactor="3" disablesorting>
-                                            <vr-check     value="dataItem.isSelected" ng-show="viewScope.showSwitch(dataItem)"></vr-check>
+                                            <vr-check value="dataItem.isSelected" ng-show="viewScope.showSwitch(dataItem)"></vr-check>
                                         </vr-datagridcolumn>
 
-                                        <vr-datagridcolumn headertext="'Hints'"  widthfactor="3" disablesorting>
+                                        <vr-datagridcolumn headertext="'Hints'" widthfactor="3" disablesorting>
                                             <vr-hint value="{{viewScope.showParametersHint(dataItem)}}" ng-if="viewScope.hasParameters(dataItem)">     </vr-hint>
                                         </vr-datagridcolumn>
 
                                         <vr-datagridcolumn headertext="'Filter'" field="'abbreviation'" disablesorting>
                                         </vr-datagridcolumn>
 
-                                       
+
 
 
                                         <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="20" disablesorting></vr-datagridcolumn>
@@ -66,7 +65,7 @@
                                             </div>
                                         </vr-datagridcolumn>
 
-                                      
+
 
                                     </vr-datagrid>
                                 </div>
@@ -81,21 +80,21 @@
 
                                             <vr-columns width="fullrow">
 
-                                                <vr-select datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection isrequired></vr-select>
+                                                <vr-select hint="Related to the following filter(s):  {{showFiltersHint('Peak Hours')}}" datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection isrequired></vr-select>
                                             </vr-columns>
                                         </vr-row>
 
                                         <vr-row ng-show="strategyFilters[15].isSelected">
 
                                             <vr-columns width="fullrow">
-                                                <vr-textbox value="gapBetweenConsecutiveCalls" type="number" label="Gap between Consecutive Calls in Seconds" isrequired></vr-textbox>
+                                                <vr-textbox hint="Related to the following filter(s):  {{showFiltersHint('Gap between Consecutive Calls in Seconds')}}" value="gapBetweenConsecutiveCalls" type="number" label="Gap between Consecutive Calls in Seconds" isrequired></vr-textbox>
                                             </vr-columns>
                                         </vr-row>
 
                                         <vr-row ng-show="strategyFilters[16].isSelected ">
 
                                             <vr-columns width="fullrow">
-                                                <vr-textbox value="gapBetweenFailedConsecutiveCalls" type="number" label="Gap between Failed Consecutive Calls in Seconds" isrequired></vr-textbox>
+                                                <vr-textbox hint="Related to the following filter(s):  {{showFiltersHint('Gap between Failed Consecutive Calls in Seconds')}}" value="gapBetweenFailedConsecutiveCalls" type="number" label="Gap between Failed Consecutive Calls in Seconds" isrequired></vr-textbox>
                                             </vr-columns>
                                         </vr-row>
 
@@ -104,14 +103,14 @@
 
 
                                             <vr-columns width="fullrow">
-                                                <vr-textbox value="maxLowDurationCall" type="number" label="Maximum Low Duration Call (s) " isrequired></vr-textbox>
+                                                <vr-textbox hint="Related to the following filter(s):  {{showFiltersHint('Maximum Low Duration Call (s)')}}" value="maxLowDurationCall" type="number" label="Maximum Low Duration Call (s)" isrequired></vr-textbox>
                                             </vr-columns>
 
                                         </vr-row>
                                         <vr-row ng-show="strategyFilters[8].isSelected">
 
                                             <vr-columns width="fullrow">
-                                                <vr-textbox hint="{{showFiltersHint('Minimum Count of Calls per Hour')}}" value="minCountofCallsinActiveHour" type="number" label="Minimum Count of Calls per Hour" isrequired></vr-textbox>
+                                                <vr-textbox hint="Related to the following filter(s):  {{showFiltersHint('Minimum Count of Calls per Hour')}}" value="minCountofCallsinActiveHour" type="number" label="Minimum Count of Calls per Hour" isrequired></vr-textbox>
                                             </vr-columns>
 
                                         </vr-row>
