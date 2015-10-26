@@ -74,13 +74,9 @@
             <i class="glyphicon glyphicon-th-list handeldrag hand-cursor" style="top: calc(50% - 6px); left: 3px"></i>
         </div>
         <div style="margin:-2px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="$parent.ctrl.expandableColumnWidth != undefined " ng-class="">
-            <div ng-show="ctrl.showExpandCollapseIcon(dataItem)">
-                <label style="height: 9px;" class=" hand-cursor" ng-click="$parent.ctrl.expandRow(dataItem)" ng-show="!dataItem.isRowExpanded">
-                    <span class="glyphicon glyphicon-plus" style="top: -2px; left: 4px"></span>
-                </label>
-                <label style="height: 9px;" class=" hand-cursor" ng-click="$parent.ctrl.collapseRow(dataItem)" ng-show="dataItem.isRowExpanded">
-                    <span class="glyphicon glyphicon-minus" style="top: -2px; left: 4px"></span>
-                </label>
+            <div ng-show="ctrl.showExpandCollapseIcon(dataItem)" style="height:100%">
+                <span class="glyphicon glyphicon-plus hand-cursor" style="top: calc(50% - 6px); left: 4px" ng-click="$parent.ctrl.expandRow(dataItem)" ng-show="!dataItem.isRowExpanded"></span>
+                <span class="glyphicon glyphicon-minus hand-cursor" style="top: calc(50% - 6px); left: 4px" ng-click="$parent.ctrl.collapseRow(dataItem)" ng-show="dataItem.isRowExpanded"></span>
             </div>
         </div>
         <div ng-style="{'display':'inline-block', 'width': $parent.ctrl.dataColumnsSectionWidth}" class="vr-datagrid-row" ng-click="$parent.ctrl.onRowClicked($event);showMenu=$parent.ctrl.isActionMenuVisible(dataItem) ; " ng-mouseleave="showMenu = false">
