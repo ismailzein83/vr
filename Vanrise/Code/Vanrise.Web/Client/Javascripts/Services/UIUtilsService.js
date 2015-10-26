@@ -29,9 +29,9 @@
                 });
         }
 
-        function callDirectiveLoadOrResolvePromise(scope, directiveAPI, directiveLoadPayload, setLoader, loadPromiseDeferred) {
-            if (loadPromiseDeferred != undefined)
-                loadPromiseDeferred.resolve();
+        function callDirectiveLoadOrResolvePromise(scope, directiveAPI, directiveLoadPayload, setLoader, readyPromiseDeferred) {
+            if (readyPromiseDeferred != undefined)
+                readyPromiseDeferred.resolve();
             else {
                 setLoader(true);
                 UtilsService.convertToPromiseIfUndefined(directiveAPI.load(directiveLoadPayload))

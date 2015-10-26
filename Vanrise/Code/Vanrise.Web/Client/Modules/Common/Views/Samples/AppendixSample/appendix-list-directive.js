@@ -52,7 +52,6 @@ function (UtilsService, Common_AppendixSample_Service, VRUIUtilsService) {
                                 readyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                 loadPromiseDeferred: UtilsService.createPromiseDeferred()
                             };
-                            promises.push(appendixItem.readyPromiseDeferred.promise);
                             promises.push(appendixItem.loadPromiseDeferred.promise);
                             appendixItems.push(appendixItem);
                         }
@@ -64,9 +63,7 @@ function (UtilsService, Common_AppendixSample_Service, VRUIUtilsService) {
                     }
 
                     function loadDynamicAppendixItem(appendixItem) {
-                        console.log(appendixItem);
                         var matchItem = UtilsService.getItemByVal(ctrl.dynamicAppendixTemplatesToAdd, appendixItem.payload.name, "name");
-                        console.log(matchItem);
                         if (matchItem == null) 
                             return;
 
@@ -92,7 +89,7 @@ function (UtilsService, Common_AppendixSample_Service, VRUIUtilsService) {
 
                 var api = {};
                 api.load = function (payload) {
-                    loadDynamicAppendixListSection(payload);
+                    return loadDynamicAppendixListSection(payload);
                 };
                 setTimeout(function () {
                     if (ctrl.onReady != undefined)

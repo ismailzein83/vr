@@ -133,13 +133,9 @@
                 });
         }
 
-        function loadAppendix() {
-
-            var promises = [];
-            promises.push(appendixReadyPromiseDeferred.promise);
+        function loadAppendix() {     
 
             var loadAppendixPromiseDeferred = UtilsService.createPromiseDeferred();
-            promises.push(loadAppendixPromiseDeferred.promise);
 
             appendixReadyPromiseDeferred.promise
                 .then(function () {
@@ -149,16 +145,12 @@
                     VRUIUtilsService.callDirectiveLoad(appendixAPI, directivePayload, loadAppendixPromiseDeferred);
                 });
 
-            return UtilsService.waitMultiplePromises(promises);
+            return loadAppendixPromiseDeferred.promise;
         }
 
         function loadAppendix2() {
-
-            var promises = [];
-            promises.push(appendix2ReadyPromiseDeferred.promise);
-
+            
             var loadAppendix2PromiseDeferred = UtilsService.createPromiseDeferred();
-            promises.push(loadAppendix2PromiseDeferred.promise);
 
             appendix2ReadyPromiseDeferred.promise
                 .then(function () {
@@ -168,7 +160,7 @@
                     VRUIUtilsService.callDirectiveLoad(appendix2API, directivePayload, loadAppendix2PromiseDeferred);
                 });
 
-            return UtilsService.waitMultiplePromises(promises);
+            return loadAppendix2PromiseDeferred.promise;
         }
 
         function loadDynamicAppendixSection() {
@@ -198,7 +190,6 @@
             promises.push(loadTemplatesPromise);
             if (dynamicAppendixPayload != undefined) {
                 dynamicAppendixReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                promises.push(dynamicAppendixReadyPromiseDeferred.promise);
 
                 var dynamicAppendixLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 promises.push(dynamicAppendixLoadPromiseDeferred.promise);
@@ -242,7 +233,6 @@
                         readyPromiseDeferred: UtilsService.createPromiseDeferred(),
                         loadPromiseDeferred: UtilsService.createPromiseDeferred()
                     };
-                    promises.push(appendixItem.readyPromiseDeferred.promise);
                     promises.push(appendixItem.loadPromiseDeferred.promise);
                     appendixItems.push(appendixItem);
                 }
@@ -280,11 +270,7 @@
 
         function loadAppendixList() {
 
-            var promises = [];
-            promises.push(appendixListReadyPromiseDeferred.promise);
-
             var loadAppendixListPromiseDeferred = UtilsService.createPromiseDeferred();
-            promises.push(loadAppendixListPromiseDeferred.promise);
 
             appendixListReadyPromiseDeferred.promise
                 .then(function () {
@@ -298,7 +284,7 @@
                     VRUIUtilsService.callDirectiveLoad(appendixListAPI, directivePayload, loadAppendixListPromiseDeferred);
                 });
 
-            return UtilsService.waitMultiplePromises(promises);
+            return loadAppendixListPromiseDeferred.promise;
         }
     }
 
