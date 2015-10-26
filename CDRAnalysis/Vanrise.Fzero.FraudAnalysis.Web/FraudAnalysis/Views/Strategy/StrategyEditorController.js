@@ -95,6 +95,17 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             $scope.strategyLevels.splice(index, 1);
         }
 
+
+        $scope.hasParameters = function (item) {
+            return (item.parameters.length > 0);
+        }
+
+
+        $scope.showParametersHint = function (item) {
+            if (item.parameters.length > 0)
+                return "This filter requires the following parameter(s)" + item.parameters.join();
+        }
+
         
     }
 
@@ -255,7 +266,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 excludeHourly: filterDef.excludeHourly,
                 toolTip: filterDef.toolTip,
                 upSign: filterDef.upSign,
-                downSign: filterDef.downSign
+                downSign: filterDef.downSign,
+                parameters: filterDef.parameters
             };
 
 
@@ -383,7 +395,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                     excludeHourly: itm.ExcludeHourly,
                     toolTip: itm.ToolTip,
                     upSign: itm.UpSign,
-                    downSign: itm.DownSign
+                    downSign: itm.DownSign,
+                    parameters: itm.Parameters
                 });
             });
         });

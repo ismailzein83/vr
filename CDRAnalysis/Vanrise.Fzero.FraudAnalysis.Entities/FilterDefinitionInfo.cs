@@ -1,6 +1,7 @@
 ﻿using System;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Fzero.Entities;
+using System.Collections.Generic;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
@@ -29,6 +30,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public string UpSign { get; set; }
 
         public string DownSign { get; set; }
+
+        public List<string> Parameters { get; set; }
 
     }
 }

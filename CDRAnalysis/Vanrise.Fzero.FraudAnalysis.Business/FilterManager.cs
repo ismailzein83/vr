@@ -51,6 +51,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         static Dictionary<int, FilterDefinition> BuildAndGetCriteriaDefinitions()
         {
 
+
+
+
             Dictionary<int, FilterDefinition> dictionary = new Dictionary<int, FilterDefinition>();
 
             foreach (var i in GetCachedFilters())
@@ -81,14 +84,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                 }
 
-                 dictionary.Add(i.Key, i.Value);
+                dictionary.Add(i.Key, i.Value);
             }
 
             return dictionary.Where(x => x.Value.OperatorTypeAllowed == GlobalConstants._DefaultOperatorType || x.Value.OperatorTypeAllowed == OperatorType.Both).OrderBy(x => x.Value.FilterId).ToDictionary(i => i.Key, i => i.Value);
         }
 
 
-        
+
 
         public Dictionary<int, FilterDefinition> GetCriteriaDefinitions()
         {
@@ -113,7 +116,51 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     upSign = Constants._Safe;
                     downSign = Constants._Critical;
                 }
-                names.Add(new FilterDefinitionInfo() { FilterId = i.Value.FilterId, OperatorTypeAllowed = i.Value.OperatorTypeAllowed, Description = i.Value.Description, Abbreviation = i.Value.Abbreviation, Label = i.Value.Label, MaxValue = i.Value.MaxValue, MinValue = i.Value.MinValue, DecimalPrecision = i.Value.DecimalPrecision, ExcludeHourly = i.Value.ExcludeHourly, ToolTip = i.Value.ToolTip, UpSign = upSign, DownSign = downSign });
+
+                FilterDefinitionInfo filterDef = new FilterDefinitionInfo()
+                {
+                    FilterId = i.Value.FilterId,
+                    OperatorTypeAllowed = i.Value.OperatorTypeAllowed,
+                    Description = i.Value.Description,
+                    Abbreviation = i.Value.Abbreviation,
+                    Label = i.Value.Label,
+                    MaxValue = i.Value.MaxValue,
+                    MinValue = i.Value.MinValue,
+                    DecimalPrecision = i.Value.DecimalPrecision,
+                    ExcludeHourly = i.Value.ExcludeHourly,
+                    ToolTip = i.Value.ToolTip,
+                    UpSign = upSign,
+                    DownSign = downSign
+                };
+
+
+                filterDef.Parameters = new List<string>();
+
+
+                switch (i.Value.FilterId)
+                {
+                    case 14:
+                        filterDef.Parameters.Add("Peak Hours");
+                        break;
+
+                    case 16:
+                        filterDef.Parameters.Add("Gap between Consecutive Calls in Seconds");
+                        break;
+
+                    case 17:
+                        filterDef.Parameters.Add("Gap between Failed Consecutive Calls in Seconds");
+                        break;
+
+                    case 18:
+                        filterDef.Parameters.Add("Maximum Low Duration Call (s)");
+                        break;
+
+                    case 9:
+                        filterDef.Parameters.Add("Minimum Count of Calls per Hour");
+                        break;
+                }
+
+                names.Add(filterDef);
             }
             return names;
         }

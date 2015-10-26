@@ -31,7 +31,7 @@
             <vr-row>
 
                 <vr-columns width="fullrow">
-
+                    <vr-label  value="'11111'">   </vr-label>
                     <vr-choices onselectionchanged="ctrl.viewVisibilityChanged">
                         <vr-choice isselected="ctrl.isFilterTabShown">Strategy Filters</vr-choice>
                         <vr-choice isselected="ctrl.isLevelsTabShow">Suspicion Rules</vr-choice>
@@ -45,10 +45,19 @@
                                     <vr-datagrid datasource="strategyFilters" maxheight="400px" hidepaginginfo hidegridmenu>
 
                                         <vr-datagridcolumn headertext="''" widthfactor="3" disablesorting>
-                                            <vr-check value="dataItem.isSelected" ng-show="viewScope.showSwitch(dataItem)"></vr-check>
+                                            <vr-check     value="dataItem.isSelected" ng-show="viewScope.showSwitch(dataItem)"></vr-check>
                                         </vr-datagridcolumn>
 
-                                        <vr-datagridcolumn headertext="'Filter'" field="'abbreviation'" widthfactor="3" disablesorting></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Hints'"  widthfactor="3" disablesorting>
+                                            <vr-textbox hint="viewScope.showParametersHint(dataItem)" ng-if="viewScope.hasParameters(dataItem)">     </vr-textbox>
+                                        </vr-datagridcolumn>
+
+                                        <vr-datagridcolumn headertext="'Filter'" field="'abbreviation'" disablesorting>
+                                        </vr-datagridcolumn>
+
+                                       
+
+
                                         <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="20" disablesorting></vr-datagridcolumn>
 
                                         <vr-datagridcolumn headertext="'Threshold'" disablesorting>
@@ -56,6 +65,9 @@
                                                 <vr-textbox placeholder="{{dataItem.label}}" value="dataItem.threshold" type="number" isrequired ng-if="dataItem.isSelected" title="{{dataItem.toolTip}}" minvalue="{{dataItem.minValue}}" maxvalue="{{dataItem.maxValue}}" decimalprecision="{{dataItem.decimalPrecision}}"></vr-textbox>
                                             </div>
                                         </vr-datagridcolumn>
+
+                                      
+
                                     </vr-datagrid>
                                 </div>
                             </vr-columns>
@@ -116,6 +128,8 @@
 
 
                         </vr-row>
+
+
                     </div>
 
                     <div ng-show="ctrl.isLevelsTabShow">
