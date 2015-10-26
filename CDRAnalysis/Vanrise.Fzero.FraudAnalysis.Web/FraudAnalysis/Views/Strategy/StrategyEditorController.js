@@ -106,6 +106,24 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 return "This filter requires the following parameter(s): " + item.parameters.join();
         }
 
+        $scope.showFiltersHint = function (param) {
+
+            console.log($scope.strategyFilters);
+
+
+            //console.log('111');
+            //angular.forEach($scope.strategyFilters, function (filter) {
+            //    console.log(filter.name);
+            //    console.log(filter.parameter);
+            //});
+
+
+
+            return param;
+            //console.log(param)
+            //if (item.parameters.length > 0)
+            //    return "This filter requires the following parameter(s): " + item.parameters.join();
+        }
         
     }
 
