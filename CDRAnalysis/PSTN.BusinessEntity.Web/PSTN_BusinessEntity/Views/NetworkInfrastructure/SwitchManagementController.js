@@ -32,6 +32,7 @@ function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, S
 
                 modalScope.onSwitchAdded = function (switchObj) {
                     gridAPI.itemAdded(switchObj);
+                    setDataItemExtension(switchObj);
                 };
             };
 
@@ -47,11 +48,8 @@ function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, S
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return SwitchAPIService.GetFilteredSwitches(dataRetrievalInput)
                 .then(function (response) {
-
-                    if (response.Data != undefined) {
-                        for (var i = 0; i < response.Data.length; i++) {
-                            setDataItemExtension(response.Data[i]);
-                        }
+                    for (var i = 0; i < response.Data.length; i++) {
+                        setDataItemExtension(response.Data[i]);
                     }
 
                     onResponseReady(response);
@@ -70,7 +68,7 @@ function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, S
         extensionObj.onTrunkGridReady = function (api) {
             extensionObj.trunkGridAPI = api;
 
-            var query = { SelectedSwitchIds: [dataItem.SwitchId] };
+            var query = { SelectedSwitchIds: [dataItem.Entity.SwitchId] };
             extensionObj.trunkGridAPI.retrieveData(query);
 
             extensionObj.onTrunkGridReady = undefined;
@@ -160,7 +158,6 @@ function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, S
     }
 
     function addTrunk(dataItem) {
-
         gridAPI.expandRow(dataItem);
 
         var onTrunkAdded = function (trunkObj) {
@@ -168,7 +165,7 @@ function SwitchManagementController($scope, PSTN_BE_Service, SwitchAPIService, S
                 dataItem.extensionObj.trunkGridAPI.onTrunkAdded(trunkObj);
         }
 
-        PSTN_BE_Service.addTrunk(dataItem.SwitchId, onTrunkAdded);
+        PSTN_BE_Service.addTrunk(dataItem.Entity.SwitchId, onTrunkAdded);
     }
 }
 

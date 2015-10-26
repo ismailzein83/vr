@@ -5,7 +5,8 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
     var directiveDefinitionObj = {
         restrict: "E",
         scope: {
-            onReady: "="
+            onReady: "=",
+            valid: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -37,6 +38,8 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
         }
 
         // private members
+
+        ctrl.valid = true;
 
         var setAreaSettingsDirectiveAPI;
         var setAreaSettings;

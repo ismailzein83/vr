@@ -46,6 +46,8 @@
             $scope.beginEffectiveDate = Date.now();
             $scope.endEffectiveDate = undefined;
 
+            $scope.settingsAreValid = false;    
+
             $scope.onSelectedSwitchesChanged = function () {
 
                 if ($scope.selectedSwitches == undefined || $scope.selectedSwitches.length == 0)

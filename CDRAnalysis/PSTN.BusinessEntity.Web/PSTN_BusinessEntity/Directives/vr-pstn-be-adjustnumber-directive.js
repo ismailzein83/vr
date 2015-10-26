@@ -5,7 +5,8 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
     var directiveDefinitionObj = {
         restrict: "E",
         scope: {
-            onReady: "="
+            onReady: "=",
+            valid: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -55,6 +56,7 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
             $scope.addAction = function () {
                 var action = getActionItem(null);
                 $scope.actions.push(action);
+                ctrl.valid = true;
             };
 
             $scope.removeAction = function ($event, action) {
@@ -63,6 +65,7 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
 
                 var index = UtilsService.getItemIndexByVal($scope.actions, action.ActionId, 'ActionId');
                 $scope.actions.splice(index, 1);
+                ctrl.valid = ($scope.actions.length > 0);
             };
         }
 
@@ -85,6 +88,8 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
                     var action = getActionItem(item);
                     $scope.actions.push(action);
                 });
+                
+                ctrl.valid = ($scope.actions.length > 0);
             }
 
             if (ctrl.onReady != null)

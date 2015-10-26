@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_NormalizationRuleEditorController" vr-loader="isGettingData" >
+﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_NormalizationRuleEditorController" vr-loader="isGettingData">
     <vr-modalbody>
         <vr-form name="formNormalizationRuleEditor">
 
@@ -69,7 +69,8 @@
                 <vr-row>
                     <vr-columns width="fullrow" vr-loader="loadingNormalizationRuleSettingsDirective">
                         <vr-directivewrapper directive="normalizationRuleSettingsDirective"
-                                             on-ready="onNormalizationRuleSettingsDirectiveReady">
+                                             on-ready="onNormalizationRuleSettingsDirectiveReady"
+                                             valid="settingsAreValid">
                         </vr-directivewrapper>
                     </vr-columns>
                 </vr-row>
@@ -93,7 +94,9 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formNormalizationRuleEditor" data-onclick="saveNormalizationRule"></vr-button>
+                <span vr-disabled="!settingsAreValid">
+                    <vr-button type="Save" formname="formNormalizationRuleEditor" data-onclick="saveNormalizationRule"></vr-button>
+                </span>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

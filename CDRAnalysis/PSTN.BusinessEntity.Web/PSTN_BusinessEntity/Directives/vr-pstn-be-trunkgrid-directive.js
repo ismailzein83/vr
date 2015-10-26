@@ -87,7 +87,6 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "TrunkAPIService", "Trunk
         function editTrunk(gridObj) {
 
             var onTrunkUpdated = function (firstTrunkObj, linkedToFirstTrunkId, secondTrunkId) {
-
                 setTrunkDescriptions(firstTrunkObj);
                 gridAPI.itemUpdated(firstTrunkObj);
 
@@ -98,8 +97,6 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "TrunkAPIService", "Trunk
 
                 var secondTrunkObj = $scope.trunks[dataItemIndex];
                 var linkedToSecondTrunkId = (secondTrunkObj != null) ? secondTrunkObj.Entity.LinkedToTrunkId : null;
-
-
 
                 updateDataItem(linkedToSecondTrunkId, null, null);
                 updateDataItem(secondTrunkId, firstTrunkObj.Entity.TrunkId, firstTrunkObj.Entity.Name);
@@ -121,18 +118,20 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "TrunkAPIService", "Trunk
         function updateDataItem(dataItemId, linkedToTrunkId, linkedToTrunkName) {
 
             if (dataItemId != null) {
-                var entities = UtilsService.getPropValuesFromArray($scope.trunks, "Entity");
-                var dataItemIndex = UtilsService.getItemIndexByVal(entities, dataItemId, "TrunkId");
+                if ($scope.trunks != undefined && $scope.trunks != null && $scope.trunks.length > 0) {
+                    var entities = UtilsService.getPropValuesFromArray($scope.trunks, "Entity");
+                    var dataItemIndex = UtilsService.getItemIndexByVal(entities, dataItemId, "TrunkId");
 
-                var dataItem = $scope.trunks[dataItemIndex];
+                    var dataItem = $scope.trunks[dataItemIndex];
 
-                if (dataItem != null) {
-                    dataItem = UtilsService.cloneObject(dataItem, true);
+                    if (dataItem != null) {
+                        dataItem = UtilsService.cloneObject(dataItem, true);
 
-                    dataItem.Entity.LinkedToTrunkId = linkedToTrunkId;
-                    dataItem.LinkedToTrunkName = linkedToTrunkName;
+                        dataItem.Entity.LinkedToTrunkId = linkedToTrunkId;
+                        dataItem.LinkedToTrunkName = linkedToTrunkName;
 
-                    gridAPI.itemUpdated(dataItem);
+                        gridAPI.itemUpdated(dataItem);
+                    }
                 }
             }
         }

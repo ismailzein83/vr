@@ -126,7 +126,10 @@ namespace PSTN.BusinessEntity.Business
             bool deleted = dataManager.DeleteSwitch(switchId);
 
             if (deleted)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetSwitches");
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+            }
 
             return deleteOperationOutput;
         }
