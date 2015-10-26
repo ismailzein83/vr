@@ -118,12 +118,12 @@
                     {
                         $scope.selectedSellingNumberPlanId = routingProductDirectiveAPI.getData().SellingNumberPlanId;
                         $scope.showSaleZoneSection = true;
-                        $scope.showRouteRuleCriteriaTypes = $scope.showCustomerSection = $scope.showExecludedCodeSection = $scope.showIncludedCodeSection = false;
+                        $scope.showRouteRuleCriteriaTypes = $scope.showCustomerSection = $scope.showExcludedCodeSection = $scope.showIncludedCodeSection = false;
                     }
                     else
                     {
                         $scope.showSaleZoneSection = false;
-                        $scope.showRouteRuleCriteriaTypes = $scope.showCustomerSection = $scope.showExecludedCodeSection = $scope.showIncludedCodeSection = true;
+                        $scope.showRouteRuleCriteriaTypes = $scope.showCustomerSection = $scope.showExcludedCodeSection = $scope.showIncludedCodeSection = true;
                     }
                 }
                 else {
@@ -134,12 +134,12 @@
             $scope.onRouteRuleCriteriaTypeSelectionChanged = function () {
                 if ($scope.selectedRouteRuleCriteriaType == WhS_Be_RouteRuleCriteriaTypeEnum.SaleZone)
                 {
-                    $scope.showSaleZoneSection = $scope.showCustomerSection = $scope.showExecludedCodeSection = true;
+                    $scope.showSaleZoneSection = $scope.showCustomerSection = $scope.showExcludedCodeSection = true;
                     $scope.showIncludedCodeSection = false;
                 }
                 else
                 {
-                    $scope.showIncludedCodeSection = $scope.showCustomerSection = $scope.showExecludedCodeSection = true;
+                    $scope.showIncludedCodeSection = $scope.showCustomerSection = $scope.showExcludedCodeSection = true;
                     $scope.showSaleZoneSection = false;
                 }
             }
@@ -153,7 +153,7 @@
             $scope.excludedCodes = [];
 
             $scope.beginEffectiveDate = new Date();
-            $scope.endEffectiveDate = new Date();
+            $scope.endEffectiveDate = undefined;
         }
 
         function load() {
