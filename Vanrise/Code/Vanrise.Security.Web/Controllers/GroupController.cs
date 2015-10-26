@@ -21,18 +21,18 @@ namespace Vanrise.Security.Web.Controllers
         public Group GetGroup(int groupId)
         {
             GroupManager manager = new GroupManager();
-            return manager.GetGroup(groupId);
+            return manager.GetGroupbyId(groupId);
         }
 
         [HttpGet]
-        public List<Group> GetGroups()
+        public IEnumerable<GroupInfo> GetGroups()
         {
             GroupManager manager = new GroupManager();
             return manager.GetGroups();
         }
 
         [HttpPost]
-        public Vanrise.Entities.InsertOperationOutput<Group> AddGroup(GroupEditorInput groupObj)
+        public Vanrise.Entities.InsertOperationOutput<GroupDetail> AddGroup(GroupEditorInput groupObj)
         {
             GroupManager manager = new GroupManager();
             Group group = new Group() 
@@ -45,7 +45,7 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpPost]
-        public Vanrise.Entities.UpdateOperationOutput<Group> UpdateGroup(GroupEditorInput groupObj)
+        public Vanrise.Entities.UpdateOperationOutput<GroupDetail> UpdateGroup(GroupEditorInput groupObj)
         {
             GroupManager manager = new GroupManager();
             Group group = new Group()

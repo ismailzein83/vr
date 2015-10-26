@@ -80,11 +80,11 @@ function GroupManagementController($scope, GroupAPIService, VRModalService, VRNo
         var modalSettings = {};
 
         var parameters = {
-            groupId: groupObj.GroupId
+            groupId: groupObj.Entity.GroupId
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Group: " + groupObj.Name;
+            modalScope.title = "Edit Group: " + groupObj.Entity.Name;
             modalScope.onGroupUpdated = function (group) {
                 gridApi.itemUpdated(group);
             };
@@ -98,12 +98,12 @@ function GroupManagementController($scope, GroupAPIService, VRModalService, VRNo
 
         var parameters = {
             holderType: 1,
-            holderId: groupObj.GroupId,
+            holderId: groupObj.Entity.GroupId,
             notificationResponseText: "Group Permissions"
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Assign Permissions to Group: " + groupObj.Name;
+            modalScope.title = "Assign Permissions to Group: " + groupObj.Entity.Name;
         };
 
         VRModalService.showModal('/Client/Modules/Security/Views/PermissionEditor.html', parameters, modalSettings);
