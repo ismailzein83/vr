@@ -41,8 +41,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CDRProcessingDataManagerFactory.cs" />
+    <Compile Include="IDataManager.cs" />
+    <Compile Include="ISetCustomerRuleDataManager.cs" />
+    <Compile Include="ISetSupplierRuleDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

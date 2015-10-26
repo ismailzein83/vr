@@ -41,9 +41,25 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Rules">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseSetCarrierRule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SetCustomerAction.cs" />
+    <Compile Include="SetCustomerRule.cs" />
+    <Compile Include="SetCustomerRuleCriteria.cs" />
+    <Compile Include="SetCustomerRuleDetail.cs" />
+    <Compile Include="SetCustomerRuleQuery.cs" />
+    <Compile Include="SetCustomerRuleSettings.cs" />
+    <Compile Include="SetSupplierAction.cs" />
+    <Compile Include="SetSupplierRule.cs" />
+    <Compile Include="SetSupplierRuleCriteria.cs" />
+    <Compile Include="SetSupplierRuleDetail.cs" />
+    <Compile Include="SetSupplierRuleQuery.cs" />
+    <Compile Include="SetSupplierRuleSettings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
