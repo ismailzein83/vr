@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive('vrWhsBeRouteRulegrid', ['VRNotificationService', 'WhS_BE_RouteRuleAPIService', 'WhS_BE_MainService',
+app.directive('vrWhsBeRouterulegrid', ['VRNotificationService', 'WhS_BE_RouteRuleAPIService', 'WhS_BE_MainService',
 function (VRNotificationService, WhS_BE_RouteRuleAPIService, WhS_BE_MainService) {
 
     var directiveDefinitionObject = {
@@ -41,11 +41,11 @@ function (VRNotificationService, WhS_BE_RouteRuleAPIService, WhS_BE_MainService)
                         return gridAPI.retrieveData(query);
                     }
 
-                    directiveAPI.onRoutingProductAdded = function (routeRuleObject) {
+                    directiveAPI.onRouteRuleAdded = function (routeRuleObject) {
                         gridAPI.itemAdded(routeRuleObject);
                     }
 
-                    directiveAPI.onRoutingProductUpdated = function (routeRuleObject) {
+                    directiveAPI.onRouteRuleUpdated = function (routeRuleObject) {
                         gridAPI.itemUpdated(routeRuleObject);
                     }
 
@@ -84,7 +84,7 @@ function (VRNotificationService, WhS_BE_RouteRuleAPIService, WhS_BE_MainService)
                 gridAPI.itemUpdated(updatedItem);
             };
 
-            WhS_BE_MainService.editRoutingProduct(routeRule, onRouteRuleUpdated);
+            WhS_BE_MainService.editRouteRule(routeRule, onRouteRuleUpdated);
         }
 
         function deleteRouteRule(routeRule) {

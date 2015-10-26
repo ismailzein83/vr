@@ -104,7 +104,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response) {
-                    return WhS_BE_RouteRuleAPIService.DeleteRule(routeRuleObj.ruleId)
+                    return WhS_BE_RouteRuleAPIService.DeleteRule(routeRuleObj.Entity.RuleId)
                         .then(function (deletionResponse) {
                             VRNotificationService.notifyOnItemDeleted("Route Rule", deletionResponse);
                             onRouteRuleDeleted(routeRuleObj);

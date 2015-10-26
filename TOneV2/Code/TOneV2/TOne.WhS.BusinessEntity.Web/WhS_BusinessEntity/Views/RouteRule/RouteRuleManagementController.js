@@ -25,9 +25,8 @@
         }
 
         function AddNewRouteRule() {
-            var onRouteRuleAdded = function (routeRuleObj) {
-                if ($scope.routeRuleGridConnector.onRouteRuleAdded != undefined)
-                    $scope.routeRuleGridConnector.onRouteRuleAdded(routeRuleObj);
+            var onRouteRuleAdded = function (addedItem) {
+                gridAPI.onRouteRuleAdded(addedItem);
             };
 
             WhS_BE_MainService.addRouteRule(onRouteRuleAdded);

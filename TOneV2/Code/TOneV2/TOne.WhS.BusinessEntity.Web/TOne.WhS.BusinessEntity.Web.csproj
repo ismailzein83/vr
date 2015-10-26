@@ -263,8 +263,6 @@
     <Content Include="WhS_BusinessEntity\Views\PricingRule\PurchasePricingRuleManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\PricingRule\SalePricingRuleManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\PricingRule\SalePricingRuleManagementController.js" />
-    <Content Include="WhS_BusinessEntity\Views\RouteRule\Grids\RouteRuleGrid.html" />
-    <Content Include="WhS_BusinessEntity\Views\RouteRule\Grids\RouteRuleGridController.js" />
     <Content Include="WhS_BusinessEntity\Views\SellingProduct\SellingProductManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SellingProduct\SellingProductManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\RouteRule\RouteRuleEditor.html" />

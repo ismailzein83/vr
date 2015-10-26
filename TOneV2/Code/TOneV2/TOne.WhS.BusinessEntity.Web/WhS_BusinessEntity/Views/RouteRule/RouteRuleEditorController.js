@@ -153,7 +153,7 @@
             $scope.excludedCodes = [];
 
             $scope.beginEffectiveDate = new Date();
-            $scope.endEffectiveDate = undefined;
+            $scope.endEffectiveDate = new Date();
         }
 
         function load() {
@@ -351,7 +351,7 @@
                 $scope.selectedrouteRuleSettingsTemplate = UtilsService.getItemByVal($scope.routeRuleSettingsTemplates, routeRuleObj.Settings.ConfigId, "TemplateConfigID");
             
             $scope.beginEffectiveDate = routeRuleObj.BeginEffectiveTime;
-            $scope.endEffectiveDate = routeRuleObj.endEffectiveTime;
+            $scope.endEffectiveDate = routeRuleObj.EndEffectiveTime;
         }
 
         function insertRouteRule() {
