@@ -88,34 +88,40 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
             function defineAPI() {
                 var api = {};
 
-                api.load = function () {
+                api.load = function (selectedIds) {
                     return WhS_BE_RoutingProductAPIService.GetRoutingProducts().then(function (response) {
+                        //Load Data Region
                         angular.forEach(response, function (itm) {
                             $scope.routingProducts.push(itm);
                         });
                         if ($attrs.sellingnumberplanid == undefined)
                             $scope.filteredRoutingProducts = $scope.routingProducts;
+
+                        setData(selectedIds);
                     });
+
+                    function setData(selectedIds)
+                    {
+                        if (selectedIds == undefined)
+                            return;
+
+                        if ($attrs.ismultipleselection) {
+                            for (var i = 0; i < selectedIds.length; i++) {
+                                var selectedRoutingProduct = UtilsService.getItemByVal($scope.routingProducts, selectedIds[i], "RoutingProductId");
+                                if (selectedRoutingProduct != null)
+                                    $scope.selectedRoutingProducts.push(selectedRoutingProduct);
+                            }
+                        }
+                        else {
+                            var selectedRoutingProduct = UtilsService.getItemByVal($scope.routingProducts, selectedIds, "RoutingProductId");
+                            if (selectedRoutingProduct != null)
+                                $scope.selectedRoutingProducts = selectedRoutingProduct;
+                        }
+                    }
                 }
 
                 api.getData = function () {
                     return $scope.selectedRoutingProducts;
-                }
-
-                api.setData = function (selectedIds) {
-                    if ($attrs.ismultipleselection) {
-                        for (var i = 0; i < selectedIds.length; i++) {
-                            var selectedRoutingProduct = UtilsService.getItemByVal($scope.routingProducts, selectedIds[i], "RoutingProductId");
-                            if (selectedRoutingProduct != null)
-                                $scope.selectedRoutingProducts.push(selectedRoutingProduct);
-                        }
-                    }
-                    else {
-                        var selectedRoutingProduct = UtilsService.getItemByVal($scope.routingProducts, selectedIds, "RoutingProductId");
-                        if (selectedRoutingProduct != null)
-                            $scope.selectedRoutingProducts=selectedRoutingProduct;
-                    }
-                      
                 }
 
                 if (ctrl.onReady != null)

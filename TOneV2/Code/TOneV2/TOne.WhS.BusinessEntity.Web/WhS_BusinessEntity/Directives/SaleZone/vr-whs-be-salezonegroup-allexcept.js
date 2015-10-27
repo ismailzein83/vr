@@ -64,12 +64,43 @@ app.directive('vrWhsBeSalezonegroupAllexcept', ['WhS_BE_SaleZoneAPIService', 'Wh
             function defineAPI() {
                 var api = {};
 
-                api.load = function () {
-                    return WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlans().then(function (response) {
+                api.load = function (saleZoneGroupSettings) {
+                    var promises = [];
+
+                    var loadSellingNumberPlanPromise = WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlans().then(function (response) {
                         angular.forEach(response, function (item) {
                             $scope.sellingNumberPlans.push(item);
                         });
+
+                        if (saleZoneGroupSettings != undefined)
+                            $scope.selectedSellingNumberPlan = UtilsService.getItemByVal($scope.sellingNumberPlans, saleZoneGroupSettings.SellingNumberPlanId, "SellingNumberPlanId");
                     });
+
+                    promises.push(loadSellingNumberPlanPromise);
+
+                    if (saleZoneGroupSettings != undefined && saleZoneGroupSettings.ZoneIds.length > 0) {
+                        var loadSaleZoneSelectorPromise = setSaleZoneSelector(saleZoneGroupSettings);
+                        promises.push(loadSaleZoneSelectorPromise);
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
+
+                    function setSaleZoneSelector(saleZoneGroupSettings) {
+                        var sellingNumberPlanId;
+
+                        if (ctrl.sellingnumberplanid == undefined)
+                            sellingNumberPlanId = saleZoneGroupSettings.SellingNumberPlanId;
+                        else
+                            sellingNumberPlanId = ctrl.sellingnumberplanid;
+
+                        var input = { SellingNumberPlanId: sellingNumberPlanId, SaleZoneIds: saleZoneGroupSettings.ZoneIds };
+
+                        return WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
+                            angular.forEach(response, function (item) {
+                                $scope.selectedSaleZones.push(item);
+                            });
+                        });
+                    }
                 }
 
                 api.getData = function () {
@@ -78,30 +109,6 @@ app.directive('vrWhsBeSalezonegroupAllexcept', ['WhS_BE_SaleZoneAPIService', 'Wh
                         SellingNumberPlanId: ctrl.sellingnumberplanid == undefined ? $scope.selectedSellingNumberPlan.SellingNumberPlanId : ctrl.sellingnumberplanid,
                         ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZones, "SaleZoneId")
                     };
-                }
-
-                api.setData = function (saleZoneGroupSettings) {
-                    var sellingNumberPlanId;
-
-                    if (ctrl.sellingnumberplanid == undefined) {
-                        $scope.selectedSellingNumberPlan = UtilsService.getItemByVal($scope.sellingNumberPlans, saleZoneGroupSettings.SellingNumberPlanId, "SellingNumberPlanId");
-                        sellingNumberPlanId = saleZoneGroupSettings.SellingNumberPlanId;
-                    }
-                    else {
-                        sellingNumberPlanId = ctrl.sellingnumberplanid;
-                    }
-
-                    if (saleZoneGroupSettings.ZoneIds.length > 0) {
-                        var input = { SellingNumberPlanId: sellingNumberPlanId, SaleZoneIds: saleZoneGroupSettings.ZoneIds };
-
-                        WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
-                            angular.forEach(response, function (item) {
-                                $scope.selectedSaleZones.push(item);
-                            });
-                        }).catch(function (error) {
-                            //TODO handle the case of exceptions
-                        });
-                    }
                 }
 
                 if (ctrl.onReady != null)

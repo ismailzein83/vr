@@ -107,23 +107,23 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         function defineAPI() {
             var api = {};
 
-            api.loadDir = function(payload)
+            api.loadDir = function (selectedIds)
             {
                 return WhS_BE_CarrierAccountAPIService.GetCarrierAccountsInfo(getCustomers, getSuppliers).then(function (response) {
                     angular.forEach(response, function (itm) {
                         $scope.datasource.push(itm);
                     });
 
-                    if (payload != undefined)
+                    if (selectedIds != undefined)
                     {
                         if ($attrs.ismultipleselection != undefined) {
-                            for (var i = 0; i < payload.selectedIds.length; i++) {
-                                var selectedCarrierValue = UtilsService.getItemByVal($scope.datasource, payload.selectedIds[i], "CarrierAccountId");
+                            for (var i = 0; i < selectedIds.length; i++) {
+                                var selectedCarrierValue = UtilsService.getItemByVal($scope.datasource, selectedIds[i], "CarrierAccountId");
                                 if (selectedCarrierValue != null)
                                     $scope.selectedCarrierValues.push(selectedCarrierValue);
                             }
                         } else {
-                            var selectedCarrierValue = UtilsService.getItemByVal($scope.datasource, payload.selectedIds, "CarrierAccountId");
+                            var selectedCarrierValue = UtilsService.getItemByVal($scope.datasource, selectedIds, "CarrierAccountId");
                             if (selectedCarrierValue != null)
                                 $scope.selectedCarrierValues = selectedCarrierValue;
                         }

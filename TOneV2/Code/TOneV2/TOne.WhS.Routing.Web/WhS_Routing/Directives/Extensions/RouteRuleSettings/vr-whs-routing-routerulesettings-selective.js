@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingRouterulesettingsSelective', ['UtilsService',
-    function (UtilsService) {
+app.directive('vrWhsRoutingRouterulesettingsSelective', ['UtilsService', 'VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -37,11 +37,12 @@ app.directive('vrWhsRoutingRouterulesettingsSelective', ['UtilsService',
         function routingSelectiveOptions(ctrl, $scope) {
 
             var carrierAccountDirectiveAPI;
+            var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountDirectiveAPI = api;
-                    declareDirectiveAsReady()
+                    carrierAccountReadyPromiseDeferred.resolve();
                 }
 
                 $scope.removeSupplier = function ($event, supplier) {
@@ -50,21 +51,31 @@ app.directive('vrWhsRoutingRouterulesettingsSelective', ['UtilsService',
                     var index = UtilsService.getItemIndexByVal($scope.selectedSuppliers, supplier.CarrierAccountId, 'CarrierAccountId');
                     $scope.selectedSuppliers.splice(index, 1);
                 };
-            }
-
-            function declareDirectiveAsReady() {
-                if (carrierAccountDirectiveAPI == undefined)
-                    return;
 
                 defineAPI();
             }
 
-
             function defineAPI() {
                 var api = {};
 
-                api.load = function () {
-                    return carrierAccountDirectiveAPI.load();
+                api.load = function (routeOptionSettingsGroup) {
+
+                    var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    carrierAccountReadyPromiseDeferred.promise.then(function () {
+                        var directivePayload = [];
+                        if (routeOptionSettingsGroup != undefined)
+                        {
+                            var supplierIds = [];
+                            for (var i = 0; i < routeOptionSettingsGroup.Options.length; i++) {
+                                directivePayload.push(routeOptionSettingsGroup.Options[i].SupplierId);
+                            }
+                        }
+                            
+                        VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, directivePayload, loadCarrierAccountPromiseDeferred);
+                    });
+
+                    return loadCarrierAccountPromiseDeferred.promise;
                 }
 
                 api.getData = function () {
@@ -85,19 +96,6 @@ app.directive('vrWhsRoutingRouterulesettingsSelective', ['UtilsService',
 
                         return options;
                     }
-                }
-
-                api.setData = function (routeOptionSettingsGroup) {
-                    var supplierIds = [];
-                    for (var i = 0; i < routeOptionSettingsGroup.Options.length; i++) {
-                        supplierIds.push(routeOptionSettingsGroup.Options[i].SupplierId);
-                    }
-
-                    carrierAccountDirectiveAPI.setData(supplierIds);
-
-                    //for (var i = 0; i < $scope.selectedSuppliers.length; i++) {
-                    //    $scope.selectedSuppliers[i].percentage = routeOptionSettingsGroup.Options[i].Percentage;
-                    //}
                 }
 
                 if (ctrl.onReady != null)

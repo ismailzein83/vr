@@ -38,7 +38,6 @@ function (VRNotificationService, WhS_BE_RouteRuleAPIService, WhS_BE_MainService)
                 function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-                        console.log(query);
                         return gridAPI.retrieveData(query);
                     }
 

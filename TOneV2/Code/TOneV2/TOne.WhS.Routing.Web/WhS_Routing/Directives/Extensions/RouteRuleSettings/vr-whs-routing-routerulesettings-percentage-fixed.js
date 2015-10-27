@@ -62,8 +62,18 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
             function defineAPI() {
                 var api = {};
 
-                api.load = function () {
+                api.load = function (routeRuleOptionPercentageSettings) {
 
+                    if (routeRuleOptionPercentageSettings != undefined)
+                    {
+                        for (var i = 0; i < routeRuleOptionPercentageSettings.Percentages.length; i++) {
+                            $scope.percentages.push({
+                                id: i,
+                                percentage: routeRuleOptionPercentageSettings.Percentages[i]
+                            });
+                        }
+                    }
+                    
                 }
 
                 api.getData = function () {
@@ -71,15 +81,6 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
                         $type: "TOne.WhS.Routing.Business.RouteRules.Percentages.FixedOptionPercentage, TOne.WhS.Routing.Business",
                         Percentages: UtilsService.getPropValuesFromArray($scope.percentages, "percentage"),
                     };
-                }
-
-                api.setData = function (RouteRuleOptionPercentageSettings) {
-                    for (var i = 0; i < RouteRuleOptionPercentageSettings.Percentages.length; i++) {
-                        $scope.percentages.push({
-                            id: i,
-                            percentage: RouteRuleOptionPercentageSettings.Percentages[i]
-                        });
-                    }
                 }
 
                 if (ctrl.onReady != null)

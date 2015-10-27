@@ -58,8 +58,13 @@ app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
             function defineAPI() {
                 var api = {};
 
-                api.load = function () {
-                    
+                api.load = function (codeCriteriaGroupSettings) {
+                    if (codeCriteriaGroupSettings != undefined)
+                    {
+                        angular.forEach(codeCriteriaGroupSettings.Codes, function (item) {
+                            $scope.codeCriteriaArray.push(item);
+                        });
+                    }
                 }
 
                 api.getData = function () {
@@ -67,12 +72,6 @@ app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups.SelectiveCodeCriteriaGroup, TOne.WhS.BusinessEntity.MainExtensions",
                         Codes: $scope.codeCriteriaArray
                     };
-                }
-
-                api.setData = function (codeCriteriaGroupSettings) {
-                    angular.forEach(codeCriteriaGroupSettings.Codes, function (item) {
-                        $scope.codeCriteriaArray.push(item);
-                    });
                 }
 
                 if (ctrl.onReady != null)

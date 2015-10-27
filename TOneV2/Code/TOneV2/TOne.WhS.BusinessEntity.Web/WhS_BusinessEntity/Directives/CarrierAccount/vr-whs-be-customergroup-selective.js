@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeCustomergroupSelective', ['UtilsService',
-    function (UtilsService) {
+app.directive('vrWhsBeCustomergroupSelective', ['UtilsService', 'VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -36,19 +36,13 @@ app.directive('vrWhsBeCustomergroupSelective', ['UtilsService',
 
         function beCustomers(ctrl, $scope) {
             var carrierAccountDirectiveAPI;
+            var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountDirectiveAPI = api;
-                    declareDirectiveAsReady();
+                    carrierAccountReadyPromiseDeferred.resolve();
                 }
-
-                declareDirectiveAsReady();
-            }
-
-            function declareDirectiveAsReady() {
-                if (carrierAccountDirectiveAPI == undefined)
-                    return;
 
                 defineAPI();
             }
@@ -56,8 +50,17 @@ app.directive('vrWhsBeCustomergroupSelective', ['UtilsService',
             function defineAPI() {
                 var api = {};
 
-                api.load = function () {
-                    return carrierAccountDirectiveAPI.load();
+                api.load = function (customerGroupSettings) {
+                    var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    carrierAccountReadyPromiseDeferred.promise.then(function () {
+                        var directivePayload;
+                        if (customerGroupSettings != undefined && customerGroupSettings != null)
+                            directivePayload = customerGroupSettings.CustomerIds;
+                        VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, directivePayload, loadCarrierAccountPromiseDeferred);
+                    });
+
+                    return loadCarrierAccountPromiseDeferred.promise;
                 }
 
                 api.getData = function () {
@@ -65,10 +68,6 @@ app.directive('vrWhsBeCustomergroupSelective', ['UtilsService',
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups.SelectiveCustomerGroup, TOne.WhS.BusinessEntity.MainExtensions",
                         CustomerIds: UtilsService.getPropValuesFromArray(carrierAccountDirectiveAPI.getData(), "CarrierAccountId")
                     };
-                }
-
-                api.setData = function (customerGroupSettings) {
-                    carrierAccountDirectiveAPI.setData(customerGroupSettings.CustomerIds);
                 }
 
                 if (ctrl.onReady != null)

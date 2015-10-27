@@ -43,18 +43,14 @@ app.directive('vrWhsRoutingRouterulesettingsOrderByrate', ['UtilsService',
             function defineAPI() {
                 var api = {};
 
-                api.load = function () {
-
+                api.load = function (routeRuleOptionOrderSettings) {
+                    
                 }
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Routing.Business.RouteRules.Orders.OptionOrderByRate, TOne.WhS.Routing.Business"
                     };
-                }
-
-                api.setData = function (RouteRuleOptionOrderSettings) {
-
                 }
 
                 if (ctrl.onReady != null)

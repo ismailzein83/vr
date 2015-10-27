@@ -70,38 +70,35 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
         {
             var api = {};
 
-            api.load = function () {
-                return WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlans().then(function (response) {
+            api.load = function (saleZoneGroupSettings) {
+                var promises = [];
+
+                var loadSellingNumberPlanPromise = WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlans().then(function (response) {
                     angular.forEach(response, function (item) {
                         $scope.sellingNumberPlans.push(item);
                     });
+
+                    if (saleZoneGroupSettings != undefined)
+                        $scope.selectedSellingNumberPlan = UtilsService.getItemByVal($scope.sellingNumberPlans, saleZoneGroupSettings.SellingNumberPlanId, "SellingNumberPlanId");
                 });
-            }
 
-            api.getData = function()
-            {
-                return {
-                    $type: "TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups.SelectiveSaleZoneGroup, TOne.WhS.BusinessEntity.MainExtensions",
-                    SellingNumberPlanId: ctrl.sellingnumberplanid == undefined ? $scope.selectedSellingNumberPlan.SellingNumberPlanId : ctrl.sellingnumberplanid,
-                    ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZones, "SaleZoneId")
-                };
-            }
+                promises.push(loadSellingNumberPlanPromise);
 
-            api.setData = function (saleZoneGroupSettings)
-            {
-                var sellingNumberPlanId;
-
-                if (ctrl.sellingnumberplanid == undefined)
-                {
-                    $scope.selectedSellingNumberPlan = UtilsService.getItemByVal($scope.sellingNumberPlans, saleZoneGroupSettings.SellingNumberPlanId, "SellingNumberPlanId");
-                    sellingNumberPlanId = saleZoneGroupSettings.SellingNumberPlanId;
-                }
-                else
-                {
-                    sellingNumberPlanId = ctrl.sellingnumberplanid;
+                if (saleZoneGroupSettings != undefined && saleZoneGroupSettings.ZoneIds.length > 0) {
+                    var loadSaleZoneSelectorPromise = setSaleZoneSelector(saleZoneGroupSettings);
+                    promises.push(loadSaleZoneSelectorPromise);
                 }
 
-                if (saleZoneGroupSettings.ZoneIds.length > 0) {
+                return UtilsService.waitMultiplePromises(promises);
+                
+                function setSaleZoneSelector(saleZoneGroupSettings) {
+                    var sellingNumberPlanId;
+
+                    if (ctrl.sellingnumberplanid == undefined)
+                        sellingNumberPlanId = saleZoneGroupSettings.SellingNumberPlanId;
+                    else
+                        sellingNumberPlanId = ctrl.sellingnumberplanid;
+
                     var input = { SellingNumberPlanId: sellingNumberPlanId, SaleZoneIds: saleZoneGroupSettings.ZoneIds };
 
                     return WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
@@ -110,6 +107,14 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
                         });
                     });
                 }
+            }
+
+            api.getData = function () {
+                return {
+                    $type: "TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups.SelectiveSaleZoneGroup, TOne.WhS.BusinessEntity.MainExtensions",
+                    SellingNumberPlanId: ctrl.sellingnumberplanid == undefined ? $scope.selectedSellingNumberPlan.SellingNumberPlanId : ctrl.sellingnumberplanid,
+                    ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZones, "SaleZoneId")
+                };
             }
 
             if (ctrl.onReady != null)
