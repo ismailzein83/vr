@@ -15,6 +15,10 @@ namespace TOne.WhS.CDRProcessing.Business
             var normalizationRules = base.GetAllRules();
 
             Func<NormalizationRule, bool> filterExpression = (item) =>
+                 (
+                    input.Query.PhoneNumberTypes==null || (item.Criteria.PhoneNumberTypes.Any(x=> input.Query.PhoneNumberTypes.Contains(x)))
+                )
+                &&
                 (
                     input.Query.PhoneNumberPrefix == null ||
                     (item.Criteria.PhoneNumberPrefix != null && item.Criteria.PhoneNumberPrefix.Contains(input.Query.PhoneNumberPrefix))
