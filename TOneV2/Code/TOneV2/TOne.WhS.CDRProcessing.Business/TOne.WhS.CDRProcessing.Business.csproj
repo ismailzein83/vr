@@ -57,9 +57,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NormalizationRuleManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SetCustomerRuleManager.cs" />
-    <Compile Include="SetSupplierRuleManager.cs" />
+    <Compile Include="CustomerIdentificationRuleManager.cs" />
+    <Compile Include="SupplierIdentificationRuleManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.CDRProcessing.Data\TOne.WhS.CDRProcessing.Data.csproj">

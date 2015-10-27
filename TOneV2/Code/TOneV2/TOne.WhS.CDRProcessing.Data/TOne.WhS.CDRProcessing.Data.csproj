@@ -48,8 +48,8 @@
   <ItemGroup>
     <Compile Include="CDRProcessingDataManagerFactory.cs" />
     <Compile Include="IDataManager.cs" />
-    <Compile Include="ISetCustomerRuleDataManager.cs" />
-    <Compile Include="ISetSupplierRuleDataManager.cs" />
+    <Compile Include="CustomerIdentificationRuleDataManager.cs" />
+    <Compile Include="ISupplierIdentificationRuleDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

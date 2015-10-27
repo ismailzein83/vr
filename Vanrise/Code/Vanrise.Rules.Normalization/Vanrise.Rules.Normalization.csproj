@@ -41,9 +41,20 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="INormalizeNumberActionContext.cs" />
+    <Compile Include="MainExtensions\AddPrefixActionSettings.cs" />
+    <Compile Include="MainExtensions\ReplaceStringActionSettings.cs" />
+    <Compile Include="MainExtensions\SubstringActionSettings.cs" />
+    <Compile Include="NormalizationRuleManager.cs" />
     <Compile Include="NormalizeNumberActionSettings.cs" />
     <Compile Include="NormalizeNumberSettings.cs" />
     <Compile Include="NormalizeNumberTarget.cs" />

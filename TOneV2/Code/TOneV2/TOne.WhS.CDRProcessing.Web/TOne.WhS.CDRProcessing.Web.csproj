@@ -128,8 +128,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Compile Include="Controllers\SetCustomerRuleController.cs" />
-    <Compile Include="Controllers\SetSupplierRuleController.cs" />
+    <Compile Include="Controllers\CustomerIdentificationRuleController.cs" />
+    <Compile Include="Controllers\NormalizationRuleController.cs" />
+    <Compile Include="Controllers\SupplierIdentificationRuleController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Constants.cs" />
   </ItemGroup>
@@ -149,21 +150,29 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_CDRProcessing\Constant\ModuleConfig.js" />
-    <Content Include="WhS_CDRProcessing\Directives\CustomerRule\Templates\SetCustomerRuleGrid.html" />
-    <Content Include="WhS_CDRProcessing\Directives\CustomerRule\vr-whs-cdrprocessing-setcustomerrule-grid.js" />
-    <Content Include="WhS_CDRProcessing\Directives\SupplierRule\Templates\SetSupplierRuleGrid.html" />
-    <Content Include="WhS_CDRProcessing\Directives\SupplierRule\vr-whs-cdrprocessing-setsupplierrule-grid.js" />
-    <Content Include="WhS_CDRProcessing\Services\APIServices\SetCustomerRuleAPIService.js" />
-    <Content Include="WhS_CDRProcessing\Services\APIServices\SetSupplierRuleAPIService.js" />
+    <Content Include="WhS_CDRProcessing\Constant\PhoneNumberTypeEnum.js" />
+    <Content Include="WhS_CDRProcessing\Directives\CustomerRule\Templates\CustomerIdentificationRuleGrid.html" />
+    <Content Include="WhS_CDRProcessing\Directives\CustomerRule\vr-whs-cdrprocessing-customeridentificationrule-grid.js" />
+    <Content Include="WhS_CDRProcessing\Directives\NormalizationRule\Templates\NormalizationRuleGrid.html" />
+    <Content Include="WhS_CDRProcessing\Directives\NormalizationRule\vr-whs-cdrprocessing-normalizationrule-grid.js" />
+    <Content Include="WhS_CDRProcessing\Directives\SupplierRule\Templates\SupplierIdentificationRuleGrid.html" />
+    <Content Include="WhS_CDRProcessing\Directives\SupplierRule\vr-whs-cdrprocessing-supplieridentificationrule-grid.js" />
+    <Content Include="WhS_CDRProcessing\Services\APIServices\CustomerIdentificationRuleAPIService.js" />
+    <Content Include="WhS_CDRProcessing\Services\APIServices\NormalizationRuleAPIService.js" />
+    <Content Include="WhS_CDRProcessing\Services\APIServices\SupplierIdentificationRuleAPIService.js" />
     <Content Include="WhS_CDRProcessing\Services\MainService.js" />
-    <Content Include="WhS_CDRProcessing\Views\CustomerRule\SetCustomerRuleEditor.html" />
-    <Content Include="WhS_CDRProcessing\Views\CustomerRule\SetCustomerRuleEditorController.js" />
-    <Content Include="WhS_CDRProcessing\Views\CustomerRule\SetCustomerRuleManagement.html" />
-    <Content Include="WhS_CDRProcessing\Views\CustomerRule\SetCustomerRuleManagementController.js" />
-    <Content Include="WhS_CDRProcessing\Views\SupplierRule\SetSupplierRuleEditor.html" />
-    <Content Include="WhS_CDRProcessing\Views\SupplierRule\SetSupplierRuleEditorController.js" />
-    <Content Include="WhS_CDRProcessing\Views\SupplierRule\SetSupplierRuleManagement.html" />
-    <Content Include="WhS_CDRProcessing\Views\SupplierRule\SetSupplierRuleManagementController.js" />
+    <Content Include="WhS_CDRProcessing\Views\CustomerRule\CustomerIdentificationRuleEditor.html" />
+    <Content Include="WhS_CDRProcessing\Views\CustomerRule\CustomerIdentificationRuleEditorController.js" />
+    <Content Include="WhS_CDRProcessing\Views\CustomerRule\CustomerIdentificationRuleManagement.html" />
+    <Content Include="WhS_CDRProcessing\Views\CustomerRule\CustomerIdentificationRuleManagementController.js" />
+    <Content Include="WhS_CDRProcessing\Views\NormalizationRule\NormalizationRuleEditor.html" />
+    <Content Include="WhS_CDRProcessing\Views\NormalizationRule\NormalizationRuleEditorController.js" />
+    <Content Include="WhS_CDRProcessing\Views\NormalizationRule\NormalizationRuleManagement.html" />
+    <Content Include="WhS_CDRProcessing\Views\NormalizationRule\NormalizationRuleManagementController.js" />
+    <Content Include="WhS_CDRProcessing\Views\SupplierRule\SupplierIdentificationRuleEditor.html" />
+    <Content Include="WhS_CDRProcessing\Views\SupplierRule\SupplierIdentificationRuleEditorController.js" />
+    <Content Include="WhS_CDRProcessing\Views\SupplierRule\SupplierIdentificationRuleManagement.html" />
+    <Content Include="WhS_CDRProcessing\Views\SupplierRule\SupplierIdentificationRuleManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -106,6 +106,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules.Normalization">
+      <HintPath>..\Output\Vanrise.Rules.Normalization.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -117,7 +120,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BaseRuleController.cs" />
+    <Compile Include="Controllers\NormalizationRuleController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +138,18 @@
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="VR_Rules\Constants\ModuleConfig.js" />
+    <Content Include="VR_Rules\Directives\NormalizationRule\Templates\AddPrefixDirectiveTemplate.html" />
+    <Content Include="VR_Rules\Directives\NormalizationRule\Templates\NormalizeNumberSettingsDirectiveTemplate.html" />
+    <Content Include="VR_Rules\Directives\NormalizationRule\Templates\ReplaceStringDirectiveTemplate.html" />
+    <Content Include="VR_Rules\Directives\NormalizationRule\Templates\SubstringDirectiveTemplate.html" />
+    <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizationnumbersettings-addprefix.js" />
+    <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizationnumbersettings-replacestring.js" />
+    <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizationnumbersettings-substring.js" />
+    <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizenumbersettings.js" />
+    <Content Include="VR_Rules\Services\APIServices\NormalizationRuleAPIService.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

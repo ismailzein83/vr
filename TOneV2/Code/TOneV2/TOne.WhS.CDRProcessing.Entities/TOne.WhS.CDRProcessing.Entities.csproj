@@ -44,20 +44,31 @@
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules.Normalization">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Normalization.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseSetCarrierRule.cs" />
+    <Compile Include="BaseCarrierIdentificationRule.cs" />
+    <Compile Include="IRule\IRulePhoneNumberLengthCriteria.cs" />
+    <Compile Include="IRule\IRulePhoneNumberPrefixCriteria.cs" />
+    <Compile Include="IRule\IRulePhoneNumberTypeCriteria.cs" />
+    <Compile Include="NormalizationRule\NormalizationRule.cs" />
+    <Compile Include="NormalizationRule\NormalizationRuleCriteria.cs" />
+    <Compile Include="NormalizationRule\NormalizationRuleDetail.cs" />
+    <Compile Include="NormalizationRule\NormalizationRuleQuery.cs" />
+    <Compile Include="NormalizationRule\NormalizationRuleSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SetCustomerRule.cs" />
-    <Compile Include="SetCustomerRuleCriteria.cs" />
-    <Compile Include="SetCustomerRuleDetail.cs" />
-    <Compile Include="SetCustomerRuleQuery.cs" />
-    <Compile Include="SetCustomerRuleSettings.cs" />
-    <Compile Include="SetSupplierRule.cs" />
-    <Compile Include="SetSupplierRuleCriteria.cs" />
-    <Compile Include="SetSupplierRuleDetail.cs" />
-    <Compile Include="SetSupplierRuleQuery.cs" />
-    <Compile Include="SetSupplierRuleSettings.cs" />
+    <Compile Include="CustomerRule\CustomerIdentificationRule.cs" />
+    <Compile Include="CustomerRule\CustomerIdentificationRuleCriteria.cs" />
+    <Compile Include="CustomerRule\CustomerIdentificationRuleDetail.cs" />
+    <Compile Include="CustomerRule\CustomerIdentificationRuleQuery.cs" />
+    <Compile Include="CustomerRule\CustomerIdentificationRuleSettings.cs" />
+    <Compile Include="SupplierRule\SupplierIdentificationRule.cs" />
+    <Compile Include="SupplierRule\SupplierIdentificationRuleCriteria.cs" />
+    <Compile Include="SupplierRule\SupplierIdentificationRuleDetail.cs" />
+    <Compile Include="SupplierRule\SupplierIdentificationRuleQuery.cs" />
+    <Compile Include="SupplierRule\SupplierIdentificationRuleSettings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

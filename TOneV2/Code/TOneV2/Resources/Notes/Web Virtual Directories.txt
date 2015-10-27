@@ -23,3 +23,4 @@
 	WhS_Sales				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Sales.Web\WhS_Sales
 	WhS_Routing				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Routing.Web\WhS_Routing
 	WhS_CDRProcessing		C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.CDRProcessing.Web\WhS_CDRProcessing
+	VR_Rules				C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
