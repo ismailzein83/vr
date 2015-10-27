@@ -21,6 +21,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CountryManager manager = new CountryManager();
             return GetWebResponse(input, manager.GetFilteredCountries(input));
         }
+
+        [HttpGet]
+        [Route("GetAllCountries")]
+        public IEnumerable<Country> GetAllCountries()
+        {
+            CountryManager manager = new CountryManager();
+            return manager.GetAllCountries();
+        }
         [HttpGet]
         [Route("GetCountry")]
         public Country GetCountry(int countryId)

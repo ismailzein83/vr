@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CodeGroupController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CarrierAccountController.cs" />
     <Compile Include="Controllers\CarrierProfileController.cs" />
@@ -177,7 +178,10 @@
     <Content Include="WhS_BusinessEntity\Constant\RouteRuleCriteriaTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierProfileGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeGroup\Templates\CodeGroupGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeGroup\vr-whs-be-codegroup-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Country\Templates\CountryGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Country\vr-whs-be-country-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\Country\vr-whs-be-country-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\Templates\SelectiveSuppliersWithZonesGroup.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\vr-whs-be-supplierswithzonesgroup-selective.js" />
@@ -225,6 +229,7 @@
     <Content Include="WhS_BusinessEntity\Directives\SaleZone\vr-whs-be-salezonegroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-suppliergroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\vr-whs-be-supplierzone-selector.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\CodeGroupAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CountryAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CarrierAccountAPIService.js" />
@@ -248,6 +253,8 @@
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierProfileEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierProfileManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierProfileManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\Country\CountryEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\Country\CountryEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\Country\CountryManagementController.js" />

@@ -14,16 +14,25 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public Vanrise.Entities.IDataRetrievalResult<Country> GetFilteredCountries(Vanrise.Entities.DataRetrievalInput<CountryQuery> input)
         {
-            var allCountries = GetAllCountries();
+            var allCountries = GetCachedCountries();
 
             Func<Country, bool> filterExpression = (prod) =>
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCountries.ToBigResult(input, filterExpression));     
         }
+
+        public IEnumerable<Country> GetAllCountries()
+        {
+            var allCountries = GetCachedCountries();
+            if (allCountries == null)
+                return null;
+
+            return allCountries.Values;
+        }
         public Country GetCountry(int countryId)
         {
-            var countries = GetAllCountries();
+            var countries = GetCachedCountries();
             return countries.GetRecord(countryId);
         }
         public TOne.Entities.InsertOperationOutput<Country> AddCountry(Country country)
@@ -66,7 +75,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         #region Private Members
 
-        public Dictionary<int, Country> GetAllCountries()
+        public Dictionary<int, Country> GetCachedCountries()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCountries",
                () =>
