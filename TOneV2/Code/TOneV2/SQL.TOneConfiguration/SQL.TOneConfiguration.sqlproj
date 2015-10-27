@@ -131,7 +131,6 @@
     <Build Include="sec\Stored Procedures\sp_Group_Insert_2.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_GetUserGroups_2.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_GetAll_2.sql" />
-    <Build Include="sec\Stored Procedures\sp_Group_Get_2.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_AssignMembers_2.sql" />
     <Build Include="Security\BEntity_2.sql" />
     <Build Include="sec\Stored Procedures\sp_View_UpdateRank.sql" />
@@ -150,7 +149,6 @@
     <Build Include="sec\Stored Procedures\sp_User_UpdateName.sql" />
     <Build Include="sec\Stored Procedures\sp_User_CreateTempByFiltered.sql" />
     <Build Include="sec\Stored Procedures\sp_OrgChart_CreateTempByName.sql" />
-    <Build Include="sec\Stored Procedures\sp_Group_CreateTempByName.sql" />
     <Build Include="sec\Stored Procedures\sp_User_UpdateLastLogin.sql" />
     <Build Include="common\Tables\TemplateConfig.sql" />
     <Build Include="common\Stored Procedures\sp_TemplateConfig_GetByConfigType.sql" />
