@@ -47,6 +47,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         }
 
     };
+
     function getBeCarrierGroupTemplate(attrs, ctrl) {
         var label;
         if (attrs.label != undefined)
@@ -83,6 +84,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                + ' <vr-select datasource="datasource" selectedvalues="selectedCarrierValues" ' + required + ' ' + hideselectedvaluessection + ' onselectionchanged="onselectionchanged"  ' + disabled + ' datatextfield="Name" datavaluefield="CarrierAccountId"'
                + 'entityname="' + label + '"></vr-select></div>';
     }
+
     function BeCarrierGroup(ctrl, $scope, WhS_BE_CarrierAccountAPIService, $attrs) {
         var getCustomers = false;
         var getSuppliers = false;
@@ -100,6 +102,30 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
 
         function defineAPI() {
             var api = {};
+
+            api.loadDir = function(payload)
+            {
+                return WhS_BE_CarrierAccountAPIService.GetCarrierAccountsInfo(getCustomers, getSuppliers).then(function (response) {
+                    angular.forEach(response, function (itm) {
+                        $scope.datasource.push(itm);
+                    });
+
+                    if (payload != undefined)
+                    {
+                        if ($attrs.ismultipleselection != undefined) {
+                            for (var i = 0; i < payload.selectedIds.length; i++) {
+                                var selectedCarrierValue = UtilsService.getItemByVal($scope.datasource, payload.selectedIds[i], "CarrierAccountId");
+                                if (selectedCarrierValue != null)
+                                    $scope.selectedCarrierValues.push(selectedCarrierValue);
+                            }
+                        } else {
+                            var selectedCarrierValue = UtilsService.getItemByVal($scope.datasource, payload.selectedIds, "CarrierAccountId");
+                            if (selectedCarrierValue != null)
+                                $scope.selectedCarrierValues = selectedCarrierValue;
+                        }
+                    }
+                });
+            }
 
             api.load = function () {
                 return WhS_BE_CarrierAccountAPIService.GetCarrierAccountsInfo(getCustomers, getSuppliers).then(function (response) {
