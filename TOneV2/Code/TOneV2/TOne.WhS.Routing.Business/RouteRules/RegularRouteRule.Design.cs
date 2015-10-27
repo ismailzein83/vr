@@ -18,6 +18,8 @@ namespace TOne.WhS.Routing.Business.RouteRules
 
         public RouteRuleOptionFilterSettings OptionFilterSettings { get; set; }
 
+        public List<RouteRuleOptionFilterSettings> OptionFilters { get; set; }
+
         public RouteRuleOptionPercentageSettings OptionPercentageSettings { get; set; }
     }
 
