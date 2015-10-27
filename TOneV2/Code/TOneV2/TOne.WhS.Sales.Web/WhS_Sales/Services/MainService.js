@@ -4,7 +4,7 @@
         sellCustomerZones: sellCustomerZones,
     });
 
-    function sellCustomerZones(customerId, onCustomerZonesSold) {
+    function sellNewZones(customerId, onCustomerZonesSold) {
 
         var modalSettings = {
         };

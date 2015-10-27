@@ -23,12 +23,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, () => GetSaleZones(sellingNumberPlanId));
         }
 
-        public IEnumerable<SaleZoneDetail> GetCachedSaleZoneDetails(int sellingNumberPlanId)
-        {
-            var allSaleZones = GetCachedSaleZones(sellingNumberPlanId);
-            return allSaleZones.MapRecords(SaleZoneDetailMapper);
-        }
-
         public SaleZone GetSaleZone(long saleZoneId)
         {
             return GetAllSaleZones().GetRecord(saleZoneId);

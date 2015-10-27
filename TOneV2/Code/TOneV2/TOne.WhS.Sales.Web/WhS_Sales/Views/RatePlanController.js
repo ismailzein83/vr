@@ -52,7 +52,7 @@
                     });
                 };
                 
-                WhS_Sales_MainService.sellCustomerZones(carrierAccountDirectiveAPI.getData().CarrierAccountId, onCustomerZonesSold);
+                WhS_Sales_MainService.sellNewZones(carrierAccountDirectiveAPI.getData().CarrierAccountId, onCustomerZonesSold);
             };
         }
 
