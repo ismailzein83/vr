@@ -46,8 +46,6 @@
             $scope.beginEffectiveDate = Date.now();
             $scope.endEffectiveDate = undefined;
 
-            $scope.settingsAreValid = false;    
-
             $scope.onSelectedSwitchesChanged = function () {
 
                 if ($scope.selectedSwitches == undefined || $scope.selectedSwitches.length == 0)
@@ -88,6 +86,14 @@
                 else {
                     VRUIUtilsService.loadDirective($scope, normalizationRuleSettingsDirectiveAPI, $scope.loadingNormalizationRuleSettingsDirective);
                 }
+            };
+
+            $scope.validateDirectiveData = function () {
+                if (normalizationRuleSettingsDirectiveAPI == undefined)
+                    return false;
+
+                var isValid = normalizationRuleSettingsDirectiveAPI.validateData();
+                return isValid;
             };
 
             $scope.saveNormalizationRule = function () {

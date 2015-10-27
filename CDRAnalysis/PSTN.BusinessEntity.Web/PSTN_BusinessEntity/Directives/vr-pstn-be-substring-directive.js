@@ -50,12 +50,16 @@ app.directive("vrPstnBeSubstring", [function () {
                     StartIndex: $scope.startIndex,
                     Length: $scope.length
                 };
-            }
+            };
 
             api.setData = function (substringActionSettings) {
                 $scope.startIndex = substringActionSettings.StartIndex;
                 $scope.length = substringActionSettings.Length;
-            }
+            };
+
+            api.validateData = function () {
+                return true;
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

@@ -5,8 +5,7 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
     var directiveDefinitionObj = {
         restrict: "E",
         scope: {
-            onReady: "=",
-            valid: "="
+            onReady: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -39,8 +38,6 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
 
         // private members
 
-        ctrl.valid = true;
-
         var setAreaSettingsDirectiveAPI;
         var setAreaSettings;
 
@@ -51,11 +48,11 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
 
             $scope.onDirectiveLoaded = function (api) {
                 setAreaSettingsDirectiveAPI = api;
-                
+
                 if (setAreaSettings != undefined) {
                     setAreaSettingsDirectiveAPI.setData(setAreaSettings);
                 }
-            }
+            };
         }
 
         function defineAPI() {
@@ -70,7 +67,7 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
                 data.ConfigId = $scope.selectedTemplate.TemplateConfigID;
 
                 return data;
-            }
+            };
 
             api.setData = function (data) {
                 if (setAreaSettingsDirectiveAPI != undefined) {
@@ -80,7 +77,14 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
                     setAreaSettings = data;
                     $scope.selectedTemplate = UtilsService.getItemByVal($scope.templates, data.ConfigId, "TemplateConfigID");
                 }
-            }
+            };
+
+            api.validateData = function () {
+                if (setAreaSettingsDirectiveAPI == undefined)
+                    return false;
+
+                return setAreaSettingsDirectiveAPI.validateData();
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

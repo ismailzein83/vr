@@ -48,11 +48,15 @@ app.directive("vrPstnBeSetareaprefix", [function () {
                     $type: "PSTN.BusinessEntity.MainExtensions.Normalization.SetArea.SetAreaPrefixSettings, PSTN.BusinessEntity.MainExtensions",
                     PrefixLength: $scope.prefixLength
                 };
-            }
+            };
 
             api.setData = function (setAreaPrefixSettings) {
                 $scope.prefixLength = setAreaPrefixSettings.PrefixLength;
-            }
+            };
+
+            api.validateData = function () {
+                return $scope.prefixLength != undefined && $scope.prefixLength != null;
+            };
 
             if (ctrl.onloaded != null)
                 ctrl.onloaded(api);

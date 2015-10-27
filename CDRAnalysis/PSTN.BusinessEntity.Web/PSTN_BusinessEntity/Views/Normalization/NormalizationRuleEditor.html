@@ -69,8 +69,7 @@
                 <vr-row>
                     <vr-columns width="fullrow" vr-loader="loadingNormalizationRuleSettingsDirective">
                         <vr-directivewrapper directive="normalizationRuleSettingsDirective"
-                                             on-ready="onNormalizationRuleSettingsDirectiveReady"
-                                             valid="settingsAreValid">
+                                             on-ready="onNormalizationRuleSettingsDirectiveReady">
                         </vr-directivewrapper>
                     </vr-columns>
                 </vr-row>
@@ -94,7 +93,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <span vr-disabled="!settingsAreValid">
+                <span vr-disabled="!validateDirectiveData()">
                     <vr-button type="Save" formname="formNormalizationRuleEditor" data-onclick="saveNormalizationRule"></vr-button>
                 </span>
                 <vr-button type="Close" data-onclick="close"></vr-button>

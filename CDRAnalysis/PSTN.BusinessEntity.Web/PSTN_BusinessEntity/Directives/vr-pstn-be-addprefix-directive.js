@@ -48,11 +48,15 @@ app.directive("vrPstnBeAddprefix", [function () {
                     $type: "PSTN.BusinessEntity.MainExtensions.Normalization.AdjustNumber.AddPrefixActionSettings, PSTN.BusinessEntity.MainExtensions",
                     Prefix: $scope.numberPrefix
                 };
-            }
+            };
 
             api.setData = function (addPrefixActionSettings) {
                 $scope.numberPrefix = addPrefixActionSettings.Prefix;
-            }
+            };
+
+            api.validateData = function () {
+                return true;
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

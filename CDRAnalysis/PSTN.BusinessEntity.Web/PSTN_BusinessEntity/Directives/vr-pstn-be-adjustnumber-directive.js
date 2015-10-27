@@ -5,8 +5,7 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
     var directiveDefinitionObj = {
         restrict: "E",
         scope: {
-            onReady: "=",
-            valid: "="
+            onReady: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -56,7 +55,6 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
             $scope.addAction = function () {
                 var action = getActionItem(null);
                 $scope.actions.push(action);
-                ctrl.valid = true;
             };
 
             $scope.removeAction = function ($event, action) {
@@ -65,7 +63,6 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
 
                 var index = UtilsService.getItemIndexByVal($scope.actions, action.ActionId, 'ActionId');
                 $scope.actions.splice(index, 1);
-                ctrl.valid = ($scope.actions.length > 0);
             };
         }
 
@@ -81,16 +78,32 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
                     $type: "PSTN.BusinessEntity.Entities.NormalizationRuleAdjustNumberSettings, PSTN.BusinessEntity.Entities",
                     Actions: ($scope.actions.length > 0) ? getActions() : null
                 };
-            }
+            };
 
             api.setData = function (adjustNumberSettings) {
                 angular.forEach(adjustNumberSettings.Actions, function (item) {
                     var action = getActionItem(item);
                     $scope.actions.push(action);
                 });
-                
-                ctrl.valid = ($scope.actions.length > 0);
-            }
+            };
+
+            api.validateData = function () {
+                if ($scope.actions.length == 0)
+                    return false;
+
+                for (var i = 0; i < $scope.actions.length; i++) {
+                    var action = $scope.actions[i];
+
+                    if (action.ActionDirectiveAPI == undefined)
+                        return false;
+
+                    if (!action.ActionDirectiveAPI.validateData()) {
+                        return false;
+                    }
+                }
+
+                return true;
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

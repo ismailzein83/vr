@@ -50,12 +50,16 @@ app.directive("vrPstnBeReplacestring", [function () {
                     StringToReplace: $scope.stringToReplace,
                     NewString: $scope.newString
                 };
-            }
+            };
 
             api.setData = function (replaceStringActionSettings) {
                 $scope.stringToReplace = replaceStringActionSettings.StringToReplace;
                 $scope.newString = replaceStringActionSettings.NewString;
-            }
+            };
+
+            api.validateData = function () {
+                return true;
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
