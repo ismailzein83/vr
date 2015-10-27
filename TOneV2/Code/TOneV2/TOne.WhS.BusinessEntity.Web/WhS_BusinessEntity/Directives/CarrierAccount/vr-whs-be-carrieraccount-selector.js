@@ -13,6 +13,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             isrequired: '@',
             isdisabled: "=",
             selectedvalues: "=",
+            hideremoveicon: "@"
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -72,17 +73,20 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         if (attrs.hideselectedvaluessection != undefined)
             hideselectedvaluessection = "hideselectedvaluessection";
 
+        var hideremoveicon = "";
+        if (attrs.hideremoveicon != undefined)
+            hideremoveicon = "hideremoveicon";
 
         if (attrs.ismultipleselection != undefined)
             return '<div style="display:inline-block;width: calc(100% - 18px);" vr-loader="isLoadingDirective">'
                        + '<vr-label >' + label + '</vr-label>'
                    + ' <vr-select ismultipleselection datasource="datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="selectedCarrierValues" ' + disabled + ' onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId"'
-                   + 'entityname="' + label + '"></vr-select></div>'
+                   + 'entityname="' + label + '" ' + hideremoveicon + '></vr-select></div>'
                    + ' <span class="glyphicon glyphicon-th hand-cursor"  aria-hidden="true" ng-click="openTreePopup()"></span></div>';
         else
             return '<div vr-loader="isLoadingDirective"><vr-label >' + label + '</vr-label>'
                + ' <vr-select datasource="datasource" selectedvalues="selectedCarrierValues" ' + required + ' ' + hideselectedvaluessection + ' onselectionchanged="onselectionchanged"  ' + disabled + ' datatextfield="Name" datavaluefield="CarrierAccountId"'
-               + 'entityname="' + label + '"></vr-select></div>';
+               + 'entityname="' + label + '" ' + hideremoveicon + '></vr-select></div>';
     }
 
     function BeCarrierGroup(ctrl, $scope, WhS_BE_CarrierAccountAPIService, $attrs) {
