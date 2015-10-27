@@ -1,5 +1,5 @@
 ﻿<div vr-modalcontent ng-controller="WhS_CDRProcessing_NormalizationRuleEditorController" vr-loader="isGettingData">
-    <vr-modalbody>
+    <vr-modalbody maxheight="'500px'">
         <vr-form name="formNormalizationRuleEditor">
 
             <vr-choices>
@@ -22,12 +22,12 @@
                     <vr-columns width="1/3row">
                         <vr-select label="Number Type"
                                    datasource="phoneNumberTypes"
-                                   selectedvalues="selectedPhoneNumberType"
+                                   selectedvalues="selectedPhoneNumberTypes"
                                    datavaluefield="value"
                                    datatextfield="description"
                                    entityname="Number Type"
-                                   hideremoveicon
-                                   isrequired>
+                                   isrequired
+                                   ismultipleselection>
                         </vr-select>
                     </vr-columns>
 

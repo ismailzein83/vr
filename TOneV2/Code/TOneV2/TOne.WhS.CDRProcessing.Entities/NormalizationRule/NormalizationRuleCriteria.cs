@@ -9,7 +9,7 @@ namespace TOne.WhS.CDRProcessing.Entities
     public enum NormalizationPhoneNumberType { CGPN = 1, CDPN = 2 }
     public class NormalizationRuleCriteria
     {
-        public NormalizationPhoneNumberType PhoneNumberType { get; set; }
+        public IEnumerable<NormalizationPhoneNumberType> PhoneNumberTypes { get; set; }
 
         public int? PhoneNumberLength { get; set; }
 

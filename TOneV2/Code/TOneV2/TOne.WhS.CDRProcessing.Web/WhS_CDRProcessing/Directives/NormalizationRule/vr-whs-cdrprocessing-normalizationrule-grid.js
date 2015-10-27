@@ -55,6 +55,8 @@ app.directive("vrWhsCdrprocessingNormalizationruleGrid", ["WhS_CDRProcessing_Mai
 
                 return WhS_CDRProcessing_NormalizationRuleAPIService.GetFilteredNormalizationRules(dataRetrievalInput)
                     .then(function (responseArray) {
+                        for (var i = 0; i < responseArray.Data.length;i++)
+                            AddPhoneTypeDescriptionName(responseArray.Data[i]);
                         onResponseReady(responseArray);
                     })
                     .catch(function (error) {
@@ -81,7 +83,15 @@ app.directive("vrWhsCdrprocessingNormalizationruleGrid", ["WhS_CDRProcessing_Mai
 
             WhS_CDRProcessing_MainService.deleteNormalizationRule(dataItem, onNormalizationRuleDeleted);
         }
-
+        function AddPhoneTypeDescriptionName(obj) {
+            for (var i = 0; i < obj.Entity.Criteria.PhoneNumberTypes.length; i++)
+                for (var p in WhS_CDRProcessing_PhoneNumberTypeEnum)
+                    if (obj.Entity.Criteria.PhoneNumberTypes[i] == WhS_CDRProcessing_PhoneNumberTypeEnum[p].value)
+                        if (obj.PhoneNumberTypeDescription != undefined)
+                            obj.PhoneNumberTypeDescription += "," + WhS_CDRProcessing_PhoneNumberTypeEnum[p].description;
+                        else
+                            obj.PhoneNumberTypeDescription = WhS_CDRProcessing_PhoneNumberTypeEnum[p].description;
+        }
         function defineMenuActions() {
 
             $scope.gridMenuActions = [

@@ -28,7 +28,7 @@
         function defineScope() {
 
             $scope.phoneNumberTypes = UtilsService.getArrayEnum(WhS_CDRProcessing_PhoneNumberTypeEnum);
-            $scope.selectedPhoneNumberType = undefined;
+            $scope.selectedPhoneNumberTypes = [];
 
             $scope.phoneNumberLength = undefined;
             $scope.phoneNumberPrefix = undefined;
@@ -131,10 +131,10 @@
         function fillScopeFromNormalizationRuleObj(rule) {
 
             $scope.description = rule.Description;
-        
-            $scope.selectedPhoneNumberType = (rule.Criteria.PhoneNumberType != null) ?
-                UtilsService.getItemByVal($scope.phoneNumberTypes, rule.Criteria.PhoneNumberType, "value") : undefined;
-
+            for (var i = 0; i < rule.Criteria.PhoneNumberTypes.length; i++)
+            {
+                $scope.selectedPhoneNumberTypes.push(UtilsService.getItemByVal($scope.phoneNumberTypes, rule.Criteria.PhoneNumberTypes[i], "value"));
+            }
             $scope.phoneNumberLength = rule.Criteria.PhoneNumberLength;
             $scope.phoneNumberPrefix = rule.Criteria.PhoneNumberPrefix;
             $scope.title = UtilsService.buildTitleForUpdateEditor("Normalization Rule");
@@ -179,11 +179,10 @@
         }
 
         function buildNormalizationRuleObjFromScope() {
-            console.log(normalizationRuleSettingsDirectiveAPI.getData());
             var normalizationRule = {
                 RuleId: (normalizationRuleId != undefined) ? normalizationRuleId : null,
                 Criteria: {
-                    PhoneNumberType: ($scope.selectedPhoneNumberType != undefined) ? $scope.selectedPhoneNumberType.value : null,
+                    PhoneNumberTypes: UtilsService.getPropValuesFromArray($scope.selectedPhoneNumberTypes, "value"),
                     PhoneNumberLength: $scope.phoneNumberLength,
                     PhoneNumberPrefix: $scope.phoneNumberPrefix
                 },
