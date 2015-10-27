@@ -1,7 +1,7 @@
 ﻿app.service('WhS_Sales_MainService', ["VRModalService", function (VRModalService) {
 
     return ({
-        sellCustomerZones: sellCustomerZones,
+        sellNewZones: sellNewZones,
     });
 
     function sellNewZones(customerId, onCustomerZonesSold) {
