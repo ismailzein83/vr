@@ -120,12 +120,12 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
         }
 
-        public IEnumerable<SaleZone> GetSaleZonesByIds(int sellingNumberPlanId, List<long> saleZoneIds)
+        public List<SaleZone> GetSaleZonesByCountryIds(int sellingNumberPlanId, List<int> countryIds)
         {
-            List<SaleZone> allZones = GetCachedSaleZones(sellingNumberPlanId);
+            List<SaleZone> allSaleZones = GetCachedSaleZones(sellingNumberPlanId);
 
-            if (allZones != null)
-                return allZones.Where(item => saleZoneIds.Contains(item.SaleZoneId));
+            if (allSaleZones != null)
+                return allSaleZones.Where(x => x.CountryId != null && countryIds.Contains((int)x.CountryId)).ToList();
 
             return null;
         }

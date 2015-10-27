@@ -17,6 +17,6 @@
             modalScope.onCustomerZonesSold = onCustomerZonesSold;
         };
 
-        VRModalService.showModal('/Client/Modules/WhS_Sales/Views/RatePlanEditor.html', parameters, modalSettings);
+        VRModalService.showModal('/Client/Modules/WhS_Sales/Views/SellNewZones.html', parameters, modalSettings);
     }
 }]);

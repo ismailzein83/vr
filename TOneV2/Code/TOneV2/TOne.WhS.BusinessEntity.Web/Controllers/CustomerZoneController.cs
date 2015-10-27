@@ -20,12 +20,20 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.GetCustomerZones(customerId, DateTime.Now, false);
         }
 
-        [HttpPost]
-        [Route("GetFilteredSaleZonesToSell")]
-        public object GetFilteredSaleZonesToSell(Vanrise.Entities.DataRetrievalInput<SaleZonesToSellQuery> input)
+        [HttpGet]
+        [Route("GetCustomerZoneLetters")]
+        public List<char> GetCustomerZoneLetters(int customerId)
         {
             CustomerZoneManager manager = new CustomerZoneManager();
-            return manager.GetFilteredSaleZonesToSell(input);
+            return manager.GetCustomerZoneLetters(customerId);
+        }
+
+        [HttpGet]
+        [Route("GetCountriesToSell")]
+        public List<Country> GetCountriesToSell(int customerId)
+        {
+            CustomerZoneManager manager = new CustomerZoneManager();
+            return manager.GetCountriesToSell(customerId);
         }
 
         [HttpPost]

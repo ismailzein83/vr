@@ -6,12 +6,12 @@
 
     function ratePlanAPIService(BaseAPIService, UtilsService, WhS_Sales_ModuleConfig) {
 
-        function GetFilteredRatePlanItems(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetFilteredRatePlanItems"), input);
+        function GetRatePlanItems(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetRatePlanItems"), input);
         }
 
         return ({
-            GetFilteredRatePlanItems: GetFilteredRatePlanItems
+            GetRatePlanItems: GetRatePlanItems
         });
     }
 

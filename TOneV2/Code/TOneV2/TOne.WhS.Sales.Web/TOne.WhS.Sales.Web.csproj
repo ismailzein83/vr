@@ -120,7 +120,9 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="WhS_Sales\Directives\Templates\" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\RatePlanController.cs" />
@@ -142,14 +144,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_Sales\Constants\ModuleConfig.js" />
-    <Content Include="WhS_Sales\Directives\Templates\RatePlanGridTemplate.html" />
-    <Content Include="WhS_Sales\Directives\vr-whs-be-rateplangrid-directive.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanAPIService.js" />
     <Content Include="WhS_Sales\Services\MainService.js" />
-    <Content Include="WhS_Sales\Views\RatePlanEditor.html" />
-    <Content Include="WhS_Sales\Views\RatePlanEditorController.js" />
-    <Content Include="WhS_Sales\Views\RatePlanManagement.html" />
-    <Content Include="WhS_Sales\Views\RatePlanManagementController.js" />
+    <Content Include="WhS_Sales\Views\SellNewZones.html" />
+    <Content Include="WhS_Sales\Views\SellNewZonesController.js" />
+    <Content Include="WhS_Sales\Views\RatePlan.html" />
+    <Content Include="WhS_Sales\Views\RatePlanController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

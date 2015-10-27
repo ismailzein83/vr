@@ -9,5 +9,9 @@ namespace TOne.WhS.Sales.Entities.Queries
     public class RatePlanQuery
     {
         public int CustomerId { get; set; }
+
+        public char ZoneLetter { get; set; }
+
+        public int CountryId { get; set; }
     }
 }

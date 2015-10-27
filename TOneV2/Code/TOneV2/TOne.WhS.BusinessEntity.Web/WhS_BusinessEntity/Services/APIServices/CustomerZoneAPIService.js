@@ -8,7 +8,8 @@
 
         return ({
             GetCustomerZones: GetCustomerZones,
-            GetFilteredSaleZonesToSell: GetFilteredSaleZonesToSell,
+            GetCountriesToSell: GetCountriesToSell,
+            GetCustomerZoneLetters: GetCustomerZoneLetters,
             AddCustomerZones: AddCustomerZones
         });
 
@@ -18,8 +19,16 @@
             });
         }
 
-        function GetFilteredSaleZonesToSell(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CustomerZone", "GetFilteredSaleZonesToSell"), input);
+        function GetCountriesToSell(customerId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CustomerZone", "GetCountriesToSell"), {
+                customerId: customerId
+            });
+        }
+
+        function GetCustomerZoneLetters(customerId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CustomerZone", "GetCustomerZoneLetters"), {
+                customerId: customerId
+            });
         }
 
         function AddCustomerZones(customerZones) {

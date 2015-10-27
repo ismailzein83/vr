@@ -37,27 +37,34 @@ namespace TOne.WhS.BusinessEntity.Business
             return null;
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZonesToSell(Vanrise.Entities.DataRetrievalInput<SaleZonesToSellQuery> input)
+        public List<Country> GetCountriesToSell(int customerId)
         {
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
-            IEnumerable<SaleZoneDetail> allSaleZones = saleZoneManager.GetCachedSaleZoneDetails(GetSellingNumberPlanId(input.Query.CustomerId));
-            CustomerZones customerZones = GetCustomerZones(input.Query.CustomerId, DateTime.Now, false);
+            CountryManager countryManager = new CountryManager();
+            List<Country> countriesToSell = countryManager.GetAllCountries().ToList();
+            
+            CustomerZones customerZones = GetCustomerZones(customerId, DateTime.Now, false);
 
-            Func<SaleZoneDetail, bool> filterExpression = (saleZone) => (input.Query.Name == null || saleZone.Entity.Name.Contains(input.Query.Name));
-
-            if (customerZones != null) {
-                List<long> customerZoneIds = customerZones.Zones.Select(x => x.ZoneId).ToList();
-                filterExpression = (saleZone) =>
-                    (
-                        !customerZoneIds.Contains(saleZone.Entity.SaleZoneId)
-                    )
-                    &&
-                    (
-                        input.Query.Name == null || saleZone.Entity.Name.Contains(input.Query.Name)
-                    );
+            if (customerZones != null && customerZones.Countries != null && customerZones.Countries.Count > 0)
+            {
+                List<int> customerCountryIds = customerZones.Countries.Select(x => x.CountryId).ToList();
+                countriesToSell = countriesToSell.Where(x => !customerCountryIds.Contains(x.CountryId)).ToList();
             }
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSaleZones.ToBigResult(input, filterExpression));
+            return countriesToSell;
+        }
+
+        public List<char> GetCustomerZoneLetters(int customerId)
+        {
+            List<char> customerZoneLetters = new List<char>();
+            List<SaleZone> customerSaleZones = GetCustomerSaleZones(customerId);
+
+            if (customerSaleZones != null)
+            {
+                List<string> customerSaleZoneNames = customerSaleZones.Select(x => x.Name).ToList();
+                customerZoneLetters = customerSaleZoneNames.Where(x => x != null && x.Length > 0).Select(x => x[0]).OrderBy(x => x).Distinct().ToList();
+            }
+
+            return customerZoneLetters;
         }
 
         public TOne.Entities.InsertOperationOutput<CustomerZones> AddCustomerZones(CustomerZones customerZones)
@@ -66,15 +73,17 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (currentCustomerZones != null)
             {
-                foreach (CustomerZone customerZone in currentCustomerZones.Zones)
+                foreach (Country country in currentCustomerZones.Countries)
                 {
-                    customerZones.Zones.Add(new CustomerZone() {
-                        ZoneId = customerZone.ZoneId
+                    customerZones.Countries.Add(new Country()
+                    {
+                        CountryId = country.CountryId,
+                        Name = country.Name
                     });
                 }
             }
 
-            customerZones.Zones.OrderBy(x => x.ZoneId); // should i keep this?
+            customerZones.Countries = customerZones.Countries.OrderBy(x => x.Name).ToList();
 
             TOne.Entities.InsertOperationOutput<CustomerZones> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CustomerZones>();
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -111,6 +120,22 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Methods
+
+        private List<SaleZone> GetCustomerSaleZones(int customerId)
+        {
+            List<SaleZone> customerSaleZones = null;
+            CustomerZones customerZones = GetCustomerZones(customerId, DateTime.Now, false);
+            
+            if (customerZones != null && customerZones.Countries != null && customerZones.Countries.Count > 0)
+            {
+                List<int> countryIds = customerZones.Countries.Select(x => x.CountryId).ToList();
+
+                SaleZoneManager saleZoneManager = new SaleZoneManager();
+                customerSaleZones = saleZoneManager.GetSaleZonesByCountryIds(GetSellingNumberPlanId(customerId), countryIds);
+            }
+
+            return customerSaleZones;
+        }
 
         private int GetSellingNumberPlanId(int customerId)
         {

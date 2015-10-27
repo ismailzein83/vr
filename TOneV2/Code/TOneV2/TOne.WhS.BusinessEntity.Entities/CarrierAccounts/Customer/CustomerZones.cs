@@ -14,6 +14,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public List<CustomerZone> Zones { get; set; }
 
+        public List<Country> Countries { get; set; }
+
         public DateTime StartEffectiveTime { get; set; }
     }
 

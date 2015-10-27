@@ -1,0 +1,58 @@
+﻿<vr-panel ng-controller="WhS_Sales_RatePlanController">
+
+    <vr-form name="formFilter" vr-loader="loadingFilters">
+
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-whs-be-carrieraccount-selector type="'Customer'"
+                                                       on-ready="onCarrierAccountDirectiveReady"
+                                                       onselectionchanged="onCarrierAccountChanged"
+                                                       isrequired
+                                                       hideremoveicon>
+                    </vr-whs-be-carrieraccount-selector>
+                </vr-columns>
+            </vr-row>
+        </div>
+
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
+                    <vr-button type="SellNewZones" formname="formFilter" data-onclick="sellNewZones"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+
+    </vr-form>
+
+    <vr-row ng-show="showZoneLetters">
+        <vr-columns width="fullrow">
+            <span ng-repeat="zoneLetter in zoneLetters">
+                <a href="javascript:" ng-click="loadRatePlanGrid(zoneLetter)">{{ zoneLetter | uppercase }}</a>&nbsp;
+            </span>
+        </vr-columns>
+    </vr-row>
+
+    <vr-row ng-show="showRatePlanGrid" removeline>
+        <vr-columns width="fullrow">
+            <vr-datagrid on-ready="onRatePlanGridReady"
+                         datasource="ratePlanItems"
+                         menuactions="gridMenuActions"
+                         idfield="ZoneId"
+                         hidegridmenu>
+
+                <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'" disablesorting></vr-datagridcolumn>
+
+                <!--<vr-datagridcolumn headertext="'New Rate'" type="'Number'" width="100px">
+                    <div style="width: 100px; float: right; margin-right: 5px;">
+                        <vr-textbox value="dataItem.newRate"></vr-textbox>
+                    </div>
+                </vr-datagridcolumn>-->
+
+            </vr-datagrid>
+        </vr-columns>
+    </vr-row>
+
+</vr-panel>

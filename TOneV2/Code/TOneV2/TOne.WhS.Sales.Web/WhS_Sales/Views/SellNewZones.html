@@ -1,0 +1,31 @@
+﻿<div vr-modalcontent ng-controller="WhS_Sales_SellNewZonesController" vr-loader="isGettingData">
+    <vr-modalbody>
+        <vr-form name="formSellNewZones">
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-datagrid on-ready="onCountryGridReady"
+                                 datasource="countries"
+                                 idfield="CountryId"
+                                 hidegridmenu>
+
+                        <vr-datagridcolumn headertext="'Select'" field="'CountryId'" widthfactor="3" disablesorting>
+                            <vr-check value="dataItem.isSelected" onvaluechanged="viewScope.onCountryCheckChanged"></vr-check>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'" disablesorting></vr-datagridcolumn>
+
+                    </vr-datagrid>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <span vr-disabled="disableSaveButton">
+                    <vr-button type="Save" formname="formSellNewZones" data-onclick="sellNewZones"></vr-button>
+                </span>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
