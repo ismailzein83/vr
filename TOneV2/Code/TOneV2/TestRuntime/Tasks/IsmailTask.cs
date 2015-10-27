@@ -22,14 +22,14 @@ namespace TestRuntime
     {
         public void Execute()
         {
-            var saleZoneDataManager = new SaleZoneDataManager();
-            object lastReceivedTimeStamp = null;
-            while(true)
-            {
-                bool isDataUpdated = saleZoneDataManager.IsDataUpdated(ref lastReceivedTimeStamp);
-                Console.WriteLine(isDataUpdated);
-                Console.ReadKey();
-            }
+            //var saleZoneDataManager = new SaleZoneDataManager();
+            //object lastReceivedTimeStamp = null;
+            //while(true)
+            //{
+            //    bool isDataUpdated = saleZoneDataManager.IsDataUpdated(ref lastReceivedTimeStamp);
+            //    Console.WriteLine(isDataUpdated);
+            //    Console.ReadKey();
+            //}
             ////TOne.LCR.Data.SQL.CodeDataManager codeDataManager = new TOne.LCR.Data.SQL.CodeDataManager();
             ////TOne.LCR.Data.SQL.CodeMatchDataManager codeMatchDataManager = new TOne.LCR.Data.SQL.CodeMatchDataManager();
             ////List<SupplierCodeInfo> suppliersCodeInfo = codeDataManager.GetActiveSupplierCodeInfo(DateTime.Today, DateTime.Today);
@@ -115,7 +115,7 @@ namespace TestRuntime
 
 
             QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
-            var queuesByStages = executionFlowManager.GetQueuesByStages(1);
+            var queuesByStages = executionFlowManager.GetQueuesByStages(7);
             TOne.CDR.Entities.CDRBatch cdrBatch = new CDRBatch();
             cdrBatch.CDRs = new List<TABS.CDR> { 
              new TABS.CDR {  AttemptDateTime = DateTime.Now, CDPN = "343565436", CGPN = "5465436547", ConnectDateTime = DateTime.Now, Duration = new TimeSpan(0,2,4), IN_CARRIER="Trer", OUT_CARRIER = "6546"

@@ -177,6 +177,24 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Mappers">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Mappers.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Web">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Queueing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
@@ -201,9 +219,6 @@
     <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Rules.Business">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Business.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Rules.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
