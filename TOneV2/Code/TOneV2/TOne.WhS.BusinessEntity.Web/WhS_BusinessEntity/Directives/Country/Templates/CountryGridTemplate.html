@@ -9,9 +9,9 @@
 
             <vr-datagridcolumn headertext="'ID'" field="'CountryId'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Country Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
-            <!--<vr-datagridexpandablerow>
-                <vr-whs-be-carrieraccount-grid on-ready="dataItem.extensionObject.onGridReady" hideprofilecolumn></vr-whs-be-carrieraccount-grid>
-            </vr-datagridexpandablerow>-->
+            <vr-datagridexpandablerow>
+                <vr-whs-be-codegroup-grid on-ready="dataItem.extensionObject.onGridReady" hidecountrycolumn></vr-whs-be-codegroup-grid>
+            </vr-datagridexpandablerow>
         </vr-datagrid>
     </vr-columns>
 </vr-row>

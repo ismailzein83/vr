@@ -12,16 +12,16 @@ namespace TOne.WhS.BusinessEntity.Business
     public class CodeGroupManager
     {
 
-        public Vanrise.Entities.IDataRetrievalResult<CodeGroup> GetFilteredCodeGroups(Vanrise.Entities.DataRetrievalInput<CodeGroupQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<CodeGroupDetail> GetFilteredCodeGroups(Vanrise.Entities.DataRetrievalInput<CodeGroupQuery> input)
         {
             var allCodeGroups = GetCachedCodeGroups();
 
             Func<CodeGroup, bool> filterExpression = (prod) =>
                  (input.Query.Code == null || prod.Code.ToLower().Contains(input.Query.Code.ToLower()))
                   &&
-                 (input.Query.CountriesIds == null || input.Query.CountriesIds.Contains(prod.CountryId)); ;
+                 (input.Query.CountriesIds == null || input.Query.CountriesIds.Count() == 0 || input.Query.CountriesIds.Contains(prod.CountryId)); ;
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodeGroups.ToBigResult(input, filterExpression));     
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodeGroups.ToBigResult(input, filterExpression, SaleZoneDetailMapper));     
         }
 
         public IEnumerable<CodeGroup> GetAllCountries()
@@ -32,11 +32,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return allCodeGroups.Values;
         }
-        //public Country GetCountry(int countryId)
-        //{
-        //    var countries = GetCachedCountries();
-        //    return countries.GetRecord(countryId);
-        //}
+        public CodeGroup GetCountry(int codeGroupId)
+        {
+            var codeGroups = GetCachedCodeGroups();
+            return codeGroups.GetRecord(codeGroupId);
+        }
         public TOne.Entities.InsertOperationOutput<CodeGroup> AddCountry(CodeGroup codeGroup)
         {
             TOne.Entities.InsertOperationOutput<CodeGroup> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CodeGroup>();
@@ -99,6 +99,21 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
+        private CodeGroupDetail SaleZoneDetailMapper(CodeGroup codeGroup)
+        {
+            CodeGroupDetail codeGroupDetail = new CodeGroupDetail();
+
+            codeGroupDetail.Entity = codeGroup;
+
+            CountryManager manager = new CountryManager();
+            if (codeGroup.CountryId != null)
+            {
+                int countryId = (int)codeGroup.CountryId;
+                codeGroupDetail.CountryName = manager.GetCountry(countryId).Name;
+            }
+
+            return codeGroupDetail;
+        }
         #endregion
     }
 }

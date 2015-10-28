@@ -77,6 +77,7 @@
     <Compile Include="CodeCriteria\CodeCriteriaGroupContext.cs" />
     <Compile Include="CodeCriteria\CodeCriteriaGroupSettings.cs" />
     <Compile Include="CodeCriteria\IRuleCodeTarget.cs" />
+    <Compile Include="CodeGroup\CodeGroupDetail.cs" />
     <Compile Include="CodeGroup\CodeGroup.cs" />
     <Compile Include="CodeGroup\CodeGroupQuery.cs" />
     <Compile Include="Country\CountryQuery.cs" />

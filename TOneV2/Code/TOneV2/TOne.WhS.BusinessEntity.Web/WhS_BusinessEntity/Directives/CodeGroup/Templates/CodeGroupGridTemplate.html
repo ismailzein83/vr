@@ -7,9 +7,9 @@
                      menuactions="gridMenuActions"
                      idfield="CodeGroupId">
 
-            <vr-datagridcolumn headertext="'ID'" field="'CodeGroupId'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Code'" field="'Code'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Country'" field="'CountryId'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'ID'" field="'Entity.CodeGroupId'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Code'" field="'Entity.Code'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Country'" field="'CountryName'" type="'Text'" ng-if="!hidecountrycolumn"></vr-datagridcolumn>
             <!--<vr-datagridexpandablerow>
                 <vr-whs-be-carrieraccount-grid on-ready="dataItem.extensionObject.onGridReady" hideprofilecolumn></vr-whs-be-carrieraccount-grid>
             </vr-datagridexpandablerow>-->

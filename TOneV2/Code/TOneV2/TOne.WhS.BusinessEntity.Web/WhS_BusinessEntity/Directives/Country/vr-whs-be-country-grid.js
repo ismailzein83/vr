@@ -52,11 +52,11 @@ function (UtilsService, VRNotificationService, WhS_BE_CountryAPIService, WhS_BE_
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_CountryAPIService.GetFilteredCountries(dataRetrievalInput)
                     .then(function (response) {
-                        //if (response.Data != undefined) {
-                        //    for (var i = 0; i < response.Data.length; i++) {
-                        //        setDataItemExtension(response.Data[i]);
-                        //    }
-                        //}
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                setDataItemExtension(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -66,20 +66,20 @@ function (UtilsService, VRNotificationService, WhS_BE_CountryAPIService, WhS_BE_
             defineMenuActions();
         }
 
-        //function setDataItemExtension(dataItem) {
+        function setDataItemExtension(dataItem) {
 
-        //    var extensionObject = {};
-        //    var query = {
-        //        CarrierProfilesIds: [dataItem.CarrierProfileId],
-        //    }
-        //    extensionObject.onGridReady = function (api) {
-        //        extensionObject.carrierAccountGridAPI = api;
-        //        extensionObject.carrierAccountGridAPI.loadGrid(query);
-        //        extensionObject.onGridReady = undefined;
-        //    };
-        //    dataItem.extensionObject = extensionObject;
+            var extensionObject = {};
+            var query = {
+                CountriesIds: [dataItem.CountryId],
+            }
+            extensionObject.onGridReady = function (api) {
+                extensionObject.codeGroupGridAPI = api;
+                extensionObject.codeGroupGridAPI.loadGrid(query);
+                extensionObject.onGridReady = undefined;
+            };
+            dataItem.extensionObject = extensionObject;
 
-        //}
+        }
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
@@ -96,6 +96,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CountryAPIService, WhS_BE_
 
         function editCountry(countryObj) {
             var onCountryUpdated = function (countryObj) {
+                setDataItemExtension(countryObj);
                 gridAPI.itemUpdated(countryObj);
             }
 

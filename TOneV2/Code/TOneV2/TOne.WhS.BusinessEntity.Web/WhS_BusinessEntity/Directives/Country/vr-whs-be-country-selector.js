@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeCountrySelector', ['WhS_BE_CountryAPIService', 'UtilsService', '$compile', function (WhS_BE_CountryAPIService, UtilsService, $compile) {
+app.directive('vrWhsBeCountrySelector', ['WhS_BE_CountryAPIService', 'WhS_BE_MainService', 'UtilsService', '$compile', function (WhS_BE_CountryAPIService, WhS_BE_MainService,UtilsService, $compile  ) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -13,6 +13,7 @@ app.directive('vrWhsBeCountrySelector', ['WhS_BE_CountryAPIService', 'UtilsServi
             isrequired: '@',
             isdisabled: "=",
             selectedvalues: "=",
+            showaddbutton: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -20,6 +21,18 @@ app.directive('vrWhsBeCountrySelector', ['WhS_BE_CountryAPIService', 'UtilsServi
             $scope.selectedCountryValues;
             if ($attrs.ismultipleselection != undefined)
                 $scope.selectedCountryValues = [];
+
+            $scope.AddNewCountry = function () {
+                var onCountryAdded = function () {
+                    WhS_BE_CountryAPIService.GetAllCountries().then(function (response) {
+                        $scope.datasource.length = 0;
+                        angular.forEach(response, function (itm) {
+                            $scope.datasource.push(itm);
+                        });
+                    });
+                };
+                WhS_BE_MainService.addCountry(onCountryAdded);
+            }
             $scope.datasource = [];
             var beCountry = new BeCountry(ctrl, $scope, WhS_BE_CountryAPIService, $attrs);
             beCountry.initializeController();
@@ -60,16 +73,16 @@ app.directive('vrWhsBeCountrySelector', ['WhS_BE_CountryAPIService', 'UtilsServi
         var hideselectedvaluessection = "";
         if (attrs.hideselectedvaluessection != undefined)
             hideselectedvaluessection = "hideselectedvaluessection";
-
-
+        var addCliked = '';
+        if (attrs.showaddbutton != undefined)
+            addCliked = 'onaddclicked="AddNewCountry"';
         if (attrs.ismultipleselection != undefined)
-            return '<div style="display:inline-block;width: calc(100% - 18px);" vr-loader="isLoadingDirective">'
-                   + ' <vr-select ismultipleselection datasource="datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="selectedCountryValues" ' + disabled + ' onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="CountryId"'
-                   + 'entityname="Country" label="Country"></vr-select></div>';
+            return  ' <vr-select ismultipleselection datasource="datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="selectedCountryValues" ' + disabled + ' onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="CountryId"'
+                   + 'entityname="Country" label="Country" '+addCliked+'></vr-select>';
         else
-            return '<div vr-loader="isLoadingDirective">'
+            return '<div vr-loader="isLoadingDirective" style="display:inline-block;width:100%">'
                + ' <vr-select datasource="datasource" selectedvalues="selectedCountryValues" ' + required + ' ' + hideselectedvaluessection + ' onselectionchanged="onselectionchanged"  ' + disabled + ' datatextfield="Name" datavaluefield="CountryId"'
-               + 'entityname="Country" label="Country"></vr-select></div>';
+               + 'entityname="Country" label="Country" ' + addCliked + '></vr-select></div>';
     }
     function BeCountry(ctrl, $scope, WhS_BE_CarrierAccountAPIService, $attrs) {
         
@@ -92,7 +105,9 @@ app.directive('vrWhsBeCountrySelector', ['WhS_BE_CountryAPIService', 'UtilsServi
             {
                 return $scope.selectedCountryValues;
             }
-
+            api.getIdsData = function () {
+                return getIdsList($scope.selectedCountryValues , "CountryId" );
+            }
             api.setData = function (selectedIds) {
                 if ($attrs.ismultipleselection!=undefined) {
                     for (var i = 0; i < selectedIds.length; i++) {
@@ -106,7 +121,13 @@ app.directive('vrWhsBeCountrySelector', ['WhS_BE_CountryAPIService', 'UtilsServi
                         $scope.selectedCountryValues = selectedCountryValue;
                 }
             }
+            function getIdsList(tab, attname) {
+                var list = [];
+                for (var i = 0; i < tab.length ; i++)
+                    list[list.length] = tab[i][attname];
+                return list;
 
+            }
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

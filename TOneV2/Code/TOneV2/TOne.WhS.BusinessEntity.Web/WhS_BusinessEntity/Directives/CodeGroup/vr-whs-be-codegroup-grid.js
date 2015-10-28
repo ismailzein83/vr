@@ -11,6 +11,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
+
             var codeGroupGrid = new CodeGroupGrid($scope, ctrl, $attrs);
             codeGroupGrid.initializeController();
         },
@@ -29,7 +30,9 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
         this.initializeController = initializeController;
 
         function initializeController() {
-           
+            if ($attrs.hidecountrycolumn != undefined) {
+                $scope.hidecountrycolumn = true;
+            }
             $scope.codegroups = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
