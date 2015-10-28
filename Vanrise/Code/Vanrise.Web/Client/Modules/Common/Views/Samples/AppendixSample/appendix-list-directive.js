@@ -31,6 +31,20 @@ function (UtilsService, Common_AppendixSample_Service, VRUIUtilsService) {
                 function loadDynamicAppendixListSection(payload) {
                     var promises = [];
 
+                    var appendixItems;
+                    if (payload != undefined) {
+                        appendixItems = [];
+                        for (var i = 0; i < payload.length; i++) {
+                            var appendixItem = {
+                                payload: payload[i],
+                                readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                            };
+                            promises.push(appendixItem.loadPromiseDeferred.promise);
+                            appendixItems.push(appendixItem);
+                        }
+                    }
+
                     var loadTemplatesPromise = Common_AppendixSample_Service.getRemoteData(1000)
                         .then(function () {
                             ctrl.dynamicAppendixTemplatesToAdd.push({
@@ -41,26 +55,13 @@ function (UtilsService, Common_AppendixSample_Service, VRUIUtilsService) {
                                 name: "Appendix 2",
                                 editor: "vr-common-appendixsample-appendix2"
                             });
-                        });
-                    promises.push(loadTemplatesPromise);
-
-                    if (payload != undefined) {
-                        var appendixItems = [];
-                        for (var i = 0; i < payload.length; i++) {
-                            var appendixItem = {
-                                payload: payload[i],
-                                readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                loadPromiseDeferred: UtilsService.createPromiseDeferred()
-                            };
-                            promises.push(appendixItem.loadPromiseDeferred.promise);
-                            appendixItems.push(appendixItem);
-                        }
-                        loadTemplatesPromise.then(function () {
-                            for (var i = 0; i < appendixItems.length; i++) {
-                                loadDynamicAppendixItem(appendixItems[i]);
+                            if (appendixItems != undefined) {
+                                for (var i = 0; i < appendixItems.length; i++) {
+                                    loadDynamicAppendixItem(appendixItems[i]);
+                                }
                             }
                         });
-                    }
+                    promises.push(loadTemplatesPromise);                    
 
                     function loadDynamicAppendixItem(appendixItem) {
                         var matchItem = UtilsService.getItemByVal(ctrl.dynamicAppendixTemplatesToAdd, appendixItem.payload.name, "name");
