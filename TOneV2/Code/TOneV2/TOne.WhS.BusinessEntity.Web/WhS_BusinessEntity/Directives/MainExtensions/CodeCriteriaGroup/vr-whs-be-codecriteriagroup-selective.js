@@ -40,7 +40,7 @@ app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/WhS_BusinessEntity/Directives/CodeCriteria/Templates/SelectiveCodeCriteriaDirectiveTemplate.html';
+                return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/CodeCriteriaGroup/Templates/SelectiveCodeCriteriaDirectiveTemplate.html';
             }
 
         };

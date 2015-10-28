@@ -31,7 +31,7 @@ app.directive('vrWhsBeCustomergroupSelective', ['UtilsService', 'VRUIUtilsServic
         };
 
         function getBeSelectiveCustomersTemplate(attrs) {
-            return '/Client/Modules/WhS_BusinessEntity/Directives/CarrierAccount/Templates/SelectiveCustomersDirectiveTemplate.html';
+            return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/CustomerGroup/Templates/SelectiveCustomersDirectiveTemplate.html';
         }
 
         function beCustomers(ctrl, $scope) {

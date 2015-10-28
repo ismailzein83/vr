@@ -31,7 +31,7 @@ app.directive('vrWhsBeSuppliergroupSelective', ['UtilsService',
         };
 
         function getBeSelectiveSuppliersTemplate(attrs) {
-            return '/Client/Modules/WhS_BusinessEntity/Directives/CarrierAccount/Templates/SelectiveSuppliersDirectiveTemplate.html';
+            return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/SupplierGroup/Templates/SelectiveSuppliersDirectiveTemplate.html';
         }
 
         function beSuppliers(ctrl, $scope) {

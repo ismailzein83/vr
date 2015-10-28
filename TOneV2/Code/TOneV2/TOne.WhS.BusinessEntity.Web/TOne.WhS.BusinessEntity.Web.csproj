@@ -133,9 +133,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\" />
-    <Folder Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierGroup\" />
+    <Folder Include="WhS_BusinessEntity\Directives\CodeCriteria\Templates\" />
     <Folder Include="WhS_BusinessEntity\Directives\PricingProduct\" />
+    <Folder Include="WhS_BusinessEntity\Directives\SaleZone\Templates\" />
     <Folder Include="WhS_BusinessEntity\Views\PricingProduct\Grids\" />
   </ItemGroup>
   <ItemGroup>
@@ -211,13 +211,13 @@
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-pricingrulesettings-extracharge-percentage.js" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-pricingrulesettings-tarrif-regular.js" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-pricingrulesettings-tariff.js" />
-    <Content Include="WhS_BusinessEntity\Directives\CodeCriteria\Templates\SelectiveCodeCriteriaDirectiveTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\SelectiveCustomersDirectiveTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CodeCriteriaGroup\Templates\SelectiveCodeCriteriaDirectiveTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\Templates\SelectiveCustomersDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-purchasepricingrule-grid.js" />
-    <Content Include="WhS_BusinessEntity\Directives\SaleZone\Templates\SelectiveSaleZonesDirectiveTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\SelectiveSuppliersDirectiveTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\Templates\SelectiveSaleZonesDirectiveTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierGroup\Templates\SelectiveSuppliersDirectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-pricingrulesettings-tod.js" />
-    <Content Include="WhS_BusinessEntity\Directives\SaleZone\vr-whs-be-salezonegroup-allexcept.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\vr-whs-be-salezonegroup-allexcept.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-carrieraccount-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-carrieraccount-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-carrierprofile-selector.js" />
@@ -228,11 +228,11 @@
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-salepricingrulecriteria.js" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-salepricingrule-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SellingNumberPlan\vr-whs-be-sellingnumberplan-selector.js" />
-    <Content Include="WhS_BusinessEntity\Directives\CodeCriteria\vr-whs-be-codecriteriagroup-selective.js" />
-    <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-customergroup-selective.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CodeCriteriaGroup\vr-whs-be-codecriteriagroup-selective.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\vr-whs-be-customergroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SellingProduct\vr-whs-be-sellingproduct-selector.js" />
-    <Content Include="WhS_BusinessEntity\Directives\SaleZone\vr-whs-be-salezonegroup-selective.js" />
-    <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-suppliergroup-selective.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\vr-whs-be-salezonegroup-selective.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierGroup\vr-whs-be-suppliergroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\vr-whs-be-supplierzone-selector.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CodeGroupAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerZoneAPIService.js" />
