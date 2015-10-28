@@ -133,9 +133,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="WhS_BusinessEntity\Directives\CodeCriteria\Templates\" />
     <Folder Include="WhS_BusinessEntity\Directives\PricingProduct\" />
-    <Folder Include="WhS_BusinessEntity\Directives\SaleZone\Templates\" />
     <Folder Include="WhS_BusinessEntity\Views\PricingProduct\Grids\" />
   </ItemGroup>
   <ItemGroup>
