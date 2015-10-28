@@ -11,7 +11,7 @@ namespace Vanrise.Rules.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "NormalizationRule")]
     [JSONWithTypeAttribute]
-    public class NormalizationRuleController:BaseAPIController
+    public class VR_Rules_NormalizationRuleController : BaseAPIController
     {
         [HttpGet]
         [Route("GetNormalizeNumberActionSettingsTemplates")]
