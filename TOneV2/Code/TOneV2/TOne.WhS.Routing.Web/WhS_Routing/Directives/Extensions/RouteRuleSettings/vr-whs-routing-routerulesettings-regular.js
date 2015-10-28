@@ -25,14 +25,10 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                 }
             },
             templateUrl: function (element, attrs) {
-                return getBeRouteRuleRegularTemplate(attrs);
+                return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Templates/RouteRuleRegularDirective.html';
             }
 
         };
-
-        function getBeRouteRuleRegularTemplate(attrs) {
-            return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Templates/RouteRuleRegularDirective.html';
-        }
 
         function beRouteRuleRegular(ctrl, $scope) {
             //var routeRuleSettingsEntity;

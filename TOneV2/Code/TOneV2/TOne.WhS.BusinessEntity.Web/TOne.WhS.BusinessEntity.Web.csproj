@@ -227,7 +227,7 @@
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\vr-whs-be-routingproduct-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-salepricingrulecriteria.js" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\vr-whs-be-salepricingrule-grid.js" />
-    <Content Include="WhS_BusinessEntity\Directives\SaleZonePackage\vr-whs-be-sellingnumberplan-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SellingNumberPlan\vr-whs-be-sellingnumberplan-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CodeCriteria\vr-whs-be-codecriteriagroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-customergroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SellingProduct\vr-whs-be-sellingproduct-selector.js" />

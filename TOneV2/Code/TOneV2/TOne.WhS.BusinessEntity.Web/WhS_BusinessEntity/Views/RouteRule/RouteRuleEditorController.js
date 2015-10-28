@@ -155,8 +155,6 @@
         function load() {
             $scope.isLoading = true;
 
-            loadEnums();
-
             if (isEditMode) {
                 getRouteRule().then(function () {
                     loadAllControls()
@@ -174,7 +172,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadRoutingProductDirective, loadSaleZoneGroupSection, loadCustomerGroupSection, loadCodeCriteriaGroupSection, loadRouteRuleSettingsSection])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadRoutingProductDirective, loadSaleZoneGroupSection, loadCustomerGroupSection, loadCodeCriteriaGroupSection, loadRouteRuleSettingsSection, loadStaticSection])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -183,17 +181,20 @@
                });
         }
 
-        function loadEnums()
-        {
-            $scope.routeRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Be_RouteRuleCriteriaTypeEnum);
-            $scope.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Be_RouteRuleCriteriaTypeEnum, 'value', 'SaleZone');
-        }
-
         function getRouteRule() {
             return WhS_BE_RouteRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
                 routeRuleEntity = routeRule;
-                fillScopeFromRouteRuleObj(routeRule);
             });
+        }
+
+        function loadFilterBySection()
+        {
+            $scope.routeRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Be_RouteRuleCriteriaTypeEnum);
+
+            if (routeRuleEntity != undefined && routeRuleEntity.Criteria.CodeCriteriaGroupSettings != null)
+                $scope.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Be_RouteRuleCriteriaTypeEnum, 'value', 'Code');
+            else
+                $scope.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Be_RouteRuleCriteriaTypeEnum, 'value', 'SaleZone');
         }
 
         function loadRoutingProductDirective() {
@@ -346,6 +347,21 @@
             return UtilsService.waitMultiplePromises(promises);
         }
 
+        function loadStaticSection() {
+            if (routeRuleEntity == undefined)
+                return;
+
+            $scope.beginEffectiveDate = routeRuleEntity.BeginEffectiveTime;
+            $scope.endEffectiveDate = routeRuleEntity.EndEffectiveTime;
+
+            if (routeRuleEntity.Criteria != null) {
+
+                angular.forEach(routeRuleEntity.Criteria.ExcludedCodes, function (item) {
+                    $scope.excludedCodes.push(item);
+                });    
+            }
+        }
+
         function buildRouteRuleObjFromScope() {
             var routeRule = {
                 RuleId: (routeRuleId != null) ? routeRuleId : 0,
@@ -362,21 +378,6 @@
             };
 
             return routeRule;
-        }
-
-        function fillScopeFromRouteRuleObj(routeRuleObj) {
-            if (routeRuleObj.Criteria != null) {
-
-                angular.forEach(routeRuleObj.Criteria.ExcludedCodes, function (item) {
-                    $scope.excludedCodes.push(item);
-                });
-
-                if (routeRuleObj.Criteria.CodeCriteriaGroupSettings != null)
-                    $scope.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Be_RouteRuleCriteriaTypeEnum, 'value', 'Code');                    
-            }
-            
-            $scope.beginEffectiveDate = routeRuleObj.BeginEffectiveTime;
-            $scope.endEffectiveDate = routeRuleObj.EndEffectiveTime;
         }
 
         function insertRouteRule() {

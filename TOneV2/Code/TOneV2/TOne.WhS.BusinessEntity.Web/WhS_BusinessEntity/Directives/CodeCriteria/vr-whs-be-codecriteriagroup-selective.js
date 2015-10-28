@@ -40,14 +40,10 @@ app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return getBeSelectiveCodeCriteriaTemplate(attrs);
+                return '/Client/Modules/WhS_BusinessEntity/Directives/CodeCriteria/Templates/SelectiveCodeCriteriaDirectiveTemplate.html';
             }
 
         };
-
-        function getBeSelectiveCodeCriteriaTemplate(attrs) {
-            return '/Client/Modules/WhS_BusinessEntity/Directives/CodeCriteria/Templates/SelectiveCodeCriteriaDirectiveTemplate.html';
-        }
 
         function beCodeCriteria(ctrl, $scope) {
 

@@ -46,14 +46,10 @@ app.directive('vrWhsBeSalezonegroupAllexcept', ['WhS_BE_SaleZoneAPIService', 'Wh
                 }
             },
             templateUrl: function (element, attrs) {
-                return getBeAllExceptSaleZonesTemplate(attrs);
+                return '/Client/Modules/WhS_BusinessEntity/Directives/SaleZone/Templates/SelectiveSaleZonesDirectiveTemplate.html';
             }
 
         };
-
-        function getBeAllExceptSaleZonesTemplate(attrs) {
-            return '/Client/Modules/WhS_BusinessEntity/Directives/SaleZone/Templates/SelectiveSaleZonesDirectiveTemplate.html';
-        }
 
         function beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService) {
 
