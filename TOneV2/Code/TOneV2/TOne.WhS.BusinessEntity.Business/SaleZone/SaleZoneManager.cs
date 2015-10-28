@@ -158,5 +158,10 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
+
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, SaleZoneInfoFilter filter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

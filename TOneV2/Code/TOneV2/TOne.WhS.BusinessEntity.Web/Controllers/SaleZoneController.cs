@@ -27,6 +27,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.GetSaleZonesInfo(sellingNumberPlanId, filter);
         }
 
+        public IEnumerable<SaleZoneInfo> GetSaleZones(string nameFilter, string serializedFilter)
+        {
+            SaleZoneInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SaleZoneInfoFilter>(serializedFilter) : null;
+            SaleZoneManager manager = new SaleZoneManager();
+            return manager.GetSaleZonesInfo(nameFilter, filter);
+        }
+
         [HttpPost]
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(SaleZoneInput input)
         {

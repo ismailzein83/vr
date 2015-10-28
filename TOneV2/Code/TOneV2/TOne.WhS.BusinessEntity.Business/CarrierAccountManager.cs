@@ -150,5 +150,10 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
+
+        public IEnumerable<CarrierAccountInfo> GetCarrierAccounts(CarrierAccountInfoFilter carrierAccountInfoFilter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

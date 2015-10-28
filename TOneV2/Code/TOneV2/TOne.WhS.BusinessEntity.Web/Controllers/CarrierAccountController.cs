@@ -37,6 +37,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.GetCarrierAccounts(getCustomers, getSuppliers);
         }
 
+        public IEnumerable<CarrierAccountInfo> GetCarrierAccounts(string serializedFilter)
+        {
+            CarrierAccountInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<CarrierAccountInfoFilter>(serializedFilter) : null;
+            CarrierAccountManager manager = new CarrierAccountManager();
+            return manager.GetCarrierAccounts(filter);
+        }
+
         [HttpGet]
         [Route("GetSupplierGroupTemplates")]
         public List<TemplateConfig> GetSupplierGroupTemplates()
