@@ -44,12 +44,12 @@
                             
                             if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                                 return;
+                           
+                            isUserChange = false;//reset the flag
 
                             if (newValue == "") {
                                 ctrl.value = undefined;
                             }
-                               
-                            isUserChange = false;//reset the flag
                             if (iAttrs.type === TextboxTypeEnum.Number.name) {
                                 var arr = String(newValue).split("");
                                 var decimalArray = String(newValue).split(".");
