@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingRouterulesettingsBlock', ['UtilsService',
+app.directive('vrWhsRoutingRouterulesettingsFilterRemoveloss', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {
@@ -11,7 +11,7 @@ app.directive('vrWhsRoutingRouterulesettingsBlock', ['UtilsService',
 
                 var ctrl = this;
 
-                var ctor = new blockCtor(ctrl, $scope);
+                var ctor = new removeLossCtor(ctrl, $scope);
                 ctor.initializeController();
 
             },
@@ -24,13 +24,13 @@ app.directive('vrWhsRoutingRouterulesettingsBlock', ['UtilsService',
                     }
                 }
             },
-            template: function (element, attrs) {
-                return '';
+            templateURL: function (element, attrs) {
+                return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Filter/Templates/RemoveLossDirective.html';
             }
 
         };
 
-        function blockCtor(ctrl, $scope) {
+        function removeLossCtor(ctrl, $scope) {
 
             function initializeController() {
                 defineAPI();
@@ -45,7 +45,7 @@ app.directive('vrWhsRoutingRouterulesettingsBlock', ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Routing.Business.RouteRules.BlockRouteRule, TOne.WhS.Routing.Business"
+                        $type: "TOne.WhS.Routing.Business.RouteRules.Filters.OptionFilterLoss, TOne.WhS.Routing.Business"
                     };
                 }
 

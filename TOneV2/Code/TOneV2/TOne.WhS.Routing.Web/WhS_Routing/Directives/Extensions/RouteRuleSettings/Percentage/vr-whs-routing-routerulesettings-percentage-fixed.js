@@ -11,8 +11,8 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
 
                 var ctrl = this;
 
-                var routingOptionPercentageFixedCtor = new routingOptionPercentageFixed(ctrl, $scope);
-                routingOptionPercentageFixedCtor.initializeController();
+                var ctor = new percentageFixedCtor(ctrl, $scope);
+                ctor.initializeController();
 
             },
             controllerAs: 'ctrl',
@@ -25,12 +25,12 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Templates/OptionPercentageFixedDirective.html';
+                return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Percentage/Templates/OptionPercentageFixedDirective.html';
             }
 
         };
 
-        function routingOptionPercentageFixed(ctrl, $scope) {
+        function percentageFixedCtor(ctrl, $scope) {
             $scope.percentages = [];
             var index;
 
@@ -58,14 +58,14 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
             function defineAPI() {
                 var api = {};
 
-                api.load = function (routeRuleOptionPercentageSettings) {
+                api.load = function (payload) {
 
-                    if (routeRuleOptionPercentageSettings != undefined)
+                    if (payload != undefined)
                     {
-                        for (var i = 0; i < routeRuleOptionPercentageSettings.Percentages.length; i++) {
+                        for (var i = 0; i < payload.Percentages.length; i++) {
                             $scope.percentages.push({
                                 id: i,
-                                percentage: routeRuleOptionPercentageSettings.Percentages[i]
+                                percentage: payload.Percentages[i]
                             });
                         }
                     }

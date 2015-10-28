@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingRouterulesettingsFilterRemoveloss', ['UtilsService',
+app.directive('vrWhsRoutingRouterulesettingsFilterMinprofit', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {
@@ -11,8 +11,8 @@ app.directive('vrWhsRoutingRouterulesettingsFilterRemoveloss', ['UtilsService',
 
                 var ctrl = this;
 
-                var routingOptionFilterRemoveLossCtor = new routingOptionFilterRemoveLoss(ctrl, $scope);
-                routingOptionFilterRemoveLossCtor.initializeController();
+                var ctor = new minProfitCtor(ctrl, $scope);
+                ctor.initializeController();
 
             },
             controllerAs: 'ctrl',
@@ -24,17 +24,13 @@ app.directive('vrWhsRoutingRouterulesettingsFilterRemoveloss', ['UtilsService',
                     }
                 }
             },
-            template: function (element, attrs) {
-                return getRoutingOptionFilterRemoveLossTemplate(attrs);
+            templateURL: function (element, attrs) {
+                return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Filter/Templates/MinProfitDirective.html';
             }
 
         };
 
-        function getRoutingOptionFilterRemoveLossTemplate(attrs) {
-            return '';
-        }
-
-        function routingOptionFilterRemoveLoss(ctrl, $scope) {
+        function minProfitCtor(ctrl, $scope) {
 
             function initializeController() {
                 defineAPI();
@@ -43,7 +39,7 @@ app.directive('vrWhsRoutingRouterulesettingsFilterRemoveloss', ['UtilsService',
             function defineAPI() {
                 var api = {};
 
-                api.load = function (routeRuleOptionFilterSettings) {
+                api.load = function (payload) {
 
                 }
 

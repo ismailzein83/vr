@@ -11,8 +11,8 @@ app.directive('vrWhsBeCustomergroupSelective', ['UtilsService', 'VRUIUtilsServic
 
                 var ctrl = this;
 
-                var beCustomersCtor = new beCustomers(ctrl, $scope);
-                beCustomersCtor.initializeController();
+                var ctor = new selectiveCustomersCtor(ctrl, $scope);
+                ctor.initializeController();
 
             },
             controllerAs: 'ctrl',
@@ -25,16 +25,12 @@ app.directive('vrWhsBeCustomergroupSelective', ['UtilsService', 'VRUIUtilsServic
                 }
             },
             templateUrl: function (element, attrs) {
-                return getBeSelectiveCustomersTemplate(attrs);
+                return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/CustomerGroup/Templates/SelectiveCustomersDirectiveTemplate.html';
             }
 
         };
 
-        function getBeSelectiveCustomersTemplate(attrs) {
-            return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/CustomerGroup/Templates/SelectiveCustomersDirectiveTemplate.html';
-        }
-
-        function beCustomers(ctrl, $scope) {
+        function selectiveCustomersCtor(ctrl, $scope) {
             var carrierAccountDirectiveAPI;
             var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -50,14 +46,14 @@ app.directive('vrWhsBeCustomergroupSelective', ['UtilsService', 'VRUIUtilsServic
             function defineAPI() {
                 var api = {};
 
-                api.load = function (customerGroupSettings) {
+                api.load = function (payload) {
                     var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     carrierAccountReadyPromiseDeferred.promise.then(function () {
-                        var directivePayload;
-                        if (customerGroupSettings != undefined && customerGroupSettings != null)
-                            directivePayload = customerGroupSettings.CustomerIds;
-                        VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, directivePayload, loadCarrierAccountPromiseDeferred);
+                        var carrierAccountPayload;
+                        if (payload != undefined && payload != null)
+                            carrierAccountPayload = payload.CustomerIds;
+                        VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, carrierAccountPayload, loadCarrierAccountPromiseDeferred);
                     });
 
                     return loadCarrierAccountPromiseDeferred.promise;

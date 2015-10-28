@@ -19,8 +19,8 @@ app.directive('vrWhsBeSalezonegroupAllexcept', ['WhS_BE_SaleZoneAPIService', 'Wh
                 $scope.showSellingNumberPlan = ctrl.sellingnumberplanid == undefined;
                 $scope.isPackageDefined = !$scope.showSellingNumberPlan;
 
-                var beSaleZonesCtor = new beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService);
-                beSaleZonesCtor.initializeController();
+                var ctor = new allExceptCtor(ctrl, $scope, WhS_BE_SaleZoneAPIService);
+                ctor.initializeController();
 
                 $scope.onSellingNumberPlanValueChanged = function () {
                     $scope.isPackageDefined = (!$scope.showSellingNumberPlan || $scope.selectedSellingNumberPlan != undefined);
@@ -51,7 +51,7 @@ app.directive('vrWhsBeSalezonegroupAllexcept', ['WhS_BE_SaleZoneAPIService', 'Wh
 
         };
 
-        function beSaleZones(ctrl, $scope, WhS_BE_SaleZoneAPIService) {
+        function allExceptCtor(ctrl, $scope, WhS_BE_SaleZoneAPIService) {
 
             function initializeController() {
                 defineAPI();
@@ -60,7 +60,7 @@ app.directive('vrWhsBeSalezonegroupAllexcept', ['WhS_BE_SaleZoneAPIService', 'Wh
             function defineAPI() {
                 var api = {};
 
-                api.load = function (saleZoneGroupSettings) {
+                api.load = function (payload) {
                     var promises = [];
 
                     var loadSellingNumberPlanPromise = WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlans().then(function (response) {
@@ -68,28 +68,28 @@ app.directive('vrWhsBeSalezonegroupAllexcept', ['WhS_BE_SaleZoneAPIService', 'Wh
                             $scope.sellingNumberPlans.push(item);
                         });
 
-                        if (saleZoneGroupSettings != undefined)
-                            $scope.selectedSellingNumberPlan = UtilsService.getItemByVal($scope.sellingNumberPlans, saleZoneGroupSettings.SellingNumberPlanId, "SellingNumberPlanId");
+                        if (payload != undefined)
+                            $scope.selectedSellingNumberPlan = UtilsService.getItemByVal($scope.sellingNumberPlans, payload.SellingNumberPlanId, "SellingNumberPlanId");
                     });
 
                     promises.push(loadSellingNumberPlanPromise);
 
-                    if (saleZoneGroupSettings != undefined && saleZoneGroupSettings.ZoneIds.length > 0) {
-                        var loadSaleZoneSelectorPromise = setSaleZoneSelector(saleZoneGroupSettings);
+                    if (payload != undefined && payload.ZoneIds.length > 0) {
+                        var loadSaleZoneSelectorPromise = setSaleZoneSelector(payload);
                         promises.push(loadSaleZoneSelectorPromise);
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
 
-                    function setSaleZoneSelector(saleZoneGroupSettings) {
+                    function setSaleZoneSelector(payload) {
                         var sellingNumberPlanId;
 
                         if (ctrl.sellingnumberplanid == undefined)
-                            sellingNumberPlanId = saleZoneGroupSettings.SellingNumberPlanId;
+                            sellingNumberPlanId = payload.SellingNumberPlanId;
                         else
                             sellingNumberPlanId = ctrl.sellingnumberplanid;
 
-                        var input = { SellingNumberPlanId: sellingNumberPlanId, SaleZoneIds: saleZoneGroupSettings.ZoneIds };
+                        var input = { SellingNumberPlanId: sellingNumberPlanId, SaleZoneIds: payload.ZoneIds };
 
                         return WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
                             angular.forEach(response, function (item) {

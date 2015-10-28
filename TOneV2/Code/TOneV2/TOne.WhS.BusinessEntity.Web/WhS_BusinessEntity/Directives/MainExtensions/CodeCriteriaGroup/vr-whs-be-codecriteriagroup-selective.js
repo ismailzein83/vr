@@ -26,8 +26,8 @@ app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
                     $scope.codeCriteriaArray.splice($scope.codeCriteriaArray.indexOf(codeToRemove), 1);
                 }
 
-                var beCodeCriteriaCtor = new beCodeCriteria(ctrl, $scope);
-                beCodeCriteriaCtor.initializeController();
+                var ctor = new codeCriteriaCtor(ctrl, $scope);
+                ctor.initializeController();
 
             },
             controllerAs: 'ctrl',
@@ -45,7 +45,7 @@ app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
 
         };
 
-        function beCodeCriteria(ctrl, $scope) {
+        function codeCriteriaCtor(ctrl, $scope) {
 
             function initializeController() {
                 defineAPI();
@@ -54,10 +54,10 @@ app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
             function defineAPI() {
                 var api = {};
 
-                api.load = function (codeCriteriaGroupSettings) {
-                    if (codeCriteriaGroupSettings != undefined)
+                api.load = function (payload) {
+                    if (payload != undefined)
                     {
-                        angular.forEach(codeCriteriaGroupSettings.Codes, function (item) {
+                        angular.forEach(payload.Codes, function (item) {
                             $scope.codeCriteriaArray.push(item);
                         });
                     }

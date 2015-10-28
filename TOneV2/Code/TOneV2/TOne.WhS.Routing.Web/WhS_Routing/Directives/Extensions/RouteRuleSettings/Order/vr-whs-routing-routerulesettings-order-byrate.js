@@ -11,8 +11,8 @@ app.directive('vrWhsRoutingRouterulesettingsOrderByrate', ['UtilsService',
 
                 var ctrl = this;
 
-                var routingOptionOrderByRateCtor = new routingOptionOrderByRate(ctrl, $scope);
-                routingOptionOrderByRateCtor.initializeController();
+                var ctor = new orderByRateCtor(ctrl, $scope);
+                ctor.initializeController();
 
             },
             controllerAs: 'ctrl',
@@ -25,16 +25,12 @@ app.directive('vrWhsRoutingRouterulesettingsOrderByrate', ['UtilsService',
                 }
             },
             template: function (element, attrs) {
-                return getRoutingOptionOrderByRateTemplate(attrs);
+                return '';
             }
 
         };
 
-        function getRoutingOptionOrderByRateTemplate(attrs) {
-            return '';
-        }
-
-        function routingOptionOrderByRate(ctrl, $scope) {
+        function orderByRateCtor(ctrl, $scope) {
 
             function initializeController() {
                 defineAPI();
@@ -43,7 +39,7 @@ app.directive('vrWhsRoutingRouterulesettingsOrderByrate', ['UtilsService',
             function defineAPI() {
                 var api = {};
 
-                api.load = function (routeRuleOptionOrderSettings) {
+                api.load = function (payload) {
                     
                 }
 

@@ -11,8 +11,8 @@ app.directive('vrWhsBeSuppliergroupSelective', ['UtilsService',
 
                 var ctrl = this;
 
-                var beSuppliersCtor = new beSuppliers(ctrl, $scope);
-                beSuppliersCtor.initializeController();
+                var ctor = new selectiveCtor(ctrl, $scope);
+                ctor.initializeController();
 
             },
             controllerAs: 'ctrl',
@@ -25,16 +25,12 @@ app.directive('vrWhsBeSuppliergroupSelective', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return getBeSelectiveSuppliersTemplate(attrs);
+                return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/SupplierGroup/Templates/SelectiveSuppliersDirectiveTemplate.html';
             }
 
         };
 
-        function getBeSelectiveSuppliersTemplate(attrs) {
-            return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/SupplierGroup/Templates/SelectiveSuppliersDirectiveTemplate.html';
-        }
-
-        function beSuppliers(ctrl, $scope) {
+        function selectiveCtor(ctrl, $scope) {
             var carrierAccountDirectiveAPI;
 
             function initializeController() {

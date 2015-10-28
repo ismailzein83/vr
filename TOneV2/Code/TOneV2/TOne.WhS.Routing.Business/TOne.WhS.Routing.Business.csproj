@@ -65,6 +65,7 @@
     <Compile Include="RouteRuleSettingsManager.cs" />
     <Compile Include="RouteRules\BlockRouteRule.cs" />
     <Compile Include="RouteRules\Filters\OptionFilterLoss.cs" />
+    <Compile Include="RouteRules\Filters\OptionFilterMinProfit.cs" />
     <Compile Include="RouteRules\OptionSettingsGroups\SelectiveOptions.cs" />
     <Compile Include="RouteRules\Orders\OptionOrderByRate.cs" />
     <Compile Include="RouteRules\Percentages\FixedOptionPercentage.cs" />
