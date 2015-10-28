@@ -140,7 +140,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                         promises.push(loadRouteOptionOrderSettingsGroupTemplatesPromise);
 
                         if (optionOrderSettingsGroupPayload != undefined) {
-                            routeRuleOptionOrderSettingsDirectiveAPI = UtilsService.createPromiseDeferred();
+                            routeRuleOptionOrderSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
                             var routeRuleOptionOrderSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                             promises.push(routeRuleOptionOrderSettingsLoadPromiseDeferred.promise);
@@ -172,7 +172,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                         promises.push(loadRouteOptionFilterSettingsGroupTemplatesPromise);
 
                         if (optionFilterSettingsGroupPayload != undefined) {
-                            routeRuleOptionFilterSettingsDirectiveAPI = UtilsService.createPromiseDeferred();
+                            routeRuleOptionFilterSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
                             var routeRuleOptionFilterSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                             promises.push(routeRuleOptionFilterSettingsLoadPromiseDeferred.promise);

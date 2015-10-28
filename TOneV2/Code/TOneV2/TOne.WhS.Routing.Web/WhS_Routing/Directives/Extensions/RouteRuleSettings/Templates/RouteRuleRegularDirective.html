@@ -1,47 +1,47 @@
-﻿<vr-section title="Options" vr-loader="isLoadingOptionSettingsSection">
+﻿<vr-section title="Options">
     <vr-row>
         <vr-columns width="1/4row">
             <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" text="None"
                        label="Option Type" datasource="optionSettingsGroupTemplates" selectedvalues="selectedOptionSettingsGroupTemplate">
             </vr-select>
         </vr-columns>
-        <vr-columns width="3/4row" ng-show="selectedOptionSettingsGroupTemplate">
+        <vr-columns width="3/4row" ng-show="selectedOptionSettingsGroupTemplate" vr-loader="isLoadingOptionSettingsSection">
             <vr-directivewrapper directive="selectedOptionSettingsGroupTemplate.Editor" on-ready="onOptionSettingsGroupDirectiveReady"></vr-directivewrapper>
         </vr-columns>
     </vr-row>
 </vr-section>
-<vr-section title="Order Settings" vr-loader="isLoadingOptionOrderSettingsSection">
+<vr-section title="Order Settings">
     <vr-row>
         <vr-columns width="1/4row">
             <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" text="None"
                        label="Order Type" datasource="optionOrderSettingsGroupTemplates" selectedvalues="selectedOptionOrderSettingsGroupTemplate">
             </vr-select>
         </vr-columns>
-        <vr-columns width="3/4row" ng-show="selectedOptionOrderSettingsGroupTemplate">
+        <vr-columns width="3/4row" ng-show="selectedOptionOrderSettingsGroupTemplate" vr-loader="isLoadingOptionOrderSettingsSection">
             <vr-directivewrapper directive="selectedOptionOrderSettingsGroupTemplate.Editor" on-ready="onOptionOrderSettingsGroupDirectiveReady"></vr-directivewrapper>
         </vr-columns>
     </vr-row>
 </vr-section>
-<vr-section title="Filter Settings" vr-loader="isLoadingOptionFilterSettingsSection">
+<vr-section title="Filter Settings">
     <vr-row>
         <vr-columns width="1/4row">
             <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" text="None"
                        label="Filter Type" datasource="optionFilterSettingsGroupTemplates" selectedvalues="selectedOptionFilterSettingsGroupTemplate">
             </vr-select>
         </vr-columns>
-        <vr-columns width="3/4row" ng-show="selectedOptionFilterSettingsGroupTemplate">
+        <vr-columns width="3/4row" ng-show="selectedOptionFilterSettingsGroupTemplate" vr-loader="isLoadingOptionFilterSettingsSection">
             <vr-directivewrapper directive="selectedOptionFilterSettingsGroupTemplate.Editor" on-ready="onOptionFilterSettingsGroupDirectiveReady"></vr-directivewrapper>
         </vr-columns>
     </vr-row>
 </vr-section>
-<vr-section title="Percentage Settings" vr-loader="isLoadingOptionPercentageSettingsSection">
+<vr-section title="Percentage Settings">
     <vr-row>
         <vr-columns width="1/4row">
             <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" text="None"
                        label="Percentage Type" datasource="optionPercentageSettingsGroupTemplates" selectedvalues="selectedPercentageSettingsGroupTemplate">
             </vr-select>
         </vr-columns>
-        <vr-columns width="3/4row" ng-show="selectedPercentageSettingsGroupTemplate">
+        <vr-columns width="3/4row" ng-show="selectedPercentageSettingsGroupTemplate" vr-loader="isLoadingOptionPercentageSettingsSection">
             <vr-directivewrapper directive="selectedPercentageSettingsGroupTemplate.Editor" on-ready="onOptionPercentageSettingsGroupDirectiveReady"></vr-directivewrapper>
         </vr-columns>
     </vr-row>
