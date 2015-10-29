@@ -416,11 +416,7 @@
 
             ctrl.headerSortableListener = {
                 onSort: function (event) {
-                    ctrl.rowHtml += ' ';
-                    scope.$apply(function () {
-                        
-                    });
-                     
+                    buildRowHtml();
                 }
             };
 
