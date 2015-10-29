@@ -440,9 +440,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             });
 
 
-            foreach (var i in AggregateDefinitions)
+            List<AggregateDefinitionInfo> aggregateDefinitionInfo = GetAggregateDefinitionsInfo();
+
+
+            foreach (var j in aggregateDefinitionInfo)
             {
-                foreach (var j in GetAggregateDefinitionsInfo())
+                foreach (var i in AggregateDefinitions)
                 {
                     if (i.Id == j.Id)
                     {
@@ -454,7 +457,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-            return AggregateDefinitions.Where(x => x.OperatorTypeAllowed == GlobalConstants._DefaultOperatorType || x.OperatorTypeAllowed == OperatorType.Mobile).ToList();
+            return AggregateDefinitions.Where(x => x.KeyName != null && (x.OperatorTypeAllowed == GlobalConstants._DefaultOperatorType || x.OperatorTypeAllowed == OperatorType.Both)).ToList();
         }
 
         public List<AggregateDefinitionInfo> GetAggregateDefinitionsInfo()
