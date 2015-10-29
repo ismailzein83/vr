@@ -9,6 +9,7 @@
         var carrierAccountDirectiveAPI;
         var ratePlanGridAPI;
         var modifiedRatePlanItems = [];
+        var selectedZoneLetter;
 
         defineScope();
         load();
@@ -65,7 +66,7 @@
 
                     return WhS_Sales_RatePlanAPIService.SavePriceList(input).then(function (response) {
                         modifiedRatePlanItems = [];
-                        return loadRatePlanGrid($scope.zoneLetters[0]); // $scope.zoneLetters[0] is defined in this case
+                        return loadRatePlanGrid(selectedZoneLetter); // selectedZoneLetter is defined in this case
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
@@ -105,6 +106,8 @@
         }
 
         function loadRatePlanGrid(zoneLetter) {
+            selectedZoneLetter = zoneLetter;
+
             if (ratePlanGridAPI != undefined) {
                 $scope.ratePlanItems = [];
                 $scope.showRatePlanGrid = true;
