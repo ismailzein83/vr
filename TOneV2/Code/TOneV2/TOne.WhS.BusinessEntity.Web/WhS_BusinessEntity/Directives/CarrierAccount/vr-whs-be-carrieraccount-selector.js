@@ -22,18 +22,9 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             if ($attrs.ismultipleselection != undefined)
                 $scope.selectedCarrierValues = [];
             $scope.datasource = [];
+
             var beCarrierGroup = new BeCarrierGroup(ctrl, $scope, WhS_BE_CarrierAccountAPIService, $attrs);
             beCarrierGroup.initializeController();
-            $scope.onselectionchanged = function () {
-                ctrl.selectedvalues = $scope.selectedCarrierValues;
-                if (ctrl.onselectionchanged != undefined) {
-                    var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
-                    if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                        onvaluechangedMethod();
-                    }
-                }
-
-            }
 
         },
         controllerAs: 'ctrl',
@@ -80,12 +71,12 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         if (attrs.ismultipleselection != undefined)
             return '<div style="display:inline-block;width: calc(100% - 18px);" vr-loader="isLoadingDirective">'
                        + '<vr-label >' + label + '</vr-label>'
-                   + ' <vr-select ismultipleselection datasource="datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="selectedCarrierValues" ' + disabled + ' onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId"'
+                   + ' <vr-select ismultipleselection datasource="datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="selectedCarrierValues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId"'
                    + 'entityname="' + label + '" ' + hideremoveicon + '></vr-select></div>'
                    + ' <span class="glyphicon glyphicon-th hand-cursor"  aria-hidden="true" ng-click="openTreePopup()"></span></div>';
         else
             return '<div vr-loader="isLoadingDirective"><vr-label >' + label + '</vr-label>'
-               + ' <vr-select datasource="datasource" selectedvalues="selectedCarrierValues" ' + required + ' ' + hideselectedvaluessection + ' onselectionchanged="onselectionchanged"  ' + disabled + ' datatextfield="Name" datavaluefield="CarrierAccountId"'
+               + ' <vr-select datasource="datasource" selectedvalues="selectedCarrierValues" ' + required + ' ' + hideselectedvaluessection + ' onselectionchanged="ctrl.onselectionchanged"  ' + disabled + ' datatextfield="Name" datavaluefield="CarrierAccountId"'
                + 'entityname="' + label + '" ' + hideremoveicon + '></vr-select></div>';
     }
 
