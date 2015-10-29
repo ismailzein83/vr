@@ -37,7 +37,6 @@
             if ($attrs.defaultsortdirection != undefined)
                 defaultSortDirection = $scope.$parent.$eval($attrs.defaultsortdirection);
 
-            ctrl.clientSideFilterFunction;
             ctrl.hideGridMenu = ($attrs.hidegridmenu != undefined);
 
             ctrl.showgmenu = false;
@@ -67,16 +66,18 @@
                 $('.vr-grid-menu').parents('div').scroll(function () {
                         var menu = $(window).find('.vr-grid-menu')[0];
                         $(menu).css({ display: 'none' });
-                        $scope.$apply(function () {
+                        if (ctrl.showgmenu == true) {
                             ctrl.showgmenu = false;
-                        })
+                            $scope.$apply();
+                        }
                     });
                 $(window).on('scroll', function () {
                         var menu = $(window).find('.vr-grid-menu')[0];
                         $(menu).css({ display: 'none' });
-                        $scope.$apply(function () {
+                        if (ctrl.showgmenu == true) {
                             ctrl.showgmenu = false;
-                        })
+                            $scope.$apply();
+                        }
                     });
 
             }, 1);
@@ -84,11 +85,9 @@
             ctrl.hidePagingInfo = ($attrs.hidepaginginfo != undefined);
             ctrl.rotateHeader = true;
             ctrl.el = $element;
-            ctrl.getCellLayoutStyle = function () {
-                return $attrs.normalcell != undefined ? { 'white-space': 'normal' } : { 'white-space': 'nowrap' };
-            }
-            if ($attrs.clientsidefilter != undefined)
-                ctrl.clientSideFilterFunction = $scope.$parent.$eval($attrs.clientsidefilter);
+
+            ctrl.cellLayoutStyle = $attrs.normalcell != undefined ? { 'white-space': 'normal' } : { 'white-space': 'nowrap' };
+            
             if ($attrs.rotate == undefined) {
                 ctrl.rotateHeader = false;
             }
@@ -134,24 +133,23 @@
 
     };
  
-    var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" title="{{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}" >'
+    var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" title="{{::#COLUMNVALUES#.dataValue #CELLFILTER#}}" >'
         + ''
-      + '<a ng-if="$parent.ctrl.isColumnClickable(colDef, dataItem)"  ng-class="::$parent.ctrl.getCellClass(colDef, dataItem)" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem)" style="cursor:pointer;"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}#PERCENTAGE#</a>'
-      + '<span ng-if="(!$parent.ctrl.isColumnClickable(colDef, dataItem))" ng-style="::$parent.ctrl.getCellLayoutStyle()" ng-class="::$parent.ctrl.getCellClass(colDef, dataItem)"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}#PERCENTAGE#</span>'
+      + '<a ng-if="#COLUMNVALUES#.isClickable"  ng-class="::#COLUMNVALUES#.cellClass" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem)" style="cursor:pointer;"> {{::#COLUMNVALUES#.dataValue #CELLFILTER#}}#PERCENTAGE#</a>'
+      + '<span ng-if="!#COLUMNVALUES#.isClickable" ng-style="::$parent.ctrl.cellLayoutStyle" ng-class="::#COLUMNVALUES#.cellClass"> {{::#COLUMNVALUES#.dataValue #CELLFILTER#}}#PERCENTAGE#</span>'
       + ''
    + '</div>';
 
     var summaryCellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" >'
         + ''
-      + '<a ng-if="ctrl.isColumnClickable(colDef, ctrl.summaryDataItem)"  ng-class="::ctrl.getCellClass(colDef, ctrl.summaryDataItem)" style="font-size:13px" ng-click="ctrl.onColumnClicked(colDef, ctrl.summaryDataItem)" style="cursor:pointer;"> {{ctrl.getColumnSummaryValue(colDef, ctrl.summaryDataItem) #CELLFILTER#}}</a>'
-      + '<span ng-if="(!ctrl.isColumnClickable(colDef, ctrl.summaryDataItem))" ng-class="::ctrl.getCellClass(colDef, ctrl.summaryDataItem)" style="font-size:13px"> {{ctrl.getColumnSummaryValue(colDef, ctrl.summaryDataItem) #CELLFILTER#}}</span>'
+      + '<span class="span-summary" style="font-size:13px"> {{#COLUMNVALUES#.dataValue #CELLFILTER#}}</span>'
       + ''
    + '</div>';
 
 
     var headerTemplate = '<div ng-click="colDef.onSort()" class="vr-datagrid-header-cell" >'
    + ' <div col-index="renderIndex">'
-     + '   <div class="vr-datagrid-celltext"  ng-class="colDef.getAlign()" title="{{colDef.description}}" >'
+     + '   <div class="vr-datagrid-celltext"  ng-class="::colDef.textAlignmentClass" title="{{colDef.description}}" >'
        + '    <span ng-show="colDef.sortDirection==\'ASC\'">&uarr;</span>'
         + '   <span ng-show="colDef.sortDirection==\'DESC\'">&darr;</span>'
               +'<span ng-if="!colDef.rotateHeader"> {{colDef.name}}</span>'
@@ -183,7 +181,7 @@
         var sortDirection;
         var defaultSortByFieldName;
         var defaultSortDirection;
-       
+        var lastAddedColumnId = 0;
 
         function addColumn(col, columnIndex) {
             var colDef = {
@@ -193,20 +191,16 @@
                 field: col.field,
                 summaryField: col.summaryField,
                 enableSorting: col.enableSorting != undefined ? col.enableSorting : false,
-                getAlign: function () {
-                    var align = '';
-                    if (col.type == "Number") 
-                        align = 'vr-grid-cell-number';                   
-                        return align;
-
-                },
                 type:col.type,
                 tag: col.tag,
                 getcolor: col.getcolor,
                 rotateHeader: ctrl.rotateHeader,
                 nonHiddable: col.nonHiddable
             };
+            lastAddedColumnId++;
+            colDef.columnId = lastAddedColumnId;
 
+            colDef.textAlignmentClass = colDef.type == "Number" ? 'vr-grid-cell-number' : '';
             if (col.onSortChanged == undefined) {
                 col.onSortChanged = function (colDef_internal, sortDirection_internal) {
                     sortColumn = colDef_internal;
@@ -239,7 +233,7 @@
             }
             colDef.cellTemplate = columnCellTemplate;
             colDef.summaryCellTemplate = getCellTemplateWithFilter(summaryCellTemplate, col);
-
+            
             if (col.isClickable != undefined) {
                 colDef.isClickableAttr = col.isClickable;
                 colDef.onClickedAttr = col.onClicked;                
@@ -254,12 +248,28 @@
             else
                 colDef.widthFactor = col.widthFactor;
 
+           
+
             if (columnIndex == undefined)
                 ctrl.columnDefs.splice(ctrl.columnDefs.length , 0, colDef);//to insert before the actionType column
             else
                 ctrl.columnDefs.splice(columnIndex, 0, colDef);
+
+            if (ctrl.datasource != undefined) {
+                for (var i = 0; i < ctrl.datasource.length; i++) {
+                    filldataItemColumnValues(ctrl.datasource[i], colDef);
+                }
+            }
+            if (ctrl.updateItems != undefined) {
+                for (var i = 0; i < ctrl.updateItems.length; i++) {
+                    filldataItemColumnValues(ctrl.updateItems[i], colDef);
+                }
+            }
+            if (ctrl.summaryDataItem != undefined)
+                fillSummaryDataItemColumnValues(colDef);
+           
             calculateColumnsWidth();
-            buildRowHtml();
+            scheduleRowHtmlBuild();
             return colDef;
         }
 
@@ -297,7 +307,7 @@
             var index = ctrl.columnDefs.indexOf(colDef);
             ctrl.columnDefs.splice(index, 1);
             calculateColumnsWidth();
-            buildRowHtml();
+            scheduleRowHtmlBuild();
         }
 
         function hideColumn(colDef) {
@@ -312,6 +322,14 @@
 
         function updateColumnHeader(colDef, headerText){
             colDef.name = headerText;
+        }
+
+        function calculateDataColumnsSectionWidth() {
+            defineActionTypeColumn();
+            var otherSectionsWidth = actionMenuWidth + expandableColumnWidth + draggableRowIconWidth + deleteRowColumnWidth + actionTypeColumnWidth;
+            //if (width < 100)
+            //    width -= 1;
+            ctrl.dataColumnsSectionWidth = "calc(100% - " + otherSectionsWidth + "px)";
         }
 
         function calculateColumnsWidth() {
@@ -353,14 +371,6 @@
             ctrl.updateItems.splice(0, 0, item);
         }
 
-        function calculateDataColumnsSectionWidth() {
-            defineActionTypeColumn();
-            var otherSectionsWidth = actionMenuWidth + expandableColumnWidth + draggableRowIconWidth + deleteRowColumnWidth + actionTypeColumnWidth;
-            //if (width < 100)
-            //    width -= 1;
-            ctrl.dataColumnsSectionWidth = "calc(100% - " + otherSectionsWidth + "px)";
-        }
-
         function initializeController() {
             ctrl.updateItems = [];
             ctrl.columnDefs = [];
@@ -387,43 +397,11 @@
             ctrl.showColumn = showColumn;
             ctrl.updateColumnHeader = updateColumnHeader;
 
-            ctrl.getColumnValue = function (colDef, dataItem) {
-                if (colDef == undefined || colDef.field == undefined)
-                    return null;
-                else
-                    return eval('dataItem.' + colDef.field);
-            };
-
-            ctrl.getColumnSummaryValue = function (colDef, dataItem) {
-                if (colDef == undefined || colDef.summaryField == undefined)
-                    return null;
-                else
-                    return eval('dataItem.' + colDef.summaryField);
-            };
-
-            ctrl.isColumnClickable = function (colDef, dataItem) {
-                if (colDef == undefined || colDef.isClickableAttr == undefined)
-                    return false;
-                else {
-                    if (typeof (colDef.isClickableAttr) == 'function')
-                        return colDef.isClickableAttr(dataItem);
-                    else
-                        return colDef.isClickableAttr;
-                }
-            };
-
             ctrl.onColumnClicked = function (colDef, dataItem) {
                 if (colDef.onClickedAttr != undefined)
                     colDef.onClickedAttr(dataItem, colDef);
             };
 
-            ctrl.getCellClass = function (colDef, dataItem) {
-                if (colDef == undefined) return 'span-summary';
-                if (colDef.getcolor != undefined)
-                    return colDef.getcolor(dataItem, colDef);
-                return 'span-summary';
-            };
-            
             var lastSelectedRow;
             ctrl.onRowClicked = function (evnt) {
                 if (lastSelectedRow != undefined)
@@ -472,14 +450,53 @@
             ctrl.viewSelectionChanged = function () {
                 calculateDataColumnsSectionWidth();
             };
+
+            scope.$watchCollection('ctrl.datasource', onDataSourceChanged);
+            scope.$watchCollection('ctrl.updateItems', onDataSourceChanged);
+
+            function onDataSourceChanged(newDataSource, oldNames) {
+                for (var i = 0; i < newDataSource.length; i++) {
+                    var dataItem = newDataSource[i];
+                    if (!dataItem.isColumnValuesFilled){                        
+                        for (var j = 0; j < ctrl.columnDefs.length; j++) {
+                            var colDef = ctrl.columnDefs[j];
+                            filldataItemColumnValues(dataItem, colDef);
+                        }
+                        dataItem.isColumnValuesFilled = true;
+                    }
+                }
+
+                
+
+            }
+
+            
+        }
+
+        function getDataItemColumnProperty(colDef) {
+            return 'col_' + colDef.columnId;
         }
         
+        var isRowHtmlBuildScheduled;
+        function scheduleRowHtmlBuild() {
+            if (isRowHtmlBuildScheduled)
+                return;
+            isRowHtmlBuildScheduled = true;
+            setTimeout(function () {
+                isRowHtmlBuildScheduled = false;
+                buildRowHtml();
+                
+            }, 100);
+        }
+
         function buildRowHtml() {
             ctrl.rowHtml = '';
             var gridvalue;
             for (var i = 0; i < ctrl.columnDefs.length; i++) {
                 var currentColumn = ctrl.columnDefs[i];
                 var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
+                var dataItemColumnPropertyPath = "dataItem.columnsValues." + getDataItemColumnProperty(currentColumn);
+                
                 ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-block\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}"">';
                 if (currentColumn.type == "MultiProgress") {
                     var values = currentColumn.field.split("|");
@@ -494,13 +511,15 @@
                
                 }
                 else if (currentColumn.type == "Progress") {
-                    gridvalue = "{{::dataItem." + currentColumn.field + "}}";
+                    gridvalue = "{{::" + dataItemColumnPropertyPath + ".dataValue}}";
                     ctrl.rowHtml += '<vr-progressbar gridvalue="' + gridvalue + '" ></vr-progressbar></div>';
                 }else
                 {
+                    var cellTemplate = UtilsService.replaceAll(currentColumn.cellTemplate, "#COLUMNVALUES#", dataItemColumnPropertyPath);
+                    cellTemplate = UtilsService.replaceAll(cellTemplate, "colDef", currentColumnHtml);
                     ctrl.rowHtml += '<div class="vr-datagrid-cell">'
                         + '    <div class="vr-datagrid-celltext ">'
-                        + UtilsService.replaceAll(currentColumn.cellTemplate, "colDef", currentColumnHtml)
+                       + cellTemplate
                      +'</div>'
                      + '</div>'
                         + '</div>'; 
@@ -516,10 +535,11 @@
                 for (var i = 0; i < ctrl.columnDefs.length; i++) {
                     var currentColumn = ctrl.columnDefs[i];
                     var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
+                    var dataItemColumnPropertyPath = "ctrl.summaryDataItem.columnsValues." + getDataItemColumnProperty(currentColumn);
                     ctrl.summaryRowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-block\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}">'
                     + '<div class="vr-datagrid-cell">'
                     + '    <div class="vr-datagrid-celltext">'
-                      + UtilsService.replaceAll(ctrl.columnDefs[i].summaryCellTemplate, "colDef", currentColumnHtml)
+                      + UtilsService.replaceAll(currentColumn.summaryCellTemplate, "#COLUMNVALUES#", dataItemColumnPropertyPath)
                         + '</div>'
                     + '</div>'
 
@@ -527,7 +547,6 @@
                 }
             }
         }
-        
         function defineAPI() {           
             gridApi.resetSorting = function () {
                 if (lastSortColumnDef != undefined) {
@@ -611,19 +630,27 @@
                         });
                     }, 10);
                 }
-                // to rigth padding in old data loading methode in bi
-                if (ctrl.datasource.length <= 11)
-                    ctrl.headerStyle = {
-                        "padding-right": "0px"
-                    }
-                else
-                ctrl.headerStyle = {
-                    "padding-right": getScrollbarWidth() + "px"
+                if (pagingOnScrollEnabled) {
+                    // to rigth padding in old data loading methode in bi
+                    if (ctrl.datasource.length <= 11)
+                        ctrl.headerStyle = {
+                            "padding-right": "0px"
+                        }
+                    else
+                        ctrl.headerStyle = {
+                            "padding-right": getScrollbarWidth() + "px"
+                        }
                 }
             }
 
             gridApi.setSummary = function (dataItem) {
                 ctrl.summaryDataItem = dataItem;
+                
+                for (var j = 0; j < ctrl.columnDefs.length; j++) {
+                    var colDef = ctrl.columnDefs[j];
+                    fillSummaryDataItemColumnValues(colDef);
+                }
+
                 buildSummaryRowHtml();
             };
 
@@ -640,6 +667,7 @@
                 return retrieveData(true);
             };
             setTimeout(function () {
+
                 isGridReady = true;
                 if (ctrl.onReady != null)
                     ctrl.onReady(gridApi);
@@ -652,6 +680,62 @@
             gridApi.collapseRow = function (dataItem) {
                 ctrl.collapseRow(dataItem);
             };            
+        }
+
+        function filldataItemColumnValues(dataItem, colDef) {
+            try{
+                
+                var colValuesObj = {};
+                if (colDef.field != undefined)
+                    colValuesObj.dataValue = eval('dataItem.' + colDef.field);
+
+                colValuesObj.cellClass = getCellClass(colDef, dataItem);
+
+                colValuesObj.isClickable = isColumnClickable(colDef, dataItem);
+
+                if (dataItem.columnsValues == undefined)
+                    dataItem.columnsValues = {};
+
+                dataItem.columnsValues[getDataItemColumnProperty(colDef)] = colValuesObj;
+            }
+            catch (ex) {
+
+            }
+
+            function getCellClass(colDef, dataItem) {
+                if (colDef.getcolor != undefined)
+                    return colDef.getcolor(dataItem, colDef);
+                if (colDef.cellClass == undefined)
+                    return 'span-summary';
+            }
+
+            function isColumnClickable(colDef, dataItem) {
+                if (colDef == undefined || colDef.isClickableAttr == undefined)
+                    return false;
+                else {
+                    if (typeof (colDef.isClickableAttr) == 'function')
+                        return colDef.isClickableAttr(dataItem);
+                    else
+                        return colDef.isClickableAttr;
+                }
+            };
+        }
+
+        function fillSummaryDataItemColumnValues(colDef) {
+            try{
+                if (ctrl.summaryDataItem == undefined)
+                    return;
+                if (ctrl.summaryDataItem.columnsValues == undefined)
+                    ctrl.summaryDataItem.columnsValues = {};
+                var colValuesObj = {};
+                if (colDef.field != undefined)
+                    colValuesObj.dataValue = eval('ctrl.summaryDataItem.' + colDef.summaryField);
+
+                ctrl.summaryDataItem.columnsValues[getDataItemColumnProperty(colDef)] = colValuesObj;
+            }
+            catch (ex) {
+
+            }
         }
 
         function setMaxHeight(maxHeight) {
@@ -726,7 +810,7 @@
             var pagesize = (Math.ceil(parseInt((h / 25) * 1.5) / 10) * 10) < 25 ? 25 : (Math.ceil(parseInt((h / 25) * 1.5) / 10) * 10);
             return pagesize;
         }
-        function getScrollbarWidth() {
+        function getScrollbarWidth() {            
             var outer = document.createElement("div");
             outer.style.visibility = "hidden";
             outer.style.width = "100px";
@@ -959,24 +1043,10 @@
            
             var promise = retrieveDataFunction(retrieveDataInput, onResponseReady);//this function should return a promise in case it is getting data
             
-            if (promise != undefined && promise != null) {
+            if (!pagingOnScrollEnabled && promise != undefined && promise != null) {
                 ctrl.isLoadingMoreData = true;
                 promise.finally(function () {
-                    ctrl.isLoadingMoreData = false;                    
-                    setTimeout(function () {
-                        var div = $(ctrl.el).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
-                        var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;                        
-                        if (hasVerticalScrollbar)
-                            ctrl.headerStyle = {
-                                "padding-right": getScrollbarWidth() + "px"
-                               
-                            }
-                        else ctrl.headerStyle = {
-                            "padding-right": "0px"
-
-                        }
-                    },500)
-                 
+                    ctrl.isLoadingMoreData = false;
                 });
             }
             return promise;            

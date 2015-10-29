@@ -197,12 +197,12 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
     $scope.clock = ""; // initialise the time variable
     $scope.tickInterval = 1000 //ms
-
+    
     var tick = function () {
         $scope.clock = Date.now() // get the current time
-        $timeout(tick, $scope.tickInterval); // reset the timer
+        setTimeout(tick, $scope.tickInterval); // reset the timer
     }
-    $timeout(tick, $scope.tickInterval);
+    setTimeout(tick, $scope.tickInterval);
 
     var allMenuItems = [];   
     MenuAPIService.GetMenuItems().then(function (response) {
