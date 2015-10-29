@@ -50,9 +50,10 @@ app.directive('vrWhsBeCustomergroupSelective', ['UtilsService', 'VRUIUtilsServic
                     var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     carrierAccountReadyPromiseDeferred.promise.then(function () {
-                        var carrierAccountPayload;
-                        if (payload != undefined && payload != null)
-                            carrierAccountPayload = payload.CustomerIds;
+                        var carrierAccountPayload = {
+                            filter: {},
+                            selectedIds: payload != undefined ? payload.CustomerIds : null
+                        };
                         VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, carrierAccountPayload, loadCarrierAccountPromiseDeferred);
                     });
 
@@ -62,7 +63,7 @@ app.directive('vrWhsBeCustomergroupSelective', ['UtilsService', 'VRUIUtilsServic
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups.SelectiveCustomerGroup, TOne.WhS.BusinessEntity.MainExtensions",
-                        CustomerIds: UtilsService.getPropValuesFromArray(carrierAccountDirectiveAPI.getData(), "CarrierAccountId")
+                        CustomerIds: carrierAccountDirectiveAPI.getSelectedIds()
                     };
                 }
 

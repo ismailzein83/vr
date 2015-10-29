@@ -61,7 +61,7 @@ app.directive('vrWhsBeSuppliergroupSelective', ['UtilsService',
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.Entities.SelectiveSuppliersSettings, TOne.WhS.BusinessEntity.Entities",
-                        SupplierIds: UtilsService.getPropValuesFromArray(carrierAccountDirectiveAPI.getData(), "CarrierAccountId")
+                        SupplierIds: carrierAccountDirectiveAPI.getSelectedIds()
                     };
                 }
 

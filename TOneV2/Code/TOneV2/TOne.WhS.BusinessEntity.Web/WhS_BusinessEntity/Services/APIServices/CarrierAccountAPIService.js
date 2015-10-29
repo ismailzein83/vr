@@ -15,12 +15,10 @@
             });
 
         }
-        function GetCarrierAccountsInfo(getCustomers, getSuppliers) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierAccount", "GetCarrierAccountsInfo"), {
-                getCustomers: getCustomers,
-                getSuppliers: getSuppliers
+        function GetCarrierAccountInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierAccount", "GetCarrierAccountInfo"), {
+                filter: filter
             });
-
         }
 
         function GetSupplierGroupTemplates() {
@@ -41,7 +39,7 @@
         }
 
         return ({
-            GetCarrierAccountsInfo: GetCarrierAccountsInfo,
+            GetCarrierAccountInfo: GetCarrierAccountInfo,
             GetSupplierGroupTemplates: GetSupplierGroupTemplates,
             GetCustomerGroupTemplates: GetCustomerGroupTemplates,
             GetFilteredCarrierAccounts: GetFilteredCarrierAccounts,

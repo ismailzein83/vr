@@ -16,17 +16,18 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var allCarrierAccounts = GetCachedCarrierAccounts();
 
-            Func<CarrierAccountDetail, bool> filterExpression = (prod) =>
-                 (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
+            Func<CarrierAccountDetail, bool> filterExpression = (item) =>
+                 (input.Query.Name == null || item.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
-                 (input.Query.CarrierProfilesIds == null || input.Query.CarrierProfilesIds.Contains(prod.CarrierProfileId))
+                 (input.Query.CarrierProfilesIds == null || input.Query.CarrierProfilesIds.Contains(item.CarrierProfileId))
                   &&
-                 (input.Query.CarrierAccountsIds == null || input.Query.CarrierAccountsIds.Contains(prod.CarrierAccountId))
+                 (input.Query.CarrierAccountsIds == null || input.Query.CarrierAccountsIds.Contains(item.CarrierAccountId))
                    &&
-                 (input.Query.AccountsTypes == null || input.Query.AccountsTypes.Contains(prod.AccountType));
+                 (input.Query.AccountsTypes == null || input.Query.AccountsTypes.Contains(item.AccountType));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression));     
         }
+
         public List<CarrierAccount> GetAllCustomers()
         {
             throw new NotImplementedException();
@@ -37,20 +38,27 @@ namespace TOne.WhS.BusinessEntity.Business
             var carrierAccount = CarrierAccountsDetails.FindRecord(x => x.CarrierAccountId == carrierAccountId);
             return carrierAccount;
         }
-        public IEnumerable<CarrierAccountInfo> GetCarrierAccounts(bool getCustomers, bool getSuppliers)
+        public IEnumerable<CarrierAccountInfo> GetCarrierAccountInfo(string filter)
         {
-            List<CarrierAccountType> CarrierAccountsType = new List<CarrierAccountType>();
+            CarrierAccountInfoQuery query = Vanrise.Common.Serializer.Deserialize<CarrierAccountInfoQuery>(filter);
 
-            if (getCustomers)
+             List<CarrierAccountType> CarrierAccountsType = new List<CarrierAccountType>();
+
+            if (query.GetCustomers)
             {
                 CarrierAccountsType.Add(CarrierAccountType.Customer);
             }
-            if (getSuppliers)
+
+            if (query.GetSuppliers)
             {
                 CarrierAccountsType.Add(CarrierAccountType.Supplier);
             }
+
+            Func<CarrierAccountDetail, bool> filterExpression = (item) =>
+                 (item.AccountType == CarrierAccountType.Exchange || CarrierAccountsType.Contains(item.AccountType));
+           
             List<CarrierAccountDetail> CarrierAccountsDetails = GetCachedCarrierAccounts();
-            return CarrierAccountsDetails.MapRecords(CarrierAccountInfoMapper, x => x.AccountType == CarrierAccountType.Exchange || CarrierAccountsType.Contains(x.AccountType));
+            return CarrierAccountsDetails.MapRecords(CarrierAccountInfoMapper, filterExpression);
         }
         public List<Vanrise.Entities.TemplateConfig> GetCustomersGroupTemplates()
         {

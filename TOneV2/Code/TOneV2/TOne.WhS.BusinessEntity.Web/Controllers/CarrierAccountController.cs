@@ -30,11 +30,11 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.GetCarrierAccount(carrierAccountId);
         }
         [HttpGet]
-        [Route("GetCarrierAccountsInfo")]
-        public IEnumerable<CarrierAccountInfo> GetCarrierAccountsInfo(bool getCustomers, bool getSuppliers)
+        [Route("GetCarrierAccountInfo")]
+        public IEnumerable<CarrierAccountInfo> GetCarrierAccountInfo(string filter)
         {
             CarrierAccountManager manager = new CarrierAccountManager();
-            return manager.GetCarrierAccounts(getCustomers, getSuppliers);
+            return manager.GetCarrierAccountInfo(filter);
         }
 
         public IEnumerable<CarrierAccountInfo> GetCarrierAccounts(string serializedFilter)
