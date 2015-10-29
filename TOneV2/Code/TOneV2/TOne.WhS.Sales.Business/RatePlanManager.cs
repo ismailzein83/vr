@@ -44,6 +44,8 @@ namespace TOne.WhS.Sales.Business
                     {
                         ratePlanItem.SaleRateId = rate.SaleRateId;
                         ratePlanItem.Rate = rate.NormalRate;
+                        ratePlanItem.BeginEffectiveDate = rate.BeginEffectiveDate;
+                        ratePlanItem.EndEffectiveDate = rate.EndEffectiveDate;
                     }
 
                     ratePlanItems.Add(ratePlanItem);

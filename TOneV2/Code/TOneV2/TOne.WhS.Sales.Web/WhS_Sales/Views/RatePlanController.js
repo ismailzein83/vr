@@ -9,7 +9,6 @@
         var carrierAccountDirectiveAPI;
         var ratePlanGridAPI;
         var modifiedRatePlanItems = [];
-        var selectedZoneLetter;
 
         defineScope();
         load();
@@ -36,13 +35,16 @@
             $scope.search = function () {
                 return loadZoneLetters().then(function () {
                     if ($scope.zoneLetters.length > 0) {
-                        return loadRatePlanGrid($scope.zoneLetters[0]);
+                        return loadRatePlanGrid();
                     }
                 });
             };
 
-            $scope.loadRatePlanGrid = function (zoneLetter) {
-                loadRatePlanGrid(zoneLetter);
+            $scope.connector = {
+                selectedZoneLetterIndex: 0,
+                onZoneLetterSelectionChanged: function () {
+                    loadRatePlanGrid();
+                }
             };
 
             $scope.sellNewZones = function () {
@@ -58,6 +60,9 @@
             };
 
             $scope.savePriceList = function () {
+                //logEEDs();
+                //return;
+
                 if (modifiedRatePlanItems.length > 0) {
                     var input = {
                         CustomerId: carrierAccountDirectiveAPI.getData().CarrierAccountId,
@@ -66,13 +71,19 @@
 
                     return WhS_Sales_RatePlanAPIService.SavePriceList(input).then(function (response) {
                         modifiedRatePlanItems = [];
-                        return loadRatePlanGrid(selectedZoneLetter); // selectedZoneLetter is defined in this case
+                        return loadRatePlanGrid();
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
                 }
             };
         }
+
+        //function logEEDs() {
+        //    for (var i = 0; i < $scope.ratePlanItems.length; i++) {
+        //        console.log($scope.ratePlanItems[i].EndEffectiveDate);
+        //    }
+        //}
 
         function load() {
             if (carrierAccountDirectiveAPI == undefined)
@@ -105,8 +116,8 @@
             }
         }
 
-        function loadRatePlanGrid(zoneLetter) {
-            selectedZoneLetter = zoneLetter;
+        function loadRatePlanGrid() {
+            $scope.loadingRatePlanGrid = true;
 
             if (ratePlanGridAPI != undefined) {
                 $scope.ratePlanItems = [];
@@ -114,7 +125,7 @@
 
                 var query = {
                     CustomerId: carrierAccountDirectiveAPI.getData().CarrierAccountId,
-                    ZoneLetter: zoneLetter,
+                    ZoneLetter: $scope.zoneLetters[$scope.connector.selectedZoneLetterIndex],
                     CountryId: null
                 };
 
@@ -137,8 +148,22 @@
                                     $scope.disableSaveButton = false;
                                 }
                             }
+
+                            if (dataItem.DisableBeginEffectiveDate) {
+                                dataItem.DisableBeginEffectiveDate = false;
+                                dataItem.DisableEndEffectiveDate = false;
+
+                                dataItem.BeginEffectiveDate = (Number(dataItem.NewRate) > Number(dataItem.Rate)) ?
+                                    new Date(new Date().setDate(new Date().getDate() + 7)) : new Date();
+
+                                dataItem.EndEffectiveDate = null;
+
+                                console.log(dataItem);
+                            }
                         };
-                        ratePlanItem.BeginEffectiveDate = new Date();
+
+                        ratePlanItem.DisableBeginEffectiveDate = true;
+                        ratePlanItem.DisableEndEffectiveDate = true;
 
                         $scope.ratePlanItems.push(ratePlanItem);
                     }
@@ -146,6 +171,8 @@
                     setModifiedRatePlanItems();
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.loadingRatePlanGrid = false;
                 });
             }
         }

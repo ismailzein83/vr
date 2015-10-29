@@ -15,5 +15,9 @@ namespace TOne.WhS.Sales.Entities
         public long? SaleRateId { get; set; }
 
         public decimal Rate { get; set; }
+
+        public DateTime? BeginEffectiveDate { get; set; }
+
+        public DateTime? EndEffectiveDate { get; set; }
     }
 }
