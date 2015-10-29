@@ -27,6 +27,13 @@ font-size:12px !important;
     color: #635F5F;
     margin-top:5px;
 }
+
+@media (max-width: 768px ) {   
+    .modal-dialog{
+        width:auto !important;
+    }
+}
+
 .vr-user-label{
     font-weight: bold;
     color: #635F5F;
