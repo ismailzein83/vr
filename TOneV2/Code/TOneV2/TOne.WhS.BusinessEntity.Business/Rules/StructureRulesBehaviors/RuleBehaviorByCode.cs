@@ -52,7 +52,7 @@ namespace TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors
                 IRuleCodeCriteria ruleCodeCriteria = rule as IRuleCodeCriteria;
                 IEnumerable<CodeCriteria> codeCriterias = ruleCodeCriteria.CodeCriterias;
                 if (codeCriterias != null)
-                    keys = codeCriterias.Where(code => !code.WithSubCodes).Select(code => code.Code);
+                    keys = codeCriterias.Select(code => code.Code);
             }
 
             protected override bool TryGetKeyFromTarget(object target, out string key)
