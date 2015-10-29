@@ -25,7 +25,7 @@ namespace Vanrise.Rules
             BaseRuleStructureBehavior ruleStructureBehavior = parentNode.Behavior;
 
             List<BaseRule> notMatchedRules;
-            IEnumerable<RuleNode> nodes = ruleStructureBehavior.StructureRules(this.Rules, out notMatchedRules);
+            IEnumerable<RuleNode> nodes = ruleStructureBehavior.StructureRules(parentNode.Rules, out notMatchedRules);
             if (nodes != null && nodes.Count() > 0)
             {
                 parentNode.ChildNodes = new List<RuleNode>();
