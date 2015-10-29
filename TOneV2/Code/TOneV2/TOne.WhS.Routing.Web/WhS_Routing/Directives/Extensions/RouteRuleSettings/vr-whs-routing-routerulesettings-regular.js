@@ -38,7 +38,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
             var routeRuleOptionOrderSettingsReadyPromiseDeferred;
 
             var routeRuleOptionFilterSettingsDirectiveAPI;
-            var routeRuleOptionFilterSettingsReadyPromiseDeferred;
+            var routeRuleOptionFilterSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var routeRuleOptionPercentageSettingsDirectiveAPI;
             var routeRuleOptionPercentageSettingsReadyPromiseDeferred;
@@ -64,8 +64,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
 
                 $scope.onOptionFilterSettingsGroupDirectiveReady = function (api) {
                     routeRuleOptionFilterSettingsDirectiveAPI = api;
-                    var setLoader = function (value) { $scope.isLoadingOptionFilterSettingsSection = value };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeRuleOptionFilterSettingsDirectiveAPI, undefined, setLoader, routeRuleOptionFilterSettingsReadyPromiseDeferred);
+                    routeRuleOptionFilterSettingsReadyPromiseDeferred.resolve();
                 }
 
                 $scope.onOptionPercentageSettingsGroupDirectiveReady = function (api) {
@@ -152,36 +151,19 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                     }
 
                     function loadOptionFilterSettingsGroupSection() {
-                        var promises = [];
-                        var optionFilterSettingsGroupPayload;
 
-                        if (payload != undefined && payload.OptionFilterSettings != null)
-                            optionFilterSettingsGroupPayload = payload.OptionFilterSettings;
+                        var loadOptionFilterSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                        var loadRouteOptionFilterSettingsGroupTemplatesPromise = WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionFilterSettingsTemplates().then(function (response) {
-                            angular.forEach(response, function (item) {
-                                $scope.optionFilterSettingsGroupTemplates.push(item);
-                            });
+                        routeRuleOptionFilterSettingsReadyPromiseDeferred.promise.then(function () {
+                            var optionFiltersGroupPayload;
 
-                            if (optionFilterSettingsGroupPayload != undefined)
-                                $scope.selectedOptionFilterSettingsGroupTemplate = UtilsService.getItemByVal($scope.optionFilterSettingsGroupTemplates, optionFilterSettingsGroupPayload.ConfigId, "TemplateConfigID");
+                            if (payload != undefined && payload.OptionFilters != null)
+                                optionFiltersGroupPayload = payload.OptionFilters;
+
+                            VRUIUtilsService.callDirectiveLoad(routeRuleOptionFilterSettingsDirectiveAPI, optionFiltersGroupPayload, loadOptionFilterSettingsPromiseDeferred);
                         });
 
-                        promises.push(loadRouteOptionFilterSettingsGroupTemplatesPromise);
-
-                        if (optionFilterSettingsGroupPayload != undefined) {
-                            routeRuleOptionFilterSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                            var routeRuleOptionFilterSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                            promises.push(routeRuleOptionFilterSettingsLoadPromiseDeferred.promise);
-
-                            routeRuleOptionFilterSettingsReadyPromiseDeferred.promise.then(function () {
-                                routeRuleOptionFilterSettingsReadyPromiseDeferred = undefined;
-                                VRUIUtilsService.callDirectiveLoad(routeRuleOptionFilterSettingsDirectiveAPI, optionFilterSettingsGroupPayload, routeRuleOptionFilterSettingsLoadPromiseDeferred);
-                            });
-                        }
-
-                        return UtilsService.waitMultiplePromises(promises);
+                        return loadOptionFilterSettingsPromiseDeferred.promise;
                     }
 
                     function loadOptionPercentageSettingsGroupSection() {
@@ -223,7 +205,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                         $type: "TOne.WhS.Routing.Business.RouteRules.RegularRouteRule, TOne.WhS.Routing.Business",
                         OptionsSettingsGroup: VRUIUtilsService.getSettingsFromDirective($scope, routeOptionSettingsGroupDirectiveAPI, 'selectedOptionSettingsGroupTemplate'),
                         OptionOrderSettings: VRUIUtilsService.getSettingsFromDirective($scope, routeRuleOptionOrderSettingsDirectiveAPI, 'selectedOptionOrderSettingsGroupTemplate'),
-                        OptionFilterSettings: VRUIUtilsService.getSettingsFromDirective($scope, routeRuleOptionFilterSettingsDirectiveAPI, 'selectedOptionFilterSettingsGroupTemplate'),
+                        OptionFilters: routeRuleOptionFilterSettingsDirectiveAPI.getData(),
                         OptionPercentageSettings: VRUIUtilsService.getSettingsFromDirective($scope, routeRuleOptionPercentageSettingsDirectiveAPI, 'selectedPercentageSettingsGroupTemplate')
                     };
                 }

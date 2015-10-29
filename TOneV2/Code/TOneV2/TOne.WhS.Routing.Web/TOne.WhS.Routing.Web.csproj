@@ -128,7 +128,9 @@
     <Content Include="WhS_Routing\Constant\ModuleConfig.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\MinProfitDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RemoveLossDirective.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RouteRuleFilterDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter-minprofit.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Templates\RouteRuleRegularDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-block.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-regular.js" />

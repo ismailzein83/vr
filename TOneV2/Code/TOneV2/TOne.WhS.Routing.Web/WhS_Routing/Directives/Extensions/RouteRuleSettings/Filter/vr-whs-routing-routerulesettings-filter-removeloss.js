@@ -24,7 +24,7 @@ app.directive('vrWhsRoutingRouterulesettingsFilterRemoveloss', ['UtilsService',
                     }
                 }
             },
-            templateURL: function (element, attrs) {
+            templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Filter/Templates/RemoveLossDirective.html';
             }
 

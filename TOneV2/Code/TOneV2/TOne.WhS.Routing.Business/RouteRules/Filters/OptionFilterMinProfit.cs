@@ -9,6 +9,8 @@ namespace TOne.WhS.Routing.Business.RouteRules.Filters
 {
     public class OptionFilterMinProfit: RouteRuleOptionFilterSettings
     {
+        public int Profit { get; set; }
+
         public override void Execute(BusinessEntity.Entities.IRouteOptionRuleExecutionContext context, BusinessEntity.Entities.RouteOptionRuleTarget target)
         {
             throw new NotImplementedException();

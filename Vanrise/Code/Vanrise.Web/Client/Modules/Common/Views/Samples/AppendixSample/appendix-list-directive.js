@@ -114,7 +114,7 @@ function (UtilsService, Common_AppendixSample_Service, VRUIUtilsService) {
                 + 'selectedvalues="ctrl.selectedDynamicAppendixToAdd">'
  +'</vr-columns>'
  +'<vr-columns width="normal" withemptyline>'
-   + '  <vr-button type="Add" standalone on-ready="ctrl.addDynamicAppendixToList" vr-disabled="ctrl.selectedDynamicAppendixToAdd == undefined" data-onclick="ctrl.addDynamicAppendixToList"></vr-button>'
+   + '  <vr-button type="Add" standalone vr-disabled="ctrl.selectedDynamicAppendixToAdd == undefined" data-onclick="ctrl.addDynamicAppendixToList"></vr-button>'
  +'</vr-columns>'
 +'</vr-row>'
 +'<vr-row>'

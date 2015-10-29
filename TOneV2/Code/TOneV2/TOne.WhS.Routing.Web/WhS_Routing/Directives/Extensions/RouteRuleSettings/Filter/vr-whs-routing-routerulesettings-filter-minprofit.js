@@ -24,7 +24,7 @@ app.directive('vrWhsRoutingRouterulesettingsFilterMinprofit', ['UtilsService',
                     }
                 }
             },
-            templateURL: function (element, attrs) {
+            templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Filter/Templates/MinProfitDirective.html';
             }
 
@@ -40,12 +40,14 @@ app.directive('vrWhsRoutingRouterulesettingsFilterMinprofit', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-
+                    if (payload != undefined)
+                        ctrl.profit = payload.Profit;
                 }
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Routing.Business.RouteRules.Filters.OptionFilterLoss, TOne.WhS.Routing.Business"
+                        $type: "TOne.WhS.Routing.Business.RouteRules.Filters.OptionFilterMinProfit, TOne.WhS.Routing.Business",
+                        Profit: ctrl.profit
                     };
                 }
 

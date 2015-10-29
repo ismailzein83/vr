@@ -172,7 +172,8 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadRoutingProductDirective, loadSaleZoneGroupSection, loadCustomerGroupSection, loadCodeCriteriaGroupSection, loadRouteRuleSettingsSection, loadStaticSection])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadRoutingProductDirective, loadSaleZoneGroupSection, loadCustomerGroupSection,
+                loadCodeCriteriaGroupSection, loadRouteRuleSettingsSection, loadStaticSection])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
