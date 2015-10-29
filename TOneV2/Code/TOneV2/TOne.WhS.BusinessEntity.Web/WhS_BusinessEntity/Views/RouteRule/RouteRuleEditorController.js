@@ -109,10 +109,10 @@
 
             $scope.onRoutingProductSelectionChanged = function () {
                 if (routingProductAPI != undefined) {
-                    var routingProductObj = routingProductAPI.getData();
+                    var routingProductObj = routingProductAPI.getSelectedValues();
                     if (routingProductObj != undefined)
                     {
-                        $scope.selectedSellingNumberPlanId = routingProductAPI.getData().SellingNumberPlanId;
+                        $scope.selectedSellingNumberPlanId = routingProductObj.SellingNumberPlanId;
                         $scope.showSaleZoneSection = true;
                         $scope.showRouteRuleCriteriaTypes = $scope.showCustomerSection = $scope.showExcludedCodeSection = $scope.showIncludedCodeSection = false;
                     }
@@ -204,9 +204,11 @@
 
             routingProductReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload;
-                    if (routeRuleEntity != undefined && routeRuleEntity.Criteria.RoutingProductId != null)
-                        directivePayload = routeRuleEntity.Criteria.RoutingProductId;
+                    var directivePayload = {
+                        filter: {},
+                        selectedIds: (routeRuleEntity != undefined && routeRuleEntity.Criteria.RoutingProductId != null) ? routeRuleEntity.Criteria.RoutingProductId : undefined
+                    }
+                  
                     VRUIUtilsService.callDirectiveLoad(routingProductAPI, directivePayload, loadRoutingProductPromiseDeferred);
                 });
 
@@ -364,10 +366,11 @@
         }
 
         function buildRouteRuleObjFromScope() {
+
             var routeRule = {
                 RuleId: (routeRuleId != null) ? routeRuleId : 0,
                 Criteria: {
-                    RoutingProductId: routingProductAPI.getData() != undefined ? routingProductAPI.getData().RoutingProductId : null,
+                    RoutingProductId: routingProductAPI.getSelectedIds(),
                     ExcludedCodes: $scope.excludedCodes,
                     SaleZoneGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsAPI, 'selectedSaleZoneGroupTemplate'),
                     CustomerGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, customerGroupSettingsAPI, 'selectedCustomerGroupTemplate'),

@@ -9,8 +9,10 @@
             return BaseAPIService.post("/api/RoutingProduct/GetFilteredRoutingProducts", input);
         }
 
-        function GetRoutingProducts() {
-            return BaseAPIService.get("/api/RoutingProduct/GetRoutingProducts");
+        function GetRoutingProductInfo(filter) {
+            return BaseAPIService.get("/api/RoutingProduct/GetRoutingProductInfo", {
+                filter: filter
+            });
         }
         function GetRoutingProductsInfoBySellingNumberPlan(sellingNumberPlan) {
             return BaseAPIService.get("/api/RoutingProduct/GetRoutingProductsInfoBySellingNumberPlan", { sellingNumberPlan: sellingNumberPlan });
@@ -36,7 +38,7 @@
 
         return ({
             GetFilteredRoutingProducts: GetFilteredRoutingProducts,
-            GetRoutingProducts: GetRoutingProducts,
+            GetRoutingProductInfo: GetRoutingProductInfo,
             GetRoutingProduct: GetRoutingProduct,
             AddRoutingProduct: AddRoutingProduct,
             UpdateRoutingProduct: UpdateRoutingProduct,

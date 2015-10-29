@@ -29,7 +29,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return routingProducts.MapRecords(RoutingProductInfoMapper, x => x.SellingNumberPlanId == sellingNumberPlanId);
         }
 
-        public IEnumerable<RoutingProductInfo> GetRoutingProductsInfo()
+        public IEnumerable<RoutingProductInfo> GetRoutingProductInfo(string filter)
         {
             var allRoutingProducts = GetAllRoutingProducts();
             return allRoutingProducts.MapRecords(RoutingProductInfoMapper);

@@ -52,7 +52,7 @@ app.directive('vrWhsBeCustomergroupSelective', ['UtilsService', 'VRUIUtilsServic
                     carrierAccountReadyPromiseDeferred.promise.then(function () {
                         var carrierAccountPayload = {
                             filter: {},
-                            selectedIds: payload != undefined ? payload.CustomerIds : null
+                            selectedIds: payload != undefined ? payload.CustomerIds : undefined
                         };
                         VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, carrierAccountPayload, loadCarrierAccountPromiseDeferred);
                     });

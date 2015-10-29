@@ -16,13 +16,15 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                 var ctrl = this;
 
                 $scope.selectedRoutingProducts;
-                if ($attrs.ismultipleselection!=undefined)
+                if ($attrs.ismultipleselection != undefined)
                     $scope.selectedRoutingProducts = [];
+
                 $scope.filteredRoutingProducts = [];
                    
                 $scope.routingProducts = [];
-                var beRoutingProductObject = new beRoutingProduct(ctrl, $scope, $attrs);
-                beRoutingProductObject.initializeController();
+                var ctor = new routingProductCtor(ctrl, $scope, $attrs);
+                ctor.initializeController();
+
                 $scope.onselectionchanged = function () {
 
                     if (ctrl.onselectionchanged != undefined) {
@@ -79,7 +81,7 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                + '</div>'
         }
 
-        function beRoutingProduct(ctrl, $scope, $attrs) {
+        function routingProductCtor(ctrl, $scope, $attrs) {
 
             function initializeController() {
                 defineAPI();
@@ -88,23 +90,21 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
             function defineAPI() {
                 var api = {};
 
-                api.load = function (selectedIds) {
-                    return WhS_BE_RoutingProductAPIService.GetRoutingProducts().then(function (response) {
-                        //Load Data Region
+                api.load = function (payload) {
+
+                    return WhS_BE_RoutingProductAPIService.GetRoutingProductInfo(angular.toJson(payload.filter)).then(function (response) {
                         angular.forEach(response, function (itm) {
                             $scope.routingProducts.push(itm);
                         });
                         if ($attrs.sellingnumberplanid == undefined)
                             $scope.filteredRoutingProducts = $scope.routingProducts;
 
-                        setData(selectedIds);
+                        if (payload.selectedIds != undefined)
+                            setData(payload.selectedIds);
                     });
 
                     function setData(selectedIds)
                     {
-                        if (selectedIds == undefined)
-                            return;
-
                         if ($attrs.ismultipleselection) {
                             for (var i = 0; i < selectedIds.length; i++) {
                                 var selectedRoutingProduct = UtilsService.getItemByVal($scope.routingProducts, selectedIds[i], "RoutingProductId");
@@ -120,7 +120,17 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                     }
                 }
 
-                api.getData = function () {
+                api.getSelectedIds = function()
+                {
+                    if ($attrs.ismultipleselection)
+                        return UtilsService.getPropValuesFromArray($scope.selectedRoutingProducts, 'RoutingProductId');
+                    else if ($scope.selectedRoutingProducts != undefined)
+                        return $scope.selectedRoutingProducts.RoutingProductId;
+                    
+                    return undefined;
+                }
+
+                api.getSelectedValues = function () {
                     return $scope.selectedRoutingProducts;
                 }
 
@@ -130,5 +140,6 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
 
             this.initializeController = initializeController;
         }
+
         return directiveDefinitionObject;
     }]);

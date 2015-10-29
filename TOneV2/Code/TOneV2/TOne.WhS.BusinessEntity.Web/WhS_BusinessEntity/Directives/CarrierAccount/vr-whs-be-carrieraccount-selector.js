@@ -126,7 +126,12 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             }
 
             api.getSelectedIds = function () {
-                return UtilsService.getPropValuesFromArray(ctrl.selectedCarrierValues, 'CarrierAccountId');
+                if (attrs.ismultipleselection)
+                    return UtilsService.getPropValuesFromArray(ctrl.selectedCarrierValues, 'CarrierAccountId');
+                else if (ctrl.selectedCarrierValues != undefined)
+                    return ctrl.selectedCarrierValues.CarrierAccountId;
+                 
+                return undefined;
             }
 
             api.getData = function ()
