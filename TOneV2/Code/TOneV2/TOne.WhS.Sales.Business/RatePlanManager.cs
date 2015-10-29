@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
 using TOne.WhS.Sales.Entities.Queries;
 using Vanrise.Common;
@@ -14,12 +16,13 @@ namespace TOne.WhS.Sales.Business
 {
     public class RatePlanManager
     {
+        #region Get Rate Plan Items
         public List<RatePlanItem> GetRatePlanItems(RatePlanQuery query)
         {
             List<RatePlanItem> ratePlanItems = new List<RatePlanItem>();
 
             List<SaleZone> saleZones = GetSaleZones(query.CustomerId);
-            
+
             if (saleZones != null)
             {
                 saleZones =
@@ -36,8 +39,12 @@ namespace TOne.WhS.Sales.Business
                     ratePlanItem.ZoneName = saleZone.Name;
 
                     var rate = saleRates.FindRecord(itm => itm.ZoneId == saleZone.SaleZoneId);
+
                     if (rate != null)
+                    {
+                        ratePlanItem.SaleRateId = rate.SaleRateId;
                         ratePlanItem.Rate = rate.NormalRate;
+                    }
 
                     ratePlanItems.Add(ratePlanItem);
                 }
@@ -45,8 +52,6 @@ namespace TOne.WhS.Sales.Business
 
             return ratePlanItems;
         }
-
-        #region Private Methods
 
         private List<SaleZone> GetSaleZones(int customerId)
         {
@@ -59,7 +64,7 @@ namespace TOne.WhS.Sales.Business
                 SaleZoneManager saleZoneManager = new SaleZoneManager();
                 return saleZoneManager.GetSaleZonesByCountryIds(sellingNumberPlanId, countryIds).ToList();
             }
-            
+
             return null;
         }
 
@@ -85,7 +90,39 @@ namespace TOne.WhS.Sales.Business
             SaleRateManager manager = new SaleRateManager();
             return manager.GetSaleRatesByCustomerZoneIds(customerId, customerZoneIds, DateTime.Now);
         }
-        
+
+        #endregion
+
+        #region Save Price List
+
+        public void SavePriceList(SalePriceListInput input)
+        {
+            int salePriceListId = CreateSalePriceList(input.CustomerId);
+
+            foreach (SaleRate saleRate in input.NewSaleRates)
+            {
+                saleRate.PriceListId = salePriceListId;
+            }
+
+            IRatePlanDataManager dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+            bool succeeded = dataManager.CloseThenInsertSaleRates(input.CustomerId, input.NewSaleRates);
+        }
+
+        private int CreateSalePriceList(int customerId)
+        {
+            int salePriceListId;
+
+            SalePriceList salePriceList = new SalePriceList() {
+                OwnerType = SalePriceListOwnerType.Customer,
+                OwnerId = customerId
+            };
+
+            IRatePlanDataManager dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+            bool added = dataManager.InsertSalePriceList(salePriceList, out salePriceListId);
+
+            return salePriceListId;
+        }
+
         #endregion
     }
 }

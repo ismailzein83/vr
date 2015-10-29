@@ -14,5 +14,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public SalePriceListOwnerType OwnerType { get; set; }
 
         public int OwnerId { get; set; }
+
+        public int CurrencyId { get; set; }
     }
 }

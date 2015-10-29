@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using TOne.WhS.Sales.Entities.Queries;
@@ -20,6 +21,14 @@ namespace TOne.WhS.Sales.Web.Controllers
         {
             RatePlanManager manager = new RatePlanManager();
             return manager.GetRatePlanItems(query);
+        }
+
+        [HttpPost]
+        [Route("SavePriceList")]
+        public void SavePriceList(SalePriceListInput input)
+        {
+            RatePlanManager manager = new RatePlanManager();
+            manager.SavePriceList(input);
         }
     }
 }

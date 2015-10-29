@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByCustomerZoneIDs", SaleRateMapper, customerId, commaSeparatedZoneIds, effectiveOn);
         }
 
+        #region Mappers
+
         private SaleRate SaleRateMapper(IDataReader reader)
         {
             SaleRate saleRate = new SaleRate();
@@ -36,11 +39,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             saleRate.NormalRate = (decimal)reader["Rate"];
             saleRate.OtherRates = null; // what about this field?
-            
+
             saleRate.BeginEffectiveDate = (DateTime)reader["BED"];
             saleRate.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED");
 
             return saleRate;
         }
+
+        #endregion
     }
 }
