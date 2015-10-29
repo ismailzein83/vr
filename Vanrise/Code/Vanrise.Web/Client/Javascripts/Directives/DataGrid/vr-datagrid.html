@@ -4,7 +4,7 @@
         <vr-choice>Updated Items ({{ctrl.updateItems.length}})</vr-choice>
     </vr-choices>
     <div class="vr-datagrid-header" ng-hide="ctrl.hideheader" ng-style="ctrl.headerStyle" style="display: flex" ng-class="ctrl.ngClassLevel">
-        <div ng-if="ctrl.showDraggableRowSection" ng-style="{'width': $parent.ctrl.draggableRowIconWidth, 'display':'inline-block'}">
+        <div ng-if="ctrl.showDraggableRowSection" ng-style="{'width': $parent.ctrl.draggableRowIconWidth, 'display':'inline-flex'}">
         </div>
         <div ng-show="!ctrl.hideGridMenu" class="vr-grid-menu-box hand-cursor out-div" ng-class="ctrl.updateItems.length > 0?'with-choices':''" ng-class="ctrl.showgmenu==true?'toggle-dd':''" ng-click="ctrl.toggelGridMenu($event)">
             <span class="vr-grid-menu-h-circle hand-cursor" ng-class="ctrl.ngClassLevel"></span>
@@ -72,11 +72,11 @@
 </div>
 <div id="rowTemplate">
     <div style="white-space:nowrap" ng-style="{'background-color': dataItem.isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :dataItem.isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0', 'display': 'flex'}">
-        <div ng-if="ctrl.showDraggableRowSection" ng-style="{'width': $parent.ctrl.draggableRowIconWidth, 'display':'inline-block'}">
+        <div ng-if="ctrl.showDraggableRowSection" ng-style="{'width': $parent.ctrl.draggableRowIconWidth, 'display':'inline-block'}" style="height:25px">
             <i class="glyphicon glyphicon-th-list handeldrag hand-cursor" style="top: calc(50% - 6px); left: 3px"></i>
         </div>
-        <div style="margin:-2px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-if="$parent.ctrl.expandableColumnWidth != undefined " ng-class="">
-            <div ng-show="ctrl.showExpandCollapseIcon(dataItem)" style="height:100%">
+        <div style="margin: -2px; height: 25px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-if="$parent.ctrl.expandableColumnWidth != undefined " ng-class="">
+            <div ng-show="ctrl.showExpandCollapseIcon(dataItem)" style="height:25px">
                 <span class="glyphicon glyphicon-plus hand-cursor" style="top: calc(50% - 6px); left: 4px" ng-click="$parent.ctrl.expandRow(dataItem)" ng-show="!dataItem.isRowExpanded"></span>
                 <span class="glyphicon glyphicon-minus hand-cursor" style="top: calc(50% - 6px); left: 4px" ng-click="$parent.ctrl.collapseRow(dataItem)" ng-show="dataItem.isRowExpanded"></span>
             </div>
