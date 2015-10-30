@@ -140,7 +140,7 @@ namespace TOne.WhS.Routing.Business
 
         private SaleCodeIterator GetCustomerSaleCodeIterator(int customerId, DateTime effectiveOn)
         {
-            string cacheName = String.Format("GetCustomerSaleCodeIterator_{0}_{1}", customerId, effectiveOn);
+            string cacheName = String.Format("GetCustomerSaleCodeIterator_{0}_{1}", customerId, effectiveOn.Date);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleCodeCacheManager>().GetOrCreateObject(cacheName,
                 () =>
                 {
@@ -164,7 +164,7 @@ namespace TOne.WhS.Routing.Business
 
         private SupplierCodeIterator GetSupplierCodeIterator(int supplierId, DateTime effectiveOn)
         {
-            string cacheName = String.Format("GetSupplierCodeIterator_{0}_{1}", supplierId, effectiveOn);
+            string cacheName = String.Format("GetSupplierCodeIterator_{0}_{1}", supplierId, effectiveOn.Date);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCodeCacheManager>().GetOrCreateObject(cacheName,
                () =>
                {

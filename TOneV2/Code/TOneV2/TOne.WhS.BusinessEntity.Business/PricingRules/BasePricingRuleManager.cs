@@ -116,7 +116,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 PricingRuleTariffContext tariffContext = new PricingRuleTariffContext();
                 (tariffPricingRule.Settings as PricingRuleTariffSettings).Execute(tariffContext, tariffTarget);
-                result.Rate = tariffTarget.Rate;
+                result.Rate = tariffTarget.EffectiveRate;
                 result.TotalAmount = tariffTarget.TotalAmount;
             }
         }
