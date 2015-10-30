@@ -43,11 +43,12 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
 
     function getTemplate(attrs) {
         var label;
-   
-        if (attrs.getcustomers != undefined)
-            label = "Customers";
-        else if (attrs.getsuppliers != undefined)
-            label = "Suppliers";
+        if (attrs.ismultipleselection != undefined) {
+            label = (attrs.getcustomers != undefined) ? "Customers" : "Suppliers";
+        }
+        else {
+            label = (attrs.getcustomers != undefined) ? "Customer" : "Supplier";
+        }
 
         var required = "";
         if (attrs.isrequired != undefined)
