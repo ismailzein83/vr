@@ -53,7 +53,7 @@
 
                     <vr-datagridcolumn headertext="'Begin Effective Date'" type="'Date'" widthfactor="2" disablesorting>
                         <span vr-disabled="dataItem.Extension.DisableBeginEffectiveDate">
-                            <vr-datetimepicker type="date" value="dataItem.BeginEffectiveDate" />
+                            <vr-datetimepicker type="date" value="dataItem.BeginEffectiveDate"></vr-datetimepicker>
                         </span>
                     </vr-datagridcolumn>
 
@@ -62,6 +62,10 @@
                             <vr-datetimepicker type="date" value="dataItem.EndEffectiveDate"></vr-datetimepicker>
                         </span>
                     </vr-datagridcolumn>
+
+                    <vr-datagridexpandablerow>
+                        <vr-whs-sales-rateplangridchild-view on-ready="dataItem.Extension.onChildViewReady"></vr-whs-sales-rateplangridchild-view>
+                    </vr-datagridexpandablerow>
 
                 </vr-datagrid>
             </vr-columns>

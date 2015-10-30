@@ -1,0 +1,11 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-choices selectedindex="selectedChoiceIndex" onselectionchanged="onChoiceSelectionChanged()">
+            <vr-choice ng-repeat="choice in choices">{{ choice.title }}</vr-choice>
+        </vr-choices>
+
+        <div ng-if="!selectedChoice.loaded">
+            {{ selectedChoice.title }}
+        </div>
+    </vr-columns>
+</vr-row>

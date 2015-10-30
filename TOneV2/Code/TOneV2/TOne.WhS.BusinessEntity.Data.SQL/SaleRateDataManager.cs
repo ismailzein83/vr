@@ -18,10 +18,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         }
 
-        public List<SaleRate> GetSaleRatesByCustomerZoneIds(int customerId, List<long> customerZoneIds, DateTime? effectiveOn)
+        public List<SaleRate> GetSaleRatesByCustomerZoneIds(SalePriceListOwnerType ownerType, int customerId, List<long> customerZoneIds, DateTime? effectiveOn)
         {
             string commaSeparatedZoneIds = string.Join<long>(",", customerZoneIds);
-            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByCustomerZoneIDs", SaleRateMapper, customerId, commaSeparatedZoneIds, effectiveOn);
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByCustomerZoneIDs", SaleRateMapper, ownerType, customerId, commaSeparatedZoneIds, effectiveOn);
         }
 
         #region Mappers

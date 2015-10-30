@@ -104,7 +104,7 @@ namespace TOne.WhS.Sales.Business
         private List<SaleRate> GetSaleRatesByCustomerZoneIds(int customerId, List<long> customerZoneIds)
         {
             SaleRateManager manager = new SaleRateManager();
-            return manager.GetSaleRatesByCustomerZoneIds(customerId, customerZoneIds, DateTime.Now);
+            return manager.GetSaleRatesByCustomerZoneIds(SalePriceListOwnerType.Customer, customerId, customerZoneIds, DateTime.Now);
         }
 
         #endregion

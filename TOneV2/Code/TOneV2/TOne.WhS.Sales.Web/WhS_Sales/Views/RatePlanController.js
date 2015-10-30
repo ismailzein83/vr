@@ -188,6 +188,11 @@
                 }
             };
 
+            extension.onChildViewReady = function (api) {
+                extension.ChildViewAPI = api;
+                extension.onChildViewReady = undefined;
+            };
+
             ratePlanItem.Extension = extension;
         }
 
