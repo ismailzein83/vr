@@ -278,11 +278,7 @@
                             var dropDown = self.parent().find('ul');
                             $(dropDown).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: 'auto' });
                         });
-                        var fixDropdownPosition = function () {
-                            $('.drop-down-inside-modal').find('.dropdown-menu').hide();
-                            $('.drop-down-inside-modal').removeClass("open");
-
-                        };
+                       
                         $('div[name=' + $attrs.id + ']').parents('div').scroll(function () {
                             fixDropdownPosition();
                         });
@@ -292,6 +288,14 @@
                    // }
 
                 }, 1);
+                var fixDropdownPosition = function () {
+                    $('.drop-down-inside-modal').find('.dropdown-menu').hide();
+                    $('.drop-down-inside-modal').removeClass("open");
+
+                };
+                $scope.$on('start-drag', function (event, args) {
+                    fixDropdownPosition();
+                });
             },
             controllerAs: 'ctrl',
             bindToController: true,

@@ -59,6 +59,7 @@ appControllers.directive('draggable', function ($document) {
             startY = event.screenY - y;
             $document.on('mousemove', mousemove);
             $document.on('mouseup', mouseup);
+            scope.$broadcast("start-drag");
         });
 
         function mousemove(event) {
