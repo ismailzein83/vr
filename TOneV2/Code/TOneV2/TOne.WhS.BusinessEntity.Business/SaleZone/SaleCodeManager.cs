@@ -30,7 +30,7 @@ namespace TOne.WhS.BusinessEntity.Business
             dataManager.DeleteSaleCodes(saleCodes);
         }
 
-        public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn, bool isEffectiveInFuture)
+        public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn)
         {
             throw new NotImplementedException();
         }

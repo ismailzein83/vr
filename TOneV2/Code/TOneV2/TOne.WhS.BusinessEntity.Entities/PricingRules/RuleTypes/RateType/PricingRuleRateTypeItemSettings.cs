@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int ConfigId { get; set; }
 
-        public string RateTypeName { get; set; }
+        public int RateTypeId { get; set; }
 
         public abstract bool Evaluate(IPricingRuleRateTypeItemContext context, PricingRuleRateTypeTarget target);
     }

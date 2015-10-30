@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Business
         where R : PricingRulesInput
     {
        
-        public T GetMatchRule(PricingRuleTarget target)
+        protected T GetMatchRule(PricingRuleTarget target)
         {
             var ruleTree = GetRuleTree(target.RuleType);
             if (ruleTree == null)
@@ -69,7 +69,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         if (rateTypeItem.Evaluate(rateTypeContext, rateTypeTarget))
                         {
                             Decimal rateToUse;
-                            if (input.Rate.OtherRates.TryGetValue(rateTypeItem.RateTypeName, out rateToUse))
+                            if (input.Rate.OtherRates.TryGetValue(rateTypeItem.RateTypeId, out rateToUse))
                             {
                                 isRateFound = true;
                                 result.Rate = rateToUse;

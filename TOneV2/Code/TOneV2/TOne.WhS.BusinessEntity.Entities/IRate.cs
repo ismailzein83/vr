@@ -10,6 +10,6 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         Decimal NormalRate { get; set; }
 
-        Dictionary<string,Decimal> OtherRates { get; set; }
+        Dictionary<int, Decimal> OtherRates { get; set; }
     }
 }

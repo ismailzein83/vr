@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public decimal NormalRate { get; set; }
 
-        public Dictionary<string, decimal> OtherRates { get; set; }
+        public Dictionary<int, decimal> OtherRates { get; set; }
 
         public DateTime BeginEffectiveDate { get; set; }
 

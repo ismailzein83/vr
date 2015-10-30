@@ -10,14 +10,13 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierCodeManager
     {
-        public List<SupplierCode> GetSupplierCodes(int supplierId,DateTime minimumDate)
+        public List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
-            return dataManager.GetSupplierCodes(supplierId,minimumDate);
+            return dataManager.GetSupplierCodes(supplierId, minimumDate);
         }
 
-
-        public List<SupplierCode> GetSupplierCodes(int supplierId, DateTime effectiveOn, bool isEffectiveInFuture)
+        public List<SupplierCode> GetSupplierCodes(int supplierId, DateTime effectiveOn)
         {
             throw new NotImplementedException();
         }

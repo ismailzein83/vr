@@ -34,7 +34,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             DateTime startPreparing = DateTime.Now;
 
             SupplierCodeManager manager = new SupplierCodeManager();
-            List<SupplierCode> existingCodes = manager.GetSupplierCodes(inputArgument.SupplierId, (DateTime)inputArgument.MinimumDate);
+            List<SupplierCode> existingCodes = manager.GetSupplierCodesEffectiveAfter(inputArgument.SupplierId, (DateTime)inputArgument.MinimumDate);
 
             CodesByCode codesByCode = new CodesByCode();
             foreach (SupplierCode code in existingCodes)

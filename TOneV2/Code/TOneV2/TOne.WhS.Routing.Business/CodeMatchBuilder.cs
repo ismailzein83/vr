@@ -35,65 +35,22 @@ namespace TOne.WhS.Routing.Business
             }
         }
 
-        public SaleCodeMatch GetSaleCodeMatch(string number, int customerId, DateTime effectiveOn, bool isEffectiveInFuture)
+        public SaleCodeMatch GetSaleCodeMatch(string number, int customerId, DateTime effectiveOn)
         {
-            SaleCodeIterator saleCodeIterator = GetCustomerSaleCodeIterator(customerId, effectiveOn, isEffectiveInFuture);
+            SaleCodeIterator saleCodeIterator = GetCustomerSaleCodeIterator(customerId, effectiveOn);
             if (saleCodeIterator != null)
                 return saleCodeIterator.GetCodeMatch(number, false);
             else
                 return null;
         }
 
-        public SupplierCodeMatch GetSupplierCodeMatch(string number, int supplierId, DateTime effectiveOn, bool isEffectiveInFuture)
+        public SupplierCodeMatch GetSupplierCodeMatch(string number, int supplierId, DateTime effectiveOn)
         {
-            SupplierCodeIterator supplierCodeIterator = GetSupplierCodeIterator(supplierId, effectiveOn, isEffectiveInFuture);
+            SupplierCodeIterator supplierCodeIterator = GetSupplierCodeIterator(supplierId, effectiveOn);
             if (supplierCodeIterator != null)
                 return supplierCodeIterator.GetCodeMatch(number);
             else
                 return null;
-        }
-
-        private SupplierCodeIterator GetSupplierCodeIterator(int supplierId, DateTime effectiveOn, bool isEffectiveInFuture)
-        {
-            string cacheName = String.Format("GetSupplierCodeIterator_{0}_{1}_{2}", supplierId, effectiveOn, isEffectiveInFuture);
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCodeCacheManager>().GetOrCreateObject(cacheName,
-               () =>
-               {
-                   SupplierCodeManager supplierCodeManager = new SupplierCodeManager();
-                   List<SupplierCode> supplierCodes = supplierCodeManager.GetSupplierCodes(supplierId, effectiveOn, isEffectiveInFuture);
-                   if (supplierCodes != null)
-                       return new SupplierCodeIterator()
-                       {
-                           CodeIterator = new CodeIterator<SupplierCode>(supplierCodes),
-                           SupplierId = supplierId
-                       };
-                   else
-                       return null;
-               });
-        }
-
-        private SaleCodeIterator GetCustomerSaleCodeIterator(int customerId, DateTime effectiveOn, bool isEffectiveInFuture)
-        {
-            string cacheName = String.Format("GetCustomerSaleCodeIterator_{0}_{1}_{2}", customerId, effectiveOn, isEffectiveInFuture);
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleCodeCacheManager>().GetOrCreateObject(cacheName,
-                () =>
-                {
-                    CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                    var customerAccount = carrierAccountManager.GetCarrierAccount(customerId);
-                    if (customerAccount == null || customerAccount.CustomerSettings == null)
-                        return null;
-                    int sellingNumberPlanId = customerAccount.CustomerSettings.SellingNumberPlanId;
-                    SaleCodeManager saleCodeManager = new SaleCodeManager();
-                    List<SaleCode> customerSaleCodes = saleCodeManager.GetSellingNumberPlanSaleCodes(sellingNumberPlanId, effectiveOn, isEffectiveInFuture);
-                    if (customerSaleCodes != null)
-                        return new SaleCodeIterator()
-                        {
-                            CodeIterator = new CodeIterator<SaleCode>(customerSaleCodes),
-                            SellingNumberPlanId = sellingNumberPlanId
-                        };
-                    else
-                        return null;
-                });
         }
 
         #endregion
@@ -179,6 +136,49 @@ namespace TOne.WhS.Routing.Business
                 };
                 onCodeMatchesAvailable(codeMatches);
             }
+        }
+
+        private SaleCodeIterator GetCustomerSaleCodeIterator(int customerId, DateTime effectiveOn)
+        {
+            string cacheName = String.Format("GetCustomerSaleCodeIterator_{0}_{1}", customerId, effectiveOn);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleCodeCacheManager>().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                    var customerAccount = carrierAccountManager.GetCarrierAccount(customerId);
+                    if (customerAccount == null || customerAccount.CustomerSettings == null)
+                        return null;
+                    int sellingNumberPlanId = customerAccount.CustomerSettings.SellingNumberPlanId;
+                    SaleCodeManager saleCodeManager = new SaleCodeManager();
+                    List<SaleCode> customerSaleCodes = saleCodeManager.GetSellingNumberPlanSaleCodes(sellingNumberPlanId, effectiveOn);
+                    if (customerSaleCodes != null)
+                        return new SaleCodeIterator()
+                        {
+                            CodeIterator = new CodeIterator<SaleCode>(customerSaleCodes),
+                            SellingNumberPlanId = sellingNumberPlanId
+                        };
+                    else
+                        return null;
+                });
+        }
+
+        private SupplierCodeIterator GetSupplierCodeIterator(int supplierId, DateTime effectiveOn)
+        {
+            string cacheName = String.Format("GetSupplierCodeIterator_{0}_{1}", supplierId, effectiveOn);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCodeCacheManager>().GetOrCreateObject(cacheName,
+               () =>
+               {
+                   SupplierCodeManager supplierCodeManager = new SupplierCodeManager();
+                   List<SupplierCode> supplierCodes = supplierCodeManager.GetSupplierCodes(supplierId, effectiveOn);
+                   if (supplierCodes != null)
+                       return new SupplierCodeIterator()
+                       {
+                           CodeIterator = new CodeIterator<SupplierCode>(supplierCodes),
+                           SupplierId = supplierId
+                       };
+                   else
+                       return null;
+               });
         }
 
         #endregion
