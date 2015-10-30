@@ -23,36 +23,12 @@
                 gridAPI = api;            
                 api.loadGrid({});
             }
-
-            //$scope.name;
-            //$scope.onCarrierProfileDirectiveReady = function (api) {
-            //    carrierProfileDirectiveAPI = api;
-            //    load();
-            //}
-
-            //$scope.onGridReady = function (api) {
-            //    gridAPI = api;
-            //    api.loadGrid({});
-            //}
-
             $scope.AddNewCountry = AddNewCountry;
-            //$scope.country = "lebanon";
         }
 
         function load() {
 
-            //$scope.isGettingData = true;
-
-            //if (carrierProfileDirectiveAPI == undefined)
-            //    return;
-
-            //carrierProfileDirectiveAPI.load().then(function () {
-            //}).catch(function (error) {
-            //    VRNotificationService.notifyExceptionWithClose(error, $scope);
-            //    $scope.isGettingData = false;
-            //}).finally(function () {
-            //    $scope.isGettingData = false;
-            //});
+           
 
         }
 

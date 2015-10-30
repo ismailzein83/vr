@@ -27,11 +27,12 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
     function CodeGroupGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var disabCountry;
         this.initializeController = initializeController;
 
         function initializeController() {
             if ($attrs.hidecountrycolumn != undefined) {
-                $scope.hidecountrycolumn = true;
+                $scope.hidecountrycolumn = disabCountry = true;
             }
             $scope.codegroups = [];
             $scope.onGridReady = function (api) {
@@ -55,11 +56,6 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_CodeGroupAPIService.GetFilteredCodeGroups(dataRetrievalInput)
                     .then(function (response) {
-                        //if (response.Data != undefined) {
-                        //    for (var i = 0; i < response.Data.length; i++) {
-                        //        setDataItemExtension(response.Data[i]);
-                        //    }
-                        //}
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -69,32 +65,13 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
             defineMenuActions();
         }
 
-        //function setDataItemExtension(dataItem) {
-
-        //    var extensionObject = {};
-        //    var query = {
-        //        CarrierProfilesIds: [dataItem.CarrierProfileId],
-        //    }
-        //    extensionObject.onGridReady = function (api) {
-        //        extensionObject.carrierAccountGridAPI = api;
-        //        extensionObject.carrierAccountGridAPI.loadGrid(query);
-        //        extensionObject.onGridReady = undefined;
-        //    };
-        //    dataItem.extensionObject = extensionObject;
-
-        //}
+        
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
                clicked: editCodeGroupe
-            }
-           // ,
-           //{
-           //    name: "New Carrier Account",
-           //    clicked: addCarrierAccount
-           //}
-            ];
+            }];
         }
 
         function editCodeGroupe(codeGroupObj) {
@@ -102,29 +79,9 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
                 gridAPI.itemUpdated(codeGroupObj);
             }
 
-            WhS_BE_MainService.editCodeGroup(codeGroupObj.Entity, onCodeGroupUpdated);
+            WhS_BE_MainService.editCodeGroup(codeGroupObj.Entity,  onCodeGroupUpdated , disabCountry);
         }
-        //function addCarrierAccount(dataItem) {
-        //    gridAPI.expandRow(dataItem);
-        //    var query = {
-        //        CarrierProfilesIds: [dataItem.CarrierProfileId],
-        //    }
-        //    if (dataItem.extensionObject.carrierAccountGridAPI != undefined)
-        //        dataItem.extensionObject.carrierAccountGridAPI.loadGrid(query);
-        //    var onCarrierAccountAdded = function (carrierAccountObj) {
-        //        if (dataItem.extensionObject.carrierAccountGridAPI != undefined)
-        //            dataItem.extensionObject.carrierAccountGridAPI.onCarrierAccountAdded(carrierAccountObj);
-        //    };
-        //    WhS_BE_MainService.addCarrierAccount(onCarrierAccountAdded, dataItem);
-        //}
-        //function deleteCarrierProfile(carrierProfileObj) {
-        //    var onCarrierProfileDeleted = function () {
-        //        //TODO: This is to refresh the Grid after delete, should be removed when centralized
-        //        retrieveData();
-        //    };
-
-        //    WhS_BE_MainService.deleteCarrierAccount(carrierProfileObj, onCarrierProfileDeleted);
-        //}
+        
     }
 
     return directiveDefinitionObject;

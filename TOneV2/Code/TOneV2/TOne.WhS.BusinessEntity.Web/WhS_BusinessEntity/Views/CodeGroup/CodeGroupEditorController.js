@@ -11,6 +11,7 @@
         var countryId;
         var countryDirectiveApi;
         var editMode;
+        var disableCountry;
         defineScope();
         loadParameters();
         load();
@@ -19,10 +20,11 @@
             if (parameters != undefined && parameters != null) {
                 codeGroupId = parameters.CodeGroupId;
                 countryId = parameters.CountryId;
+                disableCountry = parameters.disableCountry
 
             }
             editMode = (codeGroupId != undefined);
-            $scope.disableCountry = ((countryId != undefined) && !editMode)
+            $scope.disableCountry = ((countryId != undefined) && !editMode) || disableCountry == true;
         }
         function defineScope() {
             $scope.onCountryDirectiveReady = function (api) {

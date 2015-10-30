@@ -358,7 +358,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/Country/CountryEditor.html', parameters, settings);
     }
     
-    function editCodeGroup(obj, onCodeGroupUpdated) {
+    function editCodeGroup(obj, onCodeGroupUpdated , disableCountry) {
         var settings = {
             useModalTemplate: true
 
@@ -369,7 +369,8 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
             modalScope.onCodeGroupUpdated = onCodeGroupUpdated;
         };
         var parameters = {
-            CodeGroupId: obj.CodeGroupId
+            CodeGroupId: obj.CodeGroupId,
+            disableCountry: disableCountry != undefined
         };
 
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CodeGroup/CodeGroupEditor.html', parameters, settings);
