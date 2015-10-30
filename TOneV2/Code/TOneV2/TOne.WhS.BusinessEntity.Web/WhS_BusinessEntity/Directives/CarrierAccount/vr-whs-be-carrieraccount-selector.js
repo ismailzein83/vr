@@ -69,9 +69,8 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         if (attrs.ismultipleselection != undefined)
             ismultipleselection = "ismultipleselection";
 
-        if (attrs.ismultipleselection != undefined)
-            return '<div><vr-select ismultipleselection datasource="ctrl.datasource" selectedvalues="ctrl.selectedCarrierValues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
-                + label + '" ' + required + ' ' + hideselectedvaluessection + + 'entityname="' + label + '" ' + hideremoveicon + '></vr-select></div>'
+        return '<div><vr-select datasource="ctrl.datasource" selectedvalues="ctrl.selectedCarrierValues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
+            + label + '" ' + required + ' ' + hideselectedvaluessection + + 'entityname="' + label + '" ' + hideremoveicon + ' ' + ismultipleselection + '></vr-select></div>'
     }
 
     function carriersCtor(ctrl, $scope, WhS_BE_CarrierAccountAPIService, attrs) {
