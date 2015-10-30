@@ -65,8 +65,13 @@
 
         function AddNewCountry() {
             var onCountryAdded = function (countryObj) {
-                if (gridAPI != undefined)
+                if (gridAPI != undefined) {
+                    gridAPI.loadGrid({});
                     gridAPI.onCountryAdded(countryObj);
+
+                }
+                   
+
             };
             WhS_BE_MainService.addCountry(onCountryAdded);
         }

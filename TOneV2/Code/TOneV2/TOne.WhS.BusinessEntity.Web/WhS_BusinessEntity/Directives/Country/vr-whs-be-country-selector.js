@@ -24,12 +24,8 @@ app.directive('vrWhsBeCountrySelector', ['WhS_BE_CountryAPIService', 'WhS_BE_Mai
 
             $scope.AddNewCountry = function () {
                 var onCountryAdded = function () {
-                    WhS_BE_CountryAPIService.GetAllCountries().then(function (response) {
-                        $scope.datasource.length = 0;
-                        angular.forEach(response, function (itm) {
-                            $scope.datasource.push(itm);
-                        });
-                    });
+                    $scope.datasource.length = 0;
+                    return getAllCountries($scope, WhS_BE_CountryAPIService)
                 };
                 WhS_BE_MainService.addCountry(onCountryAdded);
             }
@@ -84,7 +80,7 @@ app.directive('vrWhsBeCountrySelector', ['WhS_BE_CountryAPIService', 'WhS_BE_Mai
                + ' <vr-select datasource="datasource" selectedvalues="selectedCountryValues" ' + required + ' ' + hideselectedvaluessection + ' onselectionchanged="onselectionchanged"  ' + disabled + ' datatextfield="Name" datavaluefield="CountryId"'
                + 'entityname="Country" label="Country" ' + addCliked + '></vr-select></div>';
     }
-    function BeCountry(ctrl, $scope, WhS_BE_CarrierAccountAPIService, $attrs) {
+    function BeCountry(ctrl, $scope, WhS_BE_CountryAPIService, $attrs) {
         
         function initializeController() {
             defineAPI();
@@ -93,17 +89,13 @@ app.directive('vrWhsBeCountrySelector', ['WhS_BE_CountryAPIService', 'WhS_BE_Mai
         function defineAPI() {
             var api = {};
 
-            api.load = function () {
-                return WhS_BE_CountryAPIService.GetAllCountries().then(function (response) {
-                    angular.forEach(response, function (itm) {
-                        $scope.datasource.push(itm);
-                    });
-                });
-            }
-
+            
             api.getData = function ()
             {
                 return $scope.selectedCountryValues;
+            }
+            api.getDataId = function () {
+                return $scope.selectedCountryValues.CountryId;
             }
             api.getIdsData = function () {
                 return getIdsList($scope.selectedCountryValues , "CountryId" );
@@ -128,12 +120,32 @@ app.directive('vrWhsBeCountrySelector', ['WhS_BE_CountryAPIService', 'WhS_BE_Mai
                 return list;
 
             }
+            api.load = function () {
+               
+                return WhS_BE_CountryAPIService.GetAllCountries().then(function (response) {
+                    angular.forEach(response, function (itm) {
+                        $scope.datasource.push(itm);
+                    });
+                }).catch(function (error) {
+                }).finally(function () {
+
+                });;
+            }
+
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
 
         this.initializeController = initializeController;
 
+    }
+
+    function getAllCountries($scope, WhS_BE_CountryAPIService) {
+        return WhS_BE_CountryAPIService.GetAllCountries().then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.datasource.push(itm);
+            });
+        });
     }
     return directiveDefinitionObject;
 }]);

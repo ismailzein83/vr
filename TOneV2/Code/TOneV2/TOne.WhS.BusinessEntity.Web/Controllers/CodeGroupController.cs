@@ -22,35 +22,35 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredCodeGroups(input));
         }
 
-        //[HttpGet]
-        //[Route("GetAllCountries")]
-        //public IEnumerable<Country> GetAllCountries()
-        //{
-        //    CountryManager manager = new CountryManager();
-        //    return manager.GetAllCountries();
-        //}
-        //[HttpGet]
-        //[Route("GetCountry")]
-        //public Country GetCountry(int countryId)
-        //{
-        //    CountryManager manager = new CountryManager();
-        //    return manager.GetCountry(countryId);
-        //}
+        [HttpGet]
+        [Route("GetAllCodeGroups")]
+        public IEnumerable<CodeGroup> GetAllCodeGroups()
+        {
+            CodeGroupManager manager = new CodeGroupManager();
+            return manager.GetAllCodeGroups();
+        }
+        [HttpGet]
+        [Route("GetCodeGroup")]
+        public CodeGroup GetCodeGroup(int codeGroupId)
+        {
+            CodeGroupManager manager = new CodeGroupManager();
+            return manager.GetCodeGroup(codeGroupId);
+        }
 
-        //[HttpPost]
-        //[Route("AddCountry")]
-        //public TOne.Entities.InsertOperationOutput<Country> AddCountry(Country country)
-        //{
-        //    CountryManager manager = new CountryManager();
-        //    return manager.AddCountry(country);
-        //}
-        //[HttpPost]
-        //[Route("UpdateCountry")]
-        //public TOne.Entities.UpdateOperationOutput<Country> UpdateCountry(Country country)
-        //{
-        //    CountryManager manager = new CountryManager();
-        //    return manager.UpdateCountry(country);
-        //}
+        [HttpPost]
+        [Route("AddCodeGroup")]
+        public TOne.Entities.InsertOperationOutput<CodeGroupDetail> AddCodeGroup(CodeGroup codeGroup)
+        {
+            CodeGroupManager manager = new CodeGroupManager();
+            return manager.AddCodeGroup(codeGroup);
+        }
+        [HttpPost]
+        [Route("UpdateCodeGroup")]
+        public TOne.Entities.UpdateOperationOutput<CodeGroupDetail> UpdateCodeGroup(CodeGroup codeGroup)
+        {
+            CodeGroupManager manager = new CodeGroupManager();
+            return manager.UpdateCodeGroup(codeGroup);
+        }
        
     }
 }

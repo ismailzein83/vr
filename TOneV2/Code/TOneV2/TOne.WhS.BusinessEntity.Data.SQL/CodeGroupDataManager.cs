@@ -36,20 +36,20 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_CodeGroup_GetAll", CodeGroupMapper);
         }
-        //public bool Update(Country country)
-        //{
-        //    int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_Country_Update", country.CountryId, country.Name);
-        //    return (recordsEffected > 0);
-        //}
+        public bool Update(CodeGroup codeGroup)
+        {
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CodeGroup_Update", codeGroup.CodeGroupId, codeGroup.CountryId, codeGroup.Code);
+            return (recordsEffected > 0);
+        }
 
-        //public bool Insert(Country country, out int insertedId)
-        //{
-        //    object countryId;
+        public bool Insert(CodeGroup codeGroup, out int insertedId)
+        {
+            object codeGroupId;
 
-        //    int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_Country_Insert", out countryId, country.Name);
-        //    insertedId = (int)countryId;
-        //    return (recordsEffected > 0);
-        //}
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CodeGroup_Insert", out codeGroupId, codeGroup.Code, codeGroup.CountryId);
+            insertedId = (int)codeGroupId;
+            return (recordsEffected > 0);
+        }
 
         public bool AreCodeGroupUpdated(ref object updateHandle)
         {

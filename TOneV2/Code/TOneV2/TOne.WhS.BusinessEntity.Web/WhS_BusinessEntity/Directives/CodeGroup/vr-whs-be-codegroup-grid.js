@@ -102,7 +102,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
                 gridAPI.itemUpdated(codeGroupObj);
             }
 
-            WhS_BE_MainService.editCodeGroup(codeGroupObj, onCodeGroupUpdated);
+            WhS_BE_MainService.editCodeGroup(codeGroupObj.Entity, onCodeGroupUpdated);
         }
         //function addCarrierAccount(dataItem) {
         //    gridAPI.expandRow(dataItem);

@@ -268,7 +268,7 @@
                     });
                 }, 100);
                 setTimeout(function () {
-                    if ($('div[name=' + $attrs.id + ']').parents('.modal-body').length > 0) {
+                   // if ($('div[name=' + $attrs.id + ']').parents('.modal-body').length > 0) {
 
                         $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function () {
 
@@ -289,7 +289,7 @@
                         $(window).resize(function () {
                             fixDropdownPosition();
                         });
-                    }
+                   // }
 
                 }, 1);
             },

@@ -21,10 +21,10 @@ namespace TOne.WhS.BusinessEntity.Business
                   &&
                  (input.Query.CountriesIds == null || input.Query.CountriesIds.Count() == 0 || input.Query.CountriesIds.Contains(prod.CountryId)); ;
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodeGroups.ToBigResult(input, filterExpression, SaleZoneDetailMapper));     
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodeGroups.ToBigResult(input, filterExpression, CodeGroupDetailMapper));     
         }
 
-        public IEnumerable<CodeGroup> GetAllCountries()
+        public IEnumerable<CodeGroup> GetAllCodeGroups()
         {
             var allCodeGroups = GetCachedCodeGroups();
             if (allCodeGroups == null)
@@ -32,46 +32,48 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return allCodeGroups.Values;
         }
-        public CodeGroup GetCountry(int codeGroupId)
+        public CodeGroup GetCodeGroup(int codeGroupId)
         {
             var codeGroups = GetCachedCodeGroups();
             return codeGroups.GetRecord(codeGroupId);
         }
-        public TOne.Entities.InsertOperationOutput<CodeGroup> AddCountry(CodeGroup codeGroup)
+        public TOne.Entities.InsertOperationOutput<CodeGroupDetail> AddCodeGroup(CodeGroup codeGroup)
         {
-            TOne.Entities.InsertOperationOutput<CodeGroup> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CodeGroup>();
+            TOne.Entities.InsertOperationOutput<CodeGroupDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CodeGroupDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
 
-           // int countryId = -1;
+            int coudeGroupId = -1;
 
-            //ICodeGroupDataManager dataManager = BEDataManagerFactory.GetDataManager<ICountrytDataManager>();
-            //bool insertActionSucc = dataManager.Insert(codeGroup, out coudeGroupId);
-            //if (insertActionSucc)
-            //{
-            //    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-            //    country.CountryId = coudeGroupId;
-            //    insertOperationOutput.InsertedObject = codeGroup;
-            //}
+            ICodeGroupDataManager dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
+            bool insertActionSucc = dataManager.Insert(codeGroup, out coudeGroupId);
+            if (insertActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                codeGroup.CodeGroupId = coudeGroupId;
+                insertOperationOutput.InsertedObject = CodeGroupDetailMapper(codeGroup);
+            }
 
             return insertOperationOutput;
-        } 
-        public TOne.Entities.UpdateOperationOutput<CodeGroup> UpdateCountry(CodeGroup codeGroup)
+        }
+        public TOne.Entities.UpdateOperationOutput<CodeGroupDetail> UpdateCodeGroup(CodeGroup codeGroup)
         {
             ICodeGroupDataManager dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
 
-            //bool updateActionSucc =  dataManager.Update(codeGroup);
-            TOne.Entities.UpdateOperationOutput<CodeGroup> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CodeGroup>();
+            bool updateActionSucc =  dataManager.Update(codeGroup);
+            TOne.Entities.UpdateOperationOutput<CodeGroupDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CodeGroupDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            //updateOperationOutput.UpdatedObject = null;
+            updateOperationOutput.UpdatedObject = null;
 
-            //if (updateActionSucc)
-            //{
-            //    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-            //    updateOperationOutput.UpdatedObject = codeGroup;
-            //}
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject =  CodeGroupDetailMapper(codeGroup);
+            }
 
             return updateOperationOutput;
         }
@@ -99,7 +101,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
-        private CodeGroupDetail SaleZoneDetailMapper(CodeGroup codeGroup)
+        private CodeGroupDetail CodeGroupDetailMapper(CodeGroup codeGroup)
         {
             CodeGroupDetail codeGroupDetail = new CodeGroupDetail();
 

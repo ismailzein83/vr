@@ -6,7 +6,7 @@
                     <vr-textbox value="code" label="Code Group"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-whs-be-country-selector on-ready="onCountryDirectiveReady" ismultipleselection ></vr-whs-be-country-selector>
+                    <vr-whs-be-country-selector on-ready="onCountryDirectiveReady" ismultipleselection showaddbutton></vr-whs-be-country-selector>
                 </vr-columns>
             </vr-row>
         </div>
@@ -14,7 +14,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Add" data-onclick="AddNewCountry"></vr-button>
+                    <vr-button type="Add" data-onclick="AddNewCodeGroup"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

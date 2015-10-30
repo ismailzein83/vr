@@ -27,7 +27,9 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         editPurchasePricingRule: editPurchasePricingRule,
         deletePurchasePricingRule: deletePurchasePricingRule,
         editCountry: editCountry,
-        addCountry: addCountry
+        addCountry: addCountry,
+        addCodeGroup: addCodeGroup,
+        editCodeGroup: editCodeGroup
 
     });
 
@@ -355,6 +357,44 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
 
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/Country/CountryEditor.html', parameters, settings);
     }
+    
+    function editCodeGroup(obj, onCodeGroupUpdated) {
+        var settings = {
+            useModalTemplate: true
+
+        };
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Code, "Code Group");
+            modalScope.onCodeGroupUpdated = onCodeGroupUpdated;
+        };
+        var parameters = {
+            CodeGroupId: obj.CodeGroupId
+        };
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CodeGroup/CodeGroupEditor.html', parameters, settings);
+    }
+    function addCodeGroup(onCodeGroupAdded , dataItem) {
+        var settings = {
+            useModalTemplate: true
+
+        };
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = UtilsService.buildTitleForAddEditor("Code Group");
+            modalScope.onCodeGroupAdded = onCodeGroupAdded;
+        };
+        var parameters;
+        if (dataItem != undefined) {
+            parameters = {
+                CountryId: dataItem.CountryId
+            };
+        }
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CodeGroup/CodeGroupEditor.html', parameters, settings);
+    }
+
+    
     function deletePurchasePricingRule($scope, purchasePricingRuleObj, onPurchasePricingRuleDeleted) {
         VRNotificationService.showConfirmation()
             .then(function (response) {

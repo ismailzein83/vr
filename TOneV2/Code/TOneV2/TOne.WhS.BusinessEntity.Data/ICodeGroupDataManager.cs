@@ -11,8 +11,8 @@ namespace TOne.WhS.BusinessEntity.Data
     public interface ICodeGroupDataManager : IDataManager
     {
         List<CodeGroup> GetCodeGroups();
-        //bool Update(Country country);
-        //bool Insert(Country country, out int insertedId);
+        bool Update(CodeGroup codeGroup);
+        bool Insert(CodeGroup codeGroup, out int insertedId);
         bool AreCodeGroupUpdated(ref object updateHandle);
        
     }

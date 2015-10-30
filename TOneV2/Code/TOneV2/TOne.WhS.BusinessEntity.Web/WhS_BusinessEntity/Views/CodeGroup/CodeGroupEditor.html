@@ -1,0 +1,23 @@
+﻿<vr-modalcontent ng-controller="WhS_BE_CodeGroupEditorController" vr-loader="isGettingData">
+    <vr-modalbody>
+        <vr-form name="formCountryEditor">
+            <vr-row removeline>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="code" label="Code" isrequired></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-whs-be-country-selector on-ready="onCountryDirectiveReady" isdisabled="disableCountry" isrequired showaddbutton></vr-whs-be-country-selector>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formCountryEditor" data-onclick="SaveCodeGroup"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</vr-modalcontent>

@@ -8,28 +8,23 @@
         function GetFilteredCodeGroups(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CodeGroup", "GetFilteredCodeGroups"), input);
         }
-        //function GetAllCountries() {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "Country", "GetAllCountries"));
-        //}
-        //function GetCountry(countryId) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "Country", "GetCountry"), {
-        //        countryId: countryId
-        //    });
+        function GetCodeGroup(CodeGroupId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CodeGroup", "GetCodeGroup"), {
+                CodeGroupId: CodeGroupId
+            });
 
-        //}
-        //function UpdateCountry(countryObject) {
-        //    return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "Country", "UpdateCountry"), countryObject);
-        //}
-        //function AddCountry(countryObject) {
-        //    return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "Country", "AddCountry"), countryObject);
-        //}
+        }
+        function UpdateCodeGroup(codeGroupObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CodeGroup", "UpdateCodeGroup"), codeGroupObject);
+        }
+        function AddCodeGroup(codeGroupObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CodeGroup", "AddCodeGroup"), codeGroupObject);
+        }
         return ({
-            GetFilteredCodeGroups: GetFilteredCodeGroups
-            //,
-            //GetAllCountries: GetAllCountries,
-            //GetCountry: GetCountry,
-            //UpdateCountry: UpdateCountry,
-            //AddCountry: AddCountry
+            GetFilteredCodeGroups: GetFilteredCodeGroups,
+            GetCodeGroup: GetCodeGroup,
+            UpdateCodeGroup: UpdateCodeGroup,
+            AddCodeGroup: AddCodeGroup
         });
     }
 

@@ -258,6 +258,8 @@
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierProfileManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\Country\CountryEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\Country\CountryEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\Country\CountryManagementController.js" />

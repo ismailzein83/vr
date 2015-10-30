@@ -477,6 +477,16 @@ Use this for keyframe animations
 .modal-body  .panel-body{
     padding : 0px ;
 }
+.vr-select-add{
+    position: absolute;
+    padding: 5px 2px;
+    font-size: 12px;
+    right:-2px;
+    top:25px
+}
+.modal-body  .vr-select-add{
+    right : -15px ;
+}
 .modal-body .panel-vr .panel-body{
     padding : 15px ;
 }

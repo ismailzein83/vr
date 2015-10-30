@@ -27,19 +27,7 @@
                 api.loadGrid({});
             }
 
-            ////$scope.name;
-            ////$scope.onCarrierProfileDirectiveReady = function (api) {
-            ////    carrierProfileDirectiveAPI = api;
-            ////    load();
-            ////}
-
-            ////$scope.onGridReady = function (api) {
-            ////    gridAPI = api;
-            ////    api.loadGrid({});
-            ////}
-
-            //$scope.AddNewCountry = AddNewCountry;
-            ////$scope.country = "lebanon";
+            $scope.AddNewCodeGroup = AddNewCodeGroup;
         }
 
         function load() {
@@ -56,13 +44,13 @@
             return data;
         }
 
-        //function AddNewCountry() {
-        //    var onCountryAdded = function (countryObj) {
-        //        if (gridAPI != undefined)
-        //            gridAPI.onCountryAdded(countryObj);
-        //    };
-        //    WhS_BE_MainService.addCountry(onCountryAdded);
-        //}
+        function AddNewCodeGroup() {
+            var onCodeGroupAdded = function (codeGroupObj) {
+                if (gridAPI != undefined)
+                    gridAPI.onCodeGroupAdded(codeGroupObj);
+            };
+            WhS_BE_MainService.addCodeGroup(onCodeGroupAdded);
+        }
 
     }
 

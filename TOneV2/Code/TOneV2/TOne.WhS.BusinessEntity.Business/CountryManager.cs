@@ -48,6 +48,7 @@ namespace TOne.WhS.BusinessEntity.Business
             bool insertActionSucc = dataManager.Insert(country, out countryId);
             if (insertActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 country.CountryId = countryId;
                 insertOperationOutput.InsertedObject = country;
@@ -67,6 +68,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (updateActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = country;
             }
