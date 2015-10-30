@@ -129,8 +129,12 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                 
                 if (response.Data != undefined) { // else, the export button was clicked
 
-                    if (response.Data.length > 0)
-                        $scope.detailAggregateValues.push(response.Data[0]);
+                    if (response.Data.length > 0) {
+                        for (var i = 0; i < response.Data.length; i++)                        {
+                            $scope.detailAggregateValues.push(UtilsService.cloneObject(response.Data[i]));
+                        }
+                        
+                    }
                     else {
                         $scope.showOccurancesGrid = false;
                         $scope.message = "No open occurances were found for the current account number";
