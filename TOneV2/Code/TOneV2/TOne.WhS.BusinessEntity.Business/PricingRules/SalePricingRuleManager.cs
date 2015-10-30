@@ -40,15 +40,6 @@ namespace TOne.WhS.BusinessEntity.Business
             };
         }
 
-        protected override PricingRuleTODTarget CreateTODTarget(SalePricingRulesInput input)
-        {
-            return new SalePricingRuleTODTarget
-            {
-                CustomerId = input.CustomerId,
-                SaleZoneId = input.SaleZoneId
-            };
-        }
-
         protected override PricingRuleTariffTarget CreateTariffTarget(SalePricingRulesInput input)
         {
             return new SalePricingRuleTariffTarget
@@ -61,6 +52,15 @@ namespace TOne.WhS.BusinessEntity.Business
         protected override PricingRuleExtraChargeTarget CreateExtraChargeTarget(SalePricingRulesInput input)
         {
             return new SalePricingRuleExtraChargeTarget
+            {
+                CustomerId = input.CustomerId,
+                SaleZoneId = input.SaleZoneId
+            };
+        }
+
+        protected override PricingRuleRateTypeTarget CreateRateTypeTarget(SalePricingRulesInput input)
+        {
+            return new SalePricingRuleRateTypeTarget
             {
                 CustomerId = input.CustomerId,
                 SaleZoneId = input.SaleZoneId

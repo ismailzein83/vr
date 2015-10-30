@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public enum PricingRuleType { Tariff = 0, TOD = 1, ExtraCharge = 2 }
+    public enum PricingRuleType { Tariff = 0, TOD = 1, ExtraCharge = 2, RateType = 3 }
 
     public abstract class PricingRuleSettings
     {

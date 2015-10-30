@@ -456,7 +456,7 @@ namespace TOne.Analytics.Business
 
         public VariationReportResult GetVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions, int fromRow, int toRow, EntityType entityType, string entityID, GroupingBy groupingBy)
         {
-            List<TimeRange> timeRanges = new List<TimeRange>();
+            List<TOne.Analytics.Entities.TimeRange> timeRanges = new List<TOne.Analytics.Entities.TimeRange>();
             DateTime currentDate = new DateTime();
             DateTime fromDate = new DateTime();
             DateTime toDate = new DateTime();
@@ -479,7 +479,7 @@ namespace TOne.Analytics.Business
                         toDate = currentDate;
                         break;
                 }
-                TimeRange timeRange = new TimeRange { FromDate = fromDate, ToDate = toDate };
+                TOne.Analytics.Entities.TimeRange timeRange = new TOne.Analytics.Entities.TimeRange { FromDate = fromDate, ToDate = toDate };
                 timeRanges.Add(timeRange);
                 currentDate = fromDate;
                 counter = counter - 1;
@@ -499,7 +499,7 @@ namespace TOne.Analytics.Business
             return result;
         }
 
-        public VariationReportResult GetVariationReportsData(List<VariationReports> variationReports, List<TimeRange> timeRanges, DateTime selectedDate, int periodCount, List<decimal> totalValues, List<DateTime> datetotalValues, decimal totalAverage, out List<decimal> totals, out decimal totalPercentage, out decimal totalPreviousPercentage)
+        public VariationReportResult GetVariationReportsData(List<VariationReports> variationReports, List<TOne.Analytics.Entities.TimeRange> timeRanges, DateTime selectedDate, int periodCount, List<decimal> totalValues, List<DateTime> datetotalValues, decimal totalAverage, out List<decimal> totals, out decimal totalPercentage, out decimal totalPreviousPercentage)
         {
             List<VariationReportsData> variationReportsData = new List<VariationReportsData>();
             VariationReportsData current = null;
@@ -589,7 +589,7 @@ namespace TOne.Analytics.Business
             List<VariationReportsData> onlyCustomersList = new List<VariationReportsData>();
             List<VariationReportsData> suppliersList = new List<VariationReportsData>();
             List<VariationReportsData> customersAndSuppliersList = new List<VariationReportsData>();
-            List<TimeRange> timeRanges;
+            List<TOne.Analytics.Entities.TimeRange> timeRanges;
             VariationReportOptions customersreport;
             VariationReportOptions suppliersReport;
 
@@ -680,7 +680,7 @@ namespace TOne.Analytics.Business
 
         public List<TOne.Analytics.Entities.ZoneInfo> GetDestinationTrafficVolumes(DateTime fromDate, DateTime toDate, string customerID, string supplierID, int zoneID, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination, bool isDuration)
         {
-            List<TimeRange> timeRanges = new List<TimeRange>();
+            List<TOne.Analytics.Entities.TimeRange> timeRanges = new List<TOne.Analytics.Entities.TimeRange>();
             DateTime currentDate = new DateTime();
             DateTime startDate = new DateTime();
             DateTime endDate = new DateTime();
@@ -712,7 +712,7 @@ namespace TOne.Analytics.Business
                         break;
 
                 }
-                TimeRange timeRange = new TimeRange { FromDate = startDate, ToDate = endDate };
+                TOne.Analytics.Entities.TimeRange timeRange = new TOne.Analytics.Entities.TimeRange { FromDate = startDate, ToDate = endDate };
                 timeRanges.Add(timeRange);
                 currentDate = endDate;
             }
@@ -1377,7 +1377,7 @@ namespace TOne.Analytics.Business
             };
         }
 
-        private List<TOne.Analytics.Entities.ZoneInfo> GetDestinationTrafficVolumesResult(DestinationVolumeTrafficResult DestinationTrafficVolumeData, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int zoneID, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination, List<TimeRange> timeRanges)
+        private List<TOne.Analytics.Entities.ZoneInfo> GetDestinationTrafficVolumesResult(DestinationVolumeTrafficResult DestinationTrafficVolumeData, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int zoneID, int attempts, VolumeReportsTimePeriod timePeriod, int topDestination, List<TOne.Analytics.Entities.TimeRange> timeRanges)
         {
 
             List<TOne.Analytics.Entities.ZoneInfo> DestinationTrafficVolumeResult = new List<TOne.Analytics.Entities.ZoneInfo>();

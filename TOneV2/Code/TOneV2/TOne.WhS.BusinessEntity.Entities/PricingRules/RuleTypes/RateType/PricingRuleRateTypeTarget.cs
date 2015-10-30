@@ -6,17 +6,11 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public abstract class PricingRuleTODTarget : PricingRuleTarget
+    public class PricingRuleRateTypeTarget : PricingRuleTarget
     {
-        public DateTime Time { get; set; }
-
-        public IRate Rate { get; set; }
-
-        public Decimal? RateValueToUse { get; set; }
-
         public override PricingRuleType RuleType
         {
-            get { return PricingRuleType.TOD; }
+            get { return PricingRuleType.RateType; }
         }
     }
 }

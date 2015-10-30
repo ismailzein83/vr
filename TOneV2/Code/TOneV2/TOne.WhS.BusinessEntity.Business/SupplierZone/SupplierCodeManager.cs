@@ -16,5 +16,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSupplierCodes(supplierId,minimumDate);
         }
 
+
+        public List<SupplierCode> GetSupplierCodes(int supplierId, DateTime effectiveOn, bool isEffectiveInFuture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

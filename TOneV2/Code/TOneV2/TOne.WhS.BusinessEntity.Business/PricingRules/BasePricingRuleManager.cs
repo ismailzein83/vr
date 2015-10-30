@@ -34,7 +34,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         protected abstract IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetBehaviors();
 
-        protected abstract PricingRuleTODTarget CreateTODTarget(R input);
+        protected abstract PricingRuleRateTypeTarget CreateRateTypeTarget(R input);
         protected abstract PricingRuleTariffTarget CreateTariffTarget(R input);
         protected abstract PricingRuleExtraChargeTarget CreateExtraChargeTarget(R input);
 
@@ -42,22 +42,51 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             PricingRulesResult result = new PricingRulesResult();
 
-            PricingRuleTODTarget todTarget = CreateTODTarget(input);
-            todTarget.Rate = input.Rate;
-            todTarget.EffectiveOn = input.EffectiveOn;
-            todTarget.IsEffectiveInFuture = input.IsEffectiveInFuture;
+            ApplyRateTypeRule(input, result);
 
+            ApplyExtraChargeRule(input, result);
 
-            var todPricingRule = GetMatchRule(todTarget);
-            if (todPricingRule != null)
+            ApplyTariffRule(input, result);
+
+            return result;
+        }
+
+        private void ApplyRateTypeRule(R input, PricingRulesResult result)
+        {
+            if (input.Rate.OtherRates != null && input.Rate.OtherRates.Count > 0)
             {
-                PricingRuleTODContext todContext = new PricingRuleTODContext();
-                (todPricingRule.Settings as PricingRuleTODSettings).Execute(todContext, todTarget);
-                result.Rate = todTarget.RateValueToUse;
+                bool isRateFound = false;
+                PricingRuleRateTypeTarget rateTypeTarget = CreateRateTypeTarget(input);
+                rateTypeTarget.EffectiveOn = input.EffectiveOn;
+                rateTypeTarget.IsEffectiveInFuture = input.IsEffectiveInFuture;
+
+                var rateTypePricingRule = GetMatchRule(rateTypeTarget);
+                if (rateTypePricingRule != null)
+                {
+                    PricingRuleRateTypeItemContext rateTypeContext = new PricingRuleRateTypeItemContext();
+                    foreach (var rateTypeItem in (rateTypePricingRule.Settings as PricingRuleRateTypeSettings).Items)
+                    {
+                        if (rateTypeItem.Evaluate(rateTypeContext, rateTypeTarget))
+                        {
+                            Decimal rateToUse;
+                            if (input.Rate.OtherRates.TryGetValue(rateTypeItem.RateTypeName, out rateToUse))
+                            {
+                                isRateFound = true;
+                                result.Rate = rateToUse;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (!isRateFound)
+                    result.Rate = input.Rate.NormalRate;
             }
             else
                 result.Rate = input.Rate.NormalRate;
+        }
 
+        private void ApplyExtraChargeRule(R input, PricingRulesResult result)
+        {
             PricingRuleExtraChargeTarget extraChargeTarget = CreateExtraChargeTarget(input);
             extraChargeTarget.Rate = result.Rate;
             extraChargeTarget.EffectiveOn = input.EffectiveOn;
@@ -73,7 +102,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
                 result.Rate = extraChargeTarget.Rate;
             }
+        }
 
+        private void ApplyTariffRule(R input, PricingRulesResult result)
+        {
             PricingRuleTariffTarget tariffTarget = CreateTariffTarget(input);
             tariffTarget.Rate = result.Rate;
             tariffTarget.EffectiveOn = input.EffectiveOn;
@@ -87,7 +119,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 result.Rate = tariffTarget.Rate;
                 result.TotalAmount = tariffTarget.TotalAmount;
             }
-            return result;
         }
+
     }
 }

@@ -29,5 +29,10 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
             dataManager.DeleteSaleCodes(saleCodes);
         }
+
+        public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn, bool isEffectiveInFuture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

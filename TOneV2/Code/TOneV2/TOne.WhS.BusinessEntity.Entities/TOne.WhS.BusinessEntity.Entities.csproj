@@ -86,6 +86,12 @@
     <Compile Include="Country\Country.cs" />
     <Compile Include="ICode.cs" />
     <Compile Include="IRate.cs" />
+    <Compile Include="PricingRules\RuleTypes\RateType\IPricingRuleRateTypeItemContext.cs" />
+    <Compile Include="PricingRules\RuleTypes\RateType\PricingRuleRateTypeItemSettings.cs" />
+    <Compile Include="PricingRules\RuleTypes\RateType\PricingRuleRateTypeSettings.cs" />
+    <Compile Include="PricingRules\RuleTypes\RateType\PricingRuleRateTypeTarget.cs" />
+    <Compile Include="PricingRules\RuleTypes\RateType\PurchasePricingRuleRateTypeTarget.cs" />
+    <Compile Include="PricingRules\RuleTypes\RateType\SalePricingRuleRateTypeTarget.cs" />
     <Compile Include="SaleZone\SaleZoneInfoFilter.cs" />
     <Compile Include="SellingProduct\CustomerSellingProductDetail.cs" />
     <Compile Include="SellingProduct\SellingProductDetail.cs" />
