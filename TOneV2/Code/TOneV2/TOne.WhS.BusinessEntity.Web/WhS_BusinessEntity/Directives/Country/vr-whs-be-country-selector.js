@@ -26,7 +26,8 @@ app.directive('vrWhsBeCountrySelector', ['WhS_BE_CountryAPIService', 'WhS_BE_Mai
                 var onCountryAdded = function (countryObj) {
                     $scope.datasource.length = 0;
                     return getAllCountries($scope, WhS_BE_CountryAPIService).then(function (response) {
-                        $scope.selectedCountryValues = UtilsService.getItemByVal($scope.datasource, countryObj.CountryId, "CountryId");
+                        if ($attrs.ismultipleselection == undefined)
+                             $scope.selectedCountryValues = UtilsService.getItemByVal($scope.datasource, countryObj.CountryId, "CountryId");
                     }).catch(function (error) {
                     }).finally(function () {
 
