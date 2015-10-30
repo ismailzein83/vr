@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities.Queries
 {
-    public class RatePlanQuery
+    public class RatePlanItemInput
+    {
+        public RatePlanItemFilter Filter { get; set; }
+
+        public int FromRow { get; set; }
+
+        public int ToRow { get; set; }
+    }
+
+    public class RatePlanItemFilter
     {
         public int CustomerId { get; set; }
 

@@ -17,19 +17,21 @@ namespace TOne.WhS.Sales.Business
     public class RatePlanManager
     {
         #region Get Rate Plan Items
-        public List<RatePlanItem> GetRatePlanItems(RatePlanQuery query)
+        public List<RatePlanItem> GetRatePlanItems(RatePlanItemInput input)
         {
             List<RatePlanItem> ratePlanItems = new List<RatePlanItem>();
 
-            List<SaleZone> saleZones = GetSaleZones(query.CustomerId);
+            List<SaleZone> saleZones = GetSaleZones(input.Filter.CustomerId);
 
             if (saleZones != null)
             {
                 saleZones =
-                    saleZones.Where(x => x.Name == null || (x.Name.Length > 0 && char.ToLower(x.Name[0]) == char.ToLower(query.ZoneLetter))).ToList();
+                    saleZones.Where(x => x.Name == null || (x.Name.Length > 0 && char.ToLower(x.Name[0]) == char.ToLower(input.Filter.ZoneLetter))).ToList();
+
+                saleZones = GetPagedSaleZones(saleZones, input.FromRow, input.ToRow);
 
                 List<long> saleZoneIds = saleZones.Select(item => item.SaleZoneId).ToList();
-                List<SaleRate> saleRates = GetSaleRatesByCustomerZoneIds(query.CustomerId, saleZoneIds);
+                List<SaleRate> saleRates = GetSaleRatesByCustomerZoneIds(input.Filter.CustomerId, saleZoneIds);
 
                 foreach (SaleZone saleZone in saleZones)
                 {
@@ -38,7 +40,7 @@ namespace TOne.WhS.Sales.Business
                     ratePlanItem.ZoneId = saleZone.SaleZoneId;
                     ratePlanItem.ZoneName = saleZone.Name;
 
-                    var rate = saleRates.FindRecord(itm => itm.ZoneId == saleZone.SaleZoneId);
+                    var rate = saleRates.FindRecord(item => item.ZoneId == saleZone.SaleZoneId);
 
                     if (rate != null)
                     {
@@ -85,6 +87,18 @@ namespace TOne.WhS.Sales.Business
             CarrierAccountDetail customer = manager.GetCarrierAccount(customerId);
 
             return customer.CustomerSettings.SellingNumberPlanId;
+        }
+
+        private List<SaleZone> GetPagedSaleZones(List<SaleZone> saleZones, int fromRow, int toRow)
+        {
+            List<SaleZone> pagedSaleZones = new List<SaleZone>();
+
+            for (int i = fromRow - 1; i < saleZones.Count && i < toRow; i++)
+            {
+                pagedSaleZones.Add(saleZones[i]);
+            }
+
+            return pagedSaleZones;
         }
 
         private List<SaleRate> GetSaleRatesByCustomerZoneIds(int customerId, List<long> customerZoneIds)

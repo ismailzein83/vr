@@ -32,28 +32,24 @@
                 ratePlanGridAPI = api;
             };
 
+            $scope.loadMoreData = function () {
+                return loadRatePlanGrid(false);
+            };
+
             $scope.search = function () {
-                return loadZoneLetters().then(function () {
-                    if ($scope.zoneLetters.length > 0) {
-                        return loadRatePlanGrid();
-                    }
-                });
+                return loadRatePlan();
             };
 
             $scope.zoneLetterConnector = {
                 selectedZoneLetterIndex: 0,
                 onZoneLetterSelectionChanged: function () {
-                    loadRatePlanGrid();
+                    loadRatePlanGrid(true);
                 }
             };
 
             $scope.sellNewZones = function () {
                 var onCustomerZonesSold = function (customerZones) {
-                    return loadZoneLetters().then(function () {
-                        if ($scope.zoneLetters.length > 0) {
-                            return loadRatePlanGrid($scope.zoneLetters[0]);
-                        }
-                    });
+                    loadRatePlan();
                 };
                 
                 WhS_Sales_MainService.sellNewZones(carrierAccountDirectiveAPI.getData().CarrierAccountId, onCustomerZonesSold);
@@ -63,12 +59,12 @@
                 if (modifiedRatePlanItems.length > 0) {
                     var input = {
                         CustomerId: carrierAccountDirectiveAPI.getData().CarrierAccountId,
-                        NewSaleRates: GetNewSaleRates()
+                        NewSaleRates: buildNewSaleRates()
                     };
 
                     return WhS_Sales_RatePlanAPIService.SavePriceList(input).then(function (response) {
                         modifiedRatePlanItems = [];
-                        return loadRatePlanGrid();
+                        return loadRatePlanGrid(true);
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
@@ -91,52 +87,74 @@
                 });
         }
 
-        function loadZoneLetters() {
-            if (carrierAccountDirectiveAPI != undefined) {
-                var customerId = carrierAccountDirectiveAPI.getData().CarrierAccountId;
-
-                return WhS_BE_CustomerZoneAPIService.GetCustomerZoneLetters(customerId).then(function (response) {
-                    $scope.zoneLetters = [];
-
-                    for (var i = 0; i < response.length; i++) {
-                        $scope.zoneLetters.push(response[i]);
-                    }
-
-                    $scope.showZoneLetters = ($scope.zoneLetters.length > 0);
-                });
-            }
+        function loadRatePlan() {
+            return getZoneLetters().then(function () {
+                if ($scope.zoneLetters.length > 0) {
+                    $scope.zoneLetterConnector.selectedZoneLetterIndex = 0;
+                    return loadRatePlanGrid(true);
+                }
+            });
         }
 
-        function loadRatePlanGrid() {
+        function getZoneLetters() {
+            var customerId = carrierAccountDirectiveAPI.getData().CarrierAccountId;
+
+            return WhS_BE_CustomerZoneAPIService.GetCustomerZoneLetters(customerId).then(function (response) {
+                $scope.zoneLetters = [];
+
+                for (var i = 0; i < response.length; i++) {
+                    $scope.zoneLetters.push(response[i]);
+                }
+
+                $scope.showZoneLetters = ($scope.zoneLetters.length > 0);
+            });
+        }
+
+        function loadRatePlanGrid(clearDataAndContinuePaging) {
+            $scope.showRatePlanGrid = true;
             $scope.loadingRatePlanGrid = true;
 
-            if (ratePlanGridAPI != undefined) {
-                $scope.ratePlanItems = [];
-                $scope.showRatePlanGrid = true;
-
-                var query = {
-                    CustomerId: carrierAccountDirectiveAPI.getData().CarrierAccountId,
-                    ZoneLetter: $scope.zoneLetters[$scope.zoneLetterConnector.selectedZoneLetterIndex],
-                    CountryId: null
-                };
-
-                return WhS_Sales_RatePlanAPIService.GetRatePlanItems(query).then(function (response) {
-                    for (var i = 0; i < response.length; i++) {
-                        var ratePlanItem = response[i];
-                        setRatePlanItemExtension(ratePlanItem);
-                        $scope.ratePlanItems.push(ratePlanItem);
-                    }
-
-                    setModifiedRatePlanItems();
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                }).finally(function () {
-                    $scope.loadingRatePlanGrid = false;
-                });
+            if (clearDataAndContinuePaging) {
+                ratePlanGridAPI.clearDataAndContinuePaging();
             }
+
+            var input = buildRatePlanItemInput();
+
+            return WhS_Sales_RatePlanAPIService.GetRatePlanItems(input).then(function (response) {
+                var ratePlanItems = [];
+
+                for (var i = 0; i < response.length; i++) {
+                    var item = response[i];
+                    defineRatePlanItemExtension(item);
+                    ratePlanItems.push(item);
+                }
+
+                ratePlanGridAPI.addItemsToSource(ratePlanItems);
+                setModifiedRatePlanItems();
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.loadingRatePlanGrid = false;
+            });
         }
 
-        function setRatePlanItemExtension(ratePlanItem) {
+        function buildRatePlanItemInput() {
+            var pageInfo = ratePlanGridAPI.getPageInfo();
+
+            var filter = {
+                CustomerId: carrierAccountDirectiveAPI.getData().CarrierAccountId,
+                ZoneLetter: $scope.zoneLetters[$scope.zoneLetterConnector.selectedZoneLetterIndex],
+                CountryId: null
+            };
+
+            return {
+                Filter: filter,
+                FromRow: pageInfo.fromRow,
+                ToRow: pageInfo.toRow
+            };
+        }
+
+        function defineRatePlanItemExtension(ratePlanItem) {
             var extension = {
                 NewRate: null,
                 DisableBeginEffectiveDate: true,
@@ -179,12 +197,12 @@
                 var ratePlanItem = UtilsService.getItemByVal($scope.ratePlanItems, item.ZoneId, "ZoneId");
 
                 if (ratePlanItem != undefined && ratePlanItem != null) {
-                    ratePlanItem.NewRate = item.NewRate;
+                    ratePlanItem.Extension.NewRate = item.Extension.NewRate;
                 }
             }
         }
 
-        function GetNewSaleRates() {
+        function buildNewSaleRates() {
             var newSaleRates = [];
 
             for (var i = 0; i < modifiedRatePlanItems.length; i++) {
@@ -193,7 +211,7 @@
                 newSaleRates.push({
                     SaleRateId: item.SaleRateId,
                     ZoneId: item.ZoneId,
-                    NormalRate: item.NewRate,
+                    NormalRate: item.Extension.NewRate,
                     BeginEffectiveDate: item.BeginEffectiveDate,
                     EndEffectiveDate: item.EndEffectiveDate
                 });

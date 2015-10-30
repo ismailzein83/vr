@@ -37,7 +37,9 @@
             <vr-columns width="fullrow">
                 <vr-datagrid on-ready="onRatePlanGridReady"
                              datasource="ratePlanItems"
+                             loadmoredata="loadMoreData"
                              menuactions="gridMenuActions"
+                             pagingtype="'PagingOnScroll'"
                              vr-loader="loadingRatePlanGrid"
                              idfield="ZoneId"
                              hidegridmenu>

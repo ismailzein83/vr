@@ -17,7 +17,7 @@ namespace TOne.WhS.Sales.Web.Controllers
     {
         [HttpPost]
         [Route("GetRatePlanItems")]
-        public List<RatePlanItem> GetRatePlanItems(RatePlanQuery query)
+        public List<RatePlanItem> GetRatePlanItems(RatePlanItemInput query)
         {
             RatePlanManager manager = new RatePlanManager();
             return manager.GetRatePlanItems(query);
