@@ -1,5 +1,5 @@
 ﻿<vr-panel ng-controller="WhS_BE_CountryManagementController">
-    <vr-form name="formFilter" vr-loader="isGettingData">
+    <vr-form name="formFilter" >
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
@@ -11,7 +11,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Add" data-onclick="AddNewCountry"></vr-button>
+                    <vr-button type="Add" data-onclick="addNewCountry"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

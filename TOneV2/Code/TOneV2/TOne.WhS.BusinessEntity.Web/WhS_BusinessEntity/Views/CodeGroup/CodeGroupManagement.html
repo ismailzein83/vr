@@ -3,7 +3,7 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-textbox value="code" label="Code Group"></vr-textbox>
+                    <vr-textbox type="number" decimalprecision="0" value="code" label="Code Group"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-whs-be-country-selector on-ready="onCountryDirectiveReady" ismultipleselection ></vr-whs-be-country-selector>
@@ -14,7 +14,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Add" data-onclick="AddNewCodeGroup"></vr-button>
+                    <vr-button type="Add" data-onclick="addNewCodeGroup"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

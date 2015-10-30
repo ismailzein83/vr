@@ -110,21 +110,13 @@ function (UtilsService, VRNotificationService, WhS_BE_CountryAPIService, WhS_BE_
                 dataItem.extensionObject.codeGroupGridAPI.loadGrid(query);
             var onCodeGroupAdded = function (codeGroupObj) {
                 if (dataItem.extensionObject.codeGroupGridAPI != undefined) {
-                    dataItem.extensionObject.codeGroupGridAPI.loadGrid(query);
                     dataItem.extensionObject.codeGroupGridAPI.onCodeGroupAdded(codeGroupObj);
                 }
                    
             };
             WhS_BE_MainService.addCodeGroup(onCodeGroupAdded, dataItem);
         }
-        //function deleteCarrierProfile(carrierProfileObj) {
-        //    var onCarrierProfileDeleted = function () {
-        //        //TODO: This is to refresh the Grid after delete, should be removed when centralized
-        //        retrieveData();
-        //    };
-
-        //    WhS_BE_MainService.deleteCarrierAccount(carrierProfileObj, onCarrierProfileDeleted);
-        //}
+        
     }
 
     return directiveDefinitionObject;

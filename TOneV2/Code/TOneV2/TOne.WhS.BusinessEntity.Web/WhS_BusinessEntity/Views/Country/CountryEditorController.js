@@ -2,9 +2,9 @@
 
     "use strict";
 
-    countryEditorController.$inject = ['$scope', 'WhS_BE_CountryAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
+    countryEditorController.$inject = ['$scope', 'WhS_BE_CountryAPIService', 'VRNotificationService', 'VRNavigationService'];
 
-    function countryEditorController($scope, WhS_BE_CountryAPIService, UtilsService, VRNotificationService, VRNavigationService) {
+    function countryEditorController($scope, WhS_BE_CountryAPIService, VRNotificationService, VRNavigationService) {
 
         
         var countrytId;
@@ -20,7 +20,7 @@
             editMode = (countrytId != undefined);
         }
         function defineScope() {
-            $scope.SaveCountry = function () {
+            $scope.saveCountry = function () {
                     if (editMode) {
                         return updateCountry();
                     }
@@ -44,29 +44,7 @@
                 else {
                     $scope.isGettingData = false;
                 }
-           // $scope.isGettingData = true;
-            //if (carrierProfileDirectiveAPI == undefined)
-            //    return;
-
-            //defineCarrierAccountTypes();
-           
-            //carrierProfileDirectiveAPI.load().then(function () {
-            //    if ($scope.disableCarrierProfile && carrierProfileId != undefined)
-            //    {
-            //        carrierProfileDirectiveAPI.setData(carrierProfileId);
-            //        $scope.isGettingData = false;
-            //    }   
-            //    else if (editMode) {
-            //      getCarrierAccount();
-            //    }
-            //    else {
-            //        $scope.isGettingData = false;
-            //    }
-            //}).catch(function (error) {
-            //    VRNotificationService.notifyExceptionWithClose(error, $scope);
-            //    $scope.isGettingData = false;
-            //});
-
+          
         }
         function getCountry() {
             return WhS_BE_CountryAPIService.GetCountry(countrytId).then(function (country) {

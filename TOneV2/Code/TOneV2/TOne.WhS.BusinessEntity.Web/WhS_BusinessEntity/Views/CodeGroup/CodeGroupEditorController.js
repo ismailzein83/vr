@@ -2,9 +2,9 @@
 
     "use strict";
 
-    codeGroupEditorController.$inject = ['$scope', 'WhS_BE_CodeGroupAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
+    codeGroupEditorController.$inject = ['$scope', 'WhS_BE_CodeGroupAPIService', 'VRNotificationService', 'VRNavigationService'];
 
-    function codeGroupEditorController($scope, WhS_BE_CodeGroupAPIService, UtilsService, VRNotificationService, VRNavigationService) {
+    function codeGroupEditorController($scope, WhS_BE_CodeGroupAPIService, VRNotificationService, VRNavigationService) {
 
         
         var codeGroupId;
@@ -31,7 +31,7 @@
                 countryDirectiveApi = api;
                 load();
             }
-            $scope.SaveCodeGroup = function () {
+            $scope.saveCodeGroup = function () {
                     if (editMode) {
                         return updateCodeGroup();
                     }

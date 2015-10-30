@@ -6,6 +6,7 @@
 
     function codeGroupManagementController($scope, WhS_BE_MainService, UtilsService, VRNotificationService) {
         var gridAPI;
+        var filter = {};
         var countryDirectiveApi;
         defineScope();
         load();
@@ -13,8 +14,8 @@
         function defineScope() {
             $scope.searchClicked = function () {
                 if (!$scope.isGettingData && gridAPI != undefined) {
-                   
-                    return gridAPI.loadGrid(getFilterObject());
+                    setFilterObject();
+                    return gridAPI.loadGrid(filter);
                 }
                     
             };
@@ -24,10 +25,10 @@
             }
             $scope.onGridReady = function (api) {
                 gridAPI = api;            
-                api.loadGrid({});
+                api.loadGrid(filter);
             }
 
-            $scope.AddNewCodeGroup = AddNewCodeGroup;
+            $scope.addNewCodeGroup = addNewCodeGroup;
         }
 
         function load() {
@@ -36,15 +37,14 @@
 
         }
 
-        function getFilterObject() {
-            var data = {
+        function setFilterObject() {
+            filter = {
                 Code: $scope.code,
                 CountriesIds: countryDirectiveApi.getIdsData()
             };
-            return data;
         }
 
-        function AddNewCodeGroup() {
+        function addNewCodeGroup() {
             var onCodeGroupAdded = function (codeGroupObj) {
                 if (gridAPI != undefined)
                     gridAPI.onCodeGroupAdded(codeGroupObj);

@@ -2,28 +2,25 @@
 
     "use strict";
 
-    countryManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'VRNotificationService'];
+    countryManagementController.$inject = ['$scope', 'WhS_BE_MainService'  ];
 
-    function countryManagementController($scope, WhS_BE_MainService, UtilsService, VRNotificationService) {
+    function countryManagementController($scope, WhS_BE_MainService ) {
         var gridAPI;
-        var carrierProfileDirectiveAPI;
         defineScope();
         load();
+        var filter = {};
 
         function defineScope() {
             $scope.searchClicked = function () {
-                if (!$scope.isGettingData && gridAPI != undefined) {
-                   
-                    return gridAPI.loadGrid(getFilterObject());
-                }
-                    
+                setFilterObject()
+                return gridAPI.loadGrid(filter);
             };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;            
-                api.loadGrid({});
+                api.loadGrid(filter);
             }
-            $scope.AddNewCountry = AddNewCountry;
+            $scope.addNewCountry = addNewCountry;
         }
 
         function load() {
@@ -32,19 +29,17 @@
 
         }
 
-        function getFilterObject() {
-            var data = {
+        function setFilterObject() {
+            filter = {
                 Name: $scope.name,
             };
-            return data;
+           
         }
 
-        function AddNewCountry() {
+        function addNewCountry() {
             var onCountryAdded = function (countryObj) {
                 if (gridAPI != undefined) {
-                    gridAPI.loadGrid({});
                     gridAPI.onCountryAdded(countryObj);
-
                 }
                    
 

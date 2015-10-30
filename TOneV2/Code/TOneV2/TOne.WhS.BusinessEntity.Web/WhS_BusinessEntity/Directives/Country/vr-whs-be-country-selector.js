@@ -22,10 +22,15 @@ app.directive('vrWhsBeCountrySelector', ['WhS_BE_CountryAPIService', 'WhS_BE_Mai
             if ($attrs.ismultipleselection != undefined)
                 $scope.selectedCountryValues = [];
 
-            $scope.AddNewCountry = function () {
-                var onCountryAdded = function () {
+            $scope.addNewCountry = function () {
+                var onCountryAdded = function (countryObj) {
                     $scope.datasource.length = 0;
-                    return getAllCountries($scope, WhS_BE_CountryAPIService)
+                    return getAllCountries($scope, WhS_BE_CountryAPIService).then(function (response) {
+                        $scope.selectedCountryValues = UtilsService.getItemByVal($scope.datasource, countryObj.CountryId, "CountryId");
+                    }).catch(function (error) {
+                    }).finally(function () {
+
+                    });;
                 };
                 WhS_BE_MainService.addCountry(onCountryAdded);
             }
@@ -71,7 +76,7 @@ app.directive('vrWhsBeCountrySelector', ['WhS_BE_CountryAPIService', 'WhS_BE_Mai
             hideselectedvaluessection = "hideselectedvaluessection";
         var addCliked = '';
         if (attrs.showaddbutton != undefined)
-            addCliked = 'onaddclicked="AddNewCountry"';
+            addCliked = 'onaddclicked="addNewCountry"';
         if (attrs.ismultipleselection != undefined)
             return  ' <vr-select ismultipleselection datasource="datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="selectedCountryValues" ' + disabled + ' onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="CountryId"'
                    + 'entityname="Country" label="Country" '+addCliked+'></vr-select>';
