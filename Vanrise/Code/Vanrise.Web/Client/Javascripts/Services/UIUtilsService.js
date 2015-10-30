@@ -49,6 +49,32 @@
             }
         }
 
+        function getIdSelectedIds(idProperty, attrs, ctrl)
+        {
+            if (attrs.ismultipleselection != undefined)
+                return UtilsService.getPropValuesFromArray(ctrl.selectedvalues, idProperty);
+            else if (ctrl.selectedvalues != undefined)
+                return ctrl.selectedvalues.idProperty;
+
+            return undefined;
+        }
+
+        function setSelectedValues(selectedIds, idProperty, attrs, ctrl)
+        {
+            if (attrs.ismultipleselection != undefined) {
+                for (var i = 0; i < selectedIds.length; i++) {
+                    var selectedValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds[i], idProperty);
+                    if (selectedValue != null)
+                        ctrl.selectedvalues.push(selectedValue);
+                }
+            } else {
+                var selectedValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds, idProperty);
+                if (selectedValue != null)
+                    ctrl.selectedvalues = selectedValue;
+            }
+        }
+
+
         function getSettingsFromDirective(scope, directiveAPI, templateProperty) {
             if (scope[templateProperty] != undefined) {
                 var settings = directiveAPI.getData();
@@ -63,6 +89,8 @@
             loadDirective: loadDirective,
             callDirectiveLoad: callDirectiveLoad,
             callDirectiveLoadOrResolvePromise: callDirectiveLoadOrResolvePromise,
+            getIdSelectedIds: getIdSelectedIds,
+            setSelectedValues: setSelectedValues,
             getSettingsFromDirective: getSettingsFromDirective
         });
     }

@@ -33,8 +33,10 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [Route("GetCarrierAccountInfo")]
         public IEnumerable<CarrierAccountInfo> GetCarrierAccountInfo(string filter)
         {
+            CarrierAccountInfoQuery query = filter != null ? Vanrise.Common.Serializer.Deserialize<CarrierAccountInfoQuery>(filter) : null;
+
             CarrierAccountManager manager = new CarrierAccountManager();
-            return manager.GetCarrierAccountInfo(filter);
+            return manager.GetCarrierAccountInfo(query);
         }
 
         public IEnumerable<CarrierAccountInfo> GetCarrierAccounts(string serializedFilter)

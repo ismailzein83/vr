@@ -526,6 +526,12 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
     function escapeRegExp(string) {
         return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
     }
+
+    function serializetoJson(obj)
+    {
+        return angular.toJson(obj);
+    }
+
     return ({
         replaceAll: replaceAll,
         waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -557,7 +563,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         buildTitleForUpdateEditor: buildTitleForUpdateEditor,
         waitMultiplePromises: waitMultiplePromises,
         createPromiseDeferred: createPromiseDeferred,
-        convertToPromiseIfUndefined: convertToPromiseIfUndefined
+        convertToPromiseIfUndefined: convertToPromiseIfUndefined,
+        serializetoJson: serializetoJson
     });
 
 }]);

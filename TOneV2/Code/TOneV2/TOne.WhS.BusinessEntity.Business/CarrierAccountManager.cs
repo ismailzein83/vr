@@ -38,25 +38,28 @@ namespace TOne.WhS.BusinessEntity.Business
             var carrierAccount = CarrierAccountsDetails.FindRecord(x => x.CarrierAccountId == carrierAccountId);
             return carrierAccount;
         }
-        public IEnumerable<CarrierAccountInfo> GetCarrierAccountInfo(string filter)
+        public IEnumerable<CarrierAccountInfo> GetCarrierAccountInfo(CarrierAccountInfoQuery query)
         {
-            CarrierAccountInfoQuery query = Vanrise.Common.Serializer.Deserialize<CarrierAccountInfoQuery>(filter);
+            Func<CarrierAccountDetail, bool> filterExpression = null;
 
-             List<CarrierAccountType> CarrierAccountsType = new List<CarrierAccountType>();
-
-            if (query.GetCustomers)
+            if(query != null)
             {
-                CarrierAccountsType.Add(CarrierAccountType.Customer);
-            }
+                List<CarrierAccountType> CarrierAccountsType = new List<CarrierAccountType>();
 
-            if (query.GetSuppliers)
-            {
-                CarrierAccountsType.Add(CarrierAccountType.Supplier);
-            }
+                if (query.GetCustomers)
+                {
+                    CarrierAccountsType.Add(CarrierAccountType.Customer);
+                }
 
-            Func<CarrierAccountDetail, bool> filterExpression = (item) =>
-                 (item.AccountType == CarrierAccountType.Exchange || CarrierAccountsType.Contains(item.AccountType));
-           
+                if (query.GetSuppliers)
+                {
+                    CarrierAccountsType.Add(CarrierAccountType.Supplier);
+                }
+
+                filterExpression = (item) =>
+                     (item.AccountType == CarrierAccountType.Exchange || CarrierAccountsType.Contains(item.AccountType));
+            }
+                    
             List<CarrierAccountDetail> CarrierAccountsDetails = GetCachedCarrierAccounts();
             return CarrierAccountsDetails.MapRecords(CarrierAccountInfoMapper, filterExpression);
         }

@@ -1,5 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService', 'UtilsService', '$compile', function (WhS_BE_CarrierAccountAPIService, UtilsService, $compile) {
+app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService', 'UtilsService', 'VRUIUtilsService', '$compile',
+    function (WhS_BE_CarrierAccountAPIService, UtilsService, VRUIUtilsService, $compile) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -18,12 +19,10 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            ctrl.selectedCarrierValues;
-            if ($attrs.ismultipleselection != undefined)
-                ctrl.selectedCarrierValues = [];
-            ctrl.datasource = [];
+            if ($attrs.ismultipleselection != undefined && ctrl.selectedvalues == undefined)
+                ctrl.selectedvalues = [];
 
-            ctrl.selectedvalues = ctrl.selectedCarrierValues;
+            ctrl.datasource = [];
 
             var ctor = new carriersCtor(ctrl, $scope, WhS_BE_CarrierAccountAPIService, $attrs);
             ctor.initializeController();
@@ -72,7 +71,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         if (attrs.ismultipleselection != undefined)
             ismultipleselection = "ismultipleselection";
 
-        return '<div><vr-select datasource="ctrl.datasource" selectedvalues="ctrl.selectedCarrierValues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
+        return '<div><vr-select datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
             + label + '" ' + required + ' ' + hideselectedvaluessection + ' entityname="' + label + '" ' + hideremoveicon + ' ' + ismultipleselection + '></vr-select></div>'
     }
 
@@ -86,29 +85,31 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         function defineAPI() {
             var api = {};
 
-            api.loadDir = function (payload)
-            {
-                payload.filter.GetCustomers = attrs.getcustomers != undefined;
-                payload.filter.GetSuppliers = attrs.getsuppliers != undefined;
+            api.loadDir = function (payload) {
 
-                return WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(angular.toJson(payload.filter)).then(function (response) {
+                var filter;
+                var selectedIds;
+                if (payload != undefined) {
+                    filter = payload.filter;
+                    selectedIds = payload.selectedIds;
+                }
+
+                if (filter == undefined)
+                    filter = {};
+                filter.GetCustomers = attrs.getcustomers != undefined;
+                filter.GetSuppliers = attrs.getsuppliers != undefined;
+
+                var serializedFilter = null;
+                if (filter != undefined)
+                    serializedFilter = UtilsService.serializetoJson(payload.filter);
+
+                return WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serializedFilter).then(function (response) {
                     angular.forEach(response, function (itm) {
                         ctrl.datasource.push(itm);
                     });
 
-                    if (payload.selectedIds != undefined)
-                    {
-                        if (attrs.ismultipleselection != undefined) {
-                            for (var i = 0; i < payload.selectedIds.length; i++) {
-                                var selectedCarrierValue = UtilsService.getItemByVal(ctrl.datasource, payload.selectedIds[i], "CarrierAccountId");
-                                if (selectedCarrierValue != null)
-                                    ctrl.selectedCarrierValues.push(selectedCarrierValue);
-                            }
-                        } else {
-                            var selectedCarrierValue = UtilsService.getItemByVal(ctrl.datasource, payload.selectedIds, "CarrierAccountId");
-                            if (selectedCarrierValue != null)
-                                ctrl.selectedCarrierValues = selectedCarrierValue;
-                        }
+                    if (payload.selectedIds != undefined) {
+                        VRUIUtilsService.setSelectedValues(payload.selectedIds, 'CarrierAccountId', attrs, ctrl);
                     }
                 });
             }
@@ -128,30 +129,24 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             }
 
             api.getSelectedIds = function () {
-                if (attrs.ismultipleselection != undefined)
-                    return UtilsService.getPropValuesFromArray(ctrl.selectedCarrierValues, 'CarrierAccountId');
-                else if (ctrl.selectedCarrierValues != undefined)
-                    return ctrl.selectedCarrierValues.CarrierAccountId;
-                 
-                return undefined;
+                return VRUIUtilsService.getIdSelectedIds('CarrierAccountId', attrs, ctrl);
             }
 
-            api.getData = function ()
-            {
-                return ctrl.selectedCarrierValues;
+            api.getData = function () {
+                return ctrl.selectedvalues;
             }
 
             api.setData = function (selectedIds) {
-                if (attrs.ismultipleselection!=undefined) {
+                if (attrs.ismultipleselection != undefined) {
                     for (var i = 0; i < selectedIds.length; i++) {
                         var selectedCarrierValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds[i], "CarrierAccountId");
                         if (selectedCarrierValue != null)
-                            ctrl.selectedCarrierValues.push(selectedCarrierValue);
+                            ctrl.selectedvalues.push(selectedCarrierValue);
                     }
                 } else {
                     var selectedCarrierValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds, "CarrierAccountId");
                     if (selectedCarrierValue != null)
-                        ctrl.selectedCarrierValues = selectedCarrierValue;
+                        ctrl.selectedvalues = selectedCarrierValue;
                 }
             }
 
@@ -164,4 +159,3 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
 
     return directiveDefinitionObject;
 }]);
-

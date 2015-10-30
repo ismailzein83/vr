@@ -98,7 +98,7 @@ namespace Vanrise.Common
             if (dic == null)
                 return default(R);
 
-            IEnumerable<Q> filteredResults = dic.Values.Where(filterExpression);
+            IEnumerable<Q> filteredResults = dic.Values.ApplyFiltering(filterExpression);
 
             if (filteredResults == null)
                 return default(R);
@@ -119,7 +119,7 @@ namespace Vanrise.Common
             if (dic == null)
                 return null;
 
-            IEnumerable<T> filteredResults = dic.Values.Where(filterExpression);
+            IEnumerable<T> filteredResults = dic.Values.ApplyFiltering(filterExpression);
 
             if (filteredResults == null)
                 return null;
@@ -185,7 +185,7 @@ namespace Vanrise.Common
                 return default(Q);
 
 
-            IEnumerable<T> filteredResults = list.Where(filterExpression);
+            IEnumerable<T> filteredResults = list.ApplyFiltering(filterExpression);
 
             if (filteredResults == null)
                 return default(Q);
@@ -208,7 +208,7 @@ namespace Vanrise.Common
             if (list == null)
                 return null;
 
-            IEnumerable<T> filteredResults = list.Where(filterExpression);
+            IEnumerable<T> filteredResults = list.ApplyFiltering(filterExpression);
 
             if (filteredResults == null)
                 return null;
