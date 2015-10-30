@@ -306,13 +306,12 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
         AnalyticsAPIService.GetTrafficStatistics(groupKey.value, $scope.selectedEntityId, $scope.fromDate, $scope.toDate)
         .then(function (response) {
             var chartData = response;
-
             var chartDefinition = {
                 type: "spline",
                 title: $scope.selectedEntityName
             };
             var xAxisDefinition = {
-                titlePath: "Attempts",
+                titlePath: "FirstCDRAttempt",
                 isDateTime: true
             };
             var seriesDefinitions = [];

@@ -97,6 +97,7 @@ namespace TOne.Analytics.Data.SQL
                               AllResult AS(  
 			                SELECT
 					                {0}    
+                                    , ts.FirstCDRAttempt
 				                    , ts.Attempts as Attempts
 				                    , ts.DurationsInSeconds AS DurationsInSeconds
 
@@ -118,6 +119,7 @@ namespace TOne.Analytics.Data.SQL
 
             TrafficStatistic trafficStatistics = new TrafficStatistic
             {
+                FirstCDRAttempt = GetReaderValue<DateTime>(reader, "FirstCDRAttempt"),
                 Attempts = GetReaderValue<int>(reader, "Attempts"),
                 DurationsInMinutes = GetReaderValue<Decimal>(reader, "DurationsInSeconds") / 60
             };
