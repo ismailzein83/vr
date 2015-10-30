@@ -198,6 +198,12 @@
 
                 if (ratePlanItem != undefined && ratePlanItem != null) {
                     ratePlanItem.Extension.NewRate = item.Extension.NewRate;
+
+                    ratePlanItem.BeginEffectiveDate = item.BeginEffectiveDate;
+                    ratePlanItem.Extension.DisableBeginEffectiveDate = item.Extension.DisableBeginEffectiveDate;
+
+                    ratePlanItem.EndEffectiveDate = item.EndEffectiveDate;
+                    ratePlanItem.Extension.DisableEndEffectiveDate = item.Extension.DisableEndEffectiveDate;
                 }
             }
         }
