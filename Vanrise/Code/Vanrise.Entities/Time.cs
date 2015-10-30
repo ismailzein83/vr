@@ -15,8 +15,5 @@ namespace Vanrise.Entities
         public int Second { get; set; }
 
         public int MilliSecond { get; set; }
-
-        
-
     }
 }

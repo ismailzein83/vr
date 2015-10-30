@@ -57,6 +57,7 @@
     <Compile Include="TemplateConfig.cs" />
     <Compile Include="TempTableName.cs" />
     <Compile Include="Time.cs" />
+    <Compile Include="TimeRange.cs" />
     <Compile Include="UpdateOperationResult.cs" />
     <Compile Include="File\VRFile.cs" />
   </ItemGroup>
