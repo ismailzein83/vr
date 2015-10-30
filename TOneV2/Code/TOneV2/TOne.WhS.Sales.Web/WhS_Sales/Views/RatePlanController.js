@@ -40,7 +40,7 @@
                 });
             };
 
-            $scope.connector = {
+            $scope.zoneLetterConnector = {
                 selectedZoneLetterIndex: 0,
                 onZoneLetterSelectionChanged: function () {
                     loadRatePlanGrid();
@@ -60,9 +60,6 @@
             };
 
             $scope.savePriceList = function () {
-                //logEEDs();
-                //return;
-
                 if (modifiedRatePlanItems.length > 0) {
                     var input = {
                         CustomerId: carrierAccountDirectiveAPI.getData().CarrierAccountId,
@@ -78,12 +75,6 @@
                 }
             };
         }
-
-        //function logEEDs() {
-        //    for (var i = 0; i < $scope.ratePlanItems.length; i++) {
-        //        console.log($scope.ratePlanItems[i].EndEffectiveDate);
-        //    }
-        //}
 
         function load() {
             if (carrierAccountDirectiveAPI == undefined)
@@ -125,46 +116,14 @@
 
                 var query = {
                     CustomerId: carrierAccountDirectiveAPI.getData().CarrierAccountId,
-                    ZoneLetter: $scope.zoneLetters[$scope.connector.selectedZoneLetterIndex],
+                    ZoneLetter: $scope.zoneLetters[$scope.zoneLetterConnector.selectedZoneLetterIndex],
                     CountryId: null
                 };
 
                 return WhS_Sales_RatePlanAPIService.GetRatePlanItems(query).then(function (response) {
                     for (var i = 0; i < response.length; i++) {
                         var ratePlanItem = response[i];
-
-                        ratePlanItem.onRateChanged = function (dataItem) {
-                            var dataItemIndex = UtilsService.getItemIndexByVal(modifiedRatePlanItems, dataItem.ZoneId, "ZoneId");
-                            
-                            if (dataItem.NewRate == undefined || dataItem.NewRate == null || dataItem.NewRate == "") {
-                                if (dataItemIndex > -1) {
-                                    modifiedRatePlanItems.splice(dataItemIndex, 1);
-                                    $scope.disableSaveButton = (modifiedRatePlanItems.length == 0);
-                                }
-                            }
-                            else {
-                                if (dataItemIndex == -1) {
-                                    modifiedRatePlanItems.push(dataItem);
-                                    $scope.disableSaveButton = false;
-                                }
-                            }
-
-                            if (dataItem.DisableBeginEffectiveDate) {
-                                dataItem.DisableBeginEffectiveDate = false;
-                                dataItem.DisableEndEffectiveDate = false;
-
-                                dataItem.BeginEffectiveDate = (Number(dataItem.NewRate) > Number(dataItem.Rate)) ?
-                                    new Date(new Date().setDate(new Date().getDate() + 7)) : new Date();
-
-                                dataItem.EndEffectiveDate = null;
-
-                                console.log(dataItem);
-                            }
-                        };
-
-                        ratePlanItem.DisableBeginEffectiveDate = true;
-                        ratePlanItem.DisableEndEffectiveDate = true;
-
+                        setRatePlanItemExtension(ratePlanItem);
                         $scope.ratePlanItems.push(ratePlanItem);
                     }
 
@@ -175,6 +134,43 @@
                     $scope.loadingRatePlanGrid = false;
                 });
             }
+        }
+
+        function setRatePlanItemExtension(ratePlanItem) {
+            var extension = {
+                NewRate: null,
+                DisableBeginEffectiveDate: true,
+                DisableEndEffectiveDate: true
+            };
+
+            extension.onRateChanged = function (dataItem) {
+                var dataItemIndex = UtilsService.getItemIndexByVal(modifiedRatePlanItems, dataItem.ZoneId, "ZoneId");
+
+                if (dataItem.Extension.NewRate == undefined || dataItem.Extension.NewRate == null || dataItem.Extension.NewRate == "") {
+                    if (dataItemIndex > -1) {
+                        modifiedRatePlanItems.splice(dataItemIndex, 1);
+                        $scope.disableSaveButton = (modifiedRatePlanItems.length == 0);
+                    }
+                }
+                else {
+                    if (dataItemIndex == -1) {
+                        modifiedRatePlanItems.push(dataItem);
+                        $scope.disableSaveButton = false;
+                    }
+                }
+
+                if (dataItem.Extension.DisableBeginEffectiveDate) {
+                    dataItem.Extension.DisableBeginEffectiveDate = false;
+                    dataItem.Extension.DisableEndEffectiveDate = false;
+
+                    dataItem.BeginEffectiveDate = (Number(dataItem.Extension.NewRate) > Number(dataItem.Rate)) ?
+                        new Date(new Date().setDate(new Date().getDate() + 7)) : new Date();
+
+                    dataItem.EndEffectiveDate = null;
+                }
+            };
+
+            ratePlanItem.Extension = extension;
         }
 
         function setModifiedRatePlanItems() {

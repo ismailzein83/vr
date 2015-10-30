@@ -5,11 +5,11 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-whs-be-carrieraccount-selector type="'Customer'"
-                                                       on-ready="onCarrierAccountDirectiveReady"
+                    <vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountDirectiveReady"
                                                        onselectionchanged="onCarrierAccountChanged"
-                                                       isrequired
-                                                       hideremoveicon>
+                                                       getcustomers
+                                                       hideremoveicon
+                                                       isrequired>
                     </vr-whs-be-carrieraccount-selector>
                 </vr-columns>
             </vr-row>
@@ -27,7 +27,7 @@
 
         <vr-row ng-if="showZoneLetters">
             <vr-columns width="fullrow">
-                <vr-choices selectedindex="connector.selectedZoneLetterIndex" onselectionchanged="connector.onZoneLetterSelectionChanged()">
+                <vr-choices selectedindex="zoneLetterConnector.selectedZoneLetterIndex" onselectionchanged="zoneLetterConnector.onZoneLetterSelectionChanged()">
                     <vr-choice ng-repeat="letter in zoneLetters">{{ letter | uppercase }}</vr-choice>
                 </vr-choices>
             </vr-columns>
@@ -46,17 +46,17 @@
                     <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'" widthfactor="2" disablesorting></vr-datagridcolumn>
 
                     <vr-datagridcolumn headertext="'New Rate'" type="'Number'" widthfactor="2" disablesorting>
-                        <vr-textbox value="dataItem.NewRate" onvaluechanged="dataItem.onRateChanged(dataItem)"></vr-textbox>
+                        <vr-textbox value="dataItem.Extension.NewRate" onvaluechanged="dataItem.Extension.onRateChanged(dataItem)"></vr-textbox>
                     </vr-datagridcolumn>
 
                     <vr-datagridcolumn headertext="'Begin Effective Date'" type="'Date'" widthfactor="2" disablesorting>
-                        <span vr-disabled="dataItem.DisableBeginEffectiveDate">
+                        <span vr-disabled="dataItem.Extension.DisableBeginEffectiveDate">
                             <vr-datetimepicker type="date" value="dataItem.BeginEffectiveDate" />
                         </span>
                     </vr-datagridcolumn>
 
                     <vr-datagridcolumn headertext="'End Effective Date'" type="'Date'" widthfactor="2" disablesorting>
-                        <span vr-disabled="dataItem.DisableEndEffectiveDate">
+                        <span vr-disabled="dataItem.Extension.DisableEndEffectiveDate">
                             <vr-datetimepicker type="date" value="dataItem.EndEffectiveDate"></vr-datetimepicker>
                         </span>
                     </vr-datagridcolumn>
