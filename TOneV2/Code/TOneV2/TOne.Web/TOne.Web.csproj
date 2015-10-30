@@ -177,6 +177,39 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.BaseDB">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.BaseDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.BaseFTP">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.BaseFTP.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.BaseTP">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.BaseTP.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.FileReceiveAdapter">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FileReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.FTPReceiveAdapter">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FTPReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.MySQLReceiveAdapter">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.MySQLReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.SFTPReceiveAdapter">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.SFTPReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.SQLReceiveAdapter">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.SQLReceiveAdapter.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Business.dll</HintPath>
     </Reference>
@@ -188,6 +221,9 @@
     </Reference>
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Extensions">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Integration.Mappers">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Mappers.dll</HintPath>

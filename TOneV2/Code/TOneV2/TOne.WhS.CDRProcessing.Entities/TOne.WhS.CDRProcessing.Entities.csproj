@@ -41,6 +41,16 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
@@ -50,6 +60,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseCarrierIdentificationRule.cs" />
+    <Compile Include="CDRProcessing\BillingCDRBase.cs" />
+    <Compile Include="CDRProcessing\BillingFailedCDR.cs" />
+    <Compile Include="CDRProcessing\BillingInvalidCDR.cs" />
+    <Compile Include="CDRProcessing\BillingMainCDR.cs" />
+    <Compile Include="CDRProcessing\CDR.cs" />
+    <Compile Include="CDRProcessing\CDRBatch.cs" />
+    <Compile Include="CDRProcessing\CDRBillingBatch.cs" />
+    <Compile Include="CDRProcessing\CDRFailedBatch.cs" />
+    <Compile Include="CDRProcessing\CDRInvalidBatch.cs" />
+    <Compile Include="CDRProcessing\CDRMainBatch.cs" />
+    <Compile Include="CustomerRule\CustomerIdentificationRuleTarget.cs" />
+    <Compile Include="CustomerRule\IRule\IRuleInCarrierCriteria.cs" />
+    <Compile Include="CustomerRule\IRule\IRuleInCarrierTarget.cs" />
+    <Compile Include="CustomerRule\IRule\IRuleCDPNPrefixCriteria.cs" />
+    <Compile Include="CustomerRule\IRule\IRuleCDPNPrefixTarget.cs" />
+    <Compile Include="CustomerRule\IRule\IRuleInTrunkCriteria.cs" />
+    <Compile Include="CustomerRule\IRule\IRuleInTrunkTarget.cs" />
     <Compile Include="IRule\IRulePhoneNumberLengthCriteria.cs" />
     <Compile Include="IRule\IRulePhoneNumberPrefixCriteria.cs" />
     <Compile Include="IRule\IRulePhoneNumberTypeCriteria.cs" />
@@ -64,12 +91,20 @@
     <Compile Include="CustomerRule\CustomerIdentificationRuleDetail.cs" />
     <Compile Include="CustomerRule\CustomerIdentificationRuleQuery.cs" />
     <Compile Include="CustomerRule\CustomerIdentificationRuleSettings.cs" />
+    <Compile Include="SupplierRule\IRule\IRuleSupplierCDPNPrefixCriteria.cs" />
+    <Compile Include="SupplierRule\IRule\IRuleSupplierCDPNPrefixTarget.cs" />
+    <Compile Include="SupplierRule\IRule\IRuleOutCarrierCriteria.cs" />
+    <Compile Include="SupplierRule\IRule\IRuleOutCarrierTarget.cs" />
+    <Compile Include="SupplierRule\IRule\IRuleOutTrunkCriteria.cs" />
+    <Compile Include="SupplierRule\IRule\IRuleOutTrunkTarget.cs" />
     <Compile Include="SupplierRule\SupplierIdentificationRule.cs" />
     <Compile Include="SupplierRule\SupplierIdentificationRuleCriteria.cs" />
     <Compile Include="SupplierRule\SupplierIdentificationRuleDetail.cs" />
     <Compile Include="SupplierRule\SupplierIdentificationRuleQuery.cs" />
     <Compile Include="SupplierRule\SupplierIdentificationRuleSettings.cs" />
+    <Compile Include="SupplierRule\SupplierIdentificationRuleTarget.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

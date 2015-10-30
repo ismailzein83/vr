@@ -44,9 +44,21 @@
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDRProcessingDataManagerFactory.cs" />
+    <Compile Include="ICDRDataManager.cs" />
+    <Compile Include="ICDRFailedDataManager.cs" />
+    <Compile Include="ICDRInvalidDataManager.cs" />
+    <Compile Include="ICDRMainDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="CustomerIdentificationRuleDataManager.cs" />
     <Compile Include="ISupplierIdentificationRuleDataManager.cs" />
