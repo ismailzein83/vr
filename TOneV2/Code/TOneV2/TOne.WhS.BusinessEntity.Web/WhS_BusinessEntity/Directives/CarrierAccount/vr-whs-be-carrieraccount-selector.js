@@ -23,6 +23,8 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                 ctrl.selectedCarrierValues = [];
             ctrl.datasource = [];
 
+            ctrl.selectedvalues = ctrl.selectedCarrierValues;
+
             var ctor = new carriersCtor(ctrl, $scope, WhS_BE_CarrierAccountAPIService, $attrs);
             ctor.initializeController();
 
@@ -71,7 +73,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             ismultipleselection = "ismultipleselection";
 
         return '<div><vr-select datasource="ctrl.datasource" selectedvalues="ctrl.selectedCarrierValues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
-            + label + '" ' + required + ' ' + hideselectedvaluessection + + 'entityname="' + label + '" ' + hideremoveicon + ' ' + ismultipleselection + '></vr-select></div>'
+            + label + '" ' + required + ' ' + hideselectedvaluessection + ' entityname="' + label + '" ' + hideremoveicon + ' ' + ismultipleselection + '></vr-select></div>'
     }
 
     function carriersCtor(ctrl, $scope, WhS_BE_CarrierAccountAPIService, attrs) {
@@ -126,7 +128,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             }
 
             api.getSelectedIds = function () {
-                if (attrs.ismultipleselection)
+                if (attrs.ismultipleselection != undefined)
                     return UtilsService.getPropValuesFromArray(ctrl.selectedCarrierValues, 'CarrierAccountId');
                 else if (ctrl.selectedCarrierValues != undefined)
                     return ctrl.selectedCarrierValues.CarrierAccountId;

@@ -32,21 +32,13 @@ app.directive('vrWhsBeSuppliergroupSelective', ['UtilsService',
 
         function selectiveCtor(ctrl, $scope) {
             var carrierAccountDirectiveAPI;
+            var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-
                 $scope.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountDirectiveAPI = api;
-                    declareDirectiveAsReady();
+                    carrierAccountReadyPromiseDeferred.resolve();
                 }
-                
-                declareDirectiveAsReady();
-            }
-
-            function declareDirectiveAsReady()
-            {
-                if (carrierAccountDirectiveAPI == undefined)
-                    return;
 
                 defineAPI();
             }
@@ -54,8 +46,19 @@ app.directive('vrWhsBeSuppliergroupSelective', ['UtilsService',
             function defineAPI() {
                 var api = {};
 
-                api.load = function () {
-                    return carrierAccountDirectiveAPI.load();
+                api.load = function (payload) {
+                    var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    carrierAccountReadyPromiseDeferred.promise.then(function () {
+                        var carrierAccountPayload = {
+                            filter: {},
+                            selectedIds: payload != undefined ? payload.SupplierIds : undefined
+                        };
+                        console.log(carrierAccountPayload);
+                        VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, carrierAccountPayload, loadCarrierAccountPromiseDeferred);
+                    });
+
+                    return loadCarrierAccountPromiseDeferred.promise;
                 }
 
                 api.getData = function () {
@@ -63,10 +66,6 @@ app.directive('vrWhsBeSuppliergroupSelective', ['UtilsService',
                         $type: "TOne.WhS.BusinessEntity.Entities.SelectiveSuppliersSettings, TOne.WhS.BusinessEntity.Entities",
                         SupplierIds: carrierAccountDirectiveAPI.getSelectedIds()
                     };
-                }
-
-                api.setData = function (supplierGroupSettings) {
-                    return carrierAccountDirectiveAPI.setData(supplierGroupSettings.SupplierIds);
                 }
 
                 if (ctrl.onReady != null)

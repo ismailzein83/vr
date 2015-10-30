@@ -44,8 +44,8 @@ app.directive('vrWhsRoutingRouterulesettingsSelective', ['UtilsService', 'VRUIUt
                 $scope.removeSupplier = function ($event, supplier) {
                     $event.preventDefault();
                     $event.stopPropagation();
-                    var index = UtilsService.getItemIndexByVal($scope.selectedSuppliers, supplier.CarrierAccountId, 'CarrierAccountId');
-                    $scope.selectedSuppliers.splice(index, 1);
+                    var index = UtilsService.getItemIndexByVal(ctrl.selectedSuppliers, supplier.CarrierAccountId, 'CarrierAccountId');
+                    ctrl.selectedSuppliers.splice(index, 1);
                 };
 
                 defineAPI();
@@ -59,12 +59,14 @@ app.directive('vrWhsRoutingRouterulesettingsSelective', ['UtilsService', 'VRUIUt
                     var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     carrierAccountReadyPromiseDeferred.promise.then(function () {
-                        var carrierAccountPayload = [];
+                        var carrierAccountPayload = {
+                            filter: {},
+                            selectedIds: []
+                        };
                         if (payload != undefined)
                         {
-                            var supplierIds = [];
                             for (var i = 0; i < payload.Options.length; i++) {
-                                carrierAccountPayload.push(payload.Options[i].SupplierId);
+                                carrierAccountPayload.selectedIds.push(payload.Options[i].SupplierId);
                             }
                         }
                             
@@ -82,9 +84,9 @@ app.directive('vrWhsRoutingRouterulesettingsSelective', ['UtilsService', 'VRUIUt
 
                     function getOptions() {
                         var options = [];
-                        for (var i = 0; i < $scope.selectedSuppliers.length; i++) {
+                        for (var i = 0; i < ctrl.selectedSuppliers.length; i++) {
                             options.push({
-                                SupplierId: $scope.selectedSuppliers[i].CarrierAccountId,
+                                SupplierId: ctrl.selectedSuppliers[i].CarrierAccountId,
                                 Percentage: null,
                                 Filter: null
                             });
