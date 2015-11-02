@@ -108,6 +108,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             PricingRuleTariffTarget tariffTarget = CreateTariffTarget(input);
             tariffTarget.Rate = result.Rate;
+            tariffTarget.DurationInSeconds = input.DurationInSeconds;
             tariffTarget.EffectiveOn = input.EffectiveOn;
             tariffTarget.IsEffectiveInFuture = input.IsEffectiveInFuture;
 

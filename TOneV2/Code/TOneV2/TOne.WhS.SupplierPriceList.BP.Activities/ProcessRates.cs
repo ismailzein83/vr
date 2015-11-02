@@ -30,7 +30,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
        {
            DateTime startPreparing = DateTime.Now;
            SupplierRateManager manager = new SupplierRateManager();
-           List<SupplierRate> existingRates = manager.GetSupplierRates(inputArgument.SupplierId,(DateTime)inputArgument.MinimumDate);
+           List<SupplierRate> existingRates = manager.GetSupplierRatesEffectiveAfter(inputArgument.SupplierId,(DateTime)inputArgument.MinimumDate);
            RatesByZone ratesByZone = new RatesByZone();
            //convert existingrates to dictionary
            foreach (SupplierRate rate in existingRates)

@@ -10,6 +10,8 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public IRate Rate { get; set; }
 
+        public int DurationInSeconds { get; set; }
+
         public DateTime? EffectiveOn { get; set; }
 
         public bool IsEffectiveInFuture { get; set; }
@@ -18,6 +20,8 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SalePricingRulesInput : PricingRulesInput
     {
         public int CustomerId { get; set; }
+
+        public int SellingProductId { get; set; }
 
         public long SaleZoneId { get; set; }
     }

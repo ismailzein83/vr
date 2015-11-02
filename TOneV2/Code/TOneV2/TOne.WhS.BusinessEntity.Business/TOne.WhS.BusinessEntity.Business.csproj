@@ -73,6 +73,7 @@
     <Compile Include="PricingRules\PricingRuleRateTypeItemContext.cs" />
     <Compile Include="RateTypeManager.cs" />
     <Compile Include="SaleZone\SaleCodeCacheManager.cs" />
+    <Compile Include="SaleZone\SaleRateCacheManager.cs" />
     <Compile Include="SellingProductManager.cs" />
     <Compile Include="PricingRules\BasePricingRuleManager.cs" />
     <Compile Include="PricingRules\PricingRuleManager.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="SupplierZone\SupplierCodeCacheManager.cs" />
     <Compile Include="SupplierZone\SupplierCodeManager.cs" />
     <Compile Include="SupplierZone\SupplierPriceListManager.cs" />
+    <Compile Include="SupplierZone\SupplierRateCacheManager.cs" />
     <Compile Include="SupplierZone\SupplierRateManager.cs" />
     <Compile Include="SupplierZone\SupplierZoneManager.cs" />
   </ItemGroup>

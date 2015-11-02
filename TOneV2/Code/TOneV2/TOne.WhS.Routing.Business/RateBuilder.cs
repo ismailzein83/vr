@@ -48,6 +48,7 @@ namespace TOne.WhS.Routing.Business
                     {
                         CustomerId = customerId,
                         SaleZoneId = customerZone.ZoneId,
+                        SellingProductId = customerSellingProduct.SellingProductId,
                         Rate = zoneRate,
                         EffectiveOn = effectiveOn,
                         IsEffectiveInFuture = isEffectiveInFuture

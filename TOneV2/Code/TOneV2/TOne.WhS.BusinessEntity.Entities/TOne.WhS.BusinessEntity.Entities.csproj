@@ -91,6 +91,7 @@
     <Compile Include="PricingRules\RuleTypes\RateType\PricingRuleRateTypeTarget.cs" />
     <Compile Include="PricingRules\RuleTypes\RateType\PurchasePricingRuleRateTypeTarget.cs" />
     <Compile Include="PricingRules\RuleTypes\RateType\SalePricingRuleRateTypeTarget.cs" />
+    <Compile Include="SaleZone\CallSale.cs" />
     <Compile Include="SaleZone\SaleZoneInfoFilter.cs" />
     <Compile Include="SellingProduct\CustomerSellingProductDetail.cs" />
     <Compile Include="SellingProduct\SellingProductDetail.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="SupplierZone\SupplierRate.cs" />
     <Compile Include="SupplierZone\SupplierZone.cs" />
     <Compile Include="SupplierZone\SupplierZoneInfo.cs" />
+    <Compile Include="SupplierZone\CallCost.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SellingRules\" />

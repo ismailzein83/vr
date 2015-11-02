@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SupplierPriceList
+    public class CallCost
     {
-        public int PriceListId { get; set; }
+        public decimal RateValue { get; set; }
 
-        public int SupplierId { get; set; }
+        public decimal TotalNet { get; set; }
 
         public int CurrencyId { get; set; }
     }

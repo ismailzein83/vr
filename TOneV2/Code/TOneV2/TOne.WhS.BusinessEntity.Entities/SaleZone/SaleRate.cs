@@ -16,6 +16,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int RoutingProductId { get; set; }
 
+        public int? CurrencyId { get; set; }
+
         public decimal NormalRate { get; set; }
 
         public Dictionary<int, decimal> OtherRates { get; set; }
