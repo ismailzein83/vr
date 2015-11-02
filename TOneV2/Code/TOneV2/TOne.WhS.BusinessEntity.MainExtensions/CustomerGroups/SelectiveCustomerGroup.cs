@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups
@@ -19,7 +20,11 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups
         public override string GetDescription()
         {
             if (this.CustomerIds != null)
-                return string.Join(",", this.CustomerIds);
+            {
+                CarrierAccountManager manager = new CarrierAccountManager();
+                IEnumerable<CarrierAccountDetail> carrierAccounts = manager.GetCarrierAccountsByIds(this.CustomerIds, true, false);
+                return string.Join(", ", carrierAccounts.Select(x => x.Name));
+            }
 
             return string.Empty;
         }

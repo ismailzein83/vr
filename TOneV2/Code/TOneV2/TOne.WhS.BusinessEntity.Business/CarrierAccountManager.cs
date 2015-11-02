@@ -32,36 +32,36 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
+        
         public CarrierAccountDetail GetCarrierAccount(int carrierAccountId)
         {
             List<CarrierAccountDetail> CarrierAccountsDetails = GetCachedCarrierAccounts();
             var carrierAccount = CarrierAccountsDetails.FindRecord(x => x.CarrierAccountId == carrierAccountId);
             return carrierAccount;
         }
+        
+        public IEnumerable<CarrierAccountDetail> GetCarrierAccountsByIds(List<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
+        {
+            IEnumerable<CarrierAccountDetail> carrierAccountsDetails = this.GetCarrierAccountsByType(getCustomers, getSuppliers);
+            Func<CarrierAccountDetail, bool> filterExpression = (item) => (carrierAccountsIds.Contains(item.CarrierAccountId));
+
+            return carrierAccountsDetails.FindAllRecords(filterExpression);
+        }
+
         public IEnumerable<CarrierAccountInfo> GetCarrierAccountInfo(CarrierAccountInfoFilter filter)
         {
-            Func<CarrierAccountDetail, bool> filterExpression = null;
+            IEnumerable<CarrierAccountDetail> carrierAccountsDetails = null;
 
             if(filter != null)
             {
-                List<CarrierAccountType> CarrierAccountsType = new List<CarrierAccountType>();
-
-                if (filter.GetCustomers)
-                {
-                    CarrierAccountsType.Add(CarrierAccountType.Customer);
-                }
-
-                if (filter.GetSuppliers)
-                {
-                    CarrierAccountsType.Add(CarrierAccountType.Supplier);
-                }
-
-                filterExpression = (item) =>
-                     (item.AccountType == CarrierAccountType.Exchange || CarrierAccountsType.Contains(item.AccountType));
+                carrierAccountsDetails = this.GetCarrierAccountsByType(filter.GetCustomers, filter.GetSuppliers);
             }
-                    
-            List<CarrierAccountDetail> CarrierAccountsDetails = GetCachedCarrierAccounts();
-            return CarrierAccountsDetails.MapRecords(CarrierAccountInfoMapper, filterExpression);
+            else
+            {
+                carrierAccountsDetails = this.GetCachedCarrierAccounts();
+            }
+            
+            return carrierAccountsDetails.MapRecords(CarrierAccountInfoMapper);
         }
         public List<Vanrise.Entities.TemplateConfig> GetCustomersGroupTemplates()
         {
@@ -158,6 +158,28 @@ namespace TOne.WhS.BusinessEntity.Business
                 CarrierAccountId=carrierAccountDetail.CarrierAccountId,
                 Name = carrierAccountDetail.Name,
             };
+        }
+
+        private IEnumerable<CarrierAccountDetail> GetCarrierAccountsByType(bool getCustomers, bool getSuppliers)
+        {
+            IEnumerable<CarrierAccountDetail> carrierAccountsDetails = GetCachedCarrierAccounts();
+
+            List<CarrierAccountType> CarrierAccountsType = new List<CarrierAccountType>();
+
+            if (getCustomers)
+            {
+                CarrierAccountsType.Add(CarrierAccountType.Customer);
+            }
+
+            if (getSuppliers)
+            {
+                CarrierAccountsType.Add(CarrierAccountType.Supplier);
+            }
+
+            Func<CarrierAccountDetail, bool> filterExpression = (item) =>
+                 (item.AccountType == CarrierAccountType.Exchange || CarrierAccountsType.Contains(item.AccountType));
+
+            return carrierAccountsDetails.FindAllRecords(filterExpression);
         }
 
         #endregion
