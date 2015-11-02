@@ -1159,18 +1159,6 @@
     <Content Include="Client\Libraries\Semantic\themes\default\assets\fonts\icons.svg" />
     <Content Include="Client\Libraries\Semantic\themes\default\assets\images\flags.png" />
     <Content Include="Client\Libraries\waves\waves.js" />
-    <Content Include="Client\Modules\Common\Views\Error.html" />
-    <Content Include="Client\Modules\Common\Views\ErrorController.js" />
-    <Content Include="Client\Modules\Common\Views\Samples\AppendixSample\appendix-list-directive.js" />
-    <Content Include="Client\Modules\Common\Views\Samples\AppendixSample\appendix2-directive.js" />
-    <Content Include="Client\Modules\Common\Views\Samples\AppendixSample\appendix-directive.js" />
-    <Content Include="Client\Modules\Common\Views\Samples\AppendixSample\appendix-service.js" />
-    <Content Include="Client\Modules\Common\Views\Samples\AppendixSample\Editor.html" />
-    <Content Include="Client\Modules\Common\Views\Samples\AppendixSample\EditorController.js" />
-    <Content Include="Client\Modules\Common\Views\Samples\AppendixSample\Management.html" />
-    <Content Include="Client\Modules\Common\Views\Samples\AppendixSample\ManagementController.js" />
-    <Content Include="Client\Modules\Common\Views\StartupPage.html" />
-    <Content Include="Client\Modules\Common\Views\Support.html" />
     <Content Include="Client\Styles\angular-motion.css" />
     <Content Include="Client\Styles\angular-notify.css" />
     <Content Include="Client\Styles\angular-ui-switch.css" />
@@ -1575,6 +1563,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Client\Libraries\Bower\codemirror\mode\rpm\changes\" />
+    <Folder Include="Client\Modules\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
