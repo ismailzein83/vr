@@ -144,6 +144,7 @@
     <Compile Include="Controllers\CarrierProfileController.cs" />
     <Compile Include="Controllers\CustomerPricingProductController.cs" />
     <Compile Include="Controllers\CustomerZoneController.cs" />
+    <Compile Include="Controllers\RateTypeController.cs" />
     <Compile Include="Controllers\SellingProductController.cs" />
     <Compile Include="Controllers\PricingRuleController.cs" />
     <Compile Include="Controllers\PurchasePricingRuleController.cs" />
