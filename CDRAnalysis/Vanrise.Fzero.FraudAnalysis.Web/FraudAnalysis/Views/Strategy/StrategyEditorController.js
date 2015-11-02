@@ -97,13 +97,21 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
         $scope.hasParameters = function (item) {
-            return (item.parameters.length > 0);
+            if (item.parameters != undefined) {
+                return (item.parameters.length > 0);
+            }
+            else
+                return;
         }
 
 
         $scope.showParametersHint = function (item) {
-            if (item.parameters.length > 0)
-                return "This filter requires the following parameter(s): " + item.parameters.join(',');
+            if (item.parameters != undefined) {
+                if (item.parameters.length > 0)
+                    return "This filter requires the following parameter(s): " + item.parameters.join(',');
+            }
+            else
+                return;
         }
 
 
@@ -129,14 +137,29 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
         $scope.showFiltersHint = function (parameter) {
             var filters = [];
-            if ($scope.strategyFilters.length > 0) {
-                angular.forEach($scope.strategyFilters, function (filter) {
-                    if (filter.parameters.indexOf(parameter) > -1) {
-                        filters.push(filter.abbreviation);
-                    }
-                });
+
+            if (parameter != undefined) {
+                if ($scope.strategyFilters.length > 0) {
+                    angular.forEach($scope.strategyFilters, function (filter) {
+                        if (filter.parameters != undefined)
+                            if (filter.parameters.indexOf(parameter) > -1) {
+                                filters.push(filter.abbreviation);
+                            }
+                    });
+                    return filters.join(',');
+                }
             }
-            return filters.join(',');
+            else
+                return;
+        }
+
+        $scope.showThresholdHint = function (filter, strategyLevel) {
+            if (filter != undefined) {
+                var newThreshold = (parseInt(filter.threshold) + (parseInt(strategyLevel.percentage) * parseInt(filter.threshold) / 100));
+                return filter.label + ': ' + newThreshold;
+            }
+            else
+                return;
         }
 
     }
@@ -257,7 +280,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 excludeHourly: filterDef.excludeHourly,
                 toolTip: filterDef.toolTip,
                 upSign: filterDef.upSign,
-                downSign: filterDef.downSign
+                downSign: filterDef.downSign,
+                parameters: filterDef.parameters
             };
             $scope.strategyFilters.push(filterItem);
         });

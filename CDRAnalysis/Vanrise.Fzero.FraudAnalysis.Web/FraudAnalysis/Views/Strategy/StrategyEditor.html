@@ -143,7 +143,10 @@
                                     <vr-datagridcolumn ng-repeat="filter in strategyFilters" ng-show="filter.isSelected" columnindex="$index + 1" headertext="'Filter: ' + filter.filterId" headerdescription="filter.description" tag="filter" disablesorting>
                                         <span ng-init="filterIndex = viewScope.strategyFilters.indexOf(colDef.tag) ">
                                             <div style="max-width: 50px; float: left">
-                                                <vr-switch value="dataItem.StrategyLevelCriterias[filterIndex].isSelected" hint="{{  viewScope.strategyFilters[filterIndex].label +': '+    (viewScope.strategyFilters[filterIndex].threshold + (dataItem.StrategyLevelCriterias[filterIndex].percentage*viewScope.strategyFilters[filterIndex].threshold/100)) }}"></vr-switch>
+
+                                                
+
+                                                <vr-switch value="dataItem.StrategyLevelCriterias[filterIndex].isSelected" hint="{{viewScope.showThresholdHint(viewScope.strategyFilters[filterIndex], dataItem.StrategyLevelCriterias[filterIndex])}}"></vr-switch>
                                             </div>
                                             <div style="max-width:100px;float:left">
                                                 <div style="width:100%; display:inline-block; max-width:100px"> <vr-numeric ng-show="dataItem.StrategyLevelCriterias[filterIndex].isSelected" value="dataItem.StrategyLevelCriterias[filterIndex].percentage" minvalue="-90" maxvalue="90" stepvalue="10" upsign="{{dataItem.StrategyLevelCriterias[filterIndex].upSign}}" downsign="{{dataItem.StrategyLevelCriterias[filterIndex].downSign}}" unit="%" isrequired></vr-numeric></div>

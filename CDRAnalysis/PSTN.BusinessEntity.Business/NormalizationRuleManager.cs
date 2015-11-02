@@ -26,7 +26,7 @@ namespace PSTN.BusinessEntity.Business
             return GetCachedOrCreate(String.Format("GetRuleTree_{0}", ruleType),
                 () =>
                 {
-                    var rules = GetFilteredRules(rule => rule.Settings.RuleType == ruleType);
+                    var rules = GetFilteredRules(rule => rule.Settings.RuleType == ruleType && rule.BeginEffectiveTime <= DateTime.Now && (rule.EndEffectiveTime >= DateTime.Now || rule.EndEffectiveTime == null));
                     return new Vanrise.Rules.RuleTree(rules, GetRuleStructureBehaviors());
                 });
         }
@@ -258,7 +258,7 @@ namespace PSTN.BusinessEntity.Business
 
             return detail;
         }
-        
+
         #endregion
     }
 }
