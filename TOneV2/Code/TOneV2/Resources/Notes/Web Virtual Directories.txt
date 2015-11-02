@@ -6,6 +6,7 @@
 	Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
 
  - Add the following virtual directories under "Client > Modules" folder:
+	Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
 	Main					C:\TFS\TOneV2\Code\TOneV2\TOne.Main.Web\Main
 	Analytics				C:\TFS\TOneV2\Code\TOneV2\TOne.Analytics.Web\Analytics
 	BI						C:\TFS\Vanrise\Code\Vanrise.BI.Web\BI

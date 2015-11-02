@@ -11,6 +11,7 @@ namespace TOne.Web
             Vanrise.Web.BundleConfig.RegisterBundles(bundles);
 
             bundles.Add(new ScriptBundle("~/bundles/ModulesJavascripts").IncludeDirectory(
+                "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Main", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Analytics", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/BI", "*.js", true).IncludeDirectory(
