@@ -15,9 +15,9 @@
             });
 
         }
-        function GetCarrierAccountInfo(filter) {
+        function GetCarrierAccountInfo(serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CarrierAccount", "GetCarrierAccountInfo"), {
-                filter: filter
+                serializedFilter: serializedFilter
             });
         }
 

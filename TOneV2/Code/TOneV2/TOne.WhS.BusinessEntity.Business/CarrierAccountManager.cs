@@ -38,20 +38,20 @@ namespace TOne.WhS.BusinessEntity.Business
             var carrierAccount = CarrierAccountsDetails.FindRecord(x => x.CarrierAccountId == carrierAccountId);
             return carrierAccount;
         }
-        public IEnumerable<CarrierAccountInfo> GetCarrierAccountInfo(CarrierAccountInfoQuery query)
+        public IEnumerable<CarrierAccountInfo> GetCarrierAccountInfo(CarrierAccountInfoFilter filter)
         {
             Func<CarrierAccountDetail, bool> filterExpression = null;
 
-            if(query != null)
+            if(filter != null)
             {
                 List<CarrierAccountType> CarrierAccountsType = new List<CarrierAccountType>();
 
-                if (query.GetCustomers)
+                if (filter.GetCustomers)
                 {
                     CarrierAccountsType.Add(CarrierAccountType.Customer);
                 }
 
-                if (query.GetSuppliers)
+                if (filter.GetSuppliers)
                 {
                     CarrierAccountsType.Add(CarrierAccountType.Supplier);
                 }
@@ -161,10 +161,5 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
-
-        public IEnumerable<CarrierAccountInfo> GetCarrierAccounts(CarrierAccountInfoFilter carrierAccountInfoFilter)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

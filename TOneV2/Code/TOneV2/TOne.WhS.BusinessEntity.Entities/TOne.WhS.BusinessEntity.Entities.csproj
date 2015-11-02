@@ -53,7 +53,6 @@
     <Compile Include="BusinessManagers\IBEManager.cs" />
     <Compile Include="BusinessManagers\ISaleZoneManager.cs" />
     <Compile Include="BusinessManagers\ICarrierAccountManager.cs" />
-    <Compile Include="CarrierAccountInfoQuery.cs" />
     <Compile Include="CarrierAccounts\CarrierAccount.cs" />
     <Compile Include="CarrierAccounts\CarrierAccountCustomerSettings.cs" />
     <Compile Include="CarrierAccounts\CarrierAccountDetail.cs" />

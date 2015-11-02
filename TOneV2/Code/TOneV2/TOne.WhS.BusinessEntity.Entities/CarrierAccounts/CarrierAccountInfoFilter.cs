@@ -8,5 +8,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class CarrierAccountInfoFilter
     {
+        public bool GetCustomers { get; set; }
+
+        public bool GetSuppliers { get; set; }
     }
 }
