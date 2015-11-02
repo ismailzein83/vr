@@ -19,14 +19,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups
 
         public override string GetDescription()
         {
-            if (this.CustomerIds != null)
-            {
-                CarrierAccountManager manager = new CarrierAccountManager();
-                IEnumerable<CarrierAccountDetail> carrierAccounts = manager.GetCarrierAccountsByIds(this.CustomerIds, true, false);
-                return string.Join(", ", carrierAccounts.Select(x => x.Name));
-            }
-
-            return string.Empty;
+            CarrierAccountManager manager = new CarrierAccountManager();
+            return manager.GetDescription(this.CustomerIds, true, false);
         }
     }
 }

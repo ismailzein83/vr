@@ -40,12 +40,13 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierAccount;
         }
         
-        public IEnumerable<CarrierAccountDetail> GetCarrierAccountsByIds(List<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
+        public string GetDescription(List<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
-            IEnumerable<CarrierAccountDetail> carrierAccountsDetails = this.GetCarrierAccountsByType(getCustomers, getSuppliers);
-            Func<CarrierAccountDetail, bool> filterExpression = (item) => (carrierAccountsIds.Contains(item.CarrierAccountId));
+            IEnumerable<CarrierAccountDetail> carrierAccounts = this.GetCarrierAccountsByIds(carrierAccountsIds, true, false);
+            if(carrierAccounts != null)
+                return string.Join(", ", carrierAccounts.Select(x => x.Name));
 
-            return carrierAccountsDetails.FindAllRecords(filterExpression);
+            return string.Empty;
         }
 
         public IEnumerable<CarrierAccountInfo> GetCarrierAccountInfo(CarrierAccountInfoFilter filter)
@@ -158,6 +159,17 @@ namespace TOne.WhS.BusinessEntity.Business
                 CarrierAccountId=carrierAccountDetail.CarrierAccountId,
                 Name = carrierAccountDetail.Name,
             };
+        }
+
+        private IEnumerable<CarrierAccountDetail> GetCarrierAccountsByIds(List<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
+        {
+            IEnumerable<CarrierAccountDetail> carrierAccountsDetails = this.GetCarrierAccountsByType(getCustomers, getSuppliers);
+            Func<CarrierAccountDetail, bool> filterExpression = null;
+
+            if(carrierAccountsIds != null)
+                filterExpression = (item) => (carrierAccountsIds.Contains(item.CarrierAccountId));
+
+            return carrierAccountsDetails.FindAllRecords(filterExpression);
         }
 
         private IEnumerable<CarrierAccountDetail> GetCarrierAccountsByType(bool getCustomers, bool getSuppliers)

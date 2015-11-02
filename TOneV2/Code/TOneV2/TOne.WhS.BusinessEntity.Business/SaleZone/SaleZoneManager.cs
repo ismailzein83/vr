@@ -73,6 +73,23 @@ namespace TOne.WhS.BusinessEntity.Business
             return saleZoneDictionary;
         }
 
+        public string GetDescription(int sellingNumberPlanId, List<long> saleZoneIds)
+        {
+            IEnumerable<SaleZone> allZones = GetCachedSaleZones(sellingNumberPlanId);
+
+            Func<SaleZone, bool> filterExpression = null;
+
+            if(saleZoneIds != null)
+                filterExpression = (itm) => (saleZoneIds.Contains(itm.SaleZoneId));
+
+            allZones = allZones.FindAllRecords(filterExpression);
+            
+            if(allZones != null)
+                return string.Join(", ", allZones.Select(x => x.Name));
+
+            return string.Empty;
+        }
+
         public void InsertSaleZones(List<SaleZone> saleZones)
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
@@ -99,19 +116,13 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             string filterLower = filter != null ? filter.ToLower() : null;
             List<SaleZone> allZones = GetCachedSaleZones(sellingNumberPlanId);
-            if (allZones != null)
-                return allZones.Where(itm => filterLower == null || itm.Name.Contains(filterLower)).Select(itm => new SaleZoneInfo { SaleZoneId = itm.SaleZoneId, Name = itm.Name });
-            else
-                return null;
+            return allZones.MapRecords(SaleZoneInfoMapper, itm => filterLower == null || itm.Name.Contains(filterLower));
         }
 
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(int sellingNumberPlanId, List<long> saleZoneIds)
         {
             List<SaleZone> allZones = GetCachedSaleZones(sellingNumberPlanId);
-            if (allZones != null)
-                return allZones.Where(itm => saleZoneIds.Contains(itm.SaleZoneId)).Select(itm => new SaleZoneInfo { SaleZoneId = itm.SaleZoneId, Name = itm.Name });
-            else
-                return null;
+            return allZones.MapRecords(SaleZoneInfoMapper, itm => saleZoneIds.Contains(itm.SaleZoneId));
         }
 
         public List<SaleZone> GetSaleZonesByCountryIds(int sellingNumberPlanId, List<int> countryIds)
@@ -155,6 +166,11 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 return _dataManager.AreZonesUpdated(ref _updateHandle);
             }
+        }
+
+        private SaleZoneInfo SaleZoneInfoMapper(SaleZone saleZone)
+        {
+            return new SaleZoneInfo { SaleZoneId = saleZone.SaleZoneId, Name = saleZone.Name };
         }
 
         #endregion

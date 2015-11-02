@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups
@@ -18,10 +19,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups
 
         public override string GetDescription()
         {
-            if (this.ZoneIds != null)
-                return string.Join(",", this.ZoneIds);
-
-            return string.Empty;
+            SaleZoneManager manager = new SaleZoneManager();
+            return manager.GetDescription(base.SellingNumberPlanId, this.ZoneIds);
         }
     }
 }
