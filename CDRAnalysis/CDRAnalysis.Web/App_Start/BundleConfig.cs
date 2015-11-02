@@ -11,6 +11,7 @@ namespace CDRAnalysis.Web
             Vanrise.Web.BundleConfig.RegisterBundles(bundles);
 
             bundles.Add(new ScriptBundle("~/bundles/ModulesJavascripts").IncludeDirectory(
+                "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/FraudAnalysis", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/BI", "*.js", true).IncludeDirectory(
