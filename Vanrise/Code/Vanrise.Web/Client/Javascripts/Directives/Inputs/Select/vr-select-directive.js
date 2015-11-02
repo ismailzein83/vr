@@ -268,7 +268,7 @@
                     });
                 }, 100);
                 setTimeout(function () {
-                   // if ($('div[name=' + $attrs.id + ']').parents('.modal-body').length > 0) {
+                    if ($('div[name=' + $attrs.id + ']').parents('.modal-body').length > 0 ) {
 
                         $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function () {
 
@@ -276,7 +276,8 @@
                             var selfHeight = $(this).parent().height();
                             var selfOffset = $(self).offset();
                             var dropDown = self.parent().find('ul');
-                            $(dropDown).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: 'auto' });
+                            if (!$(dropDown).hasClass(" menu-to-top"))
+                              $(dropDown).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: 'auto' });
                         });
                        
                         $('div[name=' + $attrs.id + ']').parents('div').scroll(function () {
@@ -285,7 +286,7 @@
                         $(window).resize(function () {
                             fixDropdownPosition();
                         });
-                   // }
+                    }
 
                 }, 1);
                 var fixDropdownPosition = function () {

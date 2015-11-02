@@ -1488,6 +1488,10 @@ input.ui-grid-filter-input[type="text"] {
     border-bottom: 1px solid #DDD;
    /*to fixe menu-grid action position side effects*/
 }
+vr-datagrid[hideheader="true"] .vr-datagrid{
+    
+    border-top: 1px solid #DDD;
+}
 .vr-datagrid-header{
     background-color:#829EBF;
     color:#FFF;   
