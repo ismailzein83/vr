@@ -75,6 +75,8 @@
     <Folder Include="rules\" />
     <Folder Include="rules\Tables\" />
     <Folder Include="rules\Stored Procedures\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -161,11 +163,7 @@
     <Build Include="rules\Stored Procedures\sp_Rule_Insert.sql" />
     <Build Include="rules\Stored Procedures\sp_RuleType_InsertIfNotExistsAndGetID.sql" />
     <Build Include="Security\rules.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_GetbyId.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_GetbyEmail.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_CheckUserName.sql" />
-    <Build Include="sec\Stored Procedures\sp_Group_Get.sql" />
-    <Build Include="sec\Stored Procedures\sp_Group_CreateTempByName.sql" />
+    <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
