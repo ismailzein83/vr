@@ -14,8 +14,5 @@ namespace Vanrise.Entities
 
         public string Symbol { get; set; }
 
-        public double LastRate { get; set; }
-
-        public DateTime LastRateExchangeDate { get; set; }
     }
 }
