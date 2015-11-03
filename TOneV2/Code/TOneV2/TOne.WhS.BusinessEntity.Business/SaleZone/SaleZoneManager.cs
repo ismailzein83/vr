@@ -112,13 +112,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return manager.GetTemplateConfigurations(Constants.SaleZoneGroupConfigType);
         }
 
-        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(int sellingNumberPlanId, string filter)
-        {
-            string filterLower = filter != null ? filter.ToLower() : null;
-            List<SaleZone> allZones = GetCachedSaleZones(sellingNumberPlanId);
-            return allZones.MapRecords(SaleZoneInfoMapper, itm => filterLower == null || itm.Name.Contains(filterLower));
-        }
-
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(int sellingNumberPlanId, List<long> saleZoneIds)
         {
             List<SaleZone> allZones = GetCachedSaleZones(sellingNumberPlanId);

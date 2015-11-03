@@ -5,8 +5,6 @@
         </vr-select>
     </vr-columns>
     <vr-columns colnum="4" ng-show="isPackageDefined">
-        <vr-select ismultipleselection isrequired label="Sale Zone" datasource="searchZones" selectedvalues="selectedSaleZones"
-                   datatextfield="Name" datavaluefield="SaleZoneId" entityname="Sale Zone" >
-        </vr-select>
+        <vr-whs-be-salezone-selector on-ready="onSaleZoneDirectiveReady" />
     </vr-columns>
 </div>

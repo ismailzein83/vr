@@ -11,10 +11,6 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
         controller: function ($scope, $element, $attrs) {
 
             var ctrl = this;
-            
-            console.log(ctrl.sellingnumberplanid);
-
-            $scope.selectedSaleZones = [];
 
             $scope.sellingNumberPlans = [];
             $scope.selectedSellingNumberPlan = undefined;
@@ -59,7 +55,16 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
 
     function selectiveCtor(ctrl, $scope, WhS_BE_SaleZoneAPIService) {
         
+        var saleZoneDirectiveAPI;
+        var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         function initializeController() {
+            
+            $scope.onCarrierAccountDirectiveReady = function (api) {
+                saleZoneDirectiveAPI = api;
+                saleZoneReadyPromiseDeferred.resolve();
+            }
+
             defineAPI();
         }
 
@@ -69,8 +74,6 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
 
             api.load = function (payload) {
                 var promises = [];
-
-                console.log(ctrl.sellingnumberplanid);
 
                 var loadSellingNumberPlanPromise = WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlans().then(function (response) {
                     angular.forEach(response, function (item) {

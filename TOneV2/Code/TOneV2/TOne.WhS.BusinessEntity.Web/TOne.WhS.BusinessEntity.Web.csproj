@@ -193,6 +193,7 @@
     <Content Include="WhS_BusinessEntity\Directives\RouteRule\vr-whs-be-routerule-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\vr-whs-be-routingproduct-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SaleZone\vr-whs-be-salezone-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\SellingProduct\Templates\CustomerSellingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleExtraChargeSettings.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Templates\PricingRuleFixedExtraChargeTemplate.html" />
@@ -288,10 +289,6 @@
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductManagementController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Templates\SelectiveSaleZonesTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Views\Templates\SelectiveSaleZonesTemplateController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Templates\SelectiveSuppliersTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Views\Templates\SelectiveSuppliersTemplateController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
