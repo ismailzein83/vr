@@ -41,6 +41,7 @@ namespace Vanrise.Rules
             if (notMatchedRules != null && notMatchedRules.Count > 0)
             {
                 node.UnMatchedRulesNode = new RuleNode();
+                node.UnMatchedRulesNode.IsUnMatchedRulesNode = true;
                 node.UnMatchedRulesNode.ParentNode = node;
                 node.UnMatchedRulesNode.Rules = notMatchedRules;
                 StructureRules(node.UnMatchedRulesNode, (behaviorIndex + 1));
