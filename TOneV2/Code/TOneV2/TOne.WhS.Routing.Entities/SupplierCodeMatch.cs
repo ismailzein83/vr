@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class SupplierZoneRate
+    public class SupplierCodeMatch
     {
         public int SupplierId { get; set; }
 
         public long SupplierZoneId { get; set; }
 
-        public Decimal Rate { get; set; }
+        public string SupplierCode { get; set; }
     }
 
-    public class SupplierZoneRatesByZone : Dictionary<long, SupplierZoneRate>
+    public class SupplierCodeMatchBySupplier : Dictionary<int, List<SupplierCodeMatch>>
     {
-
     }
 }

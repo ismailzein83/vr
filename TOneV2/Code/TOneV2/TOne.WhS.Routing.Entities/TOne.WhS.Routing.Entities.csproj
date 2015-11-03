@@ -50,6 +50,7 @@
     <Compile Include="CodeMatches.cs" />
     <Compile Include="IBuildCustomerRoutesContext.cs" />
     <Compile Include="IBuildRoutingProductRoutesContext.cs" />
+    <Compile Include="IRouteRuleExecutionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Routes\BaseRoute.cs" />
     <Compile Include="Routes\CustomerRoute.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Routes\RoutingProductRouteOption.cs" />
     <Compile Include="SaleCodeMatch.cs" />
     <Compile Include="CustomerZoneRate.cs" />
+    <Compile Include="SupplierCodeMatch.cs" />
     <Compile Include="SupplierZoneRate.cs" />
   </ItemGroup>
   <ItemGroup>

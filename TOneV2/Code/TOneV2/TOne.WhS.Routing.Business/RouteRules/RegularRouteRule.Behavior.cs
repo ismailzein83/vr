@@ -12,8 +12,9 @@ namespace TOne.WhS.Routing.Business.RouteRules
 {
     public partial class RegularRouteRule : RouteRuleSettings
     {
-        public override void Execute(IRouteRuleExecutionContext context, RouteRuleTarget target)
+        public override void Execute(object contextObj, RouteRuleTarget target)
         {
+            IRouteRuleExecutionContext context = (IRouteRuleExecutionContext)contextObj;
             var options = CreateOptions(context, target);
             if (options != null)
             {

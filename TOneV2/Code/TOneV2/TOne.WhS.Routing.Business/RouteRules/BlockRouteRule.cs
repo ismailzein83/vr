@@ -9,7 +9,7 @@ namespace TOne.WhS.Routing.Business.RouteRules
 {
     public class BlockRouteRule : RouteRuleSettings
     {
-        public override void Execute(BusinessEntity.Entities.IRouteRuleExecutionContext context, BusinessEntity.Entities.RouteRuleTarget target)
+        public override void Execute(object contextObj, BusinessEntity.Entities.RouteRuleTarget target)
         {
             target.BlockRoute = true;
         }

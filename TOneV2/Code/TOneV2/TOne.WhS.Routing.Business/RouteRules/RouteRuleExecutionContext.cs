@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Business.RouteOptionRules;
+using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.Business.RouteRules
 {

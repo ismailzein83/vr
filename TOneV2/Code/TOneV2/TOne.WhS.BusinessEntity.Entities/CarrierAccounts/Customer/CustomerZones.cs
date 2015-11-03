@@ -22,7 +22,5 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class CustomerZone
     {
         public long ZoneId { get; set; }
-
-        public short? ServicesFlag { get; set; }
     }
 }

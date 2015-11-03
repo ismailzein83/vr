@@ -16,38 +16,46 @@ namespace TOne.WhS.Routing.Business
         public void BuildCustomerZoneRates(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture, Action<CustomerZoneRate> onCustomerZoneRateAvailable)
         {
             CustomerZoneManager customerZoneManager = new CustomerZoneManager();
-            CustomerZones customerZones = customerZoneManager.GetCustomerZones(customerId, effectiveOn, isEffectiveInFuture);
+            var customerSaleZones = customerZoneManager.GetCustomerSaleZones(customerId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now, isEffectiveInFuture);
+            if (customerSaleZones == null)
+                return;
 
-            SalePriceListRatesByOwner ratesByOwner = GetRatesByOwner(effectiveOn, isEffectiveInFuture);
+            SaleRatesByOwner ratesByOwner = GetRatesByOwner(effectiveOn, isEffectiveInFuture);
 
-            SalePriceListRatesByZone customerRates;
-            ratesByOwner.RatesByCustomers.TryGetValue(customerId, out customerRates);
+            SaleRatesByZone customerRates;
+            if (!ratesByOwner.RatesByCustomer.TryGetValue(customerId, out customerRates))
+                return;
+
+            SalePriceListManager salePriceListManager = new SalePriceListManager();
 
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
             CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, isEffectiveInFuture);
-            SalePriceListRatesByZone sellingProductRates = null;
+            SaleRatesByZone sellingProductRates = null;
             if (customerSellingProduct != null)
                 ratesByOwner.RatesBySellingProduct.TryGetValue(customerSellingProduct.SellingProductId, out sellingProductRates);
 
+            Vanrise.Common.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.CurrencyExchangeRateManager();
             SalePricingRuleManager salePricingRuleManager = new SalePricingRuleManager();
-            foreach (var customerZone in customerZones.Zones)
+            foreach (var customerZone in customerSaleZones)
             {
                 bool isSellingProductRate = false;
-                SalePriceListRate zoneRate;
-                if (!customerRates.TryGetValue(customerZone.ZoneId, out zoneRate))
+                SaleRate zoneRate;
+                if (!customerRates.TryGetValue(customerZone.SaleZoneId, out zoneRate))
                 {
                     if (sellingProductRates != null)
                     {
-                        if (sellingProductRates.TryGetValue(customerZone.ZoneId, out zoneRate))
+                        if (sellingProductRates.TryGetValue(customerZone.SaleZoneId, out zoneRate))
                             isSellingProductRate = true;
                     }
                 }
                 if (zoneRate != null)
                 {
+                    var priceList = salePriceListManager.GetPriceList(zoneRate.PriceListId);
+                    int currencyId = zoneRate.CurrencyId.HasValue ? zoneRate.CurrencyId.Value : priceList.CurrencyId;
                     SalePricingRulesInput salePricingRulesInput = new SalePricingRulesInput
                     {
                         CustomerId = customerId,
-                        SaleZoneId = customerZone.ZoneId,
+                        SaleZoneId = customerZone.SaleZoneId,
                         SellingProductId = customerSellingProduct.SellingProductId,
                         Rate = zoneRate,
                         EffectiveOn = effectiveOn,
@@ -55,14 +63,17 @@ namespace TOne.WhS.Routing.Business
                     };
                     var pricingRulesResult = salePricingRuleManager.ApplyPricingRules(salePricingRulesInput);
 
+                    var rateValue = pricingRulesResult != null ? pricingRulesResult.Rate : zoneRate.NormalRate;
+                    rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now);
                     CustomerZoneRate customerZoneRate = new CustomerZoneRate
                     {
                         CustomerId = customerId,
                         RoutingProductId = zoneRate.RoutingProductId,
                         SellingProductId = isSellingProductRate ? customerSellingProduct.SellingProductId : (int?)null,
-                        SaleZoneId = customerZone.ZoneId,
-                        Rate = pricingRulesResult != null ? pricingRulesResult.Rate : zoneRate.NormalRate
+                        SaleZoneId = customerZone.SaleZoneId,
+                        Rate = rateValue
                     };
+                    
                     onCustomerZoneRateAvailable(customerZoneRate);
                 }
             }
@@ -73,12 +84,14 @@ namespace TOne.WhS.Routing.Business
             SupplierRateManager supplierRateManager = new SupplierRateManager();
             var supplierRates = supplierRateManager.GetRates(effectiveOn, isEffectiveInFuture);
             SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
+            Vanrise.Common.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.CurrencyExchangeRateManager();
             PurchasePricingRuleManager purchasePricingRuleManager = new PurchasePricingRuleManager();
             if (supplierRates != null)
             {
                 foreach (var supplierRate in supplierRates)
                 {
                     var priceList = supplierPriceListManager.GetPriceList(supplierRate.PriceListId);
+                    int currencyId = supplierRate.CurrencyId.HasValue ? supplierRate.CurrencyId.Value : priceList.CurrencyId;
                     PurchasePricingRulesInput purchasePricingRulesInput = new PurchasePricingRulesInput
                     {
                         SupplierId = priceList.SupplierId,
@@ -89,11 +102,13 @@ namespace TOne.WhS.Routing.Business
                     };
                     var pricingRulesResult = purchasePricingRuleManager.ApplyPricingRules(purchasePricingRulesInput);
 
+                    var rateValue = pricingRulesResult != null ? pricingRulesResult.Rate : supplierRate.NormalRate;
+                    rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now);
                     SupplierZoneRate supplierZoneRate = new SupplierZoneRate
                     {
                         SupplierId = priceList.SupplierId,
                         SupplierZoneId = supplierRate.ZoneId,
-                        Rate = pricingRulesResult != null ? pricingRulesResult.Rate : supplierRate.NormalRate
+                        Rate = rateValue
                     };
                     onSupplierZoneRateAvailable(supplierZoneRate);
                 }
@@ -104,7 +119,7 @@ namespace TOne.WhS.Routing.Business
 
         #region Private Methods
 
-        SalePriceListRatesByOwner GetRatesByOwner(DateTime? effectiveOn, bool isEffectiveInFuture)
+        SaleRatesByOwner GetRatesByOwner(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             SaleRateManager saleRateManager = new SaleRateManager();
             var rates = saleRateManager.GetRates(effectiveOn, isEffectiveInFuture);
@@ -116,14 +131,14 @@ namespace TOne.WhS.Routing.Business
 
         #region Private Classes
 
-        private class SalePriceListRatesByOwner
+        private class SaleRatesByOwner
         {
-            public Dictionary<int, SalePriceListRatesByZone> RatesByCustomers { get; set; }
+            public Dictionary<int, SaleRatesByZone> RatesByCustomer { get; set; }
 
-            public Dictionary<int, SalePriceListRatesByZone> RatesBySellingProduct { get; set; }
+            public Dictionary<int, SaleRatesByZone> RatesBySellingProduct { get; set; }
         }
 
-        private class SalePriceListRatesByZone : Dictionary<long, SalePriceListRate>
+        private class SaleRatesByZone : Dictionary<long, SaleRate>
         {
 
         }

@@ -121,10 +121,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Methods
 
-        private List<SaleZone> GetCustomerSaleZones(int customerId)
+        public List<SaleZone> GetCustomerSaleZones(int customerId, DateTime effectiveOn, bool futureEntities)
         {
             List<SaleZone> customerSaleZones = null;
-            CustomerZones customerZones = GetCustomerZones(customerId, DateTime.Now, false);
+            CustomerZones customerZones = GetCustomerZones(customerId, effectiveOn, futureEntities);
             
             if (customerZones != null && customerZones.Countries != null && customerZones.Countries.Count > 0)
             {
@@ -135,6 +135,11 @@ namespace TOne.WhS.BusinessEntity.Business
             }
 
             return customerSaleZones;
+        }
+
+        private List<SaleZone> GetCustomerSaleZones(int customerId)
+        {
+            return GetCustomerSaleZones(customerId, DateTime.Now, false);
         }
 
         private int GetSellingNumberPlanId(int customerId)

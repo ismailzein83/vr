@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleRateManager
     {
-        public List<SalePriceListRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture)
+        public List<SaleRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             throw new NotImplementedException();
         }
@@ -91,8 +91,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     Dictionary<long, SaleRate> sellingProductRatesByZone = sellingProductRates != null ? sellingProductRates.ToDictionary(itm => itm.ZoneId, itm => itm) : new Dictionary<long, SaleRate>();
                     
                     CustomerZoneManager customerZoneManager = new CustomerZoneManager();
-                    var customerZones = customerZoneManager.GetCustomerZones(customerId, effectiveOn, false);
-                    if (customerZones == null || customerZones.Zones == null)
+                    var customerSaleZones = customerZoneManager.GetCustomerSaleZones(customerId, effectiveOn, false);
+                    if (customerSaleZones == null)
                         return null;
 
                     customerZoneRates = new CustomerZoneRates
@@ -101,12 +101,12 @@ namespace TOne.WhS.BusinessEntity.Business
                         SellingProductId = customerSellingProduct.SellingProductId,
                         RatesByZone = new Dictionary<long, SaleRate>()
                     };
-                    foreach(var customerZone in customerZones.Zones)
+                    foreach (var customerZone in customerSaleZones)
                     {
                         SaleRate saleRate;
-                        if(customerRatesByZone.TryGetValue(customerZone.ZoneId, out saleRate) || sellingProductRatesByZone.TryGetValue(customerZone.ZoneId, out saleRate))
+                        if(customerRatesByZone.TryGetValue(customerZone.SaleZoneId, out saleRate) || sellingProductRatesByZone.TryGetValue(customerZone.SaleZoneId, out saleRate))
                         {
-                            customerZoneRates.RatesByZone.Add(customerZone.ZoneId, saleRate);
+                            customerZoneRates.RatesByZone.Add(customerZone.SaleZoneId, saleRate);
                         }
                     }
                     return customerZoneRates;

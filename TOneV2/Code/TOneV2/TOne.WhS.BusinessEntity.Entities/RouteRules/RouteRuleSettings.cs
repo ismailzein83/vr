@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int ConfigId { get; set; }
 
-        public virtual void Execute(IRouteRuleExecutionContext context, RouteRuleTarget target)
+        public virtual void Execute(object contextObj, RouteRuleTarget target)
         {
         }
     }

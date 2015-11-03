@@ -144,7 +144,6 @@
     <Compile Include="CarrierAccounts\Customer\IRuleCustomerCriteria.cs" />
     <Compile Include="RouteOptionRules\RouteOptionRuleTypeSettings.cs" />
     <Compile Include="RouteRules\RouteRuleDetail.cs" />
-    <Compile Include="RouteRules\IRouteRuleExecutionContext.cs" />
     <Compile Include="RouteRules\RouteRuleTypeSettings.cs" />
     <Compile Include="RoutingProduct\IRuleRoutingProductCriteria.cs" />
     <Compile Include="RouteRules\RouteRuleTarget.cs" />
@@ -163,7 +162,6 @@
     <Compile Include="SaleZone\IRuleSaleZoneCriteria.cs" />
     <Compile Include="SaleZone\IRuleSaleZoneTarget.cs" />
     <Compile Include="SaleZone\SalePriceList.cs" />
-    <Compile Include="SaleZone\SalePriceListRate.cs" />
     <Compile Include="SaleZone\SaleZoneDetail.cs" />
     <Compile Include="SaleZone\SaleZoneGroupContext.cs" />
     <Compile Include="SaleZone\SaleZoneInfo.cs" />
