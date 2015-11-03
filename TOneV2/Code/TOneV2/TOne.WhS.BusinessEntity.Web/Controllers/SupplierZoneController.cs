@@ -22,8 +22,9 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
        }
        [HttpGet]
        [Route("GetSupplierZoneInfoByIds")]
-       public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfoByIds(List<long> selectedIds)
+       public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfoByIds(string serializedObj)
        {
+           List<long> selectedIds = serializedObj != null ? Vanrise.Common.Serializer.Deserialize<List<long>>(serializedObj) : null;
            SupplierZoneManager manager = new SupplierZoneManager();
            return manager.GetSupplierZoneInfoByIds(selectedIds);
        }

@@ -14,7 +14,9 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             isrequired: '@',
             isdisabled: "=",
             selectedvalues: "=",
-            hideremoveicon: "@"
+            hideremoveicon: "@",
+            onselectitem: "=",
+            ondeselectitem:"="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -71,7 +73,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         if (attrs.ismultipleselection != undefined)
             ismultipleselection = "ismultipleselection";
 
-        return '<div><vr-select datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
+        return '<div><vr-select datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
             + label + '" ' + required + ' ' + hideselectedvaluessection + ' entityname="' + label + '" ' + hideremoveicon + ' ' + ismultipleselection + '></vr-select></div>'
     }
 

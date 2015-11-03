@@ -9,8 +9,8 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAc
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var bePurchasePricingRuleCriteriaObject = new bePurchasePricingRuleCriteria(ctrl, $scope, $attrs);
-            bePurchasePricingRuleCriteriaObject.initializeController();
+            var ctor = new bePurchasePricingRuleCriteria(ctrl, $scope, $attrs);
+            ctor.initializeController();
 
         },
         controllerAs: 'ctrl',
@@ -27,8 +27,9 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAc
         var suppliersWithZonesGroupsDirectiveAPI;
         var directiveAppendixData;
         function initializeController() {
-            $scope.purchasePricingRuleCriteriaTemplates = [];
-            $scope.onSuppliersWithZonesGroupsDirectiveReady = function (api) {
+            ctrl.purchasePricingRuleCriteriaTemplates = [];
+            ctrl.onDirectiveReady = function (api) {
+
                 suppliersWithZonesGroupsDirectiveAPI = api;
                 if (directiveAppendixData != undefined) {
                     tryLoadAppendixDirectives();
@@ -76,6 +77,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAc
             }
             api.load = function () {
                 return loadSuppliersWithZonesGroupsTemplates();
+
             }
 
             if (ctrl.onReady != null)
@@ -121,7 +123,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAc
                 });
             }
             function setSuppliersWithZonesStettingsDirective() {
-                return suppliersWithZonesGroupsDirectiveAPI.setData(directiveAppendixData.SuppliersWithZones);
+                return suppliersWithZonesGroupsDirectiveAPI.load(directiveAppendixData.SuppliersWithZones);
             }
         }
         

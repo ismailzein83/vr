@@ -12,8 +12,8 @@
             });
 
         }
-        function GetSupplierZoneInfoByIds(selectedIds) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SupplierZone", "GetSupplierZoneInfoByIds"), { selectedIds: selectedIds });
+        function GetSupplierZoneInfoByIds(serializedObj) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SupplierZone", "GetSupplierZoneInfoByIds"), { serializedObj: serializedObj });
         
         }
 

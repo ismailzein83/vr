@@ -30,31 +30,34 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
         function initializeController() {
             $scope.suppliers = [];
             ctrl.selectedSuppliers = [];
-            $scope.onCarrierAccountDirectiveReady = function (api) {
+            ctrl.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
                 carrierAccountReadyPromiseDeferred.resolve();
             }
-
-            $scope.onSelectionChanged = function () {
-                if (carrierAccountDirectiveAPI != undefined) {
-                    for (var i = 0; i < ctrl.selectedSuppliers.length; i++)
-                    {
-                        addSupplierZoneAPIFunction(ctrl.selectedSuppliers[i]); 
-                    }
-                }
-            };
-            function addSupplierZoneAPIFunction(obj) {
-                obj.selectedSuplierZones = [];
-                obj.onSupplierZonesDirectiveReady = function (api) {
-                    obj.supplierZonesDirectiveAPI = api;
-                    obj.supplierZonesDirectiveAPI.load();
-                }
+            ctrl.datasource = [];
+            ctrl.onSelectItem = function (dataItem) {
+                addSupplierZoneAPIFunction(dataItem);
             }
-            $scope.removeSupplier = function ($event, supplier) {
-                $event.preventDefault();
-                $event.stopPropagation();
-                var index = UtilsService.getItemIndexByVal(ctrl.selectedSuppliers, supplier.CarrierAccountId, 'CarrierAccountId');
+            ctrl.onDeselectItem = function (dataItem) {
+                var datasourceIndex = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.CarrierAccountId, 'CarrierAccountId');
+                ctrl.datasource.splice(datasourceIndex, 1);
+            }
+            function addSupplierZoneAPIFunction(obj) {
+                var dataItem = {
+                    CarrierAccountId: obj.CarrierAccountId,
+                    name: obj.Name,
+                    selectedSuplierZones: []
+                };
+                dataItem.onDirectiveReady = function (api) {
+                    dataItem.directiveAPI = api;
+                }
+                ctrl.datasource.push(dataItem);
+            }
+            ctrl.removeFilter = function (dataItem) {
+                var index = UtilsService.getItemIndexByVal(ctrl.selectedSuppliers, dataItem.CarrierAccountId, 'CarrierAccountId');
                 ctrl.selectedSuppliers.splice(index, 1);
+                var datasourceIndex = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.CarrierAccountId, 'CarrierAccountId');
+                ctrl.datasource.splice(datasourceIndex, 1);
             };
             defineAPI();
         }
@@ -64,12 +67,12 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
 
             api.getData = function () {
                 var suppliersWithZones = [];
-                for (var i = 0; i < ctrl.selectedSuppliers.length; i++)
+                for (var i = 0; i < ctrl.datasource.length; i++)
                 {
                     suppliersWithZones.push({
                         $type: "TOne.WhS.BusinessEntity.Entities.SupplierWithZones,TOne.WhS.BusinessEntity.Entities",
-                        SupplierId: ctrl.selectedSuppliers[i].CarrierAccountId,
-                        SupplierZoneIds: UtilsService.getPropValuesFromArray(ctrl.selectedSuppliers[i].selectedSuplierZones, "SupplierZoneId"),
+                        SupplierId: ctrl.datasource[i].CarrierAccountId,
+                        SupplierZoneIds: UtilsService.getPropValuesFromArray(ctrl.datasource[i].selectedSuplierZones, "SupplierZoneId"),
                     });
                 }
                
@@ -84,10 +87,9 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
                         supplierIds.push(obj.SupplierId);
                     }
                 }
-                
-
-                var promises = [];
+               
                 var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+
                 carrierAccountReadyPromiseDeferred.promise.then(function () {
                     var carrierAccountPayload = {
                         filter: {},
@@ -95,20 +97,58 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
                     };
                     VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, carrierAccountPayload, loadCarrierAccountPromiseDeferred);
 
-                   
+                });
+
+                return loadCarrierAccountPromiseDeferred.promise.then(function () {
+                    return loadSupplierZoneDirectives();
+                });
+
+                function loadSupplierZoneDirectives() {
+                    var promises = [];
+                    var filterItems;
                     if (payload != undefined) {
+                        filterItems = [];
                         for (var i = 0; i < payload.length; i++) {
-                            for (var j = 0; j < ctrl.selectedSuppliers.length; j++) {
-                                if (ctrl.selectedSuppliers[j].CarrierAccountId == payload[i].SupplierId)
-                                    var loadSellingNumberPlanPromise = ctrl.selectedSuppliers[j].supplierZonesDirectiveAPI.load(payload[i].SupplierZoneIds);
-                                promises.push(loadSellingNumberPlanPromise);
+                            var filterItem = {
+                                payload: payload[i],
+                                readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                            };
+                            promises.push(filterItem.loadPromiseDeferred.promise);
+                            addFilterItemToGrid(filterItem);
+                        }
+                    }
+
+                    function addFilterItemToGrid(filterItem) {
+                        for (var i = 0; i < ctrl.selectedSuppliers.length; i++) {
+                            if (filterItem.payload.SupplierId == ctrl.selectedSuppliers[i].CarrierAccountId) {
+                                addAPIToDataItem(filterItem, ctrl.selectedSuppliers[i])
                             }
                         }
                     }
-                   
+                    function addAPIToDataItem(filterItem, selectedSupplier) {
 
-                });
-                return UtilsService.waitMultiplePromises(promises);
+                        var dataItem = {
+                            CarrierAccountId: selectedSupplier.CarrierAccountId,
+                            name: selectedSupplier.Name
+                        };
+                        var dataItemPayload = filterItem.payload.SupplierZoneIds;
+
+                        dataItem.selectedSuplierZones = [];
+                        dataItem.onDirectiveReady = function (api) {
+                            dataItem.directiveAPI = api;
+                            filterItem.readyPromiseDeferred.resolve();
+                        };
+                        filterItem.readyPromiseDeferred.promise
+                            .then(function () {
+                                VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, filterItem.loadPromiseDeferred);
+                            });
+
+                        ctrl.datasource.push(dataItem);
+                    }
+                   return UtilsService.waitMultiplePromises(promises);
+                }
+              
             }
 
             if (ctrl.onReady != null)

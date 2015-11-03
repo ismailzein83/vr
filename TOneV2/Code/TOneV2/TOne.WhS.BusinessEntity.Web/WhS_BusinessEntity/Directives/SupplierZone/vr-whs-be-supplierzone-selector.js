@@ -68,16 +68,21 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                 var api = {};
 
                 api.load = function (payload) {
+                   
                     var selectedIds;
                     if (payload != undefined) {
                         selectedIds = payload;
                     }
                     if (selectedIds != undefined) {
-                    return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfoByIds(selectedIds).then(function (response) {
+                        ctrl.datasource = [];
+                        return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfoByIds(angular.toJson(selectedIds)).then(function (response) {
                         angular.forEach(response, function (item) {
                             ctrl.datasource.push(item);
+                            
                         });
+                        
                         VRUIUtilsService.setSelectedValues(selectedIds, 'SupplierZoneId', $attrs, ctrl);
+                       
                     });
                   }
                    
