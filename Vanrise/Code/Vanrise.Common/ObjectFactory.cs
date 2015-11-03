@@ -19,10 +19,11 @@ namespace Vanrise.Common
 
         public T CreateObjectFromType<T>() where T : class
         {
-            return GetCachedObj<T>() as T;
+            Type implementationType = GetCachedType<T>();
+            return Activator.CreateInstance(implementationType) as T;
         }
 
-        private Object GetCachedObj<T>()
+        private Type GetCachedType<T>()
         {
             Type implementationType;
             Type baseType = typeof(T);
@@ -31,7 +32,7 @@ namespace Vanrise.Common
                 implementationType = GetImplementationType(baseType);
                 _cachedImplementedTypes.TryAdd(baseType, implementationType);
             }
-            return Activator.CreateInstance(implementationType);
+            return implementationType;            
         }
 
         private Type GetImplementationType(Type baseType)
