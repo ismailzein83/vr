@@ -17,34 +17,33 @@ namespace Vanrise.Rules
             StructureRules(this, 0);
         }
 
-        void StructureRules(RuleNode parentNode, int behaviorIndex)
+        void StructureRules(RuleNode node, int behaviorIndex)
         {
             if (behaviorIndex >= _structureBehaviors.Count)
                 return;
-            parentNode.Behavior = _structureBehaviors[behaviorIndex];
-            BaseRuleStructureBehavior ruleStructureBehavior = parentNode.Behavior;
+            node.Behavior = _structureBehaviors[behaviorIndex];
 
             List<BaseRule> notMatchedRules;
-            IEnumerable<RuleNode> nodes = ruleStructureBehavior.StructureRules(parentNode.Rules, out notMatchedRules);
-            if (nodes != null && nodes.Count() > 0)
+            IEnumerable<RuleNode> childNodes = node.Behavior.StructureRules(node.Rules, out notMatchedRules);
+            if (childNodes != null && childNodes.Count() > 0)
             {
-                parentNode.ChildNodes = new List<RuleNode>();
-                foreach (var node in nodes)
+                node.ChildNodes = new List<RuleNode>();
+                foreach (var childNode in childNodes)
                 {
-                    if (node.Rules != null && node.Rules.Count() > 0)
+                    if (childNode.Rules != null && childNode.Rules.Count() > 0)
                     {
-                        node.ParentNode = parentNode;
-                        StructureRules(node, (behaviorIndex + 1));
-                        parentNode.ChildNodes.Add(node);
+                        childNode.ParentNode = node;
+                        StructureRules(childNode, (behaviorIndex + 1));
+                        node.ChildNodes.Add(childNode);
                     }
                 }
             }
             if (notMatchedRules != null && notMatchedRules.Count > 0)
             {
-                parentNode.UnMatchedRulesNode = new RuleNode();
-                parentNode.UnMatchedRulesNode.ParentNode = parentNode;
-                parentNode.UnMatchedRulesNode.Rules = notMatchedRules;
-                StructureRules(parentNode.UnMatchedRulesNode, (behaviorIndex + 1));
+                node.UnMatchedRulesNode = new RuleNode();
+                node.UnMatchedRulesNode.ParentNode = node;
+                node.UnMatchedRulesNode.Rules = notMatchedRules;
+                StructureRules(node.UnMatchedRulesNode, (behaviorIndex + 1));
             }
         }
 
@@ -68,21 +67,18 @@ namespace Vanrise.Rules
         }
 
         BaseRule GetFirstMatchRuleFromNode(RuleNode node, BaseRuleTarget target)
-        {    
-            RuleNode parentNode = node.ParentNode;
-            if(parentNode != null)//not root node
+        {
+            foreach (var rule in node.Rules)
             {
-                foreach (var rule in node.Rules)
-                {
-
-                    if (!IsRuleMatched(rule, target))
-                        continue;
-                    return rule;
-                }
-                if (!node.IsUnMatchedRulesNode && parentNode.UnMatchedRulesNode != null)
-                    return GetMatchRule(parentNode, target);
-                else
-                    return GetFirstMatchRuleFromNode(parentNode, target);
+                if (!IsRuleMatched(rule, target))
+                    continue;
+                return rule;
+            }
+            while(node.ParentNode != null)//not root node
+            {
+                if (!node.IsUnMatchedRulesNode && node.ParentNode.UnMatchedRulesNode != null)
+                    return GetMatchRule(node.ParentNode.UnMatchedRulesNode, target);
+                node = node.ParentNode;
             }
             return null;
         }
