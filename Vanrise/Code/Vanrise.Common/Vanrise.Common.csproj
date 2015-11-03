@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compressor.cs" />
+    <Compile Include="CurrencyExchangeRateManager.cs" />
     <Compile Include="CurrencyManager.cs" />
     <Compile Include="Cryptography.cs" />
     <Compile Include="DataRetrievalManager.cs" />
