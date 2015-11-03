@@ -110,6 +110,7 @@
 
             return service.GetRule(ruleId).then(function (pricingRule) {
                 directiveAppendixData = pricingRule;
+                
                 fillScopeFromPricingRuleObj(pricingRule);
                 tryLoadAppendixDirectives();
             }).catch(function (error) {
@@ -132,7 +133,7 @@
                 if (criteriaDirectiveAPI == undefined)
                     return;
 
-                loadOperations.push(criteriaDirectiveAPI.load);
+             //   loadOperations.push(criteriaDirectiveAPI.load);
 
                 setDirectivesDataOperations.push(setCriteriaDirective);
             }
@@ -161,7 +162,7 @@
             }
 
             function setCriteriaDirective() {
-                return criteriaDirectiveAPI.setData(directiveAppendixData.Criteria);
+                return criteriaDirectiveAPI.load(directiveAppendixData.Criteria);
             }
         }
 
