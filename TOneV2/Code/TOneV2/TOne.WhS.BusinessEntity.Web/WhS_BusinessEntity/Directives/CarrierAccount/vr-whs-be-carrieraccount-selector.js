@@ -101,15 +101,15 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
 
                 var serializedFilter = null;
                 if (filter != undefined)
-                    serializedFilter = UtilsService.serializetoJson(payload.filter);
+                    serializedFilter = UtilsService.serializetoJson(filter);
 
                 return WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serializedFilter).then(function (response) {
                     angular.forEach(response, function (itm) {
                         ctrl.datasource.push(itm);
                     });
 
-                    if (payload.selectedIds != undefined) {
-                        VRUIUtilsService.setSelectedValues(payload.selectedIds, 'CarrierAccountId', attrs, ctrl);
+                    if (selectedIds != undefined) {
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'CarrierAccountId', attrs, ctrl);
                     }
                 });
             }
