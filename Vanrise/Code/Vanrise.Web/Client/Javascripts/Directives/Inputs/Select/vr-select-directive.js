@@ -43,6 +43,8 @@
                 datasource: '=',
                 selectedvalues: '=',
                 onselectionchanged: '=',
+                onselectitem: '=',
+                ondeselectitem: '=',
                 onaddclicked: "=",
                 hint: '@'
             },
@@ -268,7 +270,7 @@
                     });
                 }, 100);
                 setTimeout(function () {
-                    if ($('div[name=' + $attrs.id + ']').parents('.modal-body').length > 0 ) {
+                    if ($('div[name=' + $attrs.id + ']').parents('.modal-body').length > 0) {
 
                         $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function () {
 
@@ -277,9 +279,9 @@
                             var selfOffset = $(self).offset();
                             var dropDown = self.parent().find('ul');
                             if (!$(dropDown).hasClass(" menu-to-top"))
-                              $(dropDown).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: 'auto' });
+                                $(dropDown).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: 'auto' });
                         });
-                       
+
                         $('div[name=' + $attrs.id + ']').parents('div').scroll(function () {
                             fixDropdownPosition();
                         });
@@ -396,7 +398,16 @@
                         function selectItem(e, item) {
 
                             if (!ctrl.isMultiple()) {
+
+                                if (ctrl.onselectitem && typeof (ctrl.onselectitem) == 'function') {
+                                    ctrl.onselectitem(item);
+
+                                }
+                                if (ctrl.ondeselectitem && typeof (ctrl.ondeselectitem) == 'function') {
+                                    ctrl.ondeselectitem(ctrl.selectedvalues);
+                                }
                                 ctrl.selectedvalues = item;
+
                             }
                             else {
                                 ctrl.muteAction(e);
@@ -407,10 +418,22 @@
                                 catch (ex) {
 
                                 }
-                                if (index >= 0)
+                                if (index >= 0) {
+                                    if (ctrl.ondeselectitem && typeof (ctrl.ondeselectitem) == 'function') {
+                                        ctrl.ondeselectitem(item);
+                                    }
                                     ctrl.selectedvalues.splice(index, 1);
-                                else
+
+                                }
+
+                                else {
+                                    if (ctrl.onselectitem && typeof (ctrl.onselectitem) == 'function') {
+                                        ctrl.onselectitem(item);
+
+                                    }
                                     ctrl.selectedvalues.push(item);
+                                }
+
                             }
                         }
 
