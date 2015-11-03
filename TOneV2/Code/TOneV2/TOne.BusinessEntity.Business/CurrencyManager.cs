@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using TOne.BusinessEntity.Data;
 using TOne.BusinessEntity.Entities;
 using TOne.Entities;
-using Vanrise.Entities;
 
 namespace TOne.BusinessEntity.Business
 {
