@@ -17,18 +17,18 @@ namespace TOne.WhS.Sales.Business
     public class RatePlanManager
     {
         #region Get Rate Plan Items
-        public List<RatePlanItem> GetRatePlanItems(RatePlanItemInput input)
+        public IEnumerable<RatePlanItem> GetRatePlanItems(RatePlanItemInput input)
         {
             List<RatePlanItem> ratePlanItems = new List<RatePlanItem>();
 
-            List<SaleZone> saleZones = GetSaleZones(input.Filter.CustomerId);
+            IEnumerable<SaleZone> saleZones = GetSaleZones(input.Filter.CustomerId);
 
             if (saleZones != null)
             {
                 saleZones =
                     saleZones.Where(x => x.Name == null || (x.Name.Length > 0 && char.ToLower(x.Name[0]) == char.ToLower(input.Filter.ZoneLetter))).ToList();
 
-                saleZones = GetPagedSaleZones(saleZones, input.FromRow, input.ToRow);
+                saleZones = this.GetPagedSaleZones(saleZones, input.FromRow, input.ToRow);
 
                 List<long> saleZoneIds = saleZones.Select(item => item.SaleZoneId).ToList();
                 List<SaleRate> saleRates = GetSaleRatesByCustomerZoneIds(input.Filter.CustomerId, saleZoneIds);
@@ -57,28 +57,18 @@ namespace TOne.WhS.Sales.Business
             return ratePlanItems;
         }
 
-        private List<SaleZone> GetSaleZones(int customerId)
+        private IEnumerable<SaleZone> GetSaleZones(int customerId)
         {
-            List<int> countryIds = GetCountryIds(customerId);
+            IEnumerable<SaleZone> saleZones = null;
+            IEnumerable<int> countryIds = new CustomerZoneManager().GetCountryIds(customerId);
 
             if (countryIds != null)
             {
-                int sellingNumberPlanId = GetSellingNumberPlanId(customerId);
-
-                SaleZoneManager saleZoneManager = new SaleZoneManager();
-                return saleZoneManager.GetSaleZonesByCountryIds(sellingNumberPlanId, countryIds).ToList();
+                int sellingNumberPlanId = new CarrierAccountManager().GetSellingNumberPlanId(customerId, CarrierAccountType.Customer);
+                saleZones = new SaleZoneManager().GetSaleZonesByCountryIds(sellingNumberPlanId, countryIds);
             }
 
-            return null;
-        }
-
-        private List<int> GetCountryIds(int customerId)
-        {
-            CustomerZoneManager manager = new CustomerZoneManager();
-            CustomerZones customerZones = manager.GetCustomerZones(customerId, DateTime.Now, false);
-
-            return (customerZones != null && customerZones.Countries != null && customerZones.Countries.Count > 0) ?
-                customerZones.Countries.Select(x => x.CountryId).ToList() : null;
+            return saleZones;
         }
 
         private int GetSellingNumberPlanId(int customerId)
@@ -89,13 +79,13 @@ namespace TOne.WhS.Sales.Business
             return customer.CustomerSettings.SellingNumberPlanId;
         }
 
-        private List<SaleZone> GetPagedSaleZones(List<SaleZone> saleZones, int fromRow, int toRow)
+        private IEnumerable<SaleZone> GetPagedSaleZones(IEnumerable<SaleZone> saleZones, int fromRow, int toRow)
         {
             List<SaleZone> pagedSaleZones = new List<SaleZone>();
 
-            for (int i = fromRow - 1; i < saleZones.Count && i < toRow; i++)
+            for (int i = fromRow - 1; i < saleZones.Count() && i < toRow; i++)
             {
-                pagedSaleZones.Add(saleZones[i]);
+                pagedSaleZones.Add(saleZones.ElementAt(i));
             }
 
             return pagedSaleZones;

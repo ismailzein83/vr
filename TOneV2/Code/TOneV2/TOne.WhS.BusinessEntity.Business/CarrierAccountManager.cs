@@ -129,6 +129,14 @@ namespace TOne.WhS.BusinessEntity.Business
             return updateOperationOutput;
         }
 
+        public int GetSellingNumberPlanId(int carrierAccountId, CarrierAccountType carrierAccountType)
+        {
+            if (carrierAccountType == CarrierAccountType.Supplier)
+                return -1;
+
+            return this.GetCarrierAccount(carrierAccountId).CustomerSettings.SellingNumberPlanId;
+        }
+
         #region Private Members
 
         List<CarrierAccountDetail> GetCachedCarrierAccounts()

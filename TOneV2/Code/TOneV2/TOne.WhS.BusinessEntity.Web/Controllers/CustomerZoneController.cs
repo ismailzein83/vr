@@ -22,7 +22,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetCustomerZoneLetters")]
-        public List<char> GetCustomerZoneLetters(int customerId)
+        public IEnumerable<char> GetCustomerZoneLetters(int customerId)
         {
             CustomerZoneManager manager = new CustomerZoneManager();
             return manager.GetCustomerZoneLetters(customerId);
@@ -30,7 +30,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetCountriesToSell")]
-        public List<Country> GetCountriesToSell(int customerId)
+        public IEnumerable<Country> GetCountriesToSell(int customerId)
         {
             CustomerZoneManager manager = new CustomerZoneManager();
             return manager.GetCountriesToSell(customerId);

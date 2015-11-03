@@ -125,7 +125,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return allZones.MapRecords(SaleZoneInfoMapper, itm => saleZoneIds.Contains(itm.SaleZoneId));
         }
 
-        public List<SaleZone> GetSaleZonesByCountryIds(int sellingNumberPlanId, List<int> countryIds)
+        public List<SaleZone> GetSaleZonesByCountryIds(int sellingNumberPlanId, IEnumerable<int> countryIds)
         {
             List<SaleZone> allSaleZones = GetCachedSaleZones(sellingNumberPlanId);
 

@@ -26,9 +26,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             object customerZonesId;
 
-            string serializedCountries = Vanrise.Common.Serializer.Serialize(customerZones.Countries);
+            string serializedCountryIds = Vanrise.Common.Serializer.Serialize(customerZones.CountryIds);
 
-            int recordsAffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerZone_Insert", out customerZonesId, customerZones.CustomerId, serializedCountries, customerZones.StartEffectiveTime);
+            int recordsAffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerZone_Insert", out customerZonesId, customerZones.CustomerId, serializedCountryIds, customerZones.StartEffectiveTime);
 
             insertedId = (int)customerZonesId;
 
@@ -48,7 +48,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             customerZones.CustomerZonesId = (int)reader["ID"];
             customerZones.CustomerId = (int)reader["CustomerID"];
-            customerZones.Countries = Vanrise.Common.Serializer.Deserialize<List<Country>>(reader["Details"] as string);
+            customerZones.CountryIds = Vanrise.Common.Serializer.Deserialize<List<int>>(reader["Details"] as string);
             customerZones.StartEffectiveTime = (DateTime)reader["BED"];
 
             return customerZones;
