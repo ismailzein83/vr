@@ -13,5 +13,15 @@ namespace Vanrise.Common
         {
             throw new NotImplementedException();
         }
+
+        public Decimal ConvertValueToCurrency(decimal value, int currencyId, DateTime effectiveOn)
+        {
+            var exchangeRate = GetEffectiveExchangeRate(currencyId, effectiveOn);
+            if (exchangeRate != null)
+                return value * exchangeRate.Rate;
+            else
+                return value;
+
+        }
     }
 }
