@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.CDRProcessing.Entities
+namespace TOne.WhS.BusinessEntity.Entities
 {
-    public interface IRuleInCarrierTarget
+    public class SupplierZoneInfoFilter
     {
-        string InCarrier { get; }
+       public int SupplierId { get; set; }
     }
 }

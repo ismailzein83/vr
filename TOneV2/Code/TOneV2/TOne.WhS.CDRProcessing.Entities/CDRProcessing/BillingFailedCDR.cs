@@ -10,7 +10,11 @@ namespace TOne.WhS.CDRProcessing.Entities
     {
         static BillingFailedCDR()
         {
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(BillingFailedCDR), "ID", "Attempt", "CustomerId", "SupplierId");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(BillingFailedCDR), "ID", "Attempt", "CustomerId", "SupplierId", "DurationInSeconds",
+                "Alert", "Connect", "Disconnect", "CGPN", "PortOut", "PortIn", "ReleaseCode", "ReleaseSource", "SaleZoneID", "SupplierZoneID", "OriginatingZoneID", "SaleCode"
+                , "SupplierCode");
         }
+        public BillingFailedCDR(BillingCDRBase copy) : base(copy) { }
+        public BillingFailedCDR() { }
     }
 }

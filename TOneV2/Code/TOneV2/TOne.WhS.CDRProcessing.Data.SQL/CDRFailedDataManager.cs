@@ -23,10 +23,17 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
        public void WriteRecordToStream(BillingFailedCDR record, object dbApplyStream)
        {
            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-           streamForBulkInsert.WriteRecord("{0}^{1}^{2}",
+           streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}",
                                     record.ID,
                                     record.CustomerId,
-                                    record.SupplierId);
+                                    record.SupplierId,
+                                    record.Attempt,
+                                    record.DurationInSeconds,
+                                    record.Alert,
+                                    record.Connect,
+                                    record.Disconnect,
+                                    record.PortOut,
+                                    record.PortIn);
 
        }
        public object FinishDBApplyStream(object dbApplyStream)

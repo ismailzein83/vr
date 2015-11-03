@@ -8,6 +8,6 @@ namespace TOne.WhS.CDRProcessing.Entities
 {
     public interface IRuleOutTrunkCriteria
     {
-        List<string> OUT_Trunks { get; }
+        List<string> OutTrunks { get; }
     }
 }

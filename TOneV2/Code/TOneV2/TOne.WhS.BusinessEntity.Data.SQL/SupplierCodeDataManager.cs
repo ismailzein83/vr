@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
           
         }
 
-        public List<SupplierCode> GetSupplierCodes(int supplierId,DateTime minimumDate)
+        public List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetByDate", SupplierCodeMapper, supplierId,minimumDate);
         }
@@ -34,6 +34,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 
             };
             return supplierCode;
+        }
+
+
+        public List<SupplierCode> GetSupplierCodes(int supplierId, DateTime effectiveOn)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetBySupplier", SupplierCodeMapper, supplierId, effectiveOn);
         }
     }
 }

@@ -119,5 +119,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             object prepareToApplySaleCodes = FinishDBApplyStream(dbApplyStream);
             ApplySaleCodesForDB(prepareToApplySaleCodes);
         }
+
+
+        public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_BySellingNumberPlan", SaleCodeMapper, sellingNumberPlanId, effectiveOn);
+        }
     }
 }

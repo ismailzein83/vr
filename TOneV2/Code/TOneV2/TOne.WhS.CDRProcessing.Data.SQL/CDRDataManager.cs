@@ -24,14 +24,23 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
        public void WriteRecordToStream(CDR record, object dbApplyStream)
        {
            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-           streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
+           streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}",
                                     record.ID,
                                     record.Attempt,
-                                    record.IN_Carrier,
-                                    record.IN_Trunk,
+                                    record.InCarrier,
+                                    record.InTrunk,
                                     record.CDPN,
-                                    record.OUT_Trunk,
-                                    record.OUT_Carrier);
+                                    record.OutTrunk,
+                                    record.OutCarrier,
+                                    record.DurationInSeconds,
+                                    record.Alert,
+                                    record.Connect,
+                                    record.Disconnect,
+                                    record.CGPN,
+                                    record.PortOut,
+                                    record.PortIn,
+                                    record.ReleaseCode,
+                                    record.ReleaseSource);
 
        }
        public void ApplyRawCDRsToDB(Object preparedCDRs)

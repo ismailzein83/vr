@@ -9,6 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISupplierCodeDataManager:IDataManager
     {
-        List<SupplierCode> GetSupplierCodes(int supplierId,DateTime minimumDate);
+        List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate);
+        List<SupplierCode> GetSupplierCodes(int supplierId, DateTime effectiveOn);
     }
 }

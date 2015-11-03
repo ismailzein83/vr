@@ -8,9 +8,9 @@ namespace TOne.WhS.CDRProcessing.Entities
 {
     public class CustomerIdentificationRuleTarget : Vanrise.Rules.BaseRuleTarget, IRuleInCarrierTarget, IRuleInTrunkTarget, IRuleCDPNPrefixTarget
     {
-        public string IN_Carrier { get; set; }
+        public string InCarrier { get; set; }
 
-        public string IN_Trunk { get; set; }
+        public string InTrunk { get; set; }
 
         public string CDPNPrefix { get; set; }
 

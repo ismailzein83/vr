@@ -32,7 +32,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn)
         {
-            throw new NotImplementedException();
+            ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
+           return dataManager.GetSellingNumberPlanSaleCodes(sellingNumberPlanId, effectiveOn);
         }
     }
 }

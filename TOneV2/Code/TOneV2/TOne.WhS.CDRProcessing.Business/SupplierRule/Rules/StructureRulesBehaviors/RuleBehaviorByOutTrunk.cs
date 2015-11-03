@@ -12,15 +12,15 @@ namespace TOne.WhS.CDRProcessing.Business.SupplierRule.Rules.StructureRulesBehav
         protected override void GetKeysFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<string> keys)
         {
             IRuleOutTrunkCriteria ruleOutTrunkCriteria = rule as IRuleOutTrunkCriteria;
-            keys = ruleOutTrunkCriteria.OUT_Trunks;
+            keys = ruleOutTrunkCriteria.OutTrunks;
         }
 
         protected override bool TryGetKeyFromTarget(object target, out string key)
         {
             IRuleOutTrunkTarget ruleOutTrunkTarget = target as IRuleOutTrunkTarget;
-            if (ruleOutTrunkTarget.OUT_Trunk != null)
+            if (ruleOutTrunkTarget.OutTrunk != null)
             {
-                key = ruleOutTrunkTarget.OUT_Trunk;
+                key = ruleOutTrunkTarget.OutTrunk;
                 return true;
             }
             else

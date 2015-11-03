@@ -7,25 +7,25 @@ using TOne.WhS.CDRProcessing.Entities;
 
 namespace TOne.WhS.CDRProcessing.Business.SupplierRule.Rules.StructureRulesBehaviors
 {
-    public class RuleBehaviorByCDPNPrefix : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByKey<string>
+    public class RuleBehaviorByCDPNPrefix : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByPrefix
     {
-        protected override void GetKeysFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<string> keys)
+        protected override void GetPrefixesFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<string> prefixes)
         {
             IRuleSupplierCDPNPrefixCriteria ruleCDPNPrefixCriteria = rule as IRuleSupplierCDPNPrefixCriteria;
-            keys = ruleCDPNPrefixCriteria.CDPNPrefixes;
+            prefixes = ruleCDPNPrefixCriteria.CDPNPrefixes;
         }
 
-        protected override bool TryGetKeyFromTarget(object target, out string key)
+        protected override bool TryGetValueToCompareFromTarget(object target, out string value)
         {
             IRuleSupplierCDPNPrefixTarget ruleCDPNPrefixTarget = target as IRuleSupplierCDPNPrefixTarget;
             if (ruleCDPNPrefixTarget.CDPNPrefix != null)
             {
-                key = ruleCDPNPrefixTarget.CDPNPrefix;
+                value = ruleCDPNPrefixTarget.CDPNPrefix;
                 return true;
             }
             else
             {
-                key = null;
+                value = null;
                 return false;
             }
         }

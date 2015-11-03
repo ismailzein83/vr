@@ -12,11 +12,23 @@ namespace TOne.WhS.BusinessEntity.Business
     public class SupplierZoneManager
     {
 
-        public IEnumerable<SupplierZoneInfo> GetSupplierZonesInfo(int supplierId,string filter)
+        public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(SupplierZoneInfoFilter filter, string searchValue)
         {
-            List<SupplierZone> supplierZones = GetCachedSupplierZones();
-            return supplierZones.MapRecords(SupplierZoneInfoMapper,x => x.SupplierId == supplierId || x.Name.Contains(filter));
+            IEnumerable<SupplierZone> supplierZones = null;
+            if(filter!=null)
+                supplierZones = GetSupplierZoneBySupplier(filter);
+            else
+             supplierZones = GetCachedSupplierZones();
+            return supplierZones.MapRecords(SupplierZoneInfoMapper, x => x.Name.Contains(searchValue));
            
+        }
+        private IEnumerable<SupplierZone> GetSupplierZoneBySupplier(SupplierZoneInfoFilter filter)
+        {
+            IEnumerable<SupplierZone> supplierZones = GetCachedSupplierZones();
+            Func<SupplierZone, bool> filterExpression = (item) =>
+                 (item.SupplierId == filter.SupplierId);
+
+            return supplierZones.FindAllRecords(filterExpression);
         }
 
         public List<SupplierZone> GetSupplierZones(int supplierId, DateTime effectiveDate)
@@ -28,10 +40,10 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
-        public IEnumerable<SupplierZoneInfo> GetSupplierZonesInfoByIds(List<long> supplierZoneIds)
+        public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfoByIds(List<long> selectedIds)
         {
             List<SupplierZone> allSupplierZones = GetCachedSupplierZones();
-            return allSupplierZones.MapRecords(SupplierZoneInfoMapper, x => supplierZoneIds.Contains(x.SupplierZoneId));
+            return allSupplierZones.MapRecords(SupplierZoneInfoMapper, x => selectedIds.Contains(x.SupplierZoneId));
         }
 
 

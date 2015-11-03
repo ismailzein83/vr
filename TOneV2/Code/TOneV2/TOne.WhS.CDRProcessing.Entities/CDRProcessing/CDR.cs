@@ -12,15 +12,25 @@ namespace TOne.WhS.CDRProcessing.Entities
 
         static CDR()
         {
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(CDR), "ID", "Attempt", "IN_Carrier", "IN_Trunk", "CDPN", "OUT_Carrier", "OUT_Trunk");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(CDR), "ID", "Attempt", "InCarrier", "InTrunk", "CDPN", "OutCarrier", "OutTrunk", "DurationInSeconds",
+                "Alert", "Connect", "Disconnect", "CGPN", "PortOut", "PortIn", "ReleaseCode", "ReleaseSource");
         }
         public DateTime Attempt { get; set; }
         public int ID { get; set; }
-        public string IN_Carrier { get; set; }
-        public string IN_Trunk { get; set; }
+        public string InCarrier { get; set; }
+        public string InTrunk { get; set; }
+        public Decimal DurationInSeconds { get; set; }
+        public string OutCarrier { get; set; }
+        public string OutTrunk { get; set; }
+        public DateTime? Alert { get; set; }
+        public DateTime? Connect { get; set; }
+        public DateTime? Disconnect { get; set; }
+        public String CDPN { get; set; }
+        public String CGPN { get; set; }
+        public string PortOut { get; set; }
+        public string PortIn { get; set; }
+        public String ReleaseCode { get; set; }
+        public String ReleaseSource { get; set; }
 
-        public string OUT_Carrier { get; set; }
-        public string OUT_Trunk { get; set; }
-        public string CDPN { get; set; }
     }
 }

@@ -8,8 +8,8 @@ namespace TOne.WhS.CDRProcessing.Entities
 {
     public class SupplierIdentificationRuleCriteria
     {
-        public List<string> Out_Trunks { get; set; }
-        public List<string> Out_Carriers { get; set; }
+        public List<string> OutTrunks { get; set; }
+        public List<string> OutCarriers { get; set; }
         public List<string> CDPNPrefixes { get; set; }
      
     }

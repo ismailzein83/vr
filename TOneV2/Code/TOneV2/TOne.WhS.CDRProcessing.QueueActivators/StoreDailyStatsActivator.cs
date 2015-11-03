@@ -11,12 +11,10 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
     {
         public override void OnDisposed()
         {
-            throw new NotImplementedException();
         }
 
         public override void ProcessItem(PersistentQueueItem item, ItemsToEnqueue outputItems)
         {
-            throw new NotImplementedException();
         }
     }
 }

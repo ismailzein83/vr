@@ -8,6 +8,6 @@ namespace TOne.WhS.CDRProcessing.Entities
 {
     public interface IRuleOutTrunkTarget
     {
-       string OUT_Trunk { get; }
+       string OutTrunk { get; }
     }
 }

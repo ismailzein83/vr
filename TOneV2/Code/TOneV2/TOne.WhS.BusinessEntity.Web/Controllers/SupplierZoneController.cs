@@ -13,18 +13,19 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     public class SupplierZoneController : BaseAPIController
     {
        [HttpGet]
-       [Route("GetSupplierZonesInfo")]
-       public IEnumerable<SupplierZoneInfo> GetSupplierZonesInfo(int supplierId,string filter)
+       [Route("GetSupplierZoneInfo")]
+       public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(string serializedFilter, string searchValue)
        {
            SupplierZoneManager manager = new SupplierZoneManager();
-           return manager.GetSupplierZonesInfo(supplierId, filter);
+           SupplierZoneInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SupplierZoneInfoFilter>(serializedFilter) : null;
+           return manager.GetSupplierZoneInfo(filter, searchValue);
        }
-       [HttpPost]
-       [Route("GetSupplierZonesInfoByIds")]
-       public IEnumerable<SupplierZoneInfo> GetSupplierZonesInfoByIds(SupplierZoneInput input)
+       [HttpGet]
+       [Route("GetSupplierZoneInfoByIds")]
+       public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfoByIds(List<long> selectedIds)
        {
            SupplierZoneManager manager = new SupplierZoneManager();
-           return manager.GetSupplierZonesInfoByIds(input.SupplierZoneIds);
+           return manager.GetSupplierZoneInfoByIds(selectedIds);
        }
     }
    public class SupplierZoneInput

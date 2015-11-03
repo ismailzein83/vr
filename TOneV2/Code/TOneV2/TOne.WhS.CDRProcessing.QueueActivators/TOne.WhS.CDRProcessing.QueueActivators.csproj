@@ -66,6 +66,14 @@
     <Compile Include="StoreStatsActivator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
+      <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
+      <Name>TOne.WhS.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.CDRProcessing.Business\TOne.WhS.CDRProcessing.Business.csproj">
       <Project>{5a382aba-4399-4274-b9b7-046e47aa946a}</Project>
       <Name>TOne.WhS.CDRProcessing.Business</Name>
@@ -73,6 +81,14 @@
     <ProjectReference Include="..\TOne.WhS.CDRProcessing.Entities\TOne.WhS.CDRProcessing.Entities.csproj">
       <Project>{a6bbd20b-b7f1-472f-8b36-a7fc009fccb8}</Project>
       <Name>TOne.WhS.CDRProcessing.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.Business\TOne.WhS.Routing.Business.csproj">
+      <Project>{923447e8-0d0b-4296-976a-8f486a8694d3}</Project>
+      <Name>TOne.WhS.Routing.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.Entities\TOne.WhS.Routing.Entities.csproj">
+      <Project>{b645c1d2-c038-4890-85aa-588fa3c3fc7a}</Project>
+      <Name>TOne.WhS.Routing.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

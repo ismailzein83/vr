@@ -16,14 +16,14 @@ namespace TOne.WhS.CDRProcessing.Entities
             get { return this.Criteria.CDPNPrefixes; }
         }
 
-        public List<string> OUT_Trunks
+        public List<string> OutTrunks
         {
-            get { return this.Criteria.Out_Trunks; }
+            get { return this.Criteria.OutTrunks; }
         }
 
-        public List<string> OUT_Carriers
+        public List<string> OutCarriers
         {
-            get { return this.Criteria.Out_Carriers; }
+            get { return this.Criteria.OutCarriers; }
         }
     }
 }

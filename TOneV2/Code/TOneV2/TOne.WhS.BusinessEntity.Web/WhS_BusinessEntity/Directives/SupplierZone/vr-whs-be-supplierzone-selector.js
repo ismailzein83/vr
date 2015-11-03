@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', 'UtilsService',
-    function (WhS_BE_SupplierZoneAPIService, UtilsService) {
+app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', 'UtilsService','VRUIUtilsService',
+    function (WhS_BE_SupplierZoneAPIService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -9,30 +9,15 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                 ismultipleselection: "@",
                 onselectionchanged: '=',
                 isrequired: "@",
-                supplierid:"="
+                supplierid: "=",
+                selectedvalues:'='
             },
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
-                $scope.selectedSupplierZones;
-                if ($attrs.ismultipleselection != undefined)
-                    $scope.selectedSupplierZones = [];
-                $scope.supplierZones = [];
-                var beSupplierZoneObject = new beSupplierZone(ctrl, $scope, $attrs);
-                beSupplierZoneObject.initializeController();
-                $scope.onselectionchanged = function () {
-
-                    if (ctrl.onselectionchanged != undefined) {
-                        var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
-                        if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                            onvaluechangedMethod();
-                        }
-                    }
-
-                }
-                $scope.searchSupplierZones = function (filter) {
-                    return WhS_BE_SupplierZoneAPIService.GetSupplierZonesInfo(ctrl.supplierid, filter);
-                }
+                var ctor = new supplierZoneCtor(ctrl, $scope, $attrs);
+                ctor.initializeController();
+               
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -51,7 +36,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
 
 
         function getBeSupplierZoneTemplate(attrs) {
-
+           
             var multipleselection = "";
             if (attrs.ismultipleselection != undefined)
                 multipleselection = "ismultipleselection"
@@ -61,48 +46,45 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
 
             return '<div>'
                +  '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SupplierZoneId" '
-            + required + ' label="Supplier Zone" datasource="searchSupplierZones" selectedvalues="selectedSupplierZones"  onselectionchanged="onselectionchanged" entityName="Supplier Zone"></vr-select>'
+            + required + ' label="Supplier Zone" datasource="ctrl.searchSupplierZones" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="Supplier Zone"></vr-select>'
             + '</div>'
         }
 
-        function beSupplierZone(ctrl, $scope, $attrs) {
+        function supplierZoneCtor(ctrl, $scope, $attrs) {
 
             function initializeController() {
+
+                ctrl.searchSupplierZones = function (searchValue) {
+                    var filter = {
+                        SupplierId: ctrl.supplierid,
+                    }
+                    return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfo(angular.toJson(filter), searchValue);
+                }
+                ctrl.supplierZones = [];
                 defineAPI();
             }
 
             function defineAPI() {
                 var api = {};
 
-                api.load = function () {
-                    //if (ctrl.supplierid != undefined)
-                    //{
-                    //    return WhS_BE_SupplierZoneAPIService.GetSupplierZonesInfo(ctrl.supplierid).then(function (response) {
-                    //        angular.forEach(response, function (itm) {
-                    //            $scope.supplierZones.push(itm); 
-                    //        });
-                    //    });
-                    //}
+                api.load = function (payload) {
+                    var selectedIds;
+                    if (payload != undefined) {
+                        selectedIds = payload;
+                    }
+                    if (selectedIds != undefined) {
+                    return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfoByIds(selectedIds).then(function (response) {
+                        angular.forEach(response, function (item) {
+                            ctrl.datasource.push(item);
+                        });
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'SupplierZoneId', $attrs, ctrl);
+                    });
+                  }
                    
                 }
-
-                api.getData = function () {
-                    return $scope.selectedSupplierZones;
+                api.getSelectedIds = function () {
+                    return VRUIUtilsService.getIdSelectedIds('SupplierZoneId', $attrs, ctrl);
                 }
-
-                api.setData = function (supplierZoneIds) {
-                    if (supplierZoneIds != null && supplierZoneIds.length > 0) {
-                        var input = {SupplierZoneIds:supplierZoneIds };
-
-                        return WhS_BE_SupplierZoneAPIService.GetSupplierZonesInfoByIds(input).then(function (response) {
-                            angular.forEach(response, function (item) {
-                                $scope.selectedSupplierZones.push(item);
-                            });
-                        });
-                    }
-
-                }
-
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

@@ -8,6 +8,6 @@ namespace TOne.WhS.CDRProcessing.Entities
 {
     public interface IRuleInCarrierCriteria
     {
-        List<string> IN_Carriers { get; }
+        List<string> InCarriers { get; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeSupplierswithzonesSelective', ['UtilsService', '$compile', 'WhS_BE_PricingRuleAPIService',
-function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
+app.directive('vrWhsBeSupplierswithzonesSelective', ['UtilsService', '$compile', 'WhS_BE_PricingRuleAPIService','VRUIUtilsService',
+function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -9,8 +9,8 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var beSuppliersWithZonesObject = new beSuppliersWithZones(ctrl, $scope, $attrs);
-            beSuppliersWithZonesObject.initializeController();
+            var ctor = new selectiveCtor(ctrl, $scope, $attrs);
+            ctor.initializeController();
 
         },
         controllerAs: 'ctrl',
@@ -23,46 +23,39 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
     };
 
 
-    function beSuppliersWithZones(ctrl, $scope, $attrs) {
+    function selectiveCtor(ctrl, $scope, $attrs) {
         var carrierAccountDirectiveAPI;
-        var supplierZonesDirectiveAPI;
-        var directiveAppendixData;
+        var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         function initializeController() {
             $scope.suppliers = [];
-            $scope.selectedSuppliers = [];
+            ctrl.selectedSuppliers = [];
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
-                declareDirectiveAsReady()
+                carrierAccountReadyPromiseDeferred.resolve();
             }
+
             $scope.onSelectionChanged = function () {
                 if (carrierAccountDirectiveAPI != undefined) {
-                    for (var i = 0; i < $scope.selectedSuppliers.length; i++)
+                    for (var i = 0; i < ctrl.selectedSuppliers.length; i++)
                     {
-                        addSupplierZoneAPIFunction($scope.selectedSuppliers[i]);
-                        
+                        addSupplierZoneAPIFunction(ctrl.selectedSuppliers[i]); 
                     }
                 }
             };
             function addSupplierZoneAPIFunction(obj) {
+                obj.selectedSuplierZones = [];
                 obj.onSupplierZonesDirectiveReady = function (api) {
                     obj.supplierZonesDirectiveAPI = api;
                     obj.supplierZonesDirectiveAPI.load();
-                    if (directiveAppendixData != undefined)
-                        trySetSupplierZoneDirectiveValues();
                 }
             }
             $scope.removeSupplier = function ($event, supplier) {
                 $event.preventDefault();
                 $event.stopPropagation();
-                var index = UtilsService.getItemIndexByVal($scope.selectedSuppliers, supplier.CarrierAccountId, 'CarrierAccountId');
-                $scope.selectedSuppliers.splice(index, 1);
+                var index = UtilsService.getItemIndexByVal(ctrl.selectedSuppliers, supplier.CarrierAccountId, 'CarrierAccountId');
+                ctrl.selectedSuppliers.splice(index, 1);
             };
-            
-        }
-        function declareDirectiveAsReady() {
-            if (carrierAccountDirectiveAPI == undefined)
-                return;
-
             defineAPI();
         }
 
@@ -71,48 +64,55 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
 
             api.getData = function () {
                 var suppliersWithZones = [];
-                for (var i = 0; i < $scope.selectedSuppliers.length; i++)
+                for (var i = 0; i < ctrl.selectedSuppliers.length; i++)
                 {
                     suppliersWithZones.push({
                         $type: "TOne.WhS.BusinessEntity.Entities.SupplierWithZones,TOne.WhS.BusinessEntity.Entities",
-                        SupplierId: $scope.selectedSuppliers[i].CarrierAccountId,
-                        SupplierZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSuppliers[i].supplierZonesDirectiveAPI.getData(), "SupplierZoneId"),
+                        SupplierId: ctrl.selectedSuppliers[i].CarrierAccountId,
+                        SupplierZoneIds: UtilsService.getPropValuesFromArray(ctrl.selectedSuppliers[i].selectedSuplierZones, "SupplierZoneId"),
                     });
                 }
                
                 return suppliersWithZones;
             }
-            
-            api.setData = function (suppliersWithZones) {
+ 
+            api.load = function (payload) {
                 var supplierIds = [];
-                for (var i = 0; i < suppliersWithZones.length; i++) {
-                    var obj = suppliersWithZones[i];
-                    supplierIds.push(obj.SupplierId);
+                if (payload != undefined) {
+                    for (var i = 0; i < payload.length; i++) {
+                        var obj = payload[i];
+                        supplierIds.push(obj.SupplierId);
+                    }
                 }
-                carrierAccountDirectiveAPI.setData(supplierIds);
-                directiveAppendixData = suppliersWithZones;
                 
-                trySetSupplierZoneDirectiveValues();
-            }
-            
-            api.load = function () {
-                return carrierAccountDirectiveAPI.load();
+
+                var promises = [];
+                var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+                carrierAccountReadyPromiseDeferred.promise.then(function () {
+                    var carrierAccountPayload = {
+                        filter: {},
+                        selectedIds: supplierIds
+                    };
+                    VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, carrierAccountPayload, loadCarrierAccountPromiseDeferred);
+
+                   
+                    if (payload != undefined) {
+                        for (var i = 0; i < payload.length; i++) {
+                            for (var j = 0; j < ctrl.selectedSuppliers.length; j++) {
+                                if (ctrl.selectedSuppliers[j].CarrierAccountId == payload[i].SupplierId)
+                                    var loadSellingNumberPlanPromise = ctrl.selectedSuppliers[j].supplierZonesDirectiveAPI.load(payload[i].SupplierZoneIds);
+                                promises.push(loadSellingNumberPlanPromise);
+                            }
+                        }
+                    }
+                   
+
+                });
+                return UtilsService.waitMultiplePromises(promises);
             }
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
-        }
-        function trySetSupplierZoneDirectiveValues() {
-            for (var i = 0; i < $scope.selectedSuppliers.length; i++) {
-                if ($scope.selectedSuppliers[i].supplierZonesDirectiveAPI == undefined)
-                     return;
-            }
-            for (var i = 0; i < directiveAppendixData.length; i++) {
-                for (var j = 0; j < $scope.selectedSuppliers.length; j++) {
-                    if ($scope.selectedSuppliers[j].CarrierAccountId == directiveAppendixData[i].SupplierId)
-                        $scope.selectedSuppliers[j].supplierZonesDirectiveAPI.setData(directiveAppendixData[i].SupplierZoneIds);
-                }
-            }
         }
 
         this.initializeController = initializeController;

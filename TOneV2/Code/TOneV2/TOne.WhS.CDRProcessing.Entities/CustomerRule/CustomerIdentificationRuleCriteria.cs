@@ -8,8 +8,8 @@ namespace TOne.WhS.CDRProcessing.Entities
 {
     public class CustomerIdentificationRuleCriteria
     {
-        public List<string> IN_Trunks { get; set; }
-        public List<string> IN_Carriers { get; set; }
+        public List<string> InTrunks { get; set; }
+        public List<string> InCarriers { get; set; }
         public List<string> CDPNPrefixes { get; set; }
       
     }
