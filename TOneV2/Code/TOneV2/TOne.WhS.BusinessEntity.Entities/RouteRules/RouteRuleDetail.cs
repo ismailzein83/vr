@@ -37,7 +37,7 @@ namespace TOne.WhS.BusinessEntity.Entities
             get
             {
                 if (this.Entity.Criteria != null && this.Entity.Criteria.SaleZoneGroupSettings != null)
-                    return this.Entity.GetSaleZoneGroupContext().GetGroupDescription(this.Entity.Criteria.SaleZoneGroupSettings);
+                    return this.Entity.Criteria.SaleZoneGroupSettings.GetDescription();
 
                 return string.Empty;
             }
