@@ -50,7 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
+    <Compile Include="BusinessManagers\ContextFactory.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />
+    <Compile Include="BusinessManagers\IContext.cs" />
     <Compile Include="BusinessManagers\ISaleZoneManager.cs" />
     <Compile Include="BusinessManagers\ICarrierAccountManager.cs" />
     <Compile Include="CarrierAccounts\CarrierAccount.cs" />

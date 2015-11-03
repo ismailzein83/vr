@@ -24,8 +24,26 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         IEnumerable<long> IRuleSaleZoneCriteria.SaleZoneIds
         {
-            get { return this.Criteria != null && this.Criteria.SaleZoneGroupSettings != null ? this.Criteria.SaleZoneGroupSettings.GetZoneIds(null) : null; }
+            get
+            {
+                if(this.Criteria != null && this.Criteria.SaleZoneGroupSettings != null)
+                {
+                    return GetSaleZoneGroupContext().GetGroupZoneIds(this.Criteria.SaleZoneGroupSettings);
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
+        
+        public ISaleZoneGroupContext GetSaleZoneGroupContext()
+        {
+            ISaleZoneGroupContext saleZoneGroupContext = ContextFactory.CreateContext<ISaleZoneGroupContext>();
+            saleZoneGroupContext.RoutingProductId = this.Criteria.RoutingProductId;
+            return saleZoneGroupContext;
+        }
+
 
         IEnumerable<CodeCriteria> IRuleCodeCriteria.CodeCriterias
         {

@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SaleZoneInfoFilter
+    public interface IContext
     {
-        public int SellingNumberPlanId { get; set; }
-
-        public ISaleZoneGroupContext SaleZoneGroupContext { get; set; }
     }
 }

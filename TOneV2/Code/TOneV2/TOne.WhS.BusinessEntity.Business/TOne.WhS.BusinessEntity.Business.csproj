@@ -74,6 +74,7 @@
     <Compile Include="RateTypeManager.cs" />
     <Compile Include="SaleZone\SaleCodeCacheManager.cs" />
     <Compile Include="SaleZone\SaleRateCacheManager.cs" />
+    <Compile Include="SaleZone\SaleZoneGroupContext.cs" />
     <Compile Include="SellingProductManager.cs" />
     <Compile Include="PricingRules\BasePricingRuleManager.cs" />
     <Compile Include="PricingRules\PricingRuleManager.cs" />

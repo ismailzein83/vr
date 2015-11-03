@@ -75,11 +75,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>().GetOrCreateObject(cacheName,
                 () =>
                 {
-                    CustomerZoneRates customerZoneRates = null;
-                    CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                    var customerAccount = carrierAccountManager.GetCarrierAccount(customerId);
-                    if (customerAccount == null || customerAccount.CustomerSettings == null)
-                        return null;
+                    CustomerZoneRates customerZoneRates = null;                   
                     CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
                     var customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, false);
                     if (customerSellingProduct == null)

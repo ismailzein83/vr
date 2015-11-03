@@ -12,7 +12,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups
     {
         public List<long> ZoneIds { get; set; }
 
-        public override IEnumerable<long> GetZoneIds(SaleZoneGroupContext context)
+        public override IEnumerable<long> GetZoneIds(ISaleZoneGroupContext context)
         {
             return this.ZoneIds;
         }

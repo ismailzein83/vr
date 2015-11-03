@@ -12,7 +12,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int SellingNumberPlanId { get; set; }
 
-        public abstract IEnumerable<long> GetZoneIds(SaleZoneGroupContext context);
+        public abstract IEnumerable<long> GetZoneIds(ISaleZoneGroupContext context);
 
         public abstract string GetDescription();
     }

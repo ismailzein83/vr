@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SaleZoneGroupContext
+    public interface ISaleZoneGroupContext : IContext
     {
+        int? RoutingProductId { get; set; }
+        IEnumerable<long> GetGroupZoneIds(SaleZoneGroupSettings saleZoneGroup);
+
+        string GetGroupDescription(SaleZoneGroupSettings saleZoneGroup);
     }
 }

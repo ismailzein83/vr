@@ -177,7 +177,33 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, SaleZoneInfoFilter filter)
         {
-            throw new NotImplementedException();
+            string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
+            List<SaleZone> allZones = GetCachedSaleZones(filter.SellingNumberPlanId);
+            HashSet<long> filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(filter.SaleZoneGroupContext);
+            Func<SaleZone, bool> zoneFilter = (zone) =>
+                {
+                    if (filteredZoneIds != null && !filteredZoneIds.Contains(zone.SaleZoneId))
+                        return false;
+                    if (nameFilterLower != null && !zone.Name.Contains(nameFilterLower))
+                        return false;
+                    return true;
+                };
+            return allZones.MapRecords(SaleZoneInfoMapper, zoneFilter);
         }
+
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(int sellingNumberPlanId, HashSet<long> saleZoneIds, ISaleZoneGroupContext saleZoneGroupContext)
+        {
+            List<SaleZone> allZones = GetCachedSaleZones(sellingNumberPlanId);
+            HashSet<long> filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(saleZoneGroupContext);
+            Func<SaleZone, bool> zoneFilter = (zone) =>
+            {
+                if (!saleZoneIds.Contains(zone.SaleZoneId))
+                    return false;
+                if (filteredZoneIds != null && !filteredZoneIds.Contains(zone.SaleZoneId))
+                    return false;
+                return true;
+            };
+            return allZones.MapRecords(SaleZoneInfoMapper, zoneFilter);
+        }        
     }
 }
