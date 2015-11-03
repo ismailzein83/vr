@@ -4,7 +4,7 @@
 
     currencyManagementController.$inject = ['$scope', 'VRCommon_CurrencyService'];
 
-    function currencyManagementController($scope, VrCommon_CurrencyService) {
+    function currencyManagementController($scope, VRCommon_CurrencyService) {
         var gridAPI;
         defineScope();
         load();
@@ -12,13 +12,15 @@
 
         function defineScope() {
             $scope.searchClicked = function () {
-              
+                setFilterObject();
+                gridAPI.loadGrid(filter)
             };
 
             $scope.onGridReady = function (api) {
-              
+                gridAPI = api;
+                gridAPI.loadGrid(filter)
             }
-           
+            $scope.addNewCurrency = addNewCurrency;
         }
 
         function load() {
@@ -30,12 +32,20 @@
         function setFilterObject() {
             filter = {
                 Name: $scope.name,
+                Symbol: $scope.symbol,
             };
            
         }
 
         function addNewCurrency() {
            
+            var onCurrencyAdded = function (currencyObj) {
+                if (gridAPI != undefined) {
+                    gridAPI.onCurrencyAdded(currencyObj);
+                }
+
+            };
+            VRCommon_CurrencyService.addCurrency(onCurrencyAdded);
         }
 
     }

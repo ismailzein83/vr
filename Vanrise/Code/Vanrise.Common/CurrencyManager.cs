@@ -18,9 +18,9 @@ namespace Vanrise.Common
             Func<Currency, bool> filterExpression = (prod) =>
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
                   &&
-                 (input.Query.Symbol == null || prod.Symbol.ToLower().Contains(input.Query.Symbol.ToLower())) ;
+                 (input.Query.Symbol == null || prod.Symbol.ToLower().Contains(input.Query.Symbol.ToLower()));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCurrencies.ToBigResult(input, filterExpression));     
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCurrencies.ToBigResult(input, filterExpression));
         }
 
         public IEnumerable<Currency> GetAllCurrencies()
@@ -31,8 +31,11 @@ namespace Vanrise.Common
 
             return allCountries.Values;
         }
-      
-        #region Private Members
+        public Currency GetCurrency(int currencyId)
+        {
+            var currencies = GetCachedCurrencies();
+            return currencies.GetRecord(currencyId);
+        }
 
         public Dictionary<int, Currency> GetCachedCurrencies()
         {
@@ -44,6 +47,48 @@ namespace Vanrise.Common
                    return currencies.ToDictionary(cu => cu.CurrencyId, cu => cu);
                });
         }
+
+        public Vanrise.Entities.InsertOperationOutput<Currency> AddCurrency(Currency currency)
+        {
+            Vanrise.Entities.InsertOperationOutput<Currency> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<Currency>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
+            int currencyId = -1;
+
+            ICurrencyDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyDataManager>();
+            bool insertActionSucc = dataManager.Insert(currency, out currencyId);
+            if (insertActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                currency.CurrencyId = currencyId;
+                insertOperationOutput.InsertedObject = currency;
+            }
+
+            return insertOperationOutput;
+        }
+        public Vanrise.Entities.UpdateOperationOutput<Currency> UpdateCurrency(Currency currency)
+        {
+            ICurrencyDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyDataManager>();
+
+            bool updateActionSucc = dataManager.Update(currency);
+            Vanrise.Entities.UpdateOperationOutput<Currency> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<Currency>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = currency;
+            }
+
+            return updateOperationOutput;
+        }
+        #region Private Members
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {

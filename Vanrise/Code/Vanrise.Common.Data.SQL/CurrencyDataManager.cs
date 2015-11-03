@@ -20,7 +20,20 @@ namespace Vanrise.Common.Data.SQL
         {
             return GetItemsSP("common.sp_Currency_GetAll", CurrencyMapper);
         }
+        public bool Update(Currency currency)
+        {
+            int recordsEffected = ExecuteNonQuerySP("common.sp_Currency_Update", currency.CurrencyId, currency.Name, currency.Symbol);
+            return (recordsEffected > 0);
+        }
 
+        public bool Insert(Currency currency, out int insertedId)
+        {
+            object currencyId;
+
+            int recordsEffected = ExecuteNonQuerySP("common.sp_Currency_Insert", out currencyId, currency.Name, currency.Symbol);
+            insertedId = (int)currencyId;
+            return (recordsEffected > 0);
+        }
         public bool AreCurrenciesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("common.Currency", ref updateHandle);

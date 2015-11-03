@@ -1,0 +1,16 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="currencies"
+                     on-ready="onGridReady"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="gridMenuActions"
+                     idfield="CurrencyId">
+
+            <vr-datagridcolumn headertext="'ID'" field="'CurrencyId'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Currency Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Symbol'" field="'Symbol'" type="'Text'"></vr-datagridcolumn>
+            
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

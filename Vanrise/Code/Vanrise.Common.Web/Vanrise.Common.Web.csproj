@@ -137,8 +137,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Common\Constant\ModuleConfig.js" />
+    <Content Include="Common\Directives\Currency\Templates\CurrencyGridTemplate.html" />
+    <Content Include="Common\Directives\Currency\vr-common-currency-grid.js" />
     <Content Include="Common\Services\APIServices\CurrencyAPIService.js" />
     <Content Include="Common\Services\CurrencyService.js" />
+    <Content Include="Common\Views\Currency\CurrencyEditor.html" />
+    <Content Include="Common\Views\Currency\CurrencyEditorController.js" />
     <Content Include="Common\Views\Currency\CurrencyManagementController.js" />
     <Content Include="Common\Views\Currency\CurrencyManagement.html" />
     <Content Include="Common\Views\Error.html" />
