@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIService', 'UtilsService',
-    function (WhS_BE_SellingNumberPlanAPIService, UtilsService) {
+app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (WhS_BE_SellingNumberPlanAPIService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -8,27 +8,22 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                 onReady: '=',
                 ismultipleselection: "@",
                 onselectionchanged: '=',
+                selectedvalues: '=',
                 isrequired: "@"
             },
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
+
                 $scope.selectedSellingNumberPlans;
                 if ($attrs.ismultipleselection != undefined)
-                $scope.selectedSellingNumberPlans = [];
-                $scope.sellingNumberPlans = [];
-                var beSellingNumberPlanObject = new beSellingNumberPlan(ctrl, $scope, $attrs);
-                beSellingNumberPlanObject.initializeController();
-                $scope.onselectionchanged = function () {
+                    $scope.selectedSellingNumberPlans = [];
 
-                    if (ctrl.onselectionchanged != undefined) {
-                        var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
-                        if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                            onvaluechangedMethod();
-                        }
-                    }
+                ctrl.datasource = [];
 
-                }
+                var ctor = new sellingNumberPlanCtor(ctrl, $scope, $attrs);
+                ctor.initializeController();
+                
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -49,19 +44,24 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
         function getBeSellingNumberPlansTemplate(attrs) {
 
             var multipleselection = "";
+            var label = "Selling Number Plan";
             if (attrs.ismultipleselection != undefined)
-                multipleselection = "ismultipleselection"
+            {
+                label = "Selling Number Plans";
+                multipleselection = "ismultipleselection";
+            }
+
             var required = "";
             if (attrs.isrequired != undefined)
                 required = "isrequired";
 
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SellingNumberPlanId" '
-            + required + ' label="Selling Number Plan" datasource="sellingNumberPlans" selectedvalues="selectedSellingNumberPlans"  onselectionchanged="onselectionchanged" entityName="Selling Number Plan"></vr-select>'
+            + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="Selling Number Plan"></vr-select>'
                + '</div>'
         }
 
-        function beSellingNumberPlan(ctrl, $scope, $attrs) {
+        function sellingNumberPlanCtor(ctrl, $scope, attrs) {
 
             function initializeController() {
                 defineAPI();
@@ -70,31 +70,26 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
             function defineAPI() {
                 var api = {};
 
-                api.load = function () {
+                api.load = function (payload) {
+
+                    var selectedIds;
+                    if (payload != undefined) {
+                        selectedIds = payload.selectedIds;
+                    }
+
                     return WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlans().then(function (response) {
                         angular.forEach(response, function (itm) {
-                            $scope.sellingNumberPlans.push(itm);
+                            ctrl.datasource.push(itm);
                         });
+
+                        if (selectedIds != undefined) {
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'SellingNumberPlanId', attrs, ctrl);
+                        }
                     });
                 }
 
-                api.getData = function () {
-                    return $scope.selectedSellingNumberPlans;
-                }
-
-                api.setData = function (selectedIds) {
-                    if ($attrs.ismultipleselection) {
-                        for (var i = 0; i < selectedIds.length; i++) {
-                            var selectedSellingNumberPlan = UtilsService.getItemByVal($scope.sellingNumberPlans, selectedIds[i], "SellingNumberPlanId");
-                            if (selectedSellingNumberPlan != null)
-                                $scope.selectedSellingNumberPlans.push(selectedSellingNumberPlan);
-                        }
-                    } else {
-                        var selectedSellingNumberPlan = UtilsService.getItemByVal($scope.sellingNumberPlans, selectedIds, "SellingNumberPlanId");
-                        if (selectedSellingNumberPlan != null)
-                            $scope.selectedSellingNumberPlans=selectedSellingNumberPlan;
-                    }
-                    
+                api.getSelectedIds = function () {
+                    return VRUIUtilsService.getIdSelectedIds('SellingNumberPlanId', attrs, ctrl);
                 }
 
                 if (ctrl.onReady != null)
@@ -103,5 +98,6 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
             
             this.initializeController = initializeController;
         }
+
         return directiveDefinitionObject;
     }]);

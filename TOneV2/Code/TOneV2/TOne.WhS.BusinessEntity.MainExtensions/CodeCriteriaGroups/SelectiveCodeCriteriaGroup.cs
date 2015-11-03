@@ -19,7 +19,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups
         public override string GetDescription()
         {
             if (this.Codes != null)
-                return string.Join(",", this.Codes.Select(item => item.Code));
+                return string.Join(", ", this.Codes.Select(item => item.Code));
 
             return string.Empty;
         }
