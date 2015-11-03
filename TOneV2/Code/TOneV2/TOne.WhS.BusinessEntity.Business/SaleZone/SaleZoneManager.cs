@@ -73,7 +73,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return saleZoneDictionary;
         }
 
-        public string GetDescription(int sellingNumberPlanId, List<long> saleZoneIds)
+        public string GetDescription(int sellingNumberPlanId, IEnumerable<long> saleZoneIds)
         {
             IEnumerable<SaleZone> allZones = GetCachedSaleZones(sellingNumberPlanId);
 
