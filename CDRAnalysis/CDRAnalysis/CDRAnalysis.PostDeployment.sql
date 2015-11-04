@@ -132,12 +132,10 @@ when not matched by source then
 	delete;
 
 
-
-
-	--FraudAnalysis.Aggregate---------------------------------------------------------------------------
+--FraudAnalysis.Aggregate---------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-;with cte_data([ID],[Name],[OperatorTypeAllowed],[NumberPrecision],[timestamp])
+;with cte_data([ID],[Name],[OperatorTypeAllowed],[NumberPrecision])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'Count Out Calls',0,'NoDecimal'),
@@ -169,16 +167,16 @@ as (select * from (values
 (27,'Diff Dest Zones',2,'NoDecimal'),
 (28,'Diff Sources Zones',2,'NoDecimal')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[OperatorTypeAllowed],[NumberPrecision],[timestamp]))
+)c([ID],[Name],[OperatorTypeAllowed],[NumberPrecision]))
 merge	[FraudAnalysis].[Aggregate] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[OperatorTypeAllowed] = s.[OperatorTypeAllowed],[NumberPrecision] = s.[NumberPrecision],[timestamp] = s.[timestamp]
+	[Name] = s.[Name],[OperatorTypeAllowed] = s.[OperatorTypeAllowed],[NumberPrecision] = s.[NumberPrecision]
 when not matched by target then
-	insert([ID],[Name],[OperatorTypeAllowed],[NumberPrecision],[timestamp])
-	values(s.[ID],s.[Name],s.[OperatorTypeAllowed],s.[NumberPrecision],s.[timestamp])
+	insert([ID],[Name],[OperatorTypeAllowed],[NumberPrecision])
+	values(s.[ID],s.[Name],s.[OperatorTypeAllowed],s.[NumberPrecision])
 when not matched by source then
 	delete;
 
