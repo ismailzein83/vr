@@ -14,6 +14,11 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
+
+                ctrl.selectedvalues;
+                if ($attrs.ismultipleselection != undefined)
+                    ctrl.selectedvalues = [];
+
                 var ctor = new saleZoneCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
 
@@ -49,12 +54,12 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                 required = "isrequired";
 
             return '<div>'
-               + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SupplierZoneId" '
+               + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SaleZoneId" '
             + required + ' label="' + label + '" datasource="ctrl.search" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '"></vr-select>'
             + '</div>'
         }
 
-        function supplierZoneCtor(ctrl, $scope, attrs) {
+        function saleZoneCtor(ctrl, $scope, attrs) {
 
             var filter;
             var isDirectiveLoaded = false;
@@ -78,17 +83,16 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                 var api = {};
 
                 api.load = function (payload) {
-                    
                     var selectedIds;
                     if (payload != undefined) {
-                        filter: payload.filter;
+                        filter = payload.filter;
                         selectedIds = payload.selectedIds;
                     }
 
                     if (selectedIds != undefined) {
                         ctrl.datasource = [];
 
-                        var input = { SellingNumberPlanId: filter.sellingNumberPlanId, SaleZoneIds: selectedIds };
+                        var input = { SellingNumberPlanId: filter.SellingNumberPlanId, SaleZoneIds: selectedIds };
 
                         return WhS_BE_SaleZoneAPIService.GetSaleZoneInfoByIds(input).then(function (response) {
                             angular.forEach(response, function (item) {

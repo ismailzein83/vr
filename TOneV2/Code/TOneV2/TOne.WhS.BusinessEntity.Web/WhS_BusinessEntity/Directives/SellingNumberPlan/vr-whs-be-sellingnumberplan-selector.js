@@ -9,15 +9,17 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                 ismultipleselection: "@",
                 onselectionchanged: '=',
                 selectedvalues: '=',
-                isrequired: "@"
+                isrequired: "@",
+                onselectitem: "=",
+                ondeselectitem: "="
             },
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
 
-                $scope.selectedSellingNumberPlans;
+                ctrl.selectedvalues;
                 if ($attrs.ismultipleselection != undefined)
-                    $scope.selectedSellingNumberPlans = [];
+                    ctrl.selectedvalues = [];
 
                 ctrl.datasource = [];
 
@@ -57,7 +59,7 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
 
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SellingNumberPlanId" '
-            + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="Selling Number Plan"></vr-select>'
+            + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Selling Number Plan" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                + '</div>'
         }
 

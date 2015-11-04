@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'WhS_BE_SellingNumberPlanAPIService', 'UtilsService',
-    function (WhS_BE_SaleZoneAPIService, WhS_BE_SellingNumberPlanAPIService, UtilsService) {
+app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'WhS_BE_SellingNumberPlanAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (WhS_BE_SaleZoneAPIService, WhS_BE_SellingNumberPlanAPIService, UtilsService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -12,31 +12,11 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
 
             var ctrl = this;
 
-            $scope.sellingNumberPlans = [];
-            $scope.selectedSellingNumberPlan = undefined;
-
             $scope.showSellingNumberPlan = ctrl.sellingnumberplanid == undefined;
-            $scope.isPackageDefined = !$scope.showSellingNumberPlan;
 
             var ctor = new selectiveCtor(ctrl, $scope, WhS_BE_SaleZoneAPIService);
             ctor.initializeController();
 
-            $scope.onSellingNumberPlanValueChanged = function () {
-                $scope.isPackageDefined = (!$scope.showSellingNumberPlan || $scope.selectedSellingNumberPlan != undefined);
-            }
-            $scope.searchZones = function (filter) {
-                var sellingNumberPlanId;
-                if (ctrl.sellingnumberplanid == undefined && $scope.selectedSellingNumberPlan != undefined)
-                {
-                    sellingNumberPlanId = $scope.selectedSellingNumberPlan.SellingNumberPlanId;
-                }    
-                else {
-                    sellingNumberPlanId = ctrl.sellingnumberplanid;
-                }
-                   
-
-                return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(sellingNumberPlanId, filter);
-            }
         },
         controllerAs: 'ctrl',
         bindToController: true,
@@ -55,14 +35,32 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
 
     function selectiveCtor(ctrl, $scope, WhS_BE_SaleZoneAPIService) {
         
+        var sellingNumberPlanDirectiveAPI;
+        var sellingNumberPlanReadyPromiseDeferred;
+
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
             
-            $scope.onCarrierAccountDirectiveReady = function (api) {
+            $scope.onSellingNumberPlanDirectiveReady = function (api) {
+                sellingNumberPlanDirectiveAPI = api;
+                sellingNumberPlanReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onSaleZoneDirectiveReady = function (api) {
                 saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onSelectSellingNumberPlan = function (selectedItem) {
+                var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
+
+                var payload = {
+                    filter: { SellingNumberPlanId: selectedItem.SellingNumberPlanId },
+                }
+
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
             }
 
             defineAPI();
@@ -75,46 +73,63 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
             api.load = function (payload) {
                 var promises = [];
 
-                var loadSellingNumberPlanPromise = WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlans().then(function (response) {
-                    angular.forEach(response, function (item) {
-                        $scope.sellingNumberPlans.push(item);
+                if (ctrl.sellingnumberplanid == undefined)
+                {
+                    sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
+                        var sellingNumberPlanPayload;
+
+                        if (payload != undefined)
+                        {
+                            sellingNumberPlanPayload = {
+                                selectedIds: payload.SellingNumberPlanId
+                            };
+                        }
+                            
+                        VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, sellingNumberPlanPayload, loadSellingNumberPlanPromiseDeferred);
                     });
 
-                    if (payload != undefined)
-                        $scope.selectedSellingNumberPlan = UtilsService.getItemByVal($scope.sellingNumberPlans, payload.SellingNumberPlanId, "SellingNumberPlanId");
-                });
+                    promises.push(loadSellingNumberPlanPromiseDeferred.promise);
 
-                promises.push(loadSellingNumberPlanPromise);
+                    var subPromisesArray = [];
 
-                if (payload != undefined && payload.ZoneIds.length > 0) {
-                    var loadSaleZoneSelectorPromise = setSaleZoneSelector(payload);
-                    promises.push(loadSaleZoneSelectorPromise);
+                    subPromisesArray.push(loadSellingNumberPlanPromiseDeferred.promise);
+                    subPromisesArray.push(saleZoneReadyPromiseDeferred.promise);
+
+                    UtilsService.waitMultiplePromises(subPromisesArray).then(loadSaleZoneSelector);
+                }
+                else
+                {
+                    saleZoneReadyPromiseDeferred.promise.then(loadSaleZoneSelector);
                 }
 
+                var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
+                promises.push(loadSaleZonePromiseDeferred.promise);
+
                 return UtilsService.waitMultiplePromises(promises);
-                
-                function setSaleZoneSelector(payload) {
-                    var sellingNumberPlanId;
 
-                    if (ctrl.sellingnumberplanid == undefined)
-                        sellingNumberPlanId = payload.SellingNumberPlanId;
-                    else
-                        sellingNumberPlanId = ctrl.sellingnumberplanid;
+                function loadSaleZoneSelector() {
+                    var saleZonePayload;
 
-                    var input = { SellingNumberPlanId: sellingNumberPlanId, SaleZoneIds: payload.ZoneIds };
-
-                    return WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
-                        angular.forEach(response, function (item) {
-                            $scope.selectedSaleZones.push(item);
-                        });
-                    });
+                    if (payload != undefined)
+                    {
+                        saleZonePayload = {
+                            filter: { SellingNumberPlanId: payload.SellingNumberPlanId },
+                            selectedIds: payload != undefined ? payload.ZoneIds : undefined
+                        };
+                    }
+                    
+                    VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, saleZonePayload, loadSaleZonePromiseDeferred);
                 }
             }
 
             api.getData = function () {
                 return {
                     $type: "TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups.SelectiveSaleZoneGroup, TOne.WhS.BusinessEntity.MainExtensions",
-                    SellingNumberPlanId: ctrl.sellingnumberplanid == undefined ? $scope.selectedSellingNumberPlan.SellingNumberPlanId : ctrl.sellingnumberplanid,
+                    SellingNumberPlanId: sellingNumberPlanDirectiveAPI != undefined ? sellingNumberPlanDirectiveAPI.getSelectedIds(): null,
                     ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZones, "SaleZoneId")
                 };
             }

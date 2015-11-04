@@ -1,10 +1,9 @@
-﻿<div style="display:inline-block;width: calc(100% - 18px);">
+﻿<vr-row removeline>
     <vr-columns colnum="4" ng-show="showSellingNumberPlan">
-        <vr-select datatextfield="Name" datavaluefield="SellingNumberPlanId"
-                   label="Selling Number Plan" datasource="sellingNumberPlans" selectedvalues="selectedSellingNumberPlan" onselectionchanged="onSellingNumberPlanValueChanged">
-        </vr-select>
+        <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" selectedvalues="selectedSellingNumberPlan" onselectitem="onSelectSellingNumberPlan" />
     </vr-columns>
-    <vr-columns colnum="4" ng-show="isPackageDefined">
-        <vr-whs-be-salezone-selector on-ready="onSaleZoneDirectiveReady" />
+    <vr-columns colnum="4" ng-show="selectedSellingNumberPlan" vr-loader="isLoadingSaleZonesSelector">
+        <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady" />
     </vr-columns>
-</div>
+</vr-row>
+    

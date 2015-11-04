@@ -13,10 +13,10 @@ app.service('WhS_BE_SaleZoneAPIService', function (BaseAPIService) {
         return BaseAPIService.post("/api/SaleZone/GetFilteredSaleZones", input);
     }
 
-    function GetSaleZonesInfo(sellingNumberPlanId, filter) {
+    function GetSaleZonesInfo(nameFilter, serializedFilter) {
         return BaseAPIService.get("/api/SaleZone/GetSaleZonesInfo", {
-            sellingNumberPlanId: sellingNumberPlanId,
-            filter: filter
+            nameFilter: nameFilter,
+            serializedFilter: serializedFilter
         });
     }
 

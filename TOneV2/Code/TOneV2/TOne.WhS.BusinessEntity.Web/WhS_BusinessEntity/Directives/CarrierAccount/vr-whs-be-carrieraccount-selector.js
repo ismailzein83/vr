@@ -21,7 +21,8 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            if ($attrs.ismultipleselection != undefined && ctrl.selectedvalues == undefined)
+            ctrl.selectedvalues;
+            if ($attrs.ismultipleselection != undefined)
                 ctrl.selectedvalues = [];
 
             ctrl.datasource = [];
