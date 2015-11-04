@@ -487,7 +487,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     case 16: i.Value.KeyName = Constants._TotalBTS; break;
                     case 17: i.Value.KeyName = Constants._DiffOutputNumbers; break;
                     case 18: i.Value.KeyName = Constants._DiffInputNumbers; break;
-                    case 19: i.Value.KeyName = Constants._CountInOffNet; break;
+                    case 19: i.Value.KeyName = Constants._CountInOffNets; break;
                     case 20: i.Value.KeyName = Constants._CountInOnNets; break;
                     case 21: i.Value.KeyName = Constants._DiffOutputNumbersNightCalls; break;
                     case 22: i.Value.KeyName = Constants._CountOutCallsPeakHours; break;

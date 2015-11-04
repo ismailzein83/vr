@@ -34,7 +34,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public const string _TotalBTS = "Total BTS";
         public const string _DiffOutputNumbers = "Diff Output Numbers";
         public const string _DiffInputNumbers = "Diff Input Numbers";
-        public const string _CountInOffNet = "Count In OffNets";
+        public const string _CountInOffNets = "Count In OffNets";
         public const string _CountInOnNets = "Count In OnNets";
         public const string _DiffOutputNumbersNightCalls = "Diff Output Numbers NightCalls";
         public const string _CountOutCallsPeakHours = "Count Out Calls Peak Hours";
