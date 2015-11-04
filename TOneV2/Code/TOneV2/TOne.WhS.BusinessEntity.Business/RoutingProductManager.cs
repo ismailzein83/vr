@@ -105,13 +105,17 @@ namespace TOne.WhS.BusinessEntity.Business
             var routingProduct = GetRoutingProduct(routingProductId);
             if (routingProduct != null && routingProduct.Settings != null)
             {
-                if (!routingProduct.Settings.IsAllZones)
+                switch (routingProduct.Settings.ZoneRelationType)
                 {
-                    if (routingProduct.Settings.Zones == null)
-                        filteredZoneIds = new HashSet<long>();//empty list
-                    else
-                        filteredZoneIds = new HashSet<long>(routingProduct.Settings.Zones.Select(zone => zone.ZoneId));
-                }
+                    case RoutingProductZoneRelationType.AllZones:
+                        break;
+                    case RoutingProductZoneRelationType.SpecificZones:
+                        if (routingProduct.Settings.Zones == null)
+                            filteredZoneIds = new HashSet<long>();//empty list
+                        else
+                            filteredZoneIds = new HashSet<long>(routingProduct.Settings.Zones.Select(zone => zone.ZoneId));
+                        break;
+                }                    
             }
             return filteredZoneIds;
         }
@@ -122,12 +126,16 @@ namespace TOne.WhS.BusinessEntity.Business
             var routingProduct = GetRoutingProduct(routingProductId);
             if (routingProduct != null && routingProduct.Settings != null)
             {
-                if (!routingProduct.Settings.IsAllSuppliers)
+                switch(routingProduct.Settings.SupplierRelationType)
                 {
-                    if (routingProduct.Settings.Suppliers == null)
-                        filteredSupplierIds = new HashSet<int>();//empty list
-                    else
-                        filteredSupplierIds = new HashSet<int>(routingProduct.Settings.Suppliers.Select(supplier => supplier.SupplierId));
+                    case RoutingProductSupplierRelationType.AllSuppliers:
+                        break;
+                    case RoutingProductSupplierRelationType.SpecificSuppliers:
+                        if (routingProduct.Settings.Suppliers == null)
+                            filteredSupplierIds = new HashSet<int>();//empty list
+                        else
+                            filteredSupplierIds = new HashSet<int>(routingProduct.Settings.Suppliers.Select(supplier => supplier.SupplierId));
+                        break;
                 }
             }
 

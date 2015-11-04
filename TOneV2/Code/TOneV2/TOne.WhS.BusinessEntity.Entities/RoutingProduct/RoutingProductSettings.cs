@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
+    public enum RoutingProductZoneRelationType {  AllZones, SpecificZones}
+    public enum RoutingProductSupplierRelationType { AllSuppliers, SpecificSuppliers}
     public class RoutingProductSettings
     {
-        public bool IsAllZones { get; set; }
-
         public short DefaultServicesFlag { get; set; }
+
+        public RoutingProductZoneRelationType ZoneRelationType { get; set; }
 
         public List<RoutingProductZone> Zones { get; set; }
 
-        public bool IsAllSuppliers { get; set; }
+        public RoutingProductSupplierRelationType SupplierRelationType { get; set; }
 
         public List<RoutingProductSupplier> Suppliers { get; set; }
 
