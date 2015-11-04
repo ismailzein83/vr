@@ -17,84 +17,95 @@ namespace TOne.WhS.Sales.Business
     public class RatePlanManager
     {
         #region Get Rate Plan Items
+
         public IEnumerable<RatePlanItem> GetRatePlanItems(RatePlanItemInput input)
         {
-            List<RatePlanItem> ratePlanItems = new List<RatePlanItem>();
-
-            IEnumerable<SaleZone> saleZones = GetSaleZones(input.Filter.CustomerId);
+            IEnumerable<RatePlanItem> items = null;
+            IEnumerable<SaleZone> saleZones = this.GetSaleZones(input.Filter.CustomerId);
 
             if (saleZones != null)
             {
-                saleZones =
-                    saleZones.Where(x => x.Name == null || (x.Name.Length > 0 && char.ToLower(x.Name[0]) == char.ToLower(input.Filter.ZoneLetter))).ToList();
-
-                saleZones = this.GetPagedSaleZones(saleZones, input.FromRow, input.ToRow);
-
-                List<long> saleZoneIds = saleZones.Select(item => item.SaleZoneId).ToList();
-                List<SaleRate> saleRates = GetSaleRatesByCustomerZoneIds(input.Filter.CustomerId, saleZoneIds);
-
-                foreach (SaleZone saleZone in saleZones)
+                if (saleZones != null)
                 {
-                    RatePlanItem ratePlanItem = new RatePlanItem();
+                    saleZones = this.GetFilteredSaleZones(saleZones, input.Filter);
 
-                    ratePlanItem.ZoneId = saleZone.SaleZoneId;
-                    ratePlanItem.ZoneName = saleZone.Name;
-
-                    var rate = saleRates.FindRecord(item => item.ZoneId == saleZone.SaleZoneId);
-
-                    if (rate != null)
+                    if (saleZones != null)
                     {
-                        ratePlanItem.SaleRateId = rate.SaleRateId;
-                        ratePlanItem.Rate = rate.NormalRate;
-                        ratePlanItem.BeginEffectiveDate = rate.BeginEffectiveDate;
-                        ratePlanItem.EndEffectiveDate = rate.EndEffectiveDate;
-                    }
+                        saleZones = this.GetPagedSaleZones(saleZones, input.FromRow, input.ToRow);
 
-                    ratePlanItems.Add(ratePlanItem);
+                        if (saleZones != null)
+                        {
+                            IEnumerable<SaleRate> saleRates = this.GetSaleRates(input.Filter.CustomerId, saleZones);
+                            items = this.GetRatePlanItems(saleZones, saleRates);
+                        }
+                    }
                 }
             }
 
-            return ratePlanItems;
+            return items;
         }
 
         private IEnumerable<SaleZone> GetSaleZones(int customerId)
         {
-            IEnumerable<SaleZone> saleZones = null;
-            IEnumerable<int> countryIds = new CustomerZoneManager().GetCountryIds(customerId);
-
-            if (countryIds != null)
-            {
-                int sellingNumberPlanId = new CarrierAccountManager().GetSellingNumberPlanId(customerId, CarrierAccountType.Customer);
-                saleZones = new SaleZoneManager().GetSaleZonesByCountryIds(sellingNumberPlanId, countryIds);
-            }
-
-            return saleZones;
+            CustomerZoneManager manager = new CustomerZoneManager();
+            return manager.GetCustomerSaleZones(customerId, DateTime.Now, false);
         }
 
-        private int GetSellingNumberPlanId(int customerId)
+        private IEnumerable<SaleZone> GetFilteredSaleZones(IEnumerable<SaleZone> saleZones, RatePlanItemFilter filter)
         {
-            CarrierAccountManager manager = new CarrierAccountManager();
-            CarrierAccountDetail customer = manager.GetCarrierAccount(customerId);
-
-            return customer.CustomerSettings.SellingNumberPlanId;
+            return saleZones.FindAllRecords(z => z.Name != null && z.Name.Length > 0 && z.Name[0] == char.ToLower(filter.ZoneLetter));
         }
 
         private IEnumerable<SaleZone> GetPagedSaleZones(IEnumerable<SaleZone> saleZones, int fromRow, int toRow)
         {
-            List<SaleZone> pagedSaleZones = new List<SaleZone>();
+            List<SaleZone> pagedSaleZones = null;
 
-            for (int i = fromRow - 1; i < saleZones.Count() && i < toRow; i++)
+            if (saleZones.Count() >= fromRow)
             {
-                pagedSaleZones.Add(saleZones.ElementAt(i));
+                pagedSaleZones = new List<SaleZone>();
+
+                for (int i = fromRow - 1; i < toRow && i < saleZones.Count(); i++)
+                {
+                    pagedSaleZones.Add(saleZones.ElementAt(i));
+                }
             }
 
             return pagedSaleZones;
         }
 
-        private List<SaleRate> GetSaleRatesByCustomerZoneIds(int customerId, List<long> customerZoneIds)
+        private IEnumerable<SaleRate> GetSaleRates(int customerId, IEnumerable<SaleZone> saleZones)
         {
             SaleRateManager manager = new SaleRateManager();
-            return manager.GetSaleRatesByCustomerZoneIds(SalePriceListOwnerType.Customer, customerId, customerZoneIds, DateTime.Now);
+            IEnumerable<long> saleZoneIds = saleZones.MapRecords(z => z.SaleZoneId);
+            
+            return manager.GetSaleRatesByCustomerZoneIds(SalePriceListOwnerType.Customer, customerId, saleZoneIds, DateTime.Now);
+        }
+
+        private IEnumerable<RatePlanItem> GetRatePlanItems(IEnumerable<SaleZone> saleZones, IEnumerable<SaleRate> saleRates)
+        {
+            List<RatePlanItem> items = new List<RatePlanItem>();
+
+            foreach (SaleZone saleZone in saleZones)
+            {
+                RatePlanItem item = new RatePlanItem();
+
+                item.ZoneId = saleZone.SaleZoneId;
+                item.ZoneName = saleZone.Name;
+
+                SaleRate rate = saleRates.FindRecord(r => r.ZoneId == saleZone.SaleZoneId);
+
+                if (rate != null)
+                {
+                    item.SaleRateId = rate.SaleRateId;
+                    item.Rate = rate.NormalRate;
+                    item.BeginEffectiveDate = rate.BeginEffectiveDate;
+                    item.EndEffectiveDate = rate.EndEffectiveDate;
+                }
+
+                items.Add(item);
+            }
+
+            return items;
         }
 
         #endregion
@@ -130,5 +141,41 @@ namespace TOne.WhS.Sales.Business
         }
 
         #endregion
+
+        private void JunkCode() {
+            /*
+            IEnumerable<SaleZone> saleZones = this.GetSaleZones(input.Filter.CustomerId);
+
+            if (saleZones != null)
+            {
+                saleZones = saleZones.FindAllRecords(z => z.Name == null || (z.Name.Length > 0 && char.ToLower(z.Name[0]) == char.ToLower(input.Filter.ZoneLetter)));
+
+                saleZones = this.GetPagedSaleZones(saleZones, input.FromRow, input.ToRow);
+
+                IEnumerable<long> saleZoneIds = saleZones.MapRecords(z => z.SaleZoneId);
+                List<SaleRate> saleRates = this.GetSaleRatesByCustomerZoneIds(input.Filter.CustomerId, saleZoneIds);
+
+                foreach (SaleZone saleZone in saleZones)
+                {
+                    RatePlanItem ratePlanItem = new RatePlanItem();
+
+                    ratePlanItem.ZoneId = saleZone.SaleZoneId;
+                    ratePlanItem.ZoneName = saleZone.Name;
+
+                    var rate = saleRates.FindRecord(item => item.ZoneId == saleZone.SaleZoneId);
+
+                    if (rate != null)
+                    {
+                        ratePlanItem.SaleRateId = rate.SaleRateId;
+                        ratePlanItem.Rate = rate.NormalRate;
+                        ratePlanItem.BeginEffectiveDate = rate.BeginEffectiveDate;
+                        ratePlanItem.EndEffectiveDate = rate.EndEffectiveDate;
+                    }
+
+                    ratePlanItems.Add(ratePlanItem);
+                }
+            }
+            */
+        }
     }
 }

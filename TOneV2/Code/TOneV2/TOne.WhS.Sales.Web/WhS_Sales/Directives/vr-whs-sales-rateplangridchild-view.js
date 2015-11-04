@@ -21,39 +21,66 @@ app.directive("vrWhsSalesRateplangridchildView", ["UtilsService", function (Util
     function DirectiveController($scope, ctrl) {
         this.initializeController = initializeController;
 
-        function initializeController() {
-            $scope.choices = [
-                { title: "Choice 1", editor: "directive", loaded: false },
-                { title: "Choice 2", editor: "directive", loaded: false },
-                { title: "Choice 3", editor: "directive", loaded: false }
-            ];
+        var choice1DirectiveAPI;
 
-            $scope.selectedChoiceIndex = 0;
-            $scope.selectedChoice = $scope.choices[0];
+        function initializeController() {
+            defineChoices();
+            load();
 
             $scope.onChoiceSelectionChanged = function () {
                 if ($scope.selectedChoiceIndex != undefined) {
-                    $scope.selectedChoice = $scope.choices[$scope.selectedChoiceIndex];
-                    
-                    if (!$scope.selectedChoice.loaded) {
-                        $scope.selectedChoice.loaded = true;
-                        console.log("loaded");
-                    }
+                    $scope.choices[$scope.selectedChoiceIndex].isLoaded = true;
                 }
             };
-
+            
             if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
                 ctrl.onReady(buildDirectiveAPI());
             }
 
             function buildDirectiveAPI() {
                 var api = {};
+                return api;
+            }
 
-                api.setHeader = function (newHeader) {
-                    $scope.header = newHeader;
+            function load() {
+
+            }
+
+            function defineChoices() {
+                $scope.choices = [
+                    { title: "Supplier", editor: "vr-whs-be-carrieraccount-selector", isLoaded: true, isSelected: true },
+                    { title: "Carrier Profile", editor: "vr-whs-be-carrierprofile-selector", isLoaded: false, isSelected: false },
+                    { title: "Country", editor: "vr-whs-be-country-selector", isLoaded: false, isSelected: false }
+                ];
+
+                for (var i = 0; i < $scope.choices.length; i++) {
+                    defineDirectiveProperties($scope.choices[i]);
+                }
+            }
+
+            function defineDirectiveProperties(choice) {
+                choice.directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                choice.onDirectiveReady = function (api) {
+                    choice.directiveAPI = api;
+                    choice.directiveReadyPromiseDeferred.resolve();
+                    delete choice.onDirectiveReady;
                 };
 
-                return api;
+                choice.loadDirective = function () {
+                    var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    choice.directiveReadyPromiseDeferred.promise.then(function () {
+                        var directivePayload = {
+                            filter: {},
+                            selectedIds: undefined
+                        };
+
+                        VRUIUtilsService.callDirectiveLoad(choice.directiveAPI, directivePayload, directiveLoadPromiseDeferred);
+                    });
+
+                    return directiveLoadPromiseDeferred.promise;
+                };
             }
         }
     }

@@ -79,12 +79,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
             Func<SaleZone, bool> filterExpression = null;
 
-            if(saleZoneIds != null)
+            if (saleZoneIds != null)
                 filterExpression = (itm) => (saleZoneIds.Contains(itm.SaleZoneId));
 
             allZones = allZones.FindAllRecords(filterExpression);
-            
-            if(allZones != null)
+
+            if (allZones != null)
                 return string.Join(", ", allZones.Select(x => x.Name));
 
             return string.Empty;
@@ -95,9 +95,9 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
             object dbApplyStream = dataManager.InitialiazeStreamForDBApply();
             foreach (SaleZone saleZone in saleZones)
-               dataManager.WriteRecordToStream(saleZone, dbApplyStream);
+                dataManager.WriteRecordToStream(saleZone, dbApplyStream);
             object prepareToApplySaleZones = dataManager.FinishDBApplyStream(dbApplyStream);
-             dataManager.ApplySaleZonesForDB(prepareToApplySaleZones);
+            dataManager.ApplySaleZonesForDB(prepareToApplySaleZones);
         }
 
         public void DeleteSaleZones(List<SaleZone> saleZones)
@@ -118,14 +118,14 @@ namespace TOne.WhS.BusinessEntity.Business
             return allZones.MapRecords(SaleZoneInfoMapper, itm => saleZoneIds.Contains(itm.SaleZoneId));
         }
 
-        public List<SaleZone> GetSaleZonesByCountryIds(int sellingNumberPlanId, IEnumerable<int> countryIds)
+        public IEnumerable<SaleZone> GetSaleZonesByCountryIds(int sellingNumberPlanId, IEnumerable<int> countryIds)
         {
-            List<SaleZone> allSaleZones = GetCachedSaleZones(sellingNumberPlanId);
-
+            IEnumerable<SaleZone> allSaleZones = GetCachedSaleZones(sellingNumberPlanId);
+            
             if (allSaleZones != null)
-                return allSaleZones.Where(x => x.CountryId != null && countryIds.Contains((int)x.CountryId)).ToList();
+                allSaleZones = allSaleZones.FindAllRecords(z => z.CountryId != null && countryIds.Contains((int)z.CountryId));
 
-            return null;
+            return allSaleZones;
         }
 
         #region Mappers
@@ -174,13 +174,13 @@ namespace TOne.WhS.BusinessEntity.Business
             List<SaleZone> allZones = GetCachedSaleZones(filter.SellingNumberPlanId);
             HashSet<long> filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(filter.SaleZoneFilterSettings);
             Func<SaleZone, bool> zoneFilter = (zone) =>
-                {
-                    if (filteredZoneIds != null && !filteredZoneIds.Contains(zone.SaleZoneId))
-                        return false;
-                    if (nameFilterLower != null && !zone.Name.Contains(nameFilterLower))
-                        return false;
-                    return true;
-                };
+            {
+                if (filteredZoneIds != null && !filteredZoneIds.Contains(zone.SaleZoneId))
+                    return false;
+                if (nameFilterLower != null && !zone.Name.Contains(nameFilterLower))
+                    return false;
+                return true;
+            };
             return allZones.MapRecords(SaleZoneInfoMapper, zoneFilter);
         }
 

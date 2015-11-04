@@ -100,6 +100,9 @@
             var customerId = carrierAccountDirectiveAPI.getData().CarrierAccountId;
 
             return WhS_BE_CustomerZoneAPIService.GetCustomerZoneLetters(customerId).then(function (response) {
+                console.log("getZoneLetters");
+                if (response == null) return;
+
                 $scope.zoneLetters = [];
 
                 for (var i = 0; i < response.length; i++) {
@@ -121,6 +124,10 @@
             var input = buildRatePlanItemInput();
 
             return WhS_Sales_RatePlanAPIService.GetRatePlanItems(input).then(function (response) {
+                console.log("GetRatePlanItems");
+                if (response == null)
+                    return;
+
                 var ratePlanItems = [];
 
                 for (var i = 0; i < response.length; i++) {

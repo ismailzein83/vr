@@ -15,10 +15,10 @@ namespace TOne.WhS.BusinessEntity.Business
             throw new NotImplementedException();
         }
 
-        public List<SaleRate> GetSaleRatesByCustomerZoneIds(SalePriceListOwnerType ownerType, int customerId, List<long> customerZoneIds, DateTime? effectiveOn)
+        public IEnumerable<SaleRate> GetSaleRatesByCustomerZoneIds(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> customerZoneIds, DateTime? effectiveOn)
         {
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
-            return dataManager.GetSaleRatesByCustomerZoneIds(ownerType, customerId, customerZoneIds, effectiveOn);
+            return dataManager.GetSaleRatesByCustomerZoneIds(ownerType, ownerId, customerZoneIds, effectiveOn);
         }
 
         public List<SaleRate> GetSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)

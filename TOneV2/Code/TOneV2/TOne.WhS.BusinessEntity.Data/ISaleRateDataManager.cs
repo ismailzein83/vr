@@ -9,6 +9,6 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISaleRateDataManager : IDataManager
     {
-        List<SaleRate> GetSaleRatesByCustomerZoneIds(SalePriceListOwnerType ownerType, int customerId, List<long> customerZoneIds, DateTime? effectiveOn);
+        IEnumerable<SaleRate> GetSaleRatesByCustomerZoneIds(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> customerZoneIds, DateTime? effectiveOn);
     }
 }

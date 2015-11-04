@@ -25,9 +25,13 @@ namespace TOne.WhS.BusinessEntity.Business
         public CustomerZones GetCustomerZones(int customerId, DateTime? effectiveOn, bool futureEntities)
         {
             CustomerZones customerZones = null;
+            var cached = this.GetAllCachedCustomerZones();
 
-            var cached = GetAllCachedCustomerZones();
-            var filtered = cached.FindAllRecords(item => item.CustomerId == customerId && item.StartEffectiveTime <= effectiveOn);
+            var filtered = cached.FindAllRecords
+            (
+                x => x.CustomerId == customerId
+                && (effectiveOn == null || (x.StartEffectiveTime == null || x.StartEffectiveTime <= effectiveOn))
+            );
 
             if (filtered != null)
             {
@@ -40,13 +44,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<Country> GetCountriesToSell(int customerId)
         {
-            var cachedCountries = new CountryManager().GetCachedCountries().Values;
+            IEnumerable<Country> countries = new CountryManager().GetCachedCountries().Values;
             CustomerZones customerZones = this.GetCustomerZones(customerId, DateTime.Now, false);
 
             if (customerZones != null)
-                return cachedCountries.FindAllRecords(item => !customerZones.CountryIds.Contains(item.CountryId));
+            {
+                countries = countries.FindAllRecords(c => !customerZones.CountryIds.Contains(c.CountryId));
+            }
 
-            return cachedCountries;
+            return countries;
         }
 
         public IEnumerable<char> GetCustomerZoneLetters(int customerId)
@@ -58,6 +64,20 @@ namespace TOne.WhS.BusinessEntity.Business
                 letters = saleZones.MapRecords(z => z.Name[0], z => z.Name != null && z.Name.Length > 0).Distinct().OrderBy(l => l);
 
             return letters;
+        }
+
+        public IEnumerable<SaleZone> GetCustomerSaleZones(int customerId, DateTime effectiveOn, bool futureEntities)
+        {
+            IEnumerable<SaleZone> saleZones = null;
+            CustomerZones customerZones = this.GetCustomerZones(customerId, effectiveOn, futureEntities);
+
+            if (customerZones != null)
+            {
+                int sellingNumberPlanId = new CarrierAccountManager().GetSellingNumberPlanId(customerId, CarrierAccountType.Customer);
+                saleZones = new SaleZoneManager().GetSaleZonesByCountryIds(sellingNumberPlanId, customerZones.CountryIds);
+            }
+
+            return saleZones;
         }
 
         public TOne.Entities.InsertOperationOutput<CustomerZones> AddCustomerZones(CustomerZones customerZones)
@@ -84,29 +104,6 @@ namespace TOne.WhS.BusinessEntity.Business
             }
 
             return insertOperationOutput;
-        }
-
-        public IEnumerable<SaleZone> GetCustomerSaleZones(int customerId, DateTime effectiveOn, bool futureEntities)
-        {
-            List<SaleZone> customerSaleZones = null;
-
-            CustomerZones customerZones = this.GetCustomerZones(customerId, effectiveOn, futureEntities);
-
-            if (customerZones != null)
-                customerSaleZones = new SaleZoneManager().GetSaleZonesByCountryIds(new CarrierAccountManager().GetSellingNumberPlanId(customerId, CarrierAccountType.Customer), customerZones.CountryIds);
-
-            return customerSaleZones;
-        }
-
-        public IEnumerable<int> GetCountryIds(int customerId)
-        {
-            List<int> countryIds = null;
-            CustomerZones customerZones = this.GetCustomerZones(customerId, DateTime.Now, false);
-
-            if (customerZones != null)
-                countryIds = customerZones.CountryIds;
-
-            return countryIds;
         }
 
         #region Private Classes
