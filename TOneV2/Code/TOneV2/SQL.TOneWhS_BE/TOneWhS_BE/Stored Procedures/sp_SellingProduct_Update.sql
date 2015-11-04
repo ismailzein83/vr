@@ -3,17 +3,19 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [TOneWhS_BE].[sp_RoutingProduct_Update]
+create PROCEDURE [TOneWhS_BE].[sp_SellingProduct_Update]
 	@ID int,
 	@Name nvarchar(255),
-	@SellingNumberPlanID int,
+	@DefaultRoutingProductId INT,
+	@SellingNumberPlanId int,
 	@Settings nvarchar(MAX)
 AS
 BEGIN
 
-	Update TOneWhS_BE.RoutingProduct
+	Update TOneWhS_BE.SellingProduct
 	Set Name = @Name,
-		SellingNumberPlanID = @SellingNumberPlanID,
+		DefaultRoutingProductID=@DefaultRoutingProductId,
+		SellingNumberPlanID = @SellingNumberPlanId,
 		Settings = @Settings
 	Where ID = @ID
 END

@@ -13,8 +13,8 @@ BEGIN
 
     SELECT [ID]
       ,[Name]
-      ,[SaleZonePackageID]
       ,[Settings]
+      ,SellingNumberPlanID
       from TOneWhS_BE.RoutingProduct
       where ID = @RoutingProductId 
 END

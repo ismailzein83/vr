@@ -3,16 +3,20 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [TOneWhS_BE].[sp_RoutingProduct_GetAll]
+create PROCEDURE [TOneWhS_BE].[sp_SupplierZone_GetAll] 
+	-- Add the parameters for the stored procedure here
+	@When DateTime
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    SELECT [ID]
-      ,[Name]
-      ,[Settings]
-      ,[SellingNumberPlanID]
-      from TOneWhS_BE.RoutingProduct
+	SELECT  sz.[ID]
+		  ,sz.[Name]
+		  ,sz.SupplierID
+		  ,sz.BED
+		  ,sz.EED
+	  FROM [TOneWhS_BE].SupplierZone sz
+	  Where ((sz.BED <= @when ) and (sz.EED is null or sz.EED > @when))
 END

@@ -3,16 +3,18 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [TOneWhS_BE].[sp_SaleZoneInfo_GetFiltered] 
-@SellingNumberPlanID int,
-@Filter nvarchar(255)
+CREATE PROCEDURE [TOneWhS_BE].[sp_SaleZone_GetByNumberPlan] 
+@SellingNumberPlanID int
 AS
 BEGIN
 	
 	SET NOCOUNT ON;
 SELECT  [ID]
+      ,[SellingNumberPlanID]
+      ,[CountryID]
       ,[Name]
-  FROM [TOneWhS_BE].[SaleZone]
+      ,[BED]
+      ,[EED]
+  FROM [TOneWhS_BE].[SaleZone] sz
   Where SellingNumberPlanID=@SellingNumberPlanID
-  and Name like('%' + @Filter + '%')
 END

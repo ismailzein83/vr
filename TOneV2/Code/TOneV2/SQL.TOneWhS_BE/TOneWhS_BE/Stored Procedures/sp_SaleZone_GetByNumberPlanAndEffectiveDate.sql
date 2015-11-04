@@ -3,16 +3,20 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [TOneWhS_BE].[sp_SaleZoneInfo_GetFiltered] 
+CREATE PROCEDURE [TOneWhS_BE].[sp_SaleZone_GetByNumberPlanAndEffectiveDate] 
 @SellingNumberPlanID int,
-@Filter nvarchar(255)
+@When DateTime
 AS
 BEGIN
 	
 	SET NOCOUNT ON;
 SELECT  [ID]
+      ,[SellingNumberPlanID]
+      ,[CountryID]
       ,[Name]
-  FROM [TOneWhS_BE].[SaleZone]
+      ,[BED]
+      ,[EED]
+  FROM [TOneWhS_BE].[SaleZone] sz
   Where SellingNumberPlanID=@SellingNumberPlanID
-  and Name like('%' + @Filter + '%')
+  and ((sz.BED <= @when ) and (sz.EED is null or sz.EED > @when))
 END

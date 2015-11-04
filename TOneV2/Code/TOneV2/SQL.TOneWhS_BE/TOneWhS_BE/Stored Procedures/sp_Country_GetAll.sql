@@ -3,16 +3,13 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [TOneWhS_BE].[sp_RoutingProduct_GetAll]
+CREATE PROCEDURE [TOneWhS_BE].[sp_Country_GetAll]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
-
-    SELECT [ID]
-      ,[Name]
-      ,[Settings]
-      ,[SellingNumberPlanID]
-      from TOneWhS_BE.RoutingProduct
+	SELECT	cn.ID,
+			cn.Name
+	FROM	[TOneWhS_BE].Country  as cn WITH(NOLOCK) 
 END

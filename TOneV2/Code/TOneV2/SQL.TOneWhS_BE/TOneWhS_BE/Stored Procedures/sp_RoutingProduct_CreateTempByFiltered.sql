@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [TOneWhS_BE].[sp_RoutingProduct_CreateTempByFiltered]
 	@TempTableName varchar(200),
 	@RoutingProductName nvarchar(255)=null,
-	@SaleZonePackageIds varchar(max)
+	@SellingNumberPlanIDs varchar(max)
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -11,19 +11,19 @@ BEGIN
 	IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
 			
-		DECLARE @SaleZonePackageIdsTable TABLE (SaleZonePackageId int)
-		INSERT INTO @SaleZonePackageIdsTable (SaleZonePackageId)
-		select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@SaleZonePackageIds)
+		DECLARE @SellingNumberPlanIDsTable TABLE (SellingNumberPlanID int)
+		INSERT INTO @SellingNumberPlanIDsTable (SellingNumberPlanID)
+		select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@SellingNumberPlanIDs)
 			SELECT
 				  [ID]
 				  ,[Name]
-				  ,[SaleZonePackageID]
+				  ,SellingNumberPlanID
 				  ,[Settings]
 			INTO #RESULT
 			FROM TOneWhS_BE.RoutingProduct                           
             WHERE  
 				(@RoutingProductName is Null or Name = @RoutingProductName)
-                AND (@SaleZonePackageIds is Null or SaleZonePackageID IN (SELECT SaleZonePackageId FROM @SaleZonePackageIdsTable))
+                AND (@SellingNumberPlanIDs is Null or SellingNumberPlanID IN (SELECT SellingNumberPlanID FROM @SellingNumberPlanIDsTable))
 			
 			DECLARE @sql VARCHAR(1000)
 			SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
