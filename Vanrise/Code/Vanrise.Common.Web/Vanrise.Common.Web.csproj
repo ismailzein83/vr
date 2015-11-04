@@ -138,6 +138,7 @@
   <ItemGroup>
     <Content Include="Common\Constant\ModuleConfig.js" />
     <Content Include="Common\Directives\Currency\Templates\CurrencyGridTemplate.html" />
+    <Content Include="Common\Directives\Currency\vr-common-currency-selector.js" />
     <Content Include="Common\Directives\Currency\vr-common-currency-grid.js" />
     <Content Include="Common\Services\APIServices\CurrencyAPIService.js" />
     <Content Include="Common\Services\CurrencyService.js" />
