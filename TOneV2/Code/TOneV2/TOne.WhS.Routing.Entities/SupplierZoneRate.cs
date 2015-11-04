@@ -12,10 +12,10 @@ namespace TOne.WhS.Routing.Entities
 
         public long SupplierZoneId { get; set; }
 
-        public Decimal Rate { get; set; }
+        public Decimal EffectiveRateValue { get; set; }
     }
 
-    public class SupplierZoneRatesByZone : Dictionary<long, SupplierZoneRate>
+    public class SupplierZoneRateByZone : Dictionary<long, SupplierZoneRate>
     {
 
     }

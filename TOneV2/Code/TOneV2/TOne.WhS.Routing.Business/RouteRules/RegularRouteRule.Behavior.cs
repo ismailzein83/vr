@@ -100,7 +100,7 @@ namespace TOne.WhS.Routing.Business.RouteRules
                     SupplierId = supplierCodeMatch.SupplierId,
                     SupplierCode = supplierCodeMatch.SupplierCode,
                     SupplierZoneId = supplierCodeMatch.SupplierZoneId,
-                    SupplierRate = supplierZoneRate.Rate,
+                    SupplierRate = supplierZoneRate.EffectiveRateValue,
                     EffectiveOn = routeRuleTarget.EffectiveOn,
                     OptionFilter = optionFilter
                 };

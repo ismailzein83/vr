@@ -30,7 +30,7 @@ namespace TOne.WhS.Routing.Business.RouteRules
 
         internal SupplierCodeMatchBySupplier SupplierCodeMatchBySupplier { private get; set; }
 
-        internal SupplierZoneRatesByZone SupplierZoneRates { private get; set; }
+        internal SupplierZoneRateByZone SupplierZoneRates { private get; set; }
 
         public RouteRule RouteRule
         {

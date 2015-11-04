@@ -65,7 +65,7 @@
     <Compile Include="Routes\RoutingProductRoute.cs" />
     <Compile Include="Routes\RoutingProductRouteOption.cs" />
     <Compile Include="SaleCodeMatch.cs" />
-    <Compile Include="CustomerZoneRate.cs" />
+    <Compile Include="CustomerZoneInfo.cs" />
     <Compile Include="SupplierCodeMatch.cs" />
     <Compile Include="SupplierZoneRate.cs" />
   </ItemGroup>
