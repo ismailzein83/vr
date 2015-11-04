@@ -38,15 +38,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 BEGIN
                     SELECT 0 ClosedoverGenerated,
                         s.Name AS StrategyName,
-                        SUM(CASE WHEN ach.Status = 1 THEN 1 ELSE 0 END) AS GeneratedCases,
-                        SUM(CASE WHEN ach.Status = 3 THEN 1 WHEN ach.Status = 4 THEN 1 ELSE 0 END) AS ClosedCases,
-                        SUM(CASE WHEN ach.Status = 3 THEN 1 ELSE 0 END) AS FraudCases
+                        SUM(CASE WHEN ac.Status = 1 THEN 1 ELSE 0 END) AS GeneratedCases,
+                        SUM(CASE WHEN ac.Status = 3 OR ac.Status = 4 THEN 1 ELSE 0 END) AS ClosedCases,
+                        SUM(CASE WHEN ac.Status = 3 THEN 1 ELSE 0 END) AS FraudCases
                         #SELECT_CLAUSE#
                         
 		            INTO #TEMP_TABLE_NAME#
 		            
-		            FROM [FraudAnalysis].[AccountCaseHistory] ach WITH(NOLOCK)
-                    INNER JOIN FraudAnalysis.StrategyExecutionDetails sed WITH(NOLOCK) ON sed.CaseID = ach.CaseID
+		            FROM [FraudAnalysis].[AccountCase] ac WITH(NOLOCK)
+                    INNER JOIN FraudAnalysis.StrategyExecutionDetails sed WITH(NOLOCK) ON sed.CaseID = ac.ID
                     INNER JOIN FraudAnalysis.StrategyExecution se WITH(NOLOCK) ON se.ID = sed.StrategyExecutionID
                     INNER JOIN [FraudAnalysis].[Strategy] s WITH(NOLOCK) ON se.StrategyId = s.Id
 		            
@@ -69,7 +69,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             StringBuilder selectClause = new StringBuilder();
 
             if (GroupDaily)
-                selectClause.Append(", CAST(ach.StatusTime AS DATE) AS DateDay");
+                selectClause.Append(", CAST(se.ExecutionDate AS DATE) AS DateDay");
             else
                 selectClause.Append(", NULL AS DateDay");
 
@@ -83,7 +83,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             groupByClause.AppendFormat("Group by s.Name");
 
             if (GroupDaily)
-                groupByClause.Append(" , CAST(ach.StatusTime AS DATE)");
+                groupByClause.Append(" , CAST(se.ExecutionDate AS DATE)");
 
             return groupByClause.ToString();
         }
@@ -95,10 +95,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             whereClause.Append("where 1=1 ");
 
             if (fromDate != null)
-                whereClause.Append(" AND ach.StatusTime >= '" + fromDate + "'");
+                whereClause.Append(" AND se.ExecutionDate >= '" + fromDate + "'");
 
             if (toDate != null)
-                whereClause.Append(" AND ach.StatusTime <= '" + toDate + "'");
+                whereClause.Append(" AND se.ExecutionDate <= '" + toDate + "'");
 
             if (strategyIDs != null && strategyIDs.Count > 0)
                 whereClause.Append(" and se.StrategyId IN (" + string.Join(",", strategyIDs) + ")");
