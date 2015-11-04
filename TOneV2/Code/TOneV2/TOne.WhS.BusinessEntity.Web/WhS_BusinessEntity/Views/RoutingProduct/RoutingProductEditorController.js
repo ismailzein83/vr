@@ -59,9 +59,9 @@
                 $scope.onSellingNumberPlanSelectionChanged = function () {
                     if (sellingNumberPlanDirectiveAPI != undefined)
                     {
-                        var sellingNumberPlanObj = sellingNumberPlanDirectiveAPI.getData();
+                        var sellingNumberPlanObj = sellingNumberPlanDirectiveAPI.getSelectedIds();
                         if (sellingNumberPlanObj != undefined)
-                            $scope.selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getData().SellingNumberPlanId;
+                            $scope.selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
                     }
                     else
                     {
@@ -189,7 +189,7 @@
                 var routingProduct = {
                     RoutingProductId: (routingProductId != null) ? routingProductId : 0,
                     Name: $scope.routingProductName,
-                    SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getData().SellingNumberPlanId,
+                    SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
                     Settings: {
                         SaleZoneGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsDirectiveAPI, 'selectedSaleZoneGroupTemplate'),
                         SupplierGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, supplierGroupSettingsDirectiveAPI, 'selectedSupplierGroupTemplate')

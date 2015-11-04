@@ -2,14 +2,15 @@
 
     "use strict";
 
-    sellingProductEditorController.$inject = ['$scope', 'WhS_BE_SellingProductAPIService','UtilsService', 'VRNotificationService', 'VRNavigationService'];
+    sellingProductEditorController.$inject = ['$scope', 'WhS_BE_SellingProductAPIService','UtilsService', 'VRNotificationService', 'VRNavigationService','VRUIUtilsService'];
 
-    function sellingProductEditorController($scope, WhS_BE_SellingProductAPIService,UtilsService, VRNotificationService, VRNavigationService) {
+    function sellingProductEditorController($scope, WhS_BE_SellingProductAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
-        var editMode;
+        var isEditMode;
         var sellingProductId;
-        var sellingNumberPlansDirectiveAPI;
-
+        var sellingNumberPlanDirectiveAPI;
+        var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var sellingProductEntity;
         loadParameters();
         defineScope();
         load();
@@ -19,12 +20,12 @@
             if (parameters != undefined && parameters != null) {
                 sellingProductId = parameters.SellingProductId;
             }
-            editMode = (sellingProductId != undefined);
+            isEditMode = (sellingProductId != undefined);
         }
 
         function defineScope() {
             $scope.SaveSellingProduct = function () {
-                if (editMode) {
+                if (isEditMode) {
                     return updateSellingProduct();
                 }
                 else {
@@ -37,56 +38,74 @@
             };
 
             $scope.onSellingNumberPlansDirectiveReady = function (api) {
-                sellingNumberPlansDirectiveAPI = api;
-                load();
+                sellingNumberPlanDirectiveAPI = api;
+                sellingNumberPlanReadyPromiseDeferred.resolve();
             }
         }
 
         function load() {
-            $scope.isGettingData = true;
+            $scope.isLoading = true;
 
-            if (sellingNumberPlansDirectiveAPI == undefined)
-                return;
+            if (isEditMode) {
+                getSellingProduct().then(function () {
+                    loadAllControls()
+                        .finally(function () {
+                            routeRuleEntity = undefined;
+                        });
+                }).catch(function () {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+            }
+            else {
+                loadAllControls();
+            }
+        }
+        function loadAllControls() {
+            
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadSellingNumberPlans])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+              .finally(function () {
+                  $scope.isLoading = false;
+              });
+        }
+        function loadSellingNumberPlans() {
+            var sellingNumberPlanLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            sellingNumberPlansDirectiveAPI.load().then(function () {
-                if (editMode) {
-                    getSellingProduct();
-                }
-                else {
-                    $scope.isGettingData = false;
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isGettingData = false;
-            });
+            sellingNumberPlanReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload ={
+                        selectedIds:sellingProductEntity!=undefined?sellingProductEntity.SellingNumberPlanId:undefined
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, directivePayload, sellingNumberPlanLoadPromiseDeferred);
+                });
+            return sellingNumberPlanLoadPromiseDeferred.promise;
         }
 
         function getSellingProduct() {
             return WhS_BE_SellingProductAPIService.GetSellingProduct(sellingProductId).then(function (sellingProduct) {
-                fillScopeFromSellingProductObj(sellingProduct);
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.isGettingData = false;
-            });;
+                sellingProductEntity = sellingProduct;
+            });
         }
 
         function buildSellingProductObjFromScope() {
             var sellingProduct = {
                 SellingProductId: (sellingProductId != null) ? sellingProductId : 0,
                 Name: $scope.name,
-                SellingNumberPlanId: sellingNumberPlansDirectiveAPI.getData().SellingNumberPlanId,
+                SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
             };
-
             return sellingProduct;
         }
 
-
-        function fillScopeFromSellingProductObj(sellingProductObj) {
-            $scope.name = sellingProductObj.Name;
-            sellingNumberPlansDirectiveAPI.setData(sellingProductObj.SellingNumberPlanId);
+        function loadFilterBySection() {
+            if(sellingProductEntity!=undefined)
+            {
+                $scope.name = sellingProductEntity.Name;
+            }
         }
-
         function insertSellingProduct() {
             var sellingProductObject = buildSellingProductObjFromScope();
             return WhS_BE_SellingProductAPIService.AddSellingProduct(sellingProductObject)

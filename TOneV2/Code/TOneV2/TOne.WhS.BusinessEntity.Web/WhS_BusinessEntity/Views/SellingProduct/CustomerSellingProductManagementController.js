@@ -6,8 +6,13 @@
 
     function customerSellingProductManagementController($scope, WhS_BE_CustomerSellingProductAPIService, WhS_BE_MainService, UtilsService, VRModalService, VRNotificationService) {
         var gridAPI;
-        var carrierAccountDirectiveAPI;
+
         var sellingProductsDirectiveAPI;
+        var sellingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var carrierAccountDirectiveAPI;
+        var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
 
         function defineScope() {
@@ -26,38 +31,57 @@
             $scope.effectiveDate;
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
-                load();
+                carrierAccountReadyPromiseDeferred.resolve();
             }
             $scope.onSellingProductsDirectiveReady = function (api) {
                 sellingProductsDirectiveAPI = api;
-                load();
+                sellingProductReadyPromiseDeferred.resolve();
             }
         }
 
         function load() {
-            $scope.isGettingData = true;
-            if (carrierAccountDirectiveAPI == undefined || sellingProductsDirectiveAPI == undefined)
-                return;
-
-            UtilsService.waitMultipleAsyncOperations([loadSellingProducts,loadCarrierAccounts]).then(function () {
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isGettingData = false;
-            }).finally(function () {
-                $scope.isGettingData = false;
-            });
+            $scope.isLoading = true;
+            loadAllControls();
+        }
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadSellingProducts, loadCarrierAccounts])
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                })
+               .finally(function () {
+                   $scope.isLoading = false;
+               });
         }
         function loadSellingProducts() {
-          return  sellingProductsDirectiveAPI.load();
+            var sellingProductLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            sellingProductReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = undefined
+
+                    VRUIUtilsService.callDirectiveLoad(sellingProductsDirectiveAPI, directivePayload, sellingProductLoadPromiseDeferred);
+                });
+            return sellingProductLoadPromiseDeferred.promise;
         }
         function loadCarrierAccounts() {
-           return carrierAccountDirectiveAPI.load();
+            var carrierAccountLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            carrierAccountReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = {
+                        selectedIds: undefined
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, directivePayload, carrierAccountLoadPromiseDeferred);
+                });
+            return carrierAccountLoadPromiseDeferred.promise;
         }
 
         function getFilterObject() {
             var data = {
-                CustomersIds: UtilsService.getPropValuesFromArray(carrierAccountDirectiveAPI.getData(), "CarrierAccountId"),
-                SellingProductsIds: UtilsService.getPropValuesFromArray(sellingProductsDirectiveAPI.getData(), "SellingProductId"),
+                CustomersIds: carrierAccountDirectiveAPI.getSelectedIds(),
+                SellingProductsIds: sellingProductsDirectiveAPI.getSelectedIds(), 
                 EffectiveDate: $scope.effectiveDate
             };
             return data;

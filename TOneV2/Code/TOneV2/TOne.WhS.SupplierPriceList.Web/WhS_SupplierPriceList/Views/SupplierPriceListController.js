@@ -22,7 +22,7 @@ function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIServi
         }
         $scope.onselectionchanged = function () {
             if (carrierAccountDirectiveAPI != undefined)
-                $scope.selectedSupplier = carrierAccountDirectiveAPI.getData();
+                $scope.selectedSupplier = carrierAccountDirectiveAPI.getSelectedValues();
         }
     }
     function load() {

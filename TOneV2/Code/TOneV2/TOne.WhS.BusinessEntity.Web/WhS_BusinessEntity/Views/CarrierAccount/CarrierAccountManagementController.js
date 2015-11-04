@@ -62,7 +62,7 @@
         function getFilterObject() {
             var data = {
                 AccountsTypes: UtilsService.getPropValuesFromArray($scope.selectedCarrierAccountTypes, "value"),
-                CarrierProfilesIds: UtilsService.getPropValuesFromArray(carrierProfileDirectiveAPI.getData(), "CarrierProfileId"),
+                CarrierProfilesIds:carrierProfileDirectiveAPI.getSelectedIds(),
                 Name:$scope.name,
 
             };

@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeSellingproductSelector', ['WhS_BE_SellingProductAPIService', 'UtilsService','$compile',
-function (WhS_BE_SellingProductAPIService, UtilsService,$compile) {
+app.directive('vrWhsBeSellingproductSelector', ['WhS_BE_SellingProductAPIService', 'UtilsService','$compile','VRUIUtilsService',
+function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -10,62 +10,58 @@ function (WhS_BE_SellingProductAPIService, UtilsService,$compile) {
                 isdisabled:"=",
                 onselectionchanged: '=',
                 isrequired: "@",
+                selectedvalues:'='
                
             },
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
 
-                $scope.selectedSellingProducts;
+                ctrl.selectedvalues;
                 if ($attrs.ismultipleselection != undefined)
-                    $scope.selectedSellingProducts = [];
+                    ctrl.selectedvalues = [];
 
-                $scope.sellingProducts = [];
-                var beSellingProductObject = new beSellingProduct(ctrl, $scope, $attrs);
-                beSellingProductObject.initializeController();
-                $scope.onselectionchanged = function () {
-
-                    if (ctrl.onselectionchanged != undefined) {
-                        var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
-                        if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                            onvaluechangedMethod();
-                        }
-                    }
-
-                }
+                ctrl.datasource = [];
+                var ctor = new sellingProductCtor(ctrl, $scope, $attrs);
+                ctor.initializeController();
+               
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            link: function preLink($scope, iElement, iAttrs) {
-                var ctrl = $scope.ctrl;
-                $scope.$watch('ctrl.isdisabled', function () {
-                    var template = getBeSellingProductsTemplate(iAttrs, ctrl);
-                    iElement.html(template);
-                    $compile(iElement.contents())($scope);
-                });
+            compile: function (element, attrs) {
+                return {
+                    pre: function ($scope, iElem, iAttrs, ctrl) {
+
+                    }
+                }
+            },
+            template: function (element, attrs) {
+                return getTemplate(attrs);
             }
 
         };
 
 
-        function getBeSellingProductsTemplate(attrs, ctrl) {
+        function getTemplate(attrs) {
 
-                var multipleselection = "";
-                if (attrs.ismultipleselection != undefined)
-                    multipleselection = "ismultipleselection"
+            var multipleselection = "";
+            var label = "Pricing Product";
+            if (attrs.ismultipleselection != undefined) {
+                label = "Pricing Products";
+                multipleselection = "ismultipleselection"
+            }
+                  
                 var required = "";
                 if (attrs.isrequired != undefined)
                     required = "isrequired";
-                var disabled = "";
-                if (ctrl.isdisabled)
-                    disabled = "vr-disabled='true'"
+                
                 return '<div  vr-loader="isLoadingDirective">'
                     + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SellingProductId" '
-                + required + ' label="Pricing Product" datasource="sellingProducts" selectedvalues="selectedSellingProducts"  onselectionchanged="onselectionchanged" ' + disabled + '></vr-select>'
+                + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged"  vr-disabled="ctrl.isdisabled"></vr-select>'
                    + '</div>'
         }
 
-        function beSellingProduct(ctrl, $scope, $attrs) {
+        function sellingProductCtor(ctrl, $scope, $attrs) {
 
             function initializeController() {
 
@@ -74,35 +70,24 @@ function (WhS_BE_SellingProductAPIService, UtilsService,$compile) {
 
             function defineAPI() {
                 var api = {};
-
-                api.getData = function () {
-                    return $scope.selectedSellingProducts;
+                api.getSelectedIds = function () {
+                    return VRUIUtilsService.getIdSelectedIds('SellingProductId', $attrs, ctrl);
                 }
 
-                api.setData = function (selectedIds) {
-                   
-                    if ($attrs.ismultipleselection) {
-                        for (var i = 0; i < selectedIds.length; i++) {
-                            var selectedSellingProduct = UtilsService.getItemByVal($scope.sellingProducts, selectedIds[i], "SellingProductId");
-                            if (selectedSellingProduct != null)
-                                $scope.selectedSellingProducts.push(selectedSellingProduct);
-                        }
+                api.load = function (payload) {
+
+                    var selectedIds;
+                    if (payload != undefined) {
+                        selectedIds = payload;
                     }
-                    else {
-                        var selectedSellingProduct = UtilsService.getItemByVal($scope.sellingProducts, selectedIds, "SellingProductId");
-                        if (selectedSellingProduct != null)
-                            $scope.selectedSellingProducts=selectedSellingProduct;
-                    }
-                }
-                api.load = function () {
                     return WhS_BE_SellingProductAPIService.GetAllSellingProduct().then(function (response) {
                         angular.forEach(response, function (itm) {
-                            $scope.sellingProducts.push(itm);
+                            ctrl.datasource.push(itm);
                         });
-                    }).catch(function (error) {
 
-                    }).finally(function () {
-                       
+                        if (selectedIds != undefined) {
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'SellingProductId', $attrs, ctrl);
+                        }
                     });
                 }
                 if (ctrl.onReady != null)

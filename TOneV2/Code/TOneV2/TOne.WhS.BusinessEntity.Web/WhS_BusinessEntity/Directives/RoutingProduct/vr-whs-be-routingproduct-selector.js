@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService', 'UtilsService',
-    function (WhS_BE_RoutingProductAPIService, UtilsService) {
+app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService', 'UtilsService','VRUIUtilsService',
+    function (WhS_BE_RoutingProductAPIService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -9,61 +9,37 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                 ismultipleselection: "@",
                 onselectionchanged: '=',
                 isrequired: "@",
-                sellingnumberplanid: "="
+                selectedvalues:'='
             },
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
 
-                $scope.selectedRoutingProducts;
+                ctrl.selectedvalues;
                 if ($attrs.ismultipleselection != undefined)
-                    $scope.selectedRoutingProducts = [];
+                    ctrl.selectedvalues = [];
 
-                $scope.filteredRoutingProducts = [];
-                   
-                $scope.routingProducts = [];
+                ctrl.datasource = [];
                 var ctor = new routingProductCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
 
-                $scope.onselectionchanged = function () {
-
-                    if (ctrl.onselectionchanged != undefined) {
-                        var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
-                        if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                            onvaluechangedMethod();
-                        }
-                    }
-
-                }
             },
             controllerAs: 'ctrl',
             bindToController: true,
             compile: function (element, attrs) {
                 return {
                     pre: function ($scope, iElem, iAttrs, ctrl) {
-                        $scope.$watch('ctrl.sellingnumberplanid', function () {
-                            if (ctrl.sellingnumberplanid != undefined) { 
-                                $scope.isLoadingDirective = true;
-                                $scope.filteredRoutingProducts.length = 0;
-                                for (var i = 0; i < $scope.routingProducts.length; i++) {
-                                    if ($scope.routingProducts[i].SellingNumberPlanId == ctrl.sellingnumberplanid)
-                                        $scope.filteredRoutingProducts.push($scope.routingProducts[i]);
-                                }
-                                $scope.isLoadingDirective = false;
-                            }
-                           
-                        });
                     }
                 }
             },
             template: function (element, attrs) {
-                return getBeRoutingProductTemplate(attrs);
+                return getTemplate(attrs);
             }
 
         };
 
 
-        function getBeRoutingProductTemplate(attrs) {
+        function getTemplate(attrs) {
 
             var multipleselection = "";
             var label = "Routing Product";
@@ -77,7 +53,7 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
 
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="RoutingProductId" '
-            + required + ' label="' + label + '" datasource="filteredRoutingProducts" selectedvalues="selectedRoutingProducts"  onselectionchanged="onselectionchanged" entityName="' + label + '"></vr-select>'
+            + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '"></vr-select>'
                + '</div>'
         }
 
@@ -91,47 +67,30 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                 var api = {};
 
                 api.load = function (payload) {
-
-                    return WhS_BE_RoutingProductAPIService.GetRoutingProductInfo(angular.toJson(payload.filter)).then(function (response) {
-                        angular.forEach(response, function (itm) {
-                            $scope.routingProducts.push(itm);
-                        });
-                        if ($attrs.sellingnumberplanid == undefined)
-                            $scope.filteredRoutingProducts = $scope.routingProducts;
-
-                        if (payload.selectedIds != undefined)
-                            setData(payload.selectedIds);
-                    });
-
-                    function setData(selectedIds)
-                    {
-                        if ($attrs.ismultipleselection) {
-                            for (var i = 0; i < selectedIds.length; i++) {
-                                var selectedRoutingProduct = UtilsService.getItemByVal($scope.routingProducts, selectedIds[i], "RoutingProductId");
-                                if (selectedRoutingProduct != null)
-                                    $scope.selectedRoutingProducts.push(selectedRoutingProduct);
-                            }
-                        }
-                        else {
-                            var selectedRoutingProduct = UtilsService.getItemByVal($scope.routingProducts, selectedIds, "RoutingProductId");
-                            if (selectedRoutingProduct != null)
-                                $scope.selectedRoutingProducts = selectedRoutingProduct;
-                        }
+                    var filter = {};
+                    var selectedIds;
+                    if (payload != undefined) {
+                        filter = payload.filter;
+                        selectedIds = payload.selectedIds;
                     }
+
+                    return WhS_BE_RoutingProductAPIService.GetRoutingProductInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                        angular.forEach(response, function (itm) {
+                            ctrl.datasource.push(itm);
+                        });
+                        if (selectedIds != undefined)
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'RoutingProductId', $attrs, ctrl);
+                            
+                    });
                 }
 
                 api.getSelectedIds = function()
                 {
-                    if ($attrs.ismultipleselection)
-                        return UtilsService.getPropValuesFromArray($scope.selectedRoutingProducts, 'RoutingProductId');
-                    else if ($scope.selectedRoutingProducts != undefined)
-                        return $scope.selectedRoutingProducts.RoutingProductId;
-                    
-                    return undefined;
+                    return VRUIUtilsService.getIdSelectedIds('RoutingProductId', $attrs, ctrl);
                 }
 
                 api.getSelectedValues = function () {
-                    return $scope.selectedRoutingProducts;
+                    return ctrl.selectedvalues;
                 }
 
                 if (ctrl.onReady != null)

@@ -38,15 +38,20 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
         function getBeSupplierZoneTemplate(attrs) {
            
             var multipleselection = "";
+            var label = "Supplier Zone";
             if (attrs.ismultipleselection != undefined)
-                multipleselection = "ismultipleselection"
+            {
+                multipleselection = "ismultipleselection";
+                label = "Supplier Zones";
+            }
+               
             var required = "";
             if (attrs.isrequired != undefined)
                 required = "isrequired";
 
             return '<div>'
                +  '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SupplierZoneId" '
-            + required + ' label="Supplier Zone" datasource="ctrl.searchSupplierZones" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="Supplier Zone"></vr-select>'
+            + required + ' label="' + label + '" datasource="ctrl.searchSupplierZones" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="Supplier Zone"></vr-select>'
             + '</div>'
         }
 

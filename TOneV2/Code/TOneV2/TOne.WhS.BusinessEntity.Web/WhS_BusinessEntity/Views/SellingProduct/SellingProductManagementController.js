@@ -2,12 +2,15 @@
 
     "use strict";
 
-    sellingProductManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'VRNotificationService'];
+    sellingProductManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'VRNotificationService','VRUIUtilsService'];
 
-    function sellingProductManagementController($scope, WhS_BE_MainService, UtilsService, VRNotificationService) {
+    function sellingProductManagementController($scope, WhS_BE_MainService, UtilsService, VRNotificationService, VRUIUtilsService) {
         var gridReady;
         var sellingNumberPlanDirectiveAPI;
+        var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var routingProductDirectiveAPI;
+        var routingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         load();
 
@@ -23,41 +26,60 @@
             }
             $scope.onSellingNumberPlanDirectiveReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
-                load();
+                sellingNumberPlanReadyPromiseDeferred.resolve();
+              
             }
             $scope.onRoutingProductDirectiveReady = function (api) {
                 routingProductDirectiveAPI = api;
-                load();
+                routingProductReadyPromiseDeferred.resolve();
             }
             $scope.AddNewSellingProduct = AddNewSellingProduct;
         }
 
         function load() {
-            $scope.isGettingData = true;
-            if (sellingNumberPlanDirectiveAPI == undefined || routingProductDirectiveAPI == undefined)
-                return;
-            UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlans, loadRoutingProducts]).then(function () {
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isGettingData = false;
-            }).finally(function () {
-                $scope.isGettingData = false;
-            });
+            $scope.isLoading = true;
+            loadAllControls();
+        }
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlans, loadRoutingProducts])
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                })
+               .finally(function () {
+                   $scope.isLoading = false;
+               });
         }
 
         function loadSellingNumberPlans() {
-           return sellingNumberPlanDirectiveAPI.load();
+            var sellingNumberPlanLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            sellingNumberPlanReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload;
+
+                    VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, directivePayload, sellingNumberPlanLoadPromiseDeferred);
+                });
+            return sellingNumberPlanLoadPromiseDeferred.promise;
         }
         function loadRoutingProducts() {
-            return routingProductDirectiveAPI.load();
+            var routingProductLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            routingProductReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload;
+
+                    VRUIUtilsService.callDirectiveLoad(routingProductDirectiveAPI, directivePayload, routingProductLoadPromiseDeferred);
+                });
+            return routingProductLoadPromiseDeferred.promise;
         }
 
         function getFilterObject() {
 
             var data = {
                 name: $scope.name,
-                SellingNumberPlansIds: UtilsService.getPropValuesFromArray(sellingNumberPlanDirectiveAPI.getData(), "SellingNumberPlanId"),
-                RoutingProductsIds: UtilsService.getPropValuesFromArray(routingProductDirectiveAPI.getData(), "RoutingProductId"),
+                SellingNumberPlanIds: sellingNumberPlanDirectiveAPI.getSelectedIds(),
+                RoutingProductsIds: routingProductDirectiveAPI.getSelectedIds(),
             };
             return data;
         }

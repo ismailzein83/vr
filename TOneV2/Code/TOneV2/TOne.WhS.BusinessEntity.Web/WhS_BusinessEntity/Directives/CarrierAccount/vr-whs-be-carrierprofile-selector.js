@@ -74,11 +74,9 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile) {
 
         function defineAPI() {
             var api = {};
-
-            api.getData = function () {
-                return $scope.selectedCarrierProfiles;
+            api.getSelectedIds = function () {
+                return VRUIUtilsService.getIdSelectedIds('CarrierProfileId', $attrs, ctrl);
             }
-
             api.setData = function (selectedIds) {
 
                 if ($attrs.ismultipleselection) {
