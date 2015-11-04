@@ -66,7 +66,7 @@
                 getCarrierAccount().then(function () {
                     loadAllControls()
                         .finally(function () {
-                            routeRuleEntity = undefined;
+                            carrierAccountEntity = undefined;
                         });
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);

@@ -10,8 +10,8 @@ app.directive("vrRulesNormalizationnumbersettingsSubstring", [function () {
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            var directiveConstructor = new DirectiveConstructor($scope, ctrl);
-            directiveConstructor.initializeController();
+            var ctor = new DirectiveConstructor($scope, ctrl);
+            ctor.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
@@ -34,8 +34,8 @@ app.directive("vrRulesNormalizationnumbersettingsSubstring", [function () {
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
 
-        $scope.startIndex = undefined;
-        $scope.length = undefined;
+        ctrl.startIndex = undefined;
+        ctrl.length = undefined;
 
         function initializeController() {
             defineAPI();
@@ -47,16 +47,16 @@ app.directive("vrRulesNormalizationnumbersettingsSubstring", [function () {
             api.getData = function () {
                 return {
                     $type: "Vanrise.Rules.Normalization.MainExtensions.SubstringActionSettings, Vanrise.Rules.Normalization",
-                    StartIndex: $scope.startIndex,
-                    Length: $scope.length
+                    StartIndex: ctrl.startIndex,
+                    Length: ctrl.length
                 };
             }
-
-            api.setData = function (substringActionSettings) {
-                $scope.startIndex = substringActionSettings.StartIndex;
-                $scope.length = substringActionSettings.Length;
+            api.load = function (payload) {
+                if (payload != undefined) {
+                    ctrl.startIndex = payload.StartIndex;
+                    ctrl.length = payload.Length;
+                }
             }
-
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

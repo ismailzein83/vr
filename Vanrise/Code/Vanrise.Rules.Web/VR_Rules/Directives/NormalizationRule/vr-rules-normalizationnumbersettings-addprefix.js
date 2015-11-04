@@ -10,8 +10,8 @@ app.directive("vrRulesNormalizationnumbersettingsAddprefix", [function () {
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            var directiveConstructor = new DirectiveConstructor($scope, ctrl);
-            directiveConstructor.initializeController();
+            var ctor = new DirectiveConstructor($scope, ctrl);
+            ctor.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
@@ -34,7 +34,7 @@ app.directive("vrRulesNormalizationnumbersettingsAddprefix", [function () {
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
 
-        $scope.numberPrefix = undefined;
+        ctrl.numberPrefix = undefined;
 
         function initializeController() {
             defineAPI();
@@ -46,14 +46,15 @@ app.directive("vrRulesNormalizationnumbersettingsAddprefix", [function () {
             api.getData = function () {
                 return {
                     $type: "Vanrise.Rules.Normalization.MainExtensions.AddPrefixActionSettings,Vanrise.Rules.Normalization",
-                    Prefix: $scope.numberPrefix
+                    Prefix: ctrl.numberPrefix
                 };
             }
-
-            api.setData = function (addPrefixActionSettings) {
-                $scope.numberPrefix = addPrefixActionSettings.Prefix;
+            api.load = function (payload) {
+                if(payload!=undefined)
+                {
+                    ctrl.numberPrefix = payload.Prefix;
+                }
             }
-
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

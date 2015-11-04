@@ -6,10 +6,12 @@
 
     function supplierIdentificationRuleEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, WhS_CDRProcessing_SupplierIdentificationRuleAPIService) {
 
-        var editMode;
+        var isEditMode;
         var ruleId;
         var carrierAccountDirectiveAPI;
-        var supplierRuleData;
+        var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var supplierRuleEntity;
         loadParameters();
         defineScope();
         load();
@@ -19,11 +21,11 @@
             if (parameters != undefined && parameters != null) {
                 ruleId = parameters.RuleId
             }
-            editMode = (ruleId != undefined);
+            isEditMode = (ruleId != undefined);
         }
         function defineScope() {
             $scope.SaveSupplierRule = function () {
-                if (editMode) {
+                if (isEditMode) {
                     return updateSupplierRule();
                 }
                 else {
@@ -32,9 +34,8 @@
             };
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
-                if (supplierRuleData != undefined)
-                    fillScopeFromSupplierRuleObj(supplierRuleData);
-                load();
+                carrierAccountReadyPromiseDeferred.resolve();
+
             }
             $scope.close = function () {
                 $scope.modalContext.closeModal()
@@ -81,34 +82,54 @@
         }
 
         function load() {
-            $scope.isGettingData = true;
-            if (carrierAccountDirectiveAPI == undefined)
-                return;
-            carrierAccountDirectiveAPI.load();
-
-            if (editMode) {
+            $scope.isLoading = true;
+            if (isEditMode) {
                 $scope.title = UtilsService.buildTitleForUpdateEditor("Supplier Rule");
-                getSupplierRule();
+                getSupplierRule().then(function () {
+                    loadAllControls()
+                        .finally(function () {
+                            customerRuleEntity = undefined;
+                        });
+                }).catch(function () {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
             }
             else {
                 $scope.title = UtilsService.buildTitleForAddEditor("Supplier Rule");
-                $scope.isGettingData = false;
-                setDefaultValues();
+                loadAllControls();
             }
 
+        }
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadCarrierAccountDirective])
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+               .finally(function () {
+                   $scope.isLoading = false;
+               });
+        }
+        function loadCarrierAccountDirective() {
 
+            var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            carrierAccountReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = {
+                        selectedIds: supplierRuleEntity != undefined ? supplierRuleEntity.Settings.SupplierId : undefined
+                    }
+                    VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, directivePayload, loadCarrierAccountPromiseDeferred);
+                });
+
+            return loadCarrierAccountPromiseDeferred.promise;
         }
         function setDefaultValues() {
         }
 
         function getSupplierRule() {
-
             return WhS_CDRProcessing_SupplierIdentificationRuleAPIService.GetRule(ruleId).then(function (supplierRule) {
-                supplierRuleData = supplierRule;
-                fillScopeFromSupplierRuleObj(supplierRule);
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isGettingData = false;
+                supplierRuleEntity = supplierRule;
             });
         }
 
@@ -136,17 +157,15 @@
             return supplierRule;
         }
 
-        function fillScopeFromSupplierRuleObj(supplierRuleObject) {
-            if (carrierAccountDirectiveAPI == undefined)
-                return;
-            $scope.outTrunks = supplierRuleObject.Criteria.Out_Trunks
-            $scope.outCarriers = supplierRuleObject.Criteria.Out_Carriers
-            $scope.CDPNPrefixes = supplierRuleObject.Criteria.CDPNPrefixes
-            carrierAccountDirectiveAPI.setData(supplierRuleObject.Settings.SupplierId);
-            $scope.beginEffectiveDate = supplierRuleObject.BeginEffectiveTime;
-            $scope.endEffectiveDate = supplierRuleObject.EndEffectiveTime;
-            $scope.description = supplierRuleObject.Description;
-            $scope.isGettingData = false;
+        function loadFilterBySection() {
+            if (supplierRuleEntity != undefined) {
+                $scope.outTrunks = supplierRuleEntity.Criteria.Out_Trunks
+                $scope.outCarriers = supplierRuleEntity.Criteria.Out_Carriers
+                $scope.CDPNPrefixes = supplierRuleEntity.Criteria.CDPNPrefixes;
+                $scope.beginEffectiveDate = supplierRuleEntity.BeginEffectiveTime;
+                $scope.endEffectiveDate = supplierRuleEntity.EndEffectiveTime;
+                $scope.description = supplierRuleEntity.Description;
+            }
         }
 
         function insertSupplierRule() {

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIService", "UtilsService", "VRNotificationService", function (VR_Rules_NormalizationRuleAPIService, UtilsService, VRNotificationService) {
+app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIService", "UtilsService", "VRNotificationService","VRUIUtilsService", function (VR_Rules_NormalizationRuleAPIService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObj = {
         restrict: "E",
@@ -32,85 +32,128 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
         this.initializeController = initializeController;
 
         function initializeController() {
-            defineScope();
+            ctrl.templates = [];
+            ctrl.selectedActionTemplate = undefined;
+            ctrl.disableAddButton = true;
+            ctrl.datasource = [];
+
+            ctrl.onActionTemplateChanged = function () {
+                ctrl.disableAddButton = (ctrl.selectedActionTemplate == undefined);
+            };
+
+            ctrl.addFilter = function () {
+                var dataItem = {
+                    id: ctrl.datasource.length + 1,
+                    configId: ctrl.selectedActionTemplate.TemplateConfigID,
+                    editor: ctrl.selectedActionTemplate.Editor,
+                    name: ctrl.selectedActionTemplate.Name
+                };
+
+                dataItem.onDirectiveReady = function (api) {
+                    dataItem.directiveAPI = api;
+                    var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
+                };
+
+                ctrl.datasource.push(dataItem);
+                ctrl.selectedActionTemplate = undefined;
+            };
+            ctrl.removeFilter = function (dataItem) {
+                var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.id, 'id');
+                ctrl.datasource.splice(index, 1);
+            };
             defineAPI();
         }
 
         // private members
 
-        var actionSettingsDirectiveAPI;
-
-        function defineScope() {
-
-            $scope.actionTemplates = [];
-            $scope.selectedActionTemplate = undefined;
-            $scope.disableAddButton = true;
-            $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
-            $scope.actions = [];
-
-            $scope.onActionTemplateChanged = function () {
-                $scope.disableAddButton = ($scope.selectedActionTemplate == undefined);
-            };
-
-            $scope.addAction = function () {
-                var action = getActionItem(null);
-                $scope.actions.push(action);
-            };
-
-            $scope.removeAction = function (dataItem) {
-                var index = UtilsService.getItemIndexByVal($scope.actions, dataItem.ActionId, 'ActionId');
-                $scope.actions.splice(index, 1);
-            };
-        }
-
         function defineAPI() {
             var api = {};
 
-            api.load = function () {
-                return loadActionTemplates();
+            api.load = function (payload) {
+                return loadFiltersSection(payload);
             };
 
             api.getData = function () {
                 return {
 
-                    Actions: ($scope.actions.length > 0) ? getActions() : null
+                    Actions: (ctrl.datasource.length > 0) ? getActions() : null
                 };
             }
 
-            api.setData = function (adjustNumberSettings) {
-                angular.forEach(adjustNumberSettings.Actions, function (item) {
-                    var action = getActionItem(item);
-                    $scope.actions.push(action);
+            function loadFiltersSection(payload) {
+
+                var promises = [];
+
+                var filterItems;
+                if (payload != undefined) {
+                    filterItems = [];
+                    for (var i = 0; i < payload.Actions.length; i++) {
+                        var filterItem = {
+                            payload: payload.Actions[i],
+                            readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                            loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                        };
+                        promises.push(filterItem.loadPromiseDeferred.promise);
+                        filterItems.push(filterItem);
+                    }
+                }
+
+                var loadTemplatesPromise = VR_Rules_NormalizationRuleAPIService.GetNormalizeNumberActionSettingsTemplates().then(function (response) {
+                    angular.forEach(response, function (item) {
+                        ctrl.templates.push(item);
+                    });
+                   
+                    if (filterItems != undefined) {
+                        for (var i = 0; i < filterItems.length; i++) {
+                            addFilterItemToGrid(filterItems[i]);
+                        }
+                    }
                 });
+
+                promises.push(loadTemplatesPromise);
+
+                function addFilterItemToGrid(filterItem) {
+                    var matchItem = UtilsService.getItemByVal(ctrl.templates, filterItem.payload.ConfigId, "TemplateConfigID");
+                    if (matchItem == null)
+                        return;
+
+                    var dataItem = {
+                        id: ctrl.datasource.length + 1,
+                        configId: matchItem.TemplateConfigID,
+                        editor: matchItem.Editor,
+                        name: matchItem.Name
+                    };
+                    var dataItemPayload = filterItem.payload;
+
+                    dataItem.onDirectiveReady = function (api) {
+                        dataItem.directiveAPI = api;
+                        filterItem.readyPromiseDeferred.resolve();
+                    };
+
+                    filterItem.readyPromiseDeferred.promise
+                        .then(function () {
+                            VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, filterItem.loadPromiseDeferred);
+                        });
+
+                    ctrl.datasource.push(dataItem);
+                 
+                }
+
+                return UtilsService.waitMultiplePromises(promises);
             }
+
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
 
-            function loadActionTemplates() {
-                $scope.loadingActionTemplates = true;
-
-                return VR_Rules_NormalizationRuleAPIService.GetNormalizeNumberActionSettingsTemplates()
-                    .then(function (response) {
-                        angular.forEach(response, function (item) {
-                            $scope.actionTemplates.push(item);
-                        });
-                    })
-                    .catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    })
-                    .finally(function () {
-                        $scope.loadingActionTemplates = false;
-                    });
-            }
-
             function getActions() {
                 var actions = [];
 
-                angular.forEach($scope.actions, function (item) {
+                angular.forEach(ctrl.datasource, function (item) {
 
-                    var action = item.ActionDirectiveAPI.getData();
-                    action.ConfigId = item.ConfigId;
+                    var action = item.directiveAPI.getData();
+                    action.ConfigId = item.configId;
 
                     actions.push(action);
                 });
@@ -119,30 +162,6 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
             }
         }
 
-        function getActionItem(dbAction) {
-
-            var actionItem = {
-                ActionId: $scope.actions.length + 1,
-
-                ConfigId: (dbAction != null) ? dbAction.ConfigId : $scope.selectedActionTemplate.TemplateConfigID,
-
-                Editor: (dbAction != null) ?
-                    UtilsService.getItemByVal($scope.actionTemplates, dbAction.ConfigId, "TemplateConfigID").Editor :
-                    $scope.selectedActionTemplate.Editor,
-
-                Data: (dbAction != null) ? dbAction : {}
-            };
-
-            actionItem.onActionDirectiveAPIReady = function (api) {
-                actionItem.ActionDirectiveAPI = api;
-                actionItem.ActionDirectiveAPI.setData(actionItem.Data);
-
-                actionItem.Data = undefined;
-                actionItem.onActionDirectiveAPIReady = undefined;
-            }
-
-            return actionItem;
-        }
     }
 
     return directiveDefinitionObj;

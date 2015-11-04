@@ -10,8 +10,8 @@ app.directive("vrRulesNormalizationnumbersettingsReplacestring", [function () {
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            var directiveConstructor = new DirectiveConstructor($scope, ctrl);
-            directiveConstructor.initializeController();
+            var ctor = new DirectiveConstructor($scope, ctrl);
+            ctor.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
@@ -34,8 +34,8 @@ app.directive("vrRulesNormalizationnumbersettingsReplacestring", [function () {
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
 
-        $scope.stringToReplace = undefined;
-        $scope.newString = undefined;
+        ctrl.stringToReplace = undefined;
+        ctrl.newString = undefined;
 
         function initializeController() {
             defineAPI();
@@ -47,14 +47,16 @@ app.directive("vrRulesNormalizationnumbersettingsReplacestring", [function () {
             api.getData = function () {
                 return {
                     $type: "Vanrise.Rules.Normalization.MainExtensions.ReplaceStringActionSettings, Vanrise.Rules.Normalization",
-                    StringToReplace: $scope.stringToReplace,
-                    NewString: $scope.newString
+                    StringToReplace: ctrl.stringToReplace,
+                    NewString: ctrl.newString
                 };
             }
 
-            api.setData = function (replaceStringActionSettings) {
-                $scope.stringToReplace = replaceStringActionSettings.StringToReplace;
-                $scope.newString = replaceStringActionSettings.NewString;
+            api.load = function (payload) {
+                if (payload != undefined) {
+                    ctrl.stringToReplace = payload.StringToReplace;
+                    ctrl.newString = payload.NewString;
+                }
             }
 
             if (ctrl.onReady != null)

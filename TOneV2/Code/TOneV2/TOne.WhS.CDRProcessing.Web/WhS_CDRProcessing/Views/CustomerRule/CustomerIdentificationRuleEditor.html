@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="WhS_CDRProcessing_CustomerIdentificationRuleEditorController" vr-loader="isGettingData" width="'50%'">
+﻿<div vr-modalcontent ng-controller="WhS_CDRProcessing_CustomerIdentificationRuleEditorController" vr-loader="isLoading" width="'50%'">
     <vr-modalbody maxheight="'500px'">
         <vr-form name="formCustomerIdentificationRuleEditor">
             <vr-choices selectedindex="0">
@@ -56,7 +56,7 @@
                                 <vr-textbox label="CDPN Prefix" value="CDPNPrefix" onvaluechanged="onCDPNValueChange"></vr-textbox>
                             </vr-columns>
                             <vr-columns width="normal" withemptyline>
-                                <vr-button type="Add" data-onclick="addCDPNPrefix" standalone vr-disabled="disableAddCDPNPrefixButton" ></vr-button>
+                                <vr-button type="Add" data-onclick="addCDPNPrefix" standalone vr-disabled="disableAddCDPNPrefixButton"></vr-button>
                             </vr-columns>
                             <vr-columns width="fullrow">
                                 <div style="max-height:78px;overflow-y: auto;">
@@ -68,7 +68,7 @@
                             </vr-columns>
                         </vr-row>
                     </vr-columns>
-</vr-row>
+                </vr-row>
             </div>
             <div ng-show="settingsSelected">
                 <vr-row>

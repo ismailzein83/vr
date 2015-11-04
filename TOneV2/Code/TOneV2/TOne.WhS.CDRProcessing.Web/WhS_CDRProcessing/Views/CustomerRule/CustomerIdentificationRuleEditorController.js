@@ -6,10 +6,13 @@
 
     function customerIdentificationRuleEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, WhS_CDRProcessing_CustomerIdentificationRuleAPIService) {
 
-        var editMode;
+        var isEditMode;
         var ruleId;
         var carrierAccountDirectiveAPI;
-       var customerRuleData;
+        var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
+        var customerRuleEntity;
         loadParameters();
         defineScope();
         load();
@@ -19,11 +22,11 @@
             if (parameters != undefined && parameters != null) {
                 ruleId = parameters.RuleId
             }
-            editMode = (ruleId != undefined);
+            isEditMode = (ruleId != undefined);
         }
         function defineScope() {
             $scope.SaveCustomerRule = function () {
-                if (editMode) {
+                if (isEditMode) {
                     return updateCustomerRule();
                 }
                 else {
@@ -32,9 +35,8 @@
             };
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
-                if (customerRuleData != undefined)
-                    fillScopeFromCustomerRuleObj(customerRuleData);
-                load();
+                carrierAccountReadyPromiseDeferred.resolve();
+
             }
             $scope.close = function () {
                 $scope.modalContext.closeModal()
@@ -81,38 +83,67 @@
         }
 
         function load() {
-           $scope.isGettingData = true;
-            if (carrierAccountDirectiveAPI == undefined)
-                return;
-            carrierAccountDirectiveAPI.load();
-            
-            if (editMode) {
+            $scope.isLoading = true;
+            if (isEditMode) {
                 $scope.title = UtilsService.buildTitleForUpdateEditor("Customer Rule");
-                getCustomerRule();
+                getCustomerRule().then(function () {
+                    loadAllControls()
+                        .finally(function () {
+                            customerRuleEntity = undefined;
+                        });
+                }).catch(function () {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
             }
             else {
                 $scope.title = UtilsService.buildTitleForAddEditor("Customer Rule");
-                $scope.isGettingData = false;
-                setDefaultValues();
+                loadAllControls();
             }
-
 
         }
         function setDefaultValues() {
         }
 
-        function getCustomerRule() {
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadCarrierAccountDirective])
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+               .finally(function () {
+                   $scope.isLoading = false;
+               });
+        }
+        function loadCarrierAccountDirective() {
 
-            return WhS_CDRProcessing_CustomerIdentificationRuleAPIService.GetRule(ruleId).then(function (customerRule) {
-                customerRuleData = customerRule;
-                fillScopeFromCustomerRuleObj(customerRule);
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isGettingData = false;
-            });
+            var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            carrierAccountReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = {
+                        selectedIds: customerRuleEntity != undefined ? customerRuleEntity.Settings.CustomerId : undefined
+                    }
+                    VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, directivePayload, loadCarrierAccountPromiseDeferred);
+                });
+
+            return loadCarrierAccountPromiseDeferred.promise;
+        }
+        function loadFilterBySection() {
+            if (customerRuleEntity != undefined) {
+                $scope.inTrunks = customerRuleEntity.Criteria.IN_Trunks
+                $scope.inCarriers = customerRuleEntity.Criteria.IN_Carriers
+                $scope.CDPNPrefixes = customerRuleEntity.Criteria.CDPNPrefixes
+                $scope.beginEffectiveDate = customerRuleEntity.BeginEffectiveTime;
+                $scope.endEffectiveDate = customerRuleEntity.EndEffectiveTime;
+                $scope.description = customerRuleEntity.Description;
+            }
         }
 
-       
+        function getCustomerRule() {
+            return WhS_CDRProcessing_CustomerIdentificationRuleAPIService.GetRule(ruleId).then(function (customerRule) {
+                customerRuleEntity = customerRule;
+            });
+        }
 
         function buildCustomerRuleObjectObjFromScope() {
             
@@ -134,19 +165,6 @@
             }
            
             return customerRule;
-        }
-
-        function fillScopeFromCustomerRuleObj(customerRuleObject) {
-            if (carrierAccountDirectiveAPI == undefined)
-                return;
-            $scope.inTrunks = customerRuleObject.Criteria.IN_Trunks
-            $scope.inCarriers = customerRuleObject.Criteria.IN_Carriers
-            $scope.CDPNPrefixes = customerRuleObject.Criteria.CDPNPrefixes
-            carrierAccountDirectiveAPI.setData(customerRuleObject.Settings.CustomerId);
-            $scope.beginEffectiveDate = customerRuleObject.BeginEffectiveTime;
-            $scope.endEffectiveDate = customerRuleObject.EndEffectiveTime;
-            $scope.description = customerRuleObject.Description;
-            $scope.isGettingData = false;
         }
 
         function insertCustomerRule() {

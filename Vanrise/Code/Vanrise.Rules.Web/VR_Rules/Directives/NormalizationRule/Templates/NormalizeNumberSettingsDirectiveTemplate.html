@@ -1,10 +1,10 @@
-﻿<div vr-loader="loadingActionTemplates">
+﻿<div >
     <vr-row>
         <vr-columns width="1/3row">
             <vr-select label="Action Type"
-                       datasource="actionTemplates"
-                       selectedvalues="selectedActionTemplate"
-                       onselectionchanged="onActionTemplateChanged"
+                       datasource="ctrl.templates"
+                       selectedvalues="ctrl.selectedActionTemplate"
+                       onselectionchanged="ctrl.onActionTemplateChanged"
                        datavaluefield="TemplateConfigID"
                        datatextfield="Name"
                        entityname="Action Type"
@@ -13,19 +13,19 @@
         </vr-columns>
 
         <vr-columns width="normal">
-            <div style="position: absolute; top: 25px;" vr-disabled="disableAddButton">
-                <vr-button type="Add" data-onclick="addAction" standalone></vr-button>
+            <div style="position: absolute; top: 25px;" vr-disabled="ctrl.disableAddButton">
+                <vr-button type="Add" data-onclick="ctrl.addFilter" standalone></vr-button>
             </div>
         </vr-columns>
     </vr-row>
 
     <vr-row>
-        <vr-columns width="fullrow">
+        <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective">
 
-            <vr-datagrid datasource="actions"
-                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="removeAction" hideheader="true">
-
-                <vr-datagridcolumn><vr-directivewrapper directive="dataItem.Editor" on-ready="dataItem.onActionDirectiveAPIReady"></vr-directivewrapper></vr-datagridcolumn>
+            <vr-datagrid datasource="ctrl.datasource"
+                         on-ready="ctrl.onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu enabledraggablerow>
+                <vr-datagridcolumn headertext="'Filter Type'" field="'name'"></vr-datagridcolumn>
+                <vr-datagridcolumn><vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady"></vr-directivewrapper></vr-datagridcolumn>
 
             </vr-datagrid>
 
