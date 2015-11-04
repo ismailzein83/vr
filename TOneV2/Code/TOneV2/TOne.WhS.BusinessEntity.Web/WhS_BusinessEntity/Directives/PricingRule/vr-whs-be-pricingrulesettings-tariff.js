@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBePricingrulesettingsTariff', ['$compile', 'WhS_BE_PricingRuleAPIService',
-function ($compile, WhS_BE_PricingRuleAPIService) {
+app.directive('vrWhsBePricingrulesettingsTariff', ['$compile', 'WhS_BE_PricingRuleAPIService','UtilsService','VRUIUtilsService',
+function ($compile, WhS_BE_PricingRuleAPIService, UtilsService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -11,18 +11,8 @@ function ($compile, WhS_BE_PricingRuleAPIService) {
 
             var ctrl = this;
             $scope.pricingRuleTariffSettings = [];
-            var bePricingRuleTariffSettingObject = new bePricingRuleTariffSetting(ctrl, $scope, $attrs);
-            bePricingRuleTariffSettingObject.initializeController();
-            $scope.onselectionchanged = function () {
-
-                if (ctrl.onselectionchanged != undefined) {
-                    var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
-                    if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                        onvaluechangedMethod();
-                    }
-                }
-
-            }
+            var ctor = new bePricingRuleTariffSetting(ctrl, $scope, $attrs);
+            ctor.initializeController();
         },
         controllerAs: 'ctrl',
         bindToController: true,
@@ -35,10 +25,13 @@ function ($compile, WhS_BE_PricingRuleAPIService) {
 
 
     function bePricingRuleTariffSetting(ctrl, $scope, $attrs) {
-        var pricingRuleTariffTemplateDirectiveAPI;
+        var directiveReadyAPI;
+        var directiveReadyPromiseDeferred;
         function initializeController() {
             $scope.onPricingRuleTariffTemplateDirectiveReady = function (api) {
-                pricingRuleTariffTemplateDirectiveAPI = api;
+                directiveReadyAPI = api;
+                var setLoader = function (value) { $scope.isLoadingDirective = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveReadyAPI, undefined, setLoader, directiveReadyPromiseDeferred);
             }
             defineAPI();
         }
@@ -48,27 +41,41 @@ function ($compile, WhS_BE_PricingRuleAPIService) {
             var api = {};
 
             api.getData = function () {
-                var obj = pricingRuleTariffTemplateDirectiveAPI.getData();
+                var obj = directiveReadyAPI.getData();
                 obj.ConfigId = $scope.selectedPricingRuleTariffSettings.TemplateConfigID;
                 return obj;
             }
+            api.load = function (payload) {
+                var configId;
+                if (payload != undefined) {
+                    configId = payload.ConfigId;
 
-            api.setData = function (settings) {
-                for (var j = 0; j < $scope.pricingRuleTariffSettings.length; j++)
-                    if (settings.ConfigId == $scope.pricingRuleTariffSettings[j].TemplateConfigID)
-                        $scope.selectedPricingRuleTariffSettings = $scope.pricingRuleTariffSettings[j];
-                $scope.onPricingRuleTariffTemplateDirectiveReady = function (api) {
-                    pricingRuleTariffTemplateDirectiveAPI = api;
-                    pricingRuleTariffTemplateDirectiveAPI.setData(settings);
                 }
-
-            }
-            api.load = function () {
-                return WhS_BE_PricingRuleAPIService.GetPricingRuleTariffTemplates().then(function (response) {
+                var promises = [];
+                var loadTariffTemplatesPromiseDeferred = WhS_BE_PricingRuleAPIService.GetPricingRuleTariffTemplates().then(function (response) {
                     angular.forEach(response, function (itm) {
                         $scope.pricingRuleTariffSettings.push(itm);
                     });
-                })
+                    if(configId!=undefined)
+                    {
+                        for (var j = 0; j < $scope.pricingRuleTariffSettings.length; j++)
+                            if (configId == $scope.pricingRuleTariffSettings[j].TemplateConfigID)
+                                $scope.selectedPricingRuleTariffSettings = $scope.pricingRuleTariffSettings[j];
+                    }
+                });
+                promises.push(loadTariffTemplatesPromiseDeferred);
+                if (payload != undefined) {
+                    directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(directiveLoadPromiseDeferred.promise);
+
+                    directiveReadyPromiseDeferred.promise.then(function () {
+                        directiveReadyPromiseDeferred = undefined;
+                        VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, payload, directiveLoadPromiseDeferred);
+                    });
+                }
+                return UtilsService.waitMultiplePromises(promises);
             }
 
             if (ctrl.onReady != null)

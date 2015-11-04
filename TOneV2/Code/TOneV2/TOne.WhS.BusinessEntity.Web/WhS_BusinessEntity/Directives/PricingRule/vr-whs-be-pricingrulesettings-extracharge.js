@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBePricingrulesettingsExtracharge', ['UtilsService', '$compile', 'WhS_BE_PricingRuleAPIService',
-function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
+app.directive('vrWhsBePricingrulesettingsExtracharge', ['UtilsService', '$compile', 'WhS_BE_PricingRuleAPIService','VRUIUtilsService',
+function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -9,9 +9,9 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            $scope.pricingRuleExtraChargeTemplates = [];
-            var bePricingRuleExtraChargeSettingObject = new bePricingRuleExtraChargeSetting(ctrl, $scope, $attrs);
-            bePricingRuleExtraChargeSettingObject.initializeController();
+            ctrl.extraChargeTemplates = [];
+            var ctor = new extraChargeCtor(ctrl, $scope, $attrs);
+            ctor.initializeController();
           
         },
         controllerAs: 'ctrl',
@@ -24,54 +24,36 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
     };
 
 
-    function bePricingRuleExtraChargeSetting(ctrl, $scope, $attrs) {
-        var pricingRuleExtraChargeTemplateDirectiveAPI;
-
+    function extraChargeCtor(ctrl, $scope, $attrs) {
         function initializeController() {
 
-            $scope.disableAddButton = true;
-            $scope.actions = [];
-            $scope.addAction = function () {
-                var action = getActionItem(null);
-                $scope.actions.push(action);
-            };
-            $scope.onActionTemplateChanged = function () {
-                $scope.disableAddButton = ($scope.selectedPricingRuleExtraChargeTemplate == undefined);
-            };
-            $scope.removeAction = function ($event, action) {
-                $event.preventDefault();
-                $event.stopPropagation();
+            ctrl.datasource = [];
+            ctrl.disableAddButton = true;
+            ctrl.addFilter = function () {
+                var dataItem = {
+                    id: ctrl.datasource.length + 1,
+                    configId: ctrl.selectedTemplate.TemplateConfigID,
+                    editor: ctrl.selectedTemplate.Editor,
+                    name: ctrl.selectedTemplate.Name
+                };
+                dataItem.onDirectiveReady = function (api) {
+                    dataItem.directiveAPI = api;
+                    var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
+                };
+                ctrl.datasource.push(dataItem);
 
-                var index = UtilsService.getItemIndexByVal($scope.actions, action.ActionId, 'ActionId');
-                $scope.actions.splice(index, 1);
+                ctrl.selectedTemplate = undefined;
+            };
+            ctrl.onActionTemplateChanged = function () {
+                ctrl.disableAddButton = (ctrl.selectedTemplate == undefined);
+            };
+            ctrl.removeFilter = function (dataItem) {
+                var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.id, 'ActionId');
+                ctrl.datasource.splice(index, 1);
             };
             defineAPI();
 
-        }
-
-        function getActionItem(dbAction) {
-
-            var actionItem = {
-                ActionId: $scope.actions.length + 1,
-
-                ConfigId: (dbAction != null) ? dbAction.ConfigId : $scope.selectedPricingRuleExtraChargeTemplate.TemplateConfigID,
-
-                Editor: (dbAction != null) ?
-                    UtilsService.getItemByVal($scope.pricingRuleExtraChargeTemplates, dbAction.ConfigId, "TemplateConfigID").Editor :
-                    $scope.selectedPricingRuleExtraChargeTemplate.Editor,
-
-                Data: (dbAction != null) ? dbAction : {},
-                Name: $scope.selectedPricingRuleExtraChargeTemplate.Name
-            };
-
-            actionItem.onPricingRuleExtraChargeTemplateDirectiveReady = function (api) {
-                actionItem.ActionDirectiveAPI = api;
-                actionItem.ActionDirectiveAPI.setData(actionItem.Data);
-
-                actionItem.Data = undefined;
-                actionItem.onPricingRuleExtraChargeTemplateDirectiveReady = undefined;
-            }
-            return actionItem;
         }
       
         function defineAPI() {
@@ -87,40 +69,76 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService) {
             function getActions() {
                 var actionList = [];
 
-                angular.forEach($scope.actions, function (item) {
-                    var obj = item.ActionDirectiveAPI.getData();
-                    obj.ConfigId = item.ConfigId;
+                angular.forEach(ctrl.datasource, function (item) {
+                    var obj = item.directiveAPI.getData();
+                    obj.ConfigId = item.configId;
                     actionList.push(obj);
                 });
 
                 return actionList;
             }
-            api.setData = function (settings) {
-                $scope.pricingRuleExtraChargeTemplates
-                for (var i = 0; i < settings.Actions.length; i++)
-                {
-                    var action = settings.Actions[i];
-                    for (var j = 0; j < $scope.pricingRuleExtraChargeTemplates.length; j++)
-                        if (action.ConfigId == $scope.pricingRuleExtraChargeTemplates[j].TemplateConfigID)
-                            $scope.selectedPricingRuleExtraChargeTemplate = $scope.pricingRuleExtraChargeTemplates[j];
-                    action.Editor = $scope.selectedPricingRuleExtraChargeTemplate.Editor;
-                    addAPIFunction(action);
-                    $scope.actions.push(action);
-                }
-                function addAPIFunction(obj) {
-                    obj.onPricingRuleExtraChargeTemplateDirectiveReady = function (api) {
-                        obj.ActionDirectiveAPI = api;
-                        obj.ActionDirectiveAPI.setData(obj);
-                        obj = undefined;
+            api.load = function (payload) {
+                return loadFiltersSection(payload);
+            }
+
+            function loadFiltersSection(payload) {
+                var promises = [];
+
+                var filterItems;
+                if (payload != undefined) {
+                    filterItems = [];
+                    for (var i = 0; i < payload.Actions.length; i++) {
+                        var filterItem = {
+                            payload: payload.Actions[i],
+                            readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                            loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                        };
+                        promises.push(filterItem.loadPromiseDeferred.promise);
+                        filterItems.push(filterItem);
                     }
                 }
-            }
-            api.load = function () {
-                return WhS_BE_PricingRuleAPIService.GetPricingRuleExtraChargeTemplates().then(function (response) {
+
+                var loadTemplatesPromise = WhS_BE_PricingRuleAPIService.GetPricingRuleExtraChargeTemplates().then(function (response) {
                     angular.forEach(response, function (itm) {
-                        $scope.pricingRuleExtraChargeTemplates.push(itm);
+                        ctrl.extraChargeTemplates.push(itm);
                     });
-                })
+
+                    if (filterItems != undefined) {
+                        for (var i = 0; i < filterItems.length; i++) {
+                            addFilterItemToGrid(filterItems[i]);
+                        }
+                    }
+                });
+
+                promises.push(loadTemplatesPromise);
+
+                function addFilterItemToGrid(filterItem) {
+                    var matchItem = UtilsService.getItemByVal(ctrl.extraChargeTemplates, filterItem.payload.ConfigId, "TemplateConfigID");
+                    if (matchItem == null)
+                        return;
+
+                    var dataItem = {
+                        id: ctrl.datasource.length + 1,
+                        configId: matchItem.TemplateConfigID,
+                        editor: matchItem.Editor,
+                        name: matchItem.Name
+                    };
+                    var dataItemPayload = filterItem.payload;
+
+                    dataItem.onDirectiveReady = function (api) {
+                        dataItem.directiveAPI = api;
+                        filterItem.readyPromiseDeferred.resolve();
+                    };
+
+                    filterItem.readyPromiseDeferred.promise
+                        .then(function () {
+                            VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, filterItem.loadPromiseDeferred);
+                        });
+
+                    ctrl.datasource.push(dataItem);
+                }
+
+                return UtilsService.waitMultiplePromises(promises);
             }
 
             if (ctrl.onReady != null)

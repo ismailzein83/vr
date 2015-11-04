@@ -10,8 +10,8 @@ function ($compile) {
         controller: function ($scope, $element, $attrs) {
 
             var ctrl = this;
-            var bePricingRuleFixedExtraChargeObject = new bePricingRuleFixedExtraCharge(ctrl, $scope, $attrs);
-            bePricingRuleFixedExtraChargeObject.initializeController();
+            var ctor = new fixedExtraChargeCtor(ctrl, $scope, $attrs);
+            ctor.initializeController();
         },
         controllerAs: 'ctrl',
         bindToController: true,
@@ -23,7 +23,7 @@ function ($compile) {
     };
 
 
-    function bePricingRuleFixedExtraCharge(ctrl, $scope, $attrs) {
+    function fixedExtraChargeCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
 
@@ -36,20 +36,18 @@ function ($compile) {
             api.getData = function () {
                 var obj = {
                     $type: "TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.ExtraCharge.Actions.FixedExtraChargeSettings, TOne.WhS.BusinessEntity.Entities",
-                    FromRate: $scope.fromRate,
-                    ToRate: $scope.toRate,
-                    ExtraAmount: $scope.extraAmount
+                    FromRate: ctrl.fromRate,
+                    ToRate: ctrl.toRate,
+                    ExtraAmount: ctrl.extraAmount
                 }
                 return obj;
             }
-
-            api.setData = function (selectedobj) {
-              
-                $scope.fromRate = selectedobj.FromRate;
-                $scope.toRate = selectedobj.ToRate
-                $scope.extraAmount = selectedobj.ExtraAmount
-            }
-            api.load = function () {
+            api.load = function (payload) {
+                if (payload != undefined) {
+                    ctrl.fromRate = payload.FromRate;
+                    ctrl.toRate = payload.ToRate
+                    ctrl.extraAmount = payload.ExtraAmount
+                }
             }
 
             if (ctrl.onReady != null)

@@ -10,18 +10,8 @@ function ($compile) {
         controller: function ($scope, $element, $attrs) {
 
             var ctrl = this;
-            var bePricingRuleRegulartariffObject = new bePricingRuleRegulartariff(ctrl, $scope, $attrs);
-            bePricingRuleRegulartariffObject.initializeController();
-            $scope.onselectionchanged = function () {
-
-                if (ctrl.onselectionchanged != undefined) {
-                    var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
-                    if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                        onvaluechangedMethod();
-                    }
-                }
-
-            }
+            var ctor = new regulartariffCtor(ctrl, $scope, $attrs);
+            ctor.initializeController();
         },
         controllerAs: 'ctrl',
         bindToController: true,
@@ -33,7 +23,7 @@ function ($compile) {
     };
 
 
-    function bePricingRuleRegulartariff(ctrl, $scope, $attrs) {
+    function regulartariffCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
 
@@ -46,21 +36,20 @@ function ($compile) {
             api.getData = function () {
                 var obj = {
                     $type: "TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.Tariff.Settings.RegularTariffSettings, TOne.WhS.BusinessEntity.Entities",
-                    CallFee: $scope.callFee,
-                    FirstPeriod: $scope.firstPeriod,
-                    FirstPeriodRate: $scope.firstPeriodRate,
-                    FractionUnit: $scope.fractionUnit
+                    CallFee: ctrl.callFee,
+                    FirstPeriod: ctrl.firstPeriod,
+                    FirstPeriodRate: ctrl.firstPeriodRate,
+                    FractionUnit: ctrl.fractionUnit
                 }
                 return obj;
             }
-
-            api.setData = function (obj) {
-                $scope.callFee=obj.CallFee;
-                $scope.firstPeriod=obj.FirstPeriod,
-                $scope.firstPeriodRate=obj.FirstPeriodRate ,
-                $scope.fractionUnit=obj.FractionUnit
-            }
-            api.load = function () {
+            api.load = function (payload) {
+                if (payload != undefined) {
+                    ctrl.callFee = payload.CallFee;
+                    ctrl.firstPeriod = payload.FirstPeriod,
+                    ctrl.firstPeriodRate = payload.FirstPeriodRate,
+                    ctrl.fractionUnit = payload.FractionUnit
+                }
             }
 
             if (ctrl.onReady != null)

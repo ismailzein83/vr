@@ -58,7 +58,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                     var filter = {
                         SupplierId: ctrl.supplierid,
                     }
-                    return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfo(angular.toJson(filter), searchValue);
+                    return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfo(UtilsService.serializetoJson(filter), searchValue);
                 }
                 ctrl.supplierZones = [];
                 defineAPI();
@@ -75,7 +75,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                     }
                     if (selectedIds != undefined) {
                         ctrl.datasource = [];
-                        return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfoByIds(angular.toJson(selectedIds)).then(function (response) {
+                        return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfoByIds(UtilsService.serializetoJson(selectedIds)).then(function (response) {
                         angular.forEach(response, function (item) {
                             ctrl.datasource.push(item);
                             

@@ -13,16 +13,6 @@ function ($compil, WhS_BE_PricingRuleAPIService) {
             $scope.pricingRuleTODSettings = [];
             var bePricingRuleTODSettingObject = new bePricingRuleTODSetting(ctrl, $scope, $attrs);
             bePricingRuleTODSettingObject.initializeController();
-            $scope.onselectionchanged = function () {
-
-                if (ctrl.onselectionchanged != undefined) {
-                    var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
-                    if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                        onvaluechangedMethod();
-                    }
-                }
-
-            }
         },
         controllerAs: 'ctrl',
         bindToController: true,
@@ -35,7 +25,6 @@ function ($compil, WhS_BE_PricingRuleAPIService) {
 
 
     function bePricingRuleTODSetting(ctrl, $scope, $attrs) {
-
         function initializeController() {
 
             defineAPI();
@@ -51,12 +40,18 @@ function ($compil, WhS_BE_PricingRuleAPIService) {
 
 
             }
-            api.load = function () {
-                return WhS_BE_PricingRuleAPIService.GetPricingRuleTODTemplates().then(function (response) {
+            api.load = function (payload) {
+
+                if(payload!=undefined)
+                {
+
+                }
+                var loadTODTemplatesPromiseDeferred = WhS_BE_PricingRuleAPIService.GetPricingRuleTODTemplates().then(function (response) {
                     angular.forEach(response, function (itm) {
                         $scope.pricingRuleTODSettings.push(itm);
                     });
-                })
+                });
+                loadTODTemplatesPromiseDeferred.promise;
             }
 
             if (ctrl.onReady != null)

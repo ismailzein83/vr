@@ -2,29 +2,21 @@
 <vr-row>
     <vr-columns width="1/4row">
         <vr-select datatextfield="Name" datavaluefield="TemplateConfigID"
-                   label="Extra Charge Type" datasource="pricingRuleExtraChargeTemplates" selectedvalues="selectedPricingRuleExtraChargeTemplate" onselectionchanged="onActionTemplateChanged" isrequired>
+                   label="Extra Charge Type" datasource="ctrl.extraChargeTemplates" selectedvalues="ctrl.selectedTemplate" onselectionchanged="ctrl.onActionTemplateChanged">
         </vr-select>
     </vr-columns>
     <vr-columns width="normal" withemptyline>
-        <vr-button type="Add" data-onclick="addAction" standalone vr-disabled="disableAddButton"></vr-button>
+        <vr-button type="Add" data-onclick="ctrl.addFilter" standalone vr-disabled="ctrl.disableAddButton"></vr-button>
     </vr-columns>
 </vr-row>
 <vr-row>
-    <vr-columns width="fullrow">
-
-        <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="actions.length > 0">
-            <li ng-repeat="action in actions" class="list-group-item list-custom" style="margin:1px;">
-                <i class="glyphicon glyphicon-th-list handeldrag" style="display:inline-block;vertical-align:middle;float: none;"></i>
-
-                <i class="glyphicon glyphicon-remove hand-cursor" style="float:right;padding:5px;cursor:default;" ng-click="removeAction($event, action)"></i>
-
-                <div style="display:inline-block; width:100%; margin-top:-10px">
-                    <vr-section title="{{action.Name}}" level="2">
-                        <vr-directivewrapper directive="action.Editor" on-ready="action.onPricingRuleExtraChargeTemplateDirectiveReady"></vr-directivewrapper>
-                    </vr-section>
-
-                </div>
-            </li>
-        </ul>
+    <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective">
+        <vr-datagrid datasource="ctrl.datasource"
+                     on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu enabledraggablerow>
+            <vr-datagridcolumn headertext="'Filter Type'" field="'name'"></vr-datagridcolumn>
+            <vr-datagridcolumn>
+                <vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady" />
+            </vr-datagridcolumn>
+        </vr-datagrid>
     </vr-columns>
 </vr-row>

@@ -10,18 +10,8 @@ function ( $compile) {
         controller: function ($scope, $element, $attrs) {
 
             var ctrl = this;
-            var bePricingRulePercentageExtraChargeObject = new bePricingRulePercentageExtraCharge(ctrl, $scope, $attrs);
-            bePricingRulePercentageExtraChargeObject.initializeController();
-            $scope.onselectionchanged = function () {
-
-                if (ctrl.onselectionchanged != undefined) {
-                    var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
-                    if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                        onvaluechangedMethod();
-                    }
-                }
-
-            }
+            var ctor = new percentageExtraChargeCtor(ctrl, $scope, $attrs);
+            ctor.initializeController();
         },
         controllerAs: 'ctrl',
         bindToController: true,
@@ -33,7 +23,7 @@ function ( $compile) {
     };
 
 
-    function bePricingRulePercentageExtraCharge(ctrl, $scope, $attrs) {
+    function percentageExtraChargeCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
 
@@ -46,20 +36,19 @@ function ( $compile) {
             api.getData = function () {
                 var obj = {
                     $type: "TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.ExtraCharge.Actions.PercentageExtraChargeSettings, TOne.WhS.BusinessEntity.Entities",
-                    FromRate: $scope.fromRate,
-                    ToRate: $scope.toRate,
-                    ExtraPercentage: $scope.extraPercentage
+                    FromRate: ctrl.fromRate,
+                    ToRate: ctrl.toRate,
+                    ExtraPercentage: ctrl.extraPercentage
                 }
                 return obj;
             }
 
-            api.setData = function (selectedobj) {
-                $scope.fromRate = selectedobj.FromRate;
-                $scope.toRate = selectedobj.ToRate
-                $scope.extraPercentage = selectedobj.ExtraPercentage
-
-            }
-            api.load = function () {
+            api.load = function (payload) {
+                if (payload != undefined) {
+                    ctrl.fromRate = payload.FromRate;
+                    ctrl.toRate = payload.ToRate
+                    ctrl.extraPercentage = payload.ExtraPercentage
+                }
             }
 
             if (ctrl.onReady != null)
