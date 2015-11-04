@@ -13,5 +13,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Code { get; set; }
 
         public IEnumerable<int> CustomerIds { get; set; }
+
+        public IEnumerable<long> SaleZoneIds { get; set; }
     }
 }

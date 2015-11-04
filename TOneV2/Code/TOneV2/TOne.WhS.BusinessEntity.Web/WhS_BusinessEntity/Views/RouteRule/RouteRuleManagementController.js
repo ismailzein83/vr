@@ -13,6 +13,9 @@
         var sellingNumberPlanDirectiveAPI;
         var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var saleZoneDirectiveAPI;
+        var saleZoneReadyPromiseDeferred;
+
         defineScope();
         load();
 
@@ -26,6 +29,30 @@
             $scope.onSellingNumberPlanDirectiveReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
                 sellingNumberPlanReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onSaleZoneDirectiveReady = function (api) {
+                saleZoneDirectiveAPI = api;
+                saleZoneReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onSelectSellingNumberPlan = function (selectedItem) {
+                $scope.showSaleZoneSelector = true;
+                $scope.isLoadingSaleZonesSelector = true;
+
+                saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
+
+                var payload = {
+                    filter: { SellingNumberPlanId: selectedItem.SellingNumberPlanId },
+                }
+
+                saleZoneReadyPromiseDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, payload, loadSaleZonePromiseDeferred);
+                });
+
+                loadSaleZonePromiseDeferred.promise.finally(function () { $scope.isLoadingSaleZonesSelector = false; })
             }
 
             $scope.onGridReady = function (api) {
@@ -43,7 +70,8 @@
             function getFilterObject() {
                 var query = {
                     Code: $scope.code,
-                    CustomerIds: carrierAccountDirectiveAPI.getSelectedIds()
+                    CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
+                    SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds()
                 };
                 return query;
             }
@@ -70,8 +98,7 @@
             return loadCarrierAccountPromiseDeferred.promise;
         }
 
-        function loadSellingNumberPlanSection()
-        {
+        function loadSellingNumberPlanSection() {
             var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
 
             sellingNumberPlanReadyPromiseDeferred.promise.then(function () {

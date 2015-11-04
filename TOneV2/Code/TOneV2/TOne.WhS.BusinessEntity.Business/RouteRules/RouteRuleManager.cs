@@ -84,7 +84,8 @@ namespace TOne.WhS.BusinessEntity.Business
             var routeRules = base.GetAllRules();
             Func<RouteRule, bool> filterExpression = (routeRule) =>
                  (input.Query.Code == null || this.CheckIfCodeCriteriaSettingsContains(routeRule, input.Query.Code))
-                 && (input.Query.CustomerIds == null || this.CheckIfCustomerSettingsContains(routeRule, input.Query.CustomerIds));
+                 && (input.Query.CustomerIds == null || this.CheckIfCustomerSettingsContains(routeRule, input.Query.CustomerIds))
+                 && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(routeRule, input.Query.SaleZoneIds));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeRules.ToBigResult(input, filterExpression, MapToDetails));
         }
@@ -114,6 +115,18 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 IRuleCustomerCriteria ruleCode = routeRule as IRuleCustomerCriteria;
                 if (ruleCode.CustomerIds != null && ruleCode.CustomerIds.Intersect(customerIds).Count() > 0)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private bool CheckIfSaleZoneSettingsContains(RouteRule routeRule, IEnumerable<long> saleZoneIds)
+        {
+            if (routeRule.Criteria.SaleZoneGroupSettings != null)
+            {
+                IRuleSaleZoneCriteria ruleCode = routeRule as IRuleSaleZoneCriteria;
+                if (ruleCode.SaleZoneIds != null && ruleCode.SaleZoneIds.Intersect(saleZoneIds).Count() > 0)
                     return true;
             }
 
