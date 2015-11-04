@@ -54,7 +54,7 @@
             if (attrs.ismultipleselection != undefined)
                 return UtilsService.getPropValuesFromArray(ctrl.selectedvalues, idProperty);
             else if (ctrl.selectedvalues != undefined)
-                return ctrl.selectedvalues.idProperty;
+                return ctrl.selectedvalues[idProperty];
 
             return undefined;
         }
