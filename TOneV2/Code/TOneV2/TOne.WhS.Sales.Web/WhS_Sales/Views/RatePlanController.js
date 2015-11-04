@@ -24,8 +24,9 @@
             };
 
             $scope.onCarrierAccountChanged = function () {
-                $scope.showZoneLetters = false;
-                $scope.showRatePlanGrid = false;
+                $scope.zoneLetters = [];
+                $scope.ratePlanItems = [];
+                showRatePlan(false);
             };
 
             $scope.onRatePlanGridReady = function (api) {
@@ -90,8 +91,12 @@
         function loadRatePlan() {
             return getZoneLetters().then(function () {
                 if ($scope.zoneLetters.length > 0) {
+                    showRatePlan(true);
                     $scope.zoneLetterConnector.selectedZoneLetterIndex = 0;
                     return loadRatePlanGrid(true);
+                }
+                else {
+                    showRatePlan(false);
                 }
             });
         }
@@ -100,7 +105,6 @@
             var customerId = carrierAccountDirectiveAPI.getData().CarrierAccountId;
 
             return WhS_BE_CustomerZoneAPIService.GetCustomerZoneLetters(customerId).then(function (response) {
-                console.log("getZoneLetters");
                 if (response == null) return;
 
                 $scope.zoneLetters = [];
@@ -108,13 +112,10 @@
                 for (var i = 0; i < response.length; i++) {
                     $scope.zoneLetters.push(response[i]);
                 }
-
-                $scope.showZoneLetters = ($scope.zoneLetters.length > 0);
             });
         }
 
         function loadRatePlanGrid(clearDataAndContinuePaging) {
-            $scope.showRatePlanGrid = true;
             $scope.loadingRatePlanGrid = true;
 
             if (clearDataAndContinuePaging) {
@@ -124,7 +125,6 @@
             var input = buildRatePlanItemInput();
 
             return WhS_Sales_RatePlanAPIService.GetRatePlanItems(input).then(function (response) {
-                console.log("GetRatePlanItems");
                 if (response == null)
                     return;
 
@@ -145,20 +145,9 @@
             });
         }
 
-        function buildRatePlanItemInput() {
-            var pageInfo = ratePlanGridAPI.getPageInfo();
-
-            var filter = {
-                CustomerId: carrierAccountDirectiveAPI.getData().CarrierAccountId,
-                ZoneLetter: $scope.zoneLetters[$scope.zoneLetterConnector.selectedZoneLetterIndex],
-                CountryId: null
-            };
-
-            return {
-                Filter: filter,
-                FromRow: pageInfo.fromRow,
-                ToRow: pageInfo.toRow
-            };
+        function showRatePlan(show) {
+            $scope.showZoneLetters = show;
+            $scope.showRatePlanGrid = show;
         }
 
         function defineRatePlanItemExtension(ratePlanItem) {
@@ -218,6 +207,22 @@
                     ratePlanItem.Extension.DisableEndEffectiveDate = item.Extension.DisableEndEffectiveDate;
                 }
             }
+        }
+
+        function buildRatePlanItemInput() {
+            var pageInfo = ratePlanGridAPI.getPageInfo();
+
+            var filter = {
+                CustomerId: carrierAccountDirectiveAPI.getData().CarrierAccountId,
+                ZoneLetter: $scope.zoneLetters[$scope.zoneLetterConnector.selectedZoneLetterIndex],
+                CountryId: null
+            };
+
+            return {
+                Filter: filter,
+                FromRow: pageInfo.fromRow,
+                ToRow: pageInfo.toRow
+            };
         }
 
         function buildNewSaleRates() {

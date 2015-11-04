@@ -44,15 +44,23 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<Country> GetCountriesToSell(int customerId)
         {
-            IEnumerable<Country> countries = new CountryManager().GetCachedCountries().Values;
+            IEnumerable<Country> countriesToSell = null;
+
+            var allCountries = new CountryManager().GetCachedCountries();
             CustomerZones customerZones = this.GetCustomerZones(customerId, DateTime.Now, false);
 
             if (customerZones != null)
             {
-                countries = countries.FindAllRecords(c => !customerZones.CountryIds.Contains(c.CountryId));
+                countriesToSell = new List<Country>();
+                IEnumerable<int> customerCountryIds = customerZones.Countries.MapRecords(c => c.CountryId);
+                countriesToSell = allCountries.FindAllRecords(c => !customerCountryIds.Contains(c.CountryId));
+            }
+            else
+            {
+                countriesToSell = allCountries.Values;
             }
 
-            return countries;
+            return countriesToSell;
         }
 
         public IEnumerable<char> GetCustomerZoneLetters(int customerId)
@@ -74,7 +82,8 @@ namespace TOne.WhS.BusinessEntity.Business
             if (customerZones != null)
             {
                 int sellingNumberPlanId = new CarrierAccountManager().GetSellingNumberPlanId(customerId, CarrierAccountType.Customer);
-                saleZones = new SaleZoneManager().GetSaleZonesByCountryIds(sellingNumberPlanId, customerZones.CountryIds);
+                IEnumerable<int> countryIds = customerZones.Countries.MapRecords(c => c.CountryId);
+                saleZones = new SaleZoneManager().GetSaleZonesByCountryIds(sellingNumberPlanId, countryIds);
             }
 
             return saleZones;
@@ -85,7 +94,14 @@ namespace TOne.WhS.BusinessEntity.Business
             CustomerZones currentCustomerZones = this.GetCustomerZones(customerZones.CustomerId, DateTime.Now, false);
 
             if (currentCustomerZones != null)
-                customerZones.CountryIds.AddRange(currentCustomerZones.CountryIds);
+            {
+                foreach (CustomerCountry country in currentCustomerZones.Countries)
+                {
+                    customerZones.Countries.Add(new CustomerCountry() {
+                        CountryId = country.CountryId
+                    });
+                }
+            }
 
             TOne.Entities.InsertOperationOutput<CustomerZones> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CustomerZones>();
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;

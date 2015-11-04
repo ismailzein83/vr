@@ -86,7 +86,9 @@
                 var country = $scope.countries[i];
 
                 if (country.isSelected) {
-                    selectedCountries.push(country);
+                    selectedCountries.push({
+                        CountryId: country.CountryId
+                    });
                 }
             }
 

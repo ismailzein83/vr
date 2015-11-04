@@ -25,19 +25,16 @@ namespace TOne.WhS.Sales.Business
 
             if (saleZones != null)
             {
+                saleZones = this.GetFilteredSaleZones(saleZones, input.Filter);
+
                 if (saleZones != null)
                 {
-                    saleZones = this.GetFilteredSaleZones(saleZones, input.Filter);
+                    saleZones = this.GetPagedSaleZones(saleZones, input.FromRow, input.ToRow);
 
                     if (saleZones != null)
                     {
-                        saleZones = this.GetPagedSaleZones(saleZones, input.FromRow, input.ToRow);
-
-                        if (saleZones != null)
-                        {
-                            IEnumerable<SaleRate> saleRates = this.GetSaleRates(input.Filter.CustomerId, saleZones);
-                            items = this.GetRatePlanItems(saleZones, saleRates);
-                        }
+                        IEnumerable<SaleRate> saleRates = this.GetSaleRates(input.Filter.CustomerId, saleZones);
+                        items = this.GetRatePlanItems(saleZones, saleRates);
                     }
                 }
             }
@@ -53,7 +50,7 @@ namespace TOne.WhS.Sales.Business
 
         private IEnumerable<SaleZone> GetFilteredSaleZones(IEnumerable<SaleZone> saleZones, RatePlanItemFilter filter)
         {
-            return saleZones.FindAllRecords(z => z.Name != null && z.Name.Length > 0 && z.Name[0] == char.ToLower(filter.ZoneLetter));
+            return saleZones.FindAllRecords(z => z.Name != null && z.Name.Length > 0 && char.ToLower(z.Name.ElementAt(0)) == char.ToLower(filter.ZoneLetter));
         }
 
         private IEnumerable<SaleZone> GetPagedSaleZones(IEnumerable<SaleZone> saleZones, int fromRow, int toRow)
@@ -77,7 +74,6 @@ namespace TOne.WhS.Sales.Business
         {
             SaleRateManager manager = new SaleRateManager();
             IEnumerable<long> saleZoneIds = saleZones.MapRecords(z => z.SaleZoneId);
-            
             return manager.GetSaleRatesByCustomerZoneIds(SalePriceListOwnerType.Customer, customerId, saleZoneIds, DateTime.Now);
         }
 
@@ -141,41 +137,5 @@ namespace TOne.WhS.Sales.Business
         }
 
         #endregion
-
-        private void JunkCode() {
-            /*
-            IEnumerable<SaleZone> saleZones = this.GetSaleZones(input.Filter.CustomerId);
-
-            if (saleZones != null)
-            {
-                saleZones = saleZones.FindAllRecords(z => z.Name == null || (z.Name.Length > 0 && char.ToLower(z.Name[0]) == char.ToLower(input.Filter.ZoneLetter)));
-
-                saleZones = this.GetPagedSaleZones(saleZones, input.FromRow, input.ToRow);
-
-                IEnumerable<long> saleZoneIds = saleZones.MapRecords(z => z.SaleZoneId);
-                List<SaleRate> saleRates = this.GetSaleRatesByCustomerZoneIds(input.Filter.CustomerId, saleZoneIds);
-
-                foreach (SaleZone saleZone in saleZones)
-                {
-                    RatePlanItem ratePlanItem = new RatePlanItem();
-
-                    ratePlanItem.ZoneId = saleZone.SaleZoneId;
-                    ratePlanItem.ZoneName = saleZone.Name;
-
-                    var rate = saleRates.FindRecord(item => item.ZoneId == saleZone.SaleZoneId);
-
-                    if (rate != null)
-                    {
-                        ratePlanItem.SaleRateId = rate.SaleRateId;
-                        ratePlanItem.Rate = rate.NormalRate;
-                        ratePlanItem.BeginEffectiveDate = rate.BeginEffectiveDate;
-                        ratePlanItem.EndEffectiveDate = rate.EndEffectiveDate;
-                    }
-
-                    ratePlanItems.Add(ratePlanItem);
-                }
-            }
-            */
-        }
     }
 }

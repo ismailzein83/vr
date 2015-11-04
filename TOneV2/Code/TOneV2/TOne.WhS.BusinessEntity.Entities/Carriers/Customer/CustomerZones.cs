@@ -12,13 +12,13 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int CustomerId { get; set; }
 
-        public List<int> CountryIds { get; set; }
+        public List<CustomerCountry> Countries { get; set; }
 
         public DateTime StartEffectiveTime { get; set; }
     }
 
-    public class CustomerZone
+    public class CustomerCountry
     {
-        public long ZoneId { get; set; }
+        public int CountryId { get; set; }
     }
 }

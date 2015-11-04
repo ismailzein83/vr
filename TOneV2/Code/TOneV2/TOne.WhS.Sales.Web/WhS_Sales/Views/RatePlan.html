@@ -25,16 +25,16 @@
             </vr-actionbar>
         </vr-row>
 
-        <vr-row ng-if="showZoneLetters">
-            <vr-columns width="fullrow">
+        <vr-row>
+            <vr-columns width="fullrow" ng-if="showZoneLetters">
                 <vr-choices selectedindex="zoneLetterConnector.selectedZoneLetterIndex" onselectionchanged="zoneLetterConnector.onZoneLetterSelectionChanged()">
                     <vr-choice ng-repeat="letter in zoneLetters">{{ letter | uppercase }}</vr-choice>
                 </vr-choices>
             </vr-columns>
         </vr-row>
 
-        <vr-row ng-show="showRatePlanGrid" removeline>
-            <vr-columns width="fullrow">
+        <vr-row removeline>
+            <vr-columns width="fullrow" ng-show="showRatePlanGrid">
                 <vr-datagrid on-ready="onRatePlanGridReady"
                              datasource="ratePlanItems"
                              loadmoredata="loadMoreData"
