@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeCarrierprofileSelector', ['WhS_BE_CarrierProfileAPIService', 'UtilsService', '$compile',
-function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile) {
+app.directive('vrWhsBeCarrierprofileSelector', ['WhS_BE_CarrierProfileAPIService', 'UtilsService', '$compile','VRUIUtilsService',
+function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -10,45 +10,38 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile) {
             isdisabled: "=",
             onselectionchanged: '=',
             isrequired: "@",
+            selectedvalues:'='
 
         },
         controller: function ($scope, $element, $attrs) {
 
             var ctrl = this;
 
-            $scope.selectedCarrierProfiles;
+            ctrl.selectedvalues;
             if ($attrs.ismultipleselection != undefined)
-                $scope.selectedCarrierProfiles = [];
+                ctrl.selectedvalues = [];
 
-            $scope.carrierProfiles = [];
-            var beCarrierProfileObject = new beCarrierProfile(ctrl, $scope, $attrs);
-            beCarrierProfileObject.initializeController();
-            $scope.onselectionchanged = function () {
-
-                if (ctrl.onselectionchanged != undefined) {
-                    var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
-                    if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                        onvaluechangedMethod();
-                    }
-                }
-
-            }
+            ctrl.datasource = [];
+            var ctor = new carrierProfileCtor(ctrl, $scope, $attrs);
+            ctor.initializeController();
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        link: function preLink($scope, iElement, iAttrs) {
-            var ctrl = $scope.ctrl;
-            $scope.$watch('ctrl.isdisabled', function () {
-                var template = getBeCarrierProfileTemplate(iAttrs, ctrl);
-                iElement.html(template);
-                $compile(iElement.contents())($scope);
-            });
+        compile: function (element, attrs) {
+            return {
+                pre: function ($scope, iElem, iAttrs, ctrl) {
+
+                }
+            }
+        },
+        template: function (element, attrs) {
+            return getTemplate(attrs);
         }
 
     };
 
 
-    function getBeCarrierProfileTemplate(attrs, ctrl) {
+    function getTemplate(attrs) {
 
         var multipleselection = "";
         if (attrs.ismultipleselection != undefined)
@@ -57,15 +50,13 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile) {
         if (attrs.isrequired != undefined)
             required = "isrequired";
         var disabled = "";
-        if (ctrl.isdisabled)
-            disabled = "vr-disabled='true'"
         return '<div  vr-loader="isLoadingDirective">'
             + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CarrierProfileId" '
-        + required + ' label="Carrier Profile" datasource="carrierProfiles" selectedvalues="selectedCarrierProfiles"  onselectionchanged="onselectionchanged" ' + disabled + '></vr-select>'
+        + required + ' label="Carrier Profile" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
            + '</div>'
     }
 
-    function beCarrierProfile(ctrl, $scope, $attrs) {
+    function carrierProfileCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
 
@@ -77,30 +68,23 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile) {
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('CarrierProfileId', $attrs, ctrl);
             }
-            api.setData = function (selectedIds) {
+            api.load = function (payload) {
 
-                if ($attrs.ismultipleselection) {
-                    for (var i = 0; i < selectedIds.length; i++) {
-                        var selectedCarrierProfile = UtilsService.getItemByVal($scope.carrierProfiles, selectedIds[i], "CarrierProfileId");
-                        if (selectedCarrierProfile != null)
-                            $scope.selectedCarrierProfiles.push(selectedCarrierProfile);
-                    }
+                var selectedIds;
+                if (payload != undefined) {
+                    selectedIds = payload.selectedIds;
                 }
-                else {
-                    var selectedCarrierProfile = UtilsService.getItemByVal($scope.carrierProfiles, selectedIds, "CarrierProfileId");
-                    if (selectedCarrierProfile != null)
-                        $scope.selectedCarrierProfiles = selectedCarrierProfile;
-                }
-            }
-            api.load = function () {
-                return WhS_BE_CarrierProfileAPIService.GetCarrierProfilesInfo().then(function (response) {
-                    angular.forEach(response, function (itm) {
-                        $scope.carrierProfiles.push(itm);
+
+                    return WhS_BE_CarrierProfileAPIService.GetCarrierProfilesInfo().then(function (response) {
+                        angular.forEach(response, function (item) {
+                            ctrl.datasource.push(item);
+
+                        });
+                        if (selectedIds!=undefined)
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'CarrierProfileId', $attrs, ctrl);
+
                     });
-                }).catch(function (error) {
-                }).finally(function () {
 
-                });
             }
 
             if (ctrl.onReady != null)

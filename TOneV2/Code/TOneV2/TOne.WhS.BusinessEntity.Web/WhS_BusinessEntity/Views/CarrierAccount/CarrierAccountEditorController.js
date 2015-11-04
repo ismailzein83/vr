@@ -2,14 +2,17 @@
 
     "use strict";
 
-    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_Be_CarrierAccountTypeEnum'];
+    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_Be_CarrierAccountTypeEnum','VRUIUtilsService'];
 
-    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_CarrierAccountTypeEnum) {
+    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_CarrierAccountTypeEnum, VRUIUtilsService) {
 
         var carrierProfileDirectiveAPI;
+        var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var carrierAccountId;
         var carrierProfileId;
-        var editMode;
+        var carrierAccountEntity;
+        var isEditMode;
         defineScope();
         loadParameters();
         load();
@@ -19,13 +22,13 @@
                 carrierAccountId = parameters.CarrierAccountId;
                 carrierProfileId = parameters.CarrierProfileId
             }
-            editMode = (carrierAccountId != undefined);
-            $scope.disableCarrierProfile = ((carrierProfileId != undefined) && !editMode);
+            isEditMode = (carrierAccountId != undefined);
+            $scope.disableCarrierProfile = ((carrierProfileId != undefined) && !isEditMode);
 
         }
         function defineScope() {
             $scope.SaveCarrierAccount = function () {
-                    if (editMode) {
+                if (isEditMode) {
                         return updateCarrierAccount();
                     }
                     else {
@@ -34,7 +37,8 @@
             };
             $scope.onCarrierProfileDirectiveReady = function (api) {
                 carrierProfileDirectiveAPI = api;
-                load();
+                carrierProfileReadyPromiseDeferred.resolve();
+
             }
 
             $scope.close = function () {
@@ -55,38 +59,53 @@
         }
 
         function load() {
-            $scope.isGettingData = true;
-            if (carrierProfileDirectiveAPI == undefined)
-                return;
-
+            $scope.isLoading = true;
             defineCarrierAccountTypes();
            
-            carrierProfileDirectiveAPI.load().then(function () {
-                if ($scope.disableCarrierProfile && carrierProfileId != undefined)
-                {
-                    carrierProfileDirectiveAPI.setData(carrierProfileId);
-                    $scope.isGettingData = false;
-                }   
-                else if (editMode) {
-                  getCarrierAccount();
-                }
-                else {
-                    $scope.isGettingData = false;
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isGettingData = false;
-            });
+            if (isEditMode) {
+                getCarrierAccount().then(function () {
+                    loadAllControls()
+                        .finally(function () {
+                            routeRuleEntity = undefined;
+                        });
+                }).catch(function () {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+            }
+            else {
+                loadAllControls();
+            }
 
         }
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadCarrierProfileDirective])
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+               .finally(function () {
+                   $scope.isLoading = false;
+               });
+        }
+        function loadCarrierProfileDirective() {
+
+            var loadCarrierProfilePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            carrierProfileReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = {
+                        selectedIds: carrierProfileId != undefined? carrierProfileId : undefined
+                    }
+                    VRUIUtilsService.callDirectiveLoad(carrierProfileDirectiveAPI, directivePayload, loadCarrierProfilePromiseDeferred);
+                });
+
+            return loadCarrierProfilePromiseDeferred.promise;
+        }
+
 
         function getCarrierAccount() {
             return WhS_BE_CarrierAccountAPIService.GetCarrierAccount(carrierAccountId).then(function (carrierAccount) {
-                fillScopeFromCarrierAccountObj(carrierAccount);
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.isGettingData = false;
+                carrierAccountEntity = carrierAccount;
             });
         }
 
@@ -95,21 +114,22 @@
                 CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
                 Name: $scope.name,
                 AccountType: $scope.selectedCarrierAccountType.value,
-                CarrierProfileId:carrierProfileDirectiveAPI.getData().CarrierProfileId,
+                CarrierProfileId: carrierProfileDirectiveAPI.getSelectedIds(),
                 SupplierSettings: {},
                 CustomerSettings: {},
             };
             return obj;
         }
-
-        function fillScopeFromCarrierAccountObj(carrierAccountObj) {
-            $scope.name = carrierAccountObj.Name;
-            for (var i = 0; i < $scope.carrierAccountTypes.length; i++)
-                if (carrierAccountObj.AccountType == $scope.carrierAccountTypes[i].value)
-                    $scope.selectedCarrierAccountType = $scope.carrierAccountTypes[i];
-            if (carrierProfileId != undefined)
-                carrierProfileDirectiveAPI.setData(carrierProfileId);
+        function loadFilterBySection() {
+            if(carrierAccountEntity!=undefined)
+            {
+                $scope.name = carrierAccountEntity.Name;
+                for (var i = 0; i < $scope.carrierAccountTypes.length; i++)
+                    if (carrierAccountEntity.AccountType == $scope.carrierAccountTypes[i].value)
+                        $scope.selectedCarrierAccountType = $scope.carrierAccountTypes[i];
+            }
         }
+      
         function insertCarrierAccount() {
             var carrierAccountObject = buildCarrierAccountObjFromScope();
             return WhS_BE_CarrierAccountAPIService.AddCarrierAccount(carrierAccountObject)

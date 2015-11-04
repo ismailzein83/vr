@@ -2,12 +2,13 @@
 
     "use strict";
 
-    carrierAccountManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'VRNotificationService', 'WhS_Be_CarrierAccountTypeEnum'];
+    carrierAccountManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'VRNotificationService', 'WhS_Be_CarrierAccountTypeEnum','VRUIUtilsService'];
 
-    function carrierAccountManagementController($scope, WhS_BE_MainService, UtilsService, VRNotificationService, WhS_Be_CarrierAccountTypeEnum) {
+    function carrierAccountManagementController($scope, WhS_BE_MainService, UtilsService, VRNotificationService, WhS_Be_CarrierAccountTypeEnum, VRUIUtilsService) {
         var gridAPI;
-        var carrierAccountDirectiveAPI;
         var carrierProfileDirectiveAPI;
+        var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
 
@@ -25,7 +26,7 @@
 
             $scope.onCarrierProfileDirectiveReady = function (api) {
                 carrierProfileDirectiveAPI = api;
-                load();
+                carrierProfileReadyPromiseDeferred.resolve();
             }
 
             $scope.onGridReady = function (api) {
@@ -41,22 +42,34 @@
 
         function load() {
 
-            $scope.isGettingData = true;
-
-            if ( carrierProfileDirectiveAPI==undefined)
-                return;
+            $scope.isLoading = true;
             defineCarrierAccountTypes();
+            loadAllControls();
 
-           loadCarrierProfiles().finally(function () {
-               $scope.isGettingData = false;
-           }).catch(function (error) {
-               VRNotificationService.notifyExceptionWithClose(error, $scope);
-               $scope.isGettingData = false;
-           });
 
         }
+        function loadAllControls() {
+            return loadCarrierProfiles()
+                .catch(function (error) {
+                    $scope.isLoading = false;
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+
+                })
+               .finally(function () {
+                   $scope.isLoading = false;
+               });
+        }
         function loadCarrierProfiles() {
-            return carrierProfileDirectiveAPI.load();
+            var loadCarrierProfilePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            carrierProfileReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = undefined;
+
+                    VRUIUtilsService.callDirectiveLoad(carrierProfileDirectiveAPI, directivePayload, loadCarrierProfilePromiseDeferred);
+                });
+
+            return loadCarrierProfilePromiseDeferred.promise;
         }
 
         function getFilterObject() {

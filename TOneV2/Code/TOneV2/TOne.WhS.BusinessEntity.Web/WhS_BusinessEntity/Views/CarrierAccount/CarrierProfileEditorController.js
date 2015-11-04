@@ -5,8 +5,9 @@
     carrierProfileEditorController.$inject = ['$scope', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
 
     function carrierProfileEditorController($scope, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService) {
-        var editMode;
+        var isEditMode;
         var carrierProfileId;
+        var carrierProfileEntity;
         loadParameters();
         defineScope();
         load();
@@ -15,13 +16,13 @@
             if (parameters != undefined && parameters != null) {
                 carrierProfileId = parameters.CarrierProfileId;
             }
-            editMode = (carrierProfileId != undefined);
+            isEditMode = (carrierProfileId != undefined);
 
         }
 
         function defineScope() {
             $scope.SaveCarrierProfile = function () {
-                if (editMode) {
+                if (isEditMode) {
                     return updateCarrierProfile();
                 }
                 else {
@@ -34,29 +35,34 @@
         }
 
         function load() {
-            $scope.isGettingData = true;
-            if (editMode) {
-                getCarrierProfile();
+            $scope.isLoading = true;
+            if (isEditMode) {
+                getCarrierProfile().then(function(){
+                    loadFilterBySection();
+                });
             }
             else {
-                $scope.isGettingData = false;
+                $scope.isLoading = true;
             }
         }
 
         function getCarrierProfile() {
             return WhS_BE_CarrierProfileAPIService.GetCarrierProfile(carrierProfileId).then(function (carrierProfile) {
-                fillScopeFromCarrierProfileObj(carrierProfile);
+                carrierProfileEntity = carrierProfile;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isGettingData = false;
+                $scope.isLoading = true;
             }).finally(function () {
-                $scope.isGettingData = false;
+                $scope.isLoading = true;
             });
         }
-
-        function fillScopeFromCarrierProfileObj(carrierProfile) {
-            $scope.name = carrierProfile.Name;
+        function loadFilterBySection() {
+            if (carrierProfileEntity != undefined) {
+                $scope.name = carrierProfile.Name;
+            }
+           
         }
+
 
         function insertCarrierProfile() {
             var carrierProfileObject = buildCarrierProfileObjFromScope();
