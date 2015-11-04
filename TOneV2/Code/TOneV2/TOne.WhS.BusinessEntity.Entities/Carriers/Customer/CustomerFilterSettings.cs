@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.Routing.Entities
+namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class RouteOptionSettingsContext
+    public class CustomerFilterSettings
     {
     }
 }

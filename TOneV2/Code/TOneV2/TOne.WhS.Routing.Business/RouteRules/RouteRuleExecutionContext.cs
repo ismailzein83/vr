@@ -15,9 +15,15 @@ namespace TOne.WhS.Routing.Business.RouteRules
     {
         RouteRule _routeRule;
         internal List<RouteOptionRuleTarget> _options = new List<RouteOptionRuleTarget>();
+        HashSet<int> _filteredSupplierIds;
         public RouteRuleExecutionContext(RouteRule routeRule)
         {
             _routeRule = routeRule;
+            SupplierFilterSettings supplierFilterSettings = new SupplierFilterSettings
+            {
+                RoutingProductId = routeRule.Criteria.RoutingProductId
+            };
+            _filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
         }
 
         internal List<SupplierCodeMatch> SupplierCodeMatches { private get; set; }
@@ -58,19 +64,38 @@ namespace TOne.WhS.Routing.Business.RouteRules
         }
 
         public List<SupplierCodeMatch> GetSupplierCodeMatches(int supplierId)
-        {            
-            if(this.SupplierCodeMatchBySupplier != null)
+        {
+            if (_filteredSupplierIds == null && _filteredSupplierIds.Contains(supplierId))
             {
-                List<SupplierCodeMatch> supplierCodeMatches;
-                if (this.SupplierCodeMatchBySupplier.TryGetValue(supplierId, out supplierCodeMatches))
-                    return supplierCodeMatches;
+                if (this.SupplierCodeMatchBySupplier != null)
+                {
+                    List<SupplierCodeMatch> supplierCodeMatches;
+                    if (this.SupplierCodeMatchBySupplier.TryGetValue(supplierId, out supplierCodeMatches))
+                        return supplierCodeMatches;
+                }
             }
             return null;
         }
 
+
+        List<SupplierCodeMatch> _validSupplierCodeMatches;
         public List<SupplierCodeMatch> GetAllSuppliersCodeMatches()
         {
-            return this.SupplierCodeMatches;
+            if (_validSupplierCodeMatches == null)
+            {
+                _validSupplierCodeMatches = new List<SupplierCodeMatch>();
+                if (this.SupplierCodeMatches != null)
+                {
+                    foreach (var supplierCodeMatch in this.SupplierCodeMatches)
+                    {
+                        if (_filteredSupplierIds == null && _filteredSupplierIds.Contains(supplierCodeMatch.SupplierId))
+                        {
+                            _validSupplierCodeMatches.Add(supplierCodeMatch);
+                        }
+                    }
+                }
+            }
+            return _validSupplierCodeMatches;
         }
 
         public SupplierZoneRate GetSupplierZoneRate(long supplierZoneId)

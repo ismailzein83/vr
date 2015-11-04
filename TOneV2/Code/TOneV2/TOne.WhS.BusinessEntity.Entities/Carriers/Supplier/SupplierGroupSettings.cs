@@ -10,14 +10,14 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int ConfigId { get; set; }
 
-        public abstract IEnumerable<int> GetSupplierIds(SupplierGroupContext context);
+        public abstract IEnumerable<int> GetSupplierIds(ISupplierGroupContext context);
     }
 
     public class SelectiveSuppliersSettings : SupplierGroupSettings
     {
         public List<int> SupplierIds { get; set; }
 
-        public override IEnumerable<int> GetSupplierIds(SupplierGroupContext context)
+        public override IEnumerable<int> GetSupplierIds(ISupplierGroupContext context)
         {
             throw new NotImplementedException();
         }

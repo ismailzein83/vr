@@ -52,8 +52,14 @@ namespace TOne.WhS.Routing.Business.RouteRules
             var options = new List<RouteOptionRuleTarget>();
             if (this.OptionsSettingsGroup != null)
             {
-                RouteOptionSettingsContext routeOptionSettingsContext = new RouteOptionSettingsContext();
-                var optionsSettings = this.OptionsSettingsGroup.GetOptionSettings(routeOptionSettingsContext);
+                IRouteOptionSettingsContext routeOptionSettingsContext = new RouteOptionSettingsContext
+                {
+                    FilterSettings = new SupplierFilterSettings
+                    {
+                        RoutingProductId = target.RoutingProductId
+                    }
+                };
+                var optionsSettings = routeOptionSettingsContext.GetGroupOptionSettings(this.OptionsSettingsGroup);
                 if (optionsSettings != null)
                 {
                     foreach (var optionSettings in optionsSettings)

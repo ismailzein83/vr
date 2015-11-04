@@ -14,26 +14,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public abstract IEnumerable<long> GetZoneIds(ISaleZoneGroupContext context);
 
-        public abstract string GetDescription();
+        public abstract string GetDescription(ISaleZoneGroupContext context);
     }
-
-    //public class SelectiveSaleZonesSettings : SaleZoneGroupSettings
-    //{
-    //    public List<long> ZoneIds { get; set; }
-
-    //    public override IEnumerable<long> GetZoneIds(SaleZoneGroupContext context)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
-
-    //public class AllExceptSaleZonesSettings : SaleZoneGroupSettings
-    //{
-    //    public List<long> ZoneIds { get; set; }
-
-    //    public override IEnumerable<long> GetZoneIds(SaleZoneGroupContext context)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
 }

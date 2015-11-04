@@ -172,7 +172,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
             List<SaleZone> allZones = GetCachedSaleZones(filter.SellingNumberPlanId);
-            HashSet<long> filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(filter.SaleZoneGroupContext);
+            HashSet<long> filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(filter.SaleZoneFilterSettings);
             Func<SaleZone, bool> zoneFilter = (zone) =>
                 {
                     if (filteredZoneIds != null && !filteredZoneIds.Contains(zone.SaleZoneId))
@@ -184,10 +184,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return allZones.MapRecords(SaleZoneInfoMapper, zoneFilter);
         }
 
-        public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(int sellingNumberPlanId, HashSet<long> saleZoneIds, ISaleZoneGroupContext saleZoneGroupContext)
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(int sellingNumberPlanId, HashSet<long> saleZoneIds, SaleZoneFilterSettings saleZoneFilterSettings)
         {
             List<SaleZone> allZones = GetCachedSaleZones(sellingNumberPlanId);
-            HashSet<long> filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(saleZoneGroupContext);
+            HashSet<long> filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(saleZoneFilterSettings);
             Func<SaleZone, bool> zoneFilter = (zone) =>
             {
                 if (!saleZoneIds.Contains(zone.SaleZoneId))

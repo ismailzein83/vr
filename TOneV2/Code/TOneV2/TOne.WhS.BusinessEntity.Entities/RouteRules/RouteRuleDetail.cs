@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Entities
             get
             {
                 if (this.Entity.Criteria != null && this.Entity.Criteria.CodeCriteriaGroupSettings != null)
-                    return this.Entity.Criteria.CodeCriteriaGroupSettings.GetDescription();
+                    return this.Entity.Criteria.CodeCriteriaGroupSettings.GetDescription(this.Entity.GetCodeCriteriaGroupContext());
 
                 return string.Empty;
             }
@@ -26,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Entities
             get
             {
                 if (this.Entity.Criteria != null && this.Entity.Criteria.CustomerGroupSettings != null)
-                    return this.Entity.Criteria.CustomerGroupSettings.GetDescription();
+                    return this.Entity.Criteria.CustomerGroupSettings.GetDescription(this.Entity.GetCustomerGroupContext());
 
                 return string.Empty;
             }
@@ -37,7 +37,7 @@ namespace TOne.WhS.BusinessEntity.Entities
             get
             {
                 if (this.Entity.Criteria != null && this.Entity.Criteria.SaleZoneGroupSettings != null)
-                    return this.Entity.Criteria.SaleZoneGroupSettings.GetDescription();
+                    return this.Entity.Criteria.SaleZoneGroupSettings.GetDescription(this.Entity.GetSaleZoneGroupContext());
 
                 return string.Empty;
             }

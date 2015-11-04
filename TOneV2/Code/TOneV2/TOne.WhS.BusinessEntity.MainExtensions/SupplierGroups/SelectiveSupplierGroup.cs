@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SupplierGroups
     {
         public List<int> SupplierIds { get; set; }
 
-        public override IEnumerable<int> GetSupplierIds(SupplierGroupContext context)
+        public override IEnumerable<int> GetSupplierIds(ISupplierGroupContext context)
         {
             return this.SupplierIds;
         }

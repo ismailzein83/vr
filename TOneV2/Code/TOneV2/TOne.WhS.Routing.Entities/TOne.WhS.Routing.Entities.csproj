@@ -60,7 +60,7 @@
     <Compile Include="RouteRuleSettings\RouteRuleOptionPercentageSettings.cs" />
     <Compile Include="RouteOptionSettings.cs" />
     <Compile Include="RouteOptionSettingsGroup.cs" />
-    <Compile Include="RouteOptionSettingsContext.cs" />
+    <Compile Include="IRouteOptionSettingsContext.cs" />
     <Compile Include="Routes\PricingProductRoute.cs" />
     <Compile Include="Routes\RoutingProductRoute.cs" />
     <Compile Include="Routes\RoutingProductRouteOption.cs" />

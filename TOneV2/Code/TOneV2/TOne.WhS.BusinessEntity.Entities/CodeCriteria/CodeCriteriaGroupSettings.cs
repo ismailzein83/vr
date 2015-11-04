@@ -10,26 +10,8 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int ConfigId { get; set; }
 
-        public abstract IEnumerable<CodeCriteria> GetCodeCriterias(CodeCriteriaGroupContext context);
+        public abstract IEnumerable<CodeCriteria> GetCodeCriterias(ICodeCriteriaGroupContext context);
 
-        public abstract string GetDescription();
+        public abstract string GetDescription(ICodeCriteriaGroupContext context);
     }
-
-    //public class SelectiveCodeCriteriaSettings : CodeCriteriaGroupSettings
-    //{
-    //    public List<CodeCriteria> Codes { get; set; }
-
-    //    public override IEnumerable<CodeCriteria> GetCodeCriterias(CodeCriteriaGroupContext context)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-
-    //    public override string GetDescription()
-    //    {
-    //        if (this.Codes != null)
-    //            return string.Join(",", this.Codes.Select(item => item.Code));
-
-    //        return string.Empty;
-    //    }
-    //}
 }

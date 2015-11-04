@@ -62,7 +62,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CarrierAccounts\CustomerGroupContext.cs" />
+    <Compile Include="CarrierAccounts\SupplierGroupContext.cs" />
+    <Compile Include="CarrierAccounts\SuppliersWithZonesGroupContext.cs" />
     <Compile Include="CodeGroupManager.cs" />
+    <Compile Include="Codes\CodeCriteriaGroupContext.cs" />
     <Compile Include="CountryManager.cs" />
     <Compile Include="CarrierAccountManager.cs" />
     <Compile Include="CarrierProfileManager.cs" />
@@ -121,7 +125,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CarrierAccounts\" />
     <Folder Include="RouteOptionRules\StructureRuleBehaviors\" />
     <Folder Include="RouteRules\StructureRuleBehaviors\" />
   </ItemGroup>

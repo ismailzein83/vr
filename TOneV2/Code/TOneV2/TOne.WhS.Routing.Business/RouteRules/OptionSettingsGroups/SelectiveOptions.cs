@@ -11,7 +11,7 @@ namespace TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups
     {
         public List<RouteOptionSettings> Options { get; set; }
         
-        public override IEnumerable<RouteOptionSettings> GetOptionSettings(RouteOptionSettingsContext context)
+        public override IEnumerable<RouteOptionSettings> GetOptionSettings(IRouteOptionSettingsContext context)
         {
             return this.Options;
         }

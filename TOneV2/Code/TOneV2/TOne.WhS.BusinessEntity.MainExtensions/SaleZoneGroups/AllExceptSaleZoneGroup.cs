@@ -17,11 +17,16 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups
             return this.ZoneIds;
         }
 
-        public override string GetDescription()
-        {
-            SaleZoneManager manager = new SaleZoneManager();
-            StringBuilder builder = new StringBuilder();
-            return builder.AppendFormat("All Except: {0}", manager.GetDescription(base.SellingNumberPlanId, this.ZoneIds)).ToString();
+        public override string GetDescription(ISaleZoneGroupContext context)
+        {           
+            var validZoneIds = context.GetGroupZoneIds(this);
+            if (validZoneIds != null)
+            {
+                SaleZoneManager manager = new SaleZoneManager();
+                return String.Format("All Except: {0}", manager.GetDescription(base.SellingNumberPlanId, validZoneIds));
+            }
+            else
+                return null;
         }
     }
 }

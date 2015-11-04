@@ -99,6 +99,41 @@ namespace TOne.WhS.BusinessEntity.Business
             return allRoutingProducts.GetRecord(routingProductId);
         }
 
+        public HashSet<long> GetFilteredZoneIds(int routingProductId)
+        {
+            HashSet<long> filteredZoneIds = null;
+            var routingProduct = GetRoutingProduct(routingProductId);
+            if (routingProduct != null && routingProduct.Settings != null)
+            {
+                if (!routingProduct.Settings.IsAllZones)
+                {
+                    if (routingProduct.Settings.Zones == null)
+                        filteredZoneIds = new HashSet<long>();//empty list
+                    else
+                        filteredZoneIds = new HashSet<long>(routingProduct.Settings.Zones.Select(zone => zone.ZoneId));
+                }
+            }
+            return filteredZoneIds;
+        }
+
+        public HashSet<int> GetFilteredSupplierIds(int routingProductId)
+        {
+            HashSet<int> filteredSupplierIds = null;
+            var routingProduct = GetRoutingProduct(routingProductId);
+            if (routingProduct != null && routingProduct.Settings != null)
+            {
+                if (!routingProduct.Settings.IsAllSuppliers)
+                {
+                    if (routingProduct.Settings.Suppliers == null)
+                        filteredSupplierIds = new HashSet<int>();//empty list
+                    else
+                        filteredSupplierIds = new HashSet<int>(routingProduct.Settings.Suppliers.Select(supplier => supplier.SupplierId));
+                }
+            }
+
+            return filteredSupplierIds;
+        }
+
         public Dictionary<int, RoutingProduct> GetAllRoutingProducts()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoutingProducts",

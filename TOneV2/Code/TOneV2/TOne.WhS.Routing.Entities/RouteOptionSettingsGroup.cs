@@ -10,6 +10,6 @@ namespace TOne.WhS.Routing.Entities
     {
         public int ConfigId { get; set; }
 
-        public abstract IEnumerable<RouteOptionSettings> GetOptionSettings(RouteOptionSettingsContext context);
+        public abstract IEnumerable<RouteOptionSettings> GetOptionSettings(IRouteOptionSettingsContext context);
     }
 }

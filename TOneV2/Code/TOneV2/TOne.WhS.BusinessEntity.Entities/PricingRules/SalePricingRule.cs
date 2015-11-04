@@ -10,14 +10,49 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public SalePricingRuleCriteria Criteria { get; set; }
 
-        public IEnumerable<int> CustomerIds
+        public ISaleZoneGroupContext GetSaleZoneGroupContext()
         {
-            get { return this.Criteria != null && this.Criteria.CustomerGroupSettings != null ? this.Criteria.CustomerGroupSettings.GetCustomerIds(null) : null; }
+            ISaleZoneGroupContext saleZoneGroupContext = ContextFactory.CreateContext<ISaleZoneGroupContext>();
+            saleZoneGroupContext.FilterSettings = new SaleZoneFilterSettings
+            {
+            };
+            return saleZoneGroupContext;
         }
 
-        public IEnumerable<long> SaleZoneIds
+        public ICustomerGroupContext GetCustomerGroupContext()
         {
-            get { return this.Criteria != null && this.Criteria.SaleZoneGroupSettings != null ? this.Criteria.SaleZoneGroupSettings.GetZoneIds(null) : null; }
+            ICustomerGroupContext customerGroupContext = ContextFactory.CreateContext<ICustomerGroupContext>();
+            customerGroupContext.FilterSettings = new CustomerFilterSettings
+            {
+            };
+            return customerGroupContext;
         }
+
+        IEnumerable<int> IRuleCustomerCriteria.CustomerIds
+        {
+            get
+            {
+                if (this.Criteria != null && this.Criteria.CustomerGroupSettings != null)
+                    return this.GetCustomerGroupContext().GetGroupCustomerIds(this.Criteria.CustomerGroupSettings);
+                else
+                    return null;
+            }
+        }
+
+        IEnumerable<long> IRuleSaleZoneCriteria.SaleZoneIds
+        {
+            get
+            {
+                if (this.Criteria != null && this.Criteria.SaleZoneGroupSettings != null)
+                {
+                    return GetSaleZoneGroupContext().GetGroupZoneIds(this.Criteria.SaleZoneGroupSettings);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        
     }
 }

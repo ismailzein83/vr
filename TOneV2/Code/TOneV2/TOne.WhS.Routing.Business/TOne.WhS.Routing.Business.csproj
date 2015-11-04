@@ -74,6 +74,7 @@
     <Compile Include="RouteRules\Orders\OptionOrderByRate.cs" />
     <Compile Include="RouteRules\Percentages\FixedOptionPercentage.cs" />
     <Compile Include="RouteRules\RegularRouteRule.Design.cs" />
+    <Compile Include="RouteRules\RouteOptionSettingsContext.cs" />
     <Compile Include="RouteRules\RouteRuleExecutionContext.cs" />
     <Compile Include="SaleCodeIterator.cs" />
     <Compile Include="SupplierCodeIterator.cs" />

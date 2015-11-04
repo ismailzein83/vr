@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SuppliersWithZonesGroupContext
+    public interface ISupplierGroupContext
     {
+        SupplierFilterSettings FilterSettings { get; set; }
+
+        IEnumerable<int> GetSupplierIds(SupplierGroupSettings group);
     }
 }

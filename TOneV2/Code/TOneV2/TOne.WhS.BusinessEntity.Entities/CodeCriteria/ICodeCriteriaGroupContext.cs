@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SupplierGroupContext
+    public interface ICodeCriteriaGroupContext : IContext
     {
+        IEnumerable<CodeCriteria> GetGroupCodeCriterias(CodeCriteriaGroupSettings group);
     }
 }

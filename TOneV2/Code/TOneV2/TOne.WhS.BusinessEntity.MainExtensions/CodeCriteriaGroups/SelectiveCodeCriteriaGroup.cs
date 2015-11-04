@@ -11,17 +11,18 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups
     {
         public List<CodeCriteria> Codes { get; set; }
 
-        public override IEnumerable<CodeCriteria> GetCodeCriterias(CodeCriteriaGroupContext context)
+        public override IEnumerable<CodeCriteria> GetCodeCriterias(ICodeCriteriaGroupContext context)
         {
             return this.Codes;
         }
 
-        public override string GetDescription()
+        public override string GetDescription(ICodeCriteriaGroupContext context)
         {
-            if (this.Codes != null)
-                return string.Join(", ", this.Codes.Select(item => item.Code));
-
-            return string.Empty;
+            var validCodes = context.GetGroupCodeCriterias(this);
+            if (validCodes != null)            
+                return string.Join(", ", validCodes.Select(item => item.Code));            
+            else
+                return null;
         }
     }
 }

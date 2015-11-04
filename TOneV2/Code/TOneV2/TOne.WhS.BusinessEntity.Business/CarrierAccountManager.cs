@@ -40,7 +40,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierAccount;
         }
         
-        public string GetDescription(List<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
+        public string GetDescription(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
             IEnumerable<CarrierAccountDetail> carrierAccounts = this.GetCarrierAccountsByIds(carrierAccountsIds, true, false);
             if(carrierAccounts != null)
@@ -55,7 +55,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if(filter != null)
             {
-                carrierAccountsDetails = this.GetCarrierAccountsByType(filter.GetCustomers, filter.GetSuppliers);
+                carrierAccountsDetails = this.GetCarrierAccountsByType(filter.GetCustomers, filter.GetSuppliers, filter.SupplierFilterSettings, filter.CustomerFilterSettings);
             }
             else
             {
@@ -64,6 +64,7 @@ namespace TOne.WhS.BusinessEntity.Business
             
             return carrierAccountsDetails.MapRecords(CarrierAccountInfoMapper);
         }
+        
         public List<Vanrise.Entities.TemplateConfig> GetCustomersGroupTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
@@ -169,9 +170,9 @@ namespace TOne.WhS.BusinessEntity.Business
             };
         }
 
-        private IEnumerable<CarrierAccountDetail> GetCarrierAccountsByIds(List<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
+        private IEnumerable<CarrierAccountDetail> GetCarrierAccountsByIds(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
-            IEnumerable<CarrierAccountDetail> carrierAccountsDetails = this.GetCarrierAccountsByType(getCustomers, getSuppliers);
+            IEnumerable<CarrierAccountDetail> carrierAccountsDetails = this.GetCarrierAccountsByType(getCustomers, getSuppliers, null, null);
             Func<CarrierAccountDetail, bool> filterExpression = null;
 
             if(carrierAccountsIds != null)
@@ -180,24 +181,26 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierAccountsDetails.FindAllRecords(filterExpression);
         }
 
-        private IEnumerable<CarrierAccountDetail> GetCarrierAccountsByType(bool getCustomers, bool getSuppliers)
+        private IEnumerable<CarrierAccountDetail> GetCarrierAccountsByType(bool getCustomers, bool getSuppliers, SupplierFilterSettings supplierFilterSettings, CustomerFilterSettings customerFilterSettings)
         {
             IEnumerable<CarrierAccountDetail> carrierAccountsDetails = GetCachedCarrierAccounts();
-
-            List<CarrierAccountType> CarrierAccountsType = new List<CarrierAccountType>();
-
-            if (getCustomers)
-            {
-                CarrierAccountsType.Add(CarrierAccountType.Customer);
-            }
-
-            if (getSuppliers)
-            {
-                CarrierAccountsType.Add(CarrierAccountType.Supplier);
-            }
-
-            Func<CarrierAccountDetail, bool> filterExpression = (item) =>
-                 (item.AccountType == CarrierAccountType.Exchange || CarrierAccountsType.Contains(item.AccountType));
+            
+            HashSet<int> filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
+            HashSet<int> filteredCustomerIds = CustomerGroupContext.GetFilteredCustomerIds(customerFilterSettings);
+            Func<CarrierAccountDetail, bool> filterExpression = (carrierAccount) =>
+                {
+                    bool isSupplier = carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange;
+                    bool isCustomer = carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange;
+                    if (getCustomers && !isCustomer)
+                        return false;
+                    if (getSuppliers && !isSupplier)
+                        return false;
+                    if (isSupplier && filteredSupplierIds != null && filteredSupplierIds.Contains(carrierAccount.CarrierAccountId))
+                        return false;
+                    if (isCustomer && filteredCustomerIds != null && filteredCustomerIds.Contains(carrierAccount.CarrierAccountId))
+                        return false;
+                    return true;
+                };
 
             return carrierAccountsDetails.FindAllRecords(filterExpression);
         }

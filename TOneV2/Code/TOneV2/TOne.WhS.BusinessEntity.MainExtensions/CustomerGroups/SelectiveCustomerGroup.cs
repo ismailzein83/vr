@@ -10,17 +10,23 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups
 {
     public class SelectiveCustomerGroup : CustomerGroupSettings
     {
-        public List<int> CustomerIds { get; set; }
+        public List<int> CustomerIds { get; set; } 
 
-        public override IEnumerable<int> GetCustomerIds(CustomerGroupContext context)
+        public override IEnumerable<int> GetCustomerIds(ICustomerGroupContext context)
         {
             return this.CustomerIds;
         }
 
-        public override string GetDescription()
+        public override string GetDescription(ICustomerGroupContext context)
         {
-            CarrierAccountManager manager = new CarrierAccountManager();
-            return manager.GetDescription(this.CustomerIds, true, false);
+            var validCustomerIds = context.GetGroupCustomerIds(this);
+            if (validCustomerIds != null)
+            {
+                CarrierAccountManager manager = new CarrierAccountManager();
+                return manager.GetDescription(validCustomerIds, true, false);
+            }
+            else
+                return null;
         }
     }
 }

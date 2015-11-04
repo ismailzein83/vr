@@ -8,9 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public interface ISaleZoneGroupContext : IContext
     {
-        int? RoutingProductId { get; set; }
+        SaleZoneFilterSettings FilterSettings { get; set; }
         IEnumerable<long> GetGroupZoneIds(SaleZoneGroupSettings saleZoneGroup);
-
-        string GetGroupDescription(SaleZoneGroupSettings saleZoneGroup);
     }
 }

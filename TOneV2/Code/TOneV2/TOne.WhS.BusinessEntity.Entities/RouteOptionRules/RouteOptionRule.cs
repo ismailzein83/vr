@@ -22,13 +22,48 @@ namespace TOne.WhS.BusinessEntity.Entities
             return false;
         }
 
+        public ISaleZoneGroupContext GetSaleZoneGroupContext()
+        {
+            ISaleZoneGroupContext saleZoneGroupContext = ContextFactory.CreateContext<ISaleZoneGroupContext>();
+            saleZoneGroupContext.FilterSettings = new SaleZoneFilterSettings
+            {
+                RoutingProductId = this.Criteria.RoutingProductId
+            };
+            return saleZoneGroupContext;
+        }
+
+        public ICustomerGroupContext GetCustomerGroupContext()
+        {
+            ICustomerGroupContext customerGroupContext = ContextFactory.CreateContext<ICustomerGroupContext>();
+            customerGroupContext.FilterSettings = new CustomerFilterSettings
+            {
+            };
+            return customerGroupContext;
+        }
+        
+        public ICodeCriteriaGroupContext GetCodeCriteriaGroupContext()
+        {
+            ICodeCriteriaGroupContext context = ContextFactory.CreateContext<ICodeCriteriaGroupContext>();
+            return context;
+        }
+
+        public ISuppliersWithZonesGroupContext GetSuppliersWithZonesGroupContext()
+        {
+            ISuppliersWithZonesGroupContext groupContext = ContextFactory.CreateContext<ISuppliersWithZonesGroupContext>();
+            groupContext.FilterSettings = new SupplierFilterSettings
+            {
+                RoutingProductId = this.Criteria.RoutingProductId
+            };
+            return groupContext;
+        }
+
         IEnumerable<int> IRuleSupplierCriteria.SupplierIds
         {
             get
             {
                 if(this.Criteria != null && this.Criteria.SuppliersWithZonesGroupSettings != null)
                 {
-                    var suppliersWithZones = this.Criteria.SuppliersWithZonesGroupSettings.GetSuppliersWithZones(null);
+                    var suppliersWithZones = this.GetSuppliersWithZonesGroupContext().GetSuppliersWithZones(this.Criteria.SuppliersWithZonesGroupSettings);
                     if (suppliersWithZones != null)
                         return suppliersWithZones.Select(itm => itm.SupplierId);
                 }
@@ -42,7 +77,7 @@ namespace TOne.WhS.BusinessEntity.Entities
             {
                 if (this.Criteria != null && this.Criteria.SuppliersWithZonesGroupSettings != null)
                 {
-                    var suppliersWithZones = this.Criteria.SuppliersWithZonesGroupSettings.GetSuppliersWithZones(null);
+                    var suppliersWithZones = this.GetSuppliersWithZonesGroupContext().GetSuppliersWithZones(this.Criteria.SuppliersWithZonesGroupSettings);
                     if (suppliersWithZones != null)
                         return suppliersWithZones.SelectMany(itm => itm.SupplierZoneIds != null ? itm.SupplierZoneIds : new List<long>());
                 }
@@ -50,19 +85,46 @@ namespace TOne.WhS.BusinessEntity.Entities
             }
         }
 
-        IEnumerable<long> IRuleSaleZoneCriteria.SaleZoneIds
-        {
-            get { return this.Criteria != null && this.Criteria.SaleZoneGroupSettings != null ? this.Criteria.SaleZoneGroupSettings.GetZoneIds(null) : null; }
-        }
 
         IEnumerable<CodeCriteria> IRuleCodeCriteria.CodeCriterias
         {
-            get { return this.Criteria != null && this.Criteria.CodeCriteriaGroupSettings != null ? this.Criteria.CodeCriteriaGroupSettings.GetCodeCriterias(null) : null; }
+            get
+            {
+                if (this.Criteria != null && this.Criteria.CodeCriteriaGroupSettings != null)
+                {
+                    return GetCodeCriteriaGroupContext().GetGroupCodeCriterias(this.Criteria.CodeCriteriaGroupSettings);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        IEnumerable<long> IRuleSaleZoneCriteria.SaleZoneIds
+        {
+            get
+            {
+                if (this.Criteria != null && this.Criteria.SaleZoneGroupSettings != null)
+                {
+                    return GetSaleZoneGroupContext().GetGroupZoneIds(this.Criteria.SaleZoneGroupSettings);
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
         IEnumerable<int> IRuleCustomerCriteria.CustomerIds
         {
-            get { return this.Criteria != null && this.Criteria.CustomerGroupSettings != null ? this.Criteria.CustomerGroupSettings.GetCustomerIds(null) : null; }
+            get
+            {
+                if (this.Criteria != null && this.Criteria.CustomerGroupSettings != null)
+                    return this.GetCustomerGroupContext().GetGroupCustomerIds(this.Criteria.CustomerGroupSettings);
+                else
+                    return null;
+            }
         }
 
         IEnumerable<int> IRuleRoutingProductCriteria.RoutingProductIds

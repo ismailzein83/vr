@@ -10,13 +10,22 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public PurchasePricingRuleCriteria Criteria { get; set; }
 
-        public IEnumerable<int> SupplierIds
+        public ISuppliersWithZonesGroupContext GetSuppliersWithZonesGroupContext()
+        {
+            ISuppliersWithZonesGroupContext groupContext = ContextFactory.CreateContext<ISuppliersWithZonesGroupContext>();
+            groupContext.FilterSettings = new SupplierFilterSettings
+            {
+            };
+            return groupContext;
+        }
+
+        IEnumerable<int> IRuleSupplierCriteria.SupplierIds
         {
             get
             {
                 if (this.Criteria != null && this.Criteria.SuppliersWithZonesGroupSettings != null)
                 {
-                    var suppliersWithZones = this.Criteria.SuppliersWithZonesGroupSettings.GetSuppliersWithZones(null);
+                    var suppliersWithZones = this.GetSuppliersWithZonesGroupContext().GetSuppliersWithZones(this.Criteria.SuppliersWithZonesGroupSettings);
                     if (suppliersWithZones != null)
                         return suppliersWithZones.Select(itm => itm.SupplierId);
                 }
@@ -24,13 +33,13 @@ namespace TOne.WhS.BusinessEntity.Entities
             }
         }
 
-        public IEnumerable<long> SupplierZoneIds
+        IEnumerable<long> IRuleSupplierZoneCriteria.SupplierZoneIds
         {
             get
             {
                 if (this.Criteria != null && this.Criteria.SuppliersWithZonesGroupSettings != null)
                 {
-                    var suppliersWithZones = this.Criteria.SuppliersWithZonesGroupSettings.GetSuppliersWithZones(null);
+                    var suppliersWithZones = this.GetSuppliersWithZonesGroupContext().GetSuppliersWithZones(this.Criteria.SuppliersWithZonesGroupSettings);
                     if (suppliersWithZones != null)
                         return suppliersWithZones.SelectMany(itm => itm.SupplierZoneIds != null ? itm.SupplierZoneIds : new List<long>());
                 }

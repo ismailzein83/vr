@@ -22,11 +22,52 @@ namespace TOne.WhS.BusinessEntity.Entities
             return false;
         }
 
+        public ISaleZoneGroupContext GetSaleZoneGroupContext()
+        {
+            ISaleZoneGroupContext context = ContextFactory.CreateContext<ISaleZoneGroupContext>();
+            context.FilterSettings = new SaleZoneFilterSettings
+            {
+                RoutingProductId = this.Criteria.RoutingProductId
+            };
+            return context;
+        }
+
+        public ICustomerGroupContext GetCustomerGroupContext()
+        {
+            ICustomerGroupContext context = ContextFactory.CreateContext<ICustomerGroupContext>();
+            context.FilterSettings = new CustomerFilterSettings
+            {
+            };
+            return context;
+        }
+
+        public ICodeCriteriaGroupContext GetCodeCriteriaGroupContext()
+        {
+            ICodeCriteriaGroupContext context = ContextFactory.CreateContext<ICodeCriteriaGroupContext>();
+            return context;
+        }
+
+
+        IEnumerable<CodeCriteria> IRuleCodeCriteria.CodeCriterias
+        {
+            get
+            {
+                if (this.Criteria != null && this.Criteria.CodeCriteriaGroupSettings != null)
+                {
+                    return GetCodeCriteriaGroupContext().GetGroupCodeCriterias(this.Criteria.CodeCriteriaGroupSettings);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
         IEnumerable<long> IRuleSaleZoneCriteria.SaleZoneIds
         {
             get
             {
-                if(this.Criteria != null && this.Criteria.SaleZoneGroupSettings != null)
+                if (this.Criteria != null && this.Criteria.SaleZoneGroupSettings != null)
                 {
                     return GetSaleZoneGroupContext().GetGroupZoneIds(this.Criteria.SaleZoneGroupSettings);
                 }
@@ -37,22 +78,15 @@ namespace TOne.WhS.BusinessEntity.Entities
             }
         }
         
-        public ISaleZoneGroupContext GetSaleZoneGroupContext()
-        {
-            ISaleZoneGroupContext saleZoneGroupContext = ContextFactory.CreateContext<ISaleZoneGroupContext>();
-            saleZoneGroupContext.RoutingProductId = this.Criteria.RoutingProductId;
-            return saleZoneGroupContext;
-        }
-
-
-        IEnumerable<CodeCriteria> IRuleCodeCriteria.CodeCriterias
-        {
-            get { return this.Criteria != null && this.Criteria.CodeCriteriaGroupSettings != null ? this.Criteria.CodeCriteriaGroupSettings.GetCodeCriterias(null) : null; }
-        }
-
         IEnumerable<int> IRuleCustomerCriteria.CustomerIds
         {
-            get { return this.Criteria != null && this.Criteria.CustomerGroupSettings != null ? this.Criteria.CustomerGroupSettings.GetCustomerIds(null) : null; }
+            get
+            {
+                if (this.Criteria != null && this.Criteria.CustomerGroupSettings != null)
+                    return this.GetCustomerGroupContext().GetGroupCustomerIds(this.Criteria.CustomerGroupSettings);
+                else
+                    return null;
+            }
         }
 
         IEnumerable<int> IRuleRoutingProductCriteria.RoutingProductIds

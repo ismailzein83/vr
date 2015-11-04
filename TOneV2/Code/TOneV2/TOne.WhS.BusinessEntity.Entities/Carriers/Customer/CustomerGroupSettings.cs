@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public abstract class SuppliersWithZonesGroupSettings
+    public abstract class CustomerGroupSettings
     {
         public int ConfigId { get; set; }
 
-        public abstract IEnumerable<SupplierWithZones> GetSuppliersWithZones(SuppliersWithZonesGroupContext context);
-    }    
+        public abstract IEnumerable<int> GetCustomerIds(ICustomerGroupContext context);
+
+        public abstract string GetDescription(ICustomerGroupContext context);
+    }
+
 }

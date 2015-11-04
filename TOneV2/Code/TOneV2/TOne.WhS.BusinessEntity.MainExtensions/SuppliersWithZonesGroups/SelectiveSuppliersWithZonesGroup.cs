@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SuppliersWithZonesGroups
     {
         public List<SupplierWithZones> SuppliersWithZones { get; set; }
 
-        public override IEnumerable<SupplierWithZones> GetSuppliersWithZones(SuppliersWithZonesGroupContext context)
+        public override IEnumerable<SupplierWithZones> GetSuppliersWithZones(ISuppliersWithZonesGroupContext context)
         {
             return this.SuppliersWithZones;
         }

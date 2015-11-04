@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class CodeCriteriaGroupContext
+    public class SaleZoneFilterSettings
     {
+        public int? RoutingProductId { get; set; }
     }
 }

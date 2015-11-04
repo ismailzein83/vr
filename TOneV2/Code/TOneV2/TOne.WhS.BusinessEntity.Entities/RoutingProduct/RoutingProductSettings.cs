@@ -14,6 +14,10 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public List<RoutingProductZone> Zones { get; set; }
 
+        public bool IsAllSuppliers { get; set; }
+
+        public List<RoutingProductSupplier> Suppliers { get; set; }
+
         public SaleZoneGroupSettings SaleZoneGroupSettings { get; set; }
 
         public SupplierGroupSettings SupplierGroupSettings { get; set; }
@@ -24,5 +28,10 @@ namespace TOne.WhS.BusinessEntity.Entities
         public long ZoneId { get; set; }
 
         public short? ServicesFlag { get; set; }
+    }
+
+    public class RoutingProductSupplier
+    {
+        public int SupplierId { get; set; }
     }
 }
