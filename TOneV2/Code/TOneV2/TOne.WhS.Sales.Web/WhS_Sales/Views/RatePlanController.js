@@ -2,9 +2,9 @@
 
     "use strict";
 
-    RatePlanController.$inject = ["$scope", "WhS_Sales_MainService", "WhS_Sales_RatePlanAPIService", "WhS_BE_CustomerZoneAPIService", "UtilsService", "VRNotificationService"];
+    RatePlanController.$inject = ["$scope", "WhS_Sales_MainService", "WhS_Sales_RatePlanAPIService", "WhS_BE_CustomerZoneAPIService", "WhS_BE_RatePlanOwnerTypeEnum", "WhS_BE_RatePlanStatusEnum", "UtilsService", "VRNotificationService"];
 
-    function RatePlanController($scope, WhS_Sales_MainService, WhS_Sales_RatePlanAPIService, WhS_BE_CustomerZoneAPIService, UtilsService, VRNotificationService) {
+    function RatePlanController($scope, WhS_Sales_MainService, WhS_Sales_RatePlanAPIService, WhS_BE_CustomerZoneAPIService, WhS_BE_RatePlanOwnerTypeEnum, WhS_BE_RatePlanStatusEnum, UtilsService, VRNotificationService) {
         
         var carrierAccountDirectiveAPI;
         var ratePlanGridAPI;
@@ -56,21 +56,7 @@
                 WhS_Sales_MainService.sellNewZones(carrierAccountDirectiveAPI.getData().CarrierAccountId, onCustomerZonesSold);
             };
 
-            $scope.savePriceList = function () {
-                if (modifiedRatePlanItems.length > 0) {
-                    var input = {
-                        CustomerId: carrierAccountDirectiveAPI.getData().CarrierAccountId,
-                        NewSaleRates: buildNewSaleRates()
-                    };
-
-                    return WhS_Sales_RatePlanAPIService.SavePriceList(input).then(function (response) {
-                        modifiedRatePlanItems = [];
-                        return loadRatePlanGrid(true);
-                    }).catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    });
-                }
-            };
+            defineSaveButtonMenuActions();
         }
 
         function load() {
@@ -142,6 +128,20 @@
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.loadingRatePlanGrid = false;
+            });
+        }
+
+        function getRatePlan() {
+            var ownerType = WhS_BE_RatePlanOwnerTypeEnum.Customer.value;
+            var ownerId = WhS_BE_RatePlanOwnerTypeEnum.Customer.value;
+            var status = WhS_BE_RatePlanStatusEnum.Draft.value;
+
+            return WhS_Sales_RatePlanAPIService.GetRatePlan(ownerType, ownerId, status).then(function (ratePlan) {
+                if (ratePlan != undefined && ratePlan != null) {
+                    for (var i = 0; i < ratePlan.Details.length; i++) {
+                        var item = ratePlan.Details[i];
+                    }
+                }
             });
         }
 
@@ -225,7 +225,42 @@
             };
         }
 
+        function defineSaveButtonMenuActions() {
+            $scope.saveButtonMenuActions = [
+                { name: "Save", clicked: savePriceList },
+                { name: "Save Draft", clicked: savePriceListDraft },
+            ];
+        }
+
+        function savePriceList() {
+            var input = {
+                CustomerId: carrierAccountDirectiveAPI.getData().CarrierAccountId,
+                NewSaleRates: buildNewSaleRates()
+            };
+
+            return WhS_Sales_RatePlanAPIService.SavePriceList(input).then(function (response) {
+                modifiedRatePlanItems = [];
+                return loadRatePlanGrid(true);
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
+        }
+
+        function savePriceListDraft() {
+            var input = {
+                OwnerType: WhS_BE_RatePlanOwnerTypeEnum.Customer.value,
+                OwnerId: carrierAccountDirectiveAPI.getData().CarrierAccountId,
+                Details: buildNewRatePlanItems(),
+                Status: WhS_BE_RatePlanStatusEnum.Draft.value
+            };
+
+            console.log(input);
+        }
+
         function buildNewSaleRates() {
+            if (modifiedRatePlanItems.length == 0)
+                return null;
+
             var newSaleRates = [];
 
             for (var i = 0; i < modifiedRatePlanItems.length; i++) {
@@ -241,6 +276,20 @@
             }
 
             return newSaleRates;
+        }
+
+        function buildNewRatePlanItems() {
+            if (modifiedRatePlanItems.length == 0)
+                return null;
+
+            var clone = UtilsService.cloneObject(modifiedRatePlanItems, true);
+
+            for (var i = 0; i < clone.length; i++) {
+                var modifiedItem = clone[i];
+                modifiedItem.Rate = modifiedItem.Extension.NewRate;
+            }
+
+            return clone;
         }
     }
 

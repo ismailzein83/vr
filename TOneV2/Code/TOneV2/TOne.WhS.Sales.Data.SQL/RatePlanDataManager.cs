@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.Sales.Data.SQL
@@ -25,7 +26,7 @@ namespace TOne.WhS.Sales.Data.SQL
             return recordsAffected > 0;
         }
 
-        public bool CloseThenInsertSaleRates(int customerId, List<SaleRate> newSaleRates)
+        public bool CloseAndInsertSaleRates(int customerId, List<SaleRate> newSaleRates)
         {
             DataTable newSaleRatesTable = BuildNewSaleRatesTable(newSaleRates);
 
@@ -77,6 +78,41 @@ namespace TOne.WhS.Sales.Data.SQL
             table.EndLoadData();
 
             return table;
+        }
+
+        public bool SetRatePlanStatusIfExists(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status)
+        {
+            ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_SetStatusIfExists", ownerType, ownerId, status);
+            return true;
+        }
+
+        public RatePlan GetRatePlan(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status)
+        {
+            return GetItemSP("TOneWhS_Sales.sp_RatePlan_GetByStatus", RatePlanMapper, ownerType, ownerId, status);
+        }
+
+        public bool InsertRatePlan(RatePlan ratePlan, out int ratePlanId)
+        {
+            object insertedId;
+            string serializedDetails = Vanrise.Common.Serializer.Serialize(ratePlan.Details);
+
+            int recordsAffected = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_Insert", out insertedId, ratePlan.OwnerType, ratePlan.OwnerId, serializedDetails, ratePlan.Status);
+
+            ratePlanId = (int)insertedId;
+            return recordsAffected > 0;
+        }
+
+        private RatePlan RatePlanMapper(IDataReader reader)
+        {
+            RatePlan ratePlan = new RatePlan();
+
+            ratePlan.RatePlanId = (int)reader["ID"];
+            ratePlan.OwnerType = (RatePlanOwnerType)reader["OwnerType"];
+            ratePlan.OwnerId = (int)reader["OwnerId"];
+            ratePlan.Details = Vanrise.Common.Serializer.Deserialize<List<RatePlanItem>>(reader["Details"] as string);
+            ratePlan.Status = (RatePlanStatus)reader["Status"];
+
+            return ratePlan;
         }
     }
 }

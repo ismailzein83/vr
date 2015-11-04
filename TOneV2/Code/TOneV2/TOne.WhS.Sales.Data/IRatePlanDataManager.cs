@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.Data
 {
@@ -11,6 +12,12 @@ namespace TOne.WhS.Sales.Data
     {
         bool InsertSalePriceList(SalePriceList salePriceList, out int salePriceListId);
 
-        bool CloseThenInsertSaleRates(int customerId, List<SaleRate> newSaleRates);
+        bool CloseAndInsertSaleRates(int customerId, List<SaleRate> newSaleRates);
+
+        bool SetRatePlanStatusIfExists(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status);
+
+        RatePlan GetRatePlan(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status);
+
+        bool InsertRatePlan(RatePlan ratePlan, out int ratePlanId);
     }
 }

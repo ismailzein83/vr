@@ -30,5 +30,21 @@ namespace TOne.WhS.Sales.Web.Controllers
             RatePlanManager manager = new RatePlanManager();
             manager.SavePriceList(input);
         }
+
+        [HttpGet]
+        [Route("GetRatePlan")]
+        public RatePlan GetRatePlan(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status)
+        {
+            RatePlanManager manager = new RatePlanManager();
+            return manager.GetRatePlan(ownerType, ownerId, status);
+        }
+
+        [HttpPost]
+        [Route("SaveRatePlanDraft")]
+        public void SaveRatePlanDraft(RatePlan draft)
+        {
+            RatePlanManager manager = new RatePlanManager();
+            manager.SaveRatePlanDraft(draft);
+        }
     }
 }
