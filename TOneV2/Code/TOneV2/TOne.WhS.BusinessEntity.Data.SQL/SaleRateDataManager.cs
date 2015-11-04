@@ -33,10 +33,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             saleRate.SaleRateId = (long)reader["ID"];
             saleRate.ZoneId = (long)reader["ZoneID"];
             saleRate.PriceListId = (int)reader["PriceListID"];
-
-            //saleRate.RoutingProductId = GetReaderValue<int?>(reader, "RoutingProductId");
-            saleRate.RoutingProductId = (int)reader["RoutingProductId"];
-
+            
             saleRate.NormalRate = (decimal)reader["Rate"];
             saleRate.OtherRates = null; // what about this field?
 

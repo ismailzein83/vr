@@ -35,6 +35,7 @@ namespace TOne.WhS.Routing.Business
                 ratesByOwner.RatesBySellingProduct.TryGetValue(customerSellingProduct.SellingProductId, out sellingProductRates);
 
             Vanrise.Common.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.CurrencyExchangeRateManager();
+            SaleEntityRoutingProductManager saleEntityRoutingProductManager = new SaleEntityRoutingProductManager();
             SalePricingRuleManager salePricingRuleManager = new SalePricingRuleManager();
             foreach (var customerZone in customerSaleZones)
             {
@@ -68,7 +69,7 @@ namespace TOne.WhS.Routing.Business
                     CustomerZoneRate customerZoneRate = new CustomerZoneRate
                     {
                         CustomerId = customerId,
-                        RoutingProductId = zoneRate.RoutingProductId,
+                        RoutingProductId = saleEntityRoutingProductManager.GetCustomerZoneRoutingProductId(customerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId, effectiveOn, isEffectiveInFuture),
                         SellingProductId = isSellingProductRate ? customerSellingProduct.SellingProductId : (int?)null,
                         SaleZoneId = customerZone.SaleZoneId,
                         Rate = rateValue

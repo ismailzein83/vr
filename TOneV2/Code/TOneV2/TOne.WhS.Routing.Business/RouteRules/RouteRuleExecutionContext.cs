@@ -65,7 +65,7 @@ namespace TOne.WhS.Routing.Business.RouteRules
 
         public List<SupplierCodeMatch> GetSupplierCodeMatches(int supplierId)
         {
-            if (_filteredSupplierIds == null && _filteredSupplierIds.Contains(supplierId))
+            if (_filteredSupplierIds == null || _filteredSupplierIds.Contains(supplierId))
             {
                 if (this.SupplierCodeMatchBySupplier != null)
                 {
@@ -83,17 +83,22 @@ namespace TOne.WhS.Routing.Business.RouteRules
         {
             if (_validSupplierCodeMatches == null)
             {
-                _validSupplierCodeMatches = new List<SupplierCodeMatch>();
-                if (this.SupplierCodeMatches != null)
+                if (_filteredSupplierIds == null)
+                    _validSupplierCodeMatches = this.SupplierCodeMatches;
+                else
                 {
-                    foreach (var supplierCodeMatch in this.SupplierCodeMatches)
+                    _validSupplierCodeMatches = new List<SupplierCodeMatch>();
+                    if (this.SupplierCodeMatches != null)
                     {
-                        if (_filteredSupplierIds == null && _filteredSupplierIds.Contains(supplierCodeMatch.SupplierId))
+                        foreach (var supplierCodeMatch in this.SupplierCodeMatches)
                         {
-                            _validSupplierCodeMatches.Add(supplierCodeMatch);
+                            if (_filteredSupplierIds.Contains(supplierCodeMatch.SupplierId))
+                            {
+                                _validSupplierCodeMatches.Add(supplierCodeMatch);
+                            }
                         }
                     }
-                }
+                }                
             }
             return _validSupplierCodeMatches;
         }

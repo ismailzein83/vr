@@ -94,6 +94,8 @@
     <Compile Include="PricingRules\RuleTypes\RateType\PricingRuleRateTypeTarget.cs" />
     <Compile Include="PricingRules\RuleTypes\RateType\PurchasePricingRuleRateTypeTarget.cs" />
     <Compile Include="PricingRules\RuleTypes\RateType\SalePricingRuleRateTypeTarget.cs" />
+    <Compile Include="RoutingProduct\DefaultRoutingProduct.cs" />
+    <Compile Include="RoutingProduct\SaleZoneRoutingProduct.cs" />
     <Compile Include="SaleZone\CallSale.cs" />
     <Compile Include="SaleZone\SaleZoneFilterSettings.cs" />
     <Compile Include="SaleZone\SaleZoneInfoFilter.cs" />

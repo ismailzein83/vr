@@ -79,6 +79,7 @@
     <Compile Include="SaleZone\SaleCodeCacheManager.cs" />
     <Compile Include="SaleZone\SaleRateCacheManager.cs" />
     <Compile Include="SaleZone\SaleZoneGroupContext.cs" />
+    <Compile Include="RoutingProducts\SaleEntityRoutingProductManager.cs" />
     <Compile Include="SellingProductManager.cs" />
     <Compile Include="PricingRules\BasePricingRuleManager.cs" />
     <Compile Include="PricingRules\PricingRuleManager.cs" />
@@ -96,7 +97,7 @@
     <Compile Include="Rules\StructureRulesBehaviors\RuleBehaviorByCustomer.cs" />
     <Compile Include="Rules\StructureRulesBehaviors\RuleBehaviorByRoutingProduct.cs" />
     <Compile Include="Rules\StructureRulesBehaviors\RuleBehaviorBySaleZone.cs" />
-    <Compile Include="RoutingProductManager.cs" />
+    <Compile Include="RoutingProducts\RoutingProductManager.cs" />
     <Compile Include="CodeIterator.cs" />
     <Compile Include="SaleZone\SalePriceListManager.cs" />
     <Compile Include="SaleZone\SaleRateManager.cs" />

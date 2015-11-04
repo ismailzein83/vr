@@ -101,45 +101,54 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public HashSet<long> GetFilteredZoneIds(int routingProductId)
         {
-            HashSet<long> filteredZoneIds = null;
-            var routingProduct = GetRoutingProduct(routingProductId);
-            if (routingProduct != null && routingProduct.Settings != null)
-            {
-                switch (routingProduct.Settings.ZoneRelationType)
-                {
-                    case RoutingProductZoneRelationType.AllZones:
-                        break;
-                    case RoutingProductZoneRelationType.SpecificZones:
-                        if (routingProduct.Settings.Zones == null)
-                            filteredZoneIds = new HashSet<long>();//empty list
-                        else
-                            filteredZoneIds = new HashSet<long>(routingProduct.Settings.Zones.Select(zone => zone.ZoneId));
-                        break;
-                }                    
-            }
-            return filteredZoneIds;
+            string cacheName = String.Format("GetFilteredZoneIds_{0}", routingProductId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+               () =>
+               {
+                   HashSet<long> filteredZoneIds = null;
+                   var routingProduct = GetRoutingProduct(routingProductId);
+                   if (routingProduct != null && routingProduct.Settings != null)
+                   {
+                       switch (routingProduct.Settings.ZoneRelationType)
+                       {
+                           case RoutingProductZoneRelationType.AllZones:
+                               break;
+                           case RoutingProductZoneRelationType.SpecificZones:
+                               if (routingProduct.Settings.Zones == null)
+                                   filteredZoneIds = new HashSet<long>();//empty list
+                               else
+                                   filteredZoneIds = new HashSet<long>(routingProduct.Settings.Zones.Select(zone => zone.ZoneId));
+                               break;
+                       }
+                   }
+                   return filteredZoneIds;
+               });           
         }
 
         public HashSet<int> GetFilteredSupplierIds(int routingProductId)
         {
-            HashSet<int> filteredSupplierIds = null;
-            var routingProduct = GetRoutingProduct(routingProductId);
-            if (routingProduct != null && routingProduct.Settings != null)
-            {
-                switch(routingProduct.Settings.SupplierRelationType)
-                {
-                    case RoutingProductSupplierRelationType.AllSuppliers:
-                        break;
-                    case RoutingProductSupplierRelationType.SpecificSuppliers:
-                        if (routingProduct.Settings.Suppliers == null)
-                            filteredSupplierIds = new HashSet<int>();//empty list
-                        else
-                            filteredSupplierIds = new HashSet<int>(routingProduct.Settings.Suppliers.Select(supplier => supplier.SupplierId));
-                        break;
-                }
-            }
-
-            return filteredSupplierIds;
+            string cacheName = String.Format("GetFilteredSupplierIds_{0}", routingProductId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+               () =>
+               {
+                   HashSet<int> filteredSupplierIds = null;
+                   var routingProduct = GetRoutingProduct(routingProductId);
+                   if (routingProduct != null && routingProduct.Settings != null)
+                   {
+                       switch (routingProduct.Settings.SupplierRelationType)
+                       {
+                           case RoutingProductSupplierRelationType.AllSuppliers:
+                               break;
+                           case RoutingProductSupplierRelationType.SpecificSuppliers:
+                               if (routingProduct.Settings.Suppliers == null)
+                                   filteredSupplierIds = new HashSet<int>();//empty list
+                               else
+                                   filteredSupplierIds = new HashSet<int>(routingProduct.Settings.Suppliers.Select(supplier => supplier.SupplierId));
+                               break;
+                       }
+                   }
+                   return filteredSupplierIds;
+               });
         }
 
         public Dictionary<int, RoutingProduct> GetAllRoutingProducts()
