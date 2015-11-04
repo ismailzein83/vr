@@ -68,7 +68,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
                 ctrl.search = function (nameFilter) {
 
-                    if (!isDirectiveLoaded)
+                    if (filter == undefined)
                         return;
 
                     var serializedFilter = UtilsService.serializetoJson(filter);
@@ -94,7 +94,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
                         var input = { SellingNumberPlanId: filter.SellingNumberPlanId, SaleZoneIds: selectedIds };
 
-                        return WhS_BE_SaleZoneAPIService.GetSaleZoneInfoByIds(input).then(function (response) {
+                        return WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
                             angular.forEach(response, function (item) {
                                 ctrl.datasource.push(item);
                             });
@@ -102,8 +102,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                             VRUIUtilsService.setSelectedValues(selectedIds, 'SaleZoneId', attrs, ctrl);
                         });
                     }
-
-                    isDirectiveLoaded = true;
                 }
 
                 api.getSelectedIds = function () {

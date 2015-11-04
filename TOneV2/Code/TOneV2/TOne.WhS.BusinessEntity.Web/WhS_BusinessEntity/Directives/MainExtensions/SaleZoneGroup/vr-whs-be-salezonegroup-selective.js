@@ -36,7 +36,7 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
     function selectiveCtor(ctrl, $scope, WhS_BE_SaleZoneAPIService) {
         
         var sellingNumberPlanDirectiveAPI;
-        var sellingNumberPlanReadyPromiseDeferred;
+        var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -72,11 +72,9 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
 
             api.load = function (payload) {
                 var promises = [];
-
+                
                 if (ctrl.sellingnumberplanid == undefined)
                 {
-                    sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
                     var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
@@ -121,6 +119,12 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
                             selectedIds: payload != undefined ? payload.ZoneIds : undefined
                         };
                     }
+                    else
+                    {
+                        saleZonePayload = {
+                            filter: { SellingNumberPlanId: ctrl.sellingnumberplanid }
+                        };
+                    }
                     
                     VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, saleZonePayload, loadSaleZonePromiseDeferred);
                 }
@@ -129,8 +133,8 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
             api.getData = function () {
                 return {
                     $type: "TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups.SelectiveSaleZoneGroup, TOne.WhS.BusinessEntity.MainExtensions",
-                    SellingNumberPlanId: sellingNumberPlanDirectiveAPI != undefined ? sellingNumberPlanDirectiveAPI.getSelectedIds(): null,
-                    ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedSaleZones, "SaleZoneId")
+                    SellingNumberPlanId: ctrl.sellingnumberplanid != undefined? ctrl.sellingnumberplanid: sellingNumberPlanDirectiveAPI.getSelectedIds(),
+                    ZoneIds: saleZoneDirectiveAPI.getSelectedIds()
                 };
             }
 
