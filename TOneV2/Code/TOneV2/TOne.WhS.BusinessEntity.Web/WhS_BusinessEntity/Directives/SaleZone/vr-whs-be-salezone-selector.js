@@ -83,6 +83,9 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                 var api = {};
 
                 api.load = function (payload) {
+
+                    ctrl.selectedvalues = [];
+
                     var selectedIds;
                     if (payload != undefined) {
                         filter = payload.filter;
