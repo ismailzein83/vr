@@ -164,6 +164,16 @@
     <Build Include="rules\Stored Procedures\sp_RuleType_InsertIfNotExistsAndGetID.sql" />
     <Build Include="Security\rules.sql" />
     <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
+    <Build Include="common\Tables\CurrencyExchangeRate.sql" />
+    <Build Include="common\Tables\Currency.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_GetById.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_GetByEmail.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_CheckUserName.sql" />
+    <Build Include="sec\Stored Procedures\sp_Group_Get.sql" />
+    <Build Include="sec\Stored Procedures\sp_Group_CreateTempByName.sql" />
+    <Build Include="common\Stored Procedures\sp_Currency_update.sql" />
+    <Build Include="common\Stored Procedures\sp_Currency_insert.sql" />
+    <Build Include="common\Stored Procedures\sp_Currency_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
