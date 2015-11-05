@@ -16,6 +16,8 @@ function NumberProfilingProcessInputController($scope, $http, StrategyAPIService
         $scope.fromDate = yesterday;
         $scope.toDate = new Date();
 
+       
+
         $scope.createProcessInputObjects = [];
 
         $scope.periods = [];
@@ -27,7 +29,15 @@ function NumberProfilingProcessInputController($scope, $http, StrategyAPIService
             $scope.hours.push({ id: itm.id, name: itm.name })
         });
 
+        $scope.gapBetweenConsecutiveCalls = 10;
+        $scope.gapBetweenFailedConsecutiveCalls = 10;
+        $scope.maxLowDurationCall = 8;
+        $scope.minCountofCallsinActiveHour = 5;
         $scope.selectedPeakHours = [];
+        angular.forEach($scope.hours, function (itm) {
+            if (itm.id >= 12 && itm.id <= 17)
+                $scope.selectedPeakHours.push(itm);
+        });
 
 
         $scope.createProcessInput.getData = function () {
