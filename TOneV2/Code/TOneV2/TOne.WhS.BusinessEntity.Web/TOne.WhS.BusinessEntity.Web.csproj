@@ -268,6 +268,10 @@
     <Content Include="WhS_BusinessEntity\Views\Country\CountryEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\Country\CountryManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\Country\CountryManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeController.js" />
+    <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SellingProduct\CustomerSellingProductEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\SellingProduct\CustomerSellingProductEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SellingProduct\CustomerSellingProductManagement.html" />
