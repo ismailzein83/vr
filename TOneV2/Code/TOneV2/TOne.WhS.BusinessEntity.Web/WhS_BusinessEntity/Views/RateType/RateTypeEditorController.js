@@ -71,7 +71,7 @@
             var rateTypeObject = buildRateTypeObjFromScope();
             return WhS_BE_RateTypeAPIService.AddRateType(rateTypeObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("RateType", response)) {
+                if (VRNotificationService.notifyOnItemAdded("RateType", response, "Name")) {
                     if ($scope.onRateTypeAdded != undefined)
                         $scope.onRateTypeAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -85,7 +85,7 @@
             var rateTypeObject = buildRateTypeObjFromScope();
             WhS_BE_RateTypeAPIService.UpdateRateType(rateTypeObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("RateType", response)) {
+                if (VRNotificationService.notifyOnItemUpdated("RateType", response, "Name")) {
                     if ($scope.onRateTypeUpdated != undefined)
                         $scope.onRateTypeUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
