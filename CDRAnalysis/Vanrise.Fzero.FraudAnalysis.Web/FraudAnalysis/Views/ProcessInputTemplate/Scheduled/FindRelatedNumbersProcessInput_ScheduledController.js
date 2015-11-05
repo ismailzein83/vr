@@ -1,15 +1,13 @@
 ﻿"use strict";
 
-FindRelatedNumbersProcessInput_Scheduled.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+FindRelatedNumbersProcessInput_ScheduledController.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-FindRelatedNumbersProcessInput_Scheduled($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function FindRelatedNumbersProcessInput_ScheduledController($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
     defineScope();
 
     function defineScope() {
 
         $scope.processInputArguments = [];
-
-
 
         $scope.schedulerTaskAction.rawExpressions.getData = function () {
             return { "ScheduleTime": "ScheduleTime" };
@@ -24,13 +22,9 @@ FindRelatedNumbersProcessInput_Scheduled($scope, $http, $routeParams, notify, VR
         };
 
     };
-
-   
-
 }
 
-
-appControllers.controller('FraudAnalysis_FindRelatedNumbersProcessInput_Scheduled', FindRelatedNumbersProcessInput_Scheduled)
+appControllers.controller('FraudAnalysis_FindRelatedNumbersProcessInput_ScheduledController', FindRelatedNumbersProcessInput_ScheduledController)
 
 
 

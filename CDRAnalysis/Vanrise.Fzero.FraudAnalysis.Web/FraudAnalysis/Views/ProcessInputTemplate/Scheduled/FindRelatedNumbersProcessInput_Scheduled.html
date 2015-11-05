@@ -1,5 +1,11 @@
-﻿<div ng-controller="FraudAnalysis_FindRelatedNumbersProcessInput_Scheduled">
+﻿<div ng-controller="FraudAnalysis_FindRelatedNumbersProcessInput_ScheduledController">
     <vr-form name="formCreateProcessInput">
+        <vr-columns width="1/4row">
+            <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired></vr-datetimepicker>
+        </vr-columns>
 
+        <vr-columns width="1/4row">
+            <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired></vr-datetimepicker>
+        </vr-columns>
     </vr-form>
 </div>

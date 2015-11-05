@@ -22,7 +22,7 @@ function AssignStrategyCasesProcessInput_Scheduled($scope, $http, $routeParams, 
    
 }
 
-appControllers.controller('FraudAnalysis_FraudAnalysis_AssignStrategyCasesProcessInput_Scheduled', AssignStrategyCasesProcessInput_Scheduled)
+appControllers.controller('FraudAnalysis_AssignStrategyCasesProcessInput_Scheduled', AssignStrategyCasesProcessInput_Scheduled)
 
 
 
