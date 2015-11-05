@@ -42,7 +42,7 @@ namespace Vanrise.Common.Data.SQL
         #region privat methode
         private Currency CurrencyMapper(IDataReader reader)
         {
-            Currency country = new Currency
+            Currency currency = new Currency
             {
                 CurrencyId = (int)reader["ID"],
                 Name = reader["Name"] as string,
@@ -50,7 +50,7 @@ namespace Vanrise.Common.Data.SQL
 
             };
 
-            return country;
+            return currency;
         }
         #endregion
     }
