@@ -12,7 +12,7 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
 
             var ctrl = this;
 
-            $scope.showSellingNumberPlan = ctrl.sellingnumberplanid == undefined;
+            $scope.showSellingNumberPlan = false;
 
             var ctor = new selectiveCtor(ctrl, $scope, WhS_BE_SaleZoneAPIService);
             ctor.initializeController();
@@ -41,6 +41,8 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var sellingNumberPlanParameter;
+
         function initializeController() {
             
             $scope.onSellingNumberPlanDirectiveReady = function (api) {
@@ -54,6 +56,7 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
             }
 
             $scope.onSelectSellingNumberPlan = function (selectedItem) {
+                $scope.showSaleZoneSelector = true;
                 var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
 
                 var payload = {
@@ -73,8 +76,12 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
             api.load = function (payload) {
                 var promises = [];
                 
-                if (ctrl.sellingnumberplanid == undefined)
+                console.log(payload);
+
+                if (payload != undefined && payload.filter.sellingNumberPlanId == undefined)
                 {
+                    $scope.showSellingNumberPlan = true;
+
                     var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
@@ -112,17 +119,13 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
                 function loadSaleZoneSelector() {
                     var saleZonePayload;
 
-                    if (payload != undefined)
-                    {
+                    if (payload != undefined) {
+                        sellingNumberPlanParameter = payload.filter.sellingNumberPlanId;
+                        $scope.showSaleZoneSelector = true;
+
                         saleZonePayload = {
-                            filter: { SellingNumberPlanId: payload.SellingNumberPlanId },
+                            filter: { SellingNumberPlanId: sellingNumberPlanParameter != undefined ? sellingNumberPlanParameter : payload.SellingNumberPlanId },
                             selectedIds: payload != undefined ? payload.ZoneIds : undefined
-                        };
-                    }
-                    else
-                    {
-                        saleZonePayload = {
-                            filter: { SellingNumberPlanId: ctrl.sellingnumberplanid }
                         };
                     }
                     
@@ -133,7 +136,7 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
             api.getData = function () {
                 return {
                     $type: "TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups.SelectiveSaleZoneGroup, TOne.WhS.BusinessEntity.MainExtensions",
-                    SellingNumberPlanId: ctrl.sellingnumberplanid != undefined? ctrl.sellingnumberplanid: sellingNumberPlanDirectiveAPI.getSelectedIds(),
+                    SellingNumberPlanId: sellingNumberPlanParameter != undefined ? sellingNumberPlanParameter : sellingNumberPlanDirectiveAPI.getSelectedIds(),
                     ZoneIds: saleZoneDirectiveAPI.getSelectedIds()
                 };
             }

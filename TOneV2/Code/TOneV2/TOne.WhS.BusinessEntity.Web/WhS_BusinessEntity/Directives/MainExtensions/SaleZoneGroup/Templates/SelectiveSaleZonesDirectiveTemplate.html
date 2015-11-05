@@ -2,7 +2,7 @@
     <vr-columns colnum="4" ng-show="showSellingNumberPlan">
         <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" selectedvalues="selectedSellingNumberPlan" onselectitem="onSelectSellingNumberPlan" />
     </vr-columns>
-    <vr-columns colnum="4" ng-show="selectedSellingNumberPlan || ctrl.sellingnumberplanid" vr-loader="isLoadingSaleZonesSelector">
+    <vr-columns colnum="4" ng-show="showSaleZoneSelector" vr-loader="isLoadingSaleZonesSelector">
         <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady" />
     </vr-columns>
 </vr-row>
