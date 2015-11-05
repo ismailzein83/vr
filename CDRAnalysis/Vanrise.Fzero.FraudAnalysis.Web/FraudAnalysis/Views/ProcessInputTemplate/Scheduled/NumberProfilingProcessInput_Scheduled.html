@@ -8,7 +8,7 @@
 
             <vr-columns width="fullrow">
                 <vr-section title="Profiling Parameters">
-                    <vr-columns width="1/2row">
+                    <vr-columns width="1/2row" ng-show="selectedPeriod.Id == 2">
                         <vr-select datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection isrequired></vr-select>
                     </vr-columns>
 
@@ -24,7 +24,7 @@
                         <vr-textbox value="maxLowDurationCall" type="number" label="Maximum Low Duration Call (s) " isrequired></vr-textbox>
                     </vr-columns>
 
-                    <vr-columns width="1/2row">
+                    <vr-columns width="1/2row" ng-show="selectedPeriod.Id == 2">
                         <vr-textbox value="minCountofCallsinActiveHour" type="number" label="Minimum Count of Calls per Hour" isrequired></vr-textbox>
                     </vr-columns>
                 </vr-section>
