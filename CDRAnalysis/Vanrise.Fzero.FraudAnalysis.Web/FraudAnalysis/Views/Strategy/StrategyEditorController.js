@@ -408,7 +408,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         if (isValid(strategyObject)) {
             return StrategyAPIService.AddStrategy(strategyObject)
           .then(function (response) {
-              if (VRNotificationService.notifyOnItemAdded("Strategy", response)) {
+              if (VRNotificationService.notifyOnItemAdded("Strategy", response, "Name")) {
                   if ($scope.onStrategyAdded != undefined)
                       $scope.onStrategyAdded(response.InsertedObject);
                   $scope.modalContext.closeModal();
