@@ -192,8 +192,8 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\Templates\SelectiveSuppliersWithZonesGroup.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\vr-whs-be-supplierswithzonesgroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\RateType\Templates\RateTypeGridTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\RateType\vr-whs-be-ratetype-grid.js" />
-    <Content Include="WhS_BusinessEntity\Directives\RateType\vr-whs-be-ratetype-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\RateType\vr-whs-be-rateType-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\RateType\vr-whs-be-rateType-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\RouteRule\Templates\RouteRuleGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RouteRule\vr-whs-be-routerule-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />
@@ -240,6 +240,7 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierGroup\vr-whs-be-suppliergroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\vr-whs-be-supplierzone-selector.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CodeGroupAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\RateTypeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CountryAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CarrierAccountAPIService.js" />
@@ -271,7 +272,7 @@
     <Content Include="WhS_BusinessEntity\Views\Country\CountryEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\Country\CountryManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\Country\CountryManagement.html" />
-    <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeController.js" />
+    <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeManagementController.js" />

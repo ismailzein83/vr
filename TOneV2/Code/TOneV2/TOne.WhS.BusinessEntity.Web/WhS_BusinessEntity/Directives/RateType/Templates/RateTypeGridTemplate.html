@@ -1,9 +1,14 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="rateTypes"
+                     on-ready="onGridReady"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="gridMenuActions"
+                     idfield="RateTypeId">
 
-</body>
-</html>
+            <vr-datagridcolumn headertext="'ID'" field="'RateTypeId'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'RateType Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

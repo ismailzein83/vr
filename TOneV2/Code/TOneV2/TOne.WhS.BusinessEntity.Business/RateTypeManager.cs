@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class RateTypeManager
     {
-        IDataRetrievalResult<RateType> GetFilteredRateType(DataRetrievalInput<RateTypeQuery> input)
+        public IDataRetrievalResult<RateType> GetFilteredRateTypes(DataRetrievalInput<RateTypeQuery> input)
         {
             var allRateTypes = GetCachedRateTypes();
             Func<RateType, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
@@ -59,40 +59,45 @@ namespace TOne.WhS.BusinessEntity.Business
             return allRateTypes.GetRecord(rateTypeId);
         }
 
-        InsertOperationOutput<RateType> Insert(RateType rateType)
+        public TOne.Entities.InsertOperationOutput<RateType> AddRateType(RateType rateType)
         {
-            InsertOperationOutput<RateType> insertOperationOutput = new InsertOperationOutput<RateType>();
-            insertOperationOutput.Result = InsertOperationResult.Failed;
+            TOne.Entities.InsertOperationOutput<RateType> insertOperationOutput = new TOne.Entities.InsertOperationOutput<RateType>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
             int rateTypeId = -1;
+
             IRateTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IRateTypeDataManager>();
             bool insertActionSucc = dataManager.Insert(rateType, out rateTypeId);
             if (insertActionSucc)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 rateType.RateTypeId = rateTypeId;
                 insertOperationOutput.InsertedObject = rateType;
             }
 
             return insertOperationOutput;
         }
-
-        UpdateOperationOutput<RateType> Update(RateType rateType)
+        public TOne.Entities.UpdateOperationOutput<RateType> UpdateRateType(RateType rateType)
         {
-            UpdateOperationOutput<RateType> updateOperationOutput = new UpdateOperationOutput<RateType>();
-            updateOperationOutput.Result = UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
             IRateTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IRateTypeDataManager>();
+
             bool updateActionSucc = dataManager.Update(rateType);
+            TOne.Entities.UpdateOperationOutput<RateType> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<RateType>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
             if (updateActionSucc)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = rateType;
             }
 
             return updateOperationOutput;
-
         }
 
 
