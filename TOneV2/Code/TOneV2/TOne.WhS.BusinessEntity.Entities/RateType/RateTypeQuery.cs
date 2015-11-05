@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.BusinessEntity.Data
+namespace TOne.WhS.BusinessEntity.Entities.RateType
 {
-    public interface IRateTypeDataManager:IDataManager
+    public class RateTypeQuery
     {
-        
+        public string Name { get; set; }
     }
 }
