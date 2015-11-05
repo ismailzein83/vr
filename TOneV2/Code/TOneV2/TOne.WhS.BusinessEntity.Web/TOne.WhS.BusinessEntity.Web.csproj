@@ -180,6 +180,8 @@
     <Content Include="WhS_BusinessEntity\Constant\PricingRuleTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PricingTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RouteRuleCriteriaTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\RoutingProductSaleZoneRelationTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\RoutingProductSupplierRelationTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierProfileGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\Templates\CodeGroupGridTemplate.html" />
