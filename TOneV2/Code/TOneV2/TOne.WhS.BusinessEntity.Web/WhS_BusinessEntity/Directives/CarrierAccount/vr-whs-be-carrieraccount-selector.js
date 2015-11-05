@@ -88,7 +88,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         function defineAPI() {
             var api = {};
 
-            api.loadDir = function (payload) {
+            api.load = function (payload) {
 
                 var filter;
                 var selectedIds;
@@ -117,43 +117,12 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                 });
             }
 
-            api.load = function () {
-
-                var filter = {
-                    GetCustomers: attrs.getcustomers != undefined,
-                    GetSuppliers: attrs.getsuppliers != undefined
-                }
-
-                return WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(angular.toJson(filter)).then(function (response) {
-                    angular.forEach(response, function (itm) {
-                        ctrl.datasource.push(itm);
-                    });
-                });
-            }
-
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('CarrierAccountId', attrs, ctrl);
             }
 
-            api.getData = function () {
-                return ctrl.selectedvalues;
-            }
             api.getSelectedValues = function () {
                 return ctrl.selectedvalues;
-            }
-
-            api.setData = function (selectedIds) {
-                if (attrs.ismultipleselection != undefined) {
-                    for (var i = 0; i < selectedIds.length; i++) {
-                        var selectedCarrierValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds[i], "CarrierAccountId");
-                        if (selectedCarrierValue != null)
-                            ctrl.selectedvalues.push(selectedCarrierValue);
-                    }
-                } else {
-                    var selectedCarrierValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds, "CarrierAccountId");
-                    if (selectedCarrierValue != null)
-                        ctrl.selectedvalues = selectedCarrierValue;
-                }
             }
 
             if (ctrl.onReady != null)

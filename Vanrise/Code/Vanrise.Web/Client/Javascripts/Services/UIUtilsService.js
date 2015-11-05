@@ -18,15 +18,7 @@
         }
 
         function callDirectiveLoad(directiveAPI, directiveLoadPayload, loadPromiseDeferred) {
-            //Todo: remove this promise when refactoring is done. Call directly directiveAPI.load
-            var tempPromise;
-
-            if (directiveAPI.loadDir != undefined)
-                tempPromise = UtilsService.convertToPromiseIfUndefined(directiveAPI.loadDir(directiveLoadPayload));
-            else
-                tempPromise = UtilsService.convertToPromiseIfUndefined(directiveAPI.load(directiveLoadPayload));
-
-            tempPromise.then(function () {
+            UtilsService.convertToPromiseIfUndefined(directiveAPI.load(directiveLoadPayload)).then(function () {
                 if (loadPromiseDeferred != undefined)
                     loadPromiseDeferred.resolve();
             }).catch(function (error) {
