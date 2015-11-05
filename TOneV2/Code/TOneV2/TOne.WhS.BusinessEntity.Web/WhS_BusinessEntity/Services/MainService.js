@@ -29,8 +29,9 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         editCountry: editCountry,
         addCountry: addCountry,
         addCodeGroup: addCodeGroup,
-        editCodeGroup: editCodeGroup
-
+        editCodeGroup: editCodeGroup,
+        editRateType: editRateType,
+        addRateType: addRateType
     });
 
     function addRoutingProduct(onRoutingProductAdded) {
@@ -326,6 +327,38 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
 
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PricingRule/PricingRuleEditor.html', parameters, settings);
     }
+
+    function editRateType(obj, onRateTypeUpdated) {
+        var settings = {
+            useModalTemplate: true
+
+        };
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Name, "RateType");
+            modalScope.onRateTypeUpdated = onRateTypeUpdated;
+        };
+        var parameters = {
+            RateTypeId: obj.RateTypeId
+        };
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RateType/RateTypeEditor.html', parameters, settings);
+    }
+    function addRateType(onRateTypeAdded) {
+        var settings = {
+            useModalTemplate: true
+
+        };
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = UtilsService.buildTitleForAddEditor("RateType");
+            modalScope.onRateTypeAdded = onRateTypeAdded;
+        };
+        var parameters = {};
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RateType/RateTypeEditor.html', parameters, settings);
+    }
+
 
     function editCountry(obj, onCountryUpdated) {
         var settings = {

@@ -22,7 +22,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public bool Update(Entities.RateType rateType)
         {
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_RateType_Update]", rateType.Name);
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_RateType_Update]", rateType.RateTypeId, rateType.Name);
             return (recordsEffected > 0);
         }
 
