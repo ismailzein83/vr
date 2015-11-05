@@ -77,6 +77,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 rateType.RateTypeId = rateTypeId;
                 insertOperationOutput.InsertedObject = rateType;
             }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
 
             return insertOperationOutput;
         }
@@ -95,6 +99,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = rateType;
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             }
 
             return updateOperationOutput;
