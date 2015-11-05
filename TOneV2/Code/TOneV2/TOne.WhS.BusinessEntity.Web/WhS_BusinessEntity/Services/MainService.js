@@ -77,9 +77,14 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
                 });
     };
 
-    function addRouteRule(onRouteRuleAdded)
+    function addRouteRule(onRouteRuleAdded, routingProductId, sellingNumberPlanId)
     {
         var settings = {
+        };
+
+        var parameters = {
+            routingProductId: routingProductId,
+            sellingNumberPlanId: sellingNumberPlanId
         };
 
         settings.onScopeReady = function (modalScope) {
@@ -87,7 +92,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
             modalScope.onRouteRuleAdded = onRouteRuleAdded;
         };
 
-        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RouteRule/RouteRuleEditor.html', null, settings);
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RouteRule/RouteRuleEditor.html', parameters, settings);
     }
 
     function editRouteRule(routeRuleObj, onRouteRuleUpdated) {

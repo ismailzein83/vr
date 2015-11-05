@@ -69,21 +69,21 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_BE_MainSer
                    });
             };
 
-            function setDataItemExtension(dataItem) {
-                var extensionObject = {};
-                var query = {
-                    RoutingProductId: dataItem.RoutingProductId
-                }
-                extensionObject.onGridReady = function (api) {
-                    extensionObject.routeRuleGridAPI = api;
-                    extensionObject.routeRuleGridAPI.loadGrid(query);
-                    extensionObject.onGridReady = undefined;
-                };
-                dataItem.extensionObject = extensionObject;
-
-            }
-
             defineMenuActions();
+        }
+
+        function setDataItemExtension(dataItem) {
+            var extensionObject = {};
+            var query = {
+                RoutingProductId: dataItem.RoutingProductId
+            }
+            extensionObject.onGridReady = function (api) {
+                extensionObject.routeRuleGridAPI = api;
+                extensionObject.routeRuleGridAPI.loadGrid(query);
+                extensionObject.onGridReady = undefined;
+            };
+            dataItem.extensionObject = extensionObject;
+
         }
 
         function defineMenuActions() {
@@ -105,17 +105,15 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_BE_MainSer
         function addRouteRule(dataItem) {
 
             gridAPI.expandRow(dataItem);
-            var query = {
-                RoutingProductId: dataItem.RoutingProductId
-            }
-            if (dataItem.extensionObject.routeRuleGridAPI != undefined)
-                dataItem.extensionObject.routeRuleGridAPI.loadGrid(query);
+
+            if (dataItem.extensionObject == undefined)
+                setDataItemExtension(dataItem);
 
             var onRouteRuleAdded = function (addedItem) {
                 dataItem.extensionObject.routeRuleGridAPI.onRouteRuleAdded(addedItem);
             };
 
-            WhS_BE_MainService.addRouteRule(onRouteRuleAdded);
+            WhS_BE_MainService.addRouteRule(onRouteRuleAdded, dataItem.RoutingProductId, dataItem.SellingNumberPlanId);
         }
 
         function editRoutingProduct(routingProduct) {

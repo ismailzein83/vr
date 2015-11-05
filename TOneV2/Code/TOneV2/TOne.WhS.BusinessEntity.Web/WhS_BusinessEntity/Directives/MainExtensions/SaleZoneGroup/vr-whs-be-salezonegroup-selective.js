@@ -55,15 +55,17 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
                 saleZoneReadyPromiseDeferred.resolve();
             }
 
-            $scope.onSelectSellingNumberPlan = function (selectedItem) {
-                $scope.showSaleZoneSelector = true;
-                var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
+            $scope.onSellingNumberPlanSelectionChanged = function () {
+                var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
+                if (selectedSellingNumberPlanId != undefined) {
+                    var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
 
-                var payload = {
-                    filter: { SellingNumberPlanId: selectedItem.SellingNumberPlanId },
+                    var payload = {
+                        filter: { SellingNumberPlanId: selectedSellingNumberPlanId },
+                    }
+
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
                 }
-
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
             }
 
             defineAPI();
@@ -75,62 +77,45 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
 
             api.load = function (payload) {
                 var promises = [];
-                
-                console.log(payload);
 
-                if (payload != undefined && payload.filter.sellingNumberPlanId == undefined)
-                {
-                    $scope.showSellingNumberPlan = true;
+                $scope.showSellingNumberPlan = payload.filter.SaleZoneFilterSettings.RoutingProductId == null;
 
-                    var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
+                var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
-                        var sellingNumberPlanPayload;
+                sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
+                    var sellingNumberPlanPayload;
 
-                        if (payload != undefined)
-                        {
-                            sellingNumberPlanPayload = {
-                                selectedIds: payload.SellingNumberPlanId
-                            };
-                        }
-                            
-                        VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, sellingNumberPlanPayload, loadSellingNumberPlanPromiseDeferred);
-                    });
+                    if (payload.filter.SellingNumberPlanId != undefined) {
+                        sellingNumberPlanPayload = {
+                            selectedIds: payload.filter.SellingNumberPlanId
+                        };
+                    }
 
-                    promises.push(loadSellingNumberPlanPromiseDeferred.promise);
+                    VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, sellingNumberPlanPayload, loadSellingNumberPlanPromiseDeferred);
+                });
 
-                    var subPromisesArray = [];
-
-                    subPromisesArray.push(loadSellingNumberPlanPromiseDeferred.promise);
-                    subPromisesArray.push(saleZoneReadyPromiseDeferred.promise);
-
-                    UtilsService.waitMultiplePromises(subPromisesArray).then(loadSaleZoneSelector);
-                }
-                else
-                {
-                    saleZoneReadyPromiseDeferred.promise.then(loadSaleZoneSelector);
-                }
+                promises.push(loadSellingNumberPlanPromiseDeferred.promise);
 
                 var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
                 promises.push(loadSaleZonePromiseDeferred.promise);
 
-                return UtilsService.waitMultiplePromises(promises);
-
-                function loadSaleZoneSelector() {
+                saleZoneReadyPromiseDeferred.promise.then(function () {
                     var saleZonePayload;
 
-                    if (payload != undefined) {
-                        sellingNumberPlanParameter = payload.filter.sellingNumberPlanId;
-                        $scope.showSaleZoneSelector = true;
+                    if (payload.filter.SellingNumberPlanId != undefined) {
+
+                        sellingNumberPlanParameter = payload.filter.SellingNumberPlanId;
 
                         saleZonePayload = {
-                            filter: { SellingNumberPlanId: sellingNumberPlanParameter != undefined ? sellingNumberPlanParameter : payload.SellingNumberPlanId },
-                            selectedIds: payload != undefined ? payload.ZoneIds : undefined
+                            filter: payload.filter,
+                            selectedIds: (payload.saleZoneGroupSettings != undefined)? payload.saleZoneGroupSettings.ZoneIds: undefined
                         };
                     }
-                    
+
                     VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, saleZonePayload, loadSaleZonePromiseDeferred);
-                }
+                });
+
+                return UtilsService.waitMultiplePromises(promises);
             }
 
             api.getData = function () {
