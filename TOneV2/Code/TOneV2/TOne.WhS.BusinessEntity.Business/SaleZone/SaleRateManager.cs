@@ -34,7 +34,7 @@ namespace TOne.WhS.BusinessEntity.Business
             CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, false);
             if (customerSellingProduct == null)
                 return null;
-            CustomerZoneRateLocator customerZoneRateLocator = new CustomerZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
+            SaleEntityZoneRateLocator customerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
             var customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerId, customerSellingProduct.SellingProductId, saleZoneId);
 
             if (customerZoneRate != null)

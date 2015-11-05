@@ -8,7 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public enum CustomerZoneRateSource { Customer, Product }
 
-    public class CustomerZoneRate
+    public class SaleEntityZoneRate
     {
         public SaleRate Rate { get; set; }
 

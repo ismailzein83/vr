@@ -111,7 +111,7 @@
     <Compile Include="SaleZone\SaleCodeManager.cs" />
     <Compile Include="SaleZone\SaleZoneManager.cs" />
     <Compile Include="SaleZone\SellingNumberPlanManager.cs" />
-    <Compile Include="SaleZone\CustomerZoneRateLocator.cs" />
+    <Compile Include="SaleZone\SaleEntityZoneRateLocator.cs" />
     <Compile Include="SupplierZone\ISupplierRateReader.cs" />
     <Compile Include="SupplierZone\SupplierCodeCacheManager.cs" />
     <Compile Include="SupplierZone\SupplierCodeManager.cs" />

@@ -27,12 +27,12 @@ namespace TOne.WhS.Routing.Business
 
             Vanrise.Common.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.CurrencyExchangeRateManager();
             CustomerZoneRoutingProductLocator customerZoneRoutingProductLocator = new CustomerZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(effectiveOn, isEffectiveInFuture));
-            CustomerZoneRateLocator customerZoneRateLocator = new CustomerZoneRateLocator(new SaleRateReadAllNoCache(effectiveOn, isEffectiveInFuture));
+            SaleEntityZoneRateLocator customerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(effectiveOn, isEffectiveInFuture));
 
             SalePricingRuleManager salePricingRuleManager = new SalePricingRuleManager();
             foreach (var customerZone in customerSaleZones)
             {
-                CustomerZoneRate customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
+                SaleEntityZoneRate customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
                 
                 if (customerZoneRate != null)
                 {

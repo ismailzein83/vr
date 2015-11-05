@@ -98,7 +98,7 @@
     <Compile Include="RoutingProduct\DefaultRoutingProduct.cs" />
     <Compile Include="RoutingProduct\SaleZoneRoutingProduct.cs" />
     <Compile Include="SaleZone\CallSale.cs" />
-    <Compile Include="SaleZone\CustomerZoneRate.cs" />
+    <Compile Include="SaleZone\SaleEntityZoneRate.cs" />
     <Compile Include="SaleZone\SaleZoneFilterSettings.cs" />
     <Compile Include="SaleZone\SaleZoneInfoFilter.cs" />
     <Compile Include="SellingProduct\CustomerSellingProductDetail.cs" />
