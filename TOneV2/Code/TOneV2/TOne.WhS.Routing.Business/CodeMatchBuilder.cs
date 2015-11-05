@@ -140,15 +140,21 @@ namespace TOne.WhS.Routing.Business
 
         private SaleCodeIterator GetCustomerSaleCodeIterator(int customerId, DateTime effectiveOn)
         {
-            string cacheName = String.Format("GetCustomerSaleCodeIterator_{0}_{1}", customerId, effectiveOn.Date);
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var customerAccount = carrierAccountManager.GetCarrierAccount(customerId);
+            if (customerAccount == null || customerAccount.CustomerSettings == null)
+                return null;
+            int sellingNumberPlanId = customerAccount.CustomerSettings.SellingNumberPlanId;
+            return GetSellingNumberPlanSaleCodeIterator(sellingNumberPlanId, effectiveOn);
+           
+        }
+
+        private SaleCodeIterator GetSellingNumberPlanSaleCodeIterator(int sellingNumberPlanId, DateTime effectiveOn)
+        {
+            string cacheName = String.Format("GetSellingNumberPlanSaleCodeIterator_{0}_{1}", sellingNumberPlanId, effectiveOn.Date);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleCodeCacheManager>().GetOrCreateObject(cacheName,
                 () =>
-                {
-                    CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                    var customerAccount = carrierAccountManager.GetCarrierAccount(customerId);
-                    if (customerAccount == null || customerAccount.CustomerSettings == null)
-                        return null;
-                    int sellingNumberPlanId = customerAccount.CustomerSettings.SellingNumberPlanId;
+                {                    
                     SaleCodeManager saleCodeManager = new SaleCodeManager();
                     List<SaleCode> customerSaleCodes = saleCodeManager.GetSellingNumberPlanSaleCodes(sellingNumberPlanId, effectiveOn);
                     if (customerSaleCodes != null)

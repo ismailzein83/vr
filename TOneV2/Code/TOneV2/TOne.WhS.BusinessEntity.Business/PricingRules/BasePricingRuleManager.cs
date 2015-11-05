@@ -120,6 +120,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 result.Rate = tariffTarget.EffectiveRate;
                 result.TotalAmount = tariffTarget.TotalAmount;
             }
+            else
+                result.TotalAmount = result.Rate * (input.DurationInSeconds / 60);
         }
 
     }

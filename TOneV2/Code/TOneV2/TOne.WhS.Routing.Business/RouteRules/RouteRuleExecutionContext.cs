@@ -30,7 +30,7 @@ namespace TOne.WhS.Routing.Business.RouteRules
 
         internal SupplierCodeMatchBySupplier SupplierCodeMatchBySupplier { private get; set; }
 
-        internal SupplierZoneRateByZone SupplierZoneRates { private get; set; }
+        internal SupplierZoneDetailByZone SupplierZoneDetails { private get; set; }
 
         public RouteRule RouteRule
         {
@@ -103,13 +103,13 @@ namespace TOne.WhS.Routing.Business.RouteRules
             return _validSupplierCodeMatches;
         }
 
-        public SupplierZoneRate GetSupplierZoneRate(long supplierZoneId)
+        public SupplierZoneDetail GetSupplierZoneDetail(long supplierZoneId)
         {
-            if(this.SupplierZoneRates != null )
+            if(this.SupplierZoneDetails != null )
             {
-                SupplierZoneRate supplierZoneRate;
-                if (this.SupplierZoneRates.TryGetValue(supplierZoneId, out supplierZoneRate))
-                    return supplierZoneRate;
+                SupplierZoneDetail supplierZoneDetail;
+                if (this.SupplierZoneDetails.TryGetValue(supplierZoneId, out supplierZoneDetail))
+                    return supplierZoneDetail;
             }
             return null;
         }

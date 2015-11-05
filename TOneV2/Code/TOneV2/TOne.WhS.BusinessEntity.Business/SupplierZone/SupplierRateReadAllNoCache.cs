@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SaleRateReadWithCache : ISaleRateReader
+    public class SupplierRateReadAllNoCache : ISupplierRateReader
     {
-        public SaleRateReadWithCache(DateTime effectiveOn)
+        public SupplierRateReadAllNoCache(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
 
         }
 
-        public SaleRatesByZone GetZoneRates(Entities.SalePriceListOwnerType ownerType, int ownerId)
+        public SupplierRatesByZone GetSupplierRates(int supplierId)
         {
             throw new NotImplementedException();
         }

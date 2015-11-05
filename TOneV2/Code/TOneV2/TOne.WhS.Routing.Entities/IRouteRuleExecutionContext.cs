@@ -22,6 +22,6 @@ namespace TOne.WhS.Routing.Entities
 
         List<SupplierCodeMatch> GetAllSuppliersCodeMatches();
 
-        SupplierZoneRate GetSupplierZoneRate(long supplierZoneId);
+        SupplierZoneDetail GetSupplierZoneDetail(long supplierZoneId);
     }
 }

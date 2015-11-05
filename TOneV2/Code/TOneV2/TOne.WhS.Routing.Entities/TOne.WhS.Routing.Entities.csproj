@@ -65,9 +65,9 @@
     <Compile Include="Routes\RoutingProductRoute.cs" />
     <Compile Include="Routes\RoutingProductRouteOption.cs" />
     <Compile Include="SaleCodeMatch.cs" />
-    <Compile Include="CustomerZoneInfo.cs" />
+    <Compile Include="CustomerZoneDetail.cs" />
     <Compile Include="SupplierCodeMatch.cs" />
-    <Compile Include="SupplierZoneRate.cs" />
+    <Compile Include="SupplierZoneDetail.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">

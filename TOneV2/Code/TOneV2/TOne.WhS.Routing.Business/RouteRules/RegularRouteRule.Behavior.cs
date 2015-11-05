@@ -91,8 +91,8 @@ namespace TOne.WhS.Routing.Business.RouteRules
 
         private void TryCreateOption(IRouteRuleExecutionContext context, List<RouteOptionRuleTarget> options, RouteRuleTarget routeRuleTarget, SupplierCodeMatch supplierCodeMatch, Decimal? percentage, RouteRuleOptionFilterSettings optionFilter)
         {
-            SupplierZoneRate supplierZoneRate = context.GetSupplierZoneRate(supplierCodeMatch.SupplierZoneId);
-            if (supplierZoneRate != null)
+            SupplierZoneDetail supplierZoneDetail = context.GetSupplierZoneDetail(supplierCodeMatch.SupplierZoneId);
+            if (supplierZoneDetail != null)
             {
                 var option = new RouteOptionWrapper
                 {
@@ -100,7 +100,7 @@ namespace TOne.WhS.Routing.Business.RouteRules
                     SupplierId = supplierCodeMatch.SupplierId,
                     SupplierCode = supplierCodeMatch.SupplierCode,
                     SupplierZoneId = supplierCodeMatch.SupplierZoneId,
-                    SupplierRate = supplierZoneRate.EffectiveRateValue,
+                    SupplierRate = supplierZoneDetail.EffectiveRateValue,
                     EffectiveOn = routeRuleTarget.EffectiveOn,
                     OptionFilter = optionFilter
                 };

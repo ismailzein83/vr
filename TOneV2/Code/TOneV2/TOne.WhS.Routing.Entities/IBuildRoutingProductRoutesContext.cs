@@ -15,7 +15,7 @@ namespace TOne.WhS.Routing.Entities
 
         SupplierCodeMatchBySupplier SupplierCodeMatchesBySupplier { get; }
 
-        SupplierZoneRateByZone SupplierZoneRates { get; }
+        SupplierZoneDetailByZone SupplierZoneDetails { get; }
 
         DateTime? EntitiesEffectiveOn { get; }
 

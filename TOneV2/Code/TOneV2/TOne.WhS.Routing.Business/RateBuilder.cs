@@ -13,7 +13,7 @@ namespace TOne.WhS.Routing.Business
     {
         #region Public Methods
 
-        public void BuildCustomerZoneInfo(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture, Action<CustomerZoneInfo> onCustomerZoneInfoAvailable)
+        public void BuildCustomerZoneDetails(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture, Action<CustomerZoneDetail> onCustomerZoneDetailAvailable)
         {
             CustomerZoneManager customerZoneManager = new CustomerZoneManager();
             var customerSaleZones = customerZoneManager.GetCustomerSaleZones(customerId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now, isEffectiveInFuture);
@@ -50,22 +50,24 @@ namespace TOne.WhS.Routing.Business
 
                     var rateValue = pricingRulesResult != null ? pricingRulesResult.Rate : customerZoneRate.Rate.NormalRate;
                     rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now);
-                    CustomerZoneInfo customerZoneInfo = new CustomerZoneInfo
+                    var customerZoneRoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
+                    CustomerZoneDetail customerZoneDetail = new CustomerZoneDetail
                     {
                         CustomerId = customerId,
-                        RoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId),
+                        RoutingProductId = customerZoneRoutingProduct != null ? customerZoneRoutingProduct.RoutingProductId : 0,
+                        RoutingProductSource = customerZoneRoutingProduct != null ? customerZoneRoutingProduct.Source : default(CustomerZoneRoutingProductSource),
                         SellingProductId = customerSellingProduct.SellingProductId,
                         SaleZoneId = customerZone.SaleZoneId,
-                        Rate = customerZoneRate, 
-                        EffectiveRateValue= rateValue
+                        EffectiveRateValue= rateValue,
+                        RateSource = customerZoneRate.Source
                     };
 
-                    onCustomerZoneInfoAvailable(customerZoneInfo);
+                    onCustomerZoneDetailAvailable(customerZoneDetail);
                 }
             }
         }
 
-        public void BuildSupplierZoneRates(DateTime? effectiveOn, bool isEffectiveInFuture, Action<SupplierZoneRate> onSupplierZoneRateAvailable)
+        public void BuildSupplierZoneDetails(DateTime? effectiveOn, bool isEffectiveInFuture, Action<SupplierZoneDetail> onSupplierZoneDetailAvailable)
         {
             SupplierRateManager supplierRateManager = new SupplierRateManager();
             var supplierRates = supplierRateManager.GetRates(effectiveOn, isEffectiveInFuture);
@@ -90,43 +92,15 @@ namespace TOne.WhS.Routing.Business
 
                     var rateValue = pricingRulesResult != null ? pricingRulesResult.Rate : supplierRate.NormalRate;
                     rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now);
-                    SupplierZoneRate supplierZoneRate = new SupplierZoneRate
+                    SupplierZoneDetail supplierZoneDetail = new SupplierZoneDetail
                     {
                         SupplierId = priceList.SupplierId,
                         SupplierZoneId = supplierRate.ZoneId,
                         EffectiveRateValue = rateValue
                     };
-                    onSupplierZoneRateAvailable(supplierZoneRate);
+                    onSupplierZoneDetailAvailable(supplierZoneDetail);
                 }
             }
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        SaleRatesByOwner GetRatesByOwner(DateTime? effectiveOn, bool isEffectiveInFuture)
-        {
-            SaleRateManager saleRateManager = new SaleRateManager();
-            var rates = saleRateManager.GetRates(effectiveOn, isEffectiveInFuture);
-            throw new NotImplementedException();
-        }
-
-
-        #endregion
-
-        #region Private Classes
-
-        private class SaleRatesByOwner
-        {
-            public Dictionary<int, SaleRatesByZone> RatesByCustomer { get; set; }
-
-            public Dictionary<int, SaleRatesByZone> RatesBySellingProduct { get; set; }
-        }
-
-        private class SaleRatesByZone : Dictionary<long, SaleRate>
-        {
-
         }
 
         #endregion

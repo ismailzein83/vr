@@ -48,6 +48,12 @@
     <Compile Include="Input\SalePriceListInput.cs" />
     <Compile Include="RatePlan.cs" />
     <Compile Include="RatePlanItem.cs" />
+    <Compile Include="RatePlanning\BaseChanges.cs" />
+    <Compile Include="RatePlanning\Changes.cs" />
+    <Compile Include="RatePlanning\RateChanges.cs" />
+    <Compile Include="RatePlanning\RoutingProductChanges.cs" />
+    <Compile Include="RatePlanning\ServiceChanges.cs" />
+    <Compile Include="RatePlanning\ZoneItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">

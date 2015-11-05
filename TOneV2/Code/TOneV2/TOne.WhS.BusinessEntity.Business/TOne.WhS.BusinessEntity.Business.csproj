@@ -112,11 +112,14 @@
     <Compile Include="SaleZone\SaleZoneManager.cs" />
     <Compile Include="SaleZone\SellingNumberPlanManager.cs" />
     <Compile Include="SaleZone\CustomerZoneRateLocator.cs" />
+    <Compile Include="SupplierZone\ISupplierRateReader.cs" />
     <Compile Include="SupplierZone\SupplierCodeCacheManager.cs" />
     <Compile Include="SupplierZone\SupplierCodeManager.cs" />
     <Compile Include="SupplierZone\SupplierPriceListManager.cs" />
     <Compile Include="SupplierZone\SupplierRateCacheManager.cs" />
     <Compile Include="SupplierZone\SupplierRateManager.cs" />
+    <Compile Include="SupplierZone\SupplierRateReadAllNoCache.cs" />
+    <Compile Include="SupplierZone\SupplierRateReadWithCache.cs" />
     <Compile Include="SupplierZone\SupplierZoneManager.cs" />
     <Compile Include="SupplierZone\SupplierZoneRateLocator.cs" />
   </ItemGroup>

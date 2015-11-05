@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class SupplierZoneRate
+    public class SupplierZoneDetail
     {
         public int SupplierId { get; set; }
 
@@ -15,7 +15,7 @@ namespace TOne.WhS.Routing.Entities
         public Decimal EffectiveRateValue { get; set; }
     }
 
-    public class SupplierZoneRateByZone : Dictionary<long, SupplierZoneRate>
+    public class SupplierZoneDetailByZone : Dictionary<long, SupplierZoneDetail>
     {
 
     }
