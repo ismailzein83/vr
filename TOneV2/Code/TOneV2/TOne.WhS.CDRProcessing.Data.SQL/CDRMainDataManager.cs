@@ -23,17 +23,26 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
        public void WriteRecordToStream(BillingMainCDR record, object dbApplyStream)
        {
            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-           streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}",
-                                    record.ID,
-                                    record.CustomerId,
-                                    record.SupplierId,
-                                    record.Attempt,
-                                    record.DurationInSeconds,
-                                    record.Alert,
-                                    record.Connect,
-                                    record.Disconnect,
-                                    record.PortOut,
-                                    record.PortIn);
+           streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}",
+                                    record.BillingCDR.ID,
+                                    record.BillingCDR.CustomerId,
+                                    record.BillingCDR.SupplierId,
+                                    record.BillingCDR.Attempt,
+                                    record.BillingCDR.DurationInSeconds,
+                                    record.BillingCDR.Alert,
+                                    record.BillingCDR.Connect,
+                                    record.BillingCDR.Disconnect,
+                                    record.BillingCDR.PortOut,
+                                    record.BillingCDR.PortIn,
+                                    record.BillingCDR.SaleCode,
+                                    record.BillingCDR.SaleZoneID,
+                                    record.BillingCDR.SupplierCode,
+                                    record.BillingCDR.SupplierZoneID,
+                                    record.BillingCDR.CDPN,
+                                    record.BillingCDR.CGPN,
+                                    record.MainCost.RateValue,
+                                    record.MainCost.TotalNet,
+                                    record.MainCost.CurrencyId);
 
        }
        public object FinishDBApplyStream(object dbApplyStream)

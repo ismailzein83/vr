@@ -6,15 +6,14 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.CDRProcessing.Entities
 {
-    public class BillingFailedCDR : BillingCDRBase
+    public class BillingFailedCDR
     {
         static BillingFailedCDR()
         {
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(BillingFailedCDR), "ID", "Attempt", "CustomerId", "SupplierId", "DurationInSeconds",
-                "Alert", "Connect", "Disconnect", "CGPN", "PortOut", "PortIn", "ReleaseCode", "ReleaseSource", "SaleZoneID", "SupplierZoneID", "OriginatingZoneID", "SaleCode"
-                , "SupplierCode");
+            BillingCDRBase BillingCDR = new BillingCDRBase();
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(BillingFailedCDR), "BillingCDR");
         }
-        public BillingFailedCDR(BillingCDRBase copy) : base(copy) { }
-        public BillingFailedCDR() { }
+
+        public BillingCDRBase BillingCDR { get; set; }
     }
 }

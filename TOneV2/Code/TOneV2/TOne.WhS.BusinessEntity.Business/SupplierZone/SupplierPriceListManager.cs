@@ -12,7 +12,9 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         public SupplierPriceList GetPriceList(int priceListId)
         {
-            throw new NotImplementedException();
+            ISupplierPriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
+            return dataManager.GetPriceList(priceListId);
+
         }
     }
 }

@@ -58,6 +58,7 @@
 
             $scope.removeOutTrunk = function (outtrunk) {
                 $scope.outTrunks.splice($scope.outTrunks.indexOf(outtrunk), 1);
+
             }
 
 
@@ -141,8 +142,8 @@
                 SupplierId: $scope.selectedSupplier.CarrierAccountId
             }
             var criteria = {
-                OUT_Trunks: $scope.outTrunks,
-                OUT_Carriers: $scope.outCarriers,
+                OutTrunks: $scope.outTrunks,
+                OutCarriers: $scope.outCarriers,
                 CDPNPrefixes: $scope.CDPNPrefixes
 
             }
@@ -153,14 +154,13 @@
                 BeginEffectiveTime: $scope.beginEffectiveDate,
                 EndEffectiveTime: $scope.endEffectiveDate
             }
-
             return supplierRule;
         }
 
         function loadFilterBySection() {
             if (supplierRuleEntity != undefined) {
-                $scope.outTrunks = supplierRuleEntity.Criteria.Out_Trunks
-                $scope.outCarriers = supplierRuleEntity.Criteria.Out_Carriers
+                $scope.outTrunks = supplierRuleEntity.Criteria.OutTrunks
+                $scope.outCarriers = supplierRuleEntity.Criteria.OutCarriers
                 $scope.CDPNPrefixes = supplierRuleEntity.Criteria.CDPNPrefixes;
                 $scope.beginEffectiveDate = supplierRuleEntity.BeginEffectiveTime;
                 $scope.endEffectiveDate = supplierRuleEntity.EndEffectiveTime;
@@ -170,8 +170,8 @@
 
         function insertSupplierRule() {
 
-            var customerRuleObject = buildSupplierRuleObjectObjFromScope();
-            return WhS_CDRProcessing_SupplierIdentificationRuleAPIService.AddRule(customerRuleObject)
+            var supplierRuleObject = buildSupplierRuleObjectObjFromScope();
+            return WhS_CDRProcessing_SupplierIdentificationRuleAPIService.AddRule(supplierRuleObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Supplier Rule", response)) {
                     if ($scope.onSupplierIdentificationRuleAdded != undefined)
@@ -185,9 +185,9 @@
         }
 
         function updateSupplierRule() {
-            var customerRuleObject = buildSupplierRuleObjectObjFromScope();
-            customerRuleObject.RuleId = ruleId;
-            WhS_CDRProcessing_SupplierIdentificationRuleAPIService.UpdateRule(customerRuleObject)
+            var supplierRuleObject = buildSupplierRuleObjectObjFromScope();
+            supplierRuleObject.RuleId = ruleId;
+            WhS_CDRProcessing_SupplierIdentificationRuleAPIService.UpdateRule(supplierRuleObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Supplier Rule", response)) {
                     if ($scope.onSupplierIdentificationRuleUpdated != undefined)

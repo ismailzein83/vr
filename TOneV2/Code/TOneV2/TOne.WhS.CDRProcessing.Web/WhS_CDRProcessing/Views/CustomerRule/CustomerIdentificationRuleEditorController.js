@@ -130,8 +130,8 @@
         }
         function loadFilterBySection() {
             if (customerRuleEntity != undefined) {
-                $scope.inTrunks = customerRuleEntity.Criteria.IN_Trunks
-                $scope.inCarriers = customerRuleEntity.Criteria.IN_Carriers
+                $scope.inTrunks = customerRuleEntity.Criteria.InTrunks
+                $scope.inCarriers = customerRuleEntity.Criteria.InCarriers
                 $scope.CDPNPrefixes = customerRuleEntity.Criteria.CDPNPrefixes
                 $scope.beginEffectiveDate = customerRuleEntity.BeginEffectiveTime;
                 $scope.endEffectiveDate = customerRuleEntity.EndEffectiveTime;
@@ -151,8 +151,8 @@
                 CustomerId: $scope.selectedCustomer.CarrierAccountId
             }
             var criteria = {
-                IN_Trunks: $scope.inTrunks,
-                IN_Carriers:$scope.inCarriers,
+                InTrunks: $scope.inTrunks,
+                InCarriers: $scope.inCarriers,
                 CDPNPrefixes: $scope.CDPNPrefixes
 
             }

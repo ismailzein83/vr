@@ -11,17 +11,17 @@ namespace TOne.WhS.CDRProcessing.Entities
         public SupplierIdentificationRuleCriteria Criteria { get; set; }
         public SupplierIdentificationRuleSettings Settings { get; set; }
 
-        public List<string> CDPNPrefixes
+        List<string> IRuleSupplierCDPNPrefixCriteria.CDPNPrefixes
         {
             get { return this.Criteria.CDPNPrefixes; }
         }
 
-        public List<string> OutTrunks
+        List<string> IRuleOutTrunkCriteria.OutTrunks
         {
             get { return this.Criteria.OutTrunks; }
         }
 
-        public List<string> OutCarriers
+        List<string> IRuleOutCarrierCriteria.OutCarriers
         {
             get { return this.Criteria.OutCarriers; }
         }

@@ -10,5 +10,7 @@ namespace TOne.WhS.BusinessEntity.Data
     public interface ISupplierRateDataManager:IDataManager
     {
         List<SupplierRate> GetSupplierRates(int supplierId,DateTime minimumDate);
+        List<SupplierRate> GetEffectiveSupplierRates(int supplierId, DateTime effectiveDate);
+        bool AreSupplierRatesUpdated(ref object updateHandle);
     }
 }

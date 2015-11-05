@@ -24,7 +24,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             SupplierRate supplierRate = new SupplierRate
             {
-                NormalRate = GetReaderValue<decimal>(reader, "Rate"),
+                NormalRate = GetReaderValue<decimal>(reader, "NormalRate"),
+                OtherRates = reader["OtherRates"] as string!=null?Vanrise.Common.Serializer.Deserialize<Dictionary<int,decimal>>(reader["OtherRates"] as string):null,
                 SupplierRateId = (long)reader["ID"],
                 ZoneId = (long)reader["ZoneID"],
                 PriceListId = GetReaderValue<int>(reader, "PriceListID"),
@@ -32,6 +33,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED")
             };
             return supplierRate;
+        }
+
+
+        public List<SupplierRate> GetEffectiveSupplierRates(int supplierId, DateTime effectiveDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetBySupplierAndEffective", SupplierRateMapper, supplierId, effectiveDate);
+        }
+
+        public bool AreSupplierRatesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.SupplierRate", ref updateHandle);
         }
     }
 }

@@ -31,29 +31,40 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
             foreach(CDR cdr in cdrBatch.CDRs){
                   DateTime StartIdentification = DateTime.Now;
                   BillingCDRBase baseCDR = GenerateBillingCdr(cdr);
-                  billingCDRBatch.CDRs.Add(baseCDR);
-                  if (baseCDR is BillingMainCDR)
-                  {
-                      if (cdrMainBatch.MainCDRs == null)
-                          cdrMainBatch.MainCDRs = new List<BillingMainCDR>();
-                      BillingMainCDR main = new BillingMainCDR(baseCDR);
-                      cdrMainBatch.MainCDRs.Add(main);
-                  }
-                  else if (baseCDR is BillingFailedCDR)
-                  {
-                      if (cdrFailedBatch.FailedCDRs == null)
-                          cdrFailedBatch.FailedCDRs = new List<BillingFailedCDR>();
 
-                      BillingFailedCDR failed = new BillingFailedCDR(baseCDR);
-                      cdrFailedBatch.FailedCDRs.Add(failed);
+                  billingCDRBatch.CDRs.Add(baseCDR);
+                 if (baseCDR.CustomerId == 0 || baseCDR.SupplierId == 0 || baseCDR.SaleCode == null || baseCDR.SaleZoneID == null || baseCDR.SupplierCode == null || baseCDR.SupplierZoneID == null)
+                      {
+                          if (cdrInvalidBatch.InvalidCDRs == null)
+                              cdrInvalidBatch.InvalidCDRs = new List<BillingInvalidCDR>();
+                          BillingInvalidCDR invalid = new BillingInvalidCDR();
+                          invalid.BillingCDR = baseCDR;
+                          cdrInvalidBatch.InvalidCDRs.Add(invalid);     
                   }
                   else
                   {
-                      if (cdrInvalidBatch.InvalidCDRs == null)
-                          cdrInvalidBatch.InvalidCDRs = new List<BillingInvalidCDR>();
-                      BillingInvalidCDR invalid = new BillingInvalidCDR(baseCDR);
-                      cdrInvalidBatch.InvalidCDRs.Add(invalid);
+                      if (baseCDR.DurationInSeconds > 0)
+                      {
+                          if (cdrMainBatch.MainCDRs == null)
+                              cdrMainBatch.MainCDRs = new List<BillingMainCDR>();
+                          BillingMainCDR main = new BillingMainCDR();
+                          main.BillingCDR = baseCDR;
+                          cdrMainBatch.MainCDRs.Add(main);
+                      }
+                      else
+                      {
+                          if (cdrFailedBatch.FailedCDRs == null)
+                              cdrFailedBatch.FailedCDRs = new List<BillingFailedCDR>();
+
+                          BillingFailedCDR failed = new BillingFailedCDR();
+                          failed.BillingCDR = baseCDR;
+                          cdrFailedBatch.FailedCDRs.Add(failed);
+                      }
                   }   
+                 
+                  
+
+                
             }
             outputItems.Add("Generate CDR Prices", cdrMainBatch);
             outputItems.Add("Generate Stats", billingCDRBatch);
@@ -64,16 +75,7 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
 
         private BillingCDRBase GenerateBillingCdr(CDR cdr)
         {
-            BillingCDRBase billingCDRMapped = null;
-            if (cdr.DurationInSeconds > 0)
-            {
-                billingCDRMapped = new BillingMainCDR();
-            }
-            else
-            {
-                billingCDRMapped = new BillingFailedCDR();
-            }
-
+            BillingCDRBase billingCDRMapped = new BillingCDRBase();
             CustomerIdentificationRuleTarget customerIdentificationRuleTarget = new Entities.CustomerIdentificationRuleTarget
             {
                 EffectiveOn = cdr.Attempt,
@@ -92,15 +94,29 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
            
             CustomerIdentificationRuleManager customerManager = new CustomerIdentificationRuleManager();
             SupplierIdentificationRuleManager supplierManager = new SupplierIdentificationRuleManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             CodeMatchBuilder codeMatchBuilder = new CodeMatchBuilder();
             CustomerIdentificationRule customerIdentificationRule = customerManager.GetMatchRule(customerIdentificationRuleTarget);
             SupplierIdentificationRule supplierIdentificationRule = supplierManager.GetMatchRule(supplierIdentificationRuleTarget);
+            SaleCodeMatch saleCodeMatch = null;
+            CarrierAccountDetail customer = null;
+            if (customerIdentificationRule!=null)
+            {
+                billingCDRMapped.CustomerId = customerIdentificationRule.Settings.CustomerId;
+                saleCodeMatch = codeMatchBuilder.GetSaleCodeMatch(cdr.CDPN, customerIdentificationRule.Settings.CustomerId, cdr.Attempt);
+                customer = carrierAccountManager.GetCarrierAccount(customerIdentificationRule.Settings.CustomerId);
+            }
 
-            billingCDRMapped.CustomerId=customerIdentificationRule.Settings.CustomerId;
-            billingCDRMapped.SupplierId = supplierIdentificationRule.Settings.SupplierId;
-
-            SaleCodeMatch saleCodeMatch = codeMatchBuilder.GetSaleCodeMatch(cdr.CDPN, customerIdentificationRule.Settings.CustomerId, cdr.Attempt);
-            SupplierCodeMatch supplierCodeMatch = codeMatchBuilder.GetSupplierCodeMatch(cdr.CDPN, supplierIdentificationRule.Settings.SupplierId, cdr.Attempt);
+            SupplierCodeMatch supplierCodeMatch = null;
+            CarrierAccountDetail supplier = null;
+            if (supplierIdentificationRule != null)
+            {
+                billingCDRMapped.SupplierId = supplierIdentificationRule.Settings.SupplierId;
+                supplierCodeMatch = codeMatchBuilder.GetSupplierCodeMatch(cdr.CDPN, supplierIdentificationRule.Settings.SupplierId, cdr.Attempt);
+                supplier = carrierAccountManager.GetCarrierAccount(supplierIdentificationRule.Settings.SupplierId);
+            }
+         
+           
             if (saleCodeMatch != null)
             {
                 billingCDRMapped.SaleCode = saleCodeMatch.SaleCode;
@@ -113,18 +129,6 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
                 billingCDRMapped.SupplierZoneID = supplierCodeMatch.SupplierZoneId;
 
             }
-         
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            CarrierAccountDetail customer = carrierAccountManager.GetCarrierAccount(customerIdentificationRule.Settings.CustomerId);
-            CarrierAccountDetail supplier = carrierAccountManager.GetCarrierAccount(supplierIdentificationRule.Settings.SupplierId);
-            if (billingCDRMapped is BillingMainCDR)
-                if ( billingCDRMapped.CustomerId == 0
-                    || billingCDRMapped.SupplierId == 0
-                    || saleCodeMatch.SaleZoneId == 0
-                    || supplierCodeMatch.SupplierZoneId == 0)
-                {
-                    billingCDRMapped = new BillingInvalidCDR(billingCDRMapped);
-                }
             return billingCDRMapped;
         }
         private BillingCDRBase GetBillingCDRBase(CDR cdrBase, BillingCDRBase cdr)

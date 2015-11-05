@@ -10,7 +10,7 @@ namespace TOne.WhS.CDRProcessing.Entities
    public class CDRBillingBatch: MappedBatchItem
    {
        static CDRBillingBatch()
-       {
+       {           
            BillingCDRBase cdr = new BillingCDRBase();
            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(CDRBillingBatch), "CDRs");
        }

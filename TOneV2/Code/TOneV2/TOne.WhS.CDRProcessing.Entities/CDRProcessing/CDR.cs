@@ -19,7 +19,7 @@ namespace TOne.WhS.CDRProcessing.Entities
         public int ID { get; set; }
         public string InCarrier { get; set; }
         public string InTrunk { get; set; }
-        public Decimal DurationInSeconds { get; set; }
+        public int DurationInSeconds { get; set; }
         public string OutCarrier { get; set; }
         public string OutTrunk { get; set; }
         public DateTime? Alert { get; set; }
