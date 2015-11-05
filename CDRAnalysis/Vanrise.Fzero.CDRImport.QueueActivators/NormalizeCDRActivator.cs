@@ -49,7 +49,7 @@ namespace Vanrise.Fzero.CDRImport.QueueActivators
                     if (currentTrunk != null)
                         cdr.OutTrunkId = currentTrunk.TrunkId;
                 }
-                cdr.SwitchID = SwitchId;
+                cdr.SwitchId = SwitchId;
 
                 normalizationManager.Normalize(cdr);
                 normalizationManager.SetAreaCode(cdr);

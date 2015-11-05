@@ -64,7 +64,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                                    , record.IMEI
                                    , record.BTSId
                                    , record.CellId
-                                   , record.SwitchID
+                                   , record.SwitchId
                                    , record.UpVolume
                                    , record.DownVolume
                                    , record.CellLatitude

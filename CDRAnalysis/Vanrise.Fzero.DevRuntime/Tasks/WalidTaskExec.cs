@@ -21,8 +21,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
-            List<int> StrategyIDs = new List<int>();
-            StrategyIDs.Add(3);
+            List<int> StrategyIds = new List<int>();
+            StrategyIds.Add(3);
             BPClient bpClient = new BPClient();
             var input = new CreateProcessInput
             {
@@ -32,7 +32,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
                     ToDate = DateTime.Parse("2015-03-20"),
                     OverridePrevious=false,
                     IncludeWhiteList =false,
-                    StrategyIds = StrategyIDs
+                    StrategyIds = StrategyIds
                 }
             };
             bpClient.CreateNewProcess(input);

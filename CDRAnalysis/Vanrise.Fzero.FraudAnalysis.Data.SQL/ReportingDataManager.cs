@@ -48,7 +48,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 		            FROM [FraudAnalysis].[AccountCase] ac WITH(NOLOCK)
                     INNER JOIN FraudAnalysis.StrategyExecutionDetails sed WITH(NOLOCK) ON sed.CaseID = ac.ID
                     INNER JOIN FraudAnalysis.StrategyExecution se WITH(NOLOCK) ON se.ID = sed.StrategyExecutionID
-                    INNER JOIN [FraudAnalysis].[Strategy] s WITH(NOLOCK) ON se.StrategyId = s.Id
+                    INNER JOIN [FraudAnalysis].[Strategy] s WITH(NOLOCK) ON se.StrategyID = s.ID
 		            
                     #WHERE_CLAUSE#
 		            
@@ -101,7 +101,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 whereClause.Append(" AND se.ExecutionDate <= '" + toDate + "'");
 
             if (strategyIDs != null && strategyIDs.Count > 0)
-                whereClause.Append(" and se.StrategyId IN (" + string.Join(",", strategyIDs) + ")");
+                whereClause.Append(" and se.StrategyID IN (" + string.Join(",", strategyIDs) + ")");
 
             return whereClause.ToString();
         }
@@ -138,7 +138,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                         FROM [FraudAnalysis].[AccountCase] ac1
                         INNER JOIN FraudAnalysis.StrategyExecutionDetails sed1 ON sed1.CaseID = ac1.ID
                         INNER JOIN FraudAnalysis.StrategyExecution se1 ON se1.ID = sed1.StrategyExecutionID
-                        INNER JOIN [FraudAnalysis].[Strategy] s1 ON se1.StrategyId = s1.Id
+                        INNER JOIN [FraudAnalysis].[Strategy] s1 ON se1.StrategyID = s1.ID
                         
                         #INNER_WHERE_CLAUSE#
                         
@@ -150,7 +150,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     FROM [FraudAnalysis].[AccountCase] ac WITH(NOLOCK)
                     INNER JOIN FraudAnalysis.StrategyExecutionDetails sed ON sed.CaseID=ac.ID
                     INNER JOIN FraudAnalysis.StrategyExecution se ON se.ID = sed.StrategyExecutionID
-                    INNER JOIN [FraudAnalysis].[Strategy] s ON se.StrategyId = s.Id
+                    INNER JOIN [FraudAnalysis].[Strategy] s ON se.StrategyID = s.ID
                     
                     #OUTER_WHERE_CLAUSE#
                     
@@ -172,7 +172,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             StringBuilder whereClause = new StringBuilder();
 
             whereClause.Append("WHERE Status = 3");
-            whereClause.Append(" AND se1.StrategyId = StrategyId");
+            whereClause.Append(" AND se1.StrategyID = StrategyID");
             whereClause.Append((!groupDaily) ? null : " AND CAST(ac1.StatusUpdatedTime AS DATE) = CAST(ac.StatusUpdatedTime AS DATE)");
 
             return whereClause.ToString();
@@ -187,7 +187,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             whereClause.Append(" AND ac.Status = 3");
             
             if (strategyIDs != null && strategyIDs.Count > 0)
-                whereClause.Append(" AND se.StrategyId IN (" + string.Join(",", strategyIDs) + ")");
+                whereClause.Append(" AND se.StrategyID IN (" + string.Join(",", strategyIDs) + ")");
 
             return whereClause.ToString();
         }
@@ -196,7 +196,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             StringBuilder groupByClause = new StringBuilder();
 
-            groupByClause.Append("GROUP BY s.Name, se.StrategyId");
+            groupByClause.Append("GROUP BY s.Name, se.StrategyID");
             groupByClause.Append((!groupDaily) ? null : ", CAST(ac.StatusUpdatedTime AS DATE)");
 
             return groupByClause.ToString();

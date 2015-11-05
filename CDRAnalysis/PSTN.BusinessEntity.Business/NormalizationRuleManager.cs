@@ -33,7 +33,7 @@ namespace PSTN.BusinessEntity.Business
 
         public void Normalize(Vanrise.Fzero.CDRImport.Entities.StagingCDR cdr)
         {
-            NormalizationRuleAdjustNumberTarget cdrInfo_CGPN = new NormalizationRuleAdjustNumberTarget { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
+            NormalizationRuleAdjustNumberTarget cdrInfo_CGPN = new NormalizationRuleAdjustNumberTarget { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchId, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
             NormalizationRule matchRule_CGPN = GetMatchRule(cdrInfo_CGPN);
             if (matchRule_CGPN != null)
             {
@@ -46,7 +46,7 @@ namespace PSTN.BusinessEntity.Business
             }
 
 
-            NormalizationRuleAdjustNumberTarget cdrInfo_CDPN = new NormalizationRuleAdjustNumberTarget { PhoneNumber = cdr.CDPN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.OutTrunkId };
+            NormalizationRuleAdjustNumberTarget cdrInfo_CDPN = new NormalizationRuleAdjustNumberTarget { PhoneNumber = cdr.CDPN, SwitchId = cdr.SwitchId, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.OutTrunkId };
             NormalizationRule matchRule_CDPN = GetMatchRule(cdrInfo_CDPN);
             if (matchRule_CDPN != null)
             {
@@ -61,7 +61,7 @@ namespace PSTN.BusinessEntity.Business
 
         public void Normalize(Vanrise.Fzero.CDRImport.Entities.CDR cdr)
         {
-            NormalizationRuleAdjustNumberTarget cdrInfo_MSISDN = new NormalizationRuleAdjustNumberTarget { PhoneNumber = cdr.MSISDN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
+            NormalizationRuleAdjustNumberTarget cdrInfo_MSISDN = new NormalizationRuleAdjustNumberTarget { PhoneNumber = cdr.MSISDN, SwitchId = cdr.SwitchId, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
             NormalizationRule matchRule_MSISDN = GetMatchRule(cdrInfo_MSISDN);
             if (matchRule_MSISDN != null)
             {
@@ -74,7 +74,7 @@ namespace PSTN.BusinessEntity.Business
             }
 
 
-            NormalizationRuleAdjustNumberTarget cdrInfo_Destination = new NormalizationRuleAdjustNumberTarget { PhoneNumber = cdr.Destination, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.OutTrunkId };
+            NormalizationRuleAdjustNumberTarget cdrInfo_Destination = new NormalizationRuleAdjustNumberTarget { PhoneNumber = cdr.Destination, SwitchId = cdr.SwitchId, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.OutTrunkId };
             NormalizationRule matchRule_Destination = GetMatchRule(cdrInfo_Destination);
             if (matchRule_Destination != null)
             {
@@ -90,7 +90,7 @@ namespace PSTN.BusinessEntity.Business
 
         public void SetAreaCode(Vanrise.Fzero.CDRImport.Entities.StagingCDR cdr)
         {
-            NormalizationRuleSetAreaTarget cdrInfo_CGPN = new NormalizationRuleSetAreaTarget { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
+            NormalizationRuleSetAreaTarget cdrInfo_CGPN = new NormalizationRuleSetAreaTarget { PhoneNumber = cdr.CGPN, SwitchId = cdr.SwitchId, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
             NormalizationRule matchRule_CGPN = GetMatchRule(cdrInfo_CGPN);
             if (matchRule_CGPN != null)
             {
@@ -100,7 +100,7 @@ namespace PSTN.BusinessEntity.Business
             }
 
 
-            NormalizationRuleSetAreaTarget cdrInfo_CDPN = new NormalizationRuleSetAreaTarget { PhoneNumber = cdr.CDPN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.OutTrunkId };
+            NormalizationRuleSetAreaTarget cdrInfo_CDPN = new NormalizationRuleSetAreaTarget { PhoneNumber = cdr.CDPN, SwitchId = cdr.SwitchId, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.OutTrunkId };
             NormalizationRule matchRule_CDPN = GetMatchRule(cdrInfo_CDPN);
             if (matchRule_CDPN != null)
             {
@@ -112,7 +112,7 @@ namespace PSTN.BusinessEntity.Business
 
         public void SetAreaCode(Vanrise.Fzero.CDRImport.Entities.CDR cdr)
         {
-            NormalizationRuleSetAreaTarget cdrInfo_MSISDN = new NormalizationRuleSetAreaTarget { PhoneNumber = cdr.MSISDN, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
+            NormalizationRuleSetAreaTarget cdrInfo_MSISDN = new NormalizationRuleSetAreaTarget { PhoneNumber = cdr.MSISDN, SwitchId = cdr.SwitchId, PhoneNumberType = NormalizationPhoneNumberType.CGPN, TrunkId = cdr.InTrunkId };
             NormalizationRule matchRule_MSISDN = GetMatchRule(cdrInfo_MSISDN);
             if (matchRule_MSISDN != null)
             {
@@ -122,7 +122,7 @@ namespace PSTN.BusinessEntity.Business
             }
 
 
-            NormalizationRuleSetAreaTarget cdrInfo_Destination = new NormalizationRuleSetAreaTarget { PhoneNumber = cdr.Destination, SwitchId = cdr.SwitchID, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.OutTrunkId };
+            NormalizationRuleSetAreaTarget cdrInfo_Destination = new NormalizationRuleSetAreaTarget { PhoneNumber = cdr.Destination, SwitchId = cdr.SwitchId, PhoneNumberType = NormalizationPhoneNumberType.CDPN, TrunkId = cdr.OutTrunkId };
             NormalizationRule matchRule_Destination = GetMatchRule(cdrInfo_Destination);
             if (matchRule_Destination != null)
             {

@@ -15,8 +15,6 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
     public class FTP_File_Mappers
     {
 
-        static int dataSourceId = 23;
-
         static StreamReaderImportedData data = new StreamReaderImportedData();
         
         public static void FillData()

@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                 stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}",
                                  cdr.CGPN
                                   , cdr.CDPN
-                                  , cdr.SwitchID
+                                  , cdr.SwitchId
                                   , cdr.InTrunkSymbol
                                   , cdr.OutTrunkSymbol
                                   , cdr.ConnectDateTime
@@ -71,7 +71,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                     stagingCDR.CDPNAreaCode = reader["CDPNAreaCode"] as string;
                     stagingCDR.DurationInSeconds = GetReaderValue<Decimal?>(reader, "DurationInSeconds");
                     stagingCDR.DisconnectDateTime = GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
-                    stagingCDR.SwitchID = GetReaderValue<int>(reader, "SwitchID");
+                    stagingCDR.SwitchId = GetReaderValue<int>(reader, "SwitchID");
 
                     currentIndex++;
                     if (currentIndex == 100000)
