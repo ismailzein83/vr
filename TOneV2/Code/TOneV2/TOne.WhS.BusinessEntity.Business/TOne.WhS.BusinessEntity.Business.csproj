@@ -76,7 +76,7 @@
     <Compile Include="CustomerZoneManager.cs" />
     <Compile Include="PricingRules\PricingRuleRateTypeItemContext.cs" />
     <Compile Include="RateTypeManager.cs" />
-    <Compile Include="RoutingProducts\CustomerZoneRoutingProductLocator.cs" />
+    <Compile Include="RoutingProducts\SaleEntityZoneRoutingProductLocator.cs" />
     <Compile Include="RoutingProducts\ISaleEntityRoutingProductReader.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductCacheManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductReadAllNoCache.cs" />

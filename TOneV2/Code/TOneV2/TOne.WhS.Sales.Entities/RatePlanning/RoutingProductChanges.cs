@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities.RatePlanning
 {
-    public class RoutingProductChanges : BaseChanges
+    public class RoutingProductChanges
     {
         public NewDefaultRoutingProduct NewDefaultRoutingProduct { get; set; }
 

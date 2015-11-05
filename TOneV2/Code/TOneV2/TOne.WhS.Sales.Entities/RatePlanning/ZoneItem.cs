@@ -23,5 +23,13 @@ namespace TOne.WhS.Sales.Entities.RatePlanning
         public DateTime? RateBED { get; set; }
 
         public DateTime? RateEED { get; set; }
+
+        public int? CurrentRoutingProductId { get; set; }
+
+        public bool isCurrentRoutingProductEditable { get; set; }
+
+        public string CurrentRoutingProductName { get; set; }
+
+        public int? NewRoutingProductId { get; set; }
     }
 }

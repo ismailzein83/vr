@@ -26,7 +26,7 @@ namespace TOne.WhS.Routing.Business
                 return;
 
             Vanrise.Common.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.CurrencyExchangeRateManager();
-            CustomerZoneRoutingProductLocator customerZoneRoutingProductLocator = new CustomerZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(effectiveOn, isEffectiveInFuture));
+            SaleEntityZoneRoutingProductLocator customerZoneRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(effectiveOn, isEffectiveInFuture));
             SaleEntityZoneRateLocator customerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(effectiveOn, isEffectiveInFuture));
 
             SalePricingRuleManager salePricingRuleManager = new SalePricingRuleManager();
@@ -55,7 +55,7 @@ namespace TOne.WhS.Routing.Business
                     {
                         CustomerId = customerId,
                         RoutingProductId = customerZoneRoutingProduct != null ? customerZoneRoutingProduct.RoutingProductId : 0,
-                        RoutingProductSource = customerZoneRoutingProduct != null ? customerZoneRoutingProduct.Source : default(CustomerZoneRoutingProductSource),
+                        RoutingProductSource = customerZoneRoutingProduct != null ? customerZoneRoutingProduct.Source : default(SaleEntityZoneRoutingProductSource),
                         SellingProductId = customerSellingProduct.SellingProductId,
                         SaleZoneId = customerZone.SaleZoneId,
                         EffectiveRateValue= rateValue,

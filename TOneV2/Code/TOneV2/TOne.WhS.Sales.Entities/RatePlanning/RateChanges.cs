@@ -7,7 +7,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Entities.RatePlanning
 {
-    public class RateChanges : BaseChanges
+    public class RateChanges
     {
         public List<NewRate> NewRates { get; set; }
 

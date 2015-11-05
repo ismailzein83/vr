@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities.RatePlanning
 {
-    public class ServiceChanges : BaseChanges
+    public class ServiceChanges
     {
         public List<NewService> NewServices { get; set; }
 

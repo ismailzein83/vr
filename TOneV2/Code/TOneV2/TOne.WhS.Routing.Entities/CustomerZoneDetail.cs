@@ -15,7 +15,7 @@ namespace TOne.WhS.Routing.Entities
 
         public int RoutingProductId { get; set; }
 
-        public CustomerZoneRoutingProductSource RoutingProductSource { get; set; }
+        public SaleEntityZoneRoutingProductSource RoutingProductSource { get; set; }
         
         public int SellingProductId { get; set; }
 

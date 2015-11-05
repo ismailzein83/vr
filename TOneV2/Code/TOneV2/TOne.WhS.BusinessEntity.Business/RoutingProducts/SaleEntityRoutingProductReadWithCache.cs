@@ -9,17 +9,15 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleEntityRoutingProductReadWithCache : ISaleEntityRoutingProductReader
     {
-        DateTime? _effectiveOn;
-        bool _isEffectiveInFuture;
-        public SaleEntityRoutingProductReadWithCache(DateTime? effectiveOn, bool isEffectiveInFuture)
+        DateTime _effectiveOn;
+        public SaleEntityRoutingProductReadWithCache(DateTime effectiveOn)
         {
             _effectiveOn = effectiveOn;
-            _isEffectiveInFuture = isEffectiveInFuture;
         }
 
         public SaleZoneRoutingProductsByZone GetRoutingProductsOnZones(SalePriceListOwnerType ownerType, int ownerId)
         {
-            string cacheName = String.Format("GetRoutingProductsOnZones_{0}_{1}_{2}_{3}", ownerType, ownerId, _effectiveOn, _isEffectiveInFuture);
+            string cacheName = String.Format("GetRoutingProductsOnZones_{0}_{1}_{2}", ownerType, ownerId, _effectiveOn.Date);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>().GetOrCreateObject(cacheName,
                 () =>
                 {
@@ -43,7 +41,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private DefaultRoutingProductsByOwner GetCachedDefaultRoutingProducts()
         {
-            string cacheName = String.Format("GetCachedDefaultRoutingProducts_{0}_{1}", _effectiveOn, _isEffectiveInFuture);
+            string cacheName = String.Format("GetCachedDefaultRoutingProducts_{0}", _effectiveOn);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>().GetOrCreateObject(cacheName,
                 () =>
                 {
