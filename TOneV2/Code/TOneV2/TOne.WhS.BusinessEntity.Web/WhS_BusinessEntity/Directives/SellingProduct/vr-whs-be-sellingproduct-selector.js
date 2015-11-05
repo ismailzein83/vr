@@ -10,8 +10,8 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
                 isdisabled:"=",
                 onselectionchanged: '=',
                 isrequired: "@",
-                selectedvalues:'='
-               
+                selectedvalues:'=',
+                hideremoveicon: "@"
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -40,25 +40,28 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
             }
 
         };
-
-
+        
         function getTemplate(attrs) {
-
             var multipleselection = "";
             var label = "Pricing Product";
+            var hideremoveicon = "";
+
             if (attrs.ismultipleselection != undefined) {
                 label = "Pricing Products";
                 multipleselection = "ismultipleselection"
             }
-                  
-                var required = "";
-                if (attrs.isrequired != undefined)
-                    required = "isrequired";
-                
-                return '<div  vr-loader="isLoadingDirective">'
-                    + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SellingProductId" '
-                + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged"  vr-disabled="ctrl.isdisabled"></vr-select>'
-                   + '</div>'
+            else if (attrs.hideremoveicon != undefined) {
+                hideremoveicon = "hideremoveicon";
+            }
+
+            var required = "";
+            if (attrs.isrequired != undefined)
+                required = "isrequired";
+
+            return '<div  vr-loader="isLoadingDirective">'
+                + '<vr-select ' + multipleselection + ' ' + hideremoveicon + ' datatextfield="Name" datavaluefield="SellingProductId" '
+            + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged"  vr-disabled="ctrl.isdisabled"></vr-select>'
+                + '</div>';
         }
 
         function sellingProductCtor(ctrl, $scope, $attrs) {
