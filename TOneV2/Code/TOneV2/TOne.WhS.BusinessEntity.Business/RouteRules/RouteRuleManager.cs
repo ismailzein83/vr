@@ -83,7 +83,8 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var routeRules = base.GetAllRules();
             Func<RouteRule, bool> filterExpression = (routeRule) =>
-                 (input.Query.Code == null || this.CheckIfCodeCriteriaSettingsContains(routeRule, input.Query.Code))
+                (input.Query.RoutingProductId == null || routeRule.Criteria.RoutingProductId == input.Query.RoutingProductId)
+                 && (input.Query.Code == null || this.CheckIfCodeCriteriaSettingsContains(routeRule, input.Query.Code))
                  && (input.Query.CustomerIds == null || this.CheckIfCustomerSettingsContains(routeRule, input.Query.CustomerIds))
                  && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(routeRule, input.Query.SaleZoneIds));
 

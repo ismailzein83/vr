@@ -57,8 +57,6 @@
                     filter: { sellingNumberPlanId: routingProductObj != undefined ? routingProductObj.SellingNumberPlanId : undefined }
                 };
 
-                console.log("Got here and payload is " + routingProductObj);
-
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupSettingsAPI, saleZoneGroupPayload, setLoader, saleZoneGroupSettingsReadyPromiseDeferred);
             }
 

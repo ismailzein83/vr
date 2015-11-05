@@ -88,16 +88,16 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_BE_MainSer
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
-                name: "Add Route Rule",
-                clicked: addRouteRule,
-            },
-            {
                 name: "Edit",
                 clicked: editRoutingProduct,
             },
             {
                 name: "Delete",
                 clicked: deleteRoutingProduct,
+            },
+            {
+                name: "Add Route Rule",
+                clicked: addRouteRule,
             }
             ];
         }
