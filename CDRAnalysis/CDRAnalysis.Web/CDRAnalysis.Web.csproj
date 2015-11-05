@@ -386,6 +386,7 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\Aspose.Cells.lic" />
     <None Include="Properties\PublishProfiles\CDRAnalysis.Web.pubxml" />
   </ItemGroup>
   <PropertyGroup>
