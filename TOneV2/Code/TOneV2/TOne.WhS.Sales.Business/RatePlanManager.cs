@@ -140,18 +140,16 @@ namespace TOne.WhS.Sales.Business
 
         #endregion
 
-        public bool SaveRatePlanDraft(RatePlan draft)
-        {
-            int ratePlanId;
-
-            IRatePlanDataManager dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            return dataManager.InsertRatePlan(draft, out ratePlanId);
-        }
-
         public RatePlan GetRatePlan(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status)
         {
             IRatePlanDataManager dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
             return dataManager.GetRatePlan(ownerType, ownerId, status);
+        }
+
+        public bool SaveRatePlanDraft(RatePlan draft)
+        {
+            IRatePlanDataManager dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+            return dataManager.InsertOrUpdateRatePlan(draft);
         }
     }
 }

@@ -2,50 +2,111 @@
 
     "use strict";
 
-    RatePlanController.$inject = ["$scope", "WhS_Sales_MainService", "WhS_Sales_RatePlanAPIService", "WhS_BE_CustomerZoneAPIService", "WhS_BE_RatePlanOwnerTypeEnum", "WhS_BE_RatePlanStatusEnum", "UtilsService", "VRNotificationService"];
+    RatePlanController.$inject = [
+        "$scope",
+        "WhS_Sales_MainService",
+        "WhS_Sales_RatePlanAPIService",
+        "WhS_BE_CustomerZoneAPIService",
+        "WhS_Sales_RatePlanOwnerTypeEnum",
+        "WhS_Sales_RatePlanStatusEnum",
+        "UtilsService",
+        "VRNotificationService"
+    ];
 
-    function RatePlanController($scope, WhS_Sales_MainService, WhS_Sales_RatePlanAPIService, WhS_BE_CustomerZoneAPIService, WhS_BE_RatePlanOwnerTypeEnum, WhS_BE_RatePlanStatusEnum, UtilsService, VRNotificationService) {
+    function RatePlanController($scope, WhS_Sales_MainService, WhS_Sales_RatePlanAPIService, WhS_BE_CustomerZoneAPIService, WhS_Sales_RatePlanOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, UtilsService, VRNotificationService) {
         
-        var carrierAccountDirectiveAPI;
-        var ratePlanGridAPI;
-        var modifiedRatePlanItems = [];
+        var sellingProductSelectorAPI;
+        var carrierAccountSelectorAPI;
+        var gridAPI;
+        var changedDataItems = [];
 
         defineScope();
         load();
 
         function defineScope() {
-            $scope.zoneLetters = [];
-            $scope.ratePlanItems = [];
-            $scope.disableSaveButton = true;
+            /* Owner Type */
 
-            $scope.onCarrierAccountDirectiveReady = function (api) {
-                carrierAccountDirectiveAPI = api;
-                load();
+            $scope.ownerTypes = UtilsService.getArrayEnum(WhS_Sales_RatePlanOwnerTypeEnum);
+            $scope.selectedOwnerType = $scope.ownerTypes[0];
+            $scope.showSellingProductSelector = false;
+            $scope.showCarrierAccountSelector = false;
+
+            $scope.onOwnerTypeChanged = function () {
+                if ($scope.selectedOwnerType != undefined) {
+                    if ($scope.selectedOwnerType.value == WhS_Sales_RatePlanOwnerTypeEnum.SellingProduct.value) {
+                        $scope.showSellingProductSelector = true;
+                        $scope.showCarrierAccountSelector = false;
+                        $scope.selectedCustomer = undefined;
+                    }
+                    else if ($scope.selectedOwnerType.value == WhS_Sales_RatePlanOwnerTypeEnum.Customer.value) {
+                        $scope.showSellingProductSelector = false;
+                        $scope.showCarrierAccountSelector = true;
+                        $scope.selectedSellingProduct = undefined;
+                    }
+
+                    clearRatePlan();
+                }
+            };
+
+            /* Selling Product */
+
+            $scope.selectedSellingProduct = undefined;
+
+            $scope.onSellingProductSelectorReady = function (api) {
+                sellingProductSelectorAPI = api;
+                api.load(undefined);
+            };
+
+            $scope.onSellingProductChanged = function () {
+                if ($scope.selectedSellingProduct != undefined) {
+                    clearRatePlan();
+                }
+            };
+
+            /* Carrier Account */
+
+            $scope.selectedCustomer = undefined;
+
+            $scope.onCarrierAccountSelectorReady = function (api) {
+                carrierAccountSelectorAPI = api;
+                api.load(undefined);
             };
 
             $scope.onCarrierAccountChanged = function () {
-                $scope.zoneLetters = [];
-                $scope.ratePlanItems = [];
-                showRatePlan(false);
+                console.log($scope.selectedCustomer);
+
+                if ($scope.selectedCustomer != undefined) {
+                    clearRatePlan();
+                }
             };
 
-            $scope.onRatePlanGridReady = function (api) {
-                ratePlanGridAPI = api;
-            };
+            /* Zone Letters */
 
-            $scope.loadMoreData = function () {
-                return loadRatePlanGrid(false);
-            };
-
-            $scope.search = function () {
-                return loadRatePlan();
-            };
+            $scope.zoneLetters = [];
 
             $scope.zoneLetterConnector = {
                 selectedZoneLetterIndex: 0,
                 onZoneLetterSelectionChanged: function () {
-                    loadRatePlanGrid(true);
+                    loadGrid(true);
                 }
+            };
+
+            /* Grid */
+
+            $scope.dataItems = [];
+
+            $scope.onGridReady = function (api) {
+                gridAPI = api;
+            };
+
+            $scope.loadMoreData = function () {
+                return loadGrid(false);
+            };
+
+            /* Action Bar */
+
+            $scope.search = function () {
+                return loadRatePlan();
             };
 
             $scope.sellNewZones = function () {
@@ -53,34 +114,43 @@
                     loadRatePlan();
                 };
                 
-                WhS_Sales_MainService.sellNewZones(carrierAccountDirectiveAPI.getData().CarrierAccountId, onCustomerZonesSold);
+                WhS_Sales_MainService.sellNewZones(carrierAccountSelectorAPI.getData().CarrierAccountId, onCustomerZonesSold);
             };
 
             defineSaveButtonMenuActions();
         }
 
         function load() {
-            if (carrierAccountDirectiveAPI == undefined)
-                return;
 
-            $scope.loadingFilters = true;
-
-            carrierAccountDirectiveAPI.load()
-                .catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose($scope, error);
-                })
-                .finally(function () {
-                    $scope.loadingFilters = false;
-                });
         }
+
+        /* New Functions */
+
+        function clearRatePlan() {
+            $scope.zoneLetters.length = 0;
+            $scope.dataItems.length = 0;
+            showRatePlan(false);
+        }
+
+        function showRatePlan(show) {
+            $scope.showZoneLetters = show;
+            $scope.showGrid = show;
+        }
+
+        /* New Functions */
 
         function loadRatePlan() {
             return getZoneLetters().then(function () {
                 if ($scope.zoneLetters.length > 0) {
                     showRatePlan(true);
                     $scope.zoneLetterConnector.selectedZoneLetterIndex = 0;
-                    return loadRatePlanGrid(true);
+                    return;
+
+                    return loadGrid(true).then(function () {
+                        return getRatePlanDraft();
+                    });
                 }
+
                 else {
                     showRatePlan(false);
                 }
@@ -88,7 +158,7 @@
         }
 
         function getZoneLetters() {
-            var customerId = carrierAccountDirectiveAPI.getData().CarrierAccountId;
+            var customerId = carrierAccountSelectorAPI.getSelectedIds();
 
             return WhS_BE_CustomerZoneAPIService.GetCustomerZoneLetters(customerId).then(function (response) {
                 if (response == null) return;
@@ -101,11 +171,11 @@
             });
         }
 
-        function loadRatePlanGrid(clearDataAndContinuePaging) {
-            $scope.loadingRatePlanGrid = true;
+        function loadGrid(clearDataAndContinuePaging) {
+            $scope.isLoadingGrid = true;
 
             if (clearDataAndContinuePaging) {
-                ratePlanGridAPI.clearDataAndContinuePaging();
+                gridAPI.clearDataAndContinuePaging();
             }
 
             var input = buildRatePlanItemInput();
@@ -118,39 +188,37 @@
 
                 for (var i = 0; i < response.length; i++) {
                     var item = response[i];
-                    defineRatePlanItemExtension(item);
+                    defineDataItemExtension(item);
                     ratePlanItems.push(item);
                 }
 
-                ratePlanGridAPI.addItemsToSource(ratePlanItems);
-                setModifiedRatePlanItems();
+                gridAPI.addItemsToSource(ratePlanItems);
+                setChangedDataItems();
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-                $scope.loadingRatePlanGrid = false;
+                $scope.isLoadingGrid = false;
             });
         }
 
-        function getRatePlan() {
+        function getRatePlanDraft() {
             var ownerType = WhS_BE_RatePlanOwnerTypeEnum.Customer.value;
-            var ownerId = WhS_BE_RatePlanOwnerTypeEnum.Customer.value;
+            var ownerId = carrierAccountSelectorAPI.getData().CarrierAccountId;
             var status = WhS_BE_RatePlanStatusEnum.Draft.value;
 
             return WhS_Sales_RatePlanAPIService.GetRatePlan(ownerType, ownerId, status).then(function (ratePlan) {
-                if (ratePlan != undefined && ratePlan != null) {
-                    for (var i = 0; i < ratePlan.Details.length; i++) {
-                        var item = ratePlan.Details[i];
+                if (ratePlan != null) {
+                    changedDataItems = [];
+
+                    for (var i = 0; i < ratePlan.RatePlanItems.length; i++) {
+                        var item = ratePlan.RatePlanItems[i];
+                        changedDataItems.push(buildDataItem(item));
                     }
                 }
             });
         }
 
-        function showRatePlan(show) {
-            $scope.showZoneLetters = show;
-            $scope.showRatePlanGrid = show;
-        }
-
-        function defineRatePlanItemExtension(ratePlanItem) {
+        function defineDataItemExtension(ratePlanItem) {
             var extension = {
                 NewRate: null,
                 DisableBeginEffectiveDate: true,
@@ -158,18 +226,16 @@
             };
 
             extension.onRateChanged = function (dataItem) {
-                var dataItemIndex = UtilsService.getItemIndexByVal(modifiedRatePlanItems, dataItem.ZoneId, "ZoneId");
+                var dataItemIndex = UtilsService.getItemIndexByVal(changedDataItems, dataItem.ZoneId, "ZoneId");
 
                 if (dataItem.Extension.NewRate == undefined || dataItem.Extension.NewRate == null || dataItem.Extension.NewRate == "") {
                     if (dataItemIndex > -1) {
-                        modifiedRatePlanItems.splice(dataItemIndex, 1);
-                        $scope.disableSaveButton = (modifiedRatePlanItems.length == 0);
+                        changedDataItems.splice(dataItemIndex, 1);
                     }
                 }
                 else {
                     if (dataItemIndex == -1) {
-                        modifiedRatePlanItems.push(dataItem);
-                        $scope.disableSaveButton = false;
+                        changedDataItems.push(dataItem);
                     }
                 }
 
@@ -192,28 +258,33 @@
             ratePlanItem.Extension = extension;
         }
 
-        function setModifiedRatePlanItems() {
-            for (var i = 0; i < modifiedRatePlanItems.length; i++) {
-                var item = modifiedRatePlanItems[i];
-                var ratePlanItem = UtilsService.getItemByVal($scope.ratePlanItems, item.ZoneId, "ZoneId");
+        function setChangedDataItems() {
+            for (var i = 0; i < changedDataItems.length; i++) {
+                var changedDataItem = changedDataItems[i];
+                var dataItem = UtilsService.getItemByVal($scope.dataItems, changedDataItem.ZoneId, "ZoneId");
 
-                if (ratePlanItem != undefined && ratePlanItem != null) {
-                    ratePlanItem.Extension.NewRate = item.Extension.NewRate;
+                if (dataItem != undefined && dataItem != null) {
+                    dataItem.Rate = changedDataItem.Rate;
+                    dataItem.Extension.NewRate = changedDataItem.Extension.NewRate;
 
-                    ratePlanItem.BeginEffectiveDate = item.BeginEffectiveDate;
-                    ratePlanItem.Extension.DisableBeginEffectiveDate = item.Extension.DisableBeginEffectiveDate;
+                    dataItem.BeginEffectiveDate = changedDataItem.BeginEffectiveDate;
+                    dataItem.Extension.DisableBeginEffectiveDate = changedDataItem.Extension.DisableBeginEffectiveDate;
 
-                    ratePlanItem.EndEffectiveDate = item.EndEffectiveDate;
-                    ratePlanItem.Extension.DisableEndEffectiveDate = item.Extension.DisableEndEffectiveDate;
+                    dataItem.EndEffectiveDate = changedDataItem.EndEffectiveDate;
+                    dataItem.Extension.DisableEndEffectiveDate = changedDataItem.Extension.DisableEndEffectiveDate;
+
+                    console.log(changedDataItem);
+                    console.log(dataItem);
+                    return;
                 }
             }
         }
 
         function buildRatePlanItemInput() {
-            var pageInfo = ratePlanGridAPI.getPageInfo();
+            var pageInfo = gridAPI.getPageInfo();
 
             var filter = {
-                CustomerId: carrierAccountDirectiveAPI.getData().CarrierAccountId,
+                CustomerId: carrierAccountSelectorAPI.getData().CarrierAccountId,
                 ZoneLetter: $scope.zoneLetters[$scope.zoneLetterConnector.selectedZoneLetterIndex],
                 CountryId: null
             };
@@ -228,43 +299,47 @@
         function defineSaveButtonMenuActions() {
             $scope.saveButtonMenuActions = [
                 { name: "Save", clicked: savePriceList },
-                { name: "Save Draft", clicked: savePriceListDraft },
+                { name: "Save Draft", clicked: saveRatePlanDraft },
             ];
         }
 
         function savePriceList() {
             var input = {
-                CustomerId: carrierAccountDirectiveAPI.getData().CarrierAccountId,
+                CustomerId: carrierAccountSelectorAPI.getData().CarrierAccountId,
                 NewSaleRates: buildNewSaleRates()
             };
 
             return WhS_Sales_RatePlanAPIService.SavePriceList(input).then(function (response) {
-                modifiedRatePlanItems = [];
-                return loadRatePlanGrid(true);
+                changedDataItems = [];
+                return loadGrid(true);
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
         }
 
-        function savePriceListDraft() {
+        function saveRatePlanDraft() {
             var input = {
                 OwnerType: WhS_BE_RatePlanOwnerTypeEnum.Customer.value,
-                OwnerId: carrierAccountDirectiveAPI.getData().CarrierAccountId,
-                Details: buildNewRatePlanItems(),
+                OwnerId: carrierAccountSelectorAPI.getData().CarrierAccountId,
+                RatePlanItems: buildItems(),
                 Status: WhS_BE_RatePlanStatusEnum.Draft.value
             };
 
-            console.log(input);
+            return WhS_Sales_RatePlanAPIService.SaveRatePlanDraft(input).then(function () {
+                console.log("Success: Draft has been saved");
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
         }
 
         function buildNewSaleRates() {
-            if (modifiedRatePlanItems.length == 0)
+            if (changedDataItems.length == 0)
                 return null;
 
             var newSaleRates = [];
 
-            for (var i = 0; i < modifiedRatePlanItems.length; i++) {
-                var item = modifiedRatePlanItems[i];
+            for (var i = 0; i < changedDataItems.length; i++) {
+                var item = changedDataItems[i];
 
                 newSaleRates.push({
                     SaleRateId: item.SaleRateId,
@@ -278,18 +353,45 @@
             return newSaleRates;
         }
 
-        function buildNewRatePlanItems() {
-            if (modifiedRatePlanItems.length == 0)
+        function buildDataItem(item) {
+            return {
+                ZoneId: item.ZoneId,
+                ZoneName: item.ZoneName,
+                SaleRateId: item.SaleRateId,
+                Rate: item.Rate,
+                BeginEffectiveDate: item.BeginEffectiveDate,
+                EndEffectiveDate: item.EndEffectiveDate,
+                Extension: {
+                    NewRate: item.Rate,
+                    DisableBeginEffectiveDate: false,
+                    DisableEndEffectiveDate: false
+                }
+            };
+        }
+
+        function buildItems() {
+            if (changedDataItems.length == 0)
                 return null;
 
-            var clone = UtilsService.cloneObject(modifiedRatePlanItems, true);
+            var items = [];
 
-            for (var i = 0; i < clone.length; i++) {
-                var modifiedItem = clone[i];
-                modifiedItem.Rate = modifiedItem.Extension.NewRate;
+            for (var i = 0; i < changedDataItems.length; i++) {
+                var item = buildItem(changedDataItems[i]);
+                items.push(item);
             }
 
-            return clone;
+            return items;
+        }
+
+        function buildItem(changedDataItem) {
+            return {
+                ZoneId: changedDataItem.ZoneId,
+                ZoneName: changedDataItem.ZoneName,
+                SaleRateId: changedDataItem.SaleRateId,
+                Rate: changedDataItem.Extension.NewRate,
+                BeginEffectiveDate: changedDataItem.BeginEffectiveDate,
+                EndEffectiveDate: changedDataItem.EndEffectiveDate
+            };
         }
     }
 

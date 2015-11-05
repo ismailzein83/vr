@@ -18,6 +18,6 @@ namespace TOne.WhS.Sales.Data
 
         RatePlan GetRatePlan(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status);
 
-        bool InsertRatePlan(RatePlan ratePlan, out int ratePlanId);
+        bool InsertOrUpdateRatePlan(RatePlan ratePlan);
     }
 }

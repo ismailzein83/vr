@@ -9,7 +9,8 @@
         return ({
             GetRatePlanItems: GetRatePlanItems,
             GetRatePlan: GetRatePlan,
-            SavePriceList: SavePriceList
+            SavePriceList: SavePriceList,
+            SaveRatePlanDraft: SaveRatePlanDraft
         });
 
         function GetRatePlanItems(input) {
@@ -17,7 +18,7 @@
         }
 
         function GetRatePlan(ownerType, ownerId, status) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetRatePlan"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetRatePlan"), {
                 ownerType: ownerType,
                 ownerId: ownerId,
                 status: status
@@ -26,6 +27,10 @@
 
         function SavePriceList(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "SavePriceList"), input);
+        }
+
+        function SaveRatePlanDraft(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "SaveRatePlanDraft"), input);
         }
     }
 

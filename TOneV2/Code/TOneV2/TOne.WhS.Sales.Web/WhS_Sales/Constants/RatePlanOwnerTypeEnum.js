@@ -1,4 +1,4 @@
-﻿app.constant("WhS_BE_RatePlanOwnerTypeEnum", {
-    SellingProduct: { value: 0, description: "SellingProduct" },
+﻿app.constant("WhS_Sales_RatePlanOwnerTypeEnum", {
+    SellingProduct: { value: 0, description: "Selling Product" },
     Customer: { value: 1, description: "Customer" }
 });

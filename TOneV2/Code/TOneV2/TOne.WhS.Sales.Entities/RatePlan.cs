@@ -14,7 +14,7 @@ namespace TOne.WhS.Sales.Entities
 
         public int OwnerId { get; set; }
 
-        public List<RatePlanItem> Details { get; set; }
+        public List<RatePlanItem> RatePlanItems { get; set; }
 
         public RatePlanStatus Status { get; set; }
     }

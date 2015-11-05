@@ -26,7 +26,7 @@ namespace TOne.WhS.Sales.Entities.RatePlanning
 
         public int? CurrentRoutingProductId { get; set; }
 
-        public bool isCurrentRoutingProductEditable { get; set; }
+        public bool IsCurrentRoutingProductEditable { get; set; }
 
         public string CurrentRoutingProductName { get; set; }
 

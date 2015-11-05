@@ -5,11 +5,30 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountDirectiveReady"
+                    <vr-select label="Owner Type"
+                               datasource="ownerTypes"
+                               selectedvalues="selectedOwnerType"
+                               onselectionchanged="onOwnerTypeChanged"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               entityname="Owner Type"
+                               hideremoveicon
+                               isrequired>
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="normal" ng-show="showSellingProductSelector">
+                    <vr-whs-be-sellingproduct-selector on-ready="onSellingProductSelectorReady"
+                                                       selectedvalues="selectedSellingProduct"
+                                                       onselectionchanged="onSellingProductChanged"
+                                                       hideremoveicon>
+                    </vr-whs-be-sellingproduct-selector>
+                </vr-columns>
+                <vr-columns width="normal" ng-show="showCarrierAccountSelector">
+                    <vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountSelectorReady"
+                                                       selectedvalues="selectedCustomer"
                                                        onselectionchanged="onCarrierAccountChanged"
                                                        getcustomers
-                                                       hideremoveicon
-                                                       isrequired>
+                                                       hideremoveicon>
                     </vr-whs-be-carrieraccount-selector>
                 </vr-columns>
             </vr-row>
@@ -19,8 +38,8 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
-                    <vr-button type="SellNewZones" formname="formFilter" data-onclick="sellNewZones"></vr-button>
-                    <vr-button type="Save" formname="formFilter" menuactions="saveButtonMenuActions" vr-disabled="disableSaveButton"></vr-button>
+                    <vr-button type="SellNewZones" formname="formFilter" data-onclick="sellNewZones" ng-show="showCarrierAccountSelector"></vr-button>
+                    <vr-button type="Save" formname="formFilter" menuactions="saveButtonMenuActions"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
@@ -34,13 +53,12 @@
         </vr-row>
 
         <vr-row removeline>
-            <vr-columns width="fullrow" ng-show="showRatePlanGrid">
-                <vr-datagrid on-ready="onRatePlanGridReady"
-                             datasource="ratePlanItems"
+            <vr-columns width="fullrow" ng-show="showGrid" vr-loader="isLoadingGrid">
+                <vr-datagrid on-ready="onGridReady"
+                             datasource="dataItems"
                              loadmoredata="loadMoreData"
                              menuactions="gridMenuActions"
                              pagingtype="'PagingOnScroll'"
-                             vr-loader="loadingRatePlanGrid"
                              idfield="ZoneId"
                              hidegridmenu>
 

@@ -91,14 +91,12 @@ namespace TOne.WhS.Sales.Data.SQL
             return GetItemSP("TOneWhS_Sales.sp_RatePlan_GetByStatus", RatePlanMapper, ownerType, ownerId, status);
         }
 
-        public bool InsertRatePlan(RatePlan ratePlan, out int ratePlanId)
+        public bool InsertOrUpdateRatePlan(RatePlan ratePlan)
         {
-            object insertedId;
-            string serializedDetails = Vanrise.Common.Serializer.Serialize(ratePlan.Details);
+            string serializedRatePlanItems = Vanrise.Common.Serializer.Serialize(ratePlan.RatePlanItems);
 
-            int recordsAffected = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_Insert", out insertedId, ratePlan.OwnerType, ratePlan.OwnerId, serializedDetails, ratePlan.Status);
+            int recordsAffected = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_InsertOrUpdate", ratePlan.OwnerType, ratePlan.OwnerId, serializedRatePlanItems, ratePlan.Status);
 
-            ratePlanId = (int)insertedId;
             return recordsAffected > 0;
         }
 
@@ -109,7 +107,7 @@ namespace TOne.WhS.Sales.Data.SQL
             ratePlan.RatePlanId = (int)reader["ID"];
             ratePlan.OwnerType = (RatePlanOwnerType)reader["OwnerType"];
             ratePlan.OwnerId = (int)reader["OwnerId"];
-            ratePlan.Details = Vanrise.Common.Serializer.Deserialize<List<RatePlanItem>>(reader["Details"] as string);
+            ratePlan.RatePlanItems = Vanrise.Common.Serializer.Deserialize<List<RatePlanItem>>(reader["Details"] as string);
             ratePlan.Status = (RatePlanStatus)reader["Status"];
 
             return ratePlan;

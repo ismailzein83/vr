@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities.RatePlanning
 {
-    public enum ChangesApplyType { SaveDraft = 0, ApplyNow = 1}
+    public enum ChangesApplyType { SaveDraft = 0, ApplyNow = 1 }
+
     public abstract class BaseChanges
     {
         public ChangesApplyType ApplyType { get; set; }
