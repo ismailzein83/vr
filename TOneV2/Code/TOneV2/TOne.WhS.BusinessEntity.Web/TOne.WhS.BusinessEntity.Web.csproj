@@ -193,7 +193,7 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\vr-whs-be-supplierswithzonesgroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\RateType\Templates\RateTypeGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RateType\vr-whs-be-rateType-grid.js" />
-    <Content Include="WhS_BusinessEntity\Directives\RateType\vr-whs-be-rateType-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\RateType\vr-whs-be-ratetype-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\RouteRule\Templates\RouteRuleGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RouteRule\vr-whs-be-routerule-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />
