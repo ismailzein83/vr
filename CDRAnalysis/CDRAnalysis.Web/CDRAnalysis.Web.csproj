@@ -285,6 +285,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="bin\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
@@ -386,7 +387,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Aspose.Cells.lic" />
     <None Include="Properties\PublishProfiles\CDRAnalysis.Web.pubxml" />
   </ItemGroup>
   <PropertyGroup>
