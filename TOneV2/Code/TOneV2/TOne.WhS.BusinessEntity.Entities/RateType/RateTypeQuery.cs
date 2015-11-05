@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.BusinessEntity.Entities.RateType
+namespace TOne.WhS.BusinessEntity.Entities
 {
     public class RateTypeQuery
     {
