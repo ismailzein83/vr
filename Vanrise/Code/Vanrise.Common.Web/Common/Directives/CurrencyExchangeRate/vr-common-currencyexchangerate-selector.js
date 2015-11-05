@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'UtilsService', 'VRUIUtilsService',
+app.directive('vrCommonCurrencyExchangeRateSelector', ['VRCommon_CurrencyAPIService', 'UtilsService', 'VRUIUtilsService',
     function (VRCommon_CurrencyAPIService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -29,13 +29,13 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'Utils
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            //compile: function (element, attrs) {
-            //    return {
-            //        pre: function ($scope, iElem, iAttrs, ctrl) {
+            compile: function (element, attrs) {
+                return {
+                    pre: function ($scope, iElem, iAttrs, ctrl) {
 
-            //        }
-            //    }
-            //},
+                    }
+                }
+            },
             template: function (element, attrs) {
                 return getCurrencyTemplate(attrs);
             }

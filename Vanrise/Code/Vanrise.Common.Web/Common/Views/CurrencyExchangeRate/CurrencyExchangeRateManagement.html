@@ -1,0 +1,24 @@
+﻿<vr-panel ng-controller="VRCommon_CurrencyExchangeRateManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-common-currency-selector on-ready="onCurrencySelectReady" ismultipleselection> </vr-common-currency-selector>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="date" label="Effective On" value="exchangeDate"></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Add" data-onclick="addNewCurrencyExchangeRate"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-common-currencyexchangerate-grid on-ready="onGridReady"> </vr-common-currencyexchangerate-grid>
+    </vr-form>
+ 
+</vr-panel>

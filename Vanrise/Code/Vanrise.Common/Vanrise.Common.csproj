@@ -75,6 +75,7 @@
     <Compile Include="Cryptography.cs" />
     <Compile Include="DataRetrievalManager.cs" />
     <Compile Include="Data\CommonDataManagerFactory.cs" />
+    <Compile Include="Data\ICurrencyExchangeRateDataManager.cs" />
     <Compile Include="Data\IDataManager.cs" />
     <Compile Include="Data\ITemplateConfigDataManager.cs" />
     <Compile Include="Data\ICurrencyDataManager.cs" />

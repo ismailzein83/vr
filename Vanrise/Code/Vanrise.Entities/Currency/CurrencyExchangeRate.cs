@@ -8,6 +8,8 @@ namespace Vanrise.Entities
 {
     public class CurrencyExchangeRate
     {
+
+        public long CurrencyExchangeRateId { get; set; }
         public int CurrencyId { get; set; }
 
         public Decimal Rate { get; set; }
