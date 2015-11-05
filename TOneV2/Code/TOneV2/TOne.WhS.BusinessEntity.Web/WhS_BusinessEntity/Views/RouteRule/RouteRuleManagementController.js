@@ -53,7 +53,7 @@
             }
 
             $scope.searchClicked = function () {
-                if (!$scope.isGettingData && gridAPI != undefined)
+                if (gridAPI != undefined)
                     return gridAPI.loadGrid(getFilterObject());
             };
 

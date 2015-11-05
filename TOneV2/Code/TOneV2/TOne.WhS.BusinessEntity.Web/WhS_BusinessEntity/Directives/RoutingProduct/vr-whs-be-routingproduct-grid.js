@@ -108,8 +108,8 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_BE_MainSer
             var query = {
                 RoutingProductId: dataItem.RoutingProductId
             }
-
-            dataItem.extensionObject.routeRuleGridAPI.loadGrid(query);
+            if (dataItem.extensionObject.routeRuleGridAPI != undefined)
+                dataItem.extensionObject.routeRuleGridAPI.loadGrid(query);
 
             var onRouteRuleAdded = function (addedItem) {
                 dataItem.extensionObject.routeRuleGridAPI.onRouteRuleAdded(addedItem);
