@@ -9,6 +9,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                 ismultipleselection: "@",
                 onselectionchanged: '=',
                 isrequired: "@",
+                isdisabled: "=",
                 selectedvalues: '='
             },
             controller: function ($scope, $element, $attrs) {
@@ -55,7 +56,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
             return '<div>'
                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SaleZoneId" '
-            + required + ' label="' + label + '" datasource="ctrl.search" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '"></vr-select>'
+            + required + ' label="' + label + '" datasource="ctrl.search" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '"></vr-select>'
             + '</div>'
         }
 
@@ -68,7 +69,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
                 ctrl.search = function (nameFilter) {
 
-                    if (filter == undefined)
+                    if (filter == undefined || filter.SellingNumberPlanId == undefined)
                         return;
 
                     var serializedFilter = UtilsService.serializetoJson(filter);

@@ -19,10 +19,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public RoutingProductSupplierRelationType SupplierRelationType { get; set; }
 
         public List<RoutingProductSupplier> Suppliers { get; set; }
-
-        public SaleZoneGroupSettings SaleZoneGroupSettings { get; set; }
-
-        public SupplierGroupSettings SupplierGroupSettings { get; set; }
     } 
    
     public class RoutingProductZone

@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="WhS_BE_RoutingProductEditorController" vr-loader="isGettingData" width="'45%'">
+﻿<div vr-modalcontent ng-controller="WhS_BE_RoutingProductEditorController" vr-loader="isLoading" width="'25%'">
     <vr-modalbody>
         <vr-form name="formRoutingProductEditor">
             <vr-choices selectedindex="0">
@@ -11,35 +11,32 @@
                     <vr-columns width="1/2row">
                         <vr-textbox value="routingProductName" label="Name" isrequired></vr-textbox>
                     </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlansSelectorReady" onselectionchanged="onSellingNumberPlanSelectionChanged"
+                                                              selectedvalues="selectedSellingNumberPlan" isrequired />
+                    </vr-columns>
                 </vr-row>
             </div>
-            <div ng-show="saleZonesSelected">
+            <div ng-show="saleZonesSelected" vr-loader="isLoadingSaleZonesSelector">
                 <vr-row>
                     <vr-columns width="1/2row">
-                        <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlansDirectiveReady" onselectionchanged="onSellingNumberPlanSelectionChanged" isrequired />
+                        <vr-select datatextfield="description" datavaluefield="value" label="Sale Zones" datasource="saleZoneRelationType"
+                                   selectedvalues="selectedSaleZoneRelationType" onselectionchanged="onSaleZoneRelationTypeSelectionChanged" hideremoveicon />
                     </vr-columns>
-                </vr-row>
-                <vr-row ng-show="selectedSellingNumberPlanId">
-                    <vr-columns width="1/4row">
-                        <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" text="None"
-                                   label="Filter Type" datasource="saleZoneGroupTemplates" selectedvalues="selectedSaleZoneGroupTemplate"></vr-select>
-                    </vr-columns>
-                    <vr-columns width="3/4row" ng-if="selectedSaleZoneGroupTemplate" vr-loader="saleZonesAppendixLoader">
-                        <vr-directivewrapper directive="selectedSaleZoneGroupTemplate.Editor" on-ready="onSaleZoneGroupSettingsDirectiveReady"
-                                             sellingnumberplanid="selectedSellingNumberPlanId"></vr-directivewrapper>
+                    <vr-columns width="1/2row" ng-show="showSaleZoneSelector">
+                        <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneSelectorReady" isdisabled="!selectedSellingNumberPlan"
+                                                      selectedvalues="selectedSaleZones" />
                     </vr-columns>
                 </vr-row>
             </div>
             <div ng-show="suppliersSelected">
                 <vr-row>
                     <vr-columns width="1/2row">
-                        <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" text="None"
-                                   label="Filter Type" datasource="supplierGroupTemplates" selectedvalues="selectedSupplierGroupTemplate"></vr-select>
+                        <vr-select datatextfield="description" datavaluefield="value" label="Suppliers" datasource="supplierRelationType"
+                                   selectedvalues="selectedSupplierRelationType" onselectionchanged="onSupplierRelationTypeSelectionChanged" hideremoveicon />
                     </vr-columns>
-                </vr-row>
-                <vr-row>
-                    <vr-columns width="1/2row" ng-if="selectedSupplierGroupTemplate" vr-loader="suppliersAppendixLoader">
-                        <vr-directivewrapper directive="selectedSupplierGroupTemplate.Editor" on-ready="onSupplierGroupSettingsDirectiveReady"></vr-directivewrapper>
+                    <vr-columns width="1/2row" ng-show="showSupplierSelector" selectedvalues="selectedSuppliers">
+                        <vr-whs-be-carrieraccount-selector ismultipleselection on-ready="onCarrierAccountSelectorReady" />
                     </vr-columns>
                 </vr-row>
             </div>

@@ -2,247 +2,306 @@
 
     "use strict";
 
-    routingProductEditorController.$inject = ['$scope', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SellingNumberPlanAPIService', 'WhS_BE_SaleZoneAPIService', 'WhS_BE_CarrierAccountAPIService',
-        'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    routingProductEditorController.$inject = ['$scope', 'WhS_BE_RoutingProductAPIService', 'WhS_Be_RoutingProductSaleZoneRelationTypeEnum', 'WhS_Be_RoutingProductSupplierRelationTypeEnum',
+        'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-    function routingProductEditorController($scope, WhS_BE_RoutingProductAPIService, WhS_BE_SellingNumberPlanAPIService, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccountAPIService,
-        UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function routingProductEditorController($scope, WhS_BE_RoutingProductAPIService, WhS_Be_RoutingProductSaleZoneRelationTypeEnum, WhS_Be_RoutingProductSupplierRelationTypeEnum,
+        UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService) {
 
-            var editMode;
-            var routingProductId;
+        var isEditMode;
+        var routingProductId
+        var routingProductEntity;
 
-            var directiveAppendixData;
+        var sellingNumberPlanDirectiveAPI;
+        var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var sellingNumberPlanDirectiveAPI;
-            var saleZoneGroupSettingsDirectiveAPI;
-            var supplierGroupSettingsDirectiveAPI;
+        var saleZoneDirectiveAPI;
+        var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            loadParameters();
-            defineScope();
-            load();
+        var carrierAccountDirectiveAPI;
+        var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            function loadParameters() {
-                var parameters = VRNavigationService.getParameters($scope);
+        loadParameters();
+        defineScope();
+        load();
 
-                if (parameters != undefined && parameters != null) {
-                    routingProductId = parameters.routingProductId;
-                }
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
 
-                editMode = (routingProductId != undefined);
+            if (parameters != undefined && parameters != null) {
+                routingProductId = parameters.routingProductId;
             }
 
-            function defineScope() {
+            isEditMode = (routingProductId != undefined);
+        }
 
-                $scope.onSellingNumberPlansDirectiveReady = function (api) {
-                    sellingNumberPlanDirectiveAPI = api;
-                    load();
-                }
+        function defineScope() {
 
-                $scope.onSaleZoneGroupSettingsDirectiveReady = function (api) {
-                    saleZoneGroupSettingsDirectiveAPI = api;
-
-                    if (directiveAppendixData != undefined)
-                        tryLoadAppendixDirectives();
-                    else
-                        VRUIUtilsService.loadDirective($scope, saleZoneGroupSettingsDirectiveAPI, 'saleZonesAppendixLoader');
-                }
-
-                $scope.onSupplierGroupSettingsDirectiveReady = function (api) {
-                    supplierGroupSettingsDirectiveAPI = api;
-
-                    if (directiveAppendixData != undefined)
-                        tryLoadAppendixDirectives();
-                    else
-                        VRUIUtilsService.loadDirective($scope, supplierGroupSettingsDirectiveAPI, 'suppliersAppendixLoader');
-                }
-
-                $scope.onSellingNumberPlanSelectionChanged = function () {
-                    if (sellingNumberPlanDirectiveAPI != undefined)
-                    {
-                        var sellingNumberPlanObj = sellingNumberPlanDirectiveAPI.getSelectedIds();
-                        if (sellingNumberPlanObj != undefined)
-                            $scope.selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
-                    }
-                    else
-                    {
-                        $scope.selectedSellingNumberPlanId = undefined;
-                    }
-                }
-
-                $scope.SaveRoutingProduct = function () {
-                    if (editMode) {
-                        return updateRoutingProduct();
-                    }
-                    else {
-                        return insertRoutingProduct();
-                    }
-                };
-
-                $scope.close = function () {
-                    $scope.modalContext.closeModal()
-                };
-
-                $scope.saleZoneGroupTemplates = [];
-                $scope.supplierGroupTemplates = [];
+            $scope.onSellingNumberPlansSelectorReady = function (api) {
+                sellingNumberPlanDirectiveAPI = api;
+                sellingNumberPlanReadyPromiseDeferred.resolve();
             }
 
-            function load() {
-                $scope.isGettingData = true;
+            $scope.onSaleZoneSelectorReady = function (api) {
+                saleZoneDirectiveAPI = api;
+                saleZoneReadyPromiseDeferred.resolve();
+            }
 
-                if (sellingNumberPlanDirectiveAPI == undefined)
-                    return;
+            $scope.onCarrierAccountSelectorReady = function (api) {
+                carrierAccountDirectiveAPI = api;
+                carrierAccountReadyPromiseDeferred.resolve();
+            }
 
-                return UtilsService.waitMultipleAsyncOperations([sellingNumberPlanDirectiveAPI.load, loadSaleZoneGroupTemplates, loadSupplierGroupTemplates]).then(function () {
-                    if (editMode) {
-                        getRoutingProduct();
+            $scope.onSellingNumberPlanSelectionChanged = function () {
+                var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
+                if (selectedSellingNumberPlanId != undefined) {
+                    var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
+
+                    var payload = {
+                        filter: { SellingNumberPlanId: selectedSellingNumberPlanId },
                     }
-                    else {
-                        $scope.isGettingData = false;
-                    }
 
-                }).catch(function (error) {
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
+                }
+            }
+
+            $scope.onSaleZoneRelationTypeSelectionChanged = function () {
+                if ($scope.selectedSaleZones != undefined && $scope.selectedSaleZoneRelationType == WhS_Be_RoutingProductSaleZoneRelationTypeEnum.AllZones) {
+                    $scope.selectedSaleZones.length = 0;
+                }
+
+                $scope.showSaleZoneSelector = ($scope.selectedSaleZoneRelationType == WhS_Be_RoutingProductSaleZoneRelationTypeEnum.SpecificZones);
+            }
+
+            $scope.onSupplierRelationTypeSelectionChanged = function () {
+                if ($scope.selectedSuppliers != undefined && $scope.selectedSupplierRelationType == WhS_Be_RoutingProductSupplierRelationTypeEnum.AllSuppliers) {
+                    $scope.selectedSuppliers.length = 0;
+                }
+
+                $scope.showSupplierSelector = ($scope.selectedSupplierRelationType == WhS_Be_RoutingProductSupplierRelationTypeEnum.SpecificSuppliers);
+            }
+
+            $scope.SaveRoutingProduct = function () {
+                if (isEditMode) {
+                    return updateRoutingProduct();
+                }
+                else {
+                    return insertRoutingProduct();
+                }
+            };
+
+            $scope.close = function () {
+                $scope.modalContext.closeModal()
+            };
+        }
+
+        function load() {
+            $scope.isLoading = true;
+
+            if (isEditMode) {
+                getRoutingProduct().then(function () {
+                    loadAllControls()
+                        .finally(function () {
+                            routingProductEntity = undefined;
+                        });
+                }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isGettingData = false;
+                    $scope.isLoading = false;
                 });
             }
-
-            function getRoutingProduct() {
-                return WhS_BE_RoutingProductAPIService.GetRoutingProduct(routingProductId).then(function (routingProduct) {
-
-                    fillScopeFromRoutingProductObj(routingProduct);
-                    directiveAppendixData = routingProduct;
-                    tryLoadAppendixDirectives();
-
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isGettingData = false;
-                });
+            else {
+                loadAllControls();
             }
+        }
 
-            function loadSaleZoneGroupTemplates() {
-                return WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates().then(function (response) {
-                    angular.forEach(response, function (item) {
-                        $scope.saleZoneGroupTemplates.push(item);
+        function getRoutingProduct() {
+            return WhS_BE_RoutingProductAPIService.GetRoutingProduct(routingProductId).then(function (routingProduct) {
+                routingProductEntity = routingProduct;
+            });
+        }
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlanSelector, loadSaleZoneRelationTypes,
+                loadSaleZoneSelector, loadSupplierRelationTypes, loadSupplierSelector, loadStaticSection])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+              .finally(function () {
+                  $scope.isLoading = false;
+              });
+        }
+
+        function loadSellingNumberPlanSelector() {
+            var sellingNumberPlanLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            sellingNumberPlanReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = {
+                        selectedIds: routingProductEntity != undefined ? routingProductEntity.SellingNumberPlanId : undefined
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, directivePayload, sellingNumberPlanLoadPromiseDeferred);
+                });
+            return sellingNumberPlanLoadPromiseDeferred.promise;
+        }
+
+        function loadSaleZoneRelationTypes() {
+            $scope.saleZoneRelationType = UtilsService.getArrayEnum(WhS_Be_RoutingProductSaleZoneRelationTypeEnum);
+
+            if (routingProductEntity != undefined && routingProductEntity.Settings != null)
+                $scope.selectedSaleZoneRelationType = UtilsService.getEnum(WhS_Be_RoutingProductSaleZoneRelationTypeEnum, 'value', routingProductEntity.Settings.ZoneRelationType);
+            else
+                $scope.selectedSaleZoneRelationType = UtilsService.getEnum(WhS_Be_RoutingProductSaleZoneRelationTypeEnum, 'value', WhS_Be_RoutingProductSaleZoneRelationTypeEnum.AllZones.value);
+        }
+
+        function loadSaleZoneSelector() {
+            var saleZoneLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            saleZoneReadyPromiseDeferred.promise
+                .then(function () {
+
+                    if (routingProductEntity != undefined) {
+                        var zoneIds = [];
+                        if (routingProductEntity.Settings != null && routingProductEntity.Settings.Zones != null) {
+                            for (var i = 0; i < routingProductEntity.Settings.Zones.length; i++) {
+                                zoneIds.push(routingProductEntity.Settings.Zones[i].ZoneId);
+                            }
+                        }
+
+                        var saleZonePayload = {
+                            filter: { SellingNumberPlanId: routingProductEntity.SellingNumberPlanId },
+                            selectedIds: zoneIds.length > 0 ? zoneIds : undefined
+                        };
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, saleZonePayload, saleZoneLoadPromiseDeferred);
+                });
+
+            return saleZoneLoadPromiseDeferred.promise;
+        }
+
+        function loadSupplierRelationTypes() {
+            $scope.supplierRelationType = UtilsService.getArrayEnum(WhS_Be_RoutingProductSupplierRelationTypeEnum);
+
+            if (routingProductEntity != undefined && routingProductEntity.Settings != null)
+                $scope.selectedSupplierRelationType = UtilsService.getEnum(WhS_Be_RoutingProductSupplierRelationTypeEnum, 'value', routingProductEntity.Settings.SupplierRelationType);
+            else
+                $scope.selectedSupplierRelationType = UtilsService.getEnum(WhS_Be_RoutingProductSupplierRelationTypeEnum, 'value', WhS_Be_RoutingProductSupplierRelationTypeEnum.AllSuppliers.value);
+        }
+
+        function loadSupplierSelector() {
+            var carrierAccountLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            carrierAccountReadyPromiseDeferred.promise
+                .then(function () {
+
+                    if (routingProductEntity != undefined) {
+                        var supplierIds = [];
+                        if (routingProductEntity.Settings != null && routingProductEntity.Settings.Suppliers != null) {
+                            for (var i = 0; i < routingProductEntity.Settings.Suppliers.length; i++) {
+                                supplierIds.push(routingProductEntity.Settings.Suppliers[i].SupplierId);
+                            }
+                        }
+
+                        var carrierAccountPayload = {
+                            selectedIds: supplierIds.length > 0 ? supplierIds : undefined
+                        };
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, carrierAccountPayload, carrierAccountLoadPromiseDeferred);
+                });
+
+            return carrierAccountLoadPromiseDeferred.promise;
+        }
+
+        function loadStaticSection() {
+            if (routingProductEntity == undefined)
+                return;
+
+            $scope.routingProductName = routingProductEntity.Name;
+        }
+
+        function buildRoutingProductObjFromScope() {
+            var routingProduct = {
+                RoutingProductId: (routingProductId != null) ? routingProductId : 0,
+                Name: $scope.routingProductName,
+                SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
+                Settings: {
+                    ZoneRelationType: $scope.selectedSaleZoneRelationType.value,
+                    Zones: buildRoutingProductZoneObj(),
+                    SupplierRelationType: $scope.selectedSupplierRelationType.value,
+                    Suppliers: buildRoutingProductSupplierObj()
+                }
+            };
+
+            return routingProduct;
+        }
+
+        function buildRoutingProductZoneObj() {
+            var routingProductZones = undefined;
+            var zoneIds = saleZoneDirectiveAPI.getSelectedIds();
+            
+            if (zoneIds != undefined && zoneIds.length > 0)
+            {
+                routingProductZones = [];
+
+                for (var i = 0; i < zoneIds.length; i++) {
+                    routingProductZones.push({
+                        ZoneId: zoneIds[i]
                     });
-                });
+                }
             }
 
-            function loadSupplierGroupTemplates() {
-                return WhS_BE_CarrierAccountAPIService.GetSupplierGroupTemplates().then(function (response) {
-                    angular.forEach(response, function (item) {
-                        $scope.supplierGroupTemplates.push(item);
-                    });
-                });
-            }
+            return routingProductZones;
+        }
 
-            function tryLoadAppendixDirectives() {
+        function buildRoutingProductSupplierObj()
+        {
+            var routingProductSuppliers = undefined;
+            var supplierIds = carrierAccountDirectiveAPI.getSelectedIds();
 
-                var loadOperations = [];
-                var setDirectivesDataOperations = [];
-                if ($scope.selectedSaleZoneGroupTemplate != undefined) {
-                    if (saleZoneGroupSettingsDirectiveAPI == undefined)
-                        return;
-                    loadOperations.push(saleZoneGroupSettingsDirectiveAPI.load);
+            if (supplierIds != undefined && supplierIds.length > 0)
+            {
+                routingProductSuppliers = [];
 
-                    setDirectivesDataOperations.push(setSaleZoneGroupSettingsDirective);
-                }
-
-                if ($scope.selectedSupplierGroupTemplate != undefined) {
-                    if (supplierGroupSettingsDirectiveAPI == undefined)
-                        return;
-
-                    loadOperations.push(supplierGroupSettingsDirectiveAPI.load);
-
-                    setDirectivesDataOperations.push(setSupplierGroupSettingsDirective);
-                }
-
-                UtilsService.waitMultipleAsyncOperations(loadOperations).then(function () {
-
-                    setAppendixDirectives();
-
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isGettingData = false;
-                });
-
-                function setAppendixDirectives() {
-                    UtilsService.waitMultipleAsyncOperations(setDirectivesDataOperations).then(function () {
-                        directiveAppendixData = undefined;
-                    }).catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    }).finally(function () {
-                        $scope.isGettingData = false;
+                for (var i = 0; i < supplierIds.length; i++) {
+                    routingProductSuppliers.push({
+                        SupplierId: supplierIds[i]
                     });
                 }
+            }
 
-                function setSaleZoneGroupSettingsDirective() {                    
-                        return saleZoneGroupSettingsDirectiveAPI.setData(directiveAppendixData.Settings.SaleZoneGroupSettings);
+            return routingProductSuppliers;
+        }
+
+        function insertRoutingProduct() {
+            var routingProductObject = buildRoutingProductObjFromScope();
+            return WhS_BE_RoutingProductAPIService.AddRoutingProduct(routingProductObject)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded("Routing Product", response)) {
+                    if ($scope.onRoutingProductAdded != undefined)
+                        $scope.onRoutingProductAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
                 }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
 
-                function setSupplierGroupSettingsDirective() {                    
-                    return supplierGroupSettingsDirectiveAPI.setData(directiveAppendixData.Settings.SupplierGroupSettings);
+        }
+
+        function updateRoutingProduct() {
+            var routingProductObject = buildRoutingProductObjFromScope();
+            WhS_BE_RoutingProductAPIService.UpdateRoutingProduct(routingProductObject)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated("Routing Product", response)) {
+                    if ($scope.onRoutingProductUpdated != undefined)
+                        $scope.onRoutingProductUpdated(response.UpdatedObject);
+                    $scope.modalContext.closeModal();
                 }
-            }
-                    
-            function buildRoutingProductObjFromScope() {
-
-                var routingProduct = {
-                    RoutingProductId: (routingProductId != null) ? routingProductId : 0,
-                    Name: $scope.routingProductName,
-                    SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
-                    Settings: {
-                        SaleZoneGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsDirectiveAPI, 'selectedSaleZoneGroupTemplate'),
-                        SupplierGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, supplierGroupSettingsDirectiveAPI, 'selectedSupplierGroupTemplate')
-                    }
-                };
-
-                return routingProduct;
-            }
-
-            function fillScopeFromRoutingProductObj(routingProductObj) {
-                $scope.routingProductName = routingProductObj.Name;
-                sellingNumberPlanDirectiveAPI.setData(routingProductObj.SellingNumberPlanId);
-
-                if (routingProductObj.Settings != null)
-                {
-                    if (routingProductObj.Settings.SaleZoneGroupSettings != null) {
-                        $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, routingProductObj.Settings.SaleZoneGroupSettings.ConfigId, "TemplateConfigID");
-                    }
-
-                    if (routingProductObj.Settings.SupplierGroupSettings != null) {
-                        $scope.selectedSupplierGroupTemplate = UtilsService.getItemByVal($scope.supplierGroupTemplates, routingProductObj.Settings.SupplierGroupSettings.ConfigId, "TemplateConfigID");
-                    }
-                }
-            }
-
-            function insertRoutingProduct() {
-                var routingProductObject = buildRoutingProductObjFromScope();
-                return WhS_BE_RoutingProductAPIService.AddRoutingProduct(routingProductObject)
-                .then(function (response) {
-                    if (VRNotificationService.notifyOnItemAdded("Routing Product", response)) {
-                        if ($scope.onRoutingProductAdded != undefined)
-                            $scope.onRoutingProductAdded(response.InsertedObject);
-                        $scope.modalContext.closeModal();
-                    }
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                });
-
-            }
-
-            function updateRoutingProduct() {
-                var routingProductObject = buildRoutingProductObjFromScope();
-                WhS_BE_RoutingProductAPIService.UpdateRoutingProduct(routingProductObject)
-                .then(function (response) {
-                    if (VRNotificationService.notifyOnItemUpdated("Routing Product", response)) {
-                        if ($scope.onRoutingProductUpdated != undefined)
-                            $scope.onRoutingProductUpdated(response.UpdatedObject);
-                        $scope.modalContext.closeModal();
-                    }
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                });
-            }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
+        }
     }
 
     appControllers.controller('WhS_BE_RoutingProductEditorController', routingProductEditorController);
