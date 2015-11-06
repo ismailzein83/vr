@@ -96,7 +96,11 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                     if (selectedIds != undefined) {
                         ctrl.datasource = [];
 
-                        var input = { SellingNumberPlanId: filter.SellingNumberPlanId, SaleZoneIds: selectedIds };
+                        var input = {
+                            SellingNumberPlanId: filter.SellingNumberPlanId,
+                            SaleZoneIds: selectedIds,
+                            SaleZoneFilterSettings: { RoutingProductId: filter.RoutingProductId}
+                        };
 
                         return WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
                             angular.forEach(response, function (item) {
