@@ -13,8 +13,8 @@ namespace TOne.WhS.Routing.Entities
 
         public List<SaleCodeMatch> SaleCodeMatches { get; set; }
 
-        public List<SupplierCodeMatch> SupplierCodeMatches { get; set; }
+        public List<SupplierCodeMatchWithRate> SupplierCodeMatches { get; set; }
 
-        public SupplierCodeMatchBySupplier SupplierCodeMatchesBySupplier { get; set; }
+        public SupplierCodeMatchWithRateBySupplier SupplierCodeMatchesBySupplier { get; set; }
     }
 }

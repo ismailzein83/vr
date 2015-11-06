@@ -15,7 +15,18 @@ namespace TOne.WhS.Routing.Entities
         public string SupplierCode { get; set; }
     }
 
+    public class SupplierCodeMatchWithRate
+    {
+        public SupplierCodeMatch CodeMatch { get; set; }
+
+        public Decimal RateValue { get; set; }
+    }
+
     public class SupplierCodeMatchBySupplier : Dictionary<int, List<SupplierCodeMatch>>
+    {
+    }
+
+    public class SupplierCodeMatchWithRateBySupplier : Dictionary<int, List<SupplierCodeMatchWithRate>>
     {
     }
 }

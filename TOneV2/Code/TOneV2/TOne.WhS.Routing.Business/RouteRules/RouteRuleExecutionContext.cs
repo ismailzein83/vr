@@ -26,11 +26,9 @@ namespace TOne.WhS.Routing.Business.RouteRules
             _filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
         }
 
-        internal List<SupplierCodeMatch> SupplierCodeMatches { private get; set; }
+        internal List<SupplierCodeMatchWithRate> SupplierCodeMatches { private get; set; }
 
-        internal SupplierCodeMatchBySupplier SupplierCodeMatchBySupplier { private get; set; }
-
-        internal SupplierZoneDetailByZone SupplierZoneDetails { private get; set; }
+        internal SupplierCodeMatchWithRateBySupplier SupplierCodeMatchBySupplier { private get; set; }
 
         public RouteRule RouteRule
         {
@@ -63,13 +61,13 @@ namespace TOne.WhS.Routing.Business.RouteRules
             return _options.AsReadOnly();
         }
 
-        public List<SupplierCodeMatch> GetSupplierCodeMatches(int supplierId)
+        public List<SupplierCodeMatchWithRate> GetSupplierCodeMatches(int supplierId)
         {
             if (_filteredSupplierIds == null || _filteredSupplierIds.Contains(supplierId))
             {
                 if (this.SupplierCodeMatchBySupplier != null)
                 {
-                    List<SupplierCodeMatch> supplierCodeMatches;
+                    List<SupplierCodeMatchWithRate> supplierCodeMatches;
                     if (this.SupplierCodeMatchBySupplier.TryGetValue(supplierId, out supplierCodeMatches))
                         return supplierCodeMatches;
                 }
@@ -78,8 +76,8 @@ namespace TOne.WhS.Routing.Business.RouteRules
         }
 
 
-        List<SupplierCodeMatch> _validSupplierCodeMatches;
-        public List<SupplierCodeMatch> GetAllSuppliersCodeMatches()
+        List<SupplierCodeMatchWithRate> _validSupplierCodeMatches;
+        public List<SupplierCodeMatchWithRate> GetAllSuppliersCodeMatches()
         {
             if (_validSupplierCodeMatches == null)
             {
@@ -87,12 +85,12 @@ namespace TOne.WhS.Routing.Business.RouteRules
                     _validSupplierCodeMatches = this.SupplierCodeMatches;
                 else
                 {
-                    _validSupplierCodeMatches = new List<SupplierCodeMatch>();
+                    _validSupplierCodeMatches = new List<SupplierCodeMatchWithRate>();
                     if (this.SupplierCodeMatches != null)
                     {
                         foreach (var supplierCodeMatch in this.SupplierCodeMatches)
                         {
-                            if (_filteredSupplierIds.Contains(supplierCodeMatch.SupplierId))
+                            if (_filteredSupplierIds.Contains(supplierCodeMatch.CodeMatch.SupplierId))
                             {
                                 _validSupplierCodeMatches.Add(supplierCodeMatch);
                             }
@@ -101,17 +99,6 @@ namespace TOne.WhS.Routing.Business.RouteRules
                 }                
             }
             return _validSupplierCodeMatches;
-        }
-
-        public SupplierZoneDetail GetSupplierZoneDetail(long supplierZoneId)
-        {
-            if(this.SupplierZoneDetails != null )
-            {
-                SupplierZoneDetail supplierZoneDetail;
-                if (this.SupplierZoneDetails.TryGetValue(supplierZoneId, out supplierZoneDetail))
-                    return supplierZoneDetail;
-            }
-            return null;
         }
     }
 }

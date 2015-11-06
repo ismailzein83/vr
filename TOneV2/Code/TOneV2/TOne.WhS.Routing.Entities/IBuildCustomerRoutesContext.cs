@@ -13,12 +13,10 @@ namespace TOne.WhS.Routing.Entities
 
         CustomerZoneDetailByZone CustomerZoneDetails { get; }
 
-        List<SupplierCodeMatch> SupplierCodeMatches { get; }
+        List<SupplierCodeMatchWithRate> SupplierCodeMatches { get; }
 
-        SupplierCodeMatchBySupplier SupplierCodeMatchesBySupplier { get; }
-
-        SupplierZoneDetailByZone SupplierZoneDetails { get; }
-
+        SupplierCodeMatchWithRateBySupplier SupplierCodeMatchesBySupplier { get; }
+        
         DateTime? EntitiesEffectiveOn { get; }
 
         bool EntitiesEffectiveInFuture { get; }

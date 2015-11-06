@@ -18,10 +18,8 @@ namespace TOne.WhS.Routing.Entities
 
         ReadOnlyCollection<RouteOptionRuleTarget> GetOptions();
 
-        List<SupplierCodeMatch> GetSupplierCodeMatches(int supplierId);
+        List<SupplierCodeMatchWithRate> GetSupplierCodeMatches(int supplierId);
 
-        List<SupplierCodeMatch> GetAllSuppliersCodeMatches();
-
-        SupplierZoneDetail GetSupplierZoneDetail(long supplierZoneId);
+        List<SupplierCodeMatchWithRate> GetAllSuppliersCodeMatches();
     }
 }

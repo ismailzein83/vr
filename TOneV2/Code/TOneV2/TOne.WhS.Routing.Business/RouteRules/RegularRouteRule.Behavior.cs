@@ -64,7 +64,7 @@ namespace TOne.WhS.Routing.Business.RouteRules
                 {
                     foreach (var optionSettings in optionsSettings)
                     {
-                        List<SupplierCodeMatch> optionSupplierCodeMatches = context.GetSupplierCodeMatches(optionSettings.SupplierId);
+                        List<SupplierCodeMatchWithRate> optionSupplierCodeMatches = context.GetSupplierCodeMatches(optionSettings.SupplierId);
                         if (optionSupplierCodeMatches != null)
                         {
                             foreach (var supplierCodeMatch in optionSupplierCodeMatches)
@@ -89,25 +89,22 @@ namespace TOne.WhS.Routing.Business.RouteRules
             return options;
         }
 
-        private void TryCreateOption(IRouteRuleExecutionContext context, List<RouteOptionRuleTarget> options, RouteRuleTarget routeRuleTarget, SupplierCodeMatch supplierCodeMatch, Decimal? percentage, RouteRuleOptionFilterSettings optionFilter)
+        private void TryCreateOption(IRouteRuleExecutionContext context, List<RouteOptionRuleTarget> options, RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, Decimal? percentage, RouteRuleOptionFilterSettings optionFilter)
         {
-            SupplierZoneDetail supplierZoneDetail = context.GetSupplierZoneDetail(supplierCodeMatch.SupplierZoneId);
-            if (supplierZoneDetail != null)
+            var supplierCodeMatch = supplierCodeMatchWithRate.CodeMatch;
+            var option = new RouteOptionWrapper
             {
-                var option = new RouteOptionWrapper
-                {
-                    RouteTarget = routeRuleTarget,
-                    SupplierId = supplierCodeMatch.SupplierId,
-                    SupplierCode = supplierCodeMatch.SupplierCode,
-                    SupplierZoneId = supplierCodeMatch.SupplierZoneId,
-                    SupplierRate = supplierZoneDetail.EffectiveRateValue,
-                    EffectiveOn = routeRuleTarget.EffectiveOn,
-                    OptionFilter = optionFilter
-                };
-                if (percentage.HasValue)
-                    option.Percentage = percentage.Value;
-                options.Add(option);
-            }
+                RouteTarget = routeRuleTarget,
+                SupplierId = supplierCodeMatch.SupplierId,
+                SupplierCode = supplierCodeMatch.SupplierCode,
+                SupplierZoneId = supplierCodeMatch.SupplierZoneId,
+                SupplierRate = supplierCodeMatchWithRate.RateValue,
+                EffectiveOn = routeRuleTarget.EffectiveOn,
+                OptionFilter = optionFilter
+            };
+            if (percentage.HasValue)
+                option.Percentage = percentage.Value;
+            options.Add(option);
         }
 
 

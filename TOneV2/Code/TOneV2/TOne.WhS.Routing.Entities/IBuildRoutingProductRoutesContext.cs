@@ -11,11 +11,9 @@ namespace TOne.WhS.Routing.Entities
     {
         IEnumerable<int> RoutingProductIds { get; }
 
-        List<SupplierCodeMatch> SupplierCodeMatches { get; }
+        List<SupplierCodeMatchWithRate> SupplierCodeMatches { get; }
 
-        SupplierCodeMatchBySupplier SupplierCodeMatchesBySupplier { get; }
-
-        SupplierZoneDetailByZone SupplierZoneDetails { get; }
+        SupplierCodeMatchWithRateBySupplier SupplierCodeMatchesBySupplier { get; }
 
         DateTime? EntitiesEffectiveOn { get; }
 

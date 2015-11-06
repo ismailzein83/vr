@@ -13,8 +13,8 @@ namespace TOne.WhS.Routing.Business
     public class CodeMatchBuilder
     {
         #region Public Methods
-        
-        public void BuildCodeMatches(IEnumerable<SaleCode> saleCodes, IEnumerable<SupplierCode> supplierCodes, Action<CodeMatches> onCodeMatchesAvailable)
+
+        public void BuildCodeMatches(IBuildCodeMatchesContext context, IEnumerable<SaleCode> saleCodes, IEnumerable<SupplierCode> supplierCodes, Action<CodeMatches> onCodeMatchesAvailable)
         {
             List<SaleCodeIterator> saleCodeIterators;
             HashSet<string> distinctSaleCodes;
@@ -25,13 +25,13 @@ namespace TOne.WhS.Routing.Business
 
             foreach (string code in distinctSupplierCodes)
             {
-                BuildAndAddCodeMatches(code, false, saleCodeIterators, supplierCodeIterators, onCodeMatchesAvailable);
+                BuildAndAddCodeMatches(code, false, saleCodeIterators, supplierCodeIterators, context.SupplierZoneDetails, onCodeMatchesAvailable);
             }
             foreach (string code in distinctSaleCodes)
             {
                 if (distinctSupplierCodes.Contains(code))
                     continue;
-                BuildAndAddCodeMatches(code, true, saleCodeIterators, supplierCodeIterators, onCodeMatchesAvailable);
+                BuildAndAddCodeMatches(code, true, saleCodeIterators, supplierCodeIterators, context.SupplierZoneDetails, onCodeMatchesAvailable);
             }
         }
 
@@ -105,7 +105,7 @@ namespace TOne.WhS.Routing.Business
             }
         }
 
-        private void BuildAndAddCodeMatches(string code, bool isDistinctFromSaleCodes, List<SaleCodeIterator> saleCodeIterators, List<SupplierCodeIterator> supplierCodeIterators, Action<CodeMatches> onCodeMatchesAvailable)
+        private void BuildAndAddCodeMatches(string code, bool isDistinctFromSaleCodes, List<SaleCodeIterator> saleCodeIterators, List<SupplierCodeIterator> supplierCodeIterators, SupplierZoneDetailByZone supplierZoneDetailsByZone, Action<CodeMatches> onCodeMatchesAvailable)
         {
             List<SaleCodeMatch> saleCodeMatches = new List<SaleCodeMatch>();
             foreach (var saleCodeIterator in saleCodeIterators)
@@ -116,15 +116,24 @@ namespace TOne.WhS.Routing.Business
             }
             if (saleCodeMatches.Count > 0)
             {
-                List<SupplierCodeMatch> supplierCodeMatches = new List<SupplierCodeMatch>();
-                SupplierCodeMatchBySupplier supplierCodeMatchBySupplier = new SupplierCodeMatchBySupplier();
+                List<SupplierCodeMatchWithRate> supplierCodeMatches = new List<SupplierCodeMatchWithRate>();
+                SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier = new SupplierCodeMatchWithRateBySupplier();
                 foreach (var supplierCodeIterator in supplierCodeIterators)
                 {
                     SupplierCodeMatch supplierCodeMatch = supplierCodeIterator.GetCodeMatch(code);
                     if(supplierCodeMatch != null)
                     {
-                        supplierCodeMatches.Add(supplierCodeMatch);
-                        supplierCodeMatchBySupplier.Add(supplierCodeIterator.SupplierId, new List<SupplierCodeMatch> { supplierCodeMatch });
+                        SupplierZoneDetail supplierZoneDetail;
+                        if (supplierZoneDetailsByZone.TryGetValue(supplierCodeMatch.SupplierZoneId, out supplierZoneDetail))
+                        {
+                            SupplierCodeMatchWithRate supplierCodeMatchWithRate = new SupplierCodeMatchWithRate
+                            {
+                                CodeMatch = supplierCodeMatch,
+                                RateValue = supplierZoneDetail.EffectiveRateValue
+                            };
+                            supplierCodeMatches.Add(supplierCodeMatchWithRate);
+                            supplierCodeMatchBySupplier.Add(supplierCodeIterator.SupplierId, new List<SupplierCodeMatchWithRate> { supplierCodeMatchWithRate });
+                        }
                     }
                 }
                 CodeMatches codeMatches = new CodeMatches

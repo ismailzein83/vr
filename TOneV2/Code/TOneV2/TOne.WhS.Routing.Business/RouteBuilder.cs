@@ -54,13 +54,13 @@ namespace TOne.WhS.Routing.Business
 
                             if(routeRule != null)
                             {
-                                bool createCustomerRoute;
+                                bool createCustomerRoute = true;
 
-                                CheckSellingProductRoute(out createCustomerRoute, context, routeCode, sellingProductRoutesDic, routeRuleManager, saleCodeMatch, customerZoneDetail, routeRuleTarget, routeRule);
+                               // CheckSellingProductRoute(out createCustomerRoute, context, routeCode, sellingProductRoutesDic, routeRuleManager, saleCodeMatch, customerZoneDetail, routeRuleTarget, routeRule);
 
                                 if(createCustomerRoute)
                                 {
-                                    CustomerRoute route = ExecuteRule<CustomerRoute>(routeCode, saleCodeMatch, customerZoneDetail, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, context.SupplierZoneDetails, routeRuleTarget, routeRule);
+                                    CustomerRoute route = ExecuteRule<CustomerRoute>(routeCode, saleCodeMatch, customerZoneDetail, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, routeRuleTarget, routeRule);
                                     route.CustomerId = customerZoneDetail.CustomerId;
                                     customerRoutes.Add(route);
                                 }
@@ -91,7 +91,7 @@ namespace TOne.WhS.Routing.Business
                     var routeRule = routeRuleManager.GetMatchRule(routeRuleTarget);
                     if (routeRule != null)
                     {
-                        RoutingProductRoute route = ExecuteRule(routingProductId, saleZoneId, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, context.SupplierZoneDetails, routeRuleTarget, routeRule);
+                        RoutingProductRoute route = ExecuteRule(routingProductId, saleZoneId, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, routeRuleTarget, routeRule);
                         routes.Add(route);
                     }
                 }
@@ -126,7 +126,7 @@ namespace TOne.WhS.Routing.Business
                     var sellingProductRouteRule = routeRuleManager.GetMatchRule(sellingProductRouteRuleTarget);
                     if (sellingProductRouteRule != null)
                     {
-                        SellingProductRoute route = ExecuteRule<SellingProductRoute>(routeCode, saleCodeMatch, customerZoneDetail, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, context.SupplierZoneDetails, sellingProductRouteRuleTarget, sellingProductRouteRule);
+                        SellingProductRoute route = ExecuteRule<SellingProductRoute>(routeCode, saleCodeMatch, customerZoneDetail, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, sellingProductRouteRuleTarget, sellingProductRouteRule);
                         route.SellingProductId = customerZoneDetail.SellingProductId;
                         sellingProductRoutesDic.Add(customerZoneDetail.SellingProductId, route);
                     }
@@ -163,14 +163,13 @@ namespace TOne.WhS.Routing.Business
             }                
         }
 
-        private T ExecuteRule<T>(string routeCode, SaleCodeMatch saleCodeMatch, CustomerZoneDetail customerZoneDetail, List<SupplierCodeMatch> supplierCodeMatches, SupplierCodeMatchBySupplier supplierCodeMatchBySupplier, SupplierZoneDetailByZone supplierZoneDetails, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
+        private T ExecuteRule<T>(string routeCode, SaleCodeMatch saleCodeMatch, CustomerZoneDetail customerZoneDetail, List<SupplierCodeMatchWithRate> supplierCodeMatches, SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
             where T : BaseRoute
         {
             RouteRuleExecutionContext routeRuleExecutionContext = new RouteRuleExecutionContext(routeRule);
             routeRuleExecutionContext.NumberOfOptions = 5;
             routeRuleExecutionContext.SupplierCodeMatches = supplierCodeMatches;
             routeRuleExecutionContext.SupplierCodeMatchBySupplier = supplierCodeMatchBySupplier;
-            routeRuleExecutionContext.SupplierZoneDetails = supplierZoneDetails;
 
             routeRule.Settings.Execute(routeRuleExecutionContext, routeRuleTarget);
             T route = Activator.CreateInstance<T>();
@@ -201,12 +200,11 @@ namespace TOne.WhS.Routing.Business
             return route;
         }
 
-        private RoutingProductRoute ExecuteRule(int routingProductId, long saleZoneId, List<SupplierCodeMatch> supplierCodeMatches, SupplierCodeMatchBySupplier supplierCodeMatchBySupplier, SupplierZoneDetailByZone supplierZoneDetails, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
+        private RoutingProductRoute ExecuteRule(int routingProductId, long saleZoneId, List<SupplierCodeMatchWithRate> supplierCodeMatches, SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
         {
             RouteRuleExecutionContext routeRuleExecutionContext = new RouteRuleExecutionContext(routeRule);
             routeRuleExecutionContext.SupplierCodeMatches = supplierCodeMatches;
             routeRuleExecutionContext.SupplierCodeMatchBySupplier = supplierCodeMatchBySupplier;
-            routeRuleExecutionContext.SupplierZoneDetails = supplierZoneDetails;
 
             routeRule.Settings.Execute(routeRuleExecutionContext, routeRuleTarget);
             RoutingProductRoute route = new RoutingProductRoute
