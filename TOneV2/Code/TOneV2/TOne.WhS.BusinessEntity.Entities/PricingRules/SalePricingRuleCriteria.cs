@@ -8,7 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SalePricingRuleCriteria : PricingRuleCriteria
     {
-        public int? SellingProductId { get; set; }
+        public List<int> SellingProductIds { get; set; }
 
         public SaleZoneGroupSettings SaleZoneGroupSettings { get; set; }
 

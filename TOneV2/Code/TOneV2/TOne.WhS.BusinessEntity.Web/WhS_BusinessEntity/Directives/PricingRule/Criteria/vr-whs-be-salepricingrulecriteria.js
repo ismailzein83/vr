@@ -27,25 +27,31 @@ function ( UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAcco
 
 
         var saleZoneGroupDirectiveAPI;
-        var saleZoneGroupDirectiveReadyPromiseDeferred;
+        var saleZoneGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var sellingProductDirectiveAPI;
+        var sellingProductDirectiveReadyPromiseDeferred;
+
 
         var customerGroupDirectiveAPI;
-        var customerGroupDirectiveReadyPromiseDeferred;
-
-        var directiveAppendixData ;
+        var customerGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
             $scope.onCustomerGroupDirectiveReady = function (api) {
                 customerGroupDirectiveAPI = api;
-                var setLoader = function (value) { $scope.isLoadingCustomerGroupDirective = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerGroupDirectiveAPI, undefined, setLoader, customerGroupDirectiveReadyPromiseDeferred);
+                customerGroupDirectiveReadyPromiseDeferred.resolve();
 
+            }
+            
+            $scope.onSellingProductDirectiveReady = function (api) {
+                sellingProductDirectiveAPI = api;
+                var setLoader = function (value) { $scope.isLoadingSellingProductDirective = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingProductDirectiveAPI, undefined, setLoader, sellingProductDirectiveReadyPromiseDeferred);
             }
             $scope.onSaleZoneGroupDirectiveReady = function (api) {
                 saleZoneGroupDirectiveAPI = api;
-               
-                var setLoader = function (value) { $scope.isLoadingSaleZoneGroupDirective = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupDirectiveAPI, undefined, setLoader, saleZoneGroupDirectiveReadyPromiseDeferred);
+                saleZoneGroupDirectiveReadyPromiseDeferred.resolve();
+              
             }
 
             defineAPI();
@@ -55,96 +61,87 @@ function ( UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAcco
             var api = {};
 
             api.getData = function () {
-                var saleZoneGroupSettings;
-                if ($scope.selectedSaleZoneGroupTemplate != undefined) {
-                    if (saleZoneGroupDirectiveAPI != undefined) {
-                        saleZoneGroupSettings = saleZoneGroupDirectiveAPI.getData();
-                        saleZoneGroupSettings.ConfigId = $scope.selectedSaleZoneGroupTemplate.TemplateConfigID;
-                    }
-                }
-
-
-                var customerGroupSettings;
-                if ($scope.selectedCustomerGroupTemplate != undefined) {
-                    if (customerGroupDirectiveAPI != undefined) {
-                        customerGroupSettings = customerGroupDirectiveAPI.getData();
-                        customerGroupSettings.ConfigId = $scope.selectedCustomerGroupTemplate.TemplateConfigID;
-                    }
-                }
-
                 var obj = {
-                    SaleZoneGroupSettings: saleZoneGroupSettings,
-                    CustomerGroupSettings: customerGroupSettings
+                    SaleZoneGroupSettings: saleZoneGroupDirectiveAPI.getData(),
+                    CustomerGroupSettings: customerGroupDirectiveAPI!=undefined?customerGroupDirectiveAPI.getData():undefined,
+                    SellingProductIds:sellingProductDirectiveAPI!=undefined?sellingProductDirectiveAPI.getSelectedIds():undefined
                 }
                 return obj;
             }
 
             api.load = function (payload) {
-                $scope.saleZoneGroupTemplates = [];
-                $scope.customerGroupTemplates = [];
-                var customerConfigId;
-                var saleZoneConfigId;
                 var customerGroupSettings;
-                var saleZoneGroupSettings = { filter: {} };
-                
+                var saleZoneGroupSettings;
+                var sellingProductIds;
                 if (payload != undefined) {
                     if (payload.CustomerGroupSettings != null)
                     {
-                        customerConfigId= payload.CustomerGroupSettings.ConfigId;
                         customerGroupSettings= payload.CustomerGroupSettings;
                     }
-                       
                     if (payload.SaleZoneGroupSettings != null)
                     {
-                       
-                        saleZoneConfigId = payload.SaleZoneGroupSettings.ConfigId;
-                        saleZoneGroupSettings.filter.SaleZoneFilterSettings = payload.SaleZoneGroupSettings;
+                        saleZoneGroupSettings = payload.SaleGroupSettings;
                     }
-                   
+                    if (payload.SellingProductIds != null)
+                        sellingProductIds = payload.SellingProductIds;
                 }
-                var promises = [];
-                var loadCustomerGroupTemplatesPromise = WhS_BE_CarrierAccountAPIService.GetCustomerGroupTemplates().then(function (response) {
-                    angular.forEach(response, function (item) {
-                        $scope.customerGroupTemplates.push(item);
-                    });
-                    if(customerConfigId!=undefined)
-                        $scope.selectedCustomerGroupTemplate = UtilsService.getItemByVal($scope.customerGroupTemplates,customerConfigId, "TemplateConfigID")
-                });
-                promises.push(loadCustomerGroupTemplatesPromise);
+                    var promises = [];
+                
+                    if (customerGroupSettings != undefined) {
 
-                if (customerGroupSettings != undefined) {
-                    customerGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                        if (customerGroupDirectiveReadyPromiseDeferred == undefined)
+                            customerGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    var customerGroupDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(customerGroupDirectiveLoadPromiseDeferred.promise);
+                        var customerGroupDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(customerGroupDirectiveLoadPromiseDeferred.promise);
 
-                    customerGroupDirectiveReadyPromiseDeferred.promise.then(function () {
-                        customerGroupDirectiveReadyPromiseDeferred = undefined;
-                        VRUIUtilsService.callDirectiveLoad(customerGroupDirectiveAPI, customerGroupSettings, customerGroupDirectiveLoadPromiseDeferred);
-                    });
-                }
-
-                var loadSaleZoneGroupTemplatesPromise = WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates().then(function (response) {
-                    angular.forEach(response, function (item) {
-                        $scope.saleZoneGroupTemplates.push(item);
-                    });
-
-                    if(saleZoneConfigId!=undefined)
-                        $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, saleZoneConfigId, "TemplateConfigID")
-                });
-                promises.push(loadSaleZoneGroupTemplatesPromise);
-
-                if (saleZoneGroupSettings.filter.SaleZoneFilterSettings != undefined) {
-                    saleZoneGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                        customerGroupDirectiveReadyPromiseDeferred.promise.then(function () {
+                            customerGroupDirectiveReadyPromiseDeferred = undefined;
+                            var customerpayload = customerGroupSettings != undefined ? customerGroupSettings : undefined;
+                            VRUIUtilsService.callDirectiveLoad(customerGroupDirectiveAPI, customerpayload, customerGroupDirectiveLoadPromiseDeferred);
+                        });
+                    }
+                    if (saleZoneGroupDirectiveReadyPromiseDeferred == undefined)
+                       saleZoneGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     var saleZoneGroupDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(saleZoneGroupDirectiveLoadPromiseDeferred.promise);
+                   
 
                     saleZoneGroupDirectiveReadyPromiseDeferred.promise.then(function () {
                         saleZoneGroupDirectiveReadyPromiseDeferred = undefined;
-                        VRUIUtilsService.callDirectiveLoad(saleZoneGroupDirectiveAPI, saleZoneGroupSettings, saleZoneGroupDirectiveLoadPromiseDeferred);
+
+                        var saleZoneGroupPayload;
+
+                        if (saleZoneGroupSettings != undefined ) {
+                            saleZoneGroupPayload = {
+                                saleZoneGroupSettings: saleZoneGroupSettings.SaleZoneGroupSettings
+                            };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(saleZoneGroupDirectiveAPI, saleZoneGroupPayload, saleZoneGroupDirectiveLoadPromiseDeferred);
+
                     });
-                }
+                    promises.push(saleZoneGroupDirectiveLoadPromiseDeferred.promise);
+
+                    if (sellingProductIds != undefined) {
+                        if (sellingProductDirectiveReadyPromiseDeferred == undefined)
+                            sellingProductDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        var sellingProductDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
+                        sellingProductDirectiveReadyPromiseDeferred.promise.then(function () {
+                            sellingProductDirectiveReadyPromiseDeferred = undefined;
+
+
+
+                            var sellingproductpayload = sellingProductIds != undefined ? sellingProductIds : undefined;
+                            VRUIUtilsService.callDirectiveLoad(sellingProductDirectiveAPI, sellingproductpayload, sellingProductDirectiveLoadPromiseDeferred);
+
+                        });
+                        promises.push(sellingProductDirectiveLoadPromiseDeferred.promise);
+                    }
+                   
+
 
                  return  UtilsService.waitMultiplePromises(promises);
             }

@@ -190,6 +190,10 @@
     <Content Include="WhS_BusinessEntity\Directives\Country\Templates\CountryGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Country\vr-whs-be-country-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\Country\vr-whs-be-country-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\Templates\CustomerGroupTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\vr-whs-be-customergroup.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\Templates\SaleZoneTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\vr-whs-be-salezonegroup.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\Templates\SelectiveSuppliersWithZonesGroup.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\vr-whs-be-supplierswithzonesgroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\RateType\Templates\RateTypeGridTemplate.html" />
