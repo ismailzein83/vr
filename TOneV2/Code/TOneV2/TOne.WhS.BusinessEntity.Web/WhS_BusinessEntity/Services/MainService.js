@@ -342,7 +342,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         };
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Name, "RateType");
+            modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Name, "Rate Type");
             modalScope.onRateTypeUpdated = onRateTypeUpdated;
         };
         var parameters = {
@@ -358,7 +358,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         };
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = UtilsService.buildTitleForAddEditor("RateType");
+            modalScope.title = UtilsService.buildTitleForAddEditor("Rate Type");
             modalScope.onRateTypeAdded = onRateTypeAdded;
         };
         var parameters = {};
@@ -373,7 +373,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
 
         };
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Name, "ZoneServiceConfig");
+            modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Name, "Zone Service Config");
             modalScope.onZoneServiceConfigUpdated = onZoneServiceConfigUpdated;
         };
         var parameters = {
@@ -390,7 +390,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         };
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = UtilsService.buildTitleForAddEditor("ZoneServiceConfig");
+            modalScope.title = UtilsService.buildTitleForAddEditor("Zone Service Config");
             modalScope.onZoneServiceConfigAdded = onZoneServiceConfigAdded;
         };
         var parameters = {};

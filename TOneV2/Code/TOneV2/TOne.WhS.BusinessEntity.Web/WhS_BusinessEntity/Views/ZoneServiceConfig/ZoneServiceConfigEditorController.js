@@ -74,7 +74,7 @@
             var zoneServiceConfigObject = buildZoneServiceConfigObjFromScope();
             return WhS_BE_ZoneServiceConfigAPIService.AddZoneServiceConfig(zoneServiceConfigObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("ZoneServiceConfig", response, "Name or Service Flag")) {
+                if (VRNotificationService.notifyOnItemAdded("Zone Service Config", response, "Name or Service Flag")) {
                     if ($scope.onZoneServiceConfigAdded != undefined)
                         $scope.onZoneServiceConfigAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -88,7 +88,7 @@
             var zoneServiceConfigObject = buildZoneServiceConfigObjFromScope();
             WhS_BE_ZoneServiceConfigAPIService.UpdateZoneServiceConfig(zoneServiceConfigObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("ZoneServiceConfig", response, "Name")) {
+                if (VRNotificationService.notifyOnItemUpdated("Zone Service Config", response, "Name")) {
                     if ($scope.onZoneServiceConfigUpdated != undefined)
                         $scope.onZoneServiceConfigUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
