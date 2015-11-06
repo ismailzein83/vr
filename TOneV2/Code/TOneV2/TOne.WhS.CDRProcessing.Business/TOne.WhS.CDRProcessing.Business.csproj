@@ -45,6 +45,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
@@ -86,6 +90,8 @@
     <Compile Include="SupplierRule\Rules\StructureRulesBehaviors\RuleBehaviorByOutCarrier.cs" />
     <Compile Include="SupplierRule\Rules\StructureRulesBehaviors\RuleBehaviorByOutTrunk.cs" />
     <Compile Include="SupplierRule\SupplierIdentificationRuleManager.cs" />
+    <Compile Include="TrafficStatistics\BaseTrafficStatisticManager.cs" />
+    <Compile Include="TrafficStatistics\TrafficStatisticByIntervalManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">

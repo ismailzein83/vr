@@ -18,7 +18,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public SaleRatesByZone GetZoneRates(Entities.SalePriceListOwnerType ownerType, int ownerId)
         {
-            SaleRatesByZone saleRatesByZone = new SaleRatesByZone();
             return GetCachedSaleRates(ownerType, ownerId);
         }
         SaleRatesByZone GetCachedSaleRates(Entities.SalePriceListOwnerType ownerType, int ownerId)
@@ -29,11 +28,14 @@ namespace TOne.WhS.BusinessEntity.Business
                    ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
                    List<SaleRate> saleRates=dataManager.GetEffectiveSaleRates(ownerType, ownerId, this.effectiveOn);
                    SaleRatesByZone saleRatesByZone = new SaleRatesByZone();
-                   foreach (SaleRate saleRate in saleRates)
+                   if (saleRates != null)
                    {
-                       if (!saleRatesByZone.ContainsKey(saleRate.ZoneId))
+                       foreach (SaleRate saleRate in saleRates)
                        {
-                           saleRatesByZone.Add(saleRate.ZoneId, saleRate);
+                           if (!saleRatesByZone.ContainsKey(saleRate.ZoneId))
+                           {
+                               saleRatesByZone.Add(saleRate.ZoneId, saleRate);
+                           }
                        }
                    }
                    return saleRatesByZone;

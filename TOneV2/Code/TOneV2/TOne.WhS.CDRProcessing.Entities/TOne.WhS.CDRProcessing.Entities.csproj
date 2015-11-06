@@ -45,6 +45,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
@@ -105,6 +109,9 @@
     <Compile Include="SupplierRule\SupplierIdentificationRuleQuery.cs" />
     <Compile Include="SupplierRule\SupplierIdentificationRuleSettings.cs" />
     <Compile Include="SupplierRule\SupplierIdentificationRuleTarget.cs" />
+    <Compile Include="TrafficStatistics\BaseTrafficStatistic.cs" />
+    <Compile Include="TrafficStatistics\TrafficStatisticBatch.cs" />
+    <Compile Include="TrafficStatistics\TrafficStatisticByInterval.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

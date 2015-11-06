@@ -7,7 +7,7 @@ using Vanrise.Integration.Entities;
 
 namespace TOne.WhS.CDRProcessing.Entities
 {
-    public class BillingCDRBase
+    public class BillingCDRBase : Vanrise.Entities.StatisticManagement.IRawItem
     {
         static BillingCDRBase()
         {
