@@ -119,6 +119,10 @@
             };
 
             $scope.onRouteRuleCriteriaTypeSelectionChanged = function () {
+
+                if ($scope.selectedRouteRuleCriteriaType == undefined)
+                    return;
+
                 if ($scope.selectedRouteRuleCriteriaType == WhS_Be_RouteRuleCriteriaTypeEnum.SaleZone)
                 {
                     $scope.showSaleZoneSection = $scope.showCustomerSection = $scope.showExcludedCodeSection = true;
@@ -166,7 +170,7 @@
         function displaySectionsBasedOnParameters()
         {
             $scope.showSaleZoneSection = routingProductId != undefined;
-            $scope.showCustomerSection = $scope.showExcludedCodeSection = $scope.showIncludedCodeSection = !$scope.showSaleZoneSection;
+            $scope.showRouteRuleTypeFilterSection = $scope.showCustomerSection = $scope.showExcludedCodeSection = $scope.showIncludedCodeSection = !$scope.showSaleZoneSection;
         }
 
         function loadAllControls() {
@@ -188,6 +192,9 @@
 
         function loadFilterBySection()
         {
+            if (!$scope.showRouteRuleTypeFilterSection)
+                return;
+
             $scope.routeRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Be_RouteRuleCriteriaTypeEnum);
 
             if (routeRuleEntity != undefined && routeRuleEntity.Criteria.CodeCriteriaGroupSettings != null)
