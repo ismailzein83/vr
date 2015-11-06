@@ -49,6 +49,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
@@ -87,6 +90,10 @@
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.Data\TOne.WhS.Routing.Data.csproj">
+      <Project>{ad5a00af-b674-4f57-a5c1-85f78a351928}</Project>
+      <Name>TOne.WhS.Routing.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.Entities\TOne.WhS.Routing.Entities.csproj">
       <Project>{b645c1d2-c038-4890-85aa-588fa3c3fc7a}</Project>

@@ -10,6 +10,7 @@ using TOne.WhS.SupplierPriceList.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.Common.Business;
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
     public class ReadFromExcelProcess:CodeActivity

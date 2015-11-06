@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {

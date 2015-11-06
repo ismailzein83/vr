@@ -25,7 +25,7 @@ namespace TOne.WhS.Routing.Business
             if (customerSellingProduct == null)
                 return;
 
-            Vanrise.Common.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.CurrencyExchangeRateManager();
+            Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
             SaleEntityZoneRoutingProductLocator customerZoneRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(effectiveOn, isEffectiveInFuture));
             SaleEntityZoneRateLocator customerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(effectiveOn, isEffectiveInFuture));
 
@@ -72,7 +72,7 @@ namespace TOne.WhS.Routing.Business
             SupplierRateManager supplierRateManager = new SupplierRateManager();
             var supplierRates = supplierRateManager.GetRates(effectiveOn, isEffectiveInFuture);
             SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
-            Vanrise.Common.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.CurrencyExchangeRateManager();
+            Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
             PurchasePricingRuleManager purchasePricingRuleManager = new PurchasePricingRuleManager();
             if (supplierRates != null)
             {

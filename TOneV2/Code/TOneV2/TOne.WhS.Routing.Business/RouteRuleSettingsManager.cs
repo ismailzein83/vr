@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Routing.Business
 {

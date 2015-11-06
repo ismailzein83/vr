@@ -164,6 +164,12 @@
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.SQL.dll</HintPath>
     </Reference>
@@ -571,6 +577,14 @@
     <ProjectReference Include="..\TOne.WhS.Routing.Business\TOne.WhS.Routing.Business.csproj">
       <Project>{923447e8-0d0b-4296-976a-8f486a8694d3}</Project>
       <Name>TOne.WhS.Routing.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.Data.SQL\TOne.WhS.Routing.Data.SQL.csproj">
+      <Project>{0dad53e2-a011-4f21-afe6-97186c5b96db}</Project>
+      <Name>TOne.WhS.Routing.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.Data\TOne.WhS.Routing.Data.csproj">
+      <Project>{ad5a00af-b674-4f57-a5c1-85f78a351928}</Project>
+      <Name>TOne.WhS.Routing.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.Entities\TOne.WhS.Routing.Entities.csproj">
       <Project>{b645c1d2-c038-4890-85aa-588fa3c3fc7a}</Project>

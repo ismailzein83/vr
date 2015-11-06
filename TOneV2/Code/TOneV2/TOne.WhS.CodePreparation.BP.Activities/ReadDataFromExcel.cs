@@ -11,6 +11,7 @@ using TOne.WhS.CodePreparation.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.Common.Business;
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
    public class ReadDataFromExcel : CodeActivity

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B645C1D2-C038-4890-85AA-588FA3C3FC7A}</ProjectGuid>
+    <ProjectGuid>{0DAD53E2-A011-4F21-AFE6-97186C5B96DB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TOne.WhS.Routing.Entities</RootNamespace>
-    <AssemblyName>TOne.WhS.Routing.Entities</AssemblyName>
+    <RootNamespace>TOne.WhS.Routing.Data.SQL</RootNamespace>
+    <AssemblyName>TOne.WhS.Routing.Data.SQL</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -41,42 +41,25 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeMatches.cs" />
-    <Compile Include="IBuildCustomerRoutesContext.cs" />
-    <Compile Include="IBuildRoutingProductRoutesContext.cs" />
-    <Compile Include="IRouteRuleExecutionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Routes\BaseRoute.cs" />
-    <Compile Include="Routes\CustomerRoute.cs" />
-    <Compile Include="Routes\RouteOption.cs" />
-    <Compile Include="RouteRuleSettings\RouteRuleOptionFilterSettings.cs" />
-    <Compile Include="RouteRuleSettings\RouteRuleOptionOrderSettings.cs" />
-    <Compile Include="RouteRuleSettings\RouteRuleOptionPercentageSettings.cs" />
-    <Compile Include="RouteOptionSettings.cs" />
-    <Compile Include="RouteOptionSettingsGroup.cs" />
-    <Compile Include="IRouteOptionSettingsContext.cs" />
-    <Compile Include="Routes\SellingProductRoute.cs" />
-    <Compile Include="Routes\RoutingProductRoute.cs" />
-    <Compile Include="Routes\RoutingProductRouteOption.cs" />
-    <Compile Include="SaleCodeMatch.cs" />
-    <Compile Include="CustomerZoneDetail.cs" />
-    <Compile Include="SupplierCodeMatch.cs" />
-    <Compile Include="SupplierZoneDetail.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
-      <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
-      <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    <ProjectReference Include="..\TOne.WhS.Routing.Data\TOne.WhS.Routing.Data.csproj">
+      <Project>{ad5a00af-b674-4f57-a5c1-85f78a351928}</Project>
+      <Name>TOne.WhS.Routing.Data</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RouteOptionRuleSettings\" />
+    <ProjectReference Include="..\TOne.WhS.Routing.Entities\TOne.WhS.Routing.Entities.csproj">
+      <Project>{b645c1d2-c038-4890-85aa-588fa3c3fc7a}</Project>
+      <Name>TOne.WhS.Routing.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
