@@ -10,7 +10,8 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                 onselectionchanged: '=',
                 isrequired: "@",
                 supplierid: "=",
-                selectedvalues:'='
+                selectedvalues: '=',
+                hidetitle:'@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -38,20 +39,22 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
         function getBeSupplierZoneTemplate(attrs) {
            
             var multipleselection = "";
-            var label = "Supplier Zone";
+            var label = 'label="Supplier Zone"';
             if (attrs.ismultipleselection != undefined)
             {
                 multipleselection = "ismultipleselection";
-                label = "Supplier Zones";
+                label = 'label="Supplier Zones"';
             }
-               
+            if (attrs.hidetitle != undefined) {
+                label = "";
+            }
             var required = "";
             if (attrs.isrequired != undefined)
                 required = "isrequired";
 
             return '<div>'
-               +  '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SupplierZoneId" '
-            + required + ' label="' + label + '" datasource="ctrl.searchSupplierZones" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="Supplier Zone"></vr-select>'
+               +  '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SupplierZoneId"'
+            + required + ' datasource="ctrl.searchSupplierZones" selectedvalues="ctrl.selectedvalues"'  +  label + 'onselectionchanged="ctrl.onselectionchanged" entityName="Supplier Zone"></vr-select>'
             + '</div>'
         }
 

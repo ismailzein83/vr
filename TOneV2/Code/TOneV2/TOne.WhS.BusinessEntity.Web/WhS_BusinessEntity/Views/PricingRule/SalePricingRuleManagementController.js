@@ -6,6 +6,14 @@
 
     function salePricingRuleManagementController($scope, WhS_BE_MainService, UtilsService, WhS_Be_PricingRuleTypeEnum) {
         var gridAPI;
+        var carrierAccountDirectiveAPI;
+        var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var sellingNumberPlanDirectiveAPI;
+        var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var saleZoneDirectiveAPI;
+        var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         load();
         function defineScope() {
@@ -14,6 +22,33 @@
                 if (!$scope.isGettingData && gridAPI != undefined)
                     return gridAPI.loadGrid(getFilterObject());
             };
+            $scope.onCarrierAccountDirectiveReady = function (api) {
+                carrierAccountDirectiveAPI = api;
+                carrierAccountReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onSellingNumberPlanDirectiveReady = function (api) {
+                sellingNumberPlanDirectiveAPI = api;
+                sellingNumberPlanReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onSaleZoneDirectiveReady = function (api) {
+                saleZoneDirectiveAPI = api;
+                saleZoneReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onSelectSellingNumberPlan = function (selectedItem) {
+                $scope.showSaleZoneSelector = true;
+
+                var payload = {
+                    filter: { SellingNumberPlanId: selectedItem.SellingNumberPlanId },
+                }
+
+                var setLoader = function (value) { $scope.isLoadingSaleZonesSection = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
+            }
+
+
 
             $scope.addMenuActions = [{
                 name: "TOD Rule",
@@ -56,7 +91,9 @@
         function getFilterObject() {
             var data = {
                 RuleTypes: UtilsService.getPropValuesFromArray($scope.selectedPricingRuleTypes, "value"),
-                Description:$scope.description
+                Description: $scope.description,
+                CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
+                SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds()
             };
             return data;
         }

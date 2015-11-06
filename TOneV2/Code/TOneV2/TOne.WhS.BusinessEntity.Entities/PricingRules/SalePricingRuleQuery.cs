@@ -10,5 +10,8 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public string Description { get; set; }
         public List<PricingRuleType> RuleTypes { get; set; }
+
+        public List<int> CustomerIds { get; set; }
+        public List<long> SaleZoneIds { get; set; }
     }
 }

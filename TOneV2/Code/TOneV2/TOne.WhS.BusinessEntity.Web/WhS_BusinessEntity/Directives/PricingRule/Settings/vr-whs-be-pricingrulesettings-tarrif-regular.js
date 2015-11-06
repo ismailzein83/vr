@@ -18,7 +18,7 @@ function ($compile) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/PricingRuleRegularTariffTemplate.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Settings/Templates/PricingRuleRegularTariffTemplate.html"
 
     };
 

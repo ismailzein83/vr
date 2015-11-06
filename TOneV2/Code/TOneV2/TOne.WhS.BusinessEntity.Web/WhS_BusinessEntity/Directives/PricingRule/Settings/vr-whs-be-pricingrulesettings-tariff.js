@@ -19,7 +19,7 @@ function ($compile, WhS_BE_PricingRuleAPIService, UtilsService, VRUIUtilsService
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/PricingRuleTariffSettings.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Settings/Templates/PricingRuleTariffSettings.html"
 
     };
 

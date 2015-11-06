@@ -18,7 +18,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAc
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/PurchasePricingRuleCriteriaTemplate.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Criteria/Templates/PurchasePricingRuleCriteriaTemplate.html"
 
     };
 

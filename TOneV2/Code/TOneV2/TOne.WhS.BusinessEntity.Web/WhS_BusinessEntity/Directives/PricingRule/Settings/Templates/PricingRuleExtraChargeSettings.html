@@ -13,8 +13,8 @@
     <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective">
         <vr-datagrid datasource="ctrl.datasource"
                      on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu enabledraggablerow>
-            <vr-datagridcolumn headertext="'Filter Type'" field="'name'"></vr-datagridcolumn>
-            <vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Filter Type'" field="'name'" widthfactor="5"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Filter Settings'" widthfactor="15" >
                 <vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady" />
             </vr-datagridcolumn>
         </vr-datagrid>

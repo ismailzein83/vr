@@ -19,7 +19,7 @@ function ($compil, WhS_BE_PricingRuleAPIService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/PricingRuleTODSettings.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Settings/Templates/PricingRuleTODSettings.html"
 
     };
 

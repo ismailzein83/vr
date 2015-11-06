@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBePricingrulesettingsExtrachargeFixed', ['$compile',
-function ($compile) {
+app.directive('vrWhsBePricingrulesettingsExtrachargePercentage', ['$compile',
+function ( $compile) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -10,7 +10,7 @@ function ($compile) {
         controller: function ($scope, $element, $attrs) {
 
             var ctrl = this;
-            var ctor = new fixedExtraChargeCtor(ctrl, $scope, $attrs);
+            var ctor = new percentageExtraChargeCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
         controllerAs: 'ctrl',
@@ -18,12 +18,12 @@ function ($compile) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/PricingRuleFixedExtraChargeTemplate.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Settings/Templates/PricingRulePercentageExtraChargeTemplate.html"
 
     };
 
 
-    function fixedExtraChargeCtor(ctrl, $scope, $attrs) {
+    function percentageExtraChargeCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
 
@@ -35,18 +35,19 @@ function ($compile) {
 
             api.getData = function () {
                 var obj = {
-                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.ExtraCharge.Actions.FixedExtraChargeSettings, TOne.WhS.BusinessEntity.Entities",
+                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.ExtraCharge.Actions.PercentageExtraChargeSettings, TOne.WhS.BusinessEntity.Entities",
                     FromRate: ctrl.fromRate,
                     ToRate: ctrl.toRate,
-                    ExtraAmount: ctrl.extraAmount
+                    ExtraPercentage: ctrl.extraPercentage
                 }
                 return obj;
             }
+
             api.load = function (payload) {
                 if (payload != undefined) {
                     ctrl.fromRate = payload.FromRate;
                     ctrl.toRate = payload.ToRate
-                    ctrl.extraAmount = payload.ExtraAmount
+                    ctrl.extraPercentage = payload.ExtraPercentage
                 }
             }
 

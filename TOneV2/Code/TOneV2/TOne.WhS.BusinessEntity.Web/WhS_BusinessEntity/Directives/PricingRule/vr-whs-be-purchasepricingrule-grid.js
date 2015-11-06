@@ -49,6 +49,7 @@ function ( VRNotificationService, WhS_BE_PurchasePricingRuleAPIService, WhS_BE_M
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_PurchasePricingRuleAPIService.GetFilteredPurchasePricingRules(dataRetrievalInput)
                     .then(function (response) {
+                        console.log(response);
                         onResponseReady(response);
                     })
                     .catch(function (error) {

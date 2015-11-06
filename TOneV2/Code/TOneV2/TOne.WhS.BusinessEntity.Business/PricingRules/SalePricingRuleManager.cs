@@ -21,13 +21,33 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             Func<SalePricingRule, bool> filterExpression = (prod) =>
                  (input.Query.Description == null || prod.Description.ToLower().Contains(input.Query.Description.ToLower()))
-                 &&
-                 (input.Query.RuleTypes == null || input.Query.RuleTypes.Contains(prod.Settings.RuleType));
-                 // &&
-                 //(input.Query.CarrierAccountsIds == null || input.Query.CarrierAccountsIds.Contains(prod.CarrierAccountId))
-                 //  &&
+                 && (input.Query.RuleTypes == null || input.Query.RuleTypes.Contains(prod.Settings.RuleType))
+                 && (input.Query.CustomerIds == null || this.CheckIfCustomerSettingsContains(prod, input.Query.CustomerIds))
+                 && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(prod, input.Query.SaleZoneIds));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, base.GetFilteredRules(filterExpression).ToBigResult(input, filterExpression, MapToDetails));
+        }
+        private bool CheckIfSaleZoneSettingsContains(SalePricingRule salePricingRule, IEnumerable<long> saleZoneIds)
+        {
+            if (salePricingRule.Criteria.SaleZoneGroupSettings != null)
+            {
+                IRuleSaleZoneCriteria ruleCode = salePricingRule as IRuleSaleZoneCriteria;
+                if (ruleCode.SaleZoneIds != null && ruleCode.SaleZoneIds.Intersect(saleZoneIds).Count() > 0)
+                    return true;
+            }
+
+            return false;
+        }
+        private bool CheckIfCustomerSettingsContains(SalePricingRule salePricingRule, IEnumerable<int> customerIds)
+        {
+            if (salePricingRule.Criteria.CustomerGroupSettings != null)
+            {
+                IRuleCustomerCriteria ruleCode = salePricingRule as IRuleCustomerCriteria;
+                if (ruleCode.CustomerIds != null && ruleCode.CustomerIds.Intersect(customerIds).Count() > 0)
+                    return true;
+            }
+
+            return false;
         }
 
         protected override SalePricingRuleDetail MapToDetails(SalePricingRule rule)

@@ -18,7 +18,7 @@ function ( UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAcco
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Templates/SalePricingRuleCriteriaTemplate.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Criteria/Templates/SalePricingRuleCriteriaTemplate.html"
 
     };
 
@@ -85,18 +85,20 @@ function ( UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAcco
                 var customerConfigId;
                 var saleZoneConfigId;
                 var customerGroupSettings;
-                var saleZoneGroupSettings;
+                var saleZoneGroupSettings = { filter: {} };
+                
                 if (payload != undefined) {
                     if (payload.CustomerGroupSettings != null)
                     {
-                        customerConfigId: payload.CustomerGroupSettings.ConfigId;
-                        customerGroupSettings: payload.CustomerGroupSettings;
+                        customerConfigId= payload.CustomerGroupSettings.ConfigId;
+                        customerGroupSettings= payload.CustomerGroupSettings;
                     }
                        
                     if (payload.SaleZoneGroupSettings != null)
                     {
+                       
                         saleZoneConfigId = payload.SaleZoneGroupSettings.ConfigId;
-                        saleZoneGroupSettings: payload.SaleZoneGroupSettings;
+                        saleZoneGroupSettings.filter.SaleZoneFilterSettings = payload.SaleZoneGroupSettings;
                     }
                    
                 }
@@ -132,7 +134,7 @@ function ( UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAcco
                 });
                 promises.push(loadSaleZoneGroupTemplatesPromise);
 
-                if (saleZoneGroupSettings != undefined) {
+                if (saleZoneGroupSettings.filter.SaleZoneFilterSettings != undefined) {
                     saleZoneGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     var saleZoneGroupDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
