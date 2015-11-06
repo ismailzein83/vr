@@ -365,6 +365,39 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
     }
 
 
+    function editZoneServiceConfig(obj, onZoneServiceConfigUpdated) {
+        var settings = {
+            useModalTemplate: true
+
+        };
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Name, "ZoneServiceConfig");
+            modalScope.onZoneServiceConfigUpdated = onZoneServiceConfigUpdated;
+        };
+        var parameters = {
+            ServiceFlag: obj.ServiceFlag
+        };
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/ZoneServiceConfig/ZoneServiceConfigEditor.html', parameters, settings);
+    }
+
+    function addZoneServiceConfig(onZoneServiceConfigAdded) {
+        var settings = {
+            useModalTemplate: true
+
+        };
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = UtilsService.buildTitleForAddEditor("ZoneServiceConfig");
+            modalScope.onZoneServiceConfigAdded = onZoneServiceConfigAdded;
+        };
+        var parameters = {};
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/ZoneServiceConfig/ZoneServiceConfigEditor.html', parameters, settings);
+    }
+
+
     function editCountry(obj, onCountryUpdated) {
         var settings = {
             useModalTemplate: true

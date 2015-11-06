@@ -240,7 +240,11 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\vr-whs-be-salezonegroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierGroup\vr-whs-be-suppliergroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\vr-whs-be-supplierzone-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\Templates\ZoneServiceConfigGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-selector.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CodeGroupAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\ZoneServiceConfigAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\RateTypeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CountryAPIService.js" />
@@ -300,6 +304,10 @@
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\ZoneServiceConfig\ZoneServiceConfigEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\ZoneServiceConfig\ZoneServiceConfigEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\ZoneServiceConfig\ZoneServiceConfigManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\ZoneServiceConfig\ZoneServiceConfigManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
