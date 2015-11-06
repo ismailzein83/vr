@@ -32,6 +32,14 @@ namespace TOne.WhS.CDRProcessing.Business
                 (
                     input.Query.Description == null ||
                     (item.Description != null && item.Description.Contains(input.Query.Description))
+                )
+                 &&
+                (
+                    input.Query.EffectiveDate == null ||
+                    (
+                        item.BeginEffectiveTime <= input.Query.EffectiveDate &&
+                        (item.EndEffectiveTime == null || item.EndEffectiveTime >= input.Query.EffectiveDate)
+                    )
                 );
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, normalizationRules.ToBigResult(input, filterExpression, MapToDetails));

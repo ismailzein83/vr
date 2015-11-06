@@ -13,5 +13,6 @@ namespace TOne.WhS.CDRProcessing.Entities
 
         public int? PhoneNumberLength { get; set; }
         public string Description { get; set; }
+        public DateTime? EffectiveDate { get; set; }
     }
 }
