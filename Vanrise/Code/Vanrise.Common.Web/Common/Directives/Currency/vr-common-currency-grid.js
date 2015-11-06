@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCommonCurrencyGrid", ["UtilsService", "VRNotificationService", "VRCommon_CurrencyAPIService","VRCommon_CurrencyService",
-function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCommon_CurrencyService) {
+app.directive("vrCommonCurrencyGrid", ["UtilsService", "VRNotificationService", "VRCommon_CurrencyAPIService","VRCommon_CurrencyService","VRCommon_CurrencyExchangeRateService",
+function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCommon_CurrencyService , VRCommon_CurrencyExchangeRateService) {
   
     var directiveDefinitionObject = {
 
@@ -53,7 +53,11 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCo
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VRCommon_CurrencyAPIService.GetFilteredCurrencies(dataRetrievalInput)
                     .then(function (response) {
-                        
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                setDataItemExtension(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -62,13 +66,30 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCo
             };
             defineMenuActions();
         }
+        function setDataItemExtension(dataItem) {
 
-        
+            var extensionObject = {};
+            var query = {
+                Currencies: [dataItem.CurrencyId]
+
+            }
+            extensionObject.onGridReady = function (api) {
+                extensionObject.currencyExchangeGridAPI = api;
+                extensionObject.currencyExchangeGridAPI.loadGrid(query);
+                extensionObject.onGridReady = undefined;
+            };
+            dataItem.extensionObject = extensionObject;
+
+        }
+                
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
                clicked: editCurrency
+            }, {
+                name: "New Exchange Rate",
+                clicked: addExchangeRate
             }
             ];
         }
@@ -78,6 +99,24 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCo
                 gridAPI.itemUpdated(currencyObj);
             }
             VRCommon_CurrencyService.editCurrency(currencyObj, onCurrencyUpdated);
+        }
+
+
+        function addExchangeRate(dataItem) {
+            gridAPI.expandRow(dataItem);
+            var query = {
+                Currencies: [dataItem.CurrencyId]
+            }
+            if (dataItem.extensionObject.currencyExchangeGridAPI != undefined)
+                dataItem.extensionObject.currencyExchangeGridAPI.loadGrid(query);
+            var onCurrencyExchangeRateAdded = function (exchangeObject) {
+                if (dataItem.extensionObject.currencyExchangeGridAPI != undefined) {
+                    dataItem.extensionObject.currencyExchangeGridAPI.onExchangeRateAdded(exchangeObject);
+                }
+
+            };
+            VRCommon_CurrencyExchangeRateService.addExchangeRate(onCurrencyExchangeRateAdded, dataItem);
+
         }
         
         

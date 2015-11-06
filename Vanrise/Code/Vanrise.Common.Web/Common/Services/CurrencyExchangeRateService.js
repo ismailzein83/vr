@@ -2,7 +2,7 @@
 app.service('VRCommon_CurrencyExchangeRateService', ['UtilsService', 'VRModalService', 'VRNotificationService',
     function (UtilsService, VRModalService, VRNotificationService) {
 
-        function addExchangeRate(onCurrencyExchangeRateAdded) {
+        function addExchangeRate(onCurrencyExchangeRateAdded , currency) {
             var settings = {
                 useModalTemplate: true
 
@@ -14,6 +14,8 @@ app.service('VRCommon_CurrencyExchangeRateService', ['UtilsService', 'VRModalSer
             };
             var parameters = {};
 
+            if (currency != undefined)
+                parameters.CurrencyId = currency.CurrencyId;
             VRModalService.showModal('/Client/Modules/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateEditor.html', parameters, settings);
         }
 

@@ -10,7 +10,9 @@
             <vr-datagridcolumn headertext="'ID'" field="'CurrencyId'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Currency Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Symbol'" field="'Symbol'" type="'Text'"></vr-datagridcolumn>
-            
+            <vr-datagridexpandablerow>
+                <vr-common-currencyexchangerate-grid on-ready="dataItem.extensionObject.onGridReady" hidecurrencycolumn></vr-common-currencyexchangerate-grid>
+            </vr-datagridexpandablerow>
         </vr-datagrid>
     </vr-columns>
 </vr-row>

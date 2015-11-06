@@ -25,10 +25,13 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyExchangeRateAPIS
     function CurrencyExhangeRateGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var disableCurrency;
         this.initializeController = initializeController;
 
         function initializeController() {
-           
+            if ($attrs.hidecurrencycolumn != undefined) {
+                $scope.hidecurrencycolumn = disableCurrency = true;
+            }
             $scope.currenciesExchangeRate = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;

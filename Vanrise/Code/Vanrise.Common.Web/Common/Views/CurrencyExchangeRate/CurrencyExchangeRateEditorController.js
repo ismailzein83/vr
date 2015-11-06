@@ -8,11 +8,17 @@
 
         
         var currencySelectorAPI;
+        var currencyId;
+        var disableCurrency;
         defineScope();
         loadParameters();
         load();
         function loadParameters() {
-            
+            var parameters = VRNavigationService.getParameters($scope);
+            if (parameters != undefined && parameters != null) {
+                currencyId = parameters.CurrencyId;
+            }
+            $scope.disableCurrency = (currencyId != undefined);
         }
         function defineScope() {
             $scope.saveExchangeRate = function () {
@@ -29,7 +35,7 @@
         function load() {
             $scope.onCurrencySelectReady = function (api) {
                 currencySelectorAPI = api;
-                currencySelectorAPI.load();
+                currencySelectorAPI.load({ selectedIds: currencyId });
             }
           
         }

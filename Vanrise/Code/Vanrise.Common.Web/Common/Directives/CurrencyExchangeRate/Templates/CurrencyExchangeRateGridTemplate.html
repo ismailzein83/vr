@@ -8,7 +8,7 @@
                      idfield="CurrencyExchangeRateId">
 
             <vr-datagridcolumn headertext="'ID'" field="'Entity.CurrencyExchangeRateId'" type="'Text'"></vr-datagridcolumn>           
-            <vr-datagridcolumn headertext="'Currency'" field="'CurrencyName'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Currency'" field="'CurrencyName'" type="'Text'" ng-if="!hidecurrencycolumn"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Exchange Date'" field="'Entity.ExchangeDate'" type="'Date'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Rate'" field="'Entity.Rate'" type="'Number'"></vr-datagridcolumn>
 
