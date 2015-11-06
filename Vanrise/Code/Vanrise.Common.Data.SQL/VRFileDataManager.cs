@@ -11,7 +11,7 @@ namespace Vanrise.Common.Data.SQL
     public class VRFileDataManager : Vanrise.Data.SQL.BaseSQLDataManager, IVRFileDataManager
     {
         public VRFileDataManager()
-            : base(GetConnectionStringName("SecurityDBConnStringKey", "ConfigurationDBConnString"))
+            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
         {
 
         }

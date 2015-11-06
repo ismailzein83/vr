@@ -11,7 +11,7 @@ namespace Vanrise.Common.Data.SQL
     public class CurrencyExchangeRateDataManager : Vanrise.Data.SQL.BaseSQLDataManager, ICurrencyExchangeRateDataManager
     {
         public CurrencyExchangeRateDataManager()
-            : base(GetConnectionStringName("SecurityDBConnStringKey", "ConfigurationDBConnString"))
+            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
         {
 
         }
