@@ -174,7 +174,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadSaleZoneGroupSection, loadCustomerGroupSection,
+            return UtilsService.waitMultipleAsyncOperations([editScopeTitle, loadFilterBySection, loadSaleZoneGroupSection, loadCustomerGroupSection,
                 loadCodeCriteriaGroupSection, loadRouteRuleSettingsSection, loadStaticSection])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -187,6 +187,16 @@
         function getRouteRule() {
             return WhS_BE_RouteRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
                 routeRuleEntity = routeRule;
+            });
+        }
+
+        function editScopeTitle()
+        {
+            if (routingProductId == undefined)
+                return;
+
+            return WhS_BE_RoutingProductAPIService.GetRoutingProduct(routingProductId).then(function (response) {
+                $scope.title += " of " + response.Name;
             });
         }
 
