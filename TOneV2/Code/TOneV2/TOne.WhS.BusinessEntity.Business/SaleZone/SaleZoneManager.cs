@@ -11,16 +11,14 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleZoneManager
     {
-        public List<SaleZone> GetSaleZones(int sellingNumberPlanId)
-        {
-            ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
-            return dataManager.GetSaleZones(sellingNumberPlanId);
-        }
-
         public List<SaleZone> GetCachedSaleZones(int sellingNumberPlanId)
         {
             string cacheName = String.Format("GetCachedSaleZones_{0}", sellingNumberPlanId);
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, () => GetSaleZones(sellingNumberPlanId));
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, () =>
+            {
+                ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
+                return dataManager.GetSaleZones(sellingNumberPlanId);
+            });
         }
 
         public SaleZone GetSaleZone(long saleZoneId)
