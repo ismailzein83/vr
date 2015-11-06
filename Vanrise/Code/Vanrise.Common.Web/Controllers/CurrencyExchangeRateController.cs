@@ -6,6 +6,7 @@ using System.Web.Http;
 using Vanrise.Entities;
 using Vanrise.Web.Base;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 namespace Vanrise.Web.Controllers
 {
    [RoutePrefix(Constants.ROUTE_PREFIX + "CurrencyExchangeRate")]

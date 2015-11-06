@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 
-namespace Vanrise.Common
+namespace Vanrise.Common.Business
 {
     public class VRFileManager
     {

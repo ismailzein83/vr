@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
 
-namespace Vanrise.Common
+namespace Vanrise.Common.Business
 {
     public class TemplateConfigManager
     {
