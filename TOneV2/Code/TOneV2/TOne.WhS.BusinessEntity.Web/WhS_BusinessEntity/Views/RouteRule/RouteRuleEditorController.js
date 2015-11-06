@@ -49,14 +49,17 @@
                 saleZoneGroupSettingsAPI = api;
                 var setLoader = function (value) { $scope.isLoadingSaleZonesSection = value };
 
-                var saleZoneGroupPayload = {
-                    filter: {
-                        SellingNumberPlanId: sellingNumberPlanId,
-                        SaleZoneFilterSettings: { RoutingProductId: routingProductId }
-                    }
-                };
+                var saleZoneGroupPayload;
 
-                console.log(saleZoneGroupPayload);
+                if (routingProductId != undefined)
+                {
+                    saleZoneGroupPayload = {
+                        saleZoneInfoFilter: {
+                            SellingNumberPlanId: sellingNumberPlanId,
+                            SaleZoneFilterSettings: { RoutingProductId: routingProductId }
+                        }
+                    };
+                }
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupSettingsAPI, saleZoneGroupPayload, setLoader, saleZoneGroupSettingsReadyPromiseDeferred);
             }
@@ -197,24 +200,20 @@
         {
             var promises = [];
 
-            var saleZoneGroupSettingsVar;
-            var sellingNumberPlanIdVar = sellingNumberPlanId;
-            var routingProductIdVar = routingProductId;
+            var saleZoneGroupPayload;
 
             if (routeRuleEntity != undefined && routeRuleEntity.Criteria.SaleZoneGroupSettings != null)
             {
-                saleZoneGroupSettingsVar = routeRuleEntity.Criteria.SaleZoneGroupSettings;
-                sellingNumberPlanIdVar = routeRuleEntity.Criteria.SaleZoneGroupSettings.SellingNumberPlanId;
-                routingProductIdVar = routeRuleEntity.Criteria.RoutingProductId;
-            }
+                saleZoneGroupPayload = {
+                    saleZoneInfoFilter: {
+                        SellingNumberPlanId: routeRuleEntity.Criteria.SaleZoneGroupSettings.SellingNumberPlanId
+                    },
+                    saleZoneGroupSettings: routeRuleEntity.Criteria.SaleZoneGroupSettings
+                };
 
-            var saleZoneGroupPayload = {
-                filter: {
-                    SellingNumberPlanId: sellingNumberPlanIdVar,
-                    SaleZoneFilterSettings: { RoutingProductId: routingProductIdVar }
-                },
-                saleZoneGroupSettings: saleZoneGroupSettingsVar
-            };
+                if (routeRuleEntity.Criteria.RoutingProductId != null)
+                    saleZoneGroupPayload.saleZoneInfoFilter.SaleZoneFilterSettings = { RoutingProductId: routeRuleEntity.Criteria.RoutingProductId };
+            }
 
             var loadSaleZoneGroupTemplatesPromise = WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates()
                 .then(function (response) {
@@ -223,13 +222,13 @@
                         $scope.saleZoneGroupTemplates.push(item);
                     });
 
-                    if (saleZoneGroupPayload.saleZoneGroupSettings != undefined)
+                    if (saleZoneGroupPayload != undefined && saleZoneGroupPayload.saleZoneGroupSettings != null)
                         $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, saleZoneGroupPayload.saleZoneGroupSettings.ConfigId, "TemplateConfigID");
                 });
 
             promises.push(loadSaleZoneGroupTemplatesPromise);
 
-            if (saleZoneGroupPayload.saleZoneGroupSettings != undefined) {
+            if (saleZoneGroupPayload != undefined && saleZoneGroupPayload.saleZoneGroupSettings != null) {
                 saleZoneGroupSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 var saleZoneGroupSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();

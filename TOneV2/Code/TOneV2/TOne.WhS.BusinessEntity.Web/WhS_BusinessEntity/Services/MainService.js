@@ -101,7 +101,8 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         var modalSettings = {
         };
         var parameters = {
-            routeRuleId: routeRuleObj.Entity.RuleId
+            routeRuleId: routeRuleObj.Entity.RuleId,
+            routingProductId: routeRuleObj.Entity.Criteria != null? routeRuleObj.Entity.Criteria.RoutingProductId : undefined
         };
 
         modalSettings.onScopeReady = function (modalScope) {

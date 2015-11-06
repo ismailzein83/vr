@@ -85,8 +85,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
                 api.load = function (payload) {
 
-                    console.log(payload);
-
                     ctrl.selectedvalues = [];
 
                     var selectedIds;
@@ -101,7 +99,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                         var input = {
                             SellingNumberPlanId: filter.SellingNumberPlanId,
                             SaleZoneIds: selectedIds,
-                            SaleZoneFilterSettings: { RoutingProductId: filter.RoutingProductId}
+                            SaleZoneFilterSettings: { RoutingProductId: filter.SaleZoneFilterSettings != undefined? filter.SaleZoneFilterSettings.RoutingProductId : undefined}
                         };
 
                         return WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {

@@ -1,6 +1,6 @@
 ﻿<vr-row removeline>
-    <vr-columns colnum="4" ng-show="showSellingNumberPlan">
-        <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" selectedvalues="selectedSellingNumberPlan" onselectionchanged="onSellingNumberPlanSelectionChanged" />
+    <vr-columns colnum="4" ng-if="showSellingNumberPlan">
+        <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" selectedvalues="selectedSellingNumberPlan" onselectitem="onSellingNumberPlanSelectItem" />
     </vr-columns>
     <vr-columns colnum="4" vr-loader="isLoadingSaleZonesSelector">
         <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady" />
