@@ -9,7 +9,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
-    public class ZoneServiceConfigManager: BaseSQLDataManager, IZoneServiceConfig
+    public class ZoneServiceConfigManager: BaseSQLDataManager, IZoneServiceConfigDataManager
     {
         public ZoneServiceConfigManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
@@ -32,7 +32,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return (recordsEffected > 0);
         }
 
-        public bool AreZoneServiceConfigUpdated(ref object updateHandle)
+        public bool AreZoneServiceConfigsUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("[TOneWhS_BE].[ZoneServiceConfig]", ref updateHandle);
         }

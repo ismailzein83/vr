@@ -7,7 +7,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data
 {
-    public interface IZoneServiceConfig: IDataManager
+    public interface IZoneServiceConfigDataManager: IDataManager
     {
         List<ZoneServiceConfig> GetZoneServiceConfigs();
 
@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Data
 
         bool Insert(ZoneServiceConfig zoneServiceFlag);
 
-        bool AreZoneServiceConfigUpdated(ref object updateHandle);
+        bool AreZoneServiceConfigsUpdated(ref object updateHandle);
 
 
     }
