@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Input\ZoneItemInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Input\RatePlanItemInput.cs" />
     <Compile Include="Input\SalePriceListInput.cs" />

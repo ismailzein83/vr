@@ -10,16 +10,20 @@ namespace TOne.WhS.BusinessEntity.Data
     public interface ISaleZoneDataManager : IDataManager
     {
         List<SaleZone> GetSaleZones(int sellingNumberPlanId);
-        List<SaleZone> GetSaleZones(int sellingNumberPlanId,DateTime effectiveDate);
+
         void ApplySaleZonesForDB(object preparedSaleZones);
+
         void DeleteSaleZones(List<SaleZone> saleZones);
+
         void InsertSaleZones(List<SaleZone> saleZones);
+
         object InitialiazeStreamForDBApply();
+
         void WriteRecordToStream(SaleZone record, object dbApplyStream);
+
         object FinishDBApplyStream(object dbApplyStream);
 
         List<SaleZoneInfo> GetSaleZonesInfo(int sellingNumberPlanId, string filter);
-
 
         bool AreZonesUpdated(ref object updateHandle);
 

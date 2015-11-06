@@ -28,11 +28,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByNumberPlan", SaleZoneMapper, sellingNumberPlanId);
         }
 
-        public List<SaleZone> GetSaleZones(int sellingNumberPlanId,DateTime effectiveDate)
-        {
-            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByNumberPlanAndEffectiveDate", SaleZoneMapper, sellingNumberPlanId, effectiveDate);
-        }
-
         public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;

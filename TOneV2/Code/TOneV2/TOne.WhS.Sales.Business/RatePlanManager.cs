@@ -8,7 +8,9 @@ using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
+using TOne.WhS.Sales.Entities.Input;
 using TOne.WhS.Sales.Entities.Queries;
+using TOne.WhS.Sales.Entities.RatePlanning;
 using Vanrise.Common;
 using Vanrise.Entities;
 
@@ -16,12 +18,37 @@ namespace TOne.WhS.Sales.Business
 {
     public class RatePlanManager
     {
-        #region Get Rate Plan Items
+        public IEnumerable<ZoneItem> GetZoneItems(ZoneItemInput input)
+        {
+            IEnumerable<ZoneItem> zoneItems = new List<ZoneItem>();
+            return zoneItems;
+        }
+
+        private IEnumerable<SaleZone> GetSaleZones(RatePlanOwnerType ownerType, int ownerId)
+        {
+            IEnumerable<SaleZone> saleZones = null;
+
+            if (ownerType == RatePlanOwnerType.SellingProduct)
+            {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
+
+                SaleZoneManager saleZoneManager = new SaleZoneManager();
+                saleZones = saleZoneManager.GetSaleZones(sellingNumberPlanId, DateTime.Now);
+            }
+            else if (ownerType == RatePlanOwnerType.Customer)
+            {
+                CustomerZoneManager manager = new CustomerZoneManager();
+                saleZones = manager.GetCustomerSaleZones(ownerId, DateTime.Now, false);
+            }
+
+            return saleZones;
+        }
 
         public IEnumerable<RatePlanItem> GetRatePlanItems(RatePlanItemInput input)
         {
             IEnumerable<RatePlanItem> items = null;
-            IEnumerable<SaleZone> saleZones = this.GetSaleZones(input.Filter.CustomerId);
+            IEnumerable<SaleZone> saleZones = this.GetSaleZones(RatePlanOwnerType.Customer, input.Filter.CustomerId);
 
             if (saleZones != null)
             {
@@ -40,12 +67,6 @@ namespace TOne.WhS.Sales.Business
             }
 
             return items;
-        }
-
-        private IEnumerable<SaleZone> GetSaleZones(int customerId)
-        {
-            CustomerZoneManager manager = new CustomerZoneManager();
-            return manager.GetCustomerSaleZones(customerId, DateTime.Now, false);
         }
 
         private IEnumerable<SaleZone> GetFilteredSaleZones(IEnumerable<SaleZone> saleZones, RatePlanItemFilter filter)
@@ -104,10 +125,6 @@ namespace TOne.WhS.Sales.Business
             return items;
         }
 
-        #endregion
-
-        #region Save Price List
-
         public void SavePriceList(SalePriceListInput input)
         {
             IRatePlanDataManager dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
@@ -137,8 +154,6 @@ namespace TOne.WhS.Sales.Business
 
             return salePriceListId;
         }
-
-        #endregion
 
         public RatePlan GetRatePlan(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status)
         {
