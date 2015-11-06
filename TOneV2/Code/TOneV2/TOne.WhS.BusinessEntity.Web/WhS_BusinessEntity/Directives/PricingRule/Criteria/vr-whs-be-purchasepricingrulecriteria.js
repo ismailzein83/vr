@@ -62,7 +62,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAc
                 $scope.suppliersWithZonesStettingsTemplates = [];
                 var suppliersWithZones ;
                 var configId;
-                if (payload != undefined)
+                if (payload != undefined && payload.SuppliersWithZonesGroupSettings!=null)
                 {
                     suppliersWithZones = payload.SuppliersWithZonesGroupSettings.SuppliersWithZones;
                     configId=payload.SuppliersWithZonesGroupSettings.ConfigId;

@@ -11,5 +11,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int ConfigId { get; set; }
 
         public abstract IEnumerable<SupplierWithZones> GetSuppliersWithZones(ISuppliersWithZonesGroupContext context);
+        public abstract string GetDescription(ISuppliersWithZonesGroupContext context);
     }    
 }
+ 

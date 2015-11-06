@@ -2,10 +2,13 @@
 
     "use strict";
 
-    customerIdentificationRuleManagementController.$inject = ['$scope', 'WhS_CDRProcessing_MainService', 'UtilsService', 'VRNotificationService'];
+    customerIdentificationRuleManagementController.$inject = ['$scope', 'WhS_CDRProcessing_MainService', 'UtilsService', 'VRNotificationService','VRUIUtilsService'];
 
-    function customerIdentificationRuleManagementController($scope, WhS_CDRProcessing_MainService, UtilsService, VRNotificationService) {
+    function customerIdentificationRuleManagementController($scope, WhS_CDRProcessing_MainService, UtilsService, VRNotificationService, VRUIUtilsService) {
         var gridAPI;
+        var carrierAccountDirectiveAPI;
+        var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
 
@@ -14,7 +17,10 @@
                 if (!$scope.isGettingData && gridAPI != undefined)
                     return gridAPI.loadGrid(getFilterObject());
             };
-
+            $scope.onCarrierAccountDirectiveReady = function (api) {
+                carrierAccountDirectiveAPI = api;
+                carrierAccountReadyPromiseDeferred.resolve();
+            }
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 var filter = {};
@@ -25,11 +31,32 @@
         }
 
         function load() {
+            $scope.isLoadingFilterData = true;
+            return UtilsService.waitMultipleAsyncOperations([loadCustomersSection]).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+                $scope.isLoadingFilterData = false;
+            }).finally(function () {
+                $scope.isLoadingFilterData = false;
+            });
+           
+        }
+        function loadCustomersSection() {
+            var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            carrierAccountReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, undefined, loadCarrierAccountPromiseDeferred);
+            });
+
+            return loadCarrierAccountPromiseDeferred.promise;
         }
 
         function getFilterObject() {
             var data = {
                 Description: $scope.description,
+                CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
+                InTrunk:$scope.intrunk,
+                InCarrier:$scope.incarrier,
+                CDPN:$scope.cdpn
             };
             return data;
         }

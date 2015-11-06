@@ -2,9 +2,9 @@
 
     "use strict";
 
-    salePricingRuleManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService','WhS_Be_PricingRuleTypeEnum'];
+    salePricingRuleManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'WhS_Be_PricingRuleTypeEnum', 'VRUIUtilsService'];
 
-    function salePricingRuleManagementController($scope, WhS_BE_MainService, UtilsService, WhS_Be_PricingRuleTypeEnum) {
+    function salePricingRuleManagementController($scope, WhS_BE_MainService, UtilsService, WhS_Be_PricingRuleTypeEnum, VRUIUtilsService) {
         var gridAPI;
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -79,13 +79,36 @@
         }
 
         function load() {
-            definePricingRuleTypes();
+            $scope.isLoadingFilterData = true;
+
+            return UtilsService.waitMultipleAsyncOperations([definePricingRuleTypes,loadCustomersSection, loadSellingNumberPlanSection, loadSaleZoneSection]).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoadingFilterData = false;
+            });
         }
-        function loadSellingProducts() {
-            return sellingProductsDirectiveAPI.load();
+        function loadCustomersSection() {
+            var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            carrierAccountReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, undefined, loadCarrierAccountPromiseDeferred);
+            });
+
+            return loadCarrierAccountPromiseDeferred.promise;
         }
-        function loadCarrierAccounts() {
-            return carrierAccountDirectiveAPI.load();
+
+        function loadSellingNumberPlanSection() {
+            var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, undefined, loadSellingNumberPlanPromiseDeferred);
+            });
+
+            return loadSellingNumberPlanPromiseDeferred.promise;
+        }
+
+        function loadSaleZoneSection() {
+            return saleZoneReadyPromiseDeferred.promise;
         }
 
         function getFilterObject() {

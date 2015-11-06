@@ -19,23 +19,25 @@ namespace TOne.WhS.BusinessEntity.Business
         public SupplierRatesByZone GetSupplierRates(int supplierId)
         {
             SupplierRatesByZone supplierRatesByZone = new SupplierRatesByZone();
-            List<SupplierRate> supplierRates = GetCachedSupplierRates(supplierId);
-            foreach (SupplierRate supplierRate in supplierRates)
-            {  
-                if(!supplierRatesByZone.ContainsKey(supplierRate.ZoneId))
-                {
-                    supplierRatesByZone.Add(supplierRate.ZoneId, supplierRate);
-                }
-            }
-            return supplierRatesByZone;
+            return GetCachedSupplierRates(supplierId);
         }
-        List<SupplierRate> GetCachedSupplierRates(int supplierId)
+        SupplierRatesByZone GetCachedSupplierRates(int supplierId)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierRateCacheManager>().GetOrCreateObject(String.Format("GetSupplierRates_{0}_{1:MM/dd/yy}", supplierId, effectiveOn.Date),
                () =>
                {
                    ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
-                   return dataManager.GetEffectiveSupplierRates(supplierId, this.effectiveOn);
+
+                   List<SupplierRate> supplierRates= dataManager.GetEffectiveSupplierRates(supplierId, this.effectiveOn);
+                   SupplierRatesByZone supplierRatesByZone = new SupplierRatesByZone();
+                   foreach (SupplierRate supplierRate in supplierRates)
+                   {
+                       if (!supplierRatesByZone.ContainsKey(supplierRate.ZoneId))
+                       {
+                           supplierRatesByZone.Add(supplierRate.ZoneId, supplierRate);
+                       }
+                   }
+                   return supplierRatesByZone;
                });
         }
     }

@@ -16,6 +16,9 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
+                ctrl.selectedvalues;
+                if ($attrs.ismultipleselection!=undefined)
+                    ctrl.selectedvalues=[];
                 var ctor = new supplierZoneCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
                
@@ -59,13 +62,12 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
         }
 
         function supplierZoneCtor(ctrl, $scope, $attrs) {
-
+            var filter;
             function initializeController() {
 
                 ctrl.searchSupplierZones = function (searchValue) {
-                    var filter = {
-                        SupplierId: ctrl.supplierid,
-                    }
+                    if (filter == undefined || filter.SupplierId == undefined)
+                        return;
                     return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfo(UtilsService.serializetoJson(filter), searchValue);
                 }
                 ctrl.supplierZones = [];
@@ -74,12 +76,13 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
 
             function defineAPI() {
                 var api = {};
-
+                
                 api.load = function (payload) {
                    
                     var selectedIds;
                     if (payload != undefined) {
-                        selectedIds = payload;
+                        filter = payload.filter;
+                        selectedIds = payload.selectedIds;
                     }
                     if (selectedIds != undefined) {
                         ctrl.datasource = [];

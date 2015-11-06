@@ -30,7 +30,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return supplierZones.FindAllRecords(filterExpression);
         }
-
+       
         public List<SupplierZone> GetSupplierZones(int supplierId, DateTime effectiveDate)
         {
             ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();

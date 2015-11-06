@@ -23,8 +23,21 @@ namespace TOne.WhS.BusinessEntity.Business
             Func<PurchasePricingRule, bool> filterExpression = (prod) =>
                 (input.Query.Description == null || prod.Description.ToLower().Contains(input.Query.Description.ToLower()))
                 &&
-                (input.Query.RuleTypes == null || input.Query.RuleTypes.Contains(prod.Settings.RuleType));
+                (input.Query.RuleTypes == null || input.Query.RuleTypes.Contains(prod.Settings.RuleType))
+                 &&
+                (input.Query.SupplierIds == null || this.CheckIfSupplierWithZonesSettingsContains(prod, input.Query.SupplierIds)); ;
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, base.GetFilteredRules(filterExpression).ToBigResult(input, filterExpression, MapToDetails));
+        }
+        private bool CheckIfSupplierWithZonesSettingsContains(PurchasePricingRule purchasePricingRule, IEnumerable<int> supplierIds)
+        {
+            if (purchasePricingRule.Criteria.SuppliersWithZonesGroupSettings != null)
+            {
+                IRuleSupplierCriteria ruleCode = purchasePricingRule as IRuleSupplierCriteria;
+                if (ruleCode.SupplierIds != null && ruleCode.SupplierIds.Intersect(supplierIds).Count() > 0)
+                    return true;
+            }
+
+            return false;
         }
         protected override PurchasePricingRuleDetail MapToDetails(PurchasePricingRule rule)
         {

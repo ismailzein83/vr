@@ -2,10 +2,12 @@
 
     "use strict";
 
-    purchasePricingRuleManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'WhS_Be_PricingRuleTypeEnum'];
+    purchasePricingRuleManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'WhS_Be_PricingRuleTypeEnum','VRUIUtilsService'];
 
-    function purchasePricingRuleManagementController($scope, WhS_BE_MainService, UtilsService, WhS_Be_PricingRuleTypeEnum) {
+    function purchasePricingRuleManagementController($scope, WhS_BE_MainService, UtilsService, WhS_Be_PricingRuleTypeEnum, VRUIUtilsService) {
         var gridAPI;
+        var carrierAccountDirectiveAPI;
+        var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         load();
         function defineScope() {
@@ -14,6 +16,11 @@
                 if (!$scope.isGettingData && gridAPI != undefined)
                     return gridAPI.loadGrid(getFilterObject());
             };
+            $scope.onCarrierAccountDirectiveReady = function (api) {
+                carrierAccountDirectiveAPI = api;
+                carrierAccountReadyPromiseDeferred.resolve();
+            }
+
 
             $scope.addMenuActions = [{
                 name: "TOD Rule",
@@ -44,14 +51,29 @@
         }
 
         function load() {
-            definePricingRuleTypes();
+            $scope.isLoadingFilterData = true;
+            return UtilsService.waitMultipleAsyncOperations([definePricingRuleTypes, loadSuppliersSection]).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoadingFilterData = false;
+            });
         }
         function getFilterObject() {
             var data = {
                 RuleTypes: UtilsService.getPropValuesFromArray($scope.selectedPricingRuleTypes, "value"),
-                Description: $scope.description
+                Description: $scope.description,
+                SupplierIds: carrierAccountDirectiveAPI.getSelectedIds()
             };
             return data;
+        }
+        function loadSuppliersSection() {
+            var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            carrierAccountReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, undefined, loadCarrierAccountPromiseDeferred);
+            });
+
+            return loadCarrierAccountPromiseDeferred.promise;
         }
 
         function AddNewPurchasePricingRule(value) {

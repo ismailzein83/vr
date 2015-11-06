@@ -38,7 +38,11 @@ namespace TOne.WhS.CDRProcessing.Business
         public Vanrise.Entities.IDataRetrievalResult<CustomerIdentificationRuleDetail> GetFilteredCustomerIdentificationRules(Vanrise.Entities.DataRetrievalInput<CustomerIdentificationRuleQuery> input)
         {
             Func<CustomerIdentificationRule, bool> filterExpression = (prod) =>
-                (input.Query.Description == null || prod.Description.ToLower().Contains(input.Query.Description.ToLower()));
+                (input.Query.Description == null || prod.Description.ToLower().Contains(input.Query.Description.ToLower()))
+                && (input.Query.CustomerIds == null || input.Query.CustomerIds.Contains(prod.Settings.CustomerId))
+                  && (input.Query.CDPN == null || prod.Criteria.CDPNPrefixes.Contains(input.Query.CDPN.ToLower()))
+                    && (input.Query.InCarrier == null || prod.Criteria.InCarriers.Contains(input.Query.InCarrier.ToLower()))
+                      && (input.Query.InTrunk == null || prod.Criteria.InTrunks.Contains(input.Query.InTrunk.ToLower()));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, base.GetFilteredRules(filterExpression).ToBigResult(input, filterExpression, MapToDetails));
         }
 

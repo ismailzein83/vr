@@ -50,7 +50,18 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
                 };
                 dataItem.onDirectiveReady = function (api) {
                     dataItem.directiveAPI = api;
+                    var supplierId = obj.CarrierAccountId;
+                    if (supplierId != undefined) {
+                        var setLoader = function (value) { $scope.isLoadingSupplierZonesSelector = value };
+
+                        var payload = {
+                            filter: { SupplierId: supplierId },
+                        }
+
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, payload, setLoader);
+                    }
                 }
+              
                 ctrl.datasource.push(dataItem);
             }
             ctrl.removeFilter = function (dataItem) {
