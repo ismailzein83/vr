@@ -11,9 +11,9 @@
         function GetAllZoneServiceConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "ZoneServiceConfig", "GetAllZoneServiceConfigs"));
         }
-        function GetZoneServiceConfig(zoneServiceConfigId) {
+        function GetZoneServiceConfig(serviceFlag) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "ZoneServiceConfig", "GetZoneServiceConfig"), {
-                zoneServiceConfigId: zoneServiceConfigId
+                serviceFlag: serviceFlag
             });
 
         }

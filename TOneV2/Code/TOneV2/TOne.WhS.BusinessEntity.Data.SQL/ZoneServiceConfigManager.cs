@@ -17,18 +17,18 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public List<Entities.ZoneServiceConfig> GetZoneServiceConfigs()
         {
-            return GetItemsSP("[TOneWhS_BE].[sp_ZoneServiceConfig_GetAll] ", ZoneServiceConfigMapper);
+            return GetItemsSP("[TOneWhS_BE].[sp_ZoneServiceConfig_GetAll]", ZoneServiceConfigMapper);
         }
 
         public bool Insert(Entities.ZoneServiceConfig zoneServiceFlag)
         {
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_ZoneServiceConfig_Insert] ", zoneServiceFlag.ServiceFlag, zoneServiceFlag.Name, zoneServiceFlag.Settings);
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_ZoneServiceConfig_Insert]", zoneServiceFlag.ServiceFlag, zoneServiceFlag.Name, zoneServiceFlag.Settings);
             return (recordsEffected > 0);
         }
 
         public bool Update(Entities.ZoneServiceConfig zoneServiceFlag)
         {
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_ZoneServiceConfig_Update] ", zoneServiceFlag.ServiceFlag, zoneServiceFlag.Name, zoneServiceFlag.Settings);
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_ZoneServiceConfig_Update]", zoneServiceFlag.ServiceFlag, zoneServiceFlag.Name, zoneServiceFlag.Settings);
             return (recordsEffected > 0);
         }
 

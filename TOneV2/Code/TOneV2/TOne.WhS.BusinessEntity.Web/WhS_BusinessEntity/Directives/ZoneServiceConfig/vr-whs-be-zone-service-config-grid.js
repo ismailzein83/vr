@@ -71,7 +71,7 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
 
             var extensionObject = {};
             var query = {
-                ZoneServiceConfigsIds: [dataItem.ZoneServiceConfigId],
+                ZoneServiceConfigsIds: [dataItem.ServiceFlag],
             }
             extensionObject.onGridReady = function (api) {
                 extensionObject.onGridReady = undefined;

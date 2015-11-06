@@ -32,7 +32,7 @@
 
         function setFilterObject() {
             filter = {
-                Name: $scope.name,
+                Name: $scope.name
             };
 
         }

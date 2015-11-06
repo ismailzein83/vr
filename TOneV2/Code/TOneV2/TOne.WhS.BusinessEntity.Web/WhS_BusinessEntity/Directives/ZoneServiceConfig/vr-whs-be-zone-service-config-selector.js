@@ -27,7 +27,7 @@ app.directive('vrWhsBeZoneServiceConfigSelector', ['WhS_BE_ZoneServiceConfigAPIS
                     $scope.datasource.length = 0;
                     return getAllZoneServiceConfigs($scope, WhS_BE_ZoneServiceConfigAPIService).then(function (response) {
                         if ($attrs.ismultipleselection == undefined)
-                            $scope.selectedZoneServiceConfigValues = UtilsService.getItemByVal($scope.datasource, zoneServiceConfigObj.ZoneServiceConfigId, "ZoneServiceConfigId");
+                            $scope.selectedZoneServiceConfigValues = UtilsService.getItemByVal($scope.datasource, zoneServiceConfigObj.ServiceFlag, "ServiceFlag");
                     }).catch(function (error) {
                     }).finally(function () {
 
@@ -79,11 +79,11 @@ app.directive('vrWhsBeZoneServiceConfigSelector', ['WhS_BE_ZoneServiceConfigAPIS
         if (attrs.showaddbutton != undefined)
             addCliked = 'onaddclicked="addNewZoneServiceConfig"';
         if (attrs.ismultipleselection != undefined)
-            return ' <vr-select ismultipleselection datasource="datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="selectedZoneServiceConfigValues" ' + disabled + ' onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="ZoneServiceConfigId"'
+            return ' <vr-select ismultipleselection datasource="datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="selectedZoneServiceConfigValues" ' + disabled + ' onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="ServiceFlag"'
                    + 'entityname="ZoneServiceConfig" label="ZoneServiceConfig" ' + addCliked + '></vr-select>';
         else
             return '<div vr-loader="isLoadingDirective" style="display:inline-block;width:100%">'
-               + ' <vr-select datasource="datasource" selectedvalues="selectedZoneServiceConfigValues" ' + required + ' ' + hideselectedvaluessection + ' onselectionchanged="onselectionchanged"  ' + disabled + ' datatextfield="Name" datavaluefield="ZoneServiceConfigId"'
+               + ' <vr-select datasource="datasource" selectedvalues="selectedZoneServiceConfigValues" ' + required + ' ' + hideselectedvaluessection + ' onselectionchanged="onselectionchanged"  ' + disabled + ' datatextfield="Name" datavaluefield="ServiceFlag"'
                + 'entityname="ZoneServiceConfig" label="ZoneServiceConfig" ' + addCliked + '></vr-select></div>';
     }
     function BeZoneServiceConfig(ctrl, $scope, WhS_BE_ZoneServiceConfigAPIService, $attrs) {
@@ -100,20 +100,20 @@ app.directive('vrWhsBeZoneServiceConfigSelector', ['WhS_BE_ZoneServiceConfigAPIS
                 return $scope.selectedZoneServiceConfigValues;
             }
             api.getDataId = function () {
-                return $scope.selectedZoneServiceConfigValues.ZoneServiceConfigId;
+                return $scope.selectedZoneServiceConfigValues.ServiceFlag;
             }
             api.getIdsData = function () {
-                return getIdsList($scope.selectedZoneServiceConfigValues, "ZoneServiceConfigId");
+                return getIdsList($scope.selectedZoneServiceConfigValues, "ServiceFlag");
             }
             api.setData = function (selectedIds) {
                 if ($attrs.ismultipleselection != undefined) {
                     for (var i = 0; i < selectedIds.length; i++) {
-                        var selectedZoneServiceConfigValue = UtilsService.getItemByVal($scope.datasource, selectedIds[i], "ZoneServiceConfigId");
+                        var selectedZoneServiceConfigValue = UtilsService.getItemByVal($scope.datasource, selectedIds[i], "ServiceFlag");
                         if (selectedZoneServiceConfigValue != null)
                             $scope.selectedZoneServiceConfigValues.push(selectedZoneServiceConfigValue);
                     }
                 } else {
-                    var selectedZoneServiceConfigValue = UtilsService.getItemByVal($scope.datasource, selectedIds, "ZoneServiceConfigId");
+                    var selectedZoneServiceConfigValue = UtilsService.getItemByVal($scope.datasource, selectedIds, "ServiceFlag");
                     if (selectedZoneServiceConfigValue != null)
                         $scope.selectedZoneServiceConfigValues = selectedZoneServiceConfigValue;
                 }

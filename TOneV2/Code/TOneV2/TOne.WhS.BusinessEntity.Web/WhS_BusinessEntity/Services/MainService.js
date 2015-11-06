@@ -31,7 +31,9 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         addCodeGroup: addCodeGroup,
         editCodeGroup: editCodeGroup,
         editRateType: editRateType,
-        addRateType: addRateType
+        addRateType: addRateType,
+        editZoneServiceConfig: editZoneServiceConfig,
+        addZoneServiceConfig: addZoneServiceConfig
     });
 
     function addRoutingProduct(onRoutingProductAdded) {
@@ -370,7 +372,6 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
             useModalTemplate: true
 
         };
-
         settings.onScopeReady = function (modalScope) {
             modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Name, "ZoneServiceConfig");
             modalScope.onZoneServiceConfigUpdated = onZoneServiceConfigUpdated;
