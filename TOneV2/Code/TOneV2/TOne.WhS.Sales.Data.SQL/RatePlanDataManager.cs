@@ -80,12 +80,14 @@ namespace TOne.WhS.Sales.Data.SQL
             return table;
         }
 
+        #region Junk Code
+        /*
         public bool SetRatePlanStatusIfExists(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status)
         {
             ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_SetStatusIfExists", ownerType, ownerId, status);
             return true;
         }
-
+        
         public RatePlan GetRatePlan(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status)
         {
             return GetItemSP("TOneWhS_Sales.sp_RatePlan_GetByStatus", RatePlanMapper, ownerType, ownerId, status);
@@ -112,5 +114,7 @@ namespace TOne.WhS.Sales.Data.SQL
 
             return ratePlan;
         }
+        */
+        #endregion
     }
 }

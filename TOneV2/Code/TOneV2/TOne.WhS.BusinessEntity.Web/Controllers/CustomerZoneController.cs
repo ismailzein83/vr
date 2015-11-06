@@ -21,14 +21,6 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetCustomerZoneLetters")]
-        public IEnumerable<char> GetCustomerZoneLetters(int customerId)
-        {
-            CustomerZoneManager manager = new CustomerZoneManager();
-            return manager.GetCustomerZoneLetters(customerId);
-        }
-
-        [HttpGet]
         [Route("GetCountriesToSell")]
         public IEnumerable<Country> GetCountriesToSell(int customerId)
         {

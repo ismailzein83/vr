@@ -43,14 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Input\ZoneItemInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Input\RatePlanItemInput.cs" />
-    <Compile Include="Input\SalePriceListInput.cs" />
-    <Compile Include="RatePlan.cs" />
-    <Compile Include="RatePlanItem.cs" />
+    <Compile Include="RatePlanning\Input\SalePriceListInput.cs" />
     <Compile Include="RatePlanning\BaseChanges.cs" />
     <Compile Include="RatePlanning\Changes.cs" />
+    <Compile Include="RatePlanning\Enums.cs" />
+    <Compile Include="RatePlanning\Input\ZoneItemInput.cs" />
     <Compile Include="RatePlanning\RateChanges.cs" />
     <Compile Include="RatePlanning\RoutingProductChanges.cs" />
     <Compile Include="RatePlanning\ServiceChanges.cs" />
@@ -61,6 +59,9 @@
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Input\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

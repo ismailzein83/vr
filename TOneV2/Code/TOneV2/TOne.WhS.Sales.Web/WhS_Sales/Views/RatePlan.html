@@ -16,18 +16,20 @@
                                isrequired>
                     </vr-select>
                 </vr-columns>
-                <vr-columns width="normal" ng-show="showSellingProductSelector">
-                    <vr-whs-be-sellingproduct-selector on-ready="onSellingProductSelectorReady"
-                                                       selectedvalues="selectedSellingProduct"
-                                                       onselectionchanged="onSellingProductChanged"
+                <vr-columns width="normal" ng-if="showSellingProductSelector">
+                    <vr-whs-be-sellingproduct-selector on-ready="sellingProductConnector.onSellingProductSelectorReady"
+                                                       selectedvalues="sellingProductConnector.selectedSellingProduct"
+                                                       onselectionchanged="sellingProductConnector.onSellingProductChanged"
+                                                       isrequired
                                                        hideremoveicon>
                     </vr-whs-be-sellingproduct-selector>
                 </vr-columns>
-                <vr-columns width="normal" ng-show="showCarrierAccountSelector">
-                    <vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountSelectorReady"
-                                                       selectedvalues="selectedCustomer"
-                                                       onselectionchanged="onCarrierAccountChanged"
+                <vr-columns width="normal" ng-if="showCarrierAccountSelector">
+                    <vr-whs-be-carrieraccount-selector on-ready="carrierAccountConnector.onCarrierAccountSelectorReady"
+                                                       selectedvalues="carrierAccountConnector.selectedCustomer"
+                                                       onselectionchanged="carrierAccountConnector.onCarrierAccountChanged"
                                                        getcustomers
+                                                       isrequired
                                                        hideremoveicon>
                     </vr-whs-be-carrieraccount-selector>
                 </vr-columns>
@@ -46,7 +48,8 @@
 
         <vr-row>
             <vr-columns width="fullrow" ng-if="showZoneLetters">
-                <vr-choices selectedindex="zoneLetterConnector.selectedZoneLetterIndex" onselectionchanged="zoneLetterConnector.onZoneLetterSelectionChanged()">
+                <vr-choices selectedindex="zoneLetterConnector.selectedZoneLetterIndex"
+                            onselectionchanged="zoneLetterConnector.onZoneLetterSelectionChanged()">
                     <vr-choice ng-repeat="letter in zoneLetters">{{ letter | uppercase }}</vr-choice>
                 </vr-choices>
             </vr-columns>
@@ -55,7 +58,7 @@
         <vr-row removeline>
             <vr-columns width="fullrow" ng-show="showGrid" vr-loader="isLoadingGrid">
                 <vr-datagrid on-ready="onGridReady"
-                             datasource="dataItems"
+                             datasource="zoneItems"
                              loadmoredata="loadMoreData"
                              menuactions="gridMenuActions"
                              pagingtype="'PagingOnScroll'"
@@ -63,21 +66,21 @@
                              hidegridmenu>
 
                     <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'" widthfactor="2" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Current Rate'" field="'CurrentRate'" type="'Number'" widthfactor="2" disablesorting></vr-datagridcolumn>
 
                     <vr-datagridcolumn headertext="'New Rate'" type="'Number'" widthfactor="2" disablesorting>
-                        <vr-textbox value="dataItem.Extension.NewRate" onvaluechanged="dataItem.Extension.onRateChanged(dataItem)"></vr-textbox>
+                        <vr-textbox value="NewRate" onvaluechanged="onNewRateChanged(dataItem)"></vr-textbox>
                     </vr-datagridcolumn>
 
                     <vr-datagridcolumn headertext="'Begin Effective Date'" type="'Date'" widthfactor="2" disablesorting>
-                        <span vr-disabled="dataItem.Extension.DisableBeginEffectiveDate">
-                            <vr-datetimepicker type="date" value="dataItem.BeginEffectiveDate"></vr-datetimepicker>
+                        <span vr-disabled="DisableBeginEffectiveDate">
+                            <vr-datetimepicker type="date" value="RateBED"></vr-datetimepicker>
                         </span>
                     </vr-datagridcolumn>
 
                     <vr-datagridcolumn headertext="'End Effective Date'" type="'Date'" widthfactor="2" disablesorting>
-                        <span vr-disabled="dataItem.Extension.DisableEndEffectiveDate">
-                            <vr-datetimepicker type="date" value="dataItem.EndEffectiveDate"></vr-datetimepicker>
+                        <span vr-disabled="DisableEndEffectiveDate">
+                            <vr-datetimepicker type="date" value="RateEED"></vr-datetimepicker>
                         </span>
                     </vr-datagridcolumn>
 

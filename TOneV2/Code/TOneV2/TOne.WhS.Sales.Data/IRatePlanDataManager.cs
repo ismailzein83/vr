@@ -14,10 +14,14 @@ namespace TOne.WhS.Sales.Data
 
         bool CloseAndInsertSaleRates(int customerId, List<SaleRate> newSaleRates);
 
+        #region Junk Code
+        /*
         bool SetRatePlanStatusIfExists(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status);
 
         RatePlan GetRatePlan(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status);
 
         bool InsertOrUpdateRatePlan(RatePlan ratePlan);
+        */
+        #endregion
     }
 }

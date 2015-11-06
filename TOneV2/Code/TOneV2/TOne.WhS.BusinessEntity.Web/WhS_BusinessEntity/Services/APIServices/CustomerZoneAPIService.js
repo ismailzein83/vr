@@ -9,7 +9,6 @@
         return ({
             GetCustomerZones: GetCustomerZones,
             GetCountriesToSell: GetCountriesToSell,
-            GetCustomerZoneLetters: GetCustomerZoneLetters,
             AddCustomerZones: AddCustomerZones
         });
 
@@ -21,12 +20,6 @@
 
         function GetCountriesToSell(customerId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CustomerZone", "GetCountriesToSell"), {
-                customerId: customerId
-            });
-        }
-
-        function GetCustomerZoneLetters(customerId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CustomerZone", "GetCustomerZoneLetters"), {
                 customerId: customerId
             });
         }

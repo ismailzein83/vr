@@ -11,17 +11,6 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class CustomerZoneManager
     {
-        public Dictionary<int, CustomerZones> GetAllCachedCustomerZones()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllCustomerZones",
-               () =>
-               {
-                   ICustomerZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerZoneDataManager>();
-                   IEnumerable<CustomerZones> customerZones = dataManager.GetAllCustomerZones();
-                   return customerZones.ToDictionary(kvp => kvp.CustomerZonesId, kvp => kvp);
-               });
-        }
-
         public CustomerZones GetCustomerZones(int customerId, DateTime? effectiveOn, bool futureEntities)
         {
             CustomerZones customerZones = null;
@@ -122,7 +111,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return insertOperationOutput;
         }
 
-        #region Private Classes
+        #region Private Members
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
@@ -133,6 +122,17 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 return _dataManager.AreAllCustomerZonesUpdated(ref _updateHandle);
             }
+        }
+
+        private Dictionary<int, CustomerZones> GetAllCachedCustomerZones()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllCustomerZones",
+               () =>
+               {
+                   ICustomerZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerZoneDataManager>();
+                   IEnumerable<CustomerZones> customerZones = dataManager.GetAllCustomerZones();
+                   return customerZones.ToDictionary(kvp => kvp.CustomerZonesId, kvp => kvp);
+               });
         }
 
         #endregion
