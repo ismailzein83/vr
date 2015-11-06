@@ -25,7 +25,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 &&
                 (input.Query.RuleTypes == null || input.Query.RuleTypes.Contains(prod.Settings.RuleType))
                  &&
-                (input.Query.SupplierIds == null || this.CheckIfSupplierWithZonesSettingsContains(prod, input.Query.SupplierIds)); ;
+                (input.Query.SupplierIds == null || this.CheckIfSupplierWithZonesSettingsContains(prod, input.Query.SupplierIds))
+                  && (input.Query.EffectiveDate == null || (prod.BeginEffectiveTime <= input.Query.EffectiveDate && (prod.EndEffectiveTime == null || prod.EndEffectiveTime >= input.Query.EffectiveDate)));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, base.GetFilteredRules(filterExpression).ToBigResult(input, filterExpression, MapToDetails));
         }
         private bool CheckIfSupplierWithZonesSettingsContains(PurchasePricingRule purchasePricingRule, IEnumerable<int> supplierIds)

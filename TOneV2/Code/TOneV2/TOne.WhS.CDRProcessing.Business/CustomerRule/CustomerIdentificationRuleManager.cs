@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.CDRProcessing.Entities;
 using Vanrise.Common;
 using Vanrise.Rules;
@@ -40,18 +42,32 @@ namespace TOne.WhS.CDRProcessing.Business
             Func<CustomerIdentificationRule, bool> filterExpression = (prod) =>
                 (input.Query.Description == null || prod.Description.ToLower().Contains(input.Query.Description.ToLower()))
                 && (input.Query.CustomerIds == null || input.Query.CustomerIds.Contains(prod.Settings.CustomerId))
-                  && (input.Query.CDPN == null || prod.Criteria.CDPNPrefixes.Contains(input.Query.CDPN.ToLower()))
-                    && (input.Query.InCarrier == null || prod.Criteria.InCarriers.Contains(input.Query.InCarrier.ToLower()))
-                      && (input.Query.InTrunk == null || prod.Criteria.InTrunks.Contains(input.Query.InTrunk.ToLower()));
+                  && (input.Query.CDPN == null || prod.Criteria.CDPNPrefixes.Any(x=>x.ToLower().Contains(input.Query.CDPN.ToLower())))
+                    && (input.Query.InCarrier == null || prod.Criteria.InCarriers.Any(x=>x.ToLower().Contains(input.Query.InCarrier.ToLower())))
+                      && (input.Query.InTrunk == null || prod.Criteria.InTrunks.Any(x=>x.ToLower().Contains(input.Query.InTrunk.ToLower())))
+                       && (input.Query.EffectiveDate == null || (prod.BeginEffectiveTime <= input.Query.EffectiveDate && (prod.EndEffectiveTime == null || prod.EndEffectiveTime >= input.Query.EffectiveDate)));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, base.GetFilteredRules(filterExpression).ToBigResult(input, filterExpression, MapToDetails));
         }
 
         protected override CustomerIdentificationRuleDetail MapToDetails(CustomerIdentificationRule rule)
         {
+            CarrierAccountManager CarrierAccountManager = new CarrierAccountManager();
+            CarrierAccountDetail carrierAccount = CarrierAccountManager.GetCarrierAccount(rule.Settings.CustomerId);
             return new CustomerIdentificationRuleDetail
             {
-                Entity = rule
+                Entity = rule,
+                CDPNPrefixes = GetDescription(rule.Criteria.CDPNPrefixes),
+                InTrunks=GetDescription(rule.Criteria.InTrunks),
+                InCarriers = GetDescription(rule.Criteria.InCarriers),
+                CustomerName=carrierAccount.Name
             };
         }
+        private string GetDescription(IEnumerable<string> list)
+        {
+            if (list != null)
+                return string.Join(", ", list);
+            else
+                return null;
+        } 
     }
 }

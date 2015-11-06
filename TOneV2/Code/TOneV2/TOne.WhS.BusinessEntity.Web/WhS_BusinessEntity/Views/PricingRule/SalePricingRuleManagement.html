@@ -26,6 +26,9 @@
                         <vr-columns width="normal" ng-show="showSaleZoneSelector" vr-loader="isLoadingSaleZonesSelector">
                             <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady" ng-show="advancedSelected" />
                         </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker label="Effective Date" value="effectiveDate" type="dateTime" ng-show="advancedSelected"></vr-datetimepicker>
+                        </vr-columns>
                     </vr-row>
                 </vr-columns>
 

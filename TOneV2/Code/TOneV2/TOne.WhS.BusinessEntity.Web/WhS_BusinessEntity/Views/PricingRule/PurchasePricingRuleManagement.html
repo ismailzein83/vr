@@ -20,6 +20,9 @@
                         <vr-columns width="normal">
                             <vr-whs-be-carrieraccount-selector ismultipleselection getsuppliers onselectitem="onSelectedSupplier" on-ready="onCarrierAccountDirectiveReady" ng-show="advancedSelected"></vr-whs-be-carrieraccount-selector>
                         </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker label="Effective Date" value="effectiveDate" type="dateTime" ng-show="advancedSelected"></vr-datetimepicker>
+                        </vr-columns>
                     </vr-row>
                 </vr-columns>
             </vr-row>

@@ -116,7 +116,8 @@
                 RuleTypes: UtilsService.getPropValuesFromArray($scope.selectedPricingRuleTypes, "value"),
                 Description: $scope.description,
                 CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
-                SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds()
+                SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds(),
+                EffectiveDate: $scope.effectiveDate
             };
             return data;
         }

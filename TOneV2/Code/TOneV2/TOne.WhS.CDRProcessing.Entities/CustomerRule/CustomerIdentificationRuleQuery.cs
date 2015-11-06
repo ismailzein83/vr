@@ -13,5 +13,6 @@ namespace TOne.WhS.CDRProcessing.Entities
         public string InTrunk  { get; set; }
          public string InCarrier  { get; set; }
          public string CDPN  { get; set; }
+         public DateTime? EffectiveDate { get; set; }
     }
 }

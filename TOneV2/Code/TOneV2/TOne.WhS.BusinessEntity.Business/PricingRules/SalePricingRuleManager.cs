@@ -23,7 +23,8 @@ namespace TOne.WhS.BusinessEntity.Business
                  (input.Query.Description == null || prod.Description.ToLower().Contains(input.Query.Description.ToLower()))
                  && (input.Query.RuleTypes == null || input.Query.RuleTypes.Contains(prod.Settings.RuleType))
                  && (input.Query.CustomerIds == null || this.CheckIfCustomerSettingsContains(prod, input.Query.CustomerIds))
-                 && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(prod, input.Query.SaleZoneIds));
+                 && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(prod, input.Query.SaleZoneIds))
+                 && (input.Query.EffectiveDate == null || (prod.BeginEffectiveTime <= input.Query.EffectiveDate && (prod.EndEffectiveTime == null || prod.EndEffectiveTime >= input.Query.EffectiveDate)));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, base.GetFilteredRules(filterExpression).ToBigResult(input, filterExpression, MapToDetails));
         }

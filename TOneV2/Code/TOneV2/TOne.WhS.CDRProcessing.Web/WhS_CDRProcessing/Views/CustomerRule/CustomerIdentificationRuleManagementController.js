@@ -56,7 +56,8 @@
                 CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
                 InTrunk:$scope.intrunk,
                 InCarrier:$scope.incarrier,
-                CDPN:$scope.cdpn
+                CDPN: $scope.cdpn,
+                EffectiveDate: $scope.effectiveDate
             };
             return data;
         }

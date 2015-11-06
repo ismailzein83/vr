@@ -11,5 +11,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Description { get; set; }
         public List<PricingRuleType> RuleTypes { get; set; }
         public List<int> SupplierIds { get; set; }
+        public DateTime? EffectiveDate { get; set; }
     }
 }

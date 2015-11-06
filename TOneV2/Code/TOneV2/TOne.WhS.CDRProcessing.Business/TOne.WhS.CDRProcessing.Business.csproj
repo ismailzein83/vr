@@ -88,6 +88,14 @@
     <Compile Include="SupplierRule\SupplierIdentificationRuleManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
+      <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
+      <Name>TOne.WhS.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.CDRProcessing.Data\TOne.WhS.CDRProcessing.Data.csproj">
       <Project>{c05ffd8e-ae8b-46a4-9fb1-448a2c9205af}</Project>
       <Name>TOne.WhS.CDRProcessing.Data</Name>

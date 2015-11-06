@@ -13,5 +13,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public List<int> CustomerIds { get; set; }
         public List<long> SaleZoneIds { get; set; }
+        public DateTime? EffectiveDate { get; set; }
     }
 }

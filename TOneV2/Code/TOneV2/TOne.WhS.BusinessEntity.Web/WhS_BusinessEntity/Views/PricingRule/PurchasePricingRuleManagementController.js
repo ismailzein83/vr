@@ -62,7 +62,8 @@
             var data = {
                 RuleTypes: UtilsService.getPropValuesFromArray($scope.selectedPricingRuleTypes, "value"),
                 Description: $scope.description,
-                SupplierIds: carrierAccountDirectiveAPI.getSelectedIds()
+                SupplierIds: carrierAccountDirectiveAPI.getSelectedIds(),
+                EffectiveDate: $scope.effectiveDate
             };
             return data;
         }
