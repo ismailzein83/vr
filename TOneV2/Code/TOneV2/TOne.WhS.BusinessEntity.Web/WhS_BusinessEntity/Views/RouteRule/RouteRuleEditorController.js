@@ -198,9 +198,9 @@
             $scope.routeRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Be_RouteRuleCriteriaTypeEnum);
 
             if (routeRuleEntity != undefined && routeRuleEntity.Criteria.CodeCriteriaGroupSettings != null)
-                $scope.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Be_RouteRuleCriteriaTypeEnum, 'value', 'Code');
+                $scope.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Be_RouteRuleCriteriaTypeEnum, 'value', WhS_Be_RouteRuleCriteriaTypeEnum.Code.value);
             else
-                $scope.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Be_RouteRuleCriteriaTypeEnum, 'value', 'SaleZone');
+                $scope.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Be_RouteRuleCriteriaTypeEnum, 'value', WhS_Be_RouteRuleCriteriaTypeEnum.SaleZone.value);
         }
 
         function loadSaleZoneGroupSection()
