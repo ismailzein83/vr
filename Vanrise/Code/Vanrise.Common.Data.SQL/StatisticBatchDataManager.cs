@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vanrise.Entities;
+using Vanrise.Common.Data.StatisticManagement;
+using Vanrise.Entities.StatisticManagement;
 
-namespace Vanrise.Common.Data.SQL
+namespace Vanrise.Common.Data.SQL.StatisticManagement
 {
     public class StatisticBatchDataManager : Vanrise.Data.SQL.BaseSQLDataManager, IStatisticBatchDataManager
     {
@@ -33,6 +34,17 @@ namespace Vanrise.Common.Data.SQL
                 batchInfo = null;
             isInfoCorrupted = isInfoCorrupted_Internal;
             return isLocked;
+        }
+
+
+        public void UnlockBatch(int typeId, DateTime batchStart)
+        {
+            ExecuteNonQuerySP("[StatisticManagement].[sp_StatisticBatch_UnLock]", typeId, batchStart);
+        }
+
+        public void UpdateBatchInfo(int typeId, DateTime batchStart, StatisticBatchInfo batchInfo)
+        {
+            ExecuteNonQuerySP("[StatisticManagement].[sp_StatisticBatch_UpdateBatchInfo]", typeId, batchStart, Serializer.Serialize(batchInfo));
         }
     }
 }

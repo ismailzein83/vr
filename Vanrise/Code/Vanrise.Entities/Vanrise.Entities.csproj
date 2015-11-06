@@ -59,9 +59,10 @@
     <Compile Include="CustomAttributes\IsAnonymousAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataRetrievalInput.cs" />
-    <Compile Include="StatisticUpdateManagement\StatisticBatch.cs" />
-    <Compile Include="StatisticUpdateManagement\StatisticBatchLockOutput.cs" />
-    <Compile Include="StatisticUpdateManagement\StatisticItem.cs" />
+    <Compile Include="StatisticManagement\IRawItem.cs" />
+    <Compile Include="StatisticManagement\IStatisticBatch.cs" />
+    <Compile Include="StatisticManagement\StatisticBatchLockOutput.cs" />
+    <Compile Include="StatisticManagement\IStatisticItem.cs" />
     <Compile Include="TemplateConfig.cs" />
     <Compile Include="TempTableName.cs" />
     <Compile Include="Time.cs" />

@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Entities
+namespace Vanrise.Entities.StatisticManagement
 {
     public enum StatisticBatchLockResult { NewBatch, ExistingBatch, BatchInfoCorrupted }
     public class StatisticBatchLockOutput
     {
         public StatisticBatchLockResult Result { get; set; }
-
-        public long BatchId { get; set; }
 
         public StatisticBatchInfo BatchInfo { get; set; }
     }
