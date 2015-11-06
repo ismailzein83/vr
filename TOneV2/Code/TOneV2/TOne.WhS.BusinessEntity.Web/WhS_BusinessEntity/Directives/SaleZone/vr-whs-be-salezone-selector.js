@@ -85,6 +85,8 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
                 api.load = function (payload) {
 
+                    console.log(payload);
+
                     ctrl.selectedvalues = [];
 
                     var selectedIds;

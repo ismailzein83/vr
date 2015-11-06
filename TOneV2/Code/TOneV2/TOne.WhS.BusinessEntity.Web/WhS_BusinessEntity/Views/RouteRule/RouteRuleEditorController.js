@@ -56,6 +56,8 @@
                     }
                 };
 
+                console.log(saleZoneGroupPayload);
+
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupSettingsAPI, saleZoneGroupPayload, setLoader, saleZoneGroupSettingsReadyPromiseDeferred);
             }
 

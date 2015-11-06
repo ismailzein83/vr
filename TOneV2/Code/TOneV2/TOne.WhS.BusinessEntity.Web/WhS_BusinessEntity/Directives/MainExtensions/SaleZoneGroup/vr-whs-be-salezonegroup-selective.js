@@ -78,6 +78,8 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
             api.load = function (payload) {
                 var promises = [];
 
+                console.log(payload);
+
                 $scope.showSellingNumberPlan = payload.filter.SaleZoneFilterSettings.RoutingProductId == null;
 
                 var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -85,9 +87,9 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
                 sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
                     var sellingNumberPlanPayload;
 
-                    if (payload.filter.SellingNumberPlanId != undefined) {
+                    if (payload.SaleZoneFilterSettings != null) {
                         sellingNumberPlanPayload = {
-                            selectedIds: payload.filter.SellingNumberPlanId
+                            selectedIds: payload.SaleZoneFilterSettings.SellingNumberPlanId
                         };
                     }
 
