@@ -33,5 +33,16 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return supplierRate;
         }
 
+
+
+        public List<SupplierPriceList> GetPriceLists()
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SupplierPriceList_GetAll", SupplierPriceListMapper);
+        }
+
+        public bool ArGetPriceListsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.SupplierPriceList", ref updateHandle);
+        }
     }
 }

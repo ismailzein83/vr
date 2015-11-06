@@ -23,7 +23,7 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
        public void WriteRecordToStream(BillingMainCDR record, object dbApplyStream)
        {
            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-           streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}",
+           streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}",
                                     record.BillingCDR.ID,
                                     record.BillingCDR.CustomerId,
                                     record.BillingCDR.SupplierId,
@@ -40,9 +40,12 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
                                     record.BillingCDR.SupplierZoneID,
                                     record.BillingCDR.CDPN,
                                     record.BillingCDR.CGPN,
-                                    record.MainCost.RateValue,
-                                    record.MainCost.TotalNet,
-                                    record.MainCost.CurrencyId);
+                                    record.Cost.RateValue,
+                                    record.Cost.TotalNet,
+                                    record.Cost.CurrencyId,
+                                    record.Sale.RateValue,
+                                    record.Sale.TotalNet,
+                                    record.Sale.CurrencyId);
 
        }
        public object FinishDBApplyStream(object dbApplyStream)

@@ -11,36 +11,13 @@ namespace TOne.WhS.CDRProcessing.Entities
         static BillingMainCDR()
         {
             BillingCDRBase BillingCDR = new BillingCDRBase();
-            MainCost MainCost = new MainCost();
-            MainSale MainSale = new MainSale();
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(BillingMainCDR), "BillingCDR", "MainCost", "MainSale");
+            Cost Cost = new Cost();
+            Sale Sale = new Sale();
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(BillingMainCDR), "BillingCDR", "Cost", "Sale");
         }
         public BillingCDRBase BillingCDR { get; set; }
-        public MainCost MainCost { get; set; }
-        public MainSale MainSale { get; set; }
+        public Cost Cost { get; set; }
+        public Sale Sale { get; set; }
     }
-    public class MainCost
-    {
-        static MainCost()
-        {
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(MainCost), "RateValue", "TotalNet", "CurrencyId");
-        }
-        public decimal RateValue { get; set; }
 
-        public decimal TotalNet { get; set; }
-
-        public int CurrencyId { get; set; }
-    }
-    public class MainSale
-    {
-        static MainSale()
-        {
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(MainSale), "RateValue", "TotalNet", "CurrencyId");
-        }
-        public decimal RateValue { get; set; }
-
-        public decimal TotalNet { get; set; }
-
-        public int CurrencyId { get; set; }
-    }
 }

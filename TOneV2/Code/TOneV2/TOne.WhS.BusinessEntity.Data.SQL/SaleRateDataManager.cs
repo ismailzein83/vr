@@ -35,7 +35,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             saleRate.PriceListId = (int)reader["PriceListID"];
             
             saleRate.NormalRate = (decimal)reader["Rate"];
-            saleRate.OtherRates = null; // what about this field?
+            saleRate.OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null;
 
             saleRate.BeginEffectiveDate = (DateTime)reader["BED"];
             saleRate.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED");
@@ -44,5 +44,16 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
         #endregion
+
+
+        public List<SaleRate> GetEffectiveSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByOwnerAndEffective", SaleRateMapper, ownerType, ownerId, effectiveOn);
+        }
+
+        public bool AreSaleRatesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.SaleRate", ref updateHandle);
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<CustomerSellingProductDetail> GetFilteredCustomerSellingProducts(Vanrise.Entities.DataRetrievalInput<CustomerSellingProductQuery> input)
         {
 
-            var allCustomerSellingProducts = GetCachedCustomerSellingProducts();
+            var allCustomerSellingProducts = GetCachedOrderedCustomerSellingProducts();
 
             Func<CustomerSellingProductDetail, bool> filterExpression = (prod) =>
                  (input.Query.EffectiveDate == null || (prod.BED<input.Query.EffectiveDate))
@@ -27,13 +27,32 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public CustomerSellingProductDetail GetCustomerSellingProduct(int customerSellingProductId)
         {
-            List<CustomerSellingProductDetail> customerSellingProducts = GetCachedCustomerSellingProducts();
+            var customerSellingProducts = GetCachedOrderedCustomerSellingProducts();
             return customerSellingProducts.FindRecord(x => x.CustomerSellingProductId == customerSellingProductId);
         }
 
         public CustomerSellingProduct GetEffectiveSellingProduct(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
-            throw new NotImplementedException();
+            string cacheName = String.Format("GetEffectiveSellingProduct_{0}_{1}_{2}", customerId, effectiveOn.HasValue ? effectiveOn.Value.Date : default(DateTime), isEffectiveInFuture);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+              () =>
+              {
+                  var orderedCustomerSellingProducts = GetCachedOrderedCustomerSellingProducts();
+
+                  CustomerSellingProductDetail customerSellingProductDetail = orderedCustomerSellingProducts.FirstOrDefault(itm => itm.CustomerId == customerId && ((effectiveOn.HasValue && effectiveOn.Value >= itm.BED) || isEffectiveInFuture));
+                  if (customerSellingProductDetail != null)
+                  {
+                      return new CustomerSellingProduct
+                      {
+                          SellingProductId = customerSellingProductDetail.SellingProductId,
+                          CustomerSellingProductId = customerSellingProductDetail.CustomerSellingProductId,
+                          CustomerId = customerSellingProductDetail.CustomerId,
+                          BED = customerSellingProductDetail.BED
+                      };
+                  }
+                  else
+                      return null;
+              });
         }
 
 
@@ -52,7 +71,7 @@ namespace TOne.WhS.BusinessEntity.Business
             #region Insertion Rules
             foreach (CustomerSellingProductDetail customerSellingProduct in customerSellingProducts)
                 {
-                    List<CustomerSellingProductDetail> cashedCustomerSellingProducts = GetCachedCustomerSellingProducts();
+                    var cashedCustomerSellingProducts = GetCachedOrderedCustomerSellingProducts();
 
 
                     IEnumerable<CustomerSellingProductDetail> customerSellingProductList = cashedCustomerSellingProducts.FindAllRecords(x => x.CustomerId == customerSellingProduct.CustomerId);
@@ -173,13 +192,16 @@ namespace TOne.WhS.BusinessEntity.Business
         //}
         #region Private Members
 
-        List<CustomerSellingProductDetail> GetCachedCustomerSellingProducts()
+        IEnumerable<CustomerSellingProductDetail> GetCachedOrderedCustomerSellingProducts()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCustomerSellingProducts",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedOrderedCustomerSellingProducts",
                () =>
                {
                    ICustomerSellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerSellingProductDataManager>();
-                   return dataManager.GetCustomerSellingProducts();
+                   IEnumerable<CustomerSellingProductDetail> customerSellingProducts = dataManager.GetCustomerSellingProducts();
+                   if (customerSellingProducts != null)
+                       customerSellingProducts = customerSellingProducts.OrderByDescending(itm => itm.BED);
+                   return customerSellingProducts;
                });
         }
 

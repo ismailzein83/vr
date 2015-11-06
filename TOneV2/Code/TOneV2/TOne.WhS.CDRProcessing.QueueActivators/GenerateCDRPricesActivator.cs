@@ -21,17 +21,24 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
         {
             CDRMainBatch cdrMainBatch = item as CDRMainBatch;
             SupplierRateManager supplierRateManager = new SupplierRateManager();
+            SaleRateManager saleRateManager = new SaleRateManager();
             foreach(BillingMainCDR cdr in cdrMainBatch.MainCDRs){
                 CallCost callCost = supplierRateManager.GetCallCost(cdr.BillingCDR.SupplierId, cdr.BillingCDR.SupplierZoneID, cdr.BillingCDR.DurationInSeconds, cdr.BillingCDR.Attempt);
+                CallSale callSale = saleRateManager.GetCallSale(cdr.BillingCDR.CustomerId, cdr.BillingCDR.SaleZoneID, cdr.BillingCDR.DurationInSeconds, cdr.BillingCDR.Attempt);
+                cdr.Cost =new Cost();
+                cdr.Sale =new Sale();
                 if (callCost != null)
                 {
-                    cdr.MainCost = new MainCost
-                    {
-                        CurrencyId = callCost.CurrencyId,
-                        RateValue = callCost.RateValue,
-                        TotalNet = callCost.TotalNet
-                    };
-                    
+                        cdr.Cost.CurrencyId = callCost.CurrencyId;
+                        cdr.Cost.RateValue = callCost.RateValue;
+                        cdr.Cost.TotalNet = callCost.TotalNet;
+                }
+                if (callSale != null)
+                {
+                    cdr.Sale.CurrencyId = callSale.CurrencyId;
+                    cdr.Sale.RateValue = callSale.RateValue;
+                    cdr.Sale.TotalNet = callSale.TotalNet;
+
                 }
                 
             }

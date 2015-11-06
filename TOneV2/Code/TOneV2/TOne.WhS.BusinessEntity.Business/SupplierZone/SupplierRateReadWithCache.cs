@@ -31,7 +31,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         List<SupplierRate> GetCachedSupplierRates(int supplierId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierRateCacheManager>().GetOrCreateObject(String.Format("GetSupplierRates_{0}_{1:MM/dd/yy H:mm:ss}", supplierId, effectiveOn),
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierRateCacheManager>().GetOrCreateObject(String.Format("GetSupplierRates_{0}_{1:MM/dd/yy}", supplierId, effectiveOn.Date),
                () =>
                {
                    ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();

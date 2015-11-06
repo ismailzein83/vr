@@ -70,6 +70,8 @@
     <Compile Include="CDRProcessing\CDRFailedBatch.cs" />
     <Compile Include="CDRProcessing\CDRInvalidBatch.cs" />
     <Compile Include="CDRProcessing\CDRMainBatch.cs" />
+    <Compile Include="CDRProcessing\Cost.cs" />
+    <Compile Include="CDRProcessing\Sale.cs" />
     <Compile Include="CustomerRule\CustomerIdentificationRuleTarget.cs" />
     <Compile Include="CustomerRule\IRule\IRuleInCarrierCriteria.cs" />
     <Compile Include="CustomerRule\IRule\IRuleInCarrierTarget.cs" />
