@@ -154,6 +154,7 @@
     <Compile Include="Controllers\SaleZoneController.cs" />
     <Compile Include="Controllers\SellingNumberPlanController.cs" />
     <Compile Include="Controllers\SupplierZoneController.cs" />
+    <Compile Include="Controllers\ZoneServiceConfigController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

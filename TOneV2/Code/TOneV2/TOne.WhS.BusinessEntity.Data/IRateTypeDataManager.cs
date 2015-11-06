@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Data
 
         bool Insert(RateType rateType, out int insertedId);
 
-        bool AreRateTypesUpdated(ref object UpdateHandle);
+        bool AreRateTypesUpdated(ref object updateHandle);
 
     }
 }

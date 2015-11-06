@@ -79,6 +79,7 @@
     <Compile Include="SupplierPriceListDataManager.cs" />
     <Compile Include="SupplierRateDataManager.cs" />
     <Compile Include="SupplierZoneDataManager.cs" />
+    <Compile Include="ZoneServiceConfigManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">

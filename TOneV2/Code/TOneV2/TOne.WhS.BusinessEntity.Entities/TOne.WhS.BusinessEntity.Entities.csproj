@@ -194,6 +194,8 @@
     <Compile Include="SupplierZone\CallCost.cs" />
     <Compile Include="SupplierZone\SupplierZoneInfoFilter.cs" />
     <Compile Include="SupplierZone\SupplierZoneRate.cs" />
+    <Compile Include="ZoneServiceConfig\ZoneServiceConfig.cs" />
+    <Compile Include="ZoneServiceConfig\ZoneServiceConfigQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SellingRules\" />
