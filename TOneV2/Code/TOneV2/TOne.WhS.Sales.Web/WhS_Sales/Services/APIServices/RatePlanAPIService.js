@@ -10,7 +10,7 @@
             GetZoneLetters: GetZoneLetters,
             GetZoneItems: GetZoneItems,
             SavePriceList: SavePriceList,
-            SaveRatePlanDraft: SaveRatePlanDraft
+            SaveChanges: SaveChanges
         });
 
         function GetZoneLetters(ownerType, ownerId) {
@@ -28,8 +28,8 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "SavePriceList"), input);
         }
 
-        function SaveRatePlanDraft(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "SaveRatePlanDraft"), input);
+        function SaveChanges(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "SaveChanges"), input);
         }
 
     }

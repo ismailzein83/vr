@@ -41,12 +41,12 @@ namespace TOne.WhS.Sales.Web.Controllers
             manager.SavePriceList(input);
         }
 
-        //[HttpPost]
-        //[Route("SaveRatePlanDraft")]
-        //public void SaveRatePlanDraft(RatePlan draft)
-        //{
-        //    RatePlanManager manager = new RatePlanManager();
-        //    manager.SaveRatePlanDraft(draft);
-        //}
+        [HttpPost]
+        [Route("SaveChanges")]
+        public bool SaveChanges(SaveChangesInput input)
+        {
+            RatePlanManager manager = new RatePlanManager();
+            return manager.SaveChanges(input);
+        }
     }
 }

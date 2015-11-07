@@ -1,0 +1,35 @@
+﻿<vr-row>
+    <vr-columns width="fullrow" vr-loader="isLoadingGrid">
+        <vr-datagrid on-ready="onGridReady"
+                     datasource="zoneItems"
+                     loadmoredata="loadMoreData"
+                     pagingtype="'PagingOnScroll'"
+                     idfield="ZoneId"
+                     hidegridmenu>
+
+            <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Current Rate'" field="'CurrentRate'" type="'Number'" widthfactor="2" disablesorting></vr-datagridcolumn>
+
+            <vr-datagridcolumn headertext="'New Rate'" type="'Number'" widthfactor="2" disablesorting>
+                <vr-textbox type="number" value="dataItem.NewRate" onvaluechanged="dataItem.onNewRateChanged(dataItem)" minvalue="0"></vr-textbox>
+            </vr-datagridcolumn>
+
+            <vr-datagridcolumn headertext="'Begin Effective Date'" type="'Date'" widthfactor="2" disablesorting>
+                <span vr-disabled="dataItem.DisableBED">
+                    <vr-datetimepicker type="date" value="dataItem.RateBED"></vr-datetimepicker>
+                </span>
+            </vr-datagridcolumn>
+
+            <vr-datagridcolumn headertext="'End Effective Date'" type="'Date'" widthfactor="2" disablesorting>
+                <span vr-disabled="dataItem.DisableEED">
+                    <vr-datetimepicker type="date" value="dataItem.RateEED"></vr-datetimepicker>
+                </span>
+            </vr-datagridcolumn>
+
+            <vr-datagridexpandablerow>
+                <vr-whs-sales-rateplangridchild-view on-ready="onChildViewReady"></vr-whs-sales-rateplangridchild-view>
+            </vr-datagridexpandablerow>
+
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

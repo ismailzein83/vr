@@ -55,42 +55,9 @@
             </vr-columns>
         </vr-row>
 
-        <vr-row removeline>
-            <vr-columns width="fullrow" ng-show="showGrid" vr-loader="isLoadingGrid">
-                <vr-datagrid on-ready="onGridReady"
-                             datasource="zoneItems"
-                             loadmoredata="loadMoreData"
-                             menuactions="gridMenuActions"
-                             pagingtype="'PagingOnScroll'"
-                             idfield="ZoneId"
-                             hidegridmenu>
-
-                    <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Current Rate'" field="'CurrentRate'" type="'Number'" widthfactor="2" disablesorting></vr-datagridcolumn>
-
-                    <vr-datagridcolumn headertext="'New Rate'" type="'Number'" widthfactor="2" disablesorting>
-                        <vr-textbox value="NewRate" onvaluechanged="onNewRateChanged(dataItem)"></vr-textbox>
-                    </vr-datagridcolumn>
-
-                    <vr-datagridcolumn headertext="'Begin Effective Date'" type="'Date'" widthfactor="2" disablesorting>
-                        <span vr-disabled="DisableBeginEffectiveDate">
-                            <vr-datetimepicker type="date" value="RateBED"></vr-datetimepicker>
-                        </span>
-                    </vr-datagridcolumn>
-
-                    <vr-datagridcolumn headertext="'End Effective Date'" type="'Date'" widthfactor="2" disablesorting>
-                        <span vr-disabled="DisableEndEffectiveDate">
-                            <vr-datetimepicker type="date" value="RateEED"></vr-datetimepicker>
-                        </span>
-                    </vr-datagridcolumn>
-
-                    <vr-datagridexpandablerow>
-                        <vr-whs-sales-rateplangridchild-view on-ready="dataItem.Extension.onChildViewReady"></vr-whs-sales-rateplangridchild-view>
-                    </vr-datagridexpandablerow>
-
-                </vr-datagrid>
-            </vr-columns>
-        </vr-row>
+        <div ng-show="showGrid">
+            <vr-whs-sales-rateplan-grid on-ready="onGridReady"></vr-whs-sales-rateplan-grid>
+        </div>
 
     </vr-form>
 

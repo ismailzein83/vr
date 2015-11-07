@@ -207,6 +207,64 @@ namespace TOne.WhS.Sales.Business
         
         #endregion
 
+        public bool SaveChanges(SaveChangesInput input)
+        {
+            IRatePlanDataManager dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+            Changes currentChanges = dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
+
+            Changes allChanges = MergeChanges(currentChanges, input.Changes);
+
+            return dataManager.InsertOrUpdateChanges(input.OwnerType, input.OwnerId, allChanges, RatePlanStatus.Draft);
+        }
+
+        private Changes MergeChanges(Changes currentChanges, Changes newChanges)
+        {
+            if (currentChanges != null)
+            {
+                Changes allChanges = new Changes();
+                allChanges.RateChanges = MergeRateChanges(currentChanges.RateChanges, newChanges.RateChanges);
+                return allChanges;
+            }
+            else
+                return newChanges;
+        }
+
+        private RateChanges MergeRateChanges(RateChanges currentRateChanges, RateChanges newRateChanges)
+        {
+            if (currentRateChanges != null && newRateChanges != null)
+            {
+                RateChanges allRateChanges = new RateChanges();
+                allRateChanges.NewRates = MergeNewRates(currentRateChanges.NewRates, newRateChanges.NewRates);
+                return allRateChanges;
+            }
+            else if (currentRateChanges != null)
+                return currentRateChanges;
+            else if (newRateChanges != null)
+                return newRateChanges;
+            else
+                return null;
+        }
+
+        private List<NewRate> MergeNewRates(List<NewRate> currentNewRates, List<NewRate> newNewRates)
+        {
+            if (currentNewRates != null && newNewRates != null)
+            {
+                foreach (NewRate currentNewRate in currentNewRates)
+                {
+                    if (newNewRates.FindRecord(x => x.ZoneId == currentNewRate.ZoneId) == null)
+                        newNewRates.Add(currentNewRate);
+                }
+
+                return newNewRates;
+            }
+            else if (currentNewRates != null)
+                return currentNewRates;
+            else if (newNewRates != null)
+                return newNewRates;
+            else
+                return null;
+        }
+
         #region Junk Code
         /*
         public RatePlan GetRatePlan(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status)

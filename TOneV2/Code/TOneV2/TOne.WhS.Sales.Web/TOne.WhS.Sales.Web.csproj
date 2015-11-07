@@ -149,6 +149,8 @@
     <Content Include="WhS_Sales\Constants\RatePlanOwnerTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\RatePlanStatusEnum.js" />
     <Content Include="WhS_Sales\Directives\Templates\RatePlanGridChildViewTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Templates\RatePlanGridTemplate.html" />
+    <Content Include="WhS_Sales\Directives\vr-whs-sales-rateplan-grid.js" />
     <Content Include="WhS_Sales\Directives\vr-whs-sales-rateplangridchild-view.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanAPIService.js" />
     <Content Include="WhS_Sales\Services\MainService.js" />

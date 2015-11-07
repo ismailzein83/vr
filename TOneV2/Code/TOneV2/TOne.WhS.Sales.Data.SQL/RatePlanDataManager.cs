@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.Sales.Entities;
+using TOne.WhS.Sales.Entities.RatePlanning;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.Sales.Data.SQL
@@ -78,6 +75,23 @@ namespace TOne.WhS.Sales.Data.SQL
             table.EndLoadData();
 
             return table;
+        }
+
+        public Changes GetChanges(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status)
+        {
+            return GetItemSP("TOneWhS_Sales.sp_RatePlan_GetChanges", ChangesMapper, ownerType, ownerId, status);
+        }
+
+        public bool InsertOrUpdateChanges(RatePlanOwnerType ownerType, int ownerId, Changes changes, RatePlanStatus status)
+        {
+            string serializedChanges = Vanrise.Common.Serializer.Serialize(changes);
+            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_InsertOrUpdateChanges", ownerType, ownerId, serializedChanges, status);
+            return affectedRows > 0;
+        }
+
+        private Changes ChangesMapper(IDataReader reader)
+        {
+            return Vanrise.Common.Serializer.Deserialize<Changes>(reader["Changes"] as string);
         }
 
         #region Junk Code
