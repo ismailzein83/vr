@@ -56,17 +56,19 @@ app.directive('vrWhsRoutingRouterulesettingsSelective', ['UtilsService', 'VRUIUt
 
                 api.load = function (payload) {
 
+                    console.log(payload);
+
                     var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     carrierAccountReadyPromiseDeferred.promise.then(function () {
                         var carrierAccountPayload = {
-                            filter: {},
+                            filter: { SupplierFilterSettings: payload != undefined? payload.SupplierFilterSettings : undefined },
                             selectedIds: []
                         };
-                        if (payload != undefined)
+                        if (payload != undefined && payload.OptionsSettingsGroup != undefined)
                         {
-                            for (var i = 0; i < payload.Options.length; i++) {
-                                carrierAccountPayload.selectedIds.push(payload.Options[i].SupplierId);
+                            for (var i = 0; i < payload.OptionsSettingsGroup.Options.length; i++) {
+                                carrierAccountPayload.selectedIds.push(payload.OptionsSettingsGroup.Options[i].SupplierId);
                             }
                         }
                             

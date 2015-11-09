@@ -43,6 +43,8 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
             var routeRuleOptionPercentageSettingsDirectiveAPI;
             var routeRuleOptionPercentageSettingsReadyPromiseDeferred;
 
+            var supplierFilterSettings;
+
             function initializeController() {
 
                 $scope.optionOrderSettingsGroupTemplates = [];
@@ -53,7 +55,17 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                 $scope.onOptionSettingsGroupDirectiveReady = function (api) {
                     routeOptionSettingsGroupDirectiveAPI = api;
                     var setLoader = function (value) { $scope.isLoadingOptionSettingsSection = value };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeOptionSettingsGroupDirectiveAPI, undefined, setLoader, routeOptionSettingsReadyPromiseDeferred);
+
+                    var optionSettingsGroupPayload;
+
+                    if(supplierFilterSettings != undefined)
+                    {
+                        optionSettingsGroupPayload = {
+                            SupplierFilterSettings: supplierFilterSettings
+                        }
+                    }
+
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeOptionSettingsGroupDirectiveAPI, optionSettingsGroupPayload, setLoader, routeOptionSettingsReadyPromiseDeferred);
                 }
 
                 $scope.onOptionOrderSettingsGroupDirectiveReady = function (api) {
@@ -89,8 +101,17 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                         var promises = [];
                         var optionSettingsGroupPayload;
 
-                        if (payload != undefined && payload.OptionsSettingsGroup != null)
-                            optionSettingsGroupPayload = payload.OptionsSettingsGroup;
+                        if (payload != undefined)
+                        {
+                            supplierFilterSettings = payload.SupplierFilterSettings;
+
+                            if (payload.RouteRuleSettings != undefined && payload.RouteRuleSettings.OptionsSettingsGroup != null) {
+                                optionSettingsGroupPayload = {
+                                    SupplierFilterSettings: supplierFilterSettings,
+                                    OptionsSettingsGroup: payload.RouteRuleSettings.OptionsSettingsGroup
+                                };
+                            }
+                        }
 
                         var loadOptionSettingsGroupTemplatesPromise = WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionSettingsGroupTemplates().then(function (response) {
                             angular.forEach(response, function (item) {
@@ -98,7 +119,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                             });
 
                             if (optionSettingsGroupPayload != undefined) {
-                                $scope.selectedOptionSettingsGroupTemplate = UtilsService.getItemByVal($scope.optionSettingsGroupTemplates, optionSettingsGroupPayload.ConfigId, "TemplateConfigID");
+                                $scope.selectedOptionSettingsGroupTemplate = UtilsService.getItemByVal($scope.optionSettingsGroupTemplates, optionSettingsGroupPayload.OptionsSettingsGroup.ConfigId, "TemplateConfigID");
                             }
                         });
 

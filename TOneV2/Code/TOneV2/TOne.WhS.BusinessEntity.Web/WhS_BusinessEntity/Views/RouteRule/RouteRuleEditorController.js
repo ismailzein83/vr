@@ -79,7 +79,12 @@
             $scope.onRouteRuleSettingsDirectiveReady = function (api) {
                 routeRuleSettingsAPI = api;
                 var setLoader = function (value) { $scope.isLoadingRouteRuleSettings = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeRuleSettingsAPI, undefined, setLoader, routeRuleSettingsReadyPromiseDeferred);
+
+                var routeRuleSettingsPayload = {
+                    SupplierFilterSettings: { RoutingProductId: routingProductId }
+                }
+
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeRuleSettingsAPI, routeRuleSettingsPayload, setLoader, routeRuleSettingsReadyPromiseDeferred);
             }
 
             $scope.SaveRouteRule = function () {
@@ -332,7 +337,12 @@
             var routeRuleSettingsPayload;
 
             if (routeRuleEntity != undefined && routeRuleEntity.Settings != null)
-                routeRuleSettingsPayload = routeRuleEntity.Settings;
+            {
+                routeRuleSettingsPayload = {
+                    SupplierFilterSettings: { RoutingProductId: routingProductId },
+                    RouteRuleSettings: routeRuleEntity.Settings
+                }
+            }
 
             var loadRouteRuleSettingsTemplatesPromise = WhS_BE_RouteRuleAPIService.GetRouteRuleSettingsTemplates().then(function (response) {
                 angular.forEach(response, function (item) {
@@ -340,7 +350,7 @@
                 });
 
                 if(routeRuleSettingsPayload != undefined)
-                    $scope.selectedrouteRuleSettingsTemplate = UtilsService.getItemByVal($scope.routeRuleSettingsTemplates, routeRuleSettingsPayload.ConfigId, "TemplateConfigID");
+                    $scope.selectedrouteRuleSettingsTemplate = UtilsService.getItemByVal($scope.routeRuleSettingsTemplates, routeRuleSettingsPayload.RouteRuleSettings.ConfigId, "TemplateConfigID");
             });
 
             promises.push(loadRouteRuleSettingsTemplatesPromise);
