@@ -92,7 +92,7 @@ namespace TestRuntime
                 InputArguments = new TOne.WhS.Routing.BP.Arguments.RoutingProcessInput
                 {
                     EffectiveTime = DateTime.Now,
-                    IsFuture = false
+                    RoutingDatabaseType = TOne.WhS.Routing.Entities.RoutingDatabaseType.Current
                 }
             });
         }

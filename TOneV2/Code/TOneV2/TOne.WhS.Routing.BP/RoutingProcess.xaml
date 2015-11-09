@@ -47,6 +47,7 @@
       <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
       <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
     </sco:Collection>
@@ -61,30 +62,30 @@
       </InArgument>
     </WriteLine>
     <twrba1:DropOldRoutingDatabases sap2010:WorkflowViewState.IdRef="DropOldRoutingDatabases_1" />
-    <twrba1:CreateRoutingDatabase sap2010:WorkflowViewState.IdRef="CreateRoutingDatabase_1">
+    <twrba1:CreateRoutingDatabase sap2010:WorkflowViewState.IdRef="CreateRoutingDatabase_2">
       <twrba1:CreateRoutingDatabase.DatabaseId>
         <OutArgument x:TypeArguments="x:Int32">
           <mca:CSharpReference x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpReference>
         </OutArgument>
       </twrba1:CreateRoutingDatabase.DatabaseId>
       <twrba1:CreateRoutingDatabase.EffectiveTime>
-        <InArgument x:TypeArguments="s:DateTime">
-          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveTime</mca:CSharpValue>
+        <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveTime</mca:CSharpValue>
         </InArgument>
       </twrba1:CreateRoutingDatabase.EffectiveTime>
       <twrba1:CreateRoutingDatabase.Type>
         <InArgument x:TypeArguments="twre:RoutingDatabaseType">
-          <mca:CSharpValue x:TypeArguments="twre:RoutingDatabaseType" xml:space="preserve">Input.IsFuture ?  Entities.RoutingDatabaseType.Future : Entities.RoutingDatabaseType.Current</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="twre:RoutingDatabaseType">Input.RoutingDatabaseType</mca:CSharpValue>
         </InArgument>
       </twrba1:CreateRoutingDatabase.Type>
     </twrba1:CreateRoutingDatabase>
-    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ1Byb2Nlc3MueGFtbAg2A1IOAgEBOgU+EQIBDT8FP2MCAQxABVAkAgECPAk8egIBDkgLSF4CAQlDC0NhAgEGTQtNygECAQM=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ1Byb2Nlc3MueGFtbAg3A1MOAgEBOwU/EQIBDUAFQGMCAQxBBVEkAgECPQk9egIBDkkLSWoCAQlEC0RhAgEGTgtOcgIBAw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="211,62" />
       <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="211,22" />
-      <sap2010:ViewStateData Id="CreateRoutingDatabase_1" sap:VirtualizedContainerService.HintSize="211,22" />
+      <sap2010:ViewStateData Id="CreateRoutingDatabase_2" sap:VirtualizedContainerService.HintSize="211,22" />
       <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="233,310">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">

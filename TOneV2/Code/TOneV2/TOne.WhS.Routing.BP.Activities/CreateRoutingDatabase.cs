@@ -15,7 +15,7 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<RoutingDatabaseType> Type { get; set; }
 
         [RequiredArgument]
-        public InArgument<DateTime> EffectiveTime { get; set; }
+        public InArgument<DateTime?> EffectiveTime { get; set; }
 
         [RequiredArgument]
         public OutArgument<int> DatabaseId { get; set; }

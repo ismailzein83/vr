@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.BP.Arguments
 {
     public class RoutingProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
-        public DateTime EffectiveTime { get; set; }
+        public DateTime? EffectiveTime { get; set; }
 
-        public bool IsFuture { get; set; }
+        public RoutingDatabaseType RoutingDatabaseType { get; set; }
 
         public bool DivideProcessIntoSubProcesses { get; set; }
 

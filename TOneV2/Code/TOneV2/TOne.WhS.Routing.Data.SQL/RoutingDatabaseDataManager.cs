@@ -19,7 +19,7 @@ namespace TOne.WhS.Routing.Data.SQL
         /// <param name="type">Routing Database Type</param>
         /// <param name="effectiveTime">Effective Date</param>
         /// <returns>Created Routing Database Id</returns>
-        public int CreateDatabase(string name, RoutingDatabaseType type, DateTime effectiveTime)
+        public int CreateDatabase(string name, RoutingDatabaseType type, DateTime? effectiveTime)
         {
             object obj;
             if (ExecuteNonQuerySP("TOneWhS_Routing.sp_RoutingDatabase_Insert", out obj, name, (int)type, effectiveTime) > 0)
