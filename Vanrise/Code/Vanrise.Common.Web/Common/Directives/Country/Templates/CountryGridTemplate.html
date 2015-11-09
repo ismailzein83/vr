@@ -1,0 +1,15 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="countries"
+                     on-ready="onGridReady"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="gridMenuActions"
+                     idfield="CountryId">
+
+            <vr-datagridcolumn headertext="'ID'" field="'CountryId'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Country Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>             
+               
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

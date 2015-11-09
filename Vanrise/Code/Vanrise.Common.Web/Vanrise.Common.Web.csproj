@@ -118,8 +118,10 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CurrencyExchangeRateController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
+    <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -142,16 +144,25 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Common\Constant\ModuleConfig.js" />
+    <Content Include="Common\Directives\Country\Templates\CountryGridTemplate.html" />
+    <Content Include="Common\Directives\Country\vr-common-country-grid.js" />
+    <Content Include="Common\Directives\Country\vr-common-country-selector.js" />
     <Content Include="Common\Directives\CurrencyExchangeRate\Templates\CurrencyExchangeRateGridTemplate.html" />
     <Content Include="Common\Directives\CurrencyExchangeRate\vr-common-currencyexchangerate-grid.js" />
     <Content Include="Common\Directives\CurrencyExchangeRate\vr-common-currencyexchangerate-selector.js" />
     <Content Include="Common\Directives\Currency\Templates\CurrencyGridTemplate.html" />
     <Content Include="Common\Directives\Currency\vr-common-currency-selector.js" />
     <Content Include="Common\Directives\Currency\vr-common-currency-grid.js" />
+    <Content Include="Common\Services\APIServices\CountryAPIService.js" />
     <Content Include="Common\Services\APIServices\CurrencyExchangeRateAPIService.js" />
     <Content Include="Common\Services\APIServices\CurrencyAPIService.js" />
     <Content Include="Common\Services\CurrencyExchangeRateService.js" />
     <Content Include="Common\Services\CurrencyService.js" />
+    <Content Include="Common\Services\CountryService.js" />
+    <Content Include="Common\Views\Country\CountryEditor.html" />
+    <Content Include="Common\Views\Country\CountryEditorController.js" />
+    <Content Include="Common\Views\Country\CountryManagement.html" />
+    <Content Include="Common\Views\Country\CountryManagementController.js" />
     <Content Include="Common\Views\CurrencyExchangeRate\CurrencyExchangeRateEditor.html" />
     <Content Include="Common\Views\CurrencyExchangeRate\CurrencyExchangeRateEditorController.js" />
     <Content Include="Common\Views\CurrencyExchangeRate\CurrencyExchangeRateManagement.html" />

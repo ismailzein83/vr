@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
-//using Vanrise.Entities;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
+using Vanrise.Common;
+using Vanrise.Common.Business;
 
-namespace TOne.WhS.BusinessEntity.Web.Controllers
+namespace Vanrise.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "Country")]
-    public class WhSBE_CountryController : BaseAPIController
+    public class VRCommon_CountryController : BaseAPIController
     {
 
         [HttpPost]
@@ -39,14 +39,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddCountry")]
-        public TOne.Entities.InsertOperationOutput<Country> AddCountry(Country country)
+        public Vanrise.Entities.InsertOperationOutput<Country> AddCountry(Country country)
         {
             CountryManager manager = new CountryManager();
             return manager.AddCountry(country);
         }
         [HttpPost]
         [Route("UpdateCountry")]
-        public TOne.Entities.UpdateOperationOutput<Country> UpdateCountry(Country country)
+        public Vanrise.Entities.UpdateOperationOutput<Country> UpdateCountry(Country country)
         {
             CountryManager manager = new CountryManager();
             return manager.UpdateCountry(country);

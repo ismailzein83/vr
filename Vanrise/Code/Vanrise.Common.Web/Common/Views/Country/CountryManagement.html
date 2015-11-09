@@ -1,0 +1,21 @@
+﻿<vr-panel ng-controller="VRCommon_CountryManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox value="name" label="Name"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Add" data-onclick="addNewCountry"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-common-country-grid on-ready="onGridReady"></vr-common-country-grid>
+    </vr-form>
+
+</vr-panel>

@@ -1,0 +1,20 @@
+﻿<vr-modalcontent ng-controller="VRCommon_CountryEditorController" vr-loader="isGettingData">
+    <vr-modalbody>
+        <vr-form name="formCountryEditor">
+            <vr-row removeline>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="name" label="Name" isrequired></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formCountryEditor" data-onclick="saveCountry"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</vr-modalcontent>

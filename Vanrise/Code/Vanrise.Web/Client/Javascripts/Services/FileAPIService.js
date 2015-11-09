@@ -5,15 +5,9 @@ var serviceObj = function (BaseAPIService) {
         PreviewImage: PreviewImage
     });
     
-    function GetCarriers(userId) {
-        return BaseAPIService.get('/api/AccountManager/GetCarriers', {
-            userId: userId
-        });
-    }
-
-  
+   
     function DownloadFile(fileId) {
-        return BaseAPIService.get('/api/VRFile/DownloadFile', {
+        return BaseAPIService.get('/api/VRCommon/File/DownloadFile', {
             fileId: fileId
         },{
             returnAllResponseParameters: true,
@@ -21,7 +15,7 @@ var serviceObj = function (BaseAPIService) {
         });
     }
     function PreviewImage(fileId) {
-        return BaseAPIService.get('/api/VRFile/PreviewImage', {
+        return BaseAPIService.get('/api/VRCommon/File/PreviewImage', {
             fileId: fileId
         });
     }

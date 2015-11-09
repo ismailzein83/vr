@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticateOperationOutput.cs" />
+    <Compile Include="Country\Country.cs" />
+    <Compile Include="Country\CountryQuery.cs" />
     <Compile Include="Currency\CurrencyExchangeRateDetail.cs" />
     <Compile Include="Currency\CurrencyExchangeRateQuery.cs" />
     <Compile Include="Currency\CurrencyExchangeRate.cs" />

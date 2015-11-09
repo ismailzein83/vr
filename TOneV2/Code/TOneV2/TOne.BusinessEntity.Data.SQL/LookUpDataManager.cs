@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.BusinessEntity.Entities;
 using TOne.Data.SQL;
-using Vanrise.Entities;
+//using Vanrise.Entities;
 
 namespace TOne.BusinessEntity.Data.SQL
 {

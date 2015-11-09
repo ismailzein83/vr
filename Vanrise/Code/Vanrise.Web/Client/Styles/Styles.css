@@ -1712,21 +1712,21 @@ vr-datagrid[hideheader="true"] .vr-datagrid{
         position: absolute;
         left: 0px;
         height: 5px;
-        font-size: 12px;
+        font-size: 11px;
         top: 25px;
         width:100% !important;  
     }
     .vr-file-name{
         display: inline-block;
-        font-size: 12px;  
-        width:100% !important;   
-        overflow: hidden;
+        font-size: 11px;
+        width: 100% !important;
         word-wrap: break-word;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         position: relative;
-        top: 7px;
+        top: 9px;
+        height: 15px;
      }
      
 /**************END VR-Upload*********/

@@ -1,0 +1,104 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Vanrise.Common.Data;
+using Vanrise.Entities;
+using Vanrise.Common;
+
+namespace Vanrise.Common.Business
+{
+    public class CountryManager
+    {
+
+        public Vanrise.Entities.IDataRetrievalResult<Country> GetFilteredCountries(Vanrise.Entities.DataRetrievalInput<CountryQuery> input)
+        {
+            var allCountries = GetCachedCountries();
+
+            Func<Country, bool> filterExpression = (prod) =>
+                 (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()));
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCountries.ToBigResult(input, filterExpression));     
+        }
+
+        public IEnumerable<Country> GetAllCountries()
+        {
+            var allCountries = GetCachedCountries();
+            if (allCountries == null)
+                return null;
+
+            return allCountries.Values;
+        }
+        public Country GetCountry(int countryId)
+        {
+            var countries = GetCachedCountries();
+            return countries.GetRecord(countryId);
+        }
+        public Vanrise.Entities.InsertOperationOutput<Country> AddCountry(Country country)
+        {
+            Vanrise.Entities.InsertOperationOutput<Country> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<Country>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
+            int countryId = -1;
+
+            ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
+            bool insertActionSucc = dataManager.Insert(country, out countryId);
+            if (insertActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                country.CountryId = countryId;
+                insertOperationOutput.InsertedObject = country;
+            }
+
+            return insertOperationOutput;
+        }
+        public Vanrise.Entities.UpdateOperationOutput<Country> UpdateCountry(Country country)
+        {
+            ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
+
+            bool updateActionSucc = dataManager.Update(country);
+            Vanrise.Entities.UpdateOperationOutput<Country> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<Country>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = country;
+            }
+
+            return updateOperationOutput;
+        }
+        #region Private Members
+
+        public Dictionary<int, Country> GetCachedCountries()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCountries",
+               () =>
+               {
+                   ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
+                   IEnumerable<Country> countries = dataManager.GetCountries();
+                   return countries.ToDictionary(cn => cn.CountryId, cn => cn);
+               });
+        }
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ICountrytDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreCountriesUpdated(ref _updateHandle);
+            }
+        }
+
+        #endregion
+    }
+}

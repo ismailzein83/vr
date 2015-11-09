@@ -42,7 +42,7 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
             $scope.isUploading = false;           
             var isInternalSetValue;
             filecontrol.fileupload({
-                url: base + '/api/VRFile/UploadFile',
+                url: base + '/api/VRCommon/File/UploadFile',
                 beforeSend: function (xhr, data) {
                     xhr.setRequestHeader('Auth-Token', SecurityService.getUserToken());
                 },
@@ -99,7 +99,7 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
                     return;
                 }
                 if(ctrl.value!=null){
-                    BaseAPIService.get("/api/VRFile/GetFileInfo",
+                    BaseAPIService.get("/api/VRCommon/File/GetFileInfo",
                         {
                             fileId: ctrl.value.fileId
                         }
