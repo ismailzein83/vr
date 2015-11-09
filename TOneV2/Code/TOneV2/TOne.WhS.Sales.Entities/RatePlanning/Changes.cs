@@ -13,5 +13,14 @@ namespace TOne.WhS.Sales.Entities.RatePlanning
         public ServiceChanges ServiceChanges { get; set; }
 
         public RoutingProductChanges RoutingProductChanges { get; set; }
+
+
+
+
+
+        public DefaultChanges DefaultChanges { get; set; }
+
+        public List<ZoneChanges> ZoneChanges { get; set; }
+
     }
 }
