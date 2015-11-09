@@ -64,7 +64,7 @@
   <ItemGroup>
     <Compile Include="CodeMatchBuilder.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="RateBuilder.cs" />
+    <Compile Include="ZoneDetailBuilder.cs" />
     <Compile Include="RouteBuilder.cs" />
     <Compile Include="RouteOptionRules\BlockRouteOptionRule.cs" />
     <Compile Include="RouteOptionRules\RouteOptionRuleExecutionContext.cs" />

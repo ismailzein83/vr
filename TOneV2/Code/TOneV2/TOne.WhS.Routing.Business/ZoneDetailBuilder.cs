@@ -9,7 +9,7 @@ using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.Business
 {
-    public class RateBuilder
+    public class ZoneDetailBuilder
     {
         #region Public Methods
 
