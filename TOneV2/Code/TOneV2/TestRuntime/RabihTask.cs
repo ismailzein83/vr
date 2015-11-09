@@ -17,7 +17,7 @@ namespace TestRuntime
     public class RabihTask : ITask
     {
         public void Execute()
-        { 
+        {
 
             //IServiceDataManager datamanager = BEDataManagerFactory.GetDataManager<IServiceDataManager>();
 
@@ -73,7 +73,7 @@ namespace TestRuntime
 
 
 
-            
+
             RunCompleteRouteBuild();
             //RunPartialRouteBuild();
         }
@@ -83,11 +83,16 @@ namespace TestRuntime
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
+                //InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
+                //{
+                //    EffectiveTime = DateTime.Now,
+                //    IsFuture = false,
+                //    IsLcrOnly = false
+                //}
+                InputArguments = new TOne.WhS.Routing.BP.Arguments.RoutingProcessInput
                 {
                     EffectiveTime = DateTime.Now,
-                    IsFuture = false,
-                    IsLcrOnly = false
+                    IsFuture = false
                 }
             });
         }
@@ -98,7 +103,7 @@ namespace TestRuntime
             bpClient.CreateNewProcess(new CreateProcessInput
             {
                 InputArguments = new TOne.LCRProcess.Arguments.DifferentialRoutingProcessInput()
-                
+
             });
         }
     }

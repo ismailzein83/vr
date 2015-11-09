@@ -73,6 +73,9 @@
     <Folder Include="TOneWhS_CDR\Tables\" />
     <Folder Include="TOneWhS_Sales\Stored Procedures\" />
     <Folder Include="TOneWhS_Sales\User Defined Types\" />
+    <Folder Include="TOneWhS_Routing\" />
+    <Folder Include="TOneWhS_Routing\Tables\" />
+    <Folder Include="TOneWhS_Routing\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_BE\Tables\CarrierAccount.sql" />
@@ -161,5 +164,11 @@
     <Build Include="Security\TOneWhS_Sales.sql" />
     <Build Include="Security\TOneWhS_Routing.sql" />
     <Build Include="Security\TOneWhS_CDR.sql" />
+    <Build Include="TOneWhS_Routing\Tables\RoutingDatabase.sql" />
+    <Build Include="TOneWhS_Routing\Stored Procedures\sp_RoutingDatabase_SetReady.sql" />
+    <Build Include="TOneWhS_Routing\Stored Procedures\sp_RoutingDatabase_GetReadyDBIDByType.sql" />
+    <Build Include="TOneWhS_Routing\Stored Procedures\sp_RoutingDatabase_GetNotDeleted.sql" />
+    <Build Include="TOneWhS_Routing\Stored Procedures\sp_RoutingDatabase_Delete.sql" />
+    <Build Include="TOneWhS_Routing\Stored Procedures\sp_RoutingDatabase_Insert.sql" />
   </ItemGroup>
 </Project>

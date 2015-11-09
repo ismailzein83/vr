@@ -528,6 +528,18 @@
       <Project>{3ee2e4dc-7474-4cf9-87eb-3dea72c97496}</Project>
       <Name>TOne.WhS.CodePreparation.BP</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.BP.Activities\TOne.WhS.Routing.BP.Activities.csproj">
+      <Project>{a28f67c0-6326-4830-8a1e-021f91a4236d}</Project>
+      <Name>TOne.WhS.Routing.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.BP.Arguments\TOne.WhS.Routing.BP.Arguments.csproj">
+      <Project>{7b185135-b5a8-4416-8b8a-66a261d7dd31}</Project>
+      <Name>TOne.WhS.Routing.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.BP\TOne.WhS.Routing.BP.csproj">
+      <Project>{84f18ef5-4751-4202-9584-c27399c920a7}</Project>
+      <Name>TOne.WhS.Routing.BP</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.Business\TOne.WhS.Routing.Business.csproj">
       <Project>{923447e8-0d0b-4296-976a-8f486a8694d3}</Project>
       <Name>TOne.WhS.Routing.Business</Name>
