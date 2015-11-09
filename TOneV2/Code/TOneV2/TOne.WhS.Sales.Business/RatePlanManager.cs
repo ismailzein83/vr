@@ -13,6 +13,13 @@ namespace TOne.WhS.Sales.Business
 {
     public class RatePlanManager
     {
+        private static IRatePlanDataManager _dataManager;
+
+        static RatePlanManager()
+        {
+            _dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+        }
+
         #region Get Zone Letters
 
         public IEnumerable<char> GetZoneLetters(RatePlanOwnerType ownerType, int ownerId)
@@ -21,10 +28,10 @@ namespace TOne.WhS.Sales.Business
 
             if (ownerType == RatePlanOwnerType.SellingProduct)
             {
-                IEnumerable<SaleZone> saleZones = this.GetSellingProductSaleZones(ownerId, DateTime.Now);
+                IEnumerable<SaleZone> saleZones = GetSellingProductSaleZones(ownerId, DateTime.Now);
 
                 if (saleZones != null)
-                    zoneLetters = saleZones.MapRecords(z => z.Name[0], z => z.Name != null && z.Name.Length > 0).Distinct().OrderBy(l => l);
+                    zoneLetters = saleZones.MapRecords(zone => zone.Name[0], zone => zone.Name != null && zone.Name.Length > 0).Distinct().OrderBy(letter => letter);
             }
             else if (ownerType == RatePlanOwnerType.Customer)
             {
@@ -42,20 +49,22 @@ namespace TOne.WhS.Sales.Business
         public IEnumerable<ZoneItem> GetZoneItems(ZoneItemInput input)
         {
             IEnumerable<ZoneItem> zoneItems = null;
-            IEnumerable<SaleZone> saleZones = this.GetSaleZones(input.Filter.OwnerType, input.Filter.OwnerId);
+            IEnumerable<SaleZone> saleZones = GetSaleZones(input.Filter.OwnerType, input.Filter.OwnerId);
 
             if (saleZones != null)
             {
-                saleZones = this.GetFilteredSaleZones(saleZones, input.Filter);
+                saleZones = GetFilteredSaleZones(saleZones, input.Filter);
 
                 if (saleZones != null)
                 {
-                    saleZones = this.GetPagedSaleZones(saleZones, input.FromRow, input.ToRow);
+                    saleZones = GetPagedSaleZones(saleZones, input.FromRow, input.ToRow);
 
                     if (saleZones != null)
                     {
-                        IEnumerable<SaleRate> saleRates = this.GetSaleRates(input.Filter.OwnerType, input.Filter.OwnerId, saleZones, DateTime.Now);
-                        zoneItems = this.BuildZoneItems(saleZones, saleRates);
+                        IEnumerable<SaleRate> saleRates = GetSaleRates(input.Filter.OwnerType, input.Filter.OwnerId, saleZones, DateTime.Now);
+                        zoneItems = BuildZoneItems(saleZones, saleRates);
+
+                        SetChanges(input.Filter.OwnerType, input.Filter.OwnerId, RatePlanStatus.Draft, zoneItems);
                     }
                 }
             }
@@ -69,7 +78,7 @@ namespace TOne.WhS.Sales.Business
 
             if (ownerType == RatePlanOwnerType.SellingProduct)
             {
-                saleZones = this.GetSellingProductSaleZones(ownerId, DateTime.Now);
+                saleZones = GetSellingProductSaleZones(ownerId, DateTime.Now);
             }
             else if (ownerType == RatePlanOwnerType.Customer)
             {
@@ -169,14 +178,58 @@ namespace TOne.WhS.Sales.Business
 
             return zoneItems;
         }
+
+        #region Reflect Zone Item Changes
         
+        private void SetChanges(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status, IEnumerable<ZoneItem> zoneItems)
+        {
+            Changes existingChanges = _dataManager.GetChanges(ownerType, ownerId, status);
+
+            if (existingChanges != null)
+            {
+                SetZoneChanges(existingChanges.ZoneChanges, zoneItems);
+            }
+        }
+
+        private void SetZoneChanges(List<ZoneChanges> existingZoneChanges, IEnumerable<ZoneItem> zoneItems)
+        {
+            if (existingZoneChanges != null) {
+                foreach (ZoneChanges changes in existingZoneChanges)
+                {
+                    SetZoneRateChanges(changes, zoneItems);
+                }
+            }
+        }
+
+        private void SetZoneRateChanges(ZoneChanges zoneChanges, IEnumerable<ZoneItem> zoneItems)
+        {
+            if (zoneChanges.NewRate != null)
+            {
+                ZoneItem zoneItem = zoneItems.FindRecord(o => o.ZoneId == zoneChanges.NewRate.ZoneId);
+
+                if (zoneItem != null)
+                {
+                    zoneItem.NewRate = zoneChanges.NewRate.NormalRate;
+                    zoneItem.RateEED = zoneChanges.NewRate.EED;
+                }
+            }
+            else if (zoneChanges.RateChange != null)
+            {
+                ZoneItem zoneItem = zoneItems.FindRecord(o => o.CurrentRateId == zoneChanges.RateChange.RateId);
+
+                if (zoneItem != null)
+                    zoneItem.RateEED = zoneChanges.RateChange.EED;
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Save Price List
 
         public void SavePriceList(SalePriceListInput input)
         {
-            IRatePlanDataManager dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
             //dataManager.SetRatePlanStatusIfExists(RatePlanOwnerType.Customer, input.CustomerId, RatePlanStatus.Completed);
 
             int salePriceListId = CreateSalePriceList(input.CustomerId);
@@ -186,7 +239,7 @@ namespace TOne.WhS.Sales.Business
                 saleRate.PriceListId = salePriceListId;
             }
 
-            dataManager.CloseAndInsertSaleRates(input.CustomerId, input.NewSaleRates);
+            _dataManager.CloseAndInsertSaleRates(input.CustomerId, input.NewSaleRates);
         }
 
         private int CreateSalePriceList(int customerId)
@@ -199,86 +252,64 @@ namespace TOne.WhS.Sales.Business
                 OwnerId = customerId
             };
 
-            IRatePlanDataManager dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            bool added = dataManager.InsertSalePriceList(salePriceList, out salePriceListId);
+            bool added = _dataManager.InsertSalePriceList(salePriceList, out salePriceListId);
 
             return salePriceListId;
         }
         
         #endregion
 
+        #region Save Changes
+
         public bool SaveChanges(SaveChangesInput input)
         {
-            IRatePlanDataManager dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            Changes currentChanges = dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
+            bool saved = true;
 
-            Changes allChanges = MergeChanges(currentChanges, input.Changes);
-
-            return dataManager.InsertOrUpdateChanges(input.OwnerType, input.OwnerId, allChanges, RatePlanStatus.Draft);
-        }
-
-        private Changes MergeChanges(Changes currentChanges, Changes newChanges)
-        {
-            if (currentChanges != null)
+            if (input.NewChanges != null)
             {
-                Changes allChanges = new Changes();
-                allChanges.RateChanges = MergeRateChanges(currentChanges.RateChanges, newChanges.RateChanges);
-                return allChanges;
+                Changes existingChanges = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
+                Changes allChanges = MergeChanges(existingChanges, input.NewChanges);
+
+                saved = _dataManager.InsertOrUpdateChanges(input.OwnerType, input.OwnerId, allChanges, RatePlanStatus.Draft);
             }
-            else
-                return newChanges;
+
+            return saved;
         }
 
-        private RateChanges MergeRateChanges(RateChanges currentRateChanges, RateChanges newRateChanges)
+        private Changes MergeChanges(Changes existingChanges, Changes newChanges)
         {
-            if (currentRateChanges != null && newRateChanges != null)
-            {
-                RateChanges allRateChanges = new RateChanges();
-                allRateChanges.NewRates = MergeNewRates(currentRateChanges.NewRates, newRateChanges.NewRates);
-                return allRateChanges;
-            }
-            else if (currentRateChanges != null)
-                return currentRateChanges;
-            else if (newRateChanges != null)
-                return newRateChanges;
-            else
-                return null;
-        }
-
-        private List<NewRate> MergeNewRates(List<NewRate> currentNewRates, List<NewRate> newNewRates)
-        {
-            if (currentNewRates != null && newNewRates != null)
-            {
-                foreach (NewRate currentNewRate in currentNewRates)
+            return Merge(existingChanges, newChanges,
+                () =>
                 {
-                    if (newNewRates.FindRecord(x => x.ZoneId == currentNewRate.ZoneId) == null)
-                        newNewRates.Add(currentNewRate);
-                }
-
-                return newNewRates;
-            }
-            else if (currentNewRates != null)
-                return currentNewRates;
-            else if (newNewRates != null)
-                return newNewRates;
-            else
-                return null;
+                    Changes allChanges = new Changes();
+                    allChanges.ZoneChanges = MergeZoneChanges(existingChanges.ZoneChanges, newChanges.ZoneChanges);
+                    return allChanges;
+                });
         }
 
-        #region Junk Code
-        /*
-        public RatePlan GetRatePlan(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status)
+        private List<ZoneChanges> MergeZoneChanges(List<ZoneChanges> existingZoneChanges, List<ZoneChanges> newZoneChanges)
         {
-            IRatePlanDataManager dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            return dataManager.GetRatePlan(ownerType, ownerId, status);
+            return Merge(existingZoneChanges, newZoneChanges,
+                () =>
+                {
+                    foreach (ZoneChanges changes in existingZoneChanges)
+                    {
+                        if (!newZoneChanges.Any(o => o.ZoneId == changes.ZoneId))
+                            newZoneChanges.Add(changes);
+                    }
+
+                    return newZoneChanges;
+                });
         }
 
-        public bool SaveRatePlanDraft(RatePlan draft)
+        private T Merge<T>(T existingChanges, T newChanges, Func<T> mergeLogic) where T : class
         {
-            IRatePlanDataManager dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            return dataManager.InsertOrUpdateRatePlan(draft);
+            if (existingChanges != null && newChanges != null)
+                return mergeLogic();
+
+            return existingChanges != null ? existingChanges : newChanges;
         }
-        */
+
         #endregion
     }
 }

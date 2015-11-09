@@ -43,34 +43,82 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     };
 
                     directiveAPI.getChanges = function () {
-                        return {
-                            RateChanges: {
-                                NewRates: getNewRates()
-                            }
-                        };
+                        var changes = null;
 
-                        function getNewRates() {
-                            var newRates = [];
+                        var defaultChanges = null;
+                        var zoneChanges = buildZoneChanges();
+
+                        if (defaultChanges != null || zoneChanges != null) {
+                            changes = {
+                                DefaultChanges: defaultChanges,
+                                ZoneChanges: zoneChanges
+                            };
+                        }
+
+                        return changes;
+
+                        function buildZoneChanges() {
+                            var zoneChanges = [];
 
                             for (var i = 0; i < $scope.zoneItems.length; i++) {
-                                var zoneItem = $scope.zoneItems[i];
+                                var zoneItemChanges = buildZoneItemChanges($scope.zoneItems[i]);
 
-                                if (zoneItem.NewRate != undefined && zoneItem.NewRate != null)
-                                    newRates.push(buildNewRate(zoneItem));
+                                if (zoneItemChanges != null)
+                                    zoneChanges.push(zoneItemChanges);
                             }
 
-                            if (newRates.length == 0)
-                                newRates = null;
+                            if (zoneChanges.length == 0)
+                                zoneChanges = null;
 
-                            return newRates
+                            return zoneChanges;
 
-                            function buildNewRate(zoneItem) {
-                                return {
-                                    ZoneId: zoneItem.ZoneId,
-                                    NormalRate: zoneItem.NewRate,
-                                    BED: zoneItem.RateBED,
-                                    EED: zoneItem.RateEED
-                                };
+                            function buildZoneItemChanges(zoneItem) {
+                                var zoneChanges = null;
+
+                                var newRate = buildNewRate(zoneItem);
+                                var rateChange = (newRate != null) ? null : buildRateChange(zoneItem);
+
+                                if (newRate != null || rateChange != null) {
+                                    zoneChanges = {
+                                        ZoneId: zoneItem.ZoneId,
+                                        NewRate: newRate,
+                                        RateChange: rateChange
+                                    };
+                                }
+
+                                return zoneChanges;
+
+                                function buildNewRate(zoneItem) {
+                                    var newRate = null;
+
+                                    if ((isEmpty(zoneItem.NewRate) || isEmpty(zoneItem.CurrentRate)) || (zoneItem.NewRate != zoneItem.CurrentRate)) {
+                                        newRate = {
+                                            ZoneId: zoneItem.ZoneId,
+                                            NormalRate: zoneItem.NewRate,
+                                            BED: zoneItem.RateBED,
+                                            EED: zoneItem.RateEED
+                                        };
+                                    }
+
+                                    return newRate;
+
+                                    function isEmpty(value) {
+                                        return (value == undefined || value == null);
+                                    }
+                                }
+
+                                function buildRateChange(zoneItem) {
+                                    var rateChange = null;
+
+                                    if (zoneItem.RateNewEED != zoneItem.RateEED) {
+                                        return {
+                                            RateId: zoneItem.CurrentRateId,
+                                            EED: zoneItem.RateEED
+                                        };
+                                    }
+
+                                    return rateChange;
+                                }
                             }
                         }
                     };
@@ -118,7 +166,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 function extendZoneItem(zoneItem) {
                     zoneItem.isDirty = false;
                     zoneItem.DisableBED = true;
-                    zoneItem.DisableEED = true;
+                    zoneItem.DisableEED = (zoneItem.NewRate == null);
+                    zoneItem.RateNewEED = zoneItem.RateEED;
 
                     zoneItem.onNewRateChanged = function (dataItem) {
                         if (!dataItem.isDirty) {

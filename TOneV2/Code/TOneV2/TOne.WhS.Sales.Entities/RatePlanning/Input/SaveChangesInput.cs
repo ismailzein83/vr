@@ -12,6 +12,6 @@ namespace TOne.WhS.Sales.Entities.RatePlanning.Input
 
         public int OwnerId { get; set; }
 
-        public Changes Changes { get; set; }
+        public Changes NewChanges { get; set; }
     }
 }

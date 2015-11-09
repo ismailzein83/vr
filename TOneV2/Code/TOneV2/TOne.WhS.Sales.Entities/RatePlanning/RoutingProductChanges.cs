@@ -6,17 +6,6 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities.RatePlanning
 {
-    public class RoutingProductChanges
-    {
-        public NewDefaultRoutingProduct NewDefaultRoutingProduct { get; set; }
-
-        public DefaultRoutingProductChange ChangedDefaultRoutingProduct { get; set; }
-
-        public List<NewZoneRoutingProduct> NewZoneRoutingProducts { get; set; }
-
-        public List<ZoneRoutingProductChange> ChangedZoneRoutingProduct { get; set; }
-    }
-
     public class NewZoneRoutingProduct
     {
         public long ZoneId { get; set; }

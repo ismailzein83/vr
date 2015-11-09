@@ -84,12 +84,7 @@
 
             $scope.zoneLetterConnector = {
                 selectedZoneLetterIndex: 0,
-                onZoneLetterSelectionChanged: function () {
-                    WhS_Sales_RatePlanAPIService.SaveChanges(buildSaveChangesInput()).then(function (succeeded) {
-                        console.log(succeeded);
-                        gridAPI.loadGrid(buildGridQuery());
-                    });
-                }
+                onZoneLetterSelectionChanged: saveChanges
             };
 
             /* Grid */
@@ -128,6 +123,12 @@
             });
         }
 
+        function saveChanges() {
+            WhS_Sales_RatePlanAPIService.SaveChanges(buildSaveChangesInput()).then(function (response) {
+                gridAPI.loadGrid(buildGridQuery());
+            });
+        }
+
         function buildGridQuery() {
             return {
                 OwnerType: $scope.selectedOwnerType.value,
@@ -140,7 +141,7 @@
             return {
                 OwnerType: $scope.selectedOwnerType.value,
                 OwnerId: getOwnerId(),
-                Changes: gridAPI.getChanges()
+                NewChanges: gridAPI.getChanges()
             };
         }
 
@@ -185,16 +186,12 @@
         function defineSaveButtonMenuActions() {
             $scope.saveButtonMenuActions = [
                 { name: "Price List", clicked: savePriceList },
-                { name: "Draft", clicked: saveDraft },
+                { name: "Draft", clicked: saveChanges },
             ];
         }
 
         function savePriceList() {
             console.log("savePriceList");
-        }
-
-        function saveDraft() {
-            console.log("saveDraft");
         }
 
         function junkCode() {
