@@ -196,9 +196,9 @@ namespace TOne.WhS.BusinessEntity.Business
                         return false;
                     if (getSuppliers && !isSupplier)
                         return false;
-                    if (isSupplier && filteredSupplierIds != null && filteredSupplierIds.Contains(carrierAccount.CarrierAccountId))
+                    if (isSupplier && filteredSupplierIds != null && !filteredSupplierIds.Contains(carrierAccount.CarrierAccountId))
                         return false;
-                    if (isCustomer && filteredCustomerIds != null && filteredCustomerIds.Contains(carrierAccount.CarrierAccountId))
+                    if (isCustomer && filteredCustomerIds != null && !filteredCustomerIds.Contains(carrierAccount.CarrierAccountId))
                         return false;
                     return true;
                 };
