@@ -16,33 +16,21 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var allCarrierProfiles = GetCachedCarrierProfiles();
 
-            Func<CarrierProfileDetail, bool> filterExpression = (prod) =>
-                 (input.Query.Name == null || prod.Entity.Name.ToLower().Contains(input.Query.Name.ToLower()))
+            Func<CarrierProfile, bool> filterExpression = (prod) =>
+                 (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
 
-                  (input.Query.Company == null || prod.Entity.Settings.Company.ToLower().Contains(input.Query.Company.ToLower()))
+                  (input.Query.Company == null || prod.Settings.Company.ToLower().Contains(input.Query.Company.ToLower()))
                  &&
 
-                  (input.Query.BillingEmail == null || prod.Entity.Settings.BillingEmail.ToLower().Contains(input.Query.BillingEmail.ToLower()))
+                  (input.Query.BillingEmail == null || prod.Settings.BillingEmail.ToLower().Contains(input.Query.BillingEmail.ToLower()))
                  &&
 
-                 (input.Query.CountriesIds == null || input.Query.CountriesIds.Count == 0 || input.Query.CountriesIds.Contains(prod.Entity.Settings.CountryId))
+                 (input.Query.CountriesIds == null || input.Query.CountriesIds.Count == 0 || input.Query.CountriesIds.Contains(prod.Settings.CountryId))
                  &&
-                 (input.Query.CarrierProfileIds == null || input.Query.CarrierProfileIds.Contains(prod.Entity.CarrierProfileId));
+                 (input.Query.CarrierProfileIds == null || input.Query.CarrierProfileIds.Contains(prod.CarrierProfileId));
 
-           // return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierProfiles.ToBigResult(input, filterExpression, CarrierProfileDetailMapper));
-
-
-
-           // BigResult<CarrierProfileDetail> br = allCarrierProfiles.ToBigResult(input, filterExpression, CarrierProfileDetailMapper);
-
-
-
-
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, new BigResult<CarrierProfileDetail>());
-
-           // return null;
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierProfiles.ToBigResult(input, filterExpression, CarrierProfileDetailMapper));
         }
 
 
