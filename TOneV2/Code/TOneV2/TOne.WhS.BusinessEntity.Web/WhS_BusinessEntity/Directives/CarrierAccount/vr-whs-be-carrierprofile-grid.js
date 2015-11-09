@@ -64,7 +64,6 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
         }
 
         function setDataItemExtension(dataItem) {
-
             var extensionObject = {};
             var query = {
                 CarrierProfilesIds: [dataItem.CarrierProfileId],
@@ -92,7 +91,9 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
 
         function editCarrierProfile(carrierProfileObj) {
             var onCarrierProfileUpdated = function (carrierProfile) {
+              
                 gridAPI.itemUpdated(carrierProfile);
+                
             }
 
             WhS_BE_MainService.editCarrierProfile(carrierProfileObj, onCarrierProfileUpdated);

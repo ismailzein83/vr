@@ -15,6 +15,7 @@
         load();
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
+          
             if (parameters != undefined && parameters != null) {
                 carrierProfileId = parameters.CarrierProfileId;
             }
@@ -110,6 +111,7 @@
         }
 
         function buildCarrierProfileObjFromScope() {
+
             var obj = {
                 CarrierProfileId: (carrierProfileId != null) ? carrierProfileId : 0,
                 Name: $scope.name,
@@ -125,6 +127,7 @@
             if (VRNotificationService.notifyOnItemUpdated("Carrier Profile", response)) {
                 if ($scope.onCarrierProfileUpdated != undefined)
                     $scope.onCarrierProfileUpdated(response.UpdatedObject);
+             
                 $scope.modalContext.closeModal();
             }
         }).catch(function (error) {

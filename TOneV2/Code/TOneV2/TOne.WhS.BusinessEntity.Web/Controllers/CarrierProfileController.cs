@@ -38,14 +38,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddCarrierProfile")]
-        public TOne.Entities.InsertOperationOutput<CarrierProfile> AddCarrierProfile(CarrierProfile carrierProfile)
+        public TOne.Entities.InsertOperationOutput<CarrierProfileDetail> AddCarrierProfile(CarrierProfile carrierProfile)
         {
             CarrierProfileManager manager = new CarrierProfileManager();
             return manager.AddCarrierProfile(carrierProfile);
         }
         [HttpPost]
         [Route("UpdateCarrierProfile")]
-        public TOne.Entities.UpdateOperationOutput<CarrierProfile> UpdateCarrierProfile(CarrierProfile carrierProfile)
+        public TOne.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfile carrierProfile)
         {
             CarrierProfileManager manager = new CarrierProfileManager();
             return manager.UpdateCarrierProfile(carrierProfile);

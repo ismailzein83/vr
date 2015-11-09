@@ -46,14 +46,17 @@ function CarrierProfileManagementController($scope, CarrierProfileAPIService, VR
     function editCarrierProfile(carrierProfileObj) {
         var modalSettings = {
         };
+       
         var parameters = {
             profileID: carrierProfileObj.ProfileID
         };
         modalSettings.onScopeReady = function (modalScope) {
+
+          
+
             modalScope.title = "Carrier Profile Info(" + carrierProfileObj.Name + ")";
             modalScope.onCarrierProfileUpdated = function (CarrierProfileUpdated) {
                 gridApi.itemUpdated(CarrierProfileUpdated);
-
             };
         };
         VRModalService.showModal('/Client/Modules/BusinessEntity/Views/CarrierProfileEditor.html', parameters, modalSettings);

@@ -248,8 +248,9 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
     function editCarrierProfile(carrierProfileObj, onCarrierProfileUpdated) {
         var modalSettings = {
         };
+
         var parameters = {
-            CarrierProfileId: carrierProfileObj.CarrierProfileId,
+            CarrierProfileId: carrierProfileObj.Entity.CarrierProfileId,
         };
 
         modalSettings.onScopeReady = function (modalScope) {

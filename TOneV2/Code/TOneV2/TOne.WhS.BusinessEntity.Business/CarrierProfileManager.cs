@@ -30,6 +30,7 @@ namespace TOne.WhS.BusinessEntity.Business
                  &&
                  (input.Query.CarrierProfileIds == null || input.Query.CarrierProfileIds.Contains(prod.CarrierProfileId));
 
+
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierProfiles.ToBigResult(input, filterExpression, CarrierProfileDetailMapper));
         }
 
@@ -46,9 +47,9 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierProfiles.MapRecords(CarrierProfileInfoMapper);
         }
 
-        public TOne.Entities.InsertOperationOutput<CarrierProfile> AddCarrierProfile(CarrierProfile carrierProfile)
+        public TOne.Entities.InsertOperationOutput<CarrierProfileDetail> AddCarrierProfile(CarrierProfile carrierProfile)
         {
-            TOne.Entities.InsertOperationOutput<CarrierProfile> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CarrierProfile>();
+            TOne.Entities.InsertOperationOutput<CarrierProfileDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CarrierProfileDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -61,18 +62,18 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 carrierProfile.CarrierProfileId = carrierProfileId;
-                insertOperationOutput.InsertedObject = carrierProfile;
+                insertOperationOutput.InsertedObject = CarrierProfileDetailMapper(carrierProfile);
             }
 
             return insertOperationOutput;
         }
 
-        public TOne.Entities.UpdateOperationOutput<CarrierProfile> UpdateCarrierProfile(CarrierProfile carrierProfile)
+        public TOne.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfile carrierProfile)
         {
             ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
 
             bool updateActionSucc = dataManager.Update(carrierProfile);
-            TOne.Entities.UpdateOperationOutput<CarrierProfile> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CarrierProfile>();
+            TOne.Entities.UpdateOperationOutput<CarrierProfileDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CarrierProfileDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -80,7 +81,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (updateActionSucc)
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = carrierProfile;
+                updateOperationOutput.UpdatedObject = CarrierProfileDetailMapper(carrierProfile);
             }
 
             return updateOperationOutput;
@@ -124,13 +125,17 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private CarrierProfileDetail CarrierProfileDetailMapper(CarrierProfile carrierProfile)
         {
-            CountryManager manager = new CountryManager();
+            CarrierProfileDetail carrierProfileDetail = new CarrierProfileDetail();
 
-            return new CarrierProfileDetail()
+            carrierProfileDetail.Entity = carrierProfile;
+
+            CountryManager manager = new CountryManager();
+            if (carrierProfile.Settings != null)
             {
-                Entity = carrierProfile,
-                CountryName = (carrierProfile.Settings != null ? string.Empty : manager.GetCountry(carrierProfile.Settings.CountryId).Name)
-            };
+                carrierProfileDetail.CountryName = manager.GetCountry(carrierProfile.Settings.CountryId).Name;
+            }
+
+            return carrierProfileDetail;
         }
 
         #endregion
