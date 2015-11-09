@@ -14,6 +14,10 @@ namespace TOne.WhS.BusinessEntity.Entities
     }
     public class CarrierProfileSettings
     {
+        public string Company { get; set; }
 
+        public int CountryId { get; set; }
+
+        public string BillingEmail { get; set; }
     }
 }

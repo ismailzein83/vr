@@ -7,10 +7,17 @@
     function carrierProfileManagementController($scope, WhS_BE_MainService, UtilsService, VRNotificationService) {
         var gridAPI;
         var carrierProfileDirectiveAPI;
+        var countryDirectiveApi;
         defineScope();
         load();
 
         function defineScope() {
+
+            $scope.onCountryDirectiveReady = function (api) {
+                countryDirectiveApi = api;
+                api.load();
+            }
+
             $scope.searchClicked = function () {
                 if (!$scope.isGettingData && gridAPI != undefined)
                    return gridAPI.loadGrid(getFilterObject());
@@ -31,7 +38,11 @@
         function getFilterObject() {
             var data = {
                 Name: $scope.name,
+                CountriesIds: countryDirectiveApi.getIdsData(),
+                Company: $scope.company,
+                BillingEmail: $scope.billingEmail
             };
+            
             return data;
         }
 

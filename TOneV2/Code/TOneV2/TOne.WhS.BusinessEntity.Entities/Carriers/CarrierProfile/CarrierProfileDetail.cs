@@ -8,5 +8,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class CarrierProfileDetail
     {
+        public CarrierProfile Entity { get; set; }
+
+        public String CountryName { get; set; }
     }
 }

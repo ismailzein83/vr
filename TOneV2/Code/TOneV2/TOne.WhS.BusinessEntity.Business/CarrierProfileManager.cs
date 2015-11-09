@@ -6,34 +6,49 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class CarrierProfileManager
     {
-        public Vanrise.Entities.IDataRetrievalResult<CarrierProfile> GetFilteredCarrierProfiles(Vanrise.Entities.DataRetrievalInput<CarrierProfileQuery> input)
+
+        public Vanrise.Entities.IDataRetrievalResult<CarrierProfileDetail> GetFilteredCarrierProfiles(Vanrise.Entities.DataRetrievalInput<CarrierProfileQuery> input)
         {
-              var allCarrierProfiles = GetCachedCarrierProfiles();
+            var allCarrierProfiles = GetCachedCarrierProfiles();
 
-            Func<CarrierProfile, bool> filterExpression = (prod) =>
-                 (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
+            Func<CarrierProfileDetail, bool> filterExpression = (prod) =>
+                 (input.Query.Name == null || prod.Entity.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
-                 (input.Query.CarrierProfileIds == null || input.Query.CarrierProfileIds.Contains(prod.CarrierProfileId));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierProfiles.ToBigResult(input, filterExpression));
+                  (input.Query.Company == null || prod.Entity.Settings.Company.ToLower().Contains(input.Query.Company.ToLower()))
+                 &&
+
+                  (input.Query.BillingEmail == null || prod.Entity.Settings.BillingEmail.ToLower().Contains(input.Query.BillingEmail.ToLower()))
+                 &&
+
+                 (input.Query.CountriesIds == null || input.Query.CountriesIds.Count == 0 || input.Query.CountriesIds.Contains(prod.Entity.Settings.CountryId))
+                 &&
+                 (input.Query.CarrierProfileIds == null || input.Query.CarrierProfileIds.Contains(prod.Entity.CarrierProfileId));
+
+           // return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierProfiles.ToBigResult(input, filterExpression, CarrierProfileDetailMapper));
+
+
+            return null;
         }
 
 
         public CarrierProfile GetCarrierProfile(int carrierProfileId)
         {
-            List<CarrierProfile> carrierProfiles = GetCachedCarrierProfiles();
-            return carrierProfiles.FindRecord(x => x.CarrierProfileId == carrierProfileId);
+            var carrierProfiles = GetCachedCarrierProfiles();
+            return carrierProfiles.GetRecord(carrierProfileId);
         }
+
         public IEnumerable<CarrierProfileInfo> GetCarrierProfilesInfo()
         {
-            List<CarrierProfile> carrierProfiles = GetCachedCarrierProfiles();
+            var carrierProfiles = GetCachedCarrierProfiles();
             return carrierProfiles.MapRecords(CarrierProfileInfoMapper);
         }
-        
+
         public TOne.Entities.InsertOperationOutput<CarrierProfile> AddCarrierProfile(CarrierProfile carrierProfile)
         {
             TOne.Entities.InsertOperationOutput<CarrierProfile> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CarrierProfile>();
@@ -75,17 +90,20 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
 
-          #region Private Members
+        #region Private Members
 
-        List<CarrierProfile> GetCachedCarrierProfiles()
+        public Dictionary<int, CarrierProfile> GetCachedCarrierProfiles()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierProfiles",
                () =>
                {
                    ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
-                   return dataManager.GetCarrierProfiles();
+                   IEnumerable<CarrierProfile> carrierProfiles = dataManager.GetCarrierProfiles();
+                   return carrierProfiles.ToDictionary(cn => cn.CarrierProfileId, cn => cn);
                });
         }
+
+
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
@@ -107,7 +125,18 @@ namespace TOne.WhS.BusinessEntity.Business
             };
         }
 
+        private CarrierProfileDetail CarrierProfileDetailMapper(CarrierProfile carrierProfile)
+        {
+            CountryManager manager = new CountryManager();
+
+            return new CarrierProfileDetail()
+            {
+                Entity = carrierProfile,
+                CountryName = (carrierProfile.Settings.CountryId != null ? string.Empty : manager.GetCountry(carrierProfile.Settings.CountryId).Name)
+            };
+        }
+
         #endregion
     }
-    
+
 }

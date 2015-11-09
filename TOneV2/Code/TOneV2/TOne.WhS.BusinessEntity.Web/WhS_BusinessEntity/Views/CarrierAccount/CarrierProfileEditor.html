@@ -11,14 +11,23 @@
                         <vr-textbox value="name" label="Name" isrequired></vr-textbox>
                     </vr-columns>
                 </vr-row>
-                <vr-row>
-                    <vr-columns width="fullrow">
-
-                    </vr-columns>
-                </vr-row>
             </div>
             <div ng-show="settingsSelected">
+                <vr-row>
+                    <vr-columns width="1/2row">
+                        <vr-textbox value="company" label="Company" isrequired></vr-textbox>
+                    </vr-columns>
 
+                    <vr-columns width="1/2row">
+                        <vr-whs-be-country-selector on-ready="onCountryDirectiveReady"  isrequired showaddbutton></vr-whs-be-country-selector>
+                    </vr-columns>
+                </vr-row>
+
+                <vr-row>
+                    <vr-columns width="1/2row">
+                        <vr-textbox value="billingEmail" label="Billing Email" type="email" isrequired></vr-textbox>
+                    </vr-columns>
+                </vr-row>
             </div>
         </vr-form>
     </vr-modalbody>
