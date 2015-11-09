@@ -33,7 +33,16 @@ namespace TOne.WhS.BusinessEntity.Business
            // return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierProfiles.ToBigResult(input, filterExpression, CarrierProfileDetailMapper));
 
 
-            return null;
+
+           // BigResult<CarrierProfileDetail> br = allCarrierProfiles.ToBigResult(input, filterExpression, CarrierProfileDetailMapper);
+
+
+
+
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, new BigResult<CarrierProfileDetail>());
+
+           // return null;
         }
 
 
@@ -132,7 +141,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return new CarrierProfileDetail()
             {
                 Entity = carrierProfile,
-                CountryName = (carrierProfile.Settings.CountryId != null ? string.Empty : manager.GetCountry(carrierProfile.Settings.CountryId).Name)
+                CountryName = (carrierProfile.Settings != null ? string.Empty : manager.GetCountry(carrierProfile.Settings.CountryId).Name)
             };
         }
 
