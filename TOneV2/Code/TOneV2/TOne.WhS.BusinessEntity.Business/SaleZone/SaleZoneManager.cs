@@ -17,10 +17,11 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var allSaleZones = GetAllSaleZones();
             Func<SaleZone, bool> filterExpression = (prod) =>
-                  ((input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
-                  && (input.Query.Countries == null || input.Query.Countries.Contains((int)prod.CountryId)))
+                     (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    && (input.Query.Countries == null || input.Query.Countries.Contains(prod.CountryId))
                   && (input.Query.SellingNumber.Equals(prod.SellingNumberPlanId))
-                  && (!input.Query.EffectiveOn.HasValue || (input.Query.EffectiveOn >= prod.BeginEffectiveDate && input.Query.EffectiveOn < prod.EndEffectiveDate));
+                  && ((!input.Query.EffectiveOn.HasValue || (prod.BeginEffectiveDate <= input.Query.EffectiveOn)))
+                  && ((!input.Query.EffectiveOn.HasValue || !prod.EndEffectiveDate.HasValue || (prod.EndEffectiveDate > input.Query.EffectiveOn)));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSaleZones.ToBigResult(input, filterExpression, SaleZoneDetailMapper));
         }

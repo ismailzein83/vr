@@ -204,6 +204,8 @@
     <Content Include="WhS_BusinessEntity\Directives\RouteRule\vr-whs-be-routerule-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\vr-whs-be-routingproduct-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SaleZone\Templates\SaleZoneGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SaleZone\vr-whs-be-salezone-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleZone\vr-whs-be-salezone-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\SellingProduct\Templates\CustomerSellingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Settings\Templates\PricingRuleExtraChargeSettings.html" />

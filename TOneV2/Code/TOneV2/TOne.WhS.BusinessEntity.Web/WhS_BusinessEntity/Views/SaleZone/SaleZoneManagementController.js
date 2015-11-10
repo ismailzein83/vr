@@ -14,7 +14,8 @@
 
         function defineScope() {
             $scope.searchClicked = function () {
-                setFilterObject()
+                setFilterObject();
+                console.log(filter);
                 return gridAPI.loadGrid(filter);
             };
             $scope.onSellingNumberReady = function (api) {
@@ -27,7 +28,7 @@
             }
             $scope.onGridReady = function (api) {
                 gridAPI = api;            
-                api.loadGrid(filter);
+               
             }
           
         }
@@ -41,6 +42,9 @@
         function setFilterObject() {
             filter = {
                 Name: $scope.name,
+                SellingNumber: sellingDirectiveApi.getSelectedIds(),
+                EffectiveOn: $scope.effectiveOn,
+                Countries: countryDirectiveApi.getIdsData().length > 0 ? countryDirectiveApi.getIdsData() : null
             };
            
         }

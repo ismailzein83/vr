@@ -11,7 +11,8 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
-    public class SaleZoneController : BaseAPIController
+    [RoutePrefix(Constants.ROUTE_PREFIX + "SaleZone")]
+    public class WhSBE_SaleZoneController : BaseAPIController
     {
         [HttpPost]
         [Route("GetFilteredSaleZones")]
@@ -21,8 +22,9 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.GetFilteredSaleZones(input);
         }
 
-        
-        
+
+        [HttpGet]
+        [Route("GetSaleZonesInfo")]
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter,int sellingNumberPlanId, string serializedFilter)
         {
             SaleZoneInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SaleZoneInfoFilter>(serializedFilter) : null;
@@ -31,13 +33,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
 
         [HttpPost]
+        [Route("GetSaleZonesInfoByIds")]
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(SaleZoneInput input)
         {
             SaleZoneManager manager = new SaleZoneManager();
             return manager.GetSaleZonesInfoByIds(input.SellingNumberPlanId, input.SaleZoneIds, input.SaleZoneFilterSettings);
         }
-
-        [HttpGet]
+        [HttpPost]
+        [Route("GetSaleZoneGroupTemplates")]
         public List<TemplateConfig> GetSaleZoneGroupTemplates()
         {
             SaleZoneManager manager = new SaleZoneManager();
