@@ -1,0 +1,27 @@
+﻿<vr-panel ng-controller="WhS_BE_SaleZoneManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>              
+                <vr-columns width="normal">
+                    <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberReady" isrequired> </vr-whs-be-sellingnumberplan-selector>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-whs-be-country-selector on-ready="onCountryReady" ismultipleselection></vr-whs-be-country-selector>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-textbox value="name" label="Name"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="date" label="Effective On" value="exchangeDate"></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+    </vr-form>
+</vr-panel>

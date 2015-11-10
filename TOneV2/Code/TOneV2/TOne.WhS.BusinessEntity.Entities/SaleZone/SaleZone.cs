@@ -12,7 +12,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int SellingNumberPlanId { get; set; }
 
-        public int? CountryId { get; set; }
+        public int CountryId { get; set; }
 
         public string Name { get; set; }
 

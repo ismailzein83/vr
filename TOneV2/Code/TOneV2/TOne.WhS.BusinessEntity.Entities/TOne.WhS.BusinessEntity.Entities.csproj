@@ -103,6 +103,7 @@
     <Compile Include="SaleZone\SaleEntityZoneRate.cs" />
     <Compile Include="SaleZone\SaleZoneFilterSettings.cs" />
     <Compile Include="SaleZone\SaleZoneInfoFilter.cs" />
+    <Compile Include="SaleZone\SaleZonesQuery.cs" />
     <Compile Include="SellingProduct\CustomerSellingProductDetail.cs" />
     <Compile Include="SellingProduct\SellingProductDetail.cs" />
     <Compile Include="SellingProduct\CustomerSellingProduct.cs" />
@@ -182,7 +183,7 @@
     <Compile Include="SaleZone\SellingNumberPlan.cs" />
     <Compile Include="Carriers\CarrierAccounts\CarrierAccountSupplierSettings.cs" />
     <Compile Include="Carriers\Supplier\SupplierGroupSettings.cs" />
-    <Compile Include="SaleZone\SaleZoneQuery.cs" />
+    <Compile Include="SaleZone\SaleZonesToSellQuery.cs" />
     <Compile Include="SaleZone\SaleZoneService.cs" />
     <Compile Include="SupplierZone\IRuleSupplierZoneCriteria.cs" />
     <Compile Include="SupplierZone\IRuleSupplierZoneTarget.cs" />

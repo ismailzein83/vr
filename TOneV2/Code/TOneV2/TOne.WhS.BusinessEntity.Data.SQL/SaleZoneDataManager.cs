@@ -130,7 +130,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             
             sellingNumberPlan.SaleZoneId = (long)reader["ID"];
             sellingNumberPlan.SellingNumberPlanId = (int)reader["SellingNumberPlanID"];
-            sellingNumberPlan.CountryId = GetReaderValue<int?>(reader, "CountryID");
+            sellingNumberPlan.CountryId = GetReaderValue<int>(reader, "CountryID");
             sellingNumberPlan.Name = reader["Name"] as string;
             sellingNumberPlan.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED");
             sellingNumberPlan.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED");

@@ -286,6 +286,8 @@
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SaleZone\SaleZoneManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\SaleZone\SaleZoneManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SellingProduct\CustomerSellingProductEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\SellingProduct\CustomerSellingProductEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SellingProduct\CustomerSellingProductManagement.html" />

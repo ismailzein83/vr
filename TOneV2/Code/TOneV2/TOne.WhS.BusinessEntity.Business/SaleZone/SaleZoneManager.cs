@@ -12,6 +12,18 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleZoneManager
     {
+
+        public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZonesQuery> input)
+        {
+            var allSaleZones = GetAllSaleZones();
+            Func<SaleZone, bool> filterExpression = (prod) =>
+                  ((input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                  && (input.Query.Countries == null || input.Query.Countries.Contains((int)prod.CountryId)))
+                  && (input.Query.SellingNumber.Equals(prod.SellingNumberPlanId))
+                  && (!input.Query.EffectiveOn.HasValue || (input.Query.EffectiveOn >= prod.BeginEffectiveDate && input.Query.EffectiveOn < prod.EndEffectiveDate));
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSaleZones.ToBigResult(input, filterExpression, SaleZoneDetailMapper));
+        }
         public List<SaleZone> GetSaleZones(int sellingNumberPlanId, DateTime effectiveDate)
         {
             return this.GetCachedSaleZones(sellingNumberPlanId);
@@ -29,9 +41,9 @@ namespace TOne.WhS.BusinessEntity.Business
                     ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
                     IEnumerable<SaleZone> allSaleZones = dataManager.GetAllSaleZones();
                     Dictionary<long, SaleZone> allSaleZonesDic = new Dictionary<long, SaleZone>();
-                    if(allSaleZones != null)
+                    if (allSaleZones != null)
                     {
-                        foreach(var saleZone in allSaleZones)
+                        foreach (var saleZone in allSaleZones)
                         {
                             allSaleZonesDic.Add(saleZone.SaleZoneId, saleZone);
                         }
@@ -40,7 +52,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 });
         }
 
-        public Dictionary<string, List<SaleCode>> GetSaleZonesWithCodes(int sellingNumberPlanId,DateTime effectiveDate)
+        public Dictionary<string, List<SaleCode>> GetSaleZonesWithCodes(int sellingNumberPlanId, DateTime effectiveDate)
         {
             Dictionary<string, List<SaleCode>> saleZoneDictionary = new Dictionary<string, List<SaleCode>>();
             IEnumerable<SaleZone> salezones = this.GetSaleZones(sellingNumberPlanId, effectiveDate);
@@ -109,14 +121,14 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<SaleZone> GetSaleZonesByCountryIds(int sellingNumberPlanId, IEnumerable<int> countryIds)
         {
             IEnumerable<SaleZone> allSaleZones = GetCachedSaleZones(sellingNumberPlanId);
-            
+
             if (allSaleZones != null)
                 allSaleZones = allSaleZones.FindAllRecords(z => z.CountryId != null && countryIds.Contains((int)z.CountryId));
 
             return allSaleZones;
         }
 
-        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter,int sellingNumberPlanId, SaleZoneInfoFilter filter)
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, int sellingNumberPlanId, SaleZoneInfoFilter filter)
         {
             string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
             List<SaleZone> allZones = GetCachedSaleZones(sellingNumberPlanId);
@@ -145,7 +157,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return true;
             };
             return allZones.MapRecords(SaleZoneInfoMapper, zoneFilter);
-        }        
+        }
 
         #region Private Members
 
@@ -159,7 +171,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return _dataManager.AreZonesUpdated(ref _updateHandle);
             }
         }
-        
+
         private List<SaleZone> GetCachedSaleZones(int sellingNumberPlanId)
         {
             string cacheName = String.Format("GetCachedSaleZones_{0}", sellingNumberPlanId);

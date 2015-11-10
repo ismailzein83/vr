@@ -13,6 +13,16 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
     public class SaleZoneController : BaseAPIController
     {
+        [HttpPost]
+        [Route("GetFilteredSaleZones")]
+        public object GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZonesQuery> input)
+        {
+            SaleZoneManager manager = new SaleZoneManager();
+            return manager.GetFilteredSaleZones(input);
+        }
+
+        
+        
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter,int sellingNumberPlanId, string serializedFilter)
         {
             SaleZoneInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SaleZoneInfoFilter>(serializedFilter) : null;
