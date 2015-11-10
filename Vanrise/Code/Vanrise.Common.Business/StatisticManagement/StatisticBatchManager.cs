@@ -37,7 +37,7 @@ namespace Vanrise.Common.Business.StatisticManagement
 
         #region Public Methods
 
-        public IEnumerable<R> ConvertRawItemsToBatches(List<T> items)
+        public IEnumerable<R> ConvertRawItemsToBatches(IEnumerable<T> items)
         {
             Dictionary<DateTime, R> batches = new Dictionary<DateTime, R>();
             foreach (var item in items)
