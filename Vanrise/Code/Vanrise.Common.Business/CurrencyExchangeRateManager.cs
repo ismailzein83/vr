@@ -12,7 +12,8 @@ namespace Vanrise.Common.Business
     {
         public CurrencyExchangeRate GetEffectiveExchangeRate(int currencyId, DateTime effectiveOn)
         {
-            throw new NotImplementedException();
+            var allCurrenciesExchangeRates = GetCachedCurrenciesExchangeRates();
+            return allCurrenciesExchangeRates.FindRecord(x => x.CurrencyId == currencyId && x.ExchangeDate >= effectiveOn);
         }
         public Decimal ConvertValueToCurrency(decimal value, int currencyId, DateTime effectiveOn)
         {
@@ -31,7 +32,7 @@ namespace Vanrise.Common.Business
 
             var filteredExchangeRates = allCurrenciesExchangeRates.FindAllRecords((prod) =>
                  (input.Query.Currencies == null || input.Query.Currencies.Contains(prod.CurrencyId))
-                  && (!input.Query.ExchangeDate.HasValue ||  input.Query.ExchangeDate >= prod.ExchangeDate));
+                  && (!input.Query.ExchangeDate.HasValue || input.Query.ExchangeDate >= prod.ExchangeDate));
 
             //if exchange rate is specified, retrieve only latest exchange rate for each currency
             if (filteredExchangeRates != null && input.Query.ExchangeDate.HasValue)
@@ -58,7 +59,7 @@ namespace Vanrise.Common.Business
                 return null;
 
             return allExchangeRates.Values;
-        }        
+        }
         public Dictionary<long, CurrencyExchangeRate> GetCachedCurrenciesExchangeRates()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCurrenciesExchangeRate",
@@ -114,7 +115,7 @@ namespace Vanrise.Common.Business
 
             return updateOperationOutput;
         }
-        
+
         #region Private Members
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager

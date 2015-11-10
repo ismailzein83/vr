@@ -1,11 +1,23 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.GenerateSupplierZoneDetails" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.GenerateSupplierZoneDetails"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Activities;assembly=TOne.WhS.Routing.BP.Activities"
+ xmlns:twre="clr-namespace:TOne.WhS.Routing.Entities;assembly=TOne.WhS.Routing.Entities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="RoutingDatabaseId" Type="InArgument(x:Int32)" />
+    <x:Property Name="EffectiveOn" Type="InArgument(s:Nullable(s:DateTime))" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.GenerateSupplierZoneDetails_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -13,22 +25,115 @@
       <x:String>System.Data</x:String>
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
-      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.GenerateSupplierZoneDetails_1</sap2010:WorkflowViewState.IdRef>
+  <Parallel DisplayName="Parallel_SupplierZoneDetail" sap2010:WorkflowViewState.IdRef="Parallel_1">
+    <Parallel.Variables>
+      <Variable x:TypeArguments="vq:BaseQueue(twre:SupplierZoneDetailBatch)" Name="queueSupplierZoneDetailBatch" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="generateSupplierZoneDetailStatus" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedSupplierZoneDetails" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareSupplierZoneDetailStatus" />
+    </Parallel.Variables>
+    <twrba:GenerateSupplierZoneDetails sap2010:WorkflowViewState.IdRef="GenerateSupplierZoneDetails_2">
+      <twrba:GenerateSupplierZoneDetails.EffectiveOn>
+        <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">EffectiveOn</mca:CSharpValue>
+        </InArgument>
+      </twrba:GenerateSupplierZoneDetails.EffectiveOn>
+      <twrba:GenerateSupplierZoneDetails.IsEffectiveInFuture>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">EffectiveOn.HasValue ? false:true</mca:CSharpValue>
+        </InArgument>
+      </twrba:GenerateSupplierZoneDetails.IsEffectiveInFuture>
+      <twrba:GenerateSupplierZoneDetails.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(twre:SupplierZoneDetailBatch)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:SupplierZoneDetailBatch)">queueSupplierZoneDetailBatch</mca:CSharpReference>
+        </InOutArgument>
+      </twrba:GenerateSupplierZoneDetails.OutputQueue>
+      <twrba:GenerateSupplierZoneDetails.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">generateSupplierZoneDetailStatus</mca:CSharpReference>
+        </OutArgument>
+      </twrba:GenerateSupplierZoneDetails.Status>
+    </twrba:GenerateSupplierZoneDetails>
+    <twrba:PrepareSupplierZoneDetailForDBApply sap2010:WorkflowViewState.IdRef="PrepareSupplierZoneDetailForDBApply_1">
+      <twrba:PrepareSupplierZoneDetailForDBApply.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(twre:SupplierZoneDetailBatch)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:SupplierZoneDetailBatch)">queueSupplierZoneDetailBatch</mca:CSharpValue>
+        </InArgument>
+      </twrba:PrepareSupplierZoneDetailForDBApply.InputQueue>
+      <twrba:PrepareSupplierZoneDetailForDBApply.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedSupplierZoneDetails</mca:CSharpReference>
+        </InOutArgument>
+      </twrba:PrepareSupplierZoneDetailForDBApply.OutputQueue>
+      <twrba:PrepareSupplierZoneDetailForDBApply.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">generateSupplierZoneDetailStatus</mca:CSharpValue>
+        </InArgument>
+      </twrba:PrepareSupplierZoneDetailForDBApply.PreviousActivityStatus>
+      <twrba:PrepareSupplierZoneDetailForDBApply.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareSupplierZoneDetailStatus</mca:CSharpReference>
+        </OutArgument>
+      </twrba:PrepareSupplierZoneDetailForDBApply.Status>
+    </twrba:PrepareSupplierZoneDetailForDBApply>
+    <twrba:ApplySupplierZoneDetailsToDB Status="{x:Null}">
+      <twrba:ApplySupplierZoneDetailsToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedSupplierZoneDetails</mca:CSharpValue>
+        </InArgument>
+      </twrba:ApplySupplierZoneDetailsToDB.InputQueue>
+      <twrba:ApplySupplierZoneDetailsToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareSupplierZoneDetailStatus</mca:CSharpValue>
+        </InArgument>
+      </twrba:ApplySupplierZoneDetailsToDB.PreviousActivityStatus>
+      <twrba:ApplySupplierZoneDetailsToDB.RoutingDatabaseId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabaseId</mca:CSharpValue>
+        </InArgument>
+      </twrba:ApplySupplierZoneDetailsToDB.RoutingDatabaseId>
+      <sap2010:WorkflowViewState.IdRef>ApplySupplierZoneDetailsToDB_1</sap2010:WorkflowViewState.IdRef>
+    </twrba:ApplySupplierZoneDetailsToDB>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEdlbmVyYXRlU3VwcGxpZXJab25lRGV0YWlscy54YW1sDzsDgQEOAgEBQgVXKQIBNVgFbTECARhuBX8qAgECSgtKawIBS0ULRWICAURUC1R/AgE9TwtPjwECATZlC2V3AgEuWwtbhwECASdqC2p+AgEgYAtgfwIBGXYLdnYCARFxC3F3AgEKewt7WQIBAw==</sads:DebugSymbol.Symbol>
+  </Parallel>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.GenerateSupplierZoneDetails_1" sap:VirtualizedContainerService.HintSize="440,440" />
+      <sap2010:ViewStateData Id="GenerateSupplierZoneDetails_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareSupplierZoneDetailForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplySupplierZoneDetailsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.GenerateSupplierZoneDetails_1" sap:VirtualizedContainerService.HintSize="834,166" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

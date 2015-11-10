@@ -18,7 +18,7 @@ namespace TOne.WhS.Routing.BP.Activities
         public bool IsEffectiveInFuture { get; set; }
 
     }
-    public sealed class GenerateSupplierZoneDetails : DependentAsyncActivity<GenerateSupplierZoneDetailsInput>
+    public sealed class GenerateSupplierZoneDetails : BaseAsyncActivity<GenerateSupplierZoneDetailsInput>
     {
         [RequiredArgument]
         public InArgument<DateTime?> EffectiveOn { get; set; }
@@ -27,22 +27,24 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InOutArgument<BaseQueue<SupplierZoneDetailBatch>> OutputQueue { get; set; }
 
-        protected override void DoWork(GenerateSupplierZoneDetailsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(GenerateSupplierZoneDetailsInput inputArgument, AsyncActivityHandle handle)
         {
-
             SupplierZoneDetailBatch supplierZoneDetailBatch = new SupplierZoneDetailBatch();
             supplierZoneDetailBatch.SupplierZoneDetails = new List<SupplierZoneDetail>();
             ZoneDetailBuilder zoneDetailBuilder = new ZoneDetailBuilder();
             zoneDetailBuilder.BuildSupplierZoneDetails(inputArgument.EffectiveOn, inputArgument.IsEffectiveInFuture, (supplierZoneDetail) =>
             {
                 supplierZoneDetailBatch.SupplierZoneDetails.Add(supplierZoneDetail);
-
+                if (supplierZoneDetailBatch.SupplierZoneDetails.Count >= 10000)
+                {
+                    inputArgument.OutputQueue.Enqueue(supplierZoneDetailBatch);
+                    supplierZoneDetailBatch = new SupplierZoneDetailBatch();
+                    supplierZoneDetailBatch.SupplierZoneDetails = new List<SupplierZoneDetail>();
+                }
             });
-
-
         }
 
-        protected override GenerateSupplierZoneDetailsInput GetInputArgument2(AsyncCodeActivityContext context)
+        protected override GenerateSupplierZoneDetailsInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new GenerateSupplierZoneDetailsInput()
             {
@@ -50,6 +52,13 @@ namespace TOne.WhS.Routing.BP.Activities
                 IsEffectiveInFuture = this.IsEffectiveInFuture.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
             };
+        }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.OutputQueue.Get(context) == null)
+                this.OutputQueue.Set(context, new MemoryQueue<SupplierZoneDetailBatch>());
+            base.OnBeforeExecute(context, handle);
         }
     }
 }

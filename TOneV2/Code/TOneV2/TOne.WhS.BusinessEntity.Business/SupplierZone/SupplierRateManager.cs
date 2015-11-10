@@ -10,16 +10,17 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierRateManager
     {
-       
-        public List<SupplierRate> GetSupplierRatesEffectiveAfter(int supplierId,DateTime minimumDate)
+
+        public List<SupplierRate> GetSupplierRatesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
-            return dataManager.GetSupplierRates(supplierId,minimumDate);
+            return dataManager.GetSupplierRates(supplierId, minimumDate);
         }
 
         public List<SupplierRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
-            throw new NotImplementedException();
+            ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
+            return dataManager.GetAllSupplierRates(effectiveOn, isEffectiveInFuture);
         }
 
         public CallCost GetCallCost(int supplierId, long supplierZoneId, int durationInSeconds, DateTime effectiveOn)

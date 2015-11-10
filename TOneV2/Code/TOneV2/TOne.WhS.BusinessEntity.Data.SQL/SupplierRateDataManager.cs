@@ -45,5 +45,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return base.IsDataUpdated("TOneWhS_BE.SupplierRate", ref updateHandle);
         }
+
+
+        public List<SupplierRate> GetAllSupplierRates(DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetAll", SupplierRateMapper, effectiveOn, isEffectiveInFuture);
+        }
     }
 }

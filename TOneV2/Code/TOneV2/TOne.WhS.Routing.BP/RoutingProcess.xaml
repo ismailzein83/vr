@@ -1,5 +1,6 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.RoutingProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:TOne.WhS.Routing.BP"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:s="clr-namespace:System;assembly=mscorlib"
@@ -38,16 +39,18 @@
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
-      <AssemblyReference>System.ServiceModel</AssemblyReference>
-      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
     </sco:Collection>
@@ -79,21 +82,47 @@
         </InArgument>
       </twrba1:CreateRoutingDatabase.Type>
     </twrba1:CreateRoutingDatabase>
-    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ1Byb2Nlc3MueGFtbAg3A1MOAgEBOwU/EQIBDUAFQGMCAQxBBVEkAgECPQk9egIBDkkLSWoCAQlEC0RhAgEGTgtOcgIBAw==</sads:DebugSymbol.Symbol>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <local:GenerateSupplierZoneDetails sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Routing.BP.GenerateSupplierZoneDetails_1">
+        <local:GenerateSupplierZoneDetails.EffectiveOn>
+          <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+            <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveTime</mca:CSharpValue>
+          </InArgument>
+        </local:GenerateSupplierZoneDetails.EffectiveOn>
+        <local:GenerateSupplierZoneDetails.RoutingDatabaseId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
+          </InArgument>
+        </local:GenerateSupplierZoneDetails.RoutingDatabaseId>
+        <sap2010:WorkflowViewState.ViewStateManager>
+          <sap2010:ViewStateManager>
+            <sap2010:ViewStateData Id="GenerateSupplierZoneDetails_1" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
+            <sap2010:ViewStateData Id="Parallel_1" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
+            <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.GenerateSupplierZoneDetails_1" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
+          </sap2010:ViewStateManager>
+        </sap2010:WorkflowViewState.ViewStateManager>
+      </local:GenerateSupplierZoneDetails>
+    </Parallel>
+    <sads:DebugSymbol.Symbol>dw1DOlxFbXB0eS54YW1sAA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="211,62" />
-      <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="211,22" />
-      <sap2010:ViewStateData Id="CreateRoutingDatabase_2" sap:VirtualizedContainerService.HintSize="211,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="233,310">
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="314,62" />
+      <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="CreateRoutingDatabase_2" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="314,86" />
+      <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="354,166" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.GenerateSupplierZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="314,86" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,436">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RoutingProcess_1" sap:VirtualizedContainerService.HintSize="273,390" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RoutingProcess_1" sap:VirtualizedContainerService.HintSize="376,516" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -64,9 +64,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplySupplierZoneDetailsToDB.cs" />
     <Compile Include="CreateRoutingDatabase.cs" />
     <Compile Include="DropOldRoutingDatabases.cs" />
     <Compile Include="GenerateSupplierZoneDetails.cs" />
+    <Compile Include="PrepareSupplierZoneDetailForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetRoutingDatabaseReady.cs" />
   </ItemGroup>
