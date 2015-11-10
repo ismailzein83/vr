@@ -15,7 +15,7 @@
         load();
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-          
+
             if (parameters != undefined && parameters != null) {
                 carrierProfileId = parameters.CarrierProfileId;
             }
@@ -24,13 +24,15 @@
         }
 
         function defineScope() {
+            $scope.phoneNumbers = ['a', 'b'];
+            $scope.faxes = ['c', 'd'];
 
+
+            defineEmailTypes();
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 load();
             }
-
-
             $scope.SaveCarrierProfile = function () {
                 if (isEditMode) {
                     return updateCarrierProfile();
@@ -42,6 +44,13 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
+        }
+
+
+        function defineEmailTypes() {
+            $scope.contacts = [];
+            //for (var x in WhS_Be_EmailTypeEnum)
+            //    $scope.contacts.push(WhS_Be_EmailTypeEnum[x]);
         }
 
         function load() {
@@ -68,7 +77,6 @@
             });
         }
 
-
         function getCarrierProfile() {
             return WhS_BE_CarrierProfileAPIService.GetCarrierProfile(carrierProfileId).then(function (carrierProfile) {
                 carrierProfileEntity = carrierProfile;
@@ -83,17 +91,26 @@
             if (carrierProfileEntity != undefined) {
                 $scope.name = carrierProfileEntity.Name;
 
-                if (carrierProfileEntity.Settings != null)
-                {
+                if (carrierProfileEntity.Settings != null) {
                     $scope.company = carrierProfileEntity.Settings.Company;
-                    $scope.webSite = carrierProfileEntity.Settings.WebSite;
+                    $scope.website = carrierProfileEntity.Settings.Website;
+                    $scope.registrationNumber = carrierProfileEntity.Settings.RegistrationNumber;
+                    $scope.phoneNumbers = carrierProfileEntity.Settings.PhoneNumbers;
+                    $scope.faxes = carrierProfileEntity.Settings.Faxes;
+                    $scope.address = carrierProfileEntity.Settings.Address;
+                    $scope.postalCode = carrierProfileEntity.Settings.PostalCode;
+                    $scope.town = carrierProfileEntity.Settings.Town;
+
+                    $scope.companyLogo = {
+                        fileId: carrierProfileEntity.CompanyLogo
+                    };
+                 
                     countryDirectiveApi.setData(carrierProfileEntity.Settings.CountryId)
                 }
-                    
+
             }
 
         }
-
 
         function insertCarrierProfile() {
             var carrierProfileObject = buildCarrierProfileObjFromScope();
@@ -115,26 +132,27 @@
             var obj = {
                 CarrierProfileId: (carrierProfileId != null) ? carrierProfileId : 0,
                 Name: $scope.name,
-                Settings: { CountryId: countryDirectiveApi.getDataId(), Company: $scope.company, WebSite: $scope.webSite }
-        };
-        return obj;
-    }
+                Settings: { CountryId: countryDirectiveApi.getDataId(), Company: $scope.company, Website: $scope.website, RegistrationNumber: $scope.registrationNumber, PhoneNumbers: $scope.phoneNumbers, Faxes: $scope.faxes, Address: $scope.address, PostalCode: $scope.postalCode, Town: $scope.town, CompanyLogo: $scope.companyLogo.fileId }
+            };
+            console.log(obj)
+            return obj;
+        }
 
-    function updateCarrierProfile() {
-        var carrierProfileObject = buildCarrierProfileObjFromScope();
-        WhS_BE_CarrierProfileAPIService.UpdateCarrierProfile(carrierProfileObject)
-        .then(function (response) {
-            if (VRNotificationService.notifyOnItemUpdated("Carrier Profile", response)) {
-                if ($scope.onCarrierProfileUpdated != undefined)
-                    $scope.onCarrierProfileUpdated(response.UpdatedObject);
-             
-                $scope.modalContext.closeModal();
-            }
-        }).catch(function (error) {
-            VRNotificationService.notifyException(error, $scope);
-        });
+        function updateCarrierProfile() {
+            var carrierProfileObject = buildCarrierProfileObjFromScope();
+            WhS_BE_CarrierProfileAPIService.UpdateCarrierProfile(carrierProfileObject)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated("Carrier Profile", response)) {
+                    if ($scope.onCarrierProfileUpdated != undefined)
+                        $scope.onCarrierProfileUpdated(response.UpdatedObject);
+
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
+        }
     }
-}
 
     appControllers.controller('WhS_BE_CarrierProfileEditorController', carrierProfileEditorController);
 })(appControllers);

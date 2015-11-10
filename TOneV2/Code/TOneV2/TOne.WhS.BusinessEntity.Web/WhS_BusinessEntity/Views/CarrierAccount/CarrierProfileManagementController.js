@@ -40,7 +40,7 @@
                 Name: $scope.name,
                 CountriesIds: countryDirectiveApi.getIdsData(),
                 Company: $scope.company,
-                RegistrationNumber: $scope.registrationNumber
+                BillingEmail: $scope.billingEmail
             };
             
             return data;

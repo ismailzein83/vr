@@ -16,7 +16,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
        public string Company { get; set; }
 
-       public string RegistrationNumber { get; set; }
+       public string BillingEmail { get; set; }
 
     }
 }

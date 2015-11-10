@@ -23,7 +23,7 @@ namespace TOne.WhS.BusinessEntity.Business
                   (input.Query.Company == null || prod.Settings.Company.ToLower().Contains(input.Query.Company.ToLower()))
                  &&
 
-                  (input.Query.RegistrationNumber == null || prod.Settings.RegistrationNumber.ToLower().Contains(input.Query.RegistrationNumber.ToLower()))
+                  (input.Query.BillingEmail == null || prod.Contacts.BillingEmail.ToLower().Contains(input.Query.BillingEmail.ToLower()))
                  &&
 
                  (input.Query.CountriesIds == null || input.Query.CountriesIds.Count == 0 || input.Query.CountriesIds.Contains(prod.Settings.CountryId))
