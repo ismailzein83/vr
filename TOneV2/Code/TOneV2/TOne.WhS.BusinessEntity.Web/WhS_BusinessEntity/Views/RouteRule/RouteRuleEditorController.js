@@ -223,7 +223,7 @@
                     var saleZoneGroupPayload;
 
                     if (routeRuleEntity != undefined) {
-                        saleZoneGroupPayload.sellingNumberPlanId = routeRuleEntity.Criteria.SaleZoneGroupSettings.SellingNumberPlanId;
+                        saleZoneGroupPayload.sellingNumberPlanId = routeRuleEntity.Criteria.SaleZoneGroupSettings != undefined ? routeRuleEntity.Criteria.SaleZoneGroupSettings.SellingNumberPlanId : undefined;
                         saleZoneGroupPayload.saleZoneGroupSettings = routeRuleEntity.Criteria.SaleZoneGroupSettings
                     }
 
