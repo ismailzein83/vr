@@ -26,10 +26,10 @@
         function defineScope() {
             $scope.phoneNumbers = ['a', 'b'];
             $scope.faxes = ['c', 'd'];
-
+            $scope.percentages = [];
             $scope.contacts = [];
 
-          
+
             for (var x in WhS_Be_ContactTypeEnum)
                 $scope.contacts.push(WhS_Be_ContactTypeEnum[x]);
 
@@ -48,6 +48,22 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
+
+
+            $scope.addPercentageOption = function () {
+                $scope.percentages.push({
+                    id: index++,
+                    percentage: $scope.percentageValue
+                });
+            };
+
+
+            $scope.removePercentage = function ($event, option) {
+                var index = UtilsService.getItemIndexByVal($scope.percentages, option.id, 'id');
+                $scope.percentages.splice(index, 1);
+            };
+
+
         }
 
 
@@ -102,8 +118,22 @@
                     $scope.companyLogo = {
                         fileId: carrierProfileEntity.Settings.CompanyLogo
                     };
-                 
+
                     countryDirectiveApi.setData(carrierProfileEntity.Settings.CountryId)
+
+
+
+                    for (var i = 0; i < carrierProfileEntity.PhoneNumbers.length; i++) {
+                        $scope.percentages.push({
+                            id: i,
+                            percentage: carrierProfileEntity.Percentages[i]
+                        });
+                    }
+
+
+
+
+
                 }
 
             }
@@ -130,7 +160,18 @@
             var obj = {
                 CarrierProfileId: (carrierProfileId != null) ? carrierProfileId : 0,
                 Name: $scope.name,
-                Settings: { CountryId: countryDirectiveApi.getDataId(), Company: $scope.company, Website: $scope.website, RegistrationNumber: $scope.registrationNumber, PhoneNumbers: $scope.phoneNumbers, Faxes: $scope.faxes, Address: $scope.address, PostalCode: $scope.postalCode, Town: $scope.town, CompanyLogo: $scope.companyLogo.fileId }
+                Settings: {
+                    CountryId: countryDirectiveApi.getDataId(),
+                    Company: $scope.company, Website: $scope.website,
+                    RegistrationNumber: $scope.registrationNumber,
+                    PhoneNumbers: $scope.phoneNumbers,
+                    Faxes: $scope.faxes,
+                    Address: $scope.address,
+                    PostalCode: $scope.postalCode,
+                    Town: $scope.town,
+                    CompanyLogo: $scope.companyLogo.fileId,
+                    Percentages: UtilsService.getPropValuesFromArray($scope.percentages, "percentage")
+                }
             };
             console.log(obj)
             return obj;
