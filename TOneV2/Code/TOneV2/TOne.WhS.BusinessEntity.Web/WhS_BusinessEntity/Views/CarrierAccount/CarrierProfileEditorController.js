@@ -26,7 +26,6 @@
         function defineScope() {
             $scope.phoneNumbers = ['a', 'b'];
             $scope.faxes = ['c', 'd'];
-            $scope.percentages = [];
             $scope.contacts = [];
 
 
@@ -50,17 +49,17 @@
             };
 
 
-            $scope.addPercentageOption = function () {
-                $scope.percentages.push({
+            $scope.addPhoneNumberOption = function () {
+                $scope.phoneNumbers.push({
                     id: index++,
-                    percentage: $scope.percentageValue
+                    phoneNumber: $scope.phoneNumberValue
                 });
             };
 
 
-            $scope.removePercentage = function ($event, option) {
-                var index = UtilsService.getItemIndexByVal($scope.percentages, option.id, 'id');
-                $scope.percentages.splice(index, 1);
+            $scope.removePhoneNumber = function ($event, option) {
+                var index = UtilsService.getItemIndexByVal($scope.phoneNumbers, option.id, 'id');
+                $scope.phoneNumbers.splice(index, 1);
             };
 
 
@@ -109,7 +108,6 @@
                     $scope.company = carrierProfileEntity.Settings.Company;
                     $scope.website = carrierProfileEntity.Settings.Website;
                     $scope.registrationNumber = carrierProfileEntity.Settings.RegistrationNumber;
-                    $scope.phoneNumbers = carrierProfileEntity.Settings.PhoneNumbers;
                     $scope.faxes = carrierProfileEntity.Settings.Faxes;
                     $scope.address = carrierProfileEntity.Settings.Address;
                     $scope.postalCode = carrierProfileEntity.Settings.PostalCode;
@@ -124,9 +122,9 @@
 
 
                     for (var i = 0; i < carrierProfileEntity.PhoneNumbers.length; i++) {
-                        $scope.percentages.push({
+                        $scope.phoneNumbers.push({
                             id: i,
-                            percentage: carrierProfileEntity.Percentages[i]
+                            phoneNumber: carrierProfileEntity.PhoneNumbers[i]
                         });
                     }
 
@@ -164,13 +162,12 @@
                     CountryId: countryDirectiveApi.getDataId(),
                     Company: $scope.company, Website: $scope.website,
                     RegistrationNumber: $scope.registrationNumber,
-                    PhoneNumbers: $scope.phoneNumbers,
                     Faxes: $scope.faxes,
                     Address: $scope.address,
                     PostalCode: $scope.postalCode,
                     Town: $scope.town,
                     CompanyLogo: $scope.companyLogo.fileId,
-                    Percentages: UtilsService.getPropValuesFromArray($scope.percentages, "percentage")
+                    PhoneNumbers: UtilsService.getPropValuesFromArray($scope.phoneNumbers, "phoneNumber")
                 }
             };
             console.log(obj)

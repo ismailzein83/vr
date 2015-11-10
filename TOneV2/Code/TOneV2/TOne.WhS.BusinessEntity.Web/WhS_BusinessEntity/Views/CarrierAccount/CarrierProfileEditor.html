@@ -28,25 +28,25 @@
 
                 <vr-row>
                     <vr-columns width="1/2row">
-                        <vr-textbox value="registrationNumber" label="Registration Number" ></vr-textbox>
+                        <vr-textbox value="registrationNumber" label="Registration Number"></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/2row">
-                        <vr-textbox value="address" label="Address" ></vr-textbox>
-                    </vr-columns>
-                </vr-row>
-
-                <vr-row>
-                    <vr-columns width="1/2row">
-                        <vr-textbox value="website" label="Website" ></vr-textbox>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-textbox value="postalCode" label="Postal Code" ></vr-textbox>
+                        <vr-textbox value="address" label="Address"></vr-textbox>
                     </vr-columns>
                 </vr-row>
 
                 <vr-row>
                     <vr-columns width="1/2row">
-                        <vr-textbox value="town" label="Town" ></vr-textbox>
+                        <vr-textbox value="website" label="Website"></vr-textbox>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-textbox value="postalCode" label="Postal Code"></vr-textbox>
+                    </vr-columns>
+                </vr-row>
+
+                <vr-row>
+                    <vr-columns width="1/2row">
+                        <vr-textbox value="town" label="Town"></vr-textbox>
                     </vr-columns>
                 </vr-row>
 
@@ -63,32 +63,30 @@
 
                 <vr-row>
                     <vr-columns width="1/2row">
-                        <vr-textbox value="phone" label="Phone" ></vr-textbox>
+                        <vr-textbox value="phone" label="Phone"></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/2row">
-                        <vr-textbox value="fax" label="Fax" ></vr-textbox>
+                        <vr-textbox value="fax" label="Fax"></vr-textbox>
                     </vr-columns>
                 </vr-row>
 
 
                 <vr-row removeline>
                     <vr-columns width="1/4row">
-                        <vr-textbox label="Percentage Value" value="percentageValue"></vr-textbox>
+                        <vr-textbox label="Phone Number Value" value="phoneNumberValue"></vr-textbox>
                     </vr-columns>
                     <vr-columns withemptyline width="1/4row">
-                        <vr-button type="Add" data-onclick="addPercentageOption" standalone></vr-button>
+                        <vr-button type="Add" data-onclick="addPhoneNumberOption" standalone></vr-button>
                     </vr-columns>
                     <vr-columns width="1/2row">
                         <div>
                             <ul class="list-group dragbelzone" ng-sortable="itemsSortable">
-                                <li ng-repeat="option in percentages" class="list-group-item list-custom" style="margin: 1px; font-size: 12px;">
+                                <li ng-repeat="option in phoneNumbers" class="list-group-item list-custom" style="margin: 1px; font-size: 12px;">
                                     <i class="glyphicon glyphicon-th-list handeldrag"></i>
                                     <div style="display: inline-block; max-width: 200px;">option ({{$index + 1}})</div>
-                                    <i class="glyphicon glyphicon-remove hand-cursor" style="float: right; padding: 5px; cursor: default" ng-click="removePercentage($event,option)"></i>
+                                    <i class="glyphicon glyphicon-remove hand-cursor" style="float: right; padding: 5px; cursor: default" ng-click="removePhoneNumber($event,option)"></i>
                                     <div style="width: 100px; float: right; margin-right: 60px; text-align: center;">
-                                        <!--<vr-numeric value="option.perc
-                                entage" unit="%" isrequired></vr-numeric>-->
-                                        {{option.percentage}}%
+                                        {{option.phoneNumber}}%
                                     </div>
                                 </li>
                             </ul>
@@ -106,7 +104,7 @@
                 <vr-row>
                     <vr-columns width="1/2row" ng-repeat="c in contacts">
                         <vr-label>{{c.label}}</vr-label>
-                        <vr-textbox value="c.value" ></vr-textbox>
+                        <vr-textbox value="c.value"></vr-textbox>
                     </vr-columns>
 
                 </vr-row>
