@@ -18,6 +18,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int CountryId { get; set; }
 
-        public string BillingEmail { get; set; }
+        public string RegistrationNumber { get; set; }
     }
 }

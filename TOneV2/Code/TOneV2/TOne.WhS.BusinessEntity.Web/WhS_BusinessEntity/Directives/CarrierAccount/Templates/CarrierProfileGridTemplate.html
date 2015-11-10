@@ -5,14 +5,11 @@
                      dataretrievalfunction="dataRetrievalFunction"
                      pagingtype="'PagingOnScroll'"
                      menuactions="gridMenuActions"
-                     idfield="Entity.CarrierProfileId"
-                     >
-
+                     idfield="Entity.CarrierProfileId">
             <vr-datagridcolumn headertext="'ID'" field="'Entity.CarrierProfileId'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Profile Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Company'" field="'Entity.Settings.Company'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Billing Email'" field="'Entity.Settings.BillingEmail'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Country'" field="'CountryName'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Company'" field="'Entity.Settings.Company'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridexpandablerow>
                 <vr-whs-be-carrieraccount-grid on-ready="dataItem.extensionObject.onGridReady" hideprofilecolumn></vr-whs-be-carrieraccount-grid>
             </vr-datagridexpandablerow>

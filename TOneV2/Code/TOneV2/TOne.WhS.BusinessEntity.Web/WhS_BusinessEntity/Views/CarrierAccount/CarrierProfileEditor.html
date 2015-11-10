@@ -2,33 +2,75 @@
     <vr-modalbody width="'50%'">
         <vr-form name="formCarrierProfileEditor">
             <vr-choices selectedindex="0">
-                <vr-choice isselected="definitionSelected">Definition</vr-choice>
-                <vr-choice isselected="settingsSelected">Settings</vr-choice>
+                <vr-choice isselected="generalInfoSelected">General Info</vr-choice>
+                <vr-choice isselected="financialInfoSelected">Financial Info</vr-choice>
+                <vr-choice isselected="contactsSelected">Contacts</vr-choice>
+                <vr-choice isselected="documentsSelected">Documents</vr-choice>
             </vr-choices>
-            <div ng-show="definitionSelected">
+            <div ng-show="generalInfoSelected">
                 <vr-row>
                     <vr-columns width="1/2row">
-                        <vr-textbox value="name" label="Name" isrequired></vr-textbox>
+                        <vr-textbox value="name" label="Profile Name" isrequired></vr-textbox>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-whs-be-country-selector on-ready="onCountryDirectiveReady" isrequired showaddbutton></vr-whs-be-country-selector>
                     </vr-columns>
                 </vr-row>
-            </div>
-            <div ng-show="settingsSelected">
+
                 <vr-row>
                     <vr-columns width="1/2row">
                         <vr-textbox value="company" label="Company" isrequired></vr-textbox>
                     </vr-columns>
-
                     <vr-columns width="1/2row">
-                        <vr-whs-be-country-selector on-ready="onCountryDirectiveReady"  isrequired showaddbutton></vr-whs-be-country-selector>
+                        <!--<vr-whs-be-city-selector on-ready="onCityDirectiveReady" isrequired showaddbutton></vr-whs-be-city-selector>-->
                     </vr-columns>
                 </vr-row>
 
                 <vr-row>
                     <vr-columns width="1/2row">
-                        <vr-textbox value="billingEmail" label="Billing Email" type="email" isrequired></vr-textbox>
+                        <vr-textbox value="registrationNumber" label="Registration Number" isrequired></vr-textbox>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-textbox value="address" label="Address" isrequired></vr-textbox>
                     </vr-columns>
                 </vr-row>
+
+                <vr-row>
+                    <vr-columns width="1/2row">
+                        <vr-textbox value="website" label="Website" isrequired></vr-textbox>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-textbox value="postalCode" label="Postal Code" isrequired></vr-textbox>
+                    </vr-columns>
+                </vr-row>
+
+                <vr-row>
+                    <vr-columns width="1/2row">
+                        <vr-textbox value="companyLogo" label="Company Logo" isrequired></vr-textbox>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-textbox value="town" label="Town" isrequired></vr-textbox>
+                    </vr-columns>
+                </vr-row>
+
+                <vr-row>
+                    <vr-columns width="1/2row">
+                        <vr-textbox value="phone" label="Phone" isrequired></vr-textbox>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-textbox value="fax" label="Fax" isrequired></vr-textbox>
+                    </vr-columns>
+                </vr-row>
+
+
             </div>
+
+            <div ng-show="financialInfoSelected">financial</div>
+            <div ng-show="contactsSelected">contacts</div>
+            <div ng-show="documentsSelected">documents</div>
+
+
+
         </vr-form>
     </vr-modalbody>
     <div>

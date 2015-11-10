@@ -86,7 +86,7 @@
                 if (carrierProfileEntity.Settings != null)
                 {
                     $scope.company = carrierProfileEntity.Settings.Company;
-                    $scope.billingEmail = carrierProfileEntity.Settings.BillingEmail;
+                    $scope.webSite = carrierProfileEntity.Settings.WebSite;
                     countryDirectiveApi.setData(carrierProfileEntity.Settings.CountryId)
                 }
                     
@@ -115,7 +115,7 @@
             var obj = {
                 CarrierProfileId: (carrierProfileId != null) ? carrierProfileId : 0,
                 Name: $scope.name,
-                Settings: {CountryId: countryDirectiveApi.getDataId(),  Company: $scope.company, BillingEmail: $scope.billingEmail}
+                Settings: { CountryId: countryDirectiveApi.getDataId(), Company: $scope.company, WebSite: $scope.webSite }
         };
         return obj;
     }
