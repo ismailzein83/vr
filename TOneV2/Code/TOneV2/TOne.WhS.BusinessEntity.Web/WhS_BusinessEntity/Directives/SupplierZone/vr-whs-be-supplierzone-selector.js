@@ -64,13 +64,14 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
         function supplierZoneCtor(ctrl, $scope, $attrs) {
             var filter;
             function initializeController() {
-
+                ctrl.datasource = [];
                 ctrl.searchSupplierZones = function (searchValue) {
+                    console.log(filter);
                     if (filter == undefined || filter.SupplierId == undefined)
-                        return;
+                        return null;
                     return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfo(UtilsService.serializetoJson(filter), searchValue);
                 }
-                ctrl.supplierZones = [];
+
                 defineAPI();
             }
 
@@ -78,14 +79,13 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                 var api = {};
                 
                 api.load = function (payload) {
-                   
                     var selectedIds;
                     if (payload != undefined) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
                     }
                     if (selectedIds != undefined) {
-                        ctrl.datasource = [];
+                        
                         return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfoByIds(UtilsService.serializetoJson(selectedIds)).then(function (response) {
                         angular.forEach(response, function (item) {
                             ctrl.datasource.push(item);

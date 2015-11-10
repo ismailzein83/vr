@@ -30,41 +30,52 @@ function ( UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAcco
         var saleZoneGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var sellingProductDirectiveAPI;
-        var sellingProductDirectiveReadyPromiseDeferred;
+        var sellingProductDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 
         var customerGroupDirectiveAPI;
         var customerGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
-            $scope.onCustomerGroupDirectiveReady = function (api) {
-                customerGroupDirectiveAPI = api;
-                customerGroupDirectiveReadyPromiseDeferred.resolve();
 
-            }
-            
-            $scope.onSellingProductDirectiveReady = function (api) {
-                sellingProductDirectiveAPI = api;
-                var setLoader = function (value) { $scope.isLoadingSellingProductDirective = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingProductDirectiveAPI, undefined, setLoader, sellingProductDirectiveReadyPromiseDeferred);
-            }
+          
             $scope.onSaleZoneGroupDirectiveReady = function (api) {
                 saleZoneGroupDirectiveAPI = api;
                 saleZoneGroupDirectiveReadyPromiseDeferred.resolve();
               
             }
-
+            $scope.onCustomerGroupDirectiveReady = function (api) {
+                customerGroupDirectiveAPI = api;
+                customerGroupDirectiveReadyPromiseDeferred.resolve();
+            }
+            $scope.onSellingProductDirectiveReady = function (api) {
+                sellingProductDirectiveAPI = api;
+                sellingProductDirectiveReadyPromiseDeferred.resolve();
+            }
+            loadTemplates();
             defineAPI();
+        
+        }
+        function loadTemplates() {
+            $scope.templates = [{
+                description: "Customer Group",
+                value: 0,
+            },
+            {
+                description: "Selling Product",
+                value: 1,
+            }];
         }
 
         function defineAPI() {
             var api = {};
-
             api.getData = function () {
                 var obj = {
-                    SaleZoneGroupSettings: saleZoneGroupDirectiveAPI.getData(),
-                    CustomerGroupSettings: customerGroupDirectiveAPI!=undefined?customerGroupDirectiveAPI.getData():undefined,
-                    SellingProductIds:sellingProductDirectiveAPI!=undefined?sellingProductDirectiveAPI.getSelectedIds():undefined
+                    SaleZoneGroupSettings: saleZoneGroupDirectiveAPI.getData(),   
+                }
+                switch ($scope.selectedTemplate.value) {
+                    case 0: obj.CustomerGroupSettings= customerGroupDirectiveAPI != undefined ? customerGroupDirectiveAPI.getData() : undefined
+                    case 1 : obj.SellingProductIds=sellingProductDirectiveAPI!=undefined?sellingProductDirectiveAPI.getSelectedIds():undefined
                 }
                 return obj;
             }
@@ -76,79 +87,65 @@ function ( UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAcco
                 if (payload != undefined) {
                     if (payload.CustomerGroupSettings != null)
                     {
-                        customerGroupSettings= payload.CustomerGroupSettings;
+                        customerGroupSettings = payload.CustomerGroupSettings;
+                        $scope.selectedTemplate = $scope.templates[0];
                     }
                     if (payload.SaleZoneGroupSettings != null)
                     {
-                        saleZoneGroupSettings = payload.SaleGroupSettings;
+                        saleZoneGroupSettings = payload.SaleZoneGroupSettings;
                     }
                     if (payload.SellingProductIds != null)
+                    {
                         sellingProductIds = payload.SellingProductIds;
+                        $scope.selectedTemplate = $scope.templates[1];
+                    }
+                       
                 }
-                    var promises = [];
-                
-                    if (customerGroupSettings != undefined) {
+                var promises = [];
+                if (customerGroupDirectiveReadyPromiseDeferred == undefined)
+                    customerGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                var customerGroupDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                promises.push(customerGroupDirectiveLoadPromiseDeferred.promise);
+                customerGroupDirectiveReadyPromiseDeferred.promise.then(function () {
+                    customerGroupDirectiveReadyPromiseDeferred = undefined;
+                    var customerpayload = customerGroupSettings != undefined ? customerGroupSettings : undefined;
+                    VRUIUtilsService.callDirectiveLoad(customerGroupDirectiveAPI, customerpayload, customerGroupDirectiveLoadPromiseDeferred);
+                });
 
-                        if (customerGroupDirectiveReadyPromiseDeferred == undefined)
-                            customerGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                        var customerGroupDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(customerGroupDirectiveLoadPromiseDeferred.promise);
-
-                        customerGroupDirectiveReadyPromiseDeferred.promise.then(function () {
-                            customerGroupDirectiveReadyPromiseDeferred = undefined;
-                            var customerpayload = customerGroupSettings != undefined ? customerGroupSettings : undefined;
-                            VRUIUtilsService.callDirectiveLoad(customerGroupDirectiveAPI, customerpayload, customerGroupDirectiveLoadPromiseDeferred);
-                        });
+                if (saleZoneGroupDirectiveReadyPromiseDeferred == undefined)
+                    saleZoneGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                var saleZoneGroupDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                promises.push(saleZoneGroupDirectiveLoadPromiseDeferred.promise);
+                saleZoneGroupDirectiveReadyPromiseDeferred.promise.then(function () {
+                    saleZoneGroupDirectiveReadyPromiseDeferred = undefined;
+                    var saleZoneGroupPayload;
+                    if (saleZoneGroupSettings != undefined) {
+                        saleZoneGroupPayload = { SaleZoneGroupSettings: saleZoneGroupSettings };
                     }
-                    if (saleZoneGroupDirectiveReadyPromiseDeferred == undefined)
-                       saleZoneGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                    VRUIUtilsService.callDirectiveLoad(saleZoneGroupDirectiveAPI, saleZoneGroupPayload, saleZoneGroupDirectiveLoadPromiseDeferred);
+                });
 
-                    var saleZoneGroupDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                   
-
-                    saleZoneGroupDirectiveReadyPromiseDeferred.promise.then(function () {
-                        saleZoneGroupDirectiveReadyPromiseDeferred = undefined;
-
-                        var saleZoneGroupPayload;
-
-                        if (saleZoneGroupSettings != undefined ) {
-                            saleZoneGroupPayload = {
-                                saleZoneGroupSettings: saleZoneGroupSettings.SaleZoneGroupSettings
-                            };
-                        }
-                        VRUIUtilsService.callDirectiveLoad(saleZoneGroupDirectiveAPI, saleZoneGroupPayload, saleZoneGroupDirectiveLoadPromiseDeferred);
-
-                    });
-                    promises.push(saleZoneGroupDirectiveLoadPromiseDeferred.promise);
-
-                    if (sellingProductIds != undefined) {
-                        if (sellingProductDirectiveReadyPromiseDeferred == undefined)
-                            sellingProductDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                        var sellingProductDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-
-                        sellingProductDirectiveReadyPromiseDeferred.promise.then(function () {
-                            sellingProductDirectiveReadyPromiseDeferred = undefined;
-
-
-
-                            var sellingproductpayload = sellingProductIds != undefined ? sellingProductIds : undefined;
-                            VRUIUtilsService.callDirectiveLoad(sellingProductDirectiveAPI, sellingproductpayload, sellingProductDirectiveLoadPromiseDeferred);
-
-                        });
-                        promises.push(sellingProductDirectiveLoadPromiseDeferred.promise);
-                    }
-                   
-
-
-                 return  UtilsService.waitMultiplePromises(promises);
+                if (sellingProductDirectiveReadyPromiseDeferred == undefined)
+                    sellingProductDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                var sellingProductDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                promises.push(sellingProductDirectiveLoadPromiseDeferred.promise);
+                sellingProductDirectiveReadyPromiseDeferred.promise.then(function () {
+                    sellingProductDirectiveReadyPromiseDeferred = undefined;
+                    var sellingproductpayload = sellingProductIds != undefined ? sellingProductIds : undefined;
+                    VRUIUtilsService.callDirectiveLoad(sellingProductDirectiveAPI, sellingproductpayload, sellingProductDirectiveLoadPromiseDeferred);
+                });
+                return UtilsService.waitMultiplePromises(promises);
             }
 
+
+
+
             if (ctrl.onReady != null)
+
                 ctrl.onReady(api);
         }
+
+
 
         this.initializeController = initializeController;
     }

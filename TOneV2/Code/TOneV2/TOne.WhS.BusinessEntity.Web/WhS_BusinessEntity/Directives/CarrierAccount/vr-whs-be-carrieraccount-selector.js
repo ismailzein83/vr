@@ -90,8 +90,6 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
 
             api.load = function (payload) {
 
-                console.log(payload);
-
                 var filter;
                 var selectedIds;
                 if (payload != undefined) {
@@ -104,7 +102,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                 filter.GetCustomers = attrs.getcustomers != undefined;
                 filter.GetSuppliers = attrs.getsuppliers != undefined;
 
-                var serializedFilter = null;
+                var serializedFilter = {};
                 if (filter != undefined)
                     serializedFilter = UtilsService.serializetoJson(filter);
 

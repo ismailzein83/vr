@@ -63,18 +63,21 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
         function saleZoneCtor(ctrl, $scope, attrs) {
 
             var filter;
+            var sellingNumberPlanId;
             var isDirectiveLoaded = false;
 
             function initializeController() {
 
                 ctrl.search = function (nameFilter) {
 
-                    if (filter == undefined || filter.SellingNumberPlanId == undefined)
+                    if (sellingNumberPlanId == undefined)
                         return;
 
-                    var serializedFilter = UtilsService.serializetoJson(filter);
+                    var serializedFilter = {};
+                    if (filter != undefined)
+                        serializedFilter = UtilsService.serializetoJson(filter);
 
-                    return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(nameFilter, serializedFilter);
+                    return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(nameFilter, sellingNumberPlanId, serializedFilter);
                 }
                 
                 defineAPI();
@@ -84,11 +87,10 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                 var api = {};
 
                 api.load = function (payload) {
-
                     ctrl.selectedvalues = [];
-
                     var selectedIds;
                     if (payload != undefined) {
+                        sellingNumberPlanId = payload.sellingNumberPlanId;
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
                     }
@@ -97,9 +99,9 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                         ctrl.datasource = [];
 
                         var input = {
-                            SellingNumberPlanId: filter.SellingNumberPlanId,
+                            SellingNumberPlanId: sellingNumberPlanId,
                             SaleZoneIds: selectedIds,
-                            SaleZoneFilterSettings: { RoutingProductId: filter.SaleZoneFilterSettings != undefined? filter.SaleZoneFilterSettings.RoutingProductId : undefined}
+                            SaleZoneFilterSettings: { RoutingProductId: filter != undefined ? filter.SaleZoneFilterSettings.RoutingProductId : undefined }
                         };
 
                         return WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {

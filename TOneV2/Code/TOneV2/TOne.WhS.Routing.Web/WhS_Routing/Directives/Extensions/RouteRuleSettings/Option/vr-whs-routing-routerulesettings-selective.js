@@ -56,8 +56,6 @@ app.directive('vrWhsRoutingRouterulesettingsSelective', ['UtilsService', 'VRUIUt
 
                 api.load = function (payload) {
 
-                    console.log(payload);
-
                     var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     carrierAccountReadyPromiseDeferred.promise.then(function () {

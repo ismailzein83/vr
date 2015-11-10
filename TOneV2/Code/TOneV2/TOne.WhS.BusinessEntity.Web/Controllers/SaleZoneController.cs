@@ -13,11 +13,11 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
     public class SaleZoneController : BaseAPIController
     {
-        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, string serializedFilter)
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter,int sellingNumberPlanId, string serializedFilter)
         {
             SaleZoneInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SaleZoneInfoFilter>(serializedFilter) : null;
             SaleZoneManager manager = new SaleZoneManager();
-            return manager.GetSaleZonesInfo(nameFilter, filter);
+            return manager.GetSaleZonesInfo(nameFilter,sellingNumberPlanId, filter);
         }
 
         [HttpPost]

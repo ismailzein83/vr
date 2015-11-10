@@ -44,6 +44,9 @@
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
@@ -55,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDRProcessingDataManagerFactory.cs" />
+    <Compile Include="ITrafficStatisticByIntervalDataManager.cs" />
     <Compile Include="ICDRDataManager.cs" />
     <Compile Include="ICDRFailedDataManager.cs" />
     <Compile Include="ICDRInvalidDataManager.cs" />

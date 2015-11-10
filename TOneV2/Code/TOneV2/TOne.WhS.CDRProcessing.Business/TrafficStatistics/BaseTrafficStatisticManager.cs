@@ -28,25 +28,13 @@ namespace TOne.WhS.CDRProcessing.Business
             return BaseTrafficStatistic.GetStatisticItemKey(rawItem.CustomerId, rawItem.SupplierId);
         }
 
-        protected override Dictionary<string, long> GetStatisticItemsIdsByKeyFromDB(TrafficStatisticBatch<T> batch)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void InsertStatisticItemsToDB(IEnumerable<T> items)
-        {
-            throw new NotImplementedException();
-        }
-
         protected override void UpdateStatisticItemFromRawItem(T statisticItem, BillingCDRBase item)
         {
             statisticItem.Attempts++;
             statisticItem.TotalDurationInSeconds += item.DurationInSeconds;
         }
 
-        protected override void UpdateStatisticItemsInDB(IEnumerable<T> items)
-        {
-            throw new NotImplementedException();
-        }
-    }
+
+    
+}
 }

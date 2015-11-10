@@ -25,16 +25,15 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, VRNotificationServi
 
     function beSaleZoneGroup(ctrl, $scope, $attrs) {
 
-
+        var payloadFilter;
         var saleZoneGroupDirectiveAPI;
         var saleZoneGroupDirectiveReadyPromiseDeferred;
 
         function initializeController() {
             $scope.onSaleZoneGroupDirectiveReady = function (api) {
                 saleZoneGroupDirectiveAPI = api;
-
                 var setLoader = function (value) { $scope.isLoadingSaleZoneGroupDirective = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupDirectiveAPI, undefined, setLoader, saleZoneGroupDirectiveReadyPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupDirectiveAPI, payloadFilter, setLoader, saleZoneGroupDirectiveReadyPromiseDeferred);
             }
 
             defineAPI();
@@ -42,6 +41,51 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, VRNotificationServi
 
         function defineAPI() {
             var api = {};
+
+            api.load = function (payload) {
+                $scope.saleZoneGroupTemplates = [];
+                var saleZoneConfigId;
+                var saleZoneGroupPayload;
+                if (payload != undefined) {
+                    payloadFilter = {
+                        saleZoneFilterSettings: payload.saleZoneFilterSettings,
+                        sellingNumberPlanId: payload.sellingNumberPlanId != undefined ? payload.sellingNumberPlanId : undefined,
+                    }
+
+                    saleZoneGroupPayload = {
+                        sellingNumberPlanId: payload.sellingNumberPlanId != undefined ? payload.sellingNumberPlanId : undefined,
+                        saleZoneFilterSettings: payload.saleZoneFilterSettings,
+                        saleZoneGroupSettings: payload.saleZoneGroupSettings
+                    }
+                    saleZoneConfigId = payload.saleZoneGroupSettings != undefined ? payload.saleZoneGroupSettings.ConfigId : undefined;
+                }
+                var promises = [];
+                var loadSaleZoneGroupTemplatesPromise = WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates().then(function (response) {
+                    angular.forEach(response, function (item) {
+                        $scope.saleZoneGroupTemplates.push(item);
+                    });
+
+                    if (saleZoneConfigId != undefined)
+                        $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, saleZoneConfigId, "TemplateConfigID");
+
+                });
+                promises.push(loadSaleZoneGroupTemplatesPromise);
+
+                if (saleZoneConfigId != undefined) {
+                    saleZoneGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    var saleZoneGroupDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(saleZoneGroupDirectiveLoadPromiseDeferred.promise);
+
+                    saleZoneGroupDirectiveReadyPromiseDeferred.promise.then(function () {
+                        saleZoneGroupDirectiveReadyPromiseDeferred = undefined;
+
+                        VRUIUtilsService.callDirectiveLoad(saleZoneGroupDirectiveAPI, saleZoneGroupPayload, saleZoneGroupDirectiveLoadPromiseDeferred);
+                    });
+                }
+
+                return UtilsService.waitMultiplePromises(promises);
+            }
 
             api.getData = function () {
                 var saleZoneGroupSettings;
@@ -52,43 +96,6 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, VRNotificationServi
                     }
                 }
                 return saleZoneGroupSettings;
-            }
-
-            api.load = function (payload) {
-                $scope.saleZoneGroupTemplates = [];
-                var saleZoneConfigId;
-                var saleZoneGroupSettings = { filter: {} };
-
-                if (payload != undefined) {
-                    if (payload.SaleZoneGroupSettings != null) {
-                        saleZoneConfigId = payload.SaleZoneGroupSettings.ConfigId;
-                        saleZoneGroupSettings.filter.SaleZoneFilterSettings = payload.SaleZoneGroupSettings;
-                    }
-                }
-                var promises = [];
-                var loadSaleZoneGroupTemplatesPromise = WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates().then(function (response) {
-                    angular.forEach(response, function (item) {
-                        $scope.saleZoneGroupTemplates.push(item);
-                    });
-
-                    if (saleZoneConfigId != undefined)
-                        $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, saleZoneConfigId, "TemplateConfigID")
-                });
-                promises.push(loadSaleZoneGroupTemplatesPromise);
-
-                if (saleZoneGroupSettings.filter.SaleZoneFilterSettings != undefined) {
-                    saleZoneGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                    var saleZoneGroupDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(saleZoneGroupDirectiveLoadPromiseDeferred.promise);
-
-                    saleZoneGroupDirectiveReadyPromiseDeferred.promise.then(function () {
-                        saleZoneGroupDirectiveReadyPromiseDeferred = undefined;
-                        VRUIUtilsService.callDirectiveLoad(saleZoneGroupDirectiveAPI, saleZoneGroupSettings, saleZoneGroupDirectiveLoadPromiseDeferred);
-                    });
-                }
-
-                return UtilsService.waitMultiplePromises(promises);
             }
 
             if (ctrl.onReady != null)

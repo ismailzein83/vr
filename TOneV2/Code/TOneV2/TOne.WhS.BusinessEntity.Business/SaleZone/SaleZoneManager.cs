@@ -116,10 +116,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return allSaleZones;
         }
 
-        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, SaleZoneInfoFilter filter)
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter,int sellingNumberPlanId, SaleZoneInfoFilter filter)
         {
             string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
-            List<SaleZone> allZones = GetCachedSaleZones(filter.SellingNumberPlanId);
+            List<SaleZone> allZones = GetCachedSaleZones(sellingNumberPlanId);
             HashSet<long> filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(filter.SaleZoneFilterSettings);
             Func<SaleZone, bool> zoneFilter = (zone) =>
             {

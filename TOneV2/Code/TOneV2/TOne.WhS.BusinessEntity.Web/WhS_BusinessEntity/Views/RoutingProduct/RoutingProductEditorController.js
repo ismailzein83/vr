@@ -58,7 +58,7 @@
                     var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
 
                     var payload = {
-                        filter: { SellingNumberPlanId: selectedSellingNumberPlanId },
+                        sellingNumberPlanId: selectedSellingNumberPlanId,
                     }
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
@@ -169,7 +169,7 @@
                         }
 
                         var saleZonePayload = {
-                            filter: { SellingNumberPlanId: routingProductEntity.SellingNumberPlanId },
+                            sellingNumberPlanId: routingProductEntity.SellingNumberPlanId,
                             selectedIds: zoneIds.length > 0 ? zoneIds : undefined
                         };
                     }

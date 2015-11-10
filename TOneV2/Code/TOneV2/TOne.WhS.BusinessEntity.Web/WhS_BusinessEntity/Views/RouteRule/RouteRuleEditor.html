@@ -16,17 +16,7 @@
                 <vr-row ng-show="showSaleZoneSection">
                     <vr-columns width="fullrow">
                         <vr-section title="Sale Zone">
-                            <vr-row>
-                                <vr-columns width="1/4row">
-                                    <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Filter Type" datasource="saleZoneGroupTemplates" text="None"
-                                               selectedvalues="selectedSaleZoneGroupTemplate">
-                                    </vr-select>
-                                </vr-columns>
-                                <vr-columns width="3/4row" ng-if="selectedSaleZoneGroupTemplate" vr-loader="isLoadingSaleZonesSection">
-                                    <vr-directivewrapper directive="selectedSaleZoneGroupTemplate.Editor" on-ready="onSaleZoneGroupSettingsDirectiveReady"
-                                                         sellingnumberplanid="selectedSellingNumberPlanId"></vr-directivewrapper>
-                                </vr-columns>
-                            </vr-row>
+                                <vr-whs-be-salezonegroup on-ready="onSaleZoneGroupSettingsDirectiveReady"></vr-whs-be-salezonegroup>
                         </vr-section>
                     </vr-columns>
                 </vr-row>
@@ -47,16 +37,7 @@
                 <vr-row ng-show="showCustomerSection">
                     <vr-columns width="fullrow">
                         <vr-section title="Customers">
-                            <vr-row>
-                                <vr-columns width="1/4row">
-                                    <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Filter Type" datasource="customerGroupTemplates" text="None"
-                                               selectedvalues="selectedCustomerGroupTemplate">
-                                    </vr-select>
-                                </vr-columns>
-                                <vr-columns width="3/4row" ng-if="selectedCustomerGroupTemplate" vr-loader="isLoadingCustomersSection">
-                                    <vr-directivewrapper directive="selectedCustomerGroupTemplate.Editor" on-ready="onCustomerGroupSettingsDirectiveReady"></vr-directivewrapper>
-                                </vr-columns>
-                            </vr-row>
+                                <vr-whs-be-customergroup on-ready="onCustomerGroupSettingsDirectiveReady"></vr-whs-be-customergroup>
                         </vr-section>
                     </vr-columns>
                 </vr-row>

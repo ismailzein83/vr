@@ -1,25 +1,28 @@
 ﻿<vr-row>
     <vr-columns width="fullrow">
-        <vr-whs-be-salezonegroup on-ready="onSaleZoneGroupDirectiveReady"></vr-whs-be-salezonegroup>
-    </vr-columns>
-       
-</vr-row>
-<vr-row>
-    <vr-choices selectedindex="0">
-        <vr-choice isselected="customerSelected">Customer</vr-choice>
-        <vr-choice isselected="sellingProductSelected">Selling Product</vr-choice>
-
-    </vr-choices>
-    <vr-columns width="fullrow" ng-if="customerSelected">
-        <vr-whs-be-customergroup on-ready="onCustomerGroupDirectiveReady"></vr-whs-be-customergroup>
-    </vr-columns>
-    <vr-columns width="fullrow" ng-if="sellingProductSelected">
-        <vr-section title="Customers">
-            <vr-columns width="normal" vr-loader="isLoadingSellingProductDirective">
-                <vr-whs-be-sellingproduct-selector on-ready="onSellingProductDirectiveReady"></vr-whs-be-sellingproduct-selector>
-            </vr-columns>
+        <vr-section title="Sale Zone">
+            <vr-whs-be-salezonegroup on-ready="onSaleZoneGroupDirectiveReady"></vr-whs-be-salezonegroup>
         </vr-section>
     </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/4row">
+        <vr-select datatextfield="description" datavaluefield="value" label="Filter Type" datasource="templates" text="None"
+                   selectedvalues="selectedTemplate" >
+        </vr-select>
+    </vr-columns>
+    
+        <vr-columns width="fullrow" vr-loader="isLoadingDirective">
+            <vr-section title="{{selectedTemplate.description}}" ng-show="selectedTemplate!=undefined">
+                <vr-columns width="fullrow" ng-show="selectedTemplate.value==0" vr-loader="isLoadingCustomerGroupDirective">
+                    <vr-whs-be-customergroup on-ready="onCustomerGroupDirectiveReady"></vr-whs-be-customergroup>
+                </vr-columns>
+                <vr-columns width="normal" vr-loader="isLoadingSellingProductDirective" ng-show="selectedTemplate.value==1">
+                    <vr-whs-be-sellingproduct-selector on-ready="onSellingProductDirectiveReady" ismultipleselection></vr-whs-be-sellingproduct-selector>
+                </vr-columns>
+            </vr-section>
+        </vr-columns>
+  
 </vr-row>
 
 

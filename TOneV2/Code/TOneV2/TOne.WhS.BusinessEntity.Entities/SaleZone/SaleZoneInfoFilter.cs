@@ -8,8 +8,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SaleZoneInfoFilter
     {
-        public int SellingNumberPlanId { get; set; }
-
         public SaleZoneFilterSettings SaleZoneFilterSettings { get; set; }
     }
 }

@@ -60,7 +60,7 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
                     var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
 
                     var payload = {
-                        filter: { SellingNumberPlanId: selectedItem.SellingNumberPlanId },
+                         sellingNumberPlanId: selectedItem.SellingNumberPlanId ,
                     }
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
@@ -76,16 +76,16 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
 
             api.load = function (payload) {
                 var promises = [];
-
-                var saleZoneInfoFilter;
+                var sellingNumberPlanId;
                 var saleZoneGroupSettings;
-
+                var saleZoneFilterSettings;
                 if (payload != undefined) {
-                    saleZoneInfoFilter = payload.saleZoneInfoFilter;
+                    sellingNumberPlanId = payload.sellingNumberPlanId;
                     saleZoneGroupSettings = payload.saleZoneGroupSettings;
+                    saleZoneFilterSettings= payload.saleZoneFilterSettings;
                 }
 
-                if (saleZoneInfoFilter == undefined || saleZoneInfoFilter.SaleZoneFilterSettings == undefined)
+                if (sellingNumberPlanId == undefined || (saleZoneFilterSettings!=undefined && saleZoneFilterSettings.RoutingProductId==undefined))
                 {
                     $scope.showSellingNumberPlan = true;
                     var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -110,13 +110,11 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
                 saleZoneReadyPromiseDeferred.promise.then(function () {
                     var saleZonePayload;
 
-                    sellingNumberPlanParameter = saleZoneInfoFilter != undefined ? saleZoneInfoFilter.SellingNumberPlanId : undefined;
+                    sellingNumberPlanParameter = sellingNumberPlanId != undefined ? sellingNumberPlanId : saleZoneGroupSettings!=undefined?saleZoneGroupSettings.SellingNumberPlanId:undefined;
 
                     saleZonePayload = {
-                        filter: {
-                            SellingNumberPlanId: sellingNumberPlanParameter, 
-                            SaleZoneFilterSettings: saleZoneInfoFilter != undefined ? saleZoneInfoFilter.SaleZoneFilterSettings : undefined
-                        },
+                        filter: { SaleZoneFilterSettings: saleZoneFilterSettings != undefined ? saleZoneFilterSettings : undefined },
+                        sellingNumberPlanId: sellingNumberPlanParameter,
                         selectedIds: saleZoneGroupSettings != undefined ? saleZoneGroupSettings.ZoneIds : undefined
                     };
 

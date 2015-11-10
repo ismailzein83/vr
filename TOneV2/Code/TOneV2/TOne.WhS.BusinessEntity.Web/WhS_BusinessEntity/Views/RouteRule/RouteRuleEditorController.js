@@ -17,13 +17,13 @@
         var routeRuleEntity;
 
         var saleZoneGroupSettingsAPI;
-        var saleZoneGroupSettingsReadyPromiseDeferred;
+        var saleZoneGroupSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var codeCriteriaGroupSettingsAPI;
         var codeCriteriaGroupSettingsReadyPromiseDeferred;
 
         var customerGroupSettingsAPI;
-        var customerGroupSettingsReadyPromiseDeferred;
+        var customerGroupSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var routeRuleSettingsAPI;
         var routeRuleSettingsReadyPromiseDeferred;
@@ -36,6 +36,7 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
+
                 routeRuleId = parameters.routeRuleId;
                 routingProductId = parameters.routingProductId;
                 sellingNumberPlanId = parameters.sellingNumberPlanId;
@@ -47,21 +48,7 @@
 
             $scope.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                 saleZoneGroupSettingsAPI = api;
-                var setLoader = function (value) { $scope.isLoadingSaleZonesSection = value };
-
-                var saleZoneGroupPayload;
-
-                if (routingProductId != undefined)
-                {
-                    saleZoneGroupPayload = {
-                        saleZoneInfoFilter: {
-                            SellingNumberPlanId: sellingNumberPlanId,
-                            SaleZoneFilterSettings: { RoutingProductId: routingProductId }
-                        }
-                    };
-                }
-
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupSettingsAPI, saleZoneGroupPayload, setLoader, saleZoneGroupSettingsReadyPromiseDeferred);
+                saleZoneGroupSettingsReadyPromiseDeferred.resolve();
             }
 
             $scope.onCodeCriteriaGroupSettingsDirectiveReady = function (api) {
@@ -72,8 +59,7 @@
 
             $scope.onCustomerGroupSettingsDirectiveReady = function (api) {
                 customerGroupSettingsAPI = api;
-                var setLoader = function (value) { $scope.isLoadingCodeCriteriaSection = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerGroupSettingsAPI, undefined, setLoader, customerGroupSettingsReadyPromiseDeferred);
+                customerGroupSettingsReadyPromiseDeferred.resolve();
             }
 
             $scope.onRouteRuleSettingsDirectiveReady = function (api) {
@@ -222,46 +208,28 @@
         {
             var promises = [];
 
-            var saleZoneGroupPayload;
-
-            if (routeRuleEntity != undefined && routeRuleEntity.Criteria.SaleZoneGroupSettings != null)
-            {
-                saleZoneGroupPayload = {
-                    saleZoneInfoFilter: {
-                        SellingNumberPlanId: routeRuleEntity.Criteria.SaleZoneGroupSettings.SellingNumberPlanId
-                    },
-                    saleZoneGroupSettings: routeRuleEntity.Criteria.SaleZoneGroupSettings
-                };
-
-                if (routeRuleEntity.Criteria.RoutingProductId != null)
-                    saleZoneGroupPayload.saleZoneInfoFilter.SaleZoneFilterSettings = { RoutingProductId: routeRuleEntity.Criteria.RoutingProductId };
-            }
-
-            var loadSaleZoneGroupTemplatesPromise = WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates()
-                .then(function (response) {
-
-                    angular.forEach(response, function (item) {
-                        $scope.saleZoneGroupTemplates.push(item);
-                    });
-
-                    if (saleZoneGroupPayload != undefined && saleZoneGroupPayload.saleZoneGroupSettings != null)
-                        $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, saleZoneGroupPayload.saleZoneGroupSettings.ConfigId, "TemplateConfigID");
-                });
-
-            promises.push(loadSaleZoneGroupTemplatesPromise);
-
-            if (saleZoneGroupPayload != undefined && saleZoneGroupPayload.saleZoneGroupSettings != null) {
+            if (saleZoneGroupSettingsReadyPromiseDeferred==undefined)
                 saleZoneGroupSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 var saleZoneGroupSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 promises.push(saleZoneGroupSettingsLoadPromiseDeferred.promise);
 
                 saleZoneGroupSettingsReadyPromiseDeferred.promise.then(function () {
+                    var saleZoneGroupPayload = {
+                        sellingNumberPlanId: sellingNumberPlanId!=undefined?sellingNumberPlanId:undefined,
+                        saleZoneFilterSettings: { RoutingProductId: routingProductId },
+                    };
+
+                    var saleZoneGroupPayload;
+
+                    if (routeRuleEntity != undefined) {
+                        saleZoneGroupPayload.sellingNumberPlanId = routeRuleEntity.Criteria.SaleZoneGroupSettings.SellingNumberPlanId;
+                        saleZoneGroupPayload.saleZoneGroupSettings = routeRuleEntity.Criteria.SaleZoneGroupSettings
+                    }
+
                     saleZoneGroupSettingsReadyPromiseDeferred = undefined;
                     VRUIUtilsService.callDirectiveLoad(saleZoneGroupSettingsAPI, saleZoneGroupPayload, saleZoneGroupSettingsLoadPromiseDeferred);
                 });
-            }
-
             return UtilsService.waitMultiplePromises(promises);
         }
 
@@ -300,33 +268,21 @@
 
         function loadCustomerGroupSection() {
             var promises = [];
-            var customerGroupPayload;
-
-            if (routeRuleEntity != undefined && routeRuleEntity.Criteria.CustomerGroupSettings != null)
-                customerGroupPayload = routeRuleEntity.Criteria.CustomerGroupSettings;
-
-            var loadCustomerGroupTemplatesPromise = WhS_BE_CarrierAccountAPIService.GetCustomerGroupTemplates().then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.customerGroupTemplates.push(item);
-                });
-
-                if(customerGroupPayload != undefined)
-                    $scope.selectedCustomerGroupTemplate = UtilsService.getItemByVal($scope.customerGroupTemplates, customerGroupPayload.ConfigId, "TemplateConfigID");
-            });
-
-            promises.push(loadCustomerGroupTemplatesPromise);
-
-            if (customerGroupPayload != undefined) {
+            if (customerGroupSettingsReadyPromiseDeferred==undefined)
                 customerGroupSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 var customerGroupSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 promises.push(customerGroupSettingsLoadPromiseDeferred.promise);
 
                 customerGroupSettingsReadyPromiseDeferred.promise.then(function () {
+                    var customerGroupPayload;
+                    if (routeRuleEntity != undefined && routeRuleEntity.Criteria.CustomerGroupSettings != null)
+                        customerGroupPayload = routeRuleEntity.Criteria.CustomerGroupSettings;
+
                     customerGroupSettingsReadyPromiseDeferred = undefined;
                     VRUIUtilsService.callDirectiveLoad(customerGroupSettingsAPI, customerGroupPayload, customerGroupSettingsLoadPromiseDeferred);
                 });
-            }
+
 
             return UtilsService.waitMultiplePromises(promises);
         }
@@ -392,8 +348,8 @@
                 Criteria: {
                     RoutingProductId: routingProductId,
                     ExcludedCodes: $scope.excludedCodes,
-                    SaleZoneGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsAPI, 'selectedSaleZoneGroupTemplate'),
-                    CustomerGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, customerGroupSettingsAPI, 'selectedCustomerGroupTemplate'),
+                    SaleZoneGroupSettings: saleZoneGroupSettingsAPI.getData(),//VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsAPI, 'selectedSaleZoneGroupTemplate'),
+                    CustomerGroupSettings: customerGroupSettingsAPI.getData(),
                     CodeCriteriaGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, codeCriteriaGroupSettingsAPI, 'selectedCodeCriteriaGroupTemplate')
                 },
                 Settings: VRUIUtilsService.getSettingsFromDirective($scope, routeRuleSettingsAPI, 'selectedrouteRuleSettingsTemplate'),

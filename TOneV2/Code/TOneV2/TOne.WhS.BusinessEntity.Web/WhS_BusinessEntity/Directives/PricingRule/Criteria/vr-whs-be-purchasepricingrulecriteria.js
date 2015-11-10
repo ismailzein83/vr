@@ -42,12 +42,12 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAc
             var api = {};
             api.getData = function () {
                 var obj = {};
-                if (ctrl.selectedSuppliersWithZonesStettingsTemplate != undefined)
+                if ($scope.selectedSuppliersWithZonesStettingsTemplate != undefined)
                 {
                     obj = {
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.SuppliersWithZonesGroups.SelectiveSuppliersWithZonesGroup,TOne.WhS.BusinessEntity.MainExtensions",
-                        SuppliersWithZones: suppliersWithZonesGroupsDirectiveAPI.getData(),
-                        ConfigId: ctrl.selectedSuppliersWithZonesStettingsTemplate.TemplateConfigID,
+                        SuppliersWithZones: directiveReadyAPI.getData(),
+                        ConfigId: $scope.selectedSuppliersWithZonesStettingsTemplate.TemplateConfigID,
                     }
                     var suppliersWithZonesGroupSettings = {
                         SuppliersWithZonesGroupSettings: obj
@@ -59,6 +59,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAc
             }
 
             api.load = function (payload) {
+
                 $scope.suppliersWithZonesStettingsTemplates = [];
                 var suppliersWithZones ;
                 var configId;

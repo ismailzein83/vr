@@ -91,6 +91,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
             }
  
             api.load = function (payload) {
+
                 var supplierIds = [];
                 if (payload != undefined) {
                     for (var i = 0; i < payload.length; i++) {
@@ -143,7 +144,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
                             CarrierAccountId: selectedSupplier.CarrierAccountId,
                             name: selectedSupplier.Name
                         };
-                        var dataItemPayload = filterItem.payload.SupplierZoneIds;
+                        var dataItemPayload = { selectedIds: filterItem.payload.SupplierZoneIds, filter: { SupplierId: selectedSupplier.CarrierAccountId } };
 
                         dataItem.selectedSuplierZones = [];
                         dataItem.onDirectiveReady = function (api) {

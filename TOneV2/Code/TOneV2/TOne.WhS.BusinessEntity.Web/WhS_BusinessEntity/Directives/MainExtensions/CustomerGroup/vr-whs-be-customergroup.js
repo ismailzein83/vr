@@ -53,7 +53,6 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
             }
 
             api.load = function (payload) {
-
                 $scope.customerGroupTemplates = [];
                 var customerConfigId;
                 var customerGroupSettings;
@@ -70,7 +69,6 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
                     });
                     if (customerConfigId != undefined)
                         $scope.selectedCustomerGroupTemplate = UtilsService.getItemByVal($scope.customerGroupTemplates, customerConfigId, "TemplateConfigID");
-                    console.log($scope.selectedCustomerGroupTemplate);
                     
                 });
                 promises.push(loadCustomerGroupTemplatesPromise);
