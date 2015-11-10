@@ -30,7 +30,7 @@
             $scope.showCarrierAccountSelector = false;
 
             $scope.onOwnerTypeChanged = function () {
-                clearAndHideRatePlan();
+                clearRatePlan();
 
                 if ($scope.selectedOwnerType != undefined) {
                     if ($scope.selectedOwnerType.value == WhS_Sales_RatePlanOwnerTypeEnum.SellingProduct.value) {
@@ -59,7 +59,7 @@
                 },
 
                 onSellingProductChanged: function () {
-                    clearAndHideRatePlan();
+                    clearRatePlan();
                 }
             };
 
@@ -74,7 +74,7 @@
                 },
                 
                 onCarrierAccountChanged: function () {
-                    clearAndHideRatePlan();
+                    clearRatePlan();
                 }
             };
             
@@ -124,9 +124,13 @@
         }
 
         function saveChanges() {
-            WhS_Sales_RatePlanAPIService.SaveChanges(buildSaveChangesInput()).then(function (response) {
-                gridAPI.loadGrid(buildGridQuery());
-            });
+            var input = buildSaveChangesInput();
+            
+            if (input.NewChanges != null) {
+                WhS_Sales_RatePlanAPIService.SaveChanges(input).then(function (response) {
+                    gridAPI.loadGrid(buildGridQuery());
+                });
+            }
         }
 
         function buildGridQuery() {
@@ -156,7 +160,7 @@
             return ownerId;
         }
 
-        function clearAndHideRatePlan() {
+        function clearRatePlan() {
             $scope.zoneLetters.length = 0;
             $scope.zoneLetterConnector.selectedZoneLetterIndex = 0;
             showRatePlan(false);
@@ -191,11 +195,16 @@
         }
 
         function savePriceList() {
-            console.log("savePriceList");
+            return UtilsService.waitMultipleAsyncOperations([saveChanges]).then(function () {
+                return savePriceListForReal();
+            });
         }
 
-        function junkCode() {
-            
+        function savePriceListForReal() {
+            return WhS_Sales_RatePlanAPIService.SavePriceList($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
+                console.log(response);
+                console.log("Price list has been saved");
+            });
         }
     }
 

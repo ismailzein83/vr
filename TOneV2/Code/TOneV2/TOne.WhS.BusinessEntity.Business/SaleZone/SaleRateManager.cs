@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Entities.RatePlanning;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -13,12 +14,6 @@ namespace TOne.WhS.BusinessEntity.Business
         public List<SaleRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             throw new NotImplementedException();
-        }
-
-        public IEnumerable<SaleRate> GetSaleRatesByCustomerZoneIds(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> customerZoneIds, DateTime? effectiveOn)
-        {
-            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
-            return dataManager.GetSaleRatesByCustomerZoneIds(ownerType, ownerId, customerZoneIds, effectiveOn);
         }
 
         public List<SaleRate> GetSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
@@ -61,6 +56,18 @@ namespace TOne.WhS.BusinessEntity.Business
                 };
             }
             return callSale;
+        }
+
+        public bool CloseRates(IEnumerable<RateChange> rateChanges)
+        {
+            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+            return dataManager.CloseRates(rateChanges);
+        }
+
+        public bool InsertRates(IEnumerable<SaleRate> newRates)
+        {
+            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+            return dataManager.InsertRates(newRates);
         }
     }
 }

@@ -6,12 +6,6 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities.RatePlanning
 {
-    public enum RatePlanOwnerType
-    {
-        SellingProduct = 0,
-        Customer = 1
-    }
-
     public enum RatePlanStatus
     {
         Draft = 0,

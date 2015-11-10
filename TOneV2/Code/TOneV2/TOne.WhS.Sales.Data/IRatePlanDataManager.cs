@@ -6,22 +6,10 @@ namespace TOne.WhS.Sales.Data
 {
     public interface IRatePlanDataManager : IDataManager
     {
-        bool InsertSalePriceList(SalePriceList salePriceList, out int salePriceListId);
+        bool InsertPriceList(SalePriceList priceList, out int priceListId);
 
-        bool CloseAndInsertSaleRates(int customerId, List<SaleRate> newSaleRates);
+        Changes GetChanges(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status);
 
-        Changes GetChanges(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status);
-
-        bool InsertOrUpdateChanges(RatePlanOwnerType ownerType, int ownerId, Changes changes, RatePlanStatus status);
-
-        #region Junk Code
-        /*
-        bool SetRatePlanStatusIfExists(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status);
-
-        RatePlan GetRatePlan(RatePlanOwnerType ownerType, int ownerId, RatePlanStatus status);
-
-        bool InsertOrUpdateRatePlan(RatePlan ratePlan);
-        */
-        #endregion
+        bool InsertOrUpdateChanges(SalePriceListOwnerType ownerType, int ownerId, Changes changes, RatePlanStatus status);
     }
 }

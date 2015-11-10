@@ -45,7 +45,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatePlanning\DefaultChanges.cs" />
-    <Compile Include="RatePlanning\Input\SalePriceListInput.cs" />
     <Compile Include="RatePlanning\BaseChanges.cs" />
     <Compile Include="RatePlanning\Changes.cs" />
     <Compile Include="RatePlanning\Enums.cs" />

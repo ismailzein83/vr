@@ -6,7 +6,6 @@ using System.Web.Http;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
-using TOne.WhS.Sales.Entities.Queries;
 using TOne.WhS.Sales.Entities.RatePlanning;
 using TOne.WhS.Sales.Entities.RatePlanning.Input;
 using Vanrise.Entities;
@@ -19,7 +18,7 @@ namespace TOne.WhS.Sales.Web.Controllers
     {
         [HttpGet]
         [Route("GetZoneLetters")]
-        public IEnumerable<char> GetZoneLetters(RatePlanOwnerType ownerType, int ownerId)
+        public IEnumerable<char> GetZoneLetters(SalePriceListOwnerType ownerType, int ownerId)
         {
             RatePlanManager manager = new RatePlanManager();
             return manager.GetZoneLetters(ownerType, ownerId);
@@ -33,12 +32,12 @@ namespace TOne.WhS.Sales.Web.Controllers
             return manager.GetZoneItems(input);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("SavePriceList")]
-        public void SavePriceList(SalePriceListInput input)
+        public void SavePriceList(SalePriceListOwnerType ownerType, int ownerId)
         {
             RatePlanManager manager = new RatePlanManager();
-            manager.SavePriceList(input);
+            manager.SavePriceList(ownerType, ownerId);
         }
 
         [HttpPost]

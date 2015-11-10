@@ -91,12 +91,12 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                 function buildNewRate(zoneItem) {
                                     var newRate = null;
 
-                                    if ((isEmpty(zoneItem.NewRate) || isEmpty(zoneItem.CurrentRate)) || (zoneItem.NewRate != zoneItem.CurrentRate)) {
+                                    if ((isEmpty(zoneItem.CurrentRate) || isEmpty(zoneItem.NewRate)) || (zoneItem.NewRate != zoneItem.CurrentRate)) {
                                         newRate = {
                                             ZoneId: zoneItem.ZoneId,
                                             NormalRate: zoneItem.NewRate,
                                             BED: zoneItem.RateBED,
-                                            EED: zoneItem.RateEED
+                                            EED: zoneItem.RateNewEED
                                         };
                                     }
 
