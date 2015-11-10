@@ -574,6 +574,10 @@
       <Project>{4810623c-c3e8-47b0-880c-68bd57d139cf}</Project>
       <Name>TOne.WhS.CodePreparation.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.BP.Arguments\TOne.WhS.Routing.BP.Arguments.csproj">
+      <Project>{7b185135-b5a8-4416-8b8a-66a261d7dd31}</Project>
+      <Name>TOne.WhS.Routing.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.Business\TOne.WhS.Routing.Business.csproj">
       <Project>{923447e8-0d0b-4296-976a-8f486a8694d3}</Project>
       <Name>TOne.WhS.Routing.Business</Name>

@@ -18,15 +18,15 @@ namespace TestRuntime.Tasks
             System.Threading.ThreadPool.SetMaxThreads(10000, 10000);
 
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
-            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 20) };
+            //QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+            //SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 20) };
 
             var runtimeServices = new List<RuntimeService>();
-            runtimeServices.Add(queueActivationService);
+            //runtimeServices.Add(queueActivationService);
 
             runtimeServices.Add(bpService);
 
-            runtimeServices.Add(schedulerService);
+            //runtimeServices.Add(schedulerService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
@@ -34,9 +34,11 @@ namespace TestRuntime.Tasks
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                InputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput
+                InputArguments = new TOne.WhS.Routing.BP.Arguments.BuildRoutesByCodePrefixInput
                 {
-                    RepricingDay = DateTime.Parse("2013-03-29")
+                    CodePrefix = "91",
+                    EffectiveOn = DateTime.Now,
+                    IsFuture = false
                 }
             });
 
