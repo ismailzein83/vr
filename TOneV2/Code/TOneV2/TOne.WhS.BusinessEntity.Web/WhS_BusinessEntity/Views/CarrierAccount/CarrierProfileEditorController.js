@@ -2,9 +2,9 @@
 
     "use strict";
 
-    carrierProfileEditorController.$inject = ['$scope', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_Be_EmailTypeEnum'];
+    carrierProfileEditorController.$inject = ['$scope', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_Be_ContactTypeEnum'];
 
-    function carrierProfileEditorController($scope, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_EmailTypeEnum) {
+    function carrierProfileEditorController($scope, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_ContactTypeEnum) {
         var isEditMode;
         var carrierProfileId;
         var carrierProfileEntity;
@@ -27,14 +27,11 @@
             $scope.phoneNumbers = ['a', 'b'];
             $scope.faxes = ['c', 'd'];
 
-
-            
             $scope.contacts = [];
 
-            console.log(WhS_Be_EmailTypeEnum)
-
-            for (var x in WhS_Be_EmailTypeEnum)
-                $scope.contacts.push(WhS_Be_EmailTypeEnum[x]);
+          
+            for (var x in WhS_Be_ContactTypeEnum)
+                $scope.contacts.push(WhS_Be_ContactTypeEnum[x]);
 
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
@@ -53,8 +50,6 @@
             };
         }
 
-
-       
 
         function load() {
             $scope.isLoading = true;

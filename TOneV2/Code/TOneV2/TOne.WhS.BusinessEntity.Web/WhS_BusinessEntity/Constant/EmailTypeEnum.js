@@ -1,6 +1,16 @@
-﻿app.constant('WhS_Be_EmailTypeEnum', {
-    x1: { value: 1, label: "type 1" },
-    x2: { value: 2, label: "type 2" },
-    x3: { value: 3, label: "type 3" },
-
+﻿app.constant('WhS_Be_ContactTypeEnum', {
+    BillingContactPerson: { value: '', label: "Billing Contact Person"},
+    BillingEmail: { value: '', label: "Billing Email"},
+    DisputeEmail: { value: '', label: "Dispute Email"},
+    PricingContactPerson: { value: '', label:"Pricing Contact Person"},
+    PricingEmail: { value: '', label:"Pricing Email"},
+    AccountManagerContact: { value: '', label: "Account Manager Contact"},
+    AccountManagerEmail: { value: '', label: "Account Manager Email"},
+    SupportContactPerson: { value: '', label: "Support Contact Person"},
+    SupportEmail: { value: '', label: "Support Email "},
+    TechnicalContactPerson: { value: '', label:"Technical Contact Person"},
+    TechnicalEmail: { value: '', label: "Technical Email"},
+    CommercialContactPerson: { value: '', label:"Commercial Contact Person"},
+    CommercialEmail: { value: '', label: "Commercial Email"},
+    AlertingSMSPhoneNumbers: { value: '', label: "Alerting SMS Phone Numbers"},
 });
