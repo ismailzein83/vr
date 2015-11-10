@@ -41,6 +41,13 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
@@ -70,6 +77,7 @@
     <Compile Include="CustomerZoneDetail.cs" />
     <Compile Include="SupplierCodeMatch.cs" />
     <Compile Include="SupplierZoneDetail.cs" />
+    <Compile Include="SupplierZoneDetailBatch.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">

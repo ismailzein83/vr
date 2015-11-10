@@ -99,7 +99,12 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #region Constants
 
-        const string query_CreateDatabaseSchema = @"";
+        const string query_CreateDatabaseSchema = @"
+                                                   Create Table SupplierZoneDetail(
+                                                    SupplierId int Not Null,
+                                                    SupplierZoneId bigint Not Null,
+                                                    EffectiveRateValue numeric(18,4) Not Null)                                        
+                                                   ";
 
         #endregion
     }

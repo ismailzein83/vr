@@ -87,7 +87,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 Title = reader["Title"] as string,
                 IsReady = GetReaderValue<bool>(reader, "IsReady"),
                 Type = (RoutingDatabaseType)reader["Type"],
-                EffectiveTime = (DateTime)reader["EffectiveTime"],
+                EffectiveTime = (DateTime?)reader["EffectiveTime"],
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
                 ReadyTime = GetReaderValue<DateTime>(reader, "ReadyTime")
             };

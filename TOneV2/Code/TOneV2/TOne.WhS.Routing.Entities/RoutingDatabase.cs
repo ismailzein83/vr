@@ -12,7 +12,7 @@ namespace TOne.WhS.Routing.Entities
         public int ID { get; set; }
         public string Title { get; set; }
         public RoutingDatabaseType Type { get; set; }
-        public DateTime EffectiveTime { get; set; }
+        public DateTime? EffectiveTime { get; set; }
         public bool IsReady { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime ReadyTime { get; set; }
