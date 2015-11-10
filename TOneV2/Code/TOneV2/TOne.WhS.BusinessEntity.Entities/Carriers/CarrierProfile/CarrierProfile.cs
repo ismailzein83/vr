@@ -13,8 +13,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Name { get; set; }
 
         public CarrierProfileSettings Settings { get; set;  }
-
-        public CarrierProfileContacts Contacts { get; set; }
     }
     public class CarrierProfileSettings
     {
@@ -40,10 +38,5 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public long CompanyLogo { get; set; }
 
-    }
-
-    public class CarrierProfileContacts
-    {
-        public string BillingEmail { get; set; }
     }
 }

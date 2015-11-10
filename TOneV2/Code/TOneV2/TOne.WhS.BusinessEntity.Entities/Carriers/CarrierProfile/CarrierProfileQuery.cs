@@ -15,8 +15,5 @@ namespace TOne.WhS.BusinessEntity.Entities
        public List<int> CountriesIds { get; set; }
 
        public string Company { get; set; }
-
-       public string BillingEmail { get; set; }
-
     }
 }

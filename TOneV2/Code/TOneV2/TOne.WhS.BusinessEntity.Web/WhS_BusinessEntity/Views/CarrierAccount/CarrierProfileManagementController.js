@@ -39,8 +39,7 @@
             var data = {
                 Name: $scope.name,
                 CountriesIds: countryDirectiveApi.getIdsData(),
-                Company: $scope.company,
-                BillingEmail: $scope.billingEmail
+                Company: $scope.company
             };
             
             return data;
