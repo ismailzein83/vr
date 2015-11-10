@@ -102,7 +102,7 @@
                     $scope.town = carrierProfileEntity.Settings.Town;
 
                     $scope.companyLogo = {
-                        fileId: carrierProfileEntity.CompanyLogo
+                        fileId: carrierProfileEntity.Settings.CompanyLogo
                     };
                  
                     countryDirectiveApi.setData(carrierProfileEntity.Settings.CountryId)
