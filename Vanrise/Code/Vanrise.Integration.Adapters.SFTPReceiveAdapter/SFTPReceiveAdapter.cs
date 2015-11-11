@@ -62,7 +62,7 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                 if (!sftp.DirectoryExists(ftpAdapterArgument.DirectorytoMoveFile))
                     sftp.CreateDirectory(ftpAdapterArgument.DirectorytoMoveFile);
 
-                sftp.Rename(filePath, ftpAdapterArgument.DirectorytoMoveFile + "/" + string.Format(@"{0}_{1}.processed", filePath.ToLower().Replace(ftpAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid()));
+                sftp.Rename(filePath, ftpAdapterArgument.DirectorytoMoveFile + "/" + string.Format(@"{0}_{1}.processed", fileObj.Name.Replace(ftpAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid()));
 
             }
         }
@@ -89,7 +89,11 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
 
 
                 if (!sftp.DirectoryExists(ftpAdapterArgument.Directory))
-                    base.LogInformation("Directory {0} not found !!", ftpAdapterArgument.Directory);
+                {
+                    base.LogError("Could not find Directory {0}", ftpAdapterArgument.Directory);
+                    throw new DirectoryNotFoundException();
+                }
+
 
 
                 base.LogInformation("{0} files are ready to be imported", currentItems.Count);

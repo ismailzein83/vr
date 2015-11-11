@@ -49,9 +49,10 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
             }
             else if (fileAdapterArgument.ActionAfterImport == (int)Actions.Move)
             {
-                base.LogVerbose("Moving file {0} after import", file.Name);
+                base.LogVerbose("Moving file {0} after import to Directory {1}", file.Name, fileAdapterArgument.DirectorytoMoveFile);
                 if (System.IO.Directory.Exists(fileAdapterArgument.Directory))
                 {
+
                     file.MoveTo(Path.Combine(fileAdapterArgument.DirectorytoMoveFile, string.Format(@"{0}_{1}.processed", file.Name.ToLower().Replace(fileAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid())));
                 }
             }

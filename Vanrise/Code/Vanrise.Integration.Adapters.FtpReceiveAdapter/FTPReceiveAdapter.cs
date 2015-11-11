@@ -56,11 +56,11 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
             }
             else if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Move)
             {
-                base.LogVerbose("Moving file {0} after import", fileObj.Name);
+                base.LogVerbose("Moving file {0} after import to Directory {1}", fileObj.Name, ftpAdapterArgument.DirectorytoMoveFile, Guid.NewGuid());
                 if (!ftp.DirectoryExists(ftpAdapterArgument.DirectorytoMoveFile))
                     ftp.CreateDirectory(ftpAdapterArgument.DirectorytoMoveFile);
 
-                ftp.Rename(filePath, ftpAdapterArgument.DirectorytoMoveFile + "/" + string.Format(@"{0}_{1}.processed", filePath.ToLower().Replace(ftpAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid()));
+                ftp.Rename(filePath, ftpAdapterArgument.DirectorytoMoveFile + "/" + string.Format(@"{0}_{1}.processed", fileObj.Name.Replace(ftpAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid()));
             }
         }
         #endregion
@@ -78,13 +78,16 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                 base.LogVerbose("FTP connection is established");
 
                 if (!ftp.DirectoryExists(ftpAdapterArgument.Directory))
+                {
                     base.LogInformation("Directory {0} not found !!", ftpAdapterArgument.Directory);
+                    throw new DirectoryNotFoundException();
+                }
 
                 ftp.ChangeDirectory(ftpAdapterArgument.Directory);
                 FtpList currentItems = ftp.GetList();
 
 
-                
+
 
 
                 base.LogInformation("{0} files are ready to be imported", currentItems.Count);
@@ -104,7 +107,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
             }
             else
             {
-                base.LogError("Could not ftp connect to server {0}", ftpAdapterArgument.ServerIP);
+                base.LogError("Could not find Directory {0}", ftpAdapterArgument.Directory);
                 throw new Exception("FTP adapter could not connect to FTP Server");
             }
         }
