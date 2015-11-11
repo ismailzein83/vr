@@ -39,7 +39,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SaleZoneManager manager = new SaleZoneManager();
             return manager.GetSaleZonesInfoByIds(input.SellingNumberPlanId, input.SaleZoneIds, input.SaleZoneFilterSettings);
         }
-        [HttpPost]
+        [HttpGet]
         [Route("GetSaleZoneGroupTemplates")]
         public List<TemplateConfig> GetSaleZoneGroupTemplates()
         {

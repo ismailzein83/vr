@@ -31,7 +31,6 @@
                 pricingType = parameters.PricingType;
                 ruleId = parameters.RuleId
             }
-
             isEditMode = (ruleId != undefined);
         }
         function defineScope() {
