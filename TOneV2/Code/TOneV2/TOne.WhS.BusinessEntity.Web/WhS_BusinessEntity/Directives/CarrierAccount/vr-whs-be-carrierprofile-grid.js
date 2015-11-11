@@ -66,7 +66,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
         function setDataItemExtension(dataItem) {
             var extensionObject = {};
             var query = {
-                CarrierProfilesIds: [dataItem.CarrierProfileId],
+                CarrierProfilesIds: [dataItem.Entity.CarrierProfileId],
             }
             extensionObject.onGridReady = function (api) {
                 extensionObject.carrierAccountGridAPI = api;
