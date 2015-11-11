@@ -21,7 +21,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public List<SaleRate> GetEffectiveSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByOwnerAndEffective", SaleRateMapper, ownerType, ownerId, effectiveOn);
+            List<SaleRate> rates = GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByOwnerAndEffective", SaleRateMapper, ownerType, ownerId, effectiveOn);
+            return rates;
         }
 
         public bool AreSaleRatesUpdated(ref object updateHandle)
@@ -33,7 +34,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             DataTable rateChangesTable = BuildRateChangesTable(rateChanges);
 
-            int affectedRows = ExecuteNonQuerySPCmd("TOneWhS_BE.sp_SaleRate_Close", (cmd) => {
+            int affectedRows = ExecuteNonQuerySPCmd("TOneWhS_BE.sp_SaleRate_CloseRates", (cmd) => {
                 SqlParameter tableParameter = new SqlParameter("@RateChanges", SqlDbType.Structured);
                 tableParameter.Value = rateChangesTable;
                 cmd.Parameters.Add(tableParameter);
@@ -48,7 +49,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             table.Columns.Add("RateID", typeof(long));
             table.Columns.Add("EED", typeof(DateTime));
-            table.Columns["EED"].AllowDBNull = true;
 
             table.BeginLoadData();
 
@@ -56,7 +56,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 DataRow row = table.NewRow();
                 row["RateID"] = rateChange.RateId;
-                row["EED"] = rateChange.EED;
+                if (rateChange.EED != null)
+                    row["EED"] = rateChange.EED;
                 table.Rows.Add(row);
             }
 
@@ -83,31 +84,29 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             DataTable table = new DataTable();
 
-            table.Columns.Add("ZoneId", typeof(long));
-            table.Columns.Add("PriceListId", typeof(int));
-
-            table.Columns.Add("CurrencyId", typeof(int));
-            table.Columns["CurrencyId"].AllowDBNull = true;
-
+            table.Columns.Add("ZoneID", typeof(long));
+            table.Columns.Add("PriceListID", typeof(int));
+            table.Columns.Add("CurrencyID", typeof(int));
             table.Columns.Add("NormalRate", typeof(decimal));
-            table.Columns.Add("OtherRates", typeof(Dictionary<int, decimal>));
-            table.Columns.Add("BeginEffectiveDate", typeof(DateTime));
-
-            table.Columns.Add("EndEffectiveDate", typeof(DateTime));
-            table.Columns["EndEffectiveDate"].AllowDBNull = true;
+            table.Columns.Add("OtherRates", typeof(string));
+            table.Columns.Add("BED", typeof(DateTime));
+            table.Columns.Add("EED", typeof(DateTime));
 
             table.BeginLoadData();
 
             foreach (SaleRate newRate in newRates)
             {
                 DataRow row = table.NewRow();
-                row["ZoneId"] = newRate.ZoneId;
-                row["PriceListId"] = newRate.PriceListId;
-                row["CurrencyId"] = newRate.CurrencyId;
+                row["ZoneID"] = newRate.ZoneId;
+                row["PriceListID"] = newRate.PriceListId;
+                if (newRate.CurrencyId != null)
+                    row["CurrencyID"] = newRate.CurrencyId;
                 row["NormalRate"] = newRate.NormalRate;
-                row["OtherRates"] = newRate.OtherRates;
-                row["BeginEffectiveDate"] = newRate.BeginEffectiveDate;
-                row["EndEffectiveDate"] = newRate.EndEffectiveDate;
+                if (newRate.OtherRates != null)
+                    row["OtherRates"] = Vanrise.Common.Serializer.Serialize(newRate.OtherRates);
+                row["BED"] = newRate.BeginEffectiveDate;
+                if (newRate.EndEffectiveDate != null)
+                    row["EED"] = newRate.EndEffectiveDate;
                 table.Rows.Add(row);
             }
 

@@ -25,6 +25,12 @@ namespace TOne.WhS.Sales.Data.SQL
             return affectedRows > 0;
         }
 
+        public bool sp_RatePlan_SetStatusIfExists(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status)
+        {
+            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_SetStatusIfExists", ownerType, ownerId, status);
+            return affectedRows > 0;
+        }
+
         #endregion
 
         #region Changes

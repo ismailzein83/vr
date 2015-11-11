@@ -11,7 +11,9 @@
             <vr-datagridcolumn headertext="'Current Rate'" field="'CurrentRate'" type="'Number'" widthfactor="2" disablesorting></vr-datagridcolumn>
 
             <vr-datagridcolumn headertext="'New Rate'" type="'Number'" widthfactor="2" disablesorting>
-                <vr-textbox type="number" value="dataItem.NewRate" onvaluechanged="dataItem.onNewRateChanged(dataItem)" minvalue="0"></vr-textbox>
+                <span vr-disabled="!dataItem.IsCurrentRateEditable">
+                    <vr-textbox type="number" value="dataItem.NewRate" onvaluechanged="dataItem.onNewRateChanged(dataItem)" minvalue="0"></vr-textbox>
+                </span>
             </vr-datagridcolumn>
 
             <vr-datagridcolumn headertext="'Begin Effective Date'" type="'Date'" widthfactor="2" disablesorting>

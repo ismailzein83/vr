@@ -100,11 +100,12 @@
             };
 
             $scope.sellNewZones = function () {
+                var customerId = $scope.carrierAccountConnector.selectedCustomer.CarrierAccountId;
                 var onCustomerZonesSold = function (customerZones) {
                     loadRatePlan();
                 };
                 
-                WhS_Sales_MainService.sellNewZones(carrierAccountSelectorAPI.getData().CarrierAccountId, onCustomerZonesSold);
+                WhS_Sales_MainService.sellNewZones(customerId, onCustomerZonesSold);
             };
 
             defineSaveButtonMenuActions();
@@ -125,12 +126,15 @@
 
         function saveChanges() {
             var input = buildSaveChangesInput();
+            console.log(input.NewChanges);
             
             if (input.NewChanges != null) {
                 WhS_Sales_RatePlanAPIService.SaveChanges(input).then(function (response) {
                     gridAPI.loadGrid(buildGridQuery());
                 });
             }
+            else
+                gridAPI.loadGrid(buildGridQuery());
         }
 
         function buildGridQuery() {
@@ -177,7 +181,8 @@
                 $scope.carrierAccountConnector.selectedCustomer.CarrierAccountId;
 
             return WhS_Sales_RatePlanAPIService.GetZoneLetters($scope.selectedOwnerType.value, ownerId).then(function (response) {
-                if (response == null) return;
+                if (response == null)
+                    return;
 
                 $scope.zoneLetters = [];
 

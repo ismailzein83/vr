@@ -73,25 +73,32 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             return zoneChanges;
 
                             function buildZoneItemChanges(zoneItem) {
-                                var zoneChanges = null;
+                                var zoneItemChanges = null;
 
                                 var newRate = buildNewRate(zoneItem);
                                 var rateChange = (newRate != null) ? null : buildRateChange(zoneItem);
 
                                 if (newRate != null || rateChange != null) {
-                                    zoneChanges = {
+                                    zoneItemChanges = {
                                         ZoneId: zoneItem.ZoneId,
                                         NewRate: newRate,
                                         RateChange: rateChange
                                     };
                                 }
 
-                                return zoneChanges;
+                                return zoneItemChanges;
 
                                 function buildNewRate(zoneItem) {
                                     var newRate = null;
+                                    var currentRate = zoneItem.CurrentRate;
+                                    var newRate = zoneItem.NewRate;
 
-                                    if ((isEmpty(zoneItem.CurrentRate) || isEmpty(zoneItem.NewRate)) || (zoneItem.NewRate != zoneItem.CurrentRate)) {
+                                    if 
+                                    (
+                                        (isEmpty(currentRate) && !isEmpty(newRate)) ||
+                                        (!isEmpty(currentRate) && !isEmpty(newRate) && Number(currentRate) != Number(newRate))
+                                    )
+                                    {
                                         newRate = {
                                             ZoneId: zoneItem.ZoneId,
                                             NormalRate: zoneItem.NewRate,
@@ -102,22 +109,23 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                                     return newRate;
 
-                                    function isEmpty(value) {
-                                        return (value == undefined || value == null);
-                                    }
                                 }
 
                                 function buildRateChange(zoneItem) {
                                     var rateChange = null;
 
-                                    if (zoneItem.RateNewEED != zoneItem.RateEED) {
+                                    if (!isEmpty(zoneItem.CurrentRate) && zoneItem.RateNewEED != zoneItem.RateEED) {
                                         return {
                                             RateId: zoneItem.CurrentRateId,
-                                            EED: zoneItem.RateEED
+                                            EED: zoneItem.RateNewEED
                                         };
                                     }
 
                                     return rateChange;
+                                }
+
+                                function isEmpty(value) {
+                                    return (value == undefined || value == null);
                                 }
                             }
                         }
@@ -165,8 +173,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                 function extendZoneItem(zoneItem) {
                     zoneItem.isDirty = false;
-                    zoneItem.DisableBED = true;
-                    zoneItem.DisableEED = (zoneItem.NewRate == null);
+                    zoneItem.DisableBED = (zoneItem.NewRate == null);
+                    zoneItem.DisableEED = (zoneItem.CurrentRate == null && zoneItem.NewRate == null);
                     zoneItem.RateNewEED = zoneItem.RateEED;
 
                     zoneItem.onNewRateChanged = function (dataItem) {

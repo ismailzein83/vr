@@ -11,5 +11,7 @@ namespace TOne.WhS.Sales.Data
         Changes GetChanges(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status);
 
         bool InsertOrUpdateChanges(SalePriceListOwnerType ownerType, int ownerId, Changes changes, RatePlanStatus status);
+
+        bool sp_RatePlan_SetStatusIfExists(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status);
     }
 }
