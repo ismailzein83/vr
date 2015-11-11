@@ -21,5 +21,11 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
             return dataManager.GetSupplierCodes(supplierId, effectiveOn);
         }
+
+        public List<SupplierCode> GetSupplierCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture)
+        {
+            ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
+            return dataManager.GetSupplierCodesByPrefix(codePrefix, effectiveOn, isFuture);
+        }
     }
 }

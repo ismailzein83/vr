@@ -41,5 +41,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetBySupplier", SupplierCodeMapper, supplierId, effectiveOn);
         }
+
+        public List<SupplierCode> GetSupplierCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetByCodePrefix", SupplierCodeMapper, codePrefix, effectiveOn);
+        }
     }
 }

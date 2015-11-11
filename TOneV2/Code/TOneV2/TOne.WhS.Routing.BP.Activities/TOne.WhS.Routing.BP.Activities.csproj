@@ -69,6 +69,8 @@
     <Compile Include="DropOldRoutingDatabases.cs" />
     <Compile Include="GenerateSupplierZoneDetails.cs" />
     <Compile Include="GetSaleCodes.cs" />
+    <Compile Include="GetSupplierCodes.cs" />
+    <Compile Include="LoadSupplierZoneDetails.cs" />
     <Compile Include="PrepareSupplierZoneDetailForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetRoutingDatabaseReady.cs" />
