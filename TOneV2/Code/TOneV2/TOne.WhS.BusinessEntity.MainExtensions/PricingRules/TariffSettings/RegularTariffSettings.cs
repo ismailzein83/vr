@@ -19,7 +19,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.PricingRules.TariffSettings
 
         public override void Execute(IPricingRuleTariffContext context, PricingRuleTariffTarget target)
         {
-            throw new NotImplementedException();
+            target.EffectiveRate = target.Rate;
+            target.TotalAmount = target.Rate * (target.DurationInSeconds / 60);
         }
     }
 }
