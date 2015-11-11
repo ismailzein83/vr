@@ -63,83 +63,116 @@
       <Variable x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)" Name="SupplierCodes" />
       <Variable x:TypeArguments="twre:SupplierZoneDetailByZone" Name="SupplierZoneDetails" />
     </Sequence.Variables>
-    <twrba1:GetSaleCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSaleCodes_1">
-      <twrba1:GetSaleCodes.CodePrefix>
-        <InArgument x:TypeArguments="x:String">
-          <mca:CSharpValue x:TypeArguments="x:String">Input.CodePrefix</mca:CSharpValue>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+        <twrba1:GetSaleCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSaleCodes_1">
+          <twrba1:GetSaleCodes.CodePrefix>
+            <InArgument x:TypeArguments="x:String">
+              <mca:CSharpValue x:TypeArguments="x:String">Input.CodePrefix</mca:CSharpValue>
+            </InArgument>
+          </twrba1:GetSaleCodes.CodePrefix>
+          <twrba1:GetSaleCodes.EffectiveOn>
+            <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+              <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveOn</mca:CSharpValue>
+            </InArgument>
+          </twrba1:GetSaleCodes.EffectiveOn>
+          <twrba1:GetSaleCodes.IsFuture>
+            <InArgument x:TypeArguments="x:Boolean">
+              <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+            </InArgument>
+          </twrba1:GetSaleCodes.IsFuture>
+          <twrba1:GetSaleCodes.SaleCodes>
+            <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">
+              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">SaleCodes</mca:CSharpReference>
+            </OutArgument>
+          </twrba1:GetSaleCodes.SaleCodes>
+        </twrba1:GetSaleCodes>
+      </Sequence>
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+        <twrba1:GetSupplierCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSupplierCodes_1">
+          <twrba1:GetSupplierCodes.CodePrefix>
+            <InArgument x:TypeArguments="x:String">
+              <mca:CSharpValue x:TypeArguments="x:String">Input.CodePrefix</mca:CSharpValue>
+            </InArgument>
+          </twrba1:GetSupplierCodes.CodePrefix>
+          <twrba1:GetSupplierCodes.EffectiveOn>
+            <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+              <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveOn</mca:CSharpValue>
+            </InArgument>
+          </twrba1:GetSupplierCodes.EffectiveOn>
+          <twrba1:GetSupplierCodes.IsFuture>
+            <InArgument x:TypeArguments="x:Boolean">
+              <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+            </InArgument>
+          </twrba1:GetSupplierCodes.IsFuture>
+          <twrba1:GetSupplierCodes.SupplierCodes>
+            <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">
+              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">SupplierCodes</mca:CSharpReference>
+            </OutArgument>
+          </twrba1:GetSupplierCodes.SupplierCodes>
+        </twrba1:GetSupplierCodes>
+        <twrba1:LoadSupplierZoneDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadSupplierZoneDetails_1">
+          <twrba1:LoadSupplierZoneDetails.SupplierCodes>
+            <InArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">SupplierCodes</mca:CSharpValue>
+            </InArgument>
+          </twrba1:LoadSupplierZoneDetails.SupplierCodes>
+          <twrba1:LoadSupplierZoneDetails.SupplierZoneDetails>
+            <OutArgument x:TypeArguments="twre:SupplierZoneDetailByZone">
+              <mca:CSharpReference x:TypeArguments="twre:SupplierZoneDetailByZone">SupplierZoneDetails</mca:CSharpReference>
+            </OutArgument>
+          </twrba1:LoadSupplierZoneDetails.SupplierZoneDetails>
+        </twrba1:LoadSupplierZoneDetails>
+      </Sequence>
+    </Parallel>
+    <twrba1:BuildCodeMatches Status="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildCodeMatches_1">
+      <twrba1:BuildCodeMatches.SaleCodes>
+        <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">SaleCodes</mca:CSharpValue>
         </InArgument>
-      </twrba1:GetSaleCodes.CodePrefix>
-      <twrba1:GetSaleCodes.EffectiveOn>
-        <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveOn</mca:CSharpValue>
-        </InArgument>
-      </twrba1:GetSaleCodes.EffectiveOn>
-      <twrba1:GetSaleCodes.IsFuture>
-        <InArgument x:TypeArguments="x:Boolean">
-          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
-        </InArgument>
-      </twrba1:GetSaleCodes.IsFuture>
-      <twrba1:GetSaleCodes.SaleCodes>
-        <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">
-          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">SaleCodes</mca:CSharpReference>
-        </OutArgument>
-      </twrba1:GetSaleCodes.SaleCodes>
-    </twrba1:GetSaleCodes>
-    <twrba1:GetSupplierCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSupplierCodes_1">
-      <twrba1:GetSupplierCodes.CodePrefix>
-        <InArgument x:TypeArguments="x:String">
-          <mca:CSharpValue x:TypeArguments="x:String">Input.CodePrefix</mca:CSharpValue>
-        </InArgument>
-      </twrba1:GetSupplierCodes.CodePrefix>
-      <twrba1:GetSupplierCodes.EffectiveOn>
-        <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveOn</mca:CSharpValue>
-        </InArgument>
-      </twrba1:GetSupplierCodes.EffectiveOn>
-      <twrba1:GetSupplierCodes.IsFuture>
-        <InArgument x:TypeArguments="x:Boolean">
-          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
-        </InArgument>
-      </twrba1:GetSupplierCodes.IsFuture>
-      <twrba1:GetSupplierCodes.SupplierCodes>
-        <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">
-          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">SupplierCodes</mca:CSharpReference>
-        </OutArgument>
-      </twrba1:GetSupplierCodes.SupplierCodes>
-    </twrba1:GetSupplierCodes>
-    <twrba1:LoadSupplierZoneDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadSupplierZoneDetails_1">
-      <twrba1:LoadSupplierZoneDetails.SupplierCodes>
+      </twrba1:BuildCodeMatches.SaleCodes>
+      <twrba1:BuildCodeMatches.SupplierCodes>
         <InArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">SupplierCodes</mca:CSharpValue>
         </InArgument>
-      </twrba1:LoadSupplierZoneDetails.SupplierCodes>
-      <twrba1:LoadSupplierZoneDetails.SupplierZoneDetails>
-        <OutArgument x:TypeArguments="twre:SupplierZoneDetailByZone">
-          <mca:CSharpReference x:TypeArguments="twre:SupplierZoneDetailByZone">SupplierZoneDetails</mca:CSharpReference>
-        </OutArgument>
-      </twrba1:LoadSupplierZoneDetails.SupplierZoneDetails>
-    </twrba1:LoadSupplierZoneDetails>
-    <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
-      <InArgument x:TypeArguments="x:String">
-        <mca:CSharpValue x:TypeArguments="x:String">SupplierZoneDetails.Count().ToString();</mca:CSharpValue>
-      </InArgument>
-    </WriteLine>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbBA8A4ABDgIBAUIFVxsCAShYBW0fAgETbgV5JgIBCHoFfhECAQJKC0poAgE4VAtUcAIBM0ULRVkCAS5PC09YAgEpYAtgaAIBI1sLW1kCAR5qC2p4AgEZZQtlWAIBFHELcXACAQ52C3Z5AgEJfAl8bgIBAw==</sads:DebugSymbol.Symbol>
+      </twrba1:BuildCodeMatches.SupplierCodes>
+      <twrba1:BuildCodeMatches.SupplierZoneDetails>
+        <InArgument x:TypeArguments="twre:SupplierZoneDetailByZone">
+          <mca:CSharpValue x:TypeArguments="twre:SupplierZoneDetailByZone">SupplierZoneDetails</mca:CSharpValue>
+        </InArgument>
+      </twrba1:BuildCodeMatches.SupplierZoneDetails>
+    </twrba1:BuildCodeMatches>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbBU8A5IBDgIBAUIFfxACARKAAQWQAR8CAQJDB1oSAgE0Wwd+EgIBE4MBC4MBaAIBDYgBC4gBcAIBCI0BC40BcQIBA0QJWR8CATVcCXEjAgEfcgl9KgIBFEwPTGwCAUVWD1Z0AgFARw9HXQIBO1EPUVwCATZkD2RsAgEvXw9fXQIBKm4PbnwCASVpD2lcAgEgdQ91dAIBGnoPen0CARU=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="GetSaleCodes_1" sap:VirtualizedContainerService.HintSize="211,22" />
-      <sap2010:ViewStateData Id="GetSupplierCodes_1" sap:VirtualizedContainerService.HintSize="211,22" />
-      <sap2010:ViewStateData Id="LoadSupplierZoneDetails_1" sap:VirtualizedContainerService.HintSize="211,22" />
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="211,62" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="233,372">
+      <sap2010:ViewStateData Id="GetSaleCodes_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.BuildRoutesByCodePrefix_1" sap:VirtualizedContainerService.HintSize="273,452" />
+      <sap2010:ViewStateData Id="GetSupplierCodes_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="LoadSupplierZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="598,254" />
+      <sap2010:ViewStateData Id="BuildCodeMatches_1" sap:VirtualizedContainerService.HintSize="598,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="620,440">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.BuildRoutesByCodePrefix_1" sap:VirtualizedContainerService.HintSize="660,520" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

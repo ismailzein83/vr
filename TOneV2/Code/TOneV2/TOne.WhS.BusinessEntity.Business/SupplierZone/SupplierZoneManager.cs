@@ -38,7 +38,8 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public SupplierZone GetSupplierZone(long zoneId)
         {
-            throw new NotImplementedException();
+            List<SupplierZone> supplierZones = GetCachedSupplierZones();
+            return supplierZones.FindRecord(x => x.SupplierZoneId == zoneId);
         }
         public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfoByIds(List<long> selectedIds)
         {
