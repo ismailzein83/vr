@@ -66,6 +66,7 @@
     <Compile Include="IDataManager.cs" />
     <Compile Include="CustomerIdentificationRuleDataManager.cs" />
     <Compile Include="ISupplierIdentificationRuleDataManager.cs" />
+    <Compile Include="ITrafficStatisticDailyDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

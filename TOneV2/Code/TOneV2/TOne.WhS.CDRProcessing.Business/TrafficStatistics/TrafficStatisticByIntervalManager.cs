@@ -8,7 +8,7 @@ using TOne.WhS.CDRProcessing.Entities;
 
 namespace TOne.WhS.CDRProcessing.Business
 {
-    public class TrafficStatisticByIntervalManager : BaseTrafficStatisticManager<TrafficStatisticByInterval>
+    public class TrafficStatisticByIntervalManager : BaseTrafficStatisticManager<TrafficStatisticByInterval, TrafficStatisticByIntervalBatch>
     {
         int _intervalInMinute;
 
@@ -36,9 +36,10 @@ namespace TOne.WhS.CDRProcessing.Business
             dataManager.UpdateStatisticItemsInDB(items);
         }
 
-        protected override Dictionary<string, long> GetStatisticItemsIdsByKeyFromDB(TrafficStatisticBatch<TrafficStatisticByInterval> batch)
+        protected override Dictionary<string, long> GetStatisticItemsIdsByKeyFromDB(TrafficStatisticByIntervalBatch batch)
         {
-            throw new NotImplementedException();
+            ITrafficStatisticByIntervalDataManager dataManager = CDRProcessingDataManagerFactory.GetDataManager<ITrafficStatisticByIntervalDataManager>();
+            return dataManager.GetStatisticItemsIdsByKeyFromDB(batch);
         }
     }
 }

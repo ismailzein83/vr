@@ -24,9 +24,12 @@ namespace Vanrise.Common.Data.SQL.StatisticManagement
 
             ExecuteReaderSP("StatisticManagement.sp_StatisticBatch_TryLock", (reader) =>
                 {
-                    isLocked = true;
-                    serializedBatchInfo = reader["BatchInfo"] as string;
-                    isInfoCorrupted_Internal = (bool)reader["IsInfoCorrupted"];
+                        if (reader.Read())
+                        {
+                            isLocked = true;
+                            serializedBatchInfo = reader["BatchInfo"] as string;
+                            isInfoCorrupted_Internal = (bool)reader["IsInfoCorrupted"];
+                        }             
                 }, typeId, batchStart, currentRuntimeProcessId, runningProcessIds != null ? String.Join(",", runningProcessIds) : null);
             if (serializedBatchInfo != null)
                 batchInfo = Serializer.Deserialize<StatisticBatchInfo>(serializedBatchInfo);

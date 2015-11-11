@@ -112,6 +112,9 @@
     <Compile Include="TrafficStatistics\BaseTrafficStatistic.cs" />
     <Compile Include="TrafficStatistics\TrafficStatisticBatch.cs" />
     <Compile Include="TrafficStatistics\TrafficStatisticByInterval.cs" />
+    <Compile Include="TrafficStatistics\TrafficStatisticByIntervalBatch.cs" />
+    <Compile Include="TrafficStatistics\TrafficStatisticDaily.cs" />
+    <Compile Include="TrafficStatistics\TrafficStatisticDailyBatch.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

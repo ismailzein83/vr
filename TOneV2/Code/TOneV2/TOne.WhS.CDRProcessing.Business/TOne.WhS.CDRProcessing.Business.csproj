@@ -92,6 +92,7 @@
     <Compile Include="SupplierRule\SupplierIdentificationRuleManager.cs" />
     <Compile Include="TrafficStatistics\BaseTrafficStatisticManager.cs" />
     <Compile Include="TrafficStatistics\TrafficStatisticByIntervalManager.cs" />
+    <Compile Include="TrafficStatistics\TrafficStatisticDailyManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">

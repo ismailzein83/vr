@@ -11,5 +11,7 @@ namespace TOne.WhS.CDRProcessing.Data
     {
         void InsertStatisticItemsToDB(IEnumerable<TrafficStatisticByInterval> items);
         void UpdateStatisticItemsInDB(IEnumerable<TrafficStatisticByInterval> items);
+
+        Dictionary<string, long> GetStatisticItemsIdsByKeyFromDB(TrafficStatisticByIntervalBatch batch);
     }
 }

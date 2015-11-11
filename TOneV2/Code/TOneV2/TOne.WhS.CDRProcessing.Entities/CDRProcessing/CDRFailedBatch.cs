@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Integration.Entities;
+using Vanrise.Queueing.Entities;
 
 namespace TOne.WhS.CDRProcessing.Entities
 {
-    public class CDRFailedBatch: MappedBatchItem
+    public class CDRFailedBatch : PersistentQueueItem
     {
         static CDRFailedBatch()
         {
@@ -20,9 +21,5 @@ namespace TOne.WhS.CDRProcessing.Entities
             return String.Format("CDRFailedBatch of {0} CDRs", FailedCDRs.Count());
         }
 
-        public override int GetRecordCount()
-        {
-            return FailedCDRs.Count();
-        }
     }
 }

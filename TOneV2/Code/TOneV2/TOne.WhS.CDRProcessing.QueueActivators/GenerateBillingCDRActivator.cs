@@ -33,7 +33,7 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
                   BillingCDRBase baseCDR = GenerateBillingCdr(cdr);
 
                   billingCDRBatch.CDRs.Add(baseCDR);
-                 if (baseCDR.CustomerId == 0 || baseCDR.SupplierId == 0 || baseCDR.SaleCode == null || baseCDR.SaleZoneID == null || baseCDR.SupplierCode == null || baseCDR.SupplierZoneID == null)
+                 if (baseCDR.CustomerId == 0 || baseCDR.SupplierId == 0 || baseCDR.SaleCode == null || baseCDR.SaleZoneID == 0 || baseCDR.SupplierCode == null || baseCDR.SupplierZoneID == 0)
                       {
                           if (cdrInvalidBatch.InvalidCDRs == null)
                               cdrInvalidBatch.InvalidCDRs = new List<BillingInvalidCDR>();
@@ -66,10 +66,14 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
 
                 
             }
-            outputItems.Add("Generate CDR Prices", cdrMainBatch);
-            outputItems.Add("Generate Stats", billingCDRBatch);
-            outputItems.Add("Store Invalid CDRs", cdrInvalidBatch);
-            outputItems.Add("Store Failed CDRs", cdrFailedBatch);
+            if (cdrMainBatch.MainCDRs != null && cdrMainBatch.MainCDRs.Count()>0)
+              outputItems.Add("Generate CDR Prices", cdrMainBatch);
+            if (billingCDRBatch.CDRs != null && billingCDRBatch.CDRs.Count() > 0)
+                outputItems.Add("Generate Stats", billingCDRBatch);
+            if (cdrInvalidBatch.InvalidCDRs != null && cdrInvalidBatch.InvalidCDRs.Count() > 0)
+             outputItems.Add("Store Invalid CDRs", cdrInvalidBatch);
+            if (cdrFailedBatch.FailedCDRs != null && cdrFailedBatch.FailedCDRs.Count() > 0)
+               outputItems.Add("Store Failed CDRs", cdrFailedBatch);
 
         }
 

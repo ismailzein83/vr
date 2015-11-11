@@ -25,12 +25,23 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
        public void WriteRecordToStream(TrafficStatisticByInterval record, object dbApplyStream)
        {
            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-           streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}",
+           streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}",
                                     record.StatisticItemId,
                                     record.CustomerId,
                                     record.SupplierId,
                                     record.Attempts,
-                                    record.TotalDurationInSeconds);
+                                    record.TotalDurationInSeconds,
+                                    record.FirstCDRAttempt,
+                                    record.LastCDRAttempt,
+                                    record.SaleZoneId,
+                                    record.SupplierZoneId,
+                                    record.PDDInSeconds,
+                                    record.MaxDurationInSeconds,
+                                    record.NumberOfCalls,
+                                    record.PortOut,
+                                    record.PortIn,
+                                    record.DeliveredAttempts,
+                                    record.SuccessfulAttempts);
 
        }
        public object FinishDBApplyStream(object dbApplyStream)
@@ -92,6 +103,17 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
            dr["SupplierId"] = trafficStatistic.SupplierId;
            dr["Attempts"] = trafficStatistic.Attempts;
            dr["TotalDurationInSeconds"] = trafficStatistic.TotalDurationInSeconds;
+           dr["FirstCDRAttempt"] = trafficStatistic.FirstCDRAttempt;
+           dr["LastCDRAttempt"] = trafficStatistic.LastCDRAttempt;
+           dr["SaleZoneID"] = trafficStatistic.SaleZoneId;
+           dr["SupplierZoneID"] = trafficStatistic.SupplierZoneId;
+           dr["PDDInSeconds"] = trafficStatistic.PDDInSeconds;
+           dr["MaxDurationInSeconds"] = trafficStatistic.MaxDurationInSeconds;
+           dr["NumberOfCalls"] = trafficStatistic.NumberOfCalls;
+           dr["PortOut"] = trafficStatistic.PortOut;
+           dr["PortIn"] = trafficStatistic.PortIn;
+           dr["DeliveredAttempts"] = trafficStatistic.DeliveredAttempts;
+           dr["SuccessfulAttempts"] = trafficStatistic.SuccessfulAttempts;
        }
        DataTable GetTrafficStatsTable()
        {
@@ -99,9 +121,49 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
            dt.Columns.Add("ID", typeof(int));
            dt.Columns.Add("CustomerId", typeof(int));
            dt.Columns.Add("SupplierId", typeof(int));
-           dt.Columns.Add("Attempts", typeof(DateTime));
+           dt.Columns.Add("Attempts", typeof(int));
            dt.Columns.Add("TotalDurationInSeconds", typeof(int));
+           dt.Columns.Add("FirstCDRAttempt", typeof(DateTime));
+           dt.Columns.Add("LastCDRAttempt", typeof(DateTime));
+           dt.Columns.Add("SaleZoneID", typeof(long));
+           dt.Columns.Add("SupplierZoneID", typeof(long));
+           dt.Columns.Add("PDDInSeconds", typeof(int));
+           dt.Columns.Add("MaxDurationInSeconds", typeof(int));
+           dt.Columns.Add("NumberOfCalls", typeof(int));
+           dt.Columns.Add("PortOut", typeof(string));
+           dt.Columns.Add("PortIn", typeof(string));
+           dt.Columns.Add("DeliveredAttempts", typeof(int));
+           dt.Columns.Add("SuccessfulAttempts", typeof(int));
+
            return dt;
+       }
+
+
+
+
+
+       public Dictionary<string, long> GetStatisticItemsIdsByKeyFromDB(TrafficStatisticByIntervalBatch batch)
+       {
+           Dictionary<string, long> trafficStatistics = new Dictionary<string, long>();
+           
+           ExecuteReaderSP("TOneWhS_CDR.sp_TrafficStats_GetIdsByGroupedKeys", (reader) =>
+           {
+               string key=null;
+               while (reader.Read())
+               {
+                   key= TrafficStatisticByInterval.GetStatisticItemKey(
+                            GetReaderValue<int>(reader,"CustomerID"),
+                            GetReaderValue<int>(reader,"SupplierID"),
+                            GetReaderValue<long>(reader, "SaleZoneID"),
+                             GetReaderValue<long>(reader, "SupplierZoneID"),
+                             GetReaderValue<string>(reader, "PortOut"),
+                             GetReaderValue<string>(reader, "PortIn"));
+                  if(!trafficStatistics.ContainsKey(key))
+                      trafficStatistics.Add(key,GetReaderValue<long>(reader,"ID"));
+               }
+           }, batch.BatchStart, batch.BatchEnd);
+
+           return trafficStatistics;
        }
     }
 }

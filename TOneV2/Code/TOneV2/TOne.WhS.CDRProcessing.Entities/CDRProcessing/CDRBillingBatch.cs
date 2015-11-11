@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Integration.Entities;
+using Vanrise.Queueing.Entities;
 
 namespace TOne.WhS.CDRProcessing.Entities
 {
-   public class CDRBillingBatch: MappedBatchItem
+    public class CDRBillingBatch : PersistentQueueItem
    {
        static CDRBillingBatch()
        {           
@@ -16,10 +17,6 @@ namespace TOne.WhS.CDRProcessing.Entities
        }
        public List<BillingCDRBase> CDRs { get; set; }
 
-       public override int GetRecordCount()
-       {
-           return CDRs.Count() ;
-       }
 
        public override string GenerateDescription()
        {
