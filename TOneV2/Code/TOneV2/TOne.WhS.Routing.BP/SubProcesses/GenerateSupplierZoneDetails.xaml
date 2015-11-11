@@ -107,7 +107,7 @@
         </OutArgument>
       </twrba:PrepareSupplierZoneDetailForDBApply.Status>
     </twrba:PrepareSupplierZoneDetailForDBApply>
-    <twrba:ApplySupplierZoneDetailsToDB Status="{x:Null}">
+    <twrba:ApplySupplierZoneDetailsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplySupplierZoneDetailsToDB_1">
       <twrba:ApplySupplierZoneDetailsToDB.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedSupplierZoneDetails</mca:CSharpValue>
@@ -123,9 +123,8 @@
           <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabaseId</mca:CSharpValue>
         </InArgument>
       </twrba:ApplySupplierZoneDetailsToDB.RoutingDatabaseId>
-      <sap2010:WorkflowViewState.IdRef>ApplySupplierZoneDetailsToDB_1</sap2010:WorkflowViewState.IdRef>
     </twrba:ApplySupplierZoneDetailsToDB>
-    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEdlbmVyYXRlU3VwcGxpZXJab25lRGV0YWlscy54YW1sDzsDgQEOAgEBQgVXKQIBNVgFbTECARhuBX8qAgECSgtKawIBS0ULRWICAURUC1R/AgE9TwtPjwECATZlC2V3AgEuWwtbhwECASdqC2p+AgEgYAtgfwIBGXYLdnYCARFxC3F3AgEKewt7WQIBAw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEdlbmVyYXRlU3VwcGxpZXJab25lRGV0YWlscy54YW1sDzsDgAEOAgEBQgVXKQIBNVgFbTECARhuBX4qAgECSgtKawIBS0ULRWICAURUC1R/AgE9TwtPjwECATZlC2V3AgEuWwtbhwECASdqC2p+AgEgYAtgfwIBGXYLdnYCARFxC3F3AgEKewt7WQIBAw==</sads:DebugSymbol.Symbol>
   </Parallel>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
