@@ -33,7 +33,7 @@ namespace TOne.WhS.Routing.Business
             foreach (var customerZone in customerSaleZones)
             {
                 SaleEntityZoneRate customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
-                
+
                 if (customerZoneRate != null)
                 {
                     int currencyId = customerZoneRate.Rate.CurrencyId.HasValue ? customerZoneRate.Rate.CurrencyId.Value : customerZoneRate.PriceList.CurrencyId;
@@ -58,7 +58,7 @@ namespace TOne.WhS.Routing.Business
                         RoutingProductSource = customerZoneRoutingProduct != null ? customerZoneRoutingProduct.Source : default(SaleEntityZoneRoutingProductSource),
                         SellingProductId = customerSellingProduct.SellingProductId,
                         SaleZoneId = customerZone.SaleZoneId,
-                        EffectiveRateValue= rateValue,
+                        EffectiveRateValue = rateValue,
                         RateSource = customerZoneRate.Source
                     };
 
@@ -66,7 +66,12 @@ namespace TOne.WhS.Routing.Business
                 }
             }
         }
-
+        /// <summary>
+        /// Build supplier zone details with rates and apply pricing rules if exist.
+        /// </summary>
+        /// <param name="effectiveOn">Effective date for rates</param>
+        /// <param name="isEffectiveInFuture">True if building process for Future.</param>
+        /// <param name="onSupplierZoneDetailAvailable">Action that evalute a Supplier Zone Detail</param>
         public void BuildSupplierZoneDetails(DateTime? effectiveOn, bool isEffectiveInFuture, Action<SupplierZoneDetail> onSupplierZoneDetailAvailable)
         {
             SupplierRateManager supplierRateManager = new SupplierRateManager();
@@ -88,9 +93,10 @@ namespace TOne.WhS.Routing.Business
                         EffectiveOn = effectiveOn,
                         IsEffectiveInFuture = isEffectiveInFuture
                     };
-                    var pricingRulesResult = purchasePricingRuleManager.ApplyPricingRules(purchasePricingRulesInput);
+                    //TODO: Update after fixing this issue
+                    //var pricingRulesResult = purchasePricingRuleManager.ApplyPricingRules(purchasePricingRulesInput);
 
-                    var rateValue = pricingRulesResult != null ? pricingRulesResult.Rate : supplierRate.NormalRate;
+                    var rateValue = supplierRate.NormalRate;//pricingRulesResult != null ? pricingRulesResult.Rate : supplierRate.NormalRate;
                     rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now);
                     SupplierZoneDetail supplierZoneDetail = new SupplierZoneDetail
                     {

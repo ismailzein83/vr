@@ -24,7 +24,7 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override void DoWork(ApplySupplierZoneDetailsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             ISupplierZoneDetailsDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ISupplierZoneDetailsDataManager>();
-            
+            dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;

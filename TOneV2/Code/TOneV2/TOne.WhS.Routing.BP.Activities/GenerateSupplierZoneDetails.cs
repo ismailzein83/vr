@@ -42,6 +42,13 @@ namespace TOne.WhS.Routing.BP.Activities
                     supplierZoneDetailBatch.SupplierZoneDetails = new List<SupplierZoneDetail>();
                 }
             });
+
+            if (supplierZoneDetailBatch.SupplierZoneDetails.Count > 0)
+            {
+                inputArgument.OutputQueue.Enqueue(supplierZoneDetailBatch);
+                supplierZoneDetailBatch = new SupplierZoneDetailBatch();
+                supplierZoneDetailBatch.SupplierZoneDetails = new List<SupplierZoneDetail>();
+            }
         }
 
         protected override GenerateSupplierZoneDetailsInput GetInputArgument(AsyncCodeActivityContext context)

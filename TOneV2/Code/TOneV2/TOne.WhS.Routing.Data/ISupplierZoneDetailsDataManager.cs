@@ -8,7 +8,7 @@ using Vanrise.Data;
 
 namespace TOne.WhS.Routing.Data
 {
-    public interface ISupplierZoneDetailsDataManager : IDataManager, IBulkApplyDataManager<SupplierZoneDetail>
+    public interface ISupplierZoneDetailsDataManager : IDataManager, IBulkApplyDataManager<SupplierZoneDetail>, IRoutingDataManager
     {
         void SaveSupplierZoneDetailsForDB(List<SupplierZoneDetail> supplierZoneDetails);
 

@@ -9,10 +9,11 @@ using Vanrise.Data.SQL;
 
 namespace TOne.WhS.Routing.Data.SQL
 {
-    public class SupplierZoneDetailsDataManager : BaseTOneDataManager, ISupplierZoneDetailsDataManager
+    public class SupplierZoneDetailsDataManager : RoutingDataManager, ISupplierZoneDetailsDataManager
     {
         public object FinishDBApplyStream(object dbApplyStream)
         {
+            
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.Close();
             return new StreamBulkInsertInfo
