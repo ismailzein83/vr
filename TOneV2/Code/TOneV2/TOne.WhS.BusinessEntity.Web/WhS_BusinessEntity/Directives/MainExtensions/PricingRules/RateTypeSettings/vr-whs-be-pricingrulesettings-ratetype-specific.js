@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBePricingrulesettingsExtrachargePercentage', ['$compile',
-function ( $compile) {
+app.directive('vrWhsBePricingrulesettingsRatetypeSpecific', ['$compile',
+function ($compile) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -10,7 +10,7 @@ function ( $compile) {
         controller: function ($scope, $element, $attrs) {
 
             var ctrl = this;
-            var ctor = new percentageExtraChargeCtor(ctrl, $scope, $attrs);
+            var ctor = new specificRateTypeCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
         controllerAs: 'ctrl',
@@ -18,12 +18,12 @@ function ( $compile) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Settings/Templates/PricingRulePercentageExtraChargeTemplate.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/PricingRules/RateTypeSettings/Templates/PricingRuleSpecificRateTypeTemplate.html"
 
     };
 
 
-    function percentageExtraChargeCtor(ctrl, $scope, $attrs) {
+    function specificRateTypeCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
 
@@ -35,19 +35,14 @@ function ( $compile) {
 
             api.getData = function () {
                 var obj = {
-                    $type: "TOne.WhS.BusinessEntity.MainExtensions.PricingRules.ExtraChargeActions.PercentageExtraChargeSettings, TOne.WhS.BusinessEntity.MainExtensions",
-                    FromRate: ctrl.fromRate,
-                    ToRate: ctrl.toRate,
-                    ExtraPercentage: ctrl.extraPercentage
+                    $type: "TOne.WhS.BusinessEntity.MainExtensions.PricingRules.RateTypeSettings.SpecificDayRateTypeSettings, TOne.WhS.BusinessEntity.MainExtensions",
+                    Date: ctrl.date,
                 }
                 return obj;
             }
-
             api.load = function (payload) {
                 if (payload != undefined) {
-                    ctrl.fromRate = payload.FromRate;
-                    ctrl.toRate = payload.ToRate
-                    ctrl.extraPercentage = payload.ExtraPercentage
+                    ctrl.date = payload.Date;
                 }
             }
 

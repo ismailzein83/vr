@@ -6,8 +6,8 @@
     function pricingRuleAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
 
      
-        function GetPricingRuleTODTemplates() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "PricingRule", "GetPricingRuleTODTemplates"));
+        function GetPricingRuleRateTypeTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "PricingRule", "GetPricingRuleRateTypeTemplates"));
 
         }
         function GetPricingRuleTariffTemplates() {
@@ -18,12 +18,13 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "PricingRule", "GetPricingRuleExtraChargeTemplates"));
 
         }
-
+        
        
         return ({
-            GetPricingRuleTODTemplates: GetPricingRuleTODTemplates,
+            GetPricingRuleRateTypeTemplates: GetPricingRuleRateTypeTemplates,
             GetPricingRuleTariffTemplates: GetPricingRuleTariffTemplates,
-            GetPricingRuleExtraChargeTemplates: GetPricingRuleExtraChargeTemplates
+            GetPricingRuleExtraChargeTemplates: GetPricingRuleExtraChargeTemplates,
+
         });
     }
 

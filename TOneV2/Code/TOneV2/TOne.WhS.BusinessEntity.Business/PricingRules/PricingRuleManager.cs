@@ -11,10 +11,10 @@ namespace TOne.WhS.BusinessEntity.Business.PricingRules
 {
    public class PricingRuleManager
     {
-       public List<TemplateConfig> GetPricingRuleTODTemplates()
+       public List<TemplateConfig> GetPricingRuleRateTypeTemplates()
        {
            TemplateConfigManager manager = new TemplateConfigManager();
-           return manager.GetTemplateConfigurations(TOne.WhS.BusinessEntity.Business.Constants.PricingRuleTODSettingsConfigType);
+           return manager.GetTemplateConfigurations(TOne.WhS.BusinessEntity.Business.Constants.PricingRuleRateTypeSettingsConfigType);
        }
        public List<TemplateConfig> GetPricingRuleTariffTemplates()
        {

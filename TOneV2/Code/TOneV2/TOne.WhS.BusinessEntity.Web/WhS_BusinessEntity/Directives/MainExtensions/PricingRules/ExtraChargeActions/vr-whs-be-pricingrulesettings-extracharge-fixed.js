@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBePricingrulesettingsTariffRegular', ['$compile',
+app.directive('vrWhsBePricingrulesettingsExtrachargeFixed', ['$compile',
 function ($compile) {
 
     var directiveDefinitionObject = {
@@ -10,7 +10,7 @@ function ($compile) {
         controller: function ($scope, $element, $attrs) {
 
             var ctrl = this;
-            var ctor = new regulartariffCtor(ctrl, $scope, $attrs);
+            var ctor = new fixedExtraChargeCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
         controllerAs: 'ctrl',
@@ -18,12 +18,12 @@ function ($compile) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/PricingRule/Settings/Templates/PricingRuleRegularTariffTemplate.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/PricingRules/ExtraChargeActions/Templates/PricingRuleFixedExtraChargeTemplate.html"
 
     };
 
 
-    function regulartariffCtor(ctrl, $scope, $attrs) {
+    function fixedExtraChargeCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
 
@@ -35,20 +35,18 @@ function ($compile) {
 
             api.getData = function () {
                 var obj = {
-                    $type: "TOne.WhS.BusinessEntity.MainExtensions.PricingRules.TariffSettings.RegularTariffSettings, TOne.WhS.BusinessEntity.MainExtensions",
-                    CallFee: ctrl.callFee,
-                    FirstPeriod: ctrl.firstPeriod,
-                    FirstPeriodRate: ctrl.firstPeriodRate,
-                    FractionUnit: ctrl.fractionUnit
+                    $type: "TOne.WhS.BusinessEntity.MainExtensions.PricingRules.ExtraChargeActions.FixedExtraChargeSettings, TOne.WhS.BusinessEntity.MainExtensions",
+                    FromRate: ctrl.fromRate,
+                    ToRate: ctrl.toRate,
+                    ExtraAmount: ctrl.extraAmount
                 }
                 return obj;
             }
             api.load = function (payload) {
                 if (payload != undefined) {
-                    ctrl.callFee = payload.CallFee;
-                    ctrl.firstPeriod = payload.FirstPeriod,
-                    ctrl.firstPeriodRate = payload.FirstPeriodRate,
-                    ctrl.fractionUnit = payload.FractionUnit
+                    ctrl.fromRate = payload.FromRate;
+                    ctrl.toRate = payload.ToRate
+                    ctrl.extraAmount = payload.ExtraAmount
                 }
             }
 

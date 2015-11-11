@@ -23,9 +23,9 @@
 
 
             $scope.addMenuActions = [{
-                name: "TOD Rule",
+                name: "Rate Type Rule",
                 clicked: function () {
-                    return AddNewPurchasePricingRule(WhS_Be_PricingRuleTypeEnum.TOD.value);
+                    return AddNewPurchasePricingRule(WhS_Be_PricingRuleTypeEnum.RateType.value);
                 }
             },
             {

@@ -22,7 +22,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public const string CodeCriteriaGroupConfigType = "WhS_BE_CodeCriteriaGroup";
 
-        public const string PricingRuleTODSettingsConfigType = "WhS_BE_PricingRuleTODSettings";
+        public const string PricingRuleRateTypeSettingsConfigType = "WhS_BE_PricingRuleRateTypeSettings";
         public const string PricingRuleTariffSettingsConfigType = "WhS_BE_PricingRuleTariffSettings";
         public const string PricingRuleExtraChargeSettingsConfigType = "WhS_BE_PricingRuleExtraChargeSettings";
         public const string SuppliersWithZonesGroupSettingsConfigType = "WhS_BE_SuppliersWithZonesGroupSettings";

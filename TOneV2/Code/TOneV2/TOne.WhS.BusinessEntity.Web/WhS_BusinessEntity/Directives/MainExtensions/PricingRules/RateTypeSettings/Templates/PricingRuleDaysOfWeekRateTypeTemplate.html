@@ -1,0 +1,35 @@
+﻿<vr-row removeline>
+    <vr-columns width="1/2row">
+        <vr-select ismultipleselection datatextfield="description" datavaluefield="value"
+                   label="Days Of Week" datasource="ctrl.daysOfWeek" selectedvalues="ctrl.selectedDaysOfWeek"></vr-select>
+    </vr-columns>
+    <vr-columns width="1/2row">
+
+        <vr-row removeline>
+            <vr-columns width="1/3row">
+                <vr-datetimepicker label="From Time" value="ctrl.fromTime" type="time"></vr-datetimepicker>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-datetimepicker label="To Time" value="ctrl.toTime" type="time"></vr-datetimepicker>
+            </vr-columns>
+            <vr-columns width="normal" withemptyline>
+                <vr-button type="Add" data-onclick="ctrl.addFilter" standalone vr-disabled="ctrl.disableAddButton"></vr-button>
+            </vr-columns>
+        </vr-row>
+        <vr-row >
+            <vr-columns width="fullrow">
+                <div>
+                    <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="ctrl.times.length > 0">
+                        <li ng-repeat="time in ctrl.times" class="list-group-item list-custom" style="margin: 1px; font-size: 12px;">
+                            <i class="glyphicon glyphicon-th-list handeldrag"></i>
+                            <div style="display: inline-block; max-width: 200px;">From Time: {{time.FromTime.Hour}}:{{time.FromTime.Minute}}  To Time: {{time.ToTime.Hour}}:{{time.ToTime.Minute}}</div>
+                            <i class="glyphicon glyphicon-remove hand-cursor" style="float: right; padding: 5px; cursor: default" ng-click="removeTime($event,time)"></i>
+                        </li>
+                    </ul>
+                </div>
+            </vr-columns>
+        </vr-row>
+
+       
+    </vr-columns>
+ </vr-row>

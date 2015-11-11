@@ -13,11 +13,11 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     public class WhSBE_PricingRuleController : BaseAPIController
     {
          [HttpGet]
-         [Route("GetPricingRuleTODTemplates")]
-         public List<TemplateConfig> GetPricingRuleTODTemplates()
+         [Route("GetPricingRuleRateTypeTemplates")]
+         public List<TemplateConfig> GetPricingRuleRateTypeTemplates()
          {
              PricingRuleManager manager = new PricingRuleManager();
-             return manager.GetPricingRuleTODTemplates(); 
+             return manager.GetPricingRuleRateTypeTemplates(); 
          }
          [HttpGet]
          [Route("GetPricingRuleTariffTemplates")]
