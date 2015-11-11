@@ -68,6 +68,7 @@
     <Compile Include="CreateRoutingDatabase.cs" />
     <Compile Include="DropOldRoutingDatabases.cs" />
     <Compile Include="GenerateSupplierZoneDetails.cs" />
+    <Compile Include="GetSaleCodes.cs" />
     <Compile Include="PrepareSupplierZoneDetailForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetRoutingDatabaseReady.cs" />
@@ -76,6 +77,14 @@
     <ProjectReference Include="..\TOne.Business\TOne.Business.csproj">
       <Project>{cab55227-6fda-4012-8a59-168ad30f96d2}</Project>
       <Name>TOne.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
+      <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
+      <Name>TOne.WhS.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.Business\TOne.WhS.Routing.Business.csproj">
       <Project>{923447e8-0d0b-4296-976a-8f486a8694d3}</Project>

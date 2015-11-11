@@ -31,16 +31,16 @@ namespace TestRuntime.Tasks
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
-            BPClient bpClient = new BPClient();
-            bpClient.CreateNewProcess(new CreateProcessInput
-            {
-                InputArguments = new TOne.WhS.Routing.BP.Arguments.BuildRoutesByCodePrefixInput
-                {
-                    CodePrefix = "91",
-                    EffectiveOn = DateTime.Now,
-                    IsFuture = false
-                }
-            });
+            //BPClient bpClient = new BPClient();
+            //bpClient.CreateNewProcess(new CreateProcessInput
+            //{
+            //    InputArguments = new TOne.WhS.Routing.BP.Arguments.BuildRoutesByCodePrefixInput
+            //    {
+            //        CodePrefix = "91",
+            //        EffectiveOn = DateTime.Now,
+            //        IsFuture = false
+            //    }
+            //});
 
 
         }

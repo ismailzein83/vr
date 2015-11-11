@@ -125,5 +125,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_BySellingNumberPlan", SaleCodeMapper, sellingNumberPlanId, effectiveOn);
         }
+
+        public List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByCodePrefix", SaleCodeMapper, codePrefix, effectiveOn);
+        }
     }
 }

@@ -17,5 +17,7 @@ namespace TOne.WhS.BusinessEntity.Data
         void WriteRecordToStream(SaleCode record, object dbApplyStream);
         object FinishDBApplyStream(object dbApplyStream);
         List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn);
+
+        List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture);
     }
 }

@@ -1,0 +1,69 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Activities;
+using Vanrise.BusinessProcess;
+using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.BusinessEntity.Business;
+
+namespace TOne.WhS.Routing.BP.Activities
+{
+
+    public class GetSaleCodesInput
+    {
+        public string CodePrefix { get; set; }
+
+        public DateTime? EffectiveOn { get; set; }
+
+        public bool IsFuture { get; set; }
+    }
+
+    public class GetSaleCodesOutput
+    {
+        public IEnumerable<SaleCode> SaleCodes { get; set; }
+    }
+
+
+    public sealed class GetSaleCodes : BaseAsyncActivity<GetSaleCodesInput, GetSaleCodesOutput>
+    {
+        [RequiredArgument]
+        public InArgument<String> CodePrefix { get; set; }
+
+        [RequiredArgument]
+        public InArgument<DateTime?> EffectiveOn { get; set; }
+
+        [RequiredArgument]
+        public InArgument<bool> IsFuture { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<IEnumerable<SaleCode>> SaleCodes { get; set; }
+
+
+        protected override GetSaleCodesOutput DoWorkWithResult(GetSaleCodesInput inputArgument, AsyncActivityHandle handle)
+        {
+            SaleCodeManager manager = new SaleCodeManager();
+            IEnumerable<SaleCode> saleCodes = manager.GetSaleCodesByPrefix(inputArgument.CodePrefix, inputArgument.EffectiveOn, inputArgument.IsFuture);
+
+            return new GetSaleCodesOutput
+            {
+                SaleCodes = saleCodes
+            };
+        }
+
+        protected override GetSaleCodesInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new GetSaleCodesInput
+            {
+                CodePrefix = this.CodePrefix.Get(context),
+                EffectiveOn = this.EffectiveOn.Get(context),
+                IsFuture = this.IsFuture.Get(context)
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetSaleCodesOutput result)
+        {
+            this.SaleCodes.Set(context, result.SaleCodes);
+        }
+    }
+}
