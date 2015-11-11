@@ -250,6 +250,7 @@
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\Templates\ZoneServiceConfigGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-selector.js" />
+    <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CodeGroupAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\ZoneServiceConfigAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\RateTypeAPIService.js" />

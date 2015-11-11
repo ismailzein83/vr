@@ -1,22 +1,23 @@
 ﻿
 app.service('WhS_BE__CodeGroupService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_CountryService',
     function (VRModalService, VRNotificationService, UtilsService, VRCommon_CountryService) {
-
+        
         return ({
             addCodeGroup: addCodeGroup,
-            editCodeGroup: editCodeGroup
+            editCodeGroup: editCodeGroup,
+            registerDrillDownToCountry: registerDrillDownToCountry
         });
         
-        function addDrillDownToCountry() {
+        function registerDrillDownToCountry() {
             var drillDownItem = {};
             
             drillDownItem.title = "Code Groups";
             drillDownItem.directive = "vr-whs-be-codegroup-grid";
-            drillDownItem.countryMenuActions = [{
+            drillDownItem.parentMenuActions = [{
                 name: "New Code Group",
                 clicked: function (countryItem) {
-                    if (drillDownItem.setSelected != undefined)
-                        drillDownItem.setSelected();
+                    if (drillDownItem.setTabSelected != undefined)
+                        drillDownItem.setTabSelected(countryItem);
                     var query = {
                         CountriesIds: [countryItem.CountryId]
                     }                    
@@ -28,21 +29,19 @@ app.service('WhS_BE__CodeGroupService', ['VRModalService', 'VRNotificationServic
                     addCodeGroup(onCodeGroupAdded, countryItem.CountryId);
                 }
             }];
-            drillDownItem.onDirectiveReady = function (directiveAPI, countryItem) {
+            drillDownItem.loadDirective = function (directiveAPI, countryItem) {
                 if (countryItem.extensionObject == undefined)
                     countryItem.extensionObject = {};
                 var query = {
                     CountriesIds: [countryItem.CountryId],
                 };
-                countryItem.extensionObject.codeGroupGridAPI = directiveAPI;
-                countryItem.extensionObject.codeGroupGridAPI.loadGrid(query);
+                countryItem.extensionObject.codeGroupGridAPI = directiveAPI;                
                 countryItem.extensionObject.onCodeGroupGridReady = undefined;
+                return countryItem.extensionObject.codeGroupGridAPI.loadGrid(query);
             };
 
             VRCommon_CountryService.addDrillDownEntity(drillDownItem);
         }
-
-        addDrillDownToCountry();
 
         function addCodeGroup(onCodeGroupAdded, countryId) {
             var settings = {
