@@ -27,7 +27,7 @@ namespace TOne.WhS.Sales.Business
 
             if (ownerType == SalePriceListOwnerType.SellingProduct)
             {
-                IEnumerable<SaleZone> saleZones = GetSellingProductSaleZones(ownerId, DateTime.Now);
+                IEnumerable<SaleZone> saleZones = GetSellingProductZones(ownerId, DateTime.Now);
 
                 if (saleZones != null)
                     zoneLetters = saleZones.MapRecords(zone => zone.Name[0], zone => zone.Name != null && zone.Name.Length > 0).Distinct().OrderBy(letter => letter);
@@ -48,20 +48,20 @@ namespace TOne.WhS.Sales.Business
         public IEnumerable<ZoneItem> GetZoneItems(ZoneItemInput input)
         {
             IEnumerable<ZoneItem> zoneItems = null;
-            IEnumerable<SaleZone> saleZones = GetSaleZones(input.Filter.OwnerType, input.Filter.OwnerId);
+            IEnumerable<SaleZone> zones = GetZones(input.Filter.OwnerType, input.Filter.OwnerId);
 
-            if (saleZones != null)
+            if (zones != null)
             {
-                saleZones = GetFilteredSaleZones(saleZones, input.Filter);
+                zones = GetFilteredZones(zones, input.Filter);
 
-                if (saleZones != null)
+                if (zones != null)
                 {
-                    saleZones = GetPagedSaleZones(saleZones, input.FromRow, input.ToRow);
+                    zones = GetPagedZones(zones, input.FromRow, input.ToRow);
 
-                    if (saleZones != null)
+                    if (zones != null)
                     {
-                        IEnumerable<SaleRate> saleRates = GetSaleRates(input.Filter.OwnerType, input.Filter.OwnerId, saleZones, DateTime.Now);
-                        zoneItems = BuildZoneItems(input.Filter.OwnerType, saleZones, saleRates);
+                        IEnumerable<SaleEntityZoneRate> zoneRates = GetZoneRates(input.Filter.OwnerType, input.Filter.OwnerId, zones, DateTime.Now);
+                        zoneItems = BuildZoneItems(input.Filter.OwnerType, zones, zoneRates);
 
                         SetChanges(input.Filter.OwnerType, input.Filter.OwnerId, RatePlanStatus.Draft, zoneItems);
                     }
@@ -71,13 +71,13 @@ namespace TOne.WhS.Sales.Business
             return zoneItems;
         }
 
-        private IEnumerable<SaleZone> GetSaleZones(SalePriceListOwnerType ownerType, int ownerId)
+        private IEnumerable<SaleZone> GetZones(SalePriceListOwnerType ownerType, int ownerId)
         {
             IEnumerable<SaleZone> saleZones = null;
 
             if (ownerType == SalePriceListOwnerType.SellingProduct)
             {
-                saleZones = GetSellingProductSaleZones(ownerId, DateTime.Now);
+                saleZones = GetSellingProductZones(ownerId, DateTime.Now);
             }
             else if (ownerType == SalePriceListOwnerType.Customer)
             {
@@ -88,7 +88,7 @@ namespace TOne.WhS.Sales.Business
             return saleZones;
         }
 
-        private IEnumerable<SaleZone> GetSellingProductSaleZones(int sellingProductId, DateTime effectiveOn)
+        private IEnumerable<SaleZone> GetSellingProductZones(int sellingProductId, DateTime effectiveOn)
         {
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(sellingProductId, CarrierAccountType.Customer);
@@ -97,12 +97,12 @@ namespace TOne.WhS.Sales.Business
             return saleZoneManager.GetSaleZones(sellingNumberPlanId, effectiveOn);
         }
 
-        private IEnumerable<SaleZone> GetFilteredSaleZones(IEnumerable<SaleZone> saleZones, ZoneItemFilter filter)
+        private IEnumerable<SaleZone> GetFilteredZones(IEnumerable<SaleZone> saleZones, ZoneItemFilter filter)
         {
             return saleZones.FindAllRecords(z => z.Name != null && z.Name.Length > 0 && char.ToLower(z.Name.ElementAt(0)) == char.ToLower(filter.ZoneLetter));
         }
 
-        private IEnumerable<SaleZone> GetPagedSaleZones(IEnumerable<SaleZone> saleZones, int fromRow, int toRow)
+        private IEnumerable<SaleZone> GetPagedZones(IEnumerable<SaleZone> saleZones, int fromRow, int toRow)
         {
             List<SaleZone> pagedSaleZones = null;
 
@@ -119,62 +119,62 @@ namespace TOne.WhS.Sales.Business
             return pagedSaleZones;
         }
 
-        private IEnumerable<SaleRate> GetSaleRates(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<SaleZone> zones, DateTime effectiveOn)
+        private IEnumerable<SaleEntityZoneRate> GetZoneRates(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<SaleZone> zones, DateTime effectiveOn)
         {
-            List<SaleRate> saleRates = null;
+            List<SaleEntityZoneRate> zoneRates = null;
             SaleEntityZoneRateLocator rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
 
             if (ownerType == SalePriceListOwnerType.SellingProduct)
             {
-                saleRates = new List<SaleRate>();
+                zoneRates = new List<SaleEntityZoneRate>();
 
                 foreach (SaleZone saleZone in zones)
                 {
                     SaleEntityZoneRate zoneRate = rateLocator.GetSellingProductZoneRate(ownerId, saleZone.SaleZoneId);
                     
                     if (zoneRate != null)
-                        saleRates.Add(zoneRate.Rate);
+                        zoneRates.Add(zoneRate);
                 }
             }
             else if (ownerType == SalePriceListOwnerType.Customer)
             {
                 CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
                 CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(ownerId, DateTime.Now, false);
-                
-                saleRates = new List<SaleRate>();
+
+                zoneRates = new List<SaleEntityZoneRate>();
 
                 foreach (SaleZone saleZone in zones)
                 {
                     SaleEntityZoneRate zoneRate = rateLocator.GetCustomerZoneRate(ownerId, customerSellingProduct.SellingProductId, saleZone.SaleZoneId);
 
                     if (zoneRate != null)
-                        saleRates.Add(zoneRate.Rate);
+                        zoneRates.Add(zoneRate);
                 }
             }
 
-            return saleRates;
+            return zoneRates;
         }
 
-        private IEnumerable<ZoneItem> BuildZoneItems(SalePriceListOwnerType ownerType, IEnumerable<SaleZone> saleZones, IEnumerable<SaleRate> saleRates)
+        private IEnumerable<ZoneItem> BuildZoneItems(SalePriceListOwnerType ownerType, IEnumerable<SaleZone> zones, IEnumerable<SaleEntityZoneRate> zoneRates)
         {
             List<ZoneItem> zoneItems = new List<ZoneItem>();
 
-            foreach (SaleZone saleZone in saleZones)
+            foreach (SaleZone zone in zones)
             {
                 ZoneItem zoneItem = new ZoneItem();
 
-                zoneItem.ZoneId = saleZone.SaleZoneId;
-                zoneItem.ZoneName = saleZone.Name;
-                zoneItem.IsCurrentRateEditable = true;
+                zoneItem.ZoneId = zone.SaleZoneId;
+                zoneItem.ZoneName = zone.Name;
 
-                SaleRate rate = saleRates.FindRecord(r => r.ZoneId == saleZone.SaleZoneId);
+                SaleEntityZoneRate zoneRate = zoneRates.FindRecord(o => o.Rate.ZoneId == zone.SaleZoneId);
 
-                if (rate != null)
+                if (zoneRate != null)
                 {
-                    zoneItem.CurrentRateId = rate.SaleRateId;
-                    zoneItem.CurrentRate = rate.NormalRate;
-                    zoneItem.RateBED = rate.BeginEffectiveDate;
-                    zoneItem.RateEED = rate.EndEffectiveDate;
+                    zoneItem.CurrentRateId = zoneRate.Rate.SaleRateId;
+                    zoneItem.CurrentRate = zoneRate.Rate.NormalRate;
+                    zoneItem.IsCurrentRateEditable = (zoneRate.Source == ownerType);
+                    zoneItem.RateBED = zoneRate.Rate.BeginEffectiveDate;
+                    zoneItem.RateEED = zoneRate.Rate.EndEffectiveDate;
                 }
 
                 zoneItems.Add(zoneItem);
@@ -214,6 +214,7 @@ namespace TOne.WhS.Sales.Business
                 if (zoneItem != null)
                 {
                     zoneItem.NewRate = zoneChanges.NewRate.NormalRate;
+                    zoneItem.IsCurrentRateEditable = true;
                     zoneItem.RateBED = zoneChanges.NewRate.BED;
                     zoneItem.RateEED = zoneChanges.NewRate.EED;
                 }

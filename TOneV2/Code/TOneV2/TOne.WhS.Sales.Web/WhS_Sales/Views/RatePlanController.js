@@ -126,15 +126,20 @@
 
         function saveChanges() {
             var input = buildSaveChangesInput();
-            console.log(input.NewChanges);
             
             if (input.NewChanges != null) {
-                WhS_Sales_RatePlanAPIService.SaveChanges(input).then(function (response) {
+                return WhS_Sales_RatePlanAPIService.SaveChanges(input).then(function (response) {
+                    console.log(buildGridQuery());
                     gridAPI.loadGrid(buildGridQuery());
                 });
             }
-            else
+            else {
                 gridAPI.loadGrid(buildGridQuery());
+
+                var deferredPromise = UtilsService.createPromiseDeferred();
+                deferredPromise.resolve();
+                return deferredPromise.promise;
+            }
         }
 
         function buildGridQuery() {
@@ -194,20 +199,21 @@
 
         function defineSaveButtonMenuActions() {
             $scope.saveButtonMenuActions = [
-                { name: "Price List", clicked: savePriceList },
+                { name: "Price List", clicked: onSavePriceListClicked },
                 { name: "Draft", clicked: saveChanges },
             ];
         }
 
-        function savePriceList() {
-            return UtilsService.waitMultipleAsyncOperations([saveChanges]).then(function () {
-                return savePriceListForReal();
+        function onSavePriceListClicked() {
+            return saveChanges().then(function () {
+                return savePriceList().then(function (response) {
+                    loadRatePlan();
+                });
             });
         }
 
-        function savePriceListForReal() {
+        function savePriceList() {
             return WhS_Sales_RatePlanAPIService.SavePriceList($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
-                console.log(response);
                 console.log("Price list has been saved");
             });
         }

@@ -46,7 +46,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 customerZoneRate = new SaleEntityZoneRate
                 {
                     Rate = saleRate,
-                    Source = CustomerZoneRateSource.Customer
+                    Source = SalePriceListOwnerType.Customer
                 };
                 return true;
             }
@@ -66,7 +66,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 customerZoneRate = new SaleEntityZoneRate
                 {
                     Rate = saleRate,
-                    Source = CustomerZoneRateSource.Product
+                    Source = SalePriceListOwnerType.SellingProduct
                 };
                 return true;
             }

@@ -21,7 +21,7 @@ namespace TOne.WhS.Routing.Entities
 
         public Decimal EffectiveRateValue { get; set; }
 
-        public CustomerZoneRateSource RateSource { get; set; }
+        public SalePriceListOwnerType RateSource { get; set; }
     }
 
     public class CustomerZoneDetailByZone : Dictionary<long, List<CustomerZoneDetail>>

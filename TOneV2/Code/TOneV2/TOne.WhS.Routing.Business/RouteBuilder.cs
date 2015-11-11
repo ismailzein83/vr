@@ -108,7 +108,7 @@ namespace TOne.WhS.Routing.Business
         {
             createCustomerRoute = true;
             //if same rule and rate is inherited from Pricing, then it should be same route as pricing product
-            if (routeRule.Criteria.RoutingProductId.HasValue && customerZoneDetail.RateSource == CustomerZoneRateSource.Product)
+            if (routeRule.Criteria.RoutingProductId.HasValue && customerZoneDetail.RateSource == SalePriceListOwnerType.SellingProduct)
             {
                 createCustomerRoute = false;
                 SellingProductRoute sellingProductRoute;
