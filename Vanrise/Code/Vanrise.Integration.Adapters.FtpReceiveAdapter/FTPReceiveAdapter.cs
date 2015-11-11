@@ -46,7 +46,8 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
             if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Rename)
             {
                 base.LogVerbose("Renaming file {0} after import", fileObj.Name);
-                ftp.Rename(filePath, filePath.ToLower().Replace(ftpAdapterArgument.Extension.ToLower(), ".Imported"));
+
+                ftp.Rename(filePath, string.Format(@"{0}_{1}.processed", filePath.ToLower().Replace(ftpAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid()));
             }
             else if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Delete)
             {
@@ -59,7 +60,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                 if (!ftp.DirectoryExists(ftpAdapterArgument.DirectorytoMoveFile))
                     ftp.CreateDirectory(ftpAdapterArgument.DirectorytoMoveFile);
 
-                ftp.Rename(filePath, ftpAdapterArgument.DirectorytoMoveFile + "/" + fileObj.Name);
+                ftp.Rename(filePath, ftpAdapterArgument.DirectorytoMoveFile + "/" + string.Format(@"{0}_{1}.processed", filePath.ToLower().Replace(ftpAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid()));
             }
         }
         #endregion
@@ -75,8 +76,17 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
             if (ftp.GetConnectionState().Connected)
             {
                 base.LogVerbose("FTP connection is established");
+
+                if (!ftp.DirectoryExists(ftpAdapterArgument.Directory))
+                    base.LogInformation("Directory {0} not found !!", ftpAdapterArgument.Directory);
+
                 ftp.ChangeDirectory(ftpAdapterArgument.Directory);
                 FtpList currentItems = ftp.GetList();
+
+
+                
+
+
                 base.LogInformation("{0} files are ready to be imported", currentItems.Count);
                 if (currentItems.Count > 0)
                 {

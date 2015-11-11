@@ -40,7 +40,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
             if (fileAdapterArgument.ActionAfterImport == (int)Actions.Rename)
             {
                 base.LogVerbose("Renaming file {0} after import", file.Name);
-                file.MoveTo(Path.Combine(file.DirectoryName, file.Name.ToLower().Replace(fileAdapterArgument.Extension.ToLower(), ".Imported")));
+                file.MoveTo(Path.Combine(file.DirectoryName, string.Format(@"{0}_{1}.processed", file.Name.ToLower().Replace(fileAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid())));
             }
             else if (fileAdapterArgument.ActionAfterImport == (int)Actions.Delete)
             {
@@ -52,7 +52,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
                 base.LogVerbose("Moving file {0} after import", file.Name);
                 if (System.IO.Directory.Exists(fileAdapterArgument.Directory))
                 {
-                    file.MoveTo(Path.Combine(fileAdapterArgument.DirectorytoMoveFile, file.Name.Replace(fileAdapterArgument.Extension, ".Imported")));
+                    file.MoveTo(Path.Combine(fileAdapterArgument.DirectorytoMoveFile, string.Format(@"{0}_{1}.processed", file.Name.ToLower().Replace(fileAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid())));
                 }
             }
         }

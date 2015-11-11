@@ -10,70 +10,90 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
     {
         #region Private Functions
 
-        private static void CreateStreamReader(Action<IImportedData> receiveData, Sftp sftp, SftpItem fileObj, String filePath)
+        private void CreateStreamReader(Action<IImportedData> receiveData, Sftp sftp, SftpItem fileObj, String filePath)
+        {
+            base.LogVerbose("Creating stream reader for file with name {0}", fileObj.Name);
+            var stream = new MemoryStream();
+            sftp.GetFile(filePath, stream);
+            byte[] data = stream.ToArray();
+            using (var ms = stream)
             {
-                var stream = new MemoryStream();
-                sftp.GetFile(filePath, stream);
-                byte[] data = stream.ToArray();
-                using (var ms = stream)
+                ms.Position = 0;
+                var sr = new StreamReader(ms);
+                receiveData(new StreamReaderImportedData()
                 {
-                    ms.Position = 0;
-                    var sr = new StreamReader(ms);
-                    receiveData(new StreamReaderImportedData()
-                    {
-                        StreamReader = new StreamReader(ms),
-                        Modified = fileObj.Modified,
-                        Name = fileObj.Name,
-                        Size = fileObj.Size
-                    });
-                }
+                    StreamReader = new StreamReader(ms),
+                    Modified = fileObj.Modified,
+                    Name = fileObj.Name,
+                    Size = fileObj.Size
+                });
             }
-        
-            private static void CloseConnection(Sftp sftp)
+        }
+
+        private static void CloseConnection(Sftp sftp)
+        {
+            sftp.Dispose();
+        }
+
+        private void EstablishConnection(Sftp sftp, FTPAdapterArgument ftpAdapterArgument)
+        {
+            sftp.Connect(ftpAdapterArgument.ServerIP);
+            sftp.Login(ftpAdapterArgument.UserName, ftpAdapterArgument.Password);
+        }
+
+        private void AfterImport(Sftp sftp, SftpItem fileObj, String filePath, FTPAdapterArgument ftpAdapterArgument)
+        {
+            if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Rename)
             {
-                sftp.Dispose();
-            }
+                base.LogVerbose("Renaming file {0} after import", fileObj.Name);
 
-            private void EstablishConnection(Sftp sftp, FTPAdapterArgument ftpAdapterArgument)
+                sftp.Rename(filePath, string.Format(@"{0}_{1}.processed", filePath.ToLower().Replace(ftpAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid()));
+            }
+            else if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Delete)
             {
-                sftp.Connect(ftpAdapterArgument.ServerIP);
-                sftp.Login(ftpAdapterArgument.UserName, ftpAdapterArgument.Password);
-            }
+                base.LogVerbose("Deleting file {0} after import", fileObj.Name);
 
-            private void AfterImport(Sftp sftp, SftpItem fileObj, String filePath, FTPAdapterArgument ftpAdapterArgument)
+                sftp.DeleteFile(filePath);
+            }
+            else if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Move)
             {
-                if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Rename)
-                {
-                    sftp.Rename(filePath, filePath.Replace(ftpAdapterArgument.Extension, ".Imported"));
-                }
-                else if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Delete)
-                {
-                    sftp.DeleteFile(filePath);
-                }
-                else if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Move)
-                {
-                    if (!sftp.DirectoryExists(ftpAdapterArgument.DirectorytoMoveFile))
-                        sftp.CreateDirectory(ftpAdapterArgument.DirectorytoMoveFile);
+                base.LogVerbose("Moving file {0} after import", fileObj.Name);
 
-                    sftp.Rename(filePath, ftpAdapterArgument.DirectorytoMoveFile + "/" + fileObj.Name);
-                }
+                if (!sftp.DirectoryExists(ftpAdapterArgument.DirectorytoMoveFile))
+                    sftp.CreateDirectory(ftpAdapterArgument.DirectorytoMoveFile);
+
+                sftp.Rename(filePath, ftpAdapterArgument.DirectorytoMoveFile + "/" + string.Format(@"{0}_{1}.processed", filePath.ToLower().Replace(ftpAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid()));
+
             }
+        }
 
-       
+
         #endregion
 
-            public override void ImportData(int dataSourceId, BaseAdapterState adapterState, BaseAdapterArgument argument, Action<IImportedData> receiveData)
+        public override void ImportData(int dataSourceId, BaseAdapterState adapterState, BaseAdapterArgument argument, Action<IImportedData> receiveData)
         {
 
             FTPAdapterArgument ftpAdapterArgument = argument as FTPAdapterArgument;
 
             var sftp = new Rebex.Net.Sftp();
 
+            base.LogVerbose("Establishing SFTP Connection");
+
             EstablishConnection(sftp, ftpAdapterArgument);
             if (sftp.GetConnectionState().Connected)
             {
+                base.LogVerbose("FTP connection is established");
+
                 sftp.ChangeDirectory(ftpAdapterArgument.Directory);
                 SftpItemCollection currentItems = sftp.GetList();
+
+
+                if (!sftp.DirectoryExists(ftpAdapterArgument.Directory))
+                    base.LogInformation("Directory {0} not found !!", ftpAdapterArgument.Directory);
+
+
+                base.LogInformation("{0} files are ready to be imported", currentItems.Count);
+
                 if (currentItems.Count > 0)
                 {
                     foreach (var fileObj in currentItems)
@@ -87,6 +107,11 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                     }
                 }
                 CloseConnection(sftp);
+            }
+            else
+            {
+                base.LogError("Could not ftp connect to server {0}", ftpAdapterArgument.ServerIP);
+                throw new Exception("FTP adapter could not connect to FTP Server");
             }
 
         }
