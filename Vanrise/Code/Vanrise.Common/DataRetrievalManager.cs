@@ -60,10 +60,18 @@ namespace Vanrise.Common
             int colIndex = 0;
 
             PropertyInfo[] properties = typeof(T).GetProperties();
+            PropertyInfo entityProperty = null;
+            PropertyInfo[] entityProperties = null;
 
             //filling header
             foreach (var prop in properties)
             {
+                if (prop.Name == "Entity")
+                {
+                    entityProperty = prop;
+                    entityProperties = prop.PropertyType.GetProperties();
+                    continue;
+                }
                 RateWorkSheet.Cells.SetColumnWidth(colIndex, 20);
                 RateWorkSheet.Cells[rowIndex, colIndex].PutValue(prop.Name);
                 Cell cell = RateWorkSheet.Cells.GetCell(rowIndex,colIndex);
@@ -75,6 +83,22 @@ namespace Vanrise.Common
                 cell.SetStyle(style);
                 colIndex++;
             }
+            if (entityProperties != null)
+            {
+                foreach (var prop in entityProperties)
+                {
+                    RateWorkSheet.Cells.SetColumnWidth(colIndex, 20);
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue(prop.Name);
+                    Cell cell = RateWorkSheet.Cells.GetCell(rowIndex, colIndex);
+                    Style style = cell.GetStyle();
+                    style.Font.Name = "Times New Roman";
+                    style.Font.Color = Color.FromArgb(255, 0, 0); ;
+                    style.Font.Size = 14;
+                    style.Font.IsBold = true;
+                    cell.SetStyle(style);
+                    colIndex++;
+                }
+            }
             rowIndex++;
             colIndex = 0;
 
@@ -83,10 +107,25 @@ namespace Vanrise.Common
             {
                 colIndex = 0;
                 foreach (var prop in properties)
-                {                    
+                {
+                    if (prop == entityProperty)
+                        continue;
                     RateWorkSheet.Cells[rowIndex, colIndex].PutValue(prop.GetValue(item));
                     colIndex++;
-                }   
+                }
+                if(entityProperty != null)
+                {
+                    object entityPropertyValue = entityProperty.GetValue(item);
+                    if(entityPropertyValue != null)
+                    {
+                        foreach (var prop in entityProperties)
+                        {
+                            RateWorkSheet.Cells[rowIndex, colIndex].PutValue(prop.GetValue(entityPropertyValue));
+                            colIndex++;
+                        }
+                    }
+                }
+
                 rowIndex++;             
             }
 

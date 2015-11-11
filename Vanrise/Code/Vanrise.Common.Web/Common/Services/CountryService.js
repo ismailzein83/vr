@@ -1,12 +1,12 @@
 ﻿
 app.service('VRCommon_CountryService', ['VRModalService', 'VRNotificationService', 'UtilsService',
     function (VRModalService, VRNotificationService, UtilsService) {
-        var drillDownEntities = [];
+        var drillDownDefinitions = [];
         return ({
             editCountry: editCountry,
             addCountry: addCountry,
-            addDrillDownEntity: addDrillDownEntity,
-            getDrillDownEntities: getDrillDownEntities
+            addDrillDownDefinition: addDrillDownDefinition,
+            getDrillDownDefinition: getDrillDownDefinition
 
         });
         function editCountry(obj, onCountryUpdated) {
@@ -42,13 +42,12 @@ app.service('VRCommon_CountryService', ['VRModalService', 'VRNotificationService
 
         
 
-        function addDrillDownEntity(drillDownEntity)
-        {
-            drillDownEntities.push(drillDownEntity);
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
         }
 
-        function getDrillDownEntities() {
-            return drillDownEntities;
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
         }
 
     }]);

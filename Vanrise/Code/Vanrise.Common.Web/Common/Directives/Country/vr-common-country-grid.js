@@ -35,7 +35,7 @@ function (UtilsService, VRNotificationService, VRCommon_CountryAPIService, VRCom
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
-                var drillDownDefinitions = VRCommon_CountryService.getDrillDownEntities();
+                var drillDownDefinitions = VRCommon_CountryService.getDrillDownDefinition();
                 gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
