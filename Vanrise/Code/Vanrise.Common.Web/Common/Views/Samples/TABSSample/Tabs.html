@@ -1,0 +1,20 @@
+﻿<vr-panel ng-controller="Common_TABSSample_TabsController">
+    <vr-form name="formFilter">
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-tabs>
+                    <vr-tab header="'Tab 1'" tabobject="tab1">Tab 1</vr-tab>
+                    <vr-tab header="'Tab 2'">Tab 2 {{testModel}}</vr-tab>
+                    
+                </vr-tabs>
+                {{tab1}}
+                <vr-switch value="tab1.isSelected">IsTab1 Selected</vr-switch>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-directivetabs tabitems="dynamicTabs">
+                </vr-directivetabs>
+            </vr-columns>
+        </vr-row>
+</vr-panel>

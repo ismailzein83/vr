@@ -181,6 +181,8 @@
     <Content Include="Common\Views\Samples\AppendixSample\EditorController.js" />
     <Content Include="Common\Views\Samples\AppendixSample\Management.html" />
     <Content Include="Common\Views\Samples\AppendixSample\ManagementController.js" />
+    <Content Include="Common\Views\Samples\TABSSample\Tabs.html" />
+    <Content Include="Common\Views\Samples\TABSSample\TabsController.js" />
     <Content Include="Common\Views\StartupPage.html" />
     <Content Include="Common\Views\Support.html" />
   </ItemGroup>

@@ -268,6 +268,16 @@
     <Content Include="Client\Javascripts\Directives\Pagination\vr-pagination.html" />
     <Content Include="Client\Javascripts\Directives\Icon\vr-icon-directive.js" />
     <Content Include="Client\Javascripts\Directives\ProgressBar\vr-progressbar-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Tabs\Templates\DirectiveTabTemplate.html" />
+    <Content Include="Client\Javascripts\Directives\Tabs\Templates\DirectiveTabsTemplate.html" />
+    <Content Include="Client\Javascripts\Directives\Tabs\Templates\TabTemplate.html" />
+    <Content Include="Client\Javascripts\Directives\Tabs\vr-directivetab-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Tabs\vr-tab-header-link-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Tabs\vr-tab-header-links-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Tabs\vr-directivetabs-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Tabs\vr-tab-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Tabs\vr-tabs-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Tabs\vr-tabs-header-directive.js" />
     <Content Include="Client\Javascripts\Directives\TreeView\vr-treeview-directive.js" />
     <Content Include="Client\Javascripts\Modules\appControllers.js" />
     <Content Include="Client\Javascripts\Modules\appRouting.js" />

@@ -2010,3 +2010,23 @@ vr-switch[type="inline"] > div {
 .hide-expande{
     visibility:hidden ;
 }
+
+/*start of vr-tabs*/
+vr-tab .row {
+    margin : 0px !important
+}
+
+vr-tab div[class^="col"] {
+    border:1px solid #ddd;
+    border-top: 0px;
+    border-radius: 0px 0px 4px 4px;
+    padding: 5px 9px;
+}
+
+@media (max-width: 992px ) {
+     vr-tabs div[class^="col"] {
+        margin-bottom:-1px !important ;
+    }
+}
+
+/*end of vr-tabs*/

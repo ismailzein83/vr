@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCommonCountryGrid", ["UtilsService", "VRNotificationService", "VRCommon_CountryAPIService", "VRCommon_CountryService",
-function (UtilsService, VRNotificationService, VRCommon_CountryAPIService, VRCommon_CountryService) {
+app.directive("vrCommonCountryGrid", ["UtilsService", "VRNotificationService", "VRCommon_CountryAPIService", "VRCommon_CountryService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, VRCommon_CountryAPIService, VRCommon_CountryService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -26,6 +26,7 @@ function (UtilsService, VRNotificationService, VRCommon_CountryAPIService, VRCom
     function CountryGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var gridDrillDownTabsObj;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -33,7 +34,10 @@ function (UtilsService, VRNotificationService, VRCommon_CountryAPIService, VRCom
             $scope.countries = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                
+
+                var drillDownDefinitions = VRCommon_CountryService.getDrillDownEntities();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
@@ -44,6 +48,7 @@ function (UtilsService, VRNotificationService, VRCommon_CountryAPIService, VRCom
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onCountryAdded = function (countryObject) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(countryObject);
                         gridAPI.itemAdded(countryObject);
                     }
                     return directiveAPI;
@@ -52,27 +57,31 @@ function (UtilsService, VRNotificationService, VRCommon_CountryAPIService, VRCom
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VRCommon_CountryAPIService.GetFilteredCountries(dataRetrievalInput)
                     .then(function (response) {   
-                        
+                        if (response.Data != undefined)
+                        {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
-            defineMenuActions();
+            defineMenuActions();            
         }
 
-       
-     
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-               clicked: editCountry
+                clicked: editCountry
             }];
         }
 
         function editCountry(countryObj) {
             var onCountryUpdated = function (countryObj) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(countryObj);
                 gridAPI.itemUpdated(countryObj);
             }
 

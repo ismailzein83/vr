@@ -65,8 +65,7 @@
                     ctrl.selectedvalues = selectedValue;
             }
         }
-
-
+        
         function getSettingsFromDirective(scope, directiveAPI, templateProperty) {
             if (scope[templateProperty] != undefined) {
                 var settings = directiveAPI.getData();
@@ -76,6 +75,10 @@
             else
                 return null;
         }
+        
+        function defineGridDrillDownTabs(drillDownDefinitions, gridAPI, gridMenuActions) {
+            return new GridDrillDownTabs(drillDownDefinitions, gridAPI, gridMenuActions);
+        }
 
         return ({
             loadDirective: loadDirective,
@@ -83,9 +86,72 @@
             callDirectiveLoadOrResolvePromise: callDirectiveLoadOrResolvePromise,
             getIdSelectedIds: getIdSelectedIds,
             setSelectedValues: setSelectedValues,
-            getSettingsFromDirective: getSettingsFromDirective
+            getSettingsFromDirective: getSettingsFromDirective,
+            defineGridDrillDownTabs: defineGridDrillDownTabs
         });
     }
 
     appControllers.service('VRUIUtilsService', VRUIUtilsService);
 })(appControllers);
+
+
+function GridDrillDownTabs(drillDownDefinitions, gridAPI, gridMenuActions) {
+
+    initialize();
+    function initialize() {
+        for (var i = 0; i < drillDownDefinitions.length; i++) {
+            var drillDownDefinition = drillDownDefinitions[i];
+            defineDrillDownDefinitionMembers(drillDownDefinition);
+            if (drillDownDefinition.parentMenuActions != undefined) {
+                for (var j = 0; j < drillDownDefinition.parentMenuActions.length; j++) {
+                    defineDrillDownMenuAction(drillDownDefinition.parentMenuActions[j]);
+                }
+            }
+        }
+    }
+
+    function defineDrillDownDefinitionMembers(drillDownDefinition) {
+        drillDownDefinition.setTabSelected = function (dataItem) {
+            var tabIndex = drillDownDefinitions.indexOf(drillDownDefinition);
+            var drillDownTab = dataItem.drillDownExtensionObject.drillDownDirectiveTabs[tabIndex];
+            if (drillDownTab.extensionObject != undefined && drillDownTab.extensionObject.tabObject != undefined)//ensure that directive is loaded
+                drillDownTab.extensionObject.tabObject.isSelected = true;
+            else {
+                gridAPI.expandRow(dataItem);
+                setTimeout(function () {
+                    drillDownDefinition.setTabSelected(dataItem);
+                });
+            }
+        };
+    }
+
+    function defineDrillDownMenuAction(drillDownDefinition) {
+        var menuAction = {
+            name: drillDownDefinition.name,
+            clicked: drillDownDefinition.clicked
+        };
+        gridMenuActions.push(menuAction);
+    }
+
+    function setDrillDownExtensionObject(dataItem) {
+        dataItem.drillDownExtensionObject = {};
+        dataItem.drillDownExtensionObject.drillDownDirectiveTabs = [];
+        for (var i = 0; i < drillDownDefinitions.length; i++) {
+            addDrillDownTab(drillDownDefinitions[i], dataItem);
+        }
+    }
+
+    function addDrillDownTab(drillDownDefinition, dataItem) {
+        var drillDownDirectiveTab = {};
+        drillDownDirectiveTab.title = drillDownDefinition.title;
+        drillDownDirectiveTab.directive = drillDownDefinition.directive;
+        drillDownDirectiveTab.loadDirective = function (directiveAPI) {
+            return drillDownDefinition.loadDirective(directiveAPI, dataItem);
+        }
+        dataItem.drillDownExtensionObject.drillDownDirectiveTabs.push(drillDownDirectiveTab);
+    }
+
+    return {
+        setDrillDownExtensionObject: setDrillDownExtensionObject
+    }
+}
