@@ -24,9 +24,11 @@
         }
 
         function defineScope() {
-            var index=0;
+            var indexPhone = 0;
+            var indexFax = 0;
+
             $scope.phoneNumbers = [];
-            $scope.faxes = ['c', 'd'];
+            $scope.faxes = [];
             $scope.contacts = [];
 
 
@@ -51,8 +53,12 @@
 
 
             $scope.addPhoneNumberOption = function () {
+
+                if ($scope.addPhoneNumberOption == undefined)
+                    $scope.addPhoneNumberOption = [];
+
                 $scope.phoneNumbers.push({
-                    id: index++,
+                    id: indexPhone++,
                     phoneNumber: $scope.phoneNumberValue
                 });
                 $scope.phoneNumberValue = '';
@@ -60,8 +66,29 @@
 
 
             $scope.removePhoneNumber = function ($event, option) {
-                var index = UtilsService.getItemIndexByVal($scope.phoneNumbers, option.id, 'id');
-                $scope.phoneNumbers.splice(index, 1);
+                var indexPhoneInside = UtilsService.getItemIndexByVal($scope.phoneNumbers, option.id, 'id');
+                $scope.phoneNumbers.splice(indexPhoneInside, 1);
+            };
+
+
+
+
+            $scope.addFaxOption = function () {
+
+                if ($scope.faxes == undefined)
+                    $scope.faxes = [];
+
+                $scope.faxes.push({
+                    id: indexFax++,
+                    fax: $scope.faxValue
+                });
+                $scope.faxValue = '';
+            };
+
+
+            $scope.removeFax = function ($event, option) {
+                var indexFaxInside = UtilsService.getItemIndexByVal($scope.faxes, option.id, 'id');
+                $scope.faxes.splice(indexFaxInside, 1);
             };
 
 
@@ -110,7 +137,6 @@
                     $scope.company = carrierProfileEntity.Settings.Company;
                     $scope.website = carrierProfileEntity.Settings.Website;
                     $scope.registrationNumber = carrierProfileEntity.Settings.RegistrationNumber;
-                    $scope.faxes = carrierProfileEntity.Settings.Faxes;
                     $scope.address = carrierProfileEntity.Settings.Address;
                     $scope.postalCode = carrierProfileEntity.Settings.PostalCode;
                     $scope.town = carrierProfileEntity.Settings.Town;
@@ -122,13 +148,27 @@
                     countryDirectiveApi.setData(carrierProfileEntity.Settings.CountryId)
 
 
-                    if (carrierProfileEntity.PhoneNumbers != undefined)
-                        for (var i = 0; i < carrierProfileEntity.PhoneNumbers.length; i++) {
+
+                    if (carrierProfileEntity.Settings.PhoneNumbers == undefined)
+                        carrierProfileEntity.Settings.PhoneNumbers = [];
+                    
+                    for (var i = 0; i < carrierProfileEntity.Settings.PhoneNumbers.length; i++) {
                             $scope.phoneNumbers.push({
                                 id: i,
-                                phoneNumber: carrierProfileEntity.PhoneNumbers[i]
+                                phoneNumber: carrierProfileEntity.Settings.PhoneNumbers[i]
                             });
-                        }
+                    }
+
+
+                    if (carrierProfileEntity.Settings.Faxes == undefined)
+                        carrierProfileEntity.Settings.Faxes = [];
+                    for (var j = 0; j < carrierProfileEntity.Settings.Faxes.length; j++) {
+                        $scope.faxes.push({
+                            id: j,
+                            fax: carrierProfileEntity.Settings.Faxes[j]
+                        });
+                    }
+
 
 
 
@@ -162,12 +202,12 @@
                     CountryId: countryDirectiveApi.getDataId(),
                     Company: $scope.company, Website: $scope.website,
                     RegistrationNumber: $scope.registrationNumber,
-                    Faxes: $scope.faxes,
                     Address: $scope.address,
                     PostalCode: $scope.postalCode,
                     Town: $scope.town,
                     CompanyLogo: $scope.companyLogo.fileId,
-                    PhoneNumbers: UtilsService.getPropValuesFromArray($scope.phoneNumbers, "phoneNumber")
+                    PhoneNumbers: UtilsService.getPropValuesFromArray($scope.phoneNumbers, "phoneNumber"),
+                    Faxes: UtilsService.getPropValuesFromArray($scope.faxes, "fax")
                 }
             };
             console.log(obj)
