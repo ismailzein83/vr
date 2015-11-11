@@ -126,7 +126,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             carrierProfileDetail.Entity = carrierProfile;
 
-            CountryManager manager = new CountryManager();
+            Vanrise.Common.Business.CountryManager manager = new Vanrise.Common.Business.CountryManager();
             if (carrierProfile.Settings != null)
             {
                 carrierProfileDetail.CountryName = manager.GetCountry(carrierProfile.Settings.CountryId).Name;

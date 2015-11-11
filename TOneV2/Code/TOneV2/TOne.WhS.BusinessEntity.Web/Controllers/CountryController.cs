@@ -5,8 +5,9 @@ using System.Web;
 using System.Web.Http;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
-//using Vanrise.Entities;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
@@ -16,39 +17,39 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("GetFilteredCountries")]
-        public object GetFilteredCountries(Vanrise.Entities.DataRetrievalInput<CountryQuery> input)
+        public object GetFilteredCountries(Vanrise.Entities.DataRetrievalInput<Vanrise.Entities.CountryQuery> input)
         {
-            CountryManager manager = new CountryManager();
+            Vanrise.Common.Business.CountryManager manager = new Vanrise.Common.Business.CountryManager();
             return GetWebResponse(input, manager.GetFilteredCountries(input));
         }
 
         [HttpGet]
         [Route("GetAllCountries")]
-        public IEnumerable<Country> GetAllCountries()
+        public IEnumerable<Vanrise.Entities.Country> GetAllCountries()
         {
-            CountryManager manager = new CountryManager();
+            Vanrise.Common.Business.CountryManager manager = new Vanrise.Common.Business.CountryManager();
             return manager.GetAllCountries();
         }
         [HttpGet]
         [Route("GetCountry")]
-        public Country GetCountry(int countryId)
+        public Vanrise.Entities.Country GetCountry(int countryId)
         {
-            CountryManager manager = new CountryManager();
+            Vanrise.Common.Business.CountryManager manager = new Vanrise.Common.Business.CountryManager();
             return manager.GetCountry(countryId);
         }
 
         [HttpPost]
         [Route("AddCountry")]
-        public TOne.Entities.InsertOperationOutput<Country> AddCountry(Country country)
+        public Vanrise.Entities.InsertOperationOutput<Vanrise.Entities.Country> AddCountry(Vanrise.Entities.Country country)
         {
-            CountryManager manager = new CountryManager();
+            Vanrise.Common.Business.CountryManager manager = new Vanrise.Common.Business.CountryManager();
             return manager.AddCountry(country);
         }
         [HttpPost]
         [Route("UpdateCountry")]
-        public TOne.Entities.UpdateOperationOutput<Country> UpdateCountry(Country country)
+        public Vanrise.Entities.UpdateOperationOutput<Vanrise.Entities.Country> UpdateCountry(Vanrise.Entities.Country country)
         {
-            CountryManager manager = new CountryManager();
+            Vanrise.Common.Business.CountryManager manager = new Vanrise.Common.Business.CountryManager();
             return manager.UpdateCountry(country);
         }
        

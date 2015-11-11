@@ -6,6 +6,7 @@ using System.Web.Http;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Web.Base;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
@@ -22,7 +23,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetCountriesToSell")]
-        public IEnumerable<Country> GetCountriesToSell(int customerId)
+        public IEnumerable<Vanrise.Entities.Country> GetCountriesToSell(int customerId)
         {
             CustomerZoneManager manager = new CustomerZoneManager();
             return manager.GetCountriesToSell(customerId);

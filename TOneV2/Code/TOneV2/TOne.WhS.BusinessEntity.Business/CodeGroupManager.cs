@@ -107,7 +107,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             codeGroupDetail.Entity = codeGroup;
 
-            CountryManager manager = new CountryManager();
+            Vanrise.Common.Business.CountryManager manager = new Vanrise.Common.Business.CountryManager();
             if (codeGroup.CountryId != null)
             {
                 int countryId = (int)codeGroup.CountryId;
