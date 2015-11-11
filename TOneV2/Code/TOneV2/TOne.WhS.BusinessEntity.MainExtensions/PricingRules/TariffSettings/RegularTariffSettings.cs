@@ -19,8 +19,27 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.PricingRules.TariffSettings
 
         public override void Execute(IPricingRuleTariffContext context, PricingRuleTariffTarget target)
         {
-            target.EffectiveRate = target.Rate;
-            target.TotalAmount = target.Rate * (target.DurationInSeconds / 60);
+
+            target.TotalAmount = 0;
+            Decimal accountedDuration = (Decimal)target.DurationInSeconds;
+            if (FirstPeriod > 0)
+            {
+                FirstPeriod = FirstPeriod;
+                Decimal firstPeriodRate = (FirstPeriodRate > 0) ? (Decimal)FirstPeriodRate : target.Rate;
+                target.TotalAmount = firstPeriodRate;
+                accountedDuration -= (Decimal)FirstPeriod;
+                    accountedDuration = Math.Max(0, accountedDuration);
+            }
+            if (FractionUnit > 0)
+            {
+                FractionUnit = (byte)FractionUnit;
+                accountedDuration = Math.Ceiling(accountedDuration / FractionUnit) * FractionUnit;
+                target.TotalAmount += Math.Ceiling(accountedDuration / FractionUnit) *  target.Rate;// 60
+            }
+            else
+                target.TotalAmount += (accountedDuration * target.Rate) / 60;
+
+            target.TotalAmount += (Decimal)CallFee;
         }
     }
 }

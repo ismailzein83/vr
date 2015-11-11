@@ -35,7 +35,7 @@ function ($compile) {
 
             api.getData = function () {
                 var obj = {
-                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRules.RuleTypes.Tariff.Settings.RegularTariffSettings, TOne.WhS.BusinessEntity.Entities",
+                    $type: "TOne.WhS.BusinessEntity.MainExtensions.PricingRules.TariffSettings.RegularTariffSettings, TOne.WhS.BusinessEntity.MainExtensions",
                     CallFee: ctrl.callFee,
                     FirstPeriod: ctrl.firstPeriod,
                     FirstPeriodRate: ctrl.firstPeriodRate,

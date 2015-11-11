@@ -58,7 +58,6 @@
     <Compile Include="PricingRules\RateTypeSettings\DaysOfWeekRateTypeSettings.cs" />
     <Compile Include="PricingRules\RateTypeSettings\SpecificDayRateTypeSettings.cs" />
     <Compile Include="PricingRules\TariffSettings\RegularTariffSettings.cs" />
-    <Compile Include="PricingRules\TODSettings\RegularTODSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaleZoneGroups\AllExceptSaleZoneGroup.cs" />
     <Compile Include="SaleZoneGroups\SelectiveSaleZoneGroup.cs" />

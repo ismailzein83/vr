@@ -84,8 +84,6 @@
     <Compile Include="CodeGroup\CodeGroupDetail.cs" />
     <Compile Include="CodeGroup\CodeGroup.cs" />
     <Compile Include="CodeGroup\CodeGroupQuery.cs" />
-    <Compile Include="Country\CountryQuery.cs" />
-    <Compile Include="Country\Country.cs" />
     <Compile Include="ICode.cs" />
     <Compile Include="IRate.cs" />
     <Compile Include="PricingRules\RuleTypes\RateType\IPricingRuleRateTypeItemContext.cs" />
@@ -119,8 +117,6 @@
     <Compile Include="PricingRules\PricingRuleTarget.cs" />
     <Compile Include="PricingRules\IPurchasePricingRuleTarget.cs" />
     <Compile Include="PricingRules\PurchasePricingRuleQuery.cs" />
-    <Compile Include="PricingRules\RuleTypes\ExtraCharge\Actions\FixedExtraChargeSettings.cs" />
-    <Compile Include="PricingRules\RuleTypes\ExtraCharge\Actions\PercentageExtraChargeSettings.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\IPricingRuleExtraChargeActionContext.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\PricingRuleExtraChargeActionSettings.cs" />
     <Compile Include="PricingRules\RuleTypes\ExtraCharge\PricingRuleExtraChargeSettings.cs" />
@@ -132,14 +128,7 @@
     <Compile Include="PricingRules\RuleTypes\Tariff\PricingRuleTariffTarget.cs" />
     <Compile Include="PricingRules\RuleTypes\Tariff\PurchasePricingTariffTarget.cs" />
     <Compile Include="PricingRules\RuleTypes\Tariff\SalePricingRuleTariffTarget.cs" />
-    <Compile Include="PricingRules\RuleTypes\Tariff\Settings\RegularTariffSettings.cs" />
-    <Compile Include="PricingRules\RuleTypes\TOD\IPricingRuleTODContext.cs" />
-    <Compile Include="PricingRules\RuleTypes\TOD\PricingRuleTODSettings.cs" />
     <Compile Include="PricingRules\PurchasePricingRuleCriteria.cs" />
-    <Compile Include="PricingRules\RuleTypes\TOD\PricingRuleTODTarget.cs" />
-    <Compile Include="PricingRules\RuleTypes\TOD\PurchasePricingTODTarget.cs" />
-    <Compile Include="PricingRules\RuleTypes\TOD\SalePricingRuleTODTarget.cs" />
-    <Compile Include="PricingRules\RuleTypes\TOD\Settings\RegularTODSettings.cs" />
     <Compile Include="PricingRules\SalePricingRuleCriteria.cs" />
     <Compile Include="PricingRules\PricingRuleSettings.cs" />
     <Compile Include="PricingRules\PurchasePricingRule.cs" />

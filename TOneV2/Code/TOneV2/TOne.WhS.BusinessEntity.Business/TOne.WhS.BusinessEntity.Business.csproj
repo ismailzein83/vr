@@ -93,7 +93,6 @@
     <Compile Include="PricingRules\BasePricingRuleManager.cs" />
     <Compile Include="PricingRules\PricingRuleManager.cs" />
     <Compile Include="PricingRules\PricingRuleExtraChargeActionContext.cs" />
-    <Compile Include="PricingRules\PricingRuleTODContext.cs" />
     <Compile Include="PricingRules\PricingRuleTariffContext.cs" />
     <Compile Include="PricingRules\PurchasePricingRuleManager.cs" />
     <Compile Include="PricingRules\SalePricingRuleManager.cs" />
