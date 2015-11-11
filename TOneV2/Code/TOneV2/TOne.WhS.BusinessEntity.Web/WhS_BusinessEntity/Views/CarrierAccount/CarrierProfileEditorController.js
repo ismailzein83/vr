@@ -24,7 +24,8 @@
         }
 
         function defineScope() {
-            $scope.phoneNumbers = ['a', 'b'];
+            var index=0;
+            $scope.phoneNumbers = [];
             $scope.faxes = ['c', 'd'];
             $scope.contacts = [];
 
@@ -54,6 +55,7 @@
                     id: index++,
                     phoneNumber: $scope.phoneNumberValue
                 });
+                $scope.phoneNumberValue = '';
             };
 
 
@@ -120,15 +122,13 @@
                     countryDirectiveApi.setData(carrierProfileEntity.Settings.CountryId)
 
 
-
-                    for (var i = 0; i < carrierProfileEntity.PhoneNumbers.length; i++) {
-                        $scope.phoneNumbers.push({
-                            id: i,
-                            phoneNumber: carrierProfileEntity.PhoneNumbers[i]
-                        });
-                    }
-
-
+                    if (carrierProfileEntity.PhoneNumbers != undefined)
+                        for (var i = 0; i < carrierProfileEntity.PhoneNumbers.length; i++) {
+                            $scope.phoneNumbers.push({
+                                id: i,
+                                phoneNumber: carrierProfileEntity.PhoneNumbers[i]
+                            });
+                        }
 
 
 

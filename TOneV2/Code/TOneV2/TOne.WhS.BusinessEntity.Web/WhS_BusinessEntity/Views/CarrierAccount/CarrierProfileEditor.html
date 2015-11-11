@@ -73,7 +73,7 @@
 
                 <vr-row removeline>
                     <vr-columns width="1/4row">
-                        <vr-textbox label="Phone Number Value" value="phoneNumberValue"></vr-textbox>
+                        <vr-textbox label="Phone" value="phoneNumberValue"></vr-textbox>
                     </vr-columns>
                     <vr-columns withemptyline width="1/4row">
                         <vr-button type="Add" data-onclick="addPhoneNumberOption" standalone></vr-button>
@@ -83,10 +83,9 @@
                             <ul class="list-group dragbelzone" ng-sortable="itemsSortable">
                                 <li ng-repeat="option in phoneNumbers" class="list-group-item list-custom" style="margin: 1px; font-size: 12px;">
                                     <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                                    <div style="display: inline-block; max-width: 200px;">option ({{$index + 1}})</div>
                                     <i class="glyphicon glyphicon-remove hand-cursor" style="float: right; padding: 5px; cursor: default" ng-click="removePhoneNumber($event,option)"></i>
                                     <div style="width: 100px; float: right; margin-right: 60px; text-align: center;">
-                                        {{option.phoneNumber}}%
+                                        {{option.phoneNumber}}
                                     </div>
                                 </li>
                             </ul>
