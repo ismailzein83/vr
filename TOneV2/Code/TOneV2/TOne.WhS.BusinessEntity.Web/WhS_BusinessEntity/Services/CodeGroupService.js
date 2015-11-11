@@ -1,5 +1,5 @@
 ﻿
-app.service('WhS_BE__CodeGroupService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_CountryService',
+app.service('WhS_BE_CodeGroupService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_CountryService',
     function (VRModalService, VRNotificationService, UtilsService, VRCommon_CountryService) {
         
         return ({
@@ -9,38 +9,36 @@ app.service('WhS_BE__CodeGroupService', ['VRModalService', 'VRNotificationServic
         });
         
         function registerDrillDownToCountry() {
-            var drillDownItem = {};
+            var drillDownDefinition = {};
             
-            drillDownItem.title = "Code Groups";
-            drillDownItem.directive = "vr-whs-be-codegroup-grid";
-            drillDownItem.parentMenuActions = [{
+            drillDownDefinition.title = "Code Groups";
+            drillDownDefinition.directive = "vr-whs-be-codegroup-grid";
+            drillDownDefinition.parentMenuActions = [{
                 name: "New Code Group",
                 clicked: function (countryItem) {
-                    if (drillDownItem.setTabSelected != undefined)
-                        drillDownItem.setTabSelected(countryItem);
+                    if (drillDownDefinition.setTabSelected != undefined)
+                        drillDownDefinition.setTabSelected(countryItem);
                     var query = {
                         CountriesIds: [countryItem.CountryId]
                     }                    
                     var onCodeGroupAdded = function (codeGroupObj) {
-                        if (countryItem.extensionObject.codeGroupGridAPI != undefined) {
-                            countryItem.extensionObject.codeGroupGridAPI.onCodeGroupAdded(codeGroupObj);
+                        if (countryItem.codeGroupGridAPI != undefined) {
+                            countryItem.codeGroupGridAPI.onCodeGroupAdded(codeGroupObj);
                         }
                     };
                     addCodeGroup(onCodeGroupAdded, countryItem.CountryId);
                 }
             }];
-            drillDownItem.loadDirective = function (directiveAPI, countryItem) {
-                if (countryItem.extensionObject == undefined)
-                    countryItem.extensionObject = {};
+
+            drillDownDefinition.loadDirective = function (directiveAPI, countryItem) {                
+                countryItem.codeGroupGridAPI = directiveAPI;
                 var query = {
                     CountriesIds: [countryItem.CountryId],
                 };
-                countryItem.extensionObject.codeGroupGridAPI = directiveAPI;                
-                countryItem.extensionObject.onCodeGroupGridReady = undefined;
-                return countryItem.extensionObject.codeGroupGridAPI.loadGrid(query);
+                return countryItem.codeGroupGridAPI.loadGrid(query);
             };
 
-            VRCommon_CountryService.addDrillDownEntity(drillDownItem);
+            VRCommon_CountryService.addDrillDownDefinition(drillDownDefinition);
         }
 
         function addCodeGroup(onCodeGroupAdded, countryId) {

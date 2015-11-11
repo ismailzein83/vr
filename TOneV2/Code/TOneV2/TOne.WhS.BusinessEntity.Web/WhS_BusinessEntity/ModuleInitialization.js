@@ -1,3 +1,3 @@
-﻿app.run(['WhS_BE__CodeGroupService', function (WhS_BE__CodeGroupService) {
-    WhS_BE__CodeGroupService.registerDrillDownToCountry();
+﻿app.run(['WhS_BE_CodeGroupService', function (WhS_BE_CodeGroupService) {
+    WhS_BE_CodeGroupService.registerDrillDownToCountry();
 }]);
