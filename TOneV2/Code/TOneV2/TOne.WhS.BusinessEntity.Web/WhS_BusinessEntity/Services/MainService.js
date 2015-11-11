@@ -26,8 +26,6 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         addPurchasePricingRule: addPurchasePricingRule,
         editPurchasePricingRule: editPurchasePricingRule,
         deletePurchasePricingRule: deletePurchasePricingRule,
-        editCountry: editCountry,
-        addCountry: addCountry,
         addCodeGroup: addCodeGroup,
         editCodeGroup: editCodeGroup,
         editRateType: editRateType,
@@ -401,36 +399,6 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
     }
 
 
-    function editCountry(obj, onCountryUpdated) {
-        var settings = {
-            useModalTemplate: true
-
-        };
-
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Name, "Country");
-            modalScope.onCountryUpdated = onCountryUpdated;
-        };
-        var parameters = {
-            CountryId: obj.CountryId
-        };
-
-        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/Country/CountryEditor.html', parameters, settings);
-    }
-    function addCountry(onCountryAdded) {
-        var settings = {
-            useModalTemplate: true
-
-        };
-
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = UtilsService.buildTitleForAddEditor("Country");
-            modalScope.onCountryAdded = onCountryAdded;
-        };
-        var parameters = {};
-
-        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/Country/CountryEditor.html', parameters, settings);
-    }
     
     function editCodeGroup(obj, onCodeGroupUpdated , disableCountry) {
         var settings = {

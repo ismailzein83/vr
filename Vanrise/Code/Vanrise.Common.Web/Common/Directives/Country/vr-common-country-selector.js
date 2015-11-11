@@ -37,7 +37,7 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
                 VRCommon_CountryService.addCountry(onCountryAdded);
             }
             $scope.datasource = [];
-            var beCountry = new BeCountry(ctrl, $scope, WhS_BE_CountryAPIService, $attrs);
+            var beCountry = new Country(ctrl, $scope, VRCommon_CountryAPIService, $attrs);
             beCountry.initializeController();
             $scope.onselectionchanged = function () {
                 ctrl.selectedvalues = $scope.selectedCountryValues;
@@ -87,7 +87,7 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
                + ' <vr-select datasource="datasource" selectedvalues="selectedCountryValues" ' + required + ' ' + hideselectedvaluessection + ' onselectionchanged="onselectionchanged"  ' + disabled + ' datatextfield="Name" datavaluefield="CountryId"'
                + 'entityname="Country" label="Country" ' + addCliked + '></vr-select></div>';
     }
-    function BeCountry(ctrl, $scope, VRCommon_CountryAPIService, $attrs) {
+    function Country(ctrl, $scope, VRCommon_CountryAPIService, $attrs) {
         
         function initializeController() {
             defineAPI();

@@ -189,7 +189,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             saleZoneDetail.Entity = saleZone;
 
-            Vanrise.Common.Business.CountryManager manager = new Vanrise.Common.Business.CountryManager();
+            CountryManager manager = new CountryManager();
             if (saleZone.CountryId != null)
             {
                 int countryId = (int)saleZone.CountryId;

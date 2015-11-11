@@ -143,7 +143,6 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CodeGroupController.cs" />
-    <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CarrierAccountController.cs" />
     <Compile Include="Controllers\CarrierProfileController.cs" />
     <Compile Include="Controllers\CustomerPricingProductController.cs" />
@@ -192,9 +191,6 @@
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierProfileGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\Templates\CodeGroupGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\vr-whs-be-codegroup-grid.js" />
-    <Content Include="WhS_BusinessEntity\Directives\Country\Templates\CountryGridTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\Country\vr-whs-be-country-selector.js" />
-    <Content Include="WhS_BusinessEntity\Directives\Country\vr-whs-be-country-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\Templates\CustomerGroupTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\vr-whs-be-customergroup.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\Templates\SaleZoneTemplate.html" />
@@ -258,7 +254,6 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\ZoneServiceConfigAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\RateTypeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerZoneAPIService.js" />
-    <Content Include="WhS_BusinessEntity\Services\APIServices\CountryAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CarrierAccountAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CarrierProfileAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerSellingProductAPIService.js" />
@@ -285,10 +280,6 @@
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Country\CountryEditor.html" />
-    <Content Include="WhS_BusinessEntity\Views\Country\CountryEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Country\CountryManagementController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Country\CountryManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeManagement.html" />

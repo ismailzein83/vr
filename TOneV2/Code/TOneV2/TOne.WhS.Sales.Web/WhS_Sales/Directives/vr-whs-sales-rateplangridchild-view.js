@@ -50,7 +50,7 @@ app.directive("vrWhsSalesRateplangridchildView", ["UtilsService", function (Util
                 $scope.choices = [
                     { title: "Supplier", editor: "vr-whs-be-carrieraccount-selector", isLoaded: true, isSelected: true },
                     { title: "Carrier Profile", editor: "vr-whs-be-carrierprofile-selector", isLoaded: false, isSelected: false },
-                    { title: "Country", editor: "vr-whs-be-country-selector", isLoaded: false, isSelected: false }
+                    { title: "Country", editor: "vr-common-country-selector", isLoaded: false, isSelected: false }
                 ];
 
                 for (var i = 0; i < $scope.choices.length; i++) {

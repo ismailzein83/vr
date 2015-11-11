@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -107,7 +108,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             codeGroupDetail.Entity = codeGroup;
 
-            Vanrise.Common.Business.CountryManager manager = new Vanrise.Common.Business.CountryManager();
+            CountryManager manager = new CountryManager();
             if (codeGroup.CountryId != null)
             {
                 int countryId = (int)codeGroup.CountryId;

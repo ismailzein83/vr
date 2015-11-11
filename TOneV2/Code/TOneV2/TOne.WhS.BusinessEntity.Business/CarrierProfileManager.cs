@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -126,7 +127,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             carrierProfileDetail.Entity = carrierProfile;
 
-            Vanrise.Common.Business.CountryManager manager = new Vanrise.Common.Business.CountryManager();
+            CountryManager manager = new CountryManager();
             if (carrierProfile.Settings != null)
             {
                 carrierProfileDetail.CountryName = manager.GetCountry(carrierProfile.Settings.CountryId).Name;

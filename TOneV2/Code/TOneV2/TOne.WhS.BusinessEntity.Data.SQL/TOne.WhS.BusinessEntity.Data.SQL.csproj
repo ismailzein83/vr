@@ -60,7 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeGroupDataManager.cs" />
-    <Compile Include="CountryDataManager.cs" />
     <Compile Include="CarrierAccountDataManager.cs" />
     <Compile Include="CarrierProfileDataManager.cs" />
     <Compile Include="CustomerSellingProductDataManager.cs" />

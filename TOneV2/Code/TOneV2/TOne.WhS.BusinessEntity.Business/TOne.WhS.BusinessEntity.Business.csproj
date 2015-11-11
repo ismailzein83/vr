@@ -70,7 +70,6 @@
     <Compile Include="CarrierAccounts\SuppliersWithZonesGroupContext.cs" />
     <Compile Include="CodeGroupManager.cs" />
     <Compile Include="Codes\CodeCriteriaGroupContext.cs" />
-    <Compile Include="CountryManager.cs" />
     <Compile Include="CarrierAccountManager.cs" />
     <Compile Include="CarrierProfileManager.cs" />
     <Compile Include="CodeManager.cs" />

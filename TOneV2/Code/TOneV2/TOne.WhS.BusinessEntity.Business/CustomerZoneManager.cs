@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -36,7 +37,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             IEnumerable<Vanrise.Entities.Country> countriesToSell = null;
 
-            var allCountries = new Vanrise.Common.Business.CountryManager().GetCachedCountries();
+            var allCountries = new CountryManager().GetCachedCountries();
             CustomerZones customerZones = this.GetCustomerZones(customerId, DateTime.Now, false);
 
             if (customerZones != null)
