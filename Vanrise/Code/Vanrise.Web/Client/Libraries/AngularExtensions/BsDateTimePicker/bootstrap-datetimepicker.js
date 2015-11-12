@@ -10641,7 +10641,7 @@
                     });
                 }
             },
-
+            // fix hide By Me@me.com
             hide = function () {
                 ///<summary>Hides the widget. Possibly will emit dp.hide</summary>
                 var transitioning = false;

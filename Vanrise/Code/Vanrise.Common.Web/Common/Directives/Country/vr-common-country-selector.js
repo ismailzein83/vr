@@ -28,7 +28,7 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
                     $scope.datasource.length = 0;
                     return getAllCountries($scope, VRCommon_CountryAPIService).then(function (response) {
                         if ($attrs.ismultipleselection == undefined)
-                             $scope.selectedCountryValues = UtilsService.getItemByVal($scope.datasource, countryObj.CountryId, "CountryId");
+                             $scope.selectedCountryValues = UtilsService.getItemByVal($scope.datasource, countryObj.Entity.CountryId, "CountryId");
                     }).catch(function (error) {
                     }).finally(function () {
 
