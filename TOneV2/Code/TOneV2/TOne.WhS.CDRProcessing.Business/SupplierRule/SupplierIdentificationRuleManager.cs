@@ -52,7 +52,7 @@ namespace TOne.WhS.CDRProcessing.Business
         protected override SupplierIdentificationRuleDetail MapToDetails(SupplierIdentificationRule rule)
         {
             CarrierAccountManager CarrierAccountManager = new CarrierAccountManager();
-            CarrierAccountDetail carrierAccount = CarrierAccountManager.GetCarrierAccount(rule.Settings.SupplierId);
+            CarrierAccount carrierAccount = CarrierAccountManager.GetCarrierAccount(rule.Settings.SupplierId);
             return new SupplierIdentificationRuleDetail{
                 Entity=rule,
                 CDPNPrefixes = GetDescription(rule.Criteria.CDPNPrefixes),

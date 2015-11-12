@@ -103,7 +103,7 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
             CustomerIdentificationRule customerIdentificationRule = customerManager.GetMatchRule(customerIdentificationRuleTarget);
             SupplierIdentificationRule supplierIdentificationRule = supplierManager.GetMatchRule(supplierIdentificationRuleTarget);
             SaleCodeMatch saleCodeMatch = null;
-            CarrierAccountDetail customer = null;
+            CarrierAccount customer = null;
             if (customerIdentificationRule!=null)
             {
                 billingCDRMapped.CustomerId = customerIdentificationRule.Settings.CustomerId;
@@ -112,7 +112,7 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
             }
 
             SupplierCodeMatch supplierCodeMatch = null;
-            CarrierAccountDetail supplier = null;
+            CarrierAccount supplier = null;
             if (supplierIdentificationRule != null)
             {
                 billingCDRMapped.SupplierId = supplierIdentificationRule.Settings.SupplierId;

@@ -1,7 +1,7 @@
 ﻿<vr-row removeline>
     <vr-columns width="1/2row">
         <vr-select ismultipleselection datatextfield="description" datavaluefield="value"
-                   label="Days Of Week" datasource="ctrl.daysOfWeek" selectedvalues="ctrl.selectedDaysOfWeek"></vr-select>
+                   label="Days Of Week" datasource="ctrl.daysOfWeek" selectedvalues="ctrl.selectedDaysOfWeek" isrequired></vr-select>
     </vr-columns>
     <vr-columns width="1/2row">
 
@@ -19,11 +19,12 @@
         <vr-row >
             <vr-columns width="fullrow">
                 <div>
-                    <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="ctrl.times.length > 0">
-                        <li ng-repeat="time in ctrl.times" class="list-group-item list-custom" style="margin: 1px; font-size: 12px;">
-                            <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                            <div style="display: inline-block; max-width: 200px;">From Time: {{time.FromTime.Hour}}:{{time.FromTime.Minute}}  To Time: {{time.ToTime.Hour}}:{{time.ToTime.Minute}}</div>
-                            <i class="glyphicon glyphicon-remove hand-cursor" style="float: right; padding: 5px; cursor: default" ng-click="removeTime($event,time)"></i>
+                    <ul class="list-group" ng-show="ctrl.times.length > 0">
+                        <li ng-repeat="time in ctrl.times" class="list-group-item list-custom" >
+                            <div style="width:100%">
+                                <div style="display: inline-block;  width: calc(100% - 10px);">From Time: {{time.FromTime.Hour}}:{{time.FromTime.Minute}}  To Time: {{time.ToTime.Hour}}:{{time.ToTime.Minute}}</div>
+                                <i class="glyphicon glyphicon-remove hand-cursor" style="width:10px; cursor :default" ng-click=" ctrl.removeTime($event,time)"></i>
+                            </div>
                         </li>
                     </ul>
                 </div>

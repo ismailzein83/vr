@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public enum RoutingStatus { Enabled=0, BlockedOutBound=1}
-    public class CarrierAccountSupplierSettings
+    public enum ActivationStatus { Active = 0, Inactive = 1, Testing = 2 }
+    public class CarrierAccountSettings
     {
-        public RoutingStatus RoutingStatus { get; set; }
+        public ActivationStatus ActivationStatus { get; set; } 
     }
 }

@@ -43,7 +43,7 @@ function ($compile, DaysOfWeekEnum, UtilsService) {
             ctrl.removeTime = function ($event,time) {
                     $event.preventDefault();
                     $event.stopPropagation();
-                    var index = UtilsService.getItemIndexByVal(ctrl.times, time, 'id');
+                    var index = UtilsService.getItemIndexByVal(ctrl.times, time.id, 'id');
                     ctrl.times.splice(index, 1);
             }
         }
@@ -76,9 +76,7 @@ function ($compile, DaysOfWeekEnum, UtilsService) {
                 return obj;
             }
             api.load = function (payload) {
-                if (payload != undefined) {
-                    console.log(payload);
-                   
+                if (payload != undefined) { 
                     for (var i = 0; i < payload.Days.length; i++) {
                         ctrl.selectedDaysOfWeek.push(UtilsService.getItemByVal(ctrl.daysOfWeek, payload.Days[i], "value"));
                     }

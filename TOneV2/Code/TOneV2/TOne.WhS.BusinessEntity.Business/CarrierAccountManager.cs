@@ -13,11 +13,11 @@ namespace TOne.WhS.BusinessEntity.Business
     public class CarrierAccountManager
     {
 
-        public Vanrise.Entities.IDataRetrievalResult<CarrierAccountDetail> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<CarrierAccount> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
         {
             var allCarrierAccounts = GetCachedCarrierAccounts();
 
-            Func<CarrierAccountDetail, bool> filterExpression = (item) =>
+            Func<CarrierAccount, bool> filterExpression = (item) =>
                  (input.Query.Name == null || item.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
                  (input.Query.CarrierProfilesIds == null || input.Query.CarrierProfilesIds.Contains(item.CarrierProfileId))
@@ -34,16 +34,15 @@ namespace TOne.WhS.BusinessEntity.Business
             throw new NotImplementedException();
         }
         
-        public CarrierAccountDetail GetCarrierAccount(int carrierAccountId)
+        public CarrierAccount GetCarrierAccount(int carrierAccountId)
         {
-            List<CarrierAccountDetail> CarrierAccountsDetails = GetCachedCarrierAccounts();
-            var carrierAccount = CarrierAccountsDetails.FindRecord(x => x.CarrierAccountId == carrierAccountId);
-            return carrierAccount;
+            var CarrierAccounts = GetCachedCarrierAccounts();
+            return CarrierAccounts.GetRecord(carrierAccountId);
         }
         
         public string GetDescription(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
-            IEnumerable<CarrierAccountDetail> carrierAccounts = this.GetCarrierAccountsByIds(carrierAccountsIds, true, false);
+            var carrierAccounts = this.GetCarrierAccountsByIds(carrierAccountsIds, true, false);
             if(carrierAccounts != null)
                 return string.Join(", ", carrierAccounts.Select(x => x.Name));
 
@@ -52,18 +51,20 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<CarrierAccountInfo> GetCarrierAccountInfo(CarrierAccountInfoFilter filter)
         {
-            IEnumerable<CarrierAccountDetail> carrierAccountsDetails = null;
+            IEnumerable<CarrierAccount> carrierAccounts = null;
 
             if(filter != null)
             {
-                carrierAccountsDetails = this.GetCarrierAccountsByType(filter.GetCustomers, filter.GetSuppliers, filter.SupplierFilterSettings, filter.CustomerFilterSettings);
+                carrierAccounts = this.GetCarrierAccountsByType(filter.GetCustomers, filter.GetSuppliers, filter.SupplierFilterSettings, filter.CustomerFilterSettings);
             }
             else
             {
-                carrierAccountsDetails = this.GetCachedCarrierAccounts();
+                var cachedCarrierAccounts = GetCachedCarrierAccounts();
+                if (cachedCarrierAccounts!=null)
+                    carrierAccounts = cachedCarrierAccounts.Values;
             }
-            
-            return carrierAccountsDetails.MapRecords(CarrierAccountInfoMapper);
+
+            return carrierAccounts.MapRecords(CarrierAccountInfoMapper);
         }
         
         public List<Vanrise.Entities.TemplateConfig> GetCustomersGroupTemplates()
@@ -101,8 +102,8 @@ namespace TOne.WhS.BusinessEntity.Business
             bool insertActionSucc = dataManager.Insert(carrierAccount, out carrierAccountId);
             if (insertActionSucc)
             {
-                var allCarrierAccounts = GetCachedCarrierAccounts();
-                CarrierAccountDetail carrierAccountDetail = allCarrierAccounts.FindRecord(x => x.CarrierAccountId == carrierAccountId);
+                carrierAccount.CarrierAccountId =carrierAccountId;
+                CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(carrierAccount);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = carrierAccountDetail;
             }
@@ -123,7 +124,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 var allCarrierAccounts = GetCachedCarrierAccounts();
 
-                CarrierAccountDetail carrierAccountDetail = allCarrierAccounts.FindRecord(x => x.CarrierAccountId == carrierAccount.CarrierAccountId);
+                CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(carrierAccount);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = carrierAccountDetail;
             }
@@ -139,15 +140,28 @@ namespace TOne.WhS.BusinessEntity.Business
             return this.GetCarrierAccount(carrierAccountId).CustomerSettings.SellingNumberPlanId;
         }
 
+        public IEnumerable<CarrierAccount> GetRoutingActiveCustomers()
+        {
+            Dictionary<int, CarrierAccount> carrierAccounts = this.GetCachedCarrierAccounts();
+            Func<CarrierAccount, bool> filterExpression = (item) => (item.CarrierAccountSettings.ActivationStatus==ActivationStatus.Active && item.CustomerSettings.RoutingStatus==RoutingStatus.Enabled);
+            return carrierAccounts.FindAllRecords(filterExpression);
+        }
+        public IEnumerable<CarrierAccount> GetRoutingActiveSuppliers()
+        {
+            Dictionary<int, CarrierAccount> carrierAccounts = this.GetCachedCarrierAccounts();
+            Func<CarrierAccount, bool> filterExpression = (item) => (item.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active && item.SupplierSettings.RoutingStatus == RoutingStatus.Enabled);
+            return carrierAccounts.FindAllRecords(filterExpression);
+        }
         #region Private Members
 
-        List<CarrierAccountDetail> GetCachedCarrierAccounts()
+        Dictionary<int,CarrierAccount> GetCachedCarrierAccounts()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierAccounts",
                () =>
                {
                    ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
-                   return dataManager.GetCarrierAccounts();
+                   IEnumerable<CarrierAccount> carrierAccounts=dataManager.GetCarrierAccounts();
+                   return carrierAccounts.ToDictionary(kvp => kvp.CarrierAccountId, kvp => kvp); 
                });
         }
 
@@ -162,33 +176,33 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
-        private CarrierAccountInfo CarrierAccountInfoMapper(CarrierAccountDetail carrierAccountDetail)
+        private CarrierAccountInfo CarrierAccountInfoMapper(CarrierAccount carrierAccount)
         {
             return new CarrierAccountInfo()
             {
-                CarrierAccountId=carrierAccountDetail.CarrierAccountId,
-                Name = carrierAccountDetail.Name,
+                CarrierAccountId = carrierAccount.CarrierAccountId,
+                Name = carrierAccount.Name,
             };
         }
 
-        private IEnumerable<CarrierAccountDetail> GetCarrierAccountsByIds(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
+        private IEnumerable<CarrierAccount> GetCarrierAccountsByIds(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
-            IEnumerable<CarrierAccountDetail> carrierAccountsDetails = this.GetCarrierAccountsByType(getCustomers, getSuppliers, null, null);
-            Func<CarrierAccountDetail, bool> filterExpression = null;
+            var carrierAccounts = this.GetCarrierAccountsByType(getCustomers, getSuppliers, null, null);
+            Func<CarrierAccount, bool> filterExpression = null;
 
             if(carrierAccountsIds != null)
                 filterExpression = (item) => (carrierAccountsIds.Contains(item.CarrierAccountId));
 
-            return carrierAccountsDetails.FindAllRecords(filterExpression);
+            return carrierAccounts.FindAllRecords(filterExpression);
         }
 
-        private IEnumerable<CarrierAccountDetail> GetCarrierAccountsByType(bool getCustomers, bool getSuppliers, SupplierFilterSettings supplierFilterSettings, CustomerFilterSettings customerFilterSettings)
+        private IEnumerable<CarrierAccount> GetCarrierAccountsByType(bool getCustomers, bool getSuppliers, SupplierFilterSettings supplierFilterSettings, CustomerFilterSettings customerFilterSettings)
         {
-            IEnumerable<CarrierAccountDetail> carrierAccountsDetails = GetCachedCarrierAccounts();
+            Dictionary<int, CarrierAccount> carrierAccounts = GetCachedCarrierAccounts();
             
             HashSet<int> filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
             HashSet<int> filteredCustomerIds = CustomerGroupContext.GetFilteredCustomerIds(customerFilterSettings);
-            Func<CarrierAccountDetail, bool> filterExpression = (carrierAccount) =>
+            Func<CarrierAccount, bool> filterExpression = (carrierAccount) =>
                 {
                     bool isSupplier = carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange;
                     bool isCustomer = carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange;
@@ -202,8 +216,24 @@ namespace TOne.WhS.BusinessEntity.Business
                         return false;
                     return true;
                 };
+            return carrierAccounts.FindAllRecords(filterExpression);
+        }
 
-            return carrierAccountsDetails.FindAllRecords(filterExpression);
+        private CarrierAccountDetail CarrierAccountDetailMapper(CarrierAccount carrierAccount)
+        {
+            CarrierAccountDetail carrierAccountDetail = new CarrierAccountDetail();
+
+            carrierAccountDetail.Entity = carrierAccount;
+
+            CarrierProfileManager manager = new CarrierProfileManager();
+            var carrierProfiles = manager.GetCachedCarrierProfiles();
+            var carrierProfile=carrierProfiles.FindRecord(itm => itm.Value.CarrierProfileId == carrierAccount.CarrierProfileId);
+            if(carrierProfile.Value!=null){
+                carrierAccountDetail.CarrierProfileName = carrierProfile.Value.Name;
+            }
+            carrierAccountDetail.AccountTypeDescription = carrierAccount.AccountType.ToString();
+
+            return carrierAccountDetail;
         }
 
         #endregion

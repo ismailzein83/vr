@@ -61,6 +61,7 @@
     <Compile Include="Carriers\CarrierAccounts\CarrierAccountInfo.cs" />
     <Compile Include="Carriers\CarrierAccounts\CarrierAccountInfoFilter.cs" />
     <Compile Include="Carriers\CarrierAccounts\CarrierAccountQuery.cs" />
+    <Compile Include="Carriers\CarrierAccounts\CarrierAccountSettings.cs" />
     <Compile Include="Carriers\Customer\CustomerFilterSettings.cs" />
     <Compile Include="Carriers\Customer\ICustomerGroupContext.cs" />
     <Compile Include="Carriers\Customer\CustomerGroupSettings.cs" />

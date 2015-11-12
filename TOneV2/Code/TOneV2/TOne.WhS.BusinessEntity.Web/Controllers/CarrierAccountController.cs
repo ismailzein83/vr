@@ -24,7 +24,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetCarrierAccount")]
-        public CarrierAccountDetail GetCarrierAccount(int carrierAccountId)
+        public CarrierAccount GetCarrierAccount(int carrierAccountId)
         {
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.GetCarrierAccount(carrierAccountId);

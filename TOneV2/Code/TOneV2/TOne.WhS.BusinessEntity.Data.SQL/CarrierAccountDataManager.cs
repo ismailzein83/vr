@@ -18,21 +18,20 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         }
      
-        private CarrierAccountDetail CarrierAccountDetailMapper(IDataReader reader)
+        private CarrierAccount CarrierAccountMapper(IDataReader reader)
         {
-            CarrierAccountDetail carrierAccountDetail = new CarrierAccountDetail
+            CarrierAccount carrierAccount = new CarrierAccount
             {
                 CarrierAccountId = (int)reader["ID"],
                 Name = reader["Name"] as string,
                 AccountType = (CarrierAccountType)GetReaderValue<int>(reader,"AccountType"),
                 SupplierSettings=Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSupplierSettings>(reader["SupplierSettings"] as string),
-                CarrierProfileName=reader["CarrierProfileName"] as string,
                 CustomerSettings=Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountCustomerSettings>(reader["CustomerSettings"] as string),
                 CarrierProfileId = (int)reader["CarrierProfileId"],
+                CarrierAccountSettings = reader["CarrierAccountSettings"] as string!=null?Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSettings>(reader["CarrierAccountSettings"] as string):null,
                  
             };
-            carrierAccountDetail.AccountTypeDescription = carrierAccountDetail.AccountType.ToString();
-            return carrierAccountDetail;
+            return carrierAccount;
         }
 
 
@@ -54,9 +53,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                  Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings));
             return (recordsEffected > 0);
         }
-        public List<CarrierAccountDetail> GetCarrierAccounts()
+        public List<CarrierAccount> GetCarrierAccounts()
         {
-            return GetItemsSP("TOneWhS_BE.sp_CarrierAccount_GetAll", CarrierAccountDetailMapper);
+            return GetItemsSP("TOneWhS_BE.sp_CarrierAccount_GetAll", CarrierAccountMapper);
         }
 
 
@@ -64,5 +63,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return base.IsDataUpdated("TOneWhS_BE.CarrierAccount", ref updateHandle);
         }
+
     }
 }

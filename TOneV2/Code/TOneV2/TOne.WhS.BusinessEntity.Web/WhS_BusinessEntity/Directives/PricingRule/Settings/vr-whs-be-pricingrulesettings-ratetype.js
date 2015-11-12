@@ -49,7 +49,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
                 ctrl.disableAddButton = (ctrl.selectedTemplate == undefined);
             };
             ctrl.removeFilter = function (dataItem) {
-                var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.id, 'ActionId');
+                var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.id, 'id');
                 ctrl.datasource.splice(index, 1);
             };
             defineAPI();

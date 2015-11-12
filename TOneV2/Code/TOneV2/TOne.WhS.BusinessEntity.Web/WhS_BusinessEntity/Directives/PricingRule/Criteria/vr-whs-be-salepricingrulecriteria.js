@@ -73,10 +73,13 @@ function ( UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAcco
                 var obj = {
                     SaleZoneGroupSettings: saleZoneGroupDirectiveAPI.getData(),   
                 }
-                switch ($scope.selectedTemplate.value) {
-                    case 0: obj.CustomerGroupSettings= customerGroupDirectiveAPI != undefined ? customerGroupDirectiveAPI.getData() : undefined
-                    case 1 : obj.SellingProductIds=sellingProductDirectiveAPI!=undefined?sellingProductDirectiveAPI.getSelectedIds():undefined
+                if ($scope.selectedTemplate != undefined) {
+                    switch ($scope.selectedTemplate.value) {
+                        case 0: obj.CustomerGroupSettings = customerGroupDirectiveAPI != undefined ? customerGroupDirectiveAPI.getData() : undefined
+                        case 1: obj.SellingProductIds = sellingProductDirectiveAPI != undefined ? sellingProductDirectiveAPI.getSelectedIds() : undefined
+                    }
                 }
+               
                 return obj;
             }
 
