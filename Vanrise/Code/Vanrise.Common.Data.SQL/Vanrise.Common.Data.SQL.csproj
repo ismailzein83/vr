@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CityDataManager.cs" />
     <Compile Include="CountryDataManager.cs" />
     <Compile Include="CurrencyExchangeRateDataManager.cs" />
     <Compile Include="IDManagerDataManager.cs" />

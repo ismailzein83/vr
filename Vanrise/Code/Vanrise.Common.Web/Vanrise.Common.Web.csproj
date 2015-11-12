@@ -118,6 +118,7 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CurrencyExchangeRateController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />

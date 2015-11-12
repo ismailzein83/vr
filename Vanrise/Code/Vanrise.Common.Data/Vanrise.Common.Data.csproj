@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonDataManagerFactory.cs" />
+    <Compile Include="ICityDataManager.cs" />
     <Compile Include="ICountrytDataManager.cs" />
     <Compile Include="ICurrencyDataManager.cs" />
     <Compile Include="ICurrencyExchangeRateDataManager.cs" />

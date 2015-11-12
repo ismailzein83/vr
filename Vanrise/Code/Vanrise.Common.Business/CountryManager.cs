@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
-using Vanrise.Common;
 
 namespace Vanrise.Common.Business
 {

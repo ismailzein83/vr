@@ -44,8 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticateOperationOutput.cs" />
-    <Compile Include="Country\CountryDetail.cs" />
+    <Compile Include="City\City.cs" />
+    <Compile Include="City\CityDetail.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="City\CityQuery.cs" />
     <Compile Include="Country\Country.cs" />
+    <Compile Include="Country\CountryDetail.cs" />
     <Compile Include="Country\CountryQuery.cs" />
     <Compile Include="Currency\CurrencyExchangeRateDetail.cs" />
     <Compile Include="Currency\CurrencyExchangeRateQuery.cs" />

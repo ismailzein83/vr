@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CityManager.cs" />
     <Compile Include="CountryManager.cs" />
     <Compile Include="CurrencyExchangeRateManager.cs" />
     <Compile Include="CurrencyManager.cs" />
