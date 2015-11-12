@@ -33,7 +33,18 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override PrepareCodeMatchesForApplyInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            throw new NotImplementedException();
+            return new PrepareCodeMatchesForApplyInput
+            {
+                InputQueue = this.InputQueue.Get(context),
+                OutputQueue = this.OutputQueue.Get(context)
+            };
+        }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.OutputQueue.Get(context) == null)
+                this.OutputQueue.Set(context, new MemoryQueue<Object>());
+            base.OnBeforeExecute(context, handle);
         }
     }
 }
