@@ -75,6 +75,7 @@
     <Compile Include="GetSupplierCodes.cs" />
     <Compile Include="LoadActiveCustomerInfos.cs" />
     <Compile Include="LoadActiveSupplierInfos.cs" />
+    <Compile Include="LoadCustomerZoneDetails.cs" />
     <Compile Include="LoadSupplierZoneDetails.cs" />
     <Compile Include="PrepareCodeMatchesForApply.cs" />
     <Compile Include="PrepareSupplierZoneDetailForDBApply.cs" />
