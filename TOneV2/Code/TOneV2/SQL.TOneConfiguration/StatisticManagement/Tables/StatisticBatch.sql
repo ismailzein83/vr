@@ -1,0 +1,9 @@
+﻿CREATE TABLE [StatisticManagement].[StatisticBatch] (
+    [TypeID]            INT            NOT NULL,
+    [BatchStart]        DATETIME       NOT NULL,
+    [BatchInfo]         NVARCHAR (MAX) NULL,
+    [LockedByProcessID] INT            NULL,
+    [CreatedTime]       DATETIME       CONSTRAINT [DF_StatisticBatch_CreatedTime] DEFAULT (getdate()) NULL,
+    CONSTRAINT [PK_StatisticBatch_1] PRIMARY KEY CLUSTERED ([TypeID] ASC, [BatchStart] ASC)
+);
+

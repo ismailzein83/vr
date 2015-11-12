@@ -77,6 +77,10 @@
     <Folder Include="rules\Stored Procedures\" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="StatisticManagement\" />
+    <Folder Include="StatisticManagement\Tables\" />
+    <Folder Include="StatisticManagement\Functions\" />
+    <Folder Include="StatisticManagement\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -174,6 +178,23 @@
     <Build Include="common\Stored Procedures\sp_Currency_update.sql" />
     <Build Include="common\Stored Procedures\sp_Currency_insert.sql" />
     <Build Include="common\Stored Procedures\sp_Currency_GetAll.sql" />
+    <Build Include="common\Tables\Type.sql" />
+    <Build Include="common\Tables\IDManager.sql" />
+    <Build Include="common\Tables\Country.sql" />
+    <Build Include="StatisticManagement\Tables\StatisticBatch.sql" />
+    <Build Include="StatisticManagement\Functions\ParseStringList.sql" />
+    <Build Include="common\Stored Procedures\sp_Type_InsertIfNotExistsAndGetID.sql" />
+    <Build Include="common\Stored Procedures\sp_IDManager_ReserveIDRange.sql" />
+    <Build Include="common\Stored Procedures\sp_CurrencyExchangeRate_update.sql" />
+    <Build Include="common\Stored Procedures\sp_CurrencyExchangeRate_insert.sql" />
+    <Build Include="common\Stored Procedures\sp_CurrencyExchangeRate_GetAll.sql" />
+    <Build Include="common\Stored Procedures\sp_Country_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_Country_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_Country_GetAll.sql" />
+    <Build Include="StatisticManagement\Stored Procedures\sp_StatisticBatch_UpdateBatchInfo.sql" />
+    <Build Include="StatisticManagement\Stored Procedures\sp_StatisticBatch_UnLock.sql" />
+    <Build Include="StatisticManagement\Stored Procedures\sp_StatisticBatch_TryLock.sql" />
+    <Build Include="Security\StatisticManagement.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

@@ -1,4 +1,4 @@
-﻿Create PROCEDURE [dbo].[LKUPtable_GenerateMergeScript]
+﻿CREATE PROCEDURE LKUPtable_GenerateMergeScript
     (@TableName NVARCHAR(128))
 AS
 --This script will Generate merge statements for data from LKUP tables.

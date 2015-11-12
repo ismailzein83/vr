@@ -1,0 +1,7 @@
+﻿CREATE TABLE [common].[Type] (
+    [ID]   INT           IDENTITY (1, 1) NOT NULL,
+    [Type] VARCHAR (900) NOT NULL,
+    CONSTRAINT [PK_Type] PRIMARY KEY CLUSTERED ([ID] ASC),
+    CONSTRAINT [IX_Type] UNIQUE NONCLUSTERED ([Type] ASC)
+);
+
