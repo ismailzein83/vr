@@ -3,21 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Activities;
+using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.Routing.Data;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
 
     public sealed class LoadActiveSupplierInfos : CodeActivity
     {
-        // Define an activity input argument of type string
-        public InArgument<string> Text { get; set; }
+        [RequiredArgument]
+        public InArgument<int> RoutingDatabaseId { get; set; }
 
-        // If your activity returns a value, derive from CodeActivity<TResult>
-        // and return the value from the Execute method.
+        [RequiredArgument]
+        public OutArgument<IEnumerable<RoutingSupplierInfo>> ActiveRoutingSupplierInfos { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
-            // Obtain the runtime value of the Text input argument
-            string text = context.GetValue(this.Text);
+
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            IEnumerable<RoutingSupplierInfo> supplierInfos = carrierAccountManager.GetRoutingActiveSuppliers();
+            ICarrierAccountInfoDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICarrierAccountInfoDataManager>();
+            dataManager.DatabaseId = RoutingDatabaseId.Get(context);
+            dataManager.SaveRoutingSupplierInfo(supplierInfos);
+            ActiveRoutingSupplierInfos.Set(context, supplierInfos);
         }
     }
 }

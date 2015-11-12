@@ -20,15 +20,7 @@ namespace TOne.WhS.Routing.Data.SQL
         {
             return GetItemsText(query_GetRoutingSupplierInfo, RoutingSupplierInfoMapper, null);
         }
-        public void ApplyRoutingCustomerInfoToDB(object preparedCustomerInfos)
-        {
-            InsertBulkToTable(preparedCustomerInfos as BulkInsertInfo);
-        }
-        public void ApplyRoutingSupplierInfoToDB(object preparedSupplierInfos)
-        {
-            InsertBulkToTable(preparedSupplierInfos as BulkInsertInfo);
-        }
-        public object PrepareRoutingCustomerInfoForDBApply(List<RoutingCustomerInfo> customerInfos)
+        public void SaveRoutingCustomerInfo(IEnumerable<RoutingCustomerInfo> customerInfos)
         {
             string filePath = GetFilePathForBulkInsert();
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
@@ -40,15 +32,15 @@ namespace TOne.WhS.Routing.Data.SQL
                 wr.Close();
             }
 
-            return new BulkInsertInfo
+            ApplyRoutingCustomerInfoToDB(new BulkInsertInfo
             {
                 TableName = "RoutingCustomerInfo",
                 DataFilePath = filePath,
                 TabLock = true,
                 FieldSeparator = '^'
-            };
+            });
         }
-        public object PrepareRoutingSupplierInfoForDBApply(List<RoutingSupplierInfo> supplierInfos)
+        public void SaveRoutingSupplierInfo(IEnumerable<RoutingSupplierInfo> supplierInfos)
         {
             string filePath = GetFilePathForBulkInsert();
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
@@ -60,13 +52,21 @@ namespace TOne.WhS.Routing.Data.SQL
                 wr.Close();
             }
 
-            return new BulkInsertInfo
+            ApplyRoutingSupplierInfoToDB(new BulkInsertInfo
             {
                 TableName = "RoutingSupplierInfo",
                 DataFilePath = filePath,
                 TabLock = true,
                 FieldSeparator = '^'
-            };
+            });
+        }
+        void ApplyRoutingCustomerInfoToDB(object preparedCustomerInfos)
+        {
+            InsertBulkToTable(preparedCustomerInfos as BulkInsertInfo);
+        }
+        void ApplyRoutingSupplierInfoToDB(object preparedSupplierInfos)
+        {
+            InsertBulkToTable(preparedSupplierInfos as BulkInsertInfo);
         }
         RoutingCustomerInfo RoutingCustomerInfoMapper(IDataReader reader)
         {
@@ -81,44 +81,6 @@ namespace TOne.WhS.Routing.Data.SQL
             {
                 SupplierId = (int)reader["SupplierId"]
             };
-        }
-        DataTable BuildRoutingCustomerInfoTable(List<RoutingCustomerInfo> customerInfos)
-        {
-            DataTable dtCustomerInfos = GetRoutingCustomerInfoTable();
-            dtCustomerInfos.BeginLoadData();
-            foreach (var c in customerInfos)
-            {
-                DataRow dr = dtCustomerInfos.NewRow();
-                dr["CustomerId"] = c.CustomerId;
-                dtCustomerInfos.Rows.Add(dr);
-            }
-            dtCustomerInfos.EndLoadData();
-            return dtCustomerInfos;
-        }
-        DataTable GetRoutingCustomerInfoTable()
-        {
-            DataTable dtCustomerInfos = new DataTable();
-            dtCustomerInfos.Columns.Add("CustomerId", typeof(Int32));
-            return dtCustomerInfos;
-        }
-        DataTable BuildRoutingSupplierInfoTable(List<RoutingSupplierInfo> supplierInfos)
-        {
-            DataTable dtSupplierInfos = GetRoutingSupplierInfoTable();
-            dtSupplierInfos.BeginLoadData();
-            foreach (var s in supplierInfos)
-            {
-                DataRow dr = dtSupplierInfos.NewRow();
-                dr["SupplierId"] = s.SupplierId;
-                dtSupplierInfos.Rows.Add(dr);
-            }
-            dtSupplierInfos.EndLoadData();
-            return dtSupplierInfos;
-        }
-        DataTable GetRoutingSupplierInfoTable()
-        {
-            DataTable dtSupplierInfos = new DataTable();
-            dtSupplierInfos.Columns.Add("SupplierId", typeof(Int32));
-            return dtSupplierInfos;
         }
 
         #region Queries

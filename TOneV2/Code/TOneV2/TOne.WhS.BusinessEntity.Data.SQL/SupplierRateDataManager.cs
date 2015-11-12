@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,18 +15,18 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public SupplierRateDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
-          
+
         }
-        public List<SupplierRate> GetSupplierRates(int supplierId,DateTime minimumDate)
+        public List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetByDate", SupplierRateMapper,supplierId, minimumDate);
+            return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetByDate", SupplierRateMapper, supplierId, minimumDate);
         }
         SupplierRate SupplierRateMapper(IDataReader reader)
         {
             SupplierRate supplierRate = new SupplierRate
             {
                 NormalRate = GetReaderValue<decimal>(reader, "NormalRate"),
-                OtherRates = reader["OtherRates"] as string!=null?Vanrise.Common.Serializer.Deserialize<Dictionary<int,decimal>>(reader["OtherRates"] as string):null,
+                OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null,
                 SupplierRateId = (long)reader["ID"],
                 ZoneId = (long)reader["ZoneID"],
                 PriceListId = GetReaderValue<int>(reader, "PriceListID"),
@@ -44,6 +45,22 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public bool AreSupplierRatesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SupplierRate", ref updateHandle);
+        }
+
+
+        public List<SupplierRate> GetAllSupplierRatesForActiveSuppliers(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos)
+        {
+            DataTable dtActiveSuppliers = CarrierAccountDataManager.BuildRoutingSupplierInfoTable(supplierInfos);
+            return GetItemsSPCmd("TOneWhS_BE.sp_SupplierRate_GetAllForActiveSuppliers", SupplierRateMapper, (cmd) =>
+            {
+                //, effectiveOn, isEffectiveInFuture
+                var dtPrm = new SqlParameter("@ActiveSuppliersInfo", SqlDbType.Structured);
+                dtPrm.Value = dtActiveSuppliers;
+                cmd.Parameters.Add(dtPrm);
+
+                cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
+                cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
+            });
         }
 
 

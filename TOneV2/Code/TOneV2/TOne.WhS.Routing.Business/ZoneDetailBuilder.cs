@@ -72,10 +72,10 @@ namespace TOne.WhS.Routing.Business
         /// <param name="effectiveOn">Effective date for rates</param>
         /// <param name="isEffectiveInFuture">True if building process for Future.</param>
         /// <param name="onSupplierZoneDetailAvailable">Action that evalute a Supplier Zone Detail</param>
-        public void BuildSupplierZoneDetails(DateTime? effectiveOn, bool isEffectiveInFuture, Action<SupplierZoneDetail> onSupplierZoneDetailAvailable)
+        public void BuildSupplierZoneDetails(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos, Action<SupplierZoneDetail> onSupplierZoneDetailAvailable)
         {
             SupplierRateManager supplierRateManager = new SupplierRateManager();
-            var supplierRates = supplierRateManager.GetRates(effectiveOn, isEffectiveInFuture);
+            var supplierRates = supplierRateManager.GetRates(effectiveOn, isEffectiveInFuture, supplierInfos);
             SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
             Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
             PurchasePricingRuleManager purchasePricingRuleManager = new PurchasePricingRuleManager();

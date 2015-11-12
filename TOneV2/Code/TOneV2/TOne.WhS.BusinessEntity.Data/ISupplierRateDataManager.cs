@@ -7,11 +7,12 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data
 {
-    public interface ISupplierRateDataManager:IDataManager
+    public interface ISupplierRateDataManager : IDataManager
     {
-        List<SupplierRate> GetSupplierRates(int supplierId,DateTime minimumDate);
+        List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate);
 
         List<SupplierRate> GetAllSupplierRates(DateTime? effectiveOn, bool isEffectiveInFuture);
+        List<SupplierRate> GetAllSupplierRatesForActiveSuppliers(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos);
         List<SupplierRate> GetEffectiveSupplierRates(int supplierId, DateTime effectiveDate);
         bool AreSupplierRatesUpdated(ref object updateHandle);
     }

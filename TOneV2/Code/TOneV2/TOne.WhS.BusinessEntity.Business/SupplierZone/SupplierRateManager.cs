@@ -17,10 +17,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSupplierRates(supplierId, minimumDate);
         }
 
-        public List<SupplierRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture)
+        public List<SupplierRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos)
         {
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
-            return dataManager.GetAllSupplierRates(effectiveOn, isEffectiveInFuture);
+            return dataManager.GetAllSupplierRatesForActiveSuppliers(effectiveOn, isEffectiveInFuture, supplierInfos);
         }
 
         public CallCost GetCallCost(int supplierId, long supplierZoneId, int durationInSeconds, DateTime effectiveOn)

@@ -13,10 +13,7 @@ namespace TOne.WhS.Routing.Data
     {
         IEnumerable<RoutingCustomerInfo> GetRoutingtCustomerInfo();
         IEnumerable<RoutingSupplierInfo> GetRoutingtSupplierInfo();
-        void ApplyRoutingCustomerInfoToDB(Object preparedCustomerInfos);
-        void ApplyRoutingSupplierInfoToDB(Object preparedSupplierInfos);
-        Object PrepareRoutingCustomerInfoForDBApply(List<RoutingCustomerInfo> customerInfos);
-        Object PrepareRoutingSupplierInfoForDBApply(List<RoutingSupplierInfo> supplierInfos);
-
+        void SaveRoutingCustomerInfo(IEnumerable<RoutingCustomerInfo> customerInfos);
+        void SaveRoutingSupplierInfo(IEnumerable<RoutingSupplierInfo> supplierInfos);
     }
 }
