@@ -13,10 +13,10 @@ namespace TOne.WhS.BusinessEntity.Business
     public class CarrierAccountManager
     {
 
-        public Vanrise.Entities.IDataRetrievalResult<CarrierAccount> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<CarrierAccountDetail> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
         {
             var allCarrierAccounts = GetCachedCarrierAccounts();
-
+             
             Func<CarrierAccount, bool> filterExpression = (item) =>
                  (input.Query.Name == null || item.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
@@ -26,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Business
                    &&
                  (input.Query.AccountsTypes == null || input.Query.AccountsTypes.Contains(item.AccountType));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression));     
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression,CarrierAccountDetailMapper));     
         }
 
         public List<CarrierAccount> GetAllCustomers()
