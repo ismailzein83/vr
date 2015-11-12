@@ -1,4 +1,4 @@
-﻿<vr-modalcontent ng-controller="FraudAnalysis_StrategyEditorController">
+﻿<div vr-modalcontent ng-controller="FraudAnalysis_StrategyEditorController" width="'95%'">
     <vr-modalbody maxheight="'1200px'" vr-loader="isGettingData">
         <vr-form name="formStrategyEditor">
             <vr-row removeline>
@@ -144,7 +144,7 @@
                                         <span ng-init="filterIndex = viewScope.strategyFilters.indexOf(colDef.tag) ">
                                             <div style="max-width: 50px; float: left">
 
-                                                
+
 
                                                 <vr-switch value="dataItem.StrategyLevelCriterias[filterIndex].isSelected" hint="{{viewScope.showThresholdHint(viewScope.strategyFilters[filterIndex], dataItem.StrategyLevelCriterias[filterIndex])}}"></vr-switch>
                                             </div>
@@ -176,6 +176,6 @@
         </vr-actionbar>
 
     </div>
-</vr-modalcontent>
+</div>
 
 
