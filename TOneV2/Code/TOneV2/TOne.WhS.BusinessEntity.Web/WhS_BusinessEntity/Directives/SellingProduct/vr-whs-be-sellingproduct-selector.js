@@ -76,7 +76,6 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('SellingProductId', $attrs, ctrl);
                 }
-
                 api.load = function (payload) {
 
                     var selectedIds;

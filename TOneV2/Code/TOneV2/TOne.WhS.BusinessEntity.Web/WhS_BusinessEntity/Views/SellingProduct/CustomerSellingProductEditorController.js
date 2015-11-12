@@ -29,6 +29,7 @@
 
         }
         function defineScope() {
+            $scope.selectedSellingProduct;
             $scope.SaveSellingProduct = function () {
                     return insertSellingProduct();
             };
@@ -111,7 +112,7 @@
         function buildSellingProductObjFromScope() {
             var obj = [];
             var selectedCustomers = carrierAccountDirectiveAPI.getSelectedValues();
-            var selectedSellingProduct = sellingProductDirectiveAPI.getSelectedValues();
+            var selectedSellingProduct = $scope.selectedSellingProduct;
             for (var i = 0; i < selectedCustomers.length; i++) {
                 obj.push({
                     CustomerId: selectedCustomers[i].CarrierAccountId,

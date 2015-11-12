@@ -4,7 +4,7 @@
             <div>
                 <vr-row>
                     <vr-columns width="1/2row">
-                        <vr-whs-be-sellingproduct-selector on-ready="onSellingProductsDirectiveReady" isdisabled="disableSellingProduct" isrequired></vr-whs-be-sellingproduct-selector>
+                        <vr-whs-be-sellingproduct-selector on-ready="onSellingProductsDirectiveReady" selectedvalues="selectedSellingProduct"  isdisabled="disableSellingProduct" isrequired></vr-whs-be-sellingproduct-selector>
                     </vr-columns>
                     <vr-columns width="1/2row">
                         <vr-whs-be-carrieraccount-selector getcustomers on-ready="onCarrierAccountDirectiveReady" selectedvalues="selectedCustomers" isrequired ismultipleselection isdisabled="disableCarrierAccount"></vr-whs-be-carrieraccount-selector>

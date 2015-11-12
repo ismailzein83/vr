@@ -37,7 +37,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                 $scope.hideProfileColumn = true;
             }
             $scope.isExpandable = function (dataItem) {
-                if (dataItem.AccountType == WhS_Be_CarrierAccountTypeEnum.Supplier.value)
+                if (dataItem.Entity.AccountType == WhS_Be_CarrierAccountTypeEnum.Supplier.value)
                     return  false;
                 return true
             }
@@ -63,7 +63,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                     .then(function (response) {
                         if (response.Data != undefined) {
                             for (var i = 0; i < response.Data.length; i++) {
-                                if (response.Data[i].AccountType != WhS_Be_CarrierAccountTypeEnum.Supplier.value) {
+                                if (response.Data[i].Entity.AccountType != WhS_Be_CarrierAccountTypeEnum.Supplier.value) {
                                     setDataItemExtension(response.Data[i]);
                                 }
                             }
@@ -81,7 +81,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
             
             var extensionObject = {};
             var query = {
-                CustomersIds: [dataItem.CarrierAccountId],
+                CustomersIds: [dataItem.Entity.CarrierAccountId],
             }
             extensionObject.onGridReady = function (api) {
                 extensionObject.custormerSellingProductGridAPI = api;
@@ -111,7 +111,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
             ];
 
             $scope.gridMenuActions = function (dataItem) {
-                if (dataItem.AccountType == WhS_Be_CarrierAccountTypeEnum.Customer.value || dataItem.AccountType == WhS_Be_CarrierAccountTypeEnum.Exchange.value)
+                if (dataItem.Entity.AccountType == WhS_Be_CarrierAccountTypeEnum.Customer.value || dataItem.Entity.AccountType == WhS_Be_CarrierAccountTypeEnum.Exchange.value)
                 {
                     return menuActionsWithSellingProduct;
                 }
@@ -126,18 +126,13 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                 gridAPI.itemUpdated(carrierAccount);
             }
 
-            WhS_BE_MainService.editCarrierAccount(carrierAccountObj, onCarrierAccountUpdated);
+            WhS_BE_MainService.editCarrierAccount(carrierAccountObj.Entity, onCarrierAccountUpdated);
         }
         function assignNew(dataItem) {
-            if (dataItem.AccountType == WhS_Be_CarrierAccountTypeEnum.Supplier.value)
+            if (dataItem.Entity.AccountType == WhS_Be_CarrierAccountTypeEnum.Supplier.value)
                 return;
 
             gridAPI.expandRow(dataItem);
-            var query = {
-                CustomersIds: [dataItem.CarrierAccountId],
-            }
-            if (dataItem.extensionObject.custormerSellingProductGridAPI != undefined)
-                dataItem.extensionObject.custormerSellingProductGridAPI.loadGrid(query);
             var onCustomerSellingProductAdded = function (customerSellingProductObj) {
                 if (dataItem.extensionObject.custormerSellingProductGridAPI != undefined)
                 {
