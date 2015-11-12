@@ -66,9 +66,10 @@
       <Variable x:TypeArguments="scg:IEnumerable(twbe:SaleCode)" Name="SaleCodes" />
       <Variable x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)" Name="SupplierCodes" />
       <Variable x:TypeArguments="twre:SupplierZoneDetailByZone" Name="SupplierZoneDetails" />
+      <Variable x:TypeArguments="twre:CustomerZoneDetailByZone" Name="CustomerZoneDetails" />
     </Sequence.Variables>
     <Parallel DisplayName="Parallel_PrepareCodes" sap2010:WorkflowViewState.IdRef="Parallel_1">
-      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+      <Sequence DisplayName="Sequence_SaleCodes" sap2010:WorkflowViewState.IdRef="Sequence_2">
         <twrba1:GetSaleCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSaleCodes_1">
           <twrba1:GetSaleCodes.CodePrefix>
             <InArgument x:TypeArguments="x:String">
@@ -91,8 +92,20 @@
             </OutArgument>
           </twrba1:GetSaleCodes.SaleCodes>
         </twrba1:GetSaleCodes>
+        <twrba1:LoadCustomerZoneDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadCustomerZoneDetails_1">
+          <twrba1:LoadCustomerZoneDetails.CustomerZoneDetails>
+            <OutArgument x:TypeArguments="twre:CustomerZoneDetailByZone">
+              <mca:CSharpReference x:TypeArguments="twre:CustomerZoneDetailByZone">CustomerZoneDetails</mca:CSharpReference>
+            </OutArgument>
+          </twrba1:LoadCustomerZoneDetails.CustomerZoneDetails>
+          <twrba1:LoadCustomerZoneDetails.SaleCodes>
+            <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">SaleCodes</mca:CSharpValue>
+            </InArgument>
+          </twrba1:LoadCustomerZoneDetails.SaleCodes>
+        </twrba1:LoadCustomerZoneDetails>
       </Sequence>
-      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+      <Sequence DisplayName="Sequence_SupplierCodes" sap2010:WorkflowViewState.IdRef="Sequence_3">
         <twrba1:GetSupplierCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSupplierCodes_1">
           <twrba1:GetSupplierCodes.CodePrefix>
             <InArgument x:TypeArguments="x:String">
@@ -227,11 +240,12 @@
         </twrba1:ApplyCodesToCodeSaleZoneTable.PreviousActivityStatus>
       </twrba1:ApplyCodesToCodeSaleZoneTable>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbChAA+cBDgIBAUYFgwEQAwG5AYQBBeUBEAIBAkcHXhIDAdsBXweCARIDAboBjQEHrAEhAgF2rQEHzAErAgEzzQEH2AElAgEb2QEH5AEuAgEDSAldHwMB3AFgCXUjAwHGAXYJgQEqAwG7AZUBDZUBhQEDAa4BmgENmgFqAwGjAZABDZABhQEDAZgBnwENnwF3AwGNAaQBDaQBcgMBggGpAQ2pAXMCAXfEAQ3EAW8CAWu/AQ2/AXsCAWC6AQ26AXsCAVXJAQ3JAXkCAUq1AQ21AX0CAT+wAQ2wAX0CATTVAQ3VAXECASjQAQ3QAXMCAR3NAYEBzQGFAQIBHOEBDeEBcQIBENwBDdwBcwIBBdkBkwHZAZcBAgEEUA9QbAMB7AFaD1p0AwHnAUsPS10DAeIBVQ9VXAMB3QFoD2hsAwHWAWMPY10DAdEBcg9yfAMBzAFtD21cAwHHAXkPeXQDAcEBfg9+fQMBvAE=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbCtAA/QBDgIBAUcFkAEQAwHJAZEBBfIBEAIBAkgHaxIDAfEBbAePARIDAcoBmgEHuQEhAwGAAboBB9kBKwIBN9oBB+UBJQIBHeYBB/EBLgIBA0kJXh8DAf8BXwlqKgMB8gFtCYIBIwMB2AGDAQmOASoDAcsBogENogGFAQMBvQGnAQ2nAWoDAbEBnQENnQGFAQMBpQGsAQ2sAXcDAZkBsQENsQFyAwGNAbYBDbYBcwMBgQHRAQ3RAW8CAXTMAQ3MAXsCAWjHAQ3HAXsCAVzWAQ3WAXkCAVDCAQ3CAX0CAUS9AQ29AX0CATjiAQ3iAXECASvdAQ3dAXMCAR/aAYEB2gGFAQIBHu4BDe4BcQIBEekBDekBcwIBBeYBkwHmAZcBAgEEUQ9RbAMBkgJbD1t0AwGMAkwPTF0DAYYCVg9WXAMBgAJiD2J9AwH5AWcPZ2wDAfMBdQ91bAMB6wFwD3BdAwHlAX8Pf3wDAd8Beg96XAMB2QGGAQ+GAXQDAdIBiwEPiwF9AwHMAQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="GetSaleCodes_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="LoadCustomerZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">

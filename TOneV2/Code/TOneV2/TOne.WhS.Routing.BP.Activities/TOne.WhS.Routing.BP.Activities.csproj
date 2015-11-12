@@ -68,6 +68,7 @@
     <Compile Include="ApplyCodesToCodeSaleZoneTable.cs" />
     <Compile Include="ApplySupplierZoneDetailsToDB.cs" />
     <Compile Include="BuildCodeMatches.cs" />
+    <Compile Include="BuildCustomerRoutes.cs" />
     <Compile Include="CreateRoutingDatabase.cs" />
     <Compile Include="DropOldRoutingDatabases.cs" />
     <Compile Include="GenerateSupplierZoneDetails.cs" />
