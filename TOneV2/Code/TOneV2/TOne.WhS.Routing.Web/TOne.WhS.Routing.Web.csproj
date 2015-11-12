@@ -141,6 +141,8 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\vr-whs-routing-routerulesettings-percentage-fixed.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\vr-whs-routing-routerulesettings-selective.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleSettingsAPIService.js" />
+    <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRouteProcess.html" />
+    <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRouteProcessController.js" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRoutesByCodePrefix.html" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRoutesByCodePrefixController.js" />
   </ItemGroup>
