@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CarrierAccountDataManager.cs" />
     <Compile Include="CodeMatchesDataManager.cs" />
     <Compile Include="MasterDatabaseDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

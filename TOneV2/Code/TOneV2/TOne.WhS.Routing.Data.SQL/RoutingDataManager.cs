@@ -103,7 +103,8 @@ namespace TOne.WhS.Routing.Data.SQL
                                                    Create Table SupplierZoneDetail(
                                                     SupplierId int Not Null,
                                                     SupplierZoneId bigint Not Null,
-                                                    EffectiveRateValue numeric(18,4) Not Null)                                        
+                                                    EffectiveRateValue numeric(18,4) Not Null
+                                                    )ON [PRIMARY]                                        
                                                     
                                                     CREATE TABLE [dbo].[CodeMatch](
 	                                                [ID] [int] IDENTITY(1,1) NOT NULL,
@@ -113,7 +114,17 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                        [ID] ASC
                                                         )
                                                         WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-                                                        ) ON [PRIMARY]";
+                                                        ) ON [PRIMARY]
+
+                                                CREATE TABLE [dbo].[RoutingCustomerInfo](
+	                                                    [CustomerId] [int] NOT NULL
+                                                    ) ON [PRIMARY]
+
+                                                CREATE TABLE [dbo].[RoutingSupplierInfo](
+	                                                    [SupplierId] [int] NOT NULL
+                                                    ) ON [PRIMARY]
+
+    ";
 
         #endregion
     }
