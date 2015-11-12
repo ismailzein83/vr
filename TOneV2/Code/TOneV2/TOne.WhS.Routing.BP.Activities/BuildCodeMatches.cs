@@ -20,7 +20,9 @@ namespace TOne.WhS.Routing.BP.Activities
 
         public IEnumerable<SupplierCode> SupplierCodes { get; set; }
 
-        public BaseQueue<CodeMatchesBatch> OutputQueue { get; set; }
+        public BaseQueue<CodeMatchesBatch> OutputQueue_1 { get; set; }
+
+        public BaseQueue<CodeMatchesBatch> OutputQueue_2 { get; set; }
     }
 
     public class BuildCodeMatchesContext : IBuildCodeMatchesContext
@@ -40,7 +42,10 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<IEnumerable<SupplierCode>> SupplierCodes { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<BaseQueue<CodeMatchesBatch>> OutputQueue { get; set; }
+        public InOutArgument<BaseQueue<CodeMatchesBatch>> OutputQueue_1 { get; set; }
+
+        [RequiredArgument]
+        public InOutArgument<BaseQueue<CodeMatchesBatch>> OutputQueue_2 { get; set; }
 
 
         protected override void DoWork(BuildCodeMatchesInput inputArgument, AsyncActivityHandle handle)
@@ -55,13 +60,17 @@ namespace TOne.WhS.Routing.BP.Activities
                 codeMatchesBatch.CodeMatches.Add(codeMatch);
                 if(codeMatchesBatch.CodeMatches.Count >= 10)
                 {
-                    inputArgument.OutputQueue.Enqueue(codeMatchesBatch);
+                    inputArgument.OutputQueue_1.Enqueue(codeMatchesBatch);
+                    inputArgument.OutputQueue_2.Enqueue(codeMatchesBatch);
                     codeMatchesBatch = new CodeMatchesBatch();
                 }
             });
 
             if(codeMatchesBatch.CodeMatches.Count > 0)
-                inputArgument.OutputQueue.Enqueue(codeMatchesBatch);
+            {
+                inputArgument.OutputQueue_1.Enqueue(codeMatchesBatch);
+                inputArgument.OutputQueue_2.Enqueue(codeMatchesBatch);
+            }
         }
 
         protected override BuildCodeMatchesInput GetInputArgument(AsyncCodeActivityContext context)
@@ -71,14 +80,19 @@ namespace TOne.WhS.Routing.BP.Activities
                 SaleCodes = this.SaleCodes.Get(context),
                 SupplierCodes = this.SupplierCodes.Get(context),
                 SupplierZoneDetails = this.SupplierZoneDetails.Get(context),
-                OutputQueue = this.OutputQueue.Get(context)
+                OutputQueue_1 = this.OutputQueue_1.Get(context),
+                OutputQueue_2 = this.OutputQueue_2.Get(context)
             };
         }
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
-            if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new MemoryQueue<CodeMatchesBatch>());
+            if (this.OutputQueue_1.Get(context) == null)
+                this.OutputQueue_1.Set(context, new MemoryQueue<CodeMatchesBatch>());
+
+            if (this.OutputQueue_2.Get(context) == null)
+                this.OutputQueue_2.Set(context, new MemoryQueue<CodeMatchesBatch>());            
+
             base.OnBeforeExecute(context, handle);
         }
     }

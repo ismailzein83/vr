@@ -37,7 +37,7 @@ namespace TOne.WhS.Routing.Data.SQL
         public void WriteRecordToStream(Entities.CodeMatches record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}", record.Code);
+            streamForBulkInsert.WriteRecord("{0}^{1}", record.Code, Vanrise.Common.Serializer.Serialize(record, true));
         }
     }
 }

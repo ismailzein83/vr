@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyCodeMatchesToDB.cs" />
+    <Compile Include="ApplyCodesToCodeSaleZoneTable.cs" />
     <Compile Include="ApplySupplierZoneDetailsToDB.cs" />
     <Compile Include="BuildCodeMatches.cs" />
     <Compile Include="CreateRoutingDatabase.cs" />

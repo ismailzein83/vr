@@ -101,22 +101,28 @@ namespace TOne.WhS.Routing.Data.SQL
 
         const string query_CreateDatabaseSchema = @"
                                                    Create Table SupplierZoneDetail(
-                                                    SupplierId int Not Null,
-                                                    SupplierZoneId bigint Not Null,
-                                                    EffectiveRateValue numeric(18,4) Not Null
+                                                        SupplierId int Not Null,
+                                                        SupplierZoneId bigint Not Null,
+                                                        EffectiveRateValue numeric(18,4) Not Null
                                                     )ON [PRIMARY]                                        
                                                     
                                                     CREATE TABLE [dbo].[CodeMatch](
-	                                                    [Code] [varchar](20) NOT NULL
+	                                                    [Code] [varchar](20) NOT NULL,
+	                                                    [Content] [nvarchar](max) NOT NULL
+                                                    ) ON [PRIMARY]
+
+                                                    CREATE TABLE [dbo].[CodeZone](
+	                                                    [Code] [varchar](20) NOT NULL,
+	                                                    [ZoneId] [bigint] NOT NULL
                                                     ) ON [PRIMARY]
 
                                                     CREATE TABLE [dbo].[RoutingCustomerInfo](
-	                                                        [CustomerId] [int] NOT NULL
-                                                        ) ON [PRIMARY]
+	                                                    [CustomerId] [int] NOT NULL
+                                                    ) ON [PRIMARY]
 
                                                     CREATE TABLE [dbo].[RoutingSupplierInfo](
-	                                                        [SupplierId] [int] NOT NULL
-                                                        ) ON [PRIMARY]";
+	                                                    [SupplierId] [int] NOT NULL
+                                                    ) ON [PRIMARY]";
 
         #endregion
     }

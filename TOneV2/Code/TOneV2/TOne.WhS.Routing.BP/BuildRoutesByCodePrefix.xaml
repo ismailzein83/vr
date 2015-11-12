@@ -131,17 +131,24 @@
     </Parallel>
     <Parallel DisplayName="Parallel_BuildCodeMatch" sap2010:WorkflowViewState.IdRef="Parallel_2">
       <Parallel.Variables>
-        <Variable x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)" Name="queueCodeMatchesBatch" />
-        <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedCodeMatches" />
+        <Variable x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)" Name="queueCodeMatchesBatch_1" />
+        <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedCodeMatches_1" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="buildCodeMatchesStatus" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareCodeMatchesStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)" Name="queueCodeMatchesBatch_2" />
+        <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedCodeMatches_2" />
       </Parallel.Variables>
       <twrba1:BuildCodeMatches sap2010:WorkflowViewState.IdRef="BuildCodeMatches_1">
-        <twrba1:BuildCodeMatches.OutputQueue>
+        <twrba1:BuildCodeMatches.OutputQueue_1>
           <InOutArgument x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">queueCodeMatchesBatch</mca:CSharpReference>
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">queueCodeMatchesBatch_1</mca:CSharpReference>
           </InOutArgument>
-        </twrba1:BuildCodeMatches.OutputQueue>
+        </twrba1:BuildCodeMatches.OutputQueue_1>
+        <twrba1:BuildCodeMatches.OutputQueue_2>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">queueCodeMatchesBatch_2</mca:CSharpReference>
+          </InOutArgument>
+        </twrba1:BuildCodeMatches.OutputQueue_2>
         <twrba1:BuildCodeMatches.SaleCodes>
           <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">
             <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">SaleCodes</mca:CSharpValue>
@@ -164,16 +171,26 @@
         </twrba1:BuildCodeMatches.SupplierZoneDetails>
       </twrba1:BuildCodeMatches>
       <twrba1:PrepareCodeMatchesForApply sap2010:WorkflowViewState.IdRef="PrepareCodeMatchesForApply_1">
-        <twrba1:PrepareCodeMatchesForApply.InputQueue>
+        <twrba1:PrepareCodeMatchesForApply.InputQueue_1>
           <InArgument x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">queueCodeMatchesBatch</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">queueCodeMatchesBatch_1</mca:CSharpValue>
           </InArgument>
-        </twrba1:PrepareCodeMatchesForApply.InputQueue>
-        <twrba1:PrepareCodeMatchesForApply.OutputQueue>
+        </twrba1:PrepareCodeMatchesForApply.InputQueue_1>
+        <twrba1:PrepareCodeMatchesForApply.InputQueue_2>
+          <InArgument x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">queueCodeMatchesBatch_2</mca:CSharpValue>
+          </InArgument>
+        </twrba1:PrepareCodeMatchesForApply.InputQueue_2>
+        <twrba1:PrepareCodeMatchesForApply.OutputQueue_1>
           <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedCodeMatches</mca:CSharpReference>
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedCodeMatches_1</mca:CSharpReference>
           </InOutArgument>
-        </twrba1:PrepareCodeMatchesForApply.OutputQueue>
+        </twrba1:PrepareCodeMatchesForApply.OutputQueue_1>
+        <twrba1:PrepareCodeMatchesForApply.OutputQueue_2>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedCodeMatches_2</mca:CSharpReference>
+          </InOutArgument>
+        </twrba1:PrepareCodeMatchesForApply.OutputQueue_2>
         <twrba1:PrepareCodeMatchesForApply.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">buildCodeMatchesStatus</mca:CSharpValue>
@@ -188,7 +205,7 @@
       <twrba1:ApplyCodeMatchesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyCodeMatchesToDB_1" RoutingDatabaseId="22">
         <twrba1:ApplyCodeMatchesToDB.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedCodeMatches</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedCodeMatches_1</mca:CSharpValue>
           </InArgument>
         </twrba1:ApplyCodeMatchesToDB.InputQueue>
         <twrba1:ApplyCodeMatchesToDB.PreviousActivityStatus>
@@ -198,7 +215,7 @@
         </twrba1:ApplyCodeMatchesToDB.PreviousActivityStatus>
       </twrba1:ApplyCodeMatchesToDB>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbCFAA8oBDgIBAUYFgwEQAgFqhAEFyAEQAgECRwdeEgMBjAFfB4IBEgIBa4sBB6UBIQIBPKYBB7sBKwIBF7wBB8cBJQIBA0gJXR8DAY0BYAl1IwIBd3YJgQEqAgFskwENkwFqAgFhmAENmAF3AgFYjgENjgGDAQIBT50BDZ0BcgIBRqIBDaIBcwIBPbMBDbMBbwIBM6kBDakBewIBKrgBDbgBeQIBIa4BDa4BeQIBGMQBDcQBcQIBDr8BDb8BcQIBBbwBgQG8AYUBAgEEUA9QbAMBnQFaD1p0AwGYAUsPS10DAZMBVQ9VXAMBjgFoD2hsAwGHAWMPY10DAYIBcg9yfAIBfW0PbVwCAXh5D3l0AgFyfg9+fQIBbQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbCRAA9sBDgIBAUYFgwEQAwGhAYQBBdkBEAIBAkcHXhIDAcMBXweCARIDAaIBjQEHrAEhAgFerQEHzAErAgEbzQEH2AElAgEDSAldHwMBxAFgCXUjAwGuAXYJgQEqAwGjAZUBDZUBhQEDAZYBmgENmgFqAwGLAZABDZABhQEDAYABnwENnwF3AgF1pAENpAFyAgFqqQENqQFzAgFfxAENxAFvAgFTvwENvwF7AgFIugENugF7AgE9yQENyQF5AgEytQENtQF9AgEnsAENsAF9AgEc1QEN1QFxAgEQ0AEN0AFzAgEFzQGBAc0BhQECAQRQD1BsAwHUAVoPWnQDAc8BSw9LXQMBygFVD1VcAwHFAWgPaGwDAb4BYw9jXQMBuQFyD3J8AwG0AW0PbVwDAa8BeQ95dAMBqQF+D359AwGkAQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
