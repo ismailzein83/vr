@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 
@@ -27,19 +28,22 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public List<SellingNumberPlan> GetSellingNumberPlans()
         {
-            return GetCachedSellingNumberPlans();
+            return GetCachedSellingNumberPlans().Values.ToList();
 
         }
 
+        public SellingNumberPlan GetSellingNumberPlan(int numberPlanId)
+        {
+            return GetCachedSellingNumberPlans().GetRecord(numberPlanId);
+        }
         #region Private Method
-
-        List<SellingNumberPlan> GetCachedSellingNumberPlans()
+        Dictionary<int ,SellingNumberPlan> GetCachedSellingNumberPlans()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSellingNumberPlans",
                () =>
                {
                    ISellingNumberPlanDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingNumberPlanDataManager>();
-                   return dataManager.GetSellingNumberPlans();
+                   return dataManager.GetSellingNumberPlans().ToDictionary(x=> x.SellingNumberPlanId , x => x);
                });
 
         }
