@@ -21,12 +21,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
 
 
-        public CustomerSellingProductDetail GetCustomerSellingProduct(int customerSellingProductId)
+        public CustomerSellingProduct GetCustomerSellingProduct(int customerSellingProductId)
         {
             return GetItemSP("TOneWhS_BE.sp_CustomerSellingProduct_Get", CustomerSellingProductDetailMapper, customerSellingProductId);
         }
 
-        public bool Insert(List<CustomerSellingProductDetail> customerSellingProduct, out List<CustomerSellingProductDetail> insertedObjects)
+        public bool Insert(List<CustomerSellingProduct> customerSellingProduct, out List<CustomerSellingProduct> insertedObjects)
         {
             DataTable table = BuildUpdatedCarriersTable(customerSellingProduct);
 
@@ -39,7 +39,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             });
             return true;
         }
-        private DataTable BuildUpdatedCarriersTable(List<CustomerSellingProductDetail> customerSellingProducts)
+        private DataTable BuildUpdatedCarriersTable(List<CustomerSellingProduct> customerSellingProducts)
         {
             DataTable table = new DataTable();
 
@@ -69,16 +69,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         //    int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerSellingProduct_Delete", customerSellingProductId,DateTime.Now);
         //    return (recordesEffected > 0);
         //}
-        CustomerSellingProductDetail CustomerSellingProductDetailMapper(IDataReader reader)
+        CustomerSellingProduct CustomerSellingProductDetailMapper(IDataReader reader)
         {
-            CustomerSellingProductDetail customerSellingProductDetail = new CustomerSellingProductDetail
+            CustomerSellingProduct customerSellingProductDetail = new CustomerSellingProduct
             {
                 CustomerSellingProductId = (int)reader["ID"],
                 CustomerId = (int)reader["CustomerID"],
                 SellingProductId = (int)reader["SellingProductID"],
                 BED = GetReaderValue<DateTime>(reader, "BED"),
-                CustomerName = reader["CustomerName"] as string,
-                SellingProductName = reader["SellingProductName"] as string,
             };
 
             return customerSellingProductDetail;
@@ -89,10 +87,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return base.IsDataUpdated("TOneWhS_BE.CustomerSellingProduct", ref updateHandle);
         }
 
-        public List<CustomerSellingProductDetail> GetCustomerSellingProducts()
+        public List<CustomerSellingProduct> GetCustomerSellingProducts()
         {
             return GetItemsSP("TOneWhS_BE.sp_CustomerSellingProduct_GetAll", CustomerSellingProductDetailMapper);
         }
 
+
+
+        public bool Update(CustomerSellingProduct customerSellingProduct)
+        {
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.CustomerSellingProduct_Update", customerSellingProduct.SellingProductId, customerSellingProduct.BED);
+            return (recordsEffected > 0);
+        }
     }
 }

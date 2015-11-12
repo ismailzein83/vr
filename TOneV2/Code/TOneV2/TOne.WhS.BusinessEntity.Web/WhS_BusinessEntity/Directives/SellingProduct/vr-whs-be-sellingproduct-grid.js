@@ -66,7 +66,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService,W
         function setDataItemExtension(dataItem) {
             var extensionObject = {};
             var query = {
-                SellingProductsIds: [dataItem.SellingProductId]
+                SellingProductsIds: [dataItem.Entity.SellingProductId]
             }
             extensionObject.onGridReady = function (api) {
                 extensionObject.custormerSellingProductGridAPI = api;
@@ -97,12 +97,12 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService,W
                 gridAPI.itemUpdated(sellingProduct);
             }
 
-            WhS_BE_MainService.editSellingProduct(sellingProductObj, onSellingProductUpdated);
+            WhS_BE_MainService.editSellingProduct(sellingProductObj.Entity, onSellingProductUpdated);
         }
         function assignCustomer(dataItem) {
             gridAPI.expandRow(dataItem);
             var query = {
-                SellingProductsIds: [dataItem.SellingProductId]
+                SellingProductsIds: [dataItem.Entity.SellingProductId]
             }
             if (dataItem.extensionObject.custormerSellingProductGridAPI!=undefined)
              dataItem.extensionObject.custormerSellingProductGridAPI.loadGrid(query);
@@ -125,7 +125,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService,W
                 gridAPI.itemDeleted(gridObject);
             };
 
-            WhS_BE_MainService.deleteSellingProduct($scope, sellingProductObj, onSellingProductDeleted);
+            WhS_BE_MainService.deleteSellingProduct($scope, sellingProductObj.Entity, onSellingProductDeleted);
         }
     }
 

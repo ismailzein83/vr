@@ -26,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
          }
          
          [HttpGet]
-         public SellingProductDetail GetSellingProduct(int sellingProductId)
+         public SellingProduct GetSellingProduct(int sellingProductId)
          {
              SellingProductManager manager = new SellingProductManager();
              return manager.GetSellingProduct(sellingProductId);

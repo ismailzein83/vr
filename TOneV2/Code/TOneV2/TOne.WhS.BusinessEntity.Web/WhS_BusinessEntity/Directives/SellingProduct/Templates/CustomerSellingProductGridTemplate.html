@@ -5,12 +5,12 @@
                      dataretrievalfunction="dataRetrievalFunction"
                      pagingtype="'PagingOnScroll'"
                      menuactions="gridMenuActions"
-                     idfield="CustomerSellingProductId">
+                     idfield="Entity.CustomerSellingProductId">
 
-            <vr-datagridcolumn headertext="'ID'" field="'CustomerSellingProductId'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'ID'" field="'Entity.CustomerSellingProductId'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Customer Name'" field="'CustomerName'" type="'Text'" ng-show="!hideCustomerColumn"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Selling Product Name'" field="'SellingProductName'" type="'Text'" ng-show="!hideSellingProductColumn"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'BED'" field="'BED'" type="'Datetime'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'BED'" field="'Entity.BED'" type="'Datetime'"></vr-datagridcolumn>
 
         </vr-datagrid>
     </vr-columns>

@@ -31,7 +31,8 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         editRateType: editRateType,
         addRateType: addRateType,
         editZoneServiceConfig: editZoneServiceConfig,
-        addZoneServiceConfig: addZoneServiceConfig
+        addZoneServiceConfig: addZoneServiceConfig,
+        editCustomerSellingProduct: editCustomerSellingProduct
     });
 
     function addRoutingProduct(onRoutingProductAdded) {
@@ -450,4 +451,20 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
                 }
             });
     }
+    function editCustomerSellingProduct(obj, onCustomerSellingProductUpdated) {
+        var settings = {
+        };
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.SellingProductName, "Customer Selling Product");
+            modalScope.onCustomerSellingProductUpdated = onCustomerSellingProductUpdated;
+        };
+        var parameters = {
+            CustomerSellingProductId: obj.CustomerSellingProductId,
+        };
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingProduct/CustomerSellingProductEditor.html', parameters, settings);
+    }
+
+    
 }]);

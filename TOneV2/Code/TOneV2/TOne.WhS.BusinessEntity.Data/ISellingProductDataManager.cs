@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISellingProductDataManager:IDataManager
     {
-        List<SellingProductDetail> GetSellingProducts();
+        List<SellingProduct> GetSellingProducts();
         bool Insert(SellingProduct sellingProduct, out int insertedId);
 
         bool Update(SellingProduct sellingProduct);

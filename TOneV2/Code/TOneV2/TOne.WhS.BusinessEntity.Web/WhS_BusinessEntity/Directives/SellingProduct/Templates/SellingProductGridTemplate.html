@@ -5,13 +5,13 @@
                          pagingtype="'PagingOnScroll'"
                          on-ready="gridReady"
                          menuactions="gridMenuActions"
-                         idfield="SellingProductId">
-                <vr-datagridcolumn headertext="'ID'" field="'SellingProductId'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Description'" field="'Name'"></vr-datagridcolumn>
+                         idfield="Entity.SellingProductId">
+                <vr-datagridcolumn headertext="'ID'" field="'Entity.SellingProductId'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Description'" field="'Entity.Name'"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Selling Number Plan'" field="'SellingNumberPlanName'"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Routing Product'" field="'DefaultRoutingProductName'"></vr-datagridcolumn>
                 <vr-datagridexpandablerow>
-                    <vr-whs-be-customersellingproduct-grid on-ready="dataItem.extensionObject.onGridReady" sellingproductid="dataItem.SellingProductId" hidesellingproductcolumn></vr-whs-be-customersellingproduct-grid>
+                    <vr-whs-be-customersellingproduct-grid on-ready="dataItem.extensionObject.onGridReady" sellingproductid="dataItem.Entity.SellingProductId" hidesellingproductcolumn></vr-whs-be-customersellingproduct-grid>
                 </vr-datagridexpandablerow>
             </vr-datagrid>
 

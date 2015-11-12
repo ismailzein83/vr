@@ -43,11 +43,11 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
         
         function getTemplate(attrs) {
             var multipleselection = "";
-            var label = "Pricing Product";
+            var label = "Selling Product";
             var hideremoveicon = "";
 
             if (attrs.ismultipleselection != undefined) {
-                label = "Pricing Products";
+                label = "Selling Products";
                 multipleselection = "ismultipleselection"
             }
             else if (attrs.hideremoveicon != undefined) {

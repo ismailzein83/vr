@@ -14,24 +14,33 @@
 
         var sellingProductId;
         var carrierAccountId;
-       
+        var customerSellingProductId;
+        var isEditMode;
+        var customerSellingProductEntity;
         defineScope();
         loadParameters();
         load();
         function loadParameters(){
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
+                customerSellingProductId = parameters.CustomerSellingProductId;
                 sellingProductId = parameters.SellingProductId;
                 carrierAccountId = parameters.CarrierAccountId;
             }
+            isEditMode = (customerSellingProductId!=undefined)
             $scope.disableSellingProduct = (sellingProductId != undefined);
-            $scope.disableCarrierAccount = (carrierAccountId != undefined);
+            $scope.disableCarrierAccount = (carrierAccountId != undefined || isEditMode);
 
         }
         function defineScope() {
             $scope.selectedSellingProduct;
             $scope.SaveSellingProduct = function () {
-                    return insertSellingProduct();
+                if (isEditMode) {
+                    return updateCustomerSellingProduct();
+                }
+                else {
+                    return insertCustomerSellingProduct();
+                }
             };
 
             $scope.close = function () {
@@ -52,25 +61,45 @@
 
         function load() {
             $scope.isLoading = true;
-            loadAllControls();
+            if (isEditMode) {
+                getCustomerSellingProduct().then(function () {
+                    loadAllControls()
+                        .finally(function () {
+                            customerSellingProductEntity = undefined;
+                        });
+                }).catch(function () {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+            }
+            else {
+                loadAllControls();
+            }
+           
                  
         }
         function loadAllControls() {
+  
             return UtilsService.waitMultipleAsyncOperations([loadSellingProducts, loadCarrierAccounts])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
                 })
                .finally(function () {
                    $scope.isLoading = false;
                });
         }
+        function getCustomerSellingProduct() {
+            return WhS_BE_CustomerSellingProductAPIService.GetCustomerSellingProduct(customerSellingProductId).then(function (customerSellingProduct) {
+                customerSellingProductEntity = customerSellingProduct;
+            });
+        }
+
         function loadSellingProducts() {
             var sellingProductLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             sellingProductReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = sellingProductId
+                    var directivePayload = sellingProductId != undefined ? sellingProductId : customerSellingProductEntity!=undefined?customerSellingProductEntity.SellingProductId:undefined
 
                     VRUIUtilsService.callDirectiveLoad(sellingProductDirectiveAPI, directivePayload, sellingProductLoadPromiseDeferred);
                 });
@@ -83,17 +112,17 @@
             carrierAccountReadyPromiseDeferred.promise
                 .then(function () {
                     var directivePayload = {
-                        selectedIds: carrierAccountId != undefined ? [carrierAccountId] : undefined
+                        
+                        selectedIds: carrierAccountId != undefined ? [carrierAccountId] : customerSellingProductEntity != undefined ? [customerSellingProductEntity.CustomerId] : undefined
                     }
-
                     VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, directivePayload, carrierAccountLoadPromiseDeferred);
                 });
             return carrierAccountLoadPromiseDeferred.promise;
         }
 
-        function insertSellingProduct() {
-            var sellingProductObject = buildSellingProductObjFromScope();
-            return WhS_BE_CustomerSellingProductAPIService.AddCustomerSellingProduct(sellingProductObject)
+        function insertCustomerSellingProduct() {
+            var customerSellingProductObject = buildSellingProductObjFromScope();
+            return WhS_BE_CustomerSellingProductAPIService.AddCustomerSellingProduct(customerSellingProductObject)
             .then(function (response) {
                
                 if (VRNotificationService.notifyOnItemAdded("Customer Selling Product", response)) {
@@ -110,19 +139,44 @@
 
         }
         function buildSellingProductObjFromScope() {
-            var obj = [];
+            var obj;
             var selectedCustomers = carrierAccountDirectiveAPI.getSelectedValues();
             var selectedSellingProduct = $scope.selectedSellingProduct;
-            for (var i = 0; i < selectedCustomers.length; i++) {
-                obj.push({
+            if (isEditMode) {
+                obj = {
                     CustomerId: selectedCustomers[i].CarrierAccountId,
-                    CustomerName: selectedCustomers[i].Name,
                     SellingProductId: selectedSellingProduct.SellingProductId,
-                    SellingProductName: selectedSellingProduct.Name,
                     BED: $scope.beginEffectiveDate,
-                });
+                };
+            } else {
+               
+                obj = [];
+                for (var i = 0; i < selectedCustomers.length; i++) {
+                    obj.push({
+                        CustomerId: selectedCustomers[i].CarrierAccountId,
+                        CustomerName: selectedCustomers[i].Name,
+                        SellingProductId: selectedSellingProduct.SellingProductId,
+                        SellingProductName: selectedSellingProduct.Name,
+                        BED: $scope.beginEffectiveDate,
+                    });
+                }
             }
+           
             return obj;
+        }
+        function updateCustomerSellingProduct() {
+            var customerSellingProductObject = buildRouteRuleObjFromScope();
+            customerSellingProductObject.CustomerSellingProductId=customerSellingProductId;
+            WhS_BE_CustomerSellingProductAPIService.UpdateCustomerSellingProduct(customerSellingProductObject)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated("Customer Selling Product", response)) {
+                    if ($scope.onCustomerSellingProductUpdated != undefined)
+                        $scope.onCustomerSellingProductUpdated(response.UpdatedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
         }
         }
         

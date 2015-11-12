@@ -14,24 +14,24 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var allSellingProducts = GetCachedSellingProducts();
 
-            Func<SellingProductDetail, bool> filterExpression = (prod) =>
+            Func<SellingProduct, bool> filterExpression = (prod) =>
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
                  (input.Query.SellingNumberPlanIds == null || input.Query.SellingNumberPlanIds.Contains(prod.SellingNumberPlanId))
                   &&
                  (input.Query.RoutingProductsIds == null || input.Query.RoutingProductsIds.Contains(prod.DefaultRoutingProductId));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSellingProducts.ToBigResult(input, filterExpression));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSellingProducts.ToBigResult(input, filterExpression,SellingProductDetailMapper));
         }
        public IEnumerable<SellingProductInfo> GetAllSellingProduct()
        {
-           List<SellingProductDetail> sellingProducts = GetCachedSellingProducts();
+           var sellingProducts = GetCachedSellingProducts();
            return sellingProducts.MapRecords(SellingProductInfoMapper);
        }
-       public SellingProductDetail GetSellingProduct(int sellingProductId)
+       public SellingProduct GetSellingProduct(int sellingProductId)
         {
-            List<SellingProductDetail> sellingProducts = GetCachedSellingProducts();
-            return sellingProducts.FindRecord(x => x.SellingProductId == sellingProductId);
+            var sellingProducts = GetCachedSellingProducts();
+            return sellingProducts.GetRecord(sellingProductId);
         }
 
 
@@ -49,10 +49,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (insertActionSucc)
             {
-                List<SellingProductDetail> sellingProducts = GetCachedSellingProducts();
+                sellingProduct.SellingProductId = sellingProductId;
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 sellingProduct.SellingProductId = sellingProductId;
-                insertOperationOutput.InsertedObject = sellingProducts.FindRecord(x => x.SellingProductId == sellingProductId);
+                insertOperationOutput.InsertedObject = SellingProductDetailMapper(sellingProduct);
             }
 
             return insertOperationOutput;
@@ -70,9 +70,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (updateActionSucc)
             {
-                List<SellingProductDetail> sellingProducts = GetCachedSellingProducts();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = sellingProducts.FindRecord(x => x.SellingProductId == sellingProduct.SellingProductId); 
+                updateOperationOutput.UpdatedObject = SellingProductDetailMapper(sellingProduct);
             }
 
             return updateOperationOutput;
@@ -97,17 +96,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
        #region Private Members
-
-       List<SellingProductDetail> GetCachedSellingProducts()
+       Dictionary<int, SellingProduct> GetCachedSellingProducts()
        {
            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSellingProducts",
               () =>
               {
                   ISellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();
-                  return dataManager.GetSellingProducts();
+                  IEnumerable<SellingProduct> sellingProducts = dataManager.GetSellingProducts();
+                  return sellingProducts.ToDictionary(kvp => kvp.SellingProductId, kvp => kvp);
               });
        }
-
        private class CacheManager : Vanrise.Caching.BaseCacheManager
        {
            ISellingProductDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();
@@ -118,13 +116,35 @@ namespace TOne.WhS.BusinessEntity.Business
                return _dataManager.AreSellingProductsUpdated(ref _updateHandle);
            }
        }
+       private SellingProductDetail SellingProductDetailMapper(SellingProduct sellingProduct)
+       {
+           SellingProductDetail sellingProductDetail = new SellingProductDetail();
 
-       private SellingProductInfo SellingProductInfoMapper(SellingProductDetail sellingProductDetail)
+           sellingProductDetail.Entity = sellingProduct;
+
+           SellingNumberPlanManager sellingNumberPlanManager = new SellingNumberPlanManager();
+           RoutingProductManager routingProductManager = new RoutingProductManager();
+           SellingNumberPlan sellingNumberPlan= sellingNumberPlanManager.GetSellingNumberPlan(sellingProduct.SellingNumberPlanId);
+
+           if (sellingProduct.DefaultRoutingProductId != null)
+           {
+               RoutingProduct routingProduct = routingProductManager.GetRoutingProduct((int)sellingProduct.DefaultRoutingProductId);
+               if (routingProduct != null)
+                   sellingProductDetail.DefaultRoutingProductName = routingProduct.Name;
+           }
+           if (sellingNumberPlan != null)
+           {
+               sellingProductDetail.SellingNumberPlanName = sellingNumberPlan.Name;
+           }
+           return sellingProductDetail;
+       }
+
+       private SellingProductInfo SellingProductInfoMapper(SellingProduct sellingProduct)
        {
            return new SellingProductInfo()
            {
-               SellingProductId = sellingProductDetail.SellingProductId,
-               Name = sellingProductDetail.Name,
+               SellingProductId = sellingProduct.SellingProductId,
+               Name = sellingProduct.Name,
            };
        }
 

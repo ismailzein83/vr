@@ -18,22 +18,23 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredCustomerSellingProducts(input));
         }
         [HttpGet]
-        public CustomerSellingProductDetail GetCustomerSellingProduct(int customerSellingProductId)
+        public CustomerSellingProduct GetCustomerSellingProduct(int customerSellingProductId)
         {
             CustomerSellingProductManager manager = new CustomerSellingProductManager();
             return manager.GetCustomerSellingProduct(customerSellingProductId);
         }
         [HttpPost]
-        public TOne.Entities.InsertOperationOutput<List<CustomerSellingProductClass>> AddCustomerSellingProduct(List<CustomerSellingProductDetail> customerSellingProducts)
+        public TOne.Entities.InsertOperationOutput<List<CustomerSellingProductClass>> AddCustomerSellingProduct(List<CustomerSellingProduct> customerSellingProducts)
         {
             CustomerSellingProductManager manager = new CustomerSellingProductManager();
             return manager.AddCustomerSellingProduct(customerSellingProducts);
         }
-        //[HttpGet]
-        //public TOne.Entities.UpdateOperationOutput<object> DeleteCustomerSellingProduct(int customerSellingProductId)
-        //{
-        //    CustomerSellingProductManager manager = new CustomerSellingProductManager();
-        //    return manager.DeleteCustomerSellingProduct(customerSellingProductId);
-        //} 
+        [HttpPost]
+        public TOne.Entities.UpdateOperationOutput<CustomerSellingProductDetail> UpdateCustomerSellingProduct(CustomerSellingProduct customerSellingProduct)
+        {
+            CustomerSellingProductManager manager = new CustomerSellingProductManager();
+            return manager.UpdateCustomerSellingProduct(customerSellingProduct);
+        }
+
     }
 }

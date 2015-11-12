@@ -9,9 +9,11 @@ namespace TOne.WhS.BusinessEntity.Data
 {
    public interface ICustomerSellingProductDataManager:IDataManager
     {
-       bool Insert(List<CustomerSellingProductDetail> customerSellingProduct, out List<CustomerSellingProductDetail> insertedObjects);
+       bool Insert(List<CustomerSellingProduct> customerSellingProduct, out List<CustomerSellingProduct> insertedObjects);
+
+       bool Update(CustomerSellingProduct customerSellingProduct);
        //bool Delete(int customerSellingProductId);
        bool AreCustomerSellingProductsUpdated(ref object updateHandle);
-       List<CustomerSellingProductDetail> GetCustomerSellingProducts();
+       List<CustomerSellingProduct> GetCustomerSellingProducts();
     }
 }

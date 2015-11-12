@@ -42,17 +42,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return (recordesEffected > 0);
         }
 
-        SellingProductDetail SellingProductDetailMapper(IDataReader reader)
+        SellingProduct SellingProductMapper(IDataReader reader)
         {
-            SellingProductDetail sellingProductDetail = new SellingProductDetail
+            SellingProduct sellingProductDetail = new SellingProduct
             {
                 SellingProductId = (int)reader["ID"],
                 Name = reader["Name"] as string,
                 DefaultRoutingProductId = GetReaderValue<int?>(reader, "DefaultRoutingProductID"),
                 SellingNumberPlanId = (int)reader["SellingNumberPlanID"],
                 Settings = ((reader["Settings"] as string) != null) ? Vanrise.Common.Serializer.Deserialize<SellingProductSettings>(reader["Settings"] as string) : null,
-                SellingNumberPlanName = reader["SellingNumberPlanName"] as string,
-                DefaultRoutingProductName = reader["DefaultRoutingProductName"] as string,
             };
             return sellingProductDetail;
         }
@@ -64,9 +62,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
 
-        public List<SellingProductDetail> GetSellingProducts()
+        public List<SellingProduct> GetSellingProducts()
         {
-            return GetItemsSP("TOneWhS_BE.sp_SellingProduct_GetAll", SellingProductDetailMapper);
+            return GetItemsSP("TOneWhS_BE.sp_SellingProduct_GetAll", SellingProductMapper);
         }
 
     }

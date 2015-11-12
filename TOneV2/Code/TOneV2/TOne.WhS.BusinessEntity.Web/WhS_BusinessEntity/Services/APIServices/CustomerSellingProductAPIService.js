@@ -22,12 +22,16 @@
         function DeleteCustomerSellingProduct(customerSellingProductId) {
             return BaseAPIService.get("/api/CustomerSellingProduct/DeleteCustomerSellingProduct", { customerSellingProductId: customerSellingProductId });
         }
+        function UpdateCustomerSellingProduct(customerSellingProductObject) {
+            return BaseAPIService.post("/api/CustomerSellingProduct/UpdateCustomerSellingProduct", customerSellingProductObject);
+        }
 
         return ({
             GetFilteredCustomerSellingProducts: GetFilteredCustomerSellingProducts,
             AddCustomerSellingProduct: AddCustomerSellingProduct,
             DeleteCustomerSellingProduct: DeleteCustomerSellingProduct,
-            GetCustomerSellingProduct: GetCustomerSellingProduct
+            GetCustomerSellingProduct: GetCustomerSellingProduct,
+            UpdateCustomerSellingProduct: UpdateCustomerSellingProduct
         });
     }
 

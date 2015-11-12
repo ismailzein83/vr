@@ -2,16 +2,16 @@
 
     "use strict";
 
-    customerSellingProductManagementController.$inject = ['$scope', 'WhS_BE_CustomerSellingProductAPIService', 'WhS_BE_MainService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
+    customerSellingProductManagementController.$inject = ['$scope', 'WhS_BE_CustomerSellingProductAPIService', 'WhS_BE_MainService', 'UtilsService', 'VRModalService', 'VRNotificationService','VRUIUtilsService'];
 
-    function customerSellingProductManagementController($scope, WhS_BE_CustomerSellingProductAPIService, WhS_BE_MainService, UtilsService, VRModalService, VRNotificationService) {
+    function customerSellingProductManagementController($scope, WhS_BE_CustomerSellingProductAPIService, WhS_BE_MainService, UtilsService, VRModalService, VRNotificationService, VRUIUtilsService) {
         var gridAPI;
 
         var sellingProductsDirectiveAPI;
-        var sellingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var sellingProductReadyPromiseDeferred;
 
         var carrierAccountDirectiveAPI;
-        var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var carrierAccountReadyPromiseDeferred;
 
         defineScope();
 
@@ -31,52 +31,19 @@
             $scope.effectiveDate;
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
-                carrierAccountReadyPromiseDeferred.resolve();
+                var setLoader = function (value) { $scope.isLoadingCustomers = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountDirectiveAPI, undefined, setLoader, carrierAccountReadyPromiseDeferred);
             }
             $scope.onSellingProductsDirectiveReady = function (api) {
                 sellingProductsDirectiveAPI = api;
-                sellingProductReadyPromiseDeferred.resolve();
+                var setLoader = function (value) { $scope.isLoadingSellingProduct = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingProductsDirectiveAPI, undefined, setLoader, sellingProductReadyPromiseDeferred);
             }
         }
 
         function load() {
-            $scope.isLoading = true;
-            loadAllControls();
         }
-        function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSellingProducts, loadCarrierAccounts])
-                .catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
-                })
-               .finally(function () {
-                   $scope.isLoading = false;
-               });
-        }
-        function loadSellingProducts() {
-            var sellingProductLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            sellingProductReadyPromiseDeferred.promise
-                .then(function () {
-                    var directivePayload = undefined
-
-                    VRUIUtilsService.callDirectiveLoad(sellingProductsDirectiveAPI, directivePayload, sellingProductLoadPromiseDeferred);
-                });
-            return sellingProductLoadPromiseDeferred.promise;
-        }
-        function loadCarrierAccounts() {
-            var carrierAccountLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            carrierAccountReadyPromiseDeferred.promise
-                .then(function () {
-                    var directivePayload = {
-                        selectedIds: undefined
-                    }
-
-                    VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, directivePayload, carrierAccountLoadPromiseDeferred);
-                });
-            return carrierAccountLoadPromiseDeferred.promise;
-        }
+       
 
         function getFilterObject() {
             var data = {

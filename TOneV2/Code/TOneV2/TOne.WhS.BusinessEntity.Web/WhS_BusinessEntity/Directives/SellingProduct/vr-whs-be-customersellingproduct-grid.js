@@ -66,6 +66,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
                     return WhS_BE_CustomerSellingProductAPIService.GetFilteredCustomerSellingProducts(dataRetrievalInput)
                         .then(function (response) {
                             onResponseReady(response);
+
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
@@ -83,12 +84,30 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
             //}
 
             function defineMenuActions() {
-                //$scope.gridMenuActions = [
-                //   {
-                //       name: "Delete",
-                //       clicked: deleteCustomerSellingProduct
-                //   }
-                //];
+                var defaultMenuActions = [
+                            {
+                                name: "Edit",
+                                clicked: editCustomerSellingProduct,
+                            }
+                ];
+
+                $scope.gridMenuActions = function (dataItem) {
+                    
+                    var date = new Date();
+                    if (dataItem.Entity.BED>  UtilsService.dateToServerFormat(date)) {
+                        return defaultMenuActions;
+                    }
+                    else {
+                        return undefined;
+                    }
+                }
+            }
+            function editCustomerSellingProduct(customerSellingProductObj) {
+                var onCustomerSellingProductUpdated = function (customerSellingProduct) {
+                    gridAPI.itemUpdated(customerSellingProduct);
+                }
+
+                WhS_BE_MainService.editCustomerSellingProduct(customerSellingProductObj.Entity, onCustomerSellingProductUpdated);
             }
         }
 
