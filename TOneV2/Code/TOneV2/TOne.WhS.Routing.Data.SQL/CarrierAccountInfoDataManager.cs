@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Data.SQL;
 
@@ -80,6 +81,44 @@ namespace TOne.WhS.Routing.Data.SQL
             {
                 SupplierId = (int)reader["SupplierId"]
             };
+        }
+        DataTable BuildRoutingCustomerInfoTable(List<RoutingCustomerInfo> customerInfos)
+        {
+            DataTable dtCustomerInfos = GetRoutingCustomerInfoTable();
+            dtCustomerInfos.BeginLoadData();
+            foreach (var c in customerInfos)
+            {
+                DataRow dr = dtCustomerInfos.NewRow();
+                dr["CustomerId"] = c.CustomerId;
+                dtCustomerInfos.Rows.Add(dr);
+            }
+            dtCustomerInfos.EndLoadData();
+            return dtCustomerInfos;
+        }
+        DataTable GetRoutingCustomerInfoTable()
+        {
+            DataTable dtCustomerInfos = new DataTable();
+            dtCustomerInfos.Columns.Add("CustomerId", typeof(Int32));
+            return dtCustomerInfos;
+        }
+        DataTable BuildRoutingSupplierInfoTable(List<RoutingSupplierInfo> supplierInfos)
+        {
+            DataTable dtSupplierInfos = GetRoutingSupplierInfoTable();
+            dtSupplierInfos.BeginLoadData();
+            foreach (var s in supplierInfos)
+            {
+                DataRow dr = dtSupplierInfos.NewRow();
+                dr["SupplierId"] = s.SupplierId;
+                dtSupplierInfos.Rows.Add(dr);
+            }
+            dtSupplierInfos.EndLoadData();
+            return dtSupplierInfos;
+        }
+        DataTable GetRoutingSupplierInfoTable()
+        {
+            DataTable dtSupplierInfos = new DataTable();
+            dtSupplierInfos.Columns.Add("SupplierId", typeof(Int32));
+            return dtSupplierInfos;
         }
 
         #region Queries

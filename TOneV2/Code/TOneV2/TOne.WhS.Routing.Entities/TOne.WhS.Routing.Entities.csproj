@@ -73,9 +73,7 @@
     <Compile Include="Routes\SellingProductRoute.cs" />
     <Compile Include="Routes\RoutingProductRoute.cs" />
     <Compile Include="Routes\RoutingProductRouteOption.cs" />
-    <Compile Include="RoutingCustomerInfo.cs" />
     <Compile Include="RoutingDatabase.cs" />
-    <Compile Include="RoutingSupplierInfo.cs" />
     <Compile Include="SaleCodeMatch.cs" />
     <Compile Include="CustomerZoneDetail.cs" />
     <Compile Include="SupplierCodeMatch.cs" />
