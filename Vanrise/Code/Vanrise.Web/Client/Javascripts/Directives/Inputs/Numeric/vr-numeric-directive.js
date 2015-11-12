@@ -2,13 +2,12 @@
 
     "use strict";
 
-    vrNumeric.$inject = ['BaseDirService'];
+    vrNumeric.$inject = ['BaseDirService', 'VRValidationService'];
 
-    function vrNumeric(BaseDirService) {
+    function vrNumeric(BaseDirService, VRValidationService) {
 
         return {
             restrict: 'E',
-            require: '^form',
             scope: {
                 value: '=',
                 hint: '@',
@@ -18,24 +17,26 @@
                 stepvalue: '@',
                 upsign: '@',
                 downsign: '@',
-                customvalidate: '&',
                 placeholder: '@'
 
             },
-            controller: function ($scope, $element) {
-
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                ctrl.validate = function () {
+                    return VRValidationService.validate(ctrl.value, $scope, $attrs);
+                };
             },
             compile: function (element, attrs) {
 
-                var inputElement = element.find('#mainInput');
-                var validationOptions = {};
-                if (attrs.isrequired !== undefined)
-                    validationOptions.requiredValue = true;
-                if (attrs.customvalidate !== undefined)
-                    validationOptions.customValidation = true;
-                var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, element.find('#rootDiv'));
+                //var inputElement = element.find('#mainInput');
+                //var validationOptions = {};
+                //if (attrs.isrequired !== undefined)
+                //    validationOptions.requiredValue = true;
+                //if (attrs.customvalidate !== undefined)
+                //    validationOptions.customValidation = true;
+                //var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, element.find('#rootDiv'));
                 return {
-                    pre: function ($scope, iElem, iAttrs, formCtrl) {
+                    pre: function ($scope, iElem, iAttrs) {
                         var ctrl = $scope.ctrl;
                         var isUserChange;
                         $scope.$watch('ctrl.value', function (newValue, oldValue) {                        
@@ -168,7 +169,7 @@
                                 classes += ' with-label ';
                             return classes;
                         }
-                        BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
+                        //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                     }
                 }
@@ -184,8 +185,10 @@
                     labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';               
                 var numericTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
                                             + '<div  class="vr-numeric" ng-style="ctrl.getInputeStyle()">'
+                                            + '<vr-validator validate="ctrl.validate()">'
                                                    + '<input class="form-control  border-radius input-box" type="text" placeholder="{{ctrl.placelHolder}}" ng-change="ctrl.notifyUserChange()" id="mainInput" ng-model="ctrl.value" >'
-                                                    + '<div class="vr-numeric-control" ng-class="ctrl.getNumericControlClass()">'
+                                                       + '</vr-validator>'
+                                                        + '<div class="vr-numeric-control" ng-class="ctrl.getNumericControlClass()">'
                                                         + '<span class="unit" ng-bind="ctrl.unitValue"></span>'
                                                         + '<div class="hand-cursor arrow-box" ng-click="ctrl.increment()" ng-style="{\'color\':ctrl.upColor}">'
                                                         + '<div class="caret-up" ></div>'
@@ -197,9 +200,9 @@
                                              + '</div>'
                                         + '<span ng-if="ctrl.hint!=undefined"  bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7;right: -10px;"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
                                     + '</div>';  
-                     var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined, true);
+                     //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined, true);
 
-                    return startTemplate + labelTemplate + numericTemplate + validationTemplate + endTemplate;
+                    return startTemplate + labelTemplate + numericTemplate + endTemplate;
             }
 
         };

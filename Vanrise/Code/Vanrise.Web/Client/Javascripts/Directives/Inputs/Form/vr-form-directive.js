@@ -1,25 +1,35 @@
 ﻿'use strict';
 
-
 app.directive('vrForm', [function () {
 
     var directiveDefinitionObject = {
         restrict: 'E',
         scope:false,
         controller: function ($scope, $element, $attrs) {
-            $scope.submitForm = function ($event) {
-                if ($event.which == 13) {                   
-                     $scope.$broadcast('submit' + $attrs.name);
+            $scope.onKeyUp = function ($event) {
+                if ($attrs.submitname != undefined) {
+                    if ($event.which == 13) {
+                        $scope.$broadcast('submit' + $attrs.submitname);                        
+                    }
                 }
             }
         },
         controllerAs: 'ctrl',
+        bindToController: true,
         compile: function (tElement, tAttrs) {
-            var newElement = '<form ng-keyup="submitForm($event)" name="' + tAttrs.name + '"  novalidate >' + tElement.context.innerHTML + '</form>';
-            tElement.html(newElement);            
+            var validationContext = tAttrs.validationcontext != undefined ? tAttrs.validationcontext : tAttrs.name;
+            var validateOutputAttribute = validationContext != undefined ? (' validationcontext="' + validationContext + '" ') : '';
+            var newElement = '<div ng-keyup="onKeyUp($event)" ><vr-validation-group' + validateOutputAttribute + '>' + tElement.context.innerHTML + '</vr-validation-group></div>';
+            tElement.html(newElement);
         }
     };
 
     return directiveDefinitionObject;
 
 }]);
+
+
+
+
+
+

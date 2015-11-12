@@ -248,7 +248,9 @@
     <Content Include="Client\Javascripts\Directives\Inputs\Numeric\vr-numeric-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Textbox\vr-textbox-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\validation-dir-service.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Validation\vr-validation-group.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\vr-validation.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Validation\vr-validator.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationNumber.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationEmail.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationArray.js" />
@@ -297,6 +299,7 @@
     <Content Include="Client\Javascripts\Services\NotificationService\vr-notification-service.js" />
     <Content Include="Client\Javascripts\Services\UIUtilsService.js" />
     <Content Include="Client\Javascripts\Services\utils-service.js" />
+    <Content Include="Client\Javascripts\Services\ValidationService.js" />
     <Content Include="Client\Javascripts\Services\zone-service.js" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePickereDpendencies\css\bootstrap.css" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePickereDpendencies\fonts\glyphicons-halflings-regular.svg" />

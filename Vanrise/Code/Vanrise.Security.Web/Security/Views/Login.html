@@ -2,7 +2,7 @@
     <div ng-controller="Security_LoginController">
         <div style="margin-top: 50%; padding-top: 55%">
             <!--<img src="../../Client/Images/doruknet-logo.png" class="vr-company-logo" style="visibility:hidden" />-->
-            <vr-form name="formLogin">
+            <vr-form name="formLogin" submitname="login">
                 <div class="row login-spacer" >
                     <div class="col-xs-8 col-xs-offset-2 col-md-8 col-md-offset-2">
                         <vr-textbox value="email" placeholder="Username" type="email" isrequired></vr-textbox>
@@ -15,7 +15,7 @@
                 </div>
                 <div class="row login-spacer">
                     <div class="col-xs-8 col-xs-offset-2 col-md-8 col-md-offset-2">
-                        <vr-button type="Login" formname="formLogin" data-onclick="Login"></vr-button>
+                        <vr-button type="Login" formname="formLogin" data-onclick="Login" submitname="login"></vr-button>
                     </div>
                 </div>
                 <div class="row login-spacer">

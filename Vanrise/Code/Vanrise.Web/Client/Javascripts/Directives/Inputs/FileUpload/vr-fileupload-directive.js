@@ -1,26 +1,29 @@
 ﻿'use strict';
 
 
-app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNotificationService', 'BaseAPIService', 'UtilsService', 'SecurityService', 'FileAPIService', function (ValidationMessagesEnum, BaseDirService, VRNotificationService, BaseAPIService ,UtilsService, SecurityService, FileAPIService) {
+app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotificationService', 'BaseAPIService', 'UtilsService', 'SecurityService', 'FileAPIService', function (VRValidationService, BaseDirService, VRNotificationService, BaseAPIService, UtilsService, SecurityService, FileAPIService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
-        require: '^form',
         scope: {
             onReady: '=',
             value: '=',
             hint:'@',
-            customvalidate: '&'
         },
         controller: function ($scope, $element, $attrs,$timeout) {
             var ctrl = this;
-            var inputElement = $element.find('#mainInput');
-            var validationOptions = {};
-            if ($attrs.isrequired !== undefined)
-                validationOptions.requiredValue = true;
-            if ($attrs.customvalidate !== undefined)
-                validationOptions.customValidation = true;
-            var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, $element.find('#rootDiv'));
+
+            ctrl.validate = function () {
+                return VRValidationService.validate(ctrl.value, $scope, $attrs);
+            };
+
+            //var inputElement = $element.find('#mainInput');
+            //var validationOptions = {};
+            //if ($attrs.isrequired !== undefined)
+            //    validationOptions.requiredValue = true;
+            //if ($attrs.customvalidate !== undefined)
+            //    validationOptions.customValidation = true;
+            //var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, $element.find('#rootDiv'));
             var filecontrol = $element.find('#fileUpload');
             $scope.extensionList = [];
             if ($attrs.extension !== undefined) {
@@ -148,16 +151,16 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
         controllerAs: 'ctrl',
         compile: function (element, attrs) {
 
-            var inputElement = element.find('#mainInput');
-            var validationOptions = {};
-            if (attrs.isrequired !== undefined)
-                validationOptions.requiredValue = true;
-            if (attrs.customvalidate !== undefined)
-                validationOptions.customValidation = true;
+            //var inputElement = element.find('#mainInput');
+            //var validationOptions = {};
+            //if (attrs.isrequired !== undefined)
+            //    validationOptions.requiredValue = true;
+            //if (attrs.customvalidate !== undefined)
+            //    validationOptions.customValidation = true;
 
-            var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, element.find('#rootDiv'));
+            //var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, element.find('#rootDiv'));
             return {
-                pre: function ($scope, iElem, iAttrs, formCtrl) {
+                pre: function ($scope, iElem, iAttrs) {
 
 
                     var ctrl = $scope.ctrl;
@@ -175,7 +178,7 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
                         }, 1)
                     }
                     
-                    BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
+                    //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                 }
             }
@@ -190,6 +193,7 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
                 labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
             var fileTemplate =
                  '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false" ng-class="isUploading == true? \'vr-disabled-div\':\'\'" >'
+                  + '<vr-validator validate="ctrl.validate()">'
                      + '<div id="mainInput" ng-model="ctrl.value" class="form-control vr-file-ulpoad"  ng-style="ctrl.getInputeStyle()" style="border-radius: 4px;padding: 0px;">'
                             + '<div  class="vr-file">'
                                +'<div ng-if=" ctrl.file !=null ">'
@@ -205,6 +209,7 @@ app.directive('vrFileupload', ['ValidationMessagesEnum', 'BaseDirService', 'VRNo
                                 + '<input type="file" id="fileUpload">'
                             + '</span>'
                       + '</div>'
+                          + '</vr-validator>'
                       + '<span  ng-if="ctrl.hint!=undefined" ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;" html="true" ng-mouseenter="ctrl.adjustTooltipPosition($event)" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
 
                     + '</div>';

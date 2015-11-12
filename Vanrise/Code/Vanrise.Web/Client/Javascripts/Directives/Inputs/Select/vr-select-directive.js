@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function vrSelectDirective(selectService, baseDirService, validationMessagesEnum, utilsService) {
+    function vrSelectDirective(selectService, baseDirService, validationMessagesEnum, utilsService, VRValidationService) {
 
         var openedDropDownIds = [], rootScope;
         var vrSelectSharedObject = {
@@ -27,8 +27,6 @@
         };
 
         var directiveDefinitionObject = {
-
-            require: '^form',
             restrict: 'E',
             scope: {
                 label: '@',
@@ -38,8 +36,6 @@
                 datavaluefield: '@',
                 datatextfield: '@',
                 hidefilterbox: '@',
-                isrequired: '@',
-                customvalidate: '&',
                 datasource: '=',
                 selectedvalues: '=',
                 onselectionchanged: '=',
@@ -53,6 +49,10 @@
                     rootScope = $scope.$root;
 
                 var controller = this;
+
+                controller.validate = function () {
+                    return VRValidationService.validate(controller.selectedvalues, $scope, $attrs);
+                };
 
                 //Configuration
                 angular.extend(this, {
@@ -310,32 +310,36 @@
 
                     var divDropdown = angular.element(element[0].querySelector('.dropdown'));
                     var ulDropdown = angular.element(element[0].querySelector('.dropdown-menu'));
-                    attrs.id = baseDirService.prepareDirectiveHTMLForValidation({}, divDropdown, undefined, divDropdown);
+                    attrs.id = baseDirService.generateHTMLElementName();
+                    divDropdown.attr('name', attrs.id);
+                    //attrs.id = baseDirService.prepareDirectiveHTMLForValidation({}, divDropdown, undefined, divDropdown);
 
                     var validateButtonClass = '';
                     if (selectService.validate(attrs)) {
-                        validateButtonClass = 'ng-class="ctrl.isValidComp()"';
+                        //validateButtonClass = 'ng-class="ctrl.isValidComp()"';
 
-                        var validationOptions = {};
-                        divDropdown.attr('ng-model', 'ctrl.selectedvalues');
+                        //var validationOptions = {};
+                        //divDropdown.attr('ng-model', 'ctrl.selectedvalues');
 
-                        if (attrs.isrequired !== undefined) {
-                            if (selectService.isMultiple(attrs)) {
-                                validationOptions.requiredArray = true;
-                                divDropdown.attr('ng-model', 'ctrl.selectedvalues.length');
-                            }
-                            else {
-                                validationOptions.requiredValue = true;
-                            }
-                        }
-                        if (attrs.customvalidate !== undefined)
-                            validationOptions.customValidation = true;
+                        //if (attrs.isrequired !== undefined) {
+                        //    if (selectService.isMultiple(attrs)) {
+                        //        validationOptions.requiredArray = true;
+                        //        divDropdown.attr('ng-model', 'ctrl.selectedvalues.length');
+                        //    }
+                        //    else {
+                        //        validationOptions.requiredValue = true;
+                        //    }
+                        //}
+                        //if (attrs.customvalidate !== undefined)
+                        //    validationOptions.customValidation = true;
 
 
 
-                        attrs.id = baseDirService.prepareDirectiveHTMLForValidation(validationOptions, divDropdown, undefined, divDropdown);
-                        var validationTemplate = baseDirService.getValidationMessageTemplate(true, true, false, true);
-                        divDropdown.append(validationTemplate);
+                        attrs.id = baseDirService.generateHTMLElementName();
+                        divDropdown.attr('name', attrs.id);
+                        //attrs.id = baseDirService.prepareDirectiveHTMLForValidation(validationOptions, divDropdown, undefined, divDropdown);
+                        //var validationTemplate = baseDirService.getValidationMessageTemplate(true, true, false, true);
+                        //divDropdown.append(validationTemplate);
                     }
                     var lblTemplate;
                     if (selectService.isMenu(attrs.type)) {
@@ -381,11 +385,11 @@
 
                 onLoad();
                 return {
-                    pre: function ($scope, iElem, iAttrs, formCtrl) {
+                    pre: function ($scope, iElem, iAttrs) {
 
                         var ctrl = $scope.ctrl;
 
-                        baseDirService.addScopeValidationMethods(ctrl, iAttrs.id, formCtrl);
+                        //baseDirService.addScopeValidationMethods(ctrl, iAttrs.id, formCtrl);
 
                         ctrl.clearAllSelected = function (e, isSingle) {
                             ctrl.muteAction(e);
@@ -491,7 +495,7 @@
 
     }
 
-    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService'];
+    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService'];
 
     app.directive('vrSelect', vrSelectDirective);
 

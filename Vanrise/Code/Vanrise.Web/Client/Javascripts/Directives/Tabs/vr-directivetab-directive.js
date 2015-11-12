@@ -11,26 +11,19 @@ app.directive('vrDirectivetab', ['UtilsService', function (UtilsService) {
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            setExtensionObject(ctrl.tabitem);
-
-            function setExtensionObject(tabItem) {                
-                if (tabItem.extensionObject != undefined)
-                    return;
-                if (tabItem.dontLoad == undefined)
-                    tabItem.dontLoad = true;
-                var extensionObject = {};
-                extensionObject.isLoading = true;
-                extensionObject.onDirectiveReady = function (directiveAPI) {
-                    if (tabItem.loadDirective != undefined) {
-                        UtilsService.convertToPromiseIfUndefined(tabItem.loadDirective(directiveAPI)).finally(function () {
-                            extensionObject.isLoading = false;
-                        });
-                    }
-                    else
-                        extensionObject.isLoading = false;
-                };
-                tabItem.extensionObject = extensionObject;
-            }
+            var tabItem = ctrl.tabitem;
+            if (tabItem.dontLoad == undefined)
+                tabItem.dontLoad = true;
+            tabItem.isLoading = true;
+            tabItem.onDirectiveReady = function (directiveAPI) {
+                if (tabItem.loadDirective != undefined) {
+                    UtilsService.convertToPromiseIfUndefined(tabItem.loadDirective(directiveAPI)).finally(function () {
+                        tabItem.isLoading = false;
+                    });
+                }
+                else
+                    tabItem.isLoading = false;
+            };
 
         },
         controllerAs: 'vrDirectiveTabCtrl',

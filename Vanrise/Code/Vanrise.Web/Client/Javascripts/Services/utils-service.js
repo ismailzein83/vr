@@ -532,6 +532,10 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         return angular.toJson(obj);
     }
 
+    function generateJSVariableName() {
+        return 'dyn_' + replaceAll(guid(), '-', '');
+    }
+
     return ({
         replaceAll: replaceAll,
         waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -564,7 +568,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         waitMultiplePromises: waitMultiplePromises,
         createPromiseDeferred: createPromiseDeferred,
         convertToPromiseIfUndefined: convertToPromiseIfUndefined,
-        serializetoJson: serializetoJson
+        serializetoJson: serializetoJson,
+        generateJSVariableName: generateJSVariableName
     });
 
 }]);

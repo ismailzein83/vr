@@ -9,8 +9,17 @@
         defineScope();
         load();
         function defineScope() {
-            $scope.testModel = "Common_TABSSample TabsController";
 
+            $scope.isValid = function (value) {               
+                return (value != undefined && value.length > 0) ? null : "Not Valid";
+            };
+
+
+            $scope.isValid2 = function () {
+                return "Invlaid ";
+            };
+
+            $scope.testModel = "Common_TABSSample TabsController";
             $scope.dynamicTabs = [{
                 title: "Appendix 1",
                 directive: "vr-common-appendixsample-appendix",

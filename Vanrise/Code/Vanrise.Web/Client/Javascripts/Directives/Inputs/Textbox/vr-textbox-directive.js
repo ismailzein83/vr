@@ -2,13 +2,12 @@
 
     "use strict";
 
-    vrTextbox.$inject = ['BaseDirService', 'TextboxTypeEnum'];
+    vrTextbox.$inject = ['BaseDirService', 'TextboxTypeEnum', 'VRValidationService'];
 
-    function vrTextbox(BaseDirService, TextboxTypeEnum) {
+    function vrTextbox(BaseDirService, TextboxTypeEnum, VRValidationService) {
 
         return {
             restrict: 'E',
-            require: '^form',
             scope: {
                 value: '=',
                 hint: '@',
@@ -16,32 +15,45 @@
                 maxvalue: '@',
                 decimalprecision: '@',
                 maxlength:'@',
-                customvalidate: '&',
                 placeholder:'@'
             },
-            controller: function () {
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
 
+                var validationOptions = {};
+                if ($attrs.type === TextboxTypeEnum.Email.name)
+                    validationOptions.emailValidation = true;
+                else if ($attrs.type === TextboxTypeEnum.Number.name) {
+                    validationOptions.numberValidation = true;
+                    validationOptions.maxNumber = ctrl.maxvalue;
+                    validationOptions.minNumber = ctrl.minvalue;
+                    validationOptions.numberPrecision = ctrl.decimalprecision;
+                }
+
+                ctrl.validate = function () {                    
+                    return VRValidationService.validate(ctrl.value, $scope, $attrs, validationOptions);
+                };
             },
             compile: function (element, attrs) {
 
-                var inputElement = element.find('#mainInput');
-                var validationOptions = {};
-                if (attrs.isrequired !== undefined)
-                    validationOptions.requiredValue = true;
-                if (attrs.customvalidate !== undefined)
-                    validationOptions.customValidation = true;
-                if (attrs.type === TextboxTypeEnum.Email.name)
-                    validationOptions.emailValidation = true;
-                if (attrs.type === TextboxTypeEnum.Number.name)
-                    validationOptions.numberValidation = true;
-                var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, element.find('#rootDiv'));
+                //var inputElement = element.find('#mainInput');
+                //var validationOptions = {};
+                //if (attrs.isrequired !== undefined)
+                //    validationOptions.requiredValue = true;
+                //if (attrs.customvalidate !== undefined)
+                //    validationOptions.customValidation = true;
+                //if (attrs.type === TextboxTypeEnum.Email.name)
+                //    validationOptions.emailValidation = true;
+                //if (attrs.type === TextboxTypeEnum.Number.name)
+                //    validationOptions.numberValidation = true;
+                //var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, element.find('#rootDiv'));
                 return {
-                    pre: function ($scope, iElem, iAttrs, formCtrl) {
+                    pre: function ($scope, iElem, iAttrs) {
                         var ctrl = $scope.ctrl;
 
+                        
                         var isUserChange;
                         $scope.$watch('ctrl.value', function (newValue, oldValue) {
-                            
                             if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                                 return;
                            
@@ -112,7 +124,7 @@
                             }, 1);
                         }
                        
-                        BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
+                        //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                     }
                 }
@@ -130,15 +142,17 @@
                 var type = 'text';
                 if (attrs.type != undefined && attrs.type === TextboxTypeEnum.Password.name)
                     type = 'password';
-                    var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
+                var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
+                            + '<vr-validator validate="ctrl.validate()">'
                             + '<input  ng-readonly="ctrl.readOnly" id="mainInput" placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()" ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control" data-autoclose="1" type="' + type + '" >'
+                            + '</vr-validator>'
                             + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
                         + '</div>';
                 
 
-                    var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined ,true);
+                    //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined ,true);
 
-                return startTemplate + labelTemplate + textboxTemplate + validationTemplate + endTemplate;
+                return startTemplate + labelTemplate + textboxTemplate + endTemplate;
             }
 
         };

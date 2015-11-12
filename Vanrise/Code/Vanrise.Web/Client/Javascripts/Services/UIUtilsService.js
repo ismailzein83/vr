@@ -112,16 +112,12 @@ function GridDrillDownTabs(drillDownDefinitions, gridAPI, gridMenuActions) {
 
     function defineDrillDownDefinitionMembers(drillDownDefinition) {
         drillDownDefinition.setTabSelected = function (dataItem) {
+            gridAPI.expandRow(dataItem);
             var tabIndex = drillDownDefinitions.indexOf(drillDownDefinition);
             var drillDownTab = dataItem.drillDownExtensionObject.drillDownDirectiveTabs[tabIndex];
-            if (drillDownTab.extensionObject != undefined && drillDownTab.extensionObject.tabObject != undefined)//ensure that directive is loaded
-                drillDownTab.extensionObject.tabObject.isSelected = true;
-            else {
-                gridAPI.expandRow(dataItem);
-                setTimeout(function () {
-                    drillDownDefinition.setTabSelected(dataItem);
-                });
-            }
+            if (drillDownTab.tabObject == undefined)
+                drillDownTab.tabObject = {};
+            drillDownTab.tabObject.isSelected = true;
         };
     }
 

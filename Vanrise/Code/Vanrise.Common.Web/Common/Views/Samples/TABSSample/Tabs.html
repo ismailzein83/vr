@@ -1,20 +1,90 @@
 ﻿<vr-panel ng-controller="Common_TABSSample_TabsController">
-    <vr-form name="formFilter">
+    <vr-form name="formFilter" validationcontext="mainGroupValid">
+
         <vr-row>
             <vr-columns width="fullrow">
-                <vr-tabs>
-                    <vr-tab header="'Tab 1'" tabobject="tab1">Tab 1</vr-tab>
-                    <vr-tab header="'Tab 2'">Tab 2 {{testModel}}</vr-tab>
-                    
-                </vr-tabs>
+
                 {{tab1}}
                 <vr-switch value="tab1.isSelected">IsTab1 Selected</vr-switch>
             </vr-columns>
         </vr-row>
+        <!--<vr-validation-group>-->
+
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-validation-group validationcontext="subGroup1Valid">
+                    <vr-validator validate="isValid(txtValue)">
+                        {{ txtValue}} - {{isValid(txtValue)}}
+                        <vr-textbox value="txtValue"></vr-textbox>
+                        <vr-tabs>
+                            <vr-tab header="'Tab 1'" tabobject="tab1">Tab 1 </vr-tab>
+                            <vr-tab header="'Tab 2'">Tab 2 {{testModel}}</vr-tab>
+                        </vr-tabs>
+                    </vr-validator>
+                </vr-validation-group>
+
+
+            </vr-columns>
+            <vr-columns>
+                <vr-switch value="valdObj.showValidation" ng-init="valdObj ={showValidation : true}"></vr-switch>
+                <div ng-if="valdObj.showValidation">
+                    {{txtValue2}}
+                    <vr-validation-group validationcontext="valdObj.subGroup2Valid">
+                        <div>
+                            {{txtValue2}}
+                            <vr-validator validate="isValid(txtValue2)">
+                                <vr-textbox value="txtValue2"></vr-textbox>
+                                {{txtValue3}} - {{txtValue2}}
+                                <!--<vr-validator validate="isValid2()">
+                    fdfdsf
+                </vr-validator>-->
+                            </vr-validator>
+
+
+                        </div>
+
+                    </vr-validation-group>
+                </div>
+
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                {{txtValue2}}
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-textbox value="txtValue3" isrequired="true" customvalidate="isValid(textContent)"></vr-textbox>
+                <vr-switch value="isDateRequired"></vr-switch>
+                <vr-datetimepicker value="selectedDate" isrequired="isDateRequired"></vr-datetimepicker>
+                {{selectedDate}}
+                <vr-numeric value="numericValue" isrequired="isDateRequired"></vr-numeric>
+                {{numericValue}}
+                <vr-textarea value="textContent" isrequired="isDateRequired"></vr-textarea>
+                {{textContent}}
+                <vr-fileupload value="fileUploadObj" isrequired="isDateRequired"></vr-fileupload>
+                {{fileUploadObj}}
+            </vr-columns>
+        </vr-row>
+        <!--</vr-validation-group>-->
+
+
         <vr-row>
             <vr-columns width="fullrow">
                 <vr-directivetabs tabitems="dynamicTabs">
                 </vr-directivetabs>
             </vr-columns>
         </vr-row>
+    </vr-form>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Add" validationcontext="subGroup1Valid"></vr-button>
+                <vr-button type="Add" validationcontext="valdObj.subGroup2Valid"></vr-button>
+                <vr-button type="Add" validationcontext="mainGroupValid"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
 </vr-panel>

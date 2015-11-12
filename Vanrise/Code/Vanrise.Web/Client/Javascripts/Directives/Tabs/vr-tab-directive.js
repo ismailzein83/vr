@@ -17,12 +17,13 @@ app.directive('vrTab', ['MultiTranscludeService', function (MultiTranscludeServi
         bindToController: true,
         link: function ($scope, elem, iAttrs, tabsCtrl, transcludeFn) {
             var ctrl = $scope.ctrl;
-            var tab = {};
+            if (ctrl.tabobject == undefined)
+                ctrl.tabobject = {};
+            var tab = ctrl.tabobject;
             tab.header = iAttrs.header != undefined ? $scope.$parent.$eval(iAttrs.header) : iAttrs.header;
             var dontLoad = iAttrs.dontload != undefined ? $scope.$parent.$eval(iAttrs.dontload) : false;
             if (!dontLoad)
                 tab.isLoaded = true;
-            ctrl.tabobject = tab;
             tabsCtrl.addTab(tab);
         },
         templateUrl: '/Client/Javascripts/Directives/Tabs/Templates/TabTemplate.html'

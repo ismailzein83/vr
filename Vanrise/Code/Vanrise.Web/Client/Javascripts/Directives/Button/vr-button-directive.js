@@ -8,20 +8,21 @@ app.directive('vrButton', ['ButtonDirService', 'SecurityService', function (Butt
         scope: {
             onclick: '=',
             isasynchronous: '=',
-            formname: '@',
-            permissions: '@'
+            formname: '=',
+            permissions: '@',
+            validationcontext: '='
         },
         controller: function ($scope, $element, $attrs) {
             
             var isSubmitting = false;
             var ctrl = this;
            
-            this.onInternalClick = function (evnt) {
+            ctrl.onInternalClick = function (evnt) {
                 if (ctrl.menuActions != undefined)
                     ctrl.showMenuActions = true;
                 else {
-                    if (this.onclick != undefined && typeof (this.onclick) == 'function') {
-                        var promise = this.onclick();//this function should return a promise in case it is performing asynchronous task
+                    if (ctrl.onclick != undefined && typeof (ctrl.onclick) == 'function') {
+                        var promise = ctrl.onclick();//this function should return a promise in case it is performing asynchronous task
                         if (promise != undefined && promise != null) {
                             isSubmitting = true;
                             promise.finally(function () {
@@ -41,29 +42,24 @@ app.directive('vrButton', ['ButtonDirService', 'SecurityService', function (Butt
                     });
                 }
             };
-
-            $scope.$on('submit' + this.formname, function () {
-                if (ctrl.formname != undefined) {
-                    var form = $scope.$parent.$eval(ctrl.formname);
-                    if (form != undefined && form.$invalid)
-                        return true;
-                }
-                ctrl.onInternalClick();
-            }) ;
-            this.showIcon = function () {
+            if ($attrs.submitname != undefined) {
+                $scope.$on('submit' + $attrs.submitname, function () {
+                    if (!ctrl.isDisabled())
+                        ctrl.onInternalClick();
+                }) ;
+            }
+            ctrl.showIcon = function () {
                 return !isSubmitting;
             };
 
-            this.showLoader = function () {
+            ctrl.showLoader = function () {
                 return isSubmitting;
             };
 
-            this.isDisabled = function () {
-                if (this.formname != undefined) {
-                    var form = $scope.$parent.$eval(this.formname);
-                    if (form != undefined && form.$invalid)
-                        return true;
-                }
+            ctrl.isDisabled = function () {
+                var validationContext = ctrl.validationcontext != undefined ? ctrl.validationcontext : ctrl.formname;
+                if (validationContext != undefined && validationContext.validate() != null)
+                    return true;
                 var isDisabled;
                 if (isSubmitting == true)
                     isDisabled = true;

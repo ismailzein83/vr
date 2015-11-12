@@ -23,26 +23,29 @@ app.directive('vrValidationDatetime', function () {
 });
 
 
-app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', function (ValidationMessagesEnum, BaseDirService) {
+app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', function (BaseDirService, VRValidationService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
-        require: '^form',
         scope: {
             value: '=',
             hint:'@',
-            customvalidate: '&',
             placeholder: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var divDatePicker = $element.find('#divDatePicker');
-            var inputElement = $element.find('#mainInput');
-            var validationOptions = {};
-            if ($attrs.isrequired !== undefined)
-                validationOptions.requiredValue = true;
-            if ($attrs.customvalidate !== undefined)
-                validationOptions.customValidation = true;
-            var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, $element.find('#rootDiv'));
+            //var inputElement = $element.find('#mainInput');
+            //var validationOptions = {};
+            //if ($attrs.isrequired !== undefined)
+            //    validationOptions.requiredValue = true;
+            //if ($attrs.customvalidate !== undefined)
+            //    validationOptions.customValidation = true;
+            //var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, $element.find('#rootDiv'));
+
+            var ctrl = this;
+            ctrl.validate = function () {
+                return VRValidationService.validate(ctrl.value, $scope, $attrs);
+            };
 
             var format;
             var isDate;
@@ -260,22 +263,22 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                 $('.btn-switcher').removeClass("glyphicon-time");
                 $('.btn-switcher').addClass("glyphicon-calendar");
             }
-            BaseDirService.addScopeValidationMethods(ctrl, elementName, this);
+            //BaseDirService.addScopeValidationMethods(ctrl, elementName, this);
 
         },
         compile: function (element, attrs) {
-            var inputElement = element.find('#mainInput');
-            var validationOptions = {};
-            if (attrs.isrequired !== undefined)
-                validationOptions.requiredValue = true;
-            if (attrs.customvalidate !== undefined)
-                validationOptions.customValidation = true;
+            //var inputElement = element.find('#mainInput');
+            //var validationOptions = {};
+            //if (attrs.isrequired !== undefined)
+            //    validationOptions.requiredValue = true;
+            //if (attrs.customvalidate !== undefined)
+            //    validationOptions.customValidation = true;
 
-            var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, element.find('#rootDiv'));
+            //var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, element.find('#rootDiv'));
             return {
-                pre: function ($scope, iElem, iAttrs, formCtrl) {
-                    var ctrl = $scope.ctrl;
-                    BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
+                pre: function ($scope, iElem, iAttrs) {
+                    //var ctrl = $scope.ctrl;
+                    //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
                 }
             }
         },
@@ -299,19 +302,21 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
 
             var dateTemplate =
                  '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"  style="height:26px;" >'
+                  + '<vr-validator validate="ctrl.validate()">'
                   + '<div id="mainInput" ng-model="ctrl.value" class="form-control " ng-style="ctrl.getInputeStyle()" style="border-radius: 4px;height: auto;padding: 0px;">'
                         + '<div  class="input-group date datetime-controle"  id="divDatePicker"  style="width:100%;"  >'
                                 + '<input class="form-control vr-date-input" ng-focus="ctrl.setDefaultDate()" placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()" style="padding:0px 5px;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
                                 + icontemplate
                             + '</div>'
                       + '</div>'
+                  + '</vr-validator>'
                       + '<span  ng-if="ctrl.hint!=undefined"  ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;top:-10px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
 
                     + '</div>';
 
-            var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined);
+            //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined);
 
-            return startTemplate + labelTemplate + dateTemplate + validationTemplate + endTemplate;
+            return startTemplate + labelTemplate + dateTemplate + endTemplate;
         }
 
     };

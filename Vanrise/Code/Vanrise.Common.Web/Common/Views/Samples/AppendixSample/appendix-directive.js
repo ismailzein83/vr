@@ -10,6 +10,7 @@ function (UtilsService, Common_AppendixSample_Service) {
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 ctrl.dataSource = [];
+                ctrl.selectedValue = [];
                 //ctrl.selectReady = function (api) {
                     var api = {};
                     api.load = function (payload) {
@@ -40,7 +41,7 @@ function (UtilsService, Common_AppendixSample_Service) {
             },
             template: function (element, attrs) {
                 return '<vr-select datatextfield="description" datavaluefield="value" label="Select Appendix 1" datasource="ctrl.dataSource"'
-                +'selectedvalues="ctrl.selectedValue" on-ready="ctrl.selectReady" ></vr-columns>';
+                +'selectedvalues="ctrl.selectedValue" on-ready="ctrl.selectReady" isrequired="true" ismultipleselection></vr-columns>';
             }
 
         };

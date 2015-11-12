@@ -2,34 +2,35 @@
 
     "use strict";
 
-    vrTextarea.$inject = ['BaseDirService' ];
+    vrTextarea.$inject = ['BaseDirService', 'VRValidationService'];
 
-    function vrTextarea(BaseDirService, TextboxTypeEnum) {
+    function vrTextarea(BaseDirService, VRValidationService) {
 
         return {
             restrict: 'E',
-            require: '^form',
             scope: {
                 value: '=',
-                hint: '@',               
-                customvalidate: '&',
+                hint: '@',
                 placeholder:'@'
             },
-            controller: function ($scope, $element) {
-
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                ctrl.validate = function () {
+                    return VRValidationService.validate(ctrl.value, $scope, $attrs);
+                };
             },
             compile: function (element, attrs) {
 
-                var inputElement = element.find('#mainInput');
-                var validationOptions = {};
-                if (attrs.isrequired !== undefined)
-                    validationOptions.requiredValue = true;
-                if (attrs.customvalidate !== undefined)
-                    validationOptions.customValidation = true;
+                //var inputElement = element.find('#mainInput');
+                //var validationOptions = {};
+                //if (attrs.isrequired !== undefined)
+                //    validationOptions.requiredValue = true;
+                //if (attrs.customvalidate !== undefined)
+                //    validationOptions.customValidation = true;
              
-                var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, element.find('#rootDiv'));
+                //var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, element.find('#rootDiv'));
                 return {
-                    pre: function ($scope, iElem, iAttrs, formCtrl) {
+                    pre: function ($scope, iElem, iAttrs) {
                         var ctrl = $scope.ctrl;
 
                         var isUserChange;
@@ -83,7 +84,7 @@
                             }, 1)
                         }
                        
-                        BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
+                        //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                     }
                 }
@@ -99,14 +100,16 @@
                     if (attrs.label != undefined)
                         labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
                     var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
+                            + '<vr-validator validate="ctrl.validate()">'
                             + '<textarea  placeholder="{{ctrl.placelHolder}}" ng-readonly="ctrl.readOnly" id="mainInput" ng-style="ctrl.getInputeStyle()" ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()"rows="3" class="form-control" style="width: 100%; resize: none;" ></textarea>'
+                            + '</vr-validator>'
                             + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
                         + '</div>';
                 
 
-                    var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined ,true);
+                    //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined ,true);
 
-                return startTemplate + labelTemplate + textboxTemplate + validationTemplate + endTemplate;
+                return startTemplate + labelTemplate + textboxTemplate + endTemplate;
             }
 
         };

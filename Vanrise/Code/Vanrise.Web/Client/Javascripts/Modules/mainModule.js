@@ -3,7 +3,18 @@
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
 .controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, SecurityService, PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService) {
-    
+        
+    $rootScope.onValidationMessageShown = function (e) {
+        var self = angular.element(e.currentTarget);
+        var selfHeight = $(self).height();
+        var TophasLable = $(self).parent().attr('label') != undefined ? 0 : (($(self).parents('.dropdown-container2').length > 0)) ? -10 : -15;
+        var topVar = ($(self).parents('.dropdown-container2').length > 0) ? (selfHeight / 3) - 5 : (selfHeight / 3);
+        var selfWidth = $(self).width();
+        var selfOffset = $(self).offset();
+        var tooltip = self.parent().find('.tooltip-error')[0];
+        $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: selfOffset.left + selfWidth });
+    };
+
     var userInfo = SecurityService.getLoggedInUserInfo();
     
     if (userInfo === undefined) {
