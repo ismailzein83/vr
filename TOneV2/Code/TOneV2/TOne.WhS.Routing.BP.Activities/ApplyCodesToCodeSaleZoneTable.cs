@@ -5,6 +5,7 @@ using System.Text;
 using System.Activities;
 using Vanrise.Queueing;
 using Vanrise.BusinessProcess;
+using TOne.WhS.Routing.Data;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -28,25 +29,29 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override void DoWork(ApplyCodesToCodeSaleZoneTableInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            //ICodeMatchesDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICodeMatchesDataManager>();
-            //dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
+            ICodeSaleZoneDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICodeSaleZoneDataManager>();
+            dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
 
-            //DoWhilePreviousRunning(previousActivityStatus, handle, () =>
-            //{
-            //    bool hasItem = false;
-            //    do
-            //    {
-            //        hasItem = inputArgument.InputQueue.TryDequeue((preparedCodeMatch) =>
-            //        {
-            //            dataManager.ApplyCodeMatchesForDB(preparedCodeMatch);
-            //        });
-            //    } while (!ShouldStop(handle) && hasItem);
-            //});
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
+                {
+                    hasItem = inputArgument.InputQueue.TryDequeue((preparedCodeMatch) =>
+                    {
+                        dataManager.ApplyCodeToCodeSaleZoneTable(preparedCodeMatch);
+                    });
+                } while (!ShouldStop(handle) && hasItem);
+            });
         }
 
         protected override ApplyCodesToCodeSaleZoneTableInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            throw new NotImplementedException();
+            return new ApplyCodesToCodeSaleZoneTableInput()
+            {
+                InputQueue = this.InputQueue.Get(context),
+                RoutingDatabaseId = this.RoutingDatabaseId.Get(context)
+            };
         }
     }
 }

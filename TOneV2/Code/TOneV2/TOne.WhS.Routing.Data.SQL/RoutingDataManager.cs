@@ -111,9 +111,9 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [Content] [nvarchar](max) NOT NULL
                                                     ) ON [PRIMARY]
 
-                                                    CREATE TABLE [dbo].[CodeZone](
+                                                    CREATE TABLE [dbo].[CodeSaleZone](
 	                                                    [Code] [varchar](20) NOT NULL,
-	                                                    [ZoneId] [bigint] NOT NULL
+	                                                    [SaleZoneId] [bigint] NOT NULL
                                                     ) ON [PRIMARY]
 
                                                     CREATE TABLE [dbo].[RoutingCustomerInfo](

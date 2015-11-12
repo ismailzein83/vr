@@ -38,9 +38,10 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override void DoWork(PrepareCodeMatchesForApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            ICodeMatchesDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICodeMatchesDataManager>();
-            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue_1, inputArgument.OutputQueue_1, CodeMatchesBatch => CodeMatchesBatch.CodeMatches);
-            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue_2, inputArgument.OutputQueue_2, CodeMatchesBatch => CodeMatchesBatch.CodeMatches);
+            ICodeMatchesDataManager codeMatchesDataManager = RoutingDataManagerFactory.GetDataManager<ICodeMatchesDataManager>();
+            ICodeSaleZoneDataManager CodeSaleZoneDataManager = RoutingDataManagerFactory.GetDataManager<ICodeSaleZoneDataManager>();
+            PrepareDataForDBApply(previousActivityStatus, handle, codeMatchesDataManager, inputArgument.InputQueue_1, inputArgument.OutputQueue_1, CodeMatchesBatch => CodeMatchesBatch.CodeMatches);
+            PrepareDataForDBApply(previousActivityStatus, handle, CodeSaleZoneDataManager, inputArgument.InputQueue_2, inputArgument.OutputQueue_2, CodeMatchesBatch => CodeMatchesBatch.CodeMatches);
         }
 
         protected override PrepareCodeMatchesForApplyInput GetInputArgument2(AsyncCodeActivityContext context)

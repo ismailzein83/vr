@@ -214,8 +214,20 @@
           </InArgument>
         </twrba1:ApplyCodeMatchesToDB.PreviousActivityStatus>
       </twrba1:ApplyCodeMatchesToDB>
+      <twrba1:ApplyCodesToCodeSaleZoneTable Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyCodesToCodeSaleZoneTable_1" RoutingDatabaseId="22">
+        <twrba1:ApplyCodesToCodeSaleZoneTable.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedCodeMatches_2</mca:CSharpValue>
+          </InArgument>
+        </twrba1:ApplyCodesToCodeSaleZoneTable.InputQueue>
+        <twrba1:ApplyCodesToCodeSaleZoneTable.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareCodeMatchesStatus</mca:CSharpValue>
+          </InArgument>
+        </twrba1:ApplyCodesToCodeSaleZoneTable.PreviousActivityStatus>
+      </twrba1:ApplyCodesToCodeSaleZoneTable>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbCRAA9sBDgIBAUYFgwEQAwGhAYQBBdkBEAIBAkcHXhIDAcMBXweCARIDAaIBjQEHrAEhAgFerQEHzAErAgEbzQEH2AElAgEDSAldHwMBxAFgCXUjAwGuAXYJgQEqAwGjAZUBDZUBhQEDAZYBmgENmgFqAwGLAZABDZABhQEDAYABnwENnwF3AgF1pAENpAFyAgFqqQENqQFzAgFfxAENxAFvAgFTvwENvwF7AgFIugENugF7AgE9yQENyQF5AgEytQENtQF9AgEnsAENsAF9AgEc1QEN1QFxAgEQ0AEN0AFzAgEFzQGBAc0BhQECAQRQD1BsAwHUAVoPWnQDAc8BSw9LXQMBygFVD1VcAwHFAWgPaGwDAb4BYw9jXQMBuQFyD3J8AwG0AW0PbVwDAa8BeQ95dAMBqQF+D359AwGkAQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbChAA+cBDgIBAUYFgwEQAwG5AYQBBeUBEAIBAkcHXhIDAdsBXweCARIDAboBjQEHrAEhAgF2rQEHzAErAgEzzQEH2AElAgEb2QEH5AEuAgEDSAldHwMB3AFgCXUjAwHGAXYJgQEqAwG7AZUBDZUBhQEDAa4BmgENmgFqAwGjAZABDZABhQEDAZgBnwENnwF3AwGNAaQBDaQBcgMBggGpAQ2pAXMCAXfEAQ3EAW8CAWu/AQ2/AXsCAWC6AQ26AXsCAVXJAQ3JAXkCAUq1AQ21AX0CAT+wAQ2wAX0CATTVAQ3VAXECASjQAQ3QAXMCAR3NAYEBzQGFAQIBHOEBDeEBcQIBENwBDdwBcwIBBdkBkwHZAZcBAgEEUA9QbAMB7AFaD1p0AwHnAUsPS10DAeIBVQ9VXAMB3QFoD2hsAwHWAWMPY10DAdEBcg9yfAMBzAFtD21cAwHHAXkPeXQDAcEBfg9+fQMBvAE=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -236,19 +248,20 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,254" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,254" />
       <sap2010:ViewStateData Id="BuildCodeMatches_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareCodeMatchesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyCodeMatchesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="794,86" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,504">
+      <sap2010:ViewStateData Id="ApplyCodesToCodeSaleZoneTable_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1034,86" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056,504">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.BuildRoutesByCodePrefix_1" sap:VirtualizedContainerService.HintSize="856,584" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.BuildRoutesByCodePrefix_1" sap:VirtualizedContainerService.HintSize="1096,584" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
