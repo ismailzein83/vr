@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICarrierAccountInfoDataManager.cs" />
     <Compile Include="ICodeMatchesDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IRoutingDatabaseDataManager.cs" />
