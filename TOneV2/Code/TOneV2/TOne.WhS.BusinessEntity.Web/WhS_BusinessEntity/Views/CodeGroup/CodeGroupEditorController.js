@@ -100,7 +100,7 @@
             var codeGroupObject = buildCodeGroupObjFromScope();
             return WhS_BE_CodeGroupAPIService.AddCodeGroup(codeGroupObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Code Group", response)) {
+                if (VRNotificationService.notifyOnItemAdded("Code Group", response,"Code")) {
                     if ($scope.onCodeGroupAdded != undefined)
                         $scope.onCodeGroupAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -114,7 +114,7 @@
             var codeGroupObject = buildCodeGroupObjFromScope();
             WhS_BE_CodeGroupAPIService.UpdateCodeGroup(codeGroupObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Code Group", response)) {
+                if (VRNotificationService.notifyOnItemUpdated("Code Group", response, "Code")) {
                     if ($scope.onCodeGroupUpdated != undefined)
                         $scope.onCodeGroupUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();

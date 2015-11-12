@@ -19,21 +19,21 @@ app.service('WhS_BE_CodeGroupService', ['VRModalService', 'VRNotificationService
                     if (drillDownDefinition.setTabSelected != undefined)
                         drillDownDefinition.setTabSelected(countryItem);
                     var query = {
-                        CountriesIds: [countryItem.CountryId]
+                        CountriesIds: [countryItem.Entity.CountryId]
                     }                    
                     var onCodeGroupAdded = function (codeGroupObj) {
                         if (countryItem.codeGroupGridAPI != undefined) {
                             countryItem.codeGroupGridAPI.onCodeGroupAdded(codeGroupObj);
                         }
                     };
-                    addCodeGroup(onCodeGroupAdded, countryItem.CountryId);
+                    addCodeGroup(onCodeGroupAdded, countryItem.Entity.CountryId);
                 }
             }];
 
             drillDownDefinition.loadDirective = function (directiveAPI, countryItem) {                
                 countryItem.codeGroupGridAPI = directiveAPI;
                 var query = {
-                    CountriesIds: [countryItem.CountryId],
+                    CountriesIds: [countryItem.Entity.CountryId],
                 };
                 return countryItem.codeGroupGridAPI.loadGrid(query);
             };

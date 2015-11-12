@@ -56,7 +56,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 codeGroup.CodeGroupId = coudeGroupId;
                 insertOperationOutput.InsertedObject = CodeGroupDetailMapper(codeGroup);
             }
-
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
             return insertOperationOutput;
         }
         public TOne.Entities.UpdateOperationOutput<CodeGroupDetail> UpdateCodeGroup(CodeGroup codeGroup)
@@ -75,7 +78,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject =  CodeGroupDetailMapper(codeGroup);
             }
-
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
             return updateOperationOutput;
         }
         #region Private Members

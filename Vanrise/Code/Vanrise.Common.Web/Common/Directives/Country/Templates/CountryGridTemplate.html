@@ -5,10 +5,10 @@
                      dataretrievalfunction="dataRetrievalFunction"
                      pagingtype="'PagingOnScroll'"
                      menuactions="gridMenuActions"
-                     idfield="CountryId">
+                     idfield="Entity.CountryId">
 
-            <vr-datagridcolumn headertext="'ID'" field="'CountryId'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Country Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>             
+            <vr-datagridcolumn headertext="'ID'" field="'Entity.CountryId'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Country Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>             
             <vr-datagridexpandablerow>
                 <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>                
             </vr-datagridexpandablerow>

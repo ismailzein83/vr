@@ -61,7 +61,7 @@ namespace TOne.WhS.BusinessEntity.Business
                () =>
                {
                    ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
-                   return dataManager.GetSupplierZones(DateTime.Now);
+                   return dataManager.GetSupplierZones();
                });
         }
 

@@ -64,24 +64,25 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                 format: format,
                 showClose: true
             });
-            setTimeout(function () {
-                if (divDatePicker.parents('.modal-body').length > 0) {
+          //  setTimeout(function () {
+                //if (divDatePicker.parents('.modal-body').length > 0) {
                     divDatePicker
                      .on('dp.show', function (e) {
                          var self = $(this);
                          var selfHeight = $(this).height();
                          var selfOffset = $(self).offset();
                          var dropDown = self.parent().find('.bootstrap-datetimepicker-widget')[0];
-                         $(dropDown).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: 'auto' });
+                         $(dropDown).removeClass("pull-right")
+                         $(dropDown).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left - $(window).scrollLeft() });
 
                      });
                    
                     $(divDatePicker.parents('div')).scroll(function () {
                         fixDateTimePickerPosition();
                     })
-                }
+               // }
 
-            }, 1)
+           // }, 1)
 
             $scope.$on('start-drag', function (event, args) {
                 fixDateTimePickerPosition();
@@ -118,10 +119,14 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
                     }
                     else
                         $scope.ctrl.value = selectedDate;
+                            //new Date(selectedDate.toISOString('yyyy-MM-dd hh:mm:ss').replace('Z', ''));
                 }
 
             });
-
+           
+            function cloneDateTime(date) {
+                return new Date(date).toUTCString().replace(' Z', '');
+            }
             function convertUTCDateToLocalDate(date) {
                 var newDate = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
 

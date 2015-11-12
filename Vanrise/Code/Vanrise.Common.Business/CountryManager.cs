@@ -12,14 +12,14 @@ namespace Vanrise.Common.Business
     public class CountryManager
     {
 
-        public Vanrise.Entities.IDataRetrievalResult<Country> GetFilteredCountries(Vanrise.Entities.DataRetrievalInput<CountryQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<CountryDetail> GetFilteredCountries(Vanrise.Entities.DataRetrievalInput<CountryQuery> input)
         {
             var allCountries = GetCachedCountries();
 
             Func<Country, bool> filterExpression = (prod) =>
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCountries.ToBigResult(input, filterExpression));     
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCountries.ToBigResult(input, filterExpression, CountryDetailMapper));     
         }
 
         public IEnumerable<Country> GetAllCountries()
@@ -35,9 +35,9 @@ namespace Vanrise.Common.Business
             var countries = GetCachedCountries();
             return countries.GetRecord(countryId);
         }
-        public Vanrise.Entities.InsertOperationOutput<Country> AddCountry(Country country)
+        public Vanrise.Entities.InsertOperationOutput<CountryDetail> AddCountry(Country country)
         {
-            Vanrise.Entities.InsertOperationOutput<Country> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<Country>();
+            Vanrise.Entities.InsertOperationOutput<CountryDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CountryDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -51,17 +51,21 @@ namespace Vanrise.Common.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 country.CountryId = countryId;
-                insertOperationOutput.InsertedObject = country;
+                insertOperationOutput.InsertedObject = CountryDetailMapper(country);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
             }
 
             return insertOperationOutput;
         }
-        public Vanrise.Entities.UpdateOperationOutput<Country> UpdateCountry(Country country)
+        public Vanrise.Entities.UpdateOperationOutput<CountryDetail> UpdateCountry(Country country)
         {
             ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
 
             bool updateActionSucc = dataManager.Update(country);
-            Vanrise.Entities.UpdateOperationOutput<Country> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<Country>();
+            Vanrise.Entities.UpdateOperationOutput<CountryDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<CountryDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -70,9 +74,12 @@ namespace Vanrise.Common.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = country;
+                updateOperationOutput.UpdatedObject = CountryDetailMapper(country);
             }
-
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
             return updateOperationOutput;
         }
         #region Private Members
@@ -99,6 +106,13 @@ namespace Vanrise.Common.Business
             }
         }
 
+        private CountryDetail CountryDetailMapper(Country country)
+        {
+            CountryDetail countryDetail = new CountryDetail();
+
+            countryDetail.Entity = country;            
+            return countryDetail;
+        }
         #endregion
     }
 }

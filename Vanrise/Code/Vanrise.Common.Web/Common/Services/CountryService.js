@@ -11,24 +11,20 @@ app.service('VRCommon_CountryService', ['VRModalService', 'VRNotificationService
         });
         function editCountry(obj, onCountryUpdated) {
             var settings = {
-                useModalTemplate: true
-
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Name, "Country");
+                modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Entity.Name, "Country");
                 modalScope.onCountryUpdated = onCountryUpdated;
             };
             var parameters = {
-                CountryId: obj.CountryId
+                CountryId: obj.Entity.CountryId
             };
 
             VRModalService.showModal('/Client/Modules/Common/Views/Country/CountryEditor.html', parameters, settings);
         }
         function addCountry(onCountryAdded) {
             var settings = {
-                useModalTemplate: true
-
             };
 
             settings.onScopeReady = function (modalScope) {

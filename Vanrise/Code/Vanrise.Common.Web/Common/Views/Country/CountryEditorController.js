@@ -71,7 +71,7 @@
             var countryObject = buildCountryObjFromScope();
             return VRCommon_CountryAPIService.AddCountry(countryObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Country", response)) {
+                if (VRNotificationService.notifyOnItemAdded("Country", response ,"Name")) {
                     if ($scope.onCountryAdded != undefined)
                         $scope.onCountryAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -85,7 +85,7 @@
             var countryObject = buildCountryObjFromScope();
             VRCommon_CountryAPIService.UpdateCountry(countryObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Country", response)) {
+                if (VRNotificationService.notifyOnItemUpdated("Country", response, "Name")) {
                     if ($scope.onCountryUpdated != undefined)
                         $scope.onCountryUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();

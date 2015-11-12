@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Data
     {
         List<SupplierZone> GetSupplierZones(int supplierId, DateTime effectiveDate);
         long ReserveIDRange(int numberOfIDs);
-        List<SupplierZone> GetSupplierZones(DateTime effectiveDate);
+        List<SupplierZone> GetSupplierZones();
         bool AreSupplierZonesUpdated(ref object updateHandle);
     }
 }

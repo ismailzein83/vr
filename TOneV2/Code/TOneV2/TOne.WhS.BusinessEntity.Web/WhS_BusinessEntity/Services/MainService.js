@@ -402,8 +402,6 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
     
     function editCodeGroup(obj, onCodeGroupUpdated , disableCountry) {
         var settings = {
-            useModalTemplate: true
-
         };
 
         settings.onScopeReady = function (modalScope) {
@@ -419,7 +417,6 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
     }
     function addCodeGroup(onCodeGroupAdded , dataItem) {
         var settings = {
-            useModalTemplate: true
 
         };
 

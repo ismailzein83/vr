@@ -39,14 +39,14 @@ namespace Vanrise.Web.Controllers
 
         [HttpPost]
         [Route("AddCountry")]
-        public Vanrise.Entities.InsertOperationOutput<Country> AddCountry(Country country)
+        public Vanrise.Entities.InsertOperationOutput<CountryDetail> AddCountry(Country country)
         {
             CountryManager manager = new CountryManager();
             return manager.AddCountry(country);
         }
         [HttpPost]
         [Route("UpdateCountry")]
-        public Vanrise.Entities.UpdateOperationOutput<Country> UpdateCountry(Country country)
+        public Vanrise.Entities.UpdateOperationOutput<CountryDetail> UpdateCountry(Country country)
         {
             CountryManager manager = new CountryManager();
             return manager.UpdateCountry(country);

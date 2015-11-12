@@ -1,4 +1,5 @@
-﻿<vr-panel ng-controller="WhS_BE_CodeGroupManagementController">
+﻿
+<vr-panel ng-controller="WhS_BE_CodeGroupManagementController">
     <vr-form name="formFilter" vr-loader="isGettingData">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
@@ -6,7 +7,7 @@
                     <vr-textbox type="number" decimalprecision="0" value="code" label="Code Group"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-common-country-selector on-ready="onCountryDirectiveReady" ismultipleselection ></vr-common-country-selector>
+                    <vr-common-country-selector on-ready="onCountryDirectiveReady" ismultipleselection></vr-common-country-selector>
                 </vr-columns>
             </vr-row>
         </div>
@@ -18,6 +19,10 @@
                 </div>
             </vr-actionbar>
         </vr-row>
-        <vr-whs-be-codegroup-grid on-ready="onGridReady"></vr-whs-be-codegroup-grid>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-whs-be-codegroup-grid on-ready="onGridReady"></vr-whs-be-codegroup-grid>
+            </vr-columns>
+        </vr-row>
     </vr-form>
 </vr-panel>
