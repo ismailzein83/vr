@@ -6,6 +6,7 @@
 
     function cityManagementController($scope, VRCommon_CityService) {
         var gridAPI;
+        var countryDirectiveApi;
         defineScope();
         load();
         var filter = {};
@@ -15,6 +16,11 @@
                 setFilterObject()
                 return gridAPI.loadGrid(filter);
             };
+
+            $scope.onCountryDirectiveReady = function (api) {
+                countryDirectiveApi = api;
+                api.load();
+            }
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;            
@@ -32,6 +38,7 @@
         function setFilterObject() {
             filter = {
                 Name: $scope.name,
+                CountryIds: countryDirectiveApi.getIdsData()
             };
            
         }

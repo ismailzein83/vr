@@ -18,7 +18,7 @@ namespace Vanrise.Common.Business
             Func<City, bool> filterExpression = (prod) =>
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
-                 (input.Query.CountryId == null || prod.CountryId == input.Query.CountryId);
+                 (input.Query.CountryIds == null ||  input.Query.CountryIds.Contains(prod.CountryId ));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCities.ToBigResult(input, filterExpression, CityDetailMapper));
         }

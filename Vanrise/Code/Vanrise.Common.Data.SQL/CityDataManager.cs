@@ -7,6 +7,13 @@ namespace Vanrise.Common.Data.SQL
 {
     public class CityDataManager : BaseSQLDataManager, ICityDataManager
     {
+
+        public CityDataManager()
+            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey"))
+        {
+
+        }
+
         public List<Entities.City> GetCities()
         {
             return GetItemsSP("[common].[sp_City_GetAll]", CityMapper);

@@ -32,6 +32,7 @@ function (UtilsService, VRNotificationService, VRCommon_CityAPIService, VRCommon
 
             $scope.cities = [];
             $scope.onGridReady = function (api) {
+             
                 gridAPI = api;
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -40,7 +41,6 @@ function (UtilsService, VRNotificationService, VRCommon_CityAPIService, VRCommon
 
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onCityAdded = function (cityObject) {
@@ -52,6 +52,10 @@ function (UtilsService, VRNotificationService, VRCommon_CityAPIService, VRCommon
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VRCommon_CityAPIService.GetFilteredCities(dataRetrievalInput)
                     .then(function (response) {
+
+                        console.log('response')
+                        console.log(response)
+
                         onResponseReady(response);
                     })
                     .catch(function (error) {

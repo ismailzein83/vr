@@ -10,6 +10,6 @@ namespace Vanrise.Entities
     {
         public string Name { get; set; }
 
-        public int CountryId { get; set; }
+        public List<int> CountryIds { get; set; }
     }
 }
