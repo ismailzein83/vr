@@ -5,8 +5,7 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
         return ({
             editCity: editCity,
             addCity: addCity,
-            registerDrillDownToCountry
-
+            registerDrillDownToCountry: registerDrillDownToCountry
         });
         function editCity(obj, onCityUpdated) {
             var settings = {
@@ -60,8 +59,9 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
             drillDownDefinition.loadDirective = function (directiveAPI, countryItem) {
                 countryItem.cityGridAPI = directiveAPI;
                 var query = {
-                    CountriesIds: [countryItem.Entity.CountryId],
+                    CountryIds: [countryItem.Entity.CountryId],
                 };
+               
                 return countryItem.cityGridAPI.loadGrid(query);
             };
 
