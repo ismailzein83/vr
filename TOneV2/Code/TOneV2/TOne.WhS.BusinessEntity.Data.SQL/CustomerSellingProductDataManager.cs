@@ -96,7 +96,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public bool Update(CustomerSellingProduct customerSellingProduct)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.CustomerSellingProduct_Update", customerSellingProduct.SellingProductId, customerSellingProduct.BED);
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerSellingProduct_Update", customerSellingProduct.CustomerSellingProductId,customerSellingProduct.SellingProductId, customerSellingProduct.BED);
             return (recordsEffected > 0);
         }
     }

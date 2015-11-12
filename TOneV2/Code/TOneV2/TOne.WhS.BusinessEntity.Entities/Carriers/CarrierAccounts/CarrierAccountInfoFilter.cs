@@ -15,5 +15,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public bool GetCustomers { get; set; }
 
         public bool GetSuppliers { get; set; }
+        public int? AssignableToSellingProductId { get; set; }
+       
     }
 }

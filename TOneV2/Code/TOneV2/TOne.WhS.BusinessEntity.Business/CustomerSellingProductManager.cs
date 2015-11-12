@@ -162,12 +162,14 @@ namespace TOne.WhS.BusinessEntity.Business
         public TOne.Entities.UpdateOperationOutput<CustomerSellingProductDetail> UpdateCustomerSellingProduct(CustomerSellingProduct customerSellingProduct)
         {
             ICustomerSellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerSellingProductDataManager>();
-
-            bool updateActionSucc = dataManager.Update(customerSellingProduct);
             TOne.Entities.UpdateOperationOutput<CustomerSellingProductDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CustomerSellingProductDetail>();
-
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
+            if (customerSellingProduct.BED < DateTime.Now)
+            {
+                return updateOperationOutput;
+            }    
+            bool updateActionSucc = dataManager.Update(customerSellingProduct);
 
             if (updateActionSucc)
             {
@@ -178,6 +180,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return updateOperationOutput;
         }
+
+        public IEnumerable<CustomerSellingProduct> GetCustomerSellingProductBySellingProduct(int sellingProductId)
+        {
+            var customerSellingProducts = GetCachedOrderedCustomerSellingProducts();
+            return customerSellingProducts.Values.FindAllRecords(x => x.SellingProductId != sellingProductId && x.BED>DateTime.Now);
+        }
+
+
 
         //public TOne.Entities.UpdateOperationOutput<object> DeleteCustomerSellingProduct(int customerSellingProductId)
         //{

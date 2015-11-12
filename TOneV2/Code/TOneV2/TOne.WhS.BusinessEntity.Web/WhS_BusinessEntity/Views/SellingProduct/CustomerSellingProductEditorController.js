@@ -54,6 +54,16 @@
                 carrierAccountDirectiveAPI = api;
                 carrierAccountReadyPromiseDeferred.resolve();
             }
+            $scope.onSelectionChanged = function () {
+                if (sellingProductDirectiveAPI != undefined && !isEditMode) {
+                    var setLoader = function (value) { $scope.isLoadingCustomers = value };
+                    var payload = {
+                        filter: { AssignableToSellingProductId: sellingProductDirectiveAPI.getSelectedIds() },
+                    }
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountDirectiveAPI, payload, setLoader);
+                }
+              
+            }
 
             $scope.beginEffectiveDate = new Date();
            
@@ -80,13 +90,20 @@
         }
         function loadAllControls() {
   
-            return UtilsService.waitMultipleAsyncOperations([loadSellingProducts, loadCarrierAccounts])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection,loadSellingProducts, loadCarrierAccounts])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
                .finally(function () {
                    $scope.isLoading = false;
                });
+        }
+        function loadFilterBySection() {
+
+            if (customerSellingProductEntity != undefined) {
+                $scope.beginEffectiveDate = customerSellingProductEntity.BED
+            }
+           
         }
         function getCustomerSellingProduct() {
             return WhS_BE_CustomerSellingProductAPIService.GetCustomerSellingProduct(customerSellingProductId).then(function (customerSellingProduct) {
@@ -112,7 +129,7 @@
             carrierAccountReadyPromiseDeferred.promise
                 .then(function () {
                     var directivePayload = {
-                        
+                      
                         selectedIds: carrierAccountId != undefined ? [carrierAccountId] : customerSellingProductEntity != undefined ? [customerSellingProductEntity.CustomerId] : undefined
                     }
                     VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, directivePayload, carrierAccountLoadPromiseDeferred);
@@ -144,7 +161,7 @@
             var selectedSellingProduct = $scope.selectedSellingProduct;
             if (isEditMode) {
                 obj = {
-                    CustomerId: selectedCustomers[i].CarrierAccountId,
+                    CustomerId: selectedCustomers[0].CarrierAccountId,
                     SellingProductId: selectedSellingProduct.SellingProductId,
                     BED: $scope.beginEffectiveDate,
                 };
@@ -154,9 +171,7 @@
                 for (var i = 0; i < selectedCustomers.length; i++) {
                     obj.push({
                         CustomerId: selectedCustomers[i].CarrierAccountId,
-                        CustomerName: selectedCustomers[i].Name,
                         SellingProductId: selectedSellingProduct.SellingProductId,
-                        SellingProductName: selectedSellingProduct.Name,
                         BED: $scope.beginEffectiveDate,
                     });
                 }
@@ -165,7 +180,7 @@
             return obj;
         }
         function updateCustomerSellingProduct() {
-            var customerSellingProductObject = buildRouteRuleObjFromScope();
+            var customerSellingProductObject = buildSellingProductObjFromScope();
             customerSellingProductObject.CustomerSellingProductId=customerSellingProductId;
             WhS_BE_CustomerSellingProductAPIService.UpdateCustomerSellingProduct(customerSellingProductObject)
             .then(function (response) {

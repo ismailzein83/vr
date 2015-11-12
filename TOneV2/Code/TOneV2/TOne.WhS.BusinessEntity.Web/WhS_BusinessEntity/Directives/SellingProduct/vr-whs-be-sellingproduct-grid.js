@@ -118,7 +118,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService,W
                     }
                 }
             };
-            WhS_BE_MainService.addCustomerSellingProduct(onCustomerSellingProductAdded,dataItem);
+            WhS_BE_MainService.addCustomerSellingProduct(onCustomerSellingProductAdded,dataItem.Entity);
         }
         function deleteSellingProduct(sellingProductObj) {
             var onSellingProductDeleted = function (gridObject) {

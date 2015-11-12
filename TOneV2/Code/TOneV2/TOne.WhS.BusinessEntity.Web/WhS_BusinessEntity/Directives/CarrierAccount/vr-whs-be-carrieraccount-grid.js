@@ -145,7 +145,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                     }
                 }
             };
-            WhS_BE_MainService.addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem);
+            WhS_BE_MainService.addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem.Entity);
         }
         function deleteCarrierAccount(carrierAccountObj) {
             var onCarrierAccountDeleted = function () {

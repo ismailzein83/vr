@@ -55,7 +55,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (filter != null)
             {
-                carrierAccounts = this.GetCarrierAccountsByType(filter.GetCustomers, filter.GetSuppliers, filter.SupplierFilterSettings, filter.CustomerFilterSettings);
+                if(filter.AssignableToSellingProductId!=null)
+                    carrierAccounts = this.GetAssignableCustomersToSellingProduct((int) filter.AssignableToSellingProductId);
+                else carrierAccounts = this.GetCarrierAccountsByType(filter.GetCustomers, filter.GetSuppliers, filter.SupplierFilterSettings, filter.CustomerFilterSettings);
             }
             else
             {
@@ -152,6 +154,19 @@ namespace TOne.WhS.BusinessEntity.Business
             IEnumerable<CarrierAccount> carrierAccounts = GetCarrierAccountsByType(false, true, null, null);
             Func<CarrierAccount, bool> filterExpression = (item) => (item.CarrierAccountSettings != null && item.SupplierSettings != null && item.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active && item.SupplierSettings.RoutingStatus == RoutingStatus.Enabled);
             return carrierAccounts.MapRecords(RoutingSupplierInfolMapper, filterExpression);
+        
+        }
+
+        public IEnumerable<CarrierAccount> GetAssignableCustomersToSellingProduct(int sellingProductId)
+        {
+           SellingProductManager sellingProductManager = new SellingProductManager();
+           SellingProduct sellingProduct = sellingProductManager.GetSellingProduct(sellingProductId);
+           var cachedCarrierAccounts = GetCachedCarrierAccounts();
+           CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
+           IEnumerable<CustomerSellingProduct> customerSellingProducts= customerSellingProductManager.GetCustomerSellingProductBySellingProduct(sellingProductId);
+           return cachedCarrierAccounts.Values.Where(x => x.CustomerSettings.SellingNumberPlanId == sellingProduct.SellingNumberPlanId
+               && customerSellingProducts.Any(y=>y.CustomerId==x.CarrierAccountId));
+         
         }
         #region Private Members
 
