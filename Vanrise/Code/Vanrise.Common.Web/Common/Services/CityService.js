@@ -1,12 +1,11 @@
 ﻿
-app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 'UtilsService',
-    function (VRModalService, VRNotificationService, UtilsService) {
+app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 'UtilsService','VRCommon_CountryService',
+    function (VRModalService, VRNotificationService, UtilsService, VRCommon_CountryService) {
         var drillDownDefinitions = [];
         return ({
             editCity: editCity,
             addCity: addCity,
-            addDrillDownDefinition: addDrillDownDefinition,
-            getDrillDownDefinition: getDrillDownDefinition
+            registerDrillDownToCountry
 
         });
         function editCity(obj, onCityUpdated) {
@@ -36,14 +35,38 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
             VRModalService.showModal('/Client/Modules/Common/Views/City/CityEditor.html', parameters, settings);
         }
 
-        
+        function registerDrillDownToCountry() {
+            var drillDownDefinition = {};
 
-        function addDrillDownDefinition(drillDownDefinition) {
-            drillDownDefinitions.push(drillDownDefinition);
-        }
+            drillDownDefinition.title = "Cities";
+            drillDownDefinition.directive = "vr-common-city-grid";
+            drillDownDefinition.parentMenuActions = [{
+                name: "New City",
+                clicked: function (countryItem) {
+                    if (drillDownDefinition.setTabSelected != undefined)
+                        drillDownDefinition.setTabSelected(countryItem);
+                    var query = {
+                        CountriesIds: [countryItem.Entity.CountryId]
+                    }
+                    var onCityAdded = function (cityObj) {
+                        if (countryItem.cityGridAPI != undefined) {
+                            countryItem.cityGridAPI.onCityAdded(cityObj);
+                        }
+                    };
+                    addCity(onCityAdded, countryItem.Entity.CountryId);
+                }
+            }];
 
-        function getDrillDownDefinition() {
-            return drillDownDefinitions;
+            drillDownDefinition.loadDirective = function (directiveAPI, countryItem) {
+                countryItem.cityGridAPI = directiveAPI;
+                var query = {
+                    CountriesIds: [countryItem.Entity.CountryId],
+                };
+                return countryItem.cityGridAPI.loadGrid(query);
+            };
+
+            VRCommon_CountryService.addDrillDownDefinition(drillDownDefinition);
         }
+      
 
     }]);
