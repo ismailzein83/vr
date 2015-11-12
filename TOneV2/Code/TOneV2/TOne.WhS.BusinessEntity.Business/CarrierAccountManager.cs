@@ -16,7 +16,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<CarrierAccountDetail> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
         {
             var allCarrierAccounts = GetCachedCarrierAccounts();
-             
+
             Func<CarrierAccount, bool> filterExpression = (item) =>
                  (input.Query.Name == null || item.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
@@ -26,24 +26,24 @@ namespace TOne.WhS.BusinessEntity.Business
                    &&
                  (input.Query.AccountsTypes == null || input.Query.AccountsTypes.Contains(item.AccountType));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression,CarrierAccountDetailMapper));     
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression, CarrierAccountDetailMapper));
         }
 
         public List<CarrierAccount> GetAllCustomers()
         {
             throw new NotImplementedException();
         }
-        
+
         public CarrierAccount GetCarrierAccount(int carrierAccountId)
         {
             var CarrierAccounts = GetCachedCarrierAccounts();
             return CarrierAccounts.GetRecord(carrierAccountId);
         }
-        
+
         public string GetDescription(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
             var carrierAccounts = this.GetCarrierAccountsByIds(carrierAccountsIds, true, false);
-            if(carrierAccounts != null)
+            if (carrierAccounts != null)
                 return string.Join(", ", carrierAccounts.Select(x => x.Name));
 
             return string.Empty;
@@ -53,20 +53,20 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             IEnumerable<CarrierAccount> carrierAccounts = null;
 
-            if(filter != null)
+            if (filter != null)
             {
                 carrierAccounts = this.GetCarrierAccountsByType(filter.GetCustomers, filter.GetSuppliers, filter.SupplierFilterSettings, filter.CustomerFilterSettings);
             }
             else
             {
                 var cachedCarrierAccounts = GetCachedCarrierAccounts();
-                if (cachedCarrierAccounts!=null)
+                if (cachedCarrierAccounts != null)
                     carrierAccounts = cachedCarrierAccounts.Values;
             }
 
             return carrierAccounts.MapRecords(CarrierAccountInfoMapper);
         }
-        
+
         public List<Vanrise.Entities.TemplateConfig> GetCustomersGroupTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
@@ -102,7 +102,7 @@ namespace TOne.WhS.BusinessEntity.Business
             bool insertActionSucc = dataManager.Insert(carrierAccount, out carrierAccountId);
             if (insertActionSucc)
             {
-                carrierAccount.CarrierAccountId =carrierAccountId;
+                carrierAccount.CarrierAccountId = carrierAccountId;
                 CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(carrierAccount);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = carrierAccountDetail;
@@ -142,27 +142,27 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<RoutingCustomerInfo> GetRoutingActiveCustomers()
         {
-           IEnumerable<CarrierAccount> carrierAccounts= GetCarrierAccountsByType(true, false, null, null);
-           
-            Func<CarrierAccount, bool> filterExpression = (item) => (item.CarrierAccountSettings.ActivationStatus==ActivationStatus.Active && item.CustomerSettings.RoutingStatus==RoutingStatus.Enabled);
-            return carrierAccounts.MapRecords(RoutingCustomerInfoMapper,filterExpression);
+            IEnumerable<CarrierAccount> carrierAccounts = GetCarrierAccountsByType(true, false, null, null);
+
+            Func<CarrierAccount, bool> filterExpression = (item) => (item.CarrierAccountSettings != null && item.CustomerSettings != null && item.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active && item.CustomerSettings.RoutingStatus == RoutingStatus.Enabled);
+            return carrierAccounts.MapRecords(RoutingCustomerInfoMapper, filterExpression);
         }
         public IEnumerable<RoutingSupplierInfo> GetRoutingActiveSuppliers()
         {
             IEnumerable<CarrierAccount> carrierAccounts = GetCarrierAccountsByType(false, true, null, null);
-            Func<CarrierAccount, bool> filterExpression = (item) => (item.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active && item.SupplierSettings.RoutingStatus == RoutingStatus.Enabled);
+            Func<CarrierAccount, bool> filterExpression = (item) => (item.CarrierAccountSettings != null && item.SupplierSettings != null && item.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active && item.SupplierSettings.RoutingStatus == RoutingStatus.Enabled);
             return carrierAccounts.MapRecords(RoutingSupplierInfolMapper, filterExpression);
         }
         #region Private Members
 
-        Dictionary<int,CarrierAccount> GetCachedCarrierAccounts()
+        Dictionary<int, CarrierAccount> GetCachedCarrierAccounts()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierAccounts",
                () =>
                {
                    ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
-                   IEnumerable<CarrierAccount> carrierAccounts=dataManager.GetCarrierAccounts();
-                   return carrierAccounts.ToDictionary(kvp => kvp.CarrierAccountId, kvp => kvp); 
+                   IEnumerable<CarrierAccount> carrierAccounts = dataManager.GetCarrierAccounts();
+                   return carrierAccounts.ToDictionary(kvp => kvp.CarrierAccountId, kvp => kvp);
                });
         }
 
@@ -191,7 +191,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var carrierAccounts = this.GetCarrierAccountsByType(getCustomers, getSuppliers, null, null);
             Func<CarrierAccount, bool> filterExpression = null;
 
-            if(carrierAccountsIds != null)
+            if (carrierAccountsIds != null)
                 filterExpression = (item) => (carrierAccountsIds.Contains(item.CarrierAccountId));
 
             return carrierAccounts.FindAllRecords(filterExpression);
@@ -200,7 +200,7 @@ namespace TOne.WhS.BusinessEntity.Business
         private IEnumerable<CarrierAccount> GetCarrierAccountsByType(bool getCustomers, bool getSuppliers, SupplierFilterSettings supplierFilterSettings, CustomerFilterSettings customerFilterSettings)
         {
             Dictionary<int, CarrierAccount> carrierAccounts = GetCachedCarrierAccounts();
-            
+
             HashSet<int> filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
             HashSet<int> filteredCustomerIds = CustomerGroupContext.GetFilteredCustomerIds(customerFilterSettings);
             Func<CarrierAccount, bool> filterExpression = (carrierAccount) =>
@@ -228,8 +228,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
             CarrierProfileManager manager = new CarrierProfileManager();
             var carrierProfiles = manager.GetCachedCarrierProfiles();
-            var carrierProfile=carrierProfiles.FindRecord(itm => itm.Value.CarrierProfileId == carrierAccount.CarrierProfileId);
-            if(carrierProfile.Value!=null){
+            var carrierProfile = carrierProfiles.FindRecord(itm => itm.Value.CarrierProfileId == carrierAccount.CarrierProfileId);
+            if (carrierProfile.Value != null)
+            {
                 carrierAccountDetail.CarrierProfileName = carrierProfile.Value.Name;
             }
             carrierAccountDetail.AccountTypeDescription = carrierAccount.AccountType.ToString();
