@@ -140,17 +140,18 @@ namespace TOne.WhS.BusinessEntity.Business
             return this.GetCarrierAccount(carrierAccountId).CustomerSettings.SellingNumberPlanId;
         }
 
-        public IEnumerable<CarrierAccount> GetRoutingActiveCustomers()
+        public IEnumerable<RoutingCustomerInfo> GetRoutingActiveCustomers()
         {
-            Dictionary<int, CarrierAccount> carrierAccounts = this.GetCachedCarrierAccounts();
+           IEnumerable<CarrierAccount> carrierAccounts= GetCarrierAccountsByType(true, false, null, null);
+           
             Func<CarrierAccount, bool> filterExpression = (item) => (item.CarrierAccountSettings.ActivationStatus==ActivationStatus.Active && item.CustomerSettings.RoutingStatus==RoutingStatus.Enabled);
-            return carrierAccounts.FindAllRecords(filterExpression);
+            return carrierAccounts.MapRecords(RoutingCustomerInfoMapper,filterExpression);
         }
-        public IEnumerable<CarrierAccount> GetRoutingActiveSuppliers()
+        public IEnumerable<RoutingSupplierInfo> GetRoutingActiveSuppliers()
         {
-            Dictionary<int, CarrierAccount> carrierAccounts = this.GetCachedCarrierAccounts();
+            IEnumerable<CarrierAccount> carrierAccounts = GetCarrierAccountsByType(false, true, null, null);
             Func<CarrierAccount, bool> filterExpression = (item) => (item.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active && item.SupplierSettings.RoutingStatus == RoutingStatus.Enabled);
-            return carrierAccounts.FindAllRecords(filterExpression);
+            return carrierAccounts.MapRecords(RoutingSupplierInfolMapper, filterExpression);
         }
         #region Private Members
 
@@ -235,6 +236,21 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return carrierAccountDetail;
         }
+        private RoutingCustomerInfo RoutingCustomerInfoMapper(CarrierAccount carrierAccount)
+        {
+            RoutingCustomerInfo routingCustomerInfo = new RoutingCustomerInfo();
+
+            routingCustomerInfo.CustomerId = carrierAccount.CarrierAccountId;
+
+            return routingCustomerInfo;
+        }
+        private RoutingSupplierInfo RoutingSupplierInfolMapper(CarrierAccount carrierAccount)
+        {
+            RoutingSupplierInfo routingSupplierInfo = new RoutingSupplierInfo();
+            routingSupplierInfo.SupplierId = carrierAccount.CarrierAccountId;
+            return routingSupplierInfo;
+        }
+
 
         #endregion
     }
