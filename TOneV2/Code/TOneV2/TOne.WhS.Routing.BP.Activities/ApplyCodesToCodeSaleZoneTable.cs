@@ -20,9 +20,28 @@ namespace TOne.WhS.Routing.BP.Activities
     public sealed class ApplyCodesToCodeSaleZoneTable : DependentAsyncActivity<ApplyCodesToCodeSaleZoneTableInput>
     {
 
+        [RequiredArgument]
+        public InArgument<BaseQueue<Object>> InputQueue { get; set; }
+
+        [RequiredArgument]
+        public InArgument<int> RoutingDatabaseId { get; set; }
+
         protected override void DoWork(ApplyCodesToCodeSaleZoneTableInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            throw new NotImplementedException();
+            //ICodeMatchesDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICodeMatchesDataManager>();
+            //dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
+
+            //DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            //{
+            //    bool hasItem = false;
+            //    do
+            //    {
+            //        hasItem = inputArgument.InputQueue.TryDequeue((preparedCodeMatch) =>
+            //        {
+            //            dataManager.ApplyCodeMatchesForDB(preparedCodeMatch);
+            //        });
+            //    } while (!ShouldStop(handle) && hasItem);
+            //});
         }
 
         protected override ApplyCodesToCodeSaleZoneTableInput GetInputArgument2(AsyncCodeActivityContext context)
