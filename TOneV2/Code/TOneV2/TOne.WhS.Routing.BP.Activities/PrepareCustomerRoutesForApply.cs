@@ -3,21 +3,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Activities;
+using TOne.WhS.Routing.Entities;
+using Vanrise.Queueing;
+using Vanrise.BusinessProcess;
+using TOne.WhS.Routing.Data;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
 
-    public sealed class PrepareCustomerRoutesForApply : CodeActivity
+    public class PrepareCustomerRoutesForApplyInput
     {
-        // Define an activity input argument of type string
-        public InArgument<string> Text { get; set; }
+        public BaseQueue<CustomerRoutesBatch> InputQueue { get; set; }
 
-        // If your activity returns a value, derive from CodeActivity<TResult>
-        // and return the value from the Execute method.
-        protected override void Execute(CodeActivityContext context)
+        public BaseQueue<Object> OutputQueue { get; set; }
+    }
+
+    public sealed class PrepareCustomerRoutesForApply : DependentAsyncActivity<PrepareCustomerRoutesForApplyInput>
+    {
+
+        [RequiredArgument]
+        public InArgument<BaseQueue<CustomerRoutesBatch>> InputQueue { get; set; }
+
+        [RequiredArgument]
+        public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
+
+
+        protected override void DoWork(PrepareCustomerRoutesForApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            // Obtain the runtime value of the Text input argument
-            string text = context.GetValue(this.Text);
+            ICustomerRouteDataManager customeRoutesDataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
+            PrepareDataForDBApply(previousActivityStatus, handle, customeRoutesDataManager, inputArgument.InputQueue, inputArgument.OutputQueue, CustomerRoutesBatch => CustomerRoutesBatch.CustomerRoutes);
+        }
+
+        protected override PrepareCustomerRoutesForApplyInput GetInputArgument2(AsyncCodeActivityContext context)
+        {
+            return new PrepareCustomerRoutesForApplyInput
+            {
+                InputQueue = this.InputQueue.Get(context),
+                OutputQueue = this.OutputQueue.Get(context)
+            };
+        }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.OutputQueue.Get(context) == null)
+                this.OutputQueue.Set(context, new MemoryQueue<Object>());
+            base.OnBeforeExecute(context, handle);
         }
     }
 }

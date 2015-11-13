@@ -3,21 +3,53 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Activities;
+using Vanrise.Queueing;
+using Vanrise.BusinessProcess;
+using TOne.WhS.Routing.Data;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
 
-    public sealed class ApplyCustomerRoutesToDB : CodeActivity
+    public class ApplyCustomerRoutesToDBInput
     {
-        // Define an activity input argument of type string
-        public InArgument<string> Text { get; set; }
+        public BaseQueue<Object> InputQueue { get; set; }
 
-        // If your activity returns a value, derive from CodeActivity<TResult>
-        // and return the value from the Execute method.
-        protected override void Execute(CodeActivityContext context)
+        public int RoutingDatabaseId { get; set; }
+    }
+
+    public sealed class ApplyCustomerRoutesToDB : DependentAsyncActivity<ApplyCustomerRoutesToDBInput>
+    {
+        [RequiredArgument]
+        public InArgument<BaseQueue<Object>> InputQueue { get; set; }
+
+        [RequiredArgument]
+        public InArgument<int> RoutingDatabaseId { get; set; }
+
+        protected override void DoWork(ApplyCustomerRoutesToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            // Obtain the runtime value of the Text input argument
-            string text = context.GetValue(this.Text);
+            ICustomerRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
+            dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
+
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
+                {
+                    hasItem = inputArgument.InputQueue.TryDequeue((preparedCustomerRoute) =>
+                    {
+                        dataManager.ApplyCustomerRouteForDB(preparedCustomerRoute);
+                    });
+                } while (!ShouldStop(handle) && hasItem);
+            });
+        }
+
+        protected override ApplyCustomerRoutesToDBInput GetInputArgument2(AsyncCodeActivityContext context)
+        {
+            return new ApplyCustomerRoutesToDBInput
+            {
+                InputQueue = this.InputQueue.Get(context),
+                RoutingDatabaseId = this.RoutingDatabaseId.Get(context)
+            };
         }
     }
 }
