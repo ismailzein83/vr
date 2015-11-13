@@ -53,6 +53,7 @@
     <Compile Include="ICodeMatchesDataManager.cs" />
     <Compile Include="ICodeSaleZoneDataManager.cs" />
     <Compile Include="ICustomerRouteDataManager.cs" />
+    <Compile Include="ICustomerZoneDetailsDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IRoutingDatabaseDataManager.cs" />
     <Compile Include="IRoutingDataManager.cs" />
