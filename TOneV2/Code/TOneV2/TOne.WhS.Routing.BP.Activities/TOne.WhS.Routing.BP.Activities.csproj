@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="ApplyCodeMatchesToDB.cs" />
     <Compile Include="ApplyCodesToCodeSaleZoneTable.cs" />
+    <Compile Include="ApplyCustomerRoutesToDB.cs" />
     <Compile Include="ApplySupplierZoneDetailsToDB.cs" />
     <Compile Include="BuildCodeMatches.cs" />
     <Compile Include="BuildCustomerRoutes.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="LoadCustomerZoneDetails.cs" />
     <Compile Include="LoadSupplierZoneDetails.cs" />
     <Compile Include="PrepareCodeMatchesForApply.cs" />
+    <Compile Include="PrepareCustomerRoutesForApply.cs" />
     <Compile Include="PrepareSupplierZoneDetailForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetRoutingDatabaseReady.cs" />
