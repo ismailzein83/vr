@@ -13,6 +13,8 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public class BuildCustomerRoutesInput
     {
+        public CustomerZoneDetailByZone CustomerZoneDetails { get; set; }
+
         public BaseQueue<CodeMatches> InputQueue { get; set; }
 
         public BaseQueue<CustomerRoutesBatch> OutputQueue { get; set; }
@@ -31,10 +33,22 @@ namespace TOne.WhS.Routing.BP.Activities
         public DateTime? EntitiesEffectiveOn { get; set; }
 
         public bool EntitiesEffectiveInFuture { get; set; }
+
+        public BuildCustomerRoutesContext(CodeMatches codeMatches, CustomerZoneDetailByZone customerZoneDetails)
+        {
+            this.SaleCodeMatches = codeMatches.SaleCodeMatches;
+            this.SupplierCodeMatches = codeMatches.SupplierCodeMatches;
+            this.SupplierCodeMatchesBySupplier = codeMatches.SupplierCodeMatchesBySupplier;
+            this.CustomerZoneDetails = customerZoneDetails;
+        }
     }
 
     public sealed class BuildCustomerRoutes : DependentAsyncActivity<BuildCustomerRoutesInput>
     {
+
+        [RequiredArgument]
+        public InArgument<CustomerZoneDetailByZone> CustomerZoneDetails { get; set; }
+
         [RequiredArgument]
         public InArgument<BaseQueue<CodeMatches>> InputQueue { get; set; }
 
@@ -50,7 +64,7 @@ namespace TOne.WhS.Routing.BP.Activities
                 {
                     hasItem = inputArgument.InputQueue.TryDequeue((preparedCodeMatch) =>
                     {
-                        BuildCustomerRoutesContext customerRoutesContext = new BuildCustomerRoutesContext();
+                        BuildCustomerRoutesContext customerRoutesContext = new BuildCustomerRoutesContext(preparedCodeMatch, inputArgument.CustomerZoneDetails);
 
                         IEnumerable<SellingProductRoute> sellingProductRoute;
                         RouteBuilder builder = new RouteBuilder();
@@ -81,6 +95,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             return new BuildCustomerRoutesInput
             {
+                CustomerZoneDetails = this.CustomerZoneDetails.Get(context),
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
             };
