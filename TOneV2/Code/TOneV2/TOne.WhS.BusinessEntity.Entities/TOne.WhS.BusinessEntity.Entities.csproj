@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountManager\AccountManager.cs" />
     <Compile Include="AccountManager\AccountManagerCarrier.cs" />
     <Compile Include="AccountManager\AccountManagerCarrierQuery.cs" />
     <Compile Include="AccountManager\AssignedCarrier.cs" />

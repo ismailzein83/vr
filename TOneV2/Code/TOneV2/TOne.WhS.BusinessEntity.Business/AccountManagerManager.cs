@@ -7,16 +7,52 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Security.Business;
-
+using Vanrise.Common;
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class AccountManagerManager
     {
         public List<AccountManagerCarrier> GetCarriers(int userId)
         {
-            IAccountManagerCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerCarrierDataManager>();
-            return dataManager.GetCarriers(userId);
+            var accountMnagers = GetCachedAccountManagers();
+
+            accountMnagers.Where(x => x.UserId == userId);
+
+            return new List<AccountManagerCarrier>();
+
+          //  accountMnagers
+          //  IAccountManagerCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerCarrierDataManager>();
+          //  return dataManager.GetCarriers(userId);
         }
+
+
+        public AccountManagerCarrier AccountManagerCarrierMapper(AccountManager accountManager)
+        {
+            AccountManagerCarrier accountManagerCarrier = new AccountManagerCarrier();
+            CarrierAccountManager CarrierAccountManager=new CarrierAccountManager();
+             CarrierAccount carrierAccount=null;
+            if(accountManager.CarrierAccountId!=null)
+             carrierAccount=CarrierAccountManager.GetCarrierAccount((int)accountManager.CarrierAccountId);
+            if (carrierAccount != null)
+                accountManagerCarrier.CarrierName = carrierAccount.Name;
+            accountManagerCarrier.CarrierAccountId = accountManager.CarrierAccountId;
+
+         //   accountManagerCarrier.IsCustomerAvailable=carrierAccount.AccountType==CarrierAccountType.Customer &&  ;
+
+           // accountManagerCarrier.IsSupplierAvailable=;
+
+
+            return accountManagerCarrier;
+        }
+
+
+
+
+
+
+
+
+
 
         public List<AssignedCarrier> GetAssignedCarriers(int managerId, bool withDescendants, CarrierAccountType carrierType)
         {
@@ -124,6 +160,32 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetAssignedAccountIds(SecurityContext.Current.GetLoggedInUserId(), CarrierAccountType.Supplier);
         }
 
+
+        #region Private Members
+
+        IEnumerable<AccountManager> GetCachedAccountManagers()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountManagers",
+               () =>
+               {
+                   IAccountManagerCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerCarrierDataManager>();
+                   return dataManager.GetAccountManagers();
+                    
+               });
+        }
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IAccountManagerCarrierDataManager _dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerCarrierDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreAccountManagerUpdated(ref _updateHandle);
+            }
+        }
+
+        #endregion
 
 
     }

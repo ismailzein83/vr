@@ -16,17 +16,41 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("BEntity.sp_AccountManager_GetCarriers", AccountManagerCarrier, userId);
         }
+        public IEnumerable<AccountManager> GetAccountManagers()
+        {
+            return GetItemsSP("[TOneWhS_BE].[sp_AccountManager_GetAll]", AccountManagerMapper);
+        }
+
+
+        AccountManager AccountManagerMapper(IDataReader reader)
+        {
+            AccountManager accountManager = new AccountManager
+            {
+                CarrierAccountId = GetReaderValue<int>(reader,"CarrierAccountId") ,
+                UserId = GetReaderValue<int>(reader, "UserId"),
+                RelationType = (CarrierAccountType) reader["RelationType"]
+            };
+
+            return accountManager;
+        }
+
 
         AccountManagerCarrier AccountManagerCarrier(IDataReader reader)
         {
             AccountManagerCarrier carrier = new AccountManagerCarrier
             {
-                CarrierAccountId = reader["CarrierAccountId"] as string,
+              //  CarrierAccountId = reader["CarrierAccountId"] as string,
                 IsCustomerAvailable = (bool)reader["IsCustomerAvailable"],
                 IsSupplierAvailable = (bool)reader["IsSupplierAvailable"]
             };
 
             return carrier;
+        }
+
+
+        public bool AreAccountManagerUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.AccountManager", ref updateHandle);
         }
     }
 }
