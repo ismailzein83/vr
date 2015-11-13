@@ -31,7 +31,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<RoutingProductInfo> GetRoutingProductInfo(RoutingProductInfoFilter filter)
         {
-            IEnumerable<RoutingProduct> routingProducts = GetAllRoutingProducts().FindAllRecords(null);
+            IEnumerable<RoutingProduct> routingProducts = GetAllRoutingProducts().Values;
 
             if (filter != null)
                 routingProducts = routingProducts.FindAllRecords(routingProduct => filter.ExcludedRoutingProductId == null || routingProduct.RoutingProductId != filter.ExcludedRoutingProductId);

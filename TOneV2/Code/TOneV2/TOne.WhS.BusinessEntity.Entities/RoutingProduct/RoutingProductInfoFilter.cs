@@ -8,6 +8,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class RoutingProductInfoFilter
     {
-        public int ExcludedRoutingProductId { get; set; }
+        public int? ExcludedRoutingProductId { get; set; }
     }
 }

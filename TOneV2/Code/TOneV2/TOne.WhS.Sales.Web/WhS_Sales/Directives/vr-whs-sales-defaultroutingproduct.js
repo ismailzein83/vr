@@ -64,41 +64,30 @@ app.directive("vrWhsSalesDefaultroutingproduct", ["UtilsService", "VRUIUtilsServ
                             ctrl.endEffectiveDate = payload.CurrentEED;
                         }
 
-                        loadCurrentSelectorSection().then(function () {
-                            return loadNewSelectorSection();
-                        });
-                        
-                        function loadCurrentSelectorSection() {
-                            var currentSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        var currentSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                            currentSelectorReadyPromiseDeferred.promise.then(function () {
-                                var currentSelectorPayload = {
-                                    filter: null,
-                                    selectedIds: currentRoutingProductId
-                                };
+                        var currentSelectorPayload = {
+                            filter: null,
+                            selectedIds: currentRoutingProductId
+                        };
 
-                                VRUIUtilsService.callDirectiveLoad(currentSelectorAPI, currentSelectorPayload, currentSelectorLoadPromiseDeferred);
-                            });
+                        VRUIUtilsService.callDirectiveLoad(currentSelectorAPI, currentSelectorPayload, currentSelectorLoadPromiseDeferred);
 
-                            return currentSelectorLoadPromiseDeferred.promise;
-                        }
-
-                        function loadNewSelectorSection() {
+                        return currentSelectorLoadPromiseDeferred.promise.then(function () {
                             var newSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                            newSelectorReadyPromiseDeferred.promise.then(function () {
-                                var newSelectorPayload = {
-                                    filter: {
+                            var newSelectorPayloadFilter = (currentRoutingProductId != undefined && currentRoutingProductId != null) ?
+                                    { ExcludedRoutingProductId: currentRoutingProductId } : null;
 
-                                    },
-                                    selectedIds: null
-                                };
+                            var newSelectorPayload = {
+                                filter: newSelectorPayloadFilter,
+                                selectedIds: null
+                            };
 
-                                VRUIUtilsService.callDirectiveLoad(newSelectorAPI, newSelectorPayload, newSelectorLoadPromiseDeferred);
-                            });
+                            VRUIUtilsService.callDirectiveLoad(newSelectorAPI, newSelectorPayload, newSelectorLoadPromiseDeferred);
 
-                            return loadNewSelector.promise;
-                        }
+                            return newSelectorLoadPromiseDeferred.promise;
+                        });
                     };
 
                     api.getDefaultChanges = function () {

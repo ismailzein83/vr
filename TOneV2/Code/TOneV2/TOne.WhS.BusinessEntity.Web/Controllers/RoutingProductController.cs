@@ -21,11 +21,11 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<RoutingProductInfo> GetRoutingProductInfo(string serializedFilter)
+        public IEnumerable<RoutingProductInfo> GetRoutingProductInfo(string filter)
         {
-            RoutingProductInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<RoutingProductInfoFilter>(serializedFilter) : null;
+            RoutingProductInfoFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<RoutingProductInfoFilter>(filter) : null;
             RoutingProductManager manager = new RoutingProductManager();
-            return manager.GetRoutingProductInfo(filter);
+            return manager.GetRoutingProductInfo(deserializedFilter);
         }
         [HttpGet]
         public IEnumerable<RoutingProductInfo> GetRoutingProductsInfoBySellingNumberPlan(int sellingNumberPlanId)

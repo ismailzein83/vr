@@ -134,10 +134,7 @@
         }
 
         function loadDefaultRoutingProductSection() {
-            var loadPromises = [];
-
             var defaultRoutingProductDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-            loadPromises.push(defaultRoutingProductDirectiveLoadPromiseDeferred.promise);
 
             defaultRoutingProductDirectiveReadyPromiseDeferred.promise.then(function () {
                 var payload = {
@@ -145,12 +142,11 @@
                     CurrentBED: new Date(),
                     CurrentEED: new Date()
                 };
-
+                
                 VRUIUtilsService.callDirectiveLoad(defaultRoutingProductDirectiveAPI, payload, defaultRoutingProductDirectiveLoadPromiseDeferred);
-                defaultRoutingProductDirectiveAPI.load(payload);
             });
 
-            return UtilsService.waitMultiplePromises(loadPromises);
+            return defaultRoutingProductDirectiveLoadPromiseDeferred.promise;
         }
 
         function loadRatePlan() {
