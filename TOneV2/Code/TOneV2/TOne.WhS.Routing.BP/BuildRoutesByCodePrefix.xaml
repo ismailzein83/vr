@@ -94,18 +94,18 @@
             </OutArgument>
           </twrba1:GetSaleCodes.SaleCodes>
         </twrba1:GetSaleCodes>
-        <twrba1:LoadCustomerZoneDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadCustomerZoneDetails_1">
-          <twrba1:LoadCustomerZoneDetails.CustomerZoneDetails>
+        <twrba1:GetCustomerZoneDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetCustomerZoneDetails_1">
+          <twrba1:GetCustomerZoneDetails.CustomerZoneDetails>
             <OutArgument x:TypeArguments="twre:CustomerZoneDetailByZone">
               <mca:CSharpReference x:TypeArguments="twre:CustomerZoneDetailByZone">CustomerZoneDetails</mca:CSharpReference>
             </OutArgument>
-          </twrba1:LoadCustomerZoneDetails.CustomerZoneDetails>
-          <twrba1:LoadCustomerZoneDetails.SaleCodes>
+          </twrba1:GetCustomerZoneDetails.CustomerZoneDetails>
+          <twrba1:GetCustomerZoneDetails.SaleCodes>
             <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">
               <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">SaleCodes</mca:CSharpValue>
             </InArgument>
-          </twrba1:LoadCustomerZoneDetails.SaleCodes>
-        </twrba1:LoadCustomerZoneDetails>
+          </twrba1:GetCustomerZoneDetails.SaleCodes>
+        </twrba1:GetCustomerZoneDetails>
       </Sequence>
       <Sequence DisplayName="Sequence_SupplierCodes" sap2010:WorkflowViewState.IdRef="Sequence_3">
         <twrba1:GetSupplierCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSupplierCodes_1">
@@ -130,23 +130,23 @@
             </OutArgument>
           </twrba1:GetSupplierCodes.SupplierCodes>
         </twrba1:GetSupplierCodes>
-        <twrba1:LoadSupplierZoneDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadSupplierZoneDetails_1">
-          <twrba1:LoadSupplierZoneDetails.RoutingDatabaseId>
+        <twrba1:GetSupplierZoneDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSupplierZoneDetails_1">
+          <twrba1:GetSupplierZoneDetails.RoutingDatabaseId>
             <InArgument x:TypeArguments="x:Int32">
               <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabaseId</mca:CSharpValue>
             </InArgument>
-          </twrba1:LoadSupplierZoneDetails.RoutingDatabaseId>
-          <twrba1:LoadSupplierZoneDetails.SupplierCodes>
+          </twrba1:GetSupplierZoneDetails.RoutingDatabaseId>
+          <twrba1:GetSupplierZoneDetails.SupplierCodes>
             <InArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">
               <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">SupplierCodes</mca:CSharpValue>
             </InArgument>
-          </twrba1:LoadSupplierZoneDetails.SupplierCodes>
-          <twrba1:LoadSupplierZoneDetails.SupplierZoneDetails>
+          </twrba1:GetSupplierZoneDetails.SupplierCodes>
+          <twrba1:GetSupplierZoneDetails.SupplierZoneDetails>
             <OutArgument x:TypeArguments="twre:SupplierZoneDetailByZone">
               <mca:CSharpReference x:TypeArguments="twre:SupplierZoneDetailByZone">SupplierZoneDetails</mca:CSharpReference>
             </OutArgument>
-          </twrba1:LoadSupplierZoneDetails.SupplierZoneDetails>
-        </twrba1:LoadSupplierZoneDetails>
+          </twrba1:GetSupplierZoneDetails.SupplierZoneDetails>
+        </twrba1:GetSupplierZoneDetails>
       </Sequence>
     </Parallel>
     <Parallel DisplayName="Parallel_BuildCodeMatch" sap2010:WorkflowViewState.IdRef="Parallel_2">
