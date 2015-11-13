@@ -23,6 +23,8 @@ namespace TOne.WhS.Routing.BP.Activities
         public BaseQueue<CodeMatchesBatch> OutputQueue_1 { get; set; }
 
         public BaseQueue<CodeMatchesBatch> OutputQueue_2 { get; set; }
+
+        public BaseQueue<CodeMatches> OutputQueueForCustomerRoutes { get; set; }
     }
 
     public class BuildCodeMatchesContext : IBuildCodeMatchesContext
@@ -47,6 +49,9 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InOutArgument<BaseQueue<CodeMatchesBatch>> OutputQueue_2 { get; set; }
 
+        [RequiredArgument]
+        public InOutArgument<BaseQueue<CodeMatches>> OutputQueueForCustomerRoutes { get; set; }
+
 
         protected override void DoWork(BuildCodeMatchesInput inputArgument, AsyncActivityHandle handle)
         {
@@ -57,7 +62,10 @@ namespace TOne.WhS.Routing.BP.Activities
 
             CodeMatchBuilder builder = new CodeMatchBuilder();
             builder.BuildCodeMatches(codeMatchContext, inputArgument.SaleCodes, inputArgument.SupplierCodes, codeMatch => {
+                
+                inputArgument.OutputQueueForCustomerRoutes.Enqueue(codeMatch);
                 codeMatchesBatch.CodeMatches.Add(codeMatch);
+                
                 if(codeMatchesBatch.CodeMatches.Count >= 10)
                 {
                     inputArgument.OutputQueue_1.Enqueue(codeMatchesBatch);
@@ -81,7 +89,8 @@ namespace TOne.WhS.Routing.BP.Activities
                 SupplierCodes = this.SupplierCodes.Get(context),
                 SupplierZoneDetails = this.SupplierZoneDetails.Get(context),
                 OutputQueue_1 = this.OutputQueue_1.Get(context),
-                OutputQueue_2 = this.OutputQueue_2.Get(context)
+                OutputQueue_2 = this.OutputQueue_2.Get(context),
+                OutputQueueForCustomerRoutes = this.OutputQueueForCustomerRoutes.Get(context)
             };
         }
 
@@ -91,7 +100,10 @@ namespace TOne.WhS.Routing.BP.Activities
                 this.OutputQueue_1.Set(context, new MemoryQueue<CodeMatchesBatch>());
 
             if (this.OutputQueue_2.Get(context) == null)
-                this.OutputQueue_2.Set(context, new MemoryQueue<CodeMatchesBatch>());            
+                this.OutputQueue_2.Set(context, new MemoryQueue<CodeMatchesBatch>());
+
+            if (this.OutputQueueForCustomerRoutes.Get(context) == null)
+                this.OutputQueueForCustomerRoutes.Set(context, new MemoryQueue<CodeMatches>());        
 
             base.OnBeforeExecute(context, handle);
         }
