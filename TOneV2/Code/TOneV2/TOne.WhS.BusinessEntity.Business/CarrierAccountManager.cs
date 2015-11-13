@@ -56,8 +56,9 @@ namespace TOne.WhS.BusinessEntity.Business
             if (filter != null)
             {
                 if(filter.AssignableToSellingProductId!=null)
-                    carrierAccounts = this.GetAssignableCustomersToSellingProduct((int) filter.AssignableToSellingProductId);
-                else carrierAccounts = this.GetCarrierAccountsByType(filter.GetCustomers, filter.GetSuppliers, filter.SupplierFilterSettings, filter.CustomerFilterSettings);
+                    carrierAccounts = this.GetNotAssignableCustomersToSellingProduct((int)filter.AssignableToSellingProductId);
+                else
+                    carrierAccounts = this.GetCarrierAccountsByType(filter.GetCustomers, filter.GetSuppliers, filter.SupplierFilterSettings, filter.CustomerFilterSettings);
             }
             else
             {
@@ -157,17 +158,19 @@ namespace TOne.WhS.BusinessEntity.Business
         
         }
 
-        public IEnumerable<CarrierAccount> GetAssignableCustomersToSellingProduct(int sellingProductId)
+        public IEnumerable<CarrierAccount> GetNotAssignableCustomersToSellingProduct(int sellingProductId)
         {
            SellingProductManager sellingProductManager = new SellingProductManager();
            SellingProduct sellingProduct = sellingProductManager.GetSellingProduct(sellingProductId);
            var cachedCarrierAccounts = GetCachedCarrierAccounts();
            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
-           IEnumerable<CustomerSellingProduct> customerSellingProducts= customerSellingProductManager.GetCustomerSellingProductBySellingProduct(sellingProductId);
+           IEnumerable<CustomerSellingProduct> customerSellingProducts = customerSellingProductManager.GetEffectiveCustomerSellingProduct();
            return cachedCarrierAccounts.Values.Where(x => x.CustomerSettings.SellingNumberPlanId == sellingProduct.SellingNumberPlanId
-               && customerSellingProducts.Any(y=>y.CustomerId==x.CarrierAccountId));
+               && (!customerSellingProducts.Any(y => y.CustomerId == x.CarrierAccountId )));
          
         }
+
+
         #region Private Members
 
         Dictionary<int, CarrierAccount> GetCachedCarrierAccounts()

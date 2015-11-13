@@ -56,106 +56,53 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
 
-        public TOne.Entities.InsertOperationOutput<List<CustomerSellingProductClass>> AddCustomerSellingProduct(List<CustomerSellingProduct> customerSellingProducts)
+        public TOne.Entities.InsertOperationOutput<List<CustomerSellingProductDetail>> AddCustomerSellingProduct(List<CustomerSellingProduct> customerSellingProducts)
         {
 
-            TOne.Entities.InsertOperationOutput<List<CustomerSellingProductClass>> insertOperationOutput = new TOne.Entities.InsertOperationOutput<List<CustomerSellingProductClass>>();
+            TOne.Entities.InsertOperationOutput<List<CustomerSellingProductDetail>> insertOperationOutput = new TOne.Entities.InsertOperationOutput<List<CustomerSellingProductDetail>>();
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
 
-            //insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            //insertOperationOutput.InsertedObject = null;
+            var cashedCustomerSellingProducts = GetCachedOrderedCustomerSellingProducts();
 
-          //  int customerSellingProductId = -1;
+            IEnumerable<CustomerSellingProduct> customerSellingProductList = cashedCustomerSellingProducts.Values.Where(x => customerSellingProducts.Any(y => y.CustomerId == x.CustomerId) && x.BED > DateTime.Today);
+            if (customerSellingProductList != null && customerSellingProductList.Count() > 0)
+            {
+                return insertOperationOutput;
+            }
+
             ICustomerSellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerSellingProductDataManager>();
             List<CustomerSellingProduct> customerSellingProductObject = new List<CustomerSellingProduct>();
 
-            #region Insertion Rules
             foreach (CustomerSellingProduct customerSellingProduct in customerSellingProducts)
                 {
-                    var cashedCustomerSellingProducts = GetCachedOrderedCustomerSellingProducts();
-
-
-                    IEnumerable<CustomerSellingProduct> customerSellingProductList = cashedCustomerSellingProducts.FindAllRecords(x => x.CustomerId == customerSellingProduct.CustomerId);
-                    if (customerSellingProductList == null || customerSellingProductList.Count() == 0)
-                    {
-                        customerSellingProductObject.Add(new CustomerSellingProduct
-                        {
-                            CustomerId = customerSellingProduct.CustomerId,
-                            BED = customerSellingProduct.BED,
-                            SellingProductId = customerSellingProduct.SellingProductId,
-                        });
-                    }
-                    else
-                    {
-                        foreach (CustomerSellingProduct obj in customerSellingProductList)
-                        {
-                                if (obj.BED < customerSellingProduct.BED)
-                                {
-                                    customerSellingProductObject.Add(new CustomerSellingProduct
-                                    {
-                                        CustomerId = obj.CustomerId,
-                                        BED = obj.BED,
-                                        SellingProductId = obj.SellingProductId,
-                                    });
-                                }
-                                else if (obj.BED > customerSellingProduct.BED)
-                                {
-                                    
-                                        customerSellingProductObject.Add(new CustomerSellingProduct
-                                        {
-                                            CustomerId = customerSellingProduct.CustomerId,
-                                            BED = customerSellingProduct.BED,
-                                            SellingProductId = customerSellingProduct.SellingProductId,
-                                            CustomerSellingProductId = obj.CustomerSellingProductId,
-
-                                        });
-                                        customerSellingProductObject.Add(new CustomerSellingProduct
-                                        {
-                                            CustomerId = customerSellingProduct.CustomerId,
-                                            BED = customerSellingProduct.BED,
-                                            SellingProductId = customerSellingProduct.SellingProductId,
-                                        });
-                                }
-                                
-                            
-                        }
-                    }
-
-
-
-                }
-            #endregion
-
+                    customerSellingProductObject.Add(new CustomerSellingProduct
+                   {
+                       CustomerId = customerSellingProduct.CustomerId,
+                       BED = customerSellingProduct.BED,
+                       SellingProductId = customerSellingProduct.SellingProductId,
+                      });
+                 }
             List<CustomerSellingProduct> insertedObjects = new List<CustomerSellingProduct>();
 
-            List<CustomerSellingProductClass> returnedData=new List<CustomerSellingProductClass>();
+            List<CustomerSellingProductDetail> returnedData = new List<CustomerSellingProductDetail>();
             bool insertActionSucc = dataManager.Insert(customerSellingProductObject, out  insertedObjects);
-            foreach (CustomerSellingProduct customerSellingProduct in customerSellingProductObject)
+            if (insertActionSucc)
             {
-                if (customerSellingProduct.CustomerSellingProductId != 0)
+                foreach (CustomerSellingProduct customerSellingProduct in insertedObjects)
                 {
                     var obj = CustomerSellingProductDetailMapper(customerSellingProduct);
-                    returnedData.Add(new CustomerSellingProductClass{
-                        Status= Status.Deleted,
+                    returnedData.Add(new CustomerSellingProductDetail
+                    {
                         Entity = obj.Entity,
                         CustomerName = obj.CustomerName,
                         SellingProductName = obj.SellingProductName
-
                     });
                 }
-            }
-            foreach (CustomerSellingProduct customerSellingProduct in insertedObjects)
-            {
-                var obj = CustomerSellingProductDetailMapper(customerSellingProduct);
-                returnedData.Add(new CustomerSellingProductClass
-                {
-                    Status = Status.New,
-                    Entity = obj.Entity,
-                    CustomerName = obj.CustomerName,
-                    SellingProductName = obj.SellingProductName
-                });
-            }
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = returnedData;
+            }
+           
             return insertOperationOutput;
         }
 
@@ -181,34 +128,20 @@ namespace TOne.WhS.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public IEnumerable<CustomerSellingProduct> GetCustomerSellingProductBySellingProduct(int sellingProductId)
+        public IEnumerable<CustomerSellingProduct> GetEffectiveCustomerSellingProduct()
         {
             var customerSellingProducts = GetCachedOrderedCustomerSellingProducts();
-            return customerSellingProducts.Values.FindAllRecords(x => x.SellingProductId != sellingProductId && x.BED>DateTime.Now);
+            return customerSellingProducts.Values.FindAllRecords(x => x.BED>DateTime.Now);
         }
 
+        public bool IsAssignableCustomerToSellingProduct(int customerId)
+        {
+            var customerSellingProducts = GetCachedOrderedCustomerSellingProducts();
+            return customerSellingProducts.Values.Any(x => x.BED > DateTime.Now && x.CustomerId == customerId);
 
 
-        //public TOne.Entities.UpdateOperationOutput<object> DeleteCustomerSellingProduct(int customerSellingProductId)
-        //{
-        //    ICustomerSellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerSellingProductDataManager>();
+        }
 
-        //    TOne.Entities.UpdateOperationOutput<object> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<object>();
-        //    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-
-        //    bool updateActionSucc = dataManager.Delete(customerSellingProductId);
-
-        //    if (updateActionSucc)
-        //    {
-        //         List<CustomerSellingProductDetail> customerSellingProducts = GetCachedCustomerSellingProducts();
-        //            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-        //         updateOperationOutput.UpdatedObject = customerSellingProducts.FindRecord(x => x.CustomerSellingProductId == customerSellingProductId);
-
-
-        //    }
-
-        //    return updateOperationOutput;
-        //}
         #region Private Members
 
         Dictionary<int,CustomerSellingProduct> GetCachedOrderedCustomerSellingProducts()
@@ -252,11 +185,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
         #endregion
-    }
-    public enum Status { New = 0, Updated = 1,Deleted=2 }
-    public class CustomerSellingProductClass : CustomerSellingProductDetail
-    {
-        public Status Status { get; set; }
     }
 
 

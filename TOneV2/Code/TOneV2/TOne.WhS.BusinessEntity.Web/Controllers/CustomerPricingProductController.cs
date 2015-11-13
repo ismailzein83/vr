@@ -24,7 +24,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.GetCustomerSellingProduct(customerSellingProductId);
         }
         [HttpPost]
-        public TOne.Entities.InsertOperationOutput<List<CustomerSellingProductClass>> AddCustomerSellingProduct(List<CustomerSellingProduct> customerSellingProducts)
+        public TOne.Entities.InsertOperationOutput<List<CustomerSellingProductDetail>> AddCustomerSellingProduct(List<CustomerSellingProduct> customerSellingProducts)
         {
             CustomerSellingProductManager manager = new CustomerSellingProductManager();
             return manager.AddCustomerSellingProduct(customerSellingProducts);
@@ -35,6 +35,11 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CustomerSellingProductManager manager = new CustomerSellingProductManager();
             return manager.UpdateCustomerSellingProduct(customerSellingProduct);
         }
-
+         [HttpGet]
+         public bool IsAssignableCustomerToSellingProduct(int customerId)
+        {
+            CustomerSellingProductManager manager = new CustomerSellingProductManager();
+            return manager.IsAssignableCustomerToSellingProduct(customerId);
+        }
     }
 }

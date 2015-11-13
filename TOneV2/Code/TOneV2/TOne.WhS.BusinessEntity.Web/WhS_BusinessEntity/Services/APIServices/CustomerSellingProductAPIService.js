@@ -25,13 +25,17 @@
         function UpdateCustomerSellingProduct(customerSellingProductObject) {
             return BaseAPIService.post("/api/CustomerSellingProduct/UpdateCustomerSellingProduct", customerSellingProductObject);
         }
+        function IsAssignableCustomerToSellingProduct(customerId) {
+            return BaseAPIService.get("/api/CustomerSellingProduct/IsAssignableCustomerToSellingProduct", { customerId: customerId });
+        }
 
         return ({
             GetFilteredCustomerSellingProducts: GetFilteredCustomerSellingProducts,
             AddCustomerSellingProduct: AddCustomerSellingProduct,
             DeleteCustomerSellingProduct: DeleteCustomerSellingProduct,
             GetCustomerSellingProduct: GetCustomerSellingProduct,
-            UpdateCustomerSellingProduct: UpdateCustomerSellingProduct
+            UpdateCustomerSellingProduct: UpdateCustomerSellingProduct,
+            IsAssignableCustomerToSellingProduct: IsAssignableCustomerToSellingProduct
         });
     }
 

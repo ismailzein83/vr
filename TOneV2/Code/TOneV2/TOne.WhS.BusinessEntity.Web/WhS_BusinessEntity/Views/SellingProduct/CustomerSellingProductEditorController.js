@@ -11,12 +11,11 @@
 
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         var sellingProductId;
-        var carrierAccountId;
         var customerSellingProductId;
         var isEditMode;
         var customerSellingProductEntity;
+        var assignableCustomerToSellingProduct;
         defineScope();
         loadParameters();
         load();
@@ -24,12 +23,12 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 customerSellingProductId = parameters.CustomerSellingProductId;
-                sellingProductId = parameters.SellingProductId;
-                carrierAccountId = parameters.CarrierAccountId;
+               sellingProductId = parameters.SellingProductId;
+                $scope.carrierAccountId = parameters.CarrierAccountId;
             }
             isEditMode = (customerSellingProductId!=undefined)
             $scope.disableSellingProduct = (sellingProductId != undefined);
-            $scope.disableCarrierAccount = (carrierAccountId != undefined || isEditMode);
+            $scope.disableCarrierAccount = ($scope.carrierAccountId != undefined || isEditMode);
 
         }
         function defineScope() {
@@ -83,6 +82,7 @@
                 });
             }
             else {
+   
                 loadAllControls();
             }
            
@@ -90,7 +90,7 @@
         }
         function loadAllControls() {
   
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection,loadSellingProducts, loadCarrierAccounts])
+            return UtilsService.waitMultipleAsyncOperations([isAssignableCustomerToSellingProduct,loadFilterBySection,loadSellingProducts, loadCarrierAccounts])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -116,7 +116,7 @@
 
             sellingProductReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = sellingProductId != undefined ? sellingProductId : customerSellingProductEntity!=undefined?customerSellingProductEntity.SellingProductId:undefined
+                    var directivePayload = sellingProductId != undefined ? sellingProductId : customerSellingProductEntity != undefined ? customerSellingProductEntity.SellingProductId : undefined
 
                     VRUIUtilsService.callDirectiveLoad(sellingProductDirectiveAPI, directivePayload, sellingProductLoadPromiseDeferred);
                 });
@@ -130,7 +130,7 @@
                 .then(function () {
                     var directivePayload = {
                       
-                        selectedIds: carrierAccountId != undefined ? [carrierAccountId] : customerSellingProductEntity != undefined ? [customerSellingProductEntity.CustomerId] : undefined
+                        selectedIds: $scope.carrierAccountId != undefined ? [$scope.carrierAccountId] : customerSellingProductEntity != undefined ? [customerSellingProductEntity.CustomerId] : undefined
                     }
                     VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, directivePayload, carrierAccountLoadPromiseDeferred);
                 });
@@ -178,6 +178,20 @@
             }
            
             return obj;
+        }
+
+        function isAssignableCustomerToSellingProduct() {  
+            if ($scope.carrierAccountId != undefined)
+            {
+                return WhS_BE_CustomerSellingProductAPIService.IsAssignableCustomerToSellingProduct($scope.carrierAccountId).then(function (response) {
+                    if (response == true) {
+                        VRNotificationService.showError("This Customer Is Assigned to Selling Product");
+                        $scope.modalContext.closeModal();
+                    }
+                       
+                });
+            }
+          
         }
         function updateCustomerSellingProduct() {
             var customerSellingProductObject = buildSellingProductObjFromScope();
