@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\AccountManagerController.cs" />
     <Compile Include="Controllers\CodeGroupController.cs" />
     <Compile Include="Controllers\CarrierAccountController.cs" />
     <Compile Include="Controllers\CarrierProfileController.cs" />
@@ -256,6 +257,7 @@
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-selector.js" />
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\AccountManagerAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CodeGroupAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\ZoneServiceConfigAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\RateTypeAPIService.js" />
@@ -274,6 +276,12 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\CodeGroupService.js" />
     <Content Include="WhS_BusinessEntity\Services\MainService.js" />
+    <Content Include="WhS_BusinessEntity\Views\AccountManager\AccountManagerManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\AccountManager\AccountManagerManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\AccountManager\CarrierAssignmentEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\AccountManager\CarrierAssignmentEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\AccountManager\OrgChartAssignmentEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\AccountManager\OrgChartAssignmentEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierAccountEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierAccountEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierAccountManagement.html" />

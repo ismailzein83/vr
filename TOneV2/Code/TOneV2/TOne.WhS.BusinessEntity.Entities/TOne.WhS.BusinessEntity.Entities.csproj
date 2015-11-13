@@ -47,8 +47,18 @@
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountManager\AccountManagerCarrier.cs" />
+    <Compile Include="AccountManager\AccountManagerCarrierQuery.cs" />
+    <Compile Include="AccountManager\AssignedCarrier.cs" />
+    <Compile Include="AccountManager\AssignedCarrierFromTempTable.cs" />
+    <Compile Include="AccountManager\AssignedCarrierQuery.cs" />
+    <Compile Include="AccountManager\OrgChartAccountManagerInfo.cs" />
+    <Compile Include="AccountManager\UpdatedAccountManagerCarrier.cs" />
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
     <Compile Include="BusinessManagers\ContextFactory.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />
