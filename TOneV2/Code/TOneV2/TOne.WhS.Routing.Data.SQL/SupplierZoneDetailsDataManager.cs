@@ -46,7 +46,7 @@ namespace TOne.WhS.Routing.Data.SQL
         {
             InsertBulkToTable(preparedSupplierZoneDetails as BaseBulkInsertInfo);
         }
-        public IEnumerable<SupplierZoneDetail> LoadSupplierZoneDetails()
+        public IEnumerable<SupplierZoneDetail> GetSupplierZoneDetails()
         {
             return GetItemsText(query_GetSupplierZoneDetails, SupplierZoneDetailMapper, null);
         }

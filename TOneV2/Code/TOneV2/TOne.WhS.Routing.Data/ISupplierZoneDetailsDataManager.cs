@@ -12,6 +12,6 @@ namespace TOne.WhS.Routing.Data
     {
         void SaveSupplierZoneDetailsForDB(List<SupplierZoneDetail> supplierZoneDetails);
         void ApplySupplierZoneDetailsForDB(object preparedSupplierZoneDetails);
-        IEnumerable<SupplierZoneDetail> LoadSupplierZoneDetails();
+        IEnumerable<SupplierZoneDetail> GetSupplierZoneDetails();
     }
 }

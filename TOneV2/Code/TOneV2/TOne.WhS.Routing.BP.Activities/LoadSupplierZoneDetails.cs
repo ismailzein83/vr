@@ -6,6 +6,7 @@ using System.Activities;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
+using TOne.WhS.Routing.Data;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -13,6 +14,8 @@ namespace TOne.WhS.Routing.BP.Activities
     public class LoadSupplierZoneDetailsInput
     {
         public IEnumerable<SupplierCode> SupplierCodes { get; set; }
+
+        public int RoutingDatabaseId { get; set; }
     }
 
     public class LoadSupplierZoneDetailsOutput
@@ -28,30 +31,34 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<IEnumerable<SupplierCode>> SupplierCodes { get; set; }
 
         [RequiredArgument]
+        public InArgument<int> RoutingDatabaseId { get; set; }
+
+        [RequiredArgument]
         public OutArgument<SupplierZoneDetailByZone> SupplierZoneDetails { get; set; }
 
         protected override LoadSupplierZoneDetailsOutput DoWorkWithResult(LoadSupplierZoneDetailsInput inputArgument, AsyncActivityHandle handle)
         {
 
-            SupplierZoneDetailByZone supplierZoneDetails = new SupplierZoneDetailByZone();
+            SupplierZoneDetailByZone supplierZoneDetailsByZone = null;
+            
+            ISupplierZoneDetailsDataManager supplierZoneDetailsManager = RoutingDataManagerFactory.GetDataManager<ISupplierZoneDetailsDataManager>();
+            supplierZoneDetailsManager.DatabaseId = inputArgument.RoutingDatabaseId;
 
-            foreach (SupplierCode code in inputArgument.SupplierCodes)
+            IEnumerable<SupplierZoneDetail> supplierZoneDetails = supplierZoneDetailsManager.GetSupplierZoneDetails();
+
+            if(supplierZoneDetails != null)
             {
-                if(!supplierZoneDetails.ContainsKey(code.ZoneId))
-                {
-                    SupplierZoneDetail zoneDetail = new SupplierZoneDetail()
-                    {
-                        SupplierId = 1,
-                        SupplierZoneId = code.ZoneId,
-                        EffectiveRateValue = 12
-                    };
+                supplierZoneDetailsByZone = new SupplierZoneDetailByZone();
 
-                    supplierZoneDetails.Add(code.ZoneId, zoneDetail);
+                foreach (SupplierCode code in inputArgument.SupplierCodes)
+                {
+                    if (!supplierZoneDetailsByZone.ContainsKey(code.ZoneId))
+                        supplierZoneDetailsByZone.Add(code.ZoneId, supplierZoneDetails.FirstOrDefault(x => x.SupplierZoneId == code.ZoneId));
                 }
             }
 
             return new LoadSupplierZoneDetailsOutput {
-                SupplierZoneDetails = supplierZoneDetails
+                SupplierZoneDetails = supplierZoneDetailsByZone
             };
         }
 
@@ -59,6 +66,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             return new LoadSupplierZoneDetailsInput
             {
+                RoutingDatabaseId = this.RoutingDatabaseId.Get(context),
                 SupplierCodes = this.SupplierCodes.Get(context)
             };
         }
