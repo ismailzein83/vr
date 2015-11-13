@@ -10,17 +10,17 @@ using Vanrise.BusinessProcess;
 namespace TOne.WhS.Routing.BP.Activities
 {
 
-    public class LoadCustomerZoneDetailsInput
+    public class GetCustomerZoneDetailsInput
     {
         public IEnumerable<SaleCode> SaleCodes { get; set; }
     }
 
-    public class LoadCustomerZoneDetailsOutput
+    public class GetCustomerZoneDetailsOutput
     {
         public CustomerZoneDetailByZone CustomerZoneDetails { get; set; }
     }
 
-    public sealed class LoadCustomerZoneDetails : BaseAsyncActivity<LoadCustomerZoneDetailsInput, LoadCustomerZoneDetailsOutput>
+    public sealed class GetCustomerZoneDetails : BaseAsyncActivity<GetCustomerZoneDetailsInput, GetCustomerZoneDetailsOutput>
     {
 
         [RequiredArgument]
@@ -29,7 +29,7 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public OutArgument<CustomerZoneDetailByZone> CustomerZoneDetails { get; set; }
 
-        protected override LoadCustomerZoneDetailsOutput DoWorkWithResult(LoadCustomerZoneDetailsInput inputArgument, AsyncActivityHandle handle)
+        protected override GetCustomerZoneDetailsOutput DoWorkWithResult(GetCustomerZoneDetailsInput inputArgument, AsyncActivityHandle handle)
         {
             CustomerZoneDetailByZone customerZoneDetails = new CustomerZoneDetailByZone();
             
@@ -59,21 +59,21 @@ namespace TOne.WhS.Routing.BP.Activities
                 }
             }
 
-            return new LoadCustomerZoneDetailsOutput
+            return new GetCustomerZoneDetailsOutput
             {
                 CustomerZoneDetails = customerZoneDetails
             };
         }
 
-        protected override LoadCustomerZoneDetailsInput GetInputArgument(AsyncCodeActivityContext context)
+        protected override GetCustomerZoneDetailsInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            return new LoadCustomerZoneDetailsInput
+            return new GetCustomerZoneDetailsInput
             {
                 SaleCodes = this.SaleCodes.Get(context)
             };
         }
 
-        protected override void OnWorkComplete(AsyncCodeActivityContext context, LoadCustomerZoneDetailsOutput result)
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetCustomerZoneDetailsOutput result)
         {
             this.CustomerZoneDetails.Set(context, result.CustomerZoneDetails);
         }

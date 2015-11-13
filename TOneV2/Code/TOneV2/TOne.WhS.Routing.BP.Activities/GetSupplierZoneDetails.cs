@@ -11,20 +11,20 @@ using TOne.WhS.Routing.Data;
 namespace TOne.WhS.Routing.BP.Activities
 {
 
-    public class LoadSupplierZoneDetailsInput
+    public class GetSupplierZoneDetailsInput
     {
         public IEnumerable<SupplierCode> SupplierCodes { get; set; }
 
         public int RoutingDatabaseId { get; set; }
     }
 
-    public class LoadSupplierZoneDetailsOutput
+    public class GetSupplierZoneDetailsOutput
     {
         public SupplierZoneDetailByZone SupplierZoneDetails { get; set; }
     }
 
 
-    public sealed class LoadSupplierZoneDetails : BaseAsyncActivity<LoadSupplierZoneDetailsInput, LoadSupplierZoneDetailsOutput>
+    public sealed class GetSupplierZoneDetails : BaseAsyncActivity<GetSupplierZoneDetailsInput, GetSupplierZoneDetailsOutput>
     {
 
         [RequiredArgument]
@@ -36,7 +36,7 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public OutArgument<SupplierZoneDetailByZone> SupplierZoneDetails { get; set; }
 
-        protected override LoadSupplierZoneDetailsOutput DoWorkWithResult(LoadSupplierZoneDetailsInput inputArgument, AsyncActivityHandle handle)
+        protected override GetSupplierZoneDetailsOutput DoWorkWithResult(GetSupplierZoneDetailsInput inputArgument, AsyncActivityHandle handle)
         {
 
             SupplierZoneDetailByZone supplierZoneDetailsByZone = null;
@@ -57,21 +57,21 @@ namespace TOne.WhS.Routing.BP.Activities
                 }
             }
 
-            return new LoadSupplierZoneDetailsOutput {
+            return new GetSupplierZoneDetailsOutput {
                 SupplierZoneDetails = supplierZoneDetailsByZone
             };
         }
 
-        protected override LoadSupplierZoneDetailsInput GetInputArgument(AsyncCodeActivityContext context)
+        protected override GetSupplierZoneDetailsInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            return new LoadSupplierZoneDetailsInput
+            return new GetSupplierZoneDetailsInput
             {
                 RoutingDatabaseId = this.RoutingDatabaseId.Get(context),
                 SupplierCodes = this.SupplierCodes.Get(context)
             };
         }
 
-        protected override void OnWorkComplete(AsyncCodeActivityContext context, LoadSupplierZoneDetailsOutput result)
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetSupplierZoneDetailsOutput result)
         {
             this.SupplierZoneDetails.Set(context, result.SupplierZoneDetails);
         }

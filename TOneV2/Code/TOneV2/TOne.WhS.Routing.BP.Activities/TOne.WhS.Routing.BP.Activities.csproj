@@ -75,10 +75,10 @@
     <Compile Include="GenerateSupplierZoneDetails.cs" />
     <Compile Include="GetSaleCodes.cs" />
     <Compile Include="GetSupplierCodes.cs" />
-    <Compile Include="LoadActiveCustomerInfos.cs" />
-    <Compile Include="LoadActiveSupplierInfos.cs" />
-    <Compile Include="LoadCustomerZoneDetails.cs" />
-    <Compile Include="LoadSupplierZoneDetails.cs" />
+    <Compile Include="GetActiveCustomerInfos.cs" />
+    <Compile Include="GetActiveSupplierInfos.cs" />
+    <Compile Include="GetCustomerZoneDetails.cs" />
+    <Compile Include="GetSupplierZoneDetails.cs" />
     <Compile Include="PrepareCodeMatchesForApply.cs" />
     <Compile Include="PrepareCustomerRoutesForApply.cs" />
     <Compile Include="PrepareSupplierZoneDetailForDBApply.cs" />
