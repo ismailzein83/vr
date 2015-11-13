@@ -9,7 +9,9 @@
         var carrierProfileId;
         var carrierProfileEntity;
         var countryId;
+        var cityId;
         var countryDirectiveApi;
+        var cityDirectiveApi;
         loadParameters();
         defineScope();
         load();
@@ -39,6 +41,12 @@
                 countryDirectiveApi = api;
                 load();
             }
+
+            $scope.onCityDirectiveReady = function (api) {
+                cityDirectiveApi = api;
+                load();
+            }
+
             $scope.SaveCarrierProfile = function () {
                 if (isEditMode) {
                     return updateCarrierProfile();
@@ -94,17 +102,34 @@
 
         }
 
+        function loadCountries() {
+            return countryDirectiveApi.load().then(function (response) {
+                if (countryId != undefined) {
+                    countryDirectiveApi.setData(countryId);
+                }
+            });
+        }
+
+
+        function loadCities() {
+            var loadCityPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            cityReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(cityDirectiveAPI, undefined, loadCityPromiseDeferred);
+            });
+
+            return loadCityPromiseDeferred.promise;
+        }
+
 
         function load() {
             $scope.isLoading = true;
-            if (countryDirectiveApi == undefined)
+            if (countryDirectiveApi == undefined || cityDirectiveApi == undefined)
                 return;
-            countryDirectiveApi.load().then(function () {
-                if (countryId != undefined) {
-                    countryDirectiveApi.setData(countryId);
-                    $scope.isLoading = false;
-                }
-                else if (isEditMode) {
+
+            UtilsService.waitMultipleAsyncOperations([loadCountries, loadCities])
+            .then(function () {
+                if (isEditMode) {
                     getCarrierProfile().then(function () {
                         loadFilterBySection();
                         $scope.isLoading = false;
@@ -113,10 +138,13 @@
                 else {
                     $scope.isLoading = false;
                 }
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
+
+            })
+            .catch(function (error) {
                 $scope.isLoading = false;
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
+
         }
 
         function getCarrierProfile() {
@@ -147,16 +175,18 @@
 
                     countryDirectiveApi.setData(carrierProfileEntity.Settings.CountryId)
 
+                    cityDirectiveApi.setData(carrierProfileEntity.Settings.CityId)
+
 
 
                     if (carrierProfileEntity.Settings.PhoneNumbers == undefined)
                         carrierProfileEntity.Settings.PhoneNumbers = [];
-                    
+
                     for (var i = 0; i < carrierProfileEntity.Settings.PhoneNumbers.length; i++) {
-                            $scope.phoneNumbers.push({
-                                id: i,
-                                phoneNumber: carrierProfileEntity.Settings.PhoneNumbers[i]
-                            });
+                        $scope.phoneNumbers.push({
+                            id: i,
+                            phoneNumber: carrierProfileEntity.Settings.PhoneNumbers[i]
+                        });
                     }
 
 
@@ -200,6 +230,7 @@
                 Name: $scope.name,
                 Settings: {
                     CountryId: countryDirectiveApi.getDataId(),
+                    CityId: cityDirectiveApi.getDataId(),
                     Company: $scope.company, Website: $scope.website,
                     RegistrationNumber: $scope.registrationNumber,
                     Address: $scope.address,
