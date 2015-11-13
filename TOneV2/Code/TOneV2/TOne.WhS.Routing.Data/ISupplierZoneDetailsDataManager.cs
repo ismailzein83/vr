@@ -11,7 +11,7 @@ namespace TOne.WhS.Routing.Data
     public interface ISupplierZoneDetailsDataManager : IDataManager, IBulkApplyDataManager<SupplierZoneDetail>, IRoutingDataManager
     {
         void SaveSupplierZoneDetailsForDB(List<SupplierZoneDetail> supplierZoneDetails);
-
         void ApplySupplierZoneDetailsForDB(object preparedSupplierZoneDetails);
+        IEnumerable<SupplierZoneDetail> LoadSupplierZoneDetails();
     }
 }
