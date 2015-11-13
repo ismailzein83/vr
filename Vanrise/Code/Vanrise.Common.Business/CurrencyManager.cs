@@ -66,6 +66,10 @@ namespace Vanrise.Common.Business
                 currency.CurrencyId = currencyId;
                 insertOperationOutput.InsertedObject = currency;
             }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
 
             return insertOperationOutput;
         }
@@ -85,7 +89,10 @@ namespace Vanrise.Common.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = currency;
             }
-
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
             return updateOperationOutput;
         }
         #region Private Members

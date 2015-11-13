@@ -1,159 +1,149 @@
 ﻿'use strict';
-app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommon_CountryService', 'UtilsService', '$compile',
-    function (VRCommon_CountryAPIService, VRCommon_CountryService, UtilsService, $compile) {
+app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommon_CountryService', 'UtilsService', 'VRUIUtilsService',
+    function (VRCommon_CountryAPIService, VRCommon_CountryService, UtilsService, VRUIUtilsService) {
 
-    var directiveDefinitionObject = {
-        restrict: 'E',
-        scope: {
-            type: "=",
-            onReady: '=',
-            label: "@",
-            ismultipleselection: "@",
-            hideselectedvaluessection: '@',
-            onselectionchanged: '=',
-            isrequired: '@',
-            isdisabled: "=",
-            selectedvalues: "=",
-            showaddbutton: '@'
-        },
-        controller: function ($scope, $element, $attrs) {
-            var ctrl = this;
+        var directiveDefinitionObject = {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+                ismultipleselection: "@",
+                onselectionchanged: '=',
+                selectedvalues: '=',
+                isrequired: "@",
+                onselectitem: "=",
+                ondeselectitem: "=",
+                isdisabled: "=",
+            },
+            controller: function ($scope, $element, $attrs) {
 
-            $scope.selectedCountryValues;
-            if ($attrs.ismultipleselection != undefined)
-                $scope.selectedCountryValues = [];
+                var ctrl = this;
+                ctrl.datasource = [];
 
-            $scope.addNewCountry = function () {
-                var onCountryAdded = function (countryObj) {
-                    $scope.datasource.length = 0;
-                    return getAllCountries($scope, VRCommon_CountryAPIService).then(function (response) {
-                        if ($attrs.ismultipleselection == undefined)
-                             $scope.selectedCountryValues = UtilsService.getItemByVal($scope.datasource, countryObj.Entity.CountryId, "CountryId");
-                    }).catch(function (error) {
-                    }).finally(function () {
+                ctrl.selectedvalues;
+                if ($attrs.ismultipleselection != undefined)
+                    ctrl.selectedvalues = [];
 
-                    });;
-                };
-                VRCommon_CountryService.addCountry(onCountryAdded);
-            }
-            $scope.datasource = [];
-            var beCountry = new Country(ctrl, $scope, VRCommon_CountryAPIService, $attrs);
-            beCountry.initializeController();
-            $scope.onselectionchanged = function () {
-                ctrl.selectedvalues = $scope.selectedCountryValues;
-                if (ctrl.onselectionchanged != undefined) {
-                    var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
-                    if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                        onvaluechangedMethod();
-                    }
+                $scope.addNewCountry = function () {
+                    var onCountryAdded = function (countryObj) {
+                        return getAllCountries($attrs, ctrl, countryObj.Entity.CountryId); 
+                    };
+                    VRCommon_CountryService.addCountry(onCountryAdded);
                 }
 
+
+                var ctor = new countryCtor(ctrl, $scope, $attrs);
+                ctor.initializeController();
+
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            compile: function (element, attrs) {
+                return {
+                    pre: function ($scope, iElem, iAttrs, ctrl) {
+
+                    }
+                }
+            },
+            template: function (element, attrs) {
+                return getCountryTemplate(attrs);
             }
 
-        },
-        controllerAs: 'ctrl',
-        bindToController: true,
-        link: function preLink($scope, iElement, iAttrs) {
-            var ctrl = $scope.ctrl;
-            $scope.$watch('ctrl.isdisabled', function () {
-                var template = getBeCountryTemplate(iAttrs, ctrl);
-                iElement.html(template);
-                $compile(iElement.contents())($scope);
-            });
+        };
+
+
+        function getCountryTemplate(attrs) {
+
+            var multipleselection = "";
+            var label = "Country";
+            if (attrs.ismultipleselection != undefined) {
+                label = "Countries";
+                multipleselection = "ismultipleselection";
+            }
+
+            var required = "";
+            if (attrs.isrequired != undefined)
+                required = "isrequired";
+            var addCliked = '';
+            if (attrs.showaddbutton != undefined)
+                addCliked = 'onaddclicked="addNewCountry"';
+
+            return '<div>'
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CountryId" '
+            + required + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Country" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+               + '</div>'
         }
 
-    };
-    function getBeCountryTemplate(attrs, ctrl) {
-        var label;
-        var disabled = "";
-        if (ctrl.isdisabled)
-            disabled = "vr-disabled='true'"
+        function countryCtor(ctrl, $scope, attrs) {
 
-        var required = "";
-        if (attrs.isrequired != undefined)
-            required = "isrequired";
-
-        var hideselectedvaluessection = "";
-        if (attrs.hideselectedvaluessection != undefined)
-            hideselectedvaluessection = "hideselectedvaluessection";
-        var addCliked = '';
-        if (attrs.showaddbutton != undefined)
-            addCliked = 'onaddclicked="addNewCountry"';
-        if (attrs.ismultipleselection != undefined)
-            return  ' <vr-select ismultipleselection datasource="datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="selectedCountryValues" ' + disabled + ' onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="CountryId"'
-                   + 'entityname="Country" label="Country" '+addCliked+'></vr-select>';
-        else
-            return '<div vr-loader="isLoadingDirective" style="display:inline-block;width:100%">'
-               + ' <vr-select datasource="datasource" selectedvalues="selectedCountryValues" ' + required + ' ' + hideselectedvaluessection + ' onselectionchanged="onselectionchanged"  ' + disabled + ' datatextfield="Name" datavaluefield="CountryId"'
-               + 'entityname="Country" label="Country" ' + addCliked + '></vr-select></div>';
-    }
-    function Country(ctrl, $scope, VRCommon_CountryAPIService, $attrs) {
-        
-        function initializeController() {
-            defineAPI();
-        }
-
-        function defineAPI() {
-            var api = {};
-
-            
-            api.getData = function ()
-            {
-                return $scope.selectedCountryValues;
+            function initializeController() {
+                defineAPI();
             }
-            api.getDataId = function () {
-                return $scope.selectedCountryValues.CountryId;
-            }
-            api.getIdsData = function () {
-                return getIdsList($scope.selectedCountryValues , "CountryId" );
-            }
-            api.setData = function (selectedIds) {
-                if ($attrs.ismultipleselection!=undefined) {
-                    for (var i = 0; i < selectedIds.length; i++) {
-                        var selectedCountryValue = UtilsService.getItemByVal($scope.datasource, selectedIds[i], "CountryId");
+
+            function defineAPI() {
+                var api = {};
+
+                api.load = function (payload) {
+
+                    var selectedIds;
+                    if (payload != undefined) {
+                        selectedIds = payload.selectedIds;
+                    }
+
+                    return getAllCountries(attrs, ctrl, selectedIds);
+                }
+
+                api.getSelectedIds = function () {
+                    return VRUIUtilsService.getIdSelectedIds('CountryId', attrs, ctrl);
+                }
+
+                api.getData = function () {
+                    return $scope.selectedvalues;
+                }
+                api.getDataId = function () {
+                    return $scope.selectedvalues.CountryId;
+                }
+                api.getIdsData = function () {
+                    return getIdsList($scope.selectedvalues, "CountryId");
+                }
+                api.setData = function (selectedIds) {
+                 
+                    if (attrs.ismultipleselection != undefined) {
+                        for (var i = 0; i < selectedIds.length; i++) {
+                            var selectedCountryValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds[i], "CountryId");
+                            if (selectedCountryValue != null)
+                                ctrl.selectedvalues.push(selectedCountryValue);
+                        }
+                    } else {
+                        var selectedCountryValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds, "CountryId");
                         if (selectedCountryValue != null)
-                            $scope.selectedCountryValues.push(selectedCountryValue);
+                            ctrl.selectedvalues = selectedCountryValue;
                     }
-                } else {
-                    var selectedCountryValue = UtilsService.getItemByVal($scope.datasource, selectedIds, "CountryId");
-                    if (selectedCountryValue != null)
-                        $scope.selectedCountryValues = selectedCountryValue;
                 }
-            }
-            function getIdsList(tab, attname) {
-                var list = [];
-                for (var i = 0; i < tab.length ; i++)
-                    list[list.length] = tab[i][attname];
-                return list;
+                function getIdsList(tab, attname) {
+                    var list = [];
+                    for (var i = 0; i < tab.length ; i++)
+                        list[list.length] = tab[i][attname];
+                    return list;
 
-            }
-            api.load = function () {
-               
-                return VRCommon_CountryAPIService.GetAllCountries().then(function (response) {
-                    angular.forEach(response, function (itm) {
-                        $scope.datasource.push(itm);
-                    });
-                }).catch(function (error) {
-                }).finally(function () {
-
-                });;
+                }
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
             }
 
-            if (ctrl.onReady != null)
-                ctrl.onReady(api);
+            this.initializeController = initializeController;
         }
 
-        this.initializeController = initializeController;
+        function getAllCountries(attrs, ctrl, selectedIds) {
+            return VRCommon_CountryAPIService.GetAllCountries().then(function (response) {
+                ctrl.datasource.length = 0;
+                angular.forEach(response, function (itm) {
+                    ctrl.datasource.push(itm);
+                });
 
-    }
-
-    function getAllCountries($scope, VRCommon_CountryAPIService) {
-        return VRCommon_CountryAPIService.GetAllCountries().then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.datasource.push(itm);
+                if (selectedIds != undefined) {
+                    VRUIUtilsService.setSelectedValues(selectedIds, 'CountryId', attrs, ctrl);
+                }
             });
-        });
-    }
-    return directiveDefinitionObject;
-}]);
-
+        }
+        return directiveDefinitionObject;
+    }]);

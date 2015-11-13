@@ -406,7 +406,6 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         };
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Code, "Code Group");
             modalScope.onCodeGroupUpdated = onCodeGroupUpdated;
         };
         var parameters = {
@@ -422,8 +421,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         };
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = UtilsService.buildTitleForAddEditor("Code Group");
-            modalScope.onCodeGroupAdded = onCodeGroupAdded;
+             modalScope.onCodeGroupAdded = onCodeGroupAdded;
         };
         var parameters;
         if (dataItem != undefined) {

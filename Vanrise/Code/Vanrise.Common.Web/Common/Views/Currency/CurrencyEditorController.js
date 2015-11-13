@@ -73,7 +73,7 @@
             var currencyObject = buildCurrencyObjFromScope();
             return VRCommon_CurrencyAPIService.AddCurrency(currencyObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Currency", response)) {
+                if (VRNotificationService.notifyOnItemAdded("Currency", response,"Symbol")) {
                     if ($scope.onCurrencyAdded != undefined)
                         $scope.onCurrencyAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -87,7 +87,7 @@
             var currencyObject = buildCurrencyObjFromScope();
             VRCommon_CurrencyAPIService.UpdateCurrency(currencyObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Currency", response)) {
+                if (VRNotificationService.notifyOnItemUpdated("Currency", response, "Symbol")) {
                     if ($scope.onCurrencyUpdated != undefined)
                         $scope.onCurrencyUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();

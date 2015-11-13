@@ -22,7 +22,7 @@
         }
         function defineScope() {
             $scope.saveExchangeRate = function () {
-                    return insertCurrency();
+                return insertCurrencyExchangeRate();
             };
 
             $scope.close = function () {
@@ -52,7 +52,7 @@
         }
 
   
-        function insertCurrency() {
+        function insertCurrencyExchangeRate() {
             var object = buildCurrencyExchangeRateObjFromScope();
             return VRCommon_CurrencyExchangeRateAPIService.AddCurrencyExchangeRate(object)
             .then(function (response) {
