@@ -55,6 +55,10 @@
             </vr-columns>
         </vr-row>
 
+        <div vr-loader="isLoadingDefaultRoutingProductSection">
+            <vr-whs-sales-defaultroutingproduct on-ready="onDefaultRoutingProductDirectiveReady"></vr-whs-sales-defaultroutingproduct>
+        </div>
+
         <div ng-show="showGrid">
             <vr-whs-sales-rateplan-grid on-ready="onGridReady"></vr-whs-sales-rateplan-grid>
         </div>

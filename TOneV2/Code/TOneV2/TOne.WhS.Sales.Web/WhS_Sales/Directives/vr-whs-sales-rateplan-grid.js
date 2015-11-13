@@ -93,12 +93,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                     var currentRate = zoneItem.CurrentRate;
                                     var newRate = zoneItem.NewRate;
 
-                                    if 
-                                    (
-                                        (isEmpty(currentRate) && !isEmpty(newRate)) ||
-                                        (!isEmpty(currentRate) && !isEmpty(newRate) && Number(currentRate) != Number(newRate))
-                                    )
-                                    {
+                                    if (!isEmpty(zoneItem.NewRate)) {
                                         newRate = {
                                             ZoneId: zoneItem.ZoneId,
                                             NormalRate: zoneItem.NewRate,
@@ -109,12 +104,15 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                                     return newRate;
 
+                                    function isEmpty(value) {
+                                        return (value == undefined || value == null);
+                                    }
                                 }
 
                                 function buildRateChange(zoneItem) {
                                     var rateChange = null;
 
-                                    if (!isEmpty(zoneItem.CurrentRate) && zoneItem.RateNewEED != zoneItem.RateEED) {
+                                    if (zoneItem.RateEED != zoneItem.RateNewEED) {
                                         return {
                                             RateId: zoneItem.CurrentRateId,
                                             EED: zoneItem.RateNewEED
@@ -122,10 +120,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                     }
 
                                     return rateChange;
-                                }
-
-                                function isEmpty(value) {
-                                    return (value == undefined || value == null);
                                 }
                             }
                         }
@@ -172,24 +166,23 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 }
 
                 function extendZoneItem(zoneItem) {
-                    zoneItem.isDirty = false;
-                    zoneItem.DisableBED = (zoneItem.NewRate == null);
-                    zoneItem.DisableEED = (zoneItem.CurrentRate == null && zoneItem.NewRate == null);
-                    zoneItem.RateNewEED = zoneItem.RateEED;
+                    zoneItem.IsDirty = false;
+                    zoneItem.RateNewEED = (zoneItem.RateEED != null) ? UtilsService.cloneDateTime(zoneItem.RateEED) : null;
 
                     zoneItem.onNewRateChanged = function (dataItem) {
-                        if (!dataItem.isDirty) {
-                            dataItem.isDirty = true;
-                            dataItem.DisableBED = false;
-                            dataItem.DisableEED = false;
-
+                        if (!dataItem.IsDirty) {
                             dataItem.RateBED = (dataItem.CurrentRate == null || dataItem.NewRate > dataItem.CurrentRate) ?
                                 new Date(new Date().setDate(new Date().getDate() + 7)) : new Date();
+
+                            dataItem.IsDirty = true;
+                            dataItem.IsCurrentRateEditable = true;
                         }
                     };
 
                     zoneItem.onChildViewReady = function (api) {
+                        console.log("onChildViewReady");
                         zoneItem.ChildViewAPI = api;
+                        api.load(null);
                         delete zoneItem.onChildViewReady;
                     };
                 }

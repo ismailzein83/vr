@@ -21,8 +21,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public List<SaleRate> GetEffectiveSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
         {
-            List<SaleRate> rates = GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByOwnerAndEffective", SaleRateMapper, ownerType, ownerId, effectiveOn);
-            return rates;
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByOwnerAndEffective", SaleRateMapper, ownerType, ownerId, effectiveOn);
         }
 
         public bool AreSaleRatesUpdated(ref object updateHandle)

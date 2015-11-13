@@ -21,8 +21,9 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<RoutingProductInfo> GetRoutingProductInfo(string filter)
+        public IEnumerable<RoutingProductInfo> GetRoutingProductInfo(string serializedFilter)
         {
+            RoutingProductInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<RoutingProductInfoFilter>(serializedFilter) : null;
             RoutingProductManager manager = new RoutingProductManager();
             return manager.GetRoutingProductInfo(filter);
         }

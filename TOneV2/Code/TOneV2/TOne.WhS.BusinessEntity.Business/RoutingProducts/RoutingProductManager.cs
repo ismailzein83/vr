@@ -29,10 +29,14 @@ namespace TOne.WhS.BusinessEntity.Business
             return routingProducts.MapRecords(RoutingProductInfoMapper, x => x.SellingNumberPlanId == sellingNumberPlanId);
         }
 
-        public IEnumerable<RoutingProductInfo> GetRoutingProductInfo(string filter)
+        public IEnumerable<RoutingProductInfo> GetRoutingProductInfo(RoutingProductInfoFilter filter)
         {
-            var allRoutingProducts = GetAllRoutingProducts();
-            return allRoutingProducts.MapRecords(RoutingProductInfoMapper);
+            IEnumerable<RoutingProduct> routingProducts = GetAllRoutingProducts().FindAllRecords(null);
+
+            if (filter != null)
+                routingProducts = routingProducts.FindAllRecords(routingProduct => filter.ExcludedRoutingProductId == null || routingProduct.RoutingProductId != filter.ExcludedRoutingProductId);
+            
+            return routingProducts.MapRecords(RoutingProductInfoMapper);
         }
 
         public TOne.Entities.InsertOperationOutput<RoutingProduct> AddRoutingProduct(RoutingProduct routingProduct)

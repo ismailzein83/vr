@@ -47,21 +47,21 @@ namespace TOne.WhS.Sales.Business
 
         public IEnumerable<ZoneItem> GetZoneItems(ZoneItemInput input)
         {
-            IEnumerable<ZoneItem> zoneItems = null;
-            IEnumerable<SaleZone> zones = GetZones(input.Filter.OwnerType, input.Filter.OwnerId);
+            List<ZoneItem> zoneItems = null;
+            List<SaleZone> zones = GetZones(input.Filter.OwnerType, input.Filter.OwnerId).ToList();
 
             if (zones != null)
             {
-                zones = GetFilteredZones(zones, input.Filter);
+                zones = GetFilteredZones(zones, input.Filter).ToList();
 
                 if (zones != null)
                 {
-                    zones = GetPagedZones(zones, input.FromRow, input.ToRow);
+                    zones = GetPagedZones(zones, input.FromRow, input.ToRow).ToList();
 
                     if (zones != null)
                     {
-                        IEnumerable<SaleEntityZoneRate> zoneRates = GetZoneRates(input.Filter.OwnerType, input.Filter.OwnerId, zones, DateTime.Now);
-                        zoneItems = BuildZoneItems(input.Filter.OwnerType, zones, zoneRates);
+                        List<SaleEntityZoneRate> zoneRates = GetZoneRates(input.Filter.OwnerType, input.Filter.OwnerId, zones, DateTime.Now).ToList();
+                        zoneItems = BuildZoneItems(input.Filter.OwnerType, zones, zoneRates).ToList();
 
                         SetChanges(input.Filter.OwnerType, input.Filter.OwnerId, RatePlanStatus.Draft, zoneItems);
                     }
@@ -214,7 +214,6 @@ namespace TOne.WhS.Sales.Business
                 if (zoneItem != null)
                 {
                     zoneItem.NewRate = zoneChanges.NewRate.NormalRate;
-                    zoneItem.IsCurrentRateEditable = true;
                     zoneItem.RateBED = zoneChanges.NewRate.BED;
                     zoneItem.RateEED = zoneChanges.NewRate.EED;
                 }

@@ -1,0 +1,21 @@
+﻿<vr-row>
+    <vr-columns width="normal">
+        <div vr-disabled="true">
+            <vr-whs-be-routingproduct-selector on-ready="ctrl.onCurrentSelectorReady" hideremoveicon></vr-whs-be-routingproduct-selector>
+        </div>
+    </vr-columns>
+
+    <vr-columns width="normal">
+        <vr-whs-be-routingproduct-selector on-ready="ctrl.onNewSelectorReady" datasource="ctrl.newRoutingProducts"></vr-whs-be-routingproduct-selector>
+    </vr-columns>
+
+    <vr-columns width="normal">
+        <div vr-disabled="true">
+            <vr-datetimepicker label="Begin Effective Date" type="date" value="ctrl.beginEffectiveDate"></vr-datetimepicker>
+        </div>
+    </vr-columns>
+
+    <vr-columns width="normal">
+        <vr-datetimepicker label="End Effective Date" type="date" value="ctrl.endEffectiveDate"></vr-datetimepicker>
+    </vr-columns>
+</vr-row>

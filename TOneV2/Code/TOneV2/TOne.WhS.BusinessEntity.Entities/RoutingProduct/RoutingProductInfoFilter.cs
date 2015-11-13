@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.BusinessEntity.Entities.RoutingProduct
+namespace TOne.WhS.BusinessEntity.Entities
 {
     public class RoutingProductInfoFilter
     {
+        public int ExcludedRoutingProductId { get; set; }
     }
 }

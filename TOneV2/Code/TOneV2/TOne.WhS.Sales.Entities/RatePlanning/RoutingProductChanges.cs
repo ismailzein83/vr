@@ -26,7 +26,7 @@ namespace TOne.WhS.Sales.Entities.RatePlanning
 
     public class NewDefaultRoutingProduct
     {
-        public int RoutingProductId { get; set; }
+        public int DefaultRoutingProductId { get; set; }
 
         public DateTime BED { get; set; }
 
