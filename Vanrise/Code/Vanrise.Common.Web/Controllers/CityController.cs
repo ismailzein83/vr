@@ -22,13 +22,17 @@ namespace Vanrise.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredCities(input));
         }
 
+
         [HttpGet]
-        [Route("GetAllCities")]
-        public IEnumerable<City> GetAllCities()
+        [Route("GetCitiesInfo")]
+        public IEnumerable<CityInfo> GetCitiesInfo(string serializedFilter)
         {
+            CityInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<CityInfoFilter>(serializedFilter) : null;
             CityManager manager = new CityManager();
-            return manager.GetAllCities();
+            return manager.GetCitiesInfo(filter);
         }
+
+               
         [HttpGet]
         [Route("GetCity")]
         public City GetCity(int cityId)

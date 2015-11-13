@@ -126,9 +126,21 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                     return list;
 
                 }
-                api.load = function () {
+                api.load = function (payload) {
 
-                    return VRCommon_CityAPIService.GetAllCities().then(function (response) {
+                    var filter;
+                    var selectedIds;
+                    if (payload != undefined) {
+                        filter = payload.filter;
+                        selectedIds = payload.selectedIds;
+                    }
+
+                    var serializedFilter = {};
+                    if (filter != undefined)
+                        serializedFilter = UtilsService.serializetoJson(filter);
+
+
+                    return VRCommon_CityAPIService.GetCitiesInfo(serializedFilter).then(function (response) {
                         angular.forEach(response, function (itm) {
                             $scope.datasource.push(itm);
                         });
@@ -147,7 +159,7 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
         }
 
         function getAllCities($scope, VRCommon_CityAPIService) {
-            return VRCommon_CityAPIService.GetAllCities().then(function (response) {
+            return VRCommon_CityAPIService.GetCitiesInfo().then(function (response) {
                 angular.forEach(response, function (itm) {
                     $scope.datasource.push(itm);
                 });

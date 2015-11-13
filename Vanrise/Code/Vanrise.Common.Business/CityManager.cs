@@ -23,6 +23,7 @@ namespace Vanrise.Common.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCities.ToBigResult(input, filterExpression, CityDetailMapper));
         }
 
+
         public IEnumerable<City> GetAllCities()
         {
             var allCities = GetCachedCities();
@@ -31,6 +32,36 @@ namespace Vanrise.Common.Business
 
             return allCities.Values;
         }
+
+
+        public IEnumerable<CityInfo> GetCitiesInfo(CityInfoFilter filter)
+        {
+            IEnumerable<City> cities = null;
+
+            if (filter != null)
+            {
+                cities = this.GetCitiesByCountry(filter.CountryId);
+            }
+            else
+            {
+                var cachedCities = GetCachedCities();
+                if (cachedCities != null)
+                    cities = cachedCities.Values;
+            }
+
+            return cities.MapRecords(CityInfoMapper);
+        }
+
+
+        private IEnumerable<City> GetCitiesByCountry(int? countryId)
+        {
+            Dictionary<int, City> cities = GetCachedCities();
+
+            Func<City, bool> filterExpression = (x) =>
+                (countryId == null || countryId == x.CountryId);
+            return cities.FindAllRecords(filterExpression);
+        }
+
 
         public Dictionary<int, City> GetCachedCities()
         {
@@ -118,6 +149,14 @@ namespace Vanrise.Common.Business
             cityDetail.Entity = city;
             cityDetail.CountryName = (country != null ? country.Name : string.Empty);
             return cityDetail;
+        }
+
+        public CityInfo CityInfoMapper(City city)
+        {
+            CityInfo cityInfo = new CityInfo();
+            cityInfo.CityId = city.CityId;
+            cityInfo.Name = city.Name;
+            return cityInfo;
         }
 
         #endregion

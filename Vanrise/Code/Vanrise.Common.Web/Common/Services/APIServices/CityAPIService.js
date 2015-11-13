@@ -8,8 +8,10 @@
         function GetFilteredCities(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "City", "GetFilteredCities"), input);
         }
-        function GetAllCities() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "City", "GetAllCities"));
+        function GetCitiesInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "City", "GetCitiesInfo"), {
+                serializedFilter: serializedFilter
+            });
         }
         function GetCity(cityId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "City", "GetCity"), {
@@ -24,7 +26,7 @@
         }
         return ({
             GetFilteredCities: GetFilteredCities,
-            GetAllCities: GetAllCities,
+            GetCitiesInfo: GetCitiesInfo,
             GetCity: GetCity,
             UpdateCity: UpdateCity,
             AddCity: AddCity
