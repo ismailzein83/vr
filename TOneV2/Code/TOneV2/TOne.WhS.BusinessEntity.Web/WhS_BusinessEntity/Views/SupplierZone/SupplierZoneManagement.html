@@ -1,9 +1,9 @@
-﻿<vr-panel ng-controller="WhS_BE_SaleZoneManagementController">
+﻿<vr-panel ng-controller="WhS_BE_SupplierZoneManagementController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
-            <vr-row removeline>              
+            <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberReady" isrequired> </vr-whs-be-sellingnumberplan-selector>
+                    <vr-whs-be-carrieraccount-selector getsuppliers on-ready="onSupplierReady" isrequired></vr-whs-be-carrieraccount-selector>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-common-country-selector on-ready="onCountryReady" ismultipleselection></vr-common-country-selector>
@@ -23,6 +23,11 @@
                 </div>
             </vr-actionbar>
         </vr-row>
-        <vr-whs-be-salezone-grid on-ready="onGridReady"></vr-whs-be-salezone-grid>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-whs-be-supplierzone-grid on-ready="onGridReady" ></vr-whs-be-supplierzone-grid>
+            </vr-columns>
+        </vr-row>
+
     </vr-form>
 </vr-panel>

@@ -5,6 +5,10 @@
 
     function supplierZoneAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
 
+        function GetFilteredSupplierZones(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SupplierZone", "GetFilteredSupplierZones"), input);
+        }
+
         function GetSupplierZoneInfo(serializedFilter, searchValue) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SupplierZone", "GetSupplierZoneInfo"), {
                 serializedFilter: serializedFilter,
@@ -19,6 +23,7 @@
 
 
         return ({
+            GetFilteredSupplierZones:GetFilteredSupplierZones,
             GetSupplierZoneInfo: GetSupplierZoneInfo,
             GetSupplierZoneInfoByIds: GetSupplierZoneInfoByIds
         });

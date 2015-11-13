@@ -12,6 +12,15 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
    [RoutePrefix(Constants.ROUTE_PREFIX + "SupplierZone")]
     public class SupplierZoneController : BaseAPIController
     {
+       [HttpPost]
+       [Route("GetFilteredSupplierZones")]
+       public object GetFilteredSupplierZones(Vanrise.Entities.DataRetrievalInput<SupplierZoneQuery> input)
+       {
+           SupplierZoneManager manager = new SupplierZoneManager();
+           return manager.GetFilteredSupplierZones(input);
+       }
+
+
        [HttpGet]
        [Route("GetSupplierZoneInfo")]
        public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(string serializedFilter, string searchValue)

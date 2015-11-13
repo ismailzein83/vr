@@ -179,6 +179,8 @@
     <Compile Include="SaleZone\SaleZoneService.cs" />
     <Compile Include="SupplierZone\IRuleSupplierZoneCriteria.cs" />
     <Compile Include="SupplierZone\IRuleSupplierZoneTarget.cs" />
+    <Compile Include="SupplierZone\SupplierZoneDetails.cs" />
+    <Compile Include="SupplierZone\SupplierZoneQuery.cs" />
     <Compile Include="SupplierZone\SupplierCode.cs" />
     <Compile Include="SupplierZone\SupplierPriceList.cs" />
     <Compile Include="SupplierZone\SupplierRate.cs" />

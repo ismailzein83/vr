@@ -190,10 +190,17 @@ namespace TOne.WhS.BusinessEntity.Business
             saleZoneDetail.Entity = saleZone;
 
             CountryManager manager = new CountryManager();
+            SellingNumberPlanManager sellingManager = new SellingNumberPlanManager();
             if (saleZone.CountryId != null)
             {
                 int countryId = (int)saleZone.CountryId;
                 saleZoneDetail.CountryName = manager.GetCountry(countryId).Name;
+            }
+
+            if (saleZone.SellingNumberPlanId != null)
+            {
+                int sellingNumberPlanId = (int)saleZone.SellingNumberPlanId;
+                saleZoneDetail.SellingNumberPlanName = sellingManager.GetSellingNumberPlan(sellingNumberPlanId).Name;
             }
 
             return saleZoneDetail;

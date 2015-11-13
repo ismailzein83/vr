@@ -14,23 +14,19 @@
         var disableCountry;
         defineScope();
         loadParameters();
-        load();
+       
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 codeGroupId = parameters.CodeGroupId;
                 countryId = parameters.CountryId;
                 disableCountry = parameters.disableCountry
-
             }
             editMode = (codeGroupId != undefined);
             $scope.disableCountry = ((countryId != undefined) && !editMode) || disableCountry == true;
+            load();
         }
-        function defineScope() {
-            $scope.onCountryDirectiveReady = function (api) {
-                countryDirectiveApi = api;
-                load();
-            }
+        function defineScope() {           
             $scope.saveCodeGroup = function () {
                     if (editMode) {
                         return updateCodeGroup();
@@ -50,26 +46,25 @@
 
         function load() {
                        
-             $scope.isGettingData = true;
-             if (countryDirectiveApi == undefined)
-                return;
-            countryDirectiveApi.load().then(function () {
-                if ($scope.disableCountry && countryId != undefined)
-                {
-                    countryDirectiveApi.setData(countryId);
-                    $scope.isGettingData = false;
-                }   
-                else if (editMode) {
-                    getCodeGroup();
-                }
-                else {
-                    $scope.isGettingData = false;
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isGettingData = false;
-            });
-
+            
+            $scope.isGettingData = true;
+             $scope.onCountryDirectiveReady = function (api) {
+                 countryDirectiveApi = api;
+                 countryDirectiveApi.load({selectedIds:countryId}).then(function () {
+                     if ($scope.disableCountry && countryId != undefined) {
+                         $scope.isGettingData = false;
+                     }
+                     else if (editMode) {
+                         getCodeGroup();
+                     }
+                     else {
+                         $scope.isGettingData = false;
+                     }
+                 }).catch(function (error) {
+                     VRNotificationService.notifyExceptionWithClose(error, $scope);
+                     $scope.isGettingData = false;
+                 });
+             }
         }
         function getCodeGroup() {
             return WhS_BE_CodeGroupAPIService.GetCodeGroup(codeGroupId).then(function (codeGroupe) {

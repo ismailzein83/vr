@@ -249,6 +249,8 @@
     <Content Include="WhS_BusinessEntity\Directives\SellingProduct\vr-whs-be-sellingproduct-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\vr-whs-be-salezonegroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierGroup\vr-whs-be-suppliergroup-selective.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SupplierZone\Templates\SupplierZoneGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SupplierZone\vr-whs-be-supplierzone-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\vr-whs-be-supplierzone-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\Templates\ZoneServiceConfigGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-grid.js" />
@@ -288,6 +290,8 @@
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SupplierZone\SupplierZoneManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\SupplierZone\SupplierZoneManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SaleZone\SaleZoneManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SaleZone\SaleZoneManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SellingProduct\CustomerSellingProductEditor.html" />

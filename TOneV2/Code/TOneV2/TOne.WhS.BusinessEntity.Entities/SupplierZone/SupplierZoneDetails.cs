@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SaleZoneDetail
+    public class SupplierZoneDetails
     {
-        public SaleZone Entity { get; set; }
+        public SupplierZone Entity { get; set; }
 
         public string CountryName { get; set; }
 
-        public string SellingNumberPlanName { get; set; }
-
+        public string SupplierName { get; set; }
+    
     }
 }

@@ -6,12 +6,24 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierZoneManager
     {
+        public Vanrise.Entities.IDataRetrievalResult<SupplierZoneDetails> GetFilteredSupplierZones(Vanrise.Entities.DataRetrievalInput<SupplierZoneQuery> input)
+        {
+            var allsupplierZones = GetCachedSupplierZones();
+            Func<SupplierZone, bool> filterExpression = (prod) =>
+                     (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    && (input.Query.Countries == null || input.Query.Countries.Contains(prod.CountryId))
+                  && (input.Query.SupplierId.Equals(prod.SupplierId))
+                  && ((!input.Query.EffectiveOn.HasValue || (prod.BeginEffectiveDate <= input.Query.EffectiveOn)))
+                  && ((!input.Query.EffectiveOn.HasValue || !prod.EndEffectiveDate.HasValue || (prod.EndEffectiveDate > input.Query.EffectiveOn)));
 
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allsupplierZones.ToBigResult(input, filterExpression, SupplierZoneDetailMapper));
+        }
         public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(SupplierZoneInfoFilter filter, string searchValue)
         {
             IEnumerable<SupplierZone> supplierZones = null;
@@ -85,6 +97,28 @@ namespace TOne.WhS.BusinessEntity.Business
             };
         }
 
+        private SupplierZoneDetails SupplierZoneDetailMapper(SupplierZone supplierZone)
+        {
+            SupplierZoneDetails supplierZoneDetail = new SupplierZoneDetails();
+
+            supplierZoneDetail.Entity = supplierZone;
+
+            CountryManager manager = new CountryManager();
+            CarrierAccountManager caManager = new CarrierAccountManager();
+            if (supplierZone.CountryId != null)
+            {
+                int countryId = (int)supplierZone.CountryId;
+                supplierZoneDetail.CountryName = manager.GetCountry(countryId).Name;
+            }
+
+            if (supplierZone.SupplierId != null)
+            {
+                int supplierId = (int)supplierZone.SupplierId;
+                supplierZoneDetail.SupplierName = caManager.GetCarrierAccount(supplierId).Name;
+            }
+
+            return supplierZoneDetail;
+        }
         #endregion
 
     }
