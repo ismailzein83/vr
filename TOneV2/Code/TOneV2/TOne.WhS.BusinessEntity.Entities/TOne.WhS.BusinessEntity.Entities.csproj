@@ -110,6 +110,7 @@
     <Compile Include="RoutingCarrierInfo\RoutingSupplierInfo.cs" />
     <Compile Include="RoutingProduct\CustomerZoneRoutingProduct.cs" />
     <Compile Include="RoutingProduct\DefaultRoutingProduct.cs" />
+    <Compile Include="RoutingProduct\RoutingProductInfoFilter.cs" />
     <Compile Include="RoutingProduct\SaleZoneRoutingProduct.cs" />
     <Compile Include="SaleZone\CallSale.cs" />
     <Compile Include="SaleZone\SaleEntityZoneRate.cs" />
