@@ -13,114 +13,62 @@ namespace TOne.WhS.Routing.Business
     {
         #region Public Methods
 
-        public void BuildCustomerZoneDetails(IEnumerable<RoutingCustomerInfo> CustomerInfos, DateTime? effectiveOn, bool isEffectiveInFuture, Action<CustomerZoneDetail> onCustomerZoneDetailAvailable)
+        public void BuildCustomerZoneDetails(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture, Action<CustomerZoneDetail> onCustomerZoneDetailAvailable)
         {
-            int customerId = 1;
+            //int customerId = 1;
 
-            SaleEntityZoneRoutingProductLocator customerZoneRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(effectiveOn, isEffectiveInFuture));
+            SaleEntityZoneRoutingProductLocator customerZoneRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(effectiveOn, isEffectiveInFuture, customerInfos));
             SaleEntityZoneRateLocator customerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(effectiveOn, isEffectiveInFuture));
 
             CustomerZoneManager customerZoneManager = new CustomerZoneManager();
-            var customerSaleZones = customerZoneManager.GetCustomerSaleZones(customerId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now, isEffectiveInFuture);
-            if (customerSaleZones == null)
-                return;
-
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
-            CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, isEffectiveInFuture);
-            if (customerSellingProduct == null)
-                return;
 
             Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
 
-
-            SalePricingRuleManager salePricingRuleManager = new SalePricingRuleManager();
-            foreach (var customerZone in customerSaleZones)
+            foreach (RoutingCustomerInfo customerInfo in customerInfos)
             {
-                SaleEntityZoneRate customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
+                var customerSaleZones = customerZoneManager.GetCustomerSaleZones(customerInfo.CustomerId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now, isEffectiveInFuture);
+                if (customerSaleZones == null)
+                    return;
 
-                if (customerZoneRate != null)
+                CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerInfo.CustomerId, effectiveOn, isEffectiveInFuture);
+                if (customerSellingProduct == null)
+                    continue;
+                SalePricingRuleManager salePricingRuleManager = new SalePricingRuleManager();
+                foreach (var customerZone in customerSaleZones)
                 {
-                    int currencyId = customerZoneRate.Rate.CurrencyId.HasValue ? customerZoneRate.Rate.CurrencyId.Value : customerZoneRate.PriceList.CurrencyId;
-                    SalePricingRulesInput salePricingRulesInput = new SalePricingRulesInput
+                    SaleEntityZoneRate customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerInfo.CustomerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
+
+                    if (customerZoneRate != null)
                     {
-                        CustomerId = customerId,
-                        SaleZoneId = customerZone.SaleZoneId,
-                        SellingProductId = customerSellingProduct.SellingProductId,
-                        Rate = customerZoneRate.Rate,
-                        EffectiveOn = effectiveOn,
-                        IsEffectiveInFuture = isEffectiveInFuture
-                    };
-                    var pricingRulesResult = salePricingRuleManager.ApplyPricingRules(salePricingRulesInput);
+                        int currencyId = customerZoneRate.Rate.CurrencyId.HasValue ? customerZoneRate.Rate.CurrencyId.Value : customerZoneRate.PriceList.CurrencyId;
+                        SalePricingRulesInput salePricingRulesInput = new SalePricingRulesInput
+                        {
+                            CustomerId = customerInfo.CustomerId,
+                            SaleZoneId = customerZone.SaleZoneId,
+                            SellingProductId = customerSellingProduct.SellingProductId,
+                            Rate = customerZoneRate.Rate,
+                            EffectiveOn = effectiveOn,
+                            IsEffectiveInFuture = isEffectiveInFuture
+                        };
+                        var pricingRulesResult = salePricingRuleManager.ApplyPricingRules(salePricingRulesInput);
 
-                    var rateValue = pricingRulesResult != null ? pricingRulesResult.Rate : customerZoneRate.Rate.NormalRate;
-                    rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now);
-                    var customerZoneRoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
-                    CustomerZoneDetail customerZoneDetail = new CustomerZoneDetail
-                    {
-                        //CustomerId = customerId,
-                        RoutingProductId = customerZoneRoutingProduct != null ? customerZoneRoutingProduct.RoutingProductId : 0,
-                        RoutingProductSource = customerZoneRoutingProduct != null ? customerZoneRoutingProduct.Source : default(SaleEntityZoneRoutingProductSource),
-                        SellingProductId = customerSellingProduct.SellingProductId,
-                        SaleZoneId = customerZone.SaleZoneId,
-                        EffectiveRateValue = rateValue,
-                        RateSource = customerZoneRate.Source
-                    };
+                        var rateValue = pricingRulesResult != null ? pricingRulesResult.Rate : customerZoneRate.Rate.NormalRate;
+                        rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now);
+                        var customerZoneRoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerInfo.CustomerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
+                        CustomerZoneDetail customerZoneDetail = new CustomerZoneDetail
+                        {
+                            CustomerId = customerInfo.CustomerId,
+                            RoutingProductId = customerZoneRoutingProduct != null ? customerZoneRoutingProduct.RoutingProductId : 0,
+                            RoutingProductSource = customerZoneRoutingProduct != null ? customerZoneRoutingProduct.Source : default(SaleEntityZoneRoutingProductSource),
+                            SellingProductId = customerSellingProduct.SellingProductId,
+                            SaleZoneId = customerZone.SaleZoneId,
+                            EffectiveRateValue = rateValue,
+                            RateSource = customerZoneRate.Source
+                        };
 
-                    onCustomerZoneDetailAvailable(customerZoneDetail);
-                }
-            }
-        }
-
-        public void BuildCustomerZoneDetails(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture, Action<CustomerZoneDetail> onCustomerZoneDetailAvailable)
-        {
-            CustomerZoneManager customerZoneManager = new CustomerZoneManager();
-            var customerSaleZones = customerZoneManager.GetCustomerSaleZones(customerId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now, isEffectiveInFuture);
-            if (customerSaleZones == null)
-                return;
-
-            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
-            CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, isEffectiveInFuture);
-            if (customerSellingProduct == null)
-                return;
-
-            Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
-            SaleEntityZoneRoutingProductLocator customerZoneRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(effectiveOn, isEffectiveInFuture));
-            SaleEntityZoneRateLocator customerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(effectiveOn, isEffectiveInFuture));
-
-            SalePricingRuleManager salePricingRuleManager = new SalePricingRuleManager();
-            foreach (var customerZone in customerSaleZones)
-            {
-                SaleEntityZoneRate customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
-
-                if (customerZoneRate != null)
-                {
-                    int currencyId = customerZoneRate.Rate.CurrencyId.HasValue ? customerZoneRate.Rate.CurrencyId.Value : customerZoneRate.PriceList.CurrencyId;
-                    SalePricingRulesInput salePricingRulesInput = new SalePricingRulesInput
-                    {
-                        CustomerId = customerId,
-                        SaleZoneId = customerZone.SaleZoneId,
-                        SellingProductId = customerSellingProduct.SellingProductId,
-                        Rate = customerZoneRate.Rate,
-                        EffectiveOn = effectiveOn,
-                        IsEffectiveInFuture = isEffectiveInFuture
-                    };
-                    var pricingRulesResult = salePricingRuleManager.ApplyPricingRules(salePricingRulesInput);
-
-                    var rateValue = pricingRulesResult != null ? pricingRulesResult.Rate : customerZoneRate.Rate.NormalRate;
-                    rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now);
-                    var customerZoneRoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
-                    CustomerZoneDetail customerZoneDetail = new CustomerZoneDetail
-                    {
-                        CustomerId = customerId,
-                        RoutingProductId = customerZoneRoutingProduct != null ? customerZoneRoutingProduct.RoutingProductId : 0,
-                        RoutingProductSource = customerZoneRoutingProduct != null ? customerZoneRoutingProduct.Source : default(SaleEntityZoneRoutingProductSource),
-                        SellingProductId = customerSellingProduct.SellingProductId,
-                        SaleZoneId = customerZone.SaleZoneId,
-                        EffectiveRateValue = rateValue,
-                        RateSource = customerZoneRate.Source
-                    };
-
-                    onCustomerZoneDetailAvailable(customerZoneDetail);
+                        onCustomerZoneDetailAvailable(customerZoneDetail);
+                    }
                 }
             }
         }
@@ -152,7 +100,7 @@ namespace TOne.WhS.Routing.Business
                         EffectiveOn = effectiveOn,
                         IsEffectiveInFuture = isEffectiveInFuture
                     };
-     
+
                     var pricingRulesResult = purchasePricingRuleManager.ApplyPricingRules(purchasePricingRulesInput);
 
                     var rateValue = pricingRulesResult != null ? pricingRulesResult.Rate : supplierRate.NormalRate;

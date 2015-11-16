@@ -1,11 +1,26 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.GenerateCustomerZoneDetails" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.GenerateCustomerZoneDetails"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twbe="clr-namespace:TOne.WhS.BusinessEntity.Entities;assembly=TOne.WhS.BusinessEntity.Entities"
+ xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Activities;assembly=TOne.WhS.Routing.BP.Activities"
+ xmlns:twre="clr-namespace:TOne.WhS.Routing.Entities;assembly=TOne.WhS.Routing.Entities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="RoutingDatabaseId" Type="InArgument(x:Int32)" />
+    <x:Property Name="EffectiveOn" Type="InArgument(s:Nullable(s:DateTime))" />
+    <x:Property Name="CustomerInfos" Type="InArgument(scg:IEnumerable(twbe:RoutingCustomerInfo))" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.GenerateCustomerZoneDetails_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -13,22 +28,130 @@
       <x:String>System.Data</x:String>
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
-      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.GenerateCustomerZoneDetails_1</sap2010:WorkflowViewState.IdRef>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="vq:BaseQueue(twre:CustomerZoneDetailBatch)" Name="queueCustomerZoneDetailBatch" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="generateCustomerZoneDetailStatus" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedCustomerZoneDetails" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareCustomerZoneDetailStatus" />
+    </Sequence.Variables>
+    <Parallel DisplayName="Parallel_CustomerZoneDetail" sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <twrba:GenerateCustomerZoneDetails sap2010:WorkflowViewState.IdRef="GenerateCustomerZoneDetails_1">
+        <twrba:GenerateCustomerZoneDetails.CustomerInfos>
+          <InArgument x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">CustomerInfos</mca:CSharpValue>
+          </InArgument>
+        </twrba:GenerateCustomerZoneDetails.CustomerInfos>
+        <twrba:GenerateCustomerZoneDetails.EffectiveOn>
+          <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+            <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">EffectiveOn</mca:CSharpValue>
+          </InArgument>
+        </twrba:GenerateCustomerZoneDetails.EffectiveOn>
+        <twrba:GenerateCustomerZoneDetails.IsEffectiveInFuture>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">EffectiveOn.HasValue ? false : true</mca:CSharpValue>
+          </InArgument>
+        </twrba:GenerateCustomerZoneDetails.IsEffectiveInFuture>
+        <twrba:GenerateCustomerZoneDetails.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(twre:CustomerZoneDetailBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:CustomerZoneDetailBatch)">queueCustomerZoneDetailBatch</mca:CSharpReference>
+          </InOutArgument>
+        </twrba:GenerateCustomerZoneDetails.OutputQueue>
+        <twrba:GenerateCustomerZoneDetails.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">generateCustomerZoneDetailStatus</mca:CSharpReference>
+          </OutArgument>
+        </twrba:GenerateCustomerZoneDetails.Status>
+      </twrba:GenerateCustomerZoneDetails>
+      <twrba:PrepareCustomerZoneDetailForDBApply sap2010:WorkflowViewState.IdRef="PrepareCustomerZoneDetailForDBApply_1">
+        <twrba:PrepareCustomerZoneDetailForDBApply.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(twre:CustomerZoneDetailBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:CustomerZoneDetailBatch)">queueCustomerZoneDetailBatch</mca:CSharpValue>
+          </InArgument>
+        </twrba:PrepareCustomerZoneDetailForDBApply.InputQueue>
+        <twrba:PrepareCustomerZoneDetailForDBApply.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedCustomerZoneDetails</mca:CSharpReference>
+          </InOutArgument>
+        </twrba:PrepareCustomerZoneDetailForDBApply.OutputQueue>
+        <twrba:PrepareCustomerZoneDetailForDBApply.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">generateCustomerZoneDetailStatus</mca:CSharpValue>
+          </InArgument>
+        </twrba:PrepareCustomerZoneDetailForDBApply.PreviousActivityStatus>
+        <twrba:PrepareCustomerZoneDetailForDBApply.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareCustomerZoneDetailStatus</mca:CSharpReference>
+          </OutArgument>
+        </twrba:PrepareCustomerZoneDetailForDBApply.Status>
+      </twrba:PrepareCustomerZoneDetailForDBApply>
+      <twrba:ApplyCustomerZoneDetailsToDB Status="{x:Null}">
+        <twrba:ApplyCustomerZoneDetailsToDB.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedCustomerZoneDetails</mca:CSharpValue>
+          </InArgument>
+        </twrba:ApplyCustomerZoneDetailsToDB.InputQueue>
+        <twrba:ApplyCustomerZoneDetailsToDB.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareCustomerZoneDetailStatus</mca:CSharpValue>
+          </InArgument>
+        </twrba:ApplyCustomerZoneDetailsToDB.PreviousActivityStatus>
+        <twrba:ApplyCustomerZoneDetailsToDB.RoutingDatabaseId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabaseId</mca:CSharpValue>
+          </InArgument>
+        </twrba:ApplyCustomerZoneDetailsToDB.RoutingDatabaseId>
+        <sap2010:WorkflowViewState.IdRef>ApplyCustomerZoneDetailsToDB_1</sap2010:WorkflowViewState.IdRef>
+      </twrba:ApplyCustomerZoneDetailsToDB>
+    </Parallel>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEdlbmVyYXRlQ3VzdG9tZXJab25lRGV0YWlscy54YW1sET8DjAEOAgEBRgWKARACAQJHB2ErAgE9Ygd3MwIBHHgHiQEsAgEDVA1UbwIBXk8NT2QCAVZKDUp5AgFOXg1egQECAUZZDVmRAQIBPm8Nb3kCATVlDWWJAQIBLXQNdIABAgElag1qgQECAR2AAQ2AAXgCARR7DXt5AgEMhQENhQFbAgEE</sads:DebugSymbol.Symbol>
+  </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.GenerateCustomerZoneDetails_1" sap:VirtualizedContainerService.HintSize="440,440" />
+      <sap2010:ViewStateData Id="GenerateCustomerZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareCustomerZoneDetailForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyCustomerZoneDetailsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,210">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.GenerateCustomerZoneDetails_1" sap:VirtualizedContainerService.HintSize="856,290" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
