@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -11,21 +12,57 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         SaleZoneRoutingProductsByOwner _allSaleZoneRoutingProductsByOwner;
         DefaultRoutingProductsByOwner _allDefaultRoutingProductByOwner;
+        ISaleEntityRoutingProductDataManager _saleEntityRoutingProductDataManager;
 
-        public SaleEntityRoutingProductReadAllNoCache(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingCustomerInfo> customerInfos)
+
+        public SaleEntityRoutingProductReadAllNoCache(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
-            _allSaleZoneRoutingProductsByOwner = GetAllSaleZoneRoutingProductsByOwner(effectiveOn, isEffectiveInFuture, customerInfos);
-            _allDefaultRoutingProductByOwner = GetAllDefaultRoutingProductsByOwner(effectiveOn, isEffectiveInFuture, customerInfos);
+            _saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
+            _allSaleZoneRoutingProductsByOwner = GetAllSaleZoneRoutingProductsByOwner(customerInfos, effectiveOn, isEffectiveInFuture);
+            _allDefaultRoutingProductByOwner = GetAllDefaultRoutingProductsByOwner(customerInfos, effectiveOn, isEffectiveInFuture);
         }
 
-        private DefaultRoutingProductsByOwner GetAllDefaultRoutingProductsByOwner(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingCustomerInfo> customerInfos)
+        private DefaultRoutingProductsByOwner GetAllDefaultRoutingProductsByOwner(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
-            throw new NotImplementedException();
+            DefaultRoutingProductsByOwner result = new DefaultRoutingProductsByOwner();
+            result.DefaultRoutingProductsByCustomer = new Dictionary<int, DefaultRoutingProduct>();
+            result.DefaultRoutingProductsByProduct = new Dictionary<int, DefaultRoutingProduct>();
+            List<DefaultRoutingProduct> defaultRoutingProducts = _saleEntityRoutingProductDataManager.GetDefaultRoutingProducts(customerInfos, effectiveOn, isEffectiveInFuture).ToList();
+
+            foreach (DefaultRoutingProduct defaultRoutingProduct in defaultRoutingProducts)
+            {
+                Dictionary<int, DefaultRoutingProduct> defaultRoutingProductsByOwner = defaultRoutingProduct.OwnerType == SalePriceListOwnerType.Customer ? result.DefaultRoutingProductsByCustomer : result.DefaultRoutingProductsByProduct;
+
+                if (!defaultRoutingProductsByOwner.ContainsKey(defaultRoutingProduct.OwnerId))
+                    defaultRoutingProductsByOwner.Add(defaultRoutingProduct.OwnerId, defaultRoutingProduct);
+            }
+            return result;
         }
 
-        private SaleZoneRoutingProductsByOwner GetAllSaleZoneRoutingProductsByOwner(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingCustomerInfo> customerInfos)
+        private SaleZoneRoutingProductsByOwner GetAllSaleZoneRoutingProductsByOwner(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
-            throw new NotImplementedException();
+            SaleZoneRoutingProductsByOwner result = new SaleZoneRoutingProductsByOwner();
+
+            result.SaleZoneRoutingProductsByCustomer = new Dictionary<int, SaleZoneRoutingProductsByZone>();
+            result.SaleZoneRoutingProductsByProduct = new Dictionary<int, SaleZoneRoutingProductsByZone>();
+
+            IEnumerable<SaleZoneRoutingProduct> saleZoneRoutingProducts = _saleEntityRoutingProductDataManager.GetSaleZoneRoutingProducts(customerInfos, effectiveOn, isEffectiveInFuture);
+
+            foreach (SaleZoneRoutingProduct saleZoneRoutingProduct in saleZoneRoutingProducts)
+            {
+                Dictionary<int, SaleZoneRoutingProductsByZone> saleZoneRoutingProductsByOwner = saleZoneRoutingProduct.OwnerType == SalePriceListOwnerType.Customer ? result.SaleZoneRoutingProductsByCustomer : result.SaleZoneRoutingProductsByProduct;
+                SaleZoneRoutingProductsByZone saleZoneRoutingProductsByZone;
+                if (!saleZoneRoutingProductsByOwner.TryGetValue(saleZoneRoutingProduct.OwnerId, out saleZoneRoutingProductsByZone))
+                {
+                    saleZoneRoutingProductsByZone = new SaleZoneRoutingProductsByZone();
+                    saleZoneRoutingProductsByOwner.Add(saleZoneRoutingProduct.OwnerId, saleZoneRoutingProductsByZone);
+                }
+                if (!saleZoneRoutingProductsByZone.ContainsKey(saleZoneRoutingProduct.SaleZoneId))
+                {
+                    saleZoneRoutingProductsByZone.Add(saleZoneRoutingProduct.SaleZoneId, saleZoneRoutingProduct);
+                }
+            }
+            return result;
         }
 
 

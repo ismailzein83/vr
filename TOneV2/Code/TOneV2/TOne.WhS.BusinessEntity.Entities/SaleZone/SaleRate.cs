@@ -24,4 +24,11 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public DateTime? EndEffectiveDate { get; set; }
     }
+
+    public class SaleRatePriceList
+    {
+        public SaleRate Rate { get; set; }
+
+        public SalePriceList PriceList { get; set; }
+    }
 }

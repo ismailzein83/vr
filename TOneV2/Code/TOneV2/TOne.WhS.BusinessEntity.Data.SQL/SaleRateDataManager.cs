@@ -24,6 +24,21 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByOwnerAndEffective", SaleRateMapper, ownerType, ownerId, effectiveOn);
         }
 
+        public List<SaleRate> GetFilteredSaleRatedByOwner(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            DataTable dtActiveCustomers = CarrierAccountDataManager.BuildRoutingCustomerInfoTable(customerInfos);
+            return GetItemsSPCmd("[TOneWhS_BE].[sp_SaleRate_GetFilteredByOwner]", SaleRateMapper, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@ActiveCustomersInfo", SqlDbType.Structured);
+                dtPrm.Value = dtActiveCustomers;
+                cmd.Parameters.Add(dtPrm);
+                cmd.Parameters.Add(new SqlParameter("@CustomerOwnerType", SalePriceListOwnerType.Customer));
+                cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
+                cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
+            });
+        }
+
+
         public bool AreSaleRatesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SaleRate", ref updateHandle);
@@ -33,7 +48,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             DataTable rateChangesTable = BuildRateChangesTable(rateChanges);
 
-            int affectedRows = ExecuteNonQuerySPCmd("TOneWhS_BE.sp_SaleRate_CloseRates", (cmd) => {
+            int affectedRows = ExecuteNonQuerySPCmd("TOneWhS_BE.sp_SaleRate_CloseRates", (cmd) =>
+            {
                 SqlParameter tableParameter = new SqlParameter("@RateChanges", SqlDbType.Structured);
                 tableParameter.Value = rateChangesTable;
                 cmd.Parameters.Add(tableParameter);
@@ -61,7 +77,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             }
 
             table.EndLoadData();
-            
+
             return table;
         }
 
@@ -135,5 +151,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
 
         #endregion
+
     }
 }

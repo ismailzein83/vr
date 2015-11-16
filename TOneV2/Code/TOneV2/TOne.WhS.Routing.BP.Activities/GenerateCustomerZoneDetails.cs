@@ -63,7 +63,8 @@ namespace TOne.WhS.Routing.BP.Activities
             {
                 CustomerInfos = this.CustomerInfos.Get(context),
                 EffectiveOn = this.EffectiveOn.Get(context),
-                IsEffectiveInFuture = this.IsEffectiveInFuture.Get(context)
+                IsEffectiveInFuture = this.IsEffectiveInFuture.Get(context),
+                OutputQueue = this.OutputQueue.Get(context)
             };
         }
 

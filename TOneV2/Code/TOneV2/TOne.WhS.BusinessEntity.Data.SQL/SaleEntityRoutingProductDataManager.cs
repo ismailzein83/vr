@@ -12,31 +12,35 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SaleEntityRoutingProductDataManager : BaseTOneDataManager, ISaleEntityRoutingProductDataManager
     {
-        public IEnumerable<DefaultRoutingProduct> GetDefaultRoutingProducts(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<Entities.RoutingCustomerInfo> customerInfos)
+        public IEnumerable<DefaultRoutingProduct> GetDefaultRoutingProducts(IEnumerable<Entities.RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             DataTable dtActiveCustomers = CarrierAccountDataManager.BuildRoutingCustomerInfoTable(customerInfos);
-            return GetItemsSPCmd("[TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetDefaultRoutingProducts]", DefaultRoutingProductMapper, (cmd) =>
+            return GetItemsSPCmd("[TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetFilteredByOwner]", DefaultRoutingProductMapper, (cmd) =>
             {
                 var dtPrm = new SqlParameter("@ActiveCustomersInfo", SqlDbType.Structured);
                 dtPrm.Value = dtActiveCustomers;
                 cmd.Parameters.Add(dtPrm);
-
+                cmd.Parameters.Add(new SqlParameter("@CustomerOwnerType", SalePriceListOwnerType.Customer));
                 cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
                 cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
+                cmd.Parameters.Add(new SqlParameter("@IsDefault", true));
             });
         }
 
-        public IEnumerable<SaleZoneRoutingProduct> GetSaleZoneRoutingProducts(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<Entities.RoutingCustomerInfo> customerInfos)
+        public IEnumerable<SaleZoneRoutingProduct> GetSaleZoneRoutingProducts(IEnumerable<Entities.RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             DataTable dtActiveCustomers = CarrierAccountDataManager.BuildRoutingCustomerInfoTable(customerInfos);
-            return GetItemsSPCmd("[TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetSaleZonesRoutingProducts]", SaleZoneRoutingProductMapper, (cmd) =>
+            return GetItemsSPCmd("[TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetFilteredByOwner]", SaleZoneRoutingProductMapper, (cmd) =>
             {
                 var dtPrm = new SqlParameter("@ActiveCustomersInfo", SqlDbType.Structured);
                 dtPrm.Value = dtActiveCustomers;
                 cmd.Parameters.Add(dtPrm);
-
+                cmd.Parameters.Add(new SqlParameter("@CustomerOwnerType", SalePriceListOwnerType.Customer));
                 cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
                 cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
+                cmd.Parameters.Add(new SqlParameter("@IsDefault", false));
+
+
             });
         }
 
@@ -61,7 +65,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 OwnerId = (int)reader["OwnerID"],
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
-                SaleZoneId = (int)reader["ZoneId"]
+                SaleZoneId = GetReaderValue<int>(reader, "ZoneId")
             };
 
         }

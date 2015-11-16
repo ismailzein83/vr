@@ -17,12 +17,12 @@ namespace TOne.WhS.Routing.Data.SQL
             Object dbApplyStream = InitialiazeStreamForDBApply();
             foreach (CustomerZoneDetail customerZoneDetail in customerZoneDetails)
                 WriteRecordToStream(customerZoneDetail, dbApplyStream);
-            Object preparedSupplierZoneDetails = FinishDBApplyStream(dbApplyStream);
-            ApplyCustomerZoneDetailsToDB(preparedSupplierZoneDetails);
+            Object preparedCustomerZoneDetails = FinishDBApplyStream(dbApplyStream);
+            ApplyCustomerZoneDetailsToDB(preparedCustomerZoneDetails);
         }
         public void ApplyCustomerZoneDetailsToDB(object preparedCustomerZoneDetails)
         {
-            InsertBulkToTable(preparedCustomerZoneDetails as BulkInsertInfo);
+            InsertBulkToTable(preparedCustomerZoneDetails as BaseBulkInsertInfo);
         }
         public IEnumerable<Entities.CustomerZoneDetail> GetCustomerZoneDetails()
         {
@@ -48,7 +48,7 @@ namespace TOne.WhS.Routing.Data.SQL
         public void WriteRecordToStream(Entities.CustomerZoneDetail record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.CustomerId, record.SaleZoneId, record.RoutingProductId, record.RoutingProductSource, record.SellingProductId, record.EffectiveRateValue, record.RateSource);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.CustomerId, record.SaleZoneId, record.RoutingProductId, (int)record.RoutingProductSource, record.SellingProductId, record.EffectiveRateValue, (int)record.RateSource);
         }
         CustomerZoneDetail CustomerZoneDetailMapper(IDataReader reader)
         {

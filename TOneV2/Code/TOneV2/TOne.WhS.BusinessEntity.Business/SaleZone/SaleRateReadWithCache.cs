@@ -22,11 +22,12 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         SaleRatesByZone GetCachedSaleRates(Entities.SalePriceListOwnerType ownerType, int ownerId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>().GetOrCreateObject(String.Format("GetSaleRates_{0}_{1}_{2:MM/dd/yy}",ownerType, ownerId, effectiveOn.Date),
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>().GetOrCreateObject(String.Format("GetSaleRates_{0}_{1}_{2:MM/dd/yy}", ownerType, ownerId, effectiveOn.Date),
                () =>
                {
+                   SalePriceListManager salePriceListManager = new SalePriceListManager();
                    ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
-                   List<SaleRate> saleRates=dataManager.GetEffectiveSaleRates(ownerType, ownerId, this.effectiveOn);
+                   List<SaleRate> saleRates = dataManager.GetEffectiveSaleRates(ownerType, ownerId, this.effectiveOn);
                    SaleRatesByZone saleRatesByZone = new SaleRatesByZone();
                    if (saleRates != null)
                    {
@@ -34,7 +35,13 @@ namespace TOne.WhS.BusinessEntity.Business
                        {
                            if (!saleRatesByZone.ContainsKey(saleRate.ZoneId))
                            {
-                               saleRatesByZone.Add(saleRate.ZoneId, saleRate);
+                               SalePriceList priceList = salePriceListManager.GetPriceList(saleRate.PriceListId);
+                               SaleRatePriceList saleRatePriceList = new SaleRatePriceList()
+                               {
+                                   PriceList = priceList,
+                                   Rate = saleRate
+                               };
+                               saleRatesByZone.Add(saleRate.ZoneId, saleRatePriceList);
                            }
                        }
                    }

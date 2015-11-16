@@ -21,58 +21,35 @@ namespace TOne.WhS.BusinessEntity.Business
         public SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long saleZoneId)
         {
             SaleEntityZoneRate customerZoneRate;
-            if (!HasCustomerRate(customerId, saleZoneId, out customerZoneRate))
-                HasProductRate(sellingProductId, saleZoneId, out customerZoneRate);
-            if (customerZoneRate != null)
-                customerZoneRate.PriceList = _salePriceListManager.GetPriceList(customerZoneRate.Rate.PriceListId);
+            if (!HasRate( SalePriceListOwnerType.Customer, customerId, saleZoneId, out customerZoneRate))
+                HasRate(SalePriceListOwnerType.SellingProduct, sellingProductId, saleZoneId, out customerZoneRate);
             return customerZoneRate;
         }
 
         public SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long saleZoneId)
         {
             SaleEntityZoneRate customerZoneRate;
-            HasProductRate(sellingProductId, saleZoneId, out customerZoneRate);
-            if (customerZoneRate != null)
-                customerZoneRate.PriceList = _salePriceListManager.GetPriceList(customerZoneRate.Rate.PriceListId);
+            HasRate(SalePriceListOwnerType.SellingProduct, sellingProductId, saleZoneId, out customerZoneRate);
             return customerZoneRate;
         }
-        
-        private bool HasCustomerRate(int customerId, long saleZoneId, out SaleEntityZoneRate customerZoneRate)
-        {
-            var zoneRates = _reader.GetZoneRates(SalePriceListOwnerType.Customer, customerId);
-            SaleRate saleRate;
-            if (zoneRates != null && zoneRates.TryGetValue(saleZoneId, out saleRate))
-            {
-                customerZoneRate = new SaleEntityZoneRate
-                {
-                    Rate = saleRate,
-                    Source = SalePriceListOwnerType.Customer
-                };
-                return true;
-            }
-            else
-            {
-                customerZoneRate = null;
-                return false;
-            }
-        }
 
-        private bool HasProductRate(int sellingProductId, long saleZoneId, out SaleEntityZoneRate customerZoneRate)
+        private bool HasRate(SalePriceListOwnerType ownerType, int ownerId, long saleZoneId, out SaleEntityZoneRate saleEntityZoneRate)
         {
-            var zoneRates = _reader.GetZoneRates(SalePriceListOwnerType.SellingProduct, sellingProductId);
-            SaleRate saleRate;
-            if (zoneRates != null && zoneRates.TryGetValue(saleZoneId, out saleRate))
+            var zoneRates = _reader.GetZoneRates(ownerType, ownerId);
+            SaleRatePriceList saleRatePriceList;
+            if (zoneRates != null && zoneRates.TryGetValue(saleZoneId, out saleRatePriceList))
             {
-                customerZoneRate = new SaleEntityZoneRate
+                saleEntityZoneRate = new SaleEntityZoneRate
                 {
-                    Rate = saleRate,
-                    Source = SalePriceListOwnerType.SellingProduct
+                    Rate = saleRatePriceList.Rate,
+                    Source = ownerType,
+                    PriceList = saleRatePriceList.PriceList
                 };
                 return true;
             }
             else
             {
-                customerZoneRate = null;
+                saleEntityZoneRate = null;
                 return false;
             }
         }

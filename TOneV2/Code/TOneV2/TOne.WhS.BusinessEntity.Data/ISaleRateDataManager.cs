@@ -10,7 +10,9 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISaleRateDataManager : IDataManager
     {
-        List<SaleRate> GetEffectiveSaleRates(SalePriceListOwnerType ownerType,int ownerId, DateTime effectiveOn);
+        List<SaleRate> GetEffectiveSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn);
+
+        List<SaleRate> GetFilteredSaleRatedByOwner(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture);
 
         bool AreSaleRatesUpdated(ref object updateHandle);
 

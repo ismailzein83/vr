@@ -19,7 +19,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public Dictionary<int, SaleRatesByZone> SaleRatesByProduct { get; set; }
     }
 
-    public class SaleRatesByZone : Dictionary<long, SaleRate>
+    public class SaleRatesByZone : Dictionary<long, SaleRatePriceList>
     {
 
     }

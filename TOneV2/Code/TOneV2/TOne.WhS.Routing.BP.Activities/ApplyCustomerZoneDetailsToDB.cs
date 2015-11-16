@@ -30,9 +30,9 @@ namespace TOne.WhS.Routing.BP.Activities
                 bool hasItem = false;
                 do
                 {
-                    hasItem = inputArgument.InputQueue.TryDequeue((preparedSupplierZoneDetail) =>
+                    hasItem = inputArgument.InputQueue.TryDequeue((preparedCustomerZoneDetail) =>
                     {
-                        dataManager.ApplyCustomerZoneDetailsToDB(preparedSupplierZoneDetail);
+                        dataManager.ApplyCustomerZoneDetailsToDB(preparedCustomerZoneDetail);
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });
