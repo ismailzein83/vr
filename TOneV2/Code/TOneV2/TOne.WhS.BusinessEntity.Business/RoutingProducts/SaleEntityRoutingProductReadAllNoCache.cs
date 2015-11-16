@@ -12,28 +12,29 @@ namespace TOne.WhS.BusinessEntity.Business
         SaleZoneRoutingProductsByOwner _allSaleZoneRoutingProductsByOwner;
         DefaultRoutingProductsByOwner _allDefaultRoutingProductByOwner;
 
-        public SaleEntityRoutingProductReadAllNoCache(DateTime? effectiveOn, bool isEffectiveInFuture)
+        public SaleEntityRoutingProductReadAllNoCache(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingCustomerInfo> customerInfos)
         {
-            _allSaleZoneRoutingProductsByOwner = GetAllSaleZoneRoutingProductsByOwner(effectiveOn, isEffectiveInFuture);
-            _allDefaultRoutingProductByOwner = GetAllDefaultRoutingProductsByOwner(effectiveOn, isEffectiveInFuture);
+            _allSaleZoneRoutingProductsByOwner = GetAllSaleZoneRoutingProductsByOwner(effectiveOn, isEffectiveInFuture, customerInfos);
+            _allDefaultRoutingProductByOwner = GetAllDefaultRoutingProductsByOwner(effectiveOn, isEffectiveInFuture, customerInfos);
         }
 
-        private DefaultRoutingProductsByOwner GetAllDefaultRoutingProductsByOwner(DateTime? effectiveOn, bool isEffectiveInFuture)
+        private DefaultRoutingProductsByOwner GetAllDefaultRoutingProductsByOwner(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingCustomerInfo> customerInfos)
         {
             throw new NotImplementedException();
         }
 
-        private SaleZoneRoutingProductsByOwner GetAllSaleZoneRoutingProductsByOwner(DateTime? effectiveOn, bool isEffectiveInFuture)
+        private SaleZoneRoutingProductsByOwner GetAllSaleZoneRoutingProductsByOwner(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingCustomerInfo> customerInfos)
         {
             throw new NotImplementedException();
         }
+
 
         public SaleZoneRoutingProductsByZone GetRoutingProductsOnZones(Entities.SalePriceListOwnerType ownerType, int ownerId)
         {
             var saleZoneRoutingProductsByOwner = ownerType == SalePriceListOwnerType.Customer ? _allSaleZoneRoutingProductsByOwner.SaleZoneRoutingProductsByCustomer : _allSaleZoneRoutingProductsByOwner.SaleZoneRoutingProductsByProduct;
             SaleZoneRoutingProductsByZone saleZoneRoutingProductByZone;
             saleZoneRoutingProductsByOwner.TryGetValue(ownerId, out saleZoneRoutingProductByZone);
-            return saleZoneRoutingProductByZone;                   
+            return saleZoneRoutingProductByZone;
         }
 
         public Entities.DefaultRoutingProduct GetDefaultRoutingProduct(Entities.SalePriceListOwnerType ownerType, int ownerId)

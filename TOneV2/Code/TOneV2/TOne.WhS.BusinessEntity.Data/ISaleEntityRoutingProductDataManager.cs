@@ -8,5 +8,6 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISaleEntityRoutingProductDataManager : IDataManager
     {
+
     }
 }
