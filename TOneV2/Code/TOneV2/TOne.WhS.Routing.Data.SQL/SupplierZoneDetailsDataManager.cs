@@ -55,7 +55,7 @@ namespace TOne.WhS.Routing.Data.SQL
             return new SupplierZoneDetail()
             {
                 SupplierId = (int)reader["SupplierId"],
-                SupplierZoneId = (int)reader["SupplierZoneId"],
+                SupplierZoneId = (long)reader["SupplierZoneId"],
                 EffectiveRateValue = GetReaderValue<decimal>(reader, "EffectiveRateValue")
             };
         }

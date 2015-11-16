@@ -126,6 +126,12 @@ namespace TOne.WhS.Routing.Business
                         SupplierZoneDetail supplierZoneDetail;
                         if (supplierZoneDetailsByZone.TryGetValue(supplierCodeMatch.SupplierZoneId, out supplierZoneDetail))
                         {
+                            if(supplierZoneDetail == null)
+                            {
+                                //TODO: log a business error here
+                                continue;
+                            }
+
                             SupplierCodeMatchWithRate supplierCodeMatchWithRate = new SupplierCodeMatchWithRate
                             {
                                 CodeMatch = supplierCodeMatch,

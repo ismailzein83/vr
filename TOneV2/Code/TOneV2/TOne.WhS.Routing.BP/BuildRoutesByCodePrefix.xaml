@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.BuildRoutesByCodePrefix" this:BuildRoutesByCodePrefix.RoutingDatabaseId="31"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.BuildRoutesByCodePrefix" this:BuildRoutesByCodePrefix.RoutingDatabaseId="38"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
@@ -108,6 +108,16 @@
         </twrba1:GetCustomerZoneDetails>
       </Sequence>
       <Sequence DisplayName="Sequence_SupplierCodes" sap2010:WorkflowViewState.IdRef="Sequence_3">
+        <Sequence.Variables>
+          <Variable x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)" Name="ActiveSupplierInfo" />
+        </Sequence.Variables>
+        <twrba1:GetActiveSupplierInfos sap2010:WorkflowViewState.IdRef="GetActiveSupplierInfos_1">
+          <twrba1:GetActiveSupplierInfos.ActiveRoutingSupplierInfos>
+            <OutArgument x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)">
+              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)">ActiveSupplierInfo</mca:CSharpReference>
+            </OutArgument>
+          </twrba1:GetActiveSupplierInfos.ActiveRoutingSupplierInfos>
+        </twrba1:GetActiveSupplierInfos>
         <twrba1:GetSupplierCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSupplierCodes_1">
           <twrba1:GetSupplierCodes.CodePrefix>
             <InArgument x:TypeArguments="x:String">
@@ -129,6 +139,11 @@
               <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">SupplierCodes</mca:CSharpReference>
             </OutArgument>
           </twrba1:GetSupplierCodes.SupplierCodes>
+          <twrba1:GetSupplierCodes.SupplierInfo>
+            <InArgument x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)">ActiveSupplierInfo</mca:CSharpValue>
+            </InArgument>
+          </twrba1:GetSupplierCodes.SupplierInfo>
         </twrba1:GetSupplierCodes>
         <twrba1:GetSupplierZoneDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSupplierZoneDetails_1">
           <twrba1:GetSupplierZoneDetails.RoutingDatabaseId>
@@ -333,29 +348,30 @@
         </twrba1:ApplyCustomerRoutesToDB.RoutingDatabaseId>
       </twrba1:ApplyCustomerRoutesToDB>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbD0BkAEBkwEBAkID0QIOAgEBSQWXARADAbgEmAEFzwIQAgECSgdtEgMB7QRuB5YBEgMBuQSmAQfKASEDAbkDywEH6gErAwHMAusBB/sBJQMBlQL8AQeMAi4DAd4BjQIHpwIkAwGDAagCB70CLgIBOr4CB84CKAIBA0sJYB8DAf0EYQlsKgMB7gRvCYQBIwMB0ASFAQmVASoDAboEswENswGFAQMBpgS4AQ24AWoDAZQErgENrgGFAQMBggS9AQ29AXcDAfADqQENqQGQAQMB3gPCAQ3CAXIDAcwDxwENxwFzAwG6A+IBDeIBbwMBpwPdAQ3dAXsDAZUD2AEN2AF7AwGDA+cBDecBeQMB8QLTAQ3TAX0DAd8CzgENzgF9AwHNAvMBDfMBcQMBugLuAQ3uAXMDAagC+AEN+AFbAwGWAoQCDYQCcQMBgwL/AQ3/AXMDAfEBiQINiQJbAwHfAZACDZACcwMBzAGfAg2fAm8DAboBlQINlQKIAQMBqAGkAg2kAnoDAZYBmgINmgKJAQMBhAG1Ag21AnICAXGrAg2rAoEBAgFfugINugJ8AgFNsAINsAJ8AgE7xgINxgJ0AgEowQINwQJ0AgEWywINywJbAgEEUw9TbAMBkwVdD110AwGMBU4PTl0DAYUFWA9YXAMB/gRkD2R9AwH2BGkPaWwDAe8Edw93bAMB5gRyD3JdAwHfBIEBD4EBfAMB2AR8D3xcAwHRBIgBD4gBXQMByQSNAQ+NAXQDAcIEkgEPkgF9AwG7BA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbEABkAEBkwEBAkID4AIOAgEBSQWmARADAbgEpwEF3gIQAgECSgdtEgMBhQVuB6UBEgMBuQS1AQfZASEDAbkD2gEH+QErAwHMAvoBB4oCJQMBlQKLAgebAi4DAd4BnAIHtgIkAwGDAbcCB8wCLgIBOs0CB90CKAIBA0sJYB8DAZUFYQlsKQMBhgVyCXgpAwH8BHkJkwEjAwHTBJQBCaQBKQMBugTCAQ3CAYUBAwGmBMcBDccBagMBlAS9AQ29AYUBAwGCBMwBDcwBdwMB8AO4AQ24AZABAwHeA9EBDdEBcgMBzAPWAQ3WAXMDAboD8QEN8QFvAwGnA+wBDewBewMBlQPnAQ3nAXsDAYMD9gEN9gF5AwHxAuIBDeIBfQMB3wLdAQ3dAX0DAc0CggINggJxAwG6Av0BDf0BcwMBqAKHAg2HAlsDAZYCkwINkwJxAwGDAo4CDY4CcwMB8QGYAg2YAlsDAd8BnwINnwJzAwHMAa4CDa4CbwMBugGkAg2kAogBAwGoAbMCDbMCegMBlgGpAg2pAokBAwGEAcQCDcQCcgIBcboCDboCgQECAV/JAg3JAnwCAU2/Ag2/AnwCATvVAg3VAnQCASjQAg3QAnQCARbaAg3aAlsCAQRTD1NsAwGrBV0PXXQDAaQFTg9OXQMBnQVYD1hcAwGWBWQPZH0DAY4FaQ9pbAMBhwV1D3WIAQMB/QSBAQ+BAWwDAfQEfA98XQMB7ASQAQ+QAYABAwHkBIsBD4sBfAMB3ASGAQ+GAVwDAdQElwEPlwFdAwHLBJwBD5wBdAMBwwShAQ+hAX0DAbsE</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="GetSaleCodes_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="LoadCustomerZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,208">
+      <sap2010:ViewStateData Id="GetCustomerZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,270">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="GetActiveSupplierInfos_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="GetSupplierCodes_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="LoadSupplierZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,208">
+      <sap2010:ViewStateData Id="GetSupplierZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,270">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1754,254" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1754,316" />
       <sap2010:ViewStateData Id="BuildCodeMatches_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareCodeMatchesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyCodeMatchesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -364,14 +380,14 @@
       <sap2010:ViewStateData Id="PrepareCustomerRoutesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyCustomerRoutesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1754,86" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1776,504">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1776,566">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.BuildRoutesByCodePrefix_1" sap:VirtualizedContainerService.HintSize="1816,584" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.BuildRoutesByCodePrefix_1" sap:VirtualizedContainerService.HintSize="1816,646" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,9 +43,18 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetBySupplier", SupplierCodeMapper, supplierId, effectiveOn);
         }
 
-        public List<SupplierCode> GetSupplierCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture)
+        public List<SupplierCode> GetActiveSupplierCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, IEnumerable<RoutingSupplierInfo> supplierInfo)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetByCodePrefix", SupplierCodeMapper, codePrefix, effectiveOn);
+            DataTable dtActiveSuppliers = CarrierAccountDataManager.BuildRoutingSupplierInfoTable(supplierInfo);
+            return GetItemsSPCmd("TOneWhS_BE.sp_SupplierCode_GetActiveCodeByPrefix", SupplierCodeMapper, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@ActiveSuppliersInfo", SqlDbType.Structured);
+                dtPrm.Value = dtActiveSuppliers;
+                cmd.Parameters.Add(dtPrm);
+
+                cmd.Parameters.Add(new SqlParameter("@CodePrefix", codePrefix));
+                cmd.Parameters.Add(new SqlParameter("@EffectiveOn", effectiveOn));
+            });
         }
     }
 }
