@@ -16,36 +16,47 @@ namespace TOne.WhS.Sales.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "RatePlan")]
     public class RatePlanController : BaseAPIController
     {
+        private RatePlanManager _manager;
+
+        public RatePlanController()
+        {
+            _manager = new RatePlanManager();
+        }
+
         [HttpGet]
         [Route("GetZoneLetters")]
         public IEnumerable<char> GetZoneLetters(SalePriceListOwnerType ownerType, int ownerId)
         {
-            RatePlanManager manager = new RatePlanManager();
-            return manager.GetZoneLetters(ownerType, ownerId);
+            return _manager.GetZoneLetters(ownerType, ownerId);
         }
 
         [HttpPost]
         [Route("GetZoneItems")]
         public IEnumerable<ZoneItem> GetZoneItems(ZoneItemInput input)
         {
-            RatePlanManager manager = new RatePlanManager();
-            return manager.GetZoneItems(input);
+            RatePlanManager _manager = new RatePlanManager();
+            return _manager.GetZoneItems(input);
+        }
+
+        [HttpGet]
+        [Route("GetDefaultRoutingProduct")]
+        public DefaultRoutingProduct GetDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            return _manager.GetDefaultRoutingProduct(ownerType, ownerId);
         }
 
         [HttpGet]
         [Route("SavePriceList")]
         public void SavePriceList(SalePriceListOwnerType ownerType, int ownerId)
         {
-            RatePlanManager manager = new RatePlanManager();
-            manager.SavePriceList(ownerType, ownerId);
+            _manager.SavePriceList(ownerType, ownerId);
         }
 
         [HttpPost]
         [Route("SaveChanges")]
         public bool SaveChanges(SaveChangesInput input)
         {
-            RatePlanManager manager = new RatePlanManager();
-            return manager.SaveChanges(input);
+            return _manager.SaveChanges(input);
         }
     }
 }

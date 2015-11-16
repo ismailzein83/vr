@@ -23,9 +23,6 @@ app.directive("vrWhsSalesDefaultroutingproduct", ["UtilsService", "VRUIUtilsServ
         function Constructor(ctrl, $scope) {
 
             function initializeController() {
-                var currentBED;
-                var currentEED;
-
                 var readyPromises = [];
 
                 var currentSelectorAPI;
@@ -53,15 +50,20 @@ app.directive("vrWhsSalesDefaultroutingproduct", ["UtilsService", "VRUIUtilsServ
                 function buildAPI() {
                     var api = {};
 
+                    var currentBED;
+                    var currentEED;
+
                     api.load = function (payload) {
                         var currentRoutingProductId;
 
                         if (payload != undefined) {
                             currentRoutingProductId = payload.CurrentRoutingProductId;
-                            currentBED = payload.CurrentBED;
+
                             ctrl.beginEffectiveDate = payload.CurrentBED;
-                            currentEED = payload.CurrentEED;
+                            currentBED = new Date(UtilsService.cloneObject(ctrl.beginEffectiveDate));
+                            
                             ctrl.endEffectiveDate = payload.CurrentEED;
+                            currentEED = new Date(UtilsService.cloneObject(ctrl.endEffectiveDate));
                         }
 
                         var currentSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -104,13 +106,14 @@ app.directive("vrWhsSalesDefaultroutingproduct", ["UtilsService", "VRUIUtilsServ
 
                         function buildNewRoutingProduct() {
                             var newRoutingProduct = null;
-                            var newRoutingProductId = selectorAPI.getSelectedIds();
+                            var currentSelectorId = currentSelectorAPI.getSelectedIds();
+                            var newSelectorId = newSelectorAPI.getSelectedIds();
 
-                            if (currentRoutingProductId != newRoutingProductId) {
+                            if (newSelectorId != null && currentSelectorId != newSelectorId) {
                                 newRoutingProduct = {
-                                    RoutingProductId: newRoutingProductId,
-                                    BED: $scope.bed,
-                                    EED: $scope.eed
+                                    DefaultRoutingProductId: newSelectorId,
+                                    BED: ctrl.beginEffectiveDate,
+                                    EED: ctrl.endEffectiveDate
                                 };
                             }
 
@@ -119,16 +122,26 @@ app.directive("vrWhsSalesDefaultroutingproduct", ["UtilsService", "VRUIUtilsServ
 
                         function buildRoutingProductChange() {
                             var routingProductChange = null;
-                            var newRoutingProductId = selectorAPI.getSelectedIds()
+                            var currentSelectorId = currentSelectorAPI.getSelectedIds();
+                            var newSelectorId = newSelectorAPI.getSelectedIds();
 
-                            if (currentRoutingProductId == newRoutingProductId && $scope.eed != currentEED) {
+                            if (newSelectorId == null && !compareDates(ctrl.endEffectiveDate, currentEED)) {
                                 routingProductChange = {
-                                    DefaultRoutingProductId: null,
-                                    EED: $scope.eed
+                                    DefaultRoutingProductId: currentSelectorId,
+                                    EED: ctrl.endEffectiveDate
                                 };
                             }
 
                             return routingProductChange;
+
+                            function compareDates(date1, date2) {
+                                if (!isEmpty(date1) && !isEmpty(date2))
+                                    return (date1.getDay() == date2.getDay() && date1.getMonth() == date2.getMonth() && date1.getYear() == date2.getYear());
+                                else if (isEmpty(date1) && isEmpty(date2))
+                                    return true;
+                                else
+                                    return false;
+                            }
                         }
                     };
 

@@ -31,12 +31,12 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 gridAPI = api;
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
-                    ctrl.onReady(buildDirectiveAPI());
+                    ctrl.onReady(buildAPI());
 
-                function buildDirectiveAPI() {
+                function buildAPI() {
                     var directiveAPI = {};
 
-                    directiveAPI.loadGrid = function (query) {
+                    directiveAPI.load = function (query) {
                         gridQuery = query;
                         gridAPI.clearDataAndContinuePaging();
                         return loadZoneItems();
@@ -103,16 +103,12 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                     }
 
                                     return newRate;
-
-                                    function isEmpty(value) {
-                                        return (value == undefined || value == null);
-                                    }
                                 }
 
                                 function buildRateChange(zoneItem) {
                                     var rateChange = null;
 
-                                    if (zoneItem.RateEED != zoneItem.RateNewEED) {
+                                    if (!compareDates(zoneItem.RateEED, zoneItem.RateNewEED)) {
                                         return {
                                             RateId: zoneItem.CurrentRateId,
                                             EED: zoneItem.RateNewEED
@@ -120,6 +116,19 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                     }
 
                                     return rateChange;
+
+                                    function compareDates(date1, date2) {
+                                        if (!isEmpty(date1) && !isEmpty(date2))
+                                            return (date1.getDay() == date2.getDay() && date1.getMonth() == date2.getMonth() && date1.getYear() == date2.getYear());
+                                        else if (isEmpty(date1) && isEmpty(date2))
+                                            return true;
+                                        else
+                                            return false;
+                                    }
+                                }
+
+                                function isEmpty(value) {
+                                    return (value == undefined || value == null);
                                 }
                             }
                         }
@@ -167,6 +176,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                 function extendZoneItem(zoneItem) {
                     zoneItem.IsDirty = false;
+                    zoneItem.RateEED = (zoneItem.RateEED != null) ? new Date(zoneItem.RateEED) : null;
                     zoneItem.RateNewEED = (zoneItem.RateEED != null) ? UtilsService.cloneDateTime(zoneItem.RateEED) : null;
 
                     zoneItem.onNewRateChanged = function (dataItem) {

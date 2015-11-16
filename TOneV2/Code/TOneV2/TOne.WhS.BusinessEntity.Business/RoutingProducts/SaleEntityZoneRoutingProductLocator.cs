@@ -10,9 +10,26 @@ namespace TOne.WhS.BusinessEntity.Business
     public class SaleEntityZoneRoutingProductLocator
     {
         ISaleEntityRoutingProductReader _reader;
+
         public SaleEntityZoneRoutingProductLocator(ISaleEntityRoutingProductReader reader)
         {
             _reader = reader;
+        }
+        
+        public DefaultRoutingProduct GetCustomerDefaultRoutingProduct(int customerId, int sellingProductId)
+        {
+            DefaultRoutingProduct defaultRoutingProduct;
+            if (!HasDefaultRP(SalePriceListOwnerType.Customer, customerId, out defaultRoutingProduct))
+                HasDefaultRP(SalePriceListOwnerType.SellingProduct, sellingProductId, out defaultRoutingProduct);
+
+            return defaultRoutingProduct;
+        }
+
+        public DefaultRoutingProduct GetSellingProductDefaultRoutingProduct(int sellingProductId)
+        {
+            DefaultRoutingProduct defaultRoutingProduct;
+            HasDefaultRP(SalePriceListOwnerType.SellingProduct, sellingProductId, out defaultRoutingProduct);
+            return defaultRoutingProduct;
         }
 
         public SaleEntityZoneRoutingProduct GetCustomerZoneRoutingProduct(int customerId, int sellingProductId, long saleZoneId)
@@ -68,6 +85,12 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             customerZoneRoutingProduct = null;
             return false;
+        }
+
+        private bool HasDefaultRP(SalePriceListOwnerType ownerType, int ownerId, out DefaultRoutingProduct defaultRoutingProduct)
+        {
+            defaultRoutingProduct = _reader.GetDefaultRoutingProduct(ownerType, ownerId);
+            return (defaultRoutingProduct != null);
         }
     }
 }

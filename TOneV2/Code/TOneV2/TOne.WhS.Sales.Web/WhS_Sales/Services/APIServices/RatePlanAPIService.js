@@ -9,6 +9,7 @@
         return ({
             GetZoneLetters: GetZoneLetters,
             GetZoneItems: GetZoneItems,
+            GetDefaultRoutingProduct: GetDefaultRoutingProduct,
             SavePriceList: SavePriceList,
             SaveChanges: SaveChanges
         });
@@ -22,6 +23,13 @@
 
         function GetZoneItems(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetZoneItems"), input);
+        }
+
+        function GetDefaultRoutingProduct(ownerType, ownerId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetDefaultRoutingProduct"), {
+                ownerType: ownerType,
+                ownerId: ownerId
+            });
         }
 
         function SavePriceList(ownerType, ownerId) {

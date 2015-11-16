@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
@@ -45,6 +46,24 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public IEnumerable<Entities.RoutingProduct> GetRoutingProducts()
         {
             return GetItemsSP("TOneWhS_BE.sp_RoutingProduct_GetAll", RoutingProductMapper);
+        }
+
+        public IEnumerable<DefaultRoutingProduct> GetEffectiveDefaultRoutingProducts(DateTime effectiveOn)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetEffective", DefaultRoutingProductMapper, effectiveOn);
+        }
+
+        private DefaultRoutingProduct DefaultRoutingProductMapper(IDataReader reader)
+        {
+            DefaultRoutingProduct defaultRoutingProduct = new DefaultRoutingProduct();
+
+            defaultRoutingProduct.OwnerType = (SalePriceListOwnerType)reader["OwnerType"];
+            defaultRoutingProduct.OwnerId = (int)reader["OwnerID"];
+            defaultRoutingProduct.RoutingProductId = (int)reader["RoutingProductID"];
+            defaultRoutingProduct.BED = (DateTime)reader["BED"];
+            defaultRoutingProduct.EED = GetReaderValue<DateTime?>(reader, "EED");
+
+            return defaultRoutingProduct;
         }
 
         public bool Insert(Entities.RoutingProduct routingProduct, out int insertedId)

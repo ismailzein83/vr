@@ -138,14 +138,11 @@ namespace TOne.WhS.Sales.Business
             }
             else if (ownerType == SalePriceListOwnerType.Customer)
             {
-                CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
-                CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(ownerId, DateTime.Now, false);
-
                 zoneRates = new List<SaleEntityZoneRate>();
 
                 foreach (SaleZone saleZone in zones)
                 {
-                    SaleEntityZoneRate zoneRate = rateLocator.GetCustomerZoneRate(ownerId, customerSellingProduct.SellingProductId, saleZone.SaleZoneId);
+                    SaleEntityZoneRate zoneRate = rateLocator.GetCustomerZoneRate(ownerId, GetSellingProductId(ownerId), saleZone.SaleZoneId);
 
                     if (zoneRate != null)
                         zoneRates.Add(zoneRate);
@@ -153,6 +150,13 @@ namespace TOne.WhS.Sales.Business
             }
 
             return zoneRates;
+        }
+
+        private int GetSellingProductId(int customerId)
+        {
+            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
+            CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, DateTime.Now, false);
+            return customerSellingProduct.SellingProductId;
         }
 
         private IEnumerable<ZoneItem> BuildZoneItems(SalePriceListOwnerType ownerType, IEnumerable<SaleZone> zones, IEnumerable<SaleEntityZoneRate> zoneRates)
@@ -228,6 +232,20 @@ namespace TOne.WhS.Sales.Business
         }
 
         #endregion
+
+        #endregion
+
+        #region Get Default Routing Product
+
+        public DefaultRoutingProduct GetDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            SaleEntityZoneRoutingProductLocator routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(DateTime.Now));
+            
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
+                return routingProductLocator.GetSellingProductDefaultRoutingProduct(ownerId);
+            else
+                return routingProductLocator.GetCustomerDefaultRoutingProduct(ownerId, GetSellingProductId(ownerId));
+        }
 
         #endregion
 
