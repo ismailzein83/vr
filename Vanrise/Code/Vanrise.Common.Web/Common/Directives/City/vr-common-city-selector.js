@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_CityService', 'UtilsService', '$compile',
-    function (VRCommon_CityAPIService, VRCommon_CityService, UtilsService, $compile) {
+app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_CityService', 'UtilsService', 'VRUIUtilsService',
+    function (VRCommon_CityAPIService, VRCommon_CityService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -106,19 +106,7 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                 api.getIdsData = function () {
                     return getIdsList($scope.selectedCityValues, "CityId");
                 }
-                api.setData = function (selectedIds) {
-                    if ($attrs.ismultipleselection != undefined) {
-                        for (var i = 0; i < selectedIds.length; i++) {
-                            var selectedCityValue = UtilsService.getItemByVal($scope.datasource, selectedIds[i], "CityId");
-                            if (selectedCityValue != null)
-                                $scope.selectedCityValues.push(selectedCityValue);
-                        }
-                    } else {
-                        var selectedCityValue = UtilsService.getItemByVal($scope.datasource, selectedIds, "CityId");
-                        if (selectedCityValue != null)
-                            $scope.selectedCityValues = selectedCityValue;
-                    }
-                }
+               
                 function getIdsList(tab, attname) {
                     var list = [];
                     for (var i = 0; i < tab.length ; i++)
@@ -144,10 +132,11 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                         angular.forEach(response, function (itm) {
                             $scope.datasource.push(itm);
                         });
-                    }).catch(function (error) {
-                    }).finally(function () {
 
-                    });;
+                        if (selectedIds != undefined) {
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'CityId', $attrs, ctrl);
+                        }
+                    });
                 }
 
                 if (ctrl.onReady != null)
