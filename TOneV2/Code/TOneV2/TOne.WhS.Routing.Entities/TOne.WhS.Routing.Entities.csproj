@@ -57,6 +57,7 @@
     <Compile Include="CodeMatches.cs" />
     <Compile Include="CodeMatchesBatch.cs" />
     <Compile Include="CustomerRoutesBatch.cs" />
+    <Compile Include="CustomerZoneDetailBatch.cs" />
     <Compile Include="IBuildCodeMatchesContext.cs" />
     <Compile Include="IBuildCustomerRoutesContext.cs" />
     <Compile Include="IBuildRoutingProductRoutesContext.cs" />

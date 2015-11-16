@@ -72,6 +72,7 @@
     <Compile Include="BuildCustomerRoutes.cs" />
     <Compile Include="CreateRoutingDatabase.cs" />
     <Compile Include="DropOldRoutingDatabases.cs" />
+    <Compile Include="GenerateCustomerZoneDetails.cs" />
     <Compile Include="GenerateSupplierZoneDetails.cs" />
     <Compile Include="GetSaleCodes.cs" />
     <Compile Include="GetSupplierCodes.cs" />
