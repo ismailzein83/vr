@@ -10,20 +10,22 @@
                 if (value == undefined || value.length == 0)
                     return ValidationMessagesEnum.required;
             }
-            if (validationOptions != undefined) {
-                if (validationOptions.emailValidation) {
-                    if (!validateEmail(value))
-                        return ValidationMessagesEnum.invalidEmail;
+            if (value != undefined && value != null) {
+                if (validationOptions != undefined) {
+                    if (validationOptions.emailValidation) {
+                        if (!validateEmail(value))
+                            return ValidationMessagesEnum.invalidEmail;
+                    }
+                    if (validationOptions.numberValidation) {
+                        if (!validateNumber(value, validationOptions))
+                            return ValidationMessagesEnum.invalidNumber;
+                    }
                 }
-                if (validationOptions.numberValidation) {
-                    if (!validateNumber(value, validationOptions))
-                        return ValidationMessagesEnum.invalidNumber;
+                if ($attrs.customvalidate != undefined) {
+                    var customerValidationError = $scope.$parent.$eval($attrs.customvalidate);
+                    if (customerValidationError != null)
+                        return customerValidationError;
                 }
-            }
-            if ($attrs.customvalidate != undefined) {
-                var customerValidationError = $scope.$parent.$eval($attrs.customvalidate);
-                if (customerValidationError != null)
-                    return customerValidationError;
             }
             return null;
         }
