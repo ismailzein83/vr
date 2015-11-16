@@ -9,6 +9,24 @@
         defineScope();
         load();
         function defineScope() {
+            $scope.deleteMe = function (itemName) {
+                alert('item deleted: ' + itemName);
+            };
+            $scope.itemsPerRow =3;
+            $scope.listItems = [];
+            for (var i = 0; i < 10; i++)
+                $scope.listItems.push('item ' + i);
+
+            $scope.deleteItem = function (item) {
+                var index = $scope.listItems.indexOf(item);
+                $scope.listItems.splice(index, 1);
+            }
+
+            $scope.removeItem = function (item) {
+                console.log(item);
+                var index = $scope.listItems.indexOf(item);
+                $scope.listItems.splice(index, 1);
+            }
 
             $scope.isValid = function (value) {               
                 return (value != undefined && value.length > 0) ? null : "Not Valid";

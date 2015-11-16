@@ -41,7 +41,7 @@ function (UtilsService, Common_AppendixSample_Service) {
             },
             template: function (element, attrs) {
                 return '<vr-select datatextfield="description" datavaluefield="value" label="Select Appendix 1" datasource="ctrl.dataSource"'
-                +'selectedvalues="ctrl.selectedValue" on-ready="ctrl.selectReady" isrequired="true" ismultipleselection></vr-columns>';
+                +'selectedvalues="ctrl.selectedValue" on-ready="ctrl.selectReady" isrequired="true"></vr-columns>';
             }
 
         };

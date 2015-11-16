@@ -2037,3 +2037,7 @@ vr-tab div[class^="col"] {
 }
 
 /*end of vr-tabs*/
+
+vr-listitem div[class^="col"] {
+        padding: 1px;
+    }

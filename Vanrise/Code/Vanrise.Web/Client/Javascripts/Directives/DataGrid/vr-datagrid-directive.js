@@ -12,7 +12,8 @@
             noverticallines: '@',
             idfield: '@',
             onexport: '=',
-            showexpand:'='
+            showexpand: '=',
+            norowhighlightonclick: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -404,11 +405,13 @@
 
             var lastSelectedRow;
             ctrl.onRowClicked = function (evnt) {
-                if (lastSelectedRow != undefined)
-                    lastSelectedRow.removeClass('vr-datagrid-datacells-click');
+                if (ctrl.norowhighlightonclick == undefined || !ctrl.norowhighlightonclick) {
+                    if (lastSelectedRow != undefined)
+                        lastSelectedRow.removeClass('vr-datagrid-datacells-click');
 
-                lastSelectedRow = angular.element(evnt.currentTarget);
-                lastSelectedRow.addClass('vr-datagrid-datacells-click');
+                    lastSelectedRow = angular.element(evnt.currentTarget);
+                    lastSelectedRow.addClass('vr-datagrid-datacells-click');
+                }
                 ctrl.menuLeft = evnt.clientX;// evnt.offsetX == undefined ? evnt.originalEvent.layerX : evnt.offsetX;
                 ctrl.menuTop = evnt.clientY;// evnt.offsetY == undefined ? evnt.originalEvent.layerY : evnt.offsetY;
                
