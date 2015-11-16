@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class AccountManagerCarrier
+    public class AccountManagerCarrier : CarrierAccountInfo
     {
-        public int? CarrierAccountId { get; set; }
-        public string CarrierName { get; set; }
         public bool IsCustomerAvailable { get; set; }
         public bool IsSupplierAvailable { get; set; }
+        public CarrierAccountType CarrierType { get; set; }
     }
 }

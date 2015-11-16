@@ -1,10 +1,11 @@
-﻿CarrierAssignmentEditorController.$inject = ['$scope', 'AccountManagerAPIService', 'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+﻿CarrierAssignmentEditorController.$inject = ['$scope', 'WhS_BE_AccountManagerAPIService', 'WhS_Be_CarrierAccountTypeEnum', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService','VRUIUtilsService'];
 
-function CarrierAssignmentEditorController($scope, AccountManagerAPIService, CarrierTypeEnum, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function CarrierAssignmentEditorController($scope, AccountManagerAPIService, CarrierTypeEnum, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
     var selectedAccountManagerId = undefined;
     var assignedCarriers = [];
-
+    var carrierAccountDirectiveAPI;
+    var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
     loadParameters();
     defineScope();
     load();
@@ -21,8 +22,30 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, Car
 
         $scope.carriers = [];
         $scope.selectedCarriers = [];
-        $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
-        
+
+        $scope.onCarrierAccountDirectiveReady = function (api) {
+            carrierAccountDirectiveAPI = api;
+            carrierAccountReadyPromiseDeferred.resolve();
+        }
+
+        $scope.onSelectItem = function (item) {
+            var obj = {
+                CarrierName: item.Name,
+                Entity: { RelationType: item.CarrierType, CarrierAccountId: item.CarrierAccountId, UserId: selectedAccountManagerId },
+                IsCustomerAssigned: false,
+                IsCustomerAvailable: item.IsCustomerAvailable,
+                IsCustomerInDirect:false,
+                IsSupplierAssigned:false,
+                IsSupplierAvailable:item.IsSupplierAvailable,
+                IsSupplierInDirect:false
+            }
+            $scope.carriers.push(obj)
+        }
+        $scope.onDeselectItem = function (item) {
+            var index1 = UtilsService.getItemIndexByVal($scope.carriers, item.CarrierAccountId, 'Entity.CarrierAccountId');
+            $scope.carriers.splice(index1, 1);
+        }
+
         $scope.assignCarriers = function () {
 
             denyDeselectedCarriers();
@@ -49,15 +72,14 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, Car
             $scope.modalContext.closeModal();
         }
 
-        $scope.denyCarrier = function ($event, item) {
-            $event.preventDefault();
-            $event.stopPropagation();
-            
+        $scope.denyCarrier = function (item) {   
             item.newCustomerSwitchValue = false;
             item.newSupplierSwitchValue = false;
 
-            var index = UtilsService.getItemIndexByVal($scope.selectedCarriers, item.CarrierAccountId, 'CarrierAccountId');
+            var index = UtilsService.getItemIndexByVal($scope.selectedCarriers, item.Entity.CarrierAccountId, 'CarrierAccountId');
             $scope.selectedCarriers.splice(index, 1);
+            var index1 = UtilsService.getItemIndexByVal($scope.carriers, item.Entity.CarrierAccountId, 'Entity.CarrierAccountId');
+            $scope.carriers.splice(index1, 1);
         };
     }
 
@@ -75,18 +97,20 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, Car
                 $scope.isGettingData = false;
             });
     }
-
     function loadCarriers() {
+        var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        return AccountManagerAPIService.GetCarriers(selectedAccountManagerId)
-            .then(function (response) {
-                $scope.carriers = getMappedCarriers(response);
-            });
+        carrierAccountReadyPromiseDeferred.promise.then(function () {
+            var payload = { filter: { AssignableToUserId: selectedAccountManagerId } }
+            VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, payload, loadCarrierAccountPromiseDeferred);
+        });
+
+        return loadCarrierAccountPromiseDeferred.promise;
     }
 
     function loadAssignedCarriers() {
 
-        return AccountManagerAPIService.GetAssignedCarriers(selectedAccountManagerId, false, CarrierTypeEnum.SaleZone.value)
+        return AccountManagerAPIService.GetAssignedCarriersDetail(selectedAccountManagerId, false, CarrierTypeEnum.Exchange.value)
             .then(function (response) {
                 assignedCarriers = response;
             });
@@ -117,21 +141,16 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, Car
     function toggleAndSelectAssignedCarriers() {
 
         for (var i = 0; i < assignedCarriers.length; i++) {
-
-            var carrier = UtilsService.getItemByVal($scope.carriers, assignedCarriers[i].CarrierAccountId, 'CarrierAccountId'); // will never return null
-            
-            if (assignedCarriers[i].RelationType == CarrierTypeEnum.Customer.value) {
-                carrier.customerSwitchValue = true;
-                carrier.newCustomerSwitchValue = true;
-            }
-            else if (assignedCarriers[i].RelationType == CarrierTypeEnum.Supplier.value) {
-                carrier.supplierSwitchValue = true;
-                carrier.newSupplierSwitchValue = true;
-            }
-
-            // 2 array items in $scope.selectedCarriers may correspond to the same carrier
-            if (!UtilsService.contains($scope.selectedCarriers, carrier))
-                $scope.selectedCarriers.push(carrier); // select the assigned carrier
+                    if (assignedCarriers[i].Entity.RelationType == CarrierTypeEnum.Customer.value) {
+                        assignedCarriers[i].customerSwitchValue = true;
+                        assignedCarriers[i].newCustomerSwitchValue = true;
+                    }
+                    else if (assignedCarriers[i].Entity.RelationType == CarrierTypeEnum.Supplier.value) {
+                        assignedCarriers[i].supplierSwitchValue = true;
+                        assignedCarriers[i].newSupplierSwitchValue = true;
+                    }
+         
+                    $scope.carriers.push(assignedCarriers[i])
         }
     }
 
@@ -139,35 +158,31 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, Car
         var mappedCarriers = [];
 
         for (var i = 0; i < $scope.carriers.length; i++)
-            mappedCarriers = mappedCarriers.concat(mapCarrierForAssignment($scope.carriers[i]));
+           mapCarrierForAssignment($scope.carriers[i], mappedCarriers);
 
         return mappedCarriers;
     }
 
-    function mapCarrierForAssignment(carrier) {
-        var mappedCarrier = [];
-
+    function mapCarrierForAssignment(carrier, mappedCarriers) {
         if (carrier.customerSwitchValue != carrier.newCustomerSwitchValue) {
             var object = {
-                UserId: carrier.UserId,
-                CarrierAccountId: carrier.CarrierAccountId,
+                UserId: carrier.Entity.UserId,
+                CarrierAccountId: carrier.Entity.CarrierAccountId,
                 RelationType: CarrierTypeEnum.Customer.value,
                 Status: carrier.newCustomerSwitchValue
             };
-            mappedCarrier.push(object);
+            mappedCarriers.push(object);
         }
-
         if (carrier.supplierSwitchValue != carrier.newSupplierSwitchValue) {
             var object = {
-                UserId: carrier.UserId,
-                CarrierAccountId: carrier.CarrierAccountId,
+                UserId: carrier.Entity.UserId,
+                CarrierAccountId: carrier.Entity.CarrierAccountId,
                 RelationType: CarrierTypeEnum.Supplier.value,
                 Status: carrier.newSupplierSwitchValue
             };
-            mappedCarrier.push(object);
+            mappedCarriers.push(object);
+          
         }
-
-        return mappedCarrier;
     }
 
     function denyDeselectedCarriers() {

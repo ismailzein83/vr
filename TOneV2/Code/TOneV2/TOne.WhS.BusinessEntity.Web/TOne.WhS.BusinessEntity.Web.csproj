@@ -136,9 +136,7 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WhS_BusinessEntity\Views\PricingProduct\Grids\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountManagerController.cs" />
@@ -187,6 +185,8 @@
     <Content Include="WhS_BusinessEntity\Constant\RouteRuleCriteriaTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RoutingProductSaleZoneRelationTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RoutingProductSupplierRelationTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Directives\AccountManager\Templates\AssignedCarriersGrid.html" />
+    <Content Include="WhS_BusinessEntity\Directives\AccountManager\vr-whs-be-assignedcarriers-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierProfileGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\Templates\CodeGroupGridTemplate.html" />
@@ -203,7 +203,7 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\vr-whs-be-supplierswithzonesgroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\RateType\Templates\RateTypeGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RateType\vr-whs-be-rate-type-grid.js" />
-    <Content Include="WhS_BusinessEntity\Directives\RateType\vr-whs-be-rate-type-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\RateType\vr-whs-be-ratetype-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\RouteRule\Templates\RouteRuleGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RouteRule\vr-whs-be-routerule-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />

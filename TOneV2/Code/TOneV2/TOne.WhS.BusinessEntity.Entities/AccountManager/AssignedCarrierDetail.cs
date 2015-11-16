@@ -6,13 +6,18 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class AssignedCarrierFromTempTable
+    public class AssignedCarrierDetail
     {
-        public string CarrierAccountID { get; set; }
+        public AssignedCarrier Entity { get; set; }
         public string CarrierName { get; set; }
         public bool IsCustomerAssigned { get; set; }
         public bool IsSupplierAssigned { get; set; }
-        public bool IsCustomerIndirect { get; set; }
-        public bool IsSupplierIndirect { get; set; }
+        public bool IsCustomerInDirect { get; set; }
+        public bool IsSupplierInDirect { get; set; }
+
+        public bool IsCustomerAvailable { get; set; }
+        public bool IsSupplierAvailable { get; set; }
+
+
     }
 }

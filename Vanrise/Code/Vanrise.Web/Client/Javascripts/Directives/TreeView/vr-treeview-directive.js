@@ -131,7 +131,8 @@ app.directive('vrTreeview', [function () {
                 });
 
                 treeElement.on('changed.jstree', function (e, data) {
-                   ctrl.selecteditem = data.node.original.sourceItem;
+                    ctrl.selecteditem = data.node.original.sourceItem;
+                    $scope.$apply();
                 });
             };
             function getFullTreeData(treeArray, jsonTree, treeElement) {
@@ -159,9 +160,11 @@ app.directive('vrTreeview', [function () {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
                     $scope.$watch('ctrl.selecteditem', function () {
                         if (iAttrs.onvaluechanged != undefined) {
+
                             var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
                             if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
                                 onvaluechangedMethod();
+                                
                             }
                         }
                     });

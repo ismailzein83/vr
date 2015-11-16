@@ -1,4 +1,4 @@
-﻿OrgChartAssignmentEditorController.$inject = ['$scope', 'AccountManagerAPIService', 'OrgChartAPIService', 'UtilsService', 'VRModalService', 'VRNavigationService', 'VRNotificationService'];
+﻿OrgChartAssignmentEditorController.$inject = ['$scope', 'WhS_BE_AccountManagerAPIService', 'OrgChartAPIService', 'UtilsService', 'VRModalService', 'VRNavigationService', 'VRNotificationService'];
 
 function OrgChartAssignmentEditorController($scope, AccountManagerAPIService, OrgChartAPIService, UtilsService, VRModalService, VRNavigationService, VRNotificationService) {
 

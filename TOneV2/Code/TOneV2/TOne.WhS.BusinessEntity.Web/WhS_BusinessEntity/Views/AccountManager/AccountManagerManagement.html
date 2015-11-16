@@ -4,7 +4,7 @@
             <vr-actionbar>
                 <div transclude-to="buttons">
                     <vr-button type="AssignOrgChart" formname="managementForm" data-onclick="openOrgChartsModal"></vr-button>
-                    <vr-button type="AssignCarriers" formname="managementForm" ng-show="currentNode" data-onclick="openCarriersModal"></vr-button>
+                    <vr-button type="AssignCarriers" formname="managementForm" ng-show="currentNode!=undefined" data-onclick="assignCarriers"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-form>
@@ -24,21 +24,9 @@
         </div>
 
         <div>
-            <vr-columns colnum="9">
-                <vr-columns colnum="fullrow" simplecol>
-                    <vr-datagrid datasource="assignedCarriers"
-                                 dataretrievalfunction="dataRetrievalFunction"
-                                 pagingtype="'PagingOnScroll'"
-                                 on-ready="gridReady"
-                                 ng-show="currentNode">
-
-                        <vr-datagridcolumn headertext="'Carrier Account ID'" field="'CarrierAccountID'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Carrier Name'" field="'CarrierName'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Is Customer'" field="'IsCustomerAssigned'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Is Supplier'" field="'IsSupplierAssigned'"></vr-datagridcolumn>
-                    </vr-datagrid>
-                </vr-columns>
-            </vr-columns>
+          <vr-columns colnum="9">
+                <vr-whs-be-assignedcarriers-grid on-ready="onGridReady"> </vr-whs-be-assignedcarriers-grid>
+              </vr-columns>
         </div>
     </vr-row>
 </vr-panel>

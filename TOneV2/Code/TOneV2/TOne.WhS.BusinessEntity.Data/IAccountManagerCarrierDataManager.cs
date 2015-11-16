@@ -10,9 +10,7 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface IAccountManagerCarrierDataManager : IDataManager
     {
-        List<AccountManagerCarrier> GetCarriers(int userId);
-
-        IEnumerable<AccountManager> GetAccountManagers();
+        IEnumerable<AssignedCarrier> GetAssignedCarriers();
 
         bool AreAccountManagerUpdated(ref object updateHandle);
     }

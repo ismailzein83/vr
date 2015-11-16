@@ -108,7 +108,6 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
 
                 return WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serializedFilter).then(function (response) {
                     ctrl.datasource.length = 0;
-
                     angular.forEach(response, function (itm) {
                         ctrl.datasource.push(itm);
                     });

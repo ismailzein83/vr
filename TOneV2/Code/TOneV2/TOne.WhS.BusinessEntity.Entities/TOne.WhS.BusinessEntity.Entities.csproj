@@ -56,7 +56,7 @@
     <Compile Include="AccountManager\AccountManagerCarrier.cs" />
     <Compile Include="AccountManager\AccountManagerCarrierQuery.cs" />
     <Compile Include="AccountManager\AssignedCarrier.cs" />
-    <Compile Include="AccountManager\AssignedCarrierFromTempTable.cs" />
+    <Compile Include="AccountManager\AssignedCarrierDetail.cs" />
     <Compile Include="AccountManager\AssignedCarrierQuery.cs" />
     <Compile Include="AccountManager\OrgChartAccountManagerInfo.cs" />
     <Compile Include="AccountManager\UpdatedAccountManagerCarrier.cs" />

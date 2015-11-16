@@ -1,11 +1,11 @@
-﻿AccountManagerManagementController.$inject = ['$scope', 'AccountManagerAPIService', 'UsersAPIService', 'OrgChartAPIService', 'ApplicationParameterAPIService', 'OrgChartAPIService', 'VRModalService', 'VRNotificationService', 'UtilsService'];
+﻿AccountManagerManagementController.$inject = ['$scope', 'WhS_BE_AccountManagerAPIService', 'UsersAPIService', 'OrgChartAPIService', 'ApplicationParameterAPIService', 'OrgChartAPIService', 'VRModalService', 'VRNotificationService', 'UtilsService','WhS_BE_MainService'];
 
-function AccountManagerManagementController($scope, AccountManagerAPIService, UsersAPIService, OrgChartAPIService, ApplicationParameterAPIService, OrgChartAPIService, VRModalService, VRNotificationService, UtilsService) {
+function AccountManagerManagementController($scope, AccountManagerAPIService, UsersAPIService, OrgChartAPIService, ApplicationParameterAPIService, OrgChartAPIService, VRModalService, VRNotificationService, UtilsService, WhS_BE_MainService) {
 
     var users = [];
     var members = [];
     var assignedOrgChartId = undefined;
-    var gridApi;
+    var gridAPI;
     var treeAPI;
 
     defineScope();
@@ -13,65 +13,12 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
 
     function defineScope() {
         $scope.nodes = [];
-        $scope.assignedCarriers = [];
-
-        $scope.openOrgChartsModal = function () {
-            var settings = {};
-            var parameters = null;
-
-            if (assignedOrgChartId != 0) {
-                parameters = {
-                    assignedOrgChartId: assignedOrgChartId
-                };
-            }
-
-            settings.onScopeReady = function (modalScope) {
-                modalScope.title = 'Assign Org Chart';
-
-                modalScope.onOrgChartAssigned = function (orgChartId) {
-                    assignedOrgChartId = orgChartId;
-
-                    buildTreeFromOrgHierarchy();
-                    $scope.currentNode = undefined;
-                    return retrieveData();
-                }
-            };
-
-            VRModalService.showModal('/Client/Modules/BusinessEntity/Views/AccountManager/OrgChartAssignmentEditor.html', parameters, settings);
-        }
-
-        $scope.openCarriersModal = function () {
-            var settings = {};
-
-            var parameters = {
-                selectedAccountManagerId: $scope.currentNode.nodeId
-            };
-            
-            settings.onScopeReady = function (modalScope) {
-                modalScope.title = 'Assign Carriers';
-                modalScope.onCarriersAssigned = function () {
-                    return retrieveData();
-                }
-            };
-
-            VRModalService.showModal('/Client/Modules/BusinessEntity/Views/AccountManager/CarrierAssignmentEditor.html', parameters, settings);
-        }
-
-        $scope.gridReady = function (api) {
-            gridApi = api;
-            return retrieveData();
-        }
-
-        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            
-            return AccountManagerAPIService.GetAssignedCarriersFromTempTable(dataRetrievalInput)
-                .then(function (response) {
-                    response.Data = getMappedAssignedCarriers(response.Data);
-                    onResponseReady(response);
-                })
-                .catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                });
+        $scope.openOrgChartsModal = openOrgChartsModal;
+        $scope.assignCarriers = assignCarriers;
+        $scope.onGridReady = function (api) {
+            gridAPI = api;
+            var filter = {};
+            api.loadGrid(filter);
         }
 
         $scope.treeReady = function (api) {
@@ -80,7 +27,7 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
 
         $scope.treeValueChanged = function () {
             if (angular.isObject($scope.currentNode) && $scope.currentNode != undefined) {
-                return retrieveData();
+                gridAPI.loadGrid(getFilterData());
             }
         }
     }
@@ -103,14 +50,14 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         });
     }
 
-    function retrieveData() {
+    function getFilterData() {
         if ($scope.currentNode != undefined) {
             var query = {
                 ManagerId: $scope.currentNode.nodeId,
                 WithDescendants: (assignedOrgChartId != undefined)
             };
 
-            return gridApi.retrieveData(query);
+            return query;
         }
     }
 
@@ -226,24 +173,27 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
         return temp;
     }
 
-    function getMappedAssignedCarriers(assignedCarriers)
-    {
-        var mappedCarriers = [];
+   
 
-        angular.forEach(assignedCarriers, function (item) {
+    function openOrgChartsModal() {
+        var onOrgChartAssigned = function (orgChartId) {
+            assignedOrgChartId = orgChartId;
+            buildTreeFromOrgHierarchy();
+            $scope.currentNode = undefined;
+            var filter = {};
+            gridAPI.loadGrid(filter);
+        };
 
-            var gridObject = {
-                CarrierAccountID: item.CarrierAccountID,
-                CarrierName: item.CarrierName,
-                IsCustomerAssigned: (item.IsCustomerIndirect) ? (item.IsCustomerAssigned + ' (Indirect)') : item.IsCustomerAssigned,
-                IsSupplierAssigned: (item.IsSupplierIndirect) ? (item.IsSupplierAssigned + ' (Indirect)') : item.IsSupplierAssigned
-            };
-
-            mappedCarriers.push(gridObject);
-        });
-        
-        return mappedCarriers;
+        WhS_BE_MainService.openOrgChartsModal(onOrgChartAssigned, assignedOrgChartId);
     }
+
+    function assignCarriers() {
+            var onCarriersAssigned = function () {
+                gridAPI.loadGrid(getFilterData());
+            }
+            WhS_BE_MainService.assignCarriers(onCarriersAssigned, $scope.currentNode.nodeId);
+    }
+
 }
 
 appControllers.controller('WhS_BE_AccountManagerManagementController', AccountManagerManagementController);

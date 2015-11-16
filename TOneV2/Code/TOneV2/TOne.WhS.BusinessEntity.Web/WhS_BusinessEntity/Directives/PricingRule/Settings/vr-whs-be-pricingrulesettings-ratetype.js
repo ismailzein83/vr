@@ -41,6 +41,13 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
                     var setLoader = function (value) { ctrl.isLoadingDirective = value };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
                 };
+
+                dataItem.onRateTypeSelectorReady = function (api) {
+                    dataItem.rateTypeSelectorAPI = api;
+                    var setLoader = function (value) { ctrl.isLoadingRateTypeDirective = value };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.rateTypeSelectorAPI, undefined, setLoader);
+                };
+
                 ctrl.datasource.push(dataItem);
 
                 ctrl.selectedTemplate = undefined;
@@ -72,6 +79,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
                 angular.forEach(ctrl.datasource, function (item) {
                     var obj = item.directiveAPI.getData();
                     obj.ConfigId = item.configId;
+                    obj.RateTypeId = item.rateTypeSelectorAPI.getSelectedIds();
                     itemList.push(obj);
                 });
 
@@ -91,7 +99,9 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
                         var filterItem = {
                             payload: payload.Items[i],
                             readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                            loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                            loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                            readyRateTypePromiseDeferred: UtilsService.createPromiseDeferred(),
+                            loadRateTypePromiseDeferred: UtilsService.createPromiseDeferred(),
                         };
                         promises.push(filterItem.loadPromiseDeferred.promise);
                         filterItems.push(filterItem);
@@ -130,11 +140,21 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
                         filterItem.readyPromiseDeferred.resolve();
                     };
 
+                  
                     filterItem.readyPromiseDeferred.promise
                         .then(function () {
                             VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, filterItem.loadPromiseDeferred);
                         });
 
+                    dataItem.onRateTypeSelectorReady = function (api) {
+                        dataItem.rateTypeSelectorAPI = api;
+                        filterItem.readyRateTypePromiseDeferred.resolve();
+                    };
+                    var dataItemRateTypePayload = { selectedIds: filterItem.payload.RateTypeId }
+                    filterItem.readyRateTypePromiseDeferred.promise
+                       .then(function () {
+                           VRUIUtilsService.callDirectiveLoad(dataItem.rateTypeSelectorAPI, dataItemRateTypePayload, filterItem.loadRateTypePromiseDeferred);
+                       });
                     ctrl.datasource.push(dataItem);
                 }
 

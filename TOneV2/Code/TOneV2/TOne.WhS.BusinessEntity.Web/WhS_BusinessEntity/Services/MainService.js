@@ -32,7 +32,9 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
         addRateType: addRateType,
         editZoneServiceConfig: editZoneServiceConfig,
         addZoneServiceConfig: addZoneServiceConfig,
-        editCustomerSellingProduct: editCustomerSellingProduct
+        editCustomerSellingProduct: editCustomerSellingProduct,
+        openOrgChartsModal: openOrgChartsModal,
+        assignCarriers: assignCarriers
     });
 
     function addRoutingProduct(onRoutingProductAdded) {
@@ -463,6 +465,36 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
 
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingProduct/CustomerSellingProductEditor.html', parameters, settings);
     }
+    function openOrgChartsModal(onOrgChartAssigned, assignedOrgChartId) {
+        var settings = {};
+        var parameters = null;
 
+        if (assignedOrgChartId != 0) {
+            parameters = {
+                assignedOrgChartId: assignedOrgChartId
+            };
+        }
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = 'Assign Org Chart';
+            modalScope.onOrgChartAssigned = onOrgChartAssigned;
+        };
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/AccountManager/OrgChartAssignmentEditor.html', parameters, settings);
+    };
+
+    function assignCarriers(onCarriersAssigned, nodeId) {
+        var settings = {};
+
+        var parameters = {
+            selectedAccountManagerId: nodeId
+        };
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = 'Assign Carriers';
+            modalScope.onCarriersAssigned = onCarriersAssigned
+        };
+
+        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/AccountManager/CarrierAssignmentEditor.html', parameters, settings);
+    };
     
 }]);

@@ -15,26 +15,33 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     {
         [HttpGet]
         [Route("GetCarriers")]
-        public List<AccountManagerCarrier> GetCarriers(int userId)
+        public IEnumerable<AccountManagerCarrier> GetAssignedCarriersById(int userId)
         {
             AccountManagerManager manager = new AccountManagerManager();
-            return manager.GetCarriers(userId);
+            return manager.GetAssignedCarriersById(userId);
         }
 
         [HttpGet]
-        [Route("GetAssignedCarriers")]
-        public List<AssignedCarrier> GetAssignedCarriers(int managerId, bool withDescendants, CarrierAccountType carrierType)
+        [Route("GetAssignedCarrierss")]
+        public IEnumerable<AssignedCarrier> GetAssignedCarriers(int managerId, bool withDescendants, CarrierAccountType carrierType)
         {
             AccountManagerManager manager = new AccountManagerManager();
             return manager.GetAssignedCarriers(managerId, withDescendants, carrierType);
         }
 
         [HttpPost]
-        [Route("GetAssignedCarriersFromTempTable")]
-        public object GetAssignedCarriersFromTempTable(Vanrise.Entities.DataRetrievalInput<AssignedCarrierQuery> input)
+        [Route("GetFilteredAssignedCarriers")]
+        public object GetFilteredAssignedCarriers(Vanrise.Entities.DataRetrievalInput<AssignedCarrierQuery> input)
         {
             AccountManagerManager manager = new AccountManagerManager();
-            return GetWebResponse(input, manager.GetAssignedCarriersFromTempTable(input));
+            return GetWebResponse(input, manager.GetFilteredAssignedCarriers(input));
+        }
+        [HttpGet]
+        [Route("GetAssignedCarriersDetail")]
+        public IEnumerable<AssignedCarrierDetail> GetAssignedCarriersDetail(int managerId, bool withDescendants, CarrierAccountType carrierType)
+        {
+            AccountManagerManager manager = new AccountManagerManager();
+            return manager.GetAssignedCarriersDetail(managerId, withDescendants, carrierType);
         }
 
         [HttpGet]

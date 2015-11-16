@@ -10,13 +10,22 @@
     </vr-columns>
 </vr-row>
 <vr-row>
-    <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective">
+    <vr-columns width="fullrow">
         <vr-datagrid datasource="ctrl.datasource"
                      on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu>
             <vr-datagridcolumn headertext="'Filter Type'" field="'name'" widthfactor="5"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Filter Settings'" widthfactor="15">
-                <vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady" />
+            <vr-datagridcolumn headertext="'Filter Settings'" widthfactor="10">
+                <div vr-loader="ctrl.isLoadingDirective">
+                    <vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady" />
+                </div>
             </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Rate Type'" widthfactor="5">
+                <div vr-loader="ctrl.isLoadingRateTypeDirective">
+                    <vr-whs-be-ratetype-selector on-ready="dataItem.onRateTypeSelectorReady" hidelabel></vr-whs-be-ratetype-selector>
+                </div>
+              
+            </vr-datagridcolumn>
+            
         </vr-datagrid>
     </vr-columns>
 </vr-row>

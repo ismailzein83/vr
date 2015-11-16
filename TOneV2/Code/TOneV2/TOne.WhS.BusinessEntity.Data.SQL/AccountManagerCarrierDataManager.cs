@@ -12,19 +12,21 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class AccountManagerCarrierDataManager : BaseTOneDataManager, IAccountManagerCarrierDataManager
     {
-        public List<AccountManagerCarrier> GetCarriers(int userId)
+
+        public AccountManagerCarrierDataManager()
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
-            return GetItemsSP("BEntity.sp_AccountManager_GetCarriers", AccountManagerCarrier, userId);
+
         }
-        public IEnumerable<AccountManager> GetAccountManagers()
+        public IEnumerable<AssignedCarrier> GetAssignedCarriers()
         {
-            return GetItemsSP("[TOneWhS_BE].[sp_AccountManager_GetAll]", AccountManagerMapper);
+            return GetItemsSP("[TOneWhS_BE].[sp_AccountManager_GetAll]", AssignedCarrierMapper);
         }
 
 
-        AccountManager AccountManagerMapper(IDataReader reader)
+        AssignedCarrier AssignedCarrierMapper(IDataReader reader)
         {
-            AccountManager accountManager = new AccountManager
+            AssignedCarrier accountManager = new AssignedCarrier
             {
                 CarrierAccountId = GetReaderValue<int>(reader,"CarrierAccountId") ,
                 UserId = GetReaderValue<int>(reader, "UserId"),
@@ -33,20 +35,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return accountManager;
         }
-
-
-        AccountManagerCarrier AccountManagerCarrier(IDataReader reader)
-        {
-            AccountManagerCarrier carrier = new AccountManagerCarrier
-            {
-              //  CarrierAccountId = reader["CarrierAccountId"] as string,
-                IsCustomerAvailable = (bool)reader["IsCustomerAvailable"],
-                IsSupplierAvailable = (bool)reader["IsSupplierAvailable"]
-            };
-
-            return carrier;
-        }
-
 
         public bool AreAccountManagerUpdated(ref object updateHandle)
         {
