@@ -49,7 +49,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ICarrierAccountInfoDataManager.cs" />
     <Compile Include="ICodeMatchesDataManager.cs" />
     <Compile Include="ICodeSaleZoneDataManager.cs" />
     <Compile Include="ICustomerRouteDataManager.cs" />

@@ -13,18 +13,12 @@ namespace TOne.WhS.Routing.BP.Activities
     public sealed class GetActiveSupplierInfos : CodeActivity
     {
         [RequiredArgument]
-        public InArgument<int> RoutingDatabaseId { get; set; }
-
-        [RequiredArgument]
         public OutArgument<IEnumerable<RoutingSupplierInfo>> ActiveRoutingSupplierInfos { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
 
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             IEnumerable<RoutingSupplierInfo> supplierInfos = carrierAccountManager.GetRoutingActiveSuppliers();
-            ICarrierAccountInfoDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICarrierAccountInfoDataManager>();
-            dataManager.DatabaseId = RoutingDatabaseId.Get(context);
-            dataManager.SaveRoutingSupplierInfo(supplierInfos);
             ActiveRoutingSupplierInfos.Set(context, supplierInfos);
         }
     }

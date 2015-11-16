@@ -125,14 +125,6 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [Code] [varchar](20) NOT NULL,
 	                                                    [SaleZoneId] [bigint] NOT NULL
                                                     ) ON [PRIMARY]
-
-                                                    CREATE TABLE [dbo].[RoutingCustomerInfo](
-	                                                    [CustomerId] [int] NOT NULL
-                                                    ) ON [PRIMARY]
-
-                                                    CREATE TABLE [dbo].[RoutingSupplierInfo](
-	                                                    [SupplierId] [int] NOT NULL
-                                                    ) ON [PRIMARY]
                                                     
                                                     CREATE TABLE [dbo].[CustomerRoute](
 	                                                    [CustomerID] [int] NOT NULL,

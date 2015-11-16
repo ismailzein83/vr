@@ -101,11 +101,6 @@
             <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">routingCustomerInfos</mca:CSharpReference>
           </OutArgument>
         </twrba1:GetActiveCustomerInfos.ActiveRoutingCustomerInfos>
-        <twrba1:GetActiveCustomerInfos.RoutingDatabaseId>
-          <InArgument x:TypeArguments="x:Int32">
-            <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
-          </InArgument>
-        </twrba1:GetActiveCustomerInfos.RoutingDatabaseId>
       </twrba1:GetActiveCustomerInfos>
       <twrba1:GetActiveSupplierInfos sap2010:WorkflowViewState.IdRef="GetActiveSupplierInfos_1">
         <twrba1:GetActiveSupplierInfos.ActiveRoutingSupplierInfos>
@@ -113,11 +108,6 @@
             <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)">routingSupplierInfo</mca:CSharpReference>
           </OutArgument>
         </twrba1:GetActiveSupplierInfos.ActiveRoutingSupplierInfos>
-        <twrba1:GetActiveSupplierInfos.RoutingDatabaseId>
-          <InArgument x:TypeArguments="x:Int32">
-            <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
-          </InArgument>
-        </twrba1:GetActiveSupplierInfos.RoutingDatabaseId>
       </twrba1:GetActiveSupplierInfos>
     </Parallel>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
