@@ -2,16 +2,21 @@
 
     "use strict";
 
-    carrierProfileEditorController.$inject = ['$scope', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_Be_ContactTypeEnum'];
+    carrierProfileEditorController.$inject = ['$scope', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_Be_ContactTypeEnum', 'VRUIUtilsService'];
 
-    function carrierProfileEditorController($scope, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_ContactTypeEnum) {
+    function carrierProfileEditorController($scope, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_ContactTypeEnum, VRUIUtilsService) {
         var isEditMode;
         var carrierProfileId;
         var carrierProfileEntity;
         var countryId;
         var cityId;
+
         var countryDirectiveApi;
+        var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var cityDirectiveApi;
+        var cityReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -39,12 +44,12 @@
 
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
-                load();
+                countryReadyPromiseDeferred.resolve();
             }
 
             $scope.onCityDirectiveReady = function (api) {
                 cityDirectiveApi = api;
-                load();
+                cityReadyPromiseDeferred.resolve();
             }
 
             $scope.SaveCarrierProfile = function () {
@@ -102,20 +107,34 @@
 
         }
 
+
         function loadCountries() {
-            return countryDirectiveApi.load().then(function (response) {
-                if (countryId != undefined) {
-                    countryDirectiveApi.setData(countryId);
-                }
+            var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
+            countryReadyPromiseDeferred.promise.then(function () {
+                console.log('carrierProfileEntity.Settings.CountryId')
+                console.log(carrierProfileEntity.Settings.CountryId)
+                var payload = {
+                    selectedIds: carrierProfileEntity.Settings.CountryId
+                };
+
+                VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
             });
+
+            return loadCountryPromiseDeferred.promise;
         }
+
 
 
         function loadCities() {
             var loadCityPromiseDeferred = UtilsService.createPromiseDeferred();
-
             cityReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(cityDirectiveAPI, undefined, loadCityPromiseDeferred);
+                console.log('carrierProfileEntity.Settings.CityId')
+                console.log(carrierProfileEntity.Settings.CityId)
+                var payload = {
+                    selectedIds: carrierProfileEntity.Settings.CityId
+                };
+
+                VRUIUtilsService.callDirectiveLoad(cityDirectiveApi, payload, loadCityPromiseDeferred);
             });
 
             return loadCityPromiseDeferred.promise;
@@ -124,40 +143,43 @@
 
         function load() {
             $scope.isLoading = true;
-            if (countryDirectiveApi == undefined || cityDirectiveApi == undefined)
-                return;
 
-            UtilsService.waitMultipleAsyncOperations([loadCountries, loadCities])
-            .then(function () {
-                if (isEditMode) {
-                    getCarrierProfile().then(function () {
-                        loadFilterBySection();
-                        $scope.isLoading = false;
-                    });
-                }
-                else {
+            if (isEditMode) {
+                getCarrierProfile().then(function () {
+                    loadAllControls()
+                        .finally(function () {
+                            carrierProfileEntity = undefined;
+                        });
+                }).catch(function () {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.isLoading = false;
-                }
-
-            })
-            .catch(function (error) {
-                $scope.isLoading = false;
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            });
-
+                });
+            }
+            else {
+                loadAllControls();
+            }
         }
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadCountries, loadCities, loadStaticSection])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+              .finally(function () {
+                  $scope.isLoading = false;
+              });
+        }
+
+
+
 
         function getCarrierProfile() {
             return WhS_BE_CarrierProfileAPIService.GetCarrierProfile(carrierProfileId).then(function (carrierProfile) {
                 carrierProfileEntity = carrierProfile;
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isLoading = true;
-            }).finally(function () {
-                $scope.isLoading = true;
             });
         }
-        function loadFilterBySection() {
+
+        function loadStaticSection() {
             if (carrierProfileEntity != undefined) {
                 $scope.name = carrierProfileEntity.Name;
 
@@ -173,12 +195,6 @@
                         fileId: carrierProfileEntity.Settings.CompanyLogo
                     };
 
-                    countryDirectiveApi.setData(carrierProfileEntity.Settings.CountryId)
-
-                    cityDirectiveApi.setData(carrierProfileEntity.Settings.CityId)
-
-
-
                     if (carrierProfileEntity.Settings.PhoneNumbers == undefined)
                         carrierProfileEntity.Settings.PhoneNumbers = [];
 
@@ -189,7 +205,6 @@
                         });
                     }
 
-
                     if (carrierProfileEntity.Settings.Faxes == undefined)
                         carrierProfileEntity.Settings.Faxes = [];
                     for (var j = 0; j < carrierProfileEntity.Settings.Faxes.length; j++) {
@@ -198,9 +213,6 @@
                             fax: carrierProfileEntity.Settings.Faxes[j]
                         });
                     }
-
-
-
 
                 }
 
