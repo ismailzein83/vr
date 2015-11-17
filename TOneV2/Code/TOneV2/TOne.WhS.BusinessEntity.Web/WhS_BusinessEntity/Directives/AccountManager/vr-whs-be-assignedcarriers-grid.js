@@ -46,7 +46,7 @@ function (VRNotificationService, WhS_BE_AccountManagerAPIService, WhS_BE_MainSer
                 }
             };
             ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_BE_AccountManagerAPIService.GetAssignedCarriersFromTempTable(dataRetrievalInput)
+                return WhS_BE_AccountManagerAPIService.GetFilteredAssignedCarriers(dataRetrievalInput)
                 .then(function (response) {
                     response.Data = getMappedAssignedCarriers(response.Data);
                     onResponseReady(response);

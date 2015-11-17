@@ -12,31 +12,11 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class AccountManagerManager
     {
-        public IEnumerable<AccountManagerCarrier> GetAssignedCarriersById(int userId)
-        {
-            var assignedCarriers = GetCachedAssignedCarriers();
-             CarrierAccountManager carrierAccountManager=new CarrierAccountManager();
-           IEnumerable<CarrierAccount> carriers= carrierAccountManager.GetAllCarriers();
-             IEnumerable<AssignedCarrier> filteredAssignedCarriers=  assignedCarriers.Where(x => x.UserId == userId);
-
-            return  carriers.MapRecords(AccountManagerCarrierMapper);
-
-        }
         public IEnumerable<AssignedCarrier> GetAssignedCarriers()
         {
             return GetCachedAssignedCarriers();
         }
        
-        public IEnumerable<AssignedCarrier> GetAssignedCarriers(int managerId, bool withDescendants, CarrierAccountType carrierType)
-        {
-            List<int> userIds = this.GetMemberIds(managerId, withDescendants);
-            var assignedCarriers = GetCachedAssignedCarriers();
-            Func<AssignedCarrier, bool> filterExpression = (prod) =>
-              (userIds == null || userIds.Contains(prod.UserId)
-              && (prod.RelationType == CarrierAccountType.Exchange || prod.RelationType == carrierType));
-
-            return assignedCarriers.FindAllRecords(filterExpression);
-        }
         public Vanrise.Entities.IDataRetrievalResult<AssignedCarrierDetail> GetFilteredAssignedCarriers(Vanrise.Entities.DataRetrievalInput<AssignedCarrierQuery> input)
         {
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
@@ -151,24 +131,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return memberIds;
         }
-        public IEnumerable<int> GetAssignedAccountIds(int managerId, CarrierAccountType carrierType)
-        {
-            IEnumerable<AssignedCarrier> assignedCarriers = GetAssignedCarriers(managerId, true, carrierType);
-            List<int> accountIds = new List<int>();
-            foreach (AssignedCarrier assignedCarrier in assignedCarriers)
-            {
-                accountIds.Add(assignedCarrier.CarrierAccountId);
-            }
-            return accountIds;
-        }
-        public IEnumerable<int> GetMyAssignedCustomerIds()
-        {
-            return GetAssignedAccountIds(SecurityContext.Current.GetLoggedInUserId(), CarrierAccountType.Customer);
-        }
-        public IEnumerable<int> GetMyAssignedSupplierIds()
-        {
-            return GetAssignedAccountIds(SecurityContext.Current.GetLoggedInUserId(), CarrierAccountType.Supplier);
-        }
 
         #region Private Members
 
@@ -203,15 +165,6 @@ namespace TOne.WhS.BusinessEntity.Business
                      assignedCarrierDetail.CarrierName=carrierAccount.Name;
             return assignedCarrierDetail;
 
-        }
-        private AccountManagerCarrier AccountManagerCarrierMapper(CarrierAccount carrierAccount)
-        {
-            AccountManagerCarrier accountManagerCarrier = new AccountManagerCarrier();
-            accountManagerCarrier.Name = carrierAccount.Name;
-            accountManagerCarrier.CarrierAccountId = carrierAccount.CarrierAccountId;
-            accountManagerCarrier.IsCustomerAvailable = (carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange);
-            accountManagerCarrier.IsSupplierAvailable = (carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange);
-            return accountManagerCarrier;
         }
         #endregion
 

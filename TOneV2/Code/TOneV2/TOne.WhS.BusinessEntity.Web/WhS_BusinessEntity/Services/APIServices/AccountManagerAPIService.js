@@ -4,21 +4,6 @@
     carrierAccountAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_BE_ModuleConfig'];
 
     function carrierAccountAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
-
-        function GetCarriers(userId)  {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "AccountManager", "GetCarriers"), {
-                userId: userId
-            });
-        }
-
-        function  GetAssignedCarriers(managerId, withDescendants, carrierType) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "AccountManager", "GetAssignedCarriers"), {
-                managerId: managerId,
-                withDescendants: withDescendants,
-                carrierType: carrierType
-            });
-
-        }
         function GetAssignedCarriersDetail(managerId, withDescendants, carrierType) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "AccountManager", "GetAssignedCarriersDetail"), {
                 managerId: managerId,
@@ -47,9 +32,7 @@
         }
 
         return ({
-            GetCarriers: GetCarriers,
-            GetAssignedCarriers: GetAssignedCarriers,
-            GetAssignedCarriersFromTempTable: GetFilteredAssignedCarriers,
+            GetFilteredAssignedCarriers: GetFilteredAssignedCarriers,
             GetLinkedOrgChartId: GetLinkedOrgChartId,
             AssignCarriers: AssignCarriers,
             UpdateLinkedOrgChart: UpdateLinkedOrgChart,

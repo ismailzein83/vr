@@ -13,21 +13,6 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "AccountManager")]
     public class WhS_BE_AccountManagerController : Vanrise.Web.Base.BaseAPIController
     {
-        [HttpGet]
-        [Route("GetCarriers")]
-        public IEnumerable<AccountManagerCarrier> GetAssignedCarriersById(int userId)
-        {
-            AccountManagerManager manager = new AccountManagerManager();
-            return manager.GetAssignedCarriersById(userId);
-        }
-
-        [HttpGet]
-        [Route("GetAssignedCarrierss")]
-        public IEnumerable<AssignedCarrier> GetAssignedCarriers(int managerId, bool withDescendants, CarrierAccountType carrierType)
-        {
-            AccountManagerManager manager = new AccountManagerManager();
-            return manager.GetAssignedCarriers(managerId, withDescendants, carrierType);
-        }
 
         [HttpPost]
         [Route("GetFilteredAssignedCarriers")]
