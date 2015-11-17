@@ -55,7 +55,6 @@
   <ItemGroup>
     <Compile Include="BEDataManagerFactory.cs" />
     <Compile Include="IAccountManagerCarrierDataManager.cs" />
-    <Compile Include="IAssignedCarrierDataManager.cs" />
     <Compile Include="ICodeGroupDataManager.cs" />
     <Compile Include="ICarrierAccountDataManager.cs" />
     <Compile Include="ICarrierProfileDataManager.cs" />

@@ -1,6 +1,6 @@
-﻿AccountManagerManagementController.$inject = ['$scope', 'WhS_BE_AccountManagerAPIService', 'UsersAPIService', 'OrgChartAPIService', 'ApplicationParameterAPIService', 'OrgChartAPIService', 'VRModalService', 'VRNotificationService', 'UtilsService','WhS_BE_MainService'];
+﻿AccountManagerManagementController.$inject = ['$scope', 'WhS_BE_AccountManagerAPIService', 'UsersAPIService', 'OrgChartAPIService', 'VRModalService', 'VRNotificationService', 'UtilsService','WhS_BE_MainService'];
 
-function AccountManagerManagementController($scope, AccountManagerAPIService, UsersAPIService, OrgChartAPIService, ApplicationParameterAPIService, OrgChartAPIService, VRModalService, VRNotificationService, UtilsService, WhS_BE_MainService) {
+function AccountManagerManagementController($scope, AccountManagerAPIService, UsersAPIService, OrgChartAPIService, VRModalService, VRNotificationService, UtilsService, WhS_BE_MainService) {
 
     var users = [];
     var members = [];

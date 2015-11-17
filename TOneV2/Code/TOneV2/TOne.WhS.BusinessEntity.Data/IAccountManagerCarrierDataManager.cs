@@ -13,5 +13,6 @@ namespace TOne.WhS.BusinessEntity.Data
         IEnumerable<AssignedCarrier> GetAssignedCarriers();
 
         bool AreAccountManagerUpdated(ref object updateHandle);
+        bool AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers);
     }
 }

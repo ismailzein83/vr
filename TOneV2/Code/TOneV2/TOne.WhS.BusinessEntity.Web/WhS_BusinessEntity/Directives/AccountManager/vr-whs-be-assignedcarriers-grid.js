@@ -63,8 +63,10 @@ function (VRNotificationService, WhS_BE_AccountManagerAPIService, WhS_BE_MainSer
                     var gridObject = {
                         Entity: { CarrierAccountId: item.Entity.CarrierAccountId },
                         CarrierName: item.CarrierName,
-                        IsCustomerAssigned: (item.IsCustomerInDirect) ? (item.IsCustomerAssigned + ' (Indirect)') : item.IsCustomerAssigned,
-                        IsSupplierAssigned: (item.IsSupplierInDirect) ? (item.IsSupplierAssigned + ' (Indirect)') : item.IsSupplierAssigned
+                        IsCustomerAssigned: item.IsCustomerAssigned,
+                        IsSupplierAssigned:  item.IsSupplierAssigned,
+                        IsCustomerInDirect:(item.IsCustomerInDirect) ? ' (Indirect)':'',
+                        IsSupplierInDirect: (item.IsSupplierInDirect) ? ' (Indirect)' : '',
                     };
 
                     mappedCarriers.push(gridObject);

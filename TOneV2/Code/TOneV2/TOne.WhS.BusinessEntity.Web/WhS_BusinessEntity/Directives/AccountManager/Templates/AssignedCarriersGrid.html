@@ -9,8 +9,14 @@
 
                 <vr-datagridcolumn headertext="'Carrier Account ID'" field="'Entity.CarrierAccountId'"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Carrier Name'" field="'CarrierName'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Is Customer'" field="'IsCustomerAssigned'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Is Supplier'" field="'IsSupplierAssigned'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Is Customer'" field="'IsCustomerAssigned'">
+                    <vr-icon icontype="dataItem.IsCustomerAssigned" text="dataItem.IsCustomerInDirect"></vr-icon>
+                
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Is Supplier'" field="'IsSupplierAssigned'">
+                    <vr-icon icontype="dataItem.IsSupplierAssigned" text="dataItem.IsSupplierInDirect"></vr-icon>
+                    
+                </vr-datagridcolumn>
             </vr-datagrid>
         </vr-columns>
 </vr-row>

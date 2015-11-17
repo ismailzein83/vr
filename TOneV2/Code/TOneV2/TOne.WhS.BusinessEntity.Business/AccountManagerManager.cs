@@ -26,20 +26,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return GetCachedAssignedCarriers();
         }
-
-
-
-        public AccountManagerCarrier AccountManagerCarrierMapper(CarrierAccount carrierAccount)
-        {
-            AccountManagerCarrier accountManagerCarrier = new AccountManagerCarrier();
-            accountManagerCarrier.Name = carrierAccount.Name;
-            accountManagerCarrier.CarrierAccountId = carrierAccount.CarrierAccountId;
-            accountManagerCarrier.IsCustomerAvailable = (carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange);
-            accountManagerCarrier.IsSupplierAvailable = (carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange);
-            return accountManagerCarrier;
-        }
-
-
+       
         public IEnumerable<AssignedCarrier> GetAssignedCarriers(int managerId, bool withDescendants, CarrierAccountType carrierType)
         {
             List<int> userIds = this.GetMemberIds(managerId, withDescendants);
@@ -50,80 +37,104 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return assignedCarriers.FindAllRecords(filterExpression);
         }
-
         public Vanrise.Entities.IDataRetrievalResult<AssignedCarrierDetail> GetFilteredAssignedCarriers(Vanrise.Entities.DataRetrievalInput<AssignedCarrierQuery> input)
         {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var carrierAccounts = carrierAccountManager.GetAllCarriers();
+
             var assignedCarriers = GetCachedAssignedCarriers();
             List<int> userIds = this.GetMemberIds(input.Query.ManagerId, input.Query.WithDescendants);
             Func<AssignedCarrier, bool> filterExpression = (prod) =>
                (userIds == null || userIds.Contains(prod.UserId));
            var filteredAssignedCarriers= assignedCarriers.ToBigResult(input, filterExpression,AssignedCarrierDetailMapper);
-
-            foreach(var obj in filteredAssignedCarriers.Data){
-                obj.IsCustomerInDirect = (input.Query.ManagerId != obj.Entity.UserId && obj.Entity.RelationType == CarrierAccountType.Customer);
-                obj.IsSupplierInDirect = (input.Query.ManagerId != obj.Entity.UserId && obj.Entity.RelationType == CarrierAccountType.Supplier);
-                obj.IsCustomerAssigned = (obj.Entity.RelationType == CarrierAccountType.Customer || obj.Entity.RelationType == CarrierAccountType.Exchange);
-                obj.IsSupplierAssigned = (obj.Entity.RelationType == CarrierAccountType.Supplier || obj.Entity.RelationType == CarrierAccountType.Exchange);
-                obj.IsCustomerAvailable = true;
-                obj.IsSupplierAvailable = true;
-            }
+           filteredAssignedCarriers.Data = FillNeededProperties(filteredAssignedCarriers.Data.ToList(), input.Query.ManagerId);
+          
            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, filteredAssignedCarriers);
         }
-
         public IEnumerable<AssignedCarrierDetail> GetAssignedCarriersDetail(int managerId, bool withDescendants, CarrierAccountType carrierType)
         {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var carrierAccounts = carrierAccountManager.GetAllCarriers();
             var assignedCarriers = GetCachedAssignedCarriers();
             List<int> userIds = this.GetMemberIds(managerId, withDescendants);
             Func<AssignedCarrier, bool> filterExpression = (prod) =>
                (userIds == null || userIds.Contains(prod.UserId)
             );
             var filteredAssignedCarriers = assignedCarriers.MapRecords(AssignedCarrierDetailMapper,filterExpression).ToList();
-
-            foreach (var obj in filteredAssignedCarriers)
-            {
-                obj.IsCustomerInDirect = (managerId != obj.Entity.UserId && obj.Entity.RelationType == CarrierAccountType.Customer);
-                obj.IsSupplierInDirect = (managerId != obj.Entity.UserId && obj.Entity.RelationType == CarrierAccountType.Supplier);
-                obj.IsCustomerAssigned = (obj.Entity.RelationType == CarrierAccountType.Customer || obj.Entity.RelationType == CarrierAccountType.Exchange);
-                obj.IsSupplierAssigned = (obj.Entity.RelationType == CarrierAccountType.Supplier || obj.Entity.RelationType == CarrierAccountType.Exchange);
-                obj.IsCustomerAvailable = true;
-                obj.IsSupplierAvailable = true;
-            }
+            FillNeededProperties( filteredAssignedCarriers,managerId);
             return filteredAssignedCarriers;
         }
 
+        public List<AssignedCarrierDetail> FillNeededProperties(List<AssignedCarrierDetail> filteredAssignedCarriers, int managerId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var carrierAccounts = carrierAccountManager.GetAllCarriers();
+            var assignedCarriers = GetCachedAssignedCarriers();
+            List<AssignedCarrierDetail> listToRemove =new List<AssignedCarrierDetail>();
+            foreach (var obj in filteredAssignedCarriers)
+            {
 
+                var carrierToRemove = filteredAssignedCarriers.FindRecord(x => x.Entity.CarrierAccountId == obj.Entity.CarrierAccountId  && x.Entity.RelationType != obj.Entity.RelationType);
+                var assignCarrier = assignedCarriers.FindRecord(x => x.CarrierAccountId == obj.Entity.CarrierAccountId && x.RelationType != obj.Entity.RelationType);
+                var carrierAccount = carrierAccounts.FindRecord(x => x.CarrierAccountId == obj.Entity.CarrierAccountId);
+                if (carrierAccount.AccountType == CarrierAccountType.Exchange)
+                {
+                    obj.IsCustomerAssigned = (obj.Entity.RelationType == CarrierAccountType.Customer) || (carrierToRemove != null && carrierToRemove.Entity.RelationType == CarrierAccountType.Customer );
+                    obj.IsSupplierAssigned = (obj.Entity.RelationType == CarrierAccountType.Supplier) || (carrierToRemove != null && carrierToRemove.Entity.RelationType == CarrierAccountType.Supplier );
+                    obj.IsCustomerAvailable = (obj.Entity.RelationType == CarrierAccountType.Customer || (carrierToRemove != null && (carrierToRemove.Entity.RelationType == CarrierAccountType.Customer && obj.Entity.UserId == carrierToRemove.Entity.UserId)) || (assignCarrier == null && obj.Entity.UserId == managerId));
+                    obj.IsSupplierAvailable = (obj.Entity.RelationType == CarrierAccountType.Supplier || (carrierToRemove != null && (carrierToRemove.Entity.RelationType == CarrierAccountType.Supplier && obj.Entity.UserId == carrierToRemove.Entity.UserId)) || (assignCarrier == null && obj.Entity.UserId == managerId));
+                    obj.IsCustomerInDirect = (managerId != obj.Entity.UserId && (obj.Entity.RelationType == CarrierAccountType.Customer || (carrierToRemove != null && carrierToRemove.Entity.RelationType == CarrierAccountType.Customer && obj.Entity.UserId == carrierToRemove.Entity.UserId)));
+                    obj.IsSupplierInDirect = (managerId != obj.Entity.UserId && (obj.Entity.RelationType == CarrierAccountType.Supplier || (carrierToRemove != null && carrierToRemove.Entity.RelationType == CarrierAccountType.Supplier && obj.Entity.UserId == carrierToRemove.Entity.UserId)));
+                    if ((carrierToRemove != null && !listToRemove.Any(x => x.Entity.CarrierAccountId == carrierToRemove.Entity.CarrierAccountId)) )
+                            listToRemove.Add(carrierToRemove);
+                }
+                else
+                {
+                      obj.IsCustomerAssigned = (obj.Entity.RelationType == CarrierAccountType.Customer);
+                      obj.IsSupplierAssigned = (obj.Entity.RelationType == CarrierAccountType.Supplier);
+                      obj.IsCustomerAvailable = (carrierAccount.AccountType == CarrierAccountType.Customer) && (obj.Entity.RelationType == CarrierAccountType.Customer);
+                      obj.IsSupplierAvailable = (carrierAccount.AccountType == CarrierAccountType.Supplier) && (obj.Entity.RelationType == CarrierAccountType.Supplier);
+                      obj.IsCustomerInDirect = (managerId != obj.Entity.UserId && obj.Entity.RelationType == CarrierAccountType.Customer);
+                      obj.IsSupplierInDirect = (managerId != obj.Entity.UserId && obj.Entity.RelationType == CarrierAccountType.Supplier);
+                }   
+                
+            }
+            foreach(var obj in listToRemove)
+                 filteredAssignedCarriers.Remove(obj);
+            return filteredAssignedCarriers;
+        }
         public Vanrise.Entities.UpdateOperationOutput<object> AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)
         {
-            IAssignedCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAssignedCarrierDataManager>();
-            bool updateActionSucc = dataManager.AssignCarriers(updatedCarriers);
-
+            IAccountManagerCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerCarrierDataManager>();
             Vanrise.Entities.UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
-
-            updateOperationOutput.Result = updateActionSucc ? Vanrise.Entities.UpdateOperationResult.Succeeded : Vanrise.Entities.UpdateOperationResult.Failed;
-            
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            bool updateActionSucc = dataManager.AssignCarriers(updatedCarriers);
+         
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+            }
+           
             updateOperationOutput.UpdatedObject = null;
            
             return updateOperationOutput;
         }
-
         public int? GetLinkedOrgChartId()
         {
             OrgChartManager orgChartManager = new OrgChartManager();
             return orgChartManager.GetLinkedOrgChartId(new OrgChartAccountManagerInfo());
         }
-
         public Vanrise.Entities.UpdateOperationOutput<object> UpdateLinkedOrgChart(int orgChartId)
         {
             OrgChartManager orgChartManager = new OrgChartManager();
             return orgChartManager.UpdateOrgChartLinkedEntity(orgChartId, new OrgChartAccountManagerInfo());
         }
-
         private List<int> GetMemberIds(int orgChartId, int managerId)
         {
             OrgChartManager orgChartManager = new OrgChartManager();
             return orgChartManager.GetMemberIds(orgChartId, managerId);
         }
-
         private List<int> GetMemberIds(int managerId, bool withDescendants)
         {
             List<int> memberIds = new List<int>();
@@ -140,29 +151,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return memberIds;
         }
-
-        public IEnumerable<int> GetMyAssignedSuppliersAMU()
-        {
-            IEnumerable<AssignedCarrier> assignedCarriers = GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierAccountType.Supplier);
-            List<int> suppliers = new List<int>();
-            foreach (AssignedCarrier assignedCarrier in assignedCarriers)
-            {
-                suppliers.Add(assignedCarrier.CarrierAccountId);
-            }
-            return suppliers;
-        }
-
-        public IEnumerable<int> GetMyAssignedCustomerAMU()
-        {
-            IEnumerable<AssignedCarrier> assignedCarriers = GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierAccountType.Customer);
-            List<int> cutomers = new List<int>();
-            foreach (AssignedCarrier assignedCarrier in assignedCarriers)
-            {
-                cutomers.Add(assignedCarrier.CarrierAccountId);
-            }
-            return cutomers;
-        }
-
         public IEnumerable<int> GetAssignedAccountIds(int managerId, CarrierAccountType carrierType)
         {
             IEnumerable<AssignedCarrier> assignedCarriers = GetAssignedCarriers(managerId, true, carrierType);
@@ -173,17 +161,14 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return accountIds;
         }
-
         public IEnumerable<int> GetMyAssignedCustomerIds()
         {
             return GetAssignedAccountIds(SecurityContext.Current.GetLoggedInUserId(), CarrierAccountType.Customer);
         }
-
         public IEnumerable<int> GetMyAssignedSupplierIds()
         {
             return GetAssignedAccountIds(SecurityContext.Current.GetLoggedInUserId(), CarrierAccountType.Supplier);
         }
-
 
         #region Private Members
 
@@ -218,6 +203,15 @@ namespace TOne.WhS.BusinessEntity.Business
                      assignedCarrierDetail.CarrierName=carrierAccount.Name;
             return assignedCarrierDetail;
 
+        }
+        private AccountManagerCarrier AccountManagerCarrierMapper(CarrierAccount carrierAccount)
+        {
+            AccountManagerCarrier accountManagerCarrier = new AccountManagerCarrier();
+            accountManagerCarrier.Name = carrierAccount.Name;
+            accountManagerCarrier.CarrierAccountId = carrierAccount.CarrierAccountId;
+            accountManagerCarrier.IsCustomerAvailable = (carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange);
+            accountManagerCarrier.IsSupplierAvailable = (carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange);
+            return accountManagerCarrier;
         }
         #endregion
 

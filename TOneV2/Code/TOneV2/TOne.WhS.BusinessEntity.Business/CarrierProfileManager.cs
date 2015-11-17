@@ -58,6 +58,7 @@ namespace TOne.WhS.BusinessEntity.Business
             bool insertActionSucc = dataManager.Insert(carrierProfile, out carrierProfileId);
             if (insertActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 carrierProfile.CarrierProfileId = carrierProfileId;
                 insertOperationOutput.InsertedObject = CarrierProfileDetailMapper(carrierProfile);
@@ -78,6 +79,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (updateActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = CarrierProfileDetailMapper(carrierProfile);
             }

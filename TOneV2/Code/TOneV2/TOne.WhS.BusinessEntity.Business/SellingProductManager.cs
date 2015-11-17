@@ -49,6 +49,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (insertActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 sellingProduct.SellingProductId = sellingProductId;
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 sellingProduct.SellingProductId = sellingProductId;
@@ -70,6 +71,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (updateActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = SellingProductDetailMapper(sellingProduct);
             }
@@ -88,6 +90,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (deleteActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
             }
 

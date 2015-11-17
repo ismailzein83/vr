@@ -295,7 +295,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
 
     function getItemByVal(array, value, attname) {
         for (var i = 0; i < array.length; i++) {
-            if (array[i][attname] == value) {
+            if (eval('array[' + i + '].' + attname) == value) {
                 return array[i];
             }
         }

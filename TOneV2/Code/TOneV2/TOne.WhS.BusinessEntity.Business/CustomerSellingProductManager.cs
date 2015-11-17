@@ -89,6 +89,7 @@ namespace TOne.WhS.BusinessEntity.Business
             bool insertActionSucc = dataManager.Insert(customerSellingProductObject, out  insertedObjects);
             if (insertActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 foreach (CustomerSellingProduct customerSellingProduct in insertedObjects)
                 {
                     var obj = CustomerSellingProductDetailMapper(customerSellingProduct);
@@ -120,6 +121,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (updateActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 CustomerSellingProductDetail customerSellingProductDetail = CustomerSellingProductDetailMapper(customerSellingProduct);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = customerSellingProductDetail;
