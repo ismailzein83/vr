@@ -13,7 +13,7 @@
                 <vr-columns width="fullrow" vr-loader="isloadingselector">
                         <vr-validator validate="isValid()">
                             <vr-datagrid datasource="carriers"
-                                         on-ready="onGridReady" ondeleterow="denyCarrier" hidegridmenu>
+                                         on-ready="onGridReady"  hidegridmenu>
                                 <vr-datagridcolumn headertext="'Name'" field="'CarrierName'" widthfactor="5"></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'Is Customer'" widthfactor="5"><vr-switch value="dataItem.newCustomerSwitchValue" vr-disabled="dataItem.IsCustomerInDirect" ng-show="dataItem.IsCustomerAvailable" class="green"></vr-switch></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'Is Supplier'" widthfactor="5"><vr-switch value="dataItem.newSupplierSwitchValue" vr-disabled="dataItem.IsSupplierInDirect" ng-show="dataItem.IsSupplierAvailable" class="green"></vr-switch></vr-datagridcolumn>

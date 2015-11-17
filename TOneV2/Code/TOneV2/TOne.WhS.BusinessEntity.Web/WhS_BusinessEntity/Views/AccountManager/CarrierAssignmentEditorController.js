@@ -77,15 +77,15 @@ function CarrierAssignmentEditorController($scope, AccountManagerAPIService, Car
             $scope.modalContext.closeModal();
         }
 
-        $scope.denyCarrier = function (item) {   
-            item.newCustomerSwitchValue = false;
-            item.newSupplierSwitchValue = false;
+       //$scope.denyCarrier = function (item) {   
+       //     item.newCustomerSwitchValue = false;
+       //     item.newSupplierSwitchValue = false;
 
-            var index = UtilsService.getItemIndexByVal($scope.selectedCarriers, item.Entity.CarrierAccountId, 'CarrierAccountId');
-            $scope.selectedCarriers.splice(index, 1);
-            var index1 = UtilsService.getItemIndexByVal($scope.carriers, item.Entity.CarrierAccountId, 'Entity.CarrierAccountId');
-            $scope.carriers.splice(index1, 1);
-        };
+       //     var index = UtilsService.getItemIndexByVal($scope.selectedCarriers, item.Entity.CarrierAccountId, 'CarrierAccountId');
+       //     $scope.selectedCarriers.splice(index, 1);
+       //     var index1 = UtilsService.getItemIndexByVal($scope.carriers, item.Entity.CarrierAccountId, 'Entity.CarrierAccountId');
+       //     $scope.carriers.splice(index1, 1);
+       // };
 
         $scope.isValid = function () {
             if (mapCarriersForAssignment().length > 0)
