@@ -1,8 +1,8 @@
 ﻿TrafficMonitorController.$inject = ['$scope', 'UtilsService', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficMonitorMeasureEnum', 'LabelColorsEnum',
-        'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'AnalyticsService'];
+        'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'AnalyticsService', 'VRValidationService'];
 
 function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierAccountAPIService, TrafficStatisticGroupKeysEnum, TrafficMonitorMeasureEnum, LabelColorsEnum,
-        CarrierTypeEnum, VRModalService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, analyticsService) {
+        CarrierTypeEnum, VRModalService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, analyticsService, VRValidationService) {
 
     var chartSelectedMeasureAPI;
     var chartSelectedEntityAPI;
@@ -57,6 +57,11 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
             }
 
         }
+
+        $scope.validateTimeRange = function () {
+            return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+        };
+
         $scope.customvalidateTestFrom = function (fromDate) {
             return UtilsService.validateDates(fromDate, $scope.toDate);
         };
@@ -93,7 +98,7 @@ function TrafficMonitorController($scope, UtilsService, AnalyticsAPIService, uiG
             chartSelectedMeasureAPI = api;
         };
         $scope.customvalidateSelectGroup = function () {
-
+            return null;
             //var zoneRule = 0;
             //var portRule = 0;
             //var codeGroupRule = 0;

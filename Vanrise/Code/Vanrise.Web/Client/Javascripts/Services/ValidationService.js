@@ -43,8 +43,20 @@
             return validmin && validmax && validmaxprec;
         }
 
+        function validateTimeRange(fromDate, toDate) {
+            if (fromDate == undefined || toDate == undefined)
+                return null;
+            var from = new Date(fromDate);
+            var to = new Date(toDate);
+            if (from.getTime() > to.getTime())
+                return "Start should be before end";
+            else
+                return null;
+        }
+
         return ({
-            validate: validate
+            validate: validate,
+            validateTimeRange: validateTimeRange
         });
     }
 

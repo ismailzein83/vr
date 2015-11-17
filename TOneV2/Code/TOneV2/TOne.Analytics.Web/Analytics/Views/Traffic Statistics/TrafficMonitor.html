@@ -16,7 +16,7 @@
                     <vr-row>
                         <vr-columns width="normal">
                             <vr-select label="Group By" datasource="groupKeys"
-                                       datatextfield="description" datavaluefield="value" selectedvalues="selectedGroupKeys" customvalidate="customvalidateSelectGroup" ismultipleselection isrequired></vr-select>
+                                       datatextfield="description" datavaluefield="value" selectedvalues="selectedGroupKeys" customvalidate="customvalidateSelectGroup()" ismultipleselection isrequired></vr-select>
                         </vr-columns>
                         <vr-columns width="normal">
                             <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Period"
@@ -24,10 +24,10 @@
                         </vr-columns>
 
                         <vr-columns width="normal">
-                            <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired customvalidate="customvalidateTestFrom"></vr-datetimepicker>
+                            <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired customvalidate="validateTimeRange()"></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired customvalidate="customvalidateTestTo"></vr-datetimepicker>
+                            <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired customvalidate="validateTimeRange()"></vr-datetimepicker>
                         </vr-columns>
 
 
