@@ -2,11 +2,12 @@
 
     "use strict";
 
-    currencyExchangeRateManagementController.$inject = ['$scope', 'VRCommon_CurrencyExchangeRateService'];
+    currencyExchangeRateManagementController.$inject = ['$scope', 'VRCommon_CurrencyExchangeRateService',  'UtilsService', 'VRUIUtilsService'];
 
-    function currencyExchangeRateManagementController($scope, VRCommon_CurrencyExchangeRateService) {
+    function currencyExchangeRateManagementController($scope, VRCommon_CurrencyExchangeRateService, UtilsService, VRUIUtilsService) {
         var gridAPI;
-        var currencySelectorAPI;
+        var currencyDirectiveApi;
+        var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         load();
         var filter = {};
@@ -23,16 +24,37 @@
             }
 
             $scope.onCurrencySelectReady = function (api) {
-                currencySelectorAPI = api;
-                currencySelectorAPI.load();
+                currencyDirectiveApi = api;
+                currencyReadyPromiseDeferred.resolve();
             }
             $scope.addNewCurrencyExchangeRate = addNewCurrencyExchangeRate;
         }
-
         function load() {
+            $scope.isGettingData = true;
+            loadAllControls();
 
-           
 
+        }
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadCurrencySelector])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+              .finally(function () {
+                  $scope.isGettingData = false;
+              });
+        }
+        function loadCurrencySelector() {
+            var currencyLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            currencyReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = {};
+
+                    VRUIUtilsService.callDirectiveLoad(currencyDirectiveApi, directivePayload, currencyLoadPromiseDeferred);
+                });
+            return currencyLoadPromiseDeferred.promise;
         }
 
         function setFilterObject() {

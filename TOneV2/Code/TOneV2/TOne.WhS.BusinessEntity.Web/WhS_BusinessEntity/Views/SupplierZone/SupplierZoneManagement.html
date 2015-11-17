@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="WhS_BE_SupplierZoneManagementController">
+﻿<vr-panel ng-controller="WhS_BE_SupplierZoneManagementController" vr-loader="isGettingData">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
@@ -25,7 +25,7 @@
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <vr-whs-be-supplierzone-grid on-ready="onGridReady" ></vr-whs-be-supplierzone-grid>
+                <vr-whs-be-supplierzone-grid on-ready="onGridReady"></vr-whs-be-supplierzone-grid>
             </vr-columns>
         </vr-row>
 

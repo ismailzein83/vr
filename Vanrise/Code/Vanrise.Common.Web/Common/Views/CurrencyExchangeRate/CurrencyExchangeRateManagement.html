@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="VRCommon_CurrencyExchangeRateManagementController">
+﻿<vr-panel ng-controller="VRCommon_CurrencyExchangeRateManagementController" vr-loader="isGettingData">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
@@ -20,5 +20,5 @@
         </vr-row>
         <vr-common-currencyexchangerate-grid on-ready="onGridReady"> </vr-common-currencyexchangerate-grid>
     </vr-form>
- 
+
 </vr-panel>

@@ -83,7 +83,20 @@
                 $scope.phoneNumbers.splice(indexPhoneInside, 1);
             };
 
+            $scope.onCountrySelctionChanged = function (item,datasource) {
 
+                if (item != undefined) {
+                    var payload = {};                   
+                     payload.filter = { CountryId: item.CountryId }
+                     cityDirectiveApi.load(payload)
+                }
+                else {
+                    $scope.city = undefined;
+
+                }
+
+                  
+            }
 
 
             $scope.addFaxOption = function () {
@@ -111,10 +124,8 @@
         function loadCountries() {
             var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
             countryReadyPromiseDeferred.promise.then(function () {
-                console.log('carrierProfileEntity.Settings.CountryId')
-                console.log(carrierProfileEntity.Settings.CountryId)
                 var payload = {
-                    selectedIds: carrierProfileEntity.Settings.CountryId
+                    selectedIds:(carrierProfileEntity!=undefined ) ? carrierProfileEntity.Settings.CountryId : undefined
                 };
 
                 VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
@@ -127,13 +138,12 @@
 
         function loadCities() {
             var loadCityPromiseDeferred = UtilsService.createPromiseDeferred();
-            cityReadyPromiseDeferred.promise.then(function () {
-                console.log('carrierProfileEntity.Settings.CityId')
-                console.log(carrierProfileEntity.Settings.CityId)
+            cityReadyPromiseDeferred.promise.then(function () {             
                 var payload = {
-                    selectedIds: carrierProfileEntity.Settings.CityId
+                    selectedIds:(carrierProfileEntity!=undefined ) ? carrierProfileEntity.Settings.CityId : undefined
                 };
-
+                if (carrierProfileEntity!=undefined && carrierProfileEntity.Settings.CountryId != undefined)
+                    payload.filter = { CountryId: carrierProfileEntity.Settings.CountryId }
                 VRUIUtilsService.callDirectiveLoad(cityDirectiveApi, payload, loadCityPromiseDeferred);
             });
 
@@ -241,8 +251,8 @@
                 CarrierProfileId: (carrierProfileId != null) ? carrierProfileId : 0,
                 Name: $scope.name,
                 Settings: {
-                    CountryId: countryDirectiveApi.getDataId(),
-                    CityId: cityDirectiveApi.getDataId(),
+                    CountryId: countryDirectiveApi.getSelectedIds(),
+                    CityId: cityDirectiveApi.getSelectedIds(),
                     Company: $scope.company, Website: $scope.website,
                     RegistrationNumber: $scope.registrationNumber,
                     Address: $scope.address,
@@ -253,7 +263,6 @@
                     Faxes: UtilsService.getPropValuesFromArray($scope.faxes, "fax")
                 }
             };
-            console.log(obj)
             return obj;
         }
 

@@ -52,10 +52,6 @@ function (UtilsService, VRNotificationService, VRCommon_CityAPIService, VRCommon
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VRCommon_CityAPIService.GetFilteredCities(dataRetrievalInput)
                     .then(function (response) {
-
-                        console.log('response')
-                        console.log(response)
-
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -77,7 +73,7 @@ function (UtilsService, VRNotificationService, VRCommon_CityAPIService, VRCommon
                 gridAPI.itemUpdated(cityObj);
             }
 
-            VRCommon_CityService.editCity(cityObj, onCityUpdated);
+            VRCommon_CityService.editCity(cityObj.Entity.CityId, onCityUpdated);
         }
 
     }

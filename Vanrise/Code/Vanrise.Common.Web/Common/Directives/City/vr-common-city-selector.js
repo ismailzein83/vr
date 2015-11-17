@@ -18,29 +18,30 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
-                $scope.selectedCityValues;
+                ctrl.datasource = [];
+                ctrl.filter;
+                ctrl.selectedvalues;
                 if ($attrs.ismultipleselection != undefined)
-                    $scope.selectedCityValues = [];
+                    ctrl.selectedvalues = [];
 
                 $scope.addNewCity = function () {
                     var onCityAdded = function (cityObj) {
-                        $scope.datasource.length = 0;
-                        return getAllCities($scope, VRCommon_CityAPIService).then(function (response) {
-                            if ($attrs.ismultipleselection == undefined)
-                                $scope.selectedCityValues = UtilsService.getItemByVal($scope.datasource, cityObj.Entity.CityId, "CityId");
-                        }).catch(function (error) {
-                        }).finally(function () {
-
-                        });;
+                        ctrl.datasource.push(cityObj.Entity);
+                        if ($attrs.ismultipleselection != undefined)
+                            ctrl.selectedvalues.push(cityObj.Entity);
+                        else
+                            ctrl.selectedvalues = cityObj.Entity;               
                     };
-                    VRCommon_CityService.addCity(onCityAdded);
+                   
+                    if (ctrl.filter != undefined)
+                        var countryId = ctrl.filter.CountryId;
+                    VRCommon_CityService.addCity(onCityAdded, countryId );
                 }
                 $scope.datasource = [];
-                var beCity = new City(ctrl, $scope, VRCommon_CityAPIService, $attrs);
+                var beCity = new City(ctrl, $scope, $attrs);
                 beCity.initializeController();
                 $scope.onselectionchanged = function () {
-                    ctrl.selectedvalues = $scope.selectedCityValues;
+                    ctrl.selectedvalues = ctrl.selectedvalues;
                     if (ctrl.onselectionchanged != undefined) {
                         var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
                         if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
@@ -53,41 +54,40 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            link: function preLink($scope, iElement, iAttrs) {
-                var ctrl = $scope.ctrl;
-                $scope.$watch('ctrl.isdisabled', function () {
-                    var template = getBeCityTemplate(iAttrs, ctrl);
-                    iElement.html(template);
-                    $compile(iElement.contents())($scope);
-                });
+            compile: function (element, attrs) {
+                return {
+                    pre: function ($scope, iElem, iAttrs, ctrl) {
+
+                    }
+                }
+            },
+            template: function (element, attrs) {
+                return getBeCityTemplate(attrs);
             }
 
         };
-        function getBeCityTemplate(attrs, ctrl) {
-            var label;
-            var disabled = "";
-            if (ctrl.isdisabled)
-                disabled = "vr-disabled='true'"
+        function getBeCityTemplate(attrs) {
+
+            var multipleselection = "";
+            var label = "City";
+            if (attrs.ismultipleselection != undefined) {
+                label = "Cities";
+                multipleselection = "ismultipleselection";
+            }
 
             var required = "";
             if (attrs.isrequired != undefined)
                 required = "isrequired";
-
-            var hideselectedvaluessection = "";
-            if (attrs.hideselectedvaluessection != undefined)
-                hideselectedvaluessection = "hideselectedvaluessection";
             var addCliked = '';
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="addNewCity"';
-            if (attrs.ismultipleselection != undefined)
-                return ' <vr-select ismultipleselection datasource="datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="selectedCityValues" ' + disabled + ' onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="CityId"'
-                       + 'entityname="City" label="City" ' + addCliked + '></vr-select>';
-            else
-                return '<div vr-loader="isLoadingDirective" style="display:inline-block;width:100%">'
-                   + ' <vr-select datasource="datasource" selectedvalues="selectedCityValues" ' + required + ' ' + hideselectedvaluessection + ' onselectionchanged="onselectionchanged"  ' + disabled + ' datatextfield="Name" datavaluefield="CityId"'
-                   + 'entityname="City" label="City" ' + addCliked + '></vr-select></div>';
+
+            return '<div>'
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CityId" '
+            + required + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="City" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+               + '</div>';
         }
-        function City(ctrl, $scope, VRCommon_CityAPIService, $attrs) {
+        function City(ctrl, $scope, attrs) {
 
             function initializeController() {
                 defineAPI();
@@ -98,13 +98,13 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
 
 
                 api.getData = function () {
-                    return $scope.selectedCityValues;
+                    return ctrl.selectedvalues;
                 }
                 api.getDataId = function () {
-                    return $scope.selectedCityValues.CityId;
+                    return ctrl.selectedvalues.CityId;
                 }
                 api.getIdsData = function () {
-                    return getIdsList($scope.selectedCityValues, "CityId");
+                    return getIdsList(ctrl.selectedvalues, "CityId");
                 }
                
                 function getIdsList(tab, attname) {
@@ -114,29 +114,26 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                     return list;
 
                 }
+                api.getSelectedIds = function () {
+                    return VRUIUtilsService.getIdSelectedIds('CityId', $attrs, ctrl);
+                }
                 api.load = function (payload) {
-
                     var filter;
                     var selectedIds;
                     if (payload != undefined) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
                     }
-
                     var serializedFilter = {};
-                    if (filter != undefined)
+                    ctrl.filter =  undefined
+                    if (filter != undefined) {
+                        ctrl.filter = filter;
                         serializedFilter = UtilsService.serializetoJson(filter);
-
-
-                    return VRCommon_CityAPIService.GetCitiesInfo(serializedFilter).then(function (response) {
-                        angular.forEach(response, function (itm) {
-                            $scope.datasource.push(itm);
-                        });
-
-                        if (selectedIds != undefined) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'CityId', $attrs, ctrl);
-                        }
-                    });
+                    }
+                       
+                  
+                      
+                    return getCitiesInfo(attrs, ctrl, selectedIds, serializedFilter);
                 }
 
                 if (ctrl.onReady != null)
@@ -147,11 +144,17 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
 
         }
 
-        function getAllCities($scope, VRCommon_CityAPIService) {
-            return VRCommon_CityAPIService.GetCitiesInfo().then(function (response) {
+        function getCitiesInfo(attrs, ctrl, selectedIds, serializedFilter) {
+            
+            return VRCommon_CityAPIService.GetCitiesInfo(serializedFilter).then(function (response) {
+                ctrl.datasource.length = 0;
                 angular.forEach(response, function (itm) {
-                    $scope.datasource.push(itm);
+                    ctrl.datasource.push(itm);
                 });
+
+                if (selectedIds != undefined) {
+                    VRUIUtilsService.setSelectedValues(selectedIds, 'CityId', attrs, ctrl);
+                }
             });
         }
         return directiveDefinitionObject;

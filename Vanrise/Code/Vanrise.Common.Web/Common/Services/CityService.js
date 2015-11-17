@@ -7,29 +7,30 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
             addCity: addCity,
             registerDrillDownToCountry: registerDrillDownToCountry
         });
-        function editCity(obj, onCityUpdated) {
+        function editCity(cityId, onCityUpdated) {
             var settings = {
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Entity.Name, "City");
                 modalScope.onCityUpdated = onCityUpdated;
             };
             var parameters = {
-                CityId: obj.Entity.CityId
+                CityId: cityId
             };
 
             VRModalService.showModal('/Client/Modules/Common/Views/City/CityEditor.html', parameters, settings);
         }
-        function addCity(onCityAdded) {
+        function addCity(onCityAdded , countryId) {
             var settings = {
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForAddEditor("City");
                 modalScope.onCityAdded = onCityAdded;
             };
             var parameters = {};
+            if (countryId != undefined) {
+                parameters.CountryId = countryId; 
+            }
 
             VRModalService.showModal('/Client/Modules/Common/Views/City/CityEditor.html', parameters, settings);
         }

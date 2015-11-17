@@ -25,7 +25,11 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
 
                 $scope.addNewCurrency = function () {
                     var onCurrencyAdded = function (currencyObj) {
-                        return getAllCurrencies($attrs,ctrl,currencyObj.CurrencyId);
+                        ctrl.datasource.push(currencyObj);
+                        if ($attrs.ismultipleselection != undefined)
+                            ctrl.selectedvalues.push(currencyObj);
+                        else
+                            ctrl.selectedvalues = currencyObj;
                     };
                     VRCommon_CurrencyService.addCurrency(onCurrencyAdded);
                 }
@@ -106,7 +110,6 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
 
         function getAllCurrencies(attrs, ctrl, selectedIds) {
             return VRCommon_CurrencyAPIService.GetAllCurrencies().then(function (response) {
-                ctrl.datasource.length = 0;
                 angular.forEach(response, function (itm) {
                     ctrl.datasource.push(itm);
                 });

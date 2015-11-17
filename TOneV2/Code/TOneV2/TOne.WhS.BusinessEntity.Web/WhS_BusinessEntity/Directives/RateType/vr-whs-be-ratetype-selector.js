@@ -76,14 +76,11 @@ app.directive('vrWhsBeRatetypeSelector', ['WhS_BE_RateTypeAPIService', 'WhS_BE_M
         function initializeController() {
             ctrl.addNewRateType = function () {
                 var onRateTypeAdded = function (rateTypeObj) {
-                    ctrl.datasource.length = 0;
-                    return getAllRateTypes(ctrl, WhS_BE_RateTypeAPIService).then(function (response) {
-                        if ($attrs.ismultipleselection == undefined)
-                            ctrl.selectedvalues = UtilsService.getItemByVal(ctrl.datasource, rateTypeObj.RateTypeId, "RateTypeId");
-                    }).catch(function (error) {
-                    }).finally(function () {
-
-                    });;
+                    ctrl.datasource.push(rateTypeObj)
+                    if ($attrs.ismultipleselection != undefined)
+                        ctrl.selectedvalues.push(rateTypeObj);
+                    else
+                        ctrl.selectedvalues = rateTypeObj;
                 };
                 WhS_BE_MainService.addRateType(onRateTypeAdded);
             }

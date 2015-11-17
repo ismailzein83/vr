@@ -9,16 +9,15 @@ app.service('VRCommon_CountryService', ['VRModalService', 'VRNotificationService
             getDrillDownDefinition: getDrillDownDefinition
 
         });
-        function editCountry(obj, onCountryUpdated) {
+        function editCountry(countryId, onCountryUpdated) {
             var settings = {
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Entity.Name, "Country");
                 modalScope.onCountryUpdated = onCountryUpdated;
             };
             var parameters = {
-                CountryId: obj.Entity.CountryId
+                CountryId: countryId
             };
 
             VRModalService.showModal('/Client/Modules/Common/Views/Country/CountryEditor.html', parameters, settings);
@@ -28,7 +27,6 @@ app.service('VRCommon_CountryService', ['VRModalService', 'VRNotificationService
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForAddEditor("Country");
                 modalScope.onCountryAdded = onCountryAdded;
             };
             var parameters = {};

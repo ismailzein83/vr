@@ -25,7 +25,11 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
 
                 $scope.addNewCountry = function () {
                     var onCountryAdded = function (countryObj) {
-                        return getAllCountries($attrs, ctrl, countryObj.Entity.CountryId); 
+                        ctrl.datasource.push(countryObj.Entity);
+                        if ($attrs.ismultipleselection != undefined)
+                            ctrl.selectedvalues.push(countryObj.Entity);
+                        else
+                            ctrl.selectedvalues = countryObj.Entity ;
                     };
                     VRCommon_CountryService.addCountry(onCountryAdded);
                 }
@@ -89,7 +93,7 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
                         selectedIds = payload.selectedIds;
                     }
 
-                    return getAllCountries(attrs, ctrl, selectedIds);
+                    return getCountriesInfo(attrs, ctrl, selectedIds);
                 }
 
                 api.getSelectedIds = function () {
@@ -97,14 +101,15 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
                 }
 
                 api.getData = function () {
-                    return $scope.selectedvalues;
+                    return ctrl.selectedvalues;
                 }
                 api.getDataId = function () {
-                    return $scope.selectedvalues.CountryId;
+                    return ctrl.selectedvalues.CountryId;
                 }
                 api.getIdsData = function () {
-                    return getIdsList($scope.selectedvalues, "CountryId");
+                    return getIdsList(ctrl.selectedvalues, "CountryId");
                 }
+               
                 api.setData = function (selectedIds) {
                  
                     if (attrs.ismultipleselection != undefined) {
@@ -133,8 +138,8 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
             this.initializeController = initializeController;
         }
 
-        function getAllCountries(attrs, ctrl, selectedIds) {
-            return VRCommon_CountryAPIService.GetAllCountries().then(function (response) {
+        function getCountriesInfo(attrs, ctrl, selectedIds) {
+            return VRCommon_CountryAPIService.GetCountriesInfo().then(function (response) {
                 ctrl.datasource.length = 0;
                 angular.forEach(response, function (itm) {
                     ctrl.datasource.push(itm);

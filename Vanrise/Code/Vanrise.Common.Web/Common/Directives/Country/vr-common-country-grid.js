@@ -85,7 +85,7 @@ function (UtilsService, VRNotificationService, VRCommon_CountryAPIService, VRCom
                 gridAPI.itemUpdated(countryObj);
             }
 
-            VRCommon_CountryService.editCountry(countryObj, onCountryUpdated);
+            VRCommon_CountryService.editCountry(countryObj.Entity.CountryId, onCountryUpdated);
         }
               
     }

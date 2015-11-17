@@ -52,16 +52,10 @@
         }
 
         function load() {
-                     
-            
-            
             $scope.isGettingData = true;
             if (countryId != undefined) {
-                codeGroupEntity = {};
-                codeGroupEntity.CountryId = countryId;
-                $scope.isGettingData = false;
                 $scope.title = UtilsService.buildTitleForAddEditor("Code Group");
-                loadAllControls()
+                loadAllControls();
             }
             else if (editMode) {
                 getCodeGroup().then(function () {
@@ -71,11 +65,9 @@
                         });
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isGettingData = false;
                 });
             }
             else {
-                $scope.isGettingData = false;
                 loadAllControls();
                 $scope.title = UtilsService.buildTitleForAddEditor("Code Group");
             }
@@ -98,7 +90,7 @@
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
-                  $scope.isLoading = false;
+                  $scope.isGettingData = false;
               });
         }
         function loadCountrySelector() {
@@ -107,7 +99,7 @@
             countryReadyPromiseDeferred.promise
                 .then(function () {
                     var directivePayload = {
-                        selectedIds: codeGroupEntity != undefined ? codeGroupEntity.CountryId : undefined
+                        selectedIds: codeGroupEntity != undefined ? codeGroupEntity.CountryId :(countryId != undefined) ?countryId: undefined
                     }
 
                     VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
@@ -117,14 +109,13 @@
 
         function fillScopeFromCodeGroupObj(codeGroupe) {
             $scope.code = codeGroupe.Code;
-            countryDirectiveApi.setData(codeGroupe.CountryId);
             $scope.title = UtilsService.buildTitleForUpdateEditor($scope.code, "Code Group");
         }
 
         function buildCodeGroupObjFromScope() {
             var obj = {
                 Code: $scope.code,
-                CountryId: countryDirectiveApi.getDataId()
+                CountryId: countryDirectiveApi.getSelectedIds()
 
             }
             if (codeGroupId != null)

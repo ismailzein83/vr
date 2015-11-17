@@ -2,19 +2,20 @@
 
     "use strict";
 
-    cityEditorController.$inject = ['$scope', 'VRCommon_CityAPIService', 'VRNotificationService', 'VRNavigationService'];
+    cityEditorController.$inject = ['$scope', 'VRCommon_CityAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function cityEditorController($scope, VRCommon_CityAPIService, VRNotificationService, VRNavigationService) {
+    function cityEditorController($scope, VRCommon_CityAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
         var cityId;
         var countryId;
         var editMode;
+        var cityEntity;
         var countryDirectiveApi;
+        var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var disableCountry;
 
         defineScope();
         loadParameters();
-        load();
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
@@ -24,12 +25,13 @@
             }
             editMode = (cityId != undefined);
             $scope.disableCountry = ((countryId != undefined) && !editMode) || disableCountry == true;
+            load();
         }
         function defineScope() {
 
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
-                load();
+                countryReadyPromiseDeferred.resolve();
             }
 
             $scope.saveCity = function () {
@@ -51,27 +53,50 @@
         function load() {
 
             $scope.isGettingData = true;
-            if (countryDirectiveApi == undefined)
-                return;
-            countryDirectiveApi.load().then(function () {
-                if ($scope.disableCountry && countryId != undefined) {
-                    countryDirectiveApi.setData(countryId);
-                    $scope.isGettingData = false;
-                }
-                else if (editMode) {
-                    getCity();
-                }
-                else {
-                    $scope.isGettingData = false;
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isGettingData = false;
-            });
+            if (countryId != undefined) {
+                $scope.title = UtilsService.buildTitleForAddEditor("City");
+                loadAllControls();
+            }
+            else if (editMode) {
+                getCity().then(function () {
+                    loadAllControls()
+                        .finally(function () {
+                            cityEntity = undefined;
+                        });
+                }).catch(function () {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
+            }
+            else {
+                loadAllControls();
+                $scope.title = UtilsService.buildTitleForAddEditor("City");
+            }
+        }
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadCountrySelector])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+              .finally(function () {
+                  $scope.isGettingData = false;
+              });
+        }
+        function loadCountrySelector() {
+            var countryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            countryReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = {
+                        selectedIds: cityEntity != undefined ? cityEntity.CountryId : (countryId != undefined) ? countryId : undefined
+                    };
+
+                    VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
+                });
+            return countryLoadPromiseDeferred.promise;
         }
 
         function getCity() {
             return VRCommon_CityAPIService.GetCity(cityId).then(function (city) {
+                cityEntity = city;
                 fillScopeFromCityObj(city);
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -84,14 +109,14 @@
             var obj = {
                 CityId: (cityId != null) ? cityId : 0,
                 Name: $scope.name,
-                CountryId: countryDirectiveApi.getDataId()
+                CountryId: countryDirectiveApi.getSelectedIds()
             };
             return obj;
         }
 
         function fillScopeFromCityObj(city) {
             $scope.name = city.Name;
-            countryDirectiveApi.setData(city.CountryId)
+            $scope.title = UtilsService.buildTitleForUpdateEditor($scope.name, "City");
         }
         function insertCity() {
             var cityObject = buildCityObjFromScope();

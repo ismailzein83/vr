@@ -2,12 +2,13 @@
 
     "use strict";
 
-    codeGroupManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'VRNotificationService'];
+    codeGroupManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function codeGroupManagementController($scope, WhS_BE_MainService, UtilsService, VRNotificationService) {
+    function codeGroupManagementController($scope, WhS_BE_MainService, UtilsService, VRNotificationService, VRUIUtilsService) {
         var gridAPI;
         var filter = {};
         var countryDirectiveApi;
+        var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         load();
 
@@ -21,7 +22,7 @@
             };
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
-                api.load();
+                countryReadyPromiseDeferred.resolve();
             }
             $scope.onGridReady = function (api) {
                 gridAPI = api;            
@@ -32,15 +33,33 @@
         }
 
         function load() {
-
-           
+            $scope.isGettingData = true;
+            loadAllControls();           
 
         }
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadCountrySelector])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+              .finally(function () {
+                  $scope.isGettingData = false;
+              });
+        }
+        function loadCountrySelector() {
+            var countryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            countryReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = {};
+                    VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
+                });
+            return countryLoadPromiseDeferred.promise;
+        }
         function setFilterObject() {
             filter = {
                 Code: $scope.code,
-                CountriesIds: countryDirectiveApi.getIdsData()
+                CountriesIds: countryDirectiveApi.getSelectedIds()
             };
         }
 

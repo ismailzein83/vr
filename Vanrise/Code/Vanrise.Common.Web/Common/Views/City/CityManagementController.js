@@ -2,11 +2,12 @@
 
     "use strict";
 
-    cityManagementController.$inject = ['$scope', 'VRCommon_CityService'  ];
+    cityManagementController.$inject = ['$scope', 'VRCommon_CityService', 'UtilsService', 'VRUIUtilsService'];
 
-    function cityManagementController($scope, VRCommon_CityService) {
+    function cityManagementController($scope, VRCommon_CityService, UtilsService, VRUIUtilsService) {
         var gridAPI;
         var countryDirectiveApi;
+        var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         load();
         var filter = {};
@@ -19,7 +20,7 @@
 
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
-                api.load();
+                countryReadyPromiseDeferred.resolve();
             }
 
             $scope.onGridReady = function (api) {
@@ -30,15 +31,36 @@
         }
 
         function load() {
-
+            $scope.isGettingData = true;           
+            loadAllControls();
            
 
         }
 
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadCountrySelector])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+              .finally(function () {
+                  $scope.isGettingData = false;
+              });
+        }
+        function loadCountrySelector() {
+            var countryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            countryReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = {};
+
+                    VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
+                });
+            return countryLoadPromiseDeferred.promise;
+        }
         function setFilterObject() {
             filter = {
                 Name: $scope.name,
-                CountryIds: countryDirectiveApi.getIdsData()
+                CountryIds: countryDirectiveApi.getSelectedIds()
             };
            
         }

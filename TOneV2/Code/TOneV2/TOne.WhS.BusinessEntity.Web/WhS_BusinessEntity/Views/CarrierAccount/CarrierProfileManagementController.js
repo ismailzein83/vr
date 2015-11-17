@@ -38,7 +38,7 @@
         function getFilterObject() {
             var data = {
                 Name: $scope.name,
-                CountriesIds: countryDirectiveApi.getIdsData(),
+                CountriesIds: countryDirectiveApi.getSelectedIds(),
                 Company: $scope.company
             };
             

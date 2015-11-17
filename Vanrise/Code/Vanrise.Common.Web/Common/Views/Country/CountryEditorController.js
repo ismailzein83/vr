@@ -2,9 +2,9 @@
 
     "use strict";
 
-    countryEditorController.$inject = ['$scope', 'VRCommon_CountryAPIService', 'VRNotificationService', 'VRNavigationService'];
+    countryEditorController.$inject = ['$scope', 'VRCommon_CountryAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-    function countryEditorController($scope, VRCommon_CountryAPIService, VRNotificationService, VRNavigationService) {
+    function countryEditorController($scope, VRCommon_CountryAPIService, VRNotificationService, VRNavigationService ,UtilsService) {
 
         
         var countrytId;
@@ -42,6 +42,7 @@
                   getCountry();
                 }
                 else {
+                    $scope.title = UtilsService.buildTitleForAddEditor("Country");
                     $scope.isGettingData = false;
                 }
           
@@ -66,6 +67,7 @@
 
         function fillScopeFromCountryObj(country) {
             $scope.name = country.Name;
+            $scope.title = UtilsService.buildTitleForUpdateEditor(country.Name, "Country");
         }
         function insertCountry() {
             var countryObject = buildCountryObjFromScope();

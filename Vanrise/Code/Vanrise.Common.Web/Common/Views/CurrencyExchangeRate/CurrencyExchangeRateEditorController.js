@@ -2,12 +2,13 @@
 
     "use strict";
 
-    currencyExchangeRateEditorController.$inject = ['$scope', 'VRCommon_CurrencyExchangeRateAPIService', 'VRNotificationService', 'VRNavigationService'];
+    currencyExchangeRateEditorController.$inject = ['$scope', 'VRCommon_CurrencyExchangeRateAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function currencyExchangeRateEditorController($scope, VRCommon_CurrencyExchangeRateAPIService, VRNotificationService, VRNavigationService) {
+    function currencyExchangeRateEditorController($scope, VRCommon_CurrencyExchangeRateAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
         
-        var currencySelectorAPI;
+        var currencyDirectiveApi;
+        var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var currencyId;
         var disableCurrency;
         defineScope();
@@ -28,18 +29,42 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
+            $scope.onCurrencySelectReady = function (api) {
+                currencyDirectiveApi = api;
+                currencyReadyPromiseDeferred.resolve()
+            }
 
 
         }
 
         function load() {
-            $scope.onCurrencySelectReady = function (api) {
-                currencySelectorAPI = api;
-                currencySelectorAPI.load({ selectedIds: currencyId });
-            }
-          
+            loadAllControls();
+            $scope.title = UtilsService.buildTitleForAddEditor("Currency Exchange Rate");
+           
         }
-        
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadCurrencySelector])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+              .finally(function () {
+                  $scope.isGettingData = false;
+              });
+        }
+        function loadCurrencySelector() {
+            var currencyLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            currencyReadyPromiseDeferred.promise
+                .then(function () {
+                var directivePayload = {
+                    selectedIds:  currencyId 
+                };
+
+                VRUIUtilsService.callDirectiveLoad(currencyDirectiveApi, directivePayload, currencyLoadPromiseDeferred);
+            });
+            return currencyLoadPromiseDeferred.promise;
+        }
+
 
         function buildCurrencyExchangeRateObjFromScope() {
             var obj = {
