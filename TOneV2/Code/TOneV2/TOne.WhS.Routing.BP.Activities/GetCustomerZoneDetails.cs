@@ -6,6 +6,7 @@ using System.Activities;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
+using TOne.WhS.Routing.Data;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -13,6 +14,8 @@ namespace TOne.WhS.Routing.BP.Activities
     public class GetCustomerZoneDetailsInput
     {
         public IEnumerable<SaleCode> SaleCodes { get; set; }
+
+        public int RoutingDatabase { get; set; }
     }
 
     public class GetCustomerZoneDetailsOutput
@@ -27,41 +30,35 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<IEnumerable<SaleCode>> SaleCodes { get; set; }
 
         [RequiredArgument]
+        public InArgument<int> RoutingDatabase { get; set; }
+
+        [RequiredArgument]
         public OutArgument<CustomerZoneDetailByZone> CustomerZoneDetails { get; set; }
 
         protected override GetCustomerZoneDetailsOutput DoWorkWithResult(GetCustomerZoneDetailsInput inputArgument, AsyncActivityHandle handle)
         {
-            CustomerZoneDetailByZone customerZoneDetails = new CustomerZoneDetailByZone();
-            
-            foreach (SaleCode code in inputArgument.SaleCodes)
+            CustomerZoneDetailByZone customerZoneDetailsByZone = null;
+            ICustomerZoneDetailsDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerZoneDetailsDataManager>();
+            dataManager.DatabaseId = inputArgument.RoutingDatabase;
+            IEnumerable<CustomerZoneDetail> customerZoneDetails = dataManager.GetCustomerZoneDetails();
+            if (customerZoneDetails != null)
             {
-                if (!customerZoneDetails.ContainsKey(code.ZoneId))
+                customerZoneDetailsByZone = new CustomerZoneDetailByZone();
+                foreach (CustomerZoneDetail customerZoneDetail in customerZoneDetails)
                 {
-                    CustomerZoneDetail zoneDetail1 = new CustomerZoneDetail()
+                    List<CustomerZoneDetail> zoneDetails;
+                    if (!customerZoneDetailsByZone.TryGetValue(customerZoneDetail.SaleZoneId, out zoneDetails))
                     {
-                        CustomerId = 1,
-                        SaleZoneId = code.ZoneId,
-                        SellingProductId = 1
-                    };
-
-                    CustomerZoneDetail zoneDetail2 = new CustomerZoneDetail()
-                    {
-                        CustomerId = 2,
-                        SaleZoneId = code.ZoneId,
-                        SellingProductId = 1
-                    };
-
-                    List<CustomerZoneDetail> zoneDetails = new List<CustomerZoneDetail>();
-                    zoneDetails.Add(zoneDetail1);
-                    zoneDetails.Add(zoneDetail2);
-
-                    customerZoneDetails.Add(code.ZoneId, zoneDetails);
+                        zoneDetails = new List<CustomerZoneDetail>();
+                        customerZoneDetailsByZone.Add(customerZoneDetail.SaleZoneId, zoneDetails);
+                    }
+                    zoneDetails.Add(customerZoneDetail);
                 }
             }
 
             return new GetCustomerZoneDetailsOutput
             {
-                CustomerZoneDetails = customerZoneDetails
+                CustomerZoneDetails = customerZoneDetailsByZone
             };
         }
 
@@ -69,7 +66,8 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             return new GetCustomerZoneDetailsInput
             {
-                SaleCodes = this.SaleCodes.Get(context)
+                SaleCodes = this.SaleCodes.Get(context),
+                RoutingDatabase = this.RoutingDatabase.Get(context)
             };
         }
 
