@@ -138,7 +138,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 if (filteredZoneIds != null && !filteredZoneIds.Contains(zone.SaleZoneId))
                     return false;
-                if (nameFilterLower != null && !zone.Name.Contains(nameFilterLower))
+                if (nameFilterLower != null && !zone.Name.ToLower().Contains(nameFilterLower))
                     return false;
                 return true;
             };
