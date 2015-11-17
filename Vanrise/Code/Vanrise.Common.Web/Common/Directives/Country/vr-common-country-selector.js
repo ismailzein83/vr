@@ -98,39 +98,7 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('CountryId', attrs, ctrl);
-                }
-
-                api.getData = function () {
-                    return ctrl.selectedvalues;
-                }
-                api.getDataId = function () {
-                    return ctrl.selectedvalues.CountryId;
-                }
-                api.getIdsData = function () {
-                    return getIdsList(ctrl.selectedvalues, "CountryId");
-                }
-               
-                api.setData = function (selectedIds) {
-                 
-                    if (attrs.ismultipleselection != undefined) {
-                        for (var i = 0; i < selectedIds.length; i++) {
-                            var selectedCountryValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds[i], "CountryId");
-                            if (selectedCountryValue != null)
-                                ctrl.selectedvalues.push(selectedCountryValue);
-                        }
-                    } else {
-                        var selectedCountryValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds, "CountryId");
-                        if (selectedCountryValue != null)
-                            ctrl.selectedvalues = selectedCountryValue;
-                    }
-                }
-                function getIdsList(tab, attname) {
-                    var list = [];
-                    for (var i = 0; i < tab.length ; i++)
-                        list[list.length] = tab[i][attname];
-                    return list;
-
-                }
+                }             
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
