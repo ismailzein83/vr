@@ -22,6 +22,24 @@ namespace TOne.WhS.Routing.Entities
         public Decimal RateValue { get; set; }
     }
 
+    public class SupplierCodeMatches
+    {
+        public int SupplierId { get; set; }
+
+        public Decimal AvgRate { get; set; }
+
+        public List<SupplierCodeZoneMatch> ZoneMatches { get; set; }
+    }
+
+    public class SupplierCodeZoneMatch
+    {
+        public string SupplierCode { get; set; }
+
+        public long SupplierZoneId { get; set; }
+
+        public Decimal Rate { get; set; }
+    }
+
     public class SupplierCodeMatchBySupplier : Dictionary<int, List<SupplierCodeMatch>>
     {
     }

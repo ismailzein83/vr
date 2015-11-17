@@ -15,5 +15,9 @@ namespace TOne.WhS.Routing.Business
         public const string RouteRuleOptionFilterSettings = "WhS_BE_RouteRuleOptionFilterSettings";
 
         public const string RouteRuleOptionPercentageSettings = "WhS_BE_RouteRuleOptionPercentageSettings";
+
+        public const string RouteRuleSettingsConfigType = "WhS_BE_RouteRuleSettingsType";
+
+        public const string RouteOptionRuleConfigType = "WhS_BE_RouteOptionRuleSettingsType";
     }
 }

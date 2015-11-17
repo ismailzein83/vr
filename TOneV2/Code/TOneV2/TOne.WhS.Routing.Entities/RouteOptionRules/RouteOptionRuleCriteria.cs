@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 
-namespace TOne.WhS.BusinessEntity.Entities
+namespace TOne.WhS.Routing.Entities
 {
-    public class RouteRuleCriteria
+    public class RouteOptionRuleCriteria
     {
         public int? RoutingProductId { get; set; }
 
@@ -17,5 +19,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public CustomerGroupSettings CustomerGroupSettings { get; set; }
 
+        public SuppliersWithZonesGroupSettings SuppliersWithZonesGroupSettings { get; set; }
     }
 }

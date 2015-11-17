@@ -21,5 +21,9 @@ namespace TOne.WhS.Routing.Entities
         List<SupplierCodeMatchWithRate> GetSupplierCodeMatches(int supplierId);
 
         List<SupplierCodeMatchWithRate> GetAllSuppliersCodeMatches();
+
+        //SupplierCodeMatches GetSupplierCodeMatches2(int supplierId);
+
+        //List<SupplierCodeMatches> GetAllSuppliersCodeMatches2();
     }
 }

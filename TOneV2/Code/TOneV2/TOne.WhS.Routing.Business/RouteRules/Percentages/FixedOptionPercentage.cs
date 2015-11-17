@@ -11,7 +11,7 @@ namespace TOne.WhS.Routing.Business.RouteRules.Percentages
     {
         public List<Decimal> Percentages { get; set; }
         
-        public override void Execute(IRouteRuleExecutionContext context, BusinessEntity.Entities.RouteRuleTarget target)
+        public override void Execute(IRouteRuleExecutionContext context, RouteRuleTarget target)
         {
             Decimal totalTakenPercentage = 0;
             int percentagesCount = this.Percentages.Count;

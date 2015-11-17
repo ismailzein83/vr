@@ -2,9 +2,9 @@
 
     "use strict";
 
-    routeRuleManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'VRUIUtilsService'];
+    routeRuleManagementController.$inject = ['$scope', 'WhS_Routing_RouteRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function routeRuleManagementController($scope, WhS_BE_MainService, UtilsService, VRUIUtilsService) {
+    function routeRuleManagementController($scope, WhS_Routing_RouteRuleService, UtilsService, VRUIUtilsService, VRNotificationService) {
         var gridAPI;
 
         var carrierAccountDirectiveAPI;
@@ -73,7 +73,7 @@
             $scope.isLoadingFilterData = true;
 
             return UtilsService.waitMultipleAsyncOperations([loadCustomersSection, loadSellingNumberPlanSection, loadSaleZoneSection]).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterData = false;
             });
@@ -109,9 +109,9 @@
                 gridAPI.onRouteRuleAdded(addedItem);
             };
 
-            WhS_BE_MainService.addRouteRule(onRouteRuleAdded);
+            WhS_Routing_RouteRuleService.addRouteRule(onRouteRuleAdded);
         }
     }
 
-    appControllers.controller('WhS_BE_RouteRuleManagementController', routeRuleManagementController);
+    appControllers.controller('WhS_Routing_RouteRuleManagementController', routeRuleManagementController);
 })(appControllers);

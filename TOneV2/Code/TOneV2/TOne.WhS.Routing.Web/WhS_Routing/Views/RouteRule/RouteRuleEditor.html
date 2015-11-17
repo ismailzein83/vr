@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="WhS_BE_RouteRuleEditorController" vr-loader="isLoading" width="'55%'">
+﻿<div vr-modalcontent ng-controller="WhS_Routing_RouteRuleEditorController" vr-loader="isLoading" width="'55%'">
     <vr-modalbody>
         <vr-form name="formRouteRuleEditor">
             <vr-choices selectedindex="0">
@@ -16,7 +16,7 @@
                 <vr-row ng-show="showSaleZoneSection">
                     <vr-columns width="fullrow">
                         <vr-section title="Sale Zone">
-                                <vr-whs-be-salezonegroup on-ready="onSaleZoneGroupSettingsDirectiveReady"></vr-whs-be-salezonegroup>
+                            <vr-whs-be-salezonegroup on-ready="onSaleZoneGroupSettingsDirectiveReady"></vr-whs-be-salezonegroup>
                         </vr-section>
                     </vr-columns>
                 </vr-row>
@@ -37,7 +37,7 @@
                 <vr-row ng-show="showCustomerSection">
                     <vr-columns width="fullrow">
                         <vr-section title="Customers">
-                                <vr-whs-be-customergroup on-ready="onCustomerGroupSettingsDirectiveReady"></vr-whs-be-customergroup>
+                            <vr-whs-be-customergroup on-ready="onCustomerGroupSettingsDirectiveReady"></vr-whs-be-customergroup>
                         </vr-section>
                     </vr-columns>
                 </vr-row>

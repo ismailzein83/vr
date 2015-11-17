@@ -65,7 +65,6 @@
     <Compile Include="ISaleEntityRoutingProductDataManager.cs" />
     <Compile Include="ISalePriceListDataManager.cs" />
     <Compile Include="ISellingProductDataManager.cs" />
-    <Compile Include="IRouteRuleDataManager.cs" />
     <Compile Include="IRoutingProductDataManager.cs" />
     <Compile Include="ISaleCodeDataManager.cs" />
     <Compile Include="ISaleRateDataManager.cs" />

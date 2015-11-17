@@ -2,11 +2,11 @@
 
     "use strict";
 
-    routeRuleEditorController.$inject = ['$scope', 'WhS_BE_RouteRuleAPIService', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SaleZoneAPIService', 'WhS_BE_CarrierAccountAPIService',
-        'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_Be_RouteRuleCriteriaTypeEnum'];
+    routeRuleEditorController.$inject = ['$scope', 'WhS_Routing_RouteRuleAPIService', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SaleZoneAPIService', 'WhS_BE_CarrierAccountAPIService',
+        'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_Routing_RouteRuleCriteriaTypeEnum'];
 
-    function routeRuleEditorController($scope, WhS_BE_RouteRuleAPIService, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccountAPIService,
-        UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, WhS_Be_RouteRuleCriteriaTypeEnum) {
+    function routeRuleEditorController($scope, WhS_Routing_RouteRuleAPIService, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccountAPIService,
+        UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, WhS_Routing_RouteRuleCriteriaTypeEnum) {
 
         var isEditMode;
 
@@ -114,7 +114,7 @@
                 if ($scope.selectedRouteRuleCriteriaType == undefined)
                     return;
 
-                if ($scope.selectedRouteRuleCriteriaType == WhS_Be_RouteRuleCriteriaTypeEnum.SaleZone)
+                if ($scope.selectedRouteRuleCriteriaType == WhS_Routing_RouteRuleCriteriaTypeEnum.SaleZone)
                 {
                     $scope.showSaleZoneSection = $scope.showCustomerSection = $scope.showExcludedCodeSection = true;
                     $scope.showIncludedCodeSection = false;
@@ -176,7 +176,7 @@
         }
 
         function getRouteRule() {
-            return WhS_BE_RouteRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
+            return WhS_Routing_RouteRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
                 routeRuleEntity = routeRule;
             });
         }
@@ -196,12 +196,12 @@
             if (!$scope.showRouteRuleTypeFilterSection)
                 return;
 
-            $scope.routeRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Be_RouteRuleCriteriaTypeEnum);
+            $scope.routeRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Routing_RouteRuleCriteriaTypeEnum);
 
             if (routeRuleEntity != undefined && routeRuleEntity.Criteria.CodeCriteriaGroupSettings != null)
-                $scope.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Be_RouteRuleCriteriaTypeEnum, 'value', WhS_Be_RouteRuleCriteriaTypeEnum.Code.value);
+                $scope.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.Code.value);
             else
-                $scope.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Be_RouteRuleCriteriaTypeEnum, 'value', WhS_Be_RouteRuleCriteriaTypeEnum.SaleZone.value);
+                $scope.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.SaleZone.value);
         }
 
         function loadSaleZoneGroupSection()
@@ -240,7 +240,7 @@
             if (routeRuleEntity != undefined && routeRuleEntity.Criteria.CodeCriteriaGroupSettings != null)
                 codeCriteriaGroupPayload = routeRuleEntity.Criteria.CodeCriteriaGroupSettings;
 
-            var loadCodeCriteriaGroupTemplatesPromise = WhS_BE_RouteRuleAPIService.GetCodeCriteriaGroupTemplates().then(function (response) {
+            var loadCodeCriteriaGroupTemplatesPromise = WhS_Routing_RouteRuleAPIService.GetCodeCriteriaGroupTemplates().then(function (response) {
                 angular.forEach(response, function (item) {
                     $scope.codeCriteriaGroupTemplates.push(item);
                 });
@@ -300,7 +300,7 @@
                 }
             }
 
-            var loadRouteRuleSettingsTemplatesPromise = WhS_BE_RouteRuleAPIService.GetRouteRuleSettingsTemplates().then(function (response) {
+            var loadRouteRuleSettingsTemplatesPromise = WhS_Routing_RouteRuleAPIService.GetRouteRuleSettingsTemplates().then(function (response) {
                 angular.forEach(response, function (item) {
                     $scope.routeRuleSettingsTemplates.push(item);
                 });
@@ -362,7 +362,7 @@
 
         function insertRouteRule() {
             var routeRuleObject = buildRouteRuleObjFromScope();
-            return WhS_BE_RouteRuleAPIService.AddRule(routeRuleObject)
+            return WhS_Routing_RouteRuleAPIService.AddRule(routeRuleObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Route Rule", response)) {
                     if ($scope.onRouteRuleAdded != undefined)
@@ -377,7 +377,7 @@
 
         function updateRouteRule() {
             var routeRuleObject = buildRouteRuleObjFromScope();
-            WhS_BE_RouteRuleAPIService.UpdateRule(routeRuleObject)
+            WhS_Routing_RouteRuleAPIService.UpdateRule(routeRuleObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Route Rule", response)) {
                     if ($scope.onRouteRuleUpdated != undefined)
@@ -390,5 +390,5 @@
         }
     }
 
-    appControllers.controller('WhS_BE_RouteRuleEditorController', routeRuleEditorController);
+    appControllers.controller('WhS_Routing_RouteRuleEditorController', routeRuleEditorController);
 })(appControllers);

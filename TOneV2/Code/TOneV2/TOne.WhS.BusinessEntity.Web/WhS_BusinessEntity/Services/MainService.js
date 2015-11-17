@@ -1,16 +1,13 @@
 ﻿
-app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_SellingProductAPIService', 'WhS_BE_CustomerSellingProductAPIService', 'WhS_BE_RoutingProductAPIService',
+app.service('WhS_BE_MainService', ['WhS_BE_SellingProductAPIService', 'WhS_BE_CustomerSellingProductAPIService', 'WhS_BE_RoutingProductAPIService',
     'VRModalService', 'VRNotificationService', 'WhS_Be_PricingTypeEnum', 'WhS_BE_SalePricingRuleAPIService', 'UtilsService', 'WhS_BE_PurchasePricingRuleAPIService',
-    function (WhS_BE_RouteRuleAPIService, WhS_BE_SellingProductAPIService, WhS_BE_CustomerSellingProductAPIService, WhS_BE_RoutingProductAPIService, VRModalService,
+    function (WhS_BE_SellingProductAPIService, WhS_BE_CustomerSellingProductAPIService, WhS_BE_RoutingProductAPIService, VRModalService,
         VRNotificationService, WhS_Be_PricingTypeEnum, WhS_BE_SalePricingRuleAPIService, UtilsService, WhS_BE_PurchasePricingRuleAPIService) {
 
     return ({
         addRoutingProduct: addRoutingProduct,
         editRoutingProduct: editRoutingProduct,
         deleteRoutingProduct: deleteRoutingProduct,
-        addRouteRule: addRouteRule,
-        editRouteRule: editRouteRule,
-        deleteRouteRule: deleteRouteRule,
         addSellingProduct: addSellingProduct,
         editSellingProduct: editSellingProduct,
         deleteSellingProduct: deleteSellingProduct,
@@ -79,55 +76,6 @@ app.service('WhS_BE_MainService', ['WhS_BE_RouteRuleAPIService', 'WhS_BE_Selling
                     }
                 });
     };
-
-    function addRouteRule(onRouteRuleAdded, routingProductId, sellingNumberPlanId)
-    {
-        var settings = {
-        };
-
-        var parameters = {
-            routingProductId: routingProductId,
-            sellingNumberPlanId: sellingNumberPlanId
-        };
-
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = "New Route Rule";
-            modalScope.onRouteRuleAdded = onRouteRuleAdded;
-        };
-
-        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RouteRule/RouteRuleEditor.html', parameters, settings);
-    }
-
-    function editRouteRule(routeRuleObj, onRouteRuleUpdated) {
-        var modalSettings = {
-        };
-        var parameters = {
-            routeRuleId: routeRuleObj.Entity.RuleId,
-            routingProductId: routeRuleObj.Entity.Criteria != null? routeRuleObj.Entity.Criteria.RoutingProductId : undefined
-        };
-
-        modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Route Rule";
-            modalScope.onRouteRuleUpdated = onRouteRuleUpdated;
-        };
-        VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RouteRule/RouteRuleEditor.html', parameters, modalSettings);
-    }
-
-    function deleteRouteRule(scope, routeRuleObj, onRouteRuleDeleted) {
-        VRNotificationService.showConfirmation()
-            .then(function (response) {
-                if (response) {
-                    return WhS_BE_RouteRuleAPIService.DeleteRule(routeRuleObj.Entity.RuleId)
-                        .then(function (deletionResponse) {
-                            VRNotificationService.notifyOnItemDeleted("Route Rule", deletionResponse);
-                            onRouteRuleDeleted(routeRuleObj);
-                        })
-                        .catch(function (error) {
-                            VRNotificationService.notifyException(error, scope);
-                        });
-                }
-            });
-    }
 
     function addSellingProduct(onSellingProductAdded) {
         var settings = {};

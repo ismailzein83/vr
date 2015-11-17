@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.BusinessEntity.Entities
+namespace TOne.WhS.Routing.Entities
 {
-    public class RouteOptionRuleTypeSettings
+    public interface IRouteOptionRuleExecutionContext
     {
-        public int Priority { get; set; }
     }
 }

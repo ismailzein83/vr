@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading;
 using System.Web;
 using System.Web.Http;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
 using Vanrise.Web.Base;
 using Vanrise.Rules.Web.Controllers;
+using TOne.WhS.Routing.Business;
+using TOne.WhS.Routing.Entities;
+using TOne.WhS.BusinessEntity.Business;
 
-namespace TOne.WhS.BusinessEntity.Web.Controllers
+namespace TOne.WhS.Routing.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "RouteRule")]
     [JSONWithTypeAttribute]

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive('vrWhsBeRouteruleGrid', ['VRNotificationService', 'WhS_BE_RouteRuleAPIService', 'WhS_BE_MainService',
-function (VRNotificationService, WhS_BE_RouteRuleAPIService, WhS_BE_MainService) {
+app.directive('vrWhsRoutingRouteruleGrid', ['VRNotificationService', 'WhS_Routing_RouteRuleAPIService', 'WhS_Routing_RouteRuleService',
+function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_RouteRuleService) {
 
     var directiveDefinitionObject = {
 
@@ -20,7 +20,7 @@ function (VRNotificationService, WhS_BE_RouteRuleAPIService, WhS_BE_MainService)
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/RouteRule/Templates/RouteRuleGridTemplate.html"
+        templateUrl: "/Client/Modules/WhS_Routing/Directives/RouteRule/Templates/RouteRuleGridTemplate.html"
 
     };
 
@@ -55,7 +55,7 @@ function (VRNotificationService, WhS_BE_RouteRuleAPIService, WhS_BE_MainService)
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_BE_RouteRuleAPIService.GetFilteredRouteRules(dataRetrievalInput)
+                return WhS_Routing_RouteRuleAPIService.GetFilteredRouteRules(dataRetrievalInput)
                    .then(function (response) {
                        onResponseReady(response);
                    })
@@ -84,7 +84,7 @@ function (VRNotificationService, WhS_BE_RouteRuleAPIService, WhS_BE_MainService)
                 gridAPI.itemUpdated(updatedItem);
             };
 
-            WhS_BE_MainService.editRouteRule(routeRule, onRouteRuleUpdated);
+            WhS_Routing_RouteRuleService.editRouteRule(routeRule, onRouteRuleUpdated);
         }
 
         function deleteRouteRule(routeRule) {
@@ -93,7 +93,7 @@ function (VRNotificationService, WhS_BE_RouteRuleAPIService, WhS_BE_MainService)
                 gridAPI.itemDeleted(deletedItem);
             }
 
-            WhS_BE_MainService.deleteRouteRule($scope, routeRule, onRouteRuleDeleted);
+            WhS_Routing_RouteRuleService.deleteRouteRule($scope, routeRule, onRouteRuleDeleted);
         }
 
         this.initializeController = initializeController;

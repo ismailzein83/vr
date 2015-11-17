@@ -11,7 +11,7 @@ namespace TOne.WhS.Routing.Business.RouteRules.Filters
     {
         public int Profit { get; set; }
 
-        public override void Execute(BusinessEntity.Entities.IRouteOptionRuleExecutionContext context, BusinessEntity.Entities.RouteOptionRuleTarget target)
+        public override void Execute(IRouteOptionRuleExecutionContext context, RouteOptionRuleTarget target)
         {
             throw new NotImplementedException();
         }

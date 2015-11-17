@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive('vrWhsBeRoutingproductGrid', ['VRNotificationService', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_MainService',
-function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_BE_MainService) {
+app.directive('vrWhsBeRoutingproductGrid', ['VRNotificationService', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_MainService', 'WhS_Routing_RouteRuleService',
+function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_BE_MainService, WhS_Routing_RouteRuleService) {
 
     var directiveDefinitionObject = {
 
@@ -113,7 +113,7 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_BE_MainSer
                 dataItem.extensionObject.routeRuleGridAPI.onRouteRuleAdded(addedItem);
             };
 
-            WhS_BE_MainService.addRouteRule(onRouteRuleAdded, dataItem.RoutingProductId, dataItem.SellingNumberPlanId);
+            WhS_Routing_RouteRuleService.addRouteRule(onRouteRuleAdded, dataItem.RoutingProductId, dataItem.SellingNumberPlanId);
         }
 
         function editRoutingProduct(routingProduct) {

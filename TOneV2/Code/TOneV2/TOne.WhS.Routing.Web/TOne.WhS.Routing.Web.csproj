@@ -109,23 +109,44 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Web">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Web.Base">
       <HintPath>..\..\..\..\Vanrise\Code\Vanrise.Web.Base\bin\Vanrise.Web.Base.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\RouteRuleController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\RouteRuleSettingsController.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
+      <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
+      <Name>TOne.WhS.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.Business\TOne.WhS.Routing.Business.csproj">
       <Project>{923447e8-0d0b-4296-976a-8f486a8694d3}</Project>
       <Name>TOne.WhS.Routing.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.Entities\TOne.WhS.Routing.Entities.csproj">
+      <Project>{b645c1d2-c038-4890-85aa-588fa3c3fc7a}</Project>
+      <Name>TOne.WhS.Routing.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_Routing\Constant\ModuleConfig.js" />
+    <Content Include="WhS_Routing\Constant\RouteRuleCriteriaTypeEnum.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\MinProfitDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RemoveLossDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RouteRuleFilterDirective.html" />
@@ -140,11 +161,19 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byrate.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\vr-whs-routing-routerulesettings-percentage-fixed.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\vr-whs-routing-routerulesettings-selective.js" />
+    <Content Include="WhS_Routing\Directives\RouteRule\Templates\RouteRuleGridTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RouteRule\vr-whs-be-routerule-grid.js" />
+    <Content Include="WhS_Routing\Services\APIServices\RouteRuleAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleSettingsAPIService.js" />
+    <Content Include="WhS_Routing\Services\RouteRuleService.js" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRouteProcess.html" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRouteProcessController.js" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRoutesByCodePrefix.html" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRoutesByCodePrefixController.js" />
+    <Content Include="WhS_Routing\Views\RouteRule\RouteRuleEditor.html" />
+    <Content Include="WhS_Routing\Views\RouteRule\RouteRuleEditorController.js" />
+    <Content Include="WhS_Routing\Views\RouteRule\RouteRuleManagement.html" />
+    <Content Include="WhS_Routing\Views\RouteRule\RouteRuleManagementController.js" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
