@@ -36,8 +36,8 @@ namespace TOne.WhS.Routing.Data.SQL
         public void WriteRecordToStream(Entities.CustomerRoute record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}", record.CustomerId, record.Code, record.SaleZoneId, 
-                record.Rate, Vanrise.Common.Serializer.Serialize(record.Options, true));
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.CustomerId, record.Code, record.SaleZoneId, 
+                record.Rate, record.IsBlocked ? 1:0, record.ExecutedRuleId, Vanrise.Common.Serializer.Serialize(record.Options, true));
         }
     }
 }

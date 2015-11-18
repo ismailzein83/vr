@@ -57,6 +57,8 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override void DoWork(BuildCustomerRoutesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            CustomerRoutesBatch customerRoutesBatch = new CustomerRoutesBatch();
+
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -70,8 +72,6 @@ namespace TOne.WhS.Routing.BP.Activities
                         RouteBuilder builder = new RouteBuilder();
                         IEnumerable<CustomerRoute> customerRoutes = builder.BuildRoutes(customerRoutesContext, preparedCodeMatch.Code, out sellingProductRoute);
 
-                        CustomerRoutesBatch customerRoutesBatch = new CustomerRoutesBatch();
-
                         foreach (CustomerRoute route in customerRoutes)
                         {
                             customerRoutesBatch.CustomerRoutes.Add(route);
@@ -81,14 +81,14 @@ namespace TOne.WhS.Routing.BP.Activities
                                 customerRoutesBatch = new CustomerRoutesBatch();
                             }
                         }
-
-                        if (customerRoutesBatch.CustomerRoutes.Count > 0)
-                        {
-                            inputArgument.OutputQueue.Enqueue(customerRoutesBatch);
-                        }
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });
+
+            if (customerRoutesBatch.CustomerRoutes.Count > 0)
+            {
+                inputArgument.OutputQueue.Enqueue(customerRoutesBatch);
+            }
         }
 
         protected override BuildCustomerRoutesInput GetInputArgument2(AsyncCodeActivityContext context)

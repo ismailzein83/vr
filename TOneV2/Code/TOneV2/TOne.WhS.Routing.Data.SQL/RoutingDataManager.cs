@@ -131,12 +131,14 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [Code] [varchar](20) NOT NULL,
 	                                                    [SaleZoneID] [bigint] NOT NULL,
 	                                                    [Rate] [decimal](9, 5) NULL,
+	                                                    [IsBlocked] [bit] NOT NULL,
+	                                                    [ExecutedRuleId] [int] NOT NULL,
 	                                                    [RouteOptions] [nvarchar](max) NULL,
-                                                    CONSTRAINT [PK_CustomerRoute] PRIMARY KEY CLUSTERED 
+                                                     CONSTRAINT [PK_CustomerRoute] PRIMARY KEY CLUSTERED 
                                                     (
 	                                                    [CustomerID] ASC,
 	                                                    [Code] ASC
-                                                    ) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+                                                    )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
                                                     ) ON [PRIMARY]
 
                                                     CREATE TYPE [LongIDType] AS TABLE(
