@@ -15,11 +15,11 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         {
 
         }
-        public bool AddSupplierPriceList(int supplierAccountId, out int supplierPriceListId)
+        public bool AddSupplierPriceList(int supplierAccountId, int? currencyId, out int supplierPriceListId)
         {
             object priceListID;
 
-            int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierPriceList_Insert", out priceListID, supplierAccountId);
+            int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierPriceList_Insert", out priceListID, supplierAccountId, currencyId);
             supplierPriceListId = (int)priceListID;
             return (recordesEffected > 0);
         }

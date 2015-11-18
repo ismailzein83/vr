@@ -33,7 +33,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private CodeIterator<CodeGroup> GetCodeIterator()
         {
-            throw new NotImplementedException();
+            var cachedCodeGroups = GetCachedCodeGroups();
+            return new CodeIterator<CodeGroup>(cachedCodeGroups.Values);
         }
 
         public IEnumerable<CodeGroup> GetAllCodeGroups()

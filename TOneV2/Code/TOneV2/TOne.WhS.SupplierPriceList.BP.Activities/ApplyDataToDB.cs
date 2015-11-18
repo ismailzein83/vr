@@ -17,13 +17,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<List<Zone>> Zones { get; set; }
         public InArgument<List<Code>> CodesToBeDeleted { get; set; }
         public InArgument<int> SupplierId { get; set; }
+        public InArgument<int> CurrencyId { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
             DateTime startApplying = DateTime.Now;
             List<Zone> zones = Zones.Get(context);
             SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
             int priceListId;
-            if (!supplierPriceListManager.AddSupplierPriceList(SupplierId.Get(context), out priceListId))
+            if (!supplierPriceListManager.AddSupplierPriceList(SupplierId.Get(context), CurrencyId.Get(context), out priceListId))
             {
                 TimeSpan stop = DateTime.Now.Subtract(startApplying);
                 context.WriteTrackingMessage(LogEntryType.Information, "Failed to insert supplier price list and takes:{0}", stop);

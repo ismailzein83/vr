@@ -9,10 +9,10 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
     public class SupplierPriceListManager
     {
-        public bool AddSupplierPriceList(int supplierAccountId, out int supplierPriceListId)
+        public bool AddSupplierPriceList(int supplierAccountId, int? currencyId, out int supplierPriceListId)
         {
             ISupplierPriceListDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
-            return dataManager.AddSupplierPriceList(supplierAccountId, out supplierPriceListId);
+            return dataManager.AddSupplierPriceList(supplierAccountId,currencyId, out supplierPriceListId);
         }
     }
 }

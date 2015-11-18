@@ -10,7 +10,8 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public long SupplierCodeId { get; set; }
 
         public string CodeValue { get; set; }
-
+        public int? CodeGroupId { get; set; }
+       
         public long ZoneId { get; set; }
 
         public DateTime BeginEffectiveDate { get; set; }

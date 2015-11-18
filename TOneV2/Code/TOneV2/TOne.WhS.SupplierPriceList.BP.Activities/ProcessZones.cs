@@ -35,6 +35,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             foreach (var zone in priceListByZone)
             {
+                
                 Zone addZone = new Zone
                 {
                     SupplierId = supplierId,
@@ -70,7 +71,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             foreach (var zone in existingZonesDictionary)
             {
                 PriceListZoneItem priceListZoneItem=null;
-                if (!priceListByZone.TryGetValue(zone.Key, out priceListZoneItem))
+                if (priceListByZone.TryGetValue(zone.Key, out priceListZoneItem))
                 {
                     zones.Add(new Zone
                     {

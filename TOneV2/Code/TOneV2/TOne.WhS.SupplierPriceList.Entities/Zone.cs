@@ -11,9 +11,10 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public long SupplierZoneId { get; set; }
 
         public int SupplierId { get; set; }
-
+        public int CountryId { get; set; }
         public string Name { get; set; }
 
+        
         public DateTime BeginEffectiveDate { get; set; }
 
         public DateTime? EndEffectiveDate { get; set; }

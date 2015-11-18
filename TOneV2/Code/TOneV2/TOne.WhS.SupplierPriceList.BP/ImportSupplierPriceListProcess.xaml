@@ -56,6 +56,7 @@
       <Variable x:TypeArguments="s:Nullable(s:DateTime)" Name="MinimumDate" />
       <Variable x:TypeArguments="twse:PriceListByZone" Name="PriceListByZone" />
       <Variable x:TypeArguments="scg:List(twse:Zone)" Name="Zones" />
+      <Variable x:TypeArguments="scg:List(twse:Code)" Name="CodesToBeDeleted" />
     </Sequence.Variables>
     <twsba1:ReadFromExcelProcess sap2010:WorkflowViewState.IdRef="ReadFromExcelProcess_1">
       <twsba1:ReadFromExcelProcess.EffectiveDate>
@@ -107,10 +108,12 @@
       </twsba1:ProcessZones.Zones>
     </twsba1:ProcessZones>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
-      <Parallel.Variables>
-        <Variable x:TypeArguments="scg:List(twse:Code)" Name="CodesToBeDeleted" />
-      </Parallel.Variables>
       <twsba1:ProcessRates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessRates_1">
+        <twsba1:ProcessRates.CurrencyId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ProcessRates.CurrencyId>
         <twsba1:ProcessRates.MinimumDate>
           <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
             <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">MinimumDate</mca:CSharpValue>
@@ -150,7 +153,17 @@
         </twsba1:ProcessCodes.Zones>
       </twsba1:ProcessCodes>
     </Parallel>
-    <twsba1:ApplyDataToDB CodesToBeDeleted="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyDataToDB_1">
+    <twsba1:ApplyDataToDB sap2010:WorkflowViewState.IdRef="ApplyDataToDB_1">
+      <twsba1:ApplyDataToDB.CodesToBeDeleted>
+        <InArgument x:TypeArguments="scg:List(twse:Code)">
+          <mca:CSharpValue x:TypeArguments="scg:List(twse:Code)">CodesToBeDeleted</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ApplyDataToDB.CodesToBeDeleted>
+      <twsba1:ApplyDataToDB.CurrencyId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ApplyDataToDB.CurrencyId>
       <twsba1:ApplyDataToDB.SupplierId>
         <InArgument x:TypeArguments="x:Int32">
           <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
@@ -162,7 +175,7 @@
         </InArgument>
       </twsba1:ApplyDataToDB.Zones>
     </twsba1:ApplyDataToDB>
-    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0UHJvY2Vzcy54YW1sGTYDpgEOAgEBPAVRIwIBVFIFbBsCATptBZgBEAIBDZkBBaQBHAIBAkkLSWoCAWQ/Cz9qAgFfRAtEVAIBWk4LTmwCAVVkC2RfAgFPWgtaYgIBSlULVWoCAUVfC19kAgFAaQtpYQIBO3EHgQEdAgEnggEHlwEdAgEOnAELnAFfAgEIoQELoQFZAgEDeQ15YQIBNHQNdGQCAS5+DX5jAgEohQENhQFuAgEhjwENjwFhAgEbigENigFkAgEVlAENlAFjAgEP</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0UHJvY2Vzcy54YW1sHDYDswEOAgEBPQVSIwIBbVMFbRsCAU5uBZsBEAIBG5wBBbEBHAIBAkoLSmoDAYABQAtAagIBekULRVQCAXRPC09sAgFuZQtlXwIBZ1sLW2ICAWFWC1ZqAgFbYAtgZAIBVWoLamECAU9vB4QBHQIBNYUBB5oBHQIBHJ8BC58BZAIBFakBC6kBXwIBD6QBC6QBWAIBCa4BC64BWQIBA3wNfGECAUhyDXJaAgFCdw13ZAIBPIEBDYEBYwIBNogBDYgBbgIBL5IBDZIBYQIBKY0BDY0BZAIBI5cBDZcBYwIBHQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

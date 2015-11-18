@@ -35,11 +35,19 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             SupplierCodeManager manager = new SupplierCodeManager();
             List<SupplierCode> existingCodes = manager.GetSupplierCodesEffectiveAfter(inputArgument.SupplierId, (DateTime)inputArgument.MinimumDate);
-
+            CodeGroupManager codeGroupManager = new CodeGroupManager();
             CodesByCode codesByCode = new CodesByCode();
             foreach (SupplierCode code in existingCodes)
             {
-                List<Code> codes = null;
+              
+               var codeGroup=  codeGroupManager.GetMatchCodeGroup(code.Code);
+               if (codeGroup == null)
+               {
+                   handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Error, "The code:{0} doesn't belong to any codegroup", code.Code);
+                   throw new WorkflowApplicationAbortedException();
+               }
+
+               List<Code> codes = null;
                 if (!codesByCode.TryGetValue(code.Code, out codes))
                 {
                     codes = new List<Code>();
@@ -50,6 +58,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         CodeValue=code.Code,
                         SupplierCodeId=code.SupplierCodeId,
                         ZoneId = code.ZoneId,
+                        CodeGroupId = codeGroup.CodeGroupId
                          
                     });
                     codesByCode.Add(code.Code, codes);
@@ -63,6 +72,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         CodeValue = code.Code,
                         ZoneId = code.ZoneId,
                         SupplierCodeId = code.SupplierCodeId,
+                        CodeGroupId = codeGroup.CodeGroupId
 
                     });
                 }
@@ -77,6 +87,13 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 if (zone.Status == TOne.WhS.SupplierPriceList.Entities.Status.New)
                 {
                     foreach(PriceListCodeItem code in zone.NewCodes){
+                        var codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code);
+                        if (codeGroup == null)
+                        {
+                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Error, "The code:{0} doesn't belong to any codegroup", code.Code);
+                            throw new WorkflowApplicationAbortedException();
+                        }
+                        zone.CountryId = codeGroup.CountryId;
                         zone.Codes.Add(new Code
                     {
                         BeginEffectiveDate = code.BED,
@@ -84,6 +101,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         CodeValue=code.Code,
                         ZoneId = zone.SupplierZoneId,
                         Status = TOne.WhS.SupplierPriceList.Entities.Status.New,
+                        CodeGroupId = codeGroup.CodeGroupId
                     });
                     }
                     
@@ -91,6 +109,13 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 else if (zone.Status == TOne.WhS.SupplierPriceList.Entities.Status.NotChanged)
                 {
                     foreach(PriceListCodeItem code in zone.NewCodes){
+                        var codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code);
+                        if (codeGroup == null)
+                        {
+                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Error, "The code:{0} doesn't belong to any codegroup", code.Code);
+                            throw new WorkflowApplicationAbortedException();
+                        }
+                        zone.CountryId = codeGroup.CountryId;
                           List<Code> matchedCodes = null;
                           codesByCode.TryGetValue(code.Code, out matchedCodes);
 
@@ -103,13 +128,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                                   Status = TOne.WhS.SupplierPriceList.Entities.Status.New,
                                   CodeValue = code.Code,
                                   ZoneId = zone.SupplierZoneId,
+                                  CodeGroupId = codeGroup.CodeGroupId
                               });
                           }
                           else
                           {
                               foreach (Code matchedCode in matchedCodes)
                               {
-                                  codesByCode.Remove(code.Code);
+                                 
                                   if (matchedCode.ZoneId == zone.SupplierZoneId && matchedCode.BeginEffectiveDate == code.BED && matchedCode.EndEffectiveDate == code.EED)
                                   {
                                       zone.Codes.Add(new Code
@@ -119,7 +145,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                                           Status = TOne.WhS.SupplierPriceList.Entities.Status.NotChanged,
                                           CodeValue = matchedCode.CodeValue,
                                           ZoneId = matchedCode.ZoneId,
-                                          SupplierCodeId = matchedCode.SupplierCodeId
+                                          SupplierCodeId = matchedCode.SupplierCodeId,
+                                          CodeGroupId = matchedCode.CodeGroupId
                                       });
                                       codesByCode.Remove(code.Code);
 
@@ -135,7 +162,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                                               Status = TOne.WhS.SupplierPriceList.Entities.Status.Updated,
                                               CodeValue = matchedCode.CodeValue,
                                               ZoneId = matchedCode.ZoneId,
-                                              SupplierCodeId = matchedCode.SupplierCodeId
+                                              SupplierCodeId = matchedCode.SupplierCodeId,
+                                              CodeGroupId = matchedCode.CodeGroupId
                                           });
                                       }
                                       else if (matchedCode.BeginEffectiveDate < code.BED)
@@ -149,6 +177,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                                                   Status = TOne.WhS.SupplierPriceList.Entities.Status.New,
                                                   CodeValue = code.Code,
                                                   ZoneId = zone.SupplierZoneId,
+                                                  CodeGroupId = codeGroup.CodeGroupId
                                               });
                                           }
                                           else if (matchedCode.EndEffectiveDate > code.BED && matchedCode.EndEffectiveDate < code.EED)
@@ -160,7 +189,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                                                   Status = TOne.WhS.SupplierPriceList.Entities.Status.Updated,
                                                   CodeValue = matchedCode.CodeValue,
                                                   ZoneId = matchedCode.ZoneId,
-                                                  SupplierCodeId = matchedCode.SupplierCodeId
+                                                  SupplierCodeId = matchedCode.SupplierCodeId,
+                                                  CodeGroupId = matchedCode.CodeGroupId
                                               });
                                               zone.Codes.Add(new Code
                                               {
@@ -169,6 +199,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                                                   Status = TOne.WhS.SupplierPriceList.Entities.Status.New,
                                                   CodeValue = code.Code,
                                                   ZoneId = zone.SupplierZoneId,
+                                                  CodeGroupId = codeGroup.CodeGroupId
                                               });
                                           }
                                           else if (matchedCode.EndEffectiveDate > zone.EndEffectiveDate || matchedCode.EndEffectiveDate == null)
@@ -180,7 +211,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                                                   Status = TOne.WhS.SupplierPriceList.Entities.Status.Updated,
                                                   CodeValue = matchedCode.CodeValue,
                                                   ZoneId = matchedCode.ZoneId,
-                                                  SupplierCodeId = matchedCode.SupplierCodeId
+                                                  SupplierCodeId = matchedCode.SupplierCodeId,
+                                                  CodeGroupId = matchedCode.CodeGroupId
                                               });
                                           }
                                       }

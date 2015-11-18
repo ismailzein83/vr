@@ -26,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             SupplierZone supplierZone = new SupplierZone
             {
                 SupplierId = (int)reader["SupplierID"],
-                CountryId = (int)reader["CountryId"],
+                CountryId = (int)reader["CountryID"],
                 SupplierZoneId = (long)reader["ID"],
                 Name = reader["Name"] as string,
                 BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),

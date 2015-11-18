@@ -69,6 +69,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 	                        BEGIN
                                  CREATE TABLE #TempTable# (              
 	                             [ID] [bigint] NOT NULL,
+                                 [CountryID] [int] NOT NULL,
 	                             [Name] [nvarchar](255) NOT NULL,
 	                             [SupplierID] [int] NOT NULL,
 	                             [BED] [datetime] NOT NULL,
@@ -94,6 +95,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 	                             [ID] [bigint] IDENTITY(1,1) NOT NULL,
 	                             [Code] [varchar](20) NOT NULL,
 	                             [ZoneID] [bigint] NOT NULL,
+                                 [CodeGroupID] [int] NULL,
 	                             [BED] [datetime] NOT NULL,
 	                             [EED] [datetime] NULL,
                                  [IsUpdated] [Bit] Null)
@@ -117,7 +119,9 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                         	           [ID] [bigint] IDENTITY(1,1) NOT NULL,
 	                                   [PriceListID] [int] NOT NULL,
 	                                   [ZoneID] [bigint] NOT NULL,
-	                                   [Rate] [decimal](9, 5) NOT NULL,
+                                       [CurrencyID] [int] NULL,
+	                                   [NormalRate] [decimal](9, 5) NOT NULL,
+                                       [OtherRates] [varchar](MAX) NULL,
 	                                   [BED] [datetime] NOT NULL,
 	                                   [EED] [datetime] NULL,
                                        [IsUpdated] [Bit] Null)
@@ -151,8 +155,9 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         private void WriteRecordToZonesStream(Zone record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
                        record.SupplierZoneId,
+                       record.CountryId,
                        record.Name,
                        record.SupplierId,
                        record.BeginEffectiveDate,
@@ -162,10 +167,11 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         private void WriteRecordToCodesStream(Code record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
                        0,
                        record.CodeValue,
                        record.ZoneId,
+                       record.CodeGroupId,
                        record.BeginEffectiveDate,
                        record.EndEffectiveDate,
                         (record.Status != Status.New) ? 1 : 0);
@@ -173,11 +179,13 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         private void WriteRecordToRatesStream(Rate record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}",
                        0,
                        record.PriceListId,
                        record.ZoneId,
+                       record.CurrencyID,
                        record.NormalRate,
+                       record.OtherRates,
                        record.BeginEffectiveDate,
                        record.EndEffectiveDate,
                        (record.Status != Status.New)?1:0);
@@ -205,8 +213,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         {
             StringBuilder queryBuilder = new StringBuilder(@"
                                         INSERT INTO [TOneWhS_BE].[SupplierZone] 
-                                        (ID,Name,SupplierID,BED,EED)
-                                        Select ID,Name,SupplierID,BED,EED From #TableName# WHERE IsUpdated=0
+                                        (ID,CountryID,Name,SupplierID,BED,EED)
+                                        Select ID,CountryID,Name,SupplierID,BED,EED From #TableName# WHERE IsUpdated=0
                                         UPDATE sz
                                         SET sz.EED = tsz.EED
                                         FROM [TOneWhS_BE].[SupplierZone] sz INNER JOIN #TableName# tsz ON sz.ID=tsz.ID  
@@ -222,8 +230,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         {
             StringBuilder queryBuilder = new StringBuilder(@"
                                         INSERT INTO [TOneWhS_BE].[SupplierCode] 
-                                        (Code,ZoneID,BED,EED)
-                                        Select Code,ZoneID,BED,EED From #TableName# WHERE IsUpdated=0
+                                        (Code,ZoneID,CodeGroupID,BED,EED)
+                                        Select Code,ZoneID,CodeGroupID,BED,EED From #TableName# WHERE IsUpdated=0
                                         UPDATE sc
                                         SET sc.EED = tsc.EED
                                         FROM [TOneWhS_BE].[SupplierCode] sc INNER JOIN #TableName# tsc ON sc.ID=tsc.ID 
@@ -239,8 +247,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         {
             StringBuilder queryBuilder = new StringBuilder(@"
                                         INSERT INTO [TOneWhS_BE].[SupplierRate] 
-                                        (PriceListID,ZoneID,Rate,BED,EED)
-                                        Select PriceListID,ZoneID,Rate,BED,EED From #TableName# WHERE IsUpdated=0
+                                        (PriceListID,ZoneID,CurrencyID,NormalRate,OtherRates,BED,EED)
+                                        Select PriceListID,ZoneID,CurrencyID,NormalRate,OtherRates,BED,EED From #TableName# WHERE IsUpdated=0
                                         UPDATE sr
                                         SET sr.EED = tsr.EED
                                         FROM [TOneWhS_BE].[SupplierRate] sr INNER JOIN #TableName# tsr ON sr.ID=tsr.ID  

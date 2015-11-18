@@ -13,7 +13,7 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
     public class SupplierPriceListController:BaseAPIController
     {
         [HttpGet]
-        public CreateProcessOutput UploadSupplierPriceList(int supplierAccountId, int fileId, DateTime? effectiveDate)
+        public CreateProcessOutput UploadSupplierPriceList(int supplierAccountId,int currencyId, int fileId, DateTime? effectiveDate)
         {
             BPClient bpClient = new BPClient();
             return bpClient.CreateNewProcess(new CreateProcessInput
@@ -22,7 +22,8 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
                 {
                     EffectiveDate = effectiveDate,
                     FileId = fileId,
-                    SupplierAccountId = supplierAccountId
+                    SupplierAccountId = supplierAccountId,
+                    CurrencyId = currencyId
                 }
 
             });

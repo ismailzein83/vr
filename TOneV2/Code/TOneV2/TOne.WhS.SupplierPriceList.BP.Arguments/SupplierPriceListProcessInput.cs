@@ -11,6 +11,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Arguments
     {
         public int SupplierAccountId { get; set; }
         public int FileId { get; set; }
+        public int CurrencyId { get; set; }
         public DateTime? EffectiveDate { get; set; }
         public override string GetTitle()
         {

@@ -18,6 +18,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public List<Zone> Zones { get; set; }
         public DateTime? MinimumDate { get; set; }
         public int SupplierId { get; set; }
+        public int CurrencyId { get; set; }
     }
 
     #endregion
@@ -26,6 +27,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
        public InOutArgument<List<Zone>> Zones { get; set; }
        public InArgument<DateTime?> MinimumDate { get; set; }
        public InArgument<int> SupplierId { get; set; }
+       public InArgument<int> CurrencyId { get; set; }
        protected override void DoWork(ProcessRatesInput inputArgument, AsyncActivityHandle handle)
        {
            DateTime startPreparing = DateTime.Now;
@@ -44,7 +46,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     NormalRate=rate.NormalRate,
                     SupplierRateId=rate.SupplierRateId,
                     ZoneId=rate.ZoneId,
-                    PriceListId=rate.PriceListId
+                    PriceListId=rate.PriceListId,
+                    CurrencyID = inputArgument.CurrencyId
                    });
                    ratesByZone.Add(rate.ZoneId, rates);
                }else
@@ -56,7 +59,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                        NormalRate = rate.NormalRate,
                        SupplierRateId = rate.SupplierRateId,
                        ZoneId = rate.ZoneId,
-                       PriceListId = rate.PriceListId
+                       PriceListId = rate.PriceListId,
+                       CurrencyID = inputArgument.CurrencyId
                    });
                }
            }
@@ -76,6 +80,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                        NormalRate = zone.NewRate.Rate,
                        ZoneId = zone.SupplierZoneId,
                        Status = TOne.WhS.SupplierPriceList.Entities.Status.New,
+                       CurrencyID = inputArgument.CurrencyId
                    });
                }
                else if (zone.Status == TOne.WhS.SupplierPriceList.Entities.Status.NotChanged)
@@ -88,7 +93,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                             {
                                 ZoneId = matchedRate.ZoneId,
                                 SupplierRateId = matchedRate.SupplierRateId,
-                                PriceListId = matchedRate.PriceListId
+                                PriceListId = matchedRate.PriceListId,
+                                CurrencyID = matchedRate.CurrencyID
                             };
 
                             if (zone.NewRate.Rate == matchedRate.NormalRate && zone.BeginEffectiveDate == matchedRate.BeginEffectiveDate && zone.EndEffectiveDate == matchedRate.EndEffectiveDate)
@@ -97,6 +103,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                                 rate.NormalRate = matchedRate.NormalRate;
                                 rate.BeginEffectiveDate = matchedRate.BeginEffectiveDate;
                                 rate.EndEffectiveDate = matchedRate.EndEffectiveDate;
+                                rate.CurrencyID = matchedRate.CurrencyID;
                                 zone.Rates.Add(rate);
                             }
                             else if (zone.NewRate.Rate == matchedRate.NormalRate)
@@ -109,6 +116,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                                         rate.NormalRate = matchedRate.NormalRate;
                                         rate.BeginEffectiveDate = matchedRate.BeginEffectiveDate;
                                         rate.EndEffectiveDate = zone.EndEffectiveDate;
+                                        rate.CurrencyID = matchedRate.CurrencyID;
                                         zone.Rates.Add(rate);
                                     }
                                  else if (matchedRate.BeginEffectiveDate < zone.BeginEffectiveDate)
@@ -119,6 +127,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                                          rate.NormalRate = zone.NewRate.Rate;
                                          rate.BeginEffectiveDate = zone.BeginEffectiveDate;
                                          rate.EndEffectiveDate = zone.EndEffectiveDate;
+                                         rate.CurrencyID = inputArgument.CurrencyId;
                                          zone.Rates.Add(rate);
                                      }
                                      else if (matchedRate.EndEffectiveDate > zone.BeginEffectiveDate && matchedRate.EndEffectiveDate < zone.EndEffectiveDate)
@@ -127,6 +136,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                                          rate.NormalRate = matchedRate.NormalRate;
                                          rate.BeginEffectiveDate = matchedRate.BeginEffectiveDate;
                                          rate.EndEffectiveDate = zone.EndEffectiveDate;
+                                         rate.CurrencyID = matchedRate.CurrencyID;
                                          zone.Rates.Add(rate);
 
                                          Rate newRate = new Rate
@@ -138,6 +148,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                                              NormalRate = matchedRate.NormalRate,
                                              BeginEffectiveDate = zone.BeginEffectiveDate,
                                              EndEffectiveDate = zone.EndEffectiveDate,
+                                             CurrencyID = matchedRate.CurrencyID
                                          };
                                          zone.Rates.Add(rate);
                                      }
@@ -147,6 +158,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                                          rate.NormalRate = matchedRate.NormalRate;
                                          rate.BeginEffectiveDate = matchedRate.BeginEffectiveDate;
                                          rate.EndEffectiveDate = zone.EndEffectiveDate;
+                                         rate.CurrencyID = matchedRate.CurrencyID;
                                          zone.Rates.Add(rate);
                                      }
                                  }
@@ -166,6 +178,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                        BeginEffectiveDate = zone.BeginEffectiveDate,
                        EndEffectiveDate = zone.EndEffectiveDate,
                        Parent = zone,
+                       CurrencyID = inputArgument.CurrencyId
                    });
                }
            }
@@ -180,7 +193,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
            {
                Zones = this.Zones.Get(context),
                SupplierId = this.SupplierId.Get(context),
-               MinimumDate = this.MinimumDate.Get(context)
+               MinimumDate = this.MinimumDate.Get(context),
+               CurrencyId=this.CurrencyId.Get(context)
            };
        }
        protected override void OnBeforeExecute(AsyncCodeActivityContext context, Vanrise.BusinessProcess.AsyncActivityHandle handle)

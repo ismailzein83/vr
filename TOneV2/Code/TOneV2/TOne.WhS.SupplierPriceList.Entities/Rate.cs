@@ -12,9 +12,9 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public long ZoneId { get; set; }
 
         public int PriceListId { get; set; }
-
+        public int? CurrencyID { get; set; }
         public decimal NormalRate { get; set; }
-
+        public string OtherRates { get; set; }
         public DateTime BeginEffectiveDate { get; set; }
 
         public DateTime? EndEffectiveDate { get; set; }
