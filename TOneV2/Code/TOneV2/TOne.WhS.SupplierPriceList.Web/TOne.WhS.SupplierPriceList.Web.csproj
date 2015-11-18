@@ -126,9 +126,7 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Template\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Controllers\SupplierPriceListController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -148,6 +146,9 @@
     <Content Include="WhS_SupplierPriceList\Services\SupplierPriceListAPIService.js" />
     <Content Include="WhS_SupplierPriceList\Views\SupplierPriceList.html" />
     <Content Include="WhS_SupplierPriceList\Views\SupplierPriceListController.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WhS_SupplierPriceList\Template\Supplier Price List Sample.xls" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

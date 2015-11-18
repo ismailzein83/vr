@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Http;
 using TOne.WhS.SupplierPriceList.BP.Arguments;
 using Vanrise.BusinessProcess.Client;
@@ -36,7 +37,9 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
         [HttpGet]
         public HttpResponseMessage DownloadSupplierPriceList()
         {
-            FileStream fstream = new FileStream("C:\\TFS\\TOneV2\\Code\\TOneV2\\TOne.WhS.SupplierPriceList.Web\\Template\\Supplier Price List Sample.xls", FileMode.Open);
+
+            var obj = HttpContext.Current.Server.MapPath("/Client/Modules/WhS_SupplierPriceList");
+            FileStream fstream = new FileStream(obj+"\\Template\\Supplier Price List Sample.xls", FileMode.Open);
             Workbook workbook = new Workbook(fstream);
             Aspose.Cells.License license = new Aspose.Cells.License();
             license.SetLicense("Aspose.Cells.lic");
