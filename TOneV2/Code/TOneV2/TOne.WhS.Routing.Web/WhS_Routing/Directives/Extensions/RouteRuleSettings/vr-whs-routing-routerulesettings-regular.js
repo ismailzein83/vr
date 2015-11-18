@@ -143,8 +143,8 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                         var promises = [];
                         var optionOrderSettingsGroupPayload;
 
-                        if (payload != undefined && payload.OptionOrderSettings != null)
-                            optionOrderSettingsGroupPayload = payload.OptionOrderSettings;
+                        if (payload != undefined && payload.RouteRuleSettings.OptionOrderSettings != null)
+                            optionOrderSettingsGroupPayload = payload.RouteRuleSettings.OptionOrderSettings;
 
                         var loadRouteOptionOrderSettingsGroupTemplatesPromise = WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionOrderSettingsTemplates().then(function (response) {
                             angular.forEach(response, function (item) {
@@ -178,8 +178,8 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                         routeRuleOptionFilterSettingsReadyPromiseDeferred.promise.then(function () {
                             var optionFiltersGroupPayload;
 
-                            if (payload != undefined && payload.OptionFilters != null)
-                                optionFiltersGroupPayload = payload.OptionFilters;
+                            if (payload != undefined && payload.RouteRuleSettings.OptionFilters != null)
+                                optionFiltersGroupPayload = payload.RouteRuleSettings.OptionFilters;
 
                             VRUIUtilsService.callDirectiveLoad(routeRuleOptionFilterSettingsDirectiveAPI, optionFiltersGroupPayload, loadOptionFilterSettingsPromiseDeferred);
                         });
@@ -191,8 +191,8 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                         var promises = [];
                         var optionPercentageSettingsGroupPayload;
 
-                        if (payload != undefined && payload.OptionPercentageSettings != null)
-                            optionPercentageSettingsGroupPayload = payload.OptionPercentageSettings;
+                        if (payload != undefined && payload.RouteRuleSettings.OptionPercentageSettings != null)
+                            optionPercentageSettingsGroupPayload = payload.RouteRuleSettings.OptionPercentageSettings;
 
                         var loadRouteOptionPercentageSettingsGroupTemplatesPromise = WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionPercentageSettingsTemplates().then(function (response) {
                             angular.forEach(response, function (item) {

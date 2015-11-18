@@ -50,12 +50,10 @@ namespace TOne.WhS.Routing.BP.Activities
             {
                 supplierZoneDetailsByZone = new SupplierZoneDetailByZone();
 
-                foreach (SupplierCode code in inputArgument.SupplierCodes)
+                foreach (SupplierZoneDetail item in supplierZoneDetails)
                 {
-                    SupplierZoneDetail supplierZoneDetail;
-                    if (!supplierZoneDetailsByZone.TryGetValue(code.ZoneId, out supplierZoneDetail))
-
-                        supplierZoneDetailsByZone.Add(code.ZoneId, supplierZoneDetail);
+                    if (!supplierZoneDetailsByZone.ContainsKey(item.SupplierZoneId))
+                        supplierZoneDetailsByZone.Add(item.SupplierZoneId, item);
                 }
             }
 

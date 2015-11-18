@@ -49,7 +49,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return new DefaultRoutingProduct()
             {
                 RoutingProductId = GetReaderValue<Int32>(reader, "RoutingProductID"),
-                OwnerType = (SalePriceListOwnerType)GetReaderValue<int>(reader, "OwnerType"),
+                OwnerType = GetReaderValue<SalePriceListOwnerType>(reader, "OwnerType"),
                 OwnerId = (int)reader["OwnerID"],
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED")
@@ -61,7 +61,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return new SaleZoneRoutingProduct()
             {
                 RoutingProductId = GetReaderValue<Int32>(reader, "RoutingProductID"),
-                OwnerType = (SalePriceListOwnerType)GetReaderValue<int>(reader, "OwnerType"),
+                OwnerType = GetReaderValue<SalePriceListOwnerType>(reader, "OwnerType"),
                 OwnerId = (int)reader["OwnerID"],
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
