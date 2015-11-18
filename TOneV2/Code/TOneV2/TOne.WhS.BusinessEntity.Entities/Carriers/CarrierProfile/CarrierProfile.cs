@@ -38,5 +38,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public long CompanyLogo { get; set; }
 
+        public List<CarrierContact> Contacts { get; set; }
+
     }
 }
