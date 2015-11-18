@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ namespace TOne.WhS.Routing.Data.SQL
             {
                 TableName = "[dbo].[CustomerZoneDetail]",
                 Stream = streamForBulkInsert,
-                TabLock = false,
+                TabLock = true,
                 KeepIdentity = false,
                 FieldSeparator = '^',
             };
@@ -56,12 +57,40 @@ namespace TOne.WhS.Routing.Data.SQL
             {
                 CustomerId = (int)reader["CustomerId"],
                 EffectiveRateValue = GetReaderValue<decimal>(reader, "EffectiveRateValue"),
-                RateSource = (SalePriceListOwnerType)GetReaderValue<byte>(reader, "RateSource"),
+                RateSource = GetReaderValue<SalePriceListOwnerType>(reader, "RateSource"),
                 RoutingProductId = GetReaderValue<int>(reader, "RoutingProductId"),
-                RoutingProductSource = (SaleEntityZoneRoutingProductSource)GetReaderValue<byte>(reader, "RoutingProductSource"),
+                RoutingProductSource = GetReaderValue<SaleEntityZoneRoutingProductSource>(reader, "RoutingProductSource"),
                 SaleZoneId = (Int64)reader["SaleZoneId"],
                 SellingProductId = GetReaderValue<int>(reader, "SellingProductId")
             };
+        }
+
+        public IEnumerable<CustomerZoneDetail> GetFilteredCustomerZoneDetailsByZone(IEnumerable<long> saleZoneIds)
+        {
+            DataTable dtZoneIds = BuildZoneIdsTable(new HashSet<long>(saleZoneIds));
+            return GetItemsText(query_GetFilteredCustomerZoneDetailsByZone, CustomerZoneDetailMapper, (cmd) =>
+            {
+
+                var dtPrm = new SqlParameter("@ZoneList", SqlDbType.Structured);
+                dtPrm.TypeName = "LongIDType";
+                dtPrm.Value = dtZoneIds;
+                cmd.Parameters.Add(dtPrm);
+            });
+        }
+
+        DataTable BuildZoneIdsTable(HashSet<long> zoneIds)
+        {
+            DataTable dtZoneInfo = new DataTable();
+            dtZoneInfo.Columns.Add("ZoneID", typeof(Int64));
+            dtZoneInfo.BeginLoadData();
+            foreach (var z in zoneIds)
+            {
+                DataRow dr = dtZoneInfo.NewRow();
+                dr["ZoneID"] = z;
+                dtZoneInfo.Rows.Add(dr);
+            }
+            dtZoneInfo.EndLoadData();
+            return dtZoneInfo;
         }
 
         #region Queries
@@ -74,9 +103,23 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[SellingProductId]
                                                   ,zd.[EffectiveRateValue]
                                                   ,zd.[RateSource]
-                                              FROM [dbo].[CustomerZoneDetail] zd";
+                                              FROM [dbo].[CustomerZoneDetail] zd with(nolock)";
+
+        const string query_GetFilteredCustomerZoneDetailsByZone = @"                                                       
+                                            SELECT zd.[CustomerId]
+                                                  ,zd.[SaleZoneId]
+                                                  ,zd.[RoutingProductId]
+                                                  ,zd.[RoutingProductSource]
+                                                  ,zd.[SellingProductId]
+                                                  ,zd.[EffectiveRateValue]
+                                                  ,zd.[RateSource]
+                                              FROM [dbo].[CustomerZoneDetail] zd with(nolock)
+                                              JOIN @ZoneList z ON z.ID = zd.SaleZoneID";
 
         #endregion
+
+
+
 
     }
 }

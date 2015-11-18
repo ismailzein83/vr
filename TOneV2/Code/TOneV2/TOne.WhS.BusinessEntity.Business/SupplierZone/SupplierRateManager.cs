@@ -20,7 +20,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public List<SupplierRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos)
         {
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
-            return dataManager.GetAllSupplierRatesForActiveSuppliers(effectiveOn, isEffectiveInFuture, supplierInfos);
+            return dataManager.GetEffectiveSupplierRatesBySuppliers(effectiveOn, isEffectiveInFuture, supplierInfos);
         }
 
         public CallCost GetCallCost(int supplierId, long supplierZoneId, int durationInSeconds, DateTime effectiveOn)

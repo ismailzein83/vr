@@ -21,37 +21,18 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetByDate", SupplierRateMapper, supplierId, minimumDate);
         }
-        SupplierRate SupplierRateMapper(IDataReader reader)
-        {
-            SupplierRate supplierRate = new SupplierRate
-            {
-                NormalRate = GetReaderValue<decimal>(reader, "NormalRate"),
-                OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null,
-                SupplierRateId = (long)reader["ID"],
-                ZoneId = (long)reader["ZoneID"],
-                PriceListId = GetReaderValue<int>(reader, "PriceListID"),
-                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
-                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED")
-            };
-            return supplierRate;
-        }
-
-
         public List<SupplierRate> GetEffectiveSupplierRates(int supplierId, DateTime effectiveDate)
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetBySupplierAndEffective", SupplierRateMapper, supplierId, effectiveDate);
         }
-
         public bool AreSupplierRatesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SupplierRate", ref updateHandle);
         }
-
-
-        public List<SupplierRate> GetAllSupplierRatesForActiveSuppliers(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos)
+        public List<SupplierRate> GetEffectiveSupplierRatesBySuppliers(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos)
         {
             DataTable dtActiveSuppliers = CarrierAccountDataManager.BuildRoutingSupplierInfoTable(supplierInfos);
-            return GetItemsSPCmd("TOneWhS_BE.sp_SupplierRate_GetAllForActiveSuppliers", SupplierRateMapper, (cmd) =>
+            return GetItemsSPCmd("TOneWhS_BE.sp_SupplierRate_GetEffectiveBySuppliers", SupplierRateMapper, (cmd) =>
             {
                 //, effectiveOn, isEffectiveInFuture
                 var dtPrm = new SqlParameter("@ActiveSuppliersInfo", SqlDbType.Structured);
@@ -62,11 +43,25 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
             });
         }
-
-
         public List<SupplierRate> GetAllSupplierRates(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetAll", SupplierRateMapper, effectiveOn, isEffectiveInFuture);
         }
+        SupplierRate SupplierRateMapper(IDataReader reader)
+        {
+            SupplierRate supplierRate = new SupplierRate
+            {
+                NormalRate = GetReaderValue<decimal>(reader, "NormalRate"),
+                OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null,
+                SupplierRateId = (long)reader["ID"],
+                ZoneId = (long)reader["ZoneID"],
+                PriceListId = GetReaderValue<int>(reader, "PriceListID"),
+                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
+                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED"),
+                CurrencyId = GetReaderValue<int?>(reader, "CurrencyId")
+            };
+            return supplierRate;
+        }
+
     }
 }

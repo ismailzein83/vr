@@ -28,7 +28,7 @@ namespace TOne.WhS.BusinessEntity.Business
             result.SaleRatesByCustomer = new Dictionary<int, SaleRatesByZone>();
             result.SaleRatesByProduct = new Dictionary<int, SaleRatesByZone>();
 
-            IEnumerable<SaleRate> saleRates = _saleRateDataManager.GetFilteredSaleRatedByOwner(customerInfos, effectiveOn, isEffectiveInFuture);
+            IEnumerable<SaleRate> saleRates = _saleRateDataManager.GetEffectiveSaleRateByCustomers(customerInfos, effectiveOn, isEffectiveInFuture);
 
             foreach (SaleRate saleRate in saleRates)
             {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public enum SalePriceListOwnerType { SellingProduct = 0, Customer = 1}
+    public enum SalePriceListOwnerType : byte { SellingProduct = 0, Customer = 1}
     public class SalePriceList
     {
         public int PriceListId { get; set; }

@@ -23,11 +23,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByOwnerAndEffective", SaleRateMapper, ownerType, ownerId, effectiveOn);
         }
-
-        public List<SaleRate> GetFilteredSaleRatedByOwner(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
+        public List<SaleRate> GetEffectiveSaleRateByCustomers(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             DataTable dtActiveCustomers = CarrierAccountDataManager.BuildRoutingCustomerInfoTable(customerInfos);
-            return GetItemsSPCmd("[TOneWhS_BE].[sp_SaleRate_GetFilteredByOwner]", SaleRateMapper, (cmd) =>
+            return GetItemsSPCmd("[TOneWhS_BE].[sp_SaleRate_GetEffectiveByCustomers]", SaleRateMapper, (cmd) =>
             {
                 var dtPrm = new SqlParameter("@ActiveCustomersInfo", SqlDbType.Structured);
                 dtPrm.Value = dtActiveCustomers;
@@ -37,13 +36,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
             });
         }
-
-
         public bool AreSaleRatesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SaleRate", ref updateHandle);
         }
-
         public bool CloseRates(IEnumerable<RateChange> rateChanges)
         {
             DataTable rateChangesTable = BuildRateChangesTable(rateChanges);
@@ -57,30 +53,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return affectedRows > 0;
         }
-
-        private DataTable BuildRateChangesTable(IEnumerable<RateChange> rateChanges)
-        {
-            DataTable table = new DataTable();
-
-            table.Columns.Add("RateID", typeof(long));
-            table.Columns.Add("EED", typeof(DateTime));
-
-            table.BeginLoadData();
-
-            foreach (RateChange rateChange in rateChanges)
-            {
-                DataRow row = table.NewRow();
-                row["RateID"] = rateChange.RateId;
-                if (rateChange.EED != null)
-                    row["EED"] = rateChange.EED;
-                table.Rows.Add(row);
-            }
-
-            table.EndLoadData();
-
-            return table;
-        }
-
         public bool InsertRates(IEnumerable<SaleRate> newRates)
         {
             DataTable newRatesTable = BuildNewRatesTable(newRates);
@@ -94,8 +66,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return affectedRows > 0;
         }
-
-        private DataTable BuildNewRatesTable(IEnumerable<SaleRate> newRates)
+        DataTable BuildNewRatesTable(IEnumerable<SaleRate> newRates)
         {
             DataTable table = new DataTable();
 
@@ -122,6 +93,28 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 row["BED"] = newRate.BeginEffectiveDate;
                 if (newRate.EndEffectiveDate != null)
                     row["EED"] = newRate.EndEffectiveDate;
+                table.Rows.Add(row);
+            }
+
+            table.EndLoadData();
+
+            return table;
+        }
+        DataTable BuildRateChangesTable(IEnumerable<RateChange> rateChanges)
+        {
+            DataTable table = new DataTable();
+
+            table.Columns.Add("RateID", typeof(long));
+            table.Columns.Add("EED", typeof(DateTime));
+
+            table.BeginLoadData();
+
+            foreach (RateChange rateChange in rateChanges)
+            {
+                DataRow row = table.NewRow();
+                row["RateID"] = rateChange.RateId;
+                if (rateChange.EED != null)
+                    row["EED"] = rateChange.EED;
                 table.Rows.Add(row);
             }
 

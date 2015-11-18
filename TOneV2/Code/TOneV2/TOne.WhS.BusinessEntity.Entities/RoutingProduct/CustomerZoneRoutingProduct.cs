@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public enum SaleEntityZoneRoutingProductSource { CustomerZone, CustomerDefault, ProductZone, ProductDefault }
+    public enum SaleEntityZoneRoutingProductSource : byte { CustomerZone, CustomerDefault, ProductZone, ProductDefault }
 
     public class SaleEntityZoneRoutingProduct
     {

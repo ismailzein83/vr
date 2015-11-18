@@ -40,24 +40,27 @@ namespace TOne.WhS.Routing.BP.Activities
         {
 
             SupplierZoneDetailByZone supplierZoneDetailsByZone = null;
-            
+
             ISupplierZoneDetailsDataManager supplierZoneDetailsManager = RoutingDataManagerFactory.GetDataManager<ISupplierZoneDetailsDataManager>();
             supplierZoneDetailsManager.DatabaseId = inputArgument.RoutingDatabaseId;
 
-            IEnumerable<SupplierZoneDetail> supplierZoneDetails = supplierZoneDetailsManager.GetSupplierZoneDetails();
+            IEnumerable<SupplierZoneDetail> supplierZoneDetails = supplierZoneDetailsManager.GetFilteredSupplierZoneDetailsBySupplierZone(inputArgument.SupplierCodes.Select(c => c.ZoneId));
 
-            if(supplierZoneDetails != null)
+            if (supplierZoneDetails != null)
             {
                 supplierZoneDetailsByZone = new SupplierZoneDetailByZone();
 
                 foreach (SupplierCode code in inputArgument.SupplierCodes)
                 {
-                    if (!supplierZoneDetailsByZone.ContainsKey(code.ZoneId))
-                        supplierZoneDetailsByZone.Add(code.ZoneId, supplierZoneDetails.FirstOrDefault(x => x.SupplierZoneId == code.ZoneId));
+                    SupplierZoneDetail supplierZoneDetail;
+                    if (!supplierZoneDetailsByZone.TryGetValue(code.ZoneId, out supplierZoneDetail))
+
+                        supplierZoneDetailsByZone.Add(code.ZoneId, supplierZoneDetail);
                 }
             }
 
-            return new GetSupplierZoneDetailsOutput {
+            return new GetSupplierZoneDetailsOutput
+            {
                 SupplierZoneDetails = supplierZoneDetailsByZone
             };
         }
