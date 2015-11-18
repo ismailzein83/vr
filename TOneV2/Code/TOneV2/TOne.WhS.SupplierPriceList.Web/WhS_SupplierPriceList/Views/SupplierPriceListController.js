@@ -34,8 +34,7 @@ function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIServi
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountDirectiveAPI, undefined, setLoader, carrierAccountReadyPromiseDeferred);
         }
         $scope.downloadTemplate = function () {
-            return WhS_SupPL_SupplierPriceListAPIService.DownloadSupplierPriceList().then(function (response) {
-                console.log(response);
+            return WhS_SupPL_SupplierPriceListAPIService.DownloadSupplierPriceListTemplate().then(function (response) {
                 UtilsService.downloadFile(response.data, response.headers);
             });
         }

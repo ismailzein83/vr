@@ -16,9 +16,11 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.SupplierPriceList.Web.Controllers
 {
-    public class SupplierPriceListController:BaseAPIController
+   [RoutePrefix(Constants.ROUTE_PREFIX + "SupplierPriceList")]
+    public class WhS_SupplierPriceListController:BaseAPIController
     {
         [HttpGet]
+        [Route("UploadSupplierPriceList")]
         public CreateProcessOutput UploadSupplierPriceList(int supplierAccountId,int currencyId, int fileId, DateTime? effectiveDate)
         {
             BPClient bpClient = new BPClient();
@@ -35,7 +37,8 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
             });
         }
         [HttpGet]
-        public HttpResponseMessage DownloadSupplierPriceList()
+        [Route("DownloadSupplierPriceListTemplate")]
+        public HttpResponseMessage DownloadSupplierPriceListTemplate()
         {
            string obj = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["ImportPriceListTemplatePath"]);
             Workbook workbook = new Workbook(obj);

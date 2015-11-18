@@ -1,6 +1,11 @@
-﻿using System;
+﻿using Aspose.Cells;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Http;
 using TOne.WhS.CodePreparation.BP.Arguments;
@@ -11,24 +16,46 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.CodePreparation.Web.Controllers
 {
+    [RoutePrefix(Constants.ROUTE_PREFIX + "CodePreparation")]
     public class CodePreparationController:BaseAPIController
     {
         [HttpGet]
+        [Route("UploadSaleZonesList")]
         public CreateProcessOutput UploadSaleZonesList(int sellingNumberPlanId, int fileId, DateTime effectiveDate)
-      {
+        {
             CodePreparationManager manager = new CodePreparationManager();
             BPClient bpClient = new BPClient();
-         return bpClient.CreateNewProcess(new CreateProcessInput
+           return bpClient.CreateNewProcess(new CreateProcessInput
             {
                 InputArguments = new CodePreparationProcessInput
                 {
                     EffectiveDate = effectiveDate,
                     FileId = fileId,
-                    SellingNumberPlanId = sellingNumberPlanId
+                    SellingNumberPlanId = sellingNumberPlanId,
                 }
 
             });
-         //   return manager.UploadSaleZonesList(sellingNumberPlanId, fileId, effectiveDate);
-      }
+        }
+        [HttpGet]
+        [Route("DownloadImportCodePreparationTemplate")]
+        public HttpResponseMessage DownloadImportCodePreparationTemplate()
+        {
+            string obj = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["ImportCodePreparationTemplatePath"]);
+            Workbook workbook = new Workbook(obj);
+            Aspose.Cells.License license = new Aspose.Cells.License();
+            license.SetLicense("Aspose.Cells.lic");
+            MemoryStream memoryStream = new MemoryStream();
+            memoryStream = workbook.SaveToStream();
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            memoryStream.Position = 0;
+            response.Content = new StreamContent(memoryStream);
+
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = String.Format("ImportPriceListTemplate.xls")
+            };
+            return response;
+        }
     }
 }

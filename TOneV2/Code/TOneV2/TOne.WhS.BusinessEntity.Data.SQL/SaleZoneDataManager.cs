@@ -50,9 +50,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public void WriteRecordToStream(SaleZone record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}",
                        0,
                        record.SellingNumberPlanId,
+                       record.CountryId,
                        record.Name,
                        record.BeginEffectiveDate,
                        record.EndEffectiveDate);

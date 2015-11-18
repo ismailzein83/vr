@@ -1,6 +1,12 @@
-﻿CodePreparationController.$inject = ['$scope', 'WhS_BE_SellingNumberPlanAPIService','WhS_CodePrep_CodePrepAPIService','WhS_BP_CreateProcessResultEnum','BusinessProcessService'];
+﻿CodePreparationController.$inject = ['$scope','WhS_CodePrep_CodePrepAPIService','WhS_BP_CreateProcessResultEnum','BusinessProcessService','VRUIUtilsService','UtilsService'];
 
-function CodePreparationController($scope, WhS_BE_SellingNumberPlanAPIService, WhS_CodePrep_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcessService) {
+function CodePreparationController($scope, WhS_CodePrep_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcessService, VRUIUtilsService, UtilsService) {
+    var sellingNumberPlanDirectiveAPI;
+    var sellingNumberPlanReadyPromiseDeferred;
+
+    var currencyDirectiveAPI;
+    var currencyReadyPromiseDeferred;
+
     defineScope();
     loadParameters();
     load();
@@ -11,25 +17,26 @@ function CodePreparationController($scope, WhS_BE_SellingNumberPlanAPIService, W
         $scope.selectedSellingNumberPlan;
         $scope.effectiveDate = new Date();
         $scope.zoneList;
+        $scope.onSellingNumberPlanSelectorReady = function (api) {
+            sellingNumberPlanDirectiveAPI = api;
+            var setLoader = function (value) { $scope.isLoadingSellingNumberPlan = value };
+            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, undefined, setLoader, sellingNumberPlanReadyPromiseDeferred);
+        }
         $scope.upload = function () {
-         return WhS_CodePrep_CodePrepAPIService.UploadSaleZonesList($scope.selectedSellingNumberPlan.SellingNumberPlanId, $scope.zoneList.fileId, $scope.effectiveDate).then(function (response) {
+            return WhS_CodePrep_CodePrepAPIService.UploadSaleZonesList($scope.selectedSellingNumberPlan.SellingNumberPlanId, $scope.zoneList.fileId, $scope.effectiveDate).then(function (response) {
                 if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
                   return  BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
             });
         }
+        $scope.downloadTemplate = function () {
+            return WhS_CodePrep_CodePrepAPIService.DownloadImportCodePreparationTemplate().then(function (response) {
+                UtilsService.downloadFile(response.data, response.headers);
+            });
+        }
     }
     function load() {
-        loadSellingNumberPlans();
     }
-    function loadSellingNumberPlans() {
-        $scope.isInitializing = true;
-        return WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlans().then(function (response) {
-            for (var i = 0; i < response.length; i++)
-                $scope.sellingNumberPlans.push(response[i]);
-        }).finally(function () {
-            $scope.isInitializing = false;
-        });
-    }
+
 
 
 };

@@ -1,15 +1,15 @@
 ﻿<vr-panel ng-controller="WhS_CodePreparation_CodePreparationController">
-    <vr-form name="formFilter">
+    <vr-form validationcontext="codePreparationGroup">
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
                 <vr-columns width="fullrow">
                     <vr-row>
-                        <vr-columns width="normal">
-                            <vr-select datasource="sellingNumberPlans" datatextfield="Name" datavaluefield="SellingNumberPlanId" selectedvalues="selectedSellingNumberPlan" isrequired label="Zone Packages"></vr-select>
+                        <vr-columns width="normal" vr-loader="isLoadingSellingNumberPlan">
+                            <vr-whs-be-sellingnumberplan-selector isrequired on-ready="onSellingNumberPlanSelectorReady" selectedvalues="selectedSellingNumberPlan"></vr-whs-be-sellingnumberplan-selector>
                         </vr-columns>
                         <vr-columns width="normal">
                             <vr-label>Upload File</vr-label>
-                          <vr-fileupload extension="reports" value="zoneList" isrequired> </vr-fileupload>
+                            <vr-fileupload extension="reports" value="zoneList" isrequired> </vr-fileupload>
 
                         </vr-columns>
                         <vr-columns width="normal">
@@ -25,7 +25,8 @@
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
 
             <div transclude-to="buttons">
-                <vr-button type="Upload" formname="formFilter" data-onclick="upload"></vr-button>
+                <vr-button type="Download" data-onclick="downloadTemplate"></vr-button>
+                <vr-button type="Upload" validationcontext="codePreparationGroup" data-onclick="upload"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>

@@ -13,6 +13,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Code { get; set; }
 
         public long ZoneId { get; set; }
+        public int CodeGroupId { get; set; }
 
         public DateTime BeginEffectiveDate { get; set; }
 

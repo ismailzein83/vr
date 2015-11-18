@@ -1,27 +1,30 @@
-﻿
-app.service('WhS_SupPL_SupplierPriceListAPIService', function (BaseAPIService) {
+﻿(function (appControllers) {
 
-    return ({
+    "use strict";
+    supplierZoneAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_SupPL_ModuleConfig'];
 
-        UploadSupplierPriceList: UploadSupplierPriceList,
-        DownloadSupplierPriceList: DownloadSupplierPriceList
-    });
+    function supplierZoneAPIService(BaseAPIService, UtilsService, WhS_SupPL_ModuleConfig) {
 
+        function UploadSupplierPriceList(supplierAccountId, currencyId, fileId, effectiveDate) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, "SupplierPriceList", "UploadSupplierPriceList"), {
+                supplierAccountId: supplierAccountId,
+                currencyId: currencyId,
+                fileId: fileId,
+                effectiveDate: effectiveDate
+            });
+        }
+        function DownloadSupplierPriceListTemplate() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, "SupplierPriceList", "DownloadSupplierPriceListTemplate"), {}, {
+                returnAllResponseParameters: true,
+                responseTypeAsBufferArray: true
+            });
+        }
 
-    function UploadSupplierPriceList(supplierAccountId,currencyId, fileId, effectiveDate) {
-        return BaseAPIService.get("/api/SupplierPriceList/UploadSupplierPriceList", {
-            supplierAccountId: supplierAccountId,
-            currencyId:currencyId,
-            fileId: fileId,
-            effectiveDate: effectiveDate
+        return ({
+            UploadSupplierPriceList: UploadSupplierPriceList,
+            DownloadSupplierPriceListTemplate: DownloadSupplierPriceListTemplate
         });
     }
 
-    function DownloadSupplierPriceList() {
-        return BaseAPIService.get("/api/SupplierPriceList/DownloadSupplierPriceList", {},{
-            returnAllResponseParameters: true,
-            responseTypeAsBufferArray: true
-        });
-    }
-
-});
+    appControllers.service('WhS_SupPL_SupplierPriceListAPIService', supplierZoneAPIService);
+})(appControllers);
