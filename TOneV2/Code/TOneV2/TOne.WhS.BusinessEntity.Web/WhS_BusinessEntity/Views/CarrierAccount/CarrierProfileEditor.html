@@ -1,137 +1,97 @@
-﻿<div vr-modalcontent ng-controller="WhS_BE_CarrierProfileEditorController" vr-loader="isLoading">
-    <vr-modalbody width="'50%'">
+﻿<div vr-modalcontent ng-controller="WhS_BE_CarrierProfileEditorController" vr-loader="isLoading" width="'50%'">
+    <vr-modalbody>
         <vr-form name="formCarrierProfileEditor">
-            <vr-choices selectedindex="0">
-                <vr-choice isselected="generalInfoSelected">General Info</vr-choice>
-                <vr-choice isselected="financialInfoSelected">Financial Info</vr-choice>
-                <vr-choice isselected="contactsSelected">Contacts</vr-choice>
-                <vr-choice isselected="documentsSelected">Documents</vr-choice>
-            </vr-choices>
-            <div ng-show="generalInfoSelected">
-                <vr-row>
-                    <vr-columns width="1/2row">
-                        <vr-textbox value="name" label="Profile Name" isrequired></vr-textbox>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-common-country-selector selectedvalues="country" onselectionchanged="onCountrySelctionChanged" on-ready="onCountryDirectiveReady" isrequired showaddbutton></vr-common-country-selector>
-                    </vr-columns>
-                </vr-row>
+            <vr-tabs>
+                <vr-tab header="'General Info'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModal.name" label="Profile Name" isrequired></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-common-country-selector selectedvalues="country" onselectionchanged="onCountrySelctionChanged" on-ready="onCountryDirectiveReady" isrequired showaddbutton></vr-common-country-selector>
+                        </vr-columns>
+                    </vr-row>
 
-                <vr-row>
-                    <vr-columns width="1/2row">
-                        <vr-textbox value="company" label="Company" isrequired></vr-textbox>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-common-city-selector vr-disabled="country== undefined || country ==  null" selectedvalues="city" on-ready="onCityDirectiveReady" isrequired showaddbutton></vr-common-city-selector>
-                    </vr-columns>
-                </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModal.company" label="Company" isrequired></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-common-city-selector vr-disabled="country== undefined || country ==  null" selectedvalues="city" on-ready="onCityDirectiveReady" isrequired showaddbutton></vr-common-city-selector>
+                        </vr-columns>
+                    </vr-row>
 
-                <vr-row>
-                    <vr-columns width="1/2row">
-                        <vr-textbox value="registrationNumber" label="Registration Number"></vr-textbox>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-textbox value="address" label="Address"></vr-textbox>
-                    </vr-columns>
-                </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModal.registrationNumber" label="Registration Number"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModal.address" label="Address"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
 
-                <vr-row>
-                    <vr-columns width="1/2row">
-                        <vr-textbox value="website" label="Website"></vr-textbox>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-textbox value="postalCode" label="Postal Code"></vr-textbox>
-                    </vr-columns>
-                </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModal.website" label="Website"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModal.postalCode" label="Postal Code"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
 
-                <vr-row>
-                    <vr-columns width="1/2row">
-                        <vr-textbox value="town" label="Town"></vr-textbox>
-                    </vr-columns>
-                </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModal.town" label="Town"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="1/4row">
+                            <vr-textbox value="scopeModal.faxvalue" type="number" decimalprecision="0" label="Fax"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns withemptyline width="1/4row">
+                            <vr-button type="Add" data-onclick="addFaxOption" standalone></vr-button>
+                        </vr-columns>
 
-               
+                        <vr-columns width="1/4row">
+                            <vr-textbox label="Phone" type="number" decimalprecision="0" value="scopeModal.phoneNumberValue"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns withemptyline width="1/4row">
+                            <vr-button type="Add" data-onclick="addPhoneNumberOption" standalone></vr-button>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-datalist maxitemsperrow="2" datasource="scopeModal.faxes" autoremoveitem="true">
+                                {{dataItem.fax}}
+                            </vr-datalist>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-datalist maxitemsperrow="2" datasource="scopeModal.phoneNumbers" autoremoveitem="true">
+                                {{dataItem.phoneNumber}}
+                            </vr-datalist>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-fileupload extension="images" value="scopeModal.companyLogo" label="Company Logo"> </vr-fileupload>
+                        </vr-columns>
 
-                <vr-row removeline>
-                    <vr-columns width="1/4row">
-                        <vr-textbox label="Fax" value="faxValue"></vr-textbox>
-                    </vr-columns>
-                    <vr-columns withemptyline width="1/4row">
-                        <vr-button type="Add" data-onclick="addFaxOption" standalone></vr-button>
-                    </vr-columns>
-
-                    <vr-columns width="1/4row">
-                        <vr-textbox label="Phone" value="phoneNumberValue"></vr-textbox>
-                    </vr-columns>
-                    <vr-columns withemptyline width="1/4row">
-                        <vr-button type="Add" data-onclick="addPhoneNumberOption" standalone></vr-button>
-                    </vr-columns>
-
-
-                  
-                </vr-row>
-
-
-
-                <vr-row removeline>
-                    <vr-columns width="1/2row">
-                        <div>
-                            <ul class="list-group dragbelzone" ng-sortable="itemsSortable">
-                                <li ng-repeat="option in faxes" class="list-group-item list-custom" style="margin: 1px; font-size: 12px;">
-                                    <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                                    <i class="glyphicon glyphicon-remove hand-cursor" style="float: right; padding: 5px; cursor: default" ng-click="removeFax($event,option)"></i>
-                                    <div style="width: 100px; float: right; margin-right: 60px; text-align: center;">
-                                        {{option.fax}}
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <div>
-                            <ul class="list-group dragbelzone" ng-sortable="itemsSortable">
-                                <li ng-repeat="option in phoneNumbers" class="list-group-item list-custom" style="margin: 1px; font-size: 12px;">
-                                    <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                                    <i class="glyphicon glyphicon-remove hand-cursor" style="float: right; padding: 5px; cursor: default" ng-click="removePhoneNumber($event,option)"></i>
-                                    <div style="width: 100px; float: right; margin-right: 60px; text-align: center;">
-                                        {{option.phoneNumber}}
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </vr-columns>
-                </vr-row>
-
-                <vr-row>
-                    <vr-columns width="1/2row">
-                        <vr-fileupload extension="images" value="companyLogo" label="Company Logo"> </vr-fileupload>
-                    </vr-columns>
-
-                    <vr-columns width="1/2row">
-                        <vr-preview-image height="80px" width="80px" value="companyLogo.fileId"> </vr-preview-image>
-                    </vr-columns>
-                </vr-row>
-
-            </div>
-
-            <div ng-show="financialInfoSelected">financial</div>
-            <div ng-show="contactsSelected">
-
-                <vr-row>
-                    <vr-columns width="1/2row" ng-repeat="c in contacts">
-                        <vr-label>{{c.label}}</vr-label>
-                        <vr-textbox value="c.value"></vr-textbox>
-                    </vr-columns>
-
-                </vr-row>
-
-
-
-            </div>
-            <div ng-show="documentsSelected">documents</div>
-
-
-
+                        <vr-columns width="1/2row">
+                            <vr-preview-image height="80px" width="80px" value="scopeModal.companyLogo.fileId"> </vr-preview-image>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Financial Info'">Financial Info</vr-tab>
+                <vr-tab header="'Contacts'">
+                    <vr-row>
+                        <vr-columns width="1/2row" ng-repeat="c in scopeModal.contacts">
+                            <vr-label>{{c.label}}</vr-label>
+                            <vr-textbox  value="c.description" type="c.inputetype"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Documents'">Documents</vr-tab>
+            </vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>

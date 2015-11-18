@@ -1,5 +1,5 @@
-﻿<vr-row removeline ng-if="ctrl.tabobject.isLoaded" ng-show="ctrl.tabobject.isSelected">
-    <vr-columns width="fullrow">
+﻿<vr-row removeline ng-if="ctrl.tabobject.isLoaded" ng-show="ctrl.tabobject.isSelected" tabcontent="true">
+    <vr-columns width="fullrow" tabs="true">
         <vr-validation-group validationcontext="ctrl.tabobject.validationContext">
             <div ng-transclude></div>
         </vr-validation-group>        

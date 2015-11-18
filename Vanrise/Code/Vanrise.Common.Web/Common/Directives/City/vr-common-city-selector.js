@@ -87,7 +87,7 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
             function defineAPI() {
                 var api = {};
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('CityId', $attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('CityId', attrs, ctrl);
                 }
                 api.load = function (payload) {
                     var filter;

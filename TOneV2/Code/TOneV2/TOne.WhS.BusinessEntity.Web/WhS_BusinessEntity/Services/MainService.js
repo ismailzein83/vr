@@ -187,7 +187,7 @@ app.service('WhS_BE_MainService', ['WhS_BE_SellingProductAPIService', 'WhS_BE_Cu
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "New Carrier Profile";
+          
             modalScope.onCarrierProfileAdded = onCarrierProfileAdded;
         };
 
@@ -203,7 +203,6 @@ app.service('WhS_BE_MainService', ['WhS_BE_SellingProductAPIService', 'WhS_BE_Cu
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Carrier Profile";
             modalScope.onCarrierProfileUpdated = onCarrierProfileUpdated;
         };
         VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileEditor.html', parameters, modalSettings);

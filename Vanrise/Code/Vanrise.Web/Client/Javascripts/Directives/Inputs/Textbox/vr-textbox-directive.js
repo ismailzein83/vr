@@ -15,15 +15,16 @@
                 maxvalue: '@',
                 decimalprecision: '@',
                 maxlength:'@',
-                placeholder:'@'
+                placeholder: '@',
+                type:'@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
                 var validationOptions = {};
-                if ($attrs.type === TextboxTypeEnum.Email.name)
+                if ($attrs.type === TextboxTypeEnum.Email.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Email.name)
                     validationOptions.emailValidation = true;
-                else if ($attrs.type === TextboxTypeEnum.Number.name) {
+                else if ($attrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name) {
                     validationOptions.numberValidation = true;
                     validationOptions.maxNumber = ctrl.maxvalue;
                     validationOptions.minNumber = ctrl.minvalue;
@@ -62,7 +63,7 @@
                             if (newValue == "") {
                                 ctrl.value = undefined;
                             }
-                            if (iAttrs.type === TextboxTypeEnum.Number.name) {
+                            if (iAttrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name) {
                                 var arr = String(newValue).split("");
                                 var decimalArray = String(newValue).split(".");
                                 var negativeArray = String(newValue).split("-");

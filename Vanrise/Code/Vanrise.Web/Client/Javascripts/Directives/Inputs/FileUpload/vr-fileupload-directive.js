@@ -114,6 +114,11 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                                    fileId: response.FileId,
                                    lastModifiedDate: response.lastModifiedDate
                                };
+                           else
+                               ctrl.file = {
+                                  
+                               };
+
                        });
 
                 }

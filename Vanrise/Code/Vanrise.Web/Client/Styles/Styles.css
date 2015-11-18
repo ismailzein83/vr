@@ -651,7 +651,7 @@ input.ui-grid-filter-input[type="text"] {
     height : 100% !important;
 }
 
-.required-inpute{  
+.required-inpute>div:nth-child(1){  
     border: 1px solid #D44A47 !important;
     outline: 0px none;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 2px rgba(195, 127, 122, 0.85);
@@ -2019,12 +2019,12 @@ vr-switch[type="inline"] > div {
 }
 
 /*start of vr-tabs*/
-vr-tab .row {
+vr-tab vr-row[tabcontent="true"] > .row {
     margin : 0px !important
 }
-
-vr-tab div[class^="col"] {
+vr-tab vr-columns[tabs="true"] > div[class^="col"]{
     border:1px solid #ddd;
+    display:block;
     border-top: 0px;
     border-radius: 0px 0px 4px 4px;
     padding: 5px 9px;
@@ -2040,4 +2040,4 @@ vr-tab div[class^="col"] {
 
 vr-listitem div[class^="col"] {
         padding: 1px;
-    }
+}

@@ -13,8 +13,8 @@ app.directive('vrValidator', ['$compile', 'UtilsService', function ($compile, Ut
             var validationMessage = '<div  class="disable-animations tooltip-error" ng-style="(' + showTooltipVariableName + ' && ' + tAttrs.validate + ' != null) ? {\'display\':\'block\'} : {\'display\':\'none\'} ">';
             validationMessage += '<div>{{' + tAttrs.validate + '}}</div></div>';
 
-            var newElement = '<div ng-class="{\'required-inpute\' : ' + tAttrs.validate + ' != null }" ng-mouseenter="' + showTooltipVariableName + '=true;$root.onValidationMessageShown($event)" ng-mouseleave="' + showTooltipVariableName + '=false" >'
-                + '<div>' + tElement.context.innerHTML + '</div>'
+            var newElement = '<div style="height: 28px;"  ng-class="{\'required-inpute\' : ' + tAttrs.validate + ' != null }" ng-mouseenter="' + showTooltipVariableName + '=true;$root.onValidationMessageShown($event)" ng-mouseleave="' + showTooltipVariableName + '=false" >'
+                + '<div >' + tElement.context.innerHTML + '</div>'
             + validationMessage
             + '</div>';
             tElement.html(newElement);

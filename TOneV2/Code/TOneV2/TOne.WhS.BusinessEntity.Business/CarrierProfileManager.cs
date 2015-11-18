@@ -63,6 +63,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 carrierProfile.CarrierProfileId = carrierProfileId;
                 insertOperationOutput.InsertedObject = CarrierProfileDetailMapper(carrierProfile);
             }
+            else
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
 
             return insertOperationOutput;
         }
@@ -83,7 +85,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = CarrierProfileDetailMapper(carrierProfile);
             }
-
+            else
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
 
