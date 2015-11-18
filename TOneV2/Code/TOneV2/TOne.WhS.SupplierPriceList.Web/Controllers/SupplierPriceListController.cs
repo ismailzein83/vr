@@ -37,26 +37,21 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
         [HttpGet]
         public HttpResponseMessage DownloadSupplierPriceList()
         {
-
-            var obj = HttpContext.Current.Server.MapPath("/Client/Modules/WhS_SupplierPriceList");
-            FileStream fstream = new FileStream(obj+"\\Template\\Supplier Price List Sample.xls", FileMode.Open);
-            Workbook workbook = new Workbook(fstream);
+           string obj = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["ImportPriceListTemplatePath"]);
+            Workbook workbook = new Workbook(obj);
             Aspose.Cells.License license = new Aspose.Cells.License();
             license.SetLicense("Aspose.Cells.lic");
             MemoryStream memoryStream = new MemoryStream();
-            memoryStream = workbook.SaveToStream();
-            
+            memoryStream = workbook.SaveToStream();       
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
-
             memoryStream.Position = 0;
             response.Content = new StreamContent(memoryStream);
            
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileName = String.Format("TemplateExcelReport.xls")
+                FileName = String.Format("ImportPriceListTemplate.xls")
             };
-            fstream.Close();
             return response;
         }
     }
