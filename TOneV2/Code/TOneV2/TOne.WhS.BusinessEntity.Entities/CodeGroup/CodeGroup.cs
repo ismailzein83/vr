@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class CodeGroup
+    public class CodeGroup : ICode
     {
        public int CodeGroupId { get; set; }
 

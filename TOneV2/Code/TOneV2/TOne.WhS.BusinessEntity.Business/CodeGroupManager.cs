@@ -25,6 +25,17 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodeGroups.ToBigResult(input, filterExpression, CodeGroupDetailMapper));     
         }
 
+        public CodeGroup GetMatchCodeGroup(string code)
+        {
+            CodeIterator<CodeGroup> codeIterator = GetCodeIterator();
+            return codeIterator.GetLongestMatch(code);
+        }
+
+        private CodeIterator<CodeGroup> GetCodeIterator()
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<CodeGroup> GetAllCodeGroups()
         {
             var allCodeGroups = GetCachedCodeGroups();
