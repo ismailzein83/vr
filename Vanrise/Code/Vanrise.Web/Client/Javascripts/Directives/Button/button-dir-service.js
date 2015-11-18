@@ -167,6 +167,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Sell New Zones',
                     class: 'glyphicon  glyphicon-plus-sign'
                 };
+            case 'Download':
+                return {
+                    text: 'Download Template',
+                    class: 'glyphicon glyphicon-download'
+                };
         }
     }
 }]);

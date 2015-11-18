@@ -1,5 +1,5 @@
 ﻿<vr-panel ng-controller="WhS_SupPL_SupplierPriceListController">
-    <vr-form name="formFilter">
+    <vr-form validationcontext="importSupplierPrieListGroup"
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
                 <vr-columns width="fullrow">
@@ -10,14 +10,14 @@
                         <vr-columns width="normal" vr-loader="isLoadingCurrencies">
                             <vr-common-currency-selector on-ready="onCurrencyDirectiveReady" selectedvalues="selectedCurrency" isrequired></vr-common-currency-selector>
                         </vr-columns>
-                        
+
                         <vr-columns width="normal">
                             <vr-label>Upload File</vr-label>
                             <vr-fileupload extension="reports" value="zoneList" isrequired> </vr-fileupload>
 
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-datetimepicker type="dateTime" label="Effective Date" value="effectiveDate" ></vr-datetimepicker>
+                            <vr-datetimepicker type="dateTime" label="Effective Date" value="effectiveDate"></vr-datetimepicker>
                         </vr-columns>
                     </vr-row>
                 </vr-columns>
@@ -29,7 +29,8 @@
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
 
             <div transclude-to="buttons">
-                <vr-button type="Upload" formname="formFilter" data-onclick="upload"></vr-button>
+                <vr-button type="Download"  data-onclick="downloadTemplate"></vr-button>
+                <vr-button type="Upload" validationcontext="importSupplierPrieListGroup" data-onclick="upload"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>

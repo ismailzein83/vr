@@ -33,6 +33,12 @@ function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIServi
             var setLoader = function (value) { $scope.isLoadingSuppliers = value };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountDirectiveAPI, undefined, setLoader, carrierAccountReadyPromiseDeferred);
         }
+        $scope.downloadTemplate = function () {
+            return WhS_SupPL_SupplierPriceListAPIService.DownloadSupplierPriceList().then(function (response) {
+                console.log(response);
+                UtilsService.downloadFile(response.data, response.headers);
+            });
+        }
 
     }
     function load() {

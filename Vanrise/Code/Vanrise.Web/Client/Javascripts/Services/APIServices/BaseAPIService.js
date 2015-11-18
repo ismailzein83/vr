@@ -25,6 +25,7 @@ app.service('BaseAPIService', function ($http, $q, $rootScope, notify, DataRetri
             urlParameters = {
                 params: params,
             };
+        
         if (options != undefined && options.responseTypeAsBufferArray) 
             urlParameters.responseType = 'arraybuffer';
         
