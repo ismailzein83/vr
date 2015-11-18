@@ -23,7 +23,7 @@ namespace TOne.WhS.Routing.Data.SQL
             {
                 TableName = "[dbo].[CodeSaleZone]",
                 Stream = streamForBulkInsert,
-                TabLock = false,
+                TabLock = true,
                 KeepIdentity = false,
                 FieldSeparator = '^',
             };
@@ -34,11 +34,10 @@ namespace TOne.WhS.Routing.Data.SQL
             return base.InitializeStreamForBulkInsert();
         }
 
-        public void WriteRecordToStream(Entities.CodeMatches record, object dbApplyStream)
+        public void WriteRecordToStream(Entities.CodeSaleZone record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            foreach (SaleCodeMatch match in record.SaleCodeMatches)
-                streamForBulkInsert.WriteRecord("{0}^{1}", record.Code, match.SaleZoneId);
+            streamForBulkInsert.WriteRecord("{0}^{1}", record.Code, record.SaleZoneId);
         }
     }
 }

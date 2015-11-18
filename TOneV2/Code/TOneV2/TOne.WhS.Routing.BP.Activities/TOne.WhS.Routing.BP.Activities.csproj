@@ -82,6 +82,7 @@
     <Compile Include="GetCustomerZoneDetails.cs" />
     <Compile Include="GetSupplierZoneDetails.cs" />
     <Compile Include="PrepareCodeMatchesForApply.cs" />
+    <Compile Include="PrepareCodeSaleZoneForApply.cs" />
     <Compile Include="PrepareCustomerRoutesForApply.cs" />
     <Compile Include="PrepareCustomerZoneDetailForDBApply.cs" />
     <Compile Include="PrepareSupplierZoneDetailForDBApply.cs" />

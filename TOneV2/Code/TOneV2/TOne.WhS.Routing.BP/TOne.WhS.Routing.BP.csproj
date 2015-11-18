@@ -94,6 +94,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.LCRProcess.Activities\TOne.LCRProcess.Activities.csproj">
+      <Project>{8E765860-8D8C-4296-9EE4-7749E861B629}</Project>
+      <Name>TOne.LCRProcess.Activities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.BP.Activities\TOne.WhS.Routing.BP.Activities.csproj">
       <Project>{a28f67c0-6326-4830-8a1e-021f91a4236d}</Project>
       <Name>TOne.WhS.Routing.BP.Activities</Name>

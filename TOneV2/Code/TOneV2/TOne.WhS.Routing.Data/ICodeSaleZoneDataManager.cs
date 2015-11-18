@@ -8,7 +8,7 @@ using Vanrise.Data;
 
 namespace TOne.WhS.Routing.Data
 {
-    public interface ICodeSaleZoneDataManager : IDataManager, IBulkApplyDataManager<CodeMatches>, IRoutingDataManager
+    public interface ICodeSaleZoneDataManager : IDataManager, IBulkApplyDataManager<CodeSaleZone>, IRoutingDataManager
     {
         void ApplyCodeToCodeSaleZoneTable(object preparedCodeMatches);
     }

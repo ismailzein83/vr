@@ -22,7 +22,7 @@ namespace TOne.WhS.Routing.Data.SQL
             {
                 TableName = "[dbo].[CustomerRoute]",
                 Stream = streamForBulkInsert,
-                TabLock = false,
+                TabLock = true,
                 KeepIdentity = false,
                 FieldSeparator = '^',
             };
