@@ -92,7 +92,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             var api = {};
 
             api.load = function (payload) {
-
+                
                 var filter;
                 var selectedIds;
                 if (payload != undefined) {

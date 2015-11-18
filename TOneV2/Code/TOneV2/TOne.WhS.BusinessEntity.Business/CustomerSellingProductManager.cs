@@ -65,7 +65,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             var cashedCustomerSellingProducts = GetCachedOrderedCustomerSellingProducts();
 
-            IEnumerable<CustomerSellingProduct> customerSellingProductList = cashedCustomerSellingProducts.Values.Where(x => customerSellingProducts.Any(y => y.CustomerId == x.CustomerId) && x.BED > DateTime.Today);
+            List<CustomerSellingProduct> customerSellingProductList = cashedCustomerSellingProducts.Values.Where(x => customerSellingProducts.Any(y => y.CustomerId == x.CustomerId && ( y.SellingProductId==x.SellingProductId || x.BED > DateTime.Now))).ToList();
             if (customerSellingProductList != null && customerSellingProductList.Count() > 0)
             {
                 return insertOperationOutput;

@@ -190,10 +190,10 @@ namespace TOne.WhS.BusinessEntity.Business
         {
            SellingProductManager sellingProductManager = new SellingProductManager();
            SellingProduct sellingProduct = sellingProductManager.GetSellingProduct(sellingProductId);
-           var cachedCarrierAccounts = GetCachedCarrierAccounts();
+           var cachedCarrierAccounts = GetCarrierAccountsByType(true, false, null, null);
            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
            IEnumerable<CustomerSellingProduct> customerSellingProducts = customerSellingProductManager.GetEffectiveCustomerSellingProduct();
-           return cachedCarrierAccounts.Values.Where(x => x.CustomerSettings.SellingNumberPlanId == sellingProduct.SellingNumberPlanId
+           return cachedCarrierAccounts.Where(x => x.CustomerSettings.SellingNumberPlanId == sellingProduct.SellingNumberPlanId
                && (!customerSellingProducts.Any(y => y.CustomerId == x.CarrierAccountId )));
          
         }
