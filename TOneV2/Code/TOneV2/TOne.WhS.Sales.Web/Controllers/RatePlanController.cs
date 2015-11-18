@@ -39,10 +39,10 @@ namespace TOne.WhS.Sales.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetDefaultRoutingProduct")]
-        public DefaultRoutingProduct GetDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId)
+        [Route("GetDefaultItem")]
+        public DefaultItem GetDefaultItem(SalePriceListOwnerType ownerType, int ownerId)
         {
-            return _manager.GetDefaultRoutingProduct(ownerType, ownerId);
+            return _manager.GetDefaultItem(ownerType, ownerId);
         }
 
         [HttpGet]

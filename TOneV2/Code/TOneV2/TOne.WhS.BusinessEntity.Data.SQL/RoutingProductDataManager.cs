@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Entities.RatePlanning;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
@@ -50,7 +52,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public IEnumerable<DefaultRoutingProduct> GetEffectiveDefaultRoutingProducts(DateTime effectiveOn)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetEffective", DefaultRoutingProductMapper, effectiveOn);
+            return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetEffectiveDefaults", DefaultRoutingProductMapper, effectiveOn);
         }
 
         private DefaultRoutingProduct DefaultRoutingProductMapper(IDataReader reader)
@@ -77,11 +79,54 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return (recordsEffected > 0);
         }
 
+        public bool InsertOrUpdateDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, NewDefaultRoutingProduct newDefaultRoutingProduct)
+        {
+            DataTable newSaleEntityRoutingProductsTable = BuildNewSaleEntityRoutingProductsTable(ownerType, ownerId, newDefaultRoutingProduct);
+
+            int affectedRows = ExecuteNonQuerySP("TOneWhS_BE.sp_SaleEntityRoutingProduct_InsertOrUpdateDefault", ownerType, ownerId, newDefaultRoutingProduct.DefaultRoutingProductId, newDefaultRoutingProduct.BED, newDefaultRoutingProduct.EED);
+
+            return affectedRows > 0;
+        }
+
+        private DataTable BuildNewSaleEntityRoutingProductsTable(SalePriceListOwnerType ownerType, int ownerId, NewDefaultRoutingProduct newDefaultRoutingProduct)
+        {
+            DataTable table = new DataTable();
+
+            table.Columns.Add("OwnerType", typeof(int));
+            table.Columns.Add("OwnerID", typeof(int));
+            table.Columns.Add("ZoneID", typeof(long));
+            table.Columns.Add("RoutingProductID", typeof(int));
+            table.Columns.Add("BED", typeof(DateTime));
+            table.Columns.Add("EED", typeof(DateTime));
+
+            table.BeginLoadData();
+            DataRow row = table.NewRow();
+                
+            row["OwnerType"] = ownerType;
+            row["OwnerID"] = ownerId;
+            row["RoutingProductID"] = newDefaultRoutingProduct.DefaultRoutingProductId;
+            row["BED"] = newDefaultRoutingProduct.BED;
+
+            if (newDefaultRoutingProduct.EED != null)
+                row["EED"] = newDefaultRoutingProduct.EED;
+
+            table.Rows.Add(row);
+            table.EndLoadData();
+
+            return table;
+        }
+
         public bool Update(Entities.RoutingProduct routingProduct)
         {
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_RoutingProduct_Update", routingProduct.RoutingProductId, routingProduct.Name, routingProduct.SellingNumberPlanId,
                 Vanrise.Common.Serializer.Serialize(routingProduct.Settings));
             return (recordsEffected > 0);
+        }
+
+        public bool UpdateDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, DefaultRoutingProductChange defaultRoutingProductChange)
+        {
+            int affectedRows = ExecuteNonQuerySP("TOneWhS_BE.sp_SaleEntityRoutingProduct_UpdateDefault", ownerType, ownerId, defaultRoutingProductChange.EED);
+            return affectedRows > 0;
         }
 
         public bool Delete(int routingProductId)

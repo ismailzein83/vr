@@ -8,8 +8,8 @@ namespace TOne.WhS.Sales.Entities.RatePlanning
 {
     public class DefaultChanges
     {
-        public NewDefaultRoutingProduct NewRoutingProduct { get; set; }
+        public NewDefaultRoutingProduct NewDefaultRoutingProduct { get; set; }
 
-        public DefaultRoutingProductChange RoutingProductChange { get; set; }
+        public DefaultRoutingProductChange DefaultRoutingProductChange { get; set; }
     }
 }

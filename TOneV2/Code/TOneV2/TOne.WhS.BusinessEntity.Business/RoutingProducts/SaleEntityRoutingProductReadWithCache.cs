@@ -47,31 +47,21 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>().GetOrCreateObject(cacheName,
                 () =>
                 {
-                    DefaultRoutingProductsByOwner defaultRoutingProductsByOwner = null;
+                    DefaultRoutingProductsByOwner defaultRoutingProductsByOwner = new DefaultRoutingProductsByOwner();
+                    defaultRoutingProductsByOwner.DefaultRoutingProductsByProduct = new Dictionary<int, DefaultRoutingProduct>();
+                    defaultRoutingProductsByOwner.DefaultRoutingProductsByCustomer = new Dictionary<int, DefaultRoutingProduct>();
 
                     IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
                     IEnumerable<DefaultRoutingProduct> defaultRoutingProducts = dataManager.GetEffectiveDefaultRoutingProducts(DateTime.Now);
 
-                    if (defaultRoutingProducts != null && defaultRoutingProducts.Count() > 0) // GetItemsSP returns an empty list instead of null
+                    if (defaultRoutingProducts != null)
                     {
-                        defaultRoutingProductsByOwner = new DefaultRoutingProductsByOwner();
-
                         foreach (DefaultRoutingProduct defaultRoutingProduct in defaultRoutingProducts)
                         {
                             if (defaultRoutingProduct.OwnerType == SalePriceListOwnerType.SellingProduct)
-                            {
-                                if (defaultRoutingProductsByOwner.DefaultRoutingProductsByProduct == null)
-                                    defaultRoutingProductsByOwner.DefaultRoutingProductsByProduct = new Dictionary<int, DefaultRoutingProduct>();
-
                                 defaultRoutingProductsByOwner.DefaultRoutingProductsByProduct.Add(defaultRoutingProduct.OwnerId, defaultRoutingProduct);
-                            }
                             else
-                            {
-                                if (defaultRoutingProductsByOwner.DefaultRoutingProductsByCustomer == null)
-                                    defaultRoutingProductsByOwner.DefaultRoutingProductsByCustomer = new Dictionary<int, DefaultRoutingProduct>();
-
                                 defaultRoutingProductsByOwner.DefaultRoutingProductsByCustomer.Add(defaultRoutingProduct.OwnerId, defaultRoutingProduct);
-                            }
                         }
                     }
 

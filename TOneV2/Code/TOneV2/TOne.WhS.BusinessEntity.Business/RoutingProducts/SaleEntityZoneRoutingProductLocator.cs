@@ -15,19 +15,19 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             _reader = reader;
         }
-        
-        public DefaultRoutingProduct GetCustomerDefaultRoutingProduct(int customerId, int sellingProductId)
+
+        public SaleEntityZoneRoutingProduct GetCustomerDefaultRoutingProduct(int customerId, int sellingProductId)
         {
-            DefaultRoutingProduct defaultRoutingProduct;
+            SaleEntityZoneRoutingProduct defaultRoutingProduct;
             if (!HasDefaultRP(SalePriceListOwnerType.Customer, customerId, out defaultRoutingProduct))
                 HasDefaultRP(SalePriceListOwnerType.SellingProduct, sellingProductId, out defaultRoutingProduct);
 
             return defaultRoutingProduct;
         }
 
-        public DefaultRoutingProduct GetSellingProductDefaultRoutingProduct(int sellingProductId)
+        public SaleEntityZoneRoutingProduct GetSellingProductDefaultRoutingProduct(int sellingProductId)
         {
-            DefaultRoutingProduct defaultRoutingProduct;
+            SaleEntityZoneRoutingProduct defaultRoutingProduct;
             HasDefaultRP(SalePriceListOwnerType.SellingProduct, sellingProductId, out defaultRoutingProduct);
             return defaultRoutingProduct;
         }
@@ -79,18 +79,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 customerZoneRoutingProduct = new SaleEntityZoneRoutingProduct
                 {
                     RoutingProductId = defaultRoutingProduct.RoutingProductId,
-                    Source = ownerType == SalePriceListOwnerType.Customer ? SaleEntityZoneRoutingProductSource.CustomerDefault : SaleEntityZoneRoutingProductSource.ProductDefault
+                    Source = ownerType == SalePriceListOwnerType.Customer ? SaleEntityZoneRoutingProductSource.CustomerDefault : SaleEntityZoneRoutingProductSource.ProductDefault,
+                    BED = defaultRoutingProduct.BED,
+                    EED = defaultRoutingProduct.EED
                 };
                 return true;
             }
             customerZoneRoutingProduct = null;
             return false;
-        }
-
-        private bool HasDefaultRP(SalePriceListOwnerType ownerType, int ownerId, out DefaultRoutingProduct defaultRoutingProduct)
-        {
-            defaultRoutingProduct = _reader.GetDefaultRoutingProduct(ownerType, ownerId);
-            return (defaultRoutingProduct != null);
         }
     }
 }

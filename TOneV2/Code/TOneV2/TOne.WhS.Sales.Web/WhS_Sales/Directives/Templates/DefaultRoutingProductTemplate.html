@@ -6,16 +6,22 @@
     </vr-columns>
 
     <vr-columns width="normal">
-        <vr-whs-be-routingproduct-selector on-ready="ctrl.onNewSelectorReady" datasource="ctrl.newRoutingProducts"></vr-whs-be-routingproduct-selector>
+        <vr-whs-be-routingproduct-selector on-ready="ctrl.onNewSelectorReady"
+                                            datasource="ctrl.newRoutingProducts"
+                                            selectedvalues="ctrl.selectedNewRoutingProduct"
+                                            onselectionchanged="ctrl.onNewRoutingProductChanged">
+        </vr-whs-be-routingproduct-selector>
     </vr-columns>
 
     <vr-columns width="normal">
-        <div vr-disabled="true">
-            <vr-datetimepicker label="Begin Effective Date" type="date" value="ctrl.beginEffectiveDate"></vr-datetimepicker>
+        <div vr-disabled="ctrl.disableBED">
+            <vr-datetimepicker label="Begin Effective Date" type="date" value="ctrl.bed"></vr-datetimepicker>
         </div>
     </vr-columns>
 
     <vr-columns width="normal">
-        <vr-datetimepicker label="End Effective Date" type="date" value="ctrl.endEffectiveDate"></vr-datetimepicker>
+        <div vr-disabled="ctrl.disableEED">
+            <vr-datetimepicker label="End Effective Date" type="date" value="ctrl.eed"></vr-datetimepicker>
+        </div>
     </vr-columns>
 </vr-row>

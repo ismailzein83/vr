@@ -222,9 +222,11 @@
 
                         if (response != null) {
                             defaultRoutingProductDirectivePayload = {
-                                CurrentRoutingProductId: response.RoutingProductId,
-                                CurrentBED: response.BED,
-                                CurrentEED: response.EED
+                                IsCurrentDefaultRoutingProductEditable: response.IsCurrentDefaultRoutingProductEditable,
+                                CurrentDefaultRoutingProductId: response.CurrentDefaultRoutingProductId,
+                                NewDefaultRoutingProductId: response.NewDefaultRoutingProductId,
+                                CurrentBED: response.CurrentBED,
+                                CurrentEED: response.CurrentEED
                             };
                         }
 
@@ -235,7 +237,7 @@
                 return defaultRoutingProductDirectiveLoadPromiseDeferred.promise;
 
                 function getDefaultRoutingProduct() {
-                    return WhS_Sales_RatePlanAPIService.GetDefaultRoutingProduct($scope.selectedOwnerType.value, getOwnerId());
+                    return WhS_Sales_RatePlanAPIService.GetDefaultItem($scope.selectedOwnerType.value, getOwnerId());
                 }
             }
 
@@ -261,8 +263,8 @@
 
         function saveChanges(loadGrid) {
             var input = buildSaveChangesInput();
-            console.log(input.NewChanges);
-            
+            console.log(input);
+
             if (input.NewChanges != null) {
                 return WhS_Sales_RatePlanAPIService.SaveChanges(input).then(function (response) {
                     if (loadGrid)
@@ -271,7 +273,7 @@
             }
             else {
                 if (loadGrid)
-                    gridAPI.load(buildGridQuery());
+                    return gridAPI.load(buildGridQuery());
 
                 var deferredPromise = UtilsService.createPromiseDeferred();
                 deferredPromise.resolve();
@@ -279,10 +281,16 @@
             }
 
             function buildSaveChangesInput() {
+                var newChanges = {};
+                var defaultChanges = defaultRoutingProductDirectiveAPI.getDefaultChanges();
+                var zoneChanges = gridAPI.getZoneChanges();
+
+                newChanges = (defaultChanges != null || zoneChanges != null) ? { DefaultChanges: defaultChanges, ZoneChanges: zoneChanges } : null;
+
                 return {
                     OwnerType: $scope.selectedOwnerType.value,
                     OwnerId: getOwnerId(),
-                    NewChanges: gridAPI.getChanges()
+                    NewChanges: newChanges
                 };
             }
         }

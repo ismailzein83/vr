@@ -10,7 +10,8 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                 onselectionchanged: '=',
                 isrequired: "@",
                 selectedvalues: '=',
-                hideremoveicon: "@"
+                hideremoveicon: "@",
+                datasource: "="
             },
             controller: function ($scope, $element, $attrs) {
 

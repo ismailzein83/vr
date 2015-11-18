@@ -51,6 +51,7 @@
     <Compile Include="RatePlanning\Input\SaveChangesInput.cs" />
     <Compile Include="RatePlanning\Input\ZoneItemInput.cs" />
     <Compile Include="RatePlanning\RateChanges.cs" />
+    <Compile Include="RatePlanning\DefaultItem.cs" />
     <Compile Include="RatePlanning\RoutingProductChanges.cs" />
     <Compile Include="RatePlanning\ServiceChanges.cs" />
     <Compile Include="RatePlanning\ZoneChanges.cs" />

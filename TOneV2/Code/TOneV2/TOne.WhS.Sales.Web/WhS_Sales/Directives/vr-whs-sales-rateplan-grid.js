@@ -1,6 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRNotificationService", function (WhS_Sales_RatePlanAPIService, UtilsService, VRNotificationService) {
+app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService",
+    function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
     return {
         restrict: "E",
@@ -24,14 +25,37 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         function initializeController() {
             var gridAPI;
             var gridQuery;
+            var gridDrillDownTabs;
 
             $scope.zoneItems = [];
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
+                gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(buildGridDrillDownDefinitions, gridAPI, []);
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(buildAPI());
+
+                function buildGridDrillDownDefinitions() {
+                    return [{
+                        title: "Routing Product",
+                        directive: "vr-whs-sales-defaultroutingproduct",
+                        loadDirective: function (defaultRoutingProductDirectiveAPI, zoneItem) {
+                            zoneItem.DefaultRoutingProductDirectiveAPI = defaultRoutingProductDirectiveAPI;
+
+                            var payload = {
+                                IsCurrentDefaultRoutingProductEditable: true,
+                                CurrentDefaultRoutingProductId: null,
+                                NewDefaultRoutingProductId: null,
+                                CurrentBED: new Date(),
+                                CurrentEED: new Date()
+                            };
+
+                            zoneItem.DefaultRoutingProductDirectiveAPI.load(payload);
+                        }
+                    }];
+                }
 
                 function buildAPI() {
                     var directiveAPI = {};
@@ -42,7 +66,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         return loadZoneItems();
                     };
 
-                    directiveAPI.getChanges = function () {
+                    directiveAPI.getZoneChanges = function () {
                         var changes = null;
 
                         var defaultChanges = null;
@@ -154,6 +178,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     for (var i = 0; i < response.length; i++) {
                         var zoneItem = response[i];
                         extendZoneItem(zoneItem);
+                        gridDrillDownTabs.setDrillDownExtensionObject(zoneItem);
                         zoneItems.push(zoneItem);
                     }
 
@@ -187,13 +212,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             dataItem.IsDirty = true;
                             dataItem.IsCurrentRateEditable = true;
                         }
-                    };
-
-                    zoneItem.onChildViewReady = function (api) {
-                        console.log("onChildViewReady");
-                        zoneItem.ChildViewAPI = api;
-                        api.load(null);
-                        delete zoneItem.onChildViewReady;
                     };
                 }
             }

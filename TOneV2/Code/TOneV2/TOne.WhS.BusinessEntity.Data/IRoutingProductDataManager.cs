@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Entities.RatePlanning;
 
 namespace TOne.WhS.BusinessEntity.Data
 {
@@ -19,7 +20,11 @@ namespace TOne.WhS.BusinessEntity.Data
 
         bool Insert(RoutingProduct routingProduct, out int insertedId);
 
+        bool InsertOrUpdateDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, NewDefaultRoutingProduct newDefaultRoutingProducts);
+
         bool Update(RoutingProduct routingProduct);
+
+        bool UpdateDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, DefaultRoutingProductChange defaultRoutingProductChange);
 
         bool Delete(int routingProductId);
 
