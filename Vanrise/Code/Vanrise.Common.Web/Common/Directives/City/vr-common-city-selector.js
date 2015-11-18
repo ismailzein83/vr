@@ -40,16 +40,7 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                 $scope.datasource = [];
                 var beCity = new City(ctrl, $scope, $attrs);
                 beCity.initializeController();
-                $scope.onselectionchanged = function () {
-                    ctrl.selectedvalues = ctrl.selectedvalues;
-                    if (ctrl.onselectionchanged != undefined) {
-                        var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
-                        if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                            onvaluechangedMethod();
-                        }
-                    }
-
-                }
+               
 
             },
             controllerAs: 'ctrl',
@@ -95,25 +86,6 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
 
             function defineAPI() {
                 var api = {};
-
-
-                api.getData = function () {
-                    return ctrl.selectedvalues;
-                }
-                api.getDataId = function () {
-                    return ctrl.selectedvalues.CityId;
-                }
-                api.getIdsData = function () {
-                    return getIdsList(ctrl.selectedvalues, "CityId");
-                }
-               
-                function getIdsList(tab, attname) {
-                    var list = [];
-                    for (var i = 0; i < tab.length ; i++)
-                        list[list.length] = tab[i][attname];
-                    return list;
-
-                }
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('CityId', $attrs, ctrl);
                 }
