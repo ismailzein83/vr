@@ -137,7 +137,16 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [CustomerID] ASC,
 	                                                    [Code] ASC
                                                     ) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-                                                    ) ON [PRIMARY]";
+                                                    ) ON [PRIMARY]
+
+                                                    CREATE TYPE [LongIDType] AS TABLE(
+	                                                    [ID] [bigint] NOT NULL,
+	                                                    PRIMARY KEY CLUSTERED 
+                                                    (
+	                                                    [ID] ASC
+                                                    )WITH (IGNORE_DUP_KEY = OFF)
+                                                    )
+";
 
         #endregion
     }
