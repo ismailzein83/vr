@@ -43,7 +43,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     EndEffectiveDate = null,
                 };
                 string ZoneName = worksheet.Cells[count, 0].StringValue;
-                if ((Status)worksheet.Cells[count, 2].IntValue == Status.New)
+                int value =Convert.ToInt16(worksheet.Cells[count, 2].StringValue);
+                Status status = (Status)value;
+                if (status == Status.New)
                 {
                     SaleZone saleZone = null;
                     if (!newZonesOrCodes.TryGetValue(ZoneName, out saleZone))
@@ -66,7 +68,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     }
 
                 }
-                else if ((Status)worksheet.Cells[count, 2].IntValue == Status.Deleted)
+                else if (status == Status.Deleted)
                 {
                     SaleZone saleZone = null;
                     if (!deletedZonesOrCodes.TryGetValue(ZoneName, out saleZone))

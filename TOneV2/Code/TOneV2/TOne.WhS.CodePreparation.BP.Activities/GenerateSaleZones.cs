@@ -109,6 +109,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                             SaleZone saleZone = saleZones.Find(x => x.Name == obj.Key);
                             obj.Value.SellingNumberPlanId = sellingNumberPlanId;
                             obj.Value.SaleZoneId = saleZone.SaleZoneId;
+                            saleCodesList.Status = Status.Deleted;
+                            saleCodesList.EndEffectiveDate = effectiveDate;
                             importedList.Add(obj.Key, saleCodesList);
                         }
                         break;

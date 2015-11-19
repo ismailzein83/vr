@@ -27,7 +27,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             {
                 TableName = "[TOneWhS_BE].[SaleZone]",
                 Stream = streamForBulkInsert,
-                TabLock = false,
+                TabLock = true,
                 KeepIdentity = false,
                 FieldSeparator = '^',
             };
@@ -41,7 +41,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             {
                 TableName = "[TOneWhS_BE].[SaleCode]",
                 Stream = streamForBulkInsert,
-                TabLock = false,
+                TabLock = true,
                 KeepIdentity = false,
                 FieldSeparator = '^',
             };
@@ -155,7 +155,8 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         void FillSaleCodeRow(DataRow dr, SaleCode saleCode)
         {
             dr["ID"] = saleCode.SaleCodeId;
-            dr["EED"] = saleCode.EndEffectiveDate;
+            if (saleCode.EndEffectiveDate != null)
+              dr["EED"] = saleCode.EndEffectiveDate;
         }
 
         public void InsertSaleCodes(List<SaleCode> saleCodes)
@@ -178,7 +179,8 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         void FillSaleZoneRow(DataRow dr, SaleZone saleZone)
         {
             dr["ID"] = saleZone.SaleZoneId;
-            dr["EED"] = saleZone.EndEffectiveDate;
+            if (saleZone.EndEffectiveDate!=null)
+              dr["EED"] = saleZone.EndEffectiveDate;
         }
 
         public void InsertSaleZones(List<SaleZone> saleZones)
