@@ -57,11 +57,17 @@
                         $scope.$watch('ctrl.value', function (newValue, oldValue) {
                             if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                                 return;
-                           
+                          
                             isUserChange = false;//reset the flag
-
+                          
                             if (newValue == "") {
                                 ctrl.value = undefined;
+                            }
+                            if (iAttrs.onvaluechanged != undefined) {
+                                var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
+                                if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
+                                    onvaluechangedMethod();
+                                }
                             }
                             if (iAttrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name) {
                                 var arr = String(newValue).split("");
@@ -86,12 +92,8 @@
                                     ctrl.value = oldValue;
 
                             }
-                            if (iAttrs.onvaluechanged != undefined) {
-                                var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
-                                if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
-                                    onvaluechangedMethod();
-                                }
-                            }
+                            
+                           
                         });
 
                         ctrl.notifyUserChange = function () {
