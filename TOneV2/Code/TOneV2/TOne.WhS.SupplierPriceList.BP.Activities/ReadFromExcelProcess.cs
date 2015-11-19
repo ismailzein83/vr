@@ -34,7 +34,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             DateTime? minimumDate=null;
             while (count < worksheet.Cells.Rows.Count)
             {
-                DateTime? bEDDateFromExcel = Convert.ToDateTime(worksheet.Cells[count, 3].StringValue);
+                DateTime? bEDDateFromExcel=null;
+               if (worksheet.Cells[count, 3].Value != null)
+                 bEDDateFromExcel = Convert.ToDateTime(worksheet.Cells[count, 3].StringValue);
 
                 DateTime? eEDDateFromExcel=null;
                 if (worksheet.Cells[count, 4].Value != null)
@@ -50,7 +52,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     PriceListCodeItem code = new PriceListCodeItem
                     {
                         Code = codeValue,
-                        BED = effectiveDate.HasValue ? effectiveDate.Value : bEDDateFromExcel.Value,
+                        BED = bEDDateFromExcel.HasValue ? bEDDateFromExcel.Value : effectiveDate.Value,
                         EED = eEDDateFromExcel
                     };
 
@@ -64,10 +66,10 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         priceListZoneItem.Rate = new PriceListRateItem
                         {
                             Rate = (decimal)worksheet.Cells[count, 2].FloatValue,
-                            BED = effectiveDate.HasValue ? effectiveDate.Value : bEDDateFromExcel.Value,
+                            BED = bEDDateFromExcel.HasValue ? bEDDateFromExcel.Value : effectiveDate.Value,
                             EED = eEDDateFromExcel,
                         };
-                        priceListZoneItem.BED = effectiveDate.HasValue ? effectiveDate.Value : bEDDateFromExcel.Value;
+                        priceListZoneItem.BED = bEDDateFromExcel.HasValue ? bEDDateFromExcel.Value : effectiveDate.Value;
                         priceListZoneItem.EED = eEDDateFromExcel;
                         priceListByZone.Add(zoneName, priceListZoneItem);
                     }

@@ -27,13 +27,16 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
              CDRMainBatch cdrMainBatch = new CDRMainBatch();
              CDRFailedBatch cdrFailedBatch = new CDRFailedBatch();
              CDRInvalidBatch cdrInvalidBatch = new CDRInvalidBatch();
-
+             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             foreach(CDR cdr in cdrBatch.CDRs){
                   DateTime StartIdentification = DateTime.Now;
                   BillingCDRBase baseCDR = GenerateBillingCdr(cdr);
+                  CarrierAccount supplier = carrierAccountManager.GetCarrierAccount(baseCDR.SupplierId);
+                  CarrierAccount customer = carrierAccountManager.GetCarrierAccount(baseCDR.CustomerId); 
 
                   billingCDRBatch.CDRs.Add(baseCDR);
-                 if (baseCDR.CustomerId == 0 || baseCDR.SupplierId == 0 || baseCDR.SaleCode == null || baseCDR.SaleZoneID == 0 || baseCDR.SupplierCode == null || baseCDR.SupplierZoneID == 0)
+
+                  if ((customer != null && customer.CarrierAccountSettings.ActivationStatus != ActivationStatus.Active) || (supplier != null && supplier.CarrierAccountSettings.ActivationStatus != ActivationStatus.Active) || baseCDR.CustomerId == 0 || baseCDR.SupplierId == 0 || baseCDR.SaleCode == null || baseCDR.SaleZoneID == 0 || baseCDR.SupplierCode == null || baseCDR.SupplierZoneID == 0)
                       {
                           if (cdrInvalidBatch.InvalidCDRs == null)
                               cdrInvalidBatch.InvalidCDRs = new List<BillingInvalidCDR>();
