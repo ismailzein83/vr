@@ -18,8 +18,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
     {
        public InArgument<int> FileId { get; set; }
        public InArgument<DateTime> EffectiveDate { get; set; }
-       public OutArgument<Dictionary<string, List<SaleCode>>> NewZonesOrCodes { get; set; }
-       public OutArgument<Dictionary<string, List<SaleCode>>> DeletedZonesOrCodes { get; set; }
+       public OutArgument<Dictionary<string, SaleZone>> NewZonesOrCodes { get; set; }
+       public OutArgument<Dictionary<string, SaleZone>> DeletedZonesOrCodes { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
             DateTime startReading = DateTime.Now;
@@ -30,8 +30,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             Workbook objExcel = new Workbook(memStreamRate);
             Worksheet worksheet = objExcel.Worksheets[0];
             int count = 1;
-            Dictionary<string, List<SaleCode>> newZonesOrCodes = new Dictionary<string, List<SaleCode>>();
-            Dictionary<string, List<SaleCode>> deletedZonesOrCodes = new Dictionary<string, List<SaleCode>>();
+            Dictionary<string, SaleZone> newZonesOrCodes = new Dictionary<string, SaleZone>();
+            Dictionary<string, SaleZone> deletedZonesOrCodes = new Dictionary<string, SaleZone>();
           
 
             while (count < worksheet.Cells.Rows.Count)
@@ -43,39 +43,49 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     EndEffectiveDate = null,
                 };
                 string ZoneName = worksheet.Cells[count, 0].StringValue;
-                if ((ImportType)worksheet.Cells[count, 2].IntValue == ImportType.New)
+                if ((Status)worksheet.Cells[count, 2].IntValue == Status.New)
                 {
-                    List<SaleCode> codesList = null;
-                    if (!newZonesOrCodes.TryGetValue(ZoneName, out codesList))
+                    SaleZone saleZone = null;
+                    if (!newZonesOrCodes.TryGetValue(ZoneName, out saleZone))
                     {
-                        codesList = new List<SaleCode>();
-                        codesList.Add(saleCode);
-                        newZonesOrCodes.Add(ZoneName, codesList);
+                        saleZone = new SaleZone();
+                        saleZone.Codes = new List<SaleCode>();
+                        saleZone.Name = ZoneName;
+                        saleZone.Status = Status.New;
+                        saleZone.BeginEffectiveDate = EffectiveDate.Get(context);
+                        saleZone.EndEffectiveDate = null;
+                        saleZone.Codes.Add(saleCode);
+                        newZonesOrCodes.Add(ZoneName, saleZone);
                     }
                     else
                     {
-                        if (codesList == null)
-                            codesList = new List<SaleCode>();
-                        codesList.Add(saleCode);
-                        newZonesOrCodes[ZoneName] = codesList;
+                        if (saleZone == null)
+                            saleZone.Codes = new List<SaleCode>();
+                        saleZone.Codes.Add(saleCode);
+                        newZonesOrCodes[ZoneName] = saleZone;
                     }
 
                 }
-                else if ((ImportType)worksheet.Cells[count, 2].IntValue == ImportType.Delete)
+                else if ((Status)worksheet.Cells[count, 2].IntValue == Status.Deleted)
                 {
-                    List<SaleCode> codesList = null;
-                    if (!deletedZonesOrCodes.TryGetValue(ZoneName, out codesList))
+                    SaleZone saleZone = null;
+                    if (!deletedZonesOrCodes.TryGetValue(ZoneName, out saleZone))
                     {
-                        codesList = new List<SaleCode>();
-                        codesList.Add(saleCode);
-                        deletedZonesOrCodes.Add(ZoneName, codesList);
+                        saleZone = new SaleZone();
+                        saleZone.Codes = new List<SaleCode>();
+                        saleZone.Codes.Add(saleCode);
+                        saleZone.Name = ZoneName;
+                        saleZone.Status = Status.Deleted;
+                        saleZone.BeginEffectiveDate = EffectiveDate.Get(context);
+                        saleZone.EndEffectiveDate = null;
+                        deletedZonesOrCodes.Add(ZoneName, saleZone);
                     }
                     else
                     {
-                        if (codesList == null)
-                            codesList = new List<SaleCode>();
-                        codesList.Add(saleCode);
-                        deletedZonesOrCodes[ZoneName] = codesList;
+                        if (saleZone == null)
+                            saleZone.Codes = new List<SaleCode>();
+                        saleZone.Codes.Add(saleCode);
+                        deletedZonesOrCodes[ZoneName] = saleZone;
                     }
                 }
                 count++;

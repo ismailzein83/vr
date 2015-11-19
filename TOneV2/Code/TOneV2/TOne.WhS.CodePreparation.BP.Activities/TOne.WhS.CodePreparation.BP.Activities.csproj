@@ -84,6 +84,14 @@
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.CodePreparation.Business\TOne.WhS.CodePreparation.Business.csproj">
+      <Project>{5cd2b9f2-360c-4439-a537-836f681d3e2d}</Project>
+      <Name>TOne.WhS.CodePreparation.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.CodePreparation.Data\TOne.WhS.CodePreparation.Data.csproj">
+      <Project>{0065e0fc-083f-4723-ae27-172964e14f72}</Project>
+      <Name>TOne.WhS.CodePreparation.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.CodePreparation.Entities\TOne.WhS.CodePreparation.Entities.csproj">
       <Project>{38ea7d60-7221-43ba-80a8-af46b874f819}</Project>
       <Name>TOne.WhS.CodePreparation.Entities</Name>

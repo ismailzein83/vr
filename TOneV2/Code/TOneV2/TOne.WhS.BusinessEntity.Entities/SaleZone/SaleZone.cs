@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
+    public enum Status{New=0,Deleted=1 , Replace = -1}
     public class SaleZone
     {
         public long SaleZoneId { get; set; }
@@ -18,5 +19,9 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime BeginEffectiveDate { get; set; }
 
         public DateTime? EndEffectiveDate { get; set; }
+
+        public List<SaleCode> Codes { get; set; }
+
+        public Status Status { get; set; }
     }
 }

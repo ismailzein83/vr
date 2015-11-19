@@ -10,7 +10,7 @@ using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SaleZoneManager
+    public class SaleZoneManager 
     {
 
         public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZonesQuery> input)
@@ -25,9 +25,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSaleZones.ToBigResult(input, filterExpression, SaleZoneDetailMapper));
         }
-        public List<SaleZone> GetSaleZones(int sellingNumberPlanId, DateTime effectiveDate)
+        public IEnumerable<SaleZone> GetSaleZones(int sellingNumberPlanId, DateTime effectiveDate)
         {
-            return this.GetCachedSaleZones(sellingNumberPlanId);
+            return this.GetCachedSaleZones(sellingNumberPlanId).Where(x => x.BeginEffectiveDate <= effectiveDate && (!x.EndEffectiveDate.HasValue || x.EndEffectiveDate.Value > effectiveDate));
         }
 
         public SaleZone GetSaleZone(long saleZoneId)
@@ -53,9 +53,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 });
         }
 
-        public Dictionary<string, List<SaleCode>> GetSaleZonesWithCodes(int sellingNumberPlanId, DateTime effectiveDate)
+        public Dictionary<string, SaleZone> GetSaleZonesWithCodes(int sellingNumberPlanId, DateTime effectiveDate)
         {
-            Dictionary<string, List<SaleCode>> saleZoneDictionary = new Dictionary<string, List<SaleCode>>();
+            Dictionary<string, SaleZone> saleZoneDictionary = new Dictionary<string, SaleZone>();
             IEnumerable<SaleZone> salezones = this.GetSaleZones(sellingNumberPlanId, effectiveDate);
 
             if (salezones != null && salezones.Count() > 0)
@@ -63,11 +63,22 @@ namespace TOne.WhS.BusinessEntity.Business
                 SaleCodeManager manager = new SaleCodeManager();
                 foreach (SaleZone saleZone in salezones)
                 {
-
-                    List<SaleCode> saleCodes = manager.GetSaleCodesByZoneID(saleZone.SaleZoneId, effectiveDate);
-                    List<SaleCode> saleCodesOut;
-                    if (!saleZoneDictionary.TryGetValue(saleZone.Name, out saleCodesOut))
-                        saleZoneDictionary.Add(saleZone.Name, saleCodes);
+                    SaleZone saleZoneOut;
+                    if (!saleZoneDictionary.TryGetValue(saleZone.Name, out saleZoneOut))
+                    {
+                         saleZoneOut = new SaleZone();
+                        List<SaleCode> saleCodes = manager.GetSaleCodesByZoneID(saleZone.SaleZoneId, effectiveDate);
+                        if (saleZoneOut.Codes==null)
+                         saleZoneOut.Codes = new List<SaleCode>();
+                        saleZoneOut.Name = saleZone.Name;
+                        saleZoneOut.SaleZoneId = saleZone.SaleZoneId;
+                        saleZoneOut.SellingNumberPlanId = saleZone.SellingNumberPlanId;
+                        saleZoneOut.BeginEffectiveDate = saleZone.BeginEffectiveDate;
+                        saleZoneOut.EndEffectiveDate = saleZone.EndEffectiveDate;
+                        saleZoneOut.Codes = saleCodes;
+                        saleZoneDictionary.Add(saleZone.Name, saleZoneOut);
+                    }
+                       
                 }
             }
 
@@ -91,24 +102,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return string.Empty;
         }
 
-        public void InsertSaleZones(List<SaleZone> saleZones)
-        {
-            ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
-            object dbApplyStream = dataManager.InitialiazeStreamForDBApply();
-            foreach (SaleZone saleZone in saleZones)
-                dataManager.WriteRecordToStream(saleZone, dbApplyStream);
-            object prepareToApplySaleZones = dataManager.FinishDBApplyStream(dbApplyStream);
-            dataManager.ApplySaleZonesForDB(prepareToApplySaleZones);
-        }
-
-        public void DeleteSaleZones(List<SaleZone> saleZones)
-        {
-            ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
-            dataManager.DeleteSaleZones(saleZones);
-        }
-
+   
         public List<Vanrise.Entities.TemplateConfig> GetSaleZoneGroupTemplates()
         {
+
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.SaleZoneGroupConfigType);
         }
@@ -205,7 +202,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return saleZoneDetail;
         }
-
+        public long ReserveIDRange(int numberOfIDs)
+        {
+            long startingId;
+            IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIDs, out startingId);
+            return startingId;
+        }
         private SaleZoneInfo SaleZoneInfoMapper(SaleZone saleZone)
         {
             return new SaleZoneInfo { SaleZoneId = saleZone.SaleZoneId, Name = saleZone.Name };

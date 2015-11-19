@@ -14,11 +14,13 @@ namespace TOne.WhS.CodePreparation.BP.Activities
     {
         public InArgument<DateTime> EffectiveDate { get; set; }
         public InArgument<int> SellingNumberPlanId { get; set; }
-        public InArgument<Dictionary<string, List<SaleCode>>> ZonesToAddDictionary { get; set; }
-        public InArgument<Dictionary<string, List<SaleCode>>> ZonesToDeleteDictionary { get; set; }
-         public InArgument<List<SaleZone>> SaleZones{ get; set; }
-        public OutArgument<List<SaleCode>> CodesToAdd { get; set; }
-        public OutArgument<List<SaleCode>> CodesToDelete { get; set; }
+        public InArgument<Dictionary<string, SaleZone>> ZonesToAddDictionary { get; set; }
+        public InArgument<Dictionary<string, SaleZone>> ZonesToDeleteDictionary { get; set; }
+      //   public InArgument<List<SaleZone>> SaleZones{ get; set; }
+        //public OutArgument<List<SaleCode>> CodesToAdd { get; set; }
+        //public OutArgument<List<SaleCode>> CodesToDelete { get; set; }
+
+        public InOutArgument<Dictionary<string, SaleZone>> AllZonesDictionary { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
             DateTime startReading = DateTime.Now;
@@ -26,79 +28,131 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             int sellingNumberPlanId = SellingNumberPlanId.Get(context);
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             CodeGroupManager codeGroupManager = new CodeGroupManager();
-            List<SaleZone> saleZones = new List<SaleZone>();
-            saleZones = SaleZones.Get(context);
-            List<SaleZone> saleZonesNeeded= saleZoneManager.GetSaleZones(sellingNumberPlanId, effectiveDate);
-            foreach(SaleZone saleZone in saleZonesNeeded)
-            {
-                if (!saleZones.Contains<SaleZone>(saleZone))
-                    saleZones.Add(saleZone);
-            }
-             
-            List<SaleCode> codesToAdd = new List<SaleCode>();
-            List<SaleCode> codesToDelete = new List<SaleCode>();
+            Dictionary<string, SaleZone> allZonesDictionary = AllZonesDictionary.Get(context);
+            //List<SaleZone> saleZones = new List<SaleZone>();
+            //   saleZones = AllZonesDictionary.Get(context);
+            Dictionary<string, SaleZone> zonesToAddDictionary = ZonesToAddDictionary.Get(context);
+            Dictionary<string, SaleZone> zonesToDeleteDictionary = ZonesToDeleteDictionary.Get(context);
+
+            Dictionary<string, SaleZone> saleZonesNeeded = saleZoneManager.GetSaleZonesWithCodes(sellingNumberPlanId, effectiveDate);     
             SaleCodeManager saleCodeManager = new SaleCodeManager();
-            Dictionary<string, List<SaleCode>> zonesToAddDictionary =ZonesToAddDictionary.Get(context);
-            Dictionary<string, List<SaleCode>> zonesToDeleteDictionary = ZonesToDeleteDictionary.Get(context);
-            foreach (SaleZone saleZone in saleZones)
+
+            foreach (var saleZone in saleZonesNeeded)
             {
-                List<SaleCode> deletedSaleCodeList = null;
-                List<SaleCode> newSaleCodeList = null;
-                if (zonesToAddDictionary.TryGetValue(saleZone.Name, out newSaleCodeList))
-                    foreach (SaleCode code in newSaleCodeList){
-                        var codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code);
-                        if (codeGroup == null)
-                        {
-                            context.WriteTrackingMessage(LogEntryType.Error, "The code:{0} doesn't belong to any codegroup", code.Code);
-                            throw new WorkflowApplicationAbortedException();
-                        }
-                        saleZone.CountryId = codeGroup.CountryId;
-                        codesToAdd.Add(new SaleCode
-                        {
-                            ZoneId = saleZone.SaleZoneId,
-                            Code = code.Code,
-                            CodeGroupId=codeGroup.CodeGroupId,
-                            BeginEffectiveDate = effectiveDate,
-                            EndEffectiveDate = null
-                        });
-                    }
-                       
-                else if (zonesToDeleteDictionary.TryGetValue(saleZone.Name, out deletedSaleCodeList))
+
+                if (!allZonesDictionary.ContainsKey(saleZone.Key))
                 {
-                    List<SaleCode> codesByZoneId = saleCodeManager.GetSaleCodesByZoneID(saleZone.SaleZoneId, effectiveDate);
-                    foreach (SaleCode code in codesByZoneId)
+                    SaleZone salezoneToDelete = new SaleZone()
                     {
-                        var codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code);
-                        if (codeGroup == null)
-                        {
-                            context.WriteTrackingMessage(LogEntryType.Error, "The code:{0} doesn't belong to any codegroup", code.Code);
-                            throw new WorkflowApplicationAbortedException();
-                        }
-                        saleZone.CountryId = codeGroup.CountryId;
+                        Status = Status.Deleted,
+                        SaleZoneId = saleZone.Value.SaleZoneId,
+                        SellingNumberPlanId = saleZone.Value.SellingNumberPlanId,
+                        BeginEffectiveDate = saleZone.Value.BeginEffectiveDate,
+                        EndEffectiveDate = effectiveDate,
+                        Name = saleZone.Value.Name,
+                        Codes = saleZone.Value.Codes
+                    };
+                    allZonesDictionary.Add(saleZone.Key, salezoneToDelete);
+                }
+                   
+            }
+            foreach (var saleZone in allZonesDictionary)
+            {
 
-                        foreach (SaleCode codeDeleted in deletedSaleCodeList)
+
+                if (saleZone.Value.Status == Status.New)
+                {
+                    SaleZone newSaleCodeList = null;
+                    if (zonesToAddDictionary.TryGetValue(saleZone.Key, out newSaleCodeList))
+                    {
+                        foreach (SaleCode code in newSaleCodeList.Codes)
                         {
-                            if (codeDeleted.Code == code.Code)
+                            var codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code);
+                            if (codeGroup == null)
                             {
-                                codesToDelete.Add(new SaleCode
-                                {
-                                    SaleCodeId = code.SaleCodeId,
-                                    EndEffectiveDate = effectiveDate
-                                });
+                                context.WriteTrackingMessage(LogEntryType.Error, "The code:{0} doesn't belong to any codegroup", code.Code);
+                                throw new WorkflowApplicationAbortedException();
                             }
+                            saleZone.Value.CountryId = codeGroup.CountryId;
+                            if (saleZone.Value.Codes == null)
+                                saleZone.Value.Codes = new List<SaleCode>();
+                            saleZone.Value.Codes.Add(new SaleCode
+                            {
+                                ZoneId = saleZone.Value.SaleZoneId,
+                                Code = code.Code,
+                                CodeGroupId = codeGroup.CodeGroupId,
+                                BeginEffectiveDate = effectiveDate,
+                                EndEffectiveDate = null,
+                                Status = Status.New
+                            });
                         }
+                    }
+                }
+                else if (saleZone.Value.Status == Status.Deleted)
+                {
+                    SaleZone deletedSaleCodeList = null;
+                    if (zonesToDeleteDictionary.TryGetValue(saleZone.Key, out deletedSaleCodeList))
+                    {
+                        List<SaleCode> codesByZoneId = saleCodeManager.GetSaleCodesByZoneID(saleZone.Value.SaleZoneId, effectiveDate);
+                        foreach (SaleCode code in codesByZoneId)
+                        {
+                            var codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code);
+                            if (codeGroup == null)
+                            {
+                                context.WriteTrackingMessage(LogEntryType.Error, "The code:{0} doesn't belong to any codegroup", code.Code);
+                                throw new WorkflowApplicationAbortedException();
+                            }
+                            saleZone.Value.CountryId = codeGroup.CountryId;
+                            if (saleZone.Value.Codes == null)
+                                saleZone.Value.Codes = new List<SaleCode>();
+                            foreach (SaleCode codeDeleted in deletedSaleCodeList.Codes)
+                            {
+                                if (codeDeleted.Code == code.Code)
+                                {
+                                    saleZone.Value.Codes.Add(new SaleCode
+                                    {
+                                        SaleCodeId = code.SaleCodeId,
+                                        EndEffectiveDate = effectiveDate,
+                                        Status = Status.Deleted
+                                    });
+                                }
+                            }
 
+                        }
+                    }
+                    else if (saleZone.Value.Codes != null)
+                    {
+                        List<SaleCode> codesByZoneId = saleCodeManager.GetSaleCodesByZoneID(saleZone.Value.SaleZoneId, effectiveDate);
+                        foreach (SaleCode code in codesByZoneId)
+                        {
+                            var codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code);
+                            if (codeGroup == null)
+                            {
+                                context.WriteTrackingMessage(LogEntryType.Error, "The code:{0} doesn't belong to any codegroup", code.Code);
+                                throw new WorkflowApplicationAbortedException();
+                            }
+                            saleZone.Value.CountryId = codeGroup.CountryId;
+                            if (saleZone.Value.Codes == null)
+                                saleZone.Value.Codes = new List<SaleCode>();
+                            foreach (SaleCode codeDeleted in saleZone.Value.Codes)
+                            {
+                                if (codeDeleted.Code == code.Code)
+                                {
+                                        codeDeleted.EndEffectiveDate = effectiveDate;
+                                        codeDeleted.Status = Status.Deleted;
+                                }
+                            }
+
+
+                        }
                     }
 
                 }
 
-
-
-
             }
 
-            CodesToAdd.Set(context, codesToAdd);
-            CodesToDelete.Set(context, codesToDelete);
+
+            AllZonesDictionary.Set(context, allZonesDictionary);
             TimeSpan spent = DateTime.Now.Subtract(startReading);
             context.WriteTrackingMessage(LogEntryType.Information, "Generating SaleCodes done and Takes: {0}", spent);
         }

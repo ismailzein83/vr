@@ -11,17 +11,6 @@ namespace TOne.WhS.BusinessEntity.Data
     {
         List<SaleZone> GetSaleZones(int sellingNumberPlanId);
 
-        void ApplySaleZonesForDB(object preparedSaleZones);
-
-        void DeleteSaleZones(List<SaleZone> saleZones);
-
-        void InsertSaleZones(List<SaleZone> saleZones);
-
-        object InitialiazeStreamForDBApply();
-
-        void WriteRecordToStream(SaleZone record, object dbApplyStream);
-
-        object FinishDBApplyStream(object dbApplyStream);
 
         List<SaleZoneInfo> GetSaleZonesInfo(int sellingNumberPlanId, string filter);
 

@@ -57,6 +57,10 @@
       <Project>{f0bcbe72-f000-46ae-85a4-79155751c767}</Project>
       <Name>TOne.Data.SQL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.CodePreparation.Data\TOne.WhS.CodePreparation.Data.csproj">
       <Project>{0065e0fc-083f-4723-ae27-172964e14f72}</Project>
       <Name>TOne.WhS.CodePreparation.Data</Name>

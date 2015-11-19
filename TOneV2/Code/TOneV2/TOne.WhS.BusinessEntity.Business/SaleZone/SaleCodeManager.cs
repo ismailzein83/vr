@@ -15,20 +15,7 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
             return dataManager.GetSaleCodesByZoneID(zoneID, effectiveDate);
         }
-        public void InsertSaleCodes(List<SaleCode> saleCodes)
-        {
-            ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            object dbApplyStream = dataManager.InitialiazeStreamForDBApply();
-            foreach (SaleCode saleCode in saleCodes)
-                dataManager.WriteRecordToStream(saleCode, dbApplyStream);
-            object prepareToApplySaleCodes = dataManager.FinishDBApplyStream(dbApplyStream);
-            dataManager.ApplySaleCodesForDB(prepareToApplySaleCodes);
-        }
-        public void DeleteSaleCodes(List<SaleCode> saleCodes)
-        {
-            ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            dataManager.DeleteSaleCodes(saleCodes);
-        }
+    
 
         public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn)
         {

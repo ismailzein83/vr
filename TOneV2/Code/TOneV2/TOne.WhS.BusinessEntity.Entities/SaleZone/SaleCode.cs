@@ -18,5 +18,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime BeginEffectiveDate { get; set; }
 
         public DateTime? EndEffectiveDate { get; set; }
+
+        public Status Status { get; set; }
     }
 }

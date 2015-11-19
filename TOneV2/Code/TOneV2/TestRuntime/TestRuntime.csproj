@@ -532,6 +532,22 @@
       <Project>{3ee2e4dc-7474-4cf9-87eb-3dea72c97496}</Project>
       <Name>TOne.WhS.CodePreparation.BP</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.CodePreparation.Business\TOne.WhS.CodePreparation.Business.csproj">
+      <Project>{5cd2b9f2-360c-4439-a537-836f681d3e2d}</Project>
+      <Name>TOne.WhS.CodePreparation.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.CodePreparation.Data.SQL\TOne.WhS.CodePreparation.Data.SQL.csproj">
+      <Project>{2d04aa1a-1a4d-4983-9841-b27a3932dff2}</Project>
+      <Name>TOne.WhS.CodePreparation.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.CodePreparation.Data\TOne.WhS.CodePreparation.Data.csproj">
+      <Project>{0065e0fc-083f-4723-ae27-172964e14f72}</Project>
+      <Name>TOne.WhS.CodePreparation.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.CodePreparation.Entities\TOne.WhS.CodePreparation.Entities.csproj">
+      <Project>{38ea7d60-7221-43ba-80a8-af46b874f819}</Project>
+      <Name>TOne.WhS.CodePreparation.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.BP.Activities\TOne.WhS.Routing.BP.Activities.csproj">
       <Project>{a28f67c0-6326-4830-8a1e-021f91a4236d}</Project>
       <Name>TOne.WhS.Routing.BP.Activities</Name>
