@@ -11,17 +11,17 @@
             <vr-datagridcolumn headertext="'Current Rate'" field="'CurrentRate'" type="'Number'" widthfactor="2" disablesorting></vr-datagridcolumn>
 
             <vr-datagridcolumn headertext="'New Rate'" type="'Number'" widthfactor="2" disablesorting>
-                <vr-textbox type="number" value="dataItem.NewRate" onvaluechanged="dataItem.onNewRateChanged(dataItem)" minvalue="0"></vr-textbox>
+                <vr-textbox value="dataItem.NewRate" onvaluechanged="dataItem.onNewRateChanged(dataItem)"></vr-textbox>
             </vr-datagridcolumn>
 
             <vr-datagridcolumn headertext="'Begin Effective Date'" type="'Date'" widthfactor="2" disablesorting>
-                <span vr-disabled="dataItem.NewRate == null">
-                    <vr-datetimepicker type="date" value="dataItem.RateBED"></vr-datetimepicker>
+                <span vr-disabled="dataItem.DisableBED">
+                    <vr-datetimepicker type="date" value="dataItem.RateNewBED"></vr-datetimepicker>
                 </span>
             </vr-datagridcolumn>
 
             <vr-datagridcolumn headertext="'End Effective Date'" type="'Date'" widthfactor="2" disablesorting>
-                <span vr-disabled="!dataItem.IsCurrentRateEditable">
+                <span vr-disabled="dataItem.DisableEED">
                     <vr-datetimepicker type="date" value="dataItem.RateNewEED"></vr-datetimepicker>
                 </span>
             </vr-datagridcolumn>

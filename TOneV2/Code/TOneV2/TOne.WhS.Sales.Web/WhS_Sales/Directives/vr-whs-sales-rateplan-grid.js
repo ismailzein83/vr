@@ -58,6 +58,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             CurrentEED: zoneItem.RoutingProductEED
                         };
 
+                        console.log(payload);
+
                         VRUIUtilsService.callDirectiveLoad(zoneItem.ZoneRoutingProductDirectiveAPI, payload, zoneRoutingProductDirectiveLoadPromiseDeferred);
 
                         return zoneRoutingProductDirectiveLoadPromiseDeferred.promise;
@@ -117,7 +119,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                     newRate = {
                                         ZoneId: zoneItem.ZoneId,
                                         NormalRate: zoneItem.NewRate,
-                                        BED: zoneItem.RateBED,
+                                        BED: zoneItem.RateNewBED,
                                         EED: zoneItem.RateNewEED
                                     };
                                 }
@@ -152,7 +154,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                     var defaultChanges = zoneItem.ZoneRoutingProductDirectiveAPI.getDefaultChanges();
                                     var newZoneRoutingProduct = null;
 
-                                    if (defaultChanges.NewDefaultRoutingProduct != null) {
+                                    if (defaultChanges != null && defaultChanges.NewDefaultRoutingProduct != null) {
                                         newZoneRoutingProduct = {
                                             $type: "TOne.WhS.Sales.Entities.RatePlanning.NewZoneRoutingProduct, TOne.WhS.Sales.Entities",
                                             ZoneId: zoneItem.ZoneId,
@@ -171,7 +173,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                     var defaultChanges = zoneItem.ZoneRoutingProductDirectiveAPI.getDefaultChanges();
                                     var zoneRoutingProductChange = null;
 
-                                    if (defaultChanges.DefaultRoutingProductChange != null) {
+                                    if (defaultChanges != null && defaultChanges.DefaultRoutingProductChange != null) {
                                         zoneRoutingProductChange = {
                                             $type: "TOne.WhS.Sales.Entities.RatePlanning.ZoneRoutingProductChange, TOne.WhS.Sales.Entities",
                                             ZoneRoutingProductId: zoneItem.ZoneId,
@@ -181,10 +183,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                                     return zoneRoutingProductChange;
                                 }
-                            }
-
-                            function isEmpty(value) {
-                                return (value == undefined || value == null);
                             }
                         }
                     };
@@ -231,20 +229,41 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 }
 
                 function extendZoneItem(zoneItem) {
-                    zoneItem.IsDirty = false;
-                    zoneItem.RateEED = (zoneItem.RateEED != null) ? new Date(zoneItem.RateEED) : null;
-                    zoneItem.RateNewEED = (zoneItem.RateEED != null) ? UtilsService.cloneDateTime(zoneItem.RateEED) : null;
+                    zoneItem.PreviousNewRate = zoneItem.NewRate;
+                    defineDateProperties(zoneItem);
 
-                    zoneItem.onNewRateChanged = function (dataItem) {
-                        if (!dataItem.IsDirty) {
-                            dataItem.RateBED = (dataItem.CurrentRate == null || dataItem.NewRate > dataItem.CurrentRate) ?
+                    zoneItem.onNewRateChanged = function (zoneItem) {
+                        zoneItem.DisableBED = isEmpty(zoneItem.NewRate);
+                        zoneItem.DisableEED = (isEmpty(zoneItem.NewRate) && !zoneItem.IsCurrentRateEditable);
+
+                        if (!isEmpty(zoneItem.NewRate) && isEmpty(zoneItem.PreviousNewRate)) {
+                            zoneItem.RateNewBED = (zoneItem.CurrentRate == null || Number(zoneItem.NewRate) > zoneItem.CurrentRate) ?
                                 new Date(new Date().setDate(new Date().getDate() + 7)) : new Date();
-
-                            dataItem.IsDirty = true;
-                            dataItem.IsCurrentRateEditable = true;
+                            zoneItem.RateNewEED = null;
                         }
+                        else if (isEmpty(zoneItem.NewRate) && !isEmpty(zoneItem.PreviousNewRate)) {
+                            zoneItem.RateNewBED = (zoneItem.CurrentRate != null && zoneItem.RateBED != null) ? new Date(zoneItem.RateBED) : null;
+                            zoneItem.RateNewEED = (zoneItem.CurrentRate != null && zoneItem.RateEED != null) ? new Date(zoneItem.RateEED) : null;
+                        }
+
+                        zoneItem.PreviousNewRate = zoneItem.NewRate;
                     };
+
+                    function defineDateProperties(zoneItem) {
+                        zoneItem.DisableBED = isEmpty(zoneItem.NewRate);
+                        zoneItem.DisableEED = (isEmpty(zoneItem.NewRate) && !zoneItem.IsCurrentRateEditable);
+
+                        zoneItem.RateBED = (zoneItem.RateBED != null) ? new Date(zoneItem.RateBED) : null;
+                        zoneItem.RateNewBED = (zoneItem.RateBED != null) ? new Date(zoneItem.RateBED) : null;
+
+                        zoneItem.RateEED = (zoneItem.RateEED != null) ? new Date(zoneItem.RateEED) : null;
+                        zoneItem.RateNewEED = (zoneItem.RateEED != null) ? new Date(zoneItem.RateEED) : null;
+                    }
                 }
+            }
+
+            function isEmpty(value) {
+                return (value == undefined || value == null || value == "");
             }
         }
     }

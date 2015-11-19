@@ -79,8 +79,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             DataTable newZoneRoutingProductsTable = BuildNewZoneRoutingProductsTable(newZoneRoutingProducts);
 
             int affectedRows = ExecuteNonQuerySPCmd("TOneWhs_BE.sp_SaleEntityRoutingProduct_InsertOrUpdateZoneRoutingProducts", (cmd) => {
-                cmd.Parameters.Add(ownerType);
-                cmd.Parameters.Add(ownerId);
+                cmd.Parameters.Add(new SqlParameter("@OwnerType", ownerType));
+                cmd.Parameters.Add(new SqlParameter("@OwnerID", ownerId));
                 
                 var tableParameter = new SqlParameter("@NewZoneRoutingProducts", SqlDbType.Structured);
                 tableParameter.Value = newZoneRoutingProductsTable;
@@ -97,7 +97,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             table.Columns.Add("ZoneID", typeof(long));
             table.Columns.Add("RoutingProductID", typeof(int));
             table.Columns.Add("BED", typeof(DateTime));
-            table.Columns.Add("EED", typeof(DateTime?));
+            table.Columns.Add("EED", typeof(DateTime));
 
             table.BeginLoadData();
 
@@ -125,8 +125,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             DataTable zoneRoutingProductChangesTable = BuildZoneRoutingProductChangesTable(zoneRoutingProductChanges);
 
             int affectedRows = ExecuteNonQuerySPCmd("TOneWhS_BE.sp_SaleEntityRoutingProduct_UpdateZoneRoutingProducts", (cmd) => {
-                cmd.Parameters.Add(ownerType);
-                cmd.Parameters.Add(ownerId);
+                cmd.Parameters.Add(new SqlParameter("@OwnerType", ownerType));
+                cmd.Parameters.Add(new SqlParameter("@OwnerID", ownerId));
                 
                 var tableParameter = new SqlParameter("@ZoneRoutingProductChanges", SqlDbType.Structured);
                 tableParameter.Value = zoneRoutingProductChangesTable;
@@ -141,7 +141,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             DataTable table = new DataTable();
 
             table.Columns.Add("ZoneID", typeof(long));
-            table.Columns.Add("EED", typeof(DateTime?));
+            table.Columns.Add("EED", typeof(DateTime));
 
             table.BeginLoadData();
 
@@ -185,7 +185,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 OwnerId = (int)reader["OwnerID"],
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
-                SaleZoneId = GetReaderValue<int>(reader, "ZoneId")
+                SaleZoneId = GetReaderValue<long>(reader, "ZoneID")
             };
 
         }
