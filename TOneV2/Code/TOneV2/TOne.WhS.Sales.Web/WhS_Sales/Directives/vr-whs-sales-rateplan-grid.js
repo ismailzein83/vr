@@ -32,7 +32,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
-                gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(buildGridDrillDownDefinitions, gridAPI, []);
+                gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(buildGridDrillDownDefinitions(), gridAPI, null);
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(buildAPI());
@@ -41,20 +41,27 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     return [{
                         title: "Routing Product",
                         directive: "vr-whs-sales-defaultroutingproduct",
-                        loadDirective: function (defaultRoutingProductDirectiveAPI, zoneItem) {
-                            zoneItem.DefaultRoutingProductDirectiveAPI = defaultRoutingProductDirectiveAPI;
-
-                            var payload = {
-                                IsCurrentDefaultRoutingProductEditable: true,
-                                CurrentDefaultRoutingProductId: null,
-                                NewDefaultRoutingProductId: null,
-                                CurrentBED: new Date(),
-                                CurrentEED: new Date()
-                            };
-
-                            zoneItem.DefaultRoutingProductDirectiveAPI.load(payload);
+                        loadDirective: function (zoneRoutingProductDirectiveAPI, zoneItem) {
+                            zoneItem.ZoneRoutingProductDirectiveAPI = zoneRoutingProductDirectiveAPI;
+                            return loadZoneRoutingProductDirective(zoneItem);
                         }
                     }];
+
+                    function loadZoneRoutingProductDirective(zoneItem) {
+                        var zoneRoutingProductDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        var payload = {
+                            IsCurrentDefaultRoutingProductEditable: zoneItem.IsCurrentRoutingProductEditable,
+                            CurrentDefaultRoutingProductId: zoneItem.CurrentRoutingProductId,
+                            NewDefaultRoutingProductId: zoneItem.NewRoutingProductId,
+                            CurrentBED: zoneItem.RoutingProductBED,
+                            CurrentEED: zoneItem.RoutingProductEED
+                        };
+
+                        VRUIUtilsService.callDirectiveLoad(zoneItem.ZoneRoutingProductDirectiveAPI, payload, zoneRoutingProductDirectiveLoadPromiseDeferred);
+
+                        return zoneRoutingProductDirectiveLoadPromiseDeferred.promise;
+                    }
                 }
 
                 function buildAPI() {
@@ -67,93 +74,117 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     };
 
                     directiveAPI.getZoneChanges = function () {
-                        var changes = null;
+                        var zoneChanges = [];
 
-                        var defaultChanges = null;
-                        var zoneChanges = buildZoneChanges();
+                        for (var i = 0; i < $scope.zoneItems.length; i++) {
+                            var zoneItemChanges = buildZoneItemChanges($scope.zoneItems[i]);
 
-                        if (defaultChanges != null || zoneChanges != null) {
-                            changes = {
-                                DefaultChanges: defaultChanges,
-                                ZoneChanges: zoneChanges
-                            };
+                            if (zoneItemChanges != null)
+                                zoneChanges.push(zoneItemChanges);
                         }
 
-                        return changes;
+                        if (zoneChanges.length == 0)
+                            zoneChanges = null;
 
-                        function buildZoneChanges() {
-                            var zoneChanges = [];
+                        return zoneChanges;
 
-                            for (var i = 0; i < $scope.zoneItems.length; i++) {
-                                var zoneItemChanges = buildZoneItemChanges($scope.zoneItems[i]);
+                        function buildZoneItemChanges(zoneItem) {
+                            var zoneItemChanges = null;
 
-                                if (zoneItemChanges != null)
-                                    zoneChanges.push(zoneItemChanges);
+                            var newRate = buildNewRate(zoneItem);
+                            var rateChange = (newRate != null) ? null : buildRateChange(zoneItem);
+                            var newRoutingProduct = buildNewRoutingProduct(zoneItem);
+                            var routingProductChange = (newRoutingProduct == null) ? buildRoutingProductChange(zoneItem) : null;
+
+                            if (newRate != null || rateChange != null || newRoutingProduct != null || routingProductChange != null) {
+                                zoneItemChanges = {
+                                    ZoneId: zoneItem.ZoneId,
+                                    NewRate: newRate,
+                                    RateChange: rateChange,
+                                    NewRoutingProduct: newRoutingProduct,
+                                    RoutingProductChange: routingProductChange
+                                };
                             }
 
-                            if (zoneChanges.length == 0)
-                                zoneChanges = null;
+                            return zoneItemChanges;
 
-                            return zoneChanges;
+                            function buildNewRate(zoneItem) {
+                                var newRate = null;
+                                var currentRate = zoneItem.CurrentRate;
+                                var newRate = zoneItem.NewRate;
 
-                            function buildZoneItemChanges(zoneItem) {
-                                var zoneItemChanges = null;
-
-                                var newRate = buildNewRate(zoneItem);
-                                var rateChange = (newRate != null) ? null : buildRateChange(zoneItem);
-
-                                if (newRate != null || rateChange != null) {
-                                    zoneItemChanges = {
+                                if (!isEmpty(zoneItem.NewRate)) {
+                                    newRate = {
                                         ZoneId: zoneItem.ZoneId,
-                                        NewRate: newRate,
-                                        RateChange: rateChange
+                                        NormalRate: zoneItem.NewRate,
+                                        BED: zoneItem.RateBED,
+                                        EED: zoneItem.RateNewEED
                                     };
                                 }
 
-                                return zoneItemChanges;
+                                return newRate;
+                            }
 
-                                function buildNewRate(zoneItem) {
-                                    var newRate = null;
-                                    var currentRate = zoneItem.CurrentRate;
-                                    var newRate = zoneItem.NewRate;
+                            function buildRateChange(zoneItem) {
+                                var rateChange = null;
 
-                                    if (!isEmpty(zoneItem.NewRate)) {
-                                        newRate = {
+                                if (!compareDates(zoneItem.RateEED, zoneItem.RateNewEED)) {
+                                    return {
+                                        RateId: zoneItem.CurrentRateId,
+                                        EED: zoneItem.RateNewEED
+                                    };
+                                }
+
+                                return rateChange;
+
+                                function compareDates(date1, date2) {
+                                    if (!isEmpty(date1) && !isEmpty(date2))
+                                        return (date1.getDay() == date2.getDay() && date1.getMonth() == date2.getMonth() && date1.getYear() == date2.getYear());
+                                    else if (isEmpty(date1) && isEmpty(date2))
+                                        return true;
+                                    else
+                                        return false;
+                                }
+                            }
+                            
+                            function buildNewRoutingProduct(zoneItem) {
+                                if (zoneItem.ZoneRoutingProductDirectiveAPI != undefined) {
+                                    var defaultChanges = zoneItem.ZoneRoutingProductDirectiveAPI.getDefaultChanges();
+                                    var newZoneRoutingProduct = null;
+
+                                    if (defaultChanges.NewDefaultRoutingProduct != null) {
+                                        newZoneRoutingProduct = {
+                                            $type: "TOne.WhS.Sales.Entities.RatePlanning.NewZoneRoutingProduct, TOne.WhS.Sales.Entities",
                                             ZoneId: zoneItem.ZoneId,
-                                            NormalRate: zoneItem.NewRate,
-                                            BED: zoneItem.RateBED,
-                                            EED: zoneItem.RateNewEED
+                                            RoutingProductId: defaultChanges.NewDefaultRoutingProduct.DefaultRoutingProductId,
+                                            BED: defaultChanges.NewDefaultRoutingProduct.BED,
+                                            EED: defaultChanges.NewDefaultRoutingProduct.EED
                                         };
                                     }
 
-                                    return newRate;
+                                    return newZoneRoutingProduct;
                                 }
+                            }
 
-                                function buildRateChange(zoneItem) {
-                                    var rateChange = null;
+                            function buildRoutingProductChange(zoneItem) {
+                                if (zoneItem.ZoneRoutingProductDirectiveAPI != undefined) {
+                                    var defaultChanges = zoneItem.ZoneRoutingProductDirectiveAPI.getDefaultChanges();
+                                    var zoneRoutingProductChange = null;
 
-                                    if (!compareDates(zoneItem.RateEED, zoneItem.RateNewEED)) {
-                                        return {
-                                            RateId: zoneItem.CurrentRateId,
-                                            EED: zoneItem.RateNewEED
+                                    if (defaultChanges.DefaultRoutingProductChange != null) {
+                                        zoneRoutingProductChange = {
+                                            $type: "TOne.WhS.Sales.Entities.RatePlanning.ZoneRoutingProductChange, TOne.WhS.Sales.Entities",
+                                            ZoneRoutingProductId: zoneItem.ZoneId,
+                                            EED: defaultChanges.DefaultRoutingProductChange.EED
                                         };
                                     }
 
-                                    return rateChange;
-
-                                    function compareDates(date1, date2) {
-                                        if (!isEmpty(date1) && !isEmpty(date2))
-                                            return (date1.getDay() == date2.getDay() && date1.getMonth() == date2.getMonth() && date1.getYear() == date2.getYear());
-                                        else if (isEmpty(date1) && isEmpty(date2))
-                                            return true;
-                                        else
-                                            return false;
-                                    }
+                                    return zoneRoutingProductChange;
                                 }
+                            }
 
-                                function isEmpty(value) {
-                                    return (value == undefined || value == null);
-                                }
+                            function isEmpty(value) {
+                                return (value == undefined || value == null);
                             }
                         }
                     };

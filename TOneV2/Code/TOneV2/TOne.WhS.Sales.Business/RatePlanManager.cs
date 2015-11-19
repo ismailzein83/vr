@@ -49,7 +49,7 @@ namespace TOne.WhS.Sales.Business
 
         public IEnumerable<ZoneItem> GetZoneItems(ZoneItemInput input)
         {
-            IEnumerable<ZoneItem> zoneItems = null;
+            List<ZoneItem> zoneItems = null;
             IEnumerable<SaleZone> zones = GetZones(input.Filter.OwnerType, input.Filter.OwnerId);
 
             if (zones != null)
@@ -62,8 +62,20 @@ namespace TOne.WhS.Sales.Business
 
                     if (zones != null)
                     {
-                        IEnumerable<SaleEntityZoneRate> zoneRates = GetZoneRates(input.Filter.OwnerType, input.Filter.OwnerId, zones, DateTime.Now);
-                        zoneItems = BuildZoneItems(input.Filter.OwnerType, zones, zoneRates);
+                        zoneItems = new List<ZoneItem>();
+
+                        foreach (SaleZone zone in zones)
+                        {
+                            ZoneItem zoneItem = new ZoneItem();
+
+                            zoneItem.ZoneId = zone.SaleZoneId;
+                            zoneItem.ZoneName = zone.Name;
+
+                            SetZoneRate(input.Filter.OwnerType, input.Filter.OwnerId, zoneItem);
+                            SetZoneRoutingProduct(input.Filter.OwnerType, input.Filter.OwnerId, zoneItem);
+
+                            zoneItems.Add(zoneItem);
+                        }
 
                         SetZoneItemChanges(input.Filter.OwnerType, input.Filter.OwnerId, zoneItems);
                     }
@@ -121,37 +133,42 @@ namespace TOne.WhS.Sales.Business
             return pagedSaleZones;
         }
 
-        private IEnumerable<SaleEntityZoneRate> GetZoneRates(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<SaleZone> zones, DateTime effectiveOn)
+        private void SetZoneRate(SalePriceListOwnerType ownerType, int ownerId, ZoneItem zoneItem)
         {
-            List<SaleEntityZoneRate> zoneRates = null;
-            SaleEntityZoneRateLocator rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
+            SaleEntityZoneRateLocator locator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(DateTime.Now));
+            
+            SaleEntityZoneRate zoneRate = (ownerType == SalePriceListOwnerType.SellingProduct) ?
+                locator.GetSellingProductZoneRate(ownerId, zoneItem.ZoneId) :
+                locator.GetCustomerZoneRate(ownerId, GetSellingProductId(ownerId), zoneItem.ZoneId);
 
-            if (ownerType == SalePriceListOwnerType.SellingProduct)
+            if (zoneRate != null)
             {
-                zoneRates = new List<SaleEntityZoneRate>();
-
-                foreach (SaleZone saleZone in zones)
-                {
-                    SaleEntityZoneRate zoneRate = rateLocator.GetSellingProductZoneRate(ownerId, saleZone.SaleZoneId);
-                    
-                    if (zoneRate != null)
-                        zoneRates.Add(zoneRate);
-                }
+                zoneItem.IsCurrentRateEditable = (zoneRate.Source == ownerType);
+                zoneItem.CurrentRateId = zoneRate.Rate.SaleRateId;
+                zoneItem.CurrentRate = zoneRate.Rate.NormalRate;
+                zoneItem.RateBED = zoneRate.Rate.BeginEffectiveDate;
+                zoneItem.RateEED = zoneRate.Rate.EndEffectiveDate;
             }
-            else if (ownerType == SalePriceListOwnerType.Customer)
+        }
+
+        private void SetZoneRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, ZoneItem zoneItem)
+        {
+            SaleEntityZoneRoutingProductLocator locator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(DateTime.Now));
+
+            SaleEntityZoneRoutingProduct zoneRoutingProduct = (ownerType == SalePriceListOwnerType.SellingProduct) ?
+                locator.GetSellingProductZoneRoutingProduct(ownerId, zoneItem.ZoneId) :
+                locator.GetCustomerZoneRoutingProduct(ownerId, GetSellingProductId(ownerId), zoneItem.ZoneId);
+
+            if (zoneRoutingProduct != null)
             {
-                zoneRates = new List<SaleEntityZoneRate>();
-
-                foreach (SaleZone saleZone in zones)
-                {
-                    SaleEntityZoneRate zoneRate = rateLocator.GetCustomerZoneRate(ownerId, GetSellingProductId(ownerId), saleZone.SaleZoneId);
-
-                    if (zoneRate != null)
-                        zoneRates.Add(zoneRate);
-                }
+                zoneItem.IsCurrentRoutingProductEditable = (
+                    (zoneRoutingProduct.Source == SaleEntityZoneRoutingProductSource.ProductZone && ownerType == SalePriceListOwnerType.SellingProduct) ||
+                    (zoneRoutingProduct.Source == SaleEntityZoneRoutingProductSource.CustomerZone && ownerType == SalePriceListOwnerType.Customer)
+                );
+                zoneItem.CurrentRoutingProductId = zoneRoutingProduct.RoutingProductId;
+                zoneItem.RoutingProductBED = zoneRoutingProduct.BED;
+                zoneItem.RoutingProductEED = zoneRoutingProduct.EED;
             }
-
-            return zoneRates;
         }
 
         private int GetSellingProductId(int customerId)
@@ -159,34 +176,6 @@ namespace TOne.WhS.Sales.Business
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
             CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, DateTime.Now, false);
             return customerSellingProduct.SellingProductId;
-        }
-
-        private IEnumerable<ZoneItem> BuildZoneItems(SalePriceListOwnerType ownerType, IEnumerable<SaleZone> zones, IEnumerable<SaleEntityZoneRate> zoneRates)
-        {
-            List<ZoneItem> zoneItems = new List<ZoneItem>();
-
-            foreach (SaleZone zone in zones)
-            {
-                ZoneItem zoneItem = new ZoneItem();
-
-                zoneItem.ZoneId = zone.SaleZoneId;
-                zoneItem.ZoneName = zone.Name;
-
-                SaleEntityZoneRate zoneRate = zoneRates.FindRecord(o => o.Rate.ZoneId == zone.SaleZoneId);
-
-                if (zoneRate != null)
-                {
-                    zoneItem.CurrentRateId = zoneRate.Rate.SaleRateId;
-                    zoneItem.CurrentRate = zoneRate.Rate.NormalRate;
-                    zoneItem.IsCurrentRateEditable = (zoneRate.Source == ownerType);
-                    zoneItem.RateBED = zoneRate.Rate.BeginEffectiveDate;
-                    zoneItem.RateEED = zoneRate.Rate.EndEffectiveDate;
-                }
-
-                zoneItems.Add(zoneItem);
-            }
-
-            return zoneItems;
         }
 
         #region Set Zone Item Changes
@@ -200,7 +189,7 @@ namespace TOne.WhS.Sales.Business
                 foreach (ZoneChanges zoneItemChanges in existingChanges.ZoneChanges)
                 {
                     SetZoneItemRateChanges(zoneItemChanges.NewRate, zoneItemChanges.RateChange, zoneItems);
-                    //SetZoneRoutingProductChanges
+                    SetZoneItemRoutingProductChanges(zoneItemChanges.NewRoutingProduct, zoneItemChanges.RoutingProductChange, zoneItems);
                 }
             }
         }
@@ -224,6 +213,28 @@ namespace TOne.WhS.Sales.Business
 
                 if (zoneItem != null)
                     zoneItem.RateEED = rateChange.EED;
+            }
+        }
+
+        private void SetZoneItemRoutingProductChanges(NewZoneRoutingProduct newRoutingProduct, ZoneRoutingProductChange routingProductChange, IEnumerable<ZoneItem> zoneItems)
+        {
+            if (newRoutingProduct != null)
+            {
+                ZoneItem zoneItem = zoneItems.FindRecord(item => item.ZoneId == newRoutingProduct.ZoneId);
+
+                if (zoneItem != null)
+                {
+                    zoneItem.NewRoutingProductId = newRoutingProduct.RoutingProductId;
+                    zoneItem.RoutingProductBED = newRoutingProduct.BED;
+                    zoneItem.RoutingProductEED = newRoutingProduct.EED;
+                }
+            }
+            else if (routingProductChange != null)
+            {
+                ZoneItem zoneItem = zoneItems.FindRecord(item => item.ZoneId == routingProductChange.ZoneId);
+
+                if (zoneItem != null)
+                    zoneItem.RoutingProductEED = routingProductChange.EED;
             }
         }
 
@@ -293,8 +304,8 @@ namespace TOne.WhS.Sales.Business
                 {
                     var newDefaultRoutingProduct = changes.DefaultChanges.NewDefaultRoutingProduct;
                     var defaultRoutingProductChange = changes.DefaultChanges.DefaultRoutingProductChange;
-                    
-                    IRoutingProductDataManager routingProductDataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
+
+                    ISaleEntityRoutingProductDataManager routingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
 
                     if (newDefaultRoutingProduct != null)
                         routingProductDataManager.InsertOrUpdateDefaultRoutingProduct(ownerType, ownerId, newDefaultRoutingProduct);
@@ -309,10 +320,24 @@ namespace TOne.WhS.Sales.Business
                     IEnumerable<NewRate> newRates = changes.ZoneChanges.MapRecords(item => item.NewRate, item => item != null);
                     IEnumerable<SaleRate> newSaleRates = MapNewRatesToSaleRates(newRates, priceListId);
                     IEnumerable<RateChange> rateChanges = changes.ZoneChanges.MapRecords(item => item.RateChange, item => item != null);
+                    IEnumerable<NewZoneRoutingProduct> newRoutingProducts = changes.ZoneChanges.MapRecords(item => item.NewRoutingProduct, item => item.NewRoutingProduct != null);
+                    IEnumerable<ZoneRoutingProductChange> routingProductChanges = changes.ZoneChanges.MapRecords(item => item.RoutingProductChange, item => item.RoutingProductChange != null);
 
-                    SaleRateManager saleRateManager = new SaleRateManager();
-                    succeeded = saleRateManager.CloseRates(rateChanges);
-                    succeeded = saleRateManager.InsertRates(newSaleRates);
+                    ISaleRateDataManager saleRateDataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+
+                    if (rateChanges != null)
+                        succeeded = saleRateDataManager.CloseRates(rateChanges);
+
+                    if (newSaleRates != null)
+                        succeeded = saleRateDataManager.InsertRates(newSaleRates);
+
+                    ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
+
+                    if (routingProductChanges != null)
+                        saleEntityRoutingProductDataManager.UpdateZoneRoutingProducts(ownerType, ownerId, routingProductChanges);
+
+                    if (newRoutingProducts != null);
+                        //saleEntityRoutingProductDataManager.InsertZoneRoutingProducts(newRoutingProducts);
                 }
 
                 _dataManager.sp_RatePlan_SetStatusIfExists(ownerType, ownerId, RatePlanStatus.Completed);
@@ -392,10 +417,10 @@ namespace TOne.WhS.Sales.Business
             return Merge(existingZoneChanges, newZoneChanges,
                 () =>
                 {
-                    foreach (ZoneChanges changes in existingZoneChanges)
+                    foreach (ZoneChanges zoneItemChanges in existingZoneChanges)
                     {
-                        if (!newZoneChanges.Any(o => o.ZoneId == changes.ZoneId))
-                            newZoneChanges.Add(changes);
+                        if (!newZoneChanges.Any(item => item.ZoneId == zoneItemChanges.ZoneId))
+                            newZoneChanges.Add(zoneItemChanges);
                     }
 
                     return newZoneChanges;

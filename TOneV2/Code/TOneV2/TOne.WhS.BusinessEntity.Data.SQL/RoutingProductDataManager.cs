@@ -50,24 +50,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_RoutingProduct_GetAll", RoutingProductMapper);
         }
 
-        public IEnumerable<DefaultRoutingProduct> GetEffectiveDefaultRoutingProducts(DateTime effectiveOn)
-        {
-            return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetEffectiveDefaults", DefaultRoutingProductMapper, effectiveOn);
-        }
-
-        private DefaultRoutingProduct DefaultRoutingProductMapper(IDataReader reader)
-        {
-            DefaultRoutingProduct defaultRoutingProduct = new DefaultRoutingProduct();
-
-            defaultRoutingProduct.OwnerType = (SalePriceListOwnerType)reader["OwnerType"];
-            defaultRoutingProduct.OwnerId = (int)reader["OwnerID"];
-            defaultRoutingProduct.RoutingProductId = (int)reader["RoutingProductID"];
-            defaultRoutingProduct.BED = (DateTime)reader["BED"];
-            defaultRoutingProduct.EED = GetReaderValue<DateTime?>(reader, "EED");
-
-            return defaultRoutingProduct;
-        }
-
         public bool Insert(Entities.RoutingProduct routingProduct, out int insertedId)
         {
             object routingProductId;
@@ -79,54 +61,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return (recordsEffected > 0);
         }
 
-        public bool InsertOrUpdateDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, NewDefaultRoutingProduct newDefaultRoutingProduct)
-        {
-            DataTable newSaleEntityRoutingProductsTable = BuildNewSaleEntityRoutingProductsTable(ownerType, ownerId, newDefaultRoutingProduct);
-
-            int affectedRows = ExecuteNonQuerySP("TOneWhS_BE.sp_SaleEntityRoutingProduct_InsertOrUpdateDefault", ownerType, ownerId, newDefaultRoutingProduct.DefaultRoutingProductId, newDefaultRoutingProduct.BED, newDefaultRoutingProduct.EED);
-
-            return affectedRows > 0;
-        }
-
-        private DataTable BuildNewSaleEntityRoutingProductsTable(SalePriceListOwnerType ownerType, int ownerId, NewDefaultRoutingProduct newDefaultRoutingProduct)
-        {
-            DataTable table = new DataTable();
-
-            table.Columns.Add("OwnerType", typeof(int));
-            table.Columns.Add("OwnerID", typeof(int));
-            table.Columns.Add("ZoneID", typeof(long));
-            table.Columns.Add("RoutingProductID", typeof(int));
-            table.Columns.Add("BED", typeof(DateTime));
-            table.Columns.Add("EED", typeof(DateTime));
-
-            table.BeginLoadData();
-            DataRow row = table.NewRow();
-                
-            row["OwnerType"] = ownerType;
-            row["OwnerID"] = ownerId;
-            row["RoutingProductID"] = newDefaultRoutingProduct.DefaultRoutingProductId;
-            row["BED"] = newDefaultRoutingProduct.BED;
-
-            if (newDefaultRoutingProduct.EED != null)
-                row["EED"] = newDefaultRoutingProduct.EED;
-
-            table.Rows.Add(row);
-            table.EndLoadData();
-
-            return table;
-        }
-
         public bool Update(Entities.RoutingProduct routingProduct)
         {
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_RoutingProduct_Update", routingProduct.RoutingProductId, routingProduct.Name, routingProduct.SellingNumberPlanId,
                 Vanrise.Common.Serializer.Serialize(routingProduct.Settings));
             return (recordsEffected > 0);
-        }
-
-        public bool UpdateDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, DefaultRoutingProductChange defaultRoutingProductChange)
-        {
-            int affectedRows = ExecuteNonQuerySP("TOneWhS_BE.sp_SaleEntityRoutingProduct_UpdateDefault", ownerType, ownerId, defaultRoutingProductChange.EED);
-            return affectedRows > 0;
         }
 
         public bool Delete(int routingProductId)
@@ -160,12 +99,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         //    return routingProductInfo;
         //}
 
-
         public bool AreRoutingProductsUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.RoutingProduct", ref updateHandle);
         }
-
 
         //public List<Entities.RoutingProductInfo> GetRoutingProductsInfoBySellingNumberPlan(int sellingNumberPlan)
         //{

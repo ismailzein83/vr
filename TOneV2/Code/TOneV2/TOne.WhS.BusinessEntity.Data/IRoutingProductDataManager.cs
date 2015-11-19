@@ -16,15 +16,9 @@ namespace TOne.WhS.BusinessEntity.Data
 
         IEnumerable<RoutingProduct> GetRoutingProducts();
 
-        IEnumerable<DefaultRoutingProduct> GetEffectiveDefaultRoutingProducts(DateTime effectiveOn);
-
         bool Insert(RoutingProduct routingProduct, out int insertedId);
 
-        bool InsertOrUpdateDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, NewDefaultRoutingProduct newDefaultRoutingProducts);
-
         bool Update(RoutingProduct routingProduct);
-
-        bool UpdateDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, DefaultRoutingProductChange defaultRoutingProductChange);
 
         bool Delete(int routingProductId);
 

@@ -57,17 +57,5 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return callSale;
         }
-
-        public bool CloseRates(IEnumerable<RateChange> rateChanges)
-        {
-            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
-            return dataManager.CloseRates(rateChanges);
-        }
-
-        public bool InsertRates(IEnumerable<SaleRate> newRates)
-        {
-            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
-            return dataManager.InsertRates(newRates);
-        }
     }
 }

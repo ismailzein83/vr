@@ -118,7 +118,6 @@ app.directive("vrWhsSalesDefaultroutingproduct", ["UtilsService", "VRUIUtilsServ
                         var defaultRoutingProductChange = (newDefaultRoutingProduct == null) ? buildDefaultRoutingProductChange() : null;
 
                         var defaultChanges = (newDefaultRoutingProduct != null || defaultRoutingProductChange != null) ? {
-                            //$type: "TOne.WhS.Sales.Entities.RatePlanning.DefaultChanges, TOne.WhS.Sales.Entities",
                             NewDefaultRoutingProduct: newDefaultRoutingProduct,
                             DefaultRoutingProductChange: defaultRoutingProductChange
                         } : null;

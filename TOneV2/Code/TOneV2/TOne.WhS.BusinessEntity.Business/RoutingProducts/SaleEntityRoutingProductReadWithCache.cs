@@ -12,6 +12,7 @@ namespace TOne.WhS.BusinessEntity.Business
     public class SaleEntityRoutingProductReadWithCache : ISaleEntityRoutingProductReader
     {
         DateTime _effectiveOn;
+
         public SaleEntityRoutingProductReadWithCache(DateTime effectiveOn)
         {
             _effectiveOn = effectiveOn;
@@ -23,8 +24,15 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>().GetOrCreateObject(cacheName,
                 () =>
                 {
-                    throw new NotImplementedException();
-                    return new SaleZoneRoutingProductsByZone();
+                    SaleZoneRoutingProductsByZone zoneRoutingProductsByZone = new SaleZoneRoutingProductsByZone();
+
+                    ISaleEntityRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
+                    IEnumerable<SaleZoneRoutingProduct> zoneRoutingProducts = dataManager.GetEffectiveZoneRoutingProducts(ownerType, ownerId, _effectiveOn);
+
+                    foreach (SaleZoneRoutingProduct zoneRoutingProduct in zoneRoutingProducts)
+                        zoneRoutingProductsByZone.Add(zoneRoutingProduct.SaleZoneId, zoneRoutingProduct);
+
+                    return zoneRoutingProductsByZone;
                 });
         }
 
@@ -51,8 +59,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     defaultRoutingProductsByOwner.DefaultRoutingProductsByProduct = new Dictionary<int, DefaultRoutingProduct>();
                     defaultRoutingProductsByOwner.DefaultRoutingProductsByCustomer = new Dictionary<int, DefaultRoutingProduct>();
 
-                    IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
-                    IEnumerable<DefaultRoutingProduct> defaultRoutingProducts = dataManager.GetEffectiveDefaultRoutingProducts(DateTime.Now);
+                    ISaleEntityRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
+                    IEnumerable<DefaultRoutingProduct> defaultRoutingProducts = dataManager.GetEffectiveDefaultRoutingProducts(_effectiveOn);
 
                     if (defaultRoutingProducts != null)
                     {

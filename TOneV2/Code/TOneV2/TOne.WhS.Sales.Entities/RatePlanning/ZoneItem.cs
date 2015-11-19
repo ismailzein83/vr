@@ -16,7 +16,7 @@ namespace TOne.WhS.Sales.Entities.RatePlanning
 
         public Decimal? CurrentRate { get; set; }
 
-        public bool IsCurrentRateEditable { get; set; }
+        public bool? IsCurrentRateEditable { get; set; }
 
         public Decimal? NewRate { get; set; }
 
@@ -26,10 +26,14 @@ namespace TOne.WhS.Sales.Entities.RatePlanning
 
         public int? CurrentRoutingProductId { get; set; }
 
-        public bool IsCurrentRoutingProductEditable { get; set; }
+        public bool? IsCurrentRoutingProductEditable { get; set; }
 
-        public string CurrentRoutingProductName { get; set; }
+        //public string CurrentRoutingProductName { get; set; }
 
         public int? NewRoutingProductId { get; set; }
+
+        public DateTime? RoutingProductBED { get; set; }
+
+        public DateTime? RoutingProductEED { get; set; }
     }
 }

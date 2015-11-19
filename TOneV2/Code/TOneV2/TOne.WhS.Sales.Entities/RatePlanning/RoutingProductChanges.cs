@@ -19,7 +19,7 @@ namespace TOne.WhS.Sales.Entities.RatePlanning
 
     public class ZoneRoutingProductChange
     {
-        public long ZoneRoutingProductId { get; set; }
+        public long ZoneId { get; set; }
 
         public DateTime? EED { get; set; }
     }
