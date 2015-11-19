@@ -43,40 +43,46 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     minimumDate = effectiveDate.HasValue ? effectiveDate : bEDDateFromExcel;
                 else if (!effectiveDate.HasValue && minimumDate > bEDDateFromExcel)
                     minimumDate = bEDDateFromExcel;
-
-                PriceListCodeItem code = new PriceListCodeItem
-                {
-                    Code = worksheet.Cells[count, 1].StringValue,
-                    BED = effectiveDate.HasValue ? effectiveDate.Value :bEDDateFromExcel.Value,
-                    EED = eEDDateFromExcel
-                };
-
                 string zoneName = worksheet.Cells[count, 0].StringValue;
-
-                PriceListZoneItem priceListZoneItem;
-                if (!priceListByZone.TryGetValue(zoneName, out priceListZoneItem))
+                string [] codes= worksheet.Cells[count, 1].StringValue.Split(',');
+                foreach (var codeValue in codes)
                 {
-                    priceListZoneItem = new PriceListZoneItem();
-
-                    priceListZoneItem.Rate = new PriceListRateItem
+                    PriceListCodeItem code = new PriceListCodeItem
                     {
-                        Rate = (decimal)worksheet.Cells[count, 2].FloatValue,
+                        Code = codeValue,
                         BED = effectiveDate.HasValue ? effectiveDate.Value : bEDDateFromExcel.Value,
-                        EED = eEDDateFromExcel,
+                        EED = eEDDateFromExcel
                     };
-                    priceListZoneItem.BED = effectiveDate.HasValue ? effectiveDate.Value  : bEDDateFromExcel.Value ;
-                    priceListZoneItem.EED = eEDDateFromExcel;
-                    priceListByZone.Add(zoneName, priceListZoneItem);
+
+
+
+                    PriceListZoneItem priceListZoneItem;
+                    if (!priceListByZone.TryGetValue(zoneName, out priceListZoneItem))
+                    {
+                        priceListZoneItem = new PriceListZoneItem();
+
+                        priceListZoneItem.Rate = new PriceListRateItem
+                        {
+                            Rate = (decimal)worksheet.Cells[count, 2].FloatValue,
+                            BED = effectiveDate.HasValue ? effectiveDate.Value : bEDDateFromExcel.Value,
+                            EED = eEDDateFromExcel,
+                        };
+                        priceListZoneItem.BED = effectiveDate.HasValue ? effectiveDate.Value : bEDDateFromExcel.Value;
+                        priceListZoneItem.EED = eEDDateFromExcel;
+                        priceListByZone.Add(zoneName, priceListZoneItem);
+                    }
+                    if (priceListZoneItem.Codes == null || priceListZoneItem.Codes.Count == 0)
+                        priceListZoneItem.Codes = new List<PriceListCodeItem>();
+                    priceListZoneItem.Codes.Add(code);
+
+                    if (code.BED < priceListZoneItem.BED)
+                        priceListZoneItem.BED = code.BED;
+
+                    if (!code.EED.HasValue || (code.EED.HasValue && priceListZoneItem.EED.HasValue && code.EED.Value > priceListZoneItem.EED.Value))
+                        priceListZoneItem.EED = code.EED;
+
+                 
                 }
-                if (priceListZoneItem.Codes == null || priceListZoneItem.Codes.Count == 0)
-                    priceListZoneItem.Codes = new List<PriceListCodeItem>();
-                priceListZoneItem.Codes.Add(code);
-
-                if (code.BED < priceListZoneItem.BED)
-                    priceListZoneItem.BED = code.BED;
-
-                if (!code.EED.HasValue || (code.EED.HasValue && priceListZoneItem.EED.HasValue && code.EED.Value > priceListZoneItem.EED.Value))
-                    priceListZoneItem.EED = code.EED;                
 
                 count++;
             }
