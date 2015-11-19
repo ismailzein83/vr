@@ -37,6 +37,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return supplierCode;
         }
 
+        string CodePrefixMapper(IDataReader reader)
+        {
+            return reader["CodePrefix"].ToString();
+        }
 
         public List<SupplierCode> GetSupplierCodes(int supplierId, DateTime effectiveOn)
         {
@@ -55,6 +59,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@CodePrefix", codePrefix));
                 cmd.Parameters.Add(new SqlParameter("@EffectiveOn", effectiveOn));
             });
+        }
+
+        public IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetDistinctCodePrefixes", CodePrefixMapper, prefixLength, effectiveOn, isFuture);
         }
     }
 }

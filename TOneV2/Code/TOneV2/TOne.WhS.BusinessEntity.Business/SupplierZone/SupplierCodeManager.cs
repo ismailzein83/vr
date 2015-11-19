@@ -27,5 +27,11 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
             return dataManager.GetActiveSupplierCodesByPrefix(codePrefix, effectiveOn, isFuture, supplierInfo);
         }
+
+        public IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
+        {
+            ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
+            return dataManager.GetDistinctCodeByPrefixes(prefixLength, effectiveOn, isFuture);
+        }
     }
 }

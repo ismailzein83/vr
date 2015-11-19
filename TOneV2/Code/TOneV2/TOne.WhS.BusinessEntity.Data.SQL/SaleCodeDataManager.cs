@@ -34,6 +34,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return saleCode;
         }
 
+        string CodePrefixMapper(IDataReader reader)
+        {
+            return reader["CodePrefix"].ToString();
+        }
+
         public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_BySellingNumberPlan", SaleCodeMapper, sellingNumberPlanId, effectiveOn);
@@ -42,6 +47,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByCodePrefix", SaleCodeMapper, codePrefix, effectiveOn);
+        }
+
+        public IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetDistinctCodePrefixes", CodePrefixMapper, prefixLength, effectiveOn, isFuture);
         }
     }
 }

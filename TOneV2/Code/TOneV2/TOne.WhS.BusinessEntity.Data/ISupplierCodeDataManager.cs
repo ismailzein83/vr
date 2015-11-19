@@ -13,5 +13,7 @@ namespace TOne.WhS.BusinessEntity.Data
         List<SupplierCode> GetSupplierCodes(int supplierId, DateTime effectiveOn);
 
         List<SupplierCode> GetActiveSupplierCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, IEnumerable<RoutingSupplierInfo> supplierInfo);
+
+        IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture);
     }
 }
