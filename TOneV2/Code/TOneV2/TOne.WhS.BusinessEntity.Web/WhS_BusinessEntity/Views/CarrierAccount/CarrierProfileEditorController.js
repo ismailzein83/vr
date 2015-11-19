@@ -31,27 +31,14 @@
         }
 
         function defineScope() {
-            var indexPhone = 0;
-            var indexFax = 0;
-
-            $scope.phoneNumbers = [];
-            $scope.faxes = [];
-            $scope.contacts = [];
-
+            
             $scope.scopeModal = {
-                contacts: []
+                contacts: [],
+                faxes: [],
+                phoneNumbers : []
+               
             };
-            for (var x in WhS_Be_ContactTypeEnum) {
-                if(WhS_Be_ContactTypeEnum[x].value)
-                  $scope.scopeModal.contacts.push(addcontactObj(x));
-            }
-            function addcontactObj(x) {
-                return {
-                    label: WhS_Be_ContactTypeEnum[x].label,
-                    value: WhS_Be_ContactTypeEnum[x].value,
-                    inputetype: WhS_Be_ContactTypeEnum[x].type
-                };
-            }
+           
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
@@ -76,19 +63,12 @@
 
 
             $scope.addPhoneNumberOption = function () {
-
+               
                 $scope.scopeModal.phoneNumbers.push({
                     phoneNumber: $scope.scopeModal.phoneNumberValue
                 });
                 $scope.scopeModal.phoneNumberValue = '';
             };
-
-
-            $scope.removePhoneNumber = function ($event, option) {
-                var indexPhoneInside = UtilsService.getItemIndexByVal($scope.phoneNumbers, option.id, 'id');
-                $scope.phoneNumbers.splice(indexPhoneInside, 1);
-            };
-
             $scope.onCountrySelctionChanged = function (item,datasource) {
                 if (item != undefined) {
                     var payload = {};                   
@@ -109,10 +89,6 @@
                 });
                 $scope.scopeModal.faxvalue = '';
             };
-
-
-            
-
 
         }
 
@@ -154,7 +130,6 @@
                 getCarrierProfile().then(function () {
                     loadAllControls()
                         .finally(function () {
-                            //carrierProfileEntity = undefined;
                         });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -168,7 +143,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadCountries, loadCities, loadStaticSection])
+            return UtilsService.waitMultipleAsyncOperations([loadCountries, loadCities, loadStaticSection ,loadContacts])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -177,8 +152,26 @@
               });
         }
 
-
-
+        function loadContacts() {
+            for (var x in WhS_Be_ContactTypeEnum) {
+                $scope.scopeModal.contacts.push(addcontactObj(x));
+            }
+           
+            if (carrierProfileEntity!=undefined &&  carrierProfileEntity.Settings.Contacts != null)
+                for (var y = 0; y < carrierProfileEntity.Settings.Contacts.length; y++) {
+                        var item = carrierProfileEntity.Settings.Contacts[y];
+                        var matchedItem = UtilsService.getItemByVal($scope.scopeModal.contacts, item.Type, 'value');
+                        if (matchedItem != null)
+                            matchedItem.description = item.Description;
+             }
+        }
+        function addcontactObj(x) {
+            return {
+                label: WhS_Be_ContactTypeEnum[x].label,
+                value: WhS_Be_ContactTypeEnum[x].value,
+                inputetype: WhS_Be_ContactTypeEnum[x].type
+            };
+        }
 
         function getCarrierProfile() {
             return WhS_BE_CarrierProfileAPIService.GetCarrierProfile(carrierProfileId).then(function (carrierProfile) {
@@ -221,11 +214,7 @@
                             fax: carrierProfileEntity.Settings.Faxes[j]
                         });
                     }
-                    if (carrierProfileEntity.Settings.Contacts!=null)
-                        for (var y = 0; y < carrierProfileEntity.Settings.Contacts.length; y++) {
-                            var item = carrierProfileEntity.Settings.Contacts[y];
-                            $scope.scopeModal.contacts[UtilsService.getItemIndexByVal($scope.scopeModal.contacts, item.Type, 'value')].description = item.Description;
-                        }
+                    
 
                    
                 }
