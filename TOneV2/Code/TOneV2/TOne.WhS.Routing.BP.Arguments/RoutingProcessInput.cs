@@ -11,6 +11,8 @@ namespace TOne.WhS.Routing.BP.Arguments
     {
         public DateTime? EffectiveTime { get; set; }
 
+        public int CodePrefixLength { get; set; }
+
         public RoutingDatabaseType RoutingDatabaseType { get; set; }
 
         public bool DivideProcessIntoSubProcesses { get; set; }

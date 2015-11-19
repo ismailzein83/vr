@@ -1,11 +1,15 @@
 ﻿<div ng-controller="WhS_Routing_BuildRouteProcessController">
     <vr-form name="formCreateProcessInput">
         <vr-row removeline>
-            <vr-columns width="1/4row">
-                <vr-datetimepicker type="date" value="effectiveOn" label="Effective On" isrequired></vr-datetimepicker>
+            <vr-columns width="1/3row">
+                <vr-select datatextfield="description" datavaluefield="value" label="Filter By" datasource="routingDatabaseTypes"
+                           selectedvalues="selectedRoutingDatabaseType" onselectionchanged="onRoutingProductDatabaseTypeSelectionChanged" hideremoveicon />
             </vr-columns>
-            <vr-columns width="1/2row">
-                <vr-switch value="isFuture" label="is Future">  </vr-switch>
+            <vr-columns width="1/3row" ng-show="!isFuture">
+                <vr-datetimepicker type="date" value="effectiveOn" label="Effective On" isrequired="!isFuture"></vr-datetimepicker>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-textbox label="Code Prefix Length" value="codePrefixLength"></vr-textbox>
             </vr-columns>
         </vr-row>
     </vr-form>
