@@ -18,23 +18,20 @@ app.service('WhS_Routing_RouteRuleService', ['WhS_Routing_RouteRuleAPIService', 
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "New Route Rule";
                 modalScope.onRouteRuleAdded = onRouteRuleAdded;
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/RouteRuleEditor.html', parameters, settings);
         }
 
-        function editRouteRule(routeRuleObj, onRouteRuleUpdated) {
+        function editRouteRule(routeRuleId, onRouteRuleUpdated) {
             var modalSettings = {
             };
             var parameters = {
-                routeRuleId: routeRuleObj.Entity.RuleId,
-                routingProductId: routeRuleObj.Entity.Criteria != null ? routeRuleObj.Entity.Criteria.RoutingProductId : undefined
+                routeRuleId: routeRuleId
             };
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.title = "Edit Route Rule";
                 modalScope.onRouteRuleUpdated = onRouteRuleUpdated;
             };
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/RouteRuleEditor.html', parameters, modalSettings);

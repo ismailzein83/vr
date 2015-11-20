@@ -1,0 +1,13 @@
+﻿<vr-row>
+    <vr-columns colnum="12" simplecol>
+        <vr-datagrid datasource="customerRoutes"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     on-ready="onGridReady"
+                     menuactions="gridMenuActions">
+
+            <vr-datagridcolumn headertext="'Customer Id'" field="'Entity.CustomerId'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Code'" field="'Entity.Code'"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

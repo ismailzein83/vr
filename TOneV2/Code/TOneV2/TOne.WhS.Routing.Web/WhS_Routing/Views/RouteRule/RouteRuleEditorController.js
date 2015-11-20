@@ -143,6 +143,7 @@
             displaySectionsBasedOnParameters();
 
             if (isEditMode) {
+                $scope.title = "Edit Route Rule";
                 getRouteRule().then(function () {
                     loadAllControls()
                         .finally(function () {
@@ -154,6 +155,7 @@
                 });
             }
             else {
+                $scope.title = "New Route Rule";
                 loadAllControls();
             }
         }
@@ -178,6 +180,7 @@
         function getRouteRule() {
             return WhS_Routing_RouteRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
                 routeRuleEntity = routeRule;
+                routingProductId = routeRuleObj.Entity.Criteria != null ? routeRuleObj.Entity.Criteria.RoutingProductId : undefined;
             });
         }
 
