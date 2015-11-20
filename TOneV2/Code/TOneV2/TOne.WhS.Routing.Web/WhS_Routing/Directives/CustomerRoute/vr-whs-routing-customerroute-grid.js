@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive('vrWhsRoutingCustomerRouteGrid', ['VRNotificationService', 'WhS_Routing_CustomerRouteAPIService', 'WhS_BE_MainService',
+app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'WhS_Routing_CustomerRouteAPIService', 'WhS_BE_MainService',
 function (VRNotificationService, WhS_Routing_CustomerRouteAPIService, WhS_BE_MainService) {
 
     var directiveDefinitionObject = {
@@ -20,7 +20,7 @@ function (VRNotificationService, WhS_Routing_CustomerRouteAPIService, WhS_BE_Mai
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_CustomerRoute/Directives/CustomerRoute/Templates/CustomerRouteGridTemplate.html"
+        templateUrl: "/Client/Modules/WhS_Routing/Directives/CustomerRoute/Templates/CustomerRouteGridTemplate.html"
 
     };
 

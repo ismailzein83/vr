@@ -84,7 +84,7 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
                 gridAPI.itemUpdated(updatedItem);
             };
 
-            WhS_Routing_RouteRuleService.editRouteRule(routeRule, onRouteRuleUpdated);
+            WhS_Routing_RouteRuleService.editRouteRule(routeRule.Entity.RouteRuleId, onRouteRuleUpdated);
         }
 
         function deleteRouteRule(routeRule) {

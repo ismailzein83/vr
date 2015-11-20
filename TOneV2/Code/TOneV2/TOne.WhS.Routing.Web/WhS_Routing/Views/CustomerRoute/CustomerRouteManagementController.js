@@ -4,7 +4,7 @@
 
     customerRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function customerRouteManagementController($scope, WhS_Routing_RouteRuleService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function customerRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService) {
         var gridAPI;
 
         var carrierAccountDirectiveAPI;
@@ -22,7 +22,7 @@
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                api.loadGrid({});
+                api.loadGrid({ RoutingDatabaseId: 129 });
             }
 
             $scope.searchClicked = function () {
@@ -32,6 +32,7 @@
 
             function getFilterObject() {
                 var query = {
+                    RoutingDatabaseId: 129,
                     Code: $scope.code,
                     CustomerIds: carrierAccountDirectiveAPI.getSelectedIds()
                 };
