@@ -63,12 +63,7 @@
                             if (newValue == "") {
                                 ctrl.value = undefined;
                             }
-                            if (iAttrs.onvaluechanged != undefined) {
-                                var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
-                                if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
-                                    onvaluechangedMethod();
-                                }
-                            }
+                            
                             if (iAttrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name) {
                                 var arr = String(newValue).split("");
                                 var decimalArray = String(newValue).split(".");
@@ -81,18 +76,25 @@
                                 if (arr.length === 0) return;
                                 if (arr.length === 1 && (arr[0] === '-' || arr[0] === '.')) return;
                                 if (arr.length === 2 && newValue === '-.') return;
-                                if (isNaN(newValue) && newValue!='') {
+                                if (isNaN(newValue) ) {
                                     ctrl.value = oldValue;
                                 }
                             
                             }
+                           
                             if (iAttrs.maxlength != undefined) {
                                 var charArray = String(newValue).split("");
                                 if(charArray.length > ctrl.maxlength)
                                     ctrl.value = oldValue;
 
                             }
-                            
+
+                            if (iAttrs.onvaluechanged != undefined) {
+                                var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
+                                if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
+                                    onvaluechangedMethod();
+                                }
+                            }
                            
                         });
 
