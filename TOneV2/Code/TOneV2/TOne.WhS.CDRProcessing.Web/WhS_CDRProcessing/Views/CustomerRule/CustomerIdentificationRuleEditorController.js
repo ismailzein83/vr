@@ -25,7 +25,8 @@
             isEditMode = (ruleId != undefined);
         }
         function defineScope() {
-            $scope.SaveCustomerRule = function () {
+            $scope.scopeModal = {};
+            $scope.scopeModal.SaveCustomerRule = function () {
                 if (isEditMode) {
                     return updateCustomerRule();
                 }
@@ -33,57 +34,52 @@
                     return insertCustomerRule();
                 }
             };
-            $scope.onCarrierAccountDirectiveReady = function (api) {
+            $scope.scopeModal.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
                 carrierAccountReadyPromiseDeferred.resolve();
 
             }
-            $scope.close = function () {
+            $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
             };
-            $scope.inTrunks = [];
-            $scope.inCarriers = [];
-            $scope.CDPNPrefixes = [];
-            $scope.addTrunk = function () {
-                $scope.inTrunks.push($scope.inTrunk);
-                $scope.inTrunk = undefined;
-            }
-            $scope.addCarrier = function () {
-                $scope.inCarriers.push($scope.inCarrier);
-                $scope.inCarrier = null;
-            }
-            $scope.addCDPNPrefix = function () {
-                $scope.CDPNPrefixes.push($scope.CDPNPrefix);
-                $scope.CDPNPrefix = undefined;
-            }
+            $scope.scopeModal.inTrunks = [];
+            $scope.scopeModal.inCarriers = [];
+            $scope.scopeModal.CDPNPrefixes = [];
+            $scope.scopeModal.disableInCarrierAddButton = true;
+            $scope.scopeModal.disableAddCDPNPrefixButton = true;
+            $scope.scopeModal.disableInTrunkAddButton = true;
 
-            $scope.removeInTrunk = function (intrunk) {
-                $scope.inTrunks.splice($scope.inTrunks.indexOf(intrunk), 1);
+            $scope.scopeModal.addTrunk = function () {
+                $scope.scopeModal.inTrunks.push($scope.scopeModal.inTrunk);
+                $scope.scopeModal.inTrunk = undefined;
+                $scope.scopeModal.disableInTrunkAddButton = true;
             }
+            $scope.scopeModal.addCarrier = function () {
 
-
-            $scope.removeInCarrier = function (incarrier) {
-                $scope.inCarriers.splice($scope.inCarriers.indexOf(incarrier), 1);
+                $scope.scopeModal.inCarriers.push($scope.scopeModal.inCarrier);
+                $scope.scopeModal.inCarrier = undefined;
+                $scope.scopeModal.disableInCarrierAddButton = true;
             }
-
-
-            $scope.removeCDPN = function (cdpn) {
-                $scope.CDPNPrefixes.splice($scope.CDPNPrefixes.indexOf(cdpn), 1);
+            $scope.scopeModal.addCDPNPrefix = function () {
+              
+                    $scope.scopeModal.CDPNPrefixes.push($scope.scopeModal.CDPNPrefix);
+                    $scope.scopeModal.CDPNPrefix = undefined;
+                    $scope.scopeModal.disableAddCDPNPrefixButton = true;
             }
-            $scope.onCDPNValueChange = function () {
-                $scope.disableAddCDPNPrefixButton = ($scope.CDPNPrefix == null);
+            $scope.scopeModal.onCDPNValueChange = function (value) {
+                $scope.scopeModal.disableAddCDPNPrefixButton = value == undefined|| UtilsService.contains($scope.scopeModal.CDPNPrefixes, $scope.scopeModal.CDPNPrefix);
             }
-            $scope.onInCarrierValueChange = function () {
-                $scope.disableInCarrierAddButton = ($scope.inCarrier == null || $scope.inCarrier == undefined);
+            $scope.scopeModal.onInCarrierValueChange = function (value) {
+                $scope.scopeModal.disableInCarrierAddButton = value == undefined || UtilsService.contains($scope.scopeModal.inCarriers, $scope.scopeModal.inCarrier);
             }
-            $scope.onInTrunkValueChange = function () {
-                $scope.disableInTrunkAddButton = ($scope.inTrunk == null);
+            $scope.scopeModal.onInTrunkValueChange = function () {
+                $scope.scopeModal.disableInTrunkAddButton = $scope.scopeModal.inTrunk == "" || UtilsService.contains($scope.scopeModal.inTrunks, $scope.scopeModal.inTrunk);
             }
 
         }
 
         function load() {
-            $scope.isLoading = true;
+            $scope.scopeModal.isLoading = true;
             if (isEditMode) {
                 $scope.title = UtilsService.buildTitleForUpdateEditor("Customer Rule");
                 getCustomerRule().then(function () {
@@ -93,7 +89,7 @@
                         });
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
+                    $scope.scopeModal.isLoading = false;
                 });
             }
             else {
@@ -111,7 +107,7 @@
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
                .finally(function () {
-                   $scope.isLoading = false;
+                   $scope.scopeModal.isLoading = false;
                });
         }
         function loadCarrierAccountDirective() {
@@ -130,12 +126,12 @@
         }
         function loadFilterBySection() {
             if (customerRuleEntity != undefined) {
-                $scope.inTrunks = customerRuleEntity.Criteria.InTrunks
-                $scope.inCarriers = customerRuleEntity.Criteria.InCarriers
-                $scope.CDPNPrefixes = customerRuleEntity.Criteria.CDPNPrefixes
-                $scope.beginEffectiveDate = customerRuleEntity.BeginEffectiveTime;
-                $scope.endEffectiveDate = customerRuleEntity.EndEffectiveTime;
-                $scope.description = customerRuleEntity.Description;
+                $scope.scopeModal.inTrunks = customerRuleEntity.Criteria.InTrunks
+                $scope.scopeModal.inCarriers = customerRuleEntity.Criteria.InCarriers
+                $scope.scopeModal.CDPNPrefixes = customerRuleEntity.Criteria.CDPNPrefixes
+                $scope.scopeModal.beginEffectiveDate = customerRuleEntity.BeginEffectiveTime;
+                $scope.scopeModal.endEffectiveDate = customerRuleEntity.EndEffectiveTime;
+                $scope.scopeModal.description = customerRuleEntity.Description;
             }
         }
 
@@ -148,20 +144,20 @@
         function buildCustomerRuleObjectObjFromScope() {
             
             var settings = {
-                CustomerId: $scope.selectedCustomer.CarrierAccountId
+                CustomerId: $scope.scopeModal.selectedCustomer.CarrierAccountId
             }
             var criteria = {
-                InTrunks: $scope.inTrunks,
-                InCarriers: $scope.inCarriers,
-                CDPNPrefixes: $scope.CDPNPrefixes
+                InTrunks: $scope.scopeModal.inTrunks,
+                InCarriers: $scope.scopeModal.inCarriers,
+                CDPNPrefixes: $scope.scopeModal.CDPNPrefixes
 
             }
             var customerRule = {
                 Settings: settings,
-                Description: $scope.description,
+                Description: $scope.scopeModal.description,
                 Criteria: criteria,
-                BeginEffectiveTime: $scope.beginEffectiveDate,
-                EndEffectiveTime: $scope.endEffectiveDate
+                BeginEffectiveTime: $scope.scopeModal.beginEffectiveDate,
+                EndEffectiveTime: $scope.scopeModal.endEffectiveDate
             }
            
             return customerRule;
@@ -173,8 +169,8 @@
             return WhS_CDRProcessing_CustomerIdentificationRuleAPIService.AddRule(customerRuleObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Customer Rule", response)) {
-                    if ($scope.onCustomerIdentificationRuleAdded != undefined)
-                        $scope.onCustomerIdentificationRuleAdded(response.InsertedObject);
+                    if ($scope.scopeModal.onCustomerIdentificationRuleAdded != undefined)
+                        $scope.scopeModal.onCustomerIdentificationRuleAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -189,8 +185,8 @@
             WhS_CDRProcessing_CustomerIdentificationRuleAPIService.UpdateRule(customerRuleObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Customer Rule", response)) {
-                    if ($scope.onCustomerIdentificationRuleUpdated != undefined)
-                        $scope.onCustomerIdentificationRuleUpdated(response.UpdatedObject);
+                    if ($scope.scopeModal.onCustomerIdentificationRuleUpdated != undefined)
+                        $scope.scopeModal.onCustomerIdentificationRuleUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {

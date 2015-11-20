@@ -34,12 +34,13 @@
             isEditMode = (ruleId != undefined);
         }
         function defineScope() {
-            $scope.onCriteriaDirectiveReady = function (api) {
+            $scope.scopeModal = {}
+            $scope.scopeModal.onCriteriaDirectiveReady = function (api) {
                 criteriaDirectiveAPI = api;
                 criteriaReadyPromiseDeferred.resolve();
             }
 
-            $scope.SavePricingRule = function () {
+            $scope.scopeModal.SavePricingRule = function () {
                 if (isEditMode) {
                     return updatePricingRule();
                 }
@@ -47,30 +48,30 @@
                     return insertPricingRule();
                 }
             };
-            $scope.onPricingRuleTypeDirectiveReady = function (api) {
+            $scope.scopeModal.onPricingRuleTypeDirectiveReady = function (api) {
                 pricingRuleTypeDirectiveAPI = api;
                 pricingRuleTypeReadyPromiseDeferred.resolve();
             }
-            $scope.close = function () {
+            $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
             };
-            $scope.beginEffectiveDate = new Date();
-            $scope.selectedPricingRuleType;
-            $scope.selectedPricingType;
+            $scope.scopeModal.beginEffectiveDate = new Date();
+            $scope.scopeModal.selectedPricingRuleType;
+            $scope.scopeModal.selectedPricingType;
         }
 
         function load() {
-            $scope.isLoading = true;
+            $scope.scopeModal.isLoading = true;
 
             definePricingRuleTypes();
             if (pricingType != undefined)
                 for (var p in WhS_Be_PricingTypeEnum)
                     if (WhS_Be_PricingTypeEnum[p].value == pricingType)
-                        $scope.selectedPricingType = WhS_Be_PricingTypeEnum[p];
+                        $scope.scopeModal.selectedPricingType = WhS_Be_PricingTypeEnum[p];
 
-            if ($scope.selectedPricingType.value == WhS_Be_PricingTypeEnum.Sale.value)
+            if ($scope.scopeModal.selectedPricingType.value == WhS_Be_PricingTypeEnum.Sale.value)
                 service = WhS_BE_SalePricingRuleAPIService;
-            else if ($scope.selectedPricingType.value == WhS_Be_PricingTypeEnum.Purchase.value)
+            else if ($scope.scopeModal.selectedPricingType.value == WhS_Be_PricingTypeEnum.Purchase.value)
                 service = WhS_BE_PurchasePricingRuleAPIService;
 
 
@@ -82,7 +83,7 @@
                         });
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
+                    $scope.scopeModal.isLoading = false;
                 });
             }
             else {
@@ -98,7 +99,7 @@
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
                .finally(function () {
-                   $scope.isLoading = false;
+                   $scope.scopeModal.isLoading = false;
                });
         }
 
@@ -131,17 +132,17 @@
         function setDefaultValues() {
             for (var p in WhS_Be_PricingRuleTypeEnum) {
                 if (WhS_Be_PricingRuleTypeEnum[p].value == pricingRuleType) {
-                    $scope.selectedPricingRuleType = WhS_Be_PricingRuleTypeEnum[p];
+                    $scope.scopeModal.selectedPricingRuleType = WhS_Be_PricingRuleTypeEnum[p];
                 }
             }
-            $scope.title = UtilsService.buildTitleForAddEditor($scope.selectedPricingRuleType.title);
+            $scope.title = UtilsService.buildTitleForAddEditor($scope.scopeModal.selectedPricingRuleType.title);
             
         }
 
         function definePricingRuleTypes() {
-            $scope.pricingRuleTypes = [];
+            $scope.scopeModal.pricingRuleTypes = [];
             for (var p in WhS_Be_PricingRuleTypeEnum)
-                $scope.pricingRuleTypes.push(WhS_Be_PricingRuleTypeEnum[p]);
+                $scope.scopeModal.pricingRuleTypes.push(WhS_Be_PricingRuleTypeEnum[p]);
         }
         function getPricingRule() {
             return service.GetRule(ruleId).then(function (pricingRule) {
@@ -155,16 +156,16 @@
              
             var settings = pricingRuleTypeDirectiveAPI.getData();
 
-            settings.RuleType = $scope.selectedPricingRuleType.value;
+            settings.RuleType = $scope.scopeModal.selectedPricingRuleType.value;
             var criteria = criteriaDirectiveAPI.getData();
            
             criteria.CriteriaType = pricingType
             var pricingRule = {
                 Settings: settings,
-                Description: $scope.description,
+                Description: $scope.scopeModal.description,
                 Criteria: criteria,
-                BeginEffectiveTime: $scope.beginEffectiveDate,
-                EndEffectiveTime: $scope.endEffectiveDate
+                BeginEffectiveTime: $scope.scopeModal.beginEffectiveDate,
+                EndEffectiveTime: $scope.scopeModal.endEffectiveDate
             }
             return pricingRule;
         }
@@ -172,15 +173,15 @@
         function loadFilterBySection() {
             if (pricingRuleEntity != undefined)
             {
-                $scope.beginEffectiveDate = pricingRuleEntity.BeginEffectiveTime;
-                $scope.endEffectiveDate = pricingRuleEntity.EndEffectiveTime;
-                $scope.description = pricingRuleEntity.Description;
+                $scope.scopeModal.beginEffectiveDate = pricingRuleEntity.BeginEffectiveTime;
+                $scope.scopeModal.endEffectiveDate = pricingRuleEntity.EndEffectiveTime;
+                $scope.scopeModal.description = pricingRuleEntity.Description;
                 for (var p in WhS_Be_PricingRuleTypeEnum) {
                     if (WhS_Be_PricingRuleTypeEnum[p].value == pricingRuleEntity.Settings.RuleType) {
-                        $scope.selectedPricingRuleType = WhS_Be_PricingRuleTypeEnum[p];
+                        $scope.scopeModal.selectedPricingRuleType = WhS_Be_PricingRuleTypeEnum[p];
                     }
                 }
-                $scope.title = UtilsService.buildTitleForUpdateEditor($scope.selectedPricingRuleType.title);
+                $scope.title = UtilsService.buildTitleForUpdateEditor($scope.scopeModal.selectedPricingRuleType.title);
             }
         }
         function insertPricingRule() {
@@ -188,9 +189,9 @@
             var pricingRuleObject = buildPricingRuleObjFromScope();
             return service.AddRule(pricingRuleObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded($scope.selectedPricingRuleType.title, response)) {
-                    if ($scope.onPricingRuleAdded != undefined)
-                        $scope.onPricingRuleAdded(response.InsertedObject);
+                if (VRNotificationService.notifyOnItemAdded($scope.scopeModal.selectedPricingRuleType.title, response)) {
+                    if ($scope.scopeModal.onPricingRuleAdded != undefined)
+                        $scope.scopeModal.onPricingRuleAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {

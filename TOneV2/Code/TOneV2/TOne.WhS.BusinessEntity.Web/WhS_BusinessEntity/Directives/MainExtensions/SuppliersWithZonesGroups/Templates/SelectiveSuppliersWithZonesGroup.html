@@ -8,7 +8,7 @@
                 <vr-row>
                     <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective">
                         <vr-datagrid datasource="ctrl.datasource"
-                                     on-ready="onGridReady" ondeleterow="ctrl.removeFilter" hidegridmenu>
+                                     on-ready="onGridReady" ondeleterow="ctrl.removeFilter" hidegridmenu norowhighlightonclick="'true'">
                             <vr-datagridcolumn headertext="'Supplier Name'" field="'name'" widthfactor="5"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Supplier Zones'" widthfactor="10">
                                 <vr-whs-be-supplierzone-selector on-ready="dataItem.onDirectiveReady" selectedvalues="dataItem.selectedSuplierZones" hidetitle ismultipleselection></vr-whs-be-supplierzone-selector>

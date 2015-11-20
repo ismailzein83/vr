@@ -58,27 +58,42 @@
                             if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                                 return;
                           
+                            var retrunedValue;
                             isUserChange = false;//reset the flag
                           
                             if (newValue == "") {
-                                ctrl.value = undefined;
+                                
+                                setTimeout(function () {
+                                    ctrl.value = undefined;
+                                    $scope.$apply();
+                                });
+                               
+                            }
+                            if (!newValue == "") {
+
+                                retrunedValue = newValue;
                             }
                             
                             if (iAttrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name) {
                                 var arr = String(newValue).split("");
                                 var decimalArray = String(newValue).split(".");
                                 var negativeArray = String(newValue).split("-");
-                                if (arr.length === 0) return;
+                                //if (arr.length === 0) return;
                                 if (decimalArray.length > 2)
                                     ctrl.value = oldValue;
                                 if (negativeArray.length > 2)
                                     ctrl.value = oldValue;
-                                if (arr.length === 0) return;
+                               // if (arr.length === 0) return;
                                 if (arr.length === 1 && (arr[0] === '-' || arr[0] === '.')) return;
                                 if (arr.length === 2 && newValue === '-.') return;
+                                if (!isNaN(newValue) && newValue != "") {
+                                    retrunedValue = newValue;
+                                }
                                 if (isNaN(newValue) ) {
                                     ctrl.value = oldValue;
+                                    retrunedValue=undefined;
                                 }
+                               
                             
                             }
                            
@@ -92,7 +107,7 @@
                             if (iAttrs.onvaluechanged != undefined) {
                                 var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
                                 if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
-                                    onvaluechangedMethod();
+                                    onvaluechangedMethod(retrunedValue);
                                 }
                             }
                            
