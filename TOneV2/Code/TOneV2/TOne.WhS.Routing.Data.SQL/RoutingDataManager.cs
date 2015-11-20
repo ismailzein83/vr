@@ -141,6 +141,18 @@ namespace TOne.WhS.Routing.Data.SQL
                                                     )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
                                                     ) ON [PRIMARY]
 
+                                                    CREATE TABLE [dbo].[RoutingProductOptions](
+	                                                                    [ProductID] [int] NOT NULL,
+	                                                                    [SaleZoneID] [int] NOT NULL,
+	                                                                    [RouteOptions] [varchar](max) NOT NULL,
+                                                                     CONSTRAINT [PK_RoutingProductRoute] PRIMARY KEY CLUSTERED 
+                                                                    (
+	                                                                    [ProductID] ASC,
+	                                                                    [SaleZoneID] ASC
+                                                                    )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+                                                                    ) ON [PRIMARY]
+
+                                                    
                                                     CREATE TYPE [LongIDType] AS TABLE(
 	                                                    [ID] [bigint] NOT NULL,
 	                                                    PRIMARY KEY CLUSTERED 
@@ -148,6 +160,8 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [ID] ASC
                                                     )WITH (IGNORE_DUP_KEY = OFF)
                                                     )
+
+                                
 ";
 
         #endregion
