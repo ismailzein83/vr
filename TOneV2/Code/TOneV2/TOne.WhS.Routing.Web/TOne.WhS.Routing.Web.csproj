@@ -171,6 +171,8 @@
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRouteProcessController.js" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRoutesByCodePrefix.html" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRoutesByCodePrefixController.js" />
+    <Content Include="WhS_Routing\Views\RouteRule\CustomerRouteManagement.html" />
+    <Content Include="WhS_Routing\Views\RouteRule\CustomerRouteManagementController.js" />
     <Content Include="WhS_Routing\Views\RouteRule\RouteRuleEditor.html" />
     <Content Include="WhS_Routing\Views\RouteRule\RouteRuleEditorController.js" />
     <Content Include="WhS_Routing\Views\RouteRule\RouteRuleManagement.html" />
