@@ -66,6 +66,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoutingDatabaseDataManager.cs" />
     <Compile Include="RoutingDataManager.cs" />
+    <Compile Include="RoutingProductOptionDataManager.cs" />
     <Compile Include="SupplierZoneDetailsDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
