@@ -61,7 +61,6 @@
     <Compile Include="CustomerZoneDetailBatch.cs" />
     <Compile Include="IBuildCodeMatchesContext.cs" />
     <Compile Include="IBuildCustomerRoutesContext.cs" />
-    <Compile Include="IBuildRoutingProductOptionsContext.cs" />
     <Compile Include="IBuildRoutingProductRoutesContext.cs" />
     <Compile Include="IRouteRuleExecutionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
