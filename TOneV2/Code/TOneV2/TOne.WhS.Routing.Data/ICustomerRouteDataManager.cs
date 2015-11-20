@@ -11,5 +11,7 @@ namespace TOne.WhS.Routing.Data
     public interface ICustomerRouteDataManager : IDataManager, IBulkApplyDataManager<CustomerRoute>, IRoutingDataManager
     {
         void ApplyCustomerRouteForDB(object preparedCustomerRoute);
+
+        Vanrise.Entities.BigResult<Entities.CustomerRoute> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<Entities.CustomerRouteQuery> input);
     }
 }

@@ -16,10 +16,8 @@ namespace TOne.WhS.Routing.Web.Controllers
         [Route("GetFilteredCustomerRoutes")]
         public object GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<CustomerRouteQuery> input)
         {
-            //CustomerRouteManager manager = new CustomerRouteManager();
-            //return GetWebResponse(input, manager.GetFilteredRouteRules(input));
-
-            throw new NotImplementedException();
+            CustomerRouteManager manager = new CustomerRouteManager();
+            return GetWebResponse(input, manager.GetFilteredCustomerRoutes(input));
         }
     }
 }
