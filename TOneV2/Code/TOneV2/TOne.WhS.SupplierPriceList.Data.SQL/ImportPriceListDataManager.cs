@@ -92,15 +92,15 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 	                            BEGIN
                                  CREATE TABLE #TempTable# ( 
                          
-	                             [ID] [bigint] IDENTITY(1,1) NOT NULL,
+	                             [ID] [bigint] NOT NULL,
 	                             [Code] [varchar](20) NOT NULL,
 	                             [ZoneID] [bigint] NOT NULL,
                                  [CodeGroupID] [int] NULL,
 	                             [BED] [datetime] NOT NULL,
 	                             [EED] [datetime] NULL,
                                  [IsUpdated] [Bit] Null)
-                                 ALTER TABLE #TempTable#
-                                 ADD PRIMARY KEY (ID)
+                               
+                                 CREATE CLUSTERED INDEX IX_SupplierCode_ID ON #TempTable# (ID); 
                                 END
                                 ");
             queryBuilder.Replace("#TempTable#", tempTable);
@@ -116,7 +116,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                             IF NOT OBJECT_ID('#TempTable#', N'U') IS NOT NULL
 	                            BEGIN
                                      CREATE TABLE #TempTable# ( 
-                        	           [ID] [bigint] IDENTITY(1,1) NOT NULL,
+                        	           [ID] [bigint]  NOT NULL,
 	                                   [PriceListID] [int] NOT NULL,
 	                                   [ZoneID] [bigint] NOT NULL,
                                        [CurrencyID] [int] NULL,
@@ -125,8 +125,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 	                                   [BED] [datetime] NOT NULL,
 	                                   [EED] [datetime] NULL,
                                        [IsUpdated] [Bit] Null)
-                                    ALTER TABLE #TempTable#
-                                    ADD PRIMARY KEY (ID)
+                                 
+                                    CREATE CLUSTERED INDEX IX_SupplierRate_ID ON #TempTable# (ID); 
 
                                 END
                              
@@ -168,7 +168,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
-                       0,
+                       record.SupplierCodeId,
                        record.CodeValue,
                        record.ZoneId,
                        record.CodeGroupId,
@@ -180,7 +180,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}",
-                       0,
+                       record.SupplierRateId,
                        record.PriceListId,
                        record.ZoneId,
                        record.CurrencyID,
@@ -271,8 +271,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         private void GenerateTempTablesName(int supplierID)
         {
             this.tempZoneTable= String.Format("[dbo].[TempTableForSupplierZones_{0}_{1}]", supplierID, Guid.NewGuid());
-            this.tempCodeTable = String.Format("[dbo].[TempTableForSupplierZones_{0}_{1}]", supplierID, Guid.NewGuid());
-            this.tempRateTable = String.Format("[dbo].[TempTableForSupplierZones_{0}_{1}]", supplierID, Guid.NewGuid());
+            this.tempCodeTable = String.Format("[dbo].[TempTableForSupplierCodes_{0}_{1}]", supplierID, Guid.NewGuid());
+            this.tempRateTable = String.Format("[dbo].[TempTableForSupplierRates_{0}_{1}]", supplierID, Guid.NewGuid());
         }
         private string tempZoneTable;
         private string tempCodeTable;

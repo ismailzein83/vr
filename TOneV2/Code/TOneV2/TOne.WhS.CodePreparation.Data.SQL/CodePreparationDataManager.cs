@@ -18,35 +18,6 @@ namespace TOne.WhS.CodePreparation.Data.SQL
 
         }
 
-
-        public object FinishSaleZoneDBApplyStream(object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.Close();
-            return new StreamBulkInsertInfo
-            {
-                TableName = "[TOneWhS_BE].[SaleZone]",
-                Stream = streamForBulkInsert,
-                TabLock = true,
-                KeepIdentity = false,
-                FieldSeparator = '^',
-            };
-        }
-
-        public object FinishSaleCodeDBApplyStream(object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.Close();
-            return new StreamBulkInsertInfo
-            {
-                TableName = "[TOneWhS_BE].[SaleCode]",
-                Stream = streamForBulkInsert,
-                TabLock = true,
-                KeepIdentity = false,
-                FieldSeparator = '^',
-            };
-        }
-
         public object InitialiazeZonesStreamForDBApply()
         {
             return base.InitializeStreamForBulkInsert();
@@ -59,25 +30,27 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         public void WriteRecordToZonesStream(Zone record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
                        record.SaleZoneId,
                        record.SellingNumberPlanId,
                        record.CountryId,
                        record.Name,
                        record.BeginEffectiveDate,
-                       record.EndEffectiveDate.HasValue ? (DateTime?)record.EndEffectiveDate.Value : null);
+                       record.EndEffectiveDate,
+                       (record.Status != Status.New) ? 1 : 0);
         }
 
         public void WriteRecordToCodesStream(Code record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}",
-                       0,
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
+                       record.SaleCodeId,
                        record.CodeValue,
                        record.ZoneId,
                        record.CodeGroupId,
                        record.BeginEffectiveDate,
-                       record.EndEffectiveDate.HasValue ? (DateTime?)record.EndEffectiveDate.Value : null);
+                       record.EndEffectiveDate,
+                       (record.Status != Status.New) ? 1 : 0);
         }
 
         public void ApplySaleZonesForDB(object preparedSaleZones)
@@ -85,113 +58,148 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             InsertBulkToTable(preparedSaleZones as BaseBulkInsertInfo);
         }
 
-        public void ApplySaleCodesForDB(object preparedSaleCodes)
+        public void InsertCodePreparationObject(Dictionary<string, Zone> saleZones, int sellingNumberPlanId)
         {
-            InsertBulkToTable(preparedSaleCodes as BaseBulkInsertInfo);
-        }
+            GenerateTempTablesName(sellingNumberPlanId);
 
-        public void DeleteSaleZones(List<Zone> saleZones)
-        {
-            DataTable dtSaleZonesToUpdate = GetSaleZonesTable();
+            CreateTempTableForSaleZones(tempZoneTable);
+            CreateTempTableForSaleCodes(tempCodeTable);
 
-            dtSaleZonesToUpdate.BeginLoadData();
+            object dbApplyStreamZones = InitialiazeZonesStreamForDBApply();
+            object dbApplyStreamCodes = InitialiazeCodesStreamForDBApply();
 
-            foreach (var item in saleZones)
+            foreach (var zone in saleZones)
             {
-                Zone saleZone = new Zone
+                WriteRecordToZonesStream(zone.Value, dbApplyStreamZones);
+                foreach (Code code in zone.Value.Codes)
                 {
-                    SaleZoneId = item.SaleZoneId,
-                    EndEffectiveDate = item.EndEffectiveDate
-                };
-                DataRow dr = dtSaleZonesToUpdate.NewRow();
-                FillSaleZoneRow(dr, saleZone);
-                dtSaleZonesToUpdate.Rows.Add(dr);
+                    WriteRecordToCodesStream(code, dbApplyStreamCodes);
+                }
             }
-            if (dtSaleZonesToUpdate.Rows.Count > 0)
-                ExecuteNonQuerySPCmd("[TOneWhS_BE].[sp_SaleZone_Update]",
-                    (cmd) =>
-                    {
-                        var dtPrm = new System.Data.SqlClient.SqlParameter("@SaleZones", SqlDbType.Structured);
-                        dtPrm.Value = dtSaleZonesToUpdate;
-                        cmd.Parameters.Add(dtPrm);
-                    }
-                    );
+
+            object prepareToApplyZones = FinishDBApplyStream(dbApplyStreamZones, tempZoneTable);
+            object prepareToApplyCodes = FinishDBApplyStream(dbApplyStreamCodes, tempCodeTable);
+
+            ApplySaleZonesForDB(prepareToApplyZones);
+            ApplySaleZonesForDB(prepareToApplyCodes);
+
+            MergingDataAndFinalizing();
+
         }
-        public void DeleteSaleCodes(List<Code> saleCodes)
+
+        private object FinishDBApplyStream(object dbApplyStream, string tempTable)
         {
-            DataTable dtSaleZCodesToUpdate = GetSaleCodesTable();
-
-            dtSaleZCodesToUpdate.BeginLoadData();
-
-            foreach (var item in saleCodes)
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.Close();
+            return new StreamBulkInsertInfo
             {
-                Code saleCode = new Code
-                {
-                    SaleCodeId = item.SaleCodeId,
-                    EndEffectiveDate = item.EndEffectiveDate
-                };
-                DataRow dr = dtSaleZCodesToUpdate.NewRow();
-                FillSaleCodeRow(dr, saleCode);
-                dtSaleZCodesToUpdate.Rows.Add(dr);
-            }
-            if (dtSaleZCodesToUpdate.Rows.Count > 0)
-                ExecuteNonQuerySPCmd("[TOneWhS_BE].[sp_SaleCode_Update]",
-                    (cmd) =>
-                    {
-                        var dtPrm = new System.Data.SqlClient.SqlParameter("@SaleCodes", SqlDbType.Structured);
-                        dtPrm.Value = dtSaleZCodesToUpdate;
-                        cmd.Parameters.Add(dtPrm);
-                    }
-                    );
+                TableName = tempTable,
+                Stream = streamForBulkInsert,
+                TabLock = false,
+                KeepIdentity = false,
+                FieldSeparator = '^',
+            };
         }
 
-        DataTable GetSaleCodesTable()
+
+
+        public string BuildApplyZonesQuery(string tempTable)
         {
-            DataTable dt = new DataTable("SaleCodes");
-            dt.Columns.Add("ID", typeof(long));
-            dt.Columns.Add("EED", typeof(DateTime));
-            return dt;
+            StringBuilder queryBuilder = new StringBuilder(@"
+                                        INSERT INTO [TOneWhS_BE].[SaleZone] 
+                                        (ID,SellingNumberPlanID,CountryID,Name,BED,EED)
+                                        Select ID,SellingNumberPlanID,CountryID,Name,BED,EED From #TableName# WHERE IsUpdated=0
+                                        UPDATE sz
+                                        SET sz.EED = tsz.EED
+                                        FROM [TOneWhS_BE].[SaleZone] sz INNER JOIN #TableName# tsz ON sz.ID=tsz.ID  
+                                        Where tsz.IsUpdated=1
+
+                                        DROP TABLE #TableName#
+                                        
+                                ");
+            queryBuilder.Replace("#TableName#", tempTable);
+            return queryBuilder.ToString();
         }
-        void FillSaleCodeRow(DataRow dr,Code saleCode)
+        public string BuildApplyCodesQuery(string tempTable)
         {
-            dr["ID"] = saleCode.SaleCodeId;
-            if (saleCode.EndEffectiveDate != null)
-              dr["EED"] = saleCode.EndEffectiveDate;
+            StringBuilder queryBuilder = new StringBuilder(@"
+                                        INSERT INTO [TOneWhS_BE].[SaleCode] 
+                                        (Code,ZoneID,CodeGroupID,BED,EED)
+                                        Select Code,ZoneID,CodeGroupID,BED,EED From #TableName# WHERE IsUpdated=0
+                                        UPDATE sc
+                                        SET sc.EED = tsc.EED
+                                        FROM [TOneWhS_BE].[SaleCode] sc INNER JOIN #TableName# tsc ON sc.ID=tsc.ID 
+                                        Where tsc.IsUpdated=1
+                                        DROP TABLE #TableName#
+
+                                        
+                                ");
+            queryBuilder.Replace("#TableName#", tempTable);
+            return queryBuilder.ToString();
         }
 
-        public void InsertSaleCodes(List<Code> saleCodes)
+        public void MergingDataAndFinalizing()
         {
-            object dbApplyStream = InitialiazeCodesStreamForDBApply();
-            foreach (Code saleCode in saleCodes)
-                WriteRecordToCodesStream(saleCode, dbApplyStream);
-            object prepareToApplySaleCodes = FinishSaleCodeDBApplyStream(dbApplyStream);
-            ApplySaleCodesForDB(prepareToApplySaleCodes);
-        }
+            ExecuteNonQueryText(BuildApplyZonesQuery(tempZoneTable), null);
+            ExecuteNonQueryText(BuildApplyCodesQuery(tempCodeTable), null);
 
-        DataTable GetSaleZonesTable()
+        }
+        private void CreateTempTableForSaleZones(string tempTable)
         {
-            DataTable dt = new DataTable("SaleZones");
-            dt.Columns.Add("ID", typeof(long));
-            dt.Columns.Add("EED", typeof(DateTime));
-            return dt;
-        }
+            StringBuilder queryBuilder = new StringBuilder(@"
+                        IF NOT OBJECT_ID('#TempTable#', N'U') IS NOT NULL
+	                        BEGIN
+                                 CREATE TABLE #TempTable# (              
+	                             [ID] [bigint] NOT NULL,
+                                 [SellingNumberPlanID] [int] NOT NULL,
+	                             [CountryID] [int] NOT NULL,
+	                             [Name] [nvarchar] (255) NOT NULL,
+	                             [BED] [datetime] NOT NULL,
+	                             [EED] [datetime] NULL,
+                                 [IsUpdated] [Bit] Null)
+                                ALTER TABLE #TempTable#
+                                ADD PRIMARY KEY (ID)
+                             END ");
+            queryBuilder.Replace("#TempTable#", tempTable);
+            ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
+            {
 
-        void FillSaleZoneRow(DataRow dr, Zone saleZone)
+            });
+
+        }
+        private void CreateTempTableForSaleCodes(string tempTable)
         {
-            dr["ID"] = saleZone.SaleZoneId;
-            if (saleZone.EndEffectiveDate!=null)
-              dr["EED"] = saleZone.EndEffectiveDate;
+            StringBuilder queryBuilder = new StringBuilder(@"
+                            IF NOT OBJECT_ID('#TempTable#', N'U') IS NOT NULL
+	                            BEGIN
+                                 CREATE TABLE #TempTable# ( 
+                         
+	                             [ID] [bigint] NOT NULL,
+	                             [Code] [varchar](20) NOT NULL,
+	                             [ZoneID] [bigint] NOT NULL,
+                                 [CodeGroupID] [int] NULL,
+	                             [BED] [datetime] NOT NULL,
+	                             [EED] [datetime] NULL,
+                                 [IsUpdated] [Bit] Null)
+
+                                 CREATE CLUSTERED INDEX IX_SaleCode_ID ON #TempTable# (ID); 
+
+                                END
+                                ");
+            queryBuilder.Replace("#TempTable#", tempTable);
+            ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
+            {
+
+            });
+
         }
 
-        public void InsertSaleZones(List<Zone> saleZones)
+        private void GenerateTempTablesName(int sellingNumberPlanId)
         {
-            object dbApplyStream = InitialiazeZonesStreamForDBApply();
-            foreach (Zone saleZone in saleZones)
-                WriteRecordToZonesStream(saleZone, dbApplyStream);
-            object prepareToApplySaleZones = FinishSaleZoneDBApplyStream(dbApplyStream);
-            ApplySaleZonesForDB(prepareToApplySaleZones);
+            this.tempZoneTable = String.Format("[dbo].[TempTableForSaleZones_{0}_{1}]", sellingNumberPlanId, Guid.NewGuid());
+            this.tempCodeTable = String.Format("[dbo].[TempTableForSaleCodes_{0}_{1}]", sellingNumberPlanId, Guid.NewGuid());
         }
-
-
+        private string tempZoneTable;
+        private string tempCodeTable;
     }
 }

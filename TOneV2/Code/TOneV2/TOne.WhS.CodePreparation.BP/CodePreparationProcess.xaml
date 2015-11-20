@@ -117,22 +117,20 @@
         </InArgument>
       </twcba1:GenerateSaleCodes.SellingNumberPlanId>
     </twcba1:GenerateSaleCodes>
-    <twcba1:ApplySaleZonesForDB sap2010:WorkflowViewState.IdRef="ApplySaleZonesForDB_2">
-      <twcba1:ApplySaleZonesForDB.AffectedZonesWithCodes>
+    <twcba1:ApplyDataForDB sap2010:WorkflowViewState.IdRef="ApplyDataForDB_1">
+      <twcba1:ApplyDataForDB.AffectedZonesWithCodes>
         <InArgument x:TypeArguments="scg:Dictionary(x:String, twce:Zone)">
           <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, twce:Zone)">AffectedZonesWithCodes</mca:CSharpValue>
         </InArgument>
-      </twcba1:ApplySaleZonesForDB.AffectedZonesWithCodes>
-    </twcba1:ApplySaleZonesForDB>
-    <twcba1:ApplySaleCodesForDB sap2010:WorkflowViewState.IdRef="ApplySaleCodesForDB_3">
-      <twcba1:ApplySaleCodesForDB.AffectedZonesWithCodes>
-        <InArgument x:TypeArguments="scg:Dictionary(x:String, twce:Zone)">
-          <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, twce:Zone)">AffectedZonesWithCodes</mca:CSharpValue>
+      </twcba1:ApplyDataForDB.AffectedZonesWithCodes>
+      <twcba1:ApplyDataForDB.SellingNumberPlanId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
         </InArgument>
-      </twcba1:ApplySaleCodesForDB.AffectedZonesWithCodes>
-    </twcba1:ApplySaleCodesForDB>
+      </twcba1:ApplyDataForDB.SellingNumberPlanId>
+    </twcba1:ApplyDataForDB>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="Complete " />
-    <sads:DebugSymbol.Symbol>d1FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb25Qcm9jZXNzLnhhbWwXNQOIAQ4CAQE6BTpnAgE9OwVLIAIBMEwFYSACAR9iBXcgAgEOeAV+IgIBCX8FhQEiAgEEhgEFhgFRAgECOkM6ZAIBPkgLSIIBAgE5Pgs+XgIBNUMLQ1QCATFPC0+CAQIBLFkLWXoCASheC15hAgEkVAtUXgIBIGULZYIBAgEbbwtvegIBF3QLdGECARNqC2peAgEPewt7egIBCoIBC4IBegIBBYYBQ4YBTgIBAw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb25Qcm9jZXNzLnhhbWwWNQOGAQ4CAQE6BTpnAgE8OwVLIAIBL0wFYSACAR5iBXcgAgENeAWDAR0CAQSEAQWEAVECAQI6QzpkAgE9SAtIggECATg+Cz5eAgE0QwtDVAIBME8LT4IBAgErWQtZegIBJ14LXmECASNUC1ReAgEfZQtlggECARpvC296AgEWdAt0YQIBEmoLal4CAQ57C3t6AgEJgAELgAFhAgEFhAFDhAFOAgED</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -140,17 +138,16 @@
       <sap2010:ViewStateData Id="ReadDataFromExcel_3" sap:VirtualizedContainerService.HintSize="211,22" />
       <sap2010:ViewStateData Id="GenerateSaleZones_4" sap:VirtualizedContainerService.HintSize="211,22" />
       <sap2010:ViewStateData Id="GenerateSaleCodes_4" sap:VirtualizedContainerService.HintSize="211,22" />
-      <sap2010:ViewStateData Id="ApplySaleZonesForDB_2" sap:VirtualizedContainerService.HintSize="211,22" />
-      <sap2010:ViewStateData Id="ApplySaleCodesForDB_3" sap:VirtualizedContainerService.HintSize="211,22" />
+      <sap2010:ViewStateData Id="ApplyDataForDB_1" sap:VirtualizedContainerService.HintSize="211,22" />
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="211,62" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="233,598">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="233,536">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.CodePreparationProcess_1" sap:VirtualizedContainerService.HintSize="273,678" />
+      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.CodePreparationProcess_1" sap:VirtualizedContainerService.HintSize="273,616" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

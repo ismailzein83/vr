@@ -68,8 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplySaleCodesForDB.cs" />
-    <Compile Include="ApplySaleZonesForDB.cs" />
+    <Compile Include="ApplyDataForDB.cs" />
     <Compile Include="GenerateSaleCodes.cs" />
     <Compile Include="GenerateSaleZones.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

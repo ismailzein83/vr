@@ -18,38 +18,11 @@ namespace TOne.WhS.CodePreparation.Business
     public class CodePreparationManager
     {
 
-        public void InsertSaleZones(List<Zone> saleZones)
+        public void InsertCodePreparationObject(Dictionary<string, Zone> saleZones,int sellingNumberPlanId)
         {
             ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
-            object dbApplyStream = dataManager.InitialiazeZonesStreamForDBApply();
-            foreach (Zone saleZone in saleZones)
-                dataManager.WriteRecordToZonesStream(saleZone, dbApplyStream);
-            object prepareToApplySaleZones = dataManager.FinishSaleZoneDBApplyStream(dbApplyStream);
-            dataManager.ApplySaleZonesForDB(prepareToApplySaleZones);
+            dataManager.InsertCodePreparationObject(saleZones, sellingNumberPlanId);
         }
-
-        public void DeleteSaleZones(List<Zone> saleZones)
-        {
-            ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
-            dataManager.DeleteSaleZones(saleZones);
-        }
-
-        public void InsertSaleCodes(List<Code> saleCodes)
-        {
-            ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
-            object dbApplyStream = dataManager.InitialiazeCodesStreamForDBApply();
-            foreach (Code saleCode in saleCodes)
-                dataManager.WriteRecordToCodesStream(saleCode, dbApplyStream);
-            object prepareToApplySaleCodes = dataManager.FinishSaleCodeDBApplyStream(dbApplyStream);
-            dataManager.ApplySaleCodesForDB(prepareToApplySaleCodes);
-        }
-        public void DeleteSaleCodes(List<Code> saleCodes)
-        {
-            ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
-            dataManager.DeleteSaleCodes(saleCodes);
-        }
-
-
         public Dictionary<string, Zone> GetSaleZonesWithCodes(int sellingNumberPlanId, DateTime effectiveDate)
         {
             SaleZoneManager saleZoneManager = new SaleZoneManager();
