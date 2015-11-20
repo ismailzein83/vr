@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -255,6 +256,12 @@ namespace Vanrise.Common
                 return GetPropertyValue(currentPropertyValue, propertyNameParts, (currentPropertyIndex + 1));
         }
 
+        public static IEnumerable<Q> VRCast<Q>(this IEnumerable list) 
+        {
+            if (list == null)
+                return null;
+            return list.Cast<Q>();
+        }
 
         #endregion
     }

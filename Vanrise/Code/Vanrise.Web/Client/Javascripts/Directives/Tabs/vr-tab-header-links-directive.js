@@ -57,7 +57,7 @@ app.directive('vrTabHeaderLinks', [function () {
             }
 
             $scope.$watch("ctrl.selectedindex", function (value) {
-                if (!choiceCtrls[ctrl.selectedindex].isSelected)
+                if (choiceCtrls[ctrl.selectedindex] != undefined && !choiceCtrls[ctrl.selectedindex].isSelected)
                     ctrl.selectChoice(choiceCtrls[ctrl.selectedindex]);
                 else {
                     if (ctrl.onselectionchanged && typeof (ctrl.onselectionchanged) == 'function') {
