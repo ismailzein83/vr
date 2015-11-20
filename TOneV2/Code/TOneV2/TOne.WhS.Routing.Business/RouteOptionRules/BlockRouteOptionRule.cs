@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Routing.Entities;
 
-namespace TOne.WhS.Routing.Business.RouteOptionRules
+namespace TOne.WhS.Routing.Business
 {
     public class BlockRouteOptionRule : RouteOptionRuleSettings
     {

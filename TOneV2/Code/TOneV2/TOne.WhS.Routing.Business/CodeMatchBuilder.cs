@@ -138,7 +138,7 @@ namespace TOne.WhS.Routing.Business
                                 RateValue = supplierZoneDetail.EffectiveRateValue
                             };
                             supplierCodeMatches.Add(supplierCodeMatchWithRate);
-                            supplierCodeMatchBySupplier.Add(supplierCodeIterator.SupplierId, new List<SupplierCodeMatchWithRate> { supplierCodeMatchWithRate });
+                            supplierCodeMatchBySupplier.Add(supplierCodeIterator.SupplierId, supplierCodeMatchWithRate);
                         }
                     }
                 }

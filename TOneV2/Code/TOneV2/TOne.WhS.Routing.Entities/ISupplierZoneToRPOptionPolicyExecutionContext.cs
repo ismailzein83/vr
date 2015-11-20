@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RouteOptionSettings
+    public interface ISupplierZoneToRPOptionPolicyExecutionContext
     {
-        public int SupplierId { get; set; }
+        RPRouteOptionSupplier SupplierOptionDetail { get; }
 
-        public Decimal? Percentage { get; set; }
+        Decimal EffectiveRate { set; }
     }
 }

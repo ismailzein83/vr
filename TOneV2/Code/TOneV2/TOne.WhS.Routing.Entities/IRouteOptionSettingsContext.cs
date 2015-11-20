@@ -9,7 +9,7 @@ namespace TOne.WhS.Routing.Entities
 {
     public interface IRouteOptionSettingsContext
     {
-        SupplierFilterSettings FilterSettings { get; set; }
+        SupplierFilterSettings SupplierFilterSettings { get; set; }
 
         IEnumerable<RouteOptionSettings> GetGroupOptionSettings(RouteOptionSettingsGroup group);
     }

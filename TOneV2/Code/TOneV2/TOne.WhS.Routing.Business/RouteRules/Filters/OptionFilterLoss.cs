@@ -7,12 +7,12 @@ using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.Business.RouteRules.Filters
 {
-    public class OptionFilterLoss : RouteRuleOptionFilterSettings
+    public class OptionFilterLoss : RouteOptionFilterSettings
     {
-        public override void Execute(IRouteOptionRuleExecutionContext context, RouteOptionRuleTarget target)
+        public override void Execute(IRouteOptionFilterExecutionContext context)
         {
-            if (target.RouteTarget.SaleRate.HasValue && target.RouteTarget.SaleRate.Value < target.SupplierRate)
-                target.FilterOption = true;
+            if (context.SaleRate.HasValue && context.SaleRate.Value < context.Option.SupplierRate)
+                context.FilterOption = true;
         }
     }
 }

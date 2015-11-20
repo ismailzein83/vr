@@ -71,6 +71,12 @@
     <Compile Include="CustomerRouteManager.cs" />
     <Compile Include="RouteOptionRuleManager.cs" />
     <Compile Include="RouteRuleManager.cs" />
+    <Compile Include="RouteRules\Contexts\RouteOptionFilterExecutionContext.cs" />
+    <Compile Include="RouteRules\Contexts\RouteOptionOrderExecutionContext.cs" />
+    <Compile Include="RouteRules\Contexts\RouteOptionPercentageExecutionContext.cs" />
+    <Compile Include="RouteRules\Contexts\RPRouteRuleExecutionContext.cs" />
+    <Compile Include="SupplierZoneToRPOptionHighestRatePolicy.cs" />
+    <Compile Include="SupplierZoneToRPOptionPolicyExecutionContext.cs" />
     <Compile Include="ZoneDetailBuilder.cs" />
     <Compile Include="RouteBuilder.cs" />
     <Compile Include="RouteOptionRules\BlockRouteOptionRule.cs" />
@@ -84,8 +90,8 @@
     <Compile Include="RouteRules\Orders\OptionOrderByRate.cs" />
     <Compile Include="RouteRules\Percentages\FixedOptionPercentage.cs" />
     <Compile Include="RouteRules\RegularRouteRule.Design.cs" />
-    <Compile Include="RouteRules\RouteOptionSettingsContext.cs" />
-    <Compile Include="RouteRules\RouteRuleExecutionContext.cs" />
+    <Compile Include="RouteRules\Contexts\RouteOptionSettingsContext.cs" />
+    <Compile Include="RouteRules\Contexts\SaleEntityRouteRuleExecutionContext.cs" />
     <Compile Include="SaleCodeIterator.cs" />
     <Compile Include="SupplierCodeIterator.cs" />
   </ItemGroup>

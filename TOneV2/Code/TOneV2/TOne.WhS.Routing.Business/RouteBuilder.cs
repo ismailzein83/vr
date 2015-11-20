@@ -10,7 +10,7 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 
 namespace TOne.WhS.Routing.Business
-{
+{    
     public class RouteBuilder
     {
         #region Public Methods
@@ -73,9 +73,9 @@ namespace TOne.WhS.Routing.Business
             return customerRoutes;
         }
 
-        public IEnumerable<RoutingProductRoute> BuildRoutes(IBuildRoutingProductRoutesContext context, long saleZoneId)
+        public IEnumerable<RPRoute> BuildRoutes(IBuildRoutingProductRoutesContext context, long saleZoneId)
         {
-            List<RoutingProductRoute> routes = new List<RoutingProductRoute>();
+            List<RPRoute> routes = new List<RPRoute>();
 
             if (context.RoutingProductIds != null)
             {
@@ -86,12 +86,13 @@ namespace TOne.WhS.Routing.Business
                     {
                         RoutingProductId = routingProductId,
                         SaleZoneId = saleZoneId,
-                        EffectiveOn = context.EntitiesEffectiveOn
+                        EffectiveOn = context.EntitiesEffectiveOn,
+                        IsEffectiveInFuture = context.EntitiesEffectiveInFuture
                     };
                     var routeRule = routeRuleManager.GetMatchRule(routeRuleTarget);
                     if (routeRule != null)
                     {
-                        RoutingProductRoute route = ExecuteRule(routingProductId, saleZoneId, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, routeRuleTarget, routeRule);
+                        RPRoute route = ExecuteRule(routingProductId, saleZoneId, context, routeRuleTarget, routeRule);
                         routes.Add(route);
                     }
                 }
@@ -166,12 +167,12 @@ namespace TOne.WhS.Routing.Business
         private T ExecuteRule<T>(string routeCode, SaleCodeMatch saleCodeMatch, CustomerZoneDetail customerZoneDetail, List<SupplierCodeMatchWithRate> supplierCodeMatches, SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
             where T : BaseRoute
         {
-            RouteRuleExecutionContext routeRuleExecutionContext = new RouteRuleExecutionContext(routeRule);
+            SaleEntityRouteRuleExecutionContext routeRuleExecutionContext = new SaleEntityRouteRuleExecutionContext(routeRule);
             routeRuleExecutionContext.NumberOfOptions = 5;
             routeRuleExecutionContext.SupplierCodeMatches = supplierCodeMatches;
             routeRuleExecutionContext.SupplierCodeMatchBySupplier = supplierCodeMatchBySupplier;
 
-            routeRule.Settings.Execute(routeRuleExecutionContext, routeRuleTarget);
+            routeRule.Settings.ExecuteForSaleEntity(routeRuleExecutionContext, routeRuleTarget);
             T route = Activator.CreateInstance<T>();
             route.Code = routeCode;
             route.SaleZoneId = saleCodeMatch.SaleZoneId;
@@ -200,45 +201,73 @@ namespace TOne.WhS.Routing.Business
             return route;
         }
 
-        private RoutingProductRoute ExecuteRule(int routingProductId, long saleZoneId, List<SupplierCodeMatchWithRate> supplierCodeMatches, SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
+        private RPRoute ExecuteRule(int routingProductId, long saleZoneId, IBuildRoutingProductRoutesContext context, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
         {
-            RouteRuleExecutionContext routeRuleExecutionContext = new RouteRuleExecutionContext(routeRule);
-            routeRuleExecutionContext.SupplierCodeMatches = supplierCodeMatches;
-            routeRuleExecutionContext.SupplierCodeMatchBySupplier = supplierCodeMatchBySupplier;
+            RPRouteRuleExecutionContext routeRuleExecutionContext = new RPRouteRuleExecutionContext(routeRule);
+            routeRuleExecutionContext.SupplierCodeMatches = context.SupplierCodeMatches;
+            routeRuleExecutionContext.SupplierCodeMatchesBySupplier = context.SupplierCodeMatchesBySupplier;
 
-            routeRule.Settings.Execute(routeRuleExecutionContext, routeRuleTarget);
-            RoutingProductRoute route = new RoutingProductRoute
+            routeRule.Settings.CreateSupplierZoneOptionsForRP(routeRuleExecutionContext, routeRuleTarget);
+            RPRoute route = new RPRoute
             {
                 RoutingProductId = routingProductId,
                 SaleZoneId = saleZoneId,
                 ExecutedRuleId = routeRule.RuleId,
-                IsBlocked = routeRuleTarget.BlockRoute
+                IsBlocked = routeRuleTarget.BlockRoute,
+                OptionsDetailsBySupplier = new Dictionary<int, RPRouteOptionSupplier>(),
+                RPOptionsByPolicy = new Dictionary<int, IEnumerable<RPRouteOption>>()
             };
-            if (routeRuleExecutionContext._options != null)
+            var routeOptionRuleTargets = routeRuleExecutionContext.GetSupplierZoneOptions();
+            if(routeOptionRuleTargets != null)
             {
-                route.Options = new List<RoutingProductRouteOption>();
-                foreach (var targetOption in routeRuleExecutionContext._options)
+                foreach(var routeOptionRuleTarget in routeOptionRuleTargets)
                 {
-                    RoutingProductRouteOption routeOption = new RoutingProductRouteOption
+                    RPRouteOptionSupplier optionSupplierDetails;
+                    if(!route.OptionsDetailsBySupplier.TryGetValue(routeOptionRuleTarget.SupplierId, out optionSupplierDetails))
                     {
-                        SupplierId = targetOption.SupplierId,
-                        SupplierCode = targetOption.SupplierCode,
-                        SupplierZoneId = targetOption.SupplierZoneId,
-                        SupplierRate = targetOption.SupplierRate,
-                        Percentage = targetOption.Percentage,
-                        IsBlocked = targetOption.BlockOption,
-                        ExecutedRuleId = targetOption.ExecutedRuleId
+                        optionSupplierDetails = new RPRouteOptionSupplier
+                        {
+                            SupplierId = routeOptionRuleTarget.SupplierId,
+                            SupplierZones = new List<RPRouteOptionSupplierZone>()
+                        };
+                    }
+                    var optionSupplierZone = new RPRouteOptionSupplierZone
+                    {
+                        SupplierZoneId = routeOptionRuleTarget.SupplierZoneId,
+                        SupplierCode = routeOptionRuleTarget.SupplierCode,
+                        SupplierRate = routeOptionRuleTarget.SupplierRate,
+                        IsBlocked = routeOptionRuleTarget.BlockOption,
+                        ExecutedRuleId = routeOptionRuleTarget.ExecutedRuleId
                     };
-                    route.Options.Add(routeOption);
+                    optionSupplierDetails.SupplierZones.Add(optionSupplierZone);
+                }
+
+
+                foreach(var supplierZoneToRPOptionPolicy in context.SupplierZoneToRPOptionPolicies)
+                {
+                    List<RPRouteOption> rpRouteOptions = new List<RPRouteOption>();
+                    foreach (var optionSupplierDetails in route.OptionsDetailsBySupplier.Values)
+                    {
+                        SupplierZoneToRPOptionPolicyExecutionContext supplierZoneToRPOptionPolicyExecutionContext = new SupplierZoneToRPOptionPolicyExecutionContext
+                        {
+                            SupplierOptionDetail = optionSupplierDetails
+                        };
+                        supplierZoneToRPOptionPolicy.Execute(supplierZoneToRPOptionPolicyExecutionContext);
+                        rpRouteOptions.Add(new RPRouteOption
+                            {
+                                SupplierId = optionSupplierDetails.SupplierId,
+                                SupplierRate = supplierZoneToRPOptionPolicyExecutionContext.EffectiveRate
+                            });
+                    }
+                    IEnumerable<RPRouteOption> rpRouteOptionsAsEnumerable = rpRouteOptions;
+                    routeRule.Settings.ApplyRuleToRPOptions(routeRuleExecutionContext, ref rpRouteOptionsAsEnumerable);
+                    route.RPOptionsByPolicy.Add(supplierZoneToRPOptionPolicy.ConfigId, rpRouteOptionsAsEnumerable);
                 }
             }
             return route;
         }
 
         #endregion
-
-        
     }
-
-    
+       
 }

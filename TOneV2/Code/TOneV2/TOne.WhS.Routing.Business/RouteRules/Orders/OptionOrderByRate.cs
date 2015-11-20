@@ -8,11 +8,11 @@ using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.Business.RouteRules.Orders
 {
-    public class OptionOrderByRate : RouteRuleOptionOrderSettings
+    public class OptionOrderByRate : RouteOptionOrderSettings
     {
-        public override IEnumerable<RouteOptionRuleTarget> Execute(IRouteRuleExecutionContext context, IEnumerable<RouteOptionRuleTarget> options)
+        public override void Execute(IRouteOptionOrderExecutionContext context)
         {
-            return options.OrderBy(itm => itm.SupplierRate);
+            context.Options = context.Options.OrderBy(itm => itm.SupplierRate);
         }
     }
 }

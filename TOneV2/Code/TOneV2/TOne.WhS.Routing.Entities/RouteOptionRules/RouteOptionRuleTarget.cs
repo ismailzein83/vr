@@ -7,7 +7,9 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RouteOptionRuleTarget : Vanrise.Rules.BaseRuleTarget, IRuleSupplierTarget, IRuleSupplierZoneTarget, IRuleCodeTarget, IRuleSaleZoneTarget, IRuleCustomerTarget, IRuleRoutingProductTarget
+    public class RouteOptionRuleTarget : Vanrise.Rules.BaseRuleTarget,
+        IRouteOptionOrderTarget, IRouteOptionFilterTarget, IRouteOptionPercentageTarget,
+        IRuleSupplierTarget, IRuleSupplierZoneTarget, IRuleCodeTarget, IRuleSaleZoneTarget, IRuleCustomerTarget, IRuleRoutingProductTarget
     {
         public RouteRuleTarget RouteTarget { get; set; }
 
@@ -19,7 +21,7 @@ namespace TOne.WhS.Routing.Entities
 
         public Decimal SupplierRate { get; set; }
 
-        public Decimal Percentage { get; set; }
+        public Decimal? Percentage { get; set; }
 
         public bool BlockOption { get; set; }
 
@@ -28,7 +30,7 @@ namespace TOne.WhS.Routing.Entities
         public int? ExecutedRuleId { get; set; }
 
         #region Interfaces
-        
+
         string IRuleCodeTarget.Code
         {
             get { return this.RouteTarget.Code; }

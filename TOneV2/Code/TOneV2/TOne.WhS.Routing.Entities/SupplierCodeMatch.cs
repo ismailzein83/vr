@@ -44,7 +44,11 @@ namespace TOne.WhS.Routing.Entities
     {
     }
 
-    public class SupplierCodeMatchWithRateBySupplier : Dictionary<int, List<SupplierCodeMatchWithRate>>
+    public class SupplierCodeMatchWithRateBySupplier : Dictionary<int, SupplierCodeMatchWithRate>
+    {
+    }
+
+    public class SupplierCodeMatchesWithRateBySupplier : Dictionary<int, List<SupplierCodeMatchWithRate>>
     {
     }
 }

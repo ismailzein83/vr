@@ -7,7 +7,8 @@ using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.Business
 {
-    public class RouteOptionRuleExecutionContext : IRouteOptionRuleExecutionContext
+    public class RouteOptionPercentageExecutionContext : IRouteOptionPercentageExecutionContext
     {
+        public IEnumerable<IRouteOptionPercentageTarget> Options { get; set; }
     }
 }

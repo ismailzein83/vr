@@ -8,7 +8,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public interface IRouteRuleExecutionContext
+    public interface ISaleEntityRouteRuleExecutionContext
     {
         RouteRule RouteRule { get; }
 
@@ -18,12 +18,8 @@ namespace TOne.WhS.Routing.Entities
 
         ReadOnlyCollection<RouteOptionRuleTarget> GetOptions();
 
-        List<SupplierCodeMatchWithRate> GetSupplierCodeMatches(int supplierId);
+        SupplierCodeMatchWithRate GetSupplierCodeMatch(int supplierId);
 
         List<SupplierCodeMatchWithRate> GetAllSuppliersCodeMatches();
-
-        //SupplierCodeMatches GetSupplierCodeMatches2(int supplierId);
-
-        //List<SupplierCodeMatches> GetAllSuppliersCodeMatches2();
     }
 }

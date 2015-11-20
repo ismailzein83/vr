@@ -10,8 +10,10 @@ namespace TOne.WhS.Routing.Entities
     {
         public int ConfigId { get; set; }
 
-        public virtual void Execute(IRouteRuleExecutionContext context, RouteRuleTarget target)
-        {
-        }
+        public abstract void ExecuteForSaleEntity(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target);
+
+        public abstract void CreateSupplierZoneOptionsForRP(IRPRouteRuleExecutionContext context, RouteRuleTarget target);
+
+        public abstract void ApplyRuleToRPOptions(IRPRouteRuleExecutionContext context, ref IEnumerable<RPRouteOption> options);
     }
 }

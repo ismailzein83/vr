@@ -7,16 +7,16 @@ using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.Business.RouteRules.Percentages
 {
-    public class FixedOptionPercentage : RouteRuleOptionPercentageSettings
+    public class FixedOptionPercentage : RouteOptionPercentageSettings
     {
         public List<Decimal> Percentages { get; set; }
-        
-        public override void Execute(IRouteRuleExecutionContext context, RouteRuleTarget target)
+
+        public override void Execute(IRouteOptionPercentageExecutionContext context)
         {
             Decimal totalTakenPercentage = 0;
             int percentagesCount = this.Percentages.Count;
-            var options = context.GetOptions();
-            int optionsCount = options.Count;
+            List<IRouteOptionPercentageTarget> optionsList = context.Options.ToList();
+            int optionsCount = optionsList.Count;
             for (int i = 0; i < optionsCount; i++)
             {
                 Decimal optionPercentage = 0;
@@ -25,7 +25,7 @@ namespace TOne.WhS.Routing.Business.RouteRules.Percentages
                     optionPercentage = 100 - totalTakenPercentage;
                 else
                     optionPercentage = Math.Min(this.Percentages[i], 100 - totalTakenPercentage);
-                options[i].Percentage = optionPercentage;
+                optionsList[i].Percentage = optionPercentage;
                 totalTakenPercentage -= optionPercentage;
 
                 if (totalTakenPercentage == 100)

@@ -16,7 +16,7 @@ namespace TOne.WhS.Routing.Entities
 
         public Decimal SupplierRate { get; set; }
 
-        public Decimal Percentage { get; set; }
+        public Decimal? Percentage { get; set; }
 
         public bool IsBlocked { get; set; }
 

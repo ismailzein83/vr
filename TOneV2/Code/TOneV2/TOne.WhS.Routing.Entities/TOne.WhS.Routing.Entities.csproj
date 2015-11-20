@@ -57,6 +57,11 @@
     <Compile Include="CodeMatches.cs" />
     <Compile Include="CodeMatchesBatch.cs" />
     <Compile Include="CodeSaleZone.cs" />
+    <Compile Include="IRPRouteRuleExecutionContext.cs" />
+    <Compile Include="ISupplierZoneToRPOptionPolicyExecutionContext.cs" />
+    <Compile Include="RouteRuleSettings\IRouteOptionFilterExecutionContext.cs" />
+    <Compile Include="RouteRuleSettings\IRouteOptionOrderExecutionContext.cs" />
+    <Compile Include="RouteRuleSettings\IRouteOptionPercentageExecutionContext.cs" />
     <Compile Include="Routes\CustomerRouteDetail.cs" />
     <Compile Include="Routes\CustomerRouteQuery.cs" />
     <Compile Include="Routes\CustomerRoutesBatch.cs" />
@@ -64,7 +69,7 @@
     <Compile Include="IBuildCodeMatchesContext.cs" />
     <Compile Include="IBuildCustomerRoutesContext.cs" />
     <Compile Include="IBuildRoutingProductRoutesContext.cs" />
-    <Compile Include="IRouteRuleExecutionContext.cs" />
+    <Compile Include="ISaleEntityRouteRuleExecutionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteOptionRules\IRouteOptionRuleExecutionContext.cs" />
     <Compile Include="RouteOptionRules\RouteOptionRule.cs" />
@@ -88,10 +93,13 @@
     <Compile Include="RouteOptionSettings.cs" />
     <Compile Include="RouteOptionSettingsGroup.cs" />
     <Compile Include="IRouteOptionSettingsContext.cs" />
+    <Compile Include="Routes\RPRoute.cs" />
+    <Compile Include="Routes\RPRouteOption.cs" />
+    <Compile Include="Routes\RPRouteOptionSupplier.cs" />
+    <Compile Include="Routes\RPRouteOptionSupplierZone.cs" />
     <Compile Include="Routes\SellingProductRoute.cs" />
-    <Compile Include="Routes\RoutingProductRoute.cs" />
-    <Compile Include="Routes\RoutingProductRouteOption.cs" />
     <Compile Include="RoutingDatabase.cs" />
+    <Compile Include="SupplierZoneToRPOptionPolicy.cs" />
     <Compile Include="SaleCodeMatch.cs" />
     <Compile Include="CustomerZoneDetail.cs" />
     <Compile Include="SupplierCodeMatch.cs" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RoutingProductRoute
+    public class RPRoute
     {
         public int RoutingProductId { get; set; }
 
@@ -16,6 +16,8 @@ namespace TOne.WhS.Routing.Entities
 
         public int ExecutedRuleId { get; set; }
 
-        public List<RoutingProductRouteOption> Options { get; set; }
+        public Dictionary<int, RPRouteOptionSupplier> OptionsDetailsBySupplier { get; set; }
+
+        public Dictionary<int, IEnumerable<RPRouteOption>> RPOptionsByPolicy { get; set; }
     }
 }
