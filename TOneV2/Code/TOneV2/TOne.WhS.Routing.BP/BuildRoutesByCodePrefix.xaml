@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.BuildRoutesByCodePrefix" this:BuildRoutesByCodePrefix.RoutingDatabaseId="56"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.BuildRoutesByCodePrefix"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
@@ -8,7 +8,6 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
- xmlns:this="clr-namespace:TOne.WhS.Routing.BP"
  xmlns:twbe="clr-namespace:TOne.WhS.BusinessEntity.Entities;assembly=TOne.WhS.BusinessEntity.Entities"
  xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Arguments;assembly=TOne.WhS.Routing.BP.Arguments"
  xmlns:twrba1="clr-namespace:TOne.WhS.Routing.BP.Activities;assembly=TOne.WhS.Routing.BP.Activities"
@@ -18,7 +17,6 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(twrba:BuildRoutesByCodePrefixInput)" />
-    <x:Property Name="RoutingDatabaseId" Type="InArgument(x:Int32)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.BuildRoutesByCodePrefix_1</sap2010:WorkflowViewState.IdRef>
@@ -54,6 +52,7 @@
       <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
@@ -103,7 +102,7 @@
           </twrba1:GetCustomerZoneDetails.CustomerZoneDetails>
           <twrba1:GetCustomerZoneDetails.RoutingDatabase>
             <InArgument x:TypeArguments="x:Int32">
-              <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabaseId</mca:CSharpValue>
+              <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
             </InArgument>
           </twrba1:GetCustomerZoneDetails.RoutingDatabase>
           <twrba1:GetCustomerZoneDetails.SaleCodes>
@@ -154,7 +153,7 @@
         <twrba1:GetSupplierZoneDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSupplierZoneDetails_1">
           <twrba1:GetSupplierZoneDetails.RoutingDatabaseId>
             <InArgument x:TypeArguments="x:Int32">
-              <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabaseId</mca:CSharpValue>
+              <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
             </InArgument>
           </twrba1:GetSupplierZoneDetails.RoutingDatabaseId>
           <twrba1:GetSupplierZoneDetails.SupplierCodes>
@@ -279,7 +278,7 @@
         </twrba1:ApplyCodeMatchesToDB.PreviousActivityStatus>
         <twrba1:ApplyCodeMatchesToDB.RoutingDatabaseId>
           <InArgument x:TypeArguments="x:Int32">
-            <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabaseId</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
           </InArgument>
         </twrba1:ApplyCodeMatchesToDB.RoutingDatabaseId>
       </twrba1:ApplyCodeMatchesToDB>
@@ -296,7 +295,7 @@
         </twrba1:ApplyCodesToCodeSaleZoneTable.PreviousActivityStatus>
         <twrba1:ApplyCodesToCodeSaleZoneTable.RoutingDatabaseId>
           <InArgument x:TypeArguments="x:Int32">
-            <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabaseId</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
           </InArgument>
         </twrba1:ApplyCodesToCodeSaleZoneTable.RoutingDatabaseId>
       </twrba1:ApplyCodesToCodeSaleZoneTable>
@@ -362,12 +361,12 @@
         </twrba1:ApplyCustomerRoutesToDB.PreviousActivityStatus>
         <twrba1:ApplyCustomerRoutesToDB.RoutingDatabaseId>
           <InArgument x:TypeArguments="x:Int32">
-            <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabaseId</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
           </InArgument>
         </twrba1:ApplyCustomerRoutesToDB.RoutingDatabaseId>
       </twrba1:ApplyCustomerRoutesToDB>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbEQBkAEBkwEBAkMD8wIOAgEBSgWsARADAf4ErQEF8QIQAgECSwdzEgMBywV0B6sBEgMB/wS8AQfgASEDAfgD4QEH9gErAwGrA/cBB4wCLAMB3gKNAgedAiUDAaQCngIHrgIuAwHqAa8CB8kCJAMBigHKAgffAi4CAT3gAgfwAigCAQNMCWEfAwHiBWIJcikDAcwFeAl+KQMBwgV/CZkBIwMBmQWaAQmqASkDAYAFyQENyQGFAQMB6wTOAQ3OAWoDAdgExAENxAGFAQMBxQTTAQ3TAXcDAbIEvwENvwGQAQMBnwTYAQ3YAXIDAYwE3QEN3QFzAwH5A+4BDe4BbwMB5QPkAQ3kAX0DAdID8wEN8wF5AwG/A+kBDekBeQMBrAOEAg2EAm8DAZgD+gEN+gF9AwGFA4kCDYkCegMB8gL/AQ3/AX4DAd8ClQINlQJxAwHLApACDZACcQMBuAKaAg2aAlsDAaUCpgINpgJyAwGRAqECDaECdgMB/gGrAg2rAlsDAesBsgINsgJzAwHXAcECDcECbwMBxAG3Ag23AogBAwGxAcYCDcYCegMBngG8Ag28AokBAwGLAdcCDdcCcgIBd80CDc0CgQECAWTcAg3cAnwCAVHSAg3SAnwCAT7oAg3oAnQCASrjAg3jAnQCARftAg3tAlsCAQRUD1RsAwH4BV4PXnQDAfEFTw9PXQMB6gVZD1lcAwHjBWUPZX0DAdsFbw9vbAMB1AVqD2pdAwHNBXsPe4gBAwHDBYcBD4cBbAMBugWCAQ+CAV0DAbIFlgEPlgGAAQMBqgWRAQ+RAXwDAaIFjAEPjAFcAwGaBZ0BD50BXQMBkQWiAQ+iAXQDAYkFpwEPpwF9AwGBBQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbENCA/ICDgIBAUkFqwEQAwHdBKwBBfACEAIBAkoHchIDAaEFcweqARIDAd4EuwEH3wEhAwHeA+ABB/UBKwMBlQP2AQeLAiwDAcwCjAIHnAIlAwGVAp0CB60CLgMB3gGuAgfIAiQDAYMByQIH3gIuAgE63wIH7wIoAgEDSwlgHwMBtQVhCXEpAwGiBXcJfSkDAZkFfgmYASMDAfUEmQEJqQEpAwHfBMgBDcgBhQEDAcsEzQENzQFqAwG5BMMBDcMBhQEDAacE0gEN0gF3AwGVBL4BDb4BkAEDAYME1wEN1wFyAwHxA9wBDdwBcwMB3wPtAQ3tAW8DAcwD4wEN4wF9AwG6A/IBDfIBeQMBqAPoAQ3oAXkDAZYDgwINgwJvAwGDA/kBDfkBfQMB8QKIAg2IAnoDAd8C/gEN/gF+AwHNApQCDZQCcQMBugKPAg2PAnEDAagCmQINmQJhAwGWAqUCDaUCcgMBgwKgAg2gAnYDAfEBqgINqgJhAwHfAbECDbECcwMBzAHAAg3AAm8DAboBtgINtgKIAQMBqAHFAg3FAnoDAZYBuwINuwKJAQMBhAHWAg3WAnICAXHMAg3MAoEBAgFf2wIN2wJ8AgFN0QIN0QJ8AgE75wIN5wJ0AgEo4gIN4gJ0AgEW7AIN7AJhAgEEUw9TbAMByAVdD110AwHCBU4PTl0DAbwFWA9YXAMBtgVkD2R9AwGvBW4PbmwDAakFaQ9pYwMBowV6D3qIAQMBmgWGAQ+GAWwDAZIFgQEPgQFdAwGLBZUBD5UBgAEDAYQFkAEPkAF8AwH9BIsBD4sBXAMB9gScAQ+cAWMDAe4EoQEPoQF0AwHnBKYBD6YBfQMB4AQ=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
