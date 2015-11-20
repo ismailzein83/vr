@@ -40,7 +40,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 function buildGridDrillDownDefinitions() {
                     return [{
                         title: "Routing Product",
-                        directive: "vr-whs-sales-defaultroutingproduct",
+                        directive: "vr-whs-sales-rateplanroutingproduct",
                         loadDirective: function (zoneRoutingProductDirectiveAPI, zoneItem) {
                             zoneItem.ZoneRoutingProductDirectiveAPI = zoneRoutingProductDirectiveAPI;
                             return loadZoneRoutingProductDirective(zoneItem);
@@ -51,9 +51,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         var zoneRoutingProductDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         var payload = {
-                            IsCurrentDefaultRoutingProductEditable: zoneItem.IsCurrentRoutingProductEditable,
-                            CurrentDefaultRoutingProductId: zoneItem.CurrentRoutingProductId,
-                            NewDefaultRoutingProductId: zoneItem.NewRoutingProductId,
+                            IsCurrentRoutingProductEditable: zoneItem.IsCurrentRoutingProductEditable,
+                            CurrentRoutingProductId: zoneItem.CurrentRoutingProductId,
+                            NewRoutingProductId: zoneItem.NewRoutingProductId,
                             CurrentBED: zoneItem.RoutingProductBED,
                             CurrentEED: zoneItem.RoutingProductEED
                         };
@@ -151,16 +151,16 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             
                             function buildNewRoutingProduct(zoneItem) {
                                 if (zoneItem.ZoneRoutingProductDirectiveAPI != undefined) {
-                                    var defaultChanges = zoneItem.ZoneRoutingProductDirectiveAPI.getDefaultChanges();
+                                    var defaultChanges = zoneItem.ZoneRoutingProductDirectiveAPI.getChanges();
                                     var newZoneRoutingProduct = null;
 
-                                    if (defaultChanges != null && defaultChanges.NewDefaultRoutingProduct != null) {
+                                    if (defaultChanges != null && defaultChanges.NewRoutingProduct != null) {
                                         newZoneRoutingProduct = {
                                             $type: "TOne.WhS.Sales.Entities.RatePlanning.NewZoneRoutingProduct, TOne.WhS.Sales.Entities",
                                             ZoneId: zoneItem.ZoneId,
-                                            RoutingProductId: defaultChanges.NewDefaultRoutingProduct.DefaultRoutingProductId,
-                                            BED: defaultChanges.NewDefaultRoutingProduct.BED,
-                                            EED: defaultChanges.NewDefaultRoutingProduct.EED
+                                            RoutingProductId: defaultChanges.NewRoutingProduct.RoutingProductId,
+                                            BED: defaultChanges.NewRoutingProduct.BED,
+                                            EED: defaultChanges.NewRoutingProduct.EED
                                         };
                                     }
 
@@ -170,14 +170,14 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                             function buildRoutingProductChange(zoneItem) {
                                 if (zoneItem.ZoneRoutingProductDirectiveAPI != undefined) {
-                                    var defaultChanges = zoneItem.ZoneRoutingProductDirectiveAPI.getDefaultChanges();
+                                    var defaultChanges = zoneItem.ZoneRoutingProductDirectiveAPI.getChanges();
                                     var zoneRoutingProductChange = null;
 
-                                    if (defaultChanges != null && defaultChanges.DefaultRoutingProductChange != null) {
+                                    if (defaultChanges != null && defaultChanges.RoutingProductChange != null) {
                                         zoneRoutingProductChange = {
                                             $type: "TOne.WhS.Sales.Entities.RatePlanning.ZoneRoutingProductChange, TOne.WhS.Sales.Entities",
                                             ZoneRoutingProductId: zoneItem.ZoneId,
-                                            EED: defaultChanges.DefaultRoutingProductChange.EED
+                                            EED: defaultChanges.RoutingProductChange.EED
                                         };
                                     }
 

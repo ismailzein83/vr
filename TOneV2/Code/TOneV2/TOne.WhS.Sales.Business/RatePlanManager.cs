@@ -255,16 +255,19 @@ namespace TOne.WhS.Sales.Business
                 locator.GetSellingProductDefaultRoutingProduct(ownerId) :
                 locator.GetCustomerDefaultRoutingProduct(ownerId, GetSellingProductId(ownerId));
 
-            defaultItem.IsCurrentDefaultRoutingProductEditable = (
+            if (locatorResult != null)
+            {
+                defaultItem.IsCurrentRoutingProductEditable = (
                 (locatorResult.Source == SaleEntityZoneRoutingProductSource.ProductDefault && ownerType == SalePriceListOwnerType.SellingProduct) ||
                 (locatorResult.Source == SaleEntityZoneRoutingProductSource.CustomerDefault && ownerType == SalePriceListOwnerType.Customer)
             );
 
-            defaultItem.CurrentDefaultRoutingProductId = locatorResult.RoutingProductId;
-            defaultItem.CurrentBED = locatorResult.BED;
-            defaultItem.CurrentEED = locatorResult.EED;
+                defaultItem.CurrentRoutingProductId = locatorResult.RoutingProductId;
+                defaultItem.CurrentRoutingProductBED = locatorResult.BED;
+                defaultItem.CurrentRoutingProductEED = locatorResult.EED;
 
-            SetDefaultItemChanges(ownerType, ownerId, defaultItem);
+                SetDefaultItemChanges(ownerType, ownerId, defaultItem);
+            }
 
             return defaultItem;
         }
@@ -280,12 +283,12 @@ namespace TOne.WhS.Sales.Business
 
                 if (newRoutingProduct != null)
                 {
-                    defaultItem.NewDefaultRoutingProductId = newRoutingProduct.DefaultRoutingProductId;
-                    defaultItem.CurrentBED = newRoutingProduct.BED;
-                    defaultItem.CurrentEED = newRoutingProduct.EED;
+                    defaultItem.NewRoutingProductId = newRoutingProduct.DefaultRoutingProductId;
+                    defaultItem.CurrentRoutingProductBED = newRoutingProduct.BED;
+                    defaultItem.CurrentRoutingProductEED = newRoutingProduct.EED;
                 }
                 else
-                    defaultItem.CurrentEED = routingProductChange.EED;
+                    defaultItem.CurrentRoutingProductEED = routingProductChange.EED;
             }
         }
 

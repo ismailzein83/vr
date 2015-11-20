@@ -16,10 +16,10 @@
     function RatePlanController($scope, WhS_Sales_MainService, WhS_Sales_RatePlanAPIService, WhS_Sales_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
         
         var sellingProductSelectorAPI;
-        var sellingProductSelectorReadyPromiseDeferred;
+        var sellingProductSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var carrierAccountSelectorAPI;
-        var carrierAccountSelectorReadyPromiseDeferred;
+        var carrierAccountSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var defaultRoutingProductDirectiveAPI;
         var defaultRoutingProductDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -29,10 +29,9 @@
         var gridReadyPromiseDeferred;
 
         defineScope();
+        load();
         
         function defineScope() {
-            /* Owner Type */
-
             $scope.ownerTypes = UtilsService.getArrayEnum(WhS_Sales_SalePriceListOwnerTypeEnum);
             $scope.selectedOwnerType = $scope.ownerTypes[0];
             $scope.showSellingProductSelector = false;
@@ -42,97 +41,58 @@
                 clearRatePlan();
 
                 if ($scope.selectedOwnerType != undefined) {
-                    sellingProductSelectorAPI = undefined;
-                    carrierAccountSelectorAPI = undefined;
-
                     if ($scope.selectedOwnerType.value == WhS_Sales_SalePriceListOwnerTypeEnum.SellingProduct.value) {
                         $scope.showSellingProductSelector = true;
                         $scope.showCarrierAccountSelector = false;
-                        $scope.carrierAccountConnector.selectedCustomer = undefined;
-
-                        sellingProductSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                        carrierAccountSelectorReadyPromiseDeferred = undefined;
+                        $scope.selectedCustomer = undefined;
                     }
                     else if ($scope.selectedOwnerType.value == WhS_Sales_SalePriceListOwnerTypeEnum.Customer.value) {
                         $scope.showSellingProductSelector = false;
                         $scope.showCarrierAccountSelector = true;
-                        $scope.sellingProductConnector.selectedSellingProduct = undefined;
-
-                        carrierAccountSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                        sellingProductSelectorReadyPromiseDeferred = undefined;
+                        $scope.selectedSellingProduct = undefined;
                     }
-
-                    $scope.isLoadingOwnerSection = true;
-
-                    loadOwnerSection().catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    }).finally(function () {
-                        $scope.isLoadingOwnerSection = false;
-                    });
                 }
             };
 
-            /* Selling Product */
-
-            $scope.sellingProductConnector = {
-                selectedSellingProduct: undefined,
-
-                onSellingProductSelectorReady: function (api) {
-                    sellingProductSelectorAPI = api;
-                    sellingProductSelectorReadyPromiseDeferred.resolve();
-                },
-
-                onSellingProductChanged: function () {
-                    clearRatePlan();
-                }
+            $scope.selectedSellingProduct = undefined;
+            $scope.onSellingProductSelectorReady = function (api) {
+                sellingProductSelectorAPI = api;
+                sellingProductSelectorReadyPromiseDeferred.resolve();
+            };
+            $scope.onSellingProductChanged = function () {
+                clearRatePlan();
             };
 
-            /* Carrier Account */
-
-            $scope.carrierAccountConnector = {
-                selectedCustomer: undefined,
-                
-                onCarrierAccountSelectorReady: function (api) {
-                    carrierAccountSelectorAPI = api;
-                    carrierAccountSelectorReadyPromiseDeferred.resolve();
-                },
-                
-                onCarrierAccountChanged: function () {
-                    clearRatePlan();
-                }
+            $scope.selectedCustomer = undefined;
+            $scope.onCarrierAccountSelectorReady = function (api) {
+                carrierAccountSelectorAPI = api;
+                carrierAccountSelectorReadyPromiseDeferred.resolve();
             };
-            
-            /* Zone Letters */
+            $scope.onCarrierAccountChanged = function () {
+                clearRatePlan();
+            };
 
             $scope.zoneLetters = [];
-
             $scope.zoneLetterConnector = {
                 selectedZoneLetterIndex: 0,
                 onZoneLetterSelectionChanged: saveChangesWithLoad
             };
-
-            /* Default Routing Product */
 
             $scope.onDefaultRoutingProductDirectiveReady = function (api) {
                 defaultRoutingProductDirectiveAPI = api;
                 defaultRoutingProductDirectiveReadyPromiseDeferred.resolve();
             };
 
-            /* Grid */
-
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 gridReadyPromiseDeferred.resolve();
             };
 
-            /* Action Bar */
-
             $scope.search = function () {
                 return loadRatePlan();
             };
-
             $scope.sellNewZones = function () {
-                var customerId = $scope.carrierAccountConnector.selectedCustomer.CarrierAccountId;
+                var customerId = $scope.selectedCustomer.CarrierAccountId;
                 var onCustomerZonesSold = function (customerZones) {
                     loadRatePlan();
                 };
@@ -144,43 +104,47 @@
         }
 
         function load() {
-        }
+            loadAllControls();
 
-        function loadOwnerSection() {
-            if (sellingProductSelectorReadyPromiseDeferred != undefined)
-                return loadSellingProductSection();
-            else if (carrierAccountSelectorReadyPromiseDeferred != undefined)
-                return loadCarrierAccountSection();
-        }
+            function loadAllControls() {
+                $scope.isLoading = true;
 
-        function loadSellingProductSection() {
-            var sellingProductSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                return loadFilterSection().catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    $scope.isLoading = false;
+                });
 
-            sellingProductSelectorReadyPromiseDeferred.promise.then(function () {
-                var sellingProductSelectorPayload = {
-                    filter: null,
-                    selectedIds: null
-                };
+                function loadFilterSection() {
+                    var promises = [];
 
-                VRUIUtilsService.callDirectiveLoad(sellingProductSelectorAPI, sellingProductSelectorPayload, sellingProductSelectorLoadPromiseDeferred);
-            });
+                    var sellingProductSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(sellingProductSelectorLoadPromiseDeferred.promise);
 
-            return sellingProductSelectorLoadPromiseDeferred.promise;
-        }
+                    sellingProductSelectorReadyPromiseDeferred.promise.then(function () {
+                        var payload = {
+                            filter: null,
+                            selectedIds: null
+                        };
 
-        function loadCarrierAccountSection() {
-            var carrierAccountSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        VRUIUtilsService.callDirectiveLoad(sellingProductSelectorAPI, payload, sellingProductSelectorLoadPromiseDeferred);
+                    });
 
-            carrierAccountSelectorReadyPromiseDeferred.promise.then(function () {
-                var carrierAccountSelectorPayload = {
-                    filter: null,
-                    selectedIds: null
-                };
+                    var carrierAccountSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(carrierAccountSelectorLoadPromiseDeferred.promise);
 
-                VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, carrierAccountSelectorPayload, carrierAccountSelectorLoadPromiseDeferred);
-            });
+                    carrierAccountSelectorReadyPromiseDeferred.promise.then(function () {
+                        var payload = {
+                            filter: null,
+                            selectedIds: null
+                        };
 
-            return carrierAccountSelectorLoadPromiseDeferred.promise;
+                        VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, payload, carrierAccountSelectorLoadPromiseDeferred);
+                    });
+
+                    return UtilsService.waitMultiplePromises(promises);
+                }
+            }
         }
 
         function loadRatePlan() {
@@ -222,11 +186,12 @@
 
                         if (response != null) {
                             defaultRoutingProductDirectivePayload = {
-                                IsCurrentDefaultRoutingProductEditable: response.IsCurrentDefaultRoutingProductEditable,
-                                CurrentDefaultRoutingProductId: response.CurrentDefaultRoutingProductId,
-                                NewDefaultRoutingProductId: response.NewDefaultRoutingProductId,
-                                CurrentBED: response.CurrentBED,
-                                CurrentEED: response.CurrentEED
+                                IsCurrentRoutingProductEditable: response.IsCurrentRoutingProductEditable,
+                                CurrentRoutingProductId: response.CurrentRoutingProductId,
+                                CurrentRoutingProductName: "Mohamad's Routing Product",
+                                NewRoutingProductId: 130252,
+                                CurrentRoutingProductBED: response.CurrentRoutingProductBED,
+                                CurrentRoutingProductEED: response.CurrentRoutingProductBED
                             };
                         }
 
@@ -282,7 +247,7 @@
 
             function buildSaveChangesInput() {
                 var newChanges = {};
-                var defaultChanges = defaultRoutingProductDirectiveAPI.getDefaultChanges();
+                var defaultChanges = defaultRoutingProductDirectiveAPI.getChanges();
                 var zoneChanges = gridAPI.getZoneChanges();
 
                 newChanges = (defaultChanges != null || zoneChanges != null) ? { DefaultChanges: defaultChanges, ZoneChanges: zoneChanges } : null;
@@ -318,10 +283,10 @@
         function getOwnerId() {
             var ownerId = null;
 
-            if (sellingProductSelectorAPI != undefined)
-                ownerId = $scope.sellingProductConnector.selectedSellingProduct.SellingProductId;
-            else if (carrierAccountSelectorAPI != undefined)
-                ownerId = $scope.carrierAccountConnector.selectedCustomer.CarrierAccountId;
+            if ($scope.showSellingProductSelector)
+                ownerId = $scope.selectedSellingProduct.SellingProductId;
+            else if ($scope.showCarrierAccountSelector)
+                ownerId = $scope.selectedCustomer.CarrierAccountId;
 
             return ownerId;
         }

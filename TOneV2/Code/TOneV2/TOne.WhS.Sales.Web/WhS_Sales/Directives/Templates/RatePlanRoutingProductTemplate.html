@@ -1,0 +1,19 @@
+﻿<vr-row>
+    <vr-columns width="normal">
+        <vr-label isvalue>{{ctrl.currentName}}</vr-label>
+    </vr-columns>
+
+    <vr-columns width="normal">
+        <vr-whs-be-routingproduct-selector on-ready="ctrl.onSelectorReady" onselectionchanged="ctrl.onSelectorChanged"></vr-whs-be-routingproduct-selector>
+    </vr-columns>
+
+    <vr-columns width="normal">
+        <vr-datetimepicker label="BED" type="date" value="ctrl.currentBED" vr-disabled="true" ng-hide="ctrl.showNewBED"></vr-datetimepicker>
+        <vr-datetimepicker label="BED" type="date" value="ctrl.newBED" ng-show="ctrl.showNewBED"></vr-datetimepicker>
+    </vr-columns>
+
+    <vr-columns width="normal">
+        <vr-datetimepicker label="EED" type="date" value="ctrl.currentEED" vr-disabled="true" ng-hide="ctrl.showNewEED"></vr-datetimepicker>
+        <vr-datetimepicker label="EED" type="date" value="ctrl.newEED" ng-show="ctrl.showNewEED"></vr-datetimepicker>
+    </vr-columns>
+</vr-row>

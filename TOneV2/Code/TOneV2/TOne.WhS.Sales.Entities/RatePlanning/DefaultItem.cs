@@ -9,14 +9,16 @@ namespace TOne.WhS.Sales.Entities
 {
     public class DefaultItem
     {
-        public bool IsCurrentDefaultRoutingProductEditable { get; set; }
+        public bool? IsCurrentRoutingProductEditable { get; set; }
 
-        public int CurrentDefaultRoutingProductId { get; set; }
+        public int? CurrentRoutingProductId { get; set; }
 
-        public int? NewDefaultRoutingProductId { get; set; }
+        public string CurrentRoutingProductName { get; set; }
 
-        public DateTime CurrentBED { get; set; }
+        public int? NewRoutingProductId { get; set; }
 
-        public DateTime? CurrentEED { get; set; }
+        public DateTime? CurrentRoutingProductBED { get; set; }
+
+        public DateTime? CurrentRoutingProductEED { get; set; }
     }
 }

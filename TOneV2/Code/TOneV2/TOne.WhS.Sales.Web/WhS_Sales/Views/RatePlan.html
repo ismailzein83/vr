@@ -1,9 +1,10 @@
 ﻿<vr-panel ng-controller="WhS_Sales_RatePlanController">
 
-    <vr-form name="formFilter" vr-loader="loadingFilters">
+    <vr-form validationcontext="formFilter" vr-loader="loadingFilters">
 
         <div vr-loader="isLoadingOwnerSection" ng-hide="filterSectionCollapsed">
             <vr-row removeline>
+
                 <vr-columns width="normal">
                     <vr-select label="Owner Type"
                                datasource="ownerTypes"
@@ -12,39 +13,41 @@
                                datavaluefield="value"
                                datatextfield="description"
                                entityname="Owner Type"
-                               hideremoveicon
-                               isrequired>
+                               hideremoveicon>
                     </vr-select>
                 </vr-columns>
-                <vr-columns width="normal" ng-if="showSellingProductSelector">
-                    <vr-whs-be-sellingproduct-selector on-ready="sellingProductConnector.onSellingProductSelectorReady"
-                                                       selectedvalues="sellingProductConnector.selectedSellingProduct"
-                                                       onselectionchanged="sellingProductConnector.onSellingProductChanged"
-                                                       isrequired
+                <vr-columns width="normal" ng-show="showSellingProductSelector">
+                    <vr-whs-be-sellingproduct-selector on-ready="onSellingProductSelectorReady"
+                                                       selectedvalues="selectedSellingProduct"
+                                                       onselectionchanged="onSellingProductChanged"
                                                        hideremoveicon>
                     </vr-whs-be-sellingproduct-selector>
                 </vr-columns>
-                <vr-columns width="normal" ng-if="showCarrierAccountSelector">
-                    <vr-whs-be-carrieraccount-selector on-ready="carrierAccountConnector.onCarrierAccountSelectorReady"
-                                                       selectedvalues="carrierAccountConnector.selectedCustomer"
-                                                       onselectionchanged="carrierAccountConnector.onCarrierAccountChanged"
+                <vr-columns width="normal" ng-show="showCarrierAccountSelector">
+                    <vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountSelectorReady"
+                                                       selectedvalues="selectedCustomer"
+                                                       onselectionchanged="onCarrierAccountChanged"
                                                        getcustomers
-                                                       isrequired
                                                        hideremoveicon>
                     </vr-whs-be-carrieraccount-selector>
                 </vr-columns>
+
             </vr-row>
         </div>
 
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
-                    <vr-button type="SellNewZones" formname="formFilter" data-onclick="sellNewZones" ng-show="showCarrierAccountSelector"></vr-button>
-                    <vr-button type="Save" formname="formFilter" menuactions="saveButtonMenuActions"></vr-button>
+                    <vr-button type="Search" validationcontext="formFilter" data-onclick="search"></vr-button>
+                    <vr-button type="SellNewZones" validationcontext="formFilter" data-onclick="sellNewZones" ng-show="showCarrierAccountSelector"></vr-button>
+                    <vr-button type="Save" validationcontext="formFilter" menuactions="saveButtonMenuActions"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
+
+        <div vr-loader="isLoadingDefaultRoutingProductSection" ng-if="showDefaultRoutingProduct">
+            <vr-whs-sales-rateplanroutingproduct on-ready="onDefaultRoutingProductDirectiveReady"></vr-whs-sales-rateplanroutingproduct>
+        </div>
 
         <vr-row>
             <vr-columns width="fullrow" ng-if="showZoneLetters">
@@ -54,10 +57,6 @@
                 </vr-choices>
             </vr-columns>
         </vr-row>
-
-        <div vr-loader="isLoadingDefaultRoutingProductSection" ng-if="showDefaultRoutingProduct">
-            <vr-whs-sales-defaultroutingproduct on-ready="onDefaultRoutingProductDirectiveReady"></vr-whs-sales-defaultroutingproduct>
-        </div>
 
         <div ng-if="showGrid">
             <vr-whs-sales-rateplan-grid on-ready="onGridReady"></vr-whs-sales-rateplan-grid>
