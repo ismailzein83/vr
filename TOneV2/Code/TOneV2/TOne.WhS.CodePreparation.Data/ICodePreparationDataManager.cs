@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.CodePreparation.Entities;
 
 namespace TOne.WhS.CodePreparation.Data
 {
@@ -12,16 +12,16 @@ namespace TOne.WhS.CodePreparation.Data
        void ApplySaleZonesForDB(object preparedSaleZones);
       void  ApplySaleCodesForDB(object preparedSaleCodes);
 
-      void DeleteSaleZones(List<SaleZone> saleZones);
-      void DeleteSaleCodes(List<SaleCode> saleCodes);
+      void DeleteSaleZones(List<Zone> saleZones);
+      void DeleteSaleCodes(List<Code> saleCodes);
 
-        void InsertSaleZones(List<SaleZone> saleZones);
+        void InsertSaleZones(List<Zone> saleZones);
 
         object InitialiazeZonesStreamForDBApply();
         object InitialiazeCodesStreamForDBApply();
 
-        void WriteRecordToZonesStream(SaleZone record, object dbApplyStream);
-        void WriteRecordToCodesStream(SaleCode record, object dbApplyStream);
+        void WriteRecordToZonesStream(Zone record, object dbApplyStream);
+        void WriteRecordToCodesStream(Code record, object dbApplyStream);
 
         object FinishSaleZoneDBApplyStream(object dbApplyStream);
         object FinishSaleCodeDBApplyStream(object dbApplyStream);

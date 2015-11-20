@@ -53,37 +53,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 });
         }
 
-        public Dictionary<string, SaleZone> GetSaleZonesWithCodes(int sellingNumberPlanId, DateTime effectiveDate)
-        {
-            Dictionary<string, SaleZone> saleZoneDictionary = new Dictionary<string, SaleZone>();
-            IEnumerable<SaleZone> salezones = this.GetSaleZones(sellingNumberPlanId, effectiveDate);
-
-            if (salezones != null && salezones.Count() > 0)
-            {
-                SaleCodeManager manager = new SaleCodeManager();
-                foreach (SaleZone saleZone in salezones)
-                {
-                    SaleZone saleZoneOut;
-                    if (!saleZoneDictionary.TryGetValue(saleZone.Name, out saleZoneOut))
-                    {
-                         saleZoneOut = new SaleZone();
-                        List<SaleCode> saleCodes = manager.GetSaleCodesByZoneID(saleZone.SaleZoneId, effectiveDate);
-                        if (saleZoneOut.Codes==null)
-                         saleZoneOut.Codes = new List<SaleCode>();
-                        saleZoneOut.Name = saleZone.Name;
-                        saleZoneOut.SaleZoneId = saleZone.SaleZoneId;
-                        saleZoneOut.SellingNumberPlanId = saleZone.SellingNumberPlanId;
-                        saleZoneOut.BeginEffectiveDate = saleZone.BeginEffectiveDate;
-                        saleZoneOut.EndEffectiveDate = saleZone.EndEffectiveDate;
-                        saleZoneOut.Codes = saleCodes;
-                        saleZoneDictionary.Add(saleZone.Name, saleZoneOut);
-                    }
-                       
-                }
-            }
-
-            return saleZoneDictionary;
-        }
+     
 
         public string GetDescription(int sellingNumberPlanId, IEnumerable<long> saleZoneIds)
         {

@@ -7,32 +7,31 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.CodePreparation.Business;
+using TOne.WhS.CodePreparation.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Common;
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
     public class ApplySaleZonesForDB : CodeActivity
     {
-        public InArgument<Dictionary<string,SaleZone>> AllZones { get; set; }
-       // public InArgument<Dictionary<string, SaleZone>> ZonesToDelete { get; set; }
-
+        public InArgument<Dictionary<string, Zone>> AffectedZonesWithCodes { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
             DateTime startReading = DateTime.Now;
 
             CodePreparationManager codePreparationManager = new CodePreparationManager();
-            Dictionary<string,SaleZone> allZones=AllZones.Get(context);
+            Dictionary<string, Zone> affectedZonesWithCodes = AffectedZonesWithCodes.Get(context);
 
-            List<SaleZone> zonesToDelete = new List<SaleZone>();
-            List<SaleZone> zonesToAdd = new List<SaleZone>();
+            List<Zone> zonesToDelete = new List<Zone>();
+            List<Zone> zonesToAdd = new List<Zone>();
 
-            foreach (var saleZone in allZones)
+            foreach (var saleZone in affectedZonesWithCodes)
             {
                 if (saleZone.Value.Status == Status.New)
                 {
                     zonesToAdd.Add(saleZone.Value);
                 }
-                else if (saleZone.Value.Status == Status.Deleted)
+                else if (saleZone.Value.Status == Status.Changed)
                 {
                     zonesToDelete.Add(saleZone.Value);
                 }

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.BusinessEntity.Entities
+namespace TOne.WhS.CodePreparation.Entities
 {
-    public class SaleZone
+    public enum Status { New = 0, Changed = 1, Replace = -1 }
+    public class Zone
     {
         public long SaleZoneId { get; set; }
 
@@ -19,5 +20,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public DateTime? EndEffectiveDate { get; set; }
 
+        public List<Code> Codes { get; set; }
+
+        public Status Status { get; set; }
     }
 }

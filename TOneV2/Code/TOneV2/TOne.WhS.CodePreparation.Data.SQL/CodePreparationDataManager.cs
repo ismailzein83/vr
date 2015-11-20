@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.Data.SQL;
-using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.CodePreparation.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.CodePreparation.Data.SQL
@@ -56,7 +56,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             return base.InitializeStreamForBulkInsert();
         }
 
-        public void WriteRecordToZonesStream(SaleZone record, object dbApplyStream)
+        public void WriteRecordToZonesStream(Zone record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^",
@@ -68,12 +68,12 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                        record.EndEffectiveDate.HasValue ? (DateTime?)record.EndEffectiveDate.Value : null);
         }
 
-        public void WriteRecordToCodesStream(SaleCode record, object dbApplyStream)
+        public void WriteRecordToCodesStream(Code record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}",
                        0,
-                       record.Code,
+                       record.CodeValue,
                        record.ZoneId,
                        record.CodeGroupId,
                        record.BeginEffectiveDate,
@@ -90,7 +90,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             InsertBulkToTable(preparedSaleCodes as BaseBulkInsertInfo);
         }
 
-        public void DeleteSaleZones(List<SaleZone> saleZones)
+        public void DeleteSaleZones(List<Zone> saleZones)
         {
             DataTable dtSaleZonesToUpdate = GetSaleZonesTable();
 
@@ -98,7 +98,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
 
             foreach (var item in saleZones)
             {
-                SaleZone saleZone = new SaleZone
+                Zone saleZone = new Zone
                 {
                     SaleZoneId = item.SaleZoneId,
                     EndEffectiveDate = item.EndEffectiveDate
@@ -117,7 +117,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                     }
                     );
         }
-        public void DeleteSaleCodes(List<SaleCode> saleCodes)
+        public void DeleteSaleCodes(List<Code> saleCodes)
         {
             DataTable dtSaleZCodesToUpdate = GetSaleCodesTable();
 
@@ -125,7 +125,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
 
             foreach (var item in saleCodes)
             {
-                SaleCode saleCode = new SaleCode
+                Code saleCode = new Code
                 {
                     SaleCodeId = item.SaleCodeId,
                     EndEffectiveDate = item.EndEffectiveDate
@@ -152,17 +152,17 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             dt.Columns.Add("EED", typeof(DateTime));
             return dt;
         }
-        void FillSaleCodeRow(DataRow dr, SaleCode saleCode)
+        void FillSaleCodeRow(DataRow dr,Code saleCode)
         {
             dr["ID"] = saleCode.SaleCodeId;
             if (saleCode.EndEffectiveDate != null)
               dr["EED"] = saleCode.EndEffectiveDate;
         }
 
-        public void InsertSaleCodes(List<SaleCode> saleCodes)
+        public void InsertSaleCodes(List<Code> saleCodes)
         {
             object dbApplyStream = InitialiazeCodesStreamForDBApply();
-            foreach (SaleCode saleCode in saleCodes)
+            foreach (Code saleCode in saleCodes)
                 WriteRecordToCodesStream(saleCode, dbApplyStream);
             object prepareToApplySaleCodes = FinishSaleCodeDBApplyStream(dbApplyStream);
             ApplySaleCodesForDB(prepareToApplySaleCodes);
@@ -176,17 +176,17 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             return dt;
         }
 
-        void FillSaleZoneRow(DataRow dr, SaleZone saleZone)
+        void FillSaleZoneRow(DataRow dr, Zone saleZone)
         {
             dr["ID"] = saleZone.SaleZoneId;
             if (saleZone.EndEffectiveDate!=null)
               dr["EED"] = saleZone.EndEffectiveDate;
         }
 
-        public void InsertSaleZones(List<SaleZone> saleZones)
+        public void InsertSaleZones(List<Zone> saleZones)
         {
             object dbApplyStream = InitialiazeZonesStreamForDBApply();
-            foreach (SaleZone saleZone in saleZones)
+            foreach (Zone saleZone in saleZones)
                 WriteRecordToZonesStream(saleZone, dbApplyStream);
             object prepareToApplySaleZones = FinishSaleZoneDBApplyStream(dbApplyStream);
             ApplySaleZonesForDB(prepareToApplySaleZones);

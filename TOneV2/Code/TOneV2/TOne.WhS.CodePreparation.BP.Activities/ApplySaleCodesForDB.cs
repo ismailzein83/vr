@@ -9,21 +9,22 @@ using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.BusinessProcess;
 using TOne.WhS.CodePreparation.Business;
+using TOne.WhS.CodePreparation.Entities;
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
     public class ApplySaleCodesForDB : CodeActivity
     {
-        public InArgument<Dictionary<string, SaleZone>> AllZones { get; set; }
+        public InArgument<Dictionary<string, Zone>> AffectedZonesWithCodes { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
             DateTime startReading = DateTime.Now;
             CodePreparationManager codePreparationManager = new CodePreparationManager();
-            List<SaleCode> codesToDelete = new List<SaleCode>();
-            List<SaleCode> codesToAdd = new List<SaleCode>();
+            List<Code> codesToDelete = new List<Code>();
+            List<Code> codesToAdd = new List<Code>();
 
-            Dictionary<string, SaleZone> allZones = AllZones.Get(context);
+            Dictionary<string, Zone> affectedZonesWithCodes = AffectedZonesWithCodes.Get(context);
 
-            foreach (var saleZone in allZones)
+            foreach (var saleZone in affectedZonesWithCodes)
             {
                 if (saleZone.Value.Codes != null)
                 {
@@ -33,7 +34,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                         {
                             codesToAdd.Add(code);
                         }
-                        else if (code.Status == Status.Deleted)
+                        else if (code.Status == Status.Changed)
                         {
                             codesToDelete.Add(code);
                         }
