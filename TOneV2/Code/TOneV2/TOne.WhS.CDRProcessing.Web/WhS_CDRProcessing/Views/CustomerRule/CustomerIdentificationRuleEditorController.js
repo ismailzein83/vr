@@ -2,9 +2,9 @@
 
     "use strict";
 
-    customerIdentificationRuleEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_CDRProcessing_CustomerIdentificationRuleAPIService'];
+    customerIdentificationRuleEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_CDRProcessing_CustomerIdentificationRuleAPIService','VRValidationService'];
 
-    function customerIdentificationRuleEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, WhS_CDRProcessing_CustomerIdentificationRuleAPIService) {
+    function customerIdentificationRuleEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, WhS_CDRProcessing_CustomerIdentificationRuleAPIService, VRValidationService) {
 
         var isEditMode;
         var ruleId;
@@ -26,6 +26,9 @@
         }
         function defineScope() {
             $scope.scopeModal = {};
+            $scope.scopeModal.validateDateTime = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModal.beginEffectiveDate, $scope.scopeModal.endEffectiveDate);
+            }
             $scope.scopeModal.SaveCustomerRule = function () {
                 if (isEditMode) {
                     return updateCustomerRule();
@@ -72,8 +75,8 @@
             $scope.scopeModal.onInCarrierValueChange = function (value) {
                 $scope.scopeModal.disableInCarrierAddButton = value == undefined || UtilsService.contains($scope.scopeModal.inCarriers, $scope.scopeModal.inCarrier);
             }
-            $scope.scopeModal.onInTrunkValueChange = function () {
-                $scope.scopeModal.disableInTrunkAddButton = $scope.scopeModal.inTrunk == "" || UtilsService.contains($scope.scopeModal.inTrunks, $scope.scopeModal.inTrunk);
+            $scope.scopeModal.onInTrunkValueChange = function (value) {
+                $scope.scopeModal.disableInTrunkAddButton = value == undefined || UtilsService.contains($scope.scopeModal.inTrunks, $scope.scopeModal.inTrunk);
             }
 
         }
@@ -169,8 +172,8 @@
             return WhS_CDRProcessing_CustomerIdentificationRuleAPIService.AddRule(customerRuleObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Customer Rule", response)) {
-                    if ($scope.scopeModal.onCustomerIdentificationRuleAdded != undefined)
-                        $scope.scopeModal.onCustomerIdentificationRuleAdded(response.InsertedObject);
+                    if ($scope.onCustomerIdentificationRuleAdded != undefined)
+                        $scope.onCustomerIdentificationRuleAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -185,8 +188,8 @@
             WhS_CDRProcessing_CustomerIdentificationRuleAPIService.UpdateRule(customerRuleObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Customer Rule", response)) {
-                    if ($scope.scopeModal.onCustomerIdentificationRuleUpdated != undefined)
-                        $scope.scopeModal.onCustomerIdentificationRuleUpdated(response.UpdatedObject);
+                    if ($scope.onCustomerIdentificationRuleUpdated != undefined)
+                        $scope.onCustomerIdentificationRuleUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {

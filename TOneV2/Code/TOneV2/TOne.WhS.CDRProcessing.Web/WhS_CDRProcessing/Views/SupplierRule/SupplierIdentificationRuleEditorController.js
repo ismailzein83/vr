@@ -2,9 +2,9 @@
 
     "use strict";
 
-    supplierIdentificationRuleEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_CDRProcessing_SupplierIdentificationRuleAPIService'];
+    supplierIdentificationRuleEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_CDRProcessing_SupplierIdentificationRuleAPIService','VRValidationService'];
 
-    function supplierIdentificationRuleEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, WhS_CDRProcessing_SupplierIdentificationRuleAPIService) {
+    function supplierIdentificationRuleEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, WhS_CDRProcessing_SupplierIdentificationRuleAPIService, VRValidationService) {
 
         var isEditMode;
         var ruleId;
@@ -24,7 +24,11 @@
             isEditMode = (ruleId != undefined);
         }
         function defineScope() {
-            $scope.SaveSupplierRule = function () {
+            $scope.scopeModal = {};
+            $scope.scopeModal.validateDateTime = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModal.beginEffectiveDate, $scope.scopeModal.endEffectiveDate);
+            }
+            $scope.scopeModal.SaveSupplierRule = function () {
                 if (isEditMode) {
                     return updateSupplierRule();
                 }
@@ -32,58 +36,51 @@
                     return insertSupplierRule();
                 }
             };
-            $scope.onCarrierAccountDirectiveReady = function (api) {
+            $scope.scopeModal.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
                 carrierAccountReadyPromiseDeferred.resolve();
 
             }
-            $scope.close = function () {
+            $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
             };
-            $scope.outTrunks = [];
-            $scope.outCarriers = [];
-            $scope.CDPNPrefixes = [];
-            $scope.addTrunk = function () {
-                $scope.outTrunks.push($scope.outTrunk);
-                $scope.outTrunk = undefined;
+            $scope.scopeModal.outTrunks = [];
+            $scope.scopeModal.outCarriers = [];
+            $scope.scopeModal.CDPNPrefixes = [];
+            $scope.scopeModal.disableOutCarrierAddButton = true;
+            $scope.scopeModal.disableAddCDPNPrefixButton = true;
+            $scope.scopeModal.disableOutTrunkAddButton = true;
+            $scope.scopeModal.addTrunk = function () {
+                $scope.scopeModal.outTrunks.push($scope.scopeModal.outTrunk);
+                $scope.scopeModal.outTrunk = undefined;
+                $scope.scopeModal.disableOutTrunkAddButton = true;
             }
-            $scope.addCarrier = function () {
-                $scope.outCarriers.push($scope.outCarrier);
-                $scope.outCarrier = undefined;
+            $scope.scopeModal.addCarrier = function () {
+                $scope.scopeModal.outCarriers.push($scope.scopeModal.outCarrier);
+                $scope.scopeModal.outCarrier = undefined;
+                $scope.scopeModal.disableOutCarrierAddButton = true;
             }
-            $scope.addCDPNPrefix = function () {
-                $scope.CDPNPrefixes.push($scope.CDPNPrefix);
-                $scope.CDPNPrefix = undefined;
-            }
-
-            $scope.removeOutTrunk = function (outtrunk) {
-                $scope.outTrunks.splice($scope.outTrunks.indexOf(outtrunk), 1);
-
-            }
-
-
-            $scope.removeOutCarrier = function (outcarrier) {
-                $scope.outCarriers.splice($scope.outCarriers.indexOf(outcarrier), 1);
+            $scope.scopeModal.addCDPNPrefix = function () {
+                $scope.scopeModal.CDPNPrefixes.push($scope.scopeModal.CDPNPrefix);
+                $scope.scopeModal.CDPNPrefix = undefined;
+                $scope.scopeModal.disableAddCDPNPrefixButton = true;
             }
 
-
-            $scope.removeCDPN = function (cdpn) {
-                $scope.CDPNPrefixes.splice($scope.CDPNPrefixes.indexOf(cdpn), 1);
+           
+            $scope.scopeModal.onCDPNValueChange = function (value) {
+                $scope.scopeModal.disableAddCDPNPrefixButton = value == undefined || UtilsService.contains($scope.scopeModal.CDPNPrefixes, $scope.scopeModal.CDPNPrefix);
             }
-            $scope.onCDPNValueChange = function () {
-                $scope.disableAddCDPNPrefixButton = ($scope.CDPNPrefix == null);
+            $scope.scopeModal.onOutCarrierValueChange = function (value) {
+                $scope.scopeModal.disableOutCarrierAddButton = value == undefined || UtilsService.contains($scope.scopeModal.outCarriers, $scope.scopeModal.outCarrier);
             }
-            $scope.onOutCarrierValueChange = function () {
-                $scope.disableOutCarrierAddButton = ($scope.outCarrier == null);
-            }
-            $scope.onOutTrunkValueChange = function () {
-                $scope.disableOutTrunkAddButton = ($scope.outTrunk == null);
+            $scope.scopeModal.onOutTrunkValueChange = function (value) {
+                $scope.scopeModal.disableOutTrunkAddButton = value == undefined || UtilsService.contains($scope.scopeModal.outTrunks, $scope.scopeModal.outTrunk);
             }
 
         }
 
         function load() {
-            $scope.isLoading = true;
+            $scope.scopeModal.isLoading = true;
             if (isEditMode) {
                 $scope.title = UtilsService.buildTitleForUpdateEditor("Supplier Rule");
                 getSupplierRule().then(function () {
@@ -93,7 +90,7 @@
                         });
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
+                    $scope.scopeModal.isLoading = false;
                 });
             }
             else {
@@ -108,7 +105,7 @@
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
                .finally(function () {
-                   $scope.isLoading = false;
+                   $scope.scopeModal.isLoading = false;
                });
         }
         function loadCarrierAccountDirective() {
@@ -139,32 +136,32 @@
         function buildSupplierRuleObjectObjFromScope() {
 
             var settings = {
-                SupplierId: $scope.selectedSupplier.CarrierAccountId
+                SupplierId: $scope.scopeModal.selectedSupplier.CarrierAccountId
             }
             var criteria = {
-                OutTrunks: $scope.outTrunks,
-                OutCarriers: $scope.outCarriers,
-                CDPNPrefixes: $scope.CDPNPrefixes
+                OutTrunks: $scope.scopeModal.outTrunks,
+                OutCarriers: $scope.scopeModal.outCarriers,
+                CDPNPrefixes: $scope.scopeModal.CDPNPrefixes
 
             }
             var supplierRule = {
                 Settings: settings,
-                Description: $scope.description,
+                Description: $scope.scopeModal.description,
                 Criteria: criteria,
-                BeginEffectiveTime: $scope.beginEffectiveDate,
-                EndEffectiveTime: $scope.endEffectiveDate
+                BeginEffectiveTime: $scope.scopeModal.beginEffectiveDate,
+                EndEffectiveTime: $scope.scopeModal.endEffectiveDate
             }
             return supplierRule;
         }
 
         function loadFilterBySection() {
             if (supplierRuleEntity != undefined) {
-                $scope.outTrunks = supplierRuleEntity.Criteria.OutTrunks
-                $scope.outCarriers = supplierRuleEntity.Criteria.OutCarriers
-                $scope.CDPNPrefixes = supplierRuleEntity.Criteria.CDPNPrefixes;
-                $scope.beginEffectiveDate = supplierRuleEntity.BeginEffectiveTime;
-                $scope.endEffectiveDate = supplierRuleEntity.EndEffectiveTime;
-                $scope.description = supplierRuleEntity.Description;
+                $scope.scopeModal.outTrunks = supplierRuleEntity.Criteria.OutTrunks
+                $scope.scopeModal.outCarriers = supplierRuleEntity.Criteria.OutCarriers
+                $scope.scopeModal.CDPNPrefixes = supplierRuleEntity.Criteria.CDPNPrefixes;
+                $scope.scopeModal.beginEffectiveDate = supplierRuleEntity.BeginEffectiveTime;
+                $scope.scopeModal.endEffectiveDate = supplierRuleEntity.EndEffectiveTime;
+                $scope.scopeModal.description = supplierRuleEntity.Description;
             }
         }
 

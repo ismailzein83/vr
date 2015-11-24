@@ -17,7 +17,7 @@
                 <vr-columns width="fullrow" ng-show="selectedTemplate.value==0" vr-loader="isLoadingCustomerGroupDirective">
                     <vr-whs-be-customergroup on-ready="onCustomerGroupDirectiveReady"></vr-whs-be-customergroup>
                 </vr-columns>
-                <vr-columns width="normal" vr-loader="isLoadingSellingProductDirective" ng-show="selectedTemplate.value==1">
+                <vr-columns width="1/4row" vr-loader="isLoadingSellingProductDirective" ng-show="selectedTemplate.value==1">
                     <vr-whs-be-sellingproduct-selector on-ready="onSellingProductDirectiveReady" ismultipleselection></vr-whs-be-sellingproduct-selector>
                 </vr-columns>
             </vr-section>

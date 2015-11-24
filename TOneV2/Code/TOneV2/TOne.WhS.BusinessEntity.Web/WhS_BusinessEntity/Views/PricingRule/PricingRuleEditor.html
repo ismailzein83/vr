@@ -1,5 +1,5 @@
-﻿<div vr-modalcontent ng-controller="WhS_BE_PricingRuleEditorController" vr-loader="isLoading" width="'60%'">
-    <vr-modalbody >
+﻿<div vr-modalcontent ng-controller="WhS_BE_PricingRuleEditorController" vr-loader="scopeModal.isLoading" width="'60%'">
+    <vr-modalbody>
         <vr-form validationcontext="pricingRuleEditorGroup">
             <vr-tabs>
                 <vr-tab header="'Definition'">
@@ -25,15 +25,19 @@
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Scheduler'">
-                    <vr-row>
-                        <vr-columns width="1/3row">
-                            <vr-datetimepicker label="Begin Effective Date" value="scopeModal.beginEffectiveDate" type="date" isrequired></vr-datetimepicker>
-                        </vr-columns>
+                    <vr-validator validate="scopeModal.validateDateTime()">
+                        <vr-row>
 
-                        <vr-columns width="1/3row">
-                            <vr-datetimepicker label="End Effective Date" value="scopeModal.endEffectiveDate" type="date"></vr-datetimepicker>
-                        </vr-columns>
-                    </vr-row>
+                            <vr-columns width="1/3row">
+                                <vr-datetimepicker label="Begin Effective Date" value="scopeModal.beginEffectiveDate" type="date" isrequired></vr-datetimepicker>
+                            </vr-columns>
+
+                            <vr-columns width="1/3row">
+                                <vr-datetimepicker label="End Effective Date" value="scopeModal.endEffectiveDate" type="date"></vr-datetimepicker>
+                            </vr-columns>
+
+                        </vr-row>
+                    </vr-validator>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

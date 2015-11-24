@@ -58,11 +58,11 @@ function ( UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAcco
         }
         function loadTemplates() {
             $scope.templates = [{
-                description: "Customer Group",
+                description: "Customers",
                 value: 0,
             },
             {
-                description: "Selling Product",
+                description: "Selling Products",
                 value: 1,
             }];
         }

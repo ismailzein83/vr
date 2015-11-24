@@ -2,9 +2,9 @@
 
     "use strict";
 
-    pricingRuleEditorController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService',  'UtilsService', 'VRNotificationService', 'VRNavigationService','WhS_Be_PricingRuleTypeEnum','WhS_Be_PricingTypeEnum','VRUIUtilsService','WhS_BE_PurchasePricingRuleAPIService'];
+    pricingRuleEditorController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService',  'UtilsService', 'VRNotificationService', 'VRNavigationService','WhS_Be_PricingRuleTypeEnum','WhS_Be_PricingTypeEnum','VRUIUtilsService','WhS_BE_PurchasePricingRuleAPIService','VRValidationService'];
 
-    function pricingRuleEditorController($scope, WhS_BE_SalePricingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_PricingRuleTypeEnum, WhS_Be_PricingTypeEnum, VRUIUtilsService, WhS_BE_PurchasePricingRuleAPIService) {
+    function pricingRuleEditorController($scope, WhS_BE_SalePricingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_PricingRuleTypeEnum, WhS_Be_PricingTypeEnum, VRUIUtilsService, WhS_BE_PurchasePricingRuleAPIService, VRValidationService) {
 
         var isEditMode;
         var pricingRuleType;
@@ -35,6 +35,9 @@
         }
         function defineScope() {
             $scope.scopeModal = {}
+            $scope.scopeModal.validateDateTime = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModal.beginEffectiveDate, $scope.scopeModal.endEffectiveDate);
+            }
             $scope.scopeModal.onCriteriaDirectiveReady = function (api) {
                 criteriaDirectiveAPI = api;
                 criteriaReadyPromiseDeferred.resolve();
@@ -190,8 +193,8 @@
             return service.AddRule(pricingRuleObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded($scope.scopeModal.selectedPricingRuleType.title, response)) {
-                    if ($scope.scopeModal.onPricingRuleAdded != undefined)
-                        $scope.scopeModal.onPricingRuleAdded(response.InsertedObject);
+                    if ($scope.onPricingRuleAdded != undefined)
+                        $scope.onPricingRuleAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -205,7 +208,7 @@
             pricingRuleObject.RuleId = ruleId;
             service.UpdateRule(pricingRuleObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated($scope.selectedPricingRuleType.title, response)) {
+                if (VRNotificationService.notifyOnItemUpdated($scope.scopeModal.selectedPricingRuleType.title, response)) {
                     if ($scope.onPricingRuleUpdated != undefined)
                         $scope.onPricingRuleUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();

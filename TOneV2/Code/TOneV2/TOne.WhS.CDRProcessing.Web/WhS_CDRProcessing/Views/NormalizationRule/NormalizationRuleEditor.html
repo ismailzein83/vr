@@ -1,74 +1,67 @@
-﻿<div vr-modalcontent ng-controller="WhS_CDRProcessing_NormalizationRuleEditorController" vr-loader="isLoading">
-    <vr-modalbody maxheight="'500px'">
-        <vr-form name="formNormalizationRuleEditor">
+﻿<div vr-modalcontent ng-controller="WhS_CDRProcessing_NormalizationRuleEditorController" vr-loader="scopeModal.isLoading" width="'50%'">
+    <vr-modalbody >
+        <vr-form validationcontext="normalizationRuleEditorGroup">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-textarea label="Description" value="scopeModal.description" isrequired></vr-textarea>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Criteria'">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-select label="Number Type"
+                                       datasource="scopeModal.phoneNumberTypes"
+                                       selectedvalues="scopeModal.selectedPhoneNumberTypes"
+                                       datavaluefield="value"
+                                       datatextfield="description"
+                                       entityname="Number Type"
+                                       isrequired
+                                       ismultipleselection>
+                            </vr-select>
+                        </vr-columns>
 
-            <vr-choices selectedindex="0">
-                <vr-choice isselected="definitionSelected">Definition</vr-choice>
-                <vr-choice isselected="criteriaSelected">Criteria</vr-choice>
-                <vr-choice isselected="settingsSelected">Settings</vr-choice>
-                <vr-choice isselected="scheduleSettingsSelected">Schedule Settings</vr-choice>
-            </vr-choices>
+                        <vr-columns width="1/3row">
+                            <vr-textbox label="Number Length" value="scopeModal.phoneNumberLength" type="number" maxlength="2" minvalue="1" maxvalue="99"></vr-textbox>
+                        </vr-columns>
 
-            <div ng-show="definitionSelected">
-                <vr-row>
-                    <vr-columns width="fullrow">
-                        <vr-textarea label="Description" value="description"></vr-textarea>
-                    </vr-columns>
-                </vr-row>
-            </div>
+                        <vr-columns width="1/3row">
+                            <vr-textbox label="Number Prefix" value="scopeModal.phoneNumberPrefix"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Settings'">
+                    <vr-row>
+                        <vr-columns width="fullrow" vr-loader="scopeModal.loadingNormalizationRuleSettingsDirective">
+                            <vr-rules-normalizenumbersettings on-ready="scopeModal.onNormalizeNumberSettingsDirectiveReady"></vr-rules-normalizenumbersettings>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Scheduler'">
+                    <vr-validator validate="scopeModal.validateDateTime()">
+                        <vr-row>
+                            <vr-columns width="1/3row">
+                                <vr-datetimepicker label="Begin Effective Date" value="scopeModal.beginEffectiveDate" type="date" isrequired></vr-datetimepicker>
+                            </vr-columns>
 
-            <div ng-show="criteriaSelected">
-                <vr-row>
-                    <vr-columns width="1/3row">
-                        <vr-select label="Number Type"
-                                   datasource="phoneNumberTypes"
-                                   selectedvalues="selectedPhoneNumberTypes"
-                                   datavaluefield="value"
-                                   datatextfield="description"
-                                   entityname="Number Type"
-                                   isrequired
-                                   ismultipleselection>
-                        </vr-select>
-                    </vr-columns>
-
-                    <vr-columns width="1/3row">
-                        <vr-textbox label="Number Length" value="phoneNumberLength" type="number" maxlength="2" minvalue="1" maxvalue="99"></vr-textbox>
-                    </vr-columns>
-
-                    <vr-columns width="1/3row">
-                        <vr-textbox label="Number Prefix" value="phoneNumberPrefix"></vr-textbox>
-                    </vr-columns>
-                </vr-row>
-            </div>
-
-            <div ng-show="settingsSelected">
-                <vr-row>
-                    <vr-columns width="fullrow" vr-loader="loadingNormalizationRuleSettingsDirective">
-                        <vr-rules-normalizenumbersettings on-ready="onNormalizeNumberSettingsDirectiveReady"></vr-rules-normalizenumbersettings>
-                    </vr-columns>
-                </vr-row>
-            </div>
-
-            <div ng-show="scheduleSettingsSelected">
-                <vr-row>
-                    <vr-columns width="1/3row">
-                        <vr-datetimepicker label="Begin Effective Date" value="beginEffectiveTime" type="date" isrequired></vr-datetimepicker>
-                    </vr-columns>
-
-                    <vr-columns width="1/3row">
-                        <vr-datetimepicker label="End Effective Date" value="endEffectiveTime" type="date"></vr-datetimepicker>
-                    </vr-columns>
-                </vr-row>
-            </div>
-
+                            <vr-columns width="1/3row">
+                                <vr-datetimepicker label="End Effective Date" value="scopeModal.endEffectiveDate" type="date"></vr-datetimepicker>
+                            </vr-columns>
+                        </vr-row>
+                        </vr-validator>
+</vr-tab>
+            </vr-tabs>
         </vr-form>
+
     </vr-modalbody>
 
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formNormalizationRuleEditor" data-onclick="saveNormalizationRule"></vr-button>
-                <vr-button type="Close" data-onclick="close"></vr-button>
+                <vr-button type="Save" validationcontext="normalizationRuleEditorGroup" data-onclick="scopeModal.saveNormalizationRule"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
             </div>
         </vr-actionbar>
     </div>

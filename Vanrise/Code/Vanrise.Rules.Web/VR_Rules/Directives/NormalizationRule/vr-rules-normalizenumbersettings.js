@@ -40,7 +40,12 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
             ctrl.onActionTemplateChanged = function () {
                 ctrl.disableAddButton = (ctrl.selectedActionTemplate == undefined);
             };
-
+            ctrl.isValid = function () {
+                
+                if (ctrl.datasource.length> 0)
+                    return null;
+                return "You Should at least one filter type ";
+            }
             ctrl.addFilter = function () {
                 var dataItem = {
                     id: ctrl.datasource.length + 1,

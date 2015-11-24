@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBePricingrulesettingsRatetypeDaysofweek', ['$compile','DaysOfWeekEnum','UtilsService',
-function ($compile, DaysOfWeekEnum, UtilsService) {
+app.directive('vrWhsBePricingrulesettingsRatetypeDaysofweek', ['$compile','DaysOfWeekEnum','UtilsService','VRValidationService',
+function ($compile, DaysOfWeekEnum, UtilsService, VRValidationService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -39,13 +39,10 @@ function ($compile, DaysOfWeekEnum, UtilsService) {
                 if (!UtilsService.contains(ctrl.times, filter))
                     ctrl.times.push(filter);
             }
-            defineAPI();
-            ctrl.removeTime = function ($event,time) {
-                    $event.preventDefault();
-                    $event.stopPropagation();
-                    var index = UtilsService.getItemIndexByVal(ctrl.times, time.id, 'id');
-                    ctrl.times.splice(index, 1);
+            ctrl.validateTime = function () {
+              return  VRValidationService.validateTimeRange(ctrl.fromTime, ctrl.toTime);
             }
+            defineAPI();
         }
         function defineDaysOfWeek() {
             ctrl.daysOfWeek = [];

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    normalizationRuleEditorController.$inject = ["$scope", "WhS_CDRProcessing_NormalizationRuleAPIService", "WhS_CDRProcessing_PhoneNumberTypeEnum", "UtilsService", "VRUIUtilsService", "VRNavigationService", "VRNotificationService"];
+    normalizationRuleEditorController.$inject = ["$scope", "WhS_CDRProcessing_NormalizationRuleAPIService", "WhS_CDRProcessing_PhoneNumberTypeEnum", "UtilsService", "VRUIUtilsService", "VRNavigationService", "VRNotificationService",'VRValidationService'];
 
-    function normalizationRuleEditorController($scope, WhS_CDRProcessing_NormalizationRuleAPIService, WhS_CDRProcessing_PhoneNumberTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function normalizationRuleEditorController($scope, WhS_CDRProcessing_NormalizationRuleAPIService, WhS_CDRProcessing_PhoneNumberTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VRValidationService) {
 
         var isEditMode;
 
@@ -27,34 +27,37 @@
         }
 
         function defineScope() {
+            $scope.scopeModal = {};
+            $scope.scopeModal.validateDateTime = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModal.beginEffectiveDate, $scope.scopeModal.endEffectiveDate);
+            }
+            $scope.scopeModal.phoneNumberTypes = UtilsService.getArrayEnum(WhS_CDRProcessing_PhoneNumberTypeEnum);
+            $scope.scopeModal.selectedPhoneNumberTypes = [];
 
-            $scope.phoneNumberTypes = UtilsService.getArrayEnum(WhS_CDRProcessing_PhoneNumberTypeEnum);
-            $scope.selectedPhoneNumberTypes = [];
+            $scope.scopeModal.phoneNumberLength = undefined;
+            $scope.scopeModal.phoneNumberPrefix = undefined;
 
-            $scope.phoneNumberLength = undefined;
-            $scope.phoneNumberPrefix = undefined;
-
-            $scope.beginEffectiveDate = Date.now();
-            $scope.endEffectiveDate = undefined;
-            $scope.onNormalizeNumberSettingsDirectiveReady = function (api) {
+            $scope.scopeModal.beginEffectiveDate = Date.now();
+            $scope.scopeModal.endEffectiveDate = undefined;
+            $scope.scopeModal.onNormalizeNumberSettingsDirectiveReady = function (api) {
                 normalizationRuleSettingsDirectiveAPI = api;
                 normalizationRuleReadyPromiseDeferred.resolve();
             }
             
-            $scope.saveNormalizationRule = function () {
+            $scope.scopeModal.saveNormalizationRule = function () {
                 if (isEditMode)
                     return updateNormalizationRule();
                 else
                     return insertNormalizationRule();
             };
 
-            $scope.close = function () {
+            $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal();
             };
         }
 
         function load() {
-            $scope.isLoading = true;
+            $scope.scopeModal.isLoading = true;
 
 
 
@@ -67,7 +70,7 @@
                         });
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
+                    $scope.scopeModal.isLoading = false;
                 });
             }
             else {
@@ -87,7 +90,7 @@
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
                .finally(function () {
-                   $scope.isLoading = false;
+                   $scope.scopeModal.isLoading = false;
                });
         }
         function loadNormalizationRuleDirective() {
@@ -104,58 +107,18 @@
         }
         function loadFilterBySection() {
             if (normalizationRuleEntity != undefined) {
-                $scope.description = normalizationRuleEntity.Description;
+                $scope.scopeModal.description = normalizationRuleEntity.Description;
                 for (var i = 0; i < normalizationRuleEntity.Criteria.PhoneNumberTypes.length; i++) {
-                    $scope.selectedPhoneNumberTypes.push(UtilsService.getItemByVal($scope.phoneNumberTypes, normalizationRuleEntity.Criteria.PhoneNumberTypes[i], "value"));
+                    $scope.scopeModal.selectedPhoneNumberTypes.push(UtilsService.getItemByVal($scope.scopeModal.phoneNumberTypes, normalizationRuleEntity.Criteria.PhoneNumberTypes[i], "value"));
                 }
-                $scope.phoneNumberLength = normalizationRuleEntity.Criteria.PhoneNumberLength;
-                $scope.phoneNumberPrefix = normalizationRuleEntity.Criteria.PhoneNumberPrefix;
+                $scope.scopeModal.phoneNumberLength = normalizationRuleEntity.Criteria.PhoneNumberLength;
+                $scope.scopeModal.phoneNumberPrefix = normalizationRuleEntity.Criteria.PhoneNumberPrefix;
                 $scope.title = UtilsService.buildTitleForUpdateEditor("Normalization Rule");
-                $scope.beginEffectiveTime = normalizationRuleEntity.BeginEffectiveTime;
-                $scope.endEffectiveTime = normalizationRuleEntity.EndEffectiveTime;
+                $scope.scopeModal.beginEffectiveTime = normalizationRuleEntity.BeginEffectiveTime;
+                $scope.scopeModal.endEffectiveTime = normalizationRuleEntity.EndEffectiveTime;
             }
         }
     
-
-        function tryLoadAppendixDirectives() {
-
-            var loadOperations = [];
-            var setOperations = [];
-
-            if (normalizationRuleSettingsDirectiveAPI == undefined)
-                return;
-
-            loadOperations.push(normalizationRuleSettingsDirectiveAPI.load);
-            setOperations.push(setNormalizationRuleSettingsDirective);
-
-            UtilsService.waitMultipleAsyncOperations(loadOperations)
-                .then(function () {
-                    if(appendixDirectiveData!=undefined)
-                     setAppendixDirectives();
-                })
-                .catch(function (error) {
-                    $scope.isGettingData = false;
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
-
-            function setAppendixDirectives() {
-                UtilsService.waitMultipleAsyncOperations(setOperations)
-                    .then(function () {
-                        appendixDirectiveData = undefined;
-                    })
-                    .catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    })
-                    .finally(function () {
-                        $scope.isGettingData = false;
-                    });
-            }
-
-            function setNormalizationRuleSettingsDirective() {
-                normalizationRuleSettingsDirectiveAPI.setData(appendixDirectiveData.Settings);
-            }
-        }
-
         function setDefaultValues() {
             $scope.title = UtilsService.buildTitleForAddEditor("Normalization Rule");
         }
@@ -199,15 +162,15 @@
             var normalizationRule = {
                 RuleId: (normalizationRuleId != undefined) ? normalizationRuleId : null,
                 Criteria: {
-                    PhoneNumberTypes: UtilsService.getPropValuesFromArray($scope.selectedPhoneNumberTypes, "value"),
-                    PhoneNumberLength: $scope.phoneNumberLength,
-                    PhoneNumberPrefix: $scope.phoneNumberPrefix
+                    PhoneNumberTypes: UtilsService.getPropValuesFromArray($scope.scopeModal.selectedPhoneNumberTypes, "value"),
+                    PhoneNumberLength: $scope.scopeModal.phoneNumberLength,
+                    PhoneNumberPrefix: $scope.scopeModal.phoneNumberPrefix
                 },
               
                 Settings: normalizationRuleSettingsDirectiveAPI.getData(),
-                Description: $scope.description,
-                BeginEffectiveTime: $scope.beginEffectiveTime,
-                EndEffectiveTime: $scope.endEffectiveTime
+                Description: $scope.scopeModal.description,
+                BeginEffectiveTime: $scope.scopeModal.beginEffectiveTime,
+                EndEffectiveTime: $scope.scopeModal.endEffectiveTime
             };
 
             return normalizationRule;
