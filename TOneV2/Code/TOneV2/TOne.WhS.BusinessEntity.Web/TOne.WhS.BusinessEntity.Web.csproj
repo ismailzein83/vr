@@ -262,6 +262,7 @@
     <Content Include="WhS_BusinessEntity\Services\CarrierAccountService.js" />
     <Content Include="WhS_BusinessEntity\Services\RoutingProductService.js" />
     <Content Include="WhS_BusinessEntity\Services\CustomerSellingProductService.js" />
+    <Content Include="WhS_BusinessEntity\Services\SaleZoneService.js" />
     <Content Include="WhS_BusinessEntity\Services\SellingProductService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\AccountManagerAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CodeGroupAPIService.js" />
