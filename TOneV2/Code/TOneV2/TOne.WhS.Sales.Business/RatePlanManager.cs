@@ -25,19 +25,19 @@ namespace TOne.WhS.Sales.Business
 
         public IEnumerable<char> GetZoneLetters(SalePriceListOwnerType ownerType, int ownerId)
         {
-            List<char> zoneLetters = null;
+            IEnumerable<char> zoneLetters = null;
 
             if (ownerType == SalePriceListOwnerType.SellingProduct)
             {
                 IEnumerable<SaleZone> saleZones = GetSellingProductZones(ownerId, DateTime.Now);
 
                 if (saleZones != null)
-                    zoneLetters = saleZones.MapRecords(zone => zone.Name[0], zone => zone.Name != null && zone.Name.Length > 0).Distinct().OrderBy(letter => letter).ToList();
+                    zoneLetters = saleZones.MapRecords(zone => zone.Name[0], zone => zone.Name != null && zone.Name.Length > 0).Distinct().OrderBy(letter => letter);
             }
             else if (ownerType == SalePriceListOwnerType.Customer)
             {
                 CustomerZoneManager customerZoneManager = new CustomerZoneManager();
-                zoneLetters = customerZoneManager.GetCustomerZoneLetters(ownerId).ToList();
+                zoneLetters = customerZoneManager.GetCustomerZoneLetters(ownerId);
             }
 
             return zoneLetters;
@@ -146,8 +146,8 @@ namespace TOne.WhS.Sales.Business
                 zoneItem.IsCurrentRateEditable = (zoneRate.Source == ownerType);
                 zoneItem.CurrentRateId = zoneRate.Rate.SaleRateId;
                 zoneItem.CurrentRate = zoneRate.Rate.NormalRate;
-                zoneItem.RateBED = zoneRate.Rate.BeginEffectiveDate;
-                zoneItem.RateEED = zoneRate.Rate.EndEffectiveDate;
+                zoneItem.CurrentRateBED = zoneRate.Rate.BeginEffectiveDate;
+                zoneItem.CurrentRateEED = zoneRate.Rate.EndEffectiveDate;
             }
         }
 
@@ -166,8 +166,8 @@ namespace TOne.WhS.Sales.Business
                     (zoneRoutingProduct.Source == SaleEntityZoneRoutingProductSource.CustomerZone && ownerType == SalePriceListOwnerType.Customer)
                 );
                 zoneItem.CurrentRoutingProductId = zoneRoutingProduct.RoutingProductId;
-                zoneItem.RoutingProductBED = zoneRoutingProduct.BED;
-                zoneItem.RoutingProductEED = zoneRoutingProduct.EED;
+                zoneItem.CurrentRoutingProductBED = zoneRoutingProduct.BED;
+                zoneItem.CurrentRoutingProductEED = zoneRoutingProduct.EED;
             }
         }
 
@@ -203,8 +203,8 @@ namespace TOne.WhS.Sales.Business
                 if (zoneItem != null)
                 {
                     zoneItem.NewRate = newRate.NormalRate;
-                    zoneItem.RateBED = newRate.BED;
-                    zoneItem.RateEED = newRate.EED;
+                    zoneItem.CurrentRateBED = newRate.BED;
+                    zoneItem.CurrentRateEED = newRate.EED;
                 }
             }
             else if (rateChange != null)
@@ -212,7 +212,7 @@ namespace TOne.WhS.Sales.Business
                 ZoneItem zoneItem = zoneItems.FindRecord(item => item.CurrentRateId == rateChange.RateId);
 
                 if (zoneItem != null)
-                    zoneItem.RateEED = rateChange.EED;
+                    zoneItem.CurrentRateEED = rateChange.EED;
             }
         }
 
@@ -225,8 +225,8 @@ namespace TOne.WhS.Sales.Business
                 if (zoneItem != null)
                 {
                     zoneItem.NewRoutingProductId = newRoutingProduct.RoutingProductId;
-                    zoneItem.RoutingProductBED = newRoutingProduct.BED;
-                    zoneItem.RoutingProductEED = newRoutingProduct.EED;
+                    zoneItem.CurrentRoutingProductBED = newRoutingProduct.BED;
+                    zoneItem.CurrentRoutingProductEED = newRoutingProduct.EED;
                 }
             }
             else if (routingProductChange != null)
@@ -234,7 +234,7 @@ namespace TOne.WhS.Sales.Business
                 ZoneItem zoneItem = zoneItems.FindRecord(item => item.ZoneId == routingProductChange.ZoneId);
 
                 if (zoneItem != null)
-                    zoneItem.RoutingProductEED = routingProductChange.EED;
+                    zoneItem.CurrentRoutingProductEED = routingProductChange.EED;
             }
         }
 

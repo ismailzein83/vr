@@ -15,10 +15,14 @@ namespace TOne.WhS.Sales.Entities
 
         public string CurrentRoutingProductName { get; set; }
 
-        public int? NewRoutingProductId { get; set; }
-
         public DateTime? CurrentRoutingProductBED { get; set; }
 
         public DateTime? CurrentRoutingProductEED { get; set; }
+
+        public int? NewRoutingProductId { get; set; }
+
+        public DateTime? NewRoutingProductBED { get; set; }
+
+        public DateTime? NewRoutingProductEED { get; set; }
     }
 }

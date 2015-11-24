@@ -11,8 +11,8 @@ app.directive("vrWhsSalesRateplanroutingproduct", ["UtilsService", "VRUIUtilsSer
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var constructor = new Constructor(ctrl, $scope);
-                constructor.initCtrl();
+                var ratePlanRoutingProduct = new RatePlanRoutingProduct(ctrl, $scope);
+                ratePlanRoutingProduct.initCtrl();
 
             },
             controllerAs: "ctrl",
@@ -20,14 +20,14 @@ app.directive("vrWhsSalesRateplanroutingproduct", ["UtilsService", "VRUIUtilsSer
             templateUrl: "/Client/Modules/WhS_Sales/Directives/Templates/RatePlanRoutingProductTemplate.html"
         };
 
-        function Constructor(ctrl, $scope) {
+        function RatePlanRoutingProduct(ctrl, $scope) {
             this.initCtrl = initCtrl;
 
             function initCtrl() {
+                var currentId;
                 var selectorAPI;
                 var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                var loadHasBeenCalled = false;
-                var isEditable;
+                var areNewDatesSet = false;
 
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
@@ -35,15 +35,22 @@ app.directive("vrWhsSalesRateplanroutingproduct", ["UtilsService", "VRUIUtilsSer
                 };
 
                 ctrl.onSelectorChanged = function () {
-                    if (loadHasBeenCalled) {
-                        if (selectorAPI.getSelectedIds() != null) {
-                            ctrl.showNewBED = true;
-                            ctrl.showNewEED = true;
+                    if (selectorAPI.getSelectedIds() != null) {
+                        ctrl.ShowNewBED = true;
+                        ctrl.ShowNewEED = true;
+
+                        if (!areNewDatesSet) {
+                            ctrl.NewBED = new Date(new Date().setDate(new Date().getDate() + 7));
+                            ctrl.NewEED = null;
+                            areNewDatesSet = true;
                         }
-                        else {
-                            ctrl.showNewBED = false;
-                            ctrl.showNewEED = (isEditable);
-                        }
+                    }
+                    else {
+                        ctrl.ShowNewBED = false;
+                        ctrl.ShowNewEED = false;
+                        ctrl.NewBED = null;
+                        ctrl.NewEED = null;
+                        areNewDatesSet = false;
                     }
                 };
 
@@ -55,21 +62,22 @@ app.directive("vrWhsSalesRateplanroutingproduct", ["UtilsService", "VRUIUtilsSer
                     var api = {};
 
                     api.load = function (payload) {
-                        loadHasBeenCalled = true;
-                        var currentId;
                         var newId;
 
                         if (payload != undefined) {
-                            console.log(payload);
                             currentId = payload.CurrentRoutingProductId;
-                            isEditable = payload.IsCurrentRoutingProductEditable;
-                            ctrl.currentName = payload.CurrentRoutingProductName;
+                            ctrl.IsEditable = payload.IsCurrentRoutingProductEditable;
+                            ctrl.CurrentName = payload.CurrentRoutingProductName;
+                            ctrl.CurrentBED = (payload.CurrentRoutingProductBED != null) ? new Date(payload.CurrentRoutingProductBED) : null;
+                            ctrl.CurrentEED = (payload.CurrentRoutingProductEED != null) ? new Date(payload.CurrentRoutingProductEED) : null;
                             newId = payload.NewRoutingProductId;
-                            ctrl.currentBED = payload.CurrentRoutingProductBED;
-                            ctrl.newBED = payload.CurrentRoutingProductBED;
-                            ctrl.currentEED = payload.CurrentRoutingProductEED;
-                            ctrl.newEED = payload.CurrentRoutingProductEED;
+                            ctrl.NewBED = (payload.NewRoutingProductBED != null) ? new Date(payload.NewRoutingProductBED) : null;
+                            ctrl.NewEED = (payload.NewRoutingProductEED != null) ? new Date(payload.NewRoutingProductEED) : null;
                         }
+
+                        areNewDatesSet = true;
+                        if (ctrl.IsEditable == null)
+                            ctrl.IsEditable = false;
 
                         var selectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -78,66 +86,54 @@ app.directive("vrWhsSalesRateplanroutingproduct", ["UtilsService", "VRUIUtilsSer
                             selectedIds: newId
                         };
 
+                        $scope.isLoadingDirective = true;
+
                         VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadPromiseDeferred);
+
+                        selectorLoadPromiseDeferred.promise.finally(function () {
+                            $scope.isLoadingDirective = false;
+                        });
 
                         return selectorLoadPromiseDeferred.promise;
                     };
 
                     api.getChanges = function () {
-                        var newDefaultRoutingProduct = buildNewDefaultRoutingProduct();
-                        var defaultRoutingProductChange = (newDefaultRoutingProduct == null) ? buildDefaultRoutingProductChange() : null;
+                        var newRoutingProduct = buildNewRoutingProduct();
+                        var routingProductChange = (newRoutingProduct == null) ? buildRoutingProductChange() : null;
 
-                        var defaultChanges = (newDefaultRoutingProduct != null || defaultRoutingProductChange != null) ? {
-                            NewDefaultRoutingProduct: newDefaultRoutingProduct,
-                            DefaultRoutingProductChange: defaultRoutingProductChange
+                        var changes = (newRoutingProduct != null || routingProductChange != null) ? {
+                            NewRoutingProduct: newRoutingProduct,
+                            RoutingProductChange: routingProductChange
                         } : null;
 
-                        return defaultChanges;
+                        return changes;
 
-                        function buildNewDefaultRoutingProduct() {
-                            var newDefaultRoutingProduct = null;
-                            var currentSelectorId = currentSelectorAPI.getSelectedIds();
-                            var newSelectorId = selectorAPI.getSelectedIds();
+                        function buildNewRoutingProduct() {
+                            var newRoutingProduct = null;
+                            var selectorId = selectorAPI.getSelectedIds();
 
-                            if (newSelectorId != null && currentSelectorId != newSelectorId) {
-                                newDefaultRoutingProduct = {
-                                    $type: "TOne.WhS.Sales.Entities.RatePlanning.NewDefaultRoutingProduct, TOne.WhS.Sales.Entities",
-                                    DefaultRoutingProductId: newSelectorId,
-                                    BED: ctrl.bed,
-                                    EED: ctrl.eed
+                            if (selectorId != null) {
+                                newRoutingProduct = {
+                                    RoutingProductId: selectorId,
+                                    BED: ctrl.NewBED,
+                                    EED: ctrl.NewEED
                                 };
                             }
 
-                            return newDefaultRoutingProduct;
+                            return newRoutingProduct;
                         }
 
-                        function buildDefaultRoutingProductChange() {
-                            var defaultRoutingProductChange = null;
-                            var currentSelectorId = currentSelectorAPI.getSelectedIds();
-                            var newSelectorId = selectorAPI.getSelectedIds();
+                        function buildRoutingProductChange() {
+                            var routingProductChange = null;
 
-                            if (newSelectorId == null && !compareDates(ctrl.eed, currentEED)) {
-                                defaultRoutingProductChange = {
-                                    $type: "TOne.WhS.Sales.Entities.RatePlanning.DefaultRoutingProductChange, TOne.WhS.Sales.Entities",
-                                    DefaultRoutingProductId: currentSelectorId,
-                                    EED: ctrl.eed
+                            if (selectorAPI.getSelectedIds() == null) {
+                                routingProductChange = {
+                                    RoutingProductId: currentId,
+                                    EED: ctrl.NewEED
                                 };
                             }
 
-                            return defaultRoutingProductChange;
-
-                            function compareDates(date1, date2) {
-                                if (!isEmpty(date1) && !isEmpty(date2))
-                                    return (date1.getDay() == date2.getDay() && date1.getMonth() == date2.getMonth() && date1.getYear() == date2.getYear());
-                                else if (isEmpty(date1) && isEmpty(date2))
-                                    return true;
-                                else
-                                    return false;
-                            }
-
-                            function isEmpty(value) {
-                                return (value == undefined || value == null);
-                            }
+                            return routingProductChange;
                         }
                     };
 

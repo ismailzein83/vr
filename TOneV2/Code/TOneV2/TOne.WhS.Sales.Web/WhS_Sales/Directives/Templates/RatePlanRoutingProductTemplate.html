@@ -1,19 +1,26 @@
 ﻿<vr-row>
-    <vr-columns width="normal">
-        <vr-label isvalue>{{ctrl.currentName}}</vr-label>
-    </vr-columns>
+    <div vr-loader="isLoadingDirective">
+        <vr-columns width="normal" ng-show="ctrl.CurrentName">
+            <vr-label>Current Routing Product</vr-label>
+            <vr-label isvalue>{{ctrl.CurrentName}}</vr-label>
+        </vr-columns>
 
-    <vr-columns width="normal">
-        <vr-whs-be-routingproduct-selector on-ready="ctrl.onSelectorReady" onselectionchanged="ctrl.onSelectorChanged"></vr-whs-be-routingproduct-selector>
-    </vr-columns>
+        <vr-columns width="normal">
+            <vr-whs-be-routingproduct-selector on-ready="ctrl.onSelectorReady" onselectionchanged="ctrl.onSelectorChanged"></vr-whs-be-routingproduct-selector>
+        </vr-columns>
 
-    <vr-columns width="normal">
-        <vr-datetimepicker label="BED" type="date" value="ctrl.currentBED" vr-disabled="true" ng-hide="ctrl.showNewBED"></vr-datetimepicker>
-        <vr-datetimepicker label="BED" type="date" value="ctrl.newBED" ng-show="ctrl.showNewBED"></vr-datetimepicker>
-    </vr-columns>
+        <vr-columns width="normal">
+            <span vr-disabled="true">
+                <vr-datetimepicker label="BED" type="date" value="ctrl.CurrentBED" ng-hide="ctrl.ShowNewBED"></vr-datetimepicker>
+            </span>
+            <vr-datetimepicker label="BED" type="date" value="ctrl.NewBED" ng-show="ctrl.ShowNewBED"></vr-datetimepicker>
+        </vr-columns>
 
-    <vr-columns width="normal">
-        <vr-datetimepicker label="EED" type="date" value="ctrl.currentEED" vr-disabled="true" ng-hide="ctrl.showNewEED"></vr-datetimepicker>
-        <vr-datetimepicker label="EED" type="date" value="ctrl.newEED" ng-show="ctrl.showNewEED"></vr-datetimepicker>
-    </vr-columns>
+        <vr-columns width="normal">
+            <span vr-disabled="!ctrl.IsEditable">
+                <vr-datetimepicker label="EED" type="date" value="ctrl.CurrentEED" ng-hide="ctrl.ShowNewEED"></vr-datetimepicker>
+            </span>
+            <vr-datetimepicker label="EED" type="date" value="ctrl.NewEED" ng-show="ctrl.ShowNewEED"></vr-datetimepicker>
+        </vr-columns>
+    </div>
 </vr-row>

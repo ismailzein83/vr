@@ -16,17 +16,16 @@
     function RatePlanController($scope, WhS_Sales_MainService, WhS_Sales_RatePlanAPIService, WhS_Sales_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
         
         var sellingProductSelectorAPI;
-        var sellingProductSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var sellingProductSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var carrierAccountSelectorAPI;
-        var carrierAccountSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var defaultRoutingProductDirectiveAPI;
-        var defaultRoutingProductDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-        var defaultRoutingProductDirectiveLoadPromiseDeferred;
+        var defaultItemDirectiveAPI;
+        var defaultItemDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         var gridAPI;
-        var gridReadyPromiseDeferred;
+        var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -57,7 +56,7 @@
             $scope.selectedSellingProduct = undefined;
             $scope.onSellingProductSelectorReady = function (api) {
                 sellingProductSelectorAPI = api;
-                sellingProductSelectorReadyPromiseDeferred.resolve();
+                sellingProductSelectorReadyDeferred.resolve();
             };
             $scope.onSellingProductChanged = function () {
                 clearRatePlan();
@@ -66,7 +65,7 @@
             $scope.selectedCustomer = undefined;
             $scope.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountSelectorAPI = api;
-                carrierAccountSelectorReadyPromiseDeferred.resolve();
+                carrierAccountSelectorReadyDeferred.resolve();
             };
             $scope.onCarrierAccountChanged = function () {
                 clearRatePlan();
@@ -79,13 +78,17 @@
             };
 
             $scope.onDefaultRoutingProductDirectiveReady = function (api) {
-                defaultRoutingProductDirectiveAPI = api;
-                defaultRoutingProductDirectiveReadyPromiseDeferred.resolve();
+                defaultItemDirectiveAPI = api;
+                defaultItemDirectiveReadyDeferred.resolve();
             };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                gridReadyPromiseDeferred.resolve();
+                //var setLoader = function (value) { $scope.isLoadingSaleZonesSection = value };
+                //var gridPayload = buildGridQuery();
+                //VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridAPI, gridPayload, setLoader, gridReadyDeferred);
+
+               gridReadyDeferred.resolve();
             };
 
             $scope.search = function () {
@@ -118,28 +121,28 @@
                 function loadFilterSection() {
                     var promises = [];
 
-                    var sellingProductSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(sellingProductSelectorLoadPromiseDeferred.promise);
+                    var sellingProductSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(sellingProductSelectorLoadDeferred.promise);
 
-                    sellingProductSelectorReadyPromiseDeferred.promise.then(function () {
+                    sellingProductSelectorReadyDeferred.promise.then(function () {
                         var payload = {
                             filter: null,
                             selectedIds: null
                         };
 
-                        VRUIUtilsService.callDirectiveLoad(sellingProductSelectorAPI, payload, sellingProductSelectorLoadPromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(sellingProductSelectorAPI, payload, sellingProductSelectorLoadDeferred);
                     });
 
-                    var carrierAccountSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(carrierAccountSelectorLoadPromiseDeferred.promise);
+                    var sellingProductSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(sellingProductSelectorLoadDeferred.promise);
 
-                    carrierAccountSelectorReadyPromiseDeferred.promise.then(function () {
+                    carrierAccountSelectorReadyDeferred.promise.then(function () {
                         var payload = {
                             filter: null,
                             selectedIds: null
                         };
 
-                        VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, payload, carrierAccountSelectorLoadPromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, payload, sellingProductSelectorLoadDeferred);
                     });
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -148,58 +151,53 @@
         }
 
         function loadRatePlan() {
-            return loadZoneLetters().then(function () {
-                if ($scope.zoneLetters.length > 0) {
-                    defaultRoutingProductDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                    gridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                    showRatePlan(true);
-
-                    var promise1 = loadDefaultRoutingProductSection();
-                    var promise2 = loadGrid();
-                    return UtilsService.waitMultiplePromises([promise1, promise2]).then(function () {
-                        defaultRoutingProductDirectiveReadyPromiseDeferred = undefined;
-                        defaultRoutingProductDirectiveLoadPromiseDeferred = undefined;
-                        gridReadyPromiseDeferred = undefined;
-                    });
-                }
+            return UtilsService.waitMultipleAsyncOperations([loadZoneLetters, loadDefaultRoutingProductSection]).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
             });
 
             function loadZoneLetters() {
                 return WhS_Sales_RatePlanAPIService.GetZoneLetters($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
-                    if (response == null)
-                        return;
+                    if (response != null) {
+                        $scope.zoneLetters = [];
 
-                    $scope.zoneLetters = [];
+                        for (var i = 0; i < response.length; i++) {
+                            $scope.zoneLetters.push(response[i]);
+                        }
 
-                    for (var i = 0; i < response.length; i++) {
-                        $scope.zoneLetters.push(response[i]);
+                        showRatePlan(true);
+                        return loadGrid();
                     }
                 });
             }
 
             function loadDefaultRoutingProductSection() {
-                defaultRoutingProductDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                var defaultItemDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 getDefaultRoutingProduct().then(function (response) {
-                    defaultRoutingProductDirectiveReadyPromiseDeferred.promise.then(function () {
-                        var defaultRoutingProductDirectivePayload;
+                    console.log("Default RP");
+                    console.log(response);
+
+                    defaultItemDirectiveReadyDeferred.promise.then(function () {
+                        var defaultItemDirectivePayload;
 
                         if (response != null) {
-                            defaultRoutingProductDirectivePayload = {
+                            defaultItemDirectivePayload = {
                                 IsCurrentRoutingProductEditable: response.IsCurrentRoutingProductEditable,
                                 CurrentRoutingProductId: response.CurrentRoutingProductId,
-                                CurrentRoutingProductName: "Mohamad's Routing Product",
-                                NewRoutingProductId: 130252,
-                                CurrentRoutingProductBED: response.CurrentRoutingProductBED,
-                                CurrentRoutingProductEED: response.CurrentRoutingProductBED
+                                CurrentRoutingProductName: response.CurrentRoutingProductName,
+                                CurrentRoutingProductBED: (response.CurrentRoutingProductBED != null) ? new Date(response.CurrentRoutingProductBED) : null,
+                                CurrentRoutingProductEED: (response.CurrentRoutingProductEED != null) ? new Date(response.CurrentRoutingProductEED) : null,
+                                NewRoutingProductId: response.NewRoutingProductId,
+                                NewRoutingProductBED: (response.NewRoutingProductBED != null) ? new Date(response.NewRoutingProductBED) : null,
+                                NewRoutingProductEED: (response.NewRoutingProductEED != null) ? new Date(response.NewRoutingProductEED) : null
                             };
                         }
 
-                        VRUIUtilsService.callDirectiveLoad(defaultRoutingProductDirectiveAPI, defaultRoutingProductDirectivePayload, defaultRoutingProductDirectiveLoadPromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(defaultItemDirectiveAPI, defaultItemDirectivePayload, defaultItemDirectiveLoadDeferred);
                     });
                 });
 
-                return defaultRoutingProductDirectiveLoadPromiseDeferred.promise;
+                return defaultItemDirectiveLoadDeferred.promise;
 
                 function getDefaultRoutingProduct() {
                     return WhS_Sales_RatePlanAPIService.GetDefaultItem($scope.selectedOwnerType.value, getOwnerId());
@@ -207,14 +205,14 @@
             }
 
             function loadGrid() {
-                var gridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                var gridLoadDeferred = UtilsService.createPromiseDeferred();
 
-                gridReadyPromiseDeferred.promise.then(function () {
+                gridReadyDeferred.promise.then(function () {
                     var gridPayload = buildGridQuery();
-                    VRUIUtilsService.callDirectiveLoad(gridAPI, gridPayload, gridLoadPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(gridAPI, gridPayload, gridLoadDeferred);
                 });
 
-                return gridLoadPromiseDeferred.promise;
+                return gridLoadDeferred.promise;
             }
         }
 
@@ -247,8 +245,8 @@
 
             function buildSaveChangesInput() {
                 var newChanges = {};
-                var defaultChanges = defaultRoutingProductDirectiveAPI.getChanges();
-                var zoneChanges = gridAPI.getZoneChanges();
+                var defaultChanges = defaultItemDirectiveAPI.getChanges();
+                var zoneChanges = gridAPI.getChanges();
 
                 newChanges = (defaultChanges != null || zoneChanges != null) ? { DefaultChanges: defaultChanges, ZoneChanges: zoneChanges } : null;
 

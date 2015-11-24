@@ -15,15 +15,17 @@
             </vr-datagridcolumn>
 
             <vr-datagridcolumn headertext="'Begin Effective Date'" type="'Date'" widthfactor="2" disablesorting>
-                <span vr-disabled="dataItem.DisableBED">
-                    <vr-datetimepicker type="date" value="dataItem.RateNewBED"></vr-datetimepicker>
+                <span vr-disabled="true">
+                    <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.showNewRateBED"></vr-datetimepicker>
                 </span>
+                <vr-datetimepicker type="date" value="dataItem.NewRateBED" ng-show="dataItem.showNewRateBED"></vr-datetimepicker>
             </vr-datagridcolumn>
 
             <vr-datagridcolumn headertext="'End Effective Date'" type="'Date'" widthfactor="2" disablesorting>
-                <span vr-disabled="dataItem.DisableEED">
-                    <vr-datetimepicker type="date" value="dataItem.RateNewEED"></vr-datetimepicker>
+                <span vr-disabled="!dataItem.IsCurrentRateEditable">
+                    <vr-datetimepicker type="date" value="dataItem.CurrentRateEED" ng-hide="dataItem.showNewRateEED"></vr-datetimepicker>
                 </span>
+                <vr-datetimepicker type="date" value="dataItem.NewRateEED" ng-show="dataItem.showNewRateEED"></vr-datetimepicker>
             </vr-datagridcolumn>
 
             <vr-datagridexpandablerow>
