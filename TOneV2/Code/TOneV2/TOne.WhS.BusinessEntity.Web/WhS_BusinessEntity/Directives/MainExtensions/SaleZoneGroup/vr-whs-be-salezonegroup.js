@@ -43,6 +43,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, VRNotificationServi
             var api = {};
 
             api.load = function (payload) {
+                
                 $scope.saleZoneGroupTemplates = [];
                 var saleZoneConfigId;
                 var saleZoneGroupPayload;
@@ -79,7 +80,6 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, VRNotificationServi
 
                     saleZoneGroupDirectiveReadyPromiseDeferred.promise.then(function () {
                         saleZoneGroupDirectiveReadyPromiseDeferred = undefined;
-
                         VRUIUtilsService.callDirectiveLoad(saleZoneGroupDirectiveAPI, saleZoneGroupPayload, saleZoneGroupDirectiveLoadPromiseDeferred);
                     });
                 }

@@ -84,6 +84,7 @@ function ( UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAcco
             }
 
             api.load = function (payload) {
+               
                 var customerGroupSettings;
                 var saleZoneGroupSettings;
                 var sellingProductIds;
@@ -123,7 +124,7 @@ function ( UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAcco
                     saleZoneGroupDirectiveReadyPromiseDeferred = undefined;
                     var saleZoneGroupPayload;
                     if (saleZoneGroupSettings != undefined) {
-                        saleZoneGroupPayload = { SaleZoneGroupSettings: saleZoneGroupSettings };
+                        saleZoneGroupPayload = { saleZoneGroupSettings: saleZoneGroupSettings };
                     }
                     VRUIUtilsService.callDirectiveLoad(saleZoneGroupDirectiveAPI, saleZoneGroupPayload, saleZoneGroupDirectiveLoadPromiseDeferred);
                 });
