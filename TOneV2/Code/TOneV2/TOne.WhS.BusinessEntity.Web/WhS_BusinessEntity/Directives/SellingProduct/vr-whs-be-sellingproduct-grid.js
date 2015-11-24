@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSellingproductGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SellingProductAPIService","WhS_BE_MainService",
-function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService,WhS_BE_MainService) {
+app.directive("vrWhsBeSellingproductGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SellingProductAPIService","WhS_BE_SellingProductService" ,"WhS_BE_CustomerSellingProductService",
+function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService,  WhS_BE_SellingProductService , WhS_BE_CustomerSellingProductService) {
 
     var directiveDefinitionObject = {
 
@@ -97,7 +97,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService,W
                 gridAPI.itemUpdated(sellingProduct);
             }
 
-            WhS_BE_MainService.editSellingProduct(sellingProductObj.Entity, onSellingProductUpdated);
+            WhS_BE_SellingProductService.editSellingProduct(sellingProductObj.Entity, onSellingProductUpdated);
         }
         function assignCustomer(dataItem) {
             gridAPI.expandRow(dataItem);
@@ -118,14 +118,14 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService,W
                     }
                 }
             };
-            WhS_BE_MainService.addCustomerSellingProduct(onCustomerSellingProductAdded,dataItem.Entity);
+            WhS_BE_CustomerSellingProductService.addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem.Entity);
         }
         function deleteSellingProduct(sellingProductObj) {
             var onSellingProductDeleted = function (gridObject) {
                 gridAPI.itemDeleted(gridObject);
             };
 
-            WhS_BE_MainService.deleteSellingProduct($scope, sellingProductObj.Entity, onSellingProductDeleted);
+            WhS_BE_SellingProductService.deleteSellingProduct($scope, sellingProductObj.Entity, onSellingProductDeleted);
         }
     }
 

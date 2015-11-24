@@ -31,7 +31,6 @@
                 gridAPI = api;            
                
             }
-          
         }
 
         function load() {

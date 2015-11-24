@@ -43,7 +43,18 @@
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
             }
-
+            $scope.scopeModal.disabledfax = true;
+            $scope.scopeModal.onFaxValueChange = function () {
+                setTimeout(function () {
+                    $scope.scopeModal.disabledfax = ($scope.scopeModal.faxvalue != undefined && $scope.scopeModal.faxvalue != null && $scope.scopeModal.faxvalue != '') ? false : true;
+                })
+            }
+            $scope.scopeModal.disabledphone = true;
+            $scope.scopeModal.onPhoneValueChange = function () {
+                setTimeout(function () {
+                    $scope.scopeModal.disabledphone = ($scope.scopeModal.phoneNumberValue != undefined && $scope.scopeModal.phoneNumberValue != null && $scope.scopeModal.phoneNumberValue != '') ? false : true;
+                })
+            }
             $scope.onCityDirectiveReady = function (api) {
                 cityDirectiveApi = api;
                 cityReadyPromiseDeferred.resolve();

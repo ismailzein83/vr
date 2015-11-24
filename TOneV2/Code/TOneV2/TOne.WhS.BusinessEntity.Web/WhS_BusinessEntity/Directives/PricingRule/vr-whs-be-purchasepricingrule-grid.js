@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBePurchasepricingruleGrid", [ "VRNotificationService", "WhS_BE_PurchasePricingRuleAPIService", "WhS_BE_MainService",
-function ( VRNotificationService, WhS_BE_PurchasePricingRuleAPIService, WhS_BE_MainService) {
+app.directive("vrWhsBePurchasepricingruleGrid", ["VRNotificationService", "WhS_BE_PurchasePricingRuleAPIService", "WhS_BE_PurchasePricingRuleService",
+function (VRNotificationService, WhS_BE_PurchasePricingRuleAPIService, WhS_BE_PurchasePricingRuleService) {
 
     var directiveDefinitionObject = {
 
@@ -79,13 +79,13 @@ function ( VRNotificationService, WhS_BE_PurchasePricingRuleAPIService, WhS_BE_M
                 RuleId: purchasePricingRuleObj.Entity.RuleId,
                 PricingType: purchasePricingRuleObj.Entity.Criteria.CriteriaType
             }
-            WhS_BE_MainService.editPurchasePricingRule(obj, onPricingRuleUpdated);
+            WhS_BE_PurchasePricingRuleService.editPurchasePricingRule(obj, onPricingRuleUpdated);
         }
         function deletePurchasePricingRule(purchasePricingRuleObj) {
             var onPurchasePricingRuleDeleted = function (purchasePricingRuleObj) {
                 gridAPI.itemDeleted(purchasePricingRuleObj);
             };
-            WhS_BE_MainService.deletePurchasePricingRule($scope, purchasePricingRuleObj, onPurchasePricingRuleDeleted);
+            WhS_BE_PurchasePricingRuleService.deletePurchasePricingRule($scope, purchasePricingRuleObj, onPurchasePricingRuleDeleted);
         }
     }
 

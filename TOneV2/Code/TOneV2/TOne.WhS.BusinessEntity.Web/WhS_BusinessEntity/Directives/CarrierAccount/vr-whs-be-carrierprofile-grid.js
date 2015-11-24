@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCarrierprofileGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierProfileAPIService", "WhS_BE_MainService",
-function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, WhS_BE_MainService) {
+app.directive("vrWhsBeCarrierprofileGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierProfileAPIService", "WhS_BE_CarrierAccountService", "WhS_BE_CarrierProfileService",
+function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, WhS_BE_CarrierAccountService, WhS_BE_CarrierProfileService) {
 
     var directiveDefinitionObject = {
 
@@ -96,7 +96,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                 
             }
 
-            WhS_BE_MainService.editCarrierProfile(carrierProfileObj, onCarrierProfileUpdated);
+            WhS_BE_CarrierProfileService.editCarrierProfile(carrierProfileObj, onCarrierProfileUpdated);
         }
         function addCarrierAccount(dataItem) {
             gridAPI.expandRow(dataItem);
@@ -109,7 +109,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                 if (dataItem.extensionObject.carrierAccountGridAPI != undefined)
                     dataItem.extensionObject.carrierAccountGridAPI.onCarrierAccountAdded(carrierAccountObj);
             };
-            WhS_BE_MainService.addCarrierAccount(onCarrierAccountAdded, dataItem);
+            WhS_BE_CarrierAccountService.addCarrierAccount(onCarrierAccountAdded, dataItem);
         }
         function deleteCarrierProfile(carrierProfileObj) {
             var onCarrierProfileDeleted = function () {
@@ -117,7 +117,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                 retrieveData();
             };
 
-            WhS_BE_MainService.deleteCarrierAccount(carrierProfileObj, onCarrierProfileDeleted);
+            // WhS_BE_MainService.deleteCarrierAccount(carrierProfileObj, onCarrierProfileDeleted); to be added in CarrierAccountService
         }
     }
 

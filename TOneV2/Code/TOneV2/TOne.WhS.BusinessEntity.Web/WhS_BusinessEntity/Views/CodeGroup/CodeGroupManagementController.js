@@ -2,9 +2,9 @@
 
     "use strict";
 
-    codeGroupManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    codeGroupManagementController.$inject = ['$scope', 'WhS_BE_CodeGroupService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function codeGroupManagementController($scope, WhS_BE_MainService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function codeGroupManagementController($scope, WhS_BE_CodeGroupService, UtilsService, VRNotificationService, VRUIUtilsService) {
         var gridAPI;
         var filter = {};
         var countryDirectiveApi;
@@ -68,7 +68,7 @@
                 if (gridAPI != undefined)
                     gridAPI.onCodeGroupAdded(codeGroupObj);
             };
-            WhS_BE_MainService.addCodeGroup(onCodeGroupAdded);
+            WhS_BE_CodeGroupService.addCodeGroup(onCodeGroupAdded);
         }
 
     }

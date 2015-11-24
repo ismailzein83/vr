@@ -2,9 +2,9 @@
 
     "use strict";
 
-    customerSellingProductManagementController.$inject = ['$scope', 'WhS_BE_CustomerSellingProductAPIService', 'WhS_BE_MainService', 'UtilsService', 'VRModalService', 'VRNotificationService','VRUIUtilsService'];
+    customerSellingProductManagementController.$inject = ['$scope', 'WhS_BE_CustomerSellingProductAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_CustomerSellingProductService'];
 
-    function customerSellingProductManagementController($scope, WhS_BE_CustomerSellingProductAPIService, WhS_BE_MainService, UtilsService, VRModalService, VRNotificationService, VRUIUtilsService) {
+    function customerSellingProductManagementController($scope, WhS_BE_CustomerSellingProductAPIService,  UtilsService, VRModalService, VRNotificationService, VRUIUtilsService, WhS_BE_CustomerSellingProductService) {
         var gridAPI;
 
         var sellingProductsDirectiveAPI;
@@ -65,7 +65,7 @@
                 
             };
 
-            WhS_BE_MainService.addCustomerSellingProduct(onCustomerSellingProductAdded);
+            WhS_BE_CustomerSellingProductService.addCustomerSellingProduct(onCustomerSellingProductAdded);
         }
     }
 

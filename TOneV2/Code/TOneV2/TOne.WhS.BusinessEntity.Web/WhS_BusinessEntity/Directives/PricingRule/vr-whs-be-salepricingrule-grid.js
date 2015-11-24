@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSalepricingruleGrid", ["VRNotificationService", "WhS_BE_SalePricingRuleAPIService", "WhS_BE_MainService",
-function ( VRNotificationService, WhS_BE_SalePricingRuleAPIService, WhS_BE_MainService) {
+app.directive("vrWhsBeSalepricingruleGrid", ["VRNotificationService", "WhS_BE_SalePricingRuleAPIService","WhS_BE_SalePricingRuleService",
+function ( VRNotificationService, WhS_BE_SalePricingRuleAPIService,WhS_BE_SalePricingRuleService) {
 
     var directiveDefinitionObject = {
 
@@ -81,13 +81,13 @@ function ( VRNotificationService, WhS_BE_SalePricingRuleAPIService, WhS_BE_MainS
                 RuleId:salePricingRuleObj.Entity.RuleId,
                 PricingType: salePricingRuleObj.Entity.Criteria.CriteriaType
             }
-            WhS_BE_MainService.editSalePricingRule(obj, onPricingRuleUpdated);
+            WhS_BE_SalePricingRuleService.editSalePricingRule(obj, onPricingRuleUpdated);
         }
         function deleteSalePricingRule(salePricingRuleObj) {
             var onSalePricingRuleDeleted = function (salePricingRuleObj) {
                 gridAPI.itemDeleted(salePricingRuleObj);
             };
-            WhS_BE_MainService.deleteSalePricingRule($scope, salePricingRuleObj, onSalePricingRuleDeleted);
+            WhS_BE_SalePricingRuleService.deleteSalePricingRule($scope, salePricingRuleObj, onSalePricingRuleDeleted);
         }
     }
 

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    salePricingRuleManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'WhS_Be_PricingRuleTypeEnum', 'VRUIUtilsService'];
+    salePricingRuleManagementController.$inject = ['$scope', 'UtilsService', 'WhS_Be_PricingRuleTypeEnum', 'VRUIUtilsService', 'WhS_BE_SalePricingRuleService'];
 
-    function salePricingRuleManagementController($scope, WhS_BE_MainService, UtilsService, WhS_Be_PricingRuleTypeEnum, VRUIUtilsService) {
+    function salePricingRuleManagementController($scope, UtilsService, WhS_Be_PricingRuleTypeEnum, VRUIUtilsService, WhS_BE_SalePricingRuleService) {
         var gridAPI;
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -131,7 +131,7 @@
                     gridAPI.onPricingRuleAdded(salePricingRuleObj);
             };
 
-            WhS_BE_MainService.addSalePricingRule(onPricingRuleAdded, value);
+            WhS_BE_SalePricingRuleService.addSalePricingRule(onPricingRuleAdded, value);
         }
     }
 

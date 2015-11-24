@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="WhS_BE_CarrierProfileManagementController">
+﻿<vr-panel ng-controller="WhS_BE_CarrierProfileManagementController" vr-loader="isLoading">
 
     <vr-form name="formFilter" vr-loader="isLoading">
         <div ng-hide="filterSectionCollapsed">
@@ -6,15 +6,15 @@
                 <vr-columns width="normal">
                     <vr-textbox value="name" label="Name"></vr-textbox>
                 </vr-columns>
-           
+
                 <vr-columns width="normal">
-                    <vr-textbox value="company" label="Company" ></vr-textbox>
+                    <vr-textbox value="company" label="Company"></vr-textbox>
                 </vr-columns>
 
                 <vr-columns width="normal">
                     <vr-common-country-selector on-ready="onCountryDirectiveReady" ismultipleselection></vr-common-country-selector>
                 </vr-columns>
-           
+
                 <vr-columns width="normal">
                     <vr-textbox value="billingEmail" label="Billing Email"></vr-textbox>
                 </vr-columns>

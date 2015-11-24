@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeZoneServiceConfigSelector', ['WhS_BE_ZoneServiceConfigAPIService', 'WhS_BE_MainService', 'UtilsService', '$compile', function (WhS_BE_ZoneServiceConfigAPIService, WhS_BE_MainService, UtilsService, $compile) {
+app.directive('vrWhsBeZoneServiceConfigSelector', ['WhS_BE_ZoneServiceConfigAPIService', 'WhS_BE_ZoneServiceConfigService', 'UtilsService', '$compile', function (WhS_BE_ZoneServiceConfigAPIService, WhS_BE_ZoneServiceConfigService, UtilsService, $compile) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -33,7 +33,7 @@ app.directive('vrWhsBeZoneServiceConfigSelector', ['WhS_BE_ZoneServiceConfigAPIS
 
                     });;
                 };
-                WhS_BE_MainService.addZoneServiceConfig(onZoneServiceConfigAdded);
+                WhS_BE_ZoneServiceConfigService.addZoneServiceConfig(onZoneServiceConfigAdded);
             }
             $scope.datasource = [];
             var beZoneServiceConfig = new BeZoneServiceConfig(ctrl, $scope, WhS_BE_ZoneServiceConfigAPIService, $attrs);

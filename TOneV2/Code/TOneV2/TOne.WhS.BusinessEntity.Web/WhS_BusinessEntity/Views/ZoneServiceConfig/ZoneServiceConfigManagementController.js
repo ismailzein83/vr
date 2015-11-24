@@ -2,9 +2,9 @@
 
     "use strict";
 
-    zoneServiceConfigManagementController.$inject = ['$scope', 'WhS_BE_MainService'];
+    zoneServiceConfigManagementController.$inject = ['$scope', 'WhS_BE_ZoneServiceConfigService'];
 
-    function zoneServiceConfigManagementController($scope, WhS_BE_MainService) {
+    function zoneServiceConfigManagementController($scope, WhS_BE_ZoneServiceConfigService) {
         var gridAPI;
         defineScope();
         load();
@@ -45,7 +45,7 @@
 
 
             };
-            WhS_BE_MainService.addZoneServiceConfig(onZoneServiceConfigAdded);
+            WhS_BE_ZoneServiceConfigService.addZoneServiceConfig(onZoneServiceConfigAdded);
         }
 
     }

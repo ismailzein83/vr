@@ -1,6 +1,6 @@
-﻿AccountManagerManagementController.$inject = ['$scope', 'WhS_BE_AccountManagerAPIService', 'UsersAPIService', 'OrgChartAPIService', 'VRModalService', 'VRNotificationService', 'UtilsService','WhS_BE_MainService'];
+﻿AccountManagerManagementController.$inject = ['$scope', 'WhS_BE_AccountManagerAPIService', 'UsersAPIService', 'OrgChartAPIService', 'VRModalService', 'VRNotificationService', 'UtilsService', 'WhS_BE_AccountManagerService'];
 
-function AccountManagerManagementController($scope, AccountManagerAPIService, UsersAPIService, OrgChartAPIService, VRModalService, VRNotificationService, UtilsService, WhS_BE_MainService) {
+function AccountManagerManagementController($scope, AccountManagerAPIService, UsersAPIService, OrgChartAPIService, VRModalService, VRNotificationService, UtilsService, WhS_BE_AccountManagerService) {
 
     var users = [];
     var members = [];
@@ -184,14 +184,14 @@ function AccountManagerManagementController($scope, AccountManagerAPIService, Us
             gridAPI.loadGrid(filter);
         };
 
-        WhS_BE_MainService.openOrgChartsModal(onOrgChartAssigned, assignedOrgChartId);
+        WhS_BE_AccountManagerService.openOrgChartsModal(onOrgChartAssigned, assignedOrgChartId);
     }
 
     function assignCarriers() {
             var onCarriersAssigned = function () {
                 gridAPI.loadGrid(getFilterData());
             }
-            WhS_BE_MainService.assignCarriers(onCarriersAssigned, $scope.currentNode.nodeId);
+            WhS_BE_AccountManagerService.assignCarriers(onCarriersAssigned, $scope.currentNode.nodeId);
     }
 
 }

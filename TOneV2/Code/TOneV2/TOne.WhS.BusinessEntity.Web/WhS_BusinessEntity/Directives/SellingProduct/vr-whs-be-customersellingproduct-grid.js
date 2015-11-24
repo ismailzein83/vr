@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCustomersellingproductGrid", [ "UtilsService", "VRNotificationService","WhS_BE_CustomerSellingProductAPIService",'WhS_BE_MainService',
-function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIService, WhS_BE_MainService) {
+app.directive("vrWhsBeCustomersellingproductGrid", [ "UtilsService", "VRNotificationService","WhS_BE_CustomerSellingProductAPIService",'WhS_BE_CustomerSellingProductService',
+function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIService , WhS_BE_CustomerSellingProductService) {
 
         var directiveDefinitionObject = {
 
@@ -107,7 +107,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
                     gridAPI.itemUpdated(customerSellingProduct);
                 }
 
-                WhS_BE_MainService.editCustomerSellingProduct(customerSellingProductObj.Entity, onCustomerSellingProductUpdated);
+                WhS_BE_CustomerSellingProductService.editCustomerSellingProduct(customerSellingProductObj.Entity, onCustomerSellingProductUpdated);
             }
         }
 

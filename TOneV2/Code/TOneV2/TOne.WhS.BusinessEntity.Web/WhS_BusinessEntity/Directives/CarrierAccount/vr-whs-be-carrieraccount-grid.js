@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCarrieraccountGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierAccountAPIService", "WhS_BE_MainService", "WhS_Be_CarrierAccountTypeEnum",
-function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, WhS_BE_MainService, WhS_Be_CarrierAccountTypeEnum) {
+app.directive("vrWhsBeCarrieraccountGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierAccountAPIService", "WhS_Be_CarrierAccountTypeEnum", "WhS_BE_CustomerSellingProductService", "WhS_BE_CarrierAccountService",
+function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, WhS_Be_CarrierAccountTypeEnum, WhS_BE_CustomerSellingProductService, WhS_BE_CarrierAccountService) {
 
     var directiveDefinitionObject = {
 
@@ -126,7 +126,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                 gridAPI.itemUpdated(carrierAccount);
             }
 
-            WhS_BE_MainService.editCarrierAccount(carrierAccountObj.Entity, onCarrierAccountUpdated);
+            WhS_BE_CarrierAccountService.editCarrierAccount(carrierAccountObj.Entity, onCarrierAccountUpdated);
         }
         function assignNew(dataItem) {
             if (dataItem.Entity.AccountType == WhS_Be_CarrierAccountTypeEnum.Supplier.value)
@@ -145,14 +145,14 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                     }
                 }
             };
-            WhS_BE_MainService.addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem.Entity);
+            WhS_BE_CustomerSellingProductService.addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem.Entity);
         }
         function deleteCarrierAccount(carrierAccountObj) {
             var onCarrierAccountDeleted = function () {
                 retrieveData();
             };
 
-            WhS_BE_MainService.deleteCarrierAccount(carrierAccountObj, onCarrierAccountDeleted);
+            // WhS_BE_MainService.deleteCarrierAccount(carrierAccountObj, onCarrierAccountDeleted); to be added in CarrierAccountService
         }
     }
 

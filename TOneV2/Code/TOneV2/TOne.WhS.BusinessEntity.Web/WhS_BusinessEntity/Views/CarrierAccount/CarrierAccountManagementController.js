@@ -2,9 +2,9 @@
 
     "use strict";
 
-    carrierAccountManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'VRNotificationService', 'WhS_Be_CarrierAccountTypeEnum','VRUIUtilsService'];
+    carrierAccountManagementController.$inject = ['$scope',  'UtilsService', 'VRNotificationService', 'WhS_Be_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountService'];
 
-    function carrierAccountManagementController($scope, WhS_BE_MainService, UtilsService, VRNotificationService, WhS_Be_CarrierAccountTypeEnum, VRUIUtilsService) {
+    function carrierAccountManagementController($scope, UtilsService, VRNotificationService, WhS_Be_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountService) {
         var gridAPI;
         var carrierProfileDirectiveAPI;
         var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -93,7 +93,7 @@
                     gridAPI.onCarrierAccountAdded(carrierAccountObj);
             };
 
-            WhS_BE_MainService.addCarrierAccount(onCarrierAccountAdded);
+            WhS_BE_CarrierAccountService.addCarrierAccount(onCarrierAccountAdded);
         }
     }
 

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    routingProductManagementController.$inject = ['$scope', 'WhS_BE_SellingNumberPlanAPIService', 'UtilsService', 'VRNotificationService', 'WhS_BE_MainService'];
+    routingProductManagementController.$inject = ['$scope', 'WhS_BE_SellingNumberPlanAPIService', 'UtilsService', 'VRNotificationService'];
 
-    function routingProductManagementController($scope, WhS_BE_SellingNumberPlanAPIService, UtilsService, VRNotificationService, WhS_BE_MainService) {
+    function routingProductManagementController($scope, WhS_BE_SellingNumberPlanAPIService, UtilsService, VRNotificationService) {
         var gridAPI;
 
         defineScope();
@@ -57,7 +57,7 @@
                 gridAPI.onRoutingProductAdded(addedItem);
             };
 
-            WhS_BE_MainService.addRoutingProduct(onRoutingProductAdded);
+            WhS_BE_RoutingProductService.addRoutingProduct(onRoutingProductAdded);
         }
     }
 

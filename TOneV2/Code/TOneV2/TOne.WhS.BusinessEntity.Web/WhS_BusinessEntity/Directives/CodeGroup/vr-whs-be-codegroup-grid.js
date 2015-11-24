@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCodegroupGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CodeGroupAPIService", "WhS_BE_MainService",
-function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_BE_MainService) {
+app.directive("vrWhsBeCodegroupGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CodeGroupAPIService", "WhS_BE_CodeGroupService",
+function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_BE_CodeGroupService) {
 
     var directiveDefinitionObject = {
 
@@ -79,7 +79,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
                 gridAPI.itemUpdated(codeGroupObj);
             }
 
-            WhS_BE_MainService.editCodeGroup(codeGroupObj.Entity,  onCodeGroupUpdated , disabCountry);
+            WhS_BE_CodeGroupService.editCodeGroup(codeGroupObj.Entity, onCodeGroupUpdated, disabCountry);
         }
         
     }

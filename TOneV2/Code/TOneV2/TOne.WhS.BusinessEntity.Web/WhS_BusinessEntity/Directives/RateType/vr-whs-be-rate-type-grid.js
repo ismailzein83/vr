@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeRateTypeGrid", ["UtilsService", "VRNotificationService", "WhS_BE_RateTypeAPIService", "WhS_BE_MainService",
-function (UtilsService, VRNotificationService, WhS_BE_RateTypeAPIService, WhS_BE_MainService) {
+app.directive("vrWhsBeRateTypeGrid", ["UtilsService", "VRNotificationService", "WhS_BE_RateTypeAPIService", "WhS_BE_RateTypeService",
+function (UtilsService, VRNotificationService, WhS_BE_RateTypeAPIService, WhS_BE_RateTypeService) {
 
     var directiveDefinitionObject = {
 
@@ -98,7 +98,7 @@ function (UtilsService, VRNotificationService, WhS_BE_RateTypeAPIService, WhS_BE
                 gridAPI.itemUpdated(rateTypeObj);
             }
 
-            WhS_BE_MainService.editRateType(rateTypeObj, onRateTypeUpdated);
+            WhS_BE_RateTypeService.editRateType(rateTypeObj, onRateTypeUpdated);
         }
 
     }

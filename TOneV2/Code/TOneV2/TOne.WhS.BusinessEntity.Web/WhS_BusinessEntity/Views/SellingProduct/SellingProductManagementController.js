@@ -2,9 +2,9 @@
 
     "use strict";
 
-    sellingProductManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'VRNotificationService','VRUIUtilsService'];
+    sellingProductManagementController.$inject = ['$scope', 'WhS_BE_SellingProductService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function sellingProductManagementController($scope, WhS_BE_MainService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function sellingProductManagementController($scope, WhS_BE_SellingProductService, UtilsService, VRNotificationService, VRUIUtilsService) {
         var gridReady;
         var sellingNumberPlanDirectiveAPI;
         var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -89,7 +89,7 @@
                 if (gridReady != undefined)
                     gridReady.onSellingProductAdded(sellingProductObj);
             };
-            WhS_BE_MainService.addSellingProduct(onSellingProductAdded);
+            WhS_BE_SellingProductService.addSellingProduct(onSellingProductAdded);
         }
     }
 

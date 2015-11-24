@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeRatetypeSelector', ['WhS_BE_RateTypeAPIService', 'WhS_BE_MainService', 'UtilsService', '$compile', 'VRUIUtilsService', function (WhS_BE_RateTypeAPIService, WhS_BE_MainService, UtilsService, $compile, VRUIUtilsService) {
+app.directive('vrWhsBeRatetypeSelector', ['WhS_BE_RateTypeAPIService', 'WhS_BE_RateTypeService', 'UtilsService', '$compile', 'VRUIUtilsService', function (WhS_BE_RateTypeAPIService, WhS_BE_RateTypeService, UtilsService, $compile, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -82,7 +82,7 @@ app.directive('vrWhsBeRatetypeSelector', ['WhS_BE_RateTypeAPIService', 'WhS_BE_M
                     else
                         ctrl.selectedvalues = rateTypeObj;
                 };
-                WhS_BE_MainService.addRateType(onRateTypeAdded);
+                WhS_BE_RateTypeService.addRateType(onRateTypeAdded);
             }
 
             defineAPI();

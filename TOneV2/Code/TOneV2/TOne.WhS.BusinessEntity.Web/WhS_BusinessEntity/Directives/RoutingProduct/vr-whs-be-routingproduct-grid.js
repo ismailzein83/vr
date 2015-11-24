@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive('vrWhsBeRoutingproductGrid', ['VRNotificationService', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_MainService', 'WhS_Routing_RouteRuleService',
-function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_BE_MainService, WhS_Routing_RouteRuleService) {
+app.directive('vrWhsBeRoutingproductGrid', ['VRNotificationService', 'WhS_BE_RoutingProductAPIService', 'WhS_Routing_RouteRuleService', 'WhS_BE_RoutingProductService',
+function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_RouteRuleService, WhS_BE_RoutingProductService) {
 
     var directiveDefinitionObject = {
 
@@ -121,7 +121,7 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_BE_MainSer
                 gridAPI.itemUpdated(updatedItem);
             };
 
-            WhS_BE_MainService.editRoutingProduct(routingProduct, onRoutingProductUpdated);
+            WhS_BE_RoutingProductService.editRoutingProduct(routingProduct, onRoutingProductUpdated);
         }
 
         function deleteRoutingProduct(routingProduct) {
@@ -130,7 +130,7 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_BE_MainSer
                 gridAPI.itemDeleted(deletedItem);
             }
 
-            WhS_BE_MainService.deleteRoutingProduct($scope, routingProduct, onRoutingProductDeleted);
+            WhS_BE_RoutingProductService.deleteRoutingProduct($scope, routingProduct, onRoutingProductDeleted);
         }
 
         this.initializeController = initializeController;

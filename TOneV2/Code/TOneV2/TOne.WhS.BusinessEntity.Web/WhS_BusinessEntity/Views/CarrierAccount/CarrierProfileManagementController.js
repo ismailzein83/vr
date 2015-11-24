@@ -2,12 +2,13 @@
 
     "use strict";
 
-    carrierProfileManagementController.$inject = ['$scope', 'WhS_BE_MainService', 'UtilsService', 'VRNotificationService'];
+    carrierProfileManagementController.$inject = ['$scope',  'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_CarrierProfileService'];
 
-    function carrierProfileManagementController($scope, WhS_BE_MainService, UtilsService, VRNotificationService) {
+    function carrierProfileManagementController($scope,  UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_CarrierProfileService) {
         var gridAPI;
         var carrierProfileDirectiveAPI;
         var countryDirectiveApi;
+        var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         load();
 
@@ -15,7 +16,7 @@
 
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
-                api.load();
+                countryReadyPromiseDeferred.resolve();
             }
 
             $scope.searchClicked = function () {
@@ -31,10 +32,29 @@
 
             $scope.AddNewCarrierProfile = AddNewCarrierProfile;
         }
-
         function load() {
+            $scope.isLoading = true;
+             loadAllControls();
         }
 
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadCountries])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+              .finally(function () {
+                  $scope.isLoading = false;
+              });
+        }
+        function loadCountries() {
+            var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
+            countryReadyPromiseDeferred.promise.then(function () {
+                var payload = {  };
+                VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
+            });
+
+            return loadCountryPromiseDeferred.promise;
+        }
         function getFilterObject() {
             var data = {
                 Name: $scope.name,
@@ -50,7 +70,7 @@
                 if (gridAPI != undefined)
                     gridAPI.onCarrierProfileAdded(carrierProfileObj);
             };
-            WhS_BE_MainService.addCarrierProfile(onCarrierProfileAdded);
+            WhS_BE_CarrierProfileService.addCarrierProfile(onCarrierProfileAdded);
         }
 
     }

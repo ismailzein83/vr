@@ -2,9 +2,9 @@
 
     "use strict";
 
-    rateTypeManagementController.$inject = ['$scope', 'WhS_BE_MainService'];
+    rateTypeManagementController.$inject = ['$scope', 'WhS_BE_RateTypeService'];
 
-    function rateTypeManagementController($scope, WhS_BE_MainService) {
+    function rateTypeManagementController($scope, WhS_BE_RateTypeService) {
         var gridAPI;
         defineScope();
         load();
@@ -45,7 +45,7 @@
 
 
             };
-            WhS_BE_MainService.addRateType(onRateTypeAdded);
+            WhS_BE_RateTypeService.addRateType(onRateTypeAdded);
         }
 
     }

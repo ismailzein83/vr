@@ -255,6 +255,14 @@
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-selector.js" />
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
+    <Content Include="WhS_BusinessEntity\Services\PurchasePricingRuleService.js" />
+    <Content Include="WhS_BusinessEntity\Services\RateTypeService.js" />
+    <Content Include="WhS_BusinessEntity\Services\SalePricingRuleService.js" />
+    <Content Include="WhS_BusinessEntity\Services\CarrierProfileService.js" />
+    <Content Include="WhS_BusinessEntity\Services\CarrierAccountService.js" />
+    <Content Include="WhS_BusinessEntity\Services\RoutingProductService.js" />
+    <Content Include="WhS_BusinessEntity\Services\CustomerSellingProductService.js" />
+    <Content Include="WhS_BusinessEntity\Services\SellingProductService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\AccountManagerAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CodeGroupAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\ZoneServiceConfigAPIService.js" />
@@ -272,7 +280,8 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SellingNumberPlanAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\CodeGroupService.js" />
-    <Content Include="WhS_BusinessEntity\Services\MainService.js" />
+    <Content Include="WhS_BusinessEntity\Services\AccountManagerService.js" />
+    <Content Include="WhS_BusinessEntity\Services\ZoneServiceConfigService.js" />
     <Content Include="WhS_BusinessEntity\Services\SellingNumberPlanService.js" />
     <Content Include="WhS_BusinessEntity\Views\AccountManager\AccountManagerManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\AccountManager\AccountManagerManagementController.js" />

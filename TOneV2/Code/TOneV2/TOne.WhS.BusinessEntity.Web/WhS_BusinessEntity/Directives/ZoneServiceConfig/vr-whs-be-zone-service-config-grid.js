@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeZoneServiceConfigGrid", ["UtilsService", "VRNotificationService", "WhS_BE_ZoneServiceConfigAPIService", "WhS_BE_MainService",
-function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIService, WhS_BE_MainService) {
+app.directive("vrWhsBeZoneServiceConfigGrid", ["UtilsService", "VRNotificationService", "WhS_BE_ZoneServiceConfigAPIService", "WhS_BE_ZoneServiceConfigService",
+function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIService, WhS_BE_ZoneServiceConfigService) {
 
     var directiveDefinitionObject = {
 
@@ -94,7 +94,7 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
                 gridAPI.itemUpdated(zoneServiceConfigObj);
             }
 
-            WhS_BE_MainService.editZoneServiceConfig(zoneServiceConfigObj, onZoneServiceConfigUpdated);
+            WhS_BE_ZoneServiceConfigService.editZoneServiceConfig(zoneServiceConfigObj, onZoneServiceConfigUpdated);
         }
 
     }
