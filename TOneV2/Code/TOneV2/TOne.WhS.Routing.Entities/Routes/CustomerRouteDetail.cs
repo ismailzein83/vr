@@ -9,5 +9,11 @@ namespace TOne.WhS.Routing.Entities
     public class CustomerRouteDetail
     {
         public CustomerRoute Entity { get; set; }
+
+        public string CustomerName { get; set; }
+
+        public string ZoneName { get; set; }
+
+        public string RouteOptions { get; set; }
     }
 }

@@ -39,6 +39,7 @@
             };
 
             function getFilterObject() {
+                
                 var query = {
                     RoutingDatabaseId: routingDatabaseSelectorAPI.getSelectedIds(),
                     Code: $scope.code,
