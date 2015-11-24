@@ -65,6 +65,7 @@ function ( UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAcco
                 description: "Selling Products",
                 value: 1,
             }];
+            $scope.selectedTemplate = $scope.templates[0];
         }
 
         function defineAPI() {
