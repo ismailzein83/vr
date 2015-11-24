@@ -534,6 +534,26 @@
       <Project>{afd16f53-67b6-4484-927a-78848377aaf9}</Project>
       <Name>TOne.Main.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Analytics.Business\TOne.WhS.Analytics.Business.csproj">
+      <Project>{ed3ad820-6c97-440e-a309-0ec0391b732a}</Project>
+      <Name>TOne.WhS.Analytics.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Analytics.Data.SQL\TOne.WhS.Analytics.Data.SQL.csproj">
+      <Project>{ae6c988e-a806-4224-ace0-342f640905c6}</Project>
+      <Name>TOne.WhS.Analytics.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Analytics.Data\TOne.WhS.Analytics.Data.csproj">
+      <Project>{86a1eac7-48f9-4e53-83f4-5bfc936b9ae2}</Project>
+      <Name>TOne.WhS.Analytics.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Analytics.Entities\TOne.WhS.Analytics.Entities.csproj">
+      <Project>{a02259d1-ff3a-4b00-82f9-4992a9347d31}</Project>
+      <Name>TOne.WhS.Analytics.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Analytics.Web\TOne.WhS.Analytics.Web.csproj">
+      <Project>{b64a7cba-3d66-4c61-813b-f19df288d069}</Project>
+      <Name>TOne.WhS.Analytics.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Data.SQL\TOne.WhS.BusinessEntity.Data.SQL.csproj">
       <Project>{c483ccbc-de5f-4fe0-a837-24d7e5b60273}</Project>
       <Name>TOne.WhS.BusinessEntity.Data.SQL</Name>

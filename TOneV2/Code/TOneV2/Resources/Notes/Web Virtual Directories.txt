@@ -26,3 +26,4 @@
 	WhS_CDRProcessing		C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.CDRProcessing.Web\WhS_CDRProcessing
 	VR_Rules				C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
 	Integration				C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
+	WhS_Analytics		    C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Analytics.Web\WhS_Analytics
