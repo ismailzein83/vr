@@ -12,24 +12,14 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class CustomerRouteDataManager : RoutingDataManager, ICustomerRouteDataManager
     {
-        private static StringBuilder query_GetFilteredCustomerRoutes;
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
 
         static CustomerRouteDataManager()
         {
-            query_GetFilteredCustomerRoutes = new StringBuilder(@"IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
-	                                                        BEGIN
-                                                            SELECT [CustomerID]
-                                                                ,[Code]
-                                                                ,[SaleZoneID]
-                                                                ,[Rate]
-                                                                ,[IsBlocked]
-                                                                ,[ExecutedRuleId]
-                                                                ,[RouteOptions]
-                                                            INTO #TEMPTABLE# FROM [dbo].[CustomerRoute] with(nolock)
-                                                            Where (@Code is Null or Code = @Code)
-                                                                ##CUSTOMERIDS##
-                                                            END");
+            _columnMapper.Add("Entity.CustomerId", "CustomerId");
+            _columnMapper.Add("Entity.Code", "Code");
         }
+
 
         public void ApplyCustomerRouteForDB(object preparedCustomerRoute)
         {
@@ -77,11 +67,11 @@ namespace TOne.WhS.Routing.Data.SQL
 
                 ExecuteNonQueryText(query_GetFilteredCustomerRoutes.ToString(), (cmd) =>
                 {
-                    cmd.Parameters.Add(new SqlParameter("@Code", input.Query.Code));
+                    cmd.Parameters.Add(new SqlParameter("@Code", input.Query.Code != null ? input.Query.Code : (object)DBNull.Value));
                 });
             };
 
-            return RetrieveData(input, createTempTableAction, CustomerRouteMapper);
+            return RetrieveData(input, createTempTableAction, CustomerRouteMapper, _columnMapper);
         }
 
         private CustomerRoute CustomerRouteMapper(IDataReader reader)
@@ -97,5 +87,23 @@ namespace TOne.WhS.Routing.Data.SQL
                 Options = reader["RouteOptions"] != null? Vanrise.Common.Serializer.Deserialize<List<RouteOption>>(reader["RouteOptions"].ToString()) : null
             };
         }
+
+        #region Queries
+
+        private StringBuilder query_GetFilteredCustomerRoutes = new StringBuilder(@"IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
+	                                                        BEGIN
+                                                            SELECT [CustomerID]
+                                                                ,[Code]
+                                                                ,[SaleZoneID]
+                                                                ,[Rate]
+                                                                ,[IsBlocked]
+                                                                ,[ExecutedRuleId]
+                                                                ,[RouteOptions]
+                                                            INTO #TEMPTABLE# FROM [dbo].[CustomerRoute] with(nolock)
+                                                            Where (@Code is Null or Code = @Code)
+                                                                #CUSTOMERIDS#
+                                                            END");
+
+        #endregion
     }
 }
