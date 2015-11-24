@@ -143,7 +143,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                         var promises = [];
                         var optionOrderSettingsGroupPayload;
 
-                        if (payload != undefined && payload.RouteRuleSettings.OptionOrderSettings != null)
+                        if (payload != undefined && payload.RouteRuleSettings != undefined && payload.RouteRuleSettings.OptionOrderSettings != null)
                             optionOrderSettingsGroupPayload = payload.RouteRuleSettings.OptionOrderSettings;
 
                         var loadRouteOptionOrderSettingsGroupTemplatesPromise = WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionOrderSettingsTemplates().then(function (response) {
@@ -178,7 +178,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                         routeRuleOptionFilterSettingsReadyPromiseDeferred.promise.then(function () {
                             var optionFiltersGroupPayload;
 
-                            if (payload != undefined && payload.RouteRuleSettings.OptionFilters != null)
+                            if (payload != undefined && payload.RouteRuleSettings != undefined && payload.RouteRuleSettings.OptionFilters != null)
                                 optionFiltersGroupPayload = payload.RouteRuleSettings.OptionFilters;
 
                             VRUIUtilsService.callDirectiveLoad(routeRuleOptionFilterSettingsDirectiveAPI, optionFiltersGroupPayload, loadOptionFilterSettingsPromiseDeferred);
@@ -191,7 +191,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                         var promises = [];
                         var optionPercentageSettingsGroupPayload;
 
-                        if (payload != undefined && payload.RouteRuleSettings.OptionPercentageSettings != null)
+                        if (payload != undefined && payload.RouteRuleSettings != undefined && payload.RouteRuleSettings.OptionPercentageSettings != null)
                             optionPercentageSettingsGroupPayload = payload.RouteRuleSettings.OptionPercentageSettings;
 
                         var loadRouteOptionPercentageSettingsGroupTemplatesPromise = WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionPercentageSettingsTemplates().then(function (response) {
@@ -223,7 +223,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Routing.Business.RouteRules.RegularRouteRule, TOne.WhS.Routing.Business",
+                        $type: "TOne.WhS.Routing.Business.RegularRouteRule, TOne.WhS.Routing.Business",
                         OptionsSettingsGroup: VRUIUtilsService.getSettingsFromDirective($scope, routeOptionSettingsGroupDirectiveAPI, 'selectedOptionSettingsGroupTemplate'),
                         OptionOrderSettings: VRUIUtilsService.getSettingsFromDirective($scope, routeRuleOptionOrderSettingsDirectiveAPI, 'selectedOptionOrderSettingsGroupTemplate'),
                         OptionFilters: routeRuleOptionFilterSettingsDirectiveAPI.getData(),
