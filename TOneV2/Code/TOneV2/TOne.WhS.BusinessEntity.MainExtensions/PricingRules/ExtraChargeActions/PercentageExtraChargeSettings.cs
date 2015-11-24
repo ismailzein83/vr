@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.PricingRules.ExtraChargeActions
         public override void Execute(IPricingRuleExtraChargeActionContext context, PricingRuleExtraChargeTarget target)
         {
             if (target.Rate >= this.FromRate && target.Rate < this.ToRate)
-                target.Rate += this.ExtraPercentage * target.Rate / 100;
+                target.Rate += Math.Ceiling(this.ExtraPercentage * target.Rate / 100);
         }
     }
 }

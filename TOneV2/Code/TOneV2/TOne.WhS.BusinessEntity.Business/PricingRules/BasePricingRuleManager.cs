@@ -121,7 +121,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 result.TotalAmount = tariffTarget.TotalAmount;
             }
             else
-                result.TotalAmount = result.Rate * (input.DurationInSeconds / 60);
+                result.TotalAmount = result.Rate * Math.Ceiling((Decimal)(input.DurationInSeconds) / 60);
         }
 
     }

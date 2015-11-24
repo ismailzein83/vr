@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.PricingRules.TariffSettings
         public int FractionUnit { get; set; }
 
         public override void Execute(IPricingRuleTariffContext context, PricingRuleTariffTarget target)
-        {
+        { 
 
             target.TotalAmount = 0;
             Decimal accountedDuration = (Decimal)target.DurationInSeconds;
@@ -35,9 +35,14 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.PricingRules.TariffSettings
                 FractionUnit = (byte)FractionUnit;
                 accountedDuration = Math.Ceiling(accountedDuration / FractionUnit) * FractionUnit;
                 target.TotalAmount += Math.Ceiling(accountedDuration / FractionUnit) *  target.Rate;// 60
+                target.EffectiveRate = Math.Ceiling(FractionUnit * target.Rate/60);
             }
             else
-                target.TotalAmount += (accountedDuration * target.Rate) / 60;
+            {
+                target.TotalAmount += Math.Ceiling((accountedDuration * target.Rate) / 60);
+                target.EffectiveRate = target.Rate;
+            }
+              
 
             target.TotalAmount += (Decimal)CallFee;
         }

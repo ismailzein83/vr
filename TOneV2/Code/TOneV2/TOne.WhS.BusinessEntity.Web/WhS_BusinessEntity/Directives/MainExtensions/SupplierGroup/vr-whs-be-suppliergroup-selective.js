@@ -54,7 +54,6 @@ app.directive('vrWhsBeSuppliergroupSelective', ['UtilsService',
                             filter: {},
                             selectedIds: payload != undefined ? payload.SupplierIds : undefined
                         };
-                        console.log(carrierAccountPayload);
                         VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, carrierAccountPayload, loadCarrierAccountPromiseDeferred);
                     });
 

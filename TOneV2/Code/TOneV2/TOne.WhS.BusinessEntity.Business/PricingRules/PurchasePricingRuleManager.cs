@@ -55,7 +55,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return new PurchasePricingRuleTariffTarget
             {
                 SupplierId = input.SupplierId,
-                SupplierZoneId = input.SupplierZoneId
+                SupplierZoneId = input.SupplierZoneId,
             };
         }
 

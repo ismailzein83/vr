@@ -34,6 +34,12 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
                 carrierAccountDirectiveAPI = api;
                 carrierAccountReadyPromiseDeferred.resolve();
             }
+            ctrl.isValid = function () {
+
+                if (ctrl.datasource.length > 0)
+                    return null;
+                return "You Should Select at least one Supplier ";
+            }
             ctrl.datasource = [];
             ctrl.onSelectItem = function (dataItem) {
                 addSupplierZoneAPIFunction(dataItem);

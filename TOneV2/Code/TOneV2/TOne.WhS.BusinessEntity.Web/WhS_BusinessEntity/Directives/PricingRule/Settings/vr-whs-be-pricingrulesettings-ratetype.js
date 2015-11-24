@@ -32,7 +32,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
 
                 if (ctrl.datasource.length > 0)
                     return null;
-                return "You Should at least one filter type ";
+                return "You Should Select at least one filter type ";
             }
             ctrl.disableAddButton = true;
             ctrl.addFilter = function () {
