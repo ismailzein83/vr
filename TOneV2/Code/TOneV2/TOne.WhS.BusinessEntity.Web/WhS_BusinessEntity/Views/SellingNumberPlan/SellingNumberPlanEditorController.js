@@ -2,9 +2,9 @@
 
     "use strict";
 
-    sellingNumberPlanEditorController.$inject = ['$scope', 'WhS_BE_SellingNumberPlanAPIService', 'VRNotificationService', 'VRNavigationService'];
+    sellingNumberPlanEditorController.$inject = ['$scope', 'WhS_BE_SellingNumberPlanAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-    function sellingNumberPlanEditorController($scope, WhS_BE_SellingNumberPlanAPIService, VRNotificationService, VRNavigationService) {
+    function sellingNumberPlanEditorController($scope, WhS_BE_SellingNumberPlanAPIService, VRNotificationService, VRNavigationService, UtilsService) {
 
         var sellingNumberPlanId;
         var editMode;
@@ -41,13 +41,13 @@
                 getSellingNumberPlan();
             }
             else {
+                $scope.title = UtilsService.buildTitleForAddEditor("SellingNumberPlan");
                 $scope.isGettingData = false;
             }
 
         }
         function getSellingNumberPlan() {
             return WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlan(sellingNumberPlanId).then(function (sellingNumberPlan) {
-                console.log(sellingNumberPlan);
                 fillScopeFromSellingNumberPlanObj(sellingNumberPlan);
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -66,16 +66,17 @@
 
         function fillScopeFromSellingNumberPlanObj(sellingNumberPlan) {
             $scope.name = sellingNumberPlan.Name;
+            $scope.title = UtilsService.buildTitleForUpdateEditor(sellingNumberPlan.Name, "SellingNumberPlan");
         }
         function insertsellingNumberPlan() {
             var sellingNumberPlanObject = buildSellingNumberPlanObjFromScope();
             return WhS_BE_SellingNumberPlanAPIService.AddSellingNumberPlan(sellingNumberPlanObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("sellingNumberPlan", response, "Name")) {
+                if (VRNotificationService.notifyOnItemAdded("Selling Number Plan", response, "Name")) {
 
                     if ($scope.onSellingNumberPlanAdded != undefined)
                         $scope.onSellingNumberPlanAdded(response.InsertedObject);
-                    $scope.modalContext.closeModal();
+                    $scope.modalConstext.closeModal();
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
@@ -86,7 +87,7 @@
             var sellingNumberPlanObject = buildSellingNumberPlanObjFromScope();
             WhS_BE_SellingNumberPlanAPIService.UpdateSellingNumberPlan(sellingNumberPlanObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("sellingNumberPlan", response, "Name")) {
+                if (VRNotificationService.notifyOnItemUpdated("Selling Number Plan", response, "Name")) {
                     if ($scope.onSellingNumberPlanUpdated != undefined)
                         $scope.onSellingNumberPlanUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();

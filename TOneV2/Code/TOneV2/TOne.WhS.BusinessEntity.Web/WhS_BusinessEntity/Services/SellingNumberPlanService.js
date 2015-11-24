@@ -1,6 +1,6 @@
 ﻿
 app.service('WhS_BE_SellingNumberPlanService', ['VRModalService', 'UtilsService',
-    function (VRModalService, UtilsService) {
+    function (VRModalService) {
         
         var drillDownDefinitions = [];
         return ({
@@ -16,7 +16,6 @@ app.service('WhS_BE_SellingNumberPlanService', ['VRModalService', 'UtilsService'
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForUpdateEditor("Selling Number Plan");
                 modalScope.onSellingNumberPlanUpdated = onSellingNumberPlanUpdated;
             };
             var parameters = {
@@ -32,7 +31,6 @@ app.service('WhS_BE_SellingNumberPlanService', ['VRModalService', 'UtilsService'
             };
             
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForAddEditor("Selling Number Plan");
                 modalScope.onSellingNumberPlanAdded = onSellingNumberPlanAdded;
             };
             var parameters = {};
