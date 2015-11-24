@@ -245,7 +245,9 @@
 
             function buildSaveChangesInput() {
                 var newChanges = {};
-                var defaultChanges = defaultItemDirectiveAPI.getChanges();
+                var defaultChanges = getDefaultChanges();
+                console.log(defaultChanges);
+
                 var zoneChanges = gridAPI.getChanges();
 
                 newChanges = (defaultChanges != null || zoneChanges != null) ? { DefaultChanges: defaultChanges, ZoneChanges: zoneChanges } : null;
@@ -255,6 +257,24 @@
                     OwnerId: getOwnerId(),
                     NewChanges: newChanges
                 };
+
+                function getDefaultChanges() {
+                    var changes = defaultItemDirectiveAPI.getChanges();
+
+                    return {
+                        NewDefaultRoutingProduct: (changes.NewRoutingProduct != null) ? {
+                            $type: "TOne.WhS.Sales.Entities.NewDefaultRoutingProduct, TOne.WhS.Sales.Entities",
+                            DefaultRoutingProductId: changes.NewRoutingProduct.RoutingProductId,
+                            BED: changes.NewRoutingProduct.BED,
+                            EED: changes.NewRoutingProduct.EED
+                        } : null,
+                        DefaultRoutingProductChange: (changes.RoutingProductChange != null) ? {
+                            $type: "TOne.WhS.Sales.Entities.DefaultRoutingProductChange, TOne.WhS.Sales.Entities",
+                            DefaultRoutingProductId: changes.RoutingProductChange.RoutingProductId,
+                            EED: changes.RoutingProductChange.EED
+                        } : null
+                    };
+                }
             }
         }
 

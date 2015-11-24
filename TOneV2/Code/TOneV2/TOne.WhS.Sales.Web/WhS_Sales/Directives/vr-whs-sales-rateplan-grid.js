@@ -110,8 +110,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                             function buildNewRate(zoneItem) {
                                 var newRate = null;
-                                var currentRate = zoneItem.CurrentRate;
-                                var newRate = zoneItem.NewRate;
 
                                 if (!isEmpty(zoneItem.NewRate)) {
                                     newRate = {

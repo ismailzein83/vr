@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.Data.SQL;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.Sales.Entities.RatePlanning;
+using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
