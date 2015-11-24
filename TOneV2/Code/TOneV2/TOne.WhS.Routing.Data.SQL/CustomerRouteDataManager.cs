@@ -12,15 +12,6 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class CustomerRouteDataManager : RoutingDataManager, ICustomerRouteDataManager
     {
-        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
-
-        static CustomerRouteDataManager()
-        {
-            _columnMapper.Add("Entity.CustomerId", "CustomerId");
-            _columnMapper.Add("Entity.Code", "Code");
-        }
-
-
         public void ApplyCustomerRouteForDB(object preparedCustomerRoute)
         {
             InsertBulkToTable(preparedCustomerRoute as BaseBulkInsertInfo);
@@ -71,7 +62,9 @@ namespace TOne.WhS.Routing.Data.SQL
                 });
             };
 
-            return RetrieveData(input, createTempTableAction, CustomerRouteMapper, _columnMapper);
+            if (input.SortByColumnName != null)
+                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
+            return RetrieveData(input, createTempTableAction, CustomerRouteMapper);
         }
 
         private CustomerRoute CustomerRouteMapper(IDataReader reader)

@@ -7,6 +7,9 @@
     function customerRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService) {
         var gridAPI;
 
+        var routingDatabaseSelectorAPI;
+        var routingDatabaseReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -20,9 +23,14 @@
                 carrierAccountReadyPromiseDeferred.resolve();
             }
 
+            $scope.onRoutingDatabaseSelectorReady = function (api) {
+                routingDatabaseSelectorAPI = api;
+                routingDatabaseReadyPromiseDeferred.resolve();
+            }
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                api.loadGrid({ RoutingDatabaseId: 129 });
+                //api.loadGrid({ RoutingDatabaseId: 129 });
             }
 
             $scope.searchClicked = function () {
@@ -32,7 +40,7 @@
 
             function getFilterObject() {
                 var query = {
-                    RoutingDatabaseId: 129,
+                    RoutingDatabaseId: routingDatabaseSelectorAPI.getSelectedIds(),
                     Code: $scope.code,
                     CustomerIds: carrierAccountDirectiveAPI.getSelectedIds()
                 };
@@ -43,11 +51,22 @@
         function load() {
             $scope.isLoadingFilterData = true;
 
-            return UtilsService.waitMultipleAsyncOperations([loadCustomersSection]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadCustomersSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterData = false;
             });
+        }
+
+        function loadRoutingDatabaseSelector()
+        {
+            var loadRoutingDatabasePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            routingDatabaseReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(routingDatabaseSelectorAPI, undefined, loadRoutingDatabasePromiseDeferred);
+            });
+
+            return loadRoutingDatabasePromiseDeferred.promise;
         }
 
         function loadCustomersSection() {

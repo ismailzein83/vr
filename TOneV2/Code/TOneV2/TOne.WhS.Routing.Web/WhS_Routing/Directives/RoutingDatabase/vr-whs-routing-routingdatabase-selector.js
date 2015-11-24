@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService', 'UtilsService','VRUIUtilsService',
-    function (WhS_BE_RoutingProductAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDatabaseAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (WhS_Routing_RoutingDatabaseAPIService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -21,7 +21,7 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                     ctrl.selectedvalues = [];
 
                 ctrl.datasource = [];
-                var ctor = new routingProductCtor(ctrl, $scope, $attrs);
+                var ctor = new routingDatabaseCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
 
             },
@@ -42,9 +42,9 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
 
         function getTemplate(attrs) {
             var multipleselection = "";
-            var label = "Routing Product";
+            var label = "Routing Database";
             if (attrs.ismultipleselection != undefined) {
-                label = "Routing Products";
+                label = "Routing Databases";
                 multipleselection = "ismultipleselection";
             }
             var required = "";
@@ -56,12 +56,12 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                 hideremoveicon = "hideremoveicon";
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="RoutingProductId" '
+                + '<vr-select ' + multipleselection + '  datatextfield="Title" datavaluefield="RoutingDatabaseId" '
             + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" ' + hideremoveicon + '></vr-select>'
                + '</div>'
         }
 
-        function routingProductCtor(ctrl, $scope, $attrs) {
+        function routingDatabaseCtor(ctrl, $scope, $attrs) {
 
             function initializeController() {
                 defineAPI();
@@ -78,23 +78,18 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                         selectedIds = payload.selectedIds;
                     }
 
-                    return WhS_BE_RoutingProductAPIService.GetRoutingProductInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return WhS_Routing_RoutingDatabaseAPIService.GetRoutingDatabaseInfo().then(function (response) {
                         angular.forEach(response, function (itm) {
                             ctrl.datasource.push(itm);
                         });
                         if (selectedIds != undefined)
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'RoutingProductId', $attrs, ctrl);
-                            
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'RoutingDatabaseId', $attrs, ctrl);
+
                     });
                 }
 
-                api.getSelectedIds = function()
-                {
-                    return VRUIUtilsService.getIdSelectedIds('RoutingProductId', $attrs, ctrl);
-                }
-
-                api.getSelectedValues = function () {
-                    return ctrl.selectedvalues;
+                api.getSelectedIds = function () {
+                    return VRUIUtilsService.getIdSelectedIds('RoutingDatabaseId', $attrs, ctrl);
                 }
 
                 if (ctrl.onReady != null)

@@ -14,5 +14,7 @@ namespace TOne.WhS.Routing.Data
         List<RoutingDatabase> GetNotDeletedDatabases();
         void DropDatabase(int databaseId);
         int GetIDByType(RoutingDatabaseType type, DateTime effectiveBefore);
+
+        bool AreRoutingDatabasesUpdated(ref object updateHandle);
     }
 }

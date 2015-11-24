@@ -11,6 +11,11 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class RoutingDatabaseDataManager : BaseTOneDataManager, IRoutingDatabaseDataManager
     {
+        public RoutingDatabaseDataManager() :
+            base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+        {
+
+        }
 
         /// <summary>
         /// Create New Routing Database.
@@ -79,6 +84,12 @@ namespace TOne.WhS.Routing.Data.SQL
             else
                 return 0;
         }
+
+        public bool AreRoutingDatabasesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_Routing.RoutingDatabase", ref updateHandle);
+        }
+
         RoutingDatabase RoutingDatabaseMapper(IDataReader reader)
         {
             return new RoutingDatabase

@@ -75,6 +75,7 @@
     <Compile Include="RouteRules\Contexts\RouteOptionOrderExecutionContext.cs" />
     <Compile Include="RouteRules\Contexts\RouteOptionPercentageExecutionContext.cs" />
     <Compile Include="RouteRules\Contexts\RPRouteRuleExecutionContext.cs" />
+    <Compile Include="RoutingDatabaseManager.cs" />
     <Compile Include="SupplierZoneToRPOptionHighestRatePolicy.cs" />
     <Compile Include="SupplierZoneToRPOptionPolicyExecutionContext.cs" />
     <Compile Include="ZoneDetailBuilder.cs" />
