@@ -207,6 +207,8 @@
     <Content Include="WhS_BusinessEntity\Directives\SaleZone\Templates\SaleZoneGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SaleZone\vr-whs-be-salezone-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleZone\vr-whs-be-salezone-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SellingNumberPlan\Templates\SellingNumberPlanGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SellingNumberPlan\vr-whs-be-sellingnumberplan-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SellingProduct\Templates\CustomerSellingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PricingRule\Settings\Templates\PricingRuleExtraChargeSettings.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\PricingRules\ExtraChargeActions\Templates\PricingRuleFixedExtraChargeTemplate.html" />
@@ -271,6 +273,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\CodeGroupService.js" />
     <Content Include="WhS_BusinessEntity\Services\MainService.js" />
+    <Content Include="WhS_BusinessEntity\Services\SellingNumberPlanService.js" />
     <Content Include="WhS_BusinessEntity\Views\AccountManager\AccountManagerManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\AccountManager\AccountManagerManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\AccountManager\CarrierAssignmentEditor.html" />
@@ -293,6 +296,10 @@
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SellingNumberPlan\SellingNumberPlanEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\SellingNumberPlan\SellingNumberPlanEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SellingNumberPlan\SellingNumberPlanManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\SellingNumberPlan\SellingNumberPlanManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SupplierZone\SupplierZoneManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SupplierZone\SupplierZoneManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SaleZone\SaleZoneManagement.html" />

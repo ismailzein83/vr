@@ -17,6 +17,19 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         }
 
+        public bool Update(Entities.SellingNumberPlan sellingNumberPlan)
+        {
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SellingNumberPlan_Update]", sellingNumberPlan.SellingNumberPlanId, sellingNumberPlan.Name);
+            return (recordsEffected > 0);
+        }
+
+        public bool Insert(Entities.SellingNumberPlan sellingNumberPlan, out int insertedId)
+        {
+            object sellingNumberPlanId;
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SellingNumberPlan_Insert]", out sellingNumberPlanId, sellingNumberPlan.Name);
+            insertedId = (int)sellingNumberPlanId;
+            return (recordsEffected > 0);
+        }
 
         public List<SellingNumberPlan> GetSellingNumberPlans()
         {
