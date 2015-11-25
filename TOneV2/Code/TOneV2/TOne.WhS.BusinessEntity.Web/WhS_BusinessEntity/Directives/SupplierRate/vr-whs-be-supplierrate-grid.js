@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSupplierzoneGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SupplierZoneAPIService",
-function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneAPIService) {
+app.directive("vrWhsBeSupplierrateGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SupplierRateAPIService",
+function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -11,7 +11,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneAPIService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var grid = new SupplierZoneGrid($scope, ctrl, $attrs);
+            var grid = new SupplierRateGrid($scope, ctrl, $attrs);
             grid.initializeController();
         },
         controllerAs: "ctrl",
@@ -19,18 +19,18 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneAPIService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/SupplierZone/Templates/SupplierZoneGridTemplate.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/SupplierRate/Templates/SupplierRateGridTemplate.html"
 
     };
 
-    function SupplierZoneGrid($scope, ctrl, $attrs) {
+    function SupplierRateGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
         this.initializeController = initializeController;
 
         function initializeController() {
            
-            $scope.supplierzones = [];
+            $scope.supplierrates = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 
@@ -48,7 +48,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneAPIService) {
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_BE_SupplierZoneAPIService.GetFilteredSupplierZones(dataRetrievalInput)
+                return WhS_BE_SupplierRateAPIService.GetFilteredSupplierRates(dataRetrievalInput)
                     .then(function (response) {
                          onResponseReady(response);
                     })

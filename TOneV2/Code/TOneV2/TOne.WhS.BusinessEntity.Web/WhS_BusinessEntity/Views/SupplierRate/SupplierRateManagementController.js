@@ -8,8 +8,6 @@
         var gridAPI;
         var supplierDirectiveApi;
         var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-        var countryDirectiveApi;
-        var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         load();
         var filter = {};
@@ -23,10 +21,7 @@
                 supplierDirectiveApi = api;
                 supplierReadyPromiseDeferred.resolve();
             }
-            $scope.onCountryReady = function (api) {
-                countryDirectiveApi = api;
-                countryReadyPromiseDeferred.resolve();
-            }
+            
             $scope.onGridReady = function (api) {
                 gridAPI = api;            
                
@@ -38,7 +33,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadCountrySelector, loadSupplierSelector])
+            return UtilsService.waitMultipleAsyncOperations([loadSupplierSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -46,16 +41,7 @@
                   $scope.isGettingData = false;
               });
         }
-        function loadCountrySelector() {
-            var countryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            countryReadyPromiseDeferred.promise
-                .then(function () {
-                    var directivePayload = {};
-                    VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
-                });
-            return countryLoadPromiseDeferred.promise;
-        }
+        
         function loadSupplierSelector() {
             var supplierLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -69,10 +55,8 @@
 
         function setFilterObject() {
             filter = {
-                Name: $scope.name,
                 SupplierId: supplierDirectiveApi.getSelectedIds(),
-                EffectiveOn: $scope.effectiveOn,
-                Countries: countryDirectiveApi.getSelectedIds()
+                EffectiveOn: $scope.effectiveOn
             };
            
         }
