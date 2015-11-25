@@ -6,8 +6,6 @@ using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
-using TOne.WhS.Sales.Entities.RatePlanning;
-using TOne.WhS.Sales.Entities.RatePlanning.Input;
 using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business

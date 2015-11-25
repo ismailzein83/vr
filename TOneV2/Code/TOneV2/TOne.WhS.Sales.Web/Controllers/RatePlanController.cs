@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web.Http;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
-using TOne.WhS.Sales.Entities.RatePlanning;
-using TOne.WhS.Sales.Entities.RatePlanning.Input;
-using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace TOne.WhS.Sales.Web.Controllers
@@ -34,7 +32,6 @@ namespace TOne.WhS.Sales.Web.Controllers
         [Route("GetZoneItems")]
         public IEnumerable<ZoneItem> GetZoneItems(ZoneItemInput input)
         {
-            RatePlanManager _manager = new RatePlanManager();
             return _manager.GetZoneItems(input);
         }
 

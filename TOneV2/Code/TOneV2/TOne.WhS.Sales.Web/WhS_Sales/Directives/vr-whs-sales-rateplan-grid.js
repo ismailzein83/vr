@@ -195,9 +195,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 $scope.isLoadingGrid = true;
 
                 return WhS_Sales_RatePlanAPIService.GetZoneItems(buildZoneItemInput()).then(function (response) {
-                    console.log("Zone Items");
-                    console.log(response);
-
                     if (response == undefined || response == null)
                         return;
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 
-namespace TOne.WhS.Sales.Entities.RatePlanning.Input
+namespace TOne.WhS.Sales.Entities
 {
     public class SaveChangesInput
     {

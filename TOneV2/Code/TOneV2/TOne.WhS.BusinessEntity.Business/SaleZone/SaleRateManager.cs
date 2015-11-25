@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.Sales.Entities.RatePlanning;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
