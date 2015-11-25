@@ -187,7 +187,7 @@
     <Compile Include="SupplierZone\SupplierZoneQuery.cs" />
     <Compile Include="SupplierZone\SupplierCode.cs" />
     <Compile Include="SupplierZone\SupplierPriceList.cs" />
-    <Compile Include="SupplierZone\SupplierRate.cs" />
+    <Compile Include="SupplierRate\SupplierRate.cs" />
     <Compile Include="SupplierZone\SupplierZone.cs" />
     <Compile Include="SupplierZone\SupplierZoneInfo.cs" />
     <Compile Include="SupplierZone\CallCost.cs" />
