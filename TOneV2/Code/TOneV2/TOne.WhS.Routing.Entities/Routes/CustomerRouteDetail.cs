@@ -14,6 +14,24 @@ namespace TOne.WhS.Routing.Entities
 
         public string ZoneName { get; set; }
 
-        public string RouteOptions { get; set; }
+        public string RouteOptionsDescription { get; set; }
+
+        public List<RouteOptionDetail> RouteOptionDetails { get; set; }
+        
+    }
+
+    public class RouteOptionDetail
+    {
+        public string SupplierName { get; set; }
+
+        public string SupplierCode { get; set; }
+
+        public string SupplierZoneName { get; set; }
+
+        public Decimal SupplierRate { get; set; }
+
+        public Decimal? Percentage { get; set; }
+
+        public bool IsBlocked { get; set; }
     }
 }

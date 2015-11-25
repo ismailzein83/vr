@@ -150,7 +150,9 @@
     <Content Include="WhS_Routing\Constant\ModuleConfig.js" />
     <Content Include="WhS_Routing\Constant\RouteRuleCriteriaTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingDatabaseTypeEnum.js" />
+    <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteDetailTemplate.html" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteGridTemplate.html" />
+    <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-details.js" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-grid.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\MinProfitDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RemoveLossDirective.html" />

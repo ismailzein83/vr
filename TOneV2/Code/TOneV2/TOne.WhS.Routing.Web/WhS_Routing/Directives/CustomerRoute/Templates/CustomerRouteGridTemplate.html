@@ -7,9 +7,14 @@
                      menuactions="gridMenuActions">
 
             <vr-datagridcolumn headertext="'Code'" field="'Entity.Code'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'CustomerName'" field="'CustomerName'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'ZoneName'" field="'ZoneName'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'RouteOptions'" field="'RouteOptions'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Rate'" field="'Entity.Rate'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Blocked'" field="'Entity.isBlocked'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Route Options'" field="'RouteOptionsDescription'"></vr-datagridcolumn>
+            <vr-datagridexpandablerow>
+                <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+            </vr-datagridexpandablerow>
         </vr-datagrid>
     </vr-columns>
 </vr-row>

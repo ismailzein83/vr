@@ -33,12 +33,15 @@ namespace TOne.WhS.Routing.Business
 
         private CustomerRouteDetail customerRouteDetailMapper(CustomerRoute customerRoute)
         {
+            List<RouteOptionDetail> optionDetails = this.GetRouteOptionDetails(customerRoute);
+
             return new CustomerRouteDetail()
             {
                 Entity = customerRoute,
                 CustomerName = this.GetCustomerName(customerRoute.CustomerId),
                 ZoneName = this.GetZoneName(customerRoute.SaleZoneId),
-                RouteOptions = GetRouteOptions(customerRoute)
+                RouteOptionsDescription = GetRouteOptionsDescription(optionDetails),
+                RouteOptionDetails = optionDetails
             };
         }
 
@@ -64,19 +67,43 @@ namespace TOne.WhS.Routing.Business
             return "Zone Not Found";
         }
 
-        private string GetRouteOptions(CustomerRoute customerRoute)
+        private List<RouteOptionDetail> GetRouteOptionDetails(CustomerRoute customerRoute)
+        {
+            if (customerRoute.Options == null)
+                return null;
+
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
+
+            List<RouteOptionDetail> optionDetails = new List<RouteOptionDetail>();
+
+            foreach (RouteOption item in customerRoute.Options)
+            {
+                CarrierAccount supplier = carrierAccountManager.GetCarrierAccount(item.SupplierId);
+                SupplierZone supplierZone = supplierZoneManager.GetSupplierZone(item.SupplierZoneId);
+
+                optionDetails.Add(new RouteOptionDetail()
+                {
+                    IsBlocked = item.IsBlocked,
+                    Percentage = item.Percentage,
+                    SupplierCode = item.SupplierCode,
+                    SupplierName = supplier != null ? supplier.Name : "Supplier Not Found",
+                    SupplierRate = item.SupplierRate,
+                    SupplierZoneName = supplierZone != null ? supplierZone.Name : "Supplier Zone Not Found"
+                });
+            }
+
+            return optionDetails;
+        }
+
+        private string GetRouteOptionsDescription(List<RouteOptionDetail> optionDetails)
         {
             StringBuilder builder = new StringBuilder();
-            if(customerRoute.Options != null)
+            if (optionDetails != null)
             {
-                CarrierAccountManager manager = new CarrierAccountManager();
-                foreach (RouteOption item in customerRoute.Options)
+                foreach (RouteOptionDetail item in optionDetails)
                 {
-                    CarrierAccount supplier = manager.GetCarrierAccount(item.SupplierId);
-                    if (supplier != null)
-                        builder.AppendFormat(" {0} {1}%,", supplier.Name, item.Percentage);
-                    else
-                        builder.Append("Supplier Not Found");
+                    builder.AppendFormat(" {0} {1}%,", item.SupplierName, item.Percentage);
                 }
             }
 

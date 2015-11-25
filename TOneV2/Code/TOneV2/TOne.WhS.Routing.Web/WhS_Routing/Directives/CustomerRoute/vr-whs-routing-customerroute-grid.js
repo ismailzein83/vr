@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'WhS_Routing_CustomerRouteAPIService','WhS_Routing_RouteRuleService',
-function (VRNotificationService, WhS_Routing_CustomerRouteAPIService , WhS_Routing_RouteRuleService) {
+app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUtilsService', 'WhS_Routing_CustomerRouteAPIService', 'WhS_Routing_RouteRuleService',
+function (VRNotificationService, VRUIUtilsService, WhS_Routing_CustomerRouteAPIService, WhS_Routing_RouteRuleService) {
 
     var directiveDefinitionObject = {
 
@@ -26,12 +26,17 @@ function (VRNotificationService, WhS_Routing_CustomerRouteAPIService , WhS_Routi
 
     function customerRouteGrid($scope, ctrl, $attrs) {
         var gridAPI;
+        var gridDrillDownTabsObj;
 
         function initializeController() {
             $scope.customerRoutes = [];
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+
+                var drillDownDefinitions = initDrillDownDefinitions();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
@@ -48,6 +53,13 @@ function (VRNotificationService, WhS_Routing_CustomerRouteAPIService , WhS_Routi
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_Routing_CustomerRouteAPIService.GetFilteredCustomerRoutes(dataRetrievalInput)
                    .then(function (response) {
+
+                       if (response.Data != undefined) {
+                           for (var i = 0; i < response.Data.length; i++) {
+                               gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                           }
+                       }
+
                        onResponseReady(response);
                    })
                    .catch(function (error) {
@@ -67,7 +79,25 @@ function (VRNotificationService, WhS_Routing_CustomerRouteAPIService , WhS_Routi
         }
 
         function openRouteRuleEditor(dataItem) {
-            WhS_Routing_RouteRuleService.editRouteRule(dataItem.ExecutedRuleId);
+            WhS_Routing_RouteRuleService.editRouteRule(dataItem.Entity.ExecutedRuleId);
+        }
+
+        function initDrillDownDefinitions()
+        {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = "Details";
+            drillDownDefinition.directive = "vr-whs-routing-customerroute-details";
+
+            drillDownDefinition.loadDirective = function (directiveAPI, customerRoute) {
+                var payload = {
+                    customerRoute: customerRoute
+                };
+
+                return directiveAPI.load(payload);
+            };
+
+            return [drillDownDefinition];
         }
 
         this.initializeController = initializeController;

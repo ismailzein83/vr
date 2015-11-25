@@ -30,7 +30,6 @@
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                //api.loadGrid({ RoutingDatabaseId: 129 });
             }
 
             $scope.searchClicked = function () {
