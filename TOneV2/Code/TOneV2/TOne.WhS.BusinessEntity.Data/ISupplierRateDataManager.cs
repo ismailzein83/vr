@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISupplierRateDataManager : IDataManager
     {
+        BigResult<SupplierRate> GetFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input);
+
         List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate);
 
         List<SupplierRate> GetAllSupplierRates(DateTime? effectiveOn, bool isEffectiveInFuture);

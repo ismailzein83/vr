@@ -154,6 +154,7 @@
     <Compile Include="Controllers\SalePricingRuleController.cs" />
     <Compile Include="Controllers\SaleZoneController.cs" />
     <Compile Include="Controllers\SellingNumberPlanController.cs" />
+    <Compile Include="Controllers\SupplierRateController.cs" />
     <Compile Include="Controllers\SupplierZoneController.cs" />
     <Compile Include="Controllers\ZoneServiceConfigController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -317,6 +318,8 @@
     <Content Include="WhS_BusinessEntity\Views\SellingNumberPlan\SellingNumberPlanEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SellingNumberPlan\SellingNumberPlanManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SellingNumberPlan\SellingNumberPlanManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SupplierRate\SupplierRateManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\SupplierRate\SupplierRateManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SupplierZone\SupplierZoneManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SupplierZone\SupplierZoneManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SaleZone\SaleZoneManagement.html" />

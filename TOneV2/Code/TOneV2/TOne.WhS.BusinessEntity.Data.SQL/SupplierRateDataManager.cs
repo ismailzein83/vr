@@ -7,16 +7,30 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SupplierRateDataManager : BaseSQLDataManager, ISupplierRateDataManager
     {
+
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
         public SupplierRateDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
+
+        static SupplierRateDataManager()
+        {
+            //_columnMapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
+            //_columnMapper.Add("AccountStatusDescription", "AccountStatusID");
+            //_columnMapper.Add("UserName", "UserID");
+            //_columnMapper.Add("CaseStatusDescription", "StatusID");
+            //_columnMapper.Add("SuspicionOccuranceStatusDescription", "SuspicionOccuranceStatus");
+            //_columnMapper.Add("AccountCaseStatusDescription", "AccountCaseStatusID");
+        }
+
         public List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate)
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetByDate", SupplierRateMapper, supplierId, minimumDate);
@@ -62,6 +76,65 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             };
             return supplierRate;
         }
+
+
+        public BigResult<SupplierRate> GetFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
+        {
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.SupplierId, input.Query.ZoneId, input.Query.EffectiveOn), (cmd) => { });
+            };
+
+            return RetrieveData(input, createTempTableAction, SupplierRateMapper, _columnMapper);
+        }
+
+        private string CreateTempTableIfNotExists(string tempTableName, int supplierId, int? zoneId, DateTime? effectiveDate)
+        {
+            StringBuilder query = new StringBuilder(@"
+                IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
+                BEGIN
+
+                SELECT  rate.[ID]
+                      , rate.[PriceListID]
+                      , rate.[ZoneID]
+	                  , (case when   priceList.[CurrencyID] is null then rate.[CurrencyID] else  priceList.[CurrencyID]    end) as CurrencyID
+                      , rate.[NormalRate]
+                      , rate.[OtherRates]
+                      , rate.[BED]
+                      , rate.[EED]
+                      , rate.[timestamp]
+                  FROM [TOneWhS_BE].[SupplierRate] rate inner join [TOneWhS_BE].[SupplierPriceList] priceList on rate.PriceListID=priceList.ID
+		
+                #WHERE_CLAUSE#
+		
+                END
+            ");
+
+            query.Replace("#TEMP_TABLE_NAME#", tempTableName);
+            query.Replace("#WHERE_CLAUSE#", GetWhereClause(supplierId, zoneId, effectiveDate));
+
+            return query.ToString();
+        }
+
+        private string GetWhereClause(int supplierId, int? zoneId, DateTime? effectiveDate)
+        {
+            StringBuilder whereClause = new StringBuilder();
+
+            whereClause.Append("WHERE (priceList.SupplierID =" + supplierId + ")");
+
+            if (zoneId.HasValue)
+                whereClause.Append(" AND rate.ZoneID = " + zoneId + "");
+
+
+            if (effectiveDate.HasValue)
+            {
+                whereClause.Append(" AND rate.BeginEffectiveDate <= '" + effectiveDate.Value + "'");
+                whereClause.Append(" AND (rate.EndEffectiveDate is null or rate.EndEffectiveDate > '" + effectiveDate.Value + "') ");
+            }
+
+            return whereClause.ToString();
+        }
+
 
     }
 }

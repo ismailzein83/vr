@@ -11,6 +11,13 @@ namespace TOne.WhS.BusinessEntity.Business
     public class SupplierRateManager
     {
 
+        public Vanrise.Entities.IDataRetrievalResult<SupplierRate> GetFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
+        {
+            ISupplierRateDataManager manager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetFilteredSupplierRates(input));
+        }
+
         public List<SupplierRate> GetSupplierRatesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
