@@ -51,5 +51,6 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return callSale;
         }
+
     }
 }
