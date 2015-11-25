@@ -2,14 +2,17 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
-                <!--<vr-columns width="normal">
-                    <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberReady" isrequired="true"> </vr-whs-be-sellingnumberplan-selector>
-                </vr-columns>
                 <vr-columns width="normal">
-                    <vr-common-country-selector on-ready="onCountryReady" ismultipleselection></vr-common-country-selector>
+                    <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" selectedvalues="selectedSellingNumberPlan" onselectitem="onSellingNumberPlanSelectItem"></vr-whs-be-sellingnumberplan-selector>
                 </vr-columns>
-                <vr-columns width="normal">
+                <vr-columns width="normal" ng-show="selectedSellingNumberPlan!=undefined">
+                    <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady" >
+                    </vr-whs-be-salezone-selector>
+                </vr-columns>
+                <!-- <vr-columns width="normal">
                     <vr-textbox value="name" label="Name"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
                 </vr-columns>-->
                 <vr-columns width="normal">
                     <vr-datetimepicker type="date" label="Effective On" value="effectiveOn"></vr-datetimepicker>
@@ -25,8 +28,8 @@
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                Sale Rate
-                <!--<vr-whs-be-salezone-grid on-ready="onGridReady"></vr-whs-be-salezone-grid>-->
+
+                <vr-whs-be-salerate-grid on-ready="onGridReady"></vr-whs-be-salerate-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

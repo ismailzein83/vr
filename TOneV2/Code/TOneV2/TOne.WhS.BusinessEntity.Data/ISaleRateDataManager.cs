@@ -10,6 +10,7 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISaleRateDataManager : IDataManager
     {
+        Vanrise.Entities.BigResult<Entities.SaleRate> GetSaleRateFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SaleRateQuery> input);
         List<SaleRate> GetEffectiveSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn);
 
         List<SaleRate> GetEffectiveSaleRateByCustomers(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture);

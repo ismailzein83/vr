@@ -20,7 +20,35 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
+        public Vanrise.Entities.IDataRetrievalResult<SaleRateDetail> GetFilteredSaleRates(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
+        {
+            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+            Vanrise.Entities.BigResult<SaleRate> saleRates = dataManager.GetSaleRateFilteredFromTemp(input);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, SaleRateDetailBigResultMapper(saleRates));
+        }
 
+        public Vanrise.Entities.BigResult<SaleRateDetail> SaleRateDetailBigResultMapper(Vanrise.Entities.BigResult<SaleRate> saleRates)
+        {
+            Vanrise.Entities.BigResult<SaleRateDetail> finalResult = new Vanrise.Entities.BigResult<SaleRateDetail>();
+            List<SaleRateDetail> l = new List<SaleRateDetail>();
+            foreach (var a in saleRates.Data)
+            {
+
+                l.Add(SaleRateDetailMapper(a));
+            }
+            finalResult.Data = l;
+            finalResult.ResultKey = saleRates.ResultKey;
+            finalResult.TotalCount = saleRates.TotalCount;
+            return finalResult;
+        }
+
+        private SaleRateDetail SaleRateDetailMapper(SaleRate saleRate){
+
+            SaleRateDetail saleRateDetail = new SaleRateDetail();
+            saleRateDetail.Entity = saleRate;
+            return saleRateDetail;
+        }
+        
         public CallSale GetCallSale(int customerId, long saleZoneId, int durationInSeconds, DateTime effectiveOn)
         {
             CallSale callSale = null;

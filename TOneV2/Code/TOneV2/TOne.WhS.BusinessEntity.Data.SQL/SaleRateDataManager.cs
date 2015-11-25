@@ -19,6 +19,19 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         }
 
+        public Vanrise.Entities.BigResult<Entities.SaleRate> GetSaleRateFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SaleRateQuery> input)
+        {
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+
+
+                ExecuteNonQuerySP("TOneWhS_BE.sp_SaleRate_CreateTempByFiltered", tempTableName, input.Query.EffectiveOn);
+            };
+
+            return RetrieveData(input, createTempTableAction, SaleRateMapper);
+
+        }
+
         public List<SaleRate> GetEffectiveSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByOwnerAndEffective", SaleRateMapper, ownerType, ownerId, effectiveOn);
