@@ -79,6 +79,8 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                     }
 
                     return WhS_BE_RoutingProductAPIService.GetRoutingProductInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                        ctrl.datasource = []; // clear data source to avoid repetition
+
                         angular.forEach(response, function (itm) {
                             ctrl.datasource.push(itm);
                         });
