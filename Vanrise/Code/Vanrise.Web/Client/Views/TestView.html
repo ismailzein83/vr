@@ -31,6 +31,54 @@
             </div>
         </vr-actionbar>
     </vr-row>
+
+    <vr-row>
+        <vr-columns width="fullrow">
+            <tabset>
+                <tab heading="Static title {{count}}" ng-init="count = 0 " select="count = count + 1">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-section title="Timer Trigger" collapsible>
+                                <vr-row removeline>
+                                    <vr-columns width="fullrow">
+                                        <vr-section title="Settings" level="2" collapsible>
+                                            <vr-form>
+                                                <vr-row removeline>
+                                                    <vr-columns width="1/2row">
+                                                        <vr-columns width="1/2row">
+                                                            <vr-datetimepicker label="Runs at" type="time" value="selectedTime"></vr-datetimepicker>
+                                                        </vr-columns>
+                                                        <vr-columns colnum="2" withemptyline>
+                                                            <vr-button type="Add" data-onclick="addTime" standalone />
+                                                        </vr-columns>
+                                                    </vr-columns>
+                                                    <vr-columns width="1/2row">
+                                                        <vr-select label="Type" isrequired datasource="[]" selectedvalues="selectedType"
+                                                                   datatextfield="name" datavaluefield="value" onaddclicked="test">
+                                                        </vr-select>
+                                                    </vr-columns>
+                                                </vr-row>
+                                            </vr-form>
+                                        </vr-section>
+                                    </vr-columns>
+                                </vr-row>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+
+
+                </tab>
+                
+                <tab >
+                    <tab-heading>
+                        <i class="glyphicon glyphicon-bell"></i> Alert!
+                    </tab-heading>
+                    I've got an HTML heading, and a select callback. Pretty cool!
+                </tab>
+            </tabset>
+        </vr-columns>
+    </vr-row>
+
     <vr-progressbar value="progress"></vr-progressbar>
     <vr-row ng-init="fieldType = 'password'">
 
@@ -44,8 +92,8 @@
         <vr-columns width="normal">
             <vr-datetimepicker type="dateTime" value="effectiveOn2" label="Time On"></vr-datetimepicker>{{effectiveOn2}}
         </vr-columns>
-        <vr-columns width="normal" >
-            <vr-check value="checkvalue" ></vr-check>{{checkvalue}}
+        <vr-columns width="normal">
+            <vr-check value="checkvalue"></vr-check>{{checkvalue}}
         </vr-columns>
     </vr-row>
     <div class="row fileupload-buttonbar">
@@ -126,7 +174,7 @@
     <vr-columns width="1/2row">
         <vr-section title="Timer Trigger" collapsible>
 
-           
+
             <vr-row removeline>
                 <vr-columns width="fullrow">
                     <vr-section title="Settings" level="2" collapsible>

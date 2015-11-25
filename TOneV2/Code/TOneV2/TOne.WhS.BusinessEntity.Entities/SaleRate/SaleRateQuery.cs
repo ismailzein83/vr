@@ -9,5 +9,13 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SaleRateQuery
     {
         public DateTime? EffectiveOn { get; set; }
+
+        public List<int> ZonesIds { get; set; }
+
+        public int OwnerType { get; set; }
+
+        public int OwnerId { get; set; }
+        public int SellingNumberPlanId { get; set; }
+
     }
 }

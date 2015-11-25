@@ -31,6 +31,7 @@
             scope: {
                 label: '@',
                 entityname: '@',
+                onReady: '=',
                 ismultipleselection: '@',
                 hideselectedvaluessection: '@',
                 datavaluefield: '@',
@@ -115,7 +116,7 @@
                         "margin-right": "-3px"
                     } : {};
                 }
-
+                
                 function adjustTooltipPosition(e) {
                     setTimeout(function () {
                         var self = angular.element(e.currentTarget);
@@ -225,7 +226,19 @@
                     if (!selectedSectionVisible()) return 'single-col-checklist';
                     return controller.selectedvalues.length === 0 ? 'single-col-checklist' : 'double-col-checklist';
                 }
-
+                var api = {}
+                api.clearDataSource = function () {
+                    if (controller.isRemoteLoad()) {
+                        controller.filtername = "";
+                        controller.data.length = 0;
+                    }
+                      
+                    else
+                        controller.datasource.length = 0;
+                }
+                if (controller.onReady != null ) {
+                    controller.onReady(api);
+                }
                 //Exports
                 angular.extend(this, {
                     isDropDownOpened: isDropDownOpened,

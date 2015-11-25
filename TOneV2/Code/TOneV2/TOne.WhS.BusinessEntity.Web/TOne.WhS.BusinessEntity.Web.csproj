@@ -184,6 +184,7 @@
     <Content Include="WhS_BusinessEntity\Constant\PricingTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RoutingProductSaleZoneRelationTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RoutingProductSupplierRelationTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\SaleRateOwnerTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Directives\AccountManager\Templates\AssignedCarriersGrid.html" />
     <Content Include="WhS_BusinessEntity\Directives\AccountManager\vr-whs-be-assignedcarriers-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />

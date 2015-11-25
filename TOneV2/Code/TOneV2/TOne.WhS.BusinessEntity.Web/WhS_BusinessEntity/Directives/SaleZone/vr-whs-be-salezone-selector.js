@@ -6,6 +6,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
             restrict: 'E',
             scope: {
                 onReady: '=',
+                onSelectorReady: '=',
                 ismultipleselection: "@",
                 onselectionchanged: '=',
                 isrequired: "@",
@@ -56,7 +57,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
             return '<div>'
                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SaleZoneId" '
-            + required + ' label="' + label + '" datasource="ctrl.search" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '"></vr-select>'
+            + required + ' label="' + label + '" on-ready="ctrl.onSelectorReady" datasource="ctrl.search" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '"></vr-select>'
             + '</div>'
         }
 

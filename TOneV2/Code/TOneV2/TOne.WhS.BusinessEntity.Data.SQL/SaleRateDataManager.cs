@@ -23,9 +23,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
+                string zonesids = null;
+                if (input.Query.ZonesIds!=null &&  input.Query.ZonesIds.Count() > 0)
+                    zonesids = string.Join<int>(",", input.Query.ZonesIds);
 
 
-                ExecuteNonQuerySP("TOneWhS_BE.sp_SaleRate_CreateTempByFiltered", tempTableName, input.Query.EffectiveOn);
+
+                ExecuteNonQuerySP("TOneWhS_BE.sp_SaleRate_CreateTempByFiltered", tempTableName, input.Query.EffectiveOn, input.Query.SellingNumberPlanId, zonesids, input.Query.OwnerType , input.Query.OwnerId);
             };
 
             return RetrieveData(input, createTempTableAction, SaleRateMapper);
