@@ -59,7 +59,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
 
         var required = "";
         if (attrs.isrequired != undefined)
-            required = "isrequired";
+            required = 'isrequired="' + attrs.isrequired + '"';
 
         var hideselectedvaluessection = "";
         if (attrs.hideselectedvaluessection != undefined)

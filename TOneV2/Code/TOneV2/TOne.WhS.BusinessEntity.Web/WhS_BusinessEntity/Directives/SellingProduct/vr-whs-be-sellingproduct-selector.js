@@ -56,7 +56,7 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
 
             var required = "";
             if (attrs.isrequired != undefined)
-                required = "isrequired";
+                required = 'isrequired="' + attrs.isrequired + '"';
 
             return '<div  vr-loader="isLoadingDirective">'
                 + '<vr-select ' + multipleselection + ' ' + hideremoveicon + ' datatextfield="Name" datavaluefield="SellingProductId" '

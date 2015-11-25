@@ -42,9 +42,10 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         private SaleRateDetail SaleRateDetailMapper(SaleRate saleRate){
-
+            SaleZoneManager sz = new SaleZoneManager();
             SaleRateDetail saleRateDetail = new SaleRateDetail();
             saleRateDetail.Entity = saleRate;
+            saleRateDetail.ZoneName = sz.GetSaleZone(saleRate.ZoneId).Name;
             return saleRateDetail;
         }
         

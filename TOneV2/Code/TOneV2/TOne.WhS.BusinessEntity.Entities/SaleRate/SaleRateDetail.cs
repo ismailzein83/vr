@@ -10,5 +10,8 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public SaleRate Entity { get; set; }
 
+        public string ZoneName { get; set; }
+
+
     }
 }

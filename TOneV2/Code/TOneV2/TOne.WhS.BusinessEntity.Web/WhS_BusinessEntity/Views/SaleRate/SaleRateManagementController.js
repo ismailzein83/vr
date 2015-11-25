@@ -68,15 +68,11 @@
                         $scope.showSellingProductSelector = true;
                         $scope.showCarrierAccountSelector = false;
                         $scope.selectedCustomer = undefined;
-                        //if (sellingProductSelectorAPI!=undefined)
-                       // sellingProductSelectorAPI.load({})
                     }
                     else if ($scope.selectedOwnerType.value == WhS_Be_SaleRateOwnerTypeEnum.Customer.value) {
                         $scope.showSellingProductSelector = false;
                         $scope.showCarrierAccountSelector = true;
                         $scope.selectedSellingProduct = undefined;
-                       // if (carrierAccountSelectorAPI != undefined)
-                          //   carrierAccountSelectorAPI.load({})
                     }
                 }
             };
