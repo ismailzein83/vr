@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public SaleZoneDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
-          
+
         }
 
         public IEnumerable<SaleZone> GetAllSaleZones()
@@ -28,7 +28,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByNumberPlan", SaleZoneMapper, sellingNumberPlanId);
         }
 
-       
+
 
         public List<SaleZoneInfo> GetSaleZonesInfo(int sellingNumberPlanId, string filter)
         {
@@ -45,7 +45,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         SaleZone SaleZoneMapper(IDataReader reader)
         {
             SaleZone sellingNumberPlan = new SaleZone();
-            
+
             sellingNumberPlan.SaleZoneId = (long)reader["ID"];
             sellingNumberPlan.SellingNumberPlanId = (int)reader["SellingNumberPlanID"];
             sellingNumberPlan.CountryId = GetReaderValue<int>(reader, "CountryID");
@@ -66,5 +66,20 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return saleZoneInfo;
         }
         #endregion
+
+
+        public IEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            List<long> saleZoneIds = new List<long>();
+            ExecuteReaderSP("[TOneWhS_BE].[sp_SaleZone_GetIds] ", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    long saleZoneId = GetReaderValue<Int64>(reader, "Id");
+                    saleZoneIds.Add(saleZoneId);
+                }
+            }, effectiveOn, isEffectiveInFuture);
+            return saleZoneIds;
+        }
     }
 }

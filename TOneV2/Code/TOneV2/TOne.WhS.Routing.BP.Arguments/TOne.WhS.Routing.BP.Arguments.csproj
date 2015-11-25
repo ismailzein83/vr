@@ -49,6 +49,7 @@
     <Compile Include="BuildRoutesByCodePrefixInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoutingProcessInput.cs" />
+    <Compile Include="RPRoutingProcessInput.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.Routing.Entities\TOne.WhS.Routing.Entities.csproj">

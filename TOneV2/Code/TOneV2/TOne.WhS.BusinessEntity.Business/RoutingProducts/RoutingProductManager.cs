@@ -35,7 +35,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (filter != null)
                 routingProducts = routingProducts.FindAllRecords(routingProduct => filter.ExcludedRoutingProductId == null || routingProduct.RoutingProductId != filter.ExcludedRoutingProductId);
-            
+
             return routingProducts.MapRecords(RoutingProductInfoMapper);
         }
 
@@ -126,7 +126,7 @@ namespace TOne.WhS.BusinessEntity.Business
                        }
                    }
                    return filteredZoneIds;
-               });           
+               });
         }
 
         public HashSet<int> GetFilteredSupplierIds(int routingProductId)
@@ -166,8 +166,21 @@ namespace TOne.WhS.BusinessEntity.Business
                });
         }
 
+        public HashSet<int> GetRoutingProductIdsBySaleZoneId(long saleZoneId)
+        {
+            HashSet<int> routingProductIds = new HashSet<int>();
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            SaleZone saleZone = saleZoneManager.GetSaleZone(saleZoneId);
+            RoutingProductZoneFinder finder = new RoutingProductZoneFinder();
+            Dictionary<int, RoutingProducts> routingProductsByNumberPlan = finder.GetAllRoutingProductsBySellingNumberPlanId();
+            RoutingProducts routingProducts;
+            if (routingProductsByNumberPlan.TryGetValue(saleZone.SellingNumberPlanId, out routingProducts))
+                routingProductIds = routingProducts.GetRoutingProductsByZoneId(saleZoneId);
+            return routingProductIds;
+        }
+
         #region Private Methods
-        
+
         private RoutingProductInfo RoutingProductInfoMapper(RoutingProduct routingProduct)
         {
             return new RoutingProductInfo()
@@ -191,6 +204,76 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 return _dataManager.AreRoutingProductsUpdated(ref _updateHandle);
             }
+        }
+
+        class RoutingProductZoneFinder
+        {
+            public Dictionary<int, RoutingProducts> GetAllRoutingProductsBySellingNumberPlanId()
+            {
+                RoutingProductManager manager = new RoutingProductManager();
+                return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoutingProductsBySellingNumberPlan", () =>
+                {
+                    var routingProducts = manager.GetAllRoutingProducts().Values;
+                    Dictionary<int, RoutingProducts> routingProductsByNumberPlan = new Dictionary<int, RoutingProducts>();
+                    foreach (RoutingProduct routingProduct in routingProducts)
+                    {
+                        RoutingProducts currentRoutingProducts;
+                        if (!routingProductsByNumberPlan.TryGetValue(routingProduct.SellingNumberPlanId, out currentRoutingProducts))
+                        {
+                            currentRoutingProducts = new RoutingProducts();
+                            routingProductsByNumberPlan.Add(routingProduct.SellingNumberPlanId, currentRoutingProducts);
+                        }
+                        currentRoutingProducts.AddRoutingProduct(routingProduct);
+                    }
+                    return routingProductsByNumberPlan;
+                });
+
+            }
+        }
+
+        class RoutingProducts
+        {
+            public RoutingProducts()
+            {
+                RoutingProductIdsWithAllZones = new HashSet<int>();
+                RoutingProductIdsWithSpecificZones = new Dictionary<long, List<int>>();
+            }
+
+            public void AddRoutingProduct(RoutingProduct routingProduct)
+            {
+                if (routingProduct.Settings != null)
+                    switch (routingProduct.Settings.ZoneRelationType)
+                    {
+                        case RoutingProductZoneRelationType.AllZones:
+                            RoutingProductIdsWithAllZones.Add(routingProduct.RoutingProductId);
+                            break;
+                        case RoutingProductZoneRelationType.SpecificZones:
+                            foreach (var saleZone in routingProduct.Settings.Zones)
+                            {
+                                List<int> routingProductsWithSpecificZones;
+                                if (!RoutingProductIdsWithSpecificZones.TryGetValue(saleZone.ZoneId, out routingProductsWithSpecificZones))
+                                {
+                                    RoutingProductIdsWithSpecificZones.Add(saleZone.ZoneId, routingProductsWithSpecificZones);
+                                }
+                                routingProductsWithSpecificZones.Add(routingProduct.RoutingProductId);
+                            }
+                            break;
+                    }
+            }
+
+            public HashSet<int> GetRoutingProductsByZoneId(long zoneId)
+            {
+                List<int> routingProductIds = new List<int>();
+                if (!RoutingProductIdsWithSpecificZones.TryGetValue(zoneId, out routingProductIds))
+                    routingProductIds = new List<int>();
+
+                routingProductIds.AddRange(RoutingProductIdsWithAllZones);
+
+                return new HashSet<int>(routingProductIds);
+            }
+
+            HashSet<int> RoutingProductIdsWithAllZones { get; set; }
+            Dictionary<long, List<int>> RoutingProductIdsWithSpecificZones { get; set; }
         }
 
         #endregion

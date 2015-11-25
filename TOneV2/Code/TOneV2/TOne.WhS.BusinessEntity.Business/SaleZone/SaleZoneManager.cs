@@ -10,7 +10,7 @@ using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SaleZoneManager 
+    public class SaleZoneManager
     {
 
         public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZonesQuery> input)
@@ -53,7 +53,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 });
         }
 
-     
+        public IEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
+            return dataManager.GetSaleZoneIds(effectiveOn, isEffectiveInFuture);
+        }
 
         public string GetDescription(int sellingNumberPlanId, IEnumerable<long> saleZoneIds)
         {
@@ -72,7 +76,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return string.Empty;
         }
 
-   
+
         public List<Vanrise.Entities.TemplateConfig> GetSaleZoneGroupTemplates()
         {
 

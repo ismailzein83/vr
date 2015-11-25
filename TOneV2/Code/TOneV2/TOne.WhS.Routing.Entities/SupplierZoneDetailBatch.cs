@@ -6,9 +6,5 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class SupplierZoneDetailBatch 
-    {       
-        public List<SupplierZoneDetail> SupplierZoneDetails { get; set; }
-
-    }
+  
 }
