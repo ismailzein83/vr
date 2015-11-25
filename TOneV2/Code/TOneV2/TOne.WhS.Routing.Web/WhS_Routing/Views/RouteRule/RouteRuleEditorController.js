@@ -180,7 +180,7 @@
         function getRouteRule() {
             return WhS_Routing_RouteRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
                 routeRuleEntity = routeRule;
-                routingProductId = routeRuleObj.Entity.Criteria != null ? routeRuleObj.Entity.Criteria.RoutingProductId : undefined;
+                routingProductId = routeRuleEntity.Criteria != null ? routeRuleEntity.Criteria.RoutingProductId : undefined;
             });
         }
 
