@@ -106,7 +106,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 DataRow row = table.NewRow();
 
                 row["ZoneID"] = product.ZoneId;
-                row["RoutingProductID"] = product.RoutingProductId;
+                row["RoutingProductID"] = product.ZoneRoutingProductId;
                 row["BED"] = product.BED;
 
                 if (product.EED != null)
@@ -149,7 +149,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 DataRow row = table.NewRow();
 
-                row["ZoneID"] = change.ZoneId;
+                row["ZoneID"] = change.ZoneRoutingProductId;
                 
                 if (change.EED != null)
                     row["EED"] = change.EED;
@@ -160,6 +160,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             table.EndLoadData();
 
             return table;
+        }
+
+        public bool AreSaleEntityRoutingProductUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.SaleEntityRoutingProduct", ref updateHandle);
         }
 
         #region Mappers

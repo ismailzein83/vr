@@ -10,7 +10,7 @@ namespace TOne.WhS.Sales.Entities
     {
         public long ZoneId { get; set; }
 
-        public int RoutingProductId { get; set; }
+        public int ZoneRoutingProductId { get; set; }
 
         public DateTime BED { get; set; }
 
@@ -19,7 +19,7 @@ namespace TOne.WhS.Sales.Entities
 
     public class ZoneRoutingProductChange
     {
-        public long ZoneId { get; set; }
+        public long ZoneRoutingProductId { get; set; }
 
         public DateTime? EED { get; set; }
     }

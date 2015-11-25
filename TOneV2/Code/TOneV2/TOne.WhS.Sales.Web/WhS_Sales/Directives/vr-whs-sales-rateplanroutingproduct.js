@@ -27,30 +27,20 @@ app.directive("vrWhsSalesRateplanroutingproduct", ["UtilsService", "VRUIUtilsSer
                 var currentId;
                 var selectorAPI;
                 var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                var areNewDatesSet = false;
 
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     selectorReadyPromiseDeferred.resolve();
                 };
 
-                ctrl.onSelectorChanged = function () {
-                    if (selectorAPI.getSelectedIds() != null) {
+                ctrl.onSelectionChange = function (item) {
+                    if (item != undefined) {
                         ctrl.ShowNewBED = true;
                         ctrl.ShowNewEED = true;
-
-                        if (!areNewDatesSet) {
-                            ctrl.NewBED = new Date(new Date().setDate(new Date().getDate() + 7));
-                            ctrl.NewEED = null;
-                            areNewDatesSet = true;
-                        }
                     }
                     else {
                         ctrl.ShowNewBED = false;
-                        ctrl.ShowNewEED = false;
-                        ctrl.NewBED = null;
-                        ctrl.NewEED = null;
-                        areNewDatesSet = false;
+                        ctrl.ShowNewEED = (ctrl.IsEditable);
                     }
                 };
 
@@ -63,7 +53,7 @@ app.directive("vrWhsSalesRateplanroutingproduct", ["UtilsService", "VRUIUtilsSer
 
                     api.load = function (payload) {
                         var newId;
-
+                        console.log(payload);
                         if (payload != undefined) {
                             currentId = payload.CurrentRoutingProductId;
                             ctrl.IsEditable = payload.IsCurrentRoutingProductEditable;
@@ -75,9 +65,16 @@ app.directive("vrWhsSalesRateplanroutingproduct", ["UtilsService", "VRUIUtilsSer
                             ctrl.NewEED = (payload.NewRoutingProductEED != null) ? new Date(payload.NewRoutingProductEED) : null;
                         }
 
-                        areNewDatesSet = true;
                         if (ctrl.IsEditable == null)
                             ctrl.IsEditable = false;
+
+                        if (newId != undefined) {
+                            ctrl.ShowNewBED = true;
+                            ctrl.ShowNewEED = true;
+                        }
+                        else if (ctrl.IsEditable) {
+                            ctrl.ShowNewEED = true;
+                        }
 
                         var selectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -126,7 +123,7 @@ app.directive("vrWhsSalesRateplanroutingproduct", ["UtilsService", "VRUIUtilsSer
                         function buildRoutingProductChange() {
                             var routingProductChange = null;
 
-                            if (selectorAPI.getSelectedIds() == null) {
+                            if (selectorAPI.getSelectedIds() == null && ctrl.CurrentEED != ctrl.NewEED) {
                                 routingProductChange = {
                                     RoutingProductId: currentId,
                                     EED: ctrl.NewEED

@@ -159,13 +159,16 @@ namespace TOne.WhS.Sales.Business
 
             if (zoneRoutingProduct != null)
             {
+                zoneItem.CurrentRoutingProductId = zoneRoutingProduct.RoutingProductId;
+                zoneItem.CurrentRoutingProductName = (zoneItem.CurrentRoutingProductId != null) ?
+                    new RoutingProductManager().GetRoutingProduct((int)zoneItem.CurrentRoutingProductId).Name : null;
+                zoneItem.CurrentRoutingProductBED = zoneRoutingProduct.BED;
+                zoneItem.CurrentRoutingProductEED = zoneRoutingProduct.EED;
+
                 zoneItem.IsCurrentRoutingProductEditable = (
                     (zoneRoutingProduct.Source == SaleEntityZoneRoutingProductSource.ProductZone && ownerType == SalePriceListOwnerType.SellingProduct) ||
                     (zoneRoutingProduct.Source == SaleEntityZoneRoutingProductSource.CustomerZone && ownerType == SalePriceListOwnerType.Customer)
                 );
-                zoneItem.CurrentRoutingProductId = zoneRoutingProduct.RoutingProductId;
-                zoneItem.CurrentRoutingProductBED = zoneRoutingProduct.BED;
-                zoneItem.CurrentRoutingProductEED = zoneRoutingProduct.EED;
             }
         }
 
@@ -201,8 +204,8 @@ namespace TOne.WhS.Sales.Business
                 if (zoneItem != null)
                 {
                     zoneItem.NewRate = newRate.NormalRate;
-                    zoneItem.CurrentRateBED = newRate.BED;
-                    zoneItem.CurrentRateEED = newRate.EED;
+                    zoneItem.NewRateBED = newRate.BED;
+                    zoneItem.NewRateEED = newRate.EED;
                 }
             }
             else if (rateChange != null)
@@ -210,7 +213,7 @@ namespace TOne.WhS.Sales.Business
                 ZoneItem zoneItem = zoneItems.FindRecord(item => item.CurrentRateId == rateChange.RateId);
 
                 if (zoneItem != null)
-                    zoneItem.CurrentRateEED = rateChange.EED;
+                    zoneItem.NewRateEED = rateChange.EED;
             }
         }
 
@@ -222,17 +225,17 @@ namespace TOne.WhS.Sales.Business
 
                 if (zoneItem != null)
                 {
-                    zoneItem.NewRoutingProductId = newRoutingProduct.RoutingProductId;
-                    zoneItem.CurrentRoutingProductBED = newRoutingProduct.BED;
-                    zoneItem.CurrentRoutingProductEED = newRoutingProduct.EED;
+                    zoneItem.NewRoutingProductId = newRoutingProduct.ZoneRoutingProductId;
+                    zoneItem.NewRoutingProductBED = newRoutingProduct.BED;
+                    zoneItem.NewRoutingProductEED = newRoutingProduct.EED;
                 }
             }
             else if (routingProductChange != null)
             {
-                ZoneItem zoneItem = zoneItems.FindRecord(item => item.ZoneId == routingProductChange.ZoneId);
+                ZoneItem zoneItem = zoneItems.FindRecord(item => item.ZoneId == routingProductChange.ZoneRoutingProductId);
 
                 if (zoneItem != null)
-                    zoneItem.CurrentRoutingProductEED = routingProductChange.EED;
+                    zoneItem.NewRoutingProductEED = routingProductChange.EED;
             }
         }
 
@@ -255,17 +258,19 @@ namespace TOne.WhS.Sales.Business
 
             if (locatorResult != null)
             {
-                defaultItem.IsCurrentRoutingProductEditable = (
-                (locatorResult.Source == SaleEntityZoneRoutingProductSource.ProductDefault && ownerType == SalePriceListOwnerType.SellingProduct) ||
-                (locatorResult.Source == SaleEntityZoneRoutingProductSource.CustomerDefault && ownerType == SalePriceListOwnerType.Customer)
-            );
-
                 defaultItem.CurrentRoutingProductId = locatorResult.RoutingProductId;
+                defaultItem.CurrentRoutingProductName = (defaultItem.CurrentRoutingProductId != null) ?
+                    new RoutingProductManager().GetRoutingProduct((int)defaultItem.CurrentRoutingProductId).Name : null;
                 defaultItem.CurrentRoutingProductBED = locatorResult.BED;
                 defaultItem.CurrentRoutingProductEED = locatorResult.EED;
 
-                SetDefaultItemChanges(ownerType, ownerId, defaultItem);
+                defaultItem.IsCurrentRoutingProductEditable = (
+                    (locatorResult.Source == SaleEntityZoneRoutingProductSource.ProductDefault && ownerType == SalePriceListOwnerType.SellingProduct) ||
+                    (locatorResult.Source == SaleEntityZoneRoutingProductSource.CustomerDefault && ownerType == SalePriceListOwnerType.Customer)
+                );
             }
+
+            SetDefaultItemChanges(ownerType, ownerId, defaultItem);
 
             return defaultItem;
         }
@@ -282,11 +287,11 @@ namespace TOne.WhS.Sales.Business
                 if (newRoutingProduct != null)
                 {
                     defaultItem.NewRoutingProductId = newRoutingProduct.DefaultRoutingProductId;
-                    defaultItem.CurrentRoutingProductBED = newRoutingProduct.BED;
-                    defaultItem.CurrentRoutingProductEED = newRoutingProduct.EED;
+                    defaultItem.NewRoutingProductBED = newRoutingProduct.BED;
+                    defaultItem.NewRoutingProductEED = newRoutingProduct.EED;
                 }
                 else
-                    defaultItem.CurrentRoutingProductEED = routingProductChange.EED;
+                    defaultItem.NewRoutingProductEED = routingProductChange.EED;
             }
         }
 

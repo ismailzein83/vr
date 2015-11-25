@@ -61,6 +61,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     customerZoneRoutingProduct = new SaleEntityZoneRoutingProduct
                     {
                         RoutingProductId = saleZoneRoutingProduct.RoutingProductId,
+                        BED = saleZoneRoutingProduct.BED,
+                        EED = saleZoneRoutingProduct.EED,
                         Source = ownerType == SalePriceListOwnerType.Customer ? SaleEntityZoneRoutingProductSource.CustomerZone : SaleEntityZoneRoutingProductSource.ProductZone
                     };
                     return true;

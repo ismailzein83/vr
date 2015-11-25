@@ -74,7 +74,9 @@
             $scope.zoneLetters = [];
             $scope.zoneLetterConnector = {
                 selectedZoneLetterIndex: 0,
-                onZoneLetterSelectionChanged: saveChangesWithLoad
+                onZoneLetterSelectionChanged: function () {
+                    return saveChanges(true);
+                }
             };
 
             $scope.onDefaultItemReady = function (api) {
@@ -212,18 +214,9 @@
             }
         }
 
-        function saveChangesWithLoad() {
-            return saveChanges(true);
-        }
-
-        function saveChangesWithoutLoad() {
-            return saveChanges(false);
-        }
-
         function saveChanges(loadGrid) {
             var input = buildSaveChangesInput();
             console.log(input);
-
             if (input.NewChanges != null) {
                 return WhS_Sales_RatePlanAPIService.SaveChanges(input).then(function (response) {
                     if (loadGrid)
@@ -238,7 +231,7 @@
                 deferredPromise.resolve();
                 return deferredPromise.promise;
             }
-
+            
             function buildSaveChangesInput() {
                 var newChanges;
                 var defaultChanges = getDefaultChanges();
@@ -253,21 +246,26 @@
                 };
 
                 function getDefaultChanges() {
-                    var changes = defaultItemAPI.getChanges();
+                    var defaultChanges = null;
+                    var directiveChanges = defaultItemAPI.getChanges();
 
-                    return {
-                        NewDefaultRoutingProduct: (changes.NewRoutingProduct != null) ? {
-                            $type: "TOne.WhS.Sales.Entities.NewDefaultRoutingProduct, TOne.WhS.Sales.Entities",
-                            DefaultRoutingProductId: changes.NewRoutingProduct.RoutingProductId,
-                            BED: changes.NewRoutingProduct.BED,
-                            EED: changes.NewRoutingProduct.EED
-                        } : null,
-                        DefaultRoutingProductChange: (changes.RoutingProductChange != null) ? {
-                            $type: "TOne.WhS.Sales.Entities.DefaultRoutingProductChange, TOne.WhS.Sales.Entities",
-                            DefaultRoutingProductId: changes.RoutingProductChange.RoutingProductId,
-                            EED: changes.RoutingProductChange.EED
-                        } : null
-                    };
+                    if (directiveChanges != null) {
+                        defaultChanges = {
+                            NewDefaultRoutingProduct: (directiveChanges.NewRoutingProduct != null) ? {
+                                $type: "TOne.WhS.Sales.Entities.NewDefaultRoutingProduct, TOne.WhS.Sales.Entities",
+                                DefaultRoutingProductId: directiveChanges.NewRoutingProduct.RoutingProductId,
+                                BED: directiveChanges.NewRoutingProduct.BED,
+                                EED: directiveChanges.NewRoutingProduct.EED
+                            } : null,
+                            DefaultRoutingProductChange: (directiveChanges.RoutingProductChange != null) ? {
+                                $type: "TOne.WhS.Sales.Entities.DefaultRoutingProductChange, TOne.WhS.Sales.Entities",
+                                DefaultRoutingProductId: directiveChanges.RoutingProductChange.RoutingProductId,
+                                EED: directiveChanges.RoutingProductChange.EED
+                            } : null
+                        };
+                    }
+                    
+                    return defaultChanges;
                 }
             }
         }
@@ -305,19 +303,41 @@
 
         function defineSaveButtonMenuActions() {
             $scope.saveButtonMenuActions = [
-                { name: "Price List", clicked: onSavePriceListClicked },
-                { name: "Draft", clicked: saveChangesWithoutLoad },
+                {
+                    name: "Price List",
+                    clicked: onSavePriceListClick
+                },
+                {
+                    name: "Draft",
+                    clicked: function () {
+                        return saveChanges(true);
+                    }
+                }
             ];
 
-            function onSavePriceListClicked() {
-                return saveChangesWithoutLoad().then(function () {
-                    return savePriceList().then(function (response) {
+            function onSavePriceListClick() {
+                var deferred = UtilsService.createPromiseDeferred();
+
+                saveChanges(false).then(function () {
+                    savePriceList().then(function (response) {
+                        deferred.resolve();
                         loadRatePlan();
+                    }).catch(function (error) {
+                        handleError(error);
                     });
+                }).catch(function (error) {
+                    handleError(error);
                 });
+
+                return deferred.promise;
 
                 function savePriceList() {
                     return WhS_Sales_RatePlanAPIService.SavePriceList($scope.selectedOwnerType.value, getOwnerId());
+                }
+
+                function handleError(error) {
+                    deferred.reject();
+                    VRNotificationService.notifyException(error, $scope);
                 }
             }
         }

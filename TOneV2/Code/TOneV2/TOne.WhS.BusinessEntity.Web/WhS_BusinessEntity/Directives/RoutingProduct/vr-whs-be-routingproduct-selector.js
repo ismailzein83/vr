@@ -10,7 +10,9 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                 onselectionchanged: '=',
                 isrequired: "@",
                 selectedvalues: '=',
-                hideremoveicon: "@"
+                hideremoveicon: "@",
+                onselectitem: "=",
+                ondeselectitem: "="
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -56,7 +58,7 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                 hideremoveicon = "hideremoveicon";
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="RoutingProductId" '
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="RoutingProductId" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem"'
             + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" ' + hideremoveicon + '></vr-select>'
                + '</div>'
         }
@@ -86,7 +88,6 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                         });
                         if (selectedIds != undefined)
                             VRUIUtilsService.setSelectedValues(selectedIds, 'RoutingProductId', $attrs, ctrl);
-                            
                     });
                 }
 

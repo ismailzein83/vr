@@ -25,5 +25,7 @@ namespace TOne.WhS.BusinessEntity.Data
         bool InsertOrUpdateZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<NewZoneRoutingProduct> newZoneRoutingProducts);
 
         bool UpdateZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<ZoneRoutingProductChange> zoneRoutingProductChanges);
+
+        bool AreSaleEntityRoutingProductUpdated(ref object updateHandle);
     }
 }
