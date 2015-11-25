@@ -16,6 +16,8 @@ namespace Vanrise.Data.SQL
         public char FieldSeparator { get; set; }
 
         public abstract string GetDataFilePath();
+
+        public IEnumerable<string> ColumnNames { get; set; }
     }
 
     public class StreamBulkInsertInfo : BaseBulkInsertInfo

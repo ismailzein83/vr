@@ -10,6 +10,8 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Configuration;
 using Vanrise.Entities;
+using System.Collections.Concurrent;
+using System.Text.RegularExpressions;
 
 namespace Vanrise.Data.SQL
 {
@@ -354,44 +356,143 @@ namespace Vanrise.Data.SQL
             if (bulkInsertInfo.FieldSeparator == default(char))
                 throw new ArgumentNullException("bulkInsertInfo.FieldSeparator");
 
+            string sqlPassword;
+            string baseBCPArgs = GetBaseBCPArgs(bulkInsertInfo, "in " + dataFilePath, out sqlPassword);
 
+            string bcpFormatArgs = GetBCPFormatArgs(bulkInsertInfo);
 
-            string errorFilePath = System.IO.Path.GetTempFileName();// String.Format(@"C:\CodeMatch\Error\{0}.txt", Guid.NewGuid());
-            SqlConnectionStringBuilder connStringBuilder = new SqlConnectionStringBuilder(GetConnectionString());
-            StringBuilder args = new StringBuilder(String.Format("{0} in {1} -e {2} -c -d {3} -S {4} -t {5} -b 100000", bulkInsertInfo.TableName, dataFilePath, errorFilePath, connStringBuilder.InitialCatalog, connStringBuilder.DataSource, bulkInsertInfo.FieldSeparator));
-
-            if (connStringBuilder.IntegratedSecurity)
-                args.Append(" -T");
-            else
-                args.Append(String.Format(" -U {0} -P {1}", connStringBuilder.UserID, connStringBuilder.Password));
+            StringBuilder args = new StringBuilder(String.Format("{0} {1} -t {2} -b 100000", baseBCPArgs, bcpFormatArgs, bulkInsertInfo.FieldSeparator));
 
             if (bulkInsertInfo.TabLock)
                 args.Append(" -h TABLOCK");
             if (bulkInsertInfo.KeepIdentity)
                 args.Append(" -E");
 
-            System.Diagnostics.Process processBulkCopy = new System.Diagnostics.Process();
+            ExecuteBCPCommand(args.ToString(), sqlPassword);
+            if (GetDeleteBCPFiles())
+                File.Delete(dataFilePath);
+        }
 
+        static ConcurrentDictionary<string, string> s_bcpFormatFileNamesByTable = new ConcurrentDictionary<string, string>();
+
+        private string GetBCPFormatArgs(BaseBulkInsertInfo bulkInsertInfo)
+        {
+            if (bulkInsertInfo.ColumnNames == null)
+                return "";
+            string formatFileName;
+            if (s_bcpFormatFileNamesByTable.TryGetValue(bulkInsertInfo.TableName, out formatFileName) && File.Exists(formatFileName))
+                return string.Format("-f {0}", formatFileName);
+
+            formatFileName = System.IO.Path.GetTempFileName();
+            
+            string sqlPassword;
+            string baseBCPArgs = GetBaseBCPArgs(bulkInsertInfo, " format nul ", out sqlPassword);
+
+            ExecuteBCPCommand(String.Format("{0} -f {1}", baseBCPArgs, formatFileName), sqlPassword);
+            ApplyColumnsToBCPFormatFile(formatFileName, bulkInsertInfo);
+            s_bcpFormatFileNamesByTable.AddOrUpdate(bulkInsertInfo.TableName, formatFileName, (k, v) => formatFileName);
+            return string.Format("-f {0}", formatFileName);
+        }
+
+        private void ApplyColumnsToBCPFormatFile(string formatFileName, BaseBulkInsertInfo bulkInsertInfo)
+        {
+            List<string> formatFileLines = File.ReadLines(formatFileName).ToList();
+            Dictionary<string, BCPFormatFileLine> columns = new Dictionary<string, BCPFormatFileLine>();
+            for (int i = 2; i < formatFileLines.Count; i++)
+            {
+                string line = formatFileLines[i];
+                line = ReplaceEmptyStrings(line, "|");
+                string[] lineFields = line.Split('|');
+                BCPFormatFileLine col = new BCPFormatFileLine
+                {
+                    HostFileDataType = lineFields[1],
+                    ServerColumnOrder = lineFields[5],
+                    ServerColumnName = lineFields[6],
+                    ColumnCollation = lineFields[7]
+                };
+                columns.Add(col.ServerColumnName, col);
+            }
+
+            List<string> newFormatLines = new List<string>();
+            newFormatLines.Add(formatFileLines[0]);
+            newFormatLines.Add(bulkInsertInfo.ColumnNames.Count().ToString());
+            int columnOrder = 0;
+            foreach (string columnName in bulkInsertInfo.ColumnNames)
+            {
+                BCPFormatFileLine matchColumn;
+                if (!columns.TryGetValue(columnName, out matchColumn))
+                    throw new Exception(String.Format("Column Name '{0}' is not available in the SQL table '{1}'", columnName, bulkInsertInfo.TableName));
+                columnOrder++;
+                string fieldDelimiter = String.Format("\"{0}\"", (columnOrder < bulkInsertInfo.ColumnNames.Count() ? bulkInsertInfo.FieldSeparator.ToString() : "\\r\\n"));
+                newFormatLines.Add(String.Format("{0}  {1}  0  0  {2}  {3}  {4}  {5}", columnOrder, matchColumn.HostFileDataType, fieldDelimiter, matchColumn.ServerColumnOrder, matchColumn.ServerColumnName, matchColumn.ColumnCollation));
+            }
+            File.WriteAllLines(formatFileName, newFormatLines);
+        }
+
+        private string GetBaseBCPArgs(BaseBulkInsertInfo bulkInsertInfo, string bcpCommand, out string sqlPassword)
+        {
+            SqlConnectionStringBuilder connStringBuilder = new SqlConnectionStringBuilder(GetConnectionString());
+            string securityArgs;
+            sqlPassword = null;
+            if (connStringBuilder.IntegratedSecurity)
+                securityArgs = " -T";
+            else
+            {
+                securityArgs = String.Format(" -U {0} -P #PASSWORD# ", connStringBuilder.UserID);
+                sqlPassword = connStringBuilder.Password;
+            }
+            return String.Format("{0} {1} -d {2} -S {3} {4} -c ", bulkInsertInfo.TableName, bcpCommand, connStringBuilder.InitialCatalog, connStringBuilder.DataSource, securityArgs);
+        }
+
+        private void ExecuteBCPCommand(string args, string sqlPassword)
+        {
             string bcpPath;
             if (string.IsNullOrEmpty(_bcpCommandName))
                 bcpPath = Path.Combine(s_bcpDirectory, "v_bcp");
             else
                 bcpPath = _bcpCommandName;
 
-            var procStartInfo = new System.Diagnostics.ProcessStartInfo(bcpPath, args.ToString());
-           
+            System.Diagnostics.Process processBulkCopy = new System.Diagnostics.Process();
+
+            string argsWithPassword = sqlPassword != null ? args.Replace("#PASSWORD#", sqlPassword) : args;
+            var procStartInfo = new System.Diagnostics.ProcessStartInfo(bcpPath, argsWithPassword);
             procStartInfo.RedirectStandardOutput = true;
             procStartInfo.UseShellExecute = false;
             procStartInfo.CreateNoWindow = true;
             processBulkCopy.StartInfo = procStartInfo;
-            processBulkCopy.Start();
+
+            bool isStarted = processBulkCopy.Start();
             processBulkCopy.WaitForExit();
-            string errorMessage = File.ReadAllText(errorFilePath);
-            if (GetDeleteBCPFiles())
-                File.Delete(dataFilePath);
-            File.Delete(errorFilePath);
-            if (!String.IsNullOrWhiteSpace(errorMessage))
-                throw new Exception(errorMessage);
+            string output = processBulkCopy.StandardOutput.ReadToEnd();
+            if (!isStarted || processBulkCopy.ExitCode != 0 || (output != null && output.Contains("Error")))
+            {
+                Exception ex = new Exception(String.Format("Error When running BCP Command. \r\n\r\nBCP Path: {0}. \r\n\r\nBCP Arguments: {1}. \r\n\r\nBCP Output: {2}", bcpPath, args, output));
+                Vanrise.Common.LoggerFactory.GetExceptionLogger().WriteException(ex);
+                throw ex;
+            }
+
+        }
+
+        private string ReplaceEmptyStrings(string line, string characterToReplace)
+        {
+            RegexOptions options = RegexOptions.None;
+            Regex regex = new Regex(@"[ ]{2,}", options);
+            return regex.Replace(line, characterToReplace);
+        }
+
+
+        /// <summary>
+        /// check https://msdn.microsoft.com/en-us/library/ms179250.aspx for BCP Format file structure
+        /// </summary>
+        private class BCPFormatFileLine
+        {
+            public string HostFileDataType { get; set; }
+
+            public string ServerColumnOrder { get; set; }
+
+            public string ServerColumnName { get; set; }
+
+            public string ColumnCollation { get; set; }
         }
 
         #endregion
