@@ -253,6 +253,8 @@
     <Content Include="WhS_BusinessEntity\Directives\SellingProduct\vr-whs-be-sellingproduct-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\vr-whs-be-salezonegroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierGroup\vr-whs-be-suppliergroup-selective.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SupplierRate\Templates\SupplierRateGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SupplierRate\vr-whs-be-supplierrate-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\Templates\SupplierZoneGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\vr-whs-be-supplierzone-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\vr-whs-be-supplierzone-selector.js" />
@@ -261,6 +263,7 @@
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-selector.js" />
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleRateAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\PurchasePricingRuleService.js" />
     <Content Include="WhS_BusinessEntity\Services\RateTypeService.js" />
     <Content Include="WhS_BusinessEntity\Services\SalePricingRuleService.js" />

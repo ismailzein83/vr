@@ -23,12 +23,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         static SupplierRateDataManager()
         {
-            //_columnMapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
-            //_columnMapper.Add("AccountStatusDescription", "AccountStatusID");
-            //_columnMapper.Add("UserName", "UserID");
-            //_columnMapper.Add("CaseStatusDescription", "StatusID");
-            //_columnMapper.Add("SuspicionOccuranceStatusDescription", "SuspicionOccuranceStatus");
-            //_columnMapper.Add("AccountCaseStatusDescription", "AccountCaseStatusID");
+            _columnMapper.Add("CurrencyName", "CurrencyID");
+            _columnMapper.Add("SupplierZoneName", "ZoneID");
         }
 
         public List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate)
@@ -77,15 +73,30 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return supplierRate;
         }
 
+        SupplierRateDetail SupplierRateDetailMapper(IDataReader reader)
+        {
+            SupplierRateDetail supplierRateDetail = new SupplierRateDetail();
+            supplierRateDetail.Entity = new SupplierRate();
+            supplierRateDetail.Entity.NormalRate = GetReaderValue<decimal>(reader, "NormalRate");
+            supplierRateDetail.Entity.OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null;
+            supplierRateDetail.Entity.SupplierRateId = (long)reader["ID"];
+            supplierRateDetail.Entity.ZoneId = (long)reader["ZoneID"];
+            supplierRateDetail.Entity.PriceListId = GetReaderValue<int>(reader, "PriceListID");
+            supplierRateDetail.Entity.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED");
+            supplierRateDetail.Entity.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED");
+            supplierRateDetail.Entity.CurrencyId = GetReaderValue<int?>(reader, "CurrencyId");
+            return supplierRateDetail;
+        }
 
-        public BigResult<SupplierRate> GetFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
+
+        public BigResult<SupplierRateDetail> GetFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.SupplierId, input.Query.ZoneId, input.Query.EffectiveOn), (cmd) => { });
             };
 
-            return RetrieveData(input, createTempTableAction, SupplierRateMapper, _columnMapper);
+            return RetrieveData(input, createTempTableAction, SupplierRateDetailMapper, _columnMapper);
         }
 
         private string CreateTempTableIfNotExists(string tempTableName, int supplierId, int? zoneId, DateTime? effectiveDate)

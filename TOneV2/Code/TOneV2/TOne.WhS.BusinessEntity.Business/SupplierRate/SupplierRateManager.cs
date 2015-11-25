@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Business
     public class SupplierRateManager
     {
 
-        public Vanrise.Entities.IDataRetrievalResult<SupplierRate> GetFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<SupplierRateDetail> GetFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
         {
             ISupplierRateDataManager manager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
 
