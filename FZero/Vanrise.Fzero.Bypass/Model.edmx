@@ -1206,6 +1206,32 @@ warning 6002: The table/view 'FMS.dbo.vwRepeatedCase' does not have a primary ke
           <Parameter Name="RecommendedActionID" Type="int" Mode="In" />
           <Parameter Name="ClientID" Type="int" Mode="In" />
         </Function>
+        <Function Name="prGetReportedCalls_1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CaseID" Type="varchar" Mode="In" />
+          <Parameter Name="b_number" Type="varchar" Mode="In" />
+          <Parameter Name="CLI" Type="varchar" Mode="In" />
+          <Parameter Name="FromSentDateTime" Type="datetime" Mode="In" />
+          <Parameter Name="ToSentDateTime" Type="datetime" Mode="In" />
+          <Parameter Name="ReportID" Type="varchar" Mode="In" />
+          <Parameter Name="CLIMobileOperatorID" Type="int" Mode="In" />
+          <Parameter Name="B_NumberMobileOperatorID" Type="int" Mode="In" />
+          <Parameter Name="MobileOperatorFeedbackID" Type="int" Mode="In" />
+          <Parameter Name="RecommendedActionID" Type="int" Mode="In" />
+          <Parameter Name="ClientID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="prGetReportedCalls_old" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CaseID" Type="varchar" Mode="In" />
+          <Parameter Name="b_number" Type="varchar" Mode="In" />
+          <Parameter Name="CLI" Type="varchar" Mode="In" />
+          <Parameter Name="FromSentDateTime" Type="datetime" Mode="In" />
+          <Parameter Name="ToSentDateTime" Type="datetime" Mode="In" />
+          <Parameter Name="ReportID" Type="varchar" Mode="In" />
+          <Parameter Name="CLIMobileOperatorID" Type="int" Mode="In" />
+          <Parameter Name="B_NumberMobileOperatorID" Type="int" Mode="In" />
+          <Parameter Name="MobileOperatorFeedbackID" Type="int" Mode="In" />
+          <Parameter Name="RecommendedActionID" Type="int" Mode="In" />
+          <Parameter Name="ClientID" Type="int" Mode="In" />
+        </Function>
         <Function Name="prGetSummaryClient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MobileOperatorID" Type="int" Mode="In" />
           <Parameter Name="FromAttemptDateTime" Type="datetime" Mode="In" />
@@ -2006,6 +2032,45 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <FunctionImport Name="prVwGeneratedCall" ReturnType="Collection(Model.prVwGeneratedCall_Result)">
           <Parameter Name="ID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="prGetReportedCalls" ReturnType="Collection(Model.prGetReportedCalls_Result)">
+            <Parameter Name="CaseID" Mode="In" Type="String" />
+            <Parameter Name="b_number" Mode="In" Type="String" />
+            <Parameter Name="CLI" Mode="In" Type="String" />
+            <Parameter Name="FromSentDateTime" Mode="In" Type="DateTime" />
+            <Parameter Name="ToSentDateTime" Mode="In" Type="DateTime" />
+            <Parameter Name="ReportID" Mode="In" Type="String" />
+            <Parameter Name="CLIMobileOperatorID" Mode="In" Type="Int32" />
+            <Parameter Name="B_NumberMobileOperatorID" Mode="In" Type="Int32" />
+            <Parameter Name="MobileOperatorFeedbackID" Mode="In" Type="Int32" />
+            <Parameter Name="RecommendedActionID" Mode="In" Type="Int32" />
+            <Parameter Name="ClientID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="prGetReportedCalls_1" ReturnType="Collection(Model.prGetReportedCalls_1_Result)">
+            <Parameter Name="CaseID" Mode="In" Type="String" />
+            <Parameter Name="b_number" Mode="In" Type="String" />
+            <Parameter Name="CLI" Mode="In" Type="String" />
+            <Parameter Name="FromSentDateTime" Mode="In" Type="DateTime" />
+            <Parameter Name="ToSentDateTime" Mode="In" Type="DateTime" />
+            <Parameter Name="ReportID" Mode="In" Type="String" />
+            <Parameter Name="CLIMobileOperatorID" Mode="In" Type="Int32" />
+            <Parameter Name="B_NumberMobileOperatorID" Mode="In" Type="Int32" />
+            <Parameter Name="MobileOperatorFeedbackID" Mode="In" Type="Int32" />
+            <Parameter Name="RecommendedActionID" Mode="In" Type="Int32" />
+            <Parameter Name="ClientID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="prGetReportedCalls_old" ReturnType="Collection(Model.prGetReportedCalls_old_Result)">
+            <Parameter Name="CaseID" Mode="In" Type="String" />
+            <Parameter Name="b_number" Mode="In" Type="String" />
+            <Parameter Name="CLI" Mode="In" Type="String" />
+            <Parameter Name="FromSentDateTime" Mode="In" Type="DateTime" />
+            <Parameter Name="ToSentDateTime" Mode="In" Type="DateTime" />
+            <Parameter Name="ReportID" Mode="In" Type="String" />
+            <Parameter Name="CLIMobileOperatorID" Mode="In" Type="Int32" />
+            <Parameter Name="B_NumberMobileOperatorID" Mode="In" Type="Int32" />
+            <Parameter Name="MobileOperatorFeedbackID" Mode="In" Type="Int32" />
+            <Parameter Name="RecommendedActionID" Mode="In" Type="Int32" />
+            <Parameter Name="ClientID" Mode="In" Type="Int32" />
+          </FunctionImport>
           <EntitySet Name="ActionTypes" EntityType="Model.ActionType" />
           <EntitySet Name="ApplicationUsers" EntityType="Model.ApplicationUser" />
           <EntitySet Name="AppTypes" EntityType="Model.AppType" />
@@ -2221,19 +2286,6 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
             <End Role="WebsiteMenu" EntitySet="WebsiteMenus" />
             <End Role="WebsiteMenu1" EntitySet="WebsiteMenus" />
           </AssociationSet>
-          <FunctionImport Name="prGetReportedCalls" ReturnType="Collection(Model.prGetReportedCalls_Result)">
-            <Parameter Name="CaseID" Mode="In" Type="String" />
-            <Parameter Name="b_number" Mode="In" Type="String" />
-            <Parameter Name="CLI" Mode="In" Type="String" />
-            <Parameter Name="FromSentDateTime" Mode="In" Type="DateTime" />
-            <Parameter Name="ToSentDateTime" Mode="In" Type="DateTime" />
-            <Parameter Name="ReportID" Mode="In" Type="String" />
-            <Parameter Name="CLIMobileOperatorID" Mode="In" Type="Int32" />
-            <Parameter Name="B_NumberMobileOperatorID" Mode="In" Type="Int32" />
-            <Parameter Name="MobileOperatorFeedbackID" Mode="In" Type="Int32" />
-            <Parameter Name="RecommendedActionID" Mode="In" Type="Int32" />
-            <Parameter Name="ClientID" Mode="In" Type="Int32" />
-          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="delete_prSummary_Admin_Result">
           <Property Type="Int32" Name="ordered" Nullable="false" />
@@ -2508,6 +2560,51 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Type="String" Name="FeedbackNotes" Nullable="true" MaxLength="5000" />
           <Property Type="String" Name="MobileOperatorFeedbackName" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="Carrier" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="prGetReportedCalls_Result">
+          <Property Type="String" Name="CaseID" Nullable="true" MaxLength="24" />
+          <Property Type="Int32" Name="ReportingStatusID" Nullable="false" />
+          <Property Type="Int32" Name="MobileOperatorFeedbackID" Nullable="true" />
+          <Property Type="DateTime" Name="AttemptDateTime" Nullable="false" />
+          <Property Type="DateTime" Name="FeedbackDateTime" Nullable="true" />
+          <Property Type="String" Name="b_number" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="DurationInSeconds" Nullable="true" />
+          <Property Type="String" Name="CLI" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ReportingStatusName" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="ReportRealID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RecommendedActionName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="MobileOperatorFeedbackName" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="prGetReportedCalls_1_Result">
+          <Property Type="String" Name="CaseID" Nullable="true" MaxLength="24" />
+          <Property Type="Int32" Name="ReportingStatusID" Nullable="false" />
+          <Property Type="Int32" Name="MobileOperatorFeedbackID" Nullable="true" />
+          <Property Type="DateTime" Name="AttemptDateTime" Nullable="false" />
+          <Property Type="DateTime" Name="FeedbackDateTime" Nullable="true" />
+          <Property Type="String" Name="b_number" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="DurationInSeconds" Nullable="false" />
+          <Property Type="String" Name="CLI" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ReportingStatusName" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="ReportRealID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="RecommendedActionName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="MobileOperatorFeedbackName" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="prGetReportedCalls_old_Result">
+          <Property Type="String" Name="CaseID" Nullable="true" MaxLength="24" />
+          <Property Type="Int32" Name="ReportingStatusID" Nullable="false" />
+          <Property Type="Int32" Name="MobileOperatorFeedbackID" Nullable="true" />
+          <Property Type="DateTime" Name="AttemptDateTime" Nullable="false" />
+          <Property Type="DateTime" Name="FeedbackDateTime" Nullable="true" />
+          <Property Type="String" Name="b_number" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="DurationInSeconds" Nullable="true" />
+          <Property Type="String" Name="CLI" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ReportingStatusName" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="ReportRealID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RecommendedActionName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="MobileOperatorFeedbackName" Nullable="true" MaxLength="20" />
         </ComplexType>
         <EntityType Name="ActionType">
           <Key>
@@ -3683,21 +3780,6 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <ComplexType Name="prGetReportedCalls_Result">
-          <Property Type="String" Name="CaseID" Nullable="true" MaxLength="24" />
-          <Property Type="Int32" Name="ReportingStatusID" Nullable="false" />
-          <Property Type="Int32" Name="MobileOperatorFeedbackID" Nullable="true" />
-          <Property Type="DateTime" Name="AttemptDateTime" Nullable="false" />
-          <Property Type="DateTime" Name="FeedbackDateTime" Nullable="true" />
-          <Property Type="String" Name="b_number" Nullable="false" MaxLength="100" />
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="Int32" Name="DurationInSeconds" Nullable="true" />
-          <Property Type="String" Name="CLI" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="ReportingStatusName" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="ReportRealID" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="RecommendedActionName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="MobileOperatorFeedbackName" Nullable="true" MaxLength="20" />
-        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4057,6 +4139,63 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
                 <ScalarProperty Name="FeedbackNotes" ColumnName="FeedbackNotes" />
                 <ScalarProperty Name="MobileOperatorFeedbackName" ColumnName="MobileOperatorFeedbackName" />
                 <ScalarProperty Name="Carrier" ColumnName="Carrier" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="prGetReportedCalls" FunctionName="Model.Store.prGetReportedCalls">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Model.prGetReportedCalls_Result">
+                <ScalarProperty Name="CaseID" ColumnName="CaseID" />
+                <ScalarProperty Name="ReportingStatusID" ColumnName="ReportingStatusID" />
+                <ScalarProperty Name="MobileOperatorFeedbackID" ColumnName="MobileOperatorFeedbackID" />
+                <ScalarProperty Name="AttemptDateTime" ColumnName="AttemptDateTime" />
+                <ScalarProperty Name="FeedbackDateTime" ColumnName="FeedbackDateTime" />
+                <ScalarProperty Name="b_number" ColumnName="b_number" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
+                <ScalarProperty Name="CLI" ColumnName="CLI" />
+                <ScalarProperty Name="ReportingStatusName" ColumnName="ReportingStatusName" />
+                <ScalarProperty Name="ReportRealID" ColumnName="ReportRealID" />
+                <ScalarProperty Name="RecommendedActionName" ColumnName="RecommendedActionName" />
+                <ScalarProperty Name="MobileOperatorFeedbackName" ColumnName="MobileOperatorFeedbackName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="prGetReportedCalls_1" FunctionName="Model.Store.prGetReportedCalls_1">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Model.prGetReportedCalls_1_Result">
+                <ScalarProperty Name="CaseID" ColumnName="CaseID" />
+                <ScalarProperty Name="ReportingStatusID" ColumnName="ReportingStatusID" />
+                <ScalarProperty Name="MobileOperatorFeedbackID" ColumnName="MobileOperatorFeedbackID" />
+                <ScalarProperty Name="AttemptDateTime" ColumnName="AttemptDateTime" />
+                <ScalarProperty Name="FeedbackDateTime" ColumnName="FeedbackDateTime" />
+                <ScalarProperty Name="b_number" ColumnName="b_number" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
+                <ScalarProperty Name="CLI" ColumnName="CLI" />
+                <ScalarProperty Name="ReportingStatusName" ColumnName="ReportingStatusName" />
+                <ScalarProperty Name="ReportRealID" ColumnName="ReportRealID" />
+                <ScalarProperty Name="RecommendedActionName" ColumnName="RecommendedActionName" />
+                <ScalarProperty Name="MobileOperatorFeedbackName" ColumnName="MobileOperatorFeedbackName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="prGetReportedCalls_old" FunctionName="Model.Store.prGetReportedCalls_old">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Model.prGetReportedCalls_old_Result">
+                <ScalarProperty Name="CaseID" ColumnName="CaseID" />
+                <ScalarProperty Name="ReportingStatusID" ColumnName="ReportingStatusID" />
+                <ScalarProperty Name="MobileOperatorFeedbackID" ColumnName="MobileOperatorFeedbackID" />
+                <ScalarProperty Name="AttemptDateTime" ColumnName="AttemptDateTime" />
+                <ScalarProperty Name="FeedbackDateTime" ColumnName="FeedbackDateTime" />
+                <ScalarProperty Name="b_number" ColumnName="b_number" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
+                <ScalarProperty Name="CLI" ColumnName="CLI" />
+                <ScalarProperty Name="ReportingStatusName" ColumnName="ReportingStatusName" />
+                <ScalarProperty Name="ReportRealID" ColumnName="ReportRealID" />
+                <ScalarProperty Name="RecommendedActionName" ColumnName="RecommendedActionName" />
+                <ScalarProperty Name="MobileOperatorFeedbackName" ColumnName="MobileOperatorFeedbackName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -4679,25 +4818,6 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="prGetReportedCalls" FunctionName="Model.Store.prGetReportedCalls">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.prGetReportedCalls_Result">
-                <ScalarProperty Name="CaseID" ColumnName="CaseID" />
-                <ScalarProperty Name="ReportingStatusID" ColumnName="ReportingStatusID" />
-                <ScalarProperty Name="MobileOperatorFeedbackID" ColumnName="MobileOperatorFeedbackID" />
-                <ScalarProperty Name="AttemptDateTime" ColumnName="AttemptDateTime" />
-                <ScalarProperty Name="FeedbackDateTime" ColumnName="FeedbackDateTime" />
-                <ScalarProperty Name="b_number" ColumnName="b_number" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
-                <ScalarProperty Name="CLI" ColumnName="CLI" />
-                <ScalarProperty Name="ReportingStatusName" ColumnName="ReportingStatusName" />
-                <ScalarProperty Name="ReportRealID" ColumnName="ReportRealID" />
-                <ScalarProperty Name="RecommendedActionName" ColumnName="RecommendedActionName" />
-                <ScalarProperty Name="MobileOperatorFeedbackName" ColumnName="MobileOperatorFeedbackName" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
