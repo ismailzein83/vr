@@ -16,6 +16,7 @@ namespace TOne.BusinessEntity.Data
 
 
         List<CodeGroupInfo> GetCodeGroups();
+        List<CodeGroupInfo> GetCodeGroupsByCustomer(string customerId);
 
         Dictionary<string, CodeGroupInfo> GetCodeGroupsByCodePrefix(string codePrefix);
 

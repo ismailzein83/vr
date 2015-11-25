@@ -103,5 +103,12 @@ namespace TOne.Web.Online.Controllers
             CurrencyManager manager = new CurrencyManager();
             return manager.GetCurrenciesFactor(customerId).ToList();
         }
+
+        [HttpGet]
+        public List<CodeGroupInfo> GetCodeGroupsByCustomer(string customerId)
+        {
+            CodeManager manager = new CodeManager();
+            return manager.GetCodeGroupsByCustomer(customerId);
+        }
     }
 }

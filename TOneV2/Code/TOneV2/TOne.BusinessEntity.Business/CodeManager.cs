@@ -44,20 +44,26 @@ namespace TOne.BusinessEntity.Business
         {
             return _dataManager.GetCodeGroups();
         }
-        public Dictionary<string,CodeGroupInfo> GetCodeGroupsDictionary()
+
+
+        public List<CodeGroupInfo> GetCodeGroupsByCustomer(string customerId)
+        {
+            return _dataManager.GetCodeGroupsByCustomer(customerId);
+        }
+        public Dictionary<string, CodeGroupInfo> GetCodeGroupsDictionary()
         {
             List<CodeGroupInfo> codeGroups = _cacheManager.GetOrCreateObject("CodeGroups",
             CacheObjectType.CodeGroup,
              () =>
-            {
-                return GetCodeGroups();
-            });
+             {
+                 return GetCodeGroups();
+             });
             Dictionary<string, CodeGroupInfo> codeGroupsDictionary = new Dictionary<string, CodeGroupInfo>();
             foreach (CodeGroupInfo codeGroup in codeGroups)
             {
                 CodeGroupInfo codeGroupInfo = null;
-                if (!codeGroupsDictionary.TryGetValue(codeGroup.Code,out codeGroupInfo))
-                codeGroupsDictionary.Add(codeGroup.Code, codeGroup);
+                if (!codeGroupsDictionary.TryGetValue(codeGroup.Code, out codeGroupInfo))
+                    codeGroupsDictionary.Add(codeGroup.Code, codeGroup);
             }
             return codeGroupsDictionary;
         }
@@ -96,17 +102,17 @@ namespace TOne.BusinessEntity.Business
         }
         private Dictionary<string, Code> GetGetSupplierCodesFromDB(string supplierId, char rootCode, DateTime when)
         {
-            ICodeDataManager _dataManager=_dataManager = BEDataManagerFactory.GetDataManager<ICodeDataManager>();
+            ICodeDataManager _dataManager = _dataManager = BEDataManagerFactory.GetDataManager<ICodeDataManager>();
             List<Code> supplierCodes = _dataManager.GetSupplierCodes(supplierId, rootCode, when);
             Dictionary<string, Code> supplierCodesDictionary = new Dictionary<string, Code>();
 
             foreach (Code supplierCode in supplierCodes)
             {
-                Code value=null;
+                Code value = null;
                 if (!supplierCodesDictionary.TryGetValue(supplierCode.Value, out value))
                     supplierCodesDictionary.Add(supplierCode.Value, supplierCode);
             }
-            
+
             return supplierCodesDictionary;
         }
         public string GetDigits(string codeValue)

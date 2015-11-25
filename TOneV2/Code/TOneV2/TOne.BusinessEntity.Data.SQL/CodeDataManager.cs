@@ -141,6 +141,18 @@ namespace TOne.BusinessEntity.Data.SQL
                 };
             });
         }
+
+        public List<CodeGroupInfo> GetCodeGroupsByCustomer(string customerId)
+        {
+            return GetItemsSP("[BEntity].[sp_CodeGroup_GetByCustomer]", (reader) =>
+            {
+                return new Entities.CodeGroupInfo
+                {
+                    Code = reader["Code"] as string,
+                    Name = reader["Name"] as string
+                };
+            }, customerId);
+        }
         public string GetCodeGroupName(int codeGroupId)
         {
             return ExecuteScalarSP("[BEntity].[sp_CodeGroup_GetName]", codeGroupId) as string;
