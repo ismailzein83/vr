@@ -1,20 +1,16 @@
-﻿<vr-row>
-    <vr-columns colnum="12" simplecol>
-        <vr-datagrid datasource="customerRoutes"
-                     dataretrievalfunction="dataRetrievalFunction"
-                     pagingtype="'PagingOnScroll'"
-                     on-ready="onGridReady"
-                     menuactions="gridMenuActions">
+﻿<vr-datagrid datasource="customerRoutes"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="onGridReady"
+             menuactions="gridMenuActions">
 
-            <vr-datagridcolumn headertext="'Code'" field="'Entity.Code'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Rate'" field="'Entity.Rate'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Blocked'" field="'Entity.isBlocked'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Route Options'" field="'RouteOptionsDescription'"></vr-datagridcolumn>
-            <vr-datagridexpandablerow>
-                <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
-            </vr-datagridexpandablerow>
-        </vr-datagrid>
-    </vr-columns>
-</vr-row>
+    <vr-datagridcolumn headertext="'Code'" field="'Entity.Code'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Rate'" field="'Entity.Rate'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Blocked'" field="'Entity.isBlocked'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Route Options'" field="'RouteOptionsDescription'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+</vr-datagrid>
