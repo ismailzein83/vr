@@ -44,17 +44,13 @@
                 countryReadyPromiseDeferred.resolve();
             }
             $scope.scopeModal.disabledfax = true;
-            $scope.scopeModal.onFaxValueChange = function () {
-                setTimeout(function () {
-                    $scope.scopeModal.disabledfax = ($scope.scopeModal.faxvalue != undefined && $scope.scopeModal.faxvalue != null && $scope.scopeModal.faxvalue != '') ? false : true;
-                })
+            $scope.scopeModal.onFaxValueChange = function (value) {
+                $scope.scopeModal.disabledfax = (value== undefined);
             }
             $scope.scopeModal.disabledphone = true;
-            $scope.scopeModal.onPhoneValueChange = function () {
-                setTimeout(function () {
-                    $scope.scopeModal.disabledphone = ($scope.scopeModal.phoneNumberValue != undefined && $scope.scopeModal.phoneNumberValue != null && $scope.scopeModal.phoneNumberValue != '') ? false : true;
-                })
-            }
+            $scope.scopeModal.onPhoneValueChange = function (value) {
+                    $scope.scopeModal.disabledphone = (value == undefined);
+           }
             $scope.onCityDirectiveReady = function (api) {
                 cityDirectiveApi = api;
                 cityReadyPromiseDeferred.resolve();
@@ -78,7 +74,8 @@
                 $scope.scopeModal.phoneNumbers.push({
                     phoneNumber: $scope.scopeModal.phoneNumberValue
                 });
-                $scope.scopeModal.phoneNumberValue = '';
+                $scope.scopeModal.phoneNumberValue = undefined;
+                $scope.scopeModal.disabledphone = true;
             };
             $scope.onCountrySelctionChanged = function (item,datasource) {
                 if (item != undefined) {
@@ -98,7 +95,8 @@
                 $scope.scopeModal.faxes.push({
                     fax: fax
                 });
-                $scope.scopeModal.faxvalue = '';
+                $scope.scopeModal.faxvalue = undefined;
+                $scope.scopeModal.disabledfax = true;
             };
 
         }
