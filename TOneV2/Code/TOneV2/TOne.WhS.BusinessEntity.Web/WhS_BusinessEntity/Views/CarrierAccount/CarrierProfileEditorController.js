@@ -77,14 +77,15 @@
                 $scope.scopeModal.phoneNumberValue = undefined;
                 $scope.scopeModal.disabledphone = true;
             };
-            $scope.onCountrySelctionChanged = function (item,datasource) {
+            $scope.onCountrySelctionChanged = function (item, datasource) {
+               
                 if (item != undefined) {
                     var payload = {};                   
                      payload.filter = { CountryId: item.CountryId }
                      cityDirectiveApi.load(payload)
                 }
-                else {
-                    $scope.city = undefined;
+                else {                  
+                    $scope.scopeModal.city = undefined;
 
                 }
             }
