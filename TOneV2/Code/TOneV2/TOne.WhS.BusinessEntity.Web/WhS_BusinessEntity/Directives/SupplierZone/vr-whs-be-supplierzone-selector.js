@@ -56,17 +56,17 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                 required = "isrequired";
 
             return '<div>'
-               +  '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SupplierZoneId"'
+               +  '<vr-select ' + multipleselection + ' on-ready="ctrl.SelectorReady"  datatextfield="Name" datavaluefield="SupplierZoneId"'
             + required + ' datasource="ctrl.searchSupplierZones" selectedvalues="ctrl.selectedvalues"'  +  label + 'onselectionchanged="ctrl.onselectionchanged" entityName="Supplier Zone"></vr-select>'
             + '</div>'
         }
 
         function supplierZoneCtor(ctrl, $scope, $attrs) {
             var filter;
+            var selectorApi;
             function initializeController() {
                 ctrl.datasource = [];
                 ctrl.searchSupplierZones = function (searchValue) {
-                    console.log(filter);
                     if (filter == undefined || filter.SupplierId == undefined)
                         return null;
                     return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfo(UtilsService.serializetoJson(filter), searchValue);
@@ -74,11 +74,14 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
 
                 defineAPI();
             }
-
+            ctrl.SelectorReady = function (api) {
+                selectorApi = api;
+            }
             function defineAPI() {
                 var api = {};
                 
                 api.load = function (payload) {
+                    selectorApi.clearDataSource();
                     var selectedIds;
                     if (payload != undefined) {
                         filter = payload.filter;

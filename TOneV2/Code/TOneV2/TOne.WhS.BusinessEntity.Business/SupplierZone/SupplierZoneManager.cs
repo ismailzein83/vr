@@ -31,7 +31,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 supplierZones = GetSupplierZoneBySupplier(filter);
             else
              supplierZones = GetCachedSupplierZones();
-            return supplierZones.MapRecords(SupplierZoneInfoMapper, x => x.Name.Contains(searchValue));
+            return supplierZones.MapRecords(SupplierZoneInfoMapper, x => x.Name.ToLower().Contains(searchValue.ToLower()));
            
         }
         private IEnumerable<SupplierZone> GetSupplierZoneBySupplier(SupplierZoneInfoFilter filter)

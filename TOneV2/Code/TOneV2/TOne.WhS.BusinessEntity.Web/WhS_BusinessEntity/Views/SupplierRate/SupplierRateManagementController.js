@@ -8,6 +8,8 @@
         var gridAPI;
         var supplierDirectiveApi;
         var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var supplierZoneDirectiveAPI;
+        var supplierZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         load();
         var filter = {};
@@ -17,6 +19,26 @@
                 setFilterObject();
                 return gridAPI.loadGrid(filter);
             };
+
+            $scope.onSupplierZoneDirectiveReady = function (api) {
+                supplierZoneDirectiveAPI = api;
+                supplierZoneReadyPromiseDeferred.resolve();
+            }
+
+
+            $scope.onSelectSupplier = function (selectedItem) {
+                $scope.showSupplierZoneSelector = true;
+                $scope.selectedSupplierZones = undefined;           
+                var payload = {
+                    filter: { SupplierId: selectedItem.CarrierAccountId },
+                }
+
+                var setLoader = function (value) { $scope.isLoadingSaleZonesSection = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader);
+            }
+
+
+
             $scope.onSupplierReady = function (api) {
                 supplierDirectiveApi = api;
                 supplierReadyPromiseDeferred.resolve();
@@ -32,8 +54,13 @@
             $scope.isGettingData = true;
             loadAllControls();
         }
+
+        function loadSupplierZoneSection() {
+            return supplierZoneReadyPromiseDeferred.promise;
+        }
+
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSupplierSelector])
+            return UtilsService.waitMultipleAsyncOperations([loadSupplierSelector, loadSupplierZoneSection])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -56,7 +83,8 @@
         function setFilterObject() {
             filter = {
                 SupplierId: supplierDirectiveApi.getSelectedIds(),
-                EffectiveOn: $scope.effectiveOn
+                EffectiveOn: $scope.effectiveOn,
+                ZoneId: supplierZoneDirectiveAPI.getSelectedIds()
             };
            
         }

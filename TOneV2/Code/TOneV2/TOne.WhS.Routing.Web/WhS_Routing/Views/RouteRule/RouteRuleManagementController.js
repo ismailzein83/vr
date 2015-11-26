@@ -40,11 +40,11 @@
                 $scope.showSaleZoneSelector = true;
 
                 var payload = {
-                    filter: { SellingNumberPlanId: selectedItem.SellingNumberPlanId },
+                    filter: { SupplierZoneId: selectedItem.SupplierZoneId },
                 }
 
-                var setLoader = function (value) { $scope.isLoadingSaleZonesSection = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
+                var setLoader = function (value) { $scope.isLoadingSupplierZonesSection = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader);
             }
 
             $scope.onGridReady = function (api) {

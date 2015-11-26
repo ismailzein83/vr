@@ -128,8 +128,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             if (effectiveDate.HasValue)
             {
-                whereClause.Append(" AND rate.BeginEffectiveDate <= '" + effectiveDate.Value + "'");
-                whereClause.Append(" AND (rate.EndEffectiveDate is null or rate.EndEffectiveDate > '" + effectiveDate.Value + "') ");
+                whereClause.Append(" AND rate.BED <= '" + effectiveDate.Value + "'");
+                whereClause.Append(" AND (rate.EED is null or rate.EED > '" + effectiveDate.Value + "') ");
             }
 
             return whereClause.ToString();
