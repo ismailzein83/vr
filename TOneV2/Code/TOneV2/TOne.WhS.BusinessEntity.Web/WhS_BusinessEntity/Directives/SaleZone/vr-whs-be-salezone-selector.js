@@ -94,7 +94,8 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
                 api.load = function (payload) {
                     ctrl.selectedvalues = [];
-                    selectorApi.clearDataSource();
+                    if (selectorApi!=undefined)
+                        selectorApi.clearDataSource();
                     var selectedIds;
                     if (payload != undefined) {
                         sellingNumberPlanId = payload.sellingNumberPlanId;
