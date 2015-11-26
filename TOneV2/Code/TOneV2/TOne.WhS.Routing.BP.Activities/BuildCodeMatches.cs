@@ -25,6 +25,7 @@ namespace TOne.WhS.Routing.BP.Activities
         public BaseQueue<CodeMatchesBatch> OutputQueue_2 { get; set; }
 
         public BaseQueue<CodeMatches> OutputQueueForCustomerRoutes { get; set; }
+        public bool IsCustomerRoutesProcess { get; set; }
     }
 
     public class BuildCodeMatchesContext : IBuildCodeMatchesContext
@@ -32,8 +33,11 @@ namespace TOne.WhS.Routing.BP.Activities
         public SupplierZoneDetailByZone SupplierZoneDetails { get; set; }
     }
 
-    public sealed class BuildCodeMatches : BaseAsyncActivity<BuildCodeMatchesInput> 
+    public sealed class BuildCodeMatches : BaseAsyncActivity<BuildCodeMatchesInput>
     {
+        [RequiredArgument]
+        public InArgument<bool> IsCustomerRoutesProcess { get; set; }
+
         [RequiredArgument]
         public InArgument<SupplierZoneDetailByZone> SupplierZoneDetails { get; set; }
 
@@ -43,16 +47,12 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<SupplierCode>> SupplierCodes { get; set; }
 
-        [RequiredArgument]
         public InOutArgument<BaseQueue<CodeMatchesBatch>> OutputQueue_1 { get; set; }
 
-        [RequiredArgument]
         public InOutArgument<BaseQueue<CodeMatchesBatch>> OutputQueue_2 { get; set; }
 
-        [RequiredArgument]
         public InOutArgument<BaseQueue<CodeMatches>> OutputQueueForCustomerRoutes { get; set; }
-
-
+        
         protected override void DoWork(BuildCodeMatchesInput inputArgument, AsyncActivityHandle handle)
         {
             CodeMatchesBatch codeMatchesBatch = new CodeMatchesBatch();
@@ -61,12 +61,14 @@ namespace TOne.WhS.Routing.BP.Activities
             codeMatchContext.SupplierZoneDetails = inputArgument.SupplierZoneDetails;
 
             CodeMatchBuilder builder = new CodeMatchBuilder();
-            builder.BuildCodeMatches(codeMatchContext, inputArgument.SaleCodes, inputArgument.SupplierCodes, codeMatch => {
-                
-                inputArgument.OutputQueueForCustomerRoutes.Enqueue(codeMatch);
+            builder.BuildCodeMatches(codeMatchContext, inputArgument.SaleCodes, inputArgument.SupplierCodes, codeMatch =>
+            {
+                if (inputArgument.IsCustomerRoutesProcess)
+                    inputArgument.OutputQueueForCustomerRoutes.Enqueue(codeMatch);
+
                 codeMatchesBatch.CodeMatches.Add(codeMatch);
-                
-                if(codeMatchesBatch.CodeMatches.Count >= 10)
+
+                if (codeMatchesBatch.CodeMatches.Count >= 10)
                 {
                     inputArgument.OutputQueue_1.Enqueue(codeMatchesBatch);
                     inputArgument.OutputQueue_2.Enqueue(codeMatchesBatch);
@@ -74,7 +76,7 @@ namespace TOne.WhS.Routing.BP.Activities
                 }
             });
 
-            if(codeMatchesBatch.CodeMatches.Count > 0)
+            if (codeMatchesBatch.CodeMatches.Count > 0)
             {
                 inputArgument.OutputQueue_1.Enqueue(codeMatchesBatch);
                 inputArgument.OutputQueue_2.Enqueue(codeMatchesBatch);
@@ -103,7 +105,7 @@ namespace TOne.WhS.Routing.BP.Activities
                 this.OutputQueue_2.Set(context, new MemoryQueue<CodeMatchesBatch>());
 
             if (this.OutputQueueForCustomerRoutes.Get(context) == null)
-                this.OutputQueueForCustomerRoutes.Set(context, new MemoryQueue<CodeMatches>());        
+                this.OutputQueueForCustomerRoutes.Set(context, new MemoryQueue<CodeMatches>());
 
             base.OnBeforeExecute(context, handle);
         }

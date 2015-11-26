@@ -17,4 +17,26 @@ namespace TOne.WhS.Routing.Entities
 
         public SupplierCodeMatchWithRateBySupplier SupplierCodeMatchesBySupplier { get; set; }
     }
+
+    public class RPCodeMatches
+    {
+        public long SaleZoneId { get; set; }
+        public string Code { get; set; }
+        public List<SupplierCodeMatchWithRate> SupplierCodeMatches { get; set; }
+
+    }
+
+    public class RPCodeMatchesByZone
+    {
+        public long SaleZoneId { get; set; }
+        public List<SupplierCodeMatchWithRate> SupplierCodeMatches { get; set; }
+        public SupplierCodeMatchWithRateBySupplier SupplierCodeMatchesBySupplier { get; set; }
+
+    }
+
+    public class RPCodeMatchesByZoneBatch
+    {
+        public List<RPCodeMatchesByZone> RPCodeMatchesByZone { get; set; }
+
+    }
 }

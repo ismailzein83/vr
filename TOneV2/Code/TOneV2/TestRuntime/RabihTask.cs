@@ -89,10 +89,13 @@ namespace TestRuntime
                 //    IsFuture = false,
                 //    IsLcrOnly = false
                 //}
-                InputArguments = new TOne.WhS.Routing.BP.Arguments.RoutingProcessInput
+                InputArguments = new TOne.WhS.Routing.BP.Arguments.RPRoutingProcessInput
                 {
-                    EffectiveTime = DateTime.Now,
-                    RoutingDatabaseType = TOne.WhS.Routing.Entities.RoutingDatabaseType.Current
+                    EffectiveOn = DateTime.Now,
+                    RoutingDatabaseType = TOne.WhS.Routing.Entities.RoutingDatabaseType.Current,
+                    CodePrefixLength = 1,
+                    IsFuture = false,
+                    SaleZoneRange = 1000
                 }
             });
         }

@@ -11,5 +11,7 @@ namespace TOne.WhS.Routing.Data
     public interface ICodeMatchesDataManager : IDataManager, IBulkApplyDataManager<CodeMatches>, IRoutingDataManager
     {
         void ApplyCodeMatchesForDB(object preparedCodeMatches);
+
+        IEnumerable<RPCodeMatches> GetCodeMatches(IEnumerable<long> saleZoneIds);
     }
 }

@@ -71,7 +71,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public IEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             List<long> saleZoneIds = new List<long>();
-            ExecuteReaderSP("[TOneWhS_BE].[sp_SaleZone_GetIds] ", (reader) =>
+            ExecuteReaderSP("[TOneWhS_BE].[sp_SaleZone_GetIds]", (reader) =>
             {
                 while (reader.Read())
                 {

@@ -76,6 +76,7 @@
     <Compile Include="GenerateCustomerZoneDetails.cs" />
     <Compile Include="GenerateSupplierZoneDetails.cs" />
     <Compile Include="GetDistinctSaleZoneIds.cs" />
+    <Compile Include="GetRPCodeMatches.cs" />
     <Compile Include="GetSaleCodes.cs" />
     <Compile Include="GetSupplierCodes.cs" />
     <Compile Include="GetActiveCustomerInfos.cs" />
