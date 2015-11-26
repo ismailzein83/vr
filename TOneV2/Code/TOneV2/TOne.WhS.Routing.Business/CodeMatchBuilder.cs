@@ -25,12 +25,16 @@ namespace TOne.WhS.Routing.Business
 
             foreach (string code in distinctSupplierCodes)
             {
+                if (context.CodePrefix.Length <= code.Length)
+                    continue;
+
                 BuildAndAddCodeMatches(code, false, saleCodeIterators, supplierCodeIterators, context.SupplierZoneDetails, onCodeMatchesAvailable);
             }
             foreach (string code in distinctSaleCodes)
             {
-                if (distinctSupplierCodes.Contains(code))
+                if (distinctSupplierCodes.Contains(code) != context.CodePrefix.Length <= code.Length)
                     continue;
+
                 BuildAndAddCodeMatches(code, true, saleCodeIterators, supplierCodeIterators, context.SupplierZoneDetails, onCodeMatchesAvailable);
             }
         }

@@ -24,10 +24,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSupplierCodes(supplierId, effectiveOn);
         }
 
-        public List<SupplierCode> GetActiveSupplierCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, IEnumerable<RoutingSupplierInfo> supplierInfo)
+        public List<SupplierCode> GetActiveSupplierCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes, IEnumerable<RoutingSupplierInfo> supplierInfo)
         {
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
-            return dataManager.GetActiveSupplierCodesByPrefix(codePrefix, effectiveOn, isFuture, supplierInfo);
+            return dataManager.GetActiveSupplierCodesByPrefix(codePrefix, effectiveOn, isFuture, getChildCodes, getParentCodes, supplierInfo);
         }
 
         public IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)

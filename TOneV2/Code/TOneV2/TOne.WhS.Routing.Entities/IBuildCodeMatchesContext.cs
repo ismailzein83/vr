@@ -8,6 +8,8 @@ namespace TOne.WhS.Routing.Entities
 {
     public interface IBuildCodeMatchesContext
     {
+        string CodePrefix { get; }
+
         SupplierZoneDetailByZone SupplierZoneDetails { get; }
     }
 }

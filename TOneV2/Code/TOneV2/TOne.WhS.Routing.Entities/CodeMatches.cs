@@ -9,6 +9,8 @@ namespace TOne.WhS.Routing.Entities
 {
     public class CodeMatches
     {
+        public string CodePrefix { get; set; }
+
         public string Code { get; set; }
 
         public List<SaleCodeMatch> SaleCodeMatches { get; set; }

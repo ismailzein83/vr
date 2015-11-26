@@ -23,10 +23,10 @@ namespace TOne.WhS.BusinessEntity.Business
            return dataManager.GetSellingNumberPlanSaleCodes(sellingNumberPlanId, effectiveOn);
         }
 
-        public List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture)
+        public List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            return dataManager.GetSaleCodesByPrefix(codePrefix, effectiveOn, isFuture);
+            return dataManager.GetSaleCodesByPrefix(codePrefix, effectiveOn, isFuture, getChildCodes, getParentCodes);
         }
 
         public IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)

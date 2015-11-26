@@ -12,6 +12,8 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public class GetSupplierCodesInput
     {
+        public int CodePrefixLength { get; set; }
+
         public string CodePrefix { get; set; }
 
         public DateTime? EffectiveOn { get; set; }
@@ -28,6 +30,8 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public sealed class GetSupplierCodes : BaseAsyncActivity<GetSupplierCodesInput, GetSupplierCodesOutput>
     {
+        //[RequiredArgument]
+        public InArgument<int> CodePrefixLength { get; set; }
 
         [RequiredArgument]
         public InArgument<String> CodePrefix { get; set; }
@@ -47,7 +51,9 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override GetSupplierCodesOutput DoWorkWithResult(GetSupplierCodesInput inputArgument, AsyncActivityHandle handle)
         {
             SupplierCodeManager manager = new SupplierCodeManager();
-            IEnumerable<SupplierCode> supplierCodes = manager.GetActiveSupplierCodesByPrefix(inputArgument.CodePrefix, inputArgument.EffectiveOn, inputArgument.IsFuture, inputArgument.SupplierInfo);
+            bool getChildCodes = (inputArgument.CodePrefixLength == inputArgument.CodePrefix.Length);
+            IEnumerable<SupplierCode> supplierCodes = 
+                manager.GetActiveSupplierCodesByPrefix(inputArgument.CodePrefix, inputArgument.EffectiveOn, inputArgument.IsFuture, getChildCodes, true, inputArgument.SupplierInfo);
 
             return new GetSupplierCodesOutput
             {
@@ -59,6 +65,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             return new GetSupplierCodesInput
             {
+                CodePrefixLength = this.CodePrefixLength.Get(context),
                 CodePrefix = this.CodePrefix.Get(context),
                 EffectiveOn = this.EffectiveOn.Get(context),
                 IsFuture = this.IsFuture.Get(context),

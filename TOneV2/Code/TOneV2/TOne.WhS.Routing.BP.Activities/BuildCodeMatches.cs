@@ -14,6 +14,8 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public class BuildCodeMatchesInput
     {
+        public string CodePrefix { get; set; }
+
         public SupplierZoneDetailByZone SupplierZoneDetails { get; set; }
 
         public IEnumerable<SaleCode> SaleCodes { get; set; }
@@ -30,11 +32,16 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public class BuildCodeMatchesContext : IBuildCodeMatchesContext
     {
+        public string CodePrefix { get; set; }
+
         public SupplierZoneDetailByZone SupplierZoneDetails { get; set; }
     }
 
     public sealed class BuildCodeMatches : BaseAsyncActivity<BuildCodeMatchesInput>
     {
+        
+        public InArgument<string> CodePrefix { get; set; }
+
         [RequiredArgument]
         public InArgument<bool> IsCustomerRoutesProcess { get; set; }
 
@@ -59,10 +66,12 @@ namespace TOne.WhS.Routing.BP.Activities
 
             BuildCodeMatchesContext codeMatchContext = new BuildCodeMatchesContext();
             codeMatchContext.SupplierZoneDetails = inputArgument.SupplierZoneDetails;
+            codeMatchContext.CodePrefix = inputArgument.CodePrefix;
 
             CodeMatchBuilder builder = new CodeMatchBuilder();
             builder.BuildCodeMatches(codeMatchContext, inputArgument.SaleCodes, inputArgument.SupplierCodes, codeMatch =>
             {
+                codeMatch.CodePrefix = inputArgument.CodePrefix;
                 if (inputArgument.IsCustomerRoutesProcess)
                     inputArgument.OutputQueueForCustomerRoutes.Enqueue(codeMatch);
 
@@ -87,6 +96,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             return new BuildCodeMatchesInput
             {
+                CodePrefix = this.CodePrefix.Get(context),
                 SaleCodes = this.SaleCodes.Get(context),
                 SupplierCodes = this.SupplierCodes.Get(context),
                 SupplierZoneDetails = this.SupplierZoneDetails.Get(context),

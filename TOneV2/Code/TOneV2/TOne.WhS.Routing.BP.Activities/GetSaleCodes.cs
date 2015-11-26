@@ -12,6 +12,8 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public class GetSaleCodesInput
     {
+        public int CodePrefixLength { get; set; }
+
         public string CodePrefix { get; set; }
 
         public DateTime? EffectiveOn { get; set; }
@@ -27,6 +29,9 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public sealed class GetSaleCodes : BaseAsyncActivity<GetSaleCodesInput, GetSaleCodesOutput>
     {
+        //[RequiredArgument]
+        public InArgument<int> CodePrefixLength { get; set; }
+
         [RequiredArgument]
         public InArgument<String> CodePrefix { get; set; }
 
@@ -43,7 +48,9 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override GetSaleCodesOutput DoWorkWithResult(GetSaleCodesInput inputArgument, AsyncActivityHandle handle)
         {
             SaleCodeManager manager = new SaleCodeManager();
-            IEnumerable<SaleCode> saleCodes = manager.GetSaleCodesByPrefix(inputArgument.CodePrefix, inputArgument.EffectiveOn, inputArgument.IsFuture);
+
+            bool getChildCodes = (inputArgument.CodePrefixLength == inputArgument.CodePrefix.Length);
+            IEnumerable<SaleCode> saleCodes = manager.GetSaleCodesByPrefix(inputArgument.CodePrefix, inputArgument.EffectiveOn, inputArgument.IsFuture, getChildCodes, true);
 
             return new GetSaleCodesOutput
             {
@@ -55,6 +62,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             return new GetSaleCodesInput
             {
+                CodePrefixLength = this.CodePrefixLength.Get(context),
                 CodePrefix = this.CodePrefix.Get(context),
                 EffectiveOn = this.EffectiveOn.Get(context),
                 IsFuture = this.IsFuture.Get(context)

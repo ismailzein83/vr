@@ -117,6 +117,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                     ) ON [PRIMARY]
 
                                                 CREATE TABLE [dbo].[CodeMatch](
+	                                                    [CodePrefix] [varchar](20) NOT NULL,
 	                                                    [Code] [varchar](20) NOT NULL,
 	                                                    [Content] [nvarchar](max) NOT NULL
                                                     ) ON [PRIMARY]
