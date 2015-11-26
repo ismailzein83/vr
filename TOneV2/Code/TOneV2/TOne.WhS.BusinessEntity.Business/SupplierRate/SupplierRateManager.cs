@@ -1,22 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
+using Vanrise.Entities;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierRateManager
     {
 
+        private SupplierRateDetail SupplierRateDetailMapper(SupplierRate supplierRate)
+        {
+            return new SupplierRateDetail()
+            {
+                Entity = supplierRate,
+                CurrencyName = this.GetCurrencyName(supplierRate.CurrencyId),
+                SupplierZoneName = this.GetSupplierZoneName(supplierRate.ZoneId),
+            };
+        }
+
+        private string GetCurrencyName(int? currencyId)
+        {
+            if (currencyId != null)
+            {
+                CurrencyManager manager = new CurrencyManager();
+                Currency currency = manager.GetCurrency(currencyId.Value);
+
+                if (currency != null)
+                    return currency.Name;
+            }
+
+            return "Currency Not Found";
+        }
+
+        private string GetSupplierZoneName(long zoneId)
+        {
+            SupplierZoneManager manager = new SupplierZoneManager();
+            SupplierZone suplierZone = manager.GetSupplierZone(zoneId);
+
+            if (suplierZone != null)
+                return suplierZone.Name;
+
+            return "Zone Not Found";
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<SupplierRateDetail> GetFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
         {
             ISupplierRateDataManager manager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetFilteredSupplierRates(input));
+            BigResult<SupplierRate> supplierRateResult = manager.GetFilteredSupplierRates(input);
+
+            BigResult<SupplierRateDetail> supplierRateDetailResult = new BigResult<SupplierRateDetail>()
+            {
+                ResultKey = supplierRateResult.ResultKey,
+                TotalCount = supplierRateResult.TotalCount,
+                Data = supplierRateResult.Data.MapRecords(SupplierRateDetailMapper)
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, supplierRateDetailResult);
         }
+
+
 
         public List<SupplierRate> GetSupplierRatesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
