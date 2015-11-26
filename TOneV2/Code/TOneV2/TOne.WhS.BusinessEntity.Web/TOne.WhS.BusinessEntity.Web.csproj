@@ -154,6 +154,7 @@
     <Compile Include="Controllers\SalePricingRuleController.cs" />
     <Compile Include="Controllers\SaleZoneController.cs" />
     <Compile Include="Controllers\SellingNumberPlanController.cs" />
+    <Compile Include="Controllers\SupplierCodeController.cs" />
     <Compile Include="Controllers\SupplierRateController.cs" />
     <Compile Include="Controllers\SupplierZoneController.cs" />
     <Compile Include="Controllers\ZoneServiceConfigController.cs" />

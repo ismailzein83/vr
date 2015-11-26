@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -33,5 +35,43 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
             return dataManager.GetDistinctCodeByPrefixes(prefixLength, effectiveOn, isFuture);
         }
+
+
+        private SupplierCodeDetail SupplierCodeDetailMapper(SupplierCode supplierCode)
+        {
+            return new SupplierCodeDetail()
+            {
+                Entity = supplierCode,
+                SupplierZoneName = this.GetSupplierZoneName(supplierCode.ZoneId),
+            };
+        }
+
+        private string GetSupplierZoneName(long zoneId)
+        {
+            SupplierZoneManager manager = new SupplierZoneManager();
+            SupplierZone suplierZone = manager.GetSupplierZone(zoneId);
+
+            if (suplierZone != null)
+                return suplierZone.Name;
+
+            return "Zone Not Found";
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<SupplierCodeDetail> GetFilteredSupplierCodes(Vanrise.Entities.DataRetrievalInput<SupplierCodeQuery> input)
+        {
+            ISupplierCodeDataManager manager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
+
+            BigResult<SupplierCode> supplierCodeResult = manager.GetFilteredSupplierCodes(input);
+
+            BigResult<SupplierCodeDetail> supplierCodeDetailResult = new BigResult<SupplierCodeDetail>()
+            {
+                ResultKey = supplierCodeResult.ResultKey,
+                TotalCount = supplierCodeResult.TotalCount,
+                Data = supplierCodeResult.Data.MapRecords(SupplierCodeDetailMapper)
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, supplierCodeDetailResult);
+        }
+
     }
 }

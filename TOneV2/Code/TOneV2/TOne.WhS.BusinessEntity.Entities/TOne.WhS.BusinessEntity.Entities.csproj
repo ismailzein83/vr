@@ -181,13 +181,15 @@
     <Compile Include="Carriers\Supplier\SupplierGroupSettings.cs" />
     <Compile Include="SaleZone\SaleZonesToSellQuery.cs" />
     <Compile Include="SaleZone\SaleZoneService.cs" />
+    <Compile Include="SupplierCode\SupplierCodeQuery.cs" />
+    <Compile Include="SupplierCode\SupplierCodeDetail.cs" />
     <Compile Include="SupplierRate\SupplierRateDetail.cs" />
     <Compile Include="SupplierRate\SupplierRateQuery.cs" />
     <Compile Include="SupplierZone\IRuleSupplierZoneCriteria.cs" />
     <Compile Include="SupplierZone\IRuleSupplierZoneTarget.cs" />
     <Compile Include="SupplierZone\SupplierZoneDetails.cs" />
     <Compile Include="SupplierZone\SupplierZoneQuery.cs" />
-    <Compile Include="SupplierZone\SupplierCode.cs" />
+    <Compile Include="SupplierCode\SupplierCode.cs" />
     <Compile Include="SupplierZone\SupplierPriceList.cs" />
     <Compile Include="SupplierRate\SupplierRate.cs" />
     <Compile Include="SupplierZone\SupplierZone.cs" />

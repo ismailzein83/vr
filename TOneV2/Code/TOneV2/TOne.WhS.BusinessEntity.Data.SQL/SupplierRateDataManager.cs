@@ -81,59 +81,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.SupplierId, input.Query.ZoneId, input.Query.EffectiveOn), (cmd) => { });
+                ExecuteNonQuerySP("[TOneWhS_BE].[sp_SupplierRate_CreateTempByFiltered]", tempTableName, input.Query.SupplierId, input.Query.ZoneId, input.Query.EffectiveOn);
             };
 
             return RetrieveData(input, createTempTableAction, SupplierRateMapper, _columnMapper);
         }
 
-        private string CreateTempTableIfNotExists(string tempTableName, int supplierId, int? zoneId, DateTime? effectiveDate)
-        {
-            StringBuilder query = new StringBuilder(@"
-                IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
-                BEGIN
-
-                SELECT  rate.[ID]
-                      , rate.[PriceListID]
-                      , rate.[ZoneID]
-	                  , (case when   priceList.[CurrencyID] is null then rate.[CurrencyID] else  priceList.[CurrencyID]    end) as CurrencyID
-                      , rate.[NormalRate]
-                      , rate.[OtherRates]
-                      , rate.[BED]
-                      , rate.[EED]
-                      , rate.[timestamp]
-                  into #TEMP_TABLE_NAME#
-                  FROM [TOneWhS_BE].[SupplierRate] rate inner join [TOneWhS_BE].[SupplierPriceList] priceList on rate.PriceListID=priceList.ID
-		
-                #WHERE_CLAUSE#
-		
-                END
-            ");
-
-            query.Replace("#TEMP_TABLE_NAME#", tempTableName);
-            query.Replace("#WHERE_CLAUSE#", GetWhereClause(supplierId, zoneId, effectiveDate));
-
-            return query.ToString();
-        }
-
-        private string GetWhereClause(int supplierId, int? zoneId, DateTime? effectiveDate)
-        {
-            StringBuilder whereClause = new StringBuilder();
-
-            whereClause.Append("WHERE (priceList.SupplierID =" + supplierId + ")");
-
-            if (zoneId.HasValue)
-                whereClause.Append(" AND rate.ZoneID = " + zoneId + "");
-
-
-            if (effectiveDate.HasValue)
-            {
-                whereClause.Append(" AND rate.BED <= '" + effectiveDate.Value + "'");
-                whereClause.Append(" AND (rate.EED is null or rate.EED > '" + effectiveDate.Value + "') ");
-            }
-
-            return whereClause.ToString();
-        }
+        
 
 
     }

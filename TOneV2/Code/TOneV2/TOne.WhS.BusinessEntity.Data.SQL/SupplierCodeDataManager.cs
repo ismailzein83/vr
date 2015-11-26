@@ -8,15 +8,25 @@ using System.Threading.Tasks;
 using TOne.Data.SQL;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SupplierCodeDataManager : BaseTOneDataManager, ISupplierCodeDataManager
     {
+
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+
         public SupplierCodeDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
           
+        }
+
+        static SupplierCodeDataManager()
+        {
+            _columnMapper.Add("Entity.SupplierCodeId", "ID");
+            _columnMapper.Add("SupplierZoneName", "ZoneID");
         }
 
         public List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate)
@@ -65,5 +75,18 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetDistinctCodePrefixes", CodePrefixMapper, prefixLength, effectiveOn, isFuture);
         }
+
+        public Vanrise.Entities.BigResult<SupplierCode> GetFilteredSupplierCodes(Vanrise.Entities.DataRetrievalInput<SupplierCodeQuery> input)
+        {
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("[TOneWhS_BE].[sp_SupplierCode_CreateTempByFiltered]", tempTableName, input.Query.Code, input.Query.ZoneId, input.Query.EffectiveOn);
+            };
+
+            return RetrieveData(input, createTempTableAction, SupplierCodeMapper, _columnMapper);
+        }
+
+
+
     }
 }
