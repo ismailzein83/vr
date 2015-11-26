@@ -1,6 +1,6 @@
 ﻿
 app.service('WhS_BE_PurchasePricingRuleService', ['WhS_BE_PurchasePricingRuleAPIService', 'WhS_Be_PricingTypeEnum', 'VRModalService', 'VRNotificationService', 'UtilsService',
-    function (WhS_BE_PurchasePricingRuleAPIService, VRModalService, VRNotificationService, UtilsService) {
+    function (WhS_BE_PurchasePricingRuleAPIService,WhS_Be_PricingTypeEnum, VRModalService, VRNotificationService, UtilsService) {
 
         function addPurchasePricingRule(onPurchasePricingRuleAdded, type) {
             var settings = {};
