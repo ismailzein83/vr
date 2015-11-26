@@ -6,7 +6,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
             restrict: 'E',
             scope: {
                 onReady: '=',
-                onSelectorReady: '=',
                 ismultipleselection: "@",
                 onselectionchanged: '=',
                 isrequired: "@",
@@ -64,10 +63,16 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
         function saleZoneCtor(ctrl, $scope, attrs) {
 
             var filter;
+            var selectorApi;
             var sellingNumberPlanId;
             var isDirectiveLoaded = false;
 
             function initializeController() {
+
+                ctrl.onSelectorReady = function(api)
+                {
+                    selectorApi = api;
+                }
 
                 ctrl.search = function (nameFilter) {
 
@@ -89,6 +94,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
                 api.load = function (payload) {
                     ctrl.selectedvalues = [];
+                    selectorApi.clearDataSource();
                     var selectedIds;
                     if (payload != undefined) {
                         sellingNumberPlanId = payload.sellingNumberPlanId;

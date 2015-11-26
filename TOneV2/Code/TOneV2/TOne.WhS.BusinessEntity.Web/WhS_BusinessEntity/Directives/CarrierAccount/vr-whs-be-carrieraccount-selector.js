@@ -11,7 +11,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             ismultipleselection: "@",
             hideselectedvaluessection: '@',
             onselectionchanged: '=',
-            isrequired: '@',
+            isrequired: '=',
             isdisabled: "=",
             selectedvalues: "=",
             hideremoveicon: "@",
@@ -26,7 +26,6 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                 ctrl.selectedvalues = [];
 
             ctrl.datasource = [];
-
             var ctor = new carriersCtor(ctrl, $scope, WhS_BE_CarrierAccountAPIService, $attrs);
             ctor.initializeController();
 
@@ -57,9 +56,10 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             label = (attrs.getcustomers != undefined && attrs.getsuppliers != undefined) ? "Carrier" : label;
         }
 
-        var required = "";
-        if (attrs.isrequired != undefined)
-            required = 'isrequired="' + attrs.isrequired + '"';
+        //var required = "";
+        //console.log(attrs.isrequired);
+        //if (attrs.isrequired != undefined)
+        //    required = 'isrequired="' + attrs.isrequired + '"';
 
         var hideselectedvaluessection = "";
         if (attrs.hideselectedvaluessection != undefined)
@@ -77,8 +77,8 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         if (attrs.ismultipleselection != undefined)
             ismultipleselection = "ismultipleselection";
 
-        return '<vr-select datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
-            + label + '" ' + required + ' ' + hideselectedvaluessection + ' entityname="' + label + '" ' + hideremoveicon + ' ' + ismultipleselection + '></vr-select>'
+        return '<vr-select isrequired="ctrl.isrequired" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
+            + label + '" ' + hideselectedvaluessection + ' entityname="' + label + '" ' + hideremoveicon + ' ' + ismultipleselection + '></vr-select>'
     }
 
     function carriersCtor(ctrl, $scope, WhS_BE_CarrierAccountAPIService, attrs) {

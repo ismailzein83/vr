@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int OwnerType { get; set; }
 
         public int OwnerId { get; set; }
-        public int SellingNumberPlanId { get; set; }
+        public int? SellingNumberPlanId { get; set; }
 
     }
 }

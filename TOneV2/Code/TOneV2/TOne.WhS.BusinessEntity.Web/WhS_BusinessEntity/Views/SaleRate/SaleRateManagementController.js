@@ -38,17 +38,13 @@
                 saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
             }
-            $scope.onSelectorReady = function (api) {
-                saleSelectorAPI = api;
-               
-            }
-            $scope.onSellingNumberPlanSelectItem = function (selectedItem) {
-                    saleSelectorAPI.clearDataSource();
+           
+            $scope.onSellingNumberPlanSelectItem = function (selectedItem) {                   
                     if (selectedItem != undefined) {
                         var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
 
                         var payload = {
-                            sellingNumberPlanId: (selectedItem != undefined) ? selectedItem.SellingNumberPlanId : 0,
+                            sellingNumberPlanId: selectedItem.SellingNumberPlanId 
                         }
 
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);

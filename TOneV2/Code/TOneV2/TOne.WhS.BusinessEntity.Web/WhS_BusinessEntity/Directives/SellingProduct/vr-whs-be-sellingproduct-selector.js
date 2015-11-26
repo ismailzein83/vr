@@ -9,7 +9,7 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
                 ismultipleselection: "@",
                 isdisabled:"=",
                 onselectionchanged: '=',
-                isrequired: "@",
+                isrequired: "=",
                 selectedvalues:'=',
                 hideremoveicon: "@"
             },
@@ -54,13 +54,10 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
                 hideremoveicon = "hideremoveicon";
             }
 
-            var required = "";
-            if (attrs.isrequired != undefined)
-                required = 'isrequired="' + attrs.isrequired + '"';
-
+           
             return '<div  vr-loader="isLoadingDirective">'
-                + '<vr-select ' + multipleselection + ' ' + hideremoveicon + ' datatextfield="Name" datavaluefield="SellingProductId" '
-            + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged"  vr-disabled="ctrl.isdisabled"></vr-select>'
+                + '<vr-select  isrequired="ctrl.isrequired" ' + multipleselection + ' ' + hideremoveicon + ' datatextfield="Name" datavaluefield="SellingProductId" '
+            + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged"  vr-disabled="ctrl.isdisabled"></vr-select>'
                 + '</div>';
         }
 

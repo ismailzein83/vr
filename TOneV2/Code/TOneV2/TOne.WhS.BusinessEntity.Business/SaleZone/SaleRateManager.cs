@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -19,28 +21,20 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
+      
         public Vanrise.Entities.IDataRetrievalResult<SaleRateDetail> GetFilteredSaleRates(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
         {
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
             Vanrise.Entities.BigResult<SaleRate> saleRates = dataManager.GetSaleRateFilteredFromTemp(input);
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, SaleRateDetailBigResultMapper(saleRates));
-        }
-
-        public Vanrise.Entities.BigResult<SaleRateDetail> SaleRateDetailBigResultMapper(Vanrise.Entities.BigResult<SaleRate> saleRates)
-        {
-            Vanrise.Entities.BigResult<SaleRateDetail> finalResult = new Vanrise.Entities.BigResult<SaleRateDetail>();
-            List<SaleRateDetail> l = new List<SaleRateDetail>();
-            foreach (var a in saleRates.Data)
+            BigResult<SaleRateDetail> customerRouteDetailResult = new BigResult<SaleRateDetail>()
             {
+                ResultKey = saleRates.ResultKey,
+                TotalCount = saleRates.TotalCount,
+                Data = saleRates.Data.MapRecords(SaleRateDetailMapper)
+            };
 
-                l.Add(SaleRateDetailMapper(a));
-            }
-            finalResult.Data = l;
-            finalResult.ResultKey = saleRates.ResultKey;
-            finalResult.TotalCount = saleRates.TotalCount;
-            return finalResult;
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult);
         }
-
         private SaleRateDetail SaleRateDetailMapper(SaleRate saleRate){
             SaleZoneManager sz = new SaleZoneManager();
             SaleRateDetail saleRateDetail = new SaleRateDetail();
