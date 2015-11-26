@@ -43,11 +43,15 @@ app.directive('vrIcon', [function ($compile) {
 
     };
 
-    function getTemplate(ctrl,attr) {
-        
+    function getTemplate(ctrl, attr) {
+
+        var text = "";
+        if (ctrl.text != undefined)
+            text = ctrl.text;
+
         var template = ''
         if (ctrl.icon.isimage)
-            template += '<div style="text-align: left;"><img style="width:12px;height:12px" title="' + ctrl.icontype + '"  src="' + ctrl.icon.value + '"  /><span>'+ctrl.text+'</span></div>'
+            template += '<div style="text-align: left;"><img style="width:12px;height:12px" title="' + ctrl.icontype + '"  src="' + ctrl.icon.value + '"  /><span>' + text + '</span></div>'
         else
             template += '<div style="text-align: left;"><span class="glyphicon ' + ctrl.icon.value + '"  /></div>'
 
