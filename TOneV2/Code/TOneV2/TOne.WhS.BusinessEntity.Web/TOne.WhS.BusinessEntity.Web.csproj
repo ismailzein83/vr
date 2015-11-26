@@ -254,6 +254,8 @@
     <Content Include="WhS_BusinessEntity\Directives\SellingProduct\vr-whs-be-sellingproduct-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\vr-whs-be-salezonegroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierGroup\vr-whs-be-suppliergroup-selective.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SupplierCode\Templates\SupplierCodeGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SupplierCode\vr-whs-be-suppliercode-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierRate\Templates\SupplierRateGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierRate\vr-whs-be-supplierrate-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\Templates\SupplierZoneGridTemplate.html" />
@@ -264,6 +266,7 @@
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-selector.js" />
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleRateAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierCodeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\PurchasePricingRuleService.js" />
     <Content Include="WhS_BusinessEntity\Services\RateTypeService.js" />
@@ -322,6 +325,8 @@
     <Content Include="WhS_BusinessEntity\Views\SellingNumberPlan\SellingNumberPlanEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SellingNumberPlan\SellingNumberPlanManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SellingNumberPlan\SellingNumberPlanManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SupplierCode\SupplierCodeManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\SupplierCode\SupplierCodeManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SupplierRate\SupplierRateManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SupplierRate\SupplierRateManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SupplierZone\SupplierZoneManagement.html" />

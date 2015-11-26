@@ -1,0 +1,12 @@
+﻿<vr-datagrid datasource="suppliercodes"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.SupplierCodeId">
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.SupplierCodeId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Zone'" field="'SupplierZoneName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Code'" field="'Entity.Code'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Begin Effective Date'" field="'Entity.BeginEffectiveDate'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'End Effective Date'" field="'Entity.EndEffectiveDate'" type="'Date'"></vr-datagridcolumn>
+</vr-datagrid>

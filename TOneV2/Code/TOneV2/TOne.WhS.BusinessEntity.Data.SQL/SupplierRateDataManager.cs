@@ -26,6 +26,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             _columnMapper.Add("CurrencyName", "CurrencyID");
             _columnMapper.Add("SupplierZoneName", "ZoneID");
             _columnMapper.Add("Entity.SupplierRateId", "ID");
+            _columnMapper.Add("Entity.BeginEffectiveDate", "BED");
+            _columnMapper.Add("Entity.EndEffectiveDate", "EED");
+            _columnMapper.Add("Entity.NormalRate", "NormalRate");
         }
 
         public List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate)
