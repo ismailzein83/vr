@@ -203,5 +203,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
+    <None Include="CLITester.PostDeployment.sql" />
   </ItemGroup>
 </Project>
