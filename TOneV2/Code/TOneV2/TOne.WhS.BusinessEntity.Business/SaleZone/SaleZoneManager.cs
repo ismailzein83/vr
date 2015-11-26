@@ -13,13 +13,13 @@ namespace TOne.WhS.BusinessEntity.Business
     public class SaleZoneManager
     {
 
-        public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZonesQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZoneQuery> input)
         {
             var allSaleZones = GetAllSaleZones();
             Func<SaleZone, bool> filterExpression = (prod) =>
                      (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     && (input.Query.Countries == null || input.Query.Countries.Contains(prod.CountryId))
-                  && (input.Query.SellingNumber.Equals(prod.SellingNumberPlanId))
+                  && (input.Query.SellingNumberId.Equals(prod.SellingNumberPlanId))
                   && ((!input.Query.EffectiveOn.HasValue || (prod.BeginEffectiveDate <= input.Query.EffectiveOn)))
                   && ((!input.Query.EffectiveOn.HasValue || !prod.EndEffectiveDate.HasValue || (prod.EndEffectiveDate > input.Query.EffectiveOn)));
 
