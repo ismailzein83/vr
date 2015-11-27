@@ -36,15 +36,13 @@ app.directive('vrWhsRoutingRouterulesettingsSelective', ['UtilsService', 'VRUIUt
             var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-                $scope.onCarrierAccountDirectiveReady = function (api) {
+                ctrl.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountDirectiveAPI = api;
                     carrierAccountReadyPromiseDeferred.resolve();
                 }
 
-                $scope.removeSupplier = function ($event, supplier) {
-                    $event.preventDefault();
-                    $event.stopPropagation();
-                    var index = UtilsService.getItemIndexByVal(ctrl.selectedSuppliers, supplier.CarrierAccountId, 'CarrierAccountId');
+                ctrl.removeFilter = function (dataItem) {
+                    var index = UtilsService.getItemIndexByVal(ctrl.selectedSuppliers, dataItem.CarrierAccountId, 'CarrierAccountId');
                     ctrl.selectedSuppliers.splice(index, 1);
                 };
 

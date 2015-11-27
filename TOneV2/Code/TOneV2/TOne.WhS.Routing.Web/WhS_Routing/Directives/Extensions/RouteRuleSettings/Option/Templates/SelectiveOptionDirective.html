@@ -1,19 +1,18 @@
 ﻿<vr-row removeline>
     <vr-columns width="1/3row">
-        <vr-whs-be-carrieraccount-selector ismultipleselection hideselectedvaluessection isrequired="true" selectedvalues="ctrl.selectedSuppliers" getsuppliers on-ready="onCarrierAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
+        <vr-whs-be-carrieraccount-selector ismultipleselection hideselectedvaluessection isrequired="true" selectedvalues="ctrl.selectedSuppliers" getsuppliers on-ready="ctrl.onCarrierAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
     </vr-columns>
     <vr-columns width="2/3row">
         <div>
-            <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="ctrl.selectedSuppliers.length > 0">
-                <li ng-repeat="supplier in ctrl.selectedSuppliers" class="list-group-item list-custom" style="margin: 1px; font-size: 12px;">
-                    <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                    <div style="display: inline-block; max-width: 200px;">{{supplier.Name}}</div>
-                    <i class="glyphicon glyphicon-remove hand-cursor" style="float: right; padding: 5px; cursor: default" ng-click="removeSupplier($event,supplier)"></i>
-                    <!--<div style="width: 100px; float: left; margin-right: 60px; text-align: center;">
-                <vr-numeric value="supplier.percentage" unit="%" isrequired></vr-numeric>
-            </div>-->
-                </li>
-            </ul>
+
+            <vr-datagrid datasource="ctrl.selectedSuppliers"
+                         on-ready="ctrl.onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu>
+                <vr-datagridcolumn headertext="'Suppliers'">
+                    {{dataItem.Name}}
+                </vr-datagridcolumn>
+            </vr-datagrid>
+
+         
         </div>
     </vr-columns>
 </vr-row>
