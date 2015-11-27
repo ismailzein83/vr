@@ -1,0 +1,24 @@
+﻿<vr-panel ng-controller="WhS_BE_SaleCodeManagementController" vr-loader="isGettingData">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="date" label="Effective On" value="effectiveOn"></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+
+                <!--<vr-whs-be-salerate-grid on-ready="onGridReady"></vr-whs-be-salerate-grid>-->
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>

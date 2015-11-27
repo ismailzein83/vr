@@ -116,10 +116,12 @@
     <Compile Include="SaleRate\SaleRateDetail.cs" />
     <Compile Include="SaleRate\SaleRateQuery.cs" />
     <Compile Include="SaleZone\CallSale.cs" />
+    <Compile Include="SaleZone\SaleCodeDetail.cs" />
     <Compile Include="SaleZone\SaleEntityZoneRate.cs" />
     <Compile Include="SaleZone\SaleZoneFilterSettings.cs" />
     <Compile Include="SaleZone\SaleZoneInfoFilter.cs" />
-    <Compile Include="SaleZone\SaleZonesQuery.cs" />
+    <Compile Include="SaleZone\SaleCodeQuery.cs" />
+    <Compile Include="SaleZone\SaleZoneQuery.cs" />
     <Compile Include="SaleZone\SellingNumberPlanDetail.cs" />
     <Compile Include="SaleZone\SellingNumberPlanQuery.cs" />
     <Compile Include="SellingProduct\CustomerSellingProductDetail.cs" />

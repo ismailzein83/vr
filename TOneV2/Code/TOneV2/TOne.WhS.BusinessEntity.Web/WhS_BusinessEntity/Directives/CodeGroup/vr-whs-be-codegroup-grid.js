@@ -79,7 +79,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
                 gridAPI.itemUpdated(codeGroupObj);
             }
 
-            WhS_BE_CodeGroupService.editCodeGroup(codeGroupObj.Entity, onCodeGroupUpdated, disabCountry);
+            WhS_BE_CodeGroupService.editCodeGroup(codeGroupObj.Entity.CodeGroupId, onCodeGroupUpdated, disabCountry);
         }
         
     }

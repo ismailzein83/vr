@@ -71,7 +71,7 @@
         function setFilterObject() {
             filter = {
                 Name: $scope.name,
-                SellingNumber: sellingDirectiveApi.getSelectedIds(),
+                SellingNumberId: sellingDirectiveApi.getSelectedIds(),
                 EffectiveOn: $scope.effectiveOn,
                 Countries: countryDirectiveApi.getSelectedIds()
             };

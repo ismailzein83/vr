@@ -17,6 +17,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
           
         }
+
+        public IEnumerable<SaleCode> GetAllSaleCodes()
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetAll", SaleCodeMapper);
+        }
+
         public List<SaleCode> GetSaleCodesByZoneID(long zoneID,DateTime effectiveDate)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_ByZondId", SaleCodeMapper, zoneID, effectiveDate);
@@ -52,6 +58,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetDistinctCodePrefixes", CodePrefixMapper, prefixLength, effectiveOn, isFuture);
+        }
+        public bool AreZonesUpdated(ref object lastReceivedDataInfo)
+        {
+            return IsDataUpdated("TOneWhS_BE.SaleCode", ref lastReceivedDataInfo);
         }
     }
 }
