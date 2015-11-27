@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', 'UtilsService','VRUIUtilsService',
+app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', 'UtilsService', 'VRUIUtilsService',
     function (WhS_BE_SupplierZoneAPIService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -11,17 +11,17 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                 isrequired: "@",
                 supplierid: "=",
                 selectedvalues: '=',
-                hidetitle:'@'
+                hidetitle: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
                 ctrl.selectedvalues;
-                if ($attrs.ismultipleselection!=undefined)
-                    ctrl.selectedvalues=[];
+                if ($attrs.ismultipleselection != undefined)
+                    ctrl.selectedvalues = [];
                 var ctor = new supplierZoneCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
-               
+
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -40,11 +40,10 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
 
 
         function getBeSupplierZoneTemplate(attrs) {
-           
+
             var multipleselection = "";
             var label = 'label="Supplier Zone"';
-            if (attrs.ismultipleselection != undefined)
-            {
+            if (attrs.ismultipleselection != undefined) {
                 multipleselection = "ismultipleselection";
                 label = 'label="Supplier Zones"';
             }
@@ -56,8 +55,8 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                 required = "isrequired";
 
             return '<div>'
-               +  '<vr-select ' + multipleselection + ' on-ready="ctrl.SelectorReady"  datatextfield="Name" datavaluefield="SupplierZoneId"'
-            + required + ' datasource="ctrl.searchSupplierZones" selectedvalues="ctrl.selectedvalues"'  +  label + 'onselectionchanged="ctrl.onselectionchanged" entityName="Supplier Zone"></vr-select>'
+               + '<vr-select ' + multipleselection + ' on-ready="ctrl.SelectorReady"  datatextfield="Name" datavaluefield="SupplierZoneId"'
+            + required + ' datasource="ctrl.searchSupplierZones" selectedvalues="ctrl.selectedvalues"' + label + 'onselectionchanged="ctrl.onselectionchanged" entityName="Supplier Zone"></vr-select>'
             + '</div>'
         }
 
@@ -79,27 +78,28 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
             }
             function defineAPI() {
                 var api = {};
-                
+
                 api.load = function (payload) {
-                    selectorApi.clearDataSource();
+                    if (selectorApi != undefined)
+                        selectorApi.clearDataSource();
                     var selectedIds;
                     if (payload != undefined) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
                     }
                     if (selectedIds != undefined) {
-                        
+
                         return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfoByIds(UtilsService.serializetoJson(selectedIds)).then(function (response) {
-                        angular.forEach(response, function (item) {
-                            ctrl.datasource.push(item);
-                            
+                            angular.forEach(response, function (item) {
+                                ctrl.datasource.push(item);
+
+                            });
+
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'SupplierZoneId', $attrs, ctrl);
+
                         });
-                        
-                        VRUIUtilsService.setSelectedValues(selectedIds, 'SupplierZoneId', $attrs, ctrl);
-                       
-                    });
-                  }
-                   
+                    }
+
                 }
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('SupplierZoneId', $attrs, ctrl);
