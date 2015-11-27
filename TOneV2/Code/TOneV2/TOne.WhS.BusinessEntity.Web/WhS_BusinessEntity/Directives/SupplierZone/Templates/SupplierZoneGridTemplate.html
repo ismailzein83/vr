@@ -10,4 +10,9 @@
     <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Begin Effective Date'" field="'Entity.BeginEffectiveDate'" type="'Date'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'End Effective Date'" field="'Entity.EndEffectiveDate'" type="'Date'"></vr-datagridcolumn>
+
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+
 </vr-datagrid>

@@ -25,11 +25,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         static SupplierCodeDataManager()
         {
-            _columnMapper.Add("Entity.SupplierCodeId", "ID");
+            _columnMapper.Add("SupplierCodeId", "ID");
             _columnMapper.Add("SupplierZoneName", "ZoneID");
-            _columnMapper.Add("Entity.Code", "Code");
-            _columnMapper.Add("Entity.BeginEffectiveDate", "BED");
-            _columnMapper.Add("Entity.EndEffectiveDate", "EED");
+            _columnMapper.Add("BeginEffectiveDate", "BED");
+            _columnMapper.Add("EndEffectiveDate", "EED");
         }
 
         public List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate)
@@ -87,6 +86,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 ExecuteNonQuerySP("[TOneWhS_BE].[sp_SupplierCode_CreateTempByFiltered]", tempTableName, input.Query.Code, input.Query.ZoneId, input.Query.EffectiveOn);
             };
+
+            if (input.SortByColumnName != null)
+                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
 
             return RetrieveData(input, createTempTableAction, SupplierCodeMapper, _columnMapper);
         }

@@ -25,10 +25,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             _columnMapper.Add("CurrencyName", "CurrencyID");
             _columnMapper.Add("SupplierZoneName", "ZoneID");
-            _columnMapper.Add("Entity.SupplierRateId", "ID");
-            _columnMapper.Add("Entity.BeginEffectiveDate", "BED");
-            _columnMapper.Add("Entity.EndEffectiveDate", "EED");
-            _columnMapper.Add("Entity.NormalRate", "NormalRate");
+            _columnMapper.Add("SupplierRateId", "ID");
+            _columnMapper.Add("BeginEffectiveDate", "BED");
+            _columnMapper.Add("EndEffectiveDate", "EED");
         }
 
         public List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate)
@@ -86,6 +85,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 ExecuteNonQuerySP("[TOneWhS_BE].[sp_SupplierRate_CreateTempByFiltered]", tempTableName, input.Query.SupplierId, input.Query.ZoneId, input.Query.EffectiveOn);
             };
+
+            if (input.SortByColumnName != null)
+                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
 
             return RetrieveData(input, createTempTableAction, SupplierRateMapper, _columnMapper);
         }

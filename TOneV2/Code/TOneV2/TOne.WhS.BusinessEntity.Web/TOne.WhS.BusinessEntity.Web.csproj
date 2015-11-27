@@ -268,6 +268,8 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierCodeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierRateAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\SupplierRateService.js" />
+    <Content Include="WhS_BusinessEntity\Services\SupplierZoneService.js" />
     <Content Include="WhS_BusinessEntity\Services\PurchasePricingRuleService.js" />
     <Content Include="WhS_BusinessEntity\Services\RateTypeService.js" />
     <Content Include="WhS_BusinessEntity\Services\SalePricingRuleService.js" />
