@@ -1,5 +1,5 @@
 ﻿
-app.service('WhS_BE_SellingNumberPlanService', ['VRModalService', 'UtilsService',
+app.service('WhS_BE_SellingNumberPlanService', ['VRModalService',
     function (VRModalService) {
         
         var drillDownDefinitions = [];
