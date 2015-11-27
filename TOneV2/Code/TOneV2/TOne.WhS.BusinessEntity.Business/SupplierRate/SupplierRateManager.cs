@@ -13,10 +13,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private SupplierRateDetail SupplierRateDetailMapper(SupplierRate supplierRate)
         {
+            SupplierPriceListManager manager = new SupplierPriceListManager();
+            SupplierPriceList priceList = manager.GetPriceList(supplierRate.PriceListId);
+
+            string currencyName = (priceList.CurrencyId.HasValue ? this.GetCurrencyName(priceList.CurrencyId) : (supplierRate.CurrencyId.HasValue ? this.GetCurrencyName(supplierRate.CurrencyId) : string.Empty));
+
             return new SupplierRateDetail()
             {
                 Entity = supplierRate,
-                CurrencyName = this.GetCurrencyName(supplierRate.CurrencyId),
+                CurrencyName = currencyName,
                 SupplierZoneName = this.GetSupplierZoneName(supplierRate.ZoneId),
             };
         }
@@ -62,8 +67,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, supplierRateDetailResult);
         }
 
-
-
         public List<SupplierRate> GetSupplierRatesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
@@ -84,7 +87,7 @@ namespace TOne.WhS.BusinessEntity.Business
             SupplierZoneRate supplierZoneRate = supplierZoneRateLocator.GetSupplierZoneRate(supplierId, supplierZoneId);
             if (supplierZoneRate != null)
             {
-                int currencyId = supplierZoneRate.Rate.CurrencyId.HasValue ? supplierZoneRate.Rate.CurrencyId.Value : supplierZoneRate.PriceList.CurrencyId;
+                int currencyId = supplierZoneRate.Rate.CurrencyId.HasValue ? supplierZoneRate.Rate.CurrencyId.Value : supplierZoneRate.PriceList.CurrencyId.Value;
                 PurchasePricingRuleManager purchasePricingRuleManager = new PurchasePricingRuleManager();
                 PurchasePricingRulesInput purchasePricingRulesInput = new PurchasePricingRulesInput
                 {

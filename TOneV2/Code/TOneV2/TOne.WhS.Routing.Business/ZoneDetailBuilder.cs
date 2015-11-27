@@ -92,7 +92,7 @@ namespace TOne.WhS.Routing.Business
                 foreach (var supplierRate in supplierRates)
                 {
                     var priceList = supplierPriceListManager.GetPriceList(supplierRate.PriceListId);
-                    int currencyId = supplierRate.CurrencyId.HasValue ? supplierRate.CurrencyId.Value : priceList.CurrencyId;
+                    int currencyId = supplierRate.CurrencyId.HasValue ? supplierRate.CurrencyId.Value : priceList.CurrencyId.Value;
                     PurchasePricingRulesInput purchasePricingRulesInput = new PurchasePricingRulesInput
                     {
                         SupplierId = priceList.SupplierId,
