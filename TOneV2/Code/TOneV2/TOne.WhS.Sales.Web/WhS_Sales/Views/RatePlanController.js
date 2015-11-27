@@ -75,7 +75,6 @@
             $scope.selectedZoneLetterIndex = 0;
 
             $scope.onZoneLetterSelectionChanged = function () {
-                console.log($scope.selectedZoneLetterIndex);
                 return saveChanges(true);
             };
 
@@ -264,8 +263,8 @@
         }
 
         function clearRatePlan() {
-            $scope.zoneLetters= undefined;
-            $scope.selectedZoneLetterIndex =undefined;
+            $scope.zoneLetters = [];
+            $scope.selectedZoneLetterIndex = 0;
             showRatePlan(false);
         }
 

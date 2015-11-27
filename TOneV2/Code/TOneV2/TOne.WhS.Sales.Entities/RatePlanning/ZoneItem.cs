@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
@@ -11,6 +12,8 @@ namespace TOne.WhS.Sales.Entities
         public long ZoneId { get; set; }
 
         public string ZoneName { get; set; }
+
+        public IEnumerable<RPRouteOptionDetail> RouteOptions { get; set; }
 
         public long? CurrentRateId { get; set; }
 

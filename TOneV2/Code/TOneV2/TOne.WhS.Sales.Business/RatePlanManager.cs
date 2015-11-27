@@ -4,6 +4,8 @@ using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Routing.Business;
+using TOne.WhS.Routing.Entities;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
@@ -79,6 +81,8 @@ namespace TOne.WhS.Sales.Business
                         
                         foreach (ZoneItem zoneItem in zoneItems)
                             SetZoneEffectiveRoutingProduct(zoneItem);
+
+                        SetRouteOptionsForZoneItems(zoneItems);
                     }
                 }
             }
@@ -186,6 +190,23 @@ namespace TOne.WhS.Sales.Business
             {
                 zoneItem.EffectiveRoutingProductId = (int)zoneItem.CurrentRoutingProductId;
                 zoneItem.EffectiveRoutingProductName = zoneItem.CurrentRoutingProductName;
+            }
+        }
+
+        private void SetRouteOptionsForZoneItems(IEnumerable<ZoneItem> zoneItems)
+        {
+            IEnumerable<RPZone> rpZones = zoneItems.MapRecords(item => new RPZone() { RoutingProductId = item.EffectiveRoutingProductId, SaleZoneId = item.ZoneId });
+            IEnumerable<RPRoute> rpRoutes = new RPRouteManager().GetRPRoutes(rpZones);
+
+            foreach (ZoneItem zoneItem in zoneItems)
+            {
+                RPRoute rpRoute = rpRoutes.FindRecord(item => item.SaleZoneId == zoneItem.ZoneId);
+                if (rpRoute != null)
+                {
+                    IEnumerable<RPRouteOption> routeOptions = new List<RPRouteOption>();
+                    rpRoute.RPOptionsByPolicy.TryGetValue(1, out routeOptions);
+                    zoneItem.RouteOptions = routeOptions.MapRecords(item => new RPRouteOptionDetail() { Entity = new RPRouteOption() { SupplierId = item.SupplierId, SupplierRate = item.SupplierRate, Percentage = item.Percentage }, SupplierName = new CarrierAccountManager().GetCarrierAccount(item.SupplierId).Name });
+                }
             }
         }
 

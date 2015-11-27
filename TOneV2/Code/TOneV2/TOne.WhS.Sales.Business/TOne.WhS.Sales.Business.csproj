@@ -65,6 +65,14 @@
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.Business\TOne.WhS.Routing.Business.csproj">
+      <Project>{923447e8-0d0b-4296-976a-8f486a8694d3}</Project>
+      <Name>TOne.WhS.Routing.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.Entities\TOne.WhS.Routing.Entities.csproj">
+      <Project>{b645c1d2-c038-4890-85aa-588fa3c3fc7a}</Project>
+      <Name>TOne.WhS.Routing.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Sales.Data\TOne.WhS.Sales.Data.csproj">
       <Project>{49d742c7-dbc2-4ff5-9197-0c504076a2fe}</Project>
       <Name>TOne.WhS.Sales.Data</Name>
