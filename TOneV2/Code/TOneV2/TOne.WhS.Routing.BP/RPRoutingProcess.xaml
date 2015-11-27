@@ -81,7 +81,13 @@
         </Variable.Default>
       </Variable>
     </Sequence.Variables>
-    <twrba1:DropOldRoutingDatabases sap2010:WorkflowViewState.IdRef="DropOldRoutingDatabases_1" />
+    <twrba1:DropOldRoutingDatabases sap2010:WorkflowViewState.IdRef="DropOldRoutingDatabases_1">
+      <twrba1:DropOldRoutingDatabases.ProcessType>
+        <InArgument x:TypeArguments="twre:RoutingProcessType">
+          <mca:CSharpValue x:TypeArguments="twre:RoutingProcessType">Input.RoutingProcessType</mca:CSharpValue>
+        </InArgument>
+      </twrba1:DropOldRoutingDatabases.ProcessType>
+    </twrba1:DropOldRoutingDatabases>
     <twrba1:CreateRoutingDatabase sap2010:WorkflowViewState.IdRef="CreateRoutingDatabase_1">
       <twrba1:CreateRoutingDatabase.DatabaseId>
         <OutArgument x:TypeArguments="x:Int32">
@@ -93,6 +99,11 @@
           <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveOn</mca:CSharpValue>
         </InArgument>
       </twrba1:CreateRoutingDatabase.EffectiveTime>
+      <twrba1:CreateRoutingDatabase.ProcessType>
+        <InArgument x:TypeArguments="twre:RoutingProcessType">
+          <mca:CSharpValue x:TypeArguments="twre:RoutingProcessType">Input.RoutingProcessType</mca:CSharpValue>
+        </InArgument>
+      </twrba1:CreateRoutingDatabase.ProcessType>
       <twrba1:CreateRoutingDatabase.Type>
         <InArgument x:TypeArguments="twre:RoutingDatabaseType">
           <mca:CSharpValue x:TypeArguments="twre:RoutingDatabaseType">Input.RoutingDatabaseType</mca:CSharpValue>
@@ -291,7 +302,7 @@
         </InArgument>
       </twrba1:SetRoutingDatabaseReady.RoutingDatabaseId>
     </twrba1:SetRoutingDatabaseReady>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sL0YDpwIOAgEBUAtQrQECAQJUBVRjAwGaAlUFZSQDAf4BZgWEARADAc4BhQEFnwEpAwGyAaABBdIBFwIBd9MBBeMBJQIBW+QBBfQBHwIBP/UBBZ4CFwIBFZ8CBaUCJgIBC10LXWgDAZECWAtYYQMBiAJiC2JyAwH/AWcHbScDAfQBbgeDASQDAc8BiAELiAFoAwHFAY0BC40BWQMBvAGSAQuSAXYDAbMBowELowFmAwGpAaoBCdABFAIBeNsBC9sBWAIBbtYBC9YBaAIBZeABC+ABZQIBXOcBC+cBWwIBUuwBC+wBcgIBSfEBC/EBXQIBQPgBC/gBeAIBNv8BCZwCFAIBFqICC6ICWQIBDGoNaoABAwH1AXYNdnADAesBew17agMB4gFxDXFgAwHZAYABDYABWgMB0AGuAQu/ARwDAZEBwAELzwEQAgF5gAILmwIqAgEXsQERtwEgAwGeAbwBEbwBhAEDAZMBrgF8rgGCAQMBkgHDARHDAZEBAgF6xwEPzQEjAwGFAYMCEYMCXwIBLIgCEYgCbAIBIo0CEY0CmwECARjKARXKAckBAwGGAQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sMUYDsgIOAgEBUAtQrQECAQJUBVomAwGjAlsFcCQDAf4BcQWPARADAc4BkAEFqgEpAwGyAasBBd0BFwIBd94BBe4BJQIBW+8BBf8BHwIBP4ACBakCFwIBFaoCBbACJgIBC1cLV3ADAaQCaAtocAMBmgJjC2NoAwGRAl4LXmEDAYgCbQttcgMB/wFyB3gnAwH0AXkHjgEkAwHPAZMBC5MBaAMBxQGYAQuYAVkDAbwBnQELnQF2AwGzAa4BC64BZgMBqQG1AQnbARQCAXjmAQvmAVgCAW7hAQvhAWgCAWXrAQvrAWUCAVzyAQvyAVsCAVL3AQv3AXICAUn8AQv8AV0CAUCDAguDAngCATaKAgmnAhQCARatAgutAlkCAQx1DXWAAQMB9QGBAQ2BAXADAesBhgENhgFqAwHiAXwNfGADAdkBiwENiwFaAwHQAbkBC8oBHAMBkQHLAQvaARACAXmLAgumAioCARe8ARHCASADAZ4BxwERxwGEAQMBkwG5AXy5AYIBAwGSAc4BEc4BkQECAXrSAQ/YASMDAYUBjgIRjgJfAgEskwIRkwJsAgEimAIRmAKbAQIBGNUBFdUByQEDAYYB</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

@@ -9,11 +9,12 @@ namespace TOne.WhS.Routing.Data
 {
     public interface IRoutingDatabaseDataManager : IDataManager
     {
-        int CreateDatabase(string name, RoutingDatabaseType type, DateTime? effectiveTime);
+        int CreateDatabase(string name, RoutingDatabaseType type, RoutingProcessType processType, DateTime? effectiveTime);
         bool SetReady(int databaseId);
         List<RoutingDatabase> GetNotDeletedDatabases();
+        List<RoutingDatabase> GetNotDeletedDatabases(RoutingProcessType processType);
         void DropDatabase(int databaseId);
-        int GetIDByType(RoutingDatabaseType type, DateTime effectiveBefore);
+        int GetIDByType(RoutingDatabaseType type, RoutingProcessType processType, DateTime effectiveBefore);
 
         bool AreRoutingDatabasesUpdated(ref object updateHandle);
     }

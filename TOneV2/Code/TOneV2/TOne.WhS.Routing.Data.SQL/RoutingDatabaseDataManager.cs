@@ -24,14 +24,15 @@ namespace TOne.WhS.Routing.Data.SQL
         /// <param name="type">Routing Database Type</param>
         /// <param name="effectiveTime">Effective Date</param>
         /// <returns>Created Routing Database Id</returns>
-        public int CreateDatabase(string name, RoutingDatabaseType type, DateTime? effectiveTime)
+        public int CreateDatabase(string name, RoutingDatabaseType type, RoutingProcessType processType, DateTime? effectiveTime)
         {
             object obj;
-            if (ExecuteNonQuerySP("TOneWhS_Routing.sp_RoutingDatabase_Insert", out obj, name, (int)type, effectiveTime) > 0)
+            if (ExecuteNonQuerySP("TOneWhS_Routing.sp_RoutingDatabase_Insert", out obj, name, (byte)type, (byte)processType, effectiveTime) > 0)
             {
                 int databaseId = (int)obj;
                 RoutingDataManager routingDataManager = new RoutingDataManager();
                 routingDataManager.DatabaseId = databaseId;
+                routingDataManager.RoutingProcessType = processType;
                 routingDataManager.CreateDatabase();
                 return databaseId;
             }
@@ -69,16 +70,15 @@ namespace TOne.WhS.Routing.Data.SQL
             routingDataManager.DropDatabaseIfExists();
             ExecuteNonQuerySP("[TOneWhS_Routing].[sp_RoutingDatabase_Delete]", databaseId);
         }
-
         /// <summary>
         /// Get Routing Database Id by type and date.
         /// </summary>
         /// <param name="type">Routing database Type.</param>
         /// <param name="effectiveBefore">Effective Date</param>
         /// <returns>Routing Database Id</returns>
-        public int GetIDByType(RoutingDatabaseType type, DateTime effectiveBefore)
+        public int GetIDByType(RoutingDatabaseType type, RoutingProcessType processType, DateTime effectiveBefore)
         {
-            object id = ExecuteScalarSP("TOneWhS_Routing.sp_RoutingDatabase_GetReadyDBIDByType", (int)type, effectiveBefore);
+            object id = ExecuteScalarSP("TOneWhS_Routing.sp_RoutingDatabase_GetReadyDBIDByType", (byte)type, (byte)processType, effectiveBefore);
             if (id != null)
                 return (int)id;
             else
@@ -97,11 +97,17 @@ namespace TOne.WhS.Routing.Data.SQL
                 ID = (int)reader["ID"],
                 Title = reader["Title"] as string,
                 IsReady = GetReaderValue<bool>(reader, "IsReady"),
-                Type = (RoutingDatabaseType)reader["Type"],
+                Type = GetReaderValue<RoutingDatabaseType>(reader, "Type"),
+                ProcessType = GetReaderValue<RoutingProcessType>(reader, "ProcessType"),
                 EffectiveTime = (DateTime?)reader["EffectiveTime"],
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
                 ReadyTime = GetReaderValue<DateTime>(reader, "ReadyTime")
             };
+        }
+        
+        public List<RoutingDatabase> GetNotDeletedDatabases(RoutingProcessType processType)
+        {
+            return GetItemsSP("[TOneWhS_Routing].[sp_RoutingDatabase_GetNotDeletedByType]", RoutingDatabaseMapper, (byte)processType);
         }
     }
 }

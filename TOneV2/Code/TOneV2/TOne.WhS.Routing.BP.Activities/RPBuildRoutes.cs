@@ -26,9 +26,7 @@ namespace TOne.WhS.Routing.BP.Activities
             RoutingProductIds = routingProductIds;
             this.SupplierCodeMatches = codeMatch.SupplierCodeMatches.ToList();
             this.SupplierCodeMatchesBySupplier = codeMatch.SupplierCodeMatchesBySupplier;
-            this.SupplierZoneToRPOptionPolicies = policies; //new List<SupplierZoneToRPOptionPolicy>() { new SupplierZoneToRPOptionHighestRatePolicy() { ConfigId = 1 }, new SupplierZoneToRPOptionLowestRatePolicy() { ConfigId = 2 }, new SupplierZoneToRPOptionAverageRatePolicy() { ConfigId = 3 } };
-
-
+            this.SupplierZoneToRPOptionPolicies = policies;
         }
         public IEnumerable<int> RoutingProductIds { get; set; }
         public List<SupplierCodeMatchWithRate> SupplierCodeMatches { get; set; }

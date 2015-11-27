@@ -41,41 +41,6 @@ namespace TestRuntime
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
-
-            //Console.ReadKey();
-            //host.Stop();
-            //Console.ReadKey();
-            //BusinessProcessRuntime.Current.TerminatePendingProcesses();
-            //Timer timer = new Timer(1000);
-            //timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
-            //timer.Start();
-
-            //////System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(() =>
-            //////    {
-            //////        for (DateTime d = DateTime.Parse(ConfigurationManager.AppSettings["RepricingFrom"]); d <= DateTime.Parse(ConfigurationManager.AppSettings["RepricingTo"]); d = d.AddDays(1))
-            //////        {
-            //////            TriggerProcess(d);
-            //////            System.Threading.Thread.Sleep(30000);
-            //////        }
-            //////    });
-            //////t.Start();
-            //char key;
-            //Console.WriteLine("Enter 'c' for Build Complete Route Build or 'p' for partial");
-            //do
-            //{
-
-            //    key = Console.ReadKey().KeyChar;
-            //    if (key == 'p')
-            //        RunPartialRouteBuild();
-            //    else if (key == 'c')
-            //        RunCompleteRouteBuild();
-            //    else
-            //        Console.WriteLine("Enter 'c' for Build Complete Route Build or 'p' for partial");
-            //} while (key != 'p' || key != 'c');
-
-
-
-
             RunCompleteProductRouteBuild();
             //RunPartialRouteBuild();
         }
@@ -92,7 +57,8 @@ namespace TestRuntime
                     CodePrefixLength = 1,
                     IsFuture = false,
                     SaleZoneRange = 1000,
-                    SupplierZoneRPOptionPolicies = new List<SupplierZoneToRPOptionPolicy>() { new SupplierZoneToRPOptionHighestRatePolicy() { ConfigId = 1 }, new SupplierZoneToRPOptionLowestRatePolicy() { ConfigId = 2 }, new SupplierZoneToRPOptionAverageRatePolicy() { ConfigId = 3 } }
+                    SupplierZoneRPOptionPolicies = new List<SupplierZoneToRPOptionPolicy>() { new SupplierZoneToRPOptionHighestRatePolicy() { ConfigId = 1 }, new SupplierZoneToRPOptionLowestRatePolicy() { ConfigId = 2 }, new SupplierZoneToRPOptionAverageRatePolicy() { ConfigId = 3 } },
+                    RoutingProcessType = RoutingProcessType.ProductRoute
                 }
             });
         }

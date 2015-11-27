@@ -11,5 +11,6 @@ namespace TOne.WhS.Routing.Data
     {
         int DatabaseId { get; set; }
         RoutingDatabaseType RoutingDatabaseType { set; }
+        RoutingProcessType RoutingProcessType { set; }
     }
 }

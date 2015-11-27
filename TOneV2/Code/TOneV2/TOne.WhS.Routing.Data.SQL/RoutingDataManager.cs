@@ -20,6 +20,8 @@ namespace TOne.WhS.Routing.Data.SQL
 
         int _databaseId;
         RoutingDatabaseType? _routingDatabaseType;
+
+        RoutingProcessType? _routingProcessType;
         /// <summary>
         /// If Routing Database id is less than or equal 0, returns the next available Id according to type and date.
         /// </summary>
@@ -30,7 +32,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 if (_databaseId <= 0)
                 {
                     RoutingDatabaseDataManager routingDatabaseManager = new RoutingDatabaseDataManager();
-                    _databaseId = routingDatabaseManager.GetIDByType(_routingDatabaseType.Value, DateTime.Now);
+                    _databaseId = routingDatabaseManager.GetIDByType(_routingDatabaseType.Value, _routingProcessType.Value, DateTime.Now);
                 }
                 return _databaseId;
             }
@@ -47,6 +49,14 @@ namespace TOne.WhS.Routing.Data.SQL
                 _routingDatabaseType = value;
             }
         }
+
+        public RoutingProcessType RoutingProcessType
+        {
+            set
+            {
+                _routingProcessType = value;
+            }
+        }
         /// <summary>
         /// Create Routing Database.
         /// </summary>
@@ -54,7 +64,15 @@ namespace TOne.WhS.Routing.Data.SQL
         {
             MasterDatabaseDataManager masterDataManager = new MasterDatabaseDataManager(GetConnectionString());
             masterDataManager.CreateDatabase(GetDatabaseName(), ConfigurationManager.AppSettings["RoutingDBDataFileDirectory"], ConfigurationManager.AppSettings["RoutingDBLogFileDirectory"]);
-            CreateDatabaseSchema();
+            switch (_routingProcessType.Value)
+            {
+                case RoutingProcessType.ProductRoute:
+                    CreateProductRoutingDatabaseSchema();
+                    break;
+                case RoutingProcessType.CustomerRoute:
+                    CreateCustomerRoutingDatabaseSchema();
+                    break;
+            }
         }
         /// <summary>
         /// Drop Routing Database if database already exists.
@@ -74,9 +92,10 @@ namespace TOne.WhS.Routing.Data.SQL
             {
                 if (!_routingDatabaseType.HasValue)
                     throw new Exception("you need to set the DatabaseId or the RoutingDatabaseType property of the Data Manager before calling any operation on the Routing database");
-
+                if (!_routingProcessType.HasValue)
+                    throw new Exception("you need to set the DatabaseId or the RoutingProcessType property of the Data Manager before calling any operation on the Routing database");
                 RoutingDatabaseDataManager routingDatabaseManager = new RoutingDatabaseDataManager();
-                _databaseId = routingDatabaseManager.GetIDByType(_routingDatabaseType.Value, DateTime.Now);
+                _databaseId = routingDatabaseManager.GetIDByType(_routingDatabaseType.Value, _routingProcessType.Value, DateTime.Now);
 
                 if (_databaseId <= 0)
                     throw new Exception(String.Format("Routing Database {0} not found", _routingDatabaseType));
@@ -92,90 +111,39 @@ namespace TOne.WhS.Routing.Data.SQL
             SqlConnectionStringBuilder connStringBuilder = new SqlConnectionStringBuilder(this.GetConnectionString());
             return connStringBuilder.InitialCatalog;
         }
-        private void CreateDatabaseSchema()
+        private void CreateCustomerRoutingDatabaseSchema()
         {
-            ExecuteNonQueryText(query_CreateDatabaseSchema, null);
+            StringBuilder query = new StringBuilder();
+            query.AppendLine(query_SupplierZoneDetailsTable);
+            query.AppendLine(query_CodeMatchTable);
+            query.AppendLine(query_CodeSaleZoneTable);
+            query.AppendLine(query_TableTypes);
+            query.AppendLine(query_CustomerRouteTable);
+            query.AppendLine(query_CustomerZoneDetailTable);
+            ExecuteNonQueryText(query.ToString(), null);
+        }
+
+        private void CreateProductRoutingDatabaseSchema()
+        {
+            StringBuilder query = new StringBuilder();
+            query.AppendLine(query_SupplierZoneDetailsTable);
+            query.AppendLine(query_CodeMatchTable);
+            query.AppendLine(query_CodeSaleZoneTable);
+            query.AppendLine(query_TableTypes);
+            query.AppendLine(query_RoutingProductTable);
+            ExecuteNonQueryText(query.ToString(), null);
         }
 
         #region Constants
 
-        const string query_CreateDatabaseSchema = @"
-
-                                                    Create Table ProductRoute(
-                                                        RoutingProductId int Not Null,
-                                                        SaleZoneId bigint Not Null,
-                                                        ExecutedRuleId int Null,
-                                                        OptionsDetailsBySupplier nvarchar(max) NULL,
-                                                        OptionsByPolicy nvarchar(max) NULL,
-                                                        IsBlocked bit NULL
-                                                    )ON [PRIMARY]
-
-                                                    Create Table SupplierZoneDetail(
-                                                        SupplierId int Not Null,
-                                                        SupplierZoneId bigint Not Null,
-                                                        EffectiveRateValue [decimal](10, 7) Not Null
-                                                    )ON [PRIMARY]
-
-                                                CREATE TABLE [dbo].[CustomerZoneDetail](
-	                                                    [CustomerId] [int] NOT NULL,
-	                                                    [SaleZoneId] [bigint] NOT NULL,
-	                                                    [RoutingProductId] [int] NULL,
-	                                                    [RoutingProductSource] [tinyint] NULL,
-	                                                    [SellingProductId] [int] NULL,
-	                                                    [EffectiveRateValue] [decimal](10, 7) NULL,
-	                                                    [RateSource] [tinyint] NULL
-                                                    ) ON [PRIMARY]
-
-                                                CREATE TABLE [dbo].[CodeMatch](
-	                                                    [CodePrefix] [varchar](20) NOT NULL,
-	                                                    [Code] [varchar](20) NOT NULL,
-	                                                    [Content] [nvarchar](max) NOT NULL
-                                                    ) ON [PRIMARY]
-
-                                               CREATE TABLE [dbo].[CodeSaleZone](
-	                                                    [Code] [varchar](20) NOT NULL,
-	                                                    [SaleZoneId] [bigint] NOT NULL
-                                                    ) ON [PRIMARY]
-
-                                                CREATE TABLE [dbo].[CustomerRoute](
-	                                                    [CustomerID] [int] NOT NULL,
-	                                                    [Code] [varchar](20) NOT NULL,
-	                                                    [SaleZoneID] [bigint] NOT NULL,
-	                                                    [Rate] [decimal](10, 7) NULL,
-	                                                    [IsBlocked] [bit] NOT NULL,
-	                                                    [ExecutedRuleId] [int] NOT NULL,
-	                                                    [RouteOptions] [nvarchar](max) NULL,
-                                                     CONSTRAINT [PK_CustomerRoute] PRIMARY KEY CLUSTERED 
-                                                    (
-	                                                    [CustomerID] ASC,
-	                                                    [Code] ASC
-                                                    )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-                                                    ) ON [PRIMARY]
-
-                                        CREATE TABLE [dbo].[RoutingProductOptions](
-	                                                                    [ProductID] [int] NOT NULL,
-	                                                                    [SaleZoneID] [int] NOT NULL,
-	                                                                    [RouteOptions] [varchar](max) NOT NULL,
-                                                                     CONSTRAINT [PK_RoutingProductRoute] PRIMARY KEY CLUSTERED 
-                                                                    (
-	                                                                    [ProductID] ASC,
-	                                                                    [SaleZoneID] ASC
-                                                                    )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-                                                                    ) ON [PRIMARY]
-
-                                                CREATE TYPE [LongIDType] AS TABLE(
-	                                                    [ID] [bigint] NOT NULL,
-	                                                    PRIMARY KEY CLUSTERED 
-                                                    (
-	                                                    [ID] ASC
-                                                    )WITH (IGNORE_DUP_KEY = OFF))
-                                                ";
 
         const string query_SupplierZoneDetailsTable = @"Create Table SupplierZoneDetail(
                                                         SupplierId int Not Null,
                                                         SupplierZoneId bigint Not Null,
                                                         EffectiveRateValue [decimal](10, 7) Not Null
-                                                    )ON [PRIMARY]  ";
+                                                    )ON [PRIMARY]  
+
+                                                    ";
 
         const string query_CustomerZoneDetailTable = @" CREATE TABLE [dbo].[CustomerZoneDetail](
 	                                                    [CustomerId] [int] NOT NULL,
@@ -185,17 +153,24 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [SellingProductId] [int] NULL,
 	                                                    [EffectiveRateValue] [decimal](10, 7) NULL,
 	                                                    [RateSource] [tinyint] NULL
-                                                    ) ON [PRIMARY]";
+                                                    ) ON [PRIMARY]
 
-        const string query_CodeMatchTable = @"CREATE TABLE [dbo].[CodeMatch](
+                                                    ";
+
+        const string query_CodeMatchTable = @"    CREATE TABLE [dbo].[CodeMatch](
+	                                                    [CodePrefix] [varchar](20) NOT NULL,
 	                                                    [Code] [varchar](20) NOT NULL,
 	                                                    [Content] [nvarchar](max) NOT NULL
-                                                    ) ON [PRIMARY]";
+                                                    ) ON [PRIMARY]
+
+                                                ";
 
         const string query_CodeSaleZoneTable = @"CREATE TABLE [dbo].[CodeSaleZone](
 	                                                    [Code] [varchar](20) NOT NULL,
 	                                                    [SaleZoneId] [bigint] NOT NULL
-                                                    ) ON [PRIMARY]";
+                                                    ) ON [PRIMARY]
+
+                                                    ";
 
         const string query_CustomerRouteTable = @"       CREATE TABLE [dbo].[CustomerRoute](
 	                                                    [CustomerID] [int] NOT NULL,
@@ -210,7 +185,9 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [CustomerID] ASC,
 	                                                    [Code] ASC
                                                     )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-                                                    ) ON [PRIMARY]";
+                                                    ) ON [PRIMARY]
+
+                                ";
 
 
         const string query_TableTypes = @"CREATE TYPE [LongIDType] AS TABLE(
@@ -219,7 +196,9 @@ namespace TOne.WhS.Routing.Data.SQL
                                                     (
 	                                                    [ID] ASC
                                                     )WITH (IGNORE_DUP_KEY = OFF)
-                                                    )";
+                                                    )
+
+                                            ";
 
 
         const string query_RoutingProductTable = @"
@@ -230,7 +209,9 @@ namespace TOne.WhS.Routing.Data.SQL
                                                         OptionsDetailsBySupplier nvarchar(max) NULL,
                                                         OptionsByPolicy nvarchar(max) NULL,
                                                         IsBlocked bit NULL
-                                                    )ON [PRIMARY]";
+                                                    )ON [PRIMARY]
+
+                                                    ";
 
         #endregion
     }

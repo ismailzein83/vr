@@ -23,11 +23,13 @@ namespace TOne.WhS.Routing.BP.Activities
                 s_DropOldDatabasesInterval = TimeSpan.FromHours(2);
         }
 
+        [RequiredArgument]
+        public InArgument<RoutingProcessType> ProcessType { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             IRoutingDatabaseDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRoutingDatabaseDataManager>();
-            List<RoutingDatabase> routingdatabases = dataManager.GetNotDeletedDatabases();
-
+            List<RoutingDatabase> routingdatabases = dataManager.GetNotDeletedDatabases(ProcessType.Get(context));
             var orderedDatabases = routingdatabases.OrderByDescending(itm => itm.EffectiveTime);
             List<int> excludedDatabaseIds = new List<int>();
 

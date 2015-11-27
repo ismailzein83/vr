@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public enum RoutingDatabaseType { Current = 0, Future = 1, SpecificDate = 2 }
+    public enum RoutingProcessType : byte { ProductRoute = 0, CustomerRoute = 1 }
+    public enum RoutingDatabaseType : byte { Current = 0, Future = 1, SpecificDate = 2 }
     public class RoutingDatabase
     {
         public int ID { get; set; }
         public string Title { get; set; }
+        public RoutingProcessType ProcessType { get; set; }
         public RoutingDatabaseType Type { get; set; }
         public DateTime? EffectiveTime { get; set; }
         public bool IsReady { get; set; }

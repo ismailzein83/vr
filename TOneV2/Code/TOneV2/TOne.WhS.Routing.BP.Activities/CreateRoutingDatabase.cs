@@ -13,7 +13,8 @@ namespace TOne.WhS.Routing.BP.Activities
     {
         [RequiredArgument]
         public InArgument<RoutingDatabaseType> Type { get; set; }
-
+        [RequiredArgument]
+        public InArgument<RoutingProcessType> ProcessType { get; set; }
         [RequiredArgument]
         public InArgument<DateTime?> EffectiveTime { get; set; }
 
@@ -23,7 +24,7 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             IRoutingDatabaseDataManager routingDatabaseManager = RoutingDataManagerFactory.GetDataManager<IRoutingDatabaseDataManager>();
-            int databaseId = routingDatabaseManager.CreateDatabase(String.Format("{0}_{1:yyyyMMdd-HHmm}", this.Type.Get(context), this.EffectiveTime.Get(context)), this.Type.Get(context), this.EffectiveTime.Get(context));
+            int databaseId = routingDatabaseManager.CreateDatabase(String.Format("{0}_{1}_{2:yyyyMMdd-HHmm}", this.Type.Get(context), this.ProcessType.Get(context), this.EffectiveTime.Get(context)), this.Type.Get(context), this.ProcessType.Get(context), this.EffectiveTime.Get(context));
             this.DatabaseId.Set(context, databaseId);
         }
     }
