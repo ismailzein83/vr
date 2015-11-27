@@ -25,13 +25,13 @@ namespace TOne.WhS.Routing.Business
             {
                 ResultKey = customerRouteResult.ResultKey,
                 TotalCount = customerRouteResult.TotalCount,
-                Data = customerRouteResult.Data.MapRecords(customerRouteDetailMapper)
+                Data = customerRouteResult.Data.MapRecords(CustomerRouteDetailMapper)
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult);
         }
 
-        private CustomerRouteDetail customerRouteDetailMapper(CustomerRoute customerRoute)
+        private CustomerRouteDetail CustomerRouteDetailMapper(CustomerRoute customerRoute)
         {
             List<RouteOptionDetail> optionDetails = this.GetRouteOptionDetails(customerRoute);
 
@@ -53,7 +53,7 @@ namespace TOne.WhS.Routing.Business
             if (customer != null)
                 return customer.Name;
 
-            return "Customer Not Found";
+            return "Not Found";
         }
 
         private string GetZoneName(long zoneId)
@@ -64,7 +64,7 @@ namespace TOne.WhS.Routing.Business
             if (saleZone != null)
                 return saleZone.Name;
 
-            return "Zone Not Found";
+            return "Not Found";
         }
 
         private List<RouteOptionDetail> GetRouteOptionDetails(CustomerRoute customerRoute)

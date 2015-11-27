@@ -3,12 +3,66 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
+using Vanrise.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Routing.Business
 {
     public class RPRouteManager
     {
+        public Vanrise.Entities.IDataRetrievalResult<RPRouteDetail> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<RPRouteQuery> input)
+        {
+            IRPRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
+            manager.DatabaseId = input.Query.RoutingDatabaseId;
+
+            BigResult<RPRoute> rpRouteResult = manager.GetFilteredRPRoutes(input);
+
+            BigResult<RPRouteDetail> customerRouteDetailResult = new BigResult<RPRouteDetail>()
+            {
+                ResultKey = rpRouteResult.ResultKey,
+                TotalCount = rpRouteResult.TotalCount,
+                Data = rpRouteResult.Data.MapRecords(RPRouteDetailMapper)
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult);
+        }
+
+        private RPRouteDetail RPRouteDetailMapper(RPRoute rpRoute)
+        {
+            return new RPRouteDetail()
+            {
+                Entity = rpRoute,
+                RoutingProductName = this.GetRoutingProductName(rpRoute.RoutingProductId),
+                SaleZoneName = this.GetSaleZoneName(rpRoute.SaleZoneId)
+            };
+        }
+
+        private string GetRoutingProductName(int routingProductId)
+        {
+            RoutingProductManager manager = new RoutingProductManager();
+            RoutingProduct routingProduct = manager.GetRoutingProduct(routingProductId);
+
+            if (routingProduct != null)
+                return routingProduct.Name;
+
+            return "Not Found";
+        }
+
+        private string GetSaleZoneName(long saleZoneId)
+        {
+            SaleZoneManager manager = new SaleZoneManager();
+            SaleZone saleZone = manager.GetSaleZone(saleZoneId);
+
+            if (saleZone != null)
+                return saleZone.Name;
+
+            return "Not Found";
+        }
+
         public IEnumerable<RPRoute> GetRPRoutes(IEnumerable<RPZone> rpZones)
         {
             List<RPRoute> rslt = new List<RPRoute>();

@@ -94,9 +94,11 @@
     <Compile Include="RouteOptionSettingsGroup.cs" />
     <Compile Include="IRouteOptionSettingsContext.cs" />
     <Compile Include="Routes\RPRoute.cs" />
+    <Compile Include="Routes\RPRouteDetail.cs" />
     <Compile Include="Routes\RPRouteOption.cs" />
     <Compile Include="Routes\RPRouteOptionSupplier.cs" />
     <Compile Include="Routes\RPRouteOptionSupplierZone.cs" />
+    <Compile Include="Routes\RPRouteQuery.cs" />
     <Compile Include="Routes\SellingProductRoute.cs" />
     <Compile Include="RoutingDatabase.cs" />
     <Compile Include="RoutingDatabaseInfo.cs" />

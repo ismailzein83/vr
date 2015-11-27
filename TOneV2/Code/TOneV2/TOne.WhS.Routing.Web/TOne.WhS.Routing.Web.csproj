@@ -123,6 +123,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CustomerRouteController.cs" />
+    <Compile Include="Controllers\RPRouteController.cs" />
     <Compile Include="Controllers\RouteRuleController.cs" />
     <Compile Include="Controllers\RoutingDatabaseController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -168,10 +169,15 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byrate.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\vr-whs-routing-routerulesettings-percentage-fixed.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\vr-whs-routing-routerulesettings-selective.js" />
+    <Content Include="WhS_Routing\Directives\RPRoute\Templates\RPRouteDetailTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RPRoute\Templates\RPRouteGridTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RPRoute\vr-whs-routing-rproute-details.js" />
+    <Content Include="WhS_Routing\Directives\RPRoute\vr-whs-routing-rproute-grid.js" />
     <Content Include="WhS_Routing\Directives\RouteRule\Templates\RouteRuleGridTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteRule\vr-whs-be-routerule-grid.js" />
     <Content Include="WhS_Routing\Directives\RoutingDatabase\vr-whs-routing-routingdatabase-selector.js" />
     <Content Include="WhS_Routing\Services\APIServices\CustomerRouteAPIService.js" />
+    <Content Include="WhS_Routing\Services\APIServices\RPRouteAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleSettingsAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RoutingDatabaseAPIService.js" />
@@ -182,8 +188,8 @@
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRoutesByCodePrefixController.js" />
     <Content Include="WhS_Routing\Views\CustomerRoute\CustomerRouteManagement.html" />
     <Content Include="WhS_Routing\Views\CustomerRoute\CustomerRouteManagementController.js" />
-    <Content Include="WhS_Routing\Views\ProductRoutes\ProductRoutesManagement.html" />
-    <Content Include="WhS_Routing\Views\ProductRoutes\ProductRoutesManagementController.js" />
+    <Content Include="WhS_Routing\Views\RPRoute\RPRouteManagement.html" />
+    <Content Include="WhS_Routing\Views\RPRoute\RPRouteManagementController.js" />
     <Content Include="WhS_Routing\Views\RouteRule\RouteRuleEditor.html" />
     <Content Include="WhS_Routing\Views\RouteRule\RouteRuleEditorController.js" />
     <Content Include="WhS_Routing\Views\RouteRule\RouteRuleManagement.html" />

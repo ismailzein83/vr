@@ -24,7 +24,7 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<int> RoutingDatabaseId { get; set; }
         protected override void DoWork(ApplyProductRoutesToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            IProductRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IProductRouteDataManager>();
+            IRPRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
             dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>

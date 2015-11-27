@@ -8,9 +8,11 @@ using Vanrise.Data;
 
 namespace TOne.WhS.Routing.Data
 {
-    public interface IProductRouteDataManager : IDataManager, IBulkApplyDataManager<RPRoute>, IRoutingDataManager
+    public interface IRPRouteDataManager : IDataManager, IBulkApplyDataManager<RPRoute>, IRoutingDataManager
     {
         void ApplyProductRouteForDB(object preparedProductRoute);
+
+        Vanrise.Entities.BigResult<Entities.RPRoute> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<Entities.RPRouteQuery> input);
 
     }
 

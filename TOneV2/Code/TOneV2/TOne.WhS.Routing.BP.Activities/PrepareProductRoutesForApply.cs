@@ -29,7 +29,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override void DoWork(PrepareProductRoutesForApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            IProductRouteDataManager productRoutesDataManager = RoutingDataManagerFactory.GetDataManager<IProductRouteDataManager>();
+            IRPRouteDataManager productRoutesDataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
             PrepareDataForDBApply(previousActivityStatus, handle, productRoutesDataManager, inputArgument.InputQueue, inputArgument.OutputQueue, ProductRoutesBatch => ProductRoutesBatch.RPRoutes);
         }
 
