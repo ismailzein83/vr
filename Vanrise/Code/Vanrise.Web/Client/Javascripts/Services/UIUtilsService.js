@@ -22,9 +22,9 @@
                 if (loadPromiseDeferred != undefined)
                     loadPromiseDeferred.resolve();
             }).catch(function (error) {
-                    if (loadPromiseDeferred != undefined)
-                        loadPromiseDeferred.reject(error);
-                });
+                if (loadPromiseDeferred != undefined)
+                    loadPromiseDeferred.reject(error);
+            });
         }
 
         function callDirectiveLoadOrResolvePromise(scope, directiveAPI, directiveLoadPayload, setLoader, readyPromiseDeferred) {
@@ -41,18 +41,19 @@
             }
         }
 
-        function getIdSelectedIds(idProperty, attrs, ctrl)
-        {
-            if (attrs.ismultipleselection != undefined)
+        function getIdSelectedIds(idProperty, attrs, ctrl) {
+            
+            if (attrs.ismultipleselection != undefined) {
                 return UtilsService.getPropValuesFromArray(ctrl.selectedvalues, idProperty);
-            else if (ctrl.selectedvalues != undefined)
+            }
+            else if (ctrl.selectedvalues != undefined) {
                 return ctrl.selectedvalues[idProperty];
+            }
 
             return undefined;
         }
 
-        function setSelectedValues(selectedIds, idProperty, attrs, ctrl)
-        {
+        function setSelectedValues(selectedIds, idProperty, attrs, ctrl) {
             if (attrs.ismultipleselection != undefined) {
                 for (var i = 0; i < selectedIds.length; i++) {
                     var selectedValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds[i], idProperty);
@@ -65,7 +66,7 @@
                     ctrl.selectedvalues = selectedValue;
             }
         }
-        
+
         function getSettingsFromDirective(scope, directiveAPI, templateProperty) {
             if (scope[templateProperty] != undefined) {
                 var settings = directiveAPI.getData();
@@ -75,7 +76,7 @@
             else
                 return null;
         }
-        
+
         function defineGridDrillDownTabs(drillDownDefinitions, gridAPI, gridMenuActions) {
             return new GridDrillDownTabs(drillDownDefinitions, gridAPI, gridMenuActions);
         }

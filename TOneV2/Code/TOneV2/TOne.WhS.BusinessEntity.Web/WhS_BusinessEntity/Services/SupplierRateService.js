@@ -17,7 +17,7 @@ app.service('WhS_BE_SupplierRateService', ['VRModalService', 'VRNotificationServ
               
 
                 var query = {
-                    SupplierZoneIds: [supplierZoneItem.Entity.SupplierZoneId],
+                    ZoneIds: [supplierZoneItem.Entity.SupplierZoneId],
                 };
                
                 return supplierZoneItem.supplierRateGridAPI.loadGrid(query);

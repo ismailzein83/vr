@@ -12,6 +12,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int SupplierId { get; set; }
 
-        public List<int> ZonesIds { get; set; }
+        public List<int> ZoneIds { get; set; }
     }
 }

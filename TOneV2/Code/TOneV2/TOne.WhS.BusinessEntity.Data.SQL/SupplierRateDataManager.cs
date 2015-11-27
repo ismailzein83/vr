@@ -84,8 +84,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 string zonesids = null;
-                if (input.Query.ZonesIds != null && input.Query.ZonesIds.Count() > 0)
-                    zonesids = string.Join<int>(",", input.Query.ZonesIds);
+                if (input.Query.ZoneIds != null && input.Query.ZoneIds.Count() > 0)
+                    zonesids = string.Join<int>(",", input.Query.ZoneIds);
 
 
                 ExecuteNonQuerySP("[TOneWhS_BE].[sp_SupplierRate_CreateTempByFiltered]", tempTableName, input.Query.SupplierId, zonesids, input.Query.EffectiveOn);
