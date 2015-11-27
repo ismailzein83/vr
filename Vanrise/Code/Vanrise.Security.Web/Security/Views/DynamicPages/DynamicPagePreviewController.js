@@ -1,6 +1,6 @@
-﻿DynamicPagePreviewController.$inject = ['$scope', 'ViewAPIService', 'WidgetAPIService', 'TimeDimensionTypeEnum', 'UtilsService', 'VRNotificationService', 'VRNavigationService','WidgetSectionEnum','PeriodEnum'];
+﻿DynamicPagePreviewController.$inject = ['$scope', 'ViewAPIService', 'WidgetAPIService', 'TimeDimensionTypeEnum', 'UtilsService', 'VRNotificationService', 'VRNavigationService','WidgetSectionEnum','PeriodEnum','VRValidationService'];
 
-function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, TimeDimensionTypeEnum, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum) {
+function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, TimeDimensionTypeEnum, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, VRValidationService) {
     var viewId;
     loadParameters();
     defineScope();
@@ -13,103 +13,97 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     }
 
     function defineScope() {
+        $scope.scopeModal = {};
         var date;
-        $scope.fromDate;
-        $scope.nonSearchable = true;
-        $scope.toDate;
-        $scope.allWidgets = [];
-        $scope.viewContent = [];
-        $scope.periods = UtilsService.getArrayEnum(PeriodEnum);
-        $scope.selectedPeriod;
-        $scope.summaryContents = [];
-        $scope.bodyContents = [];
-        $scope.summaryWidgets = [];
-        $scope.bodyWidgets = [];
-        $scope.viewWidgets = [];
+        $scope.scopeModal.fromDate;
+        $scope.scopeModal.validateDateTime = function () {
+            return VRValidationService.validateTimeRange($scope.scopeModal.fromDate, $scope.scopeModal.toDate);
+        }
+        $scope.scopeModal.nonSearchable = true;
+        $scope.scopeModal.toDate;
+        $scope.scopeModal.allWidgets = [];
+        $scope.scopeModal.viewContent = [];
+        $scope.scopeModal.periods = UtilsService.getArrayEnum(PeriodEnum);
+        $scope.scopeModal.selectedPeriod;
+        $scope.scopeModal.summaryContents = [];
+        $scope.scopeModal.bodyContents = [];
+        $scope.scopeModal.summaryWidgets = [];
+        $scope.scopeModal.bodyWidgets = [];
+        $scope.scopeModal.viewWidgets = [];
         var customize = {
             value: -1,
             description: "Customize"
         }
-        $scope.onBlurChanged = function () {
-            var from = UtilsService.getShortDate($scope.fromDate);
+        $scope.scopeModal.onBlurChanged = function () {
+            var from = UtilsService.getShortDate($scope.scopeModal.fromDate);
             var oldFrom = UtilsService.getShortDate(date.from);
-            var to = UtilsService.getShortDate($scope.toDate);
+            var to = UtilsService.getShortDate($scope.scopeModal.toDate);
             var oldTo = UtilsService.getShortDate(date.to);
             if (from != oldFrom || to != oldTo)
-                $scope.selectedPeriod = customize;
+                $scope.scopeModal.selectedPeriod = customize;
 
         }
-        $scope.periodSelectionChanged = function () {
-            if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
-                date = $scope.selectedPeriod.getInterval();
-                $scope.fromDate = date.from;
-                $scope.toDate = date.to;
+        $scope.scopeModal.periodSelectionChanged = function () {
+            if ($scope.scopeModal.selectedPeriod != undefined && $scope.scopeModal.selectedPeriod.value != -1) {
+                date = $scope.scopeModal.selectedPeriod.getInterval();
+                $scope.scopeModal.fromDate = date.from;
+                $scope.scopeModal.toDate = date.to;
             }
            
         }
         defineTimeDimensionTypes();
       
         
-        $scope.close = function () {
+        $scope.scopeModal.close = function () {
             $scope.modalContext.closeModal()
         };
-        $scope.Search = function () {
-            $scope.filter = {
-                timeDimensionType: $scope.selectedTimeDimensionType,
-                fromDate: $scope.fromDate,
-                toDate: $scope.toDate
+        $scope.scopeModal.Search = function () {
+            $scope.scopeModal.filter = {
+                timeDimensionType: $scope.scopeModal.selectedTimeDimensionType,
+                fromDate: $scope.scopeModal.fromDate,
+                toDate: $scope.scopeModal.toDate
             }
-            if (($scope.bodyWidgets != null && $scope.bodyWidgets != undefined) || ($scope.summaryWidgets != null && $scope.summaryWidgets != undefined)) {
+            if (($scope.scopeModal.bodyWidgets != null && $scope.scopeModal.bodyWidgets != undefined) || ($scope.scopeModal.summaryWidgets != null && $scope.scopeModal.summaryWidgets != undefined)) {
                return refreshData();
             }
             else {
                 return loadWidgets();
             }    
         };
-        $scope.customvalidateFrom = function (fromDate) {
-            var from = UtilsService.getShortDate(fromDate);
-            var to = UtilsService.getShortDate($scope.toDate);
-            return UtilsService.validateDates(from, to);
-        };
-        $scope.customvalidateTo = function (toDate) {
-            var from = UtilsService.getShortDate($scope.fromDate);
-            var to = UtilsService.getShortDate(toDate);
-            return UtilsService.validateDates(from, to);
-        };
-        
+       
 
     }
     
     function defineTimeDimensionTypes() {
-        $scope.timeDimensionTypes = [];
+        $scope.scopeModal.timeDimensionTypes = [];
         for (var td in TimeDimensionTypeEnum)
-            $scope.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
+            $scope.scopeModal.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
 
-        $scope.selectedTimeDimensionType= TimeDimensionTypeEnum.Daily;
+        $scope.scopeModal.selectedTimeDimensionType = TimeDimensionTypeEnum.Daily;
     }
 
     function load() {
         loadWidgets();
-        $scope.isGettingData = false;
+        $scope.scopeModal.isGettingData = false;
 
     }
     function fillDateAndPeriod(){
-        date = $scope.selectedPeriod.getInterval();
-        $scope.fromDate = date.from;
-        $scope.toDate = date.to;
-        $scope.filter = {
-            timeDimensionType: $scope.selectedTimeDimensionType,
-            fromDate: $scope.fromDate,
-            toDate: $scope.toDate
+        date = $scope.scopeModal.selectedPeriod.getInterval();
+        $scope.scopeModal.fromDate = date.from;
+        $scope.scopeModal.toDate = date.to;
+        $scope.scopeModal.filter = {
+            timeDimensionType: $scope.scopeModal.selectedTimeDimensionType,
+            fromDate: $scope.scopeModal.fromDate,
+            toDate: $scope.scopeModal.toDate
         }
     }
     function refreshData() {
         var refreshDataOperations = [];
-        angular.forEach($scope.bodyWidgets, function (bodyWidget) {
+        angular.forEach($scope.scopeModal.bodyWidgets, function (bodyWidget) {
            if(bodyWidget.API!=undefined)
             refreshDataOperations.push(bodyWidget.retrieveData);
         });
-        angular.forEach($scope.summaryWidgets, function (summaryWidget) {
+        angular.forEach($scope.scopeModal.summaryWidgets, function (summaryWidget) {
             if (summaryWidget.API != undefined)
             refreshDataOperations.push(summaryWidget.retrieveData);
         });
@@ -122,26 +116,26 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     function loadWidgets() {
 
         if (viewId != undefined) {
-            $scope.isGettingData = true;
+            $scope.scopeModal.isGettingData = true;
           return  UtilsService.waitMultipleAsyncOperations([loadAllWidgets, loadViewByID])
                  .finally(function () {
-                     loadViewWidgets($scope.allWidgets, $scope.bodyContents, $scope.summaryContents);
-                     $scope.isGettingData = false;
+                     loadViewWidgets($scope.scopeModal.allWidgets, $scope.scopeModal.bodyContents, $scope.scopeModal.summaryContents);
+                     $scope.scopeModal.isGettingData = false;
                  });
         }
         else {
-            $scope.isGettingData = true;
+            $scope.scopeModal.isGettingData = true;
             if (!$scope.$parent.nonSearchable) {
-                $scope.selectedPeriod = $scope.$parent.selectedViewPeriod;
-                $scope.selectedTimeDimensionType = $scope.$parent.selectedViewTimeDimensionType;
+                $scope.scopeModal.selectedPeriod = $scope.$parent.selectedViewPeriod;
+                $scope.scopeModal.selectedTimeDimensionType = $scope.$parent.selectedViewTimeDimensionType;
                 fillDateAndPeriod();
-                $scope.nonSearchable = false;
+                $scope.scopeModal.nonSearchable = false;
             }
 
           return  UtilsService.waitMultipleAsyncOperations([loadAllWidgets])
                 .finally(function () {
-                    loadViewWidgets($scope.allWidgets, $scope.$parent.bodyContents, $scope.$parent.summaryContents);
-                    $scope.isGettingData = false;
+                    loadViewWidgets($scope.scopeModal.allWidgets, $scope.$parent.bodyContents, $scope.$parent.summaryContents);
+                    $scope.scopeModal.isGettingData = false;
                 });
 
         }   
@@ -155,7 +149,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             {
                 value.NumberOfColumns = bodyContent.NumberOfColumns;
                 value.SectionTitle = bodyContent.SectionTitle;
-                if ($scope.nonSearchable) {
+                if ($scope.scopeModal.nonSearchable) {
                     value.DefaultPeriod = bodyContent.DefaultPeriod;
                     value.DefaultGrouping = bodyContent.DefaultGrouping;
                 }
@@ -170,7 +164,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             if (value != null) {
                 value.NumberOfColumns = summaryContent.NumberOfColumns;
                 value.SectionTitle = summaryContent.SectionTitle;
-                if ($scope.nonSearchable) {
+                if ($scope.scopeModal.nonSearchable) {
                     value.DefaultPeriod = summaryContent.DefaultPeriod;
                     value.DefaultGrouping = summaryContent.DefaultGrouping;
                 }
@@ -186,11 +180,11 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         bodyWidget.onElementReady = function (api) {
             bodyWidget.API = api;
             var filter = {};
-            if (!$scope.nonSearchable)
-               bodyWidget.API.retrieveData( $scope.filter);
+            if (!$scope.scopeModal.nonSearchable)
+                bodyWidget.API.retrieveData($scope.scopeModal.filter);
             else {
                 var widgetDate = UtilsService.getPeriod(bodyWidget.DefaultPeriod);
-                var timeDimention = UtilsService.getItemByVal($scope.timeDimensionTypes, bodyWidget.DefaultGrouping, 'value');
+                var timeDimention = UtilsService.getItemByVal($scope.scopeModal.timeDimensionTypes, bodyWidget.DefaultGrouping, 'value');
                 filter = {
                     timeDimensionType: timeDimention,
                     fromDate: widgetDate.from,
@@ -200,24 +194,24 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             }
            
             bodyWidget.retrieveData = function () {
-                if (!$scope.nonSearchable)
-                    return api.retrieveData($scope.filter);
+                if (!$scope.scopeModal.nonSearchable)
+                    return api.retrieveData($scope.scopeModal.filter);
                 else
                    return api.retrieveData(filter);
             };
         };
-        $scope.bodyWidgets.push(bodyWidget);
+        $scope.scopeModal.bodyWidgets.push(bodyWidget);
     }
     function addSummaryWidget(summaryWidget) {
         summaryWidget.onElementReady = function (api) {
            
             summaryWidget.API = api;
             var filter = {};
-            if (!$scope.nonSearchable)
-                summaryWidget.API.retrieveData( $scope.filter);
+            if (!$scope.scopeModal.nonSearchable)
+                summaryWidget.API.retrieveData($scope.scopeModal.filter);
             else {
                 var widgetDate = UtilsService.getPeriod(summaryWidget.DefaultPeriod);
-                var timeDimention = UtilsService.getItemByVal($scope.timeDimensionTypes, summaryWidget.DefaultGrouping, 'value');
+                var timeDimention = UtilsService.getItemByVal($scope.scopeModal.timeDimensionTypes, summaryWidget.DefaultGrouping, 'value');
                 filter = {
                     timeDimensionType: timeDimention,
                     fromDate: widgetDate.from,
@@ -227,31 +221,31 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             }
           
             summaryWidget.retrieveData = function () {
-                if (!$scope.nonSearchable)
-                    return api.retrieveData($scope.filter);
+                if (!$scope.scopeModal.nonSearchable)
+                    return api.retrieveData($scope.scopeModal.filter);
                 else
                     return api.retrieveData(filter);
 
             };
         };
        
-        $scope.summaryWidgets.push(summaryWidget);
+        $scope.scopeModal.summaryWidgets.push(summaryWidget);
     }
 
     function loadAllWidgets() {
         return WidgetAPIService.GetAllWidgets().then(function (response) {
-            $scope.allWidgets = response;
+            $scope.scopeModal.allWidgets = response;
         });
 
     }
     function loadViewByID() {
         return ViewAPIService.GetView(viewId).then(function (response) {
-            $scope.summaryContents = response.ViewContent.SummaryContents;
-            $scope.bodyContents = response.ViewContent.BodyContents;
+            $scope.scopeModal.summaryContents = response.ViewContent.SummaryContents;
+            $scope.scopeModal.bodyContents = response.ViewContent.BodyContents;
             if (response.ViewContent.DefaultPeriod != undefined || response.ViewContent.DefaultGrouping != undefined) {
-                $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, response.ViewContent.DefaultPeriod, 'value');
-                $scope.selectedTimeDimensionType = UtilsService.getItemByVal($scope.timeDimensionTypes, response.ViewContent.DefaultGrouping, 'value');
-                $scope.nonSearchable = false;
+                $scope.scopeModal.selectedPeriod = UtilsService.getItemByVal($scope.scopeModal.periods, response.ViewContent.DefaultPeriod, 'value');
+                $scope.scopeModal.selectedTimeDimensionType = UtilsService.getItemByVal($scope.scopeModal.timeDimensionTypes, response.ViewContent.DefaultGrouping, 'value');
+                $scope.scopeModal.nonSearchable = false;
                 fillDateAndPeriod();
             }
  

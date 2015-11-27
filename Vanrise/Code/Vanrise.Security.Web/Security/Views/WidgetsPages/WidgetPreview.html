@@ -1,37 +1,44 @@
 ﻿<div ng-controller="Security_WidgetPreviewController">
-    <vr-form name="formWidgetPreview">
+    <vr-form validationcontext="widgetPreviewGroup">
         <vr-row>
             <vr-columns width="1/4row">
-                <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Period"
-                           selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
-            </vr-columns>
-            <vr-columns width="1/4row">
-                <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired onblurdatetime="onBlurChanged" customvalidate="customvalidateFrom"></vr-datetimepicker>
+                <vr-select datasource="scopeModal.periods" datatextfield="description" datavaluefield="value" label="Period"
+                           selectedvalues="scopeModal.selectedPeriod" isrequired hidefilterbox onselectionchanged="scopeModal.periodSelectionChanged"></vr-select>
             </vr-columns>
 
-            <vr-columns width="1/4row">
-                <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired onblurdatetime="onBlurChanged" customvalidate="customvalidateTo"></vr-datetimepicker>
+            <vr-columns width="1/2row">
+               
+                <vr-validator validate="scopeModal.validateDateTime()">
+                    <vr-columns width="1/2row">
+                        <vr-datetimepicker type="dateTime" value="scopeModal.fromDate" label="From" isrequired onblurdatetime="scopeModal.onBlurChanged"></vr-datetimepicker>
+                    </vr-columns>
+
+                    <vr-columns width="1/2row">
+                        <vr-datetimepicker type="dateTime" value="scopeModal.toDate" label="To" isrequired onblurdatetime="scopeModal.onBlurChanged"></vr-datetimepicker>
+                    </vr-columns>
+                </vr-validator>
             </vr-columns>
-            <vr-columns width="1/4row">
-                <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"
-                           selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox hideremoveicon></vr-select>
-            </vr-columns>
-          
+                <vr-columns width="1/4row">
+                    <vr-select datasource="scopeModal.timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"
+                               selectedvalues="scopeModal.selectedTimeDimensionType" isrequired hidefilterbox hideremoveicon></vr-select>
+                </vr-columns>
+        
+
         </vr-row>
     </vr-form>
     <vr-row>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Search" formname="formWidgetPreview" data-onclick="Search" ></vr-button>
+                <vr-button type="Search" validationcontext="widgetPreviewGroup" data-onclick="scopeModal.Search"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>
-    <div vr-loader="isGettingData">
+    <div vr-loader="scopeModal.isGettingData">
         <vr-row>
             <div>
                 <vr-columns width="fullrow">
-                    <vr-directivewrapper directive="widget.Setting.directive" title="widget.SectionTitle" on-ready="onElementReady" settings="widget.Setting.settings"
-                                         retrievedataonload="false" filter="filter"></vr-directivewrapper>
+                    <vr-directivewrapper directive="scopeModal.widget.Setting.directive" title="scopeModal.widget.SectionTitle" on-ready="scopeModal.onElementReady" settings="scopeModal.widget.Setting.settings"
+                                         retrievedataonload="false" filter="scopeModal.filter"></vr-directivewrapper>
                 </vr-columns>
             </div>
 

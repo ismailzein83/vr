@@ -1,50 +1,58 @@
 ﻿<vr-panel ng-controller="Security_DynamicPagePreviewController">
-    <vr-form name="formDynamicPagePreview" ng-show="!nonSearchable">
+    <vr-form validationcontext="dynamicPagePreviewGroup" ng-show="!scopeModal.nonSearchable">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
-                <vr-columns width="normal">
-                    <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Period"
-                               selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
-                </vr-columns>
-                <vr-columns width="normal">
-
-                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired onblurdatetime="onBlurChanged" customvalidate="customvalidateFrom"></vr-datetimepicker>
-                </vr-columns>
-                <vr-columns width="normal">
-                    <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired onblurdatetime="onBlurChanged" customvalidate="customvalidateTo"></vr-datetimepicker>
-                </vr-columns>
-                <vr-columns width="normal">
-                    <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"
-                               selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
+                <vr-columns width="1/4row">
+                    <vr-select datasource="scopeModal.periods" datatextfield="description" datavaluefield="value" label="Period"
+                               selectedvalues="scopeModal.selectedPeriod" isrequired hidefilterbox onselectionchanged="scopeModal.periodSelectionChanged"></vr-select>
                 </vr-columns>
 
-            </vr-row> 
+
+                <vr-columns width="1/2row">
+
+                    <vr-validator validate="scopeModal.validateDateTime()">
+                        <vr-columns width="1/2row">
+                            <vr-datetimepicker type="dateTime" value="scopeModal.fromDate" label="From" isrequired onblurdatetime="scopeModal.onBlurChanged"></vr-datetimepicker>
+                        </vr-columns>
+
+                        <vr-columns width="1/2row">
+                            <vr-datetimepicker type="dateTime" value="scopeModal.toDate" label="To" isrequired onblurdatetime="scopeModal.onBlurChanged"></vr-datetimepicker>
+                        </vr-columns>
+                    </vr-validator>
+                </vr-columns>
+
+                <vr-columns width="1/4row">
+                    <vr-select datasource="scopeModal.timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"
+                               selectedvalues="scopeModal.selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
+                </vr-columns>
+
+            </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formDynamicPagePreview" data-onclick="Search"></vr-button>
+                    <vr-button type="Search" validationcontext="dynamicPagePreviewGroup" data-onclick="scopeModal.Search"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
     </vr-form> 
 
-    <div vr-loader="isGettingData">
-            <vr-row ng-if="summaryWidgets.length>0">
-                    <div class="list-group">
-                        <vr-columns ng-repeat="summaryWidget in summaryWidgets" colnum="{{summaryWidget.NumberOfColumns}}">
-                            <vr-directivewrapper directive="summaryWidget.Setting.Directive" title="summaryWidget.SectionTitle" on-ready="summaryWidget.onElementReady" settings="summaryWidget.Setting.Settings"
-                                                 retrievedataonload="true" ></vr-directivewrapper>
-                        </vr-columns>
-                    </div>
-            </vr-row>
-            <vr-row ng-if="bodyWidgets.length>0">
-                <div class="list-group " >
-                    <vr-columns ng-repeat="bodyWidget in bodyWidgets" colnum="{{bodyWidget.NumberOfColumns}}">
-                        <vr-directivewrapper directive="bodyWidget.Setting.Directive" title="bodyWidget.SectionTitle" on-ready="bodyWidget.onElementReady" settings="bodyWidget.Setting.Settings"
-                                           filter="filter"  retrievedataonload="true" ></vr-directivewrapper>
-                    </vr-columns>
-                </div>
-            </vr-row>
+    <div vr-loader="scopeModal.isGettingData">
+        <vr-row ng-if="scopeModal.summaryWidgets.length>0">
+            <div class="list-group">
+                <vr-columns ng-repeat="summaryWidget in scopeModal.summaryWidgets" colnum="{{summaryWidget.NumberOfColumns}}">
+                    <vr-directivewrapper directive="summaryWidget.Setting.Directive" title="summaryWidget.SectionTitle" on-ready="summaryWidget.onElementReady" settings="summaryWidget.Setting.Settings"
+                                         retrievedataonload="true"></vr-directivewrapper>
+                </vr-columns>
+            </div>
+        </vr-row>
+        <vr-row ng-if="scopeModal.bodyWidgets.length>0">
+            <div class="list-group ">
+                <vr-columns ng-repeat="bodyWidget in scopeModal.bodyWidgets" colnum="{{bodyWidget.NumberOfColumns}}">
+                    <vr-directivewrapper directive="bodyWidget.Setting.Directive" title="bodyWidget.SectionTitle" on-ready="bodyWidget.onElementReady" settings="bodyWidget.Setting.Settings"
+                                         filter="filter" retrievedataonload="true"></vr-directivewrapper>
+                </vr-columns>
+            </div>
+        </vr-row>
     </div>
 </vr-panel>

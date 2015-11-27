@@ -1,92 +1,86 @@
-﻿WidgetPreviewController.$inject = ['$scope', 'TimeDimensionTypeEnum','PeriodEnum','UtilsService'];
+﻿WidgetPreviewController.$inject = ['$scope', 'TimeDimensionTypeEnum','PeriodEnum','UtilsService','VRValidationService'];
 
-function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, UtilsService) {
+function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, UtilsService, VRValidationService) {
     var widgetAPI;
     defineScope();
     load();
     var date;
     function defineScope() {
-       
-        $scope.selectedPeriod = PeriodEnum.CurrentMonth;
-        date = $scope.selectedPeriod.getInterval();
-        $scope.fromDate = date.from;
-        $scope.toDate = date.to;
+        $scope.scopeModal = {};
+        $scope.scopeModal.validateDateTime = function () {
+            return VRValidationService.validateTimeRange($scope.scopeModal.fromDate, $scope.scopeModal.toDate);
+        }
+        $scope.scopeModal.selectedPeriod = PeriodEnum.CurrentMonth;
+        date = $scope.scopeModal.selectedPeriod.getInterval();
+        $scope.scopeModal.fromDate = date.from;
+        $scope.scopeModal.toDate = date.to;
         
         defineTimeDimensionTypes();
-        $scope.filter = {
-            timeDimensionType: $scope.selectedTimeDimensionType,
-            fromDate: $scope.fromDate,
-            toDate: $scope.toDate
+        $scope.scopeModal.filter = {
+            timeDimensionType: $scope.scopeModal.selectedTimeDimensionType,
+            fromDate: $scope.scopeModal.fromDate,
+            toDate: $scope.scopeModal.toDate
         }
-        $scope.periods = UtilsService.getArrayEnum(PeriodEnum);
-        $scope.close = function () {
+        $scope.scopeModal.periods = UtilsService.getArrayEnum(PeriodEnum);
+        $scope.scopeModal.close = function () {
             $scope.modalContext.closeModal()
         };
         var customize = {
             value: -1,
             description: "Customize"
         }
-        $scope.onBlurChanged = function () {
-            var from = UtilsService.getShortDate($scope.fromDate);
+        $scope.scopeModal.onBlurChanged = function () {
+            var from = UtilsService.getShortDate($scope.scopeModal.fromDate);
             var oldFrom = UtilsService.getShortDate(date.from);
-            var to = UtilsService.getShortDate($scope.toDate);
+            var to = UtilsService.getShortDate($scope.scopeModal.toDate);
             var oldTo = UtilsService.getShortDate(date.to);
             if (from != oldFrom || to != oldTo)
-                $scope.selectedPeriod = customize;
+                $scope.scopeModal.selectedPeriod = customize;
 
         }
    
         
-        $scope.widget = $scope.$parent.widget;
-        $scope.widget.SectionTitle = $scope.widget.Name;
-        $scope.onElementReady = function (api) {
+        $scope.scopeModal.widget = $scope.$parent.widget;
+        $scope.scopeModal.widget.SectionTitle = $scope.scopeModal.widget.Name;
+        $scope.scopeModal.onElementReady = function (api) {
             widgetAPI = api;
-            widgetAPI.retrieveData($scope.filter);
+            widgetAPI.retrieveData($scope.scopeModal.filter);
         };
  
-        $scope.Search = function () {
-            $scope.filter = {
-                timeDimensionType: $scope.selectedTimeDimensionType,
-                fromDate: $scope.fromDate,
-                toDate: $scope.toDate
+        $scope.scopeModal.Search = function () {
+            $scope.scopeModal.filter = {
+                timeDimensionType: $scope.scopeModal.selectedTimeDimensionType,
+                fromDate: $scope.scopeModal.fromDate,
+                toDate: $scope.scopeModal.toDate
             }
                return refreshWidget();
         };
-        $scope.periodSelectionChanged = function () {
+        $scope.scopeModal.periodSelectionChanged = function () {
 
-            if ($scope.selectedPeriod.value != -1) {
+            if ($scope.scopeModal.selectedPeriod.value != -1) {
 
-                date = $scope.selectedPeriod.getInterval();
-                $scope.fromDate = date.from;
-                $scope.toDate = date.to;
+                date = $scope.scopeModal.selectedPeriod.getInterval();
+                $scope.scopeModal.fromDate = date.from;
+                $scope.scopeModal.toDate = date.to;
             }
      
         }
-        $scope.customvalidateFrom = function (fromDate) {
-            var from = UtilsService.getShortDate(fromDate);
-            var to = UtilsService.getShortDate($scope.toDate);
-            return UtilsService.validateDates(from, to);
-        };
-        $scope.customvalidateTo = function (toDate) {
-            var from = UtilsService.getShortDate($scope.fromDate);
-            var to = UtilsService.getShortDate(toDate);
-            return UtilsService.validateDates(from, to);
-        };
+
     }
     function refreshWidget() {
-      return  widgetAPI.retrieveData($scope.filter);
+        return widgetAPI.retrieveData($scope.scopeModal.filter);
     }
 
     function defineTimeDimensionTypes() {
-        $scope.timeDimensionTypes = [];
+        $scope.scopeModal.timeDimensionTypes = [];
         for (var td in TimeDimensionTypeEnum)
-            $scope.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
-        $scope.selectedTimeDimensionType =  TimeDimensionTypeEnum.Daily;
+            $scope.scopeModal.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
+        $scope.scopeModal.selectedTimeDimensionType = TimeDimensionTypeEnum.Daily;
      
     }
     function load() {
       
-        $scope.isGettingData = false;
+        $scope.scopeModal.isGettingData = false;
         
     }
 
