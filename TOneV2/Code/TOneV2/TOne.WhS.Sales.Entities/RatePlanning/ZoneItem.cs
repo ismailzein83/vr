@@ -43,5 +43,9 @@ namespace TOne.WhS.Sales.Entities
         public DateTime? NewRoutingProductBED { get; set; }
 
         public DateTime? NewRoutingProductEED { get; set; }
+
+        public int EffectiveRoutingProductId { get; set; }
+        
+        public string EffectiveRoutingProductName { get; set; }
     }
 }

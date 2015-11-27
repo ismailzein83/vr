@@ -44,13 +44,15 @@
         </vr-row>
 
         <div vr-loader="isLoadingDefaultRoutingProductSection" ng-show="showDefaultItem">
-            <vr-whs-sales-rateplanroutingproduct on-ready="onDefaultItemReady"></vr-whs-sales-rateplanroutingproduct>
+            <vr-whs-sales-defaultroutingproduct on-ready="onDefaultItemReady"></vr-whs-sales-defaultroutingproduct>
         </div>
 
         <vr-row>
+            {{zoneLetters}}
+            {{selectedZoneLetterIndex}}
             <vr-columns width="fullrow" ng-show="showZoneLetters">
-                <vr-choices selectedindex="zoneLetterConnector.selectedZoneLetterIndex"
-                            onselectionchanged="zoneLetterConnector.onZoneLetterSelectionChanged()">
+                <vr-choices selectedindex="selectedZoneLetterIndex"
+                            onselectionchanged="onZoneLetterSelectionChanged()">
                     <vr-choice ng-repeat="letter in zoneLetters">{{ letter | uppercase }}</vr-choice>
                 </vr-choices>
             </vr-columns>

@@ -76,6 +76,9 @@ namespace TOne.WhS.Sales.Business
                         }
 
                         SetZoneItemChanges(input.Filter.OwnerType, input.Filter.OwnerId, zoneItems);
+                        
+                        foreach (ZoneItem zoneItem in zoneItems)
+                            SetZoneEffectiveRoutingProduct(zoneItem);
                     }
                 }
             }
@@ -172,6 +175,20 @@ namespace TOne.WhS.Sales.Business
             }
         }
 
+        private void SetZoneEffectiveRoutingProduct(ZoneItem zoneItem)
+        {
+            if (zoneItem.NewRoutingProductId != null)
+            {
+                zoneItem.EffectiveRoutingProductId = (int)zoneItem.NewRoutingProductId;
+                zoneItem.EffectiveRoutingProductName = new RoutingProductManager().GetRoutingProduct(zoneItem.EffectiveRoutingProductId).Name;
+            }
+            else if (zoneItem.CurrentRoutingProductId != null)
+            {
+                zoneItem.EffectiveRoutingProductId = (int)zoneItem.CurrentRoutingProductId;
+                zoneItem.EffectiveRoutingProductName = zoneItem.CurrentRoutingProductName;
+            }
+        }
+
         private int GetSellingProductId(int customerId)
         {
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
@@ -184,6 +201,9 @@ namespace TOne.WhS.Sales.Business
         private void SetZoneItemChanges(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<ZoneItem> zoneItems)
         {
             Changes existingChanges = _dataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
+
+            if (existingChanges != null && existingChanges.DefaultChanges == null && existingChanges.ZoneChanges == null)
+                existingChanges = null;
 
             if (existingChanges != null && existingChanges.ZoneChanges != null)
             {
@@ -278,6 +298,9 @@ namespace TOne.WhS.Sales.Business
         public void SetDefaultItemChanges(SalePriceListOwnerType ownerType, int ownerId, DefaultItem defaultItem)
         {
             Changes existingChanges = _dataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
+
+            if (existingChanges != null && existingChanges.DefaultChanges == null && existingChanges.ZoneChanges == null)
+                existingChanges = null;
 
             if (existingChanges != null && existingChanges.DefaultChanges != null)
             {
@@ -393,17 +416,10 @@ namespace TOne.WhS.Sales.Business
 
         public bool SaveChanges(SaveChangesInput input)
         {
-            bool saved = true;
+            Changes existingChanges = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
+            Changes allChanges = MergeChanges(existingChanges, input.NewChanges);
 
-            if (input.NewChanges != null)
-            {
-                Changes existingChanges = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
-                Changes allChanges = MergeChanges(existingChanges, input.NewChanges);
-
-                saved = _dataManager.InsertOrUpdateChanges(input.OwnerType, input.OwnerId, allChanges, RatePlanStatus.Draft);
-            }
-
-            return saved;
+            return _dataManager.InsertOrUpdateChanges(input.OwnerType, input.OwnerId, allChanges, RatePlanStatus.Draft);
         }
 
         private Changes MergeChanges(Changes existingChanges, Changes newChanges)
@@ -412,8 +428,13 @@ namespace TOne.WhS.Sales.Business
                 () =>
                 {
                     Changes allChanges = new Changes();
+
                     allChanges.ZoneChanges = MergeZoneChanges(existingChanges.ZoneChanges, newChanges.ZoneChanges);
-                    allChanges.DefaultChanges = newChanges.DefaultChanges;
+                    allChanges.DefaultChanges = (newChanges.DefaultChanges != null && (newChanges.DefaultChanges.NewDefaultRoutingProduct != null || newChanges.DefaultChanges.DefaultRoutingProductChange != null)) ? newChanges.DefaultChanges : null;
+
+                    if ((allChanges.ZoneChanges == null || allChanges.ZoneChanges.Count == 0) && allChanges.DefaultChanges == null)
+                        allChanges = null;
+
                     return allChanges;
                 });
         }
@@ -428,6 +449,8 @@ namespace TOne.WhS.Sales.Business
                         if (!newZoneChanges.Any(item => item.ZoneId == zoneItemChanges.ZoneId))
                             newZoneChanges.Add(zoneItemChanges);
                     }
+
+                    newZoneChanges.RemoveAll(item => item.NewRate == null && item.RateChange == null && item.NewRoutingProduct == null && item.RoutingProductChange == null);
 
                     return newZoneChanges;
                 });

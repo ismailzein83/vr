@@ -72,11 +72,11 @@
             };
 
             $scope.zoneLetters = [];
-            $scope.zoneLetterConnector = {
-                selectedZoneLetterIndex: 0,
-                onZoneLetterSelectionChanged: function () {
-                    return saveChanges(true);
-                }
+            $scope.selectedZoneLetterIndex = 0;
+
+            $scope.onZoneLetterSelectionChanged = function () {
+                console.log($scope.selectedZoneLetterIndex);
+                return saveChanges(true);
             };
 
             $scope.onDefaultItemReady = function (api) {
@@ -86,11 +86,7 @@
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                //var setLoader = function (value) { $scope.isLoadingSaleZonesSection = value };
-                //var gridPayload = buildGridQuery();
-                //VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridAPI, gridPayload, setLoader, gridReadyDeferred);
-
-               gridReadyDeferred.resolve();
+                gridReadyDeferred.resolve();
             };
 
             $scope.search = function () {
@@ -161,9 +157,10 @@
             getZoneLetters().then(function () {
                 if ($scope.zoneLetters.length > 0) {
                     showRatePlan(true);
-
+                    
                     gridReadyDeferred.promise.then(function () {
-                        var gridPayload = buildGridQuery();
+                        var gridPayload = getGridQuery();
+                        
                         VRUIUtilsService.callDirectiveLoad(gridAPI, gridPayload, gridLoadDeferred);
                     });
                 }
@@ -201,7 +198,7 @@
                 return WhS_Sales_RatePlanAPIService.GetZoneLetters($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
                     if (response != null) {
                         $scope.zoneLetters = [];
-
+                        
                         for (var i = 0; i < response.length; i++) {
                             $scope.zoneLetters.push(response[i]);
                         }
@@ -209,35 +206,33 @@
                 });
             }
 
+            function getGridQuery() {
+                return {
+                    OwnerType: $scope.selectedOwnerType.value,
+                    OwnerId: getOwnerId(),
+                    ZoneLetter: $scope.zoneLetters[$scope.selectedZoneLetterIndex]
+                };
+            }
+
             function getDefaultItem() {
                 return WhS_Sales_RatePlanAPIService.GetDefaultItem($scope.selectedOwnerType.value, getOwnerId());
             }
         }
 
-        function saveChanges(loadGrid) {
-            var input = buildSaveChangesInput();
+        function saveChanges(refreshRatePlan) {
+            var input = getSaveChangesInput();
             console.log(input);
-            if (input.NewChanges != null) {
-                return WhS_Sales_RatePlanAPIService.SaveChanges(input).then(function (response) {
-                    if (loadGrid)
-                        gridAPI.load(buildGridQuery());
-                });
-            }
-            else {
-                if (loadGrid)
-                    return gridAPI.load(buildGridQuery());
 
-                var deferredPromise = UtilsService.createPromiseDeferred();
-                deferredPromise.resolve();
-                return deferredPromise.promise;
-            }
+            return WhS_Sales_RatePlanAPIService.SaveChanges(input).then(function (response) {
+                if (refreshRatePlan)
+                    loadRatePlan();
+            });
             
-            function buildSaveChangesInput() {
-                var newChanges;
+            function getSaveChangesInput() {
                 var defaultChanges = getDefaultChanges();
                 var zoneChanges = gridAPI.getChanges();
 
-                newChanges = (defaultChanges != null || zoneChanges != null) ? { DefaultChanges: defaultChanges, ZoneChanges: zoneChanges } : null;
+                var newChanges = (defaultChanges != null || zoneChanges != null) ? { DefaultChanges: defaultChanges, ZoneChanges: zoneChanges } : null;
 
                 return {
                     OwnerType: $scope.selectedOwnerType.value,
@@ -252,13 +247,11 @@
                     if (directiveChanges != null) {
                         defaultChanges = {
                             NewDefaultRoutingProduct: (directiveChanges.NewRoutingProduct != null) ? {
-                                $type: "TOne.WhS.Sales.Entities.NewDefaultRoutingProduct, TOne.WhS.Sales.Entities",
                                 DefaultRoutingProductId: directiveChanges.NewRoutingProduct.RoutingProductId,
                                 BED: directiveChanges.NewRoutingProduct.BED,
                                 EED: directiveChanges.NewRoutingProduct.EED
                             } : null,
                             DefaultRoutingProductChange: (directiveChanges.RoutingProductChange != null) ? {
-                                $type: "TOne.WhS.Sales.Entities.DefaultRoutingProductChange, TOne.WhS.Sales.Entities",
                                 DefaultRoutingProductId: directiveChanges.RoutingProductChange.RoutingProductId,
                                 EED: directiveChanges.RoutingProductChange.EED
                             } : null
@@ -270,17 +263,9 @@
             }
         }
 
-        function buildGridQuery() {
-            return {
-                OwnerType: $scope.selectedOwnerType.value,
-                OwnerId: getOwnerId(),
-                ZoneLetter: $scope.zoneLetters[$scope.zoneLetterConnector.selectedZoneLetterIndex]
-            };
-        }
-
         function clearRatePlan() {
-            $scope.zoneLetters.length = 0;
-            $scope.zoneLetterConnector.selectedZoneLetterIndex = 0;
+            $scope.zoneLetters= undefined;
+            $scope.selectedZoneLetterIndex =undefined;
             showRatePlan(false);
         }
 

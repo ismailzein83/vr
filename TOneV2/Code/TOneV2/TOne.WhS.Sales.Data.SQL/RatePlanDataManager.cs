@@ -45,6 +45,7 @@ namespace TOne.WhS.Sales.Data.SQL
         public bool InsertOrUpdateChanges(SalePriceListOwnerType ownerType, int ownerId, Changes changes, RatePlanStatus status)
         {
             string serializedChanges = Vanrise.Common.Serializer.Serialize(changes);
+
             int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_InsertOrUpdateChanges", ownerType, ownerId, serializedChanges, status);
             return affectedRows > 0;
         }

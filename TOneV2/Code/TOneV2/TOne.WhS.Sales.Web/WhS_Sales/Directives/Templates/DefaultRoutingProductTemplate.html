@@ -6,7 +6,7 @@
         </vr-columns>
 
         <vr-columns width="normal">
-            <vr-whs-be-routingproduct-selector on-ready="ctrl.onSelectorReady" onselectionchanged="ctrl.onSelectionChange"></vr-whs-be-routingproduct-selector>
+            <vr-whs-be-routingproduct-selector on-ready="ctrl.onSelectorReady" onselectionchanged="ctrl.onSelectionChange" selectedvalues="ctrl.newRoutingProduct"></vr-whs-be-routingproduct-selector>
         </vr-columns>
 
         <vr-columns width="normal">
@@ -20,7 +20,9 @@
             <span vr-disabled="true">
                 <vr-datetimepicker label="EED" type="date" value="ctrl.CurrentEED" ng-hide="ctrl.ShowNewEED"></vr-datetimepicker>
             </span>
-            <vr-datetimepicker label="EED" type="date" value="ctrl.NewEED" ng-show="ctrl.ShowNewEED"></vr-datetimepicker>
+            <span vr-disabled="ctrl.newRoutingProduct == null && !ctrl.IsEditable">
+                <vr-datetimepicker label="EED" type="date" value="ctrl.NewEED" onvaluechanged="ctrl.onNewEEDChange" ng-show="ctrl.ShowNewEED"></vr-datetimepicker>
+            </span>
         </vr-columns>
     </div>
 </vr-row>

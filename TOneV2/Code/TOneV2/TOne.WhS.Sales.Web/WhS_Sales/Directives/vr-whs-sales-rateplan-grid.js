@@ -2,7 +2,6 @@
 
 app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService",
     function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
-
     return {
         restrict: "E",
         scope: {
@@ -12,7 +11,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             var ctrl = this;
 
             var ratePlanGrid = new RatePlanGrid($scope, ctrl);
-            ratePlanGrid.initializeController();
+            ratePlanGrid.initCtrl();
         },
         controllerAs: "ctrl",
         bindToController: true,
@@ -20,9 +19,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
     };
 
     function RatePlanGrid($scope, ctrl) {
-        this.initializeController = initializeController;
+        this.initCtrl = initCtrl;
 
-        function initializeController() {
+        function initCtrl() {
             var gridAPI;
             var gridQuery;
             var gridDrillDownTabs;
@@ -32,15 +31,15 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
-                gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(buildGridDrillDownDefinitions(), gridAPI, null);
+                gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(getGridDrillDownDefinitions(), gridAPI, null);
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getAPI());
 
-                function buildGridDrillDownDefinitions() {
+                function getGridDrillDownDefinitions() {
                     return [{
                         title: "Routing Product",
-                        directive: "vr-whs-sales-rateplanroutingproduct",
+                        directive: "vr-whs-sales-zoneroutingproduct",
                         loadDirective: function (zoneRoutingProductDirectiveAPI, zoneItem) {
                             zoneItem.ZoneRoutingProductDirectiveAPI = zoneRoutingProductDirectiveAPI;
                             return loadZoneRoutingProductDirective(zoneItem);
@@ -80,10 +79,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         var zoneChanges = [];
 
                         for (var i = 0; i < $scope.zoneItems.length; i++) {
-                            var zoneItemChanges = buildZoneItemChanges($scope.zoneItems[i]);
+                            var item = $scope.zoneItems[i];
 
-                            if (zoneItemChanges != null)
-                                zoneChanges.push(zoneItemChanges);
+                            if (item.IsDirty || (item.ZoneRoutingProductDirectiveAPI != undefined && item.ZoneRoutingProductDirectiveAPI.isDirty()))
+                                zoneChanges.push(getZoneItemChanges(item));
                         }
 
                         if (zoneChanges.length == 0)
@@ -91,27 +90,21 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                         return zoneChanges;
 
-                        function buildZoneItemChanges(zoneItem) {
-                            var zoneItemChanges = null;
+                        function getZoneItemChanges(zoneItem) {
+                            var newRate = getNewRate(zoneItem);
+                            var rateChange = getRateChange(zoneItem);
+                            var newRoutingProduct = getNewRoutingProduct(zoneItem);
+                            var routingProductChange = getRoutingProductChange(zoneItem);
 
-                            var newRate = buildNewRate(zoneItem);
-                            var rateChange = (newRate != null) ? null : buildRateChange(zoneItem);
-                            var newRoutingProduct = buildNewRoutingProduct(zoneItem);
-                            var routingProductChange = (newRoutingProduct == null) ? buildRoutingProductChange(zoneItem) : null;
+                            return {
+                                ZoneId: zoneItem.ZoneId,
+                                NewRate: newRate,
+                                RateChange: rateChange,
+                                NewRoutingProduct: newRoutingProduct,
+                                RoutingProductChange: routingProductChange
+                            };
 
-                            if (newRate != null || rateChange != null || newRoutingProduct != null || routingProductChange != null) {
-                                zoneItemChanges = {
-                                    ZoneId: zoneItem.ZoneId,
-                                    NewRate: newRate,
-                                    RateChange: rateChange,
-                                    NewRoutingProduct: newRoutingProduct,
-                                    RoutingProductChange: routingProductChange
-                                };
-                            }
-
-                            return zoneItemChanges;
-
-                            function buildNewRate(zoneItem) {
+                            function getNewRate(zoneItem) {
                                 var newRate = null;
 
                                 if (!isEmpty(zoneItem.NewRate)) {
@@ -126,7 +119,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                 return newRate;
                             }
 
-                            function buildRateChange(zoneItem) {
+                            function getRateChange(zoneItem) {
                                 var rateChange = null;
 
                                 if (zoneItem.IsCurrentRateEditable && !compareDates(zoneItem.CurrentRateEED, zoneItem.NewRateEED)) {
@@ -148,14 +141,13 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                 }
                             }
                             
-                            function buildNewRoutingProduct(zoneItem) {
+                            function getNewRoutingProduct(zoneItem) {
                                 if (zoneItem.ZoneRoutingProductDirectiveAPI != undefined) {
                                     var routingProductChanges = zoneItem.ZoneRoutingProductDirectiveAPI.getChanges();
                                     var newZoneRoutingProduct = null;
 
                                     if (routingProductChanges != null && routingProductChanges.NewRoutingProduct != null) {
                                         newZoneRoutingProduct = {
-                                            $type: "TOne.WhS.Sales.Entities.NewZoneRoutingProduct, TOne.WhS.Sales.Entities",
                                             ZoneId: zoneItem.ZoneId,
                                             ZoneRoutingProductId: routingProductChanges.NewRoutingProduct.RoutingProductId,
                                             BED: routingProductChanges.NewRoutingProduct.BED,
@@ -167,14 +159,13 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                 }
                             }
 
-                            function buildRoutingProductChange(zoneItem) {
+                            function getRoutingProductChange(zoneItem) {
                                 if (zoneItem.ZoneRoutingProductDirectiveAPI != undefined) {
                                     var routingProductChanges = zoneItem.ZoneRoutingProductDirectiveAPI.getChanges();
                                     var zoneRoutingProductChange = null;
 
                                     if (routingProductChanges != null && routingProductChanges.RoutingProductChange != null) {
                                         zoneRoutingProductChange = {
-                                            $type: "TOne.WhS.Sales.Entities.ZoneRoutingProductChange, TOne.WhS.Sales.Entities",
                                             ZoneRoutingProductId: routingProductChanges.RoutingProductChange.RoutingProductId,
                                             EED: routingProductChanges.RoutingProductChange.EED
                                         };
@@ -197,7 +188,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             function loadZoneItems() {
                 $scope.isLoadingGrid = true;
 
-                return WhS_Sales_RatePlanAPIService.GetZoneItems(buildZoneItemInput()).then(function (response) {
+                return WhS_Sales_RatePlanAPIService.GetZoneItems(getZoneItemInput()).then(function (response) {
                     if (response == undefined || response == null)
                         return;
 
@@ -217,7 +208,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     $scope.isLoadingGrid = false;
                 });
 
-                function buildZoneItemInput() {
+                function getZoneItemInput() {
                     var pageInfo = gridAPI.getPageInfo();
 
                     return {
@@ -228,6 +219,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 }
 
                 function extendZoneItem(zoneItem) {
+                    zoneItem.IsDirty = false;
                     zoneItem.IsCurrentRateEditable = (zoneItem.IsCurrentRateEditable == null) ? false : zoneItem.IsCurrentRateEditable;
 
                     zoneItem.CurrentRateBED = (zoneItem.CurrentRateBED != null) ? new Date(zoneItem.CurrentRateBED) : null;
@@ -240,6 +232,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     zoneItem.showNewRateEED = !isEmpty(zoneItem.NewRate);
 
                     zoneItem.onNewRateChanged = function (zoneItem) {
+                        zoneItem.IsDirty = true;
+                        console.log(zoneItem.IsDirty);
+
                         if (!isEmpty(zoneItem.NewRate)) {
                             zoneItem.showNewRateBED = true;
                             zoneItem.showNewRateEED = true;
@@ -257,6 +252,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             zoneItem.showNewRateEED = false;
                             zoneItem.AreNewDatesSet = false;
                         }
+                    };
+
+                    zoneItem.onNewRateEEDChange = function (zoneItem) {
+                        zoneItem.IsDirty = true;
+                        console.log(zoneItem.IsDirty);
                     };
                 }
             }

@@ -27,7 +27,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public IEnumerable<SaleZone> GetSaleZones(int sellingNumberPlanId, DateTime effectiveDate)
         {
-            return this.GetCachedSaleZones(sellingNumberPlanId).Where(x => x.BeginEffectiveDate <= effectiveDate && (!x.EndEffectiveDate.HasValue || x.EndEffectiveDate.Value > effectiveDate));
+            return this.GetCachedSaleZones(sellingNumberPlanId).FindAllRecords(item => item.BeginEffectiveDate <= effectiveDate && (!item.EndEffectiveDate.HasValue || item.EndEffectiveDate.Value > effectiveDate));
         }
 
         public SaleZone GetSaleZone(long saleZoneId)
