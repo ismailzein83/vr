@@ -59,7 +59,6 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneAPIService, Wh
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_SupplierZoneAPIService.GetFilteredSupplierZones(dataRetrievalInput)
                     .then(function (response) {
-
                         if (response.Data != undefined) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);

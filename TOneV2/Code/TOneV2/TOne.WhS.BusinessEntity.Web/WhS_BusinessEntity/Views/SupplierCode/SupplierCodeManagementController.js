@@ -29,7 +29,7 @@
 
             $scope.onSelectSupplier = function (selectedItem) {
                 $scope.showSupplierZoneSelector = true;
-                $scope.selectedSupplierZones = undefined;           
+                $scope.selectedSupplierZones.length = 0;
                 var payload = {
                     filter: { SupplierId: selectedItem.CarrierAccountId },
                 }
@@ -85,7 +85,7 @@
             filter = {
                 SupplierId: supplierDirectiveApi.getSelectedIds(),
                 EffectiveOn: $scope.effectiveOn,
-                ZoneId: supplierZoneDirectiveAPI.getSelectedIds(),
+                ZoneIds: supplierZoneDirectiveAPI.getSelectedIds(),
                 Code: $scope.code
             };
            

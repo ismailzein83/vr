@@ -25,10 +25,10 @@
                 supplierZoneReadyPromiseDeferred.resolve();
             }
 
-
             $scope.onSelectSupplier = function (selectedItem) {
                 $scope.showSupplierZoneSelector = true;
-                $scope.selectedSupplierZones = undefined;           
+                $scope.selectedSupplierZones.length = 0;
+
                 var payload = {
                     filter: { SupplierId: selectedItem.CarrierAccountId },
                 }
@@ -43,10 +43,10 @@
                 supplierDirectiveApi = api;
                 supplierReadyPromiseDeferred.resolve();
             }
-            
+
             $scope.onGridReady = function (api) {
-                gridAPI = api;            
-               
+                gridAPI = api;
+
             }
         }
 
@@ -68,7 +68,7 @@
                   $scope.isGettingData = false;
               });
         }
-        
+
         function loadSupplierSelector() {
             var supplierLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -84,9 +84,11 @@
             filter = {
                 SupplierId: supplierDirectiveApi.getSelectedIds(),
                 EffectiveOn: $scope.effectiveOn,
-                ZoneId: supplierZoneDirectiveAPI.getSelectedIds()
+                ZoneIds: supplierZoneDirectiveAPI.getSelectedIds()
             };
-           
+          
+
+
         }
 
     }

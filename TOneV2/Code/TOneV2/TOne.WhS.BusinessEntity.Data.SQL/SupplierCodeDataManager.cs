@@ -84,7 +84,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("[TOneWhS_BE].[sp_SupplierCode_CreateTempByFiltered]", tempTableName, input.Query.Code, input.Query.ZoneId, input.Query.EffectiveOn);
+                string zonesids = null;
+                if (input.Query.ZonesIds != null && input.Query.ZonesIds.Count() > 0)
+                    zonesids = string.Join<int>(",", input.Query.ZonesIds);
+
+                ExecuteNonQuerySP("[TOneWhS_BE].[sp_SupplierCode_CreateTempByFiltered]", tempTableName, input.Query.Code, zonesids, input.Query.EffectiveOn);
             };
 
             if (input.SortByColumnName != null)
