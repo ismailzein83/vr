@@ -27,6 +27,7 @@ namespace TOne.WhS.Routing.BP.Activities
         public BaseQueue<CodeMatchesBatch> OutputQueue_2 { get; set; }
 
         public BaseQueue<CodeMatches> OutputQueueForCustomerRoutes { get; set; }
+        
         public bool IsCustomerRoutesProcess { get; set; }
     }
 
@@ -97,6 +98,7 @@ namespace TOne.WhS.Routing.BP.Activities
             return new BuildCodeMatchesInput
             {
                 CodePrefix = this.CodePrefix.Get(context),
+                IsCustomerRoutesProcess = this.IsCustomerRoutesProcess.Get(context),
                 SaleCodes = this.SaleCodes.Get(context),
                 SupplierCodes = this.SupplierCodes.Get(context),
                 SupplierZoneDetails = this.SupplierZoneDetails.Get(context),
