@@ -40,7 +40,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public sealed class BuildCodeMatches : BaseAsyncActivity<BuildCodeMatchesInput>
     {
-        
+        [RequiredArgument]
         public InArgument<string> CodePrefix { get; set; }
 
         [RequiredArgument]

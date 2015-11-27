@@ -30,7 +30,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public sealed class GetSupplierCodes : BaseAsyncActivity<GetSupplierCodesInput, GetSupplierCodesOutput>
     {
-        //[RequiredArgument]
+        [RequiredArgument]
         public InArgument<int> CodePrefixLength { get; set; }
 
         [RequiredArgument]

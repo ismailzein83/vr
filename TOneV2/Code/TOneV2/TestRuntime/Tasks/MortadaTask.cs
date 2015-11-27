@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.Routing.Business;
+using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
@@ -31,6 +33,8 @@ namespace TestRuntime.Tasks
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
+            RunCompleteProductRouteBuild();
+
             //BPClient bpClient = new BPClient();
             //bpClient.CreateNewProcess(new CreateProcessInput
             //{
@@ -43,6 +47,23 @@ namespace TestRuntime.Tasks
             //});
 
 
+        }
+
+        private static void RunCompleteProductRouteBuild()
+        {
+            BPClient bpClient = new BPClient();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                InputArguments = new TOne.WhS.Routing.BP.Arguments.RPRoutingProcessInput
+                {
+                    EffectiveOn = DateTime.Now,
+                    RoutingDatabaseType = TOne.WhS.Routing.Entities.RoutingDatabaseType.Current,
+                    CodePrefixLength = 1,
+                    IsFuture = false,
+                    SaleZoneRange = 1000,
+                    SupplierZoneRPOptionPolicies = new List<SupplierZoneToRPOptionPolicy>() { new SupplierZoneToRPOptionHighestRatePolicy() { ConfigId = 1 }, new SupplierZoneToRPOptionLowestRatePolicy() { ConfigId = 2 }, new SupplierZoneToRPOptionAverageRatePolicy() { ConfigId = 3 } }
+                }
+            });
         }
     }
 }
