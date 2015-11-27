@@ -77,7 +77,9 @@
     <Compile Include="RouteRules\Contexts\RPRouteRuleExecutionContext.cs" />
     <Compile Include="RoutingDatabaseManager.cs" />
     <Compile Include="RPRouteManager.cs" />
-    <Compile Include="SupplierZoneToRPOptionHighestRatePolicy.cs" />
+    <Compile Include="OptionPolicies\SupplierZoneToRPOptionAverageRatePolicy.cs" />
+    <Compile Include="OptionPolicies\SupplierZoneToRPOptionHighestRatePolicy.cs" />
+    <Compile Include="OptionPolicies\SupplierZoneToRPOptionLowestRatePolicy.cs" />
     <Compile Include="SupplierZoneToRPOptionPolicyExecutionContext.cs" />
     <Compile Include="ZoneDetailBuilder.cs" />
     <Compile Include="RouteBuilder.cs" />

@@ -31,8 +31,8 @@ namespace TOne.WhS.Routing.Entities
     public class RPCodeMatchesByZone
     {
         public long SaleZoneId { get; set; }
-        public List<SupplierCodeMatchWithRate> SupplierCodeMatches { get; set; }
-        public SupplierCodeMatchWithRateBySupplier SupplierCodeMatchesBySupplier { get; set; }
+        public IEnumerable<SupplierCodeMatchWithRate> SupplierCodeMatches { get; set; }
+        public SupplierCodeMatchesWithRateBySupplier SupplierCodeMatchesBySupplier { get; set; }
 
     }
 

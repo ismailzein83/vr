@@ -20,4 +20,12 @@ namespace TOne.WhS.Routing.Entities
 
         public Dictionary<int, IEnumerable<RPRouteOption>> RPOptionsByPolicy { get; set; }
     }
+    public class RPRouteBatch
+    {
+        public RPRouteBatch()
+        {
+            this.RPRoutes = new List<RPRoute>();
+        }
+        public List<RPRoute> RPRoutes { get; set; }
+    }
 }

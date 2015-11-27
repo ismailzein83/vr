@@ -10,7 +10,7 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 
 namespace TOne.WhS.Routing.Business
-{    
+{
     public class RouteBuilder
     {
         #region Public Methods
@@ -25,21 +25,21 @@ namespace TOne.WhS.Routing.Business
             throw new NotImplementedException();
         }
 
-       
+
         public IEnumerable<CustomerRoute> BuildRoutes(IBuildCustomerRoutesContext context, string routeCode, out IEnumerable<SellingProductRoute> sellingProductRoutes)
         {
             List<CustomerRoute> customerRoutes = new List<CustomerRoute>();
             Dictionary<int, SellingProductRoute> sellingProductRoutesDic = new Dictionary<int, SellingProductRoute>();
 
             if (context.SaleCodeMatches != null && context.CustomerZoneDetails != null)
-            {                
+            {
                 RouteRuleManager routeRuleManager = new RouteRuleManager();
-                foreach(var saleCodeMatch in context.SaleCodeMatches)
+                foreach (var saleCodeMatch in context.SaleCodeMatches)
                 {
                     List<CustomerZoneDetail> matchCustomerZoneDetails;
-                    if(context.CustomerZoneDetails.TryGetValue(saleCodeMatch.SaleZoneId, out matchCustomerZoneDetails))
+                    if (context.CustomerZoneDetails.TryGetValue(saleCodeMatch.SaleZoneId, out matchCustomerZoneDetails))
                     {
-                        foreach(var customerZoneDetail in matchCustomerZoneDetails)
+                        foreach (var customerZoneDetail in matchCustomerZoneDetails)
                         {
                             var routeRuleTarget = new RouteRuleTarget
                             {
@@ -52,13 +52,13 @@ namespace TOne.WhS.Routing.Business
                             };
                             var routeRule = routeRuleManager.GetMatchRule(routeRuleTarget);
 
-                            if(routeRule != null)
+                            if (routeRule != null)
                             {
                                 bool createCustomerRoute = true;
 
-                               // CheckSellingProductRoute(out createCustomerRoute, context, routeCode, sellingProductRoutesDic, routeRuleManager, saleCodeMatch, customerZoneDetail, routeRuleTarget, routeRule);
+                                // CheckSellingProductRoute(out createCustomerRoute, context, routeCode, sellingProductRoutesDic, routeRuleManager, saleCodeMatch, customerZoneDetail, routeRuleTarget, routeRule);
 
-                                if(createCustomerRoute)
+                                if (createCustomerRoute)
                                 {
                                     CustomerRoute route = ExecuteRule<CustomerRoute>(routeCode, saleCodeMatch, customerZoneDetail, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, routeRuleTarget, routeRule);
                                     route.CustomerId = customerZoneDetail.CustomerId;
@@ -161,7 +161,7 @@ namespace TOne.WhS.Routing.Business
                         }
                     }
                 }
-            }                
+            }
         }
 
         private T ExecuteRule<T>(string routeCode, SaleCodeMatch saleCodeMatch, CustomerZoneDetail customerZoneDetail, List<SupplierCodeMatchWithRate> supplierCodeMatches, SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
@@ -218,18 +218,19 @@ namespace TOne.WhS.Routing.Business
                 RPOptionsByPolicy = new Dictionary<int, IEnumerable<RPRouteOption>>()
             };
             var routeOptionRuleTargets = routeRuleExecutionContext.GetSupplierZoneOptions();
-            if(routeOptionRuleTargets != null)
+            if (routeOptionRuleTargets != null)
             {
-                foreach(var routeOptionRuleTarget in routeOptionRuleTargets)
+                foreach (var routeOptionRuleTarget in routeOptionRuleTargets)
                 {
                     RPRouteOptionSupplier optionSupplierDetails;
-                    if(!route.OptionsDetailsBySupplier.TryGetValue(routeOptionRuleTarget.SupplierId, out optionSupplierDetails))
+                    if (!route.OptionsDetailsBySupplier.TryGetValue(routeOptionRuleTarget.SupplierId, out optionSupplierDetails))
                     {
                         optionSupplierDetails = new RPRouteOptionSupplier
                         {
                             SupplierId = routeOptionRuleTarget.SupplierId,
                             SupplierZones = new List<RPRouteOptionSupplierZone>()
                         };
+                        route.OptionsDetailsBySupplier.Add(routeOptionRuleTarget.SupplierId, optionSupplierDetails);
                     }
                     var optionSupplierZone = new RPRouteOptionSupplierZone
                     {
@@ -240,10 +241,10 @@ namespace TOne.WhS.Routing.Business
                         ExecutedRuleId = routeOptionRuleTarget.ExecutedRuleId
                     };
                     optionSupplierDetails.SupplierZones.Add(optionSupplierZone);
+
                 }
 
-
-                foreach(var supplierZoneToRPOptionPolicy in context.SupplierZoneToRPOptionPolicies)
+                foreach (var supplierZoneToRPOptionPolicy in context.SupplierZoneToRPOptionPolicies)
                 {
                     List<RPRouteOption> rpRouteOptions = new List<RPRouteOption>();
                     foreach (var optionSupplierDetails in route.OptionsDetailsBySupplier.Values)
@@ -269,5 +270,5 @@ namespace TOne.WhS.Routing.Business
 
         #endregion
     }
-       
+
 }

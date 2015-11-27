@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.BusinessEntity.Data;
 using TOne.BusinessEntity.Entities;
+using TOne.WhS.Routing.Business;
+using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
@@ -74,8 +76,25 @@ namespace TestRuntime
 
 
 
-            RunCompleteRouteBuild();
+            RunCompleteProductRouteBuild();
             //RunPartialRouteBuild();
+        }
+
+        private static void RunCompleteProductRouteBuild()
+        {
+            BPClient bpClient = new BPClient();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                InputArguments = new TOne.WhS.Routing.BP.Arguments.RPRoutingProcessInput
+                {
+                    EffectiveOn = DateTime.Now,
+                    RoutingDatabaseType = TOne.WhS.Routing.Entities.RoutingDatabaseType.Current,
+                    CodePrefixLength = 1,
+                    IsFuture = false,
+                    SaleZoneRange = 1000,
+                    SupplierZoneRPOptionPolicies = new List<SupplierZoneToRPOptionPolicy>() { new SupplierZoneToRPOptionHighestRatePolicy() { ConfigId = 1 }, new SupplierZoneToRPOptionLowestRatePolicy() { ConfigId = 2 }, new SupplierZoneToRPOptionAverageRatePolicy() { ConfigId = 3 } }
+                }
+            });
         }
 
         private static void RunCompleteRouteBuild()
@@ -83,20 +102,13 @@ namespace TestRuntime
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                //InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
-                //{
-                //    EffectiveTime = DateTime.Now,
-                //    IsFuture = false,
-                //    IsLcrOnly = false
-                //}
-                InputArguments = new TOne.WhS.Routing.BP.Arguments.RPRoutingProcessInput
+                InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
                 {
-                    EffectiveOn = DateTime.Now,
-                    RoutingDatabaseType = TOne.WhS.Routing.Entities.RoutingDatabaseType.Current,
-                    CodePrefixLength = 1,
+                    EffectiveTime = DateTime.Now,
                     IsFuture = false,
-                    SaleZoneRange = 1000
+                    IsLcrOnly = false
                 }
+
             });
         }
 

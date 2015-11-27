@@ -100,6 +100,16 @@ namespace TOne.WhS.Routing.Data.SQL
         #region Constants
 
         const string query_CreateDatabaseSchema = @"
+
+                                                    Create Table ProductRoute(
+                                                        RoutingProductId int Not Null,
+                                                        SaleZoneId bigint Not Null,
+                                                        ExecutedRuleId int Null,
+                                                        OptionsDetailsBySupplier nvarchar(max) NULL,
+                                                        OptionsByPolicy nvarchar(max) NULL,
+                                                        IsBlocked bit NULL
+                                                    )ON [PRIMARY]
+
                                                     Create Table SupplierZoneDetail(
                                                         SupplierId int Not Null,
                                                         SupplierZoneId bigint Not Null,
@@ -202,16 +212,6 @@ namespace TOne.WhS.Routing.Data.SQL
                                                     )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
                                                     ) ON [PRIMARY]";
 
-        const string query_RoutingProductOptionsTable = @"CREATE TABLE [dbo].[RoutingProductOptions](
-	                                                                    [ProductID] [int] NOT NULL,
-	                                                                    [SaleZoneID] [int] NOT NULL,
-	                                                                    [RouteOptions] [varchar](max) NOT NULL,
-                                                                     CONSTRAINT [PK_RoutingProductRoute] PRIMARY KEY CLUSTERED 
-                                                                    (
-	                                                                    [ProductID] ASC,
-	                                                                    [SaleZoneID] ASC
-                                                                    )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-                                                                    ) ON [PRIMARY]";
 
         const string query_TableTypes = @"CREATE TYPE [LongIDType] AS TABLE(
 	                                                    [ID] [bigint] NOT NULL,
@@ -220,6 +220,17 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [ID] ASC
                                                     )WITH (IGNORE_DUP_KEY = OFF)
                                                     )";
+
+
+        const string query_RoutingProductTable = @"
+                                                    Create Table ProductRoute(
+                                                        RoutingProductId int Not Null,
+                                                        SaleZoneId bigint Not Null,
+                                                        ExecutedRuleId int Null,
+                                                        OptionsDetailsBySupplier nvarchar(max) NULL,
+                                                        OptionsByPolicy nvarchar(max) NULL,
+                                                        IsBlocked bit NULL
+                                                    )ON [PRIMARY]";
 
         #endregion
     }

@@ -26,34 +26,67 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<long>> SaleZoneIds { get; set; }
         [RequiredArgument]
-        public InArgument<BaseQueue<RPCodeMatchesByZone>> OutputQueue { get; set; }
+        public InOutArgument<BaseQueue<RPCodeMatchesByZone>> OutputQueue { get; set; }
 
         protected override void DoWork(GetRPCodeMatchesInput inputArgument, AsyncActivityHandle handle)
         {
             ICodeMatchesDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICodeMatchesDataManager>();
             dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
-            Dictionary<long, RPCodeMatchesByZone> codeMatchesByZone = new Dictionary<long, RPCodeMatchesByZone>();
             var codeMatches = dataManager.GetCodeMatches(inputArgument.SaleZoneIds);
             long currentZoneId = 0;
+            Dictionary<long, SupplierCodeMatchWithRate> currentSupplierCodeMatchesWithRate = null;
             foreach (var codeMatch in codeMatches.OrderBy(c => c.SaleZoneId))
             {
-                RPCodeMatchesByZone codeMatchByZone = null;
-                if (currentZoneId != codeMatch.SaleZoneId && codeMatchesByZone.ContainsKey(currentZoneId))
+                if (currentZoneId != codeMatch.SaleZoneId)
                 {
-                    inputArgument.OutputQueue.Enqueue(codeMatchByZone);
-                }
-                if (!codeMatchesByZone.TryGetValue(codeMatch.SaleZoneId, out codeMatchByZone))
-                {
-                    currentZoneId = codeMatch.SaleZoneId;
-                    codeMatchByZone = new RPCodeMatchesByZone()
+                    if (currentSupplierCodeMatchesWithRate != null)
                     {
-                        SaleZoneId = codeMatch.SaleZoneId,
-                        SupplierCodeMatches = new List<SupplierCodeMatchWithRate>()
-                    };
-                    codeMatchesByZone.Add(codeMatch.SaleZoneId, codeMatchByZone);
+                        RPCodeMatchesByZone codeMatchByZone = new RPCodeMatchesByZone()
+                       {
+                           SaleZoneId = currentZoneId,
+                           SupplierCodeMatches = currentSupplierCodeMatchesWithRate.Values,
+                           SupplierCodeMatchesBySupplier = GetSupplierCodeMatchesBySupplier(currentSupplierCodeMatchesWithRate.Values)
+                       };
+
+                        inputArgument.OutputQueue.Enqueue(codeMatchByZone);
+                    }
+                    currentSupplierCodeMatchesWithRate = new Dictionary<long, SupplierCodeMatchWithRate>();
+                    currentZoneId = codeMatch.SaleZoneId;
                 }
-                codeMatchByZone.SupplierCodeMatches.AddRange(codeMatch.SupplierCodeMatches);
+                foreach (var item in codeMatch.SupplierCodeMatches)
+                {
+                    if (!currentSupplierCodeMatchesWithRate.ContainsKey(item.CodeMatch.SupplierZoneId))
+                        currentSupplierCodeMatchesWithRate.Add(item.CodeMatch.SupplierZoneId, item);
+                }
             }
+            if (currentSupplierCodeMatchesWithRate != null)
+            {
+                RPCodeMatchesByZone codeMatchByZone = new RPCodeMatchesByZone()
+                {
+                    SaleZoneId = currentZoneId,
+                    SupplierCodeMatches = currentSupplierCodeMatchesWithRate.Values,
+                    SupplierCodeMatchesBySupplier = GetSupplierCodeMatchesBySupplier(currentSupplierCodeMatchesWithRate.Values)
+                };
+
+                inputArgument.OutputQueue.Enqueue(codeMatchByZone);
+            }
+        }
+
+        private SupplierCodeMatchesWithRateBySupplier GetSupplierCodeMatchesBySupplier(IEnumerable<SupplierCodeMatchWithRate> supplierCodeMatchesWithRate)
+        {
+            SupplierCodeMatchesWithRateBySupplier codeMatchBySupplierId = new SupplierCodeMatchesWithRateBySupplier();
+            foreach (var supplierCodeMatch in supplierCodeMatchesWithRate)
+            {
+                List<SupplierCodeMatchWithRate> currentCodeMatches;
+                if (!codeMatchBySupplierId.TryGetValue(supplierCodeMatch.CodeMatch.SupplierId, out currentCodeMatches))
+                {
+                    currentCodeMatches = new List<SupplierCodeMatchWithRate>();
+                    codeMatchBySupplierId.Add(supplierCodeMatch.CodeMatch.SupplierId, currentCodeMatches);
+                }
+                currentCodeMatches.Add(supplierCodeMatch);
+            }
+
+            return codeMatchBySupplierId;
         }
 
         protected override GetRPCodeMatchesInput GetInputArgument(AsyncCodeActivityContext context)
@@ -69,6 +102,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             if (this.OutputQueue == null)
                 this.OutputQueue.Set(context, new MemoryQueue<RPCodeMatchesByZone>());
+            base.OnBeforeExecute(context, handle);
         }
 
     }
