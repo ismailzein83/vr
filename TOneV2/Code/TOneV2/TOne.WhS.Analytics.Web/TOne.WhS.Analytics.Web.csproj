@@ -107,6 +107,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -116,25 +120,42 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="WhS_Analytics\Constant\" />
-    <Folder Include="WhS_Analytics\Directives\" />
-    <Folder Include="WhS_Analytics\Services\" />
-    <Folder Include="WhS_Analytics\Views\" />
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\GenericAnalyticController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TOne.Analytics.Business\TOne.Analytics.Business.csproj">
-      <Project>{1d2c62ce-4f44-474e-84ef-44579a454dea}</Project>
-      <Name>TOne.Analytics.Business</Name>
+    <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
+      <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
+      <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TOne.Analytics.Entities\TOne.Analytics.Entities.csproj">
-      <Project>{d23495a3-bf94-4a57-973d-8b3b384fc0a8}</Project>
-      <Name>TOne.Analytics.Entities</Name>
+    <ProjectReference Include="..\TOne.WhS.Analytics.Business\TOne.WhS.Analytics.Business.csproj">
+      <Project>{ed3ad820-6c97-440e-a309-0ec0391b732a}</Project>
+      <Name>TOne.WhS.Analytics.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Analytics.Entities\TOne.WhS.Analytics.Entities.csproj">
+      <Project>{a02259d1-ff3a-4b00-82f9-4992a9347d31}</Project>
+      <Name>TOne.WhS.Analytics.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WhS_Analytics\Constant\GenericAnalyticDimensionEnum.js" />
+    <Content Include="WhS_Analytics\Constant\GenericAnalyticMeasureEnum.js" />
+    <Content Include="WhS_Analytics\Constant\ModuleConfig.js" />
+    <Content Include="WhS_Analytics\Directives\Generic\vr-whs-analytics-genericchart.js" />
+    <Content Include="WhS_Analytics\Directives\Generic\vr-whs-analytics-genericfilter.js" />
+    <Content Include="WhS_Analytics\Directives\Generic\vr-whs-analytics-genericgrid.js" />
+    <Content Include="WhS_Analytics\Directives\Generic\Templates\GenericChartTemplate.html" />
+    <Content Include="WhS_Analytics\Directives\Generic\Templates\GenericFilterTemplate.html" />
+    <Content Include="WhS_Analytics\Directives\Generic\Templates\GenericGridTemplate.html" />
+    <Content Include="WhS_Analytics\Services\APIServices\GenericAnalyticAPIService.js" />
+    <Content Include="WhS_Analytics\Services\GenericAnalyticService.js" />
+    <Content Include="WhS_Analytics\Views\TrafficMonitor.html" />
+    <Content Include="WhS_Analytics\Views\TrafficMonitorController.js" />
+    <Content Include="WhS_Analytics\Views\HourlyReport.html" />
+    <Content Include="WhS_Analytics\Views\HourlyReportController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

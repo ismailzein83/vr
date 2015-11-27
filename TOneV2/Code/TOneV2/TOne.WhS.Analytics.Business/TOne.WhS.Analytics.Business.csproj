@@ -41,18 +41,31 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GenericAnalyticManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TOne.Analytics.Data\TOne.Analytics.Data.csproj">
-      <Project>{c7d60145-89ba-461c-aa71-b37636dd2541}</Project>
-      <Name>TOne.Analytics.Data</Name>
+    <ProjectReference Include="..\TOne.WhS.Analytics.Data\TOne.WhS.Analytics.Data.csproj">
+      <Project>{86a1eac7-48f9-4e53-83f4-5bfc936b9ae2}</Project>
+      <Name>TOne.WhS.Analytics.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TOne.Analytics.Entities\TOne.Analytics.Entities.csproj">
-      <Project>{d23495a3-bf94-4a57-973d-8b3b384fc0a8}</Project>
-      <Name>TOne.Analytics.Entities</Name>
+    <ProjectReference Include="..\TOne.WhS.Analytics.Entities\TOne.WhS.Analytics.Entities.csproj">
+      <Project>{a02259d1-ff3a-4b00-82f9-4992a9347d31}</Project>
+      <Name>TOne.WhS.Analytics.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
+      <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
+      <Name>TOne.WhS.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,0 +1,24 @@
+﻿<vr-panel ng-controller="WhS_Analytics_TrafficMonitorController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilter">
+            <vr-whs-analytics-genericfilter on-ready="onFilterDirectivectiveReady"></vr-whs-analytics-genericfilter>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <div>
+            <vr-row>
+                <vr-whs-analytics-genericchart on-ready="onReadyGeneralChart"></vr-whs-analytics-genericchart>
+            </vr-row>
+            <vr-row>
+                <vr-columns colnum="12">
+                    <vr-whs-analytics-genericgrid withsummary on-ready="onReadyGeneralGrid"></vr-whs-analytics-genericgrid>
+                </vr-columns>
+            </vr-row>
+        </div>
+    </vr-form>
+</vr-panel>

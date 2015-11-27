@@ -266,6 +266,7 @@
             }
         }
 
+
         return ({
             getGenericAnalyticMeasureValues:getGenericAnalyticMeasureValues,
             getGenericAnalyticMeasures:getGenericAnalyticMeasures,

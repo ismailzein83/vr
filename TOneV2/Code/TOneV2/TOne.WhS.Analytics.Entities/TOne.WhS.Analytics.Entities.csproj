@@ -41,8 +41,17 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnalyticDimension.cs" />
+    <Compile Include="AnalyticDimensionValue.cs" />
+    <Compile Include="AnalyticMeasureField.cs" />
+    <Compile Include="AnalyticRecord.cs" />
+    <Compile Include="AnalyticSummaryBigResult.cs" />
+    <Compile Include="GenericAnalyticQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

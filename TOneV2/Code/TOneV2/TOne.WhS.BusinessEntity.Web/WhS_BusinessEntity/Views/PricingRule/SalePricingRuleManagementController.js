@@ -14,6 +14,8 @@
 
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
         defineScope();
         load();
         function defineScope() {
@@ -41,7 +43,7 @@
                 $scope.showSaleZoneSelector = true;
 
                 var payload = {
-                    filter: { SellingNumberPlanId: selectedItem.SellingNumberPlanId },
+                    sellingNumberPlanId: selectedItem.SellingNumberPlanId,
                 }
 
                 var setLoader = function (value) { $scope.isLoadingSaleZonesSection = value };

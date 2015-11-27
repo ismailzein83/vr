@@ -29,11 +29,7 @@
             var pagingType;
             if ($attrs.pagingtype != undefined)
                 pagingType = $scope.$parent.$eval($attrs.pagingtype);
-
-            var defaultSortByFieldName;
-            if ($attrs.defaultsortbyfieldname != undefined)
-                defaultSortByFieldName = $scope.$parent.$eval($attrs.defaultsortbyfieldname);
-
+                       
             var defaultSortDirection;
             if ($attrs.defaultsortdirection != undefined)
                 defaultSortDirection = $scope.$parent.$eval($attrs.defaultsortdirection);
@@ -100,10 +96,10 @@
             var actionsAttribute = hasActionMenu ? $scope.$parent.$eval($attrs.menuactions) : undefined;
             var enableDraggableRow = $attrs.enabledraggablerow != undefined ? $scope.$parent.$eval($attrs.enabledraggablerow) : false;
             var deleteRowFunction = $attrs.ondeleterow != undefined ? $scope.$parent.$eval($attrs.ondeleterow) : undefined;
-            var dataGridObj = new DataGrid(ctrl, $scope);
+            var dataGridObj = new DataGrid(ctrl, $scope, $attrs);
             dataGridObj.initializeController();
             if (retrieveDataFunction != undefined)
-                dataGridObj.defineRetrieveData(retrieveDataFunction, pagingType, defaultSortByFieldName, defaultSortDirection);
+                dataGridObj.defineRetrieveData(retrieveDataFunction, pagingType, defaultSortDirection);
 
             if (loadMoreDataFunction != undefined)
                 dataGridObj.definePagingOnScroll($scope, loadMoreDataFunction);
@@ -160,7 +156,7 @@
 + '</div>';
 
 
-    function DataGrid(ctrl, scope) {
+    function DataGrid(ctrl, scope, attrs) {
 
         var gridApi = {};
         var maxHeight;
@@ -180,7 +176,6 @@
         var sortColumn;
         var isGridReady;
         var sortDirection;
-        var defaultSortByFieldName;
         var defaultSortDirection;
         var lastAddedColumnId = 0;
 
@@ -956,9 +951,8 @@
         //    //ctrl.hideColumn(actionTypeColumn);
         //}
 
-        function defineRetrieveData(retrieveDataFunc, pagingType, defaultSortByFieldName_local, defaultSortDirection_local) {
+        function defineRetrieveData(retrieveDataFunc, pagingType, defaultSortDirection_local) {
             retrieveDataFunction = retrieveDataFunc;
-            defaultSortByFieldName = defaultSortByFieldName_local;
             defaultSortDirection = defaultSortDirection_local;
 
             switch(pagingType)
@@ -980,6 +974,10 @@
         function retrieveData(clearBeforeRetrieve, isExport, isSorting) {
             if (!isGridReady)
                 return;
+
+            var defaultSortByFieldName;
+            if (attrs.defaultsortbyfieldname != undefined)
+                defaultSortByFieldName = scope.$parent.$eval(attrs.defaultsortbyfieldname);
             
             if (clearBeforeRetrieve) {
                 retrieveDataResultKey = null;                
@@ -989,7 +987,7 @@
             if (clearBeforeRetrieve || isSorting) {
                 if (ctrl.showPager)
                     ctrl.pagerSettings.currentPage = 1;
-            }
+            }           
 
             retrieveDataInput.SortByColumnName = sortColumn != undefined ? sortColumn.field : defaultSortByFieldName;
             if (retrieveDataInput.SortByColumnName == undefined)
