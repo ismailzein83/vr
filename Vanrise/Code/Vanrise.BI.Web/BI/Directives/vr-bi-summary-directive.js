@@ -116,10 +116,15 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
         }
 
         function retrieveData(filter) {
+           // console.log(filter.fromDate)
+            var fromDate = new Date(filter.fromDate.getTime() + filter.fromDate.getTimezoneOffset() * 60 * 1000);
+            var toDate = new Date(filter.toDate.getTime() + filter.toDate.getTimezoneOffset() * 60 * 1000);
+         //   console.log(fromDate);
+          //  console.log(toDate);
             if (!ctrl.isAllowed)
                 return;
             ctrl.isGettingData = true;
-            return BIAPIService.GetMeasureValues1(filter.fromDate, filter.toDate, settings.MeasureTypes)
+            return BIAPIService.GetMeasureValues1(fromDate, toDate, settings.MeasureTypes)
                         .then(function (response) {
                            
                             for (var i = 0; i < response.length; i++) {

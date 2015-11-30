@@ -102,6 +102,7 @@ app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesServi
         }
 
         function retrieveData(filter) {
+
             if (!ctrl.isAllowed)
                 return;
             ctrl.isGettingData = true;

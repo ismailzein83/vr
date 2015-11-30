@@ -48,6 +48,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
                 date = $scope.scopeModal.selectedPeriod.getInterval();
                 $scope.scopeModal.fromDate = date.from;
                 $scope.scopeModal.toDate = date.to;
+               
             }
            
         }
@@ -58,11 +59,13 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             $scope.modalContext.closeModal()
         };
         $scope.scopeModal.Search = function () {
+
             $scope.scopeModal.filter = {
                 timeDimensionType: $scope.scopeModal.selectedTimeDimensionType,
                 fromDate: $scope.scopeModal.fromDate,
                 toDate: $scope.scopeModal.toDate
             }
+            
             if (($scope.scopeModal.bodyWidgets != null && $scope.scopeModal.bodyWidgets != undefined) || ($scope.scopeModal.summaryWidgets != null && $scope.scopeModal.summaryWidgets != undefined)) {
                return refreshData();
             }
