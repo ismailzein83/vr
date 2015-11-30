@@ -158,6 +158,8 @@
     <Content Include="WhS_Sales\Directives\vr-whs-sales-zoneroutingproduct.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanAPIService.js" />
     <Content Include="WhS_Sales\Services\MainService.js" />
+    <Content Include="WhS_Sales\Views\RPRouteOptionSupplier.html" />
+    <Content Include="WhS_Sales\Views\RPRouteOptionSupplierController.js" />
     <Content Include="WhS_Sales\Views\SellNewZones.html" />
     <Content Include="WhS_Sales\Views\SellNewZonesController.js" />
     <Content Include="WhS_Sales\Views\RatePlan.html" />

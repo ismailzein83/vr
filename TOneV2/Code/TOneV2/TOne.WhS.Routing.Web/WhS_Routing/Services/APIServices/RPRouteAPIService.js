@@ -9,8 +9,17 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, "RPRoute", "GetFilteredRPRoutes"), input);
         }
 
+        function GetRPRouteOptionSupplier(routingProductId, saleZoneId, supplierId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, "RPRoute", "GetRPRouteOptionSupplier"), {
+                routingProductId: routingProductId,
+                saleZoneId: saleZoneId,
+                supplierId: supplierId
+            });
+        }
+
         return ({
-            GetFilteredRPRoutes: GetFilteredRPRoutes
+            GetFilteredRPRoutes: GetFilteredRPRoutes,
+            GetRPRouteOptionSupplier: GetRPRouteOptionSupplier
         });
     }
 

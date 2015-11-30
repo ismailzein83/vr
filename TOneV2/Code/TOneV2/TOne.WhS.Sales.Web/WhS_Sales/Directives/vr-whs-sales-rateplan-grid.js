@@ -204,7 +204,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         }
 
                         gridAPI.addItemsToSource(zoneItems);
-                        console.log(zoneItems);
 
                         UtilsService.waitMultiplePromises(promises).then(function () {
                             deferred.resolve();
@@ -250,7 +249,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                     zoneItem.onNewRateChanged = function (zoneItem) {
                         zoneItem.IsDirty = true;
-                        console.log(zoneItem.IsDirty);
 
                         if (!isEmpty(zoneItem.NewRate)) {
                             zoneItem.showNewRateBED = true;
@@ -273,22 +271,23 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                     zoneItem.onNewRateEEDChange = function (zoneItem) {
                         zoneItem.IsDirty = true;
-                        console.log(zoneItem.IsDirty);
                     };
 
                     function defineRouteOptionProperties(zoneItem) {
                         zoneItem.RouteOptionsReadyDeferred = UtilsService.createPromiseDeferred();
 
                         zoneItem.onRouteOptionsReady = function (api) {
-                            console.log("onRouteOptionsReady");
                             zoneItem.RouteOptionsAPI = api;
                             zoneItem.RouteOptionsReadyDeferred.resolve();
                         };
 
                         zoneItem.RouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
                         zoneItem.RouteOptionsReadyDeferred.promise.then(function () {
-                            console.log("RouteOptionsReadyDeferred.promise.then");
-                            var payload = { RouteOptions: zoneItem.RouteOptions };
+                            var payload = {
+                                SaleZoneId: zoneItem.ZoneId,
+                                RoutingProductId: zoneItem.EffectiveRoutingProductId,
+                                RouteOptions: zoneItem.RouteOptions
+                            };
                             VRUIUtilsService.callDirectiveLoad(zoneItem.RouteOptionsAPI, payload, zoneItem.RouteOptionsLoadDeferred);
                         });
                     }

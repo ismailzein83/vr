@@ -19,5 +19,13 @@ namespace TOne.WhS.Routing.Web.Controllers
             RPRouteManager manager = new RPRouteManager();
             return GetWebResponse(input, manager.GetFilteredRPRoutes(input));
         }
+
+        [HttpGet]
+        [Route("GetRPRouteOptionSupplier")]
+        public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(int routingProductId, long saleZoneId, int supplierId)
+        {
+            RPRouteManager manager = new RPRouteManager();
+            return manager.GetRPRouteOptionSupplier(routingProductId, saleZoneId, supplierId);
+        }
     }
 }

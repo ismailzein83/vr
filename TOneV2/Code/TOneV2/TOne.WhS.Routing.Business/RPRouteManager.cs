@@ -158,9 +158,29 @@ namespace TOne.WhS.Routing.Business
             return rslt;
         }
 
-        public RPRouteOptionSupplier GetRPRouteSupplierOption(int routingProductId, long saleZoneId, int supplierId)
+        public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(int routingProductId, long saleZoneId, int supplierId)
         {
-            return null;
+            RPRouteOptionSupplierDetail rpRouteOptionSupplierDetail = null;
+            RPRouteOptionSupplier rpRouteOptionSupplier = null;
+
+            IEnumerable<RPRoute> rpRoutes = GetRPRoutes(new List<RPZone>() {
+                new RPZone() {
+                    RoutingProductId = routingProductId,
+                    SaleZoneId = saleZoneId
+                }
+            });
+
+            if (rpRoutes != null)
+            {
+                rpRoutes.ElementAt(0).OptionsDetailsBySupplier.TryGetValue(supplierId, out rpRouteOptionSupplier);
+                rpRouteOptionSupplierDetail = new RPRouteOptionSupplierDetail()
+                {
+                    SupplierName = new CarrierAccountManager().GetCarrierAccount(supplierId).Name,
+                    SupplierZones = rpRouteOptionSupplier.SupplierZones.MapRecords(item => new RPRouteOptionSupplierZoneDetail() { Entity = item, SupplierZoneName = new SupplierZoneManager().GetSupplierZone(supplierId).Name }).ToList()
+                };
+            }
+
+            return rpRouteOptionSupplierDetail;
         }
     }
 
