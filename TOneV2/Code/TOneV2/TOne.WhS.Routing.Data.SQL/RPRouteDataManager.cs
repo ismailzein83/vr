@@ -47,14 +47,15 @@ namespace TOne.WhS.Routing.Data.SQL
             {
                 query_GetFilteredRPRoutes.Replace("#TEMPTABLE#", tempTableName);
 
-                string routingProductIdsFilter = string.Empty;
-                string saleZoneIdsFilter = string.Empty;
+                string routingProductIdsFilter = " 1=1 ";
+                string saleZoneIdsFilter = " 1=1 ";
+                
 
                 if (input.Query.RoutingProductIds != null && input.Query.RoutingProductIds.Count > 0)
-                    routingProductIdsFilter = string.Format("AND RoutingProductId In({0})", string.Join(",", input.Query.RoutingProductIds));
+                    routingProductIdsFilter = string.Format("RoutingProductId In({0})", string.Join(",", input.Query.RoutingProductIds));
 
                 if (input.Query.SaleZoneIds != null && input.Query.SaleZoneIds.Count > 0)
-                    saleZoneIdsFilter = string.Format("AND SaleZoneId In({0})", string.Join(",", input.Query.SaleZoneIds));
+                    saleZoneIdsFilter = string.Format("SaleZoneId In({0})", string.Join(",", input.Query.SaleZoneIds));
 
                 query_GetFilteredRPRoutes.Replace("#ROUTING_PRODUCT_IDS#", routingProductIdsFilter);
                 query_GetFilteredRPRoutes.Replace("#SALE_ZONE_IDS#", saleZoneIdsFilter);
@@ -91,7 +92,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                   ,[OptionsByPolicy]
                                                                   ,[IsBlocked]
                                                             INTO #TEMPTABLE# FROM [dbo].[ProductRoute] with(nolock)
-                                                            Where #ROUTING_PRODUCT_IDS# #SALE_ZONE_IDS# 
+                                                            Where #ROUTING_PRODUCT_IDS# AND #SALE_ZONE_IDS# 
                                                             END");
 
         #endregion

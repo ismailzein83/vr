@@ -10,8 +10,11 @@
         var routingProductSelectorAPI;
         var routingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var sellingNumberPlanDirectiveAPI;
+        var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var saleZoneSelectorAPI;
-        var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        //var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -23,10 +26,27 @@
                 routingProductReadyPromiseDeferred.resolve();
             }
 
+            $scope.onSellingNumberPlanDirectiveReady = function (api) {
+                sellingNumberPlanDirectiveAPI = api;
+                sellingNumberPlanReadyPromiseDeferred.resolve();
+            }
+
             $scope.onSaleZoneSelectorReady = function (api) {
                 saleZoneSelectorAPI = api;
-                saleZoneReadyPromiseDeferred.resolve();
+                //saleZoneReadyPromiseDeferred.resolve();
             }
+
+            $scope.onSelectSellingNumberPlan = function (selectedItem) {
+                $scope.showSaleZoneSelector = true;
+
+                var payload = {
+                    sellingNumberPlanId: selectedItem.SellingNumberPlanId
+                }
+
+                var setLoader = function (value) { $scope.isLoadingSaleZoneSection = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneSelectorAPI, payload, setLoader);
+            }
+
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -43,7 +63,7 @@
                 var query = {
                     RoutingDatabaseId: '229',
                     RoutingProductIds: routingProductSelectorAPI.getSelectedIds(),
-                    SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds()
+                    SaleZoneIds: saleZoneSelectorAPI.getSelectedIds()
                 };
                 return query;
             }
@@ -52,14 +72,14 @@
         function load() {
             $scope.isLoadingFilterData = true;
 
-            return UtilsService.waitMultipleAsyncOperations([loadRoutingProductSelector, loadSaleZoneSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadRoutingProductSelector, loadSellingNumberPlanSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterData = false;
             });
         }
 
-        function loadRoutingDatabaseSelector() {
+        function loadRoutingProductSelector() {
             var loadRoutingProductPromiseDeferred = UtilsService.createPromiseDeferred();
 
             routingProductReadyPromiseDeferred.promise.then(function () {
@@ -67,6 +87,16 @@
             });
 
             return loadRoutingProductPromiseDeferred.promise;
+        }
+
+        function loadSellingNumberPlanSection() {
+            var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, undefined, loadSellingNumberPlanPromiseDeferred);
+            });
+
+            return loadSellingNumberPlanPromiseDeferred.promise;
         }
 
         function loadSaleZoneSelector() {

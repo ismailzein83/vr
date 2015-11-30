@@ -9,6 +9,9 @@
                     <vr-whs-be-routingproduct-selector ismultipleselection on-ready="onRoutingProductSelectorReady"></vr-whs-be-routingproduct-selector>
                 </vr-columns>
                 <vr-columns colnum="2">
+                    <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" onselectitem="onSelectSellingNumberPlan"></vr-whs-be-sellingnumberplan-selector>
+                </vr-columns>
+                <vr-columns colnum="2" vr-loader="isLoadingSaleZoneSection" ng-show="showSaleZoneSelector">
                     <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneSelectorReady"></vr-whs-be-salezone-selector>
                 </vr-columns>
             </vr-row>

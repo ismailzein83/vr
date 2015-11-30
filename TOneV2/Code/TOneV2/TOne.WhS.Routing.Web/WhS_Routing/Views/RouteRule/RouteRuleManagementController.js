@@ -14,7 +14,6 @@
         var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var saleZoneDirectiveAPI;
-        var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -33,18 +32,17 @@
 
             $scope.onSaleZoneDirectiveReady = function (api) {
                 saleZoneDirectiveAPI = api;
-                saleZoneReadyPromiseDeferred.resolve();
             }
 
             $scope.onSelectSellingNumberPlan = function (selectedItem) {
                 $scope.showSaleZoneSelector = true;
 
                 var payload = {
-                    filter: { SupplierZoneId: selectedItem.SupplierZoneId },
+                    sellingNumberPlanId: selectedItem.SellingNumberPlanId
                 }
 
-                var setLoader = function (value) { $scope.isLoadingSupplierZonesSection = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader);
+                var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
             }
 
             $scope.onGridReady = function (api) {
@@ -72,7 +70,7 @@
         function load() {
             $scope.isLoadingFilterData = true;
 
-            return UtilsService.waitMultipleAsyncOperations([loadCustomersSection, loadSellingNumberPlanSection, loadSaleZoneSection]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadCustomersSection, loadSellingNumberPlanSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterData = false;
@@ -98,10 +96,6 @@
             });
 
             return loadSellingNumberPlanPromiseDeferred.promise;
-        }
-
-        function loadSaleZoneSection() {
-            return saleZoneReadyPromiseDeferred.promise;
         }
 
         function AddNewRouteRule() {
