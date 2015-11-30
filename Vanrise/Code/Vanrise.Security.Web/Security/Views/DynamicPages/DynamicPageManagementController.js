@@ -15,7 +15,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         $scope.users=[];
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
-            if ($scope.users.length != 0 && $scope.groups.length != 0)
+         //   if ($scope.users.length != 0 && $scope.groups.length != 0)
                retrieveData();
         };
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
@@ -63,12 +63,9 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
         $scope.Add = function () {
             addPage();
         };
-        $scope.searchClicked = function () {
             $scope.searchClicked = function () {
                 return retrieveData();
             };
-
-        }
     }
     function retrieveData() {
 
@@ -90,8 +87,8 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
     }
     function addPage() {
         var settings = {
-            useModalTemplate: true,
-            width: '95%'
+          //  useModalTemplate: true,
+          //  width: '95%'
         };
         settings.onScopeReady = function (modalScope) {
             modalScope.title = UtilsService.buildTitleForAddEditor("Dynamic Page");
@@ -105,8 +102,8 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
 
     function updatePage(dataItem) {
         var settings = {
-            useModalTemplate: true,
-            width: '95%'
+          //  useModalTemplate: true,
+            //width: '95%'
         };
         
         settings.onScopeReady = function (modalScope) {

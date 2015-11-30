@@ -108,6 +108,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
                
                 var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
+                
                 carrierAccountReadyPromiseDeferred.promise.then(function () {
                     var carrierAccountPayload = {
                         filter: {},
@@ -116,10 +117,20 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
                     VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, carrierAccountPayload, loadCarrierAccountPromiseDeferred);
 
                 });
+                var loadFinalPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                return loadCarrierAccountPromiseDeferred.promise.then(function () {
-                    return loadSupplierZoneDirectives();
+                 loadCarrierAccountPromiseDeferred.promise.then(function () {
+                     loadSupplierZoneDirectives().then(function () {
+                         if (loadPromiseDeferred != undefined)
+                            loadFinalPromiseDeferred.resolve();
+                     }).catch(function (error) {
+                         if (loadPromiseDeferred != undefined)
+                          loadFinalPromiseDeferred.reject(error);
+                     });
                 });
+
+
+                return loadFinalPromiseDeferred.promise;
 
                 function loadSupplierZoneDirectives() {
                     var promises = [];
