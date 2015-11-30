@@ -1,119 +1,116 @@
 ﻿"use strict";
 
 app.directive("vrWhsSalesDefaultroutingproduct", ["UtilsService", "VRUIUtilsService",
-    function (UtilsService, VRUIUtilsService) {
+function (UtilsService, VRUIUtilsService) {
 
-        return {
-            restrict: "E",
-            scope: {
-                onReady: "="
-            },
-            controller: function ($scope, $element, $attrs) {
-                var ctrl = this;
+    return {
+        restrict: "E",
+        scope: {
+            onReady: "="
+        },
+        controller: function ($scope, $element, $attrs) {
+            var ctrl = this;
+            var defaultRoutingProduct = new DefaultRoutingProduct(ctrl, $scope);
+            defaultRoutingProduct.initCtrl();
+        },
+        controllerAs: "ctrl",
+        bindToController: true,
+        templateUrl: "/Client/Modules/WhS_Sales/Directives/Templates/DefaultRoutingProductTemplate.html"
+    };
 
-                var ratePlanRoutingProduct = new RatePlanRoutingProduct(ctrl, $scope);
-                ratePlanRoutingProduct.initCtrl();
+    function DefaultRoutingProduct(ctrl, $scope) {
+        this.initCtrl = initCtrl;
 
-            },
-            controllerAs: "ctrl",
-            bindToController: true,
-            templateUrl: "/Client/Modules/WhS_Sales/Directives/Templates/DefaultRoutingProductTemplate.html"
-        };
+        var isDirty = false;
+        var counter = 0;
+        var currentId;
+        var newId;
+        var selectorAPI;
+        var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        function RatePlanRoutingProduct(ctrl, $scope) {
-            this.initCtrl = initCtrl;
+        function initCtrl() {
+            ctrl.onSelectorReady = function (api) {
+                selectorAPI = api;
+                selectorReadyPromiseDeferred.resolve();
+            };
 
-            function initCtrl() {
-                var isDirty = false;
-                var counter = 0;
-                var currentId;
-                var newId;
-                var selectorAPI;
-                var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                ctrl.onSelectorReady = function (api) {
-                    selectorAPI = api;
-                    selectorReadyPromiseDeferred.resolve();
-                };
-
-                ctrl.onSelectionChange = function (item) {
-                    counter++;
-                    var selectedId = selectorAPI.getSelectedIds;
+            ctrl.onSelectionChange = function (item) {
+                counter++;
+                var selectedId = selectorAPI.getSelectedIds;
                     
-                    if ((!newId && counter > 1) || (newId && counter > 2))
-                        isDirty = true;
+                if ((!newId && counter > 1) || (newId && counter > 2))
+                    isDirty = true;
+            };
+
+            selectorReadyPromiseDeferred.promise.then(function () {
+                getAPI();
+            });
+        }
+
+        function getAPI() {
+            var api = {};
+
+            api.load = function (payload) {
+                isDirty = false;
+
+                if (payload != undefined) {
+                    currentId = payload.CurrentRoutingProductId;
+                    ctrl.CurrentName = payload.CurrentRoutingProductName;
+                    newId = payload.NewRoutingProductId;
+                }
+
+                //if (ctrl.IsEditable == null) ctrl.IsEditable = false;
+
+                var selectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                var selectorPayload = {
+                    filter: { ExcludedRoutingProductId: currentId },
+                    selectedIds: newId
                 };
 
-                selectorReadyPromiseDeferred.promise.then(function () {
-                    getAPI();
+                $scope.isLoading = true;
+
+                VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);
+
+                selectorLoadDeferred.promise.finally(function () {
+                    $scope.isLoading = false;
                 });
 
-                function getAPI() {
-                    var api = {};
+                return selectorLoadDeferred.promise;
+            };
 
-                    api.load = function (payload) {
-                        isDirty = false;
+            api.applyChanges = function (changes) {
+                changes.DefaultChanges = null;
 
-                        if (payload != undefined) {
-                            currentId = payload.CurrentRoutingProductId;
-                            ctrl.CurrentName = payload.CurrentRoutingProductName;
-                            newId = payload.NewRoutingProductId;
-                        }
-
-                        if (ctrl.IsEditable == null)
-                            ctrl.IsEditable = false;
-
-                        var selectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        var selectorPayload = {
-                            filter: { ExcludedRoutingProductId: currentId },
-                            selectedIds: newId
-                        };
-
-                        $scope.isLoading = true;
-
-                        VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);
-
-                        selectorLoadDeferred.promise.finally(function () {
-                            $scope.isLoading = false;
-                        });
-
-                        return selectorLoadDeferred.promise;
+                if (isDirty) {
+                    changes.DefaultChanges = {
+                        NewDefaultRoutingProduct: getNewDefaultRoutingProduct(),
+                        DefaultRoutingProductChange: getDefaultRoutingProductChange()
                     };
-
-                    api.applyChanges = function (changes) {
-                        changes.DefaultChanges = null;
-
-                        if (isDirty) {
-                            changes.DefaultChanges = {
-                                NewDefaultRoutingProduct: getNewDefaultRoutingProduct(),
-                                DefaultRoutingProductChange: getDefaultRoutingProductChange()
-                            };
-                        }
-
-                        function getNewDefaultRoutingProduct() {
-                            var newRoutingProduct = null;
-                            var selectedId = selectorAPI.getSelectedIds();
-
-                            if (selectedId != null) {
-                                newRoutingProduct = {
-                                    DefaultRoutingProductId: selectedId,
-                                    BED: new Date(),
-                                    EED: null
-                                };
-                            }
-
-                            return newRoutingProduct;
-                        }
-
-                        function getDefaultRoutingProductChange() {
-                            return null;
-                        }
-                    };
-
-                    if (ctrl.onReady != null)
-                        ctrl.onReady(api);
                 }
-            }
+
+                function getNewDefaultRoutingProduct() {
+                    var newRoutingProduct = null;
+                    var selectedId = selectorAPI.getSelectedIds();
+
+                    if (selectedId != null) {
+                        newRoutingProduct = {
+                            DefaultRoutingProductId: selectedId,
+                            BED: new Date(),
+                            EED: null
+                        };
+                    }
+
+                    return newRoutingProduct;
+                }
+
+                function getDefaultRoutingProductChange() {
+                    return null;
+                }
+            };
+
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
         }
-    }]);
+    }
+}]);

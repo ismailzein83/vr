@@ -20,10 +20,10 @@ function (WhS_Sales_MainService, UtilsService) {
     function ZoneRouteOptions(ctrl, $scope) {
         this.initCtrl = initCtrl;
 
-        function initCtrl() {
-            var routingProductId;
-            var saleZoneId;
+        var routingProductId;
+        var saleZoneId;
 
+        function initCtrl() {
             ctrl.routeOptions = [];
 
             ctrl.viewSupplier = function (routeOption) {
@@ -31,23 +31,23 @@ function (WhS_Sales_MainService, UtilsService) {
             };
 
             getAPI();
+        }
 
-            function getAPI() {
-                var api = {};
+        function getAPI() {
+            var api = {};
 
-                api.load = function (payload) {
-                    if (payload != undefined) {
-                        saleZoneId = payload.SaleZoneId;
-                        routingProductId = payload.RoutingProductId;
+            api.load = function (payload) {
+                if (payload != undefined) {
+                    saleZoneId = payload.SaleZoneId;
+                    routingProductId = payload.RoutingProductId;
 
-                        for (var i = 0; i < payload.RouteOptions.length; i++)
-                            ctrl.routeOptions.push(payload.RouteOptions[i]);
-                    }
-                };
+                    for (var i = 0; i < payload.RouteOptions.length; i++)
+                        ctrl.routeOptions.push(payload.RouteOptions[i]);
+                }
+            };
 
-                if (ctrl.onReady != null)
-                    ctrl.onReady(api);
-            }
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
         }
     }
 }]);

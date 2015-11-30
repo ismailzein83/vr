@@ -9,7 +9,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-
             var ratePlanGrid = new RatePlanGrid($scope, ctrl);
             ratePlanGrid.initCtrl();
         },
@@ -21,228 +20,226 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
     function RatePlanGrid($scope, ctrl) {
         this.initCtrl = initCtrl;
 
-        function initCtrl() {
-            var gridAPI;
-            var gridQuery;
-            var gridDrillDownTabs;
+        var gridAPI;
+        var gridQuery;
+        var gridDrillDownTabs;
 
+        function initCtrl() {
             $scope.zoneItems = [];
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-
                 gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(getGridDrillDownDefinitions(), gridAPI, null);
 
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
+                if (ctrl.onReady && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getAPI());
-
-                function getGridDrillDownDefinitions() {
-                    return [{
-                        title: "Routing Product",
-                        directive: "vr-whs-sales-zoneroutingproduct",
-                        loadDirective: function (zoneRoutingProductDirectiveAPI, zoneItem) {
-                            return zoneRoutingProductDirectiveAPI.load(zoneItem);
-                        }
-                    }];
-                }
-
-                function getAPI() {
-                    var api = {};
-
-                    api.load = function (query) {
-                        gridQuery = query;
-                        gridAPI.clearDataAndContinuePaging();
-                        return loadZoneItems();
-                    };
-
-                    api.applyChanges = function (changes) {
-                        var zoneChanges = [];
-
-                        for (var i = 0; i < $scope.zoneItems.length; i++) {
-                            var item = $scope.zoneItems[i];
-
-                            if (item.IsDirty)
-                                applyChanges(zoneChanges, item);
-                        }
-
-                        changes.ZoneChanges = zoneChanges.length > 0 ? zoneChanges : null;
-                    };
-
-                    return api;
-                }
             };
 
             $scope.loadMoreData = function () {
                 return loadZoneItems();
             };
+        }
 
-            function loadZoneItems() {
-                var deferred = UtilsService.createPromiseDeferred();
-                $scope.isLoadingGrid = true;
+        function getGridDrillDownDefinitions() {
+            return [{
+                title: "Routing Product",
+                directive: "vr-whs-sales-zoneroutingproduct",
+                loadDirective: function (zoneRoutingProductDirectiveAPI, zoneItem) {
+                    return zoneRoutingProductDirectiveAPI.load(zoneItem);
+                }
+            }];
+        }
 
-                WhS_Sales_RatePlanAPIService.GetZoneItems(getZoneItemInput()).then(function (response) {
-                    if (response != null) {
-                        var promises = [];
-                        var zoneItems = [];
+        function getAPI() {
+            var api = {};
 
-                        for (var i = 0; i < response.length; i++) {
-                            var zoneItem = response[i];
-                            extendZoneItem(zoneItem);
-                            gridDrillDownTabs.setDrillDownExtensionObject(zoneItem);
-                            promises.push(zoneItem.RouteOptionsLoadDeferred.promise);
+            api.load = function (query) {
+                gridQuery = query;
+                gridAPI.clearDataAndContinuePaging();
+                return loadZoneItems();
+            };
 
-                            zoneItems.push(zoneItem);
-                        }
+            api.applyChanges = function (changes) {
+                var zoneChanges = [];
 
-                        gridAPI.addItemsToSource(zoneItems);
+                for (var i = 0; i < $scope.zoneItems.length; i++) {
+                    var item = $scope.zoneItems[i];
 
-                        UtilsService.waitMultiplePromises(promises).then(function () {
-                            deferred.resolve();
-                        }).catch(function (error) {
-                            handleError(error);
-                        }).finally(function () {
-                            $scope.isLoadingGrid = false;
-                        });
+                    if (item.IsDirty)
+                        applyChanges(zoneChanges, item);
+                }
+
+                changes.ZoneChanges = zoneChanges.length > 0 ? zoneChanges : null;
+            };
+
+            return api;
+        }
+
+        function loadZoneItems() {
+            var deferred = UtilsService.createPromiseDeferred();
+            $scope.isLoadingGrid = true;
+
+            WhS_Sales_RatePlanAPIService.GetZoneItems(getZoneItemInput()).then(function (response) {
+                if (response != null) {
+                    var promises = [];
+                    var zoneItems = [];
+
+                    for (var i = 0; i < response.length; i++) {
+                        var zoneItem = response[i];
+                        extendZoneItem(zoneItem);
+                        gridDrillDownTabs.setDrillDownExtensionObject(zoneItem);
+                        promises.push(zoneItem.RouteOptionsLoadDeferred.promise);
+
+                        zoneItems.push(zoneItem);
                     }
-                    else
+
+                    gridAPI.addItemsToSource(zoneItems);
+
+                    UtilsService.waitMultiplePromises(promises).then(function () {
                         deferred.resolve();
-                }).catch(function (error) {
-                    $scope.isLoadingGrid = false;
-                    handleError(error);
-                });
-
-                return deferred.promise;
-
-                function getZoneItemInput() {
-                    var pageInfo = gridAPI.getPageInfo();
-
-                    return {
-                        Filter: gridQuery,
-                        FromRow: pageInfo.fromRow,
-                        ToRow: pageInfo.toRow
-                    };
+                    }).catch(function (error) {
+                        handleError(error);
+                    }).finally(function () {
+                        $scope.isLoadingGrid = false;
+                    });
                 }
+                else
+                    deferred.resolve();
+            }).catch(function (error) {
+                $scope.isLoadingGrid = false;
+                handleError(error);
+            });
 
-                function extendZoneItem(zoneItem) {
-                    zoneItem.IsDirty = false;
-                    defineRouteOptionProperties(zoneItem);
+            return deferred.promise;
 
-                    zoneItem.IsCurrentRateEditable = (zoneItem.IsCurrentRateEditable == null) ? false : zoneItem.IsCurrentRateEditable;
+            function getZoneItemInput() {
+                var pageInfo = gridAPI.getPageInfo();
 
-                    zoneItem.CurrentRateBED = (zoneItem.CurrentRateBED != null) ? new Date(zoneItem.CurrentRateBED) : null;
-                    zoneItem.NewRateBED = (zoneItem.NewRateBED != null) ? new Date(zoneItem.NewRateBED) : null;
+                return {
+                    Filter: gridQuery,
+                    FromRow: pageInfo.fromRow,
+                    ToRow: pageInfo.toRow
+                };
+            }
 
-                    zoneItem.CurrentRateEED = (zoneItem.CurrentRateEED != null) ? new Date(zoneItem.CurrentRateEED) : null;
-                    zoneItem.NewRateEED = (zoneItem.NewRateEED != null) ? new Date(zoneItem.NewRateEED) : null;
+            function extendZoneItem(zoneItem) {
+                zoneItem.IsDirty = false;
+                defineRouteOptionProperties(zoneItem);
 
-                    zoneItem.showNewRateBED = zoneItem.NewRate;
-                    zoneItem.showNewRateEED = zoneItem.NewRate;
+                zoneItem.IsCurrentRateEditable = (zoneItem.IsCurrentRateEditable == null) ? false : zoneItem.IsCurrentRateEditable;
 
-                    zoneItem.onNewRateChanged = function (zoneItem) {
-                        zoneItem.IsDirty = true;
+                zoneItem.CurrentRateBED = (zoneItem.CurrentRateBED != null) ? new Date(zoneItem.CurrentRateBED) : null;
+                zoneItem.NewRateBED = (zoneItem.NewRateBED != null) ? new Date(zoneItem.NewRateBED) : null;
 
-                        if (zoneItem.NewRate) {
-                            zoneItem.showNewRateBED = true;
-                            zoneItem.showNewRateEED = true;
+                zoneItem.CurrentRateEED = (zoneItem.CurrentRateEED != null) ? new Date(zoneItem.CurrentRateEED) : null;
+                zoneItem.NewRateEED = (zoneItem.NewRateEED != null) ? new Date(zoneItem.NewRateEED) : null;
 
-                            if (!zoneItem.AreNewDatesSet) {
-                                zoneItem.NewRateBED = (zoneItem.CurrentRate == null || Number(zoneItem.NewRate) > zoneItem.CurrentRate) ? new Date(new Date().setDate(new Date().getDate() + 7)) : new Date();
-                                zoneItem.NewRateEED = null;
-                                zoneItem.AreNewDatesSet = true;
-                            }
-                        }
-                        else {
-                            zoneItem.NewRateBED = null;
+                zoneItem.showNewRateBED = zoneItem.NewRate;
+                zoneItem.showNewRateEED = zoneItem.NewRate;
+
+                zoneItem.onNewRateChanged = function (zoneItem) {
+                    zoneItem.IsDirty = true;
+
+                    if (zoneItem.NewRate) {
+                        zoneItem.showNewRateBED = true;
+                        zoneItem.showNewRateEED = true;
+
+                        if (!zoneItem.AreNewDatesSet) {
+                            zoneItem.NewRateBED = (zoneItem.CurrentRate == null || Number(zoneItem.NewRate) > zoneItem.CurrentRate) ? new Date(new Date().setDate(new Date().getDate() + 7)) : new Date();
                             zoneItem.NewRateEED = null;
-                            zoneItem.showNewRateBED = false;
-                            zoneItem.showNewRateEED = false;
-                            zoneItem.AreNewDatesSet = false;
+                            zoneItem.AreNewDatesSet = true;
                         }
-                    };
-
-                    zoneItem.onNewRateEEDChange = function (zoneItem) {
-                        zoneItem.IsDirty = true;
-                    };
-
-                    function defineRouteOptionProperties(zoneItem) {
-                        zoneItem.RouteOptionsReadyDeferred = UtilsService.createPromiseDeferred();
-
-                        zoneItem.onRouteOptionsReady = function (api) {
-                            zoneItem.RouteOptionsAPI = api;
-                            zoneItem.RouteOptionsReadyDeferred.resolve();
-                        };
-
-                        zoneItem.RouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
-                        zoneItem.RouteOptionsReadyDeferred.promise.then(function () {
-                            var payload = {
-                                SaleZoneId: zoneItem.ZoneId,
-                                RoutingProductId: zoneItem.EffectiveRoutingProductId,
-                                RouteOptions: zoneItem.RouteOptions
-                            };
-                            VRUIUtilsService.callDirectiveLoad(zoneItem.RouteOptionsAPI, payload, zoneItem.RouteOptionsLoadDeferred);
-                        });
                     }
-                }
+                    else {
+                        zoneItem.NewRateBED = null;
+                        zoneItem.NewRateEED = null;
+                        zoneItem.showNewRateBED = false;
+                        zoneItem.showNewRateEED = false;
+                        zoneItem.AreNewDatesSet = false;
+                    }
+                };
 
-                function handleError(error) {
-                    deferred.reject();
-                    VRNotificationService.notifyException(error, $scope);
+                zoneItem.onNewRateEEDChange = function (zoneItem) {
+                    zoneItem.IsDirty = true;
+                };
+
+                function defineRouteOptionProperties(zoneItem) {
+                    zoneItem.RouteOptionsReadyDeferred = UtilsService.createPromiseDeferred();
+
+                    zoneItem.onRouteOptionsReady = function (api) {
+                        zoneItem.RouteOptionsAPI = api;
+                        zoneItem.RouteOptionsReadyDeferred.resolve();
+                    };
+
+                    zoneItem.RouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
+                    zoneItem.RouteOptionsReadyDeferred.promise.then(function () {
+                        var payload = {
+                            SaleZoneId: zoneItem.ZoneId,
+                            RoutingProductId: zoneItem.EffectiveRoutingProductId,
+                            RouteOptions: zoneItem.RouteOptions
+                        };
+                        VRUIUtilsService.callDirectiveLoad(zoneItem.RouteOptionsAPI, payload, zoneItem.RouteOptionsLoadDeferred);
+                    });
                 }
+            }
+
+            function handleError(error) {
+                deferred.reject();
+                VRNotificationService.notifyException(error, $scope);
             }
         }
 
         function applyChanges(zoneChanges, zoneItem) {
-            var zoneItemChanges = {
-                ZoneId: zoneItem.ZoneId,
-                NewRate: getNewRate(zoneItem),
-                RateChange: getRateChange(zoneItem)
-            };
+            if (zoneItem.IsDirty) {
+                var zoneItemChanges = {
+                    ZoneId: zoneItem.ZoneId
+                };
 
-            for (var i = 0; i < zoneItem.drillDownExtensionObject.drillDownDirectiveTabs.length; i++) {
-                var item = zoneItem.drillDownExtensionObject.drillDownDirectiveTabs[i];
+                setNewRate(zoneItemChanges, zoneItem);
+                setRateChange(zoneItemChanges, zoneItem);
 
-                if (item.directiveAPI)
-                    item.directiveAPI.applyChanges(zoneItemChanges);
+                for (var i = 0; i < zoneItem.drillDownExtensionObject.drillDownDirectiveTabs.length; i++) {
+                    var item = zoneItem.drillDownExtensionObject.drillDownDirectiveTabs[i];
+
+                    if (item.directiveAPI)
+                        item.directiveAPI.applyChanges(zoneItemChanges);
+                }
+
+                zoneChanges.push(zoneItemChanges);
             }
-
-            zoneChanges.push(zoneItemChanges);
         }
 
-        function getNewRate(zoneItem) {
-            var newRate = null;
+        function setNewRate(zoneChanges, zoneItem) {
+            zoneChanges.NewRate = null;
 
             if (zoneItem.NewRate) {
-                newRate = {
+                zoneChanges.NewRate = {
                     ZoneId: zoneItem.ZoneId,
                     NormalRate: zoneItem.NewRate,
                     BED: zoneItem.NewRateBED,
                     EED: zoneItem.NewRateEED
                 };
             }
-
-            return newRate;
         }
 
-        function getRateChange(zoneItem) {
-            var rateChange = null;
+        function setRateChange(zoneChanges, zoneItem) {
+            zoneChanges.RateChange = null;
 
             if (zoneItem.IsCurrentRateEditable && !compareDates(zoneItem.CurrentRateEED, zoneItem.NewRateEED)) {
-                return {
+                zoneChanges.RateChange = {
                     RateId: zoneItem.CurrentRateId,
                     EED: zoneItem.NewRateEED
                 };
             }
+        }
 
-            return rateChange;
-
-            function compareDates(date1, date2) {
-                if (date1 && date2)
-                    return date1.getTime() == date2.getTime();
-                else if (!date1 && !date2)
-                    return true;
-                else
-                    return false;
-            }
+        function compareDates(date1, date2) {
+            if (date1 && date2)
+                return date1.getTime() == date2.getTime();
+            else if (!date1 && !date2)
+                return true;
+            else
+                return false;
         }
     }
 }]);
