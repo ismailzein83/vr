@@ -131,8 +131,11 @@ app.directive('vrTreeview', [function () {
                 });
 
                 treeElement.on('changed.jstree', function (e, data) {
-                    ctrl.selecteditem = data.node.original.sourceItem;
-                    $scope.$apply();
+                    if (data.node != undefined) {
+                        ctrl.selecteditem = data.node.original.sourceItem;
+                        $scope.$apply();
+                    }
+  
                 });
             };
             function getFullTreeData(treeArray, jsonTree, treeElement) {

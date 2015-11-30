@@ -130,7 +130,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
 
             var viewWidget = {
                 Widget: $scope.selectedWidget,
-                NumberOfColumns: $scope.selectedColumnWidth.value,
+                NumberOfColumns: $scope.selectedColumnWidth,
                 SectionTitle:$scope.sectionTitle
             }
             if ($scope.nonSearchable) {
@@ -271,7 +271,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
             var Widget = $scope.addedSummaryWidgets[i];
             var viewSummaryContent = {
                 WidgetId: Widget.Widget.Id,
-                NumberOfColumns: Widget.NumberOfColumns,
+                NumberOfColumns: Widget.NumberOfColumns.value,
                 SectionTitle: Widget.SectionTitle
             }
             if (Widget.DefaultPeriod != undefined && Widget.DefaultGrouping != undefined) {
@@ -284,7 +284,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
             var Widget = $scope.addedBodyWidgets[i];
             var viewBodyContent = {
                 WidgetId: Widget.Widget.Id,
-                NumberOfColumns: Widget.NumberOfColumns,
+                NumberOfColumns: Widget.NumberOfColumns.value,
                 SectionTitle: Widget.SectionTitle
             }
             if (Widget.DefaultPeriod != undefined && Widget.DefaultGrouping != undefined) {
@@ -367,11 +367,16 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         {
             var bodyContent = $scope.filter.BodyContents[i];
             var value = UtilsService.getItemByVal($scope.bodyWidgets, bodyContent.WidgetId, 'Id');
+            var numberOfColumns;
+            for (var j = 0; j < $scope.columnWidth.length; j++)
+                if (bodyContent.NumberOfColumns == $scope.columnWidth[j].value)
+                    numberOfColumns = $scope.columnWidth[j];
+
             if (value != null)
             {
                 var viewWidget = {
                     Widget: value,
-                    NumberOfColumns: bodyContent.NumberOfColumns,
+                    NumberOfColumns: numberOfColumns,
                     SectionTitle: bodyContent.SectionTitle
                 }
                 if (bodyContent.DefaultPeriod != undefined && bodyContent.DefaultGrouping != undefined) {
@@ -387,10 +392,15 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         for (var i = 0; i < $scope.filter.SummaryContents.length; i++) {
             var summaryContent = $scope.filter.SummaryContents[i];
             var value = UtilsService.getItemByVal($scope.summaryWidgets, summaryContent.WidgetId, 'Id');
+            var numberOfColumns;
+            for (var j = 0; j < $scope.columnWidth.length; j++)
+                if (summaryContent.NumberOfColumns == $scope.columnWidth[j].value)
+                    numberOfColumns = $scope.columnWidth[j];
+
             if (value != null) {
                 var viewWidget = {
                     Widget: value,
-                    NumberOfColumns: summaryContent.NumberOfColumns,
+                    NumberOfColumns: numberOfColumns,
                     SectionTitle: summaryContent.SectionTitle
                 }
                 if (summaryContent.DefaultPeriod != undefined && summaryContent.DefaultGrouping != undefined) {
@@ -400,6 +410,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
                 $scope.addedSummaryWidgets.push(viewWidget);
                 $scope.summaryWidgets.splice($scope.summaryWidgets.indexOf(value), 1);
             }
+          
 
         }
         //$scope.selectedMenuNode = UtilsService.getItemByVal($scope.menuList, $scope.filter.ModuleId, 'Id');

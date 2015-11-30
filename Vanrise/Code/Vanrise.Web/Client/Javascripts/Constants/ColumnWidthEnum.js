@@ -1,7 +1,7 @@
 ﻿app.constant('ColumnWidthEnum', {
-    QuarterRow: { name: "QuarterRow", value: 3, description: "Quarter Row" },
-    FullRow: { name: "FullRow", value: 12, description: "Full Row" },
-    HalfRow: { name: "HalfRow", value: 6, description: "Half Row" },
-    OneThirdRow: { name: "OneThirdRow", value: 4, description: "1/3 Row" },
+    QuarterRow: { name: "QuarterRow", value:0, description: "Quarter Row",numberOfColumns:3 },
+    FullRow: { name: "FullRow", value: 1, description: "Full Row", numberOfColumns: 12 },
+    HalfRow: { name: "HalfRow", value: 2, description: "Half Row", numberOfColumns:6 },
+    OneThirdRow: { name: "OneThirdRow", value: 3, description: "1/3 Row", numberOfColumns: 4 },
 });
 

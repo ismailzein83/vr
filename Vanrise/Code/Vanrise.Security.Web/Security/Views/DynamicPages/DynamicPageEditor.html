@@ -100,7 +100,7 @@
                         <vr-section title="Summary">
 
                             <div class="list-group dragbelzone" ng-sortable="itemsSortable">
-                                <vr-columns ng-repeat="addedSummaryWidget in addedSummaryWidgets" colnum="{{addedSummaryWidget.NumberOfColumns}}">
+                                <vr-columns ng-repeat="addedSummaryWidget in addedSummaryWidgets" colnum="{{addedSummaryWidget.NumberOfColumns.numberOfColumns}}">
                                     <div ng-class="validateWidgetError(addedSummaryWidget)">
                                         <i class="glyphicon glyphicon-th-list handeldrag"></i>
                                         <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeViewContent(addedSummaryWidget)"></i>
@@ -113,7 +113,7 @@
                     </vr-row>
                     <vr-row ng-if="addedBodyWidgets.length>0">
                         <div class="list-group dragbelzone" ng-sortable="itemsSortable">
-                            <vr-columns ng-repeat="addedBodyWidget in addedBodyWidgets" colnum="{{addedBodyWidget.NumberOfColumns}}">
+                            <vr-columns ng-repeat="addedBodyWidget in addedBodyWidgets" colnum="{{addedBodyWidget.NumberOfColumns.numberOfColumns}}">
                                 <div ng-class="validateWidgetError(addedBodyWidget)" style="border-radius: 4px; height: auto; padding: 0px; ">
 
 

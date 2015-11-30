@@ -40,15 +40,15 @@
     <div vr-loader="scopeModal.isGettingData">
         <vr-row ng-if="scopeModal.summaryWidgets.length>0">
             <div class="list-group">
-                <vr-columns ng-repeat="summaryWidget in scopeModal.summaryWidgets" colnum="{{summaryWidget.NumberOfColumns}}">
+                <vr-columns ng-repeat="summaryWidget in scopeModal.summaryWidgets" colnum="{{summaryWidget.NumberOfColumns.numberOfColumns}}">
                     <vr-directivewrapper directive="summaryWidget.Setting.Directive" title="summaryWidget.SectionTitle" on-ready="summaryWidget.onElementReady" settings="summaryWidget.Setting.Settings"
                                          retrievedataonload="true"></vr-directivewrapper>
                 </vr-columns>
             </div>
         </vr-row>
-        <vr-row ng-if="scopeModal.bodyWidgets.length>0">
+        <vr-row ng-if="scopeModal.bodyWidgets.length>0"> 
             <div class="list-group ">
-                <vr-columns ng-repeat="bodyWidget in scopeModal.bodyWidgets" colnum="{{bodyWidget.NumberOfColumns}}">
+                <vr-columns ng-repeat="bodyWidget in scopeModal.bodyWidgets" colnum="{{bodyWidget.NumberOfColumns.numberOfColumns}}">
                     <vr-directivewrapper directive="bodyWidget.Setting.Directive" title="bodyWidget.SectionTitle" on-ready="bodyWidget.onElementReady" settings="bodyWidget.Setting.Settings"
                                          filter="filter" retrievedataonload="true"></vr-directivewrapper>
                 </vr-columns>

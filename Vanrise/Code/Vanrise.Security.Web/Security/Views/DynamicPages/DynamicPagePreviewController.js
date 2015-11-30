@@ -1,6 +1,6 @@
-﻿DynamicPagePreviewController.$inject = ['$scope', 'ViewAPIService', 'WidgetAPIService', 'TimeDimensionTypeEnum', 'UtilsService', 'VRNotificationService', 'VRNavigationService','WidgetSectionEnum','PeriodEnum','VRValidationService'];
+﻿DynamicPagePreviewController.$inject = ['$scope', 'ViewAPIService', 'WidgetAPIService', 'TimeDimensionTypeEnum', 'UtilsService', 'VRNotificationService', 'VRNavigationService','WidgetSectionEnum','PeriodEnum','VRValidationService','ColumnWidthEnum'];
 
-function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, TimeDimensionTypeEnum, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, VRValidationService) {
+function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, TimeDimensionTypeEnum, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, VRValidationService, ColumnWidthEnum) {
     var viewId;
     loadParameters();
     defineScope();
@@ -145,9 +145,15 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         for (var i = 0; i < BodyContents.length; i++) {
             var bodyContent = BodyContents[i];
             var value = UtilsService.getItemByVal(allWidgets, bodyContent.WidgetId, 'Id');
+
+            var numberOfColumns;
+            for (var td in ColumnWidthEnum)
+                if (bodyContent.NumberOfColumns == ColumnWidthEnum[td].value)
+                    numberOfColumns= ColumnWidthEnum[td]
+
             if (value != null)
             {
-                value.NumberOfColumns = bodyContent.NumberOfColumns;
+                value.NumberOfColumns = numberOfColumns;
                 value.SectionTitle = bodyContent.SectionTitle;
                 if ($scope.scopeModal.nonSearchable) {
                     value.DefaultPeriod = bodyContent.DefaultPeriod;
@@ -159,10 +165,15 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
 
         }
      for (var i = 0; i < SummaryContents.length; i++) {
-            var summaryContent = SummaryContents[i];
-            var value = UtilsService.getItemByVal(allWidgets, summaryContent.WidgetId, 'Id');
+         var summaryContent = SummaryContents[i];
+
+         var value = UtilsService.getItemByVal(allWidgets, summaryContent.WidgetId, 'Id');
+         var numberOfColumns;
+         for (var td in ColumnWidthEnum)
+             if (summaryContent.NumberOfColumns == ColumnWidthEnum[td].value)
+                 numberOfColumns = ColumnWidthEnum[td]
             if (value != null) {
-                value.NumberOfColumns = summaryContent.NumberOfColumns;
+                value.NumberOfColumns = numberOfColumns;
                 value.SectionTitle = summaryContent.SectionTitle;
                 if ($scope.scopeModal.nonSearchable) {
                     value.DefaultPeriod = summaryContent.DefaultPeriod;

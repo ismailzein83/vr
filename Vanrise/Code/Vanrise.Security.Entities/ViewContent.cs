@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Security.Entities
 {
+   
     public class ViewContent
     {
         public List<ViewContentItem> SummaryContents { get; set; }
