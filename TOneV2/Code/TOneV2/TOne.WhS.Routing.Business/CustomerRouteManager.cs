@@ -33,7 +33,7 @@ namespace TOne.WhS.Routing.Business
 
         private CustomerRouteDetail CustomerRouteDetailMapper(CustomerRoute customerRoute)
         {
-            List<RouteOptionDetail> optionDetails = this.GetRouteOptionDetails(customerRoute);
+            List<CustomerRouteOptionDetail> optionDetails = this.GetRouteOptionDetails(customerRoute);
 
             return new CustomerRouteDetail()
             {
@@ -67,7 +67,7 @@ namespace TOne.WhS.Routing.Business
             return "Not Found";
         }
 
-        private List<RouteOptionDetail> GetRouteOptionDetails(CustomerRoute customerRoute)
+        private List<CustomerRouteOptionDetail> GetRouteOptionDetails(CustomerRoute customerRoute)
         {
             if (customerRoute.Options == null)
                 return null;
@@ -75,14 +75,14 @@ namespace TOne.WhS.Routing.Business
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
 
-            List<RouteOptionDetail> optionDetails = new List<RouteOptionDetail>();
+            List<CustomerRouteOptionDetail> optionDetails = new List<CustomerRouteOptionDetail>();
 
             foreach (RouteOption item in customerRoute.Options)
             {
                 CarrierAccount supplier = carrierAccountManager.GetCarrierAccount(item.SupplierId);
                 SupplierZone supplierZone = supplierZoneManager.GetSupplierZone(item.SupplierZoneId);
 
-                optionDetails.Add(new RouteOptionDetail()
+                optionDetails.Add(new CustomerRouteOptionDetail()
                 {
                     IsBlocked = item.IsBlocked,
                     Percentage = item.Percentage,
@@ -96,12 +96,12 @@ namespace TOne.WhS.Routing.Business
             return optionDetails;
         }
 
-        private string GetRouteOptionsDescription(List<RouteOptionDetail> optionDetails)
+        private string GetRouteOptionsDescription(List<CustomerRouteOptionDetail> optionDetails)
         {
             StringBuilder builder = new StringBuilder();
             if (optionDetails != null)
             {
-                foreach (RouteOptionDetail item in optionDetails)
+                foreach (CustomerRouteOptionDetail item in optionDetails)
                 {
                     builder.AppendFormat(" {0} {1}%,", item.SupplierName, item.Percentage);
                 }

@@ -61,7 +61,10 @@ namespace TestRuntime.Tasks
                     CodePrefixLength = 1,
                     IsFuture = false,
                     SaleZoneRange = 1000,
-                    SupplierZoneRPOptionPolicies = new List<SupplierZoneToRPOptionPolicy>() { new SupplierZoneToRPOptionHighestRatePolicy() { ConfigId = 1 }, new SupplierZoneToRPOptionLowestRatePolicy() { ConfigId = 2 }, new SupplierZoneToRPOptionAverageRatePolicy() { ConfigId = 3 } }
+                    SupplierZoneRPOptionPolicies = new List<SupplierZoneToRPOptionPolicy>() { 
+                        new SupplierZoneToRPOptionHighestRatePolicy() { ConfigId = 27 }, 
+                        new SupplierZoneToRPOptionLowestRatePolicy() { ConfigId = 29 }, 
+                        new SupplierZoneToRPOptionAverageRatePolicy() { ConfigId = 30 } }
                 }
             });
         }

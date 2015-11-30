@@ -27,5 +27,21 @@ namespace TOne.WhS.Routing.Web.Controllers
             RPRouteManager manager = new RPRouteManager();
             return manager.GetRPRouteOptionSupplier(routingProductId, saleZoneId, supplierId);
         }
+
+        [HttpGet]
+        [Route("GetPoliciesOptionTemplates")]
+        public IEnumerable<Vanrise.Entities.TemplateConfig> GetPoliciesOptionTemplates()
+        {
+            RPRouteManager manager = new RPRouteManager();
+            return manager.GetPoliciesOptionTemplates();
+        }
+
+        [HttpGet]
+        [Route("GetRouteOptionDetails")]
+        public IEnumerable<RPRouteOptionDetail> GetRouteOptionDetails(int routingDatabaseId, int policyOptionConfigId, int routingProductId, long saleZoneId)
+        {
+            RPRouteManager manager = new RPRouteManager();
+            return manager.GetRouteOptionDetails(routingDatabaseId, policyOptionConfigId, routingProductId, saleZoneId);
+        }
     }
 }

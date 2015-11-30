@@ -14,6 +14,8 @@ namespace TOne.WhS.Routing.Data
 
         Vanrise.Entities.BigResult<Entities.RPRoute> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<Entities.RPRouteQuery> input);
 
+        Dictionary<int, IEnumerable<RPRouteOption>> GetRouteOptions(int routingProductId, long saleZoneId);
+
     }
 
 }

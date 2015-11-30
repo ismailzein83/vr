@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -68,6 +69,21 @@ namespace TOne.WhS.Routing.Data.SQL
             return RetrieveData(input, createTempTableAction, CustomerRouteMapper);
         }
 
+        public Dictionary<int, IEnumerable<RPRouteOption>> GetRouteOptions(int routingProductId, long saleZoneId)
+        {
+            object routeOptionsSerialized = ExecuteScalarText(query_GetRouteOptions, (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@RoutingProductId", routingProductId));
+                    cmd.Parameters.Add(new SqlParameter("@SaleZoneId", saleZoneId));
+                }
+            );
+
+            if(routeOptionsSerialized == null)
+                return null;
+
+            return Vanrise.Common.Serializer.Deserialize<Dictionary<int, IEnumerable<RPRouteOption>>>(routeOptionsSerialized.ToString());
+        }
+
         private RPRoute CustomerRouteMapper(IDataReader reader)
         {
             return new RPRoute()
@@ -94,6 +110,10 @@ namespace TOne.WhS.Routing.Data.SQL
                                                             INTO #TEMPTABLE# FROM [dbo].[ProductRoute] with(nolock)
                                                             Where #ROUTING_PRODUCT_IDS# AND #SALE_ZONE_IDS# 
                                                             END");
+
+        private const string query_GetRouteOptions = @"SELECT [OptionsByPolicy]
+                                                        FROM [dbo].[ProductRoute] 
+                                                        Where RoutingProductId = @RoutingProductId And SaleZoneId = @SaleZoneId";
 
         #endregion
     }

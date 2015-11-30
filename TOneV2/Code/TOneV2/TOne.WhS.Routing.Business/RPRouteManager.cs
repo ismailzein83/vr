@@ -9,6 +9,7 @@ using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Routing.Business
 {
@@ -29,38 +30,6 @@ namespace TOne.WhS.Routing.Business
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult);
-        }
-
-        private RPRouteDetail RPRouteDetailMapper(RPRoute rpRoute)
-        {
-            return new RPRouteDetail()
-            {
-                Entity = rpRoute,
-                RoutingProductName = this.GetRoutingProductName(rpRoute.RoutingProductId),
-                SaleZoneName = this.GetSaleZoneName(rpRoute.SaleZoneId)
-            };
-        }
-
-        private string GetRoutingProductName(int routingProductId)
-        {
-            RoutingProductManager manager = new RoutingProductManager();
-            RoutingProduct routingProduct = manager.GetRoutingProduct(routingProductId);
-
-            if (routingProduct != null)
-                return routingProduct.Name;
-
-            return "Not Found";
-        }
-
-        private string GetSaleZoneName(long saleZoneId)
-        {
-            SaleZoneManager manager = new SaleZoneManager();
-            SaleZone saleZone = manager.GetSaleZone(saleZoneId);
-
-            if (saleZone != null)
-                return saleZone.Name;
-
-            return "Not Found";
         }
 
         public IEnumerable<RPRoute> GetRPRoutes(IEnumerable<RPZone> rpZones)
@@ -182,6 +151,85 @@ namespace TOne.WhS.Routing.Business
 
             return rpRouteOptionSupplierDetail;
         }
+
+        public IEnumerable<RPRouteOptionDetail> GetRouteOptionDetails(int routingDatabaseId, int policyOptionConfigId, int routingProductId, long saleZoneId)
+        {
+            IRPRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
+            manager.DatabaseId = routingDatabaseId;
+
+            Dictionary<int, IEnumerable<RPRouteOption>> allOptions = manager.GetRouteOptions(routingProductId, saleZoneId);
+            if (allOptions == null || !allOptions.ContainsKey(policyOptionConfigId))
+                return null;
+
+            IEnumerable<RPRouteOption> routeOptionsByPolicy = allOptions[policyOptionConfigId];
+            return routeOptionsByPolicy.MapRecords(RPRouteOptionMapper);
+        }
+
+        public IEnumerable<Vanrise.Entities.TemplateConfig> GetPoliciesOptionTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.SupplierZoneToRPOptionConfigType);
+        }
+
+        #region Private Memebers
+
+        private RPRouteDetail RPRouteDetailMapper(RPRoute rpRoute)
+        {
+            return new RPRouteDetail()
+            {
+                Entity = rpRoute,
+                RoutingProductName = this.GetRoutingProductName(rpRoute.RoutingProductId),
+                SaleZoneName = this.GetSaleZoneName(rpRoute.SaleZoneId)
+            };
+        }
+
+        private RPRouteOptionDetail RPRouteOptionMapper(RPRouteOption routeOption)
+        {
+            if (routeOption == null)
+                return null;
+
+            return new RPRouteOptionDetail()
+            {
+                Entity = routeOption,
+                SupplierName = GetSupplierName(routeOption.SupplierId)
+            };
+        }
+
+        private string GetRoutingProductName(int routingProductId)
+        {
+            RoutingProductManager manager = new RoutingProductManager();
+            RoutingProduct routingProduct = manager.GetRoutingProduct(routingProductId);
+
+            if (routingProduct != null)
+                return routingProduct.Name;
+
+            return "Not Found";
+        }
+
+        private string GetSaleZoneName(long saleZoneId)
+        {
+            SaleZoneManager manager = new SaleZoneManager();
+            SaleZone saleZone = manager.GetSaleZone(saleZoneId);
+
+            if (saleZone != null)
+                return saleZone.Name;
+
+            return "Not Found";
+        }
+
+        private string GetSupplierName(int supplierId)
+        {
+            CarrierAccountManager manager = new CarrierAccountManager();
+            CarrierAccount supplier = manager.GetCarrierAccount(supplierId);
+
+            if (supplier != null)
+                return supplier.Name;
+
+            return "Not Found";
+        }
+        
+
+        #endregion
     }
 
     public class RPZone

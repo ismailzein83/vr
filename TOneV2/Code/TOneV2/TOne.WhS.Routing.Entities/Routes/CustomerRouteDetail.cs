@@ -16,11 +16,11 @@ namespace TOne.WhS.Routing.Entities
 
         public string RouteOptionsDescription { get; set; }
 
-        public List<RouteOptionDetail> RouteOptionDetails { get; set; }
+        public List<CustomerRouteOptionDetail> RouteOptionDetails { get; set; }
         
     }
 
-    public class RouteOptionDetail
+    public class CustomerRouteOptionDetail
     {
         public string SupplierName { get; set; }
 

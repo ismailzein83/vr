@@ -88,9 +88,9 @@ function (VRNotificationService, VRUIUtilsService, WhS_Routing_RPRouteAPIService
             drillDownDefinition.title = "Details";
             drillDownDefinition.directive = "vr-whs-routing-rproute-details";
 
-            drillDownDefinition.loadDirective = function (directiveAPI, rpRoute) {
+            drillDownDefinition.loadDirective = function (directiveAPI, rpRouteDetail) {
                 var payload = {
-                    rpRoute: rpRoute
+                    rpRouteDetail: rpRouteDetail
                 };
 
                 return directiveAPI.load(payload);

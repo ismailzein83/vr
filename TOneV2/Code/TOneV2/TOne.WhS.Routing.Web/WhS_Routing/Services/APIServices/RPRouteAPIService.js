@@ -17,9 +17,25 @@
             });
         }
 
+        function GetPoliciesOptionTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, "RPRoute", "GetPoliciesOptionTemplates"));
+        }
+        
+        function GetRouteOptionDetails(routingDatabaseId, policyOptionConfigId, routingProductId, saleZoneId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, "RPRoute", "GetRouteOptionDetails"),
+                {
+                    routingDatabaseId: routingDatabaseId,
+                    policyOptionConfigId: policyOptionConfigId,
+                    routingProductId: routingProductId,
+                    saleZoneId: saleZoneId
+                });
+        }
+
         return ({
             GetFilteredRPRoutes: GetFilteredRPRoutes,
-            GetRPRouteOptionSupplier: GetRPRouteOptionSupplier
+            GetRPRouteOptionSupplier: GetRPRouteOptionSupplier,
+            GetPoliciesOptionTemplates: GetPoliciesOptionTemplates,
+            GetRouteOptionDetails: GetRouteOptionDetails
         });
     }
 

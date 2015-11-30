@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingRprouteDetails', ['UtilsService',
-    function (UtilsService) {
+app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRouteAPIService',
+    function (UtilsService, WhS_Routing_RPRouteAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -10,6 +10,8 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService',
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
+
+                ctrl.policyOptions = [];
 
                 var ctor = new rpRouteDetailsCtor(ctrl, $scope);
                 ctor.initializeController();
@@ -24,13 +26,26 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService',
                     }
                 }
             },
-            templateUrl: "/Client/Modules/WhS_Routing/Directives/RPRoute/Templates/RPDetailTemplate.html"
+            templateUrl: "/Client/Modules/WhS_Routing/Directives/RPRoute/Templates/RPRouteDetailTemplate.html"
         };
 
         function rpRouteDetailsCtor(ctrl, $scope) {
+            var rpRouteDetail;
 
             function initializeController() {
-                //$scope.routeOptionDetails = [];
+                ctrl.rpRouteOptions = [];
+
+                $scope.onPolicySelectItem = function (selectedItem) {
+                    if (rpRouteDetail == undefined)
+                        return;
+                    
+                    WhS_Routing_RPRouteAPIService.GetRouteOptionDetails(rpRouteDetail.RoutingDatabaseId, selectedItem.TemplateConfigID, rpRouteDetail.Entity.RoutingProductId, rpRouteDetail.Entity.SaleZoneId).then(function (response) {
+                        angular.forEach(response, function (item) {
+                            ctrl.rpRouteOptions.push(item);
+                        });
+                    });
+                };
+
                 defineAPI();
             }
 
@@ -38,9 +53,15 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    var rpRoute;
+                    
                     if (payload != undefined)
-                        rpRoute = payload.rpRoute;
+                        rpRouteDetail = payload.rpRouteDetail;
+
+                    WhS_Routing_RPRouteAPIService.GetPoliciesOptionTemplates().then(function (response) {
+                        angular.forEach(response, function (item) {
+                            ctrl.policyOptions.push(item);
+                        });
+                    });
                 }
 
                 if (ctrl.onReady != null)
