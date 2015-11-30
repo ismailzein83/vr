@@ -80,7 +80,7 @@ namespace TOne.WhS.Sales.Business
                         SetZoneItemChanges(input.Filter.OwnerType, input.Filter.OwnerId, zoneItems);
                         
                         foreach (ZoneItem zoneItem in zoneItems)
-                            SetZoneEffectiveRoutingProduct(zoneItem);
+                            SetZoneEffectiveRoutingProduct(input.Filter.OwnerType, input.Filter.OwnerId, zoneItem);
 
                         SetRouteOptionsForZoneItems(zoneItems);
                     }
@@ -179,17 +179,25 @@ namespace TOne.WhS.Sales.Business
             }
         }
 
-        private void SetZoneEffectiveRoutingProduct(ZoneItem zoneItem)
+        private void SetZoneEffectiveRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, ZoneItem zoneItem)
         {
             if (zoneItem.NewRoutingProductId != null)
             {
                 zoneItem.EffectiveRoutingProductId = (int)zoneItem.NewRoutingProductId;
                 zoneItem.EffectiveRoutingProductName = new RoutingProductManager().GetRoutingProduct(zoneItem.EffectiveRoutingProductId).Name;
             }
-            else if (zoneItem.CurrentRoutingProductId != null)
-            {
-                zoneItem.EffectiveRoutingProductId = (int)zoneItem.CurrentRoutingProductId;
-                zoneItem.EffectiveRoutingProductName = zoneItem.CurrentRoutingProductName;
+            else {
+                Changes changes = _dataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
+                
+                if (changes != null && changes.DefaultChanges != null && changes.DefaultChanges.NewDefaultRoutingProduct != null) {
+                    zoneItem.EffectiveRoutingProductId = changes.DefaultChanges.NewDefaultRoutingProduct.DefaultRoutingProductId;
+                    zoneItem.EffectiveRoutingProductName = new RoutingProductManager().GetRoutingProduct(changes.DefaultChanges.NewDefaultRoutingProduct.DefaultRoutingProductId).Name;
+                }
+                else if (zoneItem.CurrentRoutingProductId != null)
+                {
+                    zoneItem.EffectiveRoutingProductId = (int)zoneItem.CurrentRoutingProductId;
+                    zoneItem.EffectiveRoutingProductName = zoneItem.CurrentRoutingProductName;
+                }
             }
         }
 
@@ -316,7 +324,7 @@ namespace TOne.WhS.Sales.Business
             return defaultItem;
         }
 
-        public void SetDefaultItemChanges(SalePriceListOwnerType ownerType, int ownerId, DefaultItem defaultItem)
+        private void SetDefaultItemChanges(SalePriceListOwnerType ownerType, int ownerId, DefaultItem defaultItem)
         {
             Changes existingChanges = _dataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
 
