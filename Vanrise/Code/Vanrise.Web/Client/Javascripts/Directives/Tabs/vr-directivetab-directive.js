@@ -16,6 +16,7 @@ app.directive('vrDirectivetab', ['UtilsService', function (UtilsService) {
                 tabItem.dontLoad = true;
             tabItem.isLoading = true;
             tabItem.onDirectiveReady = function (directiveAPI) {
+                tabItem.directiveAPI = directiveAPI;
                 if (tabItem.loadDirective != undefined) {
                     UtilsService.convertToPromiseIfUndefined(tabItem.loadDirective(directiveAPI)).finally(function () {
                         tabItem.isLoading = false;
