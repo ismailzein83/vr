@@ -112,9 +112,9 @@
             payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.Switch.value);
             payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.PortIn.value);
             payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.PortOut.value);
-            payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.ASR.value);
-            payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.ACD.value);
-            payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.Attempts.value);
+           // payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.ASR.value);
+           // payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.ACD.value);
+           // payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.Attempts.value);
             return payload;
         }
         function loadMeasures() {
@@ -122,14 +122,14 @@
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.SuccessfulAttempts.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.DurationsInSeconds.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.FailedAttempts.value);
-           // measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.CeiledDuration.value);
+            measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.CeiledDuration.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.ASR.value);
-            // measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.NER.value);
+          //   measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.NER.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value);
              measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.ABR.value);
             // 
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.PDDInSeconds.value);
-          //  measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.PGAD.value);
+            measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.PGAD.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.MaxDurationInSeconds.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.LastCDRAttempt.value);
         }

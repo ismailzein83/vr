@@ -15,7 +15,7 @@ namespace TOne.WhS.CDRProcessing.Entities
         public DateTime LastCDRAttempt { get; set; }
 
         public int CustomerId { get; set; }
-
+        public int SwitchID { get; set; }
         public int SupplierId { get; set; }
 
         public int Attempts { get; set; }
@@ -28,11 +28,15 @@ namespace TOne.WhS.CDRProcessing.Entities
         public string PortIn { get; set; }
         public int DeliveredAttempts { get; set; }
         public int SuccessfulAttempts { get; set; }
-        public long TotalDurationInSeconds { get; set; }
+        public long DurationInSeconds { get; set; }
 
-        public static string GetStatisticItemKey(int customerId, int supplierId, long saleZoneId, long supplierZoneId, string portOut, string portIn)
+        public Decimal Utilization { get; set; }
+        public int DeliveredNumberOfCalls { get; set; }
+        public int PGAD { get; set; }
+        public int CeiledDuration { get; set; }
+        public static string GetStatisticItemKey(int customerId, int supplierId, long saleZoneId, long supplierZoneId, string portOut, string portIn,int switchID)
         {
-            return string.Format("{0}_{1}_{2}_{3}_{4}_{5}", customerId, supplierId, saleZoneId, supplierZoneId, portOut, portIn);
+            return string.Format("{0}_{1}_{2}_{3}_{4}_{5}_{6}", customerId, supplierId, saleZoneId, supplierZoneId, portOut, portIn, switchID);
         }
     }
 }

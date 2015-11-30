@@ -21,23 +21,24 @@ namespace TOne.WhS.CDRProcessing.Business
             statisticItem.SupplierZoneId=rawItem.SupplierZoneID;
             statisticItem.PortIn=rawItem.PortIn;
             statisticItem.PortOut = rawItem.PortOut;
+            statisticItem.SwitchID = rawItem.SwitchID;
             return statisticItem;
         }
 
         protected override string GetStatisticItemKey(T statisticItem)
         {
-            return BaseTrafficStatistic.GetStatisticItemKey(statisticItem.CustomerId, statisticItem.SupplierId, statisticItem.SaleZoneId, statisticItem.SupplierZoneId, statisticItem.PortOut, statisticItem.PortIn);
+            return BaseTrafficStatistic.GetStatisticItemKey(statisticItem.CustomerId, statisticItem.SupplierId, statisticItem.SaleZoneId, statisticItem.SupplierZoneId, statisticItem.PortOut, statisticItem.PortIn,statisticItem.SwitchID);
         }
 
         protected override string GetStatisticItemKey(BillingCDRBase rawItem)
         {
-            return BaseTrafficStatistic.GetStatisticItemKey(rawItem.CustomerId, rawItem.SupplierId, rawItem.SaleZoneID, rawItem.SupplierZoneID, rawItem.PortOut, rawItem.PortIn);
+            return BaseTrafficStatistic.GetStatisticItemKey(rawItem.CustomerId, rawItem.SupplierId, rawItem.SaleZoneID, rawItem.SupplierZoneID, rawItem.PortOut, rawItem.PortIn,rawItem.SwitchID);
         }
 
         protected override void UpdateStatisticItemFromRawItem(T statisticItem, BillingCDRBase item)
         {
             statisticItem.Attempts++;
-            statisticItem.TotalDurationInSeconds += item.DurationInSeconds;
+            statisticItem.DurationInSeconds += item.DurationInSeconds;
             statisticItem.FirstCDRAttempt = item.Attempt <= statisticItem.FirstCDRAttempt || statisticItem.FirstCDRAttempt == default(DateTime) ? item.Attempt : statisticItem.FirstCDRAttempt;
             statisticItem.LastCDRAttempt = item.Attempt > statisticItem.LastCDRAttempt ? item.Attempt : statisticItem.LastCDRAttempt;
             statisticItem.NumberOfCalls++;
@@ -52,6 +53,16 @@ namespace TOne.WhS.CDRProcessing.Business
                 statisticItem.PDDInSeconds = statisticItem.PDDInSeconds > 0 ? (int)(statisticItem.PDDInSeconds + pdd) : pdd;
             }
             statisticItem.MaxDurationInSeconds = item.DurationInSeconds >= statisticItem.MaxDurationInSeconds ? item.DurationInSeconds : statisticItem.MaxDurationInSeconds;
+            if (item.DurationInSeconds > 0)
+                statisticItem.DeliveredNumberOfCalls++;
+
+            if (item.Connect.HasValue)
+            {
+                statisticItem.PGAD += item.Connect.Value.Subtract(item.Attempt).Seconds;
+            }
+           // statisticItem.CeiledDuration += (int)Math.Ceiling(item.DurationInSeconds);
+            //if (item.Disconnect.HasValue) 
+            //    statisticItem.Utilization += item.Disconnect.Value.Subtract(item.Attempt);
 
         }
         public static DateTime? GetFirstValidDateTime(params DateTime?[] times)

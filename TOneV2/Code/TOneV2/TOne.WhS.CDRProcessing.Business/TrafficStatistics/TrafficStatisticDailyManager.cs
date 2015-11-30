@@ -20,6 +20,7 @@ namespace TOne.WhS.CDRProcessing.Business
             statisticItem.SupplierZoneId = rawItem.SupplierZoneId;
             statisticItem.PortIn = rawItem.PortIn;
             statisticItem.PortOut = rawItem.PortOut;
+            statisticItem.SwitchID = rawItem.SwitchID;
             return statisticItem;
         }
 
@@ -31,12 +32,12 @@ namespace TOne.WhS.CDRProcessing.Business
 
         protected override string GetStatisticItemKey(TrafficStatisticDaily statisticItem)
         {
-            return BaseTrafficStatistic.GetStatisticItemKey(statisticItem.CustomerId, statisticItem.SupplierId, statisticItem.SaleZoneId, statisticItem.SupplierZoneId, statisticItem.PortOut, statisticItem.PortIn);
+            return BaseTrafficStatistic.GetStatisticItemKey(statisticItem.CustomerId, statisticItem.SupplierId, statisticItem.SaleZoneId, statisticItem.SupplierZoneId, statisticItem.PortOut, statisticItem.PortIn,statisticItem.SwitchID);
         }
 
         protected override string GetStatisticItemKey(TrafficStatisticByInterval rawItem)
         {
-            return BaseTrafficStatistic.GetStatisticItemKey(rawItem.CustomerId, rawItem.SupplierId, rawItem.SaleZoneId, rawItem.SupplierZoneId, rawItem.PortOut, rawItem.PortIn);
+            return BaseTrafficStatistic.GetStatisticItemKey(rawItem.CustomerId, rawItem.SupplierId, rawItem.SaleZoneId, rawItem.SupplierZoneId, rawItem.PortOut, rawItem.PortIn,rawItem.SwitchID);
         }
 
         protected override Dictionary<string, long> GetStatisticItemsIdsByKeyFromDB(TrafficStatisticDailyBatch batch)
@@ -54,17 +55,20 @@ namespace TOne.WhS.CDRProcessing.Business
         protected override void UpdateStatisticItemFromRawItem(TrafficStatisticDaily statisticItem, TrafficStatisticByInterval item)
         {
             statisticItem.Attempts++;
-            statisticItem.TotalDurationInSeconds += item.TotalDurationInSeconds;
+            statisticItem.DurationInSeconds += item.DurationInSeconds;
             statisticItem.FirstCDRAttempt = item.FirstCDRAttempt <= statisticItem.FirstCDRAttempt || statisticItem.FirstCDRAttempt == default(DateTime) ? item.FirstCDRAttempt : statisticItem.FirstCDRAttempt;
             statisticItem.LastCDRAttempt = item.LastCDRAttempt >= statisticItem.LastCDRAttempt ? item.LastCDRAttempt : statisticItem.LastCDRAttempt;
             statisticItem.NumberOfCalls++;
-            if (item.TotalDurationInSeconds > 0)
+            if (item.DurationInSeconds > 0)
             {
                 statisticItem.SuccessfulAttempts++;
                 statisticItem.DeliveredAttempts++;
                 statisticItem.PDDInSeconds = item.PDDInSeconds > 0 ? (int)statisticItem.PDDInSeconds + item.PDDInSeconds :  statisticItem.PDDInSeconds;
             }
             statisticItem.MaxDurationInSeconds = item.MaxDurationInSeconds >= statisticItem.MaxDurationInSeconds ? item.MaxDurationInSeconds : statisticItem.MaxDurationInSeconds;
+            if (item.DurationInSeconds > 0)
+                statisticItem.DeliveredNumberOfCalls++;
+                statisticItem.PGAD += item.PGAD;
 
   
         }

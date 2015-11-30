@@ -49,10 +49,10 @@ namespace TOne.WhS.Analytics.Data.SQL
             s_AllDimensionsConfig.Add(AnalyticDimension.Zone,
                 new AnalyticDimensionConfig
                 {
-                    IdColumn = "ISNULL(ts.OurZoneID,'N/A')",
+                    IdColumn = "ISNULL(ts.SaleZoneID,'N/A')",
                     NameColumn = "z.Name",
-                    JoinStatements = new List<string>() { " JOIN Zone z WITH (NOLOCK) ON z.ZoneID = ts.OurZoneID " },
-                    GroupByStatements = new List<string>() { " ts.OurZoneID, z.Name " },
+                    JoinStatements = new List<string>() { " JOIN TOneWhS_BE.SaleZone z WITH (NOLOCK) ON z.ID = ts.SaleZoneID " },
+                    GroupByStatements = new List<string>() { " ts.SaleZoneID, z.Name " },
                     ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
 
@@ -98,15 +98,15 @@ namespace TOne.WhS.Analytics.Data.SQL
                     ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
 
-            //s_AllDimensionsConfig.Add(AnalyticDimension.Switch,
-            //    new AnalyticDimensionConfig
-            //    {
-            //        IdColumn = "ts.SwitchID",
-            //        NameColumn = "sw.Name",
-            //        JoinStatements = new List<string>() { @"JOIN Switch sw WITH (NOLOCK) ON sw.SwitchID = ts.SwitchID" },
-            //        GroupByStatements = new List<string>() { "ts.SwitchID, sw.Name" },
-            //        ExpressionSummary = AnalyticSummary.Sum.ToString("G")
-            //    });
+            s_AllDimensionsConfig.Add(AnalyticDimension.Switch,
+                new AnalyticDimensionConfig
+                {
+                    IdColumn = "ts.SwitchID",
+                    NameColumn = "sw.Name",
+                    JoinStatements = new List<string>() { @"JOIN [TOneWhS_BE].[Switch] sw WITH (NOLOCK) ON sw.ID = ts.SwitchID" },
+                    GroupByStatements = new List<string>() { "ts.SwitchID, sw.Name" },
+                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
+                });
 
             //s_AllDimensionsConfig.Add(AnalyticDimension.GateWayIn,
             //    new AnalyticDimensionConfig
@@ -410,13 +410,13 @@ namespace TOne.WhS.Analytics.Data.SQL
                     GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.NumberOfCalls_Expression.ColumnAlias)
                 });
 
-            //s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.DeliveredNumberOfCalls,
-            //    new AnalyticMeasureFieldConfig
-            //    {
-            //        GetColumnsExpressions = new List<Func<GenericAnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.DeliveredNumberOfCalls_Expression },
-            //        MappedSQLColumn = MeasureValueExpression.DeliveredNumberOfCalls_Expression.ColumnAlias,
-            //        GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.DeliveredNumberOfCalls_Expression.ColumnAlias)
-            //    });
+            s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.DeliveredNumberOfCalls,
+                new AnalyticMeasureFieldConfig
+                {
+                    GetColumnsExpressions = new List<Func<GenericAnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.DeliveredNumberOfCalls_Expression },
+                    MappedSQLColumn = MeasureValueExpression.DeliveredNumberOfCalls_Expression.ColumnAlias,
+                    GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.DeliveredNumberOfCalls_Expression.ColumnAlias)
+                });
 
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.CeiledDuration,
                 new AnalyticMeasureFieldConfig

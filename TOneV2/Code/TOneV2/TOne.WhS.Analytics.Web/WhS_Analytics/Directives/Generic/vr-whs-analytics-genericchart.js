@@ -45,6 +45,10 @@ function (WhS_Analytics_GenericAnalyticAPIService, WhS_Analytics_GenericAnalytic
                                 isHour = true;
                             }
                         }
+                        if (payload.DimensionFields != undefined) {
+                                for (var i = 0; i < payload.DimensionFields.length; i++)
+                                    dimensions.push(payload.DimensionFields[i]);
+                        }
                         if (payload.measures != undefined) {
                             for (var i = 0; i < payload.measures.length; i++) {
                                 for (var p in WhS_Analytics_GenericAnalyticMeasureEnum)
@@ -91,6 +95,7 @@ function (WhS_Analytics_GenericAnalyticAPIService, WhS_Analytics_GenericAnalytic
                         }
                     }
                     function renderCharts(response) {
+                        console.log(response);
                         ctrl.isGettingEntityStatistics = true;
 
                         var chartData = new Array();
@@ -193,7 +198,12 @@ function (WhS_Analytics_GenericAnalyticAPIService, WhS_Analytics_GenericAnalytic
                                 for (var i = 0; i < response.Data.length; i++) {
                                     var values = {};
                                     if (period!=undefined)
-                                       values[period.name ] = response.Data[i].DimensionValues[0].Name;
+                                        values[period.name] = response.Data[i].DimensionValues[0].Name;
+                                   
+                                    if (dimensions != undefined)
+                                        values.name = [];
+                                        for (var k = 0; k < response.Data[i].DimensionValues.length; k++)
+                                            values.name.push(response.Data[i].DimensionValues[k].Name);
                                     values[ctrl.measures[x].name] = response.Data[i].MeasureValues[ctrl.measures[x].name];
                                     chartData[x].push(values);
                                 }
@@ -206,9 +216,11 @@ function (WhS_Analytics_GenericAnalyticAPIService, WhS_Analytics_GenericAnalytic
                                 });
 
                                 var sdef = new Array();
-
+                              
+                       
                                 sdef.push({
                                     title: ctrl.measures[x].description,
+                                    titlePath: "name",
                                     valuePath: ctrl.measures[x].name
                                 });
                                 seriesDefinitions.push(sdef);

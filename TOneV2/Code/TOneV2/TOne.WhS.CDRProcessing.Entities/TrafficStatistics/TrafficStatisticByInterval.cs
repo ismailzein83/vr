@@ -10,7 +10,7 @@ namespace TOne.WhS.CDRProcessing.Entities
     {
         static TrafficStatisticByInterval()
         {
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(TrafficStatisticByInterval), "StatisticItemId", "FirstCDRAttempt", "LastCDRAttempt", "CustomerId", "SupplierId", "Attempts", "TotalDurationInSeconds", "SaleZoneId", "SupplierZoneId", "PDDInSeconds", "MaxDurationInSeconds", "NumberOfCalls", "PortOut", "PortIn", "DeliveredAttempts", "SuccessfulAttempts");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(TrafficStatisticByInterval), "StatisticItemId","SwitchID", "FirstCDRAttempt", "LastCDRAttempt", "CustomerId", "SupplierId", "Attempts", "DurationInSeconds", "SaleZoneId", "SupplierZoneId", "PDDInSeconds", "MaxDurationInSeconds", "NumberOfCalls", "PortOut", "PortIn", "DeliveredAttempts", "SuccessfulAttempts", "Utilization", "DeliveredNumberOfCalls", "PGAD", "CeiledDuration");
         }
     }
 }

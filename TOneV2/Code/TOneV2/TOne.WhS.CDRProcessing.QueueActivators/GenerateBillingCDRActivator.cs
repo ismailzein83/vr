@@ -141,6 +141,7 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
         private BillingCDRBase GetBillingCDRBase(CDR cdrBase, BillingCDRBase cdr)
         {
             cdr.Alert = cdrBase.Alert;
+            cdr.SwitchID = cdrBase.SwitchID;
             cdr.Attempt = cdrBase.Attempt;
             cdr.CDPN = cdrBase.CDPN;
             cdr.CGPN = cdrBase.CGPN;

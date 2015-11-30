@@ -12,7 +12,7 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
     {
 
        public CDRDataManager()
-            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+           : base(GetConnectionStringName("TOneWhS_CDR_DBConnStringKey", "TOneWhS_CDR_DBConnString"))
         {
 
         }
@@ -50,11 +50,29 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
       
        public object FinishDBApplyStream(object dbApplyStream)
        {
+           List<string> columns = new List<string>();
+           columns.Add("ID");
+           columns.Add("Attempt");
+           columns.Add("InCarrier");
+           columns.Add("InTrunk");
+           columns.Add("CDPN");
+           columns.Add("OutTrunk");
+           columns.Add("OutCarrier");
+           columns.Add("DurationInSeconds");
+           columns.Add("Alert");
+           columns.Add("Connect");
+           columns.Add("Disconnect");
+           columns.Add("CGPN");
+           columns.Add("PortOut");
+           columns.Add("PortIn");
+           columns.Add("ReleaseCode");
+           columns.Add("ReleaseSource");
 
            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
            streamForBulkInsert.Close();
            return new StreamBulkInsertInfo
            {
+               ColumnNames=columns,
                TableName = "[TOneWhS_CDR].[CDR]",
                Stream = streamForBulkInsert,
                TabLock = false,

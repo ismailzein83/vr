@@ -11,12 +11,13 @@ namespace TOne.WhS.CDRProcessing.Entities
     {
         static BillingCDRBase()
         {
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(BillingCDRBase), "ID", "Attempt", "CustomerId", "SupplierId", "DurationInSeconds",
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(BillingCDRBase), "ID","SwitchID", "Attempt", "CustomerId", "SupplierId", "DurationInSeconds",
                 "Alert", "Connect", "Disconnect", "CGPN", "CDPN", "PortOut", "PortIn", "ReleaseCode", "ReleaseSource", "SaleZoneID", "SupplierZoneID", "OriginatingZoneID", "SaleCode"
                 , "SupplierCode");
         }
         
         public int ID { get; set; }
+        public int SwitchID { get; set; }
         public DateTime Attempt { get; set; }
         public int CustomerId { get; set; }
         public int SupplierId { get; set; }

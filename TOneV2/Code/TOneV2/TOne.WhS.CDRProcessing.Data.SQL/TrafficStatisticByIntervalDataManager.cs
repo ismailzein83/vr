@@ -25,12 +25,13 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
        public void WriteRecordToStream(TrafficStatisticByInterval record, object dbApplyStream)
        {
            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-           streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}",
+
+           streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}",
                                     record.StatisticItemId,
                                     record.CustomerId,
                                     record.SupplierId,
                                     record.Attempts,
-                                    record.TotalDurationInSeconds,
+                                    record.DurationInSeconds,
                                     record.FirstCDRAttempt,
                                     record.LastCDRAttempt,
                                     record.SaleZoneId,
@@ -41,17 +42,44 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
                                     record.PortOut,
                                     record.PortIn,
                                     record.DeliveredAttempts,
-                                    record.SuccessfulAttempts);
+                                    record.SuccessfulAttempts,
+                                    record.DeliveredNumberOfCalls,
+                                    record.CeiledDuration,
+                                    record.SwitchID,
+                                    record.PGAD);
 
        }
        public object FinishDBApplyStream(object dbApplyStream)
        {
+            List<string> columns=new List<string>();
+            columns.Add("ID");
+            columns.Add("CustomerID");
+            columns.Add("SupplierID");
+            columns.Add("Attempts");
+            columns.Add("DurationInSeconds");
+            columns.Add("FirstCDRAttempt");
+            columns.Add("LastCDRAttempt");
+            columns.Add("SaleZoneID");
+            columns.Add("SupplierZoneID");
+            columns.Add("SumOfPDDInSeconds");
+            columns.Add("MaxDurationInSeconds");
+            columns.Add("NumberOfCalls");
+            columns.Add("PortOut");
+            columns.Add("PortIn");
+            columns.Add("DeliveredAttempts");
+            columns.Add("SuccessfulAttempts");
 
+            columns.Add("DeliveredNumberOfCalls");
+            columns.Add("CeiledDuration");
+            columns.Add("SwitchID");
+            columns.Add("SumOfPGAD");
+           
            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
            streamForBulkInsert.Close();
            return new StreamBulkInsertInfo
            {
-               TableName = "[TOneWhS_CDR].[TrafficStats]",
+               ColumnNames=columns,
+               TableName = "[TOneWhS_Stats].[TrafficStats]",
                Stream = streamForBulkInsert,
                TabLock = false,
                KeepIdentity = false,
@@ -88,7 +116,7 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
            }
            dtStatisticsToUpdate.EndLoadData();
            if (dtStatisticsToUpdate.Rows.Count > 0)
-               ExecuteNonQuerySPCmd("[TOneWhS_CDR].[sp_TrafficStats_Update]",
+               ExecuteNonQuerySPCmd("[TOneWhS_Stats].[sp_TrafficStats_Update]",
                    (cmd) =>
                    {
                        var dtPrm = new System.Data.SqlClient.SqlParameter("@TrafficStats", SqlDbType.Structured);
@@ -102,7 +130,7 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
            dr["CustomerId"] = trafficStatistic.CustomerId;
            dr["SupplierId"] = trafficStatistic.SupplierId;
            dr["Attempts"] = trafficStatistic.Attempts;
-           dr["TotalDurationInSeconds"] = trafficStatistic.TotalDurationInSeconds;
+           dr["TotalDurationInSeconds"] = trafficStatistic.DurationInSeconds;
            dr["FirstCDRAttempt"] = trafficStatistic.FirstCDRAttempt;
            dr["LastCDRAttempt"] = trafficStatistic.LastCDRAttempt;
            dr["SaleZoneID"] = trafficStatistic.SaleZoneId;
@@ -114,6 +142,12 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
            dr["PortIn"] = trafficStatistic.PortIn;
            dr["DeliveredAttempts"] = trafficStatistic.DeliveredAttempts;
            dr["SuccessfulAttempts"] = trafficStatistic.SuccessfulAttempts;
+
+               dr["DeliveredNumberOfCalls"] = trafficStatistic.DeliveredNumberOfCalls;
+               dr["CeiledDuration"] = trafficStatistic.CeiledDuration;
+               dr["SumOfPGAD"] = trafficStatistic.PGAD;
+               dr["UtilizationInSeconds"] = trafficStatistic.Utilization;
+
        }
        DataTable GetTrafficStatsTable()
        {
@@ -135,6 +169,11 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
            dt.Columns.Add("DeliveredAttempts", typeof(int));
            dt.Columns.Add("SuccessfulAttempts", typeof(int));
 
+
+           dt.Columns.Add("DeliveredNumberOfCalls", typeof(int));
+           dt.Columns.Add("CeiledDuration", typeof(int));
+           dt.Columns.Add("SumOfPGAD", typeof(int));
+           dt.Columns.Add("UtilizationInSeconds", typeof(decimal));
            return dt;
        }
 
@@ -145,8 +184,8 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
        public Dictionary<string, long> GetStatisticItemsIdsByKeyFromDB(TrafficStatisticByIntervalBatch batch)
        {
            Dictionary<string, long> trafficStatistics = new Dictionary<string, long>();
-           
-           ExecuteReaderSP("TOneWhS_CDR.sp_TrafficStats_GetIdsByGroupedKeys", (reader) =>
+
+           ExecuteReaderSP("[TOneWhS_Stats].sp_TrafficStats_GetIdsByGroupedKeys", (reader) =>
            {
                string key=null;
                while (reader.Read())
@@ -157,9 +196,10 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
                             GetReaderValue<long>(reader, "SaleZoneID"),
                              GetReaderValue<long>(reader, "SupplierZoneID"),
                              GetReaderValue<string>(reader, "PortOut"),
-                             GetReaderValue<string>(reader, "PortIn"));
+                             GetReaderValue<string>(reader, "PortIn"),
+                             GetReaderValue<int>(reader, "SwitchID"));
                   if(!trafficStatistics.ContainsKey(key))
-                      trafficStatistics.Add(key,GetReaderValue<long>(reader,"ID"));
+                      trafficStatistics.Add(key,GetReaderValue<int>(reader,"ID"));
                }
            }, batch.BatchStart, batch.BatchEnd);
 

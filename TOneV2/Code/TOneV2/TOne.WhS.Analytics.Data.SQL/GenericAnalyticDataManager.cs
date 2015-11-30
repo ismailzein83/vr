@@ -158,7 +158,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             StringBuilder filterPartBuilder = new StringBuilder();
             StringBuilder groupByPartBuilder = new StringBuilder();
             StringBuilder ctePartBuilder = new StringBuilder();
-            string tableNamePartBuilder = "TOneWhS_CDR.TrafficStats";
+            string tableNamePartBuilder = "TOneWhS_Stats.TrafficStats";
             string tableIndex = "IX_TrafficStats_DateTimeFirst";
             string currencyPartBuilder = "";
 
