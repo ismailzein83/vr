@@ -228,37 +228,16 @@
             });
             
             function getSaveChangesInput() {
-                var defaultChanges = getDefaultChanges();
-                var zoneChanges = gridAPI.getChanges();
+                var changes = {};
 
-                var newChanges = (defaultChanges != null || zoneChanges != null) ? { DefaultChanges: defaultChanges, ZoneChanges: zoneChanges } : null;
+                defaultItemAPI.applyChanges(changes);
+                gridAPI.applyChanges(changes);
 
                 return {
                     OwnerType: $scope.selectedOwnerType.value,
                     OwnerId: getOwnerId(),
-                    NewChanges: newChanges
+                    NewChanges: (changes.DefaultChanges != null || changes.ZoneChanges != null) ? changes : null
                 };
-
-                function getDefaultChanges() {
-                    var defaultChanges = null;
-                    var directiveChanges = defaultItemAPI.getChanges();
-
-                    if (directiveChanges != null) {
-                        defaultChanges = {
-                            NewDefaultRoutingProduct: (directiveChanges.NewRoutingProduct != null) ? {
-                                DefaultRoutingProductId: directiveChanges.NewRoutingProduct.RoutingProductId,
-                                BED: directiveChanges.NewRoutingProduct.BED,
-                                EED: directiveChanges.NewRoutingProduct.EED
-                            } : null,
-                            DefaultRoutingProductChange: (directiveChanges.RoutingProductChange != null) ? {
-                                DefaultRoutingProductId: directiveChanges.RoutingProductChange.RoutingProductId,
-                                EED: directiveChanges.RoutingProductChange.EED
-                            } : null
-                        };
-                    }
-                    
-                    return defaultChanges;
-                }
             }
         }
 

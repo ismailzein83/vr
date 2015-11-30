@@ -18,12 +18,12 @@ app.directive("vrWhsSalesZoneroutingproduct", ["UtilsService", "VRUIUtilsService
         };
 
         function ZoneRoutingProduct(ctrl, $scope) {
+            var zoneItem;
+            var counter = 0;
+
             this.initCtrl = initCtrl;
 
             function initCtrl() {
-                var counter = 0;
-                var isDirty = false;
-
                 var currentId;
                 var newId;
                 
@@ -37,7 +37,9 @@ app.directive("vrWhsSalesZoneroutingproduct", ["UtilsService", "VRUIUtilsService
 
                 ctrl.onSelectionChange = function () {
                     counter++;
-                    if ((newId == null && counter > 1) || (newId != null && counter > 2)) isDirty = true;
+
+                    if ((!newId && counter > 1) || (newId && counter > 2))
+                        zoneItem.IsDirty = true;
                 };
 
                 selectorReadyDeferred.promise.then(function () {
@@ -49,6 +51,7 @@ app.directive("vrWhsSalesZoneroutingproduct", ["UtilsService", "VRUIUtilsService
 
                     api.load = function (payload) {
                         if (payload != undefined) {
+                            zoneItem = payload;
                             currentId = payload.CurrentRoutingProductId;
                             ctrl.CurrentName = payload.CurrentRoutingProductName;
                             newId = payload.NewRoutingProductId;
@@ -72,34 +75,29 @@ app.directive("vrWhsSalesZoneroutingproduct", ["UtilsService", "VRUIUtilsService
                         return selectorLoadDeferred.promise;
                     };
 
-                    api.getChanges = function () {
-                        var changes = null;
-
-                        if (isDirty) {
-                            var changes = {
-                                NewRoutingProduct: getNewRoutingProduct()
-                            };
-                        }
-
-                        return changes;
+                    api.applyChanges = function (zoneItemChanges) {
+                        zoneItemChanges.NewRoutingProduct = getNewRoutingProduct();
+                        zoneItemChanges.RoutingProductChange = getRoutingProductChange();
 
                         function getNewRoutingProduct() {
-                            var newRoutingProduct = null;
+                            var newZoneRoutingProduct = null;
                             var selectedId = selectorAPI.getSelectedIds();
 
                             if (selectedId != null) {
-                                newRoutingProduct = {
-                                    RoutingProductId: selectedId,
-                                    BED: new Date()
+                                newZoneRoutingProduct = {
+                                    ZoneId: zoneItemChanges.ZoneId,
+                                    ZoneRoutingProductId: selectedId,
+                                    BED: new Date(),
+                                    EED: null
                                 };
                             }
 
-                            return newRoutingProduct;
+                            return newZoneRoutingProduct;
                         }
-                    };
 
-                    api.isDirty = function () {
-                        return isDirty;
+                        function getRoutingProductChange() {
+                            return null;
+                        }
                     };
 
                     if (ctrl.onReady != null)

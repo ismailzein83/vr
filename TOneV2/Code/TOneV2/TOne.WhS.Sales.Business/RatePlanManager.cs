@@ -342,7 +342,7 @@ namespace TOne.WhS.Sales.Business
                     defaultItem.NewRoutingProductBED = newRoutingProduct.BED;
                     defaultItem.NewRoutingProductEED = newRoutingProduct.EED;
                 }
-                else
+                else if (routingProductChange != null)
                     defaultItem.NewRoutingProductEED = routingProductChange.EED;
             }
         }

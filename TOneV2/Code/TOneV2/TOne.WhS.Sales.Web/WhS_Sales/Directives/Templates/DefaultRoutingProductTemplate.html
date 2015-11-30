@@ -1,28 +1,12 @@
 ﻿<vr-row>
-    <div vr-loader="isLoadingDirective">
+    <div vr-loader="isLoading">
         <vr-columns width="normal" ng-show="ctrl.CurrentName">
-            <span style="display: block;"><vr-label>Current Routing Product</vr-label></span>
-            <vr-label isvalue>{{ctrl.CurrentName}}</vr-label>
+            <div><vr-label>Current Routing Product</vr-label></div>
+            <div><vr-label isvalue>{{ctrl.CurrentName}}</vr-label></div>
         </vr-columns>
 
         <vr-columns width="normal">
-            <vr-whs-be-routingproduct-selector on-ready="ctrl.onSelectorReady" onselectionchanged="ctrl.onSelectionChange" selectedvalues="ctrl.newRoutingProduct"></vr-whs-be-routingproduct-selector>
-        </vr-columns>
-
-        <vr-columns width="normal">
-            <span vr-disabled="true">
-                <vr-datetimepicker label="BED" type="date" value="ctrl.CurrentBED" ng-hide="ctrl.ShowNewBED"></vr-datetimepicker>
-            </span>
-            <vr-datetimepicker label="BED" type="date" value="ctrl.NewBED" ng-show="ctrl.ShowNewBED"></vr-datetimepicker>
-        </vr-columns>
-
-        <vr-columns width="normal">
-            <span vr-disabled="true">
-                <vr-datetimepicker label="EED" type="date" value="ctrl.CurrentEED" ng-hide="ctrl.ShowNewEED"></vr-datetimepicker>
-            </span>
-            <span vr-disabled="ctrl.newRoutingProduct == null && !ctrl.IsEditable">
-                <vr-datetimepicker label="EED" type="date" value="ctrl.NewEED" onvaluechanged="ctrl.onNewEEDChange" ng-show="ctrl.ShowNewEED"></vr-datetimepicker>
-            </span>
+            <vr-whs-be-routingproduct-selector on-ready="ctrl.onSelectorReady" onselectionchanged="ctrl.onSelectionChange"></vr-whs-be-routingproduct-selector>
         </vr-columns>
     </div>
 </vr-row>

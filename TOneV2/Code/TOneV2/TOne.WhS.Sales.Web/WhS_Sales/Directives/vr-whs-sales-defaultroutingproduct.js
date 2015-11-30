@@ -24,13 +24,12 @@ app.directive("vrWhsSalesDefaultroutingproduct", ["UtilsService", "VRUIUtilsServ
             this.initCtrl = initCtrl;
 
             function initCtrl() {
-                var counter = 0;
                 var isDirty = false;
+                var counter = 0;
                 var currentId;
+                var newId;
                 var selectorAPI;
                 var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                ctrl.newRoutingProduct = undefined;
 
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
@@ -39,22 +38,10 @@ app.directive("vrWhsSalesDefaultroutingproduct", ["UtilsService", "VRUIUtilsServ
 
                 ctrl.onSelectionChange = function (item) {
                     counter++;
+                    var selectedId = selectorAPI.getSelectedIds;
                     
-                    if (counter > 1)
+                    if ((!newId && counter > 1) || (newId && counter > 2))
                         isDirty = true;
-
-                    if (item != undefined) {
-                        ctrl.ShowNewBED = true;
-                        ctrl.ShowNewEED = true;
-                    }
-                    else {
-                        ctrl.ShowNewBED = false;
-                        ctrl.ShowNewEED = (ctrl.IsEditable);
-                    }
-                };
-
-                ctrl.onNewEEDChange = function () {
-                    isDirty = true;
                 };
 
                 selectorReadyPromiseDeferred.promise.then(function () {
@@ -65,104 +52,63 @@ app.directive("vrWhsSalesDefaultroutingproduct", ["UtilsService", "VRUIUtilsServ
                     var api = {};
 
                     api.load = function (payload) {
-                        var newId;
-                        
+                        isDirty = false;
+
                         if (payload != undefined) {
                             currentId = payload.CurrentRoutingProductId;
-                            ctrl.IsEditable = payload.IsCurrentRoutingProductEditable;
                             ctrl.CurrentName = payload.CurrentRoutingProductName;
-                            ctrl.CurrentBED = (payload.CurrentRoutingProductBED != null) ? new Date(payload.CurrentRoutingProductBED) : null;
-                            ctrl.CurrentEED = (payload.CurrentRoutingProductEED != null) ? new Date(payload.CurrentRoutingProductEED) : null;
                             newId = payload.NewRoutingProductId;
-                            ctrl.NewBED = (payload.NewRoutingProductBED != null) ? new Date(payload.NewRoutingProductBED) : null;
-                            ctrl.NewEED = (payload.NewRoutingProductEED != null) ? new Date(payload.NewRoutingProductEED) : null;
                         }
 
                         if (ctrl.IsEditable == null)
                             ctrl.IsEditable = false;
 
-                        if (newId != undefined) {
-                            ctrl.ShowNewBED = true;
-                            ctrl.ShowNewEED = true;
-                        }
-                        else if (ctrl.IsEditable) {
-                            ctrl.ShowNewEED = true;
-                        }
-
-                        var selectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        var selectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                         var selectorPayload = {
                             filter: { ExcludedRoutingProductId: currentId },
                             selectedIds: newId
                         };
 
-                        $scope.isLoadingDirective = true;
+                        $scope.isLoading = true;
 
-                        VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadPromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);
 
-                        selectorLoadPromiseDeferred.promise.finally(function () {
-                            $scope.isLoadingDirective = false;
+                        selectorLoadDeferred.promise.finally(function () {
+                            $scope.isLoading = false;
                         });
 
-                        return selectorLoadPromiseDeferred.promise;
+                        return selectorLoadDeferred.promise;
                     };
 
-                    api.getChanges = function () {
-                        var changes = null;
+                    api.applyChanges = function (changes) {
+                        changes.DefaultChanges = null;
 
                         if (isDirty) {
-                            var newRoutingProduct = getNewRoutingProduct();
-                            var routingProductChange = getRoutingProductChange();
-
-                            var changes = {
-                                NewRoutingProduct: newRoutingProduct,
-                                RoutingProductChange: routingProductChange
+                            changes.DefaultChanges = {
+                                NewDefaultRoutingProduct: getNewDefaultRoutingProduct(),
+                                DefaultRoutingProductChange: getDefaultRoutingProductChange()
                             };
                         }
 
-                        return changes;
-
-                        function getNewRoutingProduct() {
+                        function getNewDefaultRoutingProduct() {
                             var newRoutingProduct = null;
-                            var selectorId = selectorAPI.getSelectedIds();
+                            var selectedId = selectorAPI.getSelectedIds();
 
-                            if (selectorId != null) {
+                            if (selectedId != null) {
                                 newRoutingProduct = {
-                                    RoutingProductId: selectorId,
-                                    BED: ctrl.NewBED,
-                                    EED: ctrl.NewEED
+                                    DefaultRoutingProductId: selectedId,
+                                    BED: new Date(),
+                                    EED: null
                                 };
                             }
 
                             return newRoutingProduct;
                         }
 
-                        function getRoutingProductChange() {
-                            var routingProductChange = null;
-
-                            if (selectorAPI.getSelectedIds() == null && !compareDates(ctrl.CurrentEED, ctrl.NewEED))
-                            {
-                                routingProductChange = {
-                                    RoutingProductId: currentId,
-                                    EED: ctrl.NewEED
-                                };
-                            }
-
-                            return routingProductChange;
-
-                            function compareDates(date1, date2) {
-                                if (date1 != null && date1.getTime != undefined && date2 != null && date2.getTime != undefined)
-                                    return (date1.getTime() != date2.getTime());
-                                else if (date1 == null && date2 == null)
-                                    return true;
-                                else
-                                    return false;
-                            }
+                        function getDefaultRoutingProductChange() {
+                            return null;
                         }
-                    };
-
-                    api.isDirty = function () {
-                        return isDirty;
                     };
 
                     if (ctrl.onReady != null)
