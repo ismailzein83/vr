@@ -3,6 +3,9 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
+                    <vr-whs-be-codegroup-selector on-ready="onCodeGroupDirectiveReady"></vr-whs-be-codegroup-selector>
+                </vr-columns>
+                <vr-columns width="normal">
                     <vr-datetimepicker type="date" label="Effective On" value="effectiveOn"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
@@ -17,7 +20,7 @@
         <vr-row>
             <vr-columns width="fullrow">
 
-                <!--<vr-whs-be-salerate-grid on-ready="onGridReady"></vr-whs-be-salerate-grid>-->
+                <vr-whs-be-salecode-grid on-ready="onGridReady"></vr-whs-be-salecode-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

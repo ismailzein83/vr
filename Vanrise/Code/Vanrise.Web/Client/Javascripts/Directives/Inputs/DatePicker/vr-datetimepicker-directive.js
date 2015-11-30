@@ -91,7 +91,8 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                 fixDateTimePickerPosition();
             });
             var fixDateTimePickerPosition = function () {
-                divDatePicker.data("DateTimePicker").hide()
+                if (divDatePicker.data!= undefined)
+                    divDatePicker.data("DateTimePicker").hide()
 
             };
             var isUserChange = false;

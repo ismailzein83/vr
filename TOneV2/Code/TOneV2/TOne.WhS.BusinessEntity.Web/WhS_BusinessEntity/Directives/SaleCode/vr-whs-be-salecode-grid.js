@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSalerateGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SaleRateAPIService",
-function (UtilsService, VRNotificationService, WhS_BE_SaleRateAPIService) {
+app.directive("vrWhsBeSalecodeGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SaleCodeAPIService",
+function (UtilsService, VRNotificationService, WhS_BE_SaleCodeAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -11,7 +11,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleRateAPIService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var grid = new SaleRateGrid($scope, ctrl, $attrs);
+            var grid = new SaleCodeGrid($scope, ctrl, $attrs);
             grid.initializeController();
         },
         controllerAs: "ctrl",
@@ -19,18 +19,18 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleRateAPIService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/SaleRate/Templates/SaleRateGridTemplate.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/SaleCode/Templates/SaleCodeGridTemplate.html"
 
     };
 
-    function SaleRateGrid($scope, ctrl, $attrs) {
+    function SaleCodeGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
         this.initializeController = initializeController;
 
         function initializeController() {
            
-            $scope.salerates = [];
+            $scope.salecodes = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 
@@ -48,7 +48,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleRateAPIService) {
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_BE_SaleRateAPIService.GetFilteredSaleRate(dataRetrievalInput)
+                return WhS_BE_SaleCodeAPIService.GetFilteredSaleCode(dataRetrievalInput)
                     .then(function (response) {
                          onResponseReady(response);
                     })

@@ -8,7 +8,9 @@
 
 
         var gridAPI;
-       
+        var codeGroupDirectiveAPI;
+        var codeGroupReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
         var filter = {};
@@ -23,14 +25,18 @@
                 gridAPI = api;            
                
             }
-          
+            $scope.onCodeGroupDirectiveReady = function (api) {
+                codeGroupDirectiveAPI = api;
+                codeGroupReadyPromiseDeferred.resolve();
+            }
+
         }
         function load() {           
             $scope.isLoading = true;
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([])
+            return UtilsService.waitMultipleAsyncOperations([loadCodeGroup])
               .catch(function (error) {
                   VRNotificationService.notifyExceptionWithClose(error, $scope);
               })
@@ -39,7 +45,14 @@
              });
         }
       
-        
+        function loadCodeGroup() {
+            var loadCodeGroupPromiseDeferred = UtilsService.createPromiseDeferred();
+            codeGroupReadyPromiseDeferred.promise.then(function () {
+                var payload = {};
+                VRUIUtilsService.callDirectiveLoad(codeGroupDirectiveAPI, payload, loadCodeGroupPromiseDeferred);
+            });
+            return loadCodeGroupPromiseDeferred.promise;
+        }
        
         function setFilterObject() {
             filter = {                
