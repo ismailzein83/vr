@@ -9,7 +9,6 @@
         var routingProductId;
         var saleZoneId;
         var supplierId;
-        var supplierName;
 
         loadParameters();
         defineScope();
@@ -22,7 +21,6 @@
                 routingProductId = parameters.RoutingProductId;
                 saleZoneId = parameters.SaleZoneId;
                 supplierId = parameters.SupplierId;
-                //supplierName = parameters.SupplierName;
             }
         }
 

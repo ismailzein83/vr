@@ -176,7 +176,7 @@ namespace TOne.WhS.Routing.Business
                 rpRouteOptionSupplierDetail = new RPRouteOptionSupplierDetail()
                 {
                     SupplierName = new CarrierAccountManager().GetCarrierAccount(supplierId).Name,
-                    SupplierZones = rpRouteOptionSupplier.SupplierZones.MapRecords(item => new RPRouteOptionSupplierZoneDetail() { Entity = item, SupplierZoneName = new SupplierZoneManager().GetSupplierZone(supplierId).Name }).ToList()
+                    SupplierZones = rpRouteOptionSupplier.SupplierZones.MapRecords(item => new RPRouteOptionSupplierZoneDetail() { Entity = item, SupplierZoneName = new SupplierZoneManager().GetSupplierZone(item.SupplierZoneId).Name })
                 };
             }
 

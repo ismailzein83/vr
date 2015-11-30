@@ -10,6 +10,6 @@ namespace TOne.WhS.Routing.Entities
     {
         public string SupplierName { get; set; }
 
-        public List<RPRouteOptionSupplierZoneDetail> SupplierZones { get; set; }
+        public IEnumerable<RPRouteOptionSupplierZoneDetail> SupplierZones { get; set; }
     }
 }
