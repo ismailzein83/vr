@@ -104,6 +104,7 @@
     <Compile Include="Routes\SellingProductRoute.cs" />
     <Compile Include="RoutingDatabase.cs" />
     <Compile Include="RoutingDatabaseInfo.cs" />
+    <Compile Include="RoutingDatabaseInfoFilter.cs" />
     <Compile Include="SupplierZoneToRPOptionPolicy.cs" />
     <Compile Include="SaleCodeMatch.cs" />
     <Compile Include="CustomerZoneDetail.cs" />

@@ -7,6 +7,9 @@
     function rpRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService) {
         var gridAPI;
 
+        var routingDatabaseSelectorAPI;
+        var routingDatabaseReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var routingProductSelectorAPI;
         var routingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -14,12 +17,16 @@
         var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var saleZoneSelectorAPI;
-        //var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
 
         function defineScope() {
+
+            $scope.onRoutingDatabaseSelectorReady = function (api) {
+                routingDatabaseSelectorAPI = api;
+                routingDatabaseReadyPromiseDeferred.resolve();
+            }
 
             $scope.onRoutingProductSelectorReady = function (api) {
                 routingProductSelectorAPI = api;
@@ -33,7 +40,6 @@
 
             $scope.onSaleZoneSelectorReady = function (api) {
                 saleZoneSelectorAPI = api;
-                //saleZoneReadyPromiseDeferred.resolve();
             }
 
             $scope.onSelectSellingNumberPlan = function (selectedItem) {
@@ -50,7 +56,6 @@
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                gridAPI.loadGrid({ RoutingDatabaseId: '229' });
             }
 
             $scope.searchClicked = function () {
@@ -61,7 +66,7 @@
             function getFilterObject() {
 
                 var query = {
-                    RoutingDatabaseId: '229',
+                    RoutingDatabaseId: routingDatabaseSelectorAPI.getSelectedIds(),
                     RoutingProductIds: routingProductSelectorAPI.getSelectedIds(),
                     SaleZoneIds: saleZoneSelectorAPI.getSelectedIds()
                 };
@@ -72,11 +77,21 @@
         function load() {
             $scope.isLoadingFilterData = true;
 
-            return UtilsService.waitMultipleAsyncOperations([loadRoutingProductSelector, loadSellingNumberPlanSection]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadRoutingProductSelector, loadSellingNumberPlanSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterData = false;
             });
+        }
+
+        function loadRoutingDatabaseSelector() {
+            var loadRoutingDatabasePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            routingDatabaseReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(routingDatabaseSelectorAPI, undefined, loadRoutingDatabasePromiseDeferred);
+            });
+
+            return loadRoutingDatabasePromiseDeferred.promise;
         }
 
         function loadRoutingProductSelector() {

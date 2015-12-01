@@ -15,8 +15,9 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             SupplierPriceListManager manager = new SupplierPriceListManager();
             SupplierPriceList priceList = manager.GetPriceList(supplierRate.PriceListId);
-
-            string currencyName = (priceList.CurrencyId.HasValue ? this.GetCurrencyName(priceList.CurrencyId) : (supplierRate.CurrencyId.HasValue ? this.GetCurrencyName(supplierRate.CurrencyId) : string.Empty));
+            
+            int currencyId = supplierRate.CurrencyId.HasValue ? supplierRate.CurrencyId.Value : priceList.CurrencyId;
+            string currencyName = this.GetCurrencyName(currencyId);
 
             return new SupplierRateDetail()
             {
@@ -87,7 +88,7 @@ namespace TOne.WhS.BusinessEntity.Business
             SupplierZoneRate supplierZoneRate = supplierZoneRateLocator.GetSupplierZoneRate(supplierId, supplierZoneId);
             if (supplierZoneRate != null)
             {
-                int currencyId = supplierZoneRate.Rate.CurrencyId.HasValue ? supplierZoneRate.Rate.CurrencyId.Value : supplierZoneRate.PriceList.CurrencyId.Value;
+                int currencyId = supplierZoneRate.Rate.CurrencyId.HasValue ? supplierZoneRate.Rate.CurrencyId.Value : supplierZoneRate.PriceList.CurrencyId;
                 PurchasePricingRuleManager purchasePricingRuleManager = new PurchasePricingRuleManager();
                 PurchasePricingRulesInput purchasePricingRulesInput = new PurchasePricingRulesInput
                 {

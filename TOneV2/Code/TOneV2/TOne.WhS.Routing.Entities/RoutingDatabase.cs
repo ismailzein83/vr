@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public enum RoutingProcessType : byte { ProductRoute = 0, CustomerRoute = 1 }
+    public enum RoutingProcessType : byte { RoutingProductRoute = 0, CustomerRoute = 1 }
     public enum RoutingDatabaseType : byte { Current = 0, Future = 1, SpecificDate = 2 }
     public class RoutingDatabase
     {

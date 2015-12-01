@@ -5,8 +5,11 @@
 
     function routingDatabaseAPIService(BaseAPIService, UtilsService, WhS_Routing_ModuleConfig) {
 
-        function GetRoutingDatabaseInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, "RoutingDatabase", "GetRoutingDatabaseInfo"));
+        function GetRoutingDatabaseInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, "RoutingDatabase", "GetRoutingDatabaseInfo"), 
+                {
+                    serializedFilter: serializedFilter
+                });
         }
 
         return ({

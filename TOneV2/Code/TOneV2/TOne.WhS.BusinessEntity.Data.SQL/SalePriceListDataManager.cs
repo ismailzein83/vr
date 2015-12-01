@@ -20,9 +20,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             SalePriceList salePriceList = new SalePriceList
             {
-                OwnerId = GetReaderValue<int>(reader, "OwnerID"),
-                CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
-                PriceListId = GetReaderValue<int>(reader, "ID"),
+                OwnerId = (int)reader["OwnerID"],
+                CurrencyId = (int)reader["CurrencyID"],
+                PriceListId = (int)reader["ID"],
                 OwnerType = (Entities.SalePriceListOwnerType)GetReaderValue<int>(reader, "OwnerType"),
             };
             return salePriceList;

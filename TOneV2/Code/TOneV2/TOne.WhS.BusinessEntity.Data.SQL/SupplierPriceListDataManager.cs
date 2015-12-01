@@ -26,9 +26,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             SupplierPriceList supplierRate = new SupplierPriceList
             {
-                SupplierId = GetReaderValue<int>(reader, "SupplierID"),
-                CurrencyId = GetReaderValue<int?>(reader, "CurrencyID"),
-                PriceListId = GetReaderValue<int>(reader, "ID"),
+                SupplierId = (int)reader["SupplierID"],
+                CurrencyId = (int)reader["CurrencyID"],
+                PriceListId = (int)reader["ID"],
             };
             return supplierRate;
         }

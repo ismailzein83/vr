@@ -58,7 +58,7 @@ namespace TestRuntime
                     IsFuture = false,
                     SaleZoneRange = 1000,
                     SupplierZoneRPOptionPolicies = new List<SupplierZoneToRPOptionPolicy>() { new SupplierZoneToRPOptionHighestRatePolicy() { ConfigId = 1 }, new SupplierZoneToRPOptionLowestRatePolicy() { ConfigId = 2 }, new SupplierZoneToRPOptionAverageRatePolicy() { ConfigId = 3 } },
-                    RoutingProcessType = RoutingProcessType.ProductRoute
+                    RoutingProcessType = RoutingProcessType.RoutingProductRoute
                 }
             });
         }

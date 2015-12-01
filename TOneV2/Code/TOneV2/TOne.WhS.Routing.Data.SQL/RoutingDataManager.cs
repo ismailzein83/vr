@@ -66,7 +66,7 @@ namespace TOne.WhS.Routing.Data.SQL
             masterDataManager.CreateDatabase(GetDatabaseName(), ConfigurationManager.AppSettings["RoutingDBDataFileDirectory"], ConfigurationManager.AppSettings["RoutingDBLogFileDirectory"]);
             switch (_routingProcessType.Value)
             {
-                case RoutingProcessType.ProductRoute:
+                case RoutingProcessType.RoutingProductRoute:
                     CreateProductRoutingDatabaseSchema();
                     break;
                 case RoutingProcessType.CustomerRoute:

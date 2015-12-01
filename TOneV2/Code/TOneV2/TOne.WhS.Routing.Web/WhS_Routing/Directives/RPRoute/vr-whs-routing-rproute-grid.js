@@ -34,15 +34,16 @@ function (VRNotificationService, VRUIUtilsService, WhS_Routing_RPRouteAPIService
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
-                var drillDownDefinitions = initDrillDownDefinitions();
-                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
-
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
                 function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
+
+                        var drillDownDefinitions = initDrillDownDefinitions(query.RoutingDatabaseId);
+                        gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+
                         return gridAPI.retrieveData(query);
                     }
 
@@ -82,7 +83,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_Routing_RPRouteAPIService
             WhS_Routing_RouteRuleService.editRouteRule(dataItem.Entity.ExecutedRuleId);
         }
 
-        function initDrillDownDefinitions() {
+        function initDrillDownDefinitions(routingDatabaseId) {
             var drillDownDefinition = {};
 
             drillDownDefinition.title = "Details";
@@ -90,7 +91,8 @@ function (VRNotificationService, VRUIUtilsService, WhS_Routing_RPRouteAPIService
 
             drillDownDefinition.loadDirective = function (directiveAPI, rpRouteDetail) {
                 var payload = {
-                    rpRouteDetail: rpRouteDetail
+                    rpRouteDetail: rpRouteDetail,
+                    routingDatabaseId: routingDatabaseId
                 };
 
                 return directiveAPI.load(payload);

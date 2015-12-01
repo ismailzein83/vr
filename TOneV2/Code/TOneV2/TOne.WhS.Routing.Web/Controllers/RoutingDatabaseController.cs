@@ -14,10 +14,11 @@ namespace TOne.WhS.Routing.Web.Controllers
     {
         [HttpGet]
         [Route("GetRoutingDatabaseInfo")]
-        public IEnumerable<RoutingDatabaseInfo> GetRoutingDatabaseInfo()
+        public IEnumerable<RoutingDatabaseInfo> GetRoutingDatabaseInfo(string serializedFilter)
         {
+            RoutingDatabaseInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<RoutingDatabaseInfoFilter>(serializedFilter) : null;
             RoutingDatabaseManager manager = new RoutingDatabaseManager();
-            return manager.GetRoutingDatabaseInfo();
+            return manager.GetRoutingDatabaseInfo(filter);
         }
     }
 }

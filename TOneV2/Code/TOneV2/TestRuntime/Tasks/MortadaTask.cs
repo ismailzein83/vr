@@ -64,7 +64,8 @@ namespace TestRuntime.Tasks
                     SupplierZoneRPOptionPolicies = new List<SupplierZoneToRPOptionPolicy>() { 
                         new SupplierZoneToRPOptionHighestRatePolicy() { ConfigId = 27 }, 
                         new SupplierZoneToRPOptionLowestRatePolicy() { ConfigId = 29 }, 
-                        new SupplierZoneToRPOptionAverageRatePolicy() { ConfigId = 30 } }
+                        new SupplierZoneToRPOptionAverageRatePolicy() { ConfigId = 30 } },
+                    RoutingProcessType = RoutingProcessType.RoutingProductRoute
                 }
             });
         }

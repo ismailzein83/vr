@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDatabaseAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (WhS_Routing_RoutingDatabaseAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDatabaseAPIService', 'WhS_Routing_RoutingProcessTypeEnum', 'UtilsService', 'VRUIUtilsService',
+    function (WhS_Routing_RoutingDatabaseAPIService, WhS_Routing_RoutingProcessTypeEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -10,7 +10,9 @@ app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDataba
                 onselectionchanged: '=',
                 isrequired: "@",
                 selectedvalues: '=',
-                hideremoveicon: "@"
+                hideremoveicon: "@",
+                getcustomerroutes: "@",
+                getroutingproductroutes: "@"
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -42,9 +44,9 @@ app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDataba
 
         function getTemplate(attrs) {
             var multipleselection = "";
-            var label = "Routing Database";
+            var label = (attrs.getcustomerroutes != undefined) ? "Customer Route Database" : "Routing Product Route Database"
             if (attrs.ismultipleselection != undefined) {
-                label = "Routing Databases";
+                label = (attrs.getcustomerroutes != undefined) ? "Customer Route Databases" : "Routing Product Route Databases";
                 multipleselection = "ismultipleselection";
             }
             var required = "";
@@ -71,14 +73,24 @@ app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDataba
                 var api = {};
 
                 api.load = function (payload) {
-                    var filter = {};
+                    var filter;
                     var selectedIds;
                     if (payload != undefined) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
                     }
 
-                    return WhS_Routing_RoutingDatabaseAPIService.GetRoutingDatabaseInfo().then(function (response) {
+                    if (filter == undefined)
+                        filter = {};
+
+                    filter.ProcessType = $attrs.getcustomerroutes != undefined ?
+                        WhS_Routing_RoutingProcessTypeEnum.CustomerRoute.value : WhS_Routing_RoutingProcessTypeEnum.RoutingProductRoute.value;
+
+                    var serializedFilter = {};
+                    if (filter != undefined)
+                        serializedFilter = UtilsService.serializetoJson(filter);
+
+                    return WhS_Routing_RoutingDatabaseAPIService.GetRoutingDatabaseInfo(serializedFilter).then(function (response) {
                         angular.forEach(response, function (itm) {
                             ctrl.datasource.push(itm);
                         });

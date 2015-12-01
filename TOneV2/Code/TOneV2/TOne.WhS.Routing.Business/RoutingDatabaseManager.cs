@@ -12,10 +12,10 @@ namespace TOne.WhS.Routing.Business
     public class RoutingDatabaseManager
     {
 
-        public IEnumerable<RoutingDatabaseInfo> GetRoutingDatabaseInfo()
+        public IEnumerable<RoutingDatabaseInfo> GetRoutingDatabaseInfo(RoutingDatabaseInfoFilter filter)
         {
             IEnumerable<RoutingDatabase> routingDatabases = GetNotDeletedDatabases().Values;
-            return routingDatabases.MapRecords(RoutingDatabaseInfoMapper);
+            return routingDatabases.MapRecords(RoutingDatabaseInfoMapper, x => x.ProcessType == filter.ProcessType);
         }
 
         public Dictionary<int, RoutingDatabase> GetNotDeletedDatabases()
