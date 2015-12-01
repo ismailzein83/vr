@@ -14,7 +14,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         List<CodeValidation> _validations = new List<CodeValidation>();
 
-        public void ProcessCountryCodes(List<ImportedCode> importedCodes, List<NewCode> newCodes, ExistingCodesByCodeValue existingCodes, List<ChangedCode> changedCodes, ZonesByName newAndExistingZones, ExistingZonesByName existingZones, List<ChangedZone> changedZones, DateTime codeCloseDate)
+        public void ProcessCountryCodes(List<ImportedCode> importedCodes, ExistingCodesByCodeValue existingCodes, List<ChangedCode> changedCodes, ZonesByName newAndExistingZones, ExistingZonesByName existingZones, List<ChangedZone> changedZones, DateTime codeCloseDate)
         {
             foreach(var importedCode in importedCodes.OrderBy(code => code.BED))
             {

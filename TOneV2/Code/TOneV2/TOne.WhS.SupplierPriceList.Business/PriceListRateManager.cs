@@ -10,7 +10,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
     public class PriceListRateManager
     {
-        public void ProcessCountryRates(List<ImportedRate> importedRates, List<NewRate> newRates, ExistingRatesByZoneName existingRates, List<ChangedRate> changedRates, ZonesByName newAndExistingZones, ExistingZonesByName existingZones)
+        public void ProcessCountryRates(List<ImportedRate> importedRates, ExistingRatesByZoneName existingRates, List<ChangedRate> changedRates, ZonesByName newAndExistingZones, ExistingZonesByName existingZones)
         {
             CloseRatesForClosedZones(existingZones.SelectMany(itm => itm.Value), changedRates);
             foreach(var importedRate in importedRates)
@@ -28,13 +28,13 @@ namespace TOne.WhS.SupplierPriceList.Business
                             importedRate.ChangeType = importedRate.NormalRate > recentRateValue.Value ? RateChangeType.Increase : RateChangeType.Decrease;
                         else
                             importedRate.ChangeType = RateChangeType.New;
-                        AddImportedRate(importedRate, newRates, newAndExistingZones, existingZones);
+                        AddImportedRate(importedRate, newAndExistingZones, existingZones);
                     }
                 }
                 else
                 {
                     importedRate.ChangeType = RateChangeType.New;
-                    AddImportedRate(importedRate, newRates, newAndExistingZones, existingZones);
+                    AddImportedRate(importedRate, newAndExistingZones, existingZones);
                 }
             }
         }
@@ -100,7 +100,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         }
 
-        private void AddImportedRate(ImportedRate importedRate, List<NewRate> newRates, ZonesByName newAndExistingZones, ExistingZonesByName existingZones)
+        private void AddImportedRate(ImportedRate importedRate, ZonesByName newAndExistingZones, ExistingZonesByName existingZones)
         {
             List<IZone> zones;
             if (!newAndExistingZones.TryGetValue(importedRate.ZoneName, out zones))
@@ -117,14 +117,14 @@ namespace TOne.WhS.SupplierPriceList.Business
             {
                 if (zone.EED.VRGreaterThan(zone.BED) && zone.EED.VRGreaterThan(currentRateBED))
                 {
-                    AddNewRate(importedRate, ref currentRateBED, zone, newRates, out shouldAddMoreRates);
+                    AddNewRate(importedRate, ref currentRateBED, zone, out shouldAddMoreRates);
                     if (!shouldAddMoreRates)
                         break;
                 }
             }
         }
 
-        private void AddNewRate(ImportedRate importedRate, ref DateTime currentRateBED, IZone zone, List<NewRate> newRates, out bool shouldAddMoreRates)
+        private void AddNewRate(ImportedRate importedRate, ref DateTime currentRateBED, IZone zone, out bool shouldAddMoreRates)
         {
             shouldAddMoreRates = false;
             var newRate = new NewRate
