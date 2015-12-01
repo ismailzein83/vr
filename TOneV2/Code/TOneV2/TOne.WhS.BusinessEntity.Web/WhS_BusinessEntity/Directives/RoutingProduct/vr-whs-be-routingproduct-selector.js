@@ -59,20 +59,28 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
 
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="RoutingProductId" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem"'
-            + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" ' + hideremoveicon + '></vr-select>'
+            + required + ' label="' + label + '" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" ' + hideremoveicon + '></vr-select>'
                + '</div>'
         }
 
         function routingProductCtor(ctrl, $scope, $attrs) {
 
+            var selectorApi;
+
             function initializeController() {
-                defineAPI();
+                ctrl.onSelectorReady = function (api) {
+                    selectorApi = api;
+                    defineAPI();
+                }
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+
+                    selectorApi.clearDataSource();
+
                     var filter = {};
                     var selectedIds;
                     if (payload != undefined) {
@@ -85,7 +93,9 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                         angular.forEach(response, function (itm) {
                             ctrl.datasource.push(itm);
                         });
-                        VRUIUtilsService.setSelectedValues(selectedIds, 'RoutingProductId', $attrs, ctrl);
+
+                        if (selectedIds != undefined)
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'RoutingProductId', $attrs, ctrl);
                     });
                 }
 

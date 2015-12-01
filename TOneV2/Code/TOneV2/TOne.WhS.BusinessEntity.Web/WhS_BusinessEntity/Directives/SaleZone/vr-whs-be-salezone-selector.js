@@ -16,10 +16,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
                 var ctrl = this;
 
-                ctrl.selectedvalues;
-                if ($attrs.ismultipleselection != undefined)
-                    ctrl.selectedvalues = [];
-
                 var ctor = new saleZoneCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
 
@@ -69,9 +65,14 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
             function initializeController() {
 
+                ctrl.selectedvalues;
+                if (attrs.ismultipleselection != undefined)
+                    ctrl.selectedvalues = [];
+
                 ctrl.onSelectorReady = function(api)
                 {
                     selectorApi = api;
+                    defineAPI();
                 }
 
                 ctrl.search = function (nameFilter) {
@@ -86,16 +87,16 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                     return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(nameFilter, sellingNumberPlanId, serializedFilter);
                 }
                 
-                defineAPI();
+                
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    ctrl.selectedvalues = [];
-                    if (selectorApi!=undefined)
-                        selectorApi.clearDataSource();
+                   
+                    selectorApi.clearDataSource();
+
                     var selectedIds;
                     if (payload != undefined) {
                         sellingNumberPlanId = payload.sellingNumberPlanId;

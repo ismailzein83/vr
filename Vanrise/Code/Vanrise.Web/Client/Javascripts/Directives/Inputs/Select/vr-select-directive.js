@@ -235,6 +235,14 @@
                       
                     else
                         controller.datasource.length = 0;
+
+                    if (controller.selectedvalues != undefined)
+                    {
+                        if (controller.selectedvalues.length != undefined)
+                            controller.selectedvalues.length = 0;
+                        else
+                            controller.selectedvalues = undefined;
+                    }
                 }
                 if (controller.onReady != null ) {
                     controller.onReady(api);

@@ -55,24 +55,16 @@
 
         function setSelectedValues(selectedIds, idProperty, attrs, ctrl) {
             if (attrs.ismultipleselection != undefined) {
-                if (selectedIds) {
-                    for (var i = 0; i < selectedIds.length; i++) {
-                        var selectedValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds[i], idProperty);
-                        if (selectedValue != null)
-                            ctrl.selectedvalues.push(selectedValue);
-                    }
-                }
-                else
-                    ctrl.selectedvalues = [];
-                
-            } else {
-                if (selectedIds) {
-                    var selectedValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds, idProperty);
+                for (var i = 0; i < selectedIds.length; i++) {
+                    var selectedValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds[i], idProperty);
                     if (selectedValue != null)
-                        ctrl.selectedvalues = selectedValue;
+                        ctrl.selectedvalues.push(selectedValue);
                 }
-                else
-                    ctrl.selectedvalues = undefined;
+            }
+            else {
+                var selectedValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds, idProperty);
+                if (selectedValue != null)
+                    ctrl.selectedvalues = selectedValue;
             }
         }
 
