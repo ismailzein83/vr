@@ -36,6 +36,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             };
 
             $scope.loadMoreData = function () {
+                console.log("$scope.loadMoreData");
                 return loadZoneItems();
             };
         }
@@ -76,12 +77,14 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         }
 
         function loadZoneItems() {
-            var deferred = UtilsService.createPromiseDeferred();
-            $scope.isLoadingGrid = true;
+            $scope.isLoading = true;
 
-            WhS_Sales_RatePlanAPIService.GetZoneItems(getZoneItemInput()).then(function (response) {
+            var promises = [];
+            var zoneItemsGetPromise = WhS_Sales_RatePlanAPIService.GetZoneItems(getZoneItemInput());
+            promises.push(zoneItemsGetPromise);
+
+            zoneItemsGetPromise.then(function (response) {
                 if (response != null) {
-                    var promises = [];
                     var zoneItems = [];
 
                     for (var i = 0; i < response.length; i++) {
@@ -94,23 +97,14 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     }
 
                     gridAPI.addItemsToSource(zoneItems);
-
-                    UtilsService.waitMultiplePromises(promises).then(function () {
-                        deferred.resolve();
-                    }).catch(function (error) {
-                        handleError(error);
-                    }).finally(function () {
-                        $scope.isLoadingGrid = false;
-                    });
                 }
-                else
-                    deferred.resolve();
-            }).catch(function (error) {
-                $scope.isLoadingGrid = false;
-                handleError(error);
             });
 
-            return deferred.promise;
+            return UtilsService.waitMultiplePromises(promises).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
 
             function getZoneItemInput() {
                 var pageInfo = gridAPI.getPageInfo();
@@ -124,7 +118,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             function extendZoneItem(zoneItem) {
                 zoneItem.IsDirty = false;
-                defineRouteOptionProperties(zoneItem);
+                setRouteOptionProperties(zoneItem);
 
                 zoneItem.IsCurrentRateEditable = (zoneItem.IsCurrentRateEditable == null) ? false : zoneItem.IsCurrentRateEditable;
 
@@ -163,7 +157,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     zoneItem.IsDirty = true;
                 };
 
-                function defineRouteOptionProperties(zoneItem) {
+                function setRouteOptionProperties(zoneItem) {
                     zoneItem.RouteOptionsReadyDeferred = UtilsService.createPromiseDeferred();
 
                     zoneItem.onRouteOptionsReady = function (api) {
@@ -181,11 +175,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         VRUIUtilsService.callDirectiveLoad(zoneItem.RouteOptionsAPI, payload, zoneItem.RouteOptionsLoadDeferred);
                     });
                 }
-            }
-
-            function handleError(error) {
-                deferred.reject();
-                VRNotificationService.notifyException(error, $scope);
             }
         }
 
@@ -207,39 +196,39 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                 zoneChanges.push(zoneItemChanges);
             }
-        }
 
-        function setNewRate(zoneChanges, zoneItem) {
-            zoneChanges.NewRate = null;
+            function setNewRate(zoneChanges, zoneItem) {
+                zoneChanges.NewRate = null;
 
-            if (zoneItem.NewRate) {
-                zoneChanges.NewRate = {
-                    ZoneId: zoneItem.ZoneId,
-                    NormalRate: zoneItem.NewRate,
-                    BED: zoneItem.NewRateBED,
-                    EED: zoneItem.NewRateEED
-                };
+                if (zoneItem.NewRate) {
+                    zoneChanges.NewRate = {
+                        ZoneId: zoneItem.ZoneId,
+                        NormalRate: zoneItem.NewRate,
+                        BED: zoneItem.NewRateBED,
+                        EED: zoneItem.NewRateEED
+                    };
+                }
             }
-        }
 
-        function setRateChange(zoneChanges, zoneItem) {
-            zoneChanges.RateChange = null;
+            function setRateChange(zoneChanges, zoneItem) {
+                zoneChanges.RateChange = null;
 
-            if (zoneItem.IsCurrentRateEditable && !compareDates(zoneItem.CurrentRateEED, zoneItem.NewRateEED)) {
-                zoneChanges.RateChange = {
-                    RateId: zoneItem.CurrentRateId,
-                    EED: zoneItem.NewRateEED
-                };
+                if (zoneItem.IsCurrentRateEditable && !compareDates(zoneItem.CurrentRateEED, zoneItem.NewRateEED)) {
+                    zoneChanges.RateChange = {
+                        RateId: zoneItem.CurrentRateId,
+                        EED: zoneItem.NewRateEED
+                    };
+                }
+
+                function compareDates(date1, date2) {
+                    if (date1 && date1.getTime && date2 && date2.getTime)
+                        return date1.getTime() == date2.getTime();
+                    else if (!date1 && !date2)
+                        return true;
+                    else
+                        return false;
+                }
             }
-        }
-
-        function compareDates(date1, date2) {
-            if (date1 && date2)
-                return date1.getTime() == date2.getTime();
-            else if (!date1 && !date2)
-                return true;
-            else
-                return false;
         }
     }
 }]);
