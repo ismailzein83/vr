@@ -264,5 +264,32 @@ namespace Vanrise.Common
         }
 
         #endregion
+
+        #region DateTime
+
+        public static bool VRGreaterThan(this DateTime? date, DateTime? targetDate)
+        {
+            if (date.HasValue)
+            {
+                if (targetDate.HasValue)
+                    return date.Value > targetDate.Value;
+                else
+                    return false;
+            }
+            else
+            {
+                if (targetDate.HasValue)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
+        public static bool VRLessThan(this DateTime? date, DateTime? targetDate)
+        {
+            return !date.VRGreaterThan(targetDate);
+        }
+
+        #endregion
     }
 }
