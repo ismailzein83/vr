@@ -200,6 +200,7 @@
     <PostDeploy Include="Common.PostDeployment.sql" />
     <None Include="TOne.PostDeployment.sql" />
     <None Include="CDRAnalysis.PostDeployment.sql" />
+    <None Include="CarrierPortal.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
