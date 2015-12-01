@@ -78,9 +78,11 @@ namespace TOne.WhS.Sales.Business
                         }
 
                         SetZoneItemChanges(input.Filter.OwnerType, input.Filter.OwnerId, zoneItems);
-                        
+
+                        NewDefaultRoutingProduct newDefaultRoutingProduct = GetNewDefaultRoutingProduct(input.Filter.OwnerType, input.Filter.OwnerId);
+
                         foreach (ZoneItem zoneItem in zoneItems)
-                            SetZoneEffectiveRoutingProduct(input.Filter.OwnerType, input.Filter.OwnerId, zoneItem);
+                            SetZoneEffectiveRoutingProduct(zoneItem, newDefaultRoutingProduct);
 
                         SetRouteOptionsForZoneItems(zoneItems);
                     }
@@ -177,7 +179,15 @@ namespace TOne.WhS.Sales.Business
             }
         }
 
-        private void SetZoneEffectiveRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, ZoneItem zoneItem)
+        private NewDefaultRoutingProduct GetNewDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            Changes changes = _dataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
+            if (changes != null && changes.DefaultChanges != null)
+                return changes.DefaultChanges.NewDefaultRoutingProduct;
+            return null;
+        }
+
+        private void SetZoneEffectiveRoutingProduct(ZoneItem zoneItem, NewDefaultRoutingProduct newDefaultRoutingProduct)
         {
             if (zoneItem.NewRoutingProductId != null)
             {
@@ -185,11 +195,10 @@ namespace TOne.WhS.Sales.Business
                 zoneItem.EffectiveRoutingProductName = new RoutingProductManager().GetRoutingProduct(zoneItem.EffectiveRoutingProductId).Name;
             }
             else {
-                Changes changes = _dataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
-                
-                if (changes != null && changes.DefaultChanges != null && changes.DefaultChanges.NewDefaultRoutingProduct != null) {
-                    zoneItem.EffectiveRoutingProductId = changes.DefaultChanges.NewDefaultRoutingProduct.DefaultRoutingProductId;
-                    zoneItem.EffectiveRoutingProductName = new RoutingProductManager().GetRoutingProduct(changes.DefaultChanges.NewDefaultRoutingProduct.DefaultRoutingProductId).Name;
+                if (newDefaultRoutingProduct != null)
+                {
+                    zoneItem.EffectiveRoutingProductId = newDefaultRoutingProduct.DefaultRoutingProductId;
+                    zoneItem.EffectiveRoutingProductName = new RoutingProductManager().GetRoutingProduct(newDefaultRoutingProduct.DefaultRoutingProductId).Name;
                 }
                 else if (zoneItem.CurrentRoutingProductId != null)
                 {

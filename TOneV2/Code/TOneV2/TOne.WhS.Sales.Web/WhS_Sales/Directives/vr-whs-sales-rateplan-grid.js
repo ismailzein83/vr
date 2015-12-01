@@ -36,7 +36,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             };
 
             $scope.loadMoreData = function () {
-                console.log("$scope.loadMoreData");
                 return loadZoneItems();
             };
         }

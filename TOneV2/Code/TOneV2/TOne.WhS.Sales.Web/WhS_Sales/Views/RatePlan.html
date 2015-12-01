@@ -1,8 +1,8 @@
 ﻿<vr-panel ng-controller="WhS_Sales_RatePlanController">
 
-    <vr-form validationcontext="formFilter" vr-loader="loadingFilters">
+    <vr-form validationcontext="formFilter">
 
-        <div vr-loader="isLoadingOwnerSection" ng-hide="filterSectionCollapsed">
+        <div vr-loader="isLoadingFilterSection" ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
                     <vr-select label="Owner Type"

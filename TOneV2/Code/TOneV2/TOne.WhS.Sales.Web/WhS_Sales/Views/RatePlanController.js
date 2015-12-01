@@ -107,39 +107,31 @@
             loadAllControls();
 
             function loadAllControls() {
-                $scope.isLoading = true;
+                $scope.isLoadingFilterSection = true;
 
-                return loadFilterSection().catch(function (error) {
+                UtilsService.waitMultipleAsyncOperations([loadOwnerSection]).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
-                    $scope.isLoading = false;
+                    $scope.isLoadingFilterSection = false;
                 });
 
-                function loadFilterSection() {
+                function loadOwnerSection() {
                     var promises = [];
 
                     var sellingProductSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     promises.push(sellingProductSelectorLoadDeferred.promise);
 
                     sellingProductSelectorReadyDeferred.promise.then(function () {
-                        var payload = {
-                            filter: null,
-                            selectedIds: null
-                        };
-
+                        var payload = { filter: null, selectedIds: null };
                         VRUIUtilsService.callDirectiveLoad(sellingProductSelectorAPI, payload, sellingProductSelectorLoadDeferred);
                     });
 
-                    var sellingProductSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(sellingProductSelectorLoadDeferred.promise);
+                    var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(carrierAccountSelectorLoadDeferred.promise);
 
                     carrierAccountSelectorReadyDeferred.promise.then(function () {
-                        var payload = {
-                            filter: null,
-                            selectedIds: null
-                        };
-
-                        VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, payload, sellingProductSelectorLoadDeferred);
+                        var payload = { filter: null, selectedIds: null };
+                        VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, payload, carrierAccountSelectorLoadDeferred);
                     });
 
                     return UtilsService.waitMultiplePromises(promises);
