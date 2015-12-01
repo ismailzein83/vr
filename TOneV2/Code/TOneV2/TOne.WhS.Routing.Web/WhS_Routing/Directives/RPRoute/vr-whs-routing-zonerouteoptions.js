@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesZonerouteoptions", ["WhS_Sales_MainService", "UtilsService",
+app.directive("vrWhsRoutingZonerouteoptions", ["WhS_Sales_MainService", "UtilsService",
 function (WhS_Sales_MainService, UtilsService) {
     return {
         restrict: "E",
@@ -14,7 +14,7 @@ function (WhS_Sales_MainService, UtilsService) {
         },
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: "/Client/Modules/WhS_Sales/Directives/Templates/ZoneRouteOptionsTemplate.html"
+        templateUrl: "/Client/Modules/WhS_Routing/Directives/RPRoute/Templates/ZoneRouteOptionsTemplate.html"
     };
 
     function ZoneRouteOptions(ctrl, $scope) {
