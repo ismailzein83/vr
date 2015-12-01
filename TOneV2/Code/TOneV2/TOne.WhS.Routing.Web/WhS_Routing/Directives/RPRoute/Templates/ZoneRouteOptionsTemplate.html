@@ -1,8 +1,8 @@
 ﻿<div>
-    <span style="display: inline-block; text-align: center; padding: 0px 5px;" ng-repeat="routeOption in ctrl.routeOptions">
-        <div title="{{routeOption.Entity.Percentage}}%">
-            <vr-label><a ng-click="ctrl.viewSupplier(routeOption);" style="cursor: pointer;">{{routeOption.SupplierName}}</a></vr-label>
-        </div>
-        <div><vr-label isvalue>{{routeOption.Entity.SupplierRate}}</vr-label></div>
-    </span>
+    <a style="cursor: pointer; display: inline-block; text-align: center; padding: 0px 10px 0px 0px;"
+       title="Supplier: {{routeOption.SupplierName}}, Percentage: {{routeOption.Entity.Percentage}}%"
+       ng-repeat="routeOption in ctrl.routeOptions"
+       ng-click="ctrl.viewSupplier(routeOption)">
+        {{routeOption.Entity.SupplierRate}}
+    </a>
 </div>

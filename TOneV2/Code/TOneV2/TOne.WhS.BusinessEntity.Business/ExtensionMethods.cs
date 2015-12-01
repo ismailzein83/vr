@@ -25,5 +25,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return false;
         }
+
+        public static bool IsEffective(this IBusinessEntity entity, DateTime? date)
+        {
+            return IsEffective(entity, date, false);
+        }
     }
 }

@@ -153,13 +153,15 @@
             var gridLoadDeferred = UtilsService.createPromiseDeferred();
             promises.push(gridLoadDeferred.promise);
 
-            getZoneLetters().then(function () {
+            var zoneLettersLoadPromise = getZoneLetters();
+            promises.push(zoneLettersLoadPromise);
+
+            zoneLettersLoadPromise.then(function () {
                 if ($scope.zoneLetters.length > 0) {
                     showRatePlan(true);
                     
                     gridReadyDeferred.promise.then(function () {
                         var gridPayload = getGridQuery();
-                        
                         VRUIUtilsService.callDirectiveLoad(gridAPI, gridPayload, gridLoadDeferred);
                     });
                 }
@@ -170,7 +172,10 @@
             var defaultItemLoadDeferred = UtilsService.createPromiseDeferred();
             promises.push(defaultItemLoadDeferred.promise);
 
-            getDefaultItem().then(function (response) {
+            var defaultItemGetPromise = getDefaultItem();
+            promises.push(defaultItemGetPromise);
+
+            defaultItemGetPromise.then(function (response) {
                 defaultItemReadyDeferred.promise.then(function () {
                     var defaultItemPayload;
 

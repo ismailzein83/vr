@@ -92,19 +92,17 @@ namespace TOne.WhS.Sales.Business
 
         private IEnumerable<SaleZone> GetZones(SalePriceListOwnerType ownerType, int ownerId)
         {
-            IEnumerable<SaleZone> saleZones = null;
+            IEnumerable<SaleZone> zones = null;
 
             if (ownerType == SalePriceListOwnerType.SellingProduct)
-            {
-                saleZones = GetSellingProductZones(ownerId, DateTime.Now);
-            }
+                zones = GetSellingProductZones(ownerId, DateTime.Now);
             else if (ownerType == SalePriceListOwnerType.Customer)
             {
                 CustomerZoneManager manager = new CustomerZoneManager();
-                saleZones = manager.GetCustomerSaleZones(ownerId, DateTime.Now, false);
+                zones = manager.GetCustomerSaleZones(ownerId, DateTime.Now, false);
             }
 
-            return saleZones;
+            return zones;
         }
 
         private IEnumerable<SaleZone> GetSellingProductZones(int sellingProductId, DateTime effectiveOn)

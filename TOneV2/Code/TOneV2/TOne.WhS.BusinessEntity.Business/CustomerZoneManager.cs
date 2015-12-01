@@ -68,13 +68,14 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<SaleZone> GetCustomerSaleZones(int customerId, DateTime effectiveOn, bool futureEntities)
         {
             IEnumerable<SaleZone> saleZones = null;
-            CustomerZones customerZones = this.GetCustomerZones(customerId, effectiveOn, futureEntities);
+            CustomerZones customerZones = GetCustomerZones(customerId, effectiveOn, futureEntities);
 
             if (customerZones != null)
             {
                 int sellingNumberPlanId = new CarrierAccountManager().GetSellingNumberPlanId(customerId, CarrierAccountType.Customer);
-                IEnumerable<int> countryIds = customerZones.Countries.MapRecords(c => c.CountryId);
+                IEnumerable<int> countryIds = customerZones.Countries.MapRecords(item => item.CountryId);
                 saleZones = new SaleZoneManager().GetSaleZonesByCountryIds(sellingNumberPlanId, countryIds);
+                saleZones = saleZones.FindAllRecords(item => item.IsEffective(effectiveOn));
             }
 
             return saleZones;
