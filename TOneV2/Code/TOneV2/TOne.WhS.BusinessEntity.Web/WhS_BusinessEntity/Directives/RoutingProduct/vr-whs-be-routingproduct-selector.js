@@ -81,13 +81,11 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                     }
 
                     return WhS_BE_RoutingProductAPIService.GetRoutingProductInfo(UtilsService.serializetoJson(filter)).then(function (response) {
-                        ctrl.datasource = []; // clear data source to avoid repetition
-
+                        ctrl.datasource = []; // clear data source to avoid duplication
                         angular.forEach(response, function (itm) {
                             ctrl.datasource.push(itm);
                         });
-                        if (selectedIds != undefined)
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'RoutingProductId', $attrs, ctrl);
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'RoutingProductId', $attrs, ctrl);
                     });
                 }
 

@@ -68,6 +68,8 @@ function (UtilsService, VRUIUtilsService) {
                     selectedIds: newId
                 };
 
+                console.log(selectorPayload);
+
                 $scope.isLoading = true;
 
                 VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);
@@ -109,7 +111,7 @@ function (UtilsService, VRUIUtilsService) {
                 }
             };
 
-            if (ctrl.onReady != null)
+            if (ctrl.onReady && typeof (ctrl.onReady) == "function")
                 ctrl.onReady(api);
         }
     }

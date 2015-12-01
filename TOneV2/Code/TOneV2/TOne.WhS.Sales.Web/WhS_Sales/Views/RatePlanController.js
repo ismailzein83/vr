@@ -142,32 +142,24 @@
         function loadRatePlan() {
             var promises = [];
 
-            var gridLoadDeferred = UtilsService.createPromiseDeferred();
-            promises.push(gridLoadDeferred.promise);
+            var zoneLettersGetPromise = getZoneLetters();
+            promises.push(zoneLettersGetPromise);
 
-            var zoneLettersLoadPromise = getZoneLetters();
-            promises.push(zoneLettersLoadPromise);
-
-            zoneLettersLoadPromise.then(function () {
+            zoneLettersGetPromise.then(function () {
                 if ($scope.zoneLetters.length > 0) {
                     showRatePlan(true);
-                    
-                    gridReadyDeferred.promise.then(function () {
-                        var gridPayload = getGridQuery();
-                        VRUIUtilsService.callDirectiveLoad(gridAPI, gridPayload, gridLoadDeferred);
-                    });
+                    var gridLoadPromise = loadGrid();
+                    promises.push(gridLoadPromise);
                 }
-                else
-                    gridLoadDeferred.resolve();
             });
-
-            var defaultItemLoadDeferred = UtilsService.createPromiseDeferred();
-            promises.push(defaultItemLoadDeferred.promise);
 
             var defaultItemGetPromise = getDefaultItem();
             promises.push(defaultItemGetPromise);
 
             defaultItemGetPromise.then(function (response) {
+                var defaultItemLoadDeferred = UtilsService.createPromiseDeferred();
+                promises.push(defaultItemLoadDeferred.promise);
+
                 defaultItemReadyDeferred.promise.then(function () {
                     var defaultItemPayload;
 
@@ -202,6 +194,20 @@
                 });
             }
 
+            function getDefaultItem() {
+                return WhS_Sales_RatePlanAPIService.GetDefaultItem($scope.selectedOwnerType.value, getOwnerId());
+            }
+        }
+
+        function loadGrid() {
+            var gridLoadDeferred = UtilsService.createPromiseDeferred();
+
+            gridReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(gridAPI, getGridQuery(), gridLoadDeferred);
+            });
+
+            return gridLoadDeferred.promise;
+
             function getGridQuery() {
                 return {
                     OwnerType: $scope.selectedOwnerType.value,
@@ -209,19 +215,14 @@
                     ZoneLetter: $scope.zoneLetters[$scope.selectedZoneLetterIndex]
                 };
             }
-
-            function getDefaultItem() {
-                return WhS_Sales_RatePlanAPIService.GetDefaultItem($scope.selectedOwnerType.value, getOwnerId());
-            }
         }
 
-        function saveChanges(refreshRatePlan) {
+        function saveChanges(shouldLoadGrid) {
             var input = getSaveChangesInput();
-            console.log(input);
 
             return WhS_Sales_RatePlanAPIService.SaveChanges(input).then(function (response) {
-                if (refreshRatePlan)
-                    loadRatePlan();
+                if (shouldLoadGrid)
+                    loadGrid();
             });
             
             function getSaveChangesInput() {
@@ -250,6 +251,42 @@
             $scope.showGrid = show;
         }
 
+        function defineSaveButtonMenuActions() {
+            $scope.saveButtonMenuActions = [{
+                name: "Price List",
+                clicked: onSavePriceListClick
+            }, {
+                name: "Draft",
+                clicked: function () {
+                    return saveChanges(false);
+                }
+            }];
+
+            function onSavePriceListClick() {
+                var promises = [];
+
+                var saveChangesPromise = saveChanges(false);
+                promises.push(saveChangesPromise);
+
+                saveChangesPromise.then(function () {
+                    var savePriceListPromise = savePriceList();
+                    promises.push(savePriceListPromise);
+
+                    savePriceListPromise.then(function () {
+                        loadRatePlan();
+                    });
+                });
+
+                return UtilsService.waitMultiplePromises(promises).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
+
+                function savePriceList() {
+                    return WhS_Sales_RatePlanAPIService.SavePriceList($scope.selectedOwnerType.value, getOwnerId());
+                }
+            }
+        }
+
         function getOwnerId() {
             var ownerId = null;
 
@@ -259,47 +296,6 @@
                 ownerId = $scope.selectedCustomer.CarrierAccountId;
 
             return ownerId;
-        }
-
-        function defineSaveButtonMenuActions() {
-            $scope.saveButtonMenuActions = [
-                {
-                    name: "Price List",
-                    clicked: onSavePriceListClick
-                },
-                {
-                    name: "Draft",
-                    clicked: function () {
-                        return saveChanges(true);
-                    }
-                }
-            ];
-
-            function onSavePriceListClick() {
-                var deferred = UtilsService.createPromiseDeferred();
-
-                saveChanges(false).then(function () {
-                    savePriceList().then(function (response) {
-                        deferred.resolve();
-                        loadRatePlan();
-                    }).catch(function (error) {
-                        handleError(error);
-                    });
-                }).catch(function (error) {
-                    handleError(error);
-                });
-
-                return deferred.promise;
-
-                function savePriceList() {
-                    return WhS_Sales_RatePlanAPIService.SavePriceList($scope.selectedOwnerType.value, getOwnerId());
-                }
-
-                function handleError(error) {
-                    deferred.reject();
-                    VRNotificationService.notifyException(error, $scope);
-                }
-            }
         }
     }
 
