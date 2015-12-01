@@ -43,9 +43,11 @@
             </vr-actionbar>
         </vr-row>
 
-        <div vr-loader="isLoadingDefaultRoutingProductSection" ng-show="showDefaultItem">
-            <vr-whs-sales-defaultroutingproduct on-ready="onDefaultItemReady"></vr-whs-sales-defaultroutingproduct>
-        </div>
+        <vr-row ng-if="showDefaultItem">
+            <vr-columns width="fullrow">
+                <vr-directivetabs tabitems="defaultItemTabs"></vr-directivetabs>
+            </vr-columns>
+        </vr-row>
 
         <vr-row>
             <vr-columns width="fullrow" ng-show="showZoneLetters">

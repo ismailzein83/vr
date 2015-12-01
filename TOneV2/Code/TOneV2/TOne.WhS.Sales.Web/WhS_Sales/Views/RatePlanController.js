@@ -21,6 +21,7 @@
         var carrierAccountSelectorAPI;
         var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var defaultItem;
         var defaultItemAPI;
         var defaultItemReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -70,6 +71,14 @@
             $scope.onCarrierAccountChanged = function () {
                 clearRatePlan();
             };
+
+            $scope.defaultItemTabs = [{
+                title: "Default Routing Product",
+                directive: "vr-whs-sales-defaultroutingproduct",
+                loadDirective: function (api) {
+                    return api.load(defaultItem);
+                }
+            }];
 
             $scope.zoneLetters = [];
             $scope.selectedZoneLetterIndex = 0;
@@ -157,27 +166,14 @@
             promises.push(defaultItemGetPromise);
 
             defaultItemGetPromise.then(function (response) {
-                var defaultItemLoadDeferred = UtilsService.createPromiseDeferred();
-                promises.push(defaultItemLoadDeferred.promise);
+                defaultItem = response;
 
-                defaultItemReadyDeferred.promise.then(function () {
-                    var defaultItemPayload;
-
-                    if (response != null) {
-                        defaultItemPayload = {
-                            CurrentRoutingProductId: response.CurrentRoutingProductId,
-                            CurrentRoutingProductName: response.CurrentRoutingProductName,
-                            CurrentRoutingProductBED: (response.CurrentRoutingProductBED != null) ? new Date(response.CurrentRoutingProductBED) : null,
-                            CurrentRoutingProductEED: (response.CurrentRoutingProductEED != null) ? new Date(response.CurrentRoutingProductEED) : null,
-                            IsCurrentRoutingProductEditable: response.IsCurrentRoutingProductEditable,
-                            NewRoutingProductId: response.NewRoutingProductId,
-                            NewRoutingProductBED: (response.NewRoutingProductBED != null) ? new Date(response.NewRoutingProductBED) : null,
-                            NewRoutingProductEED: (response.NewRoutingProductEED != null) ? new Date(response.NewRoutingProductEED) : null
-                        };
-                    }
-
-                    VRUIUtilsService.callDirectiveLoad(defaultItemAPI, defaultItemPayload, defaultItemLoadDeferred);
-                });
+                for (var i = 0; i < $scope.defaultItemTabs.length; i++) {
+                    var item = $scope.defaultItemTabs[i];
+                    
+                    if (item.directiveAPI)
+                        item.loadDirective(item.directiveAPI);
+                }
             });
 
             return UtilsService.waitMultiplePromises(promises);
@@ -196,6 +192,10 @@
 
             function getDefaultItem() {
                 return WhS_Sales_RatePlanAPIService.GetDefaultItem($scope.selectedOwnerType.value, getOwnerId());
+            }
+
+            function defineDefaultItemTabs() {
+
             }
         }
 
@@ -228,7 +228,15 @@
             function getSaveChangesInput() {
                 var changes = {};
 
-                defaultItemAPI.applyChanges(changes);
+                if (defaultItem.IsDirty) {
+                    for (var i = 0; i < $scope.defaultItemTabs.length; i++) {
+                        var item = $scope.defaultItemTabs[i];
+
+                        if (item.directiveAPI)
+                            item.directiveAPI.applyChanges(changes);
+                    }
+                }
+
                 gridAPI.applyChanges(changes);
 
                 return {

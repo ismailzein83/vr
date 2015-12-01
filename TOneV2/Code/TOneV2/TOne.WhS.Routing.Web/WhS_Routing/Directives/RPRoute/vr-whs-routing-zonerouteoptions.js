@@ -38,15 +38,15 @@ function (WhS_Sales_MainService, UtilsService) {
 
             api.load = function (payload) {
                 if (payload != undefined) {
-                    saleZoneId = payload.SaleZoneId;
                     routingProductId = payload.RoutingProductId;
+                    saleZoneId = payload.SaleZoneId;
 
                     for (var i = 0; i < payload.RouteOptions.length; i++)
                         ctrl.routeOptions.push(payload.RouteOptions[i]);
                 }
             };
 
-            if (ctrl.onReady != null)
+            if (ctrl.onReady && typeof (ctrl.onReady) == "function")
                 ctrl.onReady(api);
         }
     }

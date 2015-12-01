@@ -21,7 +21,7 @@ function (UtilsService, VRUIUtilsService) {
     function DefaultRoutingProduct(ctrl, $scope) {
         this.initCtrl = initCtrl;
 
-        var isDirty = false;
+        var defaultItem;
         var counter = 0;
         var currentId;
         var newId;
@@ -39,7 +39,7 @@ function (UtilsService, VRUIUtilsService) {
                 var selectedId = selectorAPI.getSelectedIds;
                     
                 if ((!newId && counter > 1) || (newId && counter > 2))
-                    isDirty = true;
+                    defaultItem.IsDirty = true;
             };
 
             selectorReadyPromiseDeferred.promise.then(function () {
@@ -51,9 +51,8 @@ function (UtilsService, VRUIUtilsService) {
             var api = {};
 
             api.load = function (payload) {
-                isDirty = false;
-
                 if (payload != undefined) {
+                    defaultItem = payload;
                     currentId = payload.CurrentRoutingProductId;
                     ctrl.CurrentName = payload.CurrentRoutingProductName;
                     newId = payload.NewRoutingProductId;
@@ -68,8 +67,6 @@ function (UtilsService, VRUIUtilsService) {
                     selectedIds: newId
                 };
 
-                console.log(selectorPayload);
-
                 $scope.isLoading = true;
 
                 VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);
@@ -82,32 +79,24 @@ function (UtilsService, VRUIUtilsService) {
             };
 
             api.applyChanges = function (changes) {
-                changes.DefaultChanges = null;
+                changes.DefaultChanges = {};
+                setNewDefaultRoutingProduct(changes);
+                setDefaultRoutingProductChange(changes);
 
-                if (isDirty) {
-                    changes.DefaultChanges = {
-                        NewDefaultRoutingProduct: getNewDefaultRoutingProduct(),
-                        DefaultRoutingProductChange: getDefaultRoutingProductChange()
-                    };
-                }
-
-                function getNewDefaultRoutingProduct() {
-                    var newRoutingProduct = null;
+                function setNewDefaultRoutingProduct(changes) {
                     var selectedId = selectorAPI.getSelectedIds();
-
+                    
                     if (selectedId != null) {
-                        newRoutingProduct = {
+                        changes.DefaultChanges.NewDefaultRoutingProduct = {
                             DefaultRoutingProductId: selectedId,
                             BED: new Date(),
                             EED: null
                         };
                     }
-
-                    return newRoutingProduct;
                 }
 
-                function getDefaultRoutingProductChange() {
-                    return null;
+                function setDefaultRoutingProductChange(changes) {
+                    changes.DefaultChanges.DefaultRoutingProductChange = null;
                 }
             };
 
