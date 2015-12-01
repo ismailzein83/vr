@@ -97,6 +97,7 @@
     <Compile Include="CodeGroup\CodeGroupDetail.cs" />
     <Compile Include="CodeGroup\CodeGroup.cs" />
     <Compile Include="CodeGroup\CodeGroupQuery.cs" />
+    <Compile Include="IBusinessEntity.cs" />
     <Compile Include="ICode.cs" />
     <Compile Include="IRate.cs" />
     <Compile Include="PricingRules\RuleTypes\RateType\IPricingRuleRateTypeItemContext.cs" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SaleZone
+    public class SaleZone : IBusinessEntity
     {
         public long SaleZoneId { get; set; }
 

@@ -83,6 +83,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="CustomerSellingProductManager.cs" />
     <Compile Include="CustomerZoneManager.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="PricingRules\PricingRuleRateTypeItemContext.cs" />
     <Compile Include="RateTypeManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityZoneRoutingProductLocator.cs" />
