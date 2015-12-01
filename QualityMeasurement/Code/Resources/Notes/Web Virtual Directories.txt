@@ -1,0 +1,8 @@
+﻿Expand the IIS web site of QualityMeasurement.Web project:
+ - Add the following virtual directory under the root site:
+Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
+
+ - Add the following virtual directories under Client > Modules folder:
+Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
+Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+QM_CLITester			C:\TFS\CLITesterV2\Code\QM.CLITester.Web\QM_CLITester
