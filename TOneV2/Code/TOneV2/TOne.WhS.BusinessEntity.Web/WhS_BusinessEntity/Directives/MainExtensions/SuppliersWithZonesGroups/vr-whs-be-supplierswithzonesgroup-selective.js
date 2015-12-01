@@ -121,11 +121,11 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
 
                  loadCarrierAccountPromiseDeferred.promise.then(function () {
                      loadSupplierZoneDirectives().then(function () {
-                         if (loadPromiseDeferred != undefined)
+                         if (loadFinalPromiseDeferred != undefined)
                             loadFinalPromiseDeferred.resolve();
                      }).catch(function (error) {
-                         if (loadPromiseDeferred != undefined)
-                          loadFinalPromiseDeferred.reject(error);
+                         if (loadFinalPromiseDeferred != undefined)
+                             loadFinalPromiseDeferred.reject(error);
                      });
                 });
 
