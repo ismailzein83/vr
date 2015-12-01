@@ -15,12 +15,12 @@
   opacity: 1;
 }
 .am-collapse-out {
-  -webkit-animation-duration: .25s;
-  animation-duration: .25s;
+  -webkit-animation-duration: .5s;
+  animation-duration: .5s;
   -webkit-animation-timing-function: ease-out;
   animation-timing-function: ease-out;
-  -webkit-animation-fill-mode: forwards;
-  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: backwards;
+  animation-fill-mode: backwards;
   opacity: 1;
 }
 .am-collapse.am-collapse-add,
@@ -57,7 +57,14 @@
   animation-play-state: running;
 }
 @-webkit-keyframes expand {
-  
+  from {
+   opacity: 0;
+   max-height:0px;
+  }
+  to {
+     opacity: 1;
+     max-height:300px;
+  }
 
 }
 @keyframes expand {
@@ -70,16 +77,21 @@
      max-height:300px;
   }
 }
-@-webkit-keyframes collapse {
-  
-  to {
-    height:0px
-  }
+@-webkit-keyframes collapse{
+    from{
+        max-height:300px;
+    }
+    to {
+     max-height:0px
+    }
 }
 @keyframes collapse {
-   to {
-    height:0px
-  }
+    from{
+        max-height:300px;
+    }
+    to {
+     max-height:0px
+    }
 }
 .panel-collapse.am-collapse.in-remove {
   -webkit-animation-name: collapse;

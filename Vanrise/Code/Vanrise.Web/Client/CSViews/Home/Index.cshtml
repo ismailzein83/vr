@@ -70,7 +70,6 @@
     <div id="wrapper" ng-style="toogled==true?{'padding-left':'210px'}:{'padding-left':'25px'}">
         <!-- Sidebar -->
         <div id="sidebar-wrapper" ng-style="toogled==true?{'width':'225px'}:{'width':'0px'}">
-
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" ng-show="toogled==true" ng-mouseout="mouseout()" ng-mouseover="mouseover()">
                 <div class="panel panel-default toggle-panel ">
                     <div class="panel-heading dll-menu" style="height: 36px;">
@@ -95,9 +94,8 @@
                             </li>
                         </ul>
 
-                    </div>
-
-                    <div id="collapse-{{item.Id}}" ng-class=" menuItemsCurrent.Id == item.Id ?'am-collapse':''" ng-show=" menuItemsCurrent.Id == item.Id ">
+                    </div>                    
+                    <div id="collapse-{{item.Id}}" ng-class=" menuItemsCurrent.Id == item.Id ?'am-collapse':menuItemsCurrent.Id==null ? 'am-collapse':''" ng-show=" menuItemsCurrent.Id == item.Id ">
                         <div class="panel-body">
                             <div ng-repeat="c in item.Childs">
                                 <ul class="nav">
