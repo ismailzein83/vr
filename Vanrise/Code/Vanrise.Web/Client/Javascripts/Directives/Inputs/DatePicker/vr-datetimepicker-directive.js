@@ -304,9 +304,9 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
             var dateTemplate =
                  '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"   >'
                   + '<vr-validator validate="ctrl.validate()">'
-                  + '<div id="mainInput" ng-model="ctrl.value" class="form-control " ng-style="ctrl.getInputeStyle()" style="border-radius: 4px;height: 27px;padding: 0px;display:block">'
+                  + '<div id="mainInput" ng-model="ctrl.value" class="form-control " ng-style="ctrl.getInputeStyle()" style="border-radius: 4px;height: 26px;padding: 0px;display:block">'
                         + '<div  class="input-group date datetime-controle"  id="divDatePicker"  style="width:100%;"  >'
-                                + '<input class="form-control vr-date-input" ng-focus="ctrl.setDefaultDate()" placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()" style="padding:0px 5px;height: 25px;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
+                                + '<input class="form-control vr-date-input" ng-focus="ctrl.setDefaultDate()" placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()" style="padding:0px 5px;height: 24px;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
                                 + icontemplate
                             + '</div>'
                       + '</div>'
