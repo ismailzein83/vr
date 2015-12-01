@@ -10,9 +10,29 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
     {
         public BusinessEntity.Entities.SupplierZone ZoneEntity { get; set; }
 
-        public List<ExistingCode> Codes { get; set; }
+        public List<ExistingCode> ExistingCodes { get; set; }
 
-        public List<ExistingRate> Rates { get; set; }
+        List<NewCode> _newCodes = new List<NewCode>();
+        public List<NewCode> NewCodes
+        {
+            get
+            {
+                return _newCodes;
+            }
+        }
+
+        public List<ExistingRate> ExistingRates { get; set; }
+        
+        List<NewRate> _newRates = new List<NewRate>();
+        public List<NewRate> NewRates
+        {
+            get
+            {
+                return _newRates;
+            }
+        }
+
+        public ChangedZone ChangedZone { get; set; }
 
         public long ZoneId
         {
@@ -24,6 +44,11 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             get { return ZoneEntity.Name; }
         }
 
+        public int CountryId
+        {
+            get { return ZoneEntity.CountryId; }
+        }
+
         public DateTime BED
         {
             get { return ZoneEntity.BeginEffectiveDate; }
@@ -31,7 +56,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public DateTime? EED
         {
-            get { return ZoneEntity.EndEffectiveDate; }
+            get { return ChangedZone != null ? ChangedZone.EED : ZoneEntity.EndEffectiveDate; }
         }
     }
 
@@ -42,14 +67,27 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         public BusinessEntity.Entities.SupplierCode CodeEntity { get; set; }
 
         public bool IsImported { get; set; }
+
+        public ChangedCode ChangedCode { get; set; }
+
+        public DateTime? EED
+        {
+            get { return ChangedCode != null ? ChangedCode.EED : CodeEntity.EndEffectiveDate; }
+        }
     }
 
     public class ExistingRate
     {
         public ExistingZone ParentZone { get; set; }
+
         public BusinessEntity.Entities.SupplierRate RateEntity { get; set; }
 
-        public bool IsImported { get; set; }
+        public ChangedRate ChangedRate { get; set; }
+
+        public DateTime? EED
+        {
+            get { return ChangedRate != null ? ChangedRate.EED : RateEntity.EndEffectiveDate; }
+        }
     }
 
     public class ExistingZonesByName : Dictionary<string, List<ExistingZone>>

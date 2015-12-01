@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
+    public enum CodeValidationType { NoCodeGroup, CodeGroupWrongCountry, RetroActiveMovedCode, RetroActiveNewCode }
+
+    public class CodeValidation
+    {
+        public string Code { get; set; }
+
+        public CodeValidationType ValidationType { get; set; }
+    }
     public interface IZone
     {
         long ZoneId { get; }
@@ -15,6 +23,12 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         DateTime BED { get; }
 
         DateTime? EED { get; }
+
+        List<NewCode> NewCodes { get; }
+
+        List<NewRate> NewRates { get; }
+
+        int CountryId { get; }
     }
 
     public class ZonesByName : Dictionary<string, List<IZone>>
@@ -35,16 +49,32 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public DateTime? EED { get; set; }
 
-        //public List<NewCode> NewCodes { get; set; }
+        List<NewCode> _newCodes = new List<NewCode>();
+        public List<NewCode> NewCodes
+        {
+            get
+            {
+                return _newCodes;
+            }
+        }
 
-        //public List<NewRate> NewRates { get; set; }
+        List<NewRate> _newRates = new List<NewRate>();
+        public List<NewRate> NewRates
+        {
+            get
+            {
+                return _newRates;
+            }
+        }
     }
 
     public class NewZonesByName : Dictionary<string, List<NewZone>>
     {
 
     }
-
+   
+    public enum CodeChangeType { NotChanged = 0, New = 1, Deleted = 2, Moved = 3 }
+    
     public class ImportedCode
     {
         public string Code { get; set; }
@@ -54,6 +84,26 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
+
+        public CodeChangeType ChangeType { get; set; }
+
+        List<NewCode> _newCodes = new List<NewCode>();
+        public List<NewCode> NewCodes
+        {
+            get
+            {
+                return _newCodes;
+            }
+        }
+
+        List<ExistingCode> _changedExistingCodes = new List<ExistingCode>();
+        public List<ExistingCode> ChangedExistingCodes
+        {
+            get
+            {
+                return _changedExistingCodes;
+            }
+        }
     }
 
     public class ImportedRate
@@ -69,7 +119,29 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
+        
+        public RateChangeType ChangeType { get; set; }
+
+        List<NewRate> _newRates = new List<NewRate>();
+        public List<NewRate> NewRates
+        {
+            get
+            {
+                return _newRates;
+            }
+        }
+
+        List<ExistingRate> _changedExistingRates = new List<ExistingRate>();
+        public List<ExistingRate> ChangedExistingRates
+        {
+            get
+            {
+                return _changedExistingRates;
+            }
+        }
     }
+
+    
 
     public class NewCode
     {
@@ -83,6 +155,8 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public DateTime? EED { get; set; }
     }
+
+    public enum RateChangeType { NotChanged = 0, New = 1, Increase = 2, Decrease = 3 }
 
     public class NewRate
     {

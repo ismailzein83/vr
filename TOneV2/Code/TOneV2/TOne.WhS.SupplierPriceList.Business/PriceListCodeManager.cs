@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
+using Vanrise.Common;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -11,7 +12,9 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         BusinessEntity.Business.CodeGroupManager codeGroupManager = new BusinessEntity.Business.CodeGroupManager();
 
-        public void ProcessCodes(List<ImportedCode> importedCodes, List<NewCode> newCodes, ZonesByName zones, ExistingZonesByName existingZones, ExistingCodesByCodeValue existingCodes, List<ChangedCode> changedCodes)
+        List<CodeValidation> _validations = new List<CodeValidation>();
+
+        public void ProcessCountryCodes(List<ImportedCode> importedCodes, List<NewCode> newCodes, ExistingCodesByCodeValue existingCodes, List<ChangedCode> changedCodes, ZonesByName newAndExistingZones, ExistingZonesByName existingZones, List<ChangedZone> changedZones, DateTime codeCloseDate)
         {
             foreach(var importedCode in importedCodes.OrderBy(code => code.BED))
             {
@@ -19,26 +22,45 @@ namespace TOne.WhS.SupplierPriceList.Business
                 if(existingCodes.TryGetValue(importedCode.Code, out matchExistingCodes))
                 {
                     bool shouldNotAddCode;
-                    CloseExistingOverlapedCodes(importedCode, matchExistingCodes, changedCodes, out shouldNotAddCode);
+                    string recentCodeZoneName;
+                    CloseExistingOverlapedCodes(importedCode, matchExistingCodes, out shouldNotAddCode, out recentCodeZoneName);
                     if(!shouldNotAddCode)
                     {
-                        AddImportedCode(importedCode, newCodes, zones, existingZones);
+                        if (recentCodeZoneName != null && importedCode.ZoneName != recentCodeZoneName)
+                            importedCode.ChangeType = CodeChangeType.Moved;
+                        else
+                            importedCode.ChangeType = CodeChangeType.New;
+                        AddImportedCode(importedCode, newAndExistingZones, existingZones);
                     }
                 }
                 else
                 {
-                    AddImportedCode(importedCode, newCodes, zones, existingZones);
+                    importedCode.ChangeType = CodeChangeType.New;
+                    AddImportedCode(importedCode, newAndExistingZones, existingZones);
+                }
+                if(importedCode.BED < DateTime.Now)
+                {
+                    switch (importedCode.ChangeType)
+                    {
+                        case CodeChangeType.New: _validations.Add(new CodeValidation { Code = importedCode.Code, ValidationType = CodeValidationType.RetroActiveNewCode }); break;
+                        case CodeChangeType.Moved: _validations.Add(new CodeValidation { Code = importedCode.Code, ValidationType = CodeValidationType.RetroActiveMovedCode }); break;
+                    }
                 }
             }
+            CloseNotImportedCodes(existingCodes.SelectMany(itm => itm.Value), changedCodes, codeCloseDate);
+            CloseZonesWithNoCodes(existingZones.SelectMany(itm => itm.Value), changedZones);
         }
 
-        private void CloseExistingOverlapedCodes(ImportedCode importedCode, List<ExistingCode> matchExistingCodes, List<ChangedCode> changedCodes, out bool shouldNotAddCode)
+        private void CloseExistingOverlapedCodes(ImportedCode importedCode, List<ExistingCode> matchExistingCodes, out bool shouldNotAddCode, out string recentCodeZoneName)
         {
             shouldNotAddCode = false;
-            foreach (var existingCode in matchExistingCodes)
+            recentCodeZoneName = null;
+            foreach (var existingCode in matchExistingCodes.OrderBy(itm => itm.CodeEntity.BeginEffectiveDate))
             {
+                if (existingCode.CodeEntity.BeginEffectiveDate < importedCode.BED)
+                    recentCodeZoneName = existingCode.ParentZone.ZoneEntity.Name;
                 existingCode.IsImported = true;
-                if (!existingCode.CodeEntity.EndEffectiveDate.HasValue || existingCode.CodeEntity.EndEffectiveDate.Value > importedCode.BED)
+                if (existingCode.EED.VRGreaterThan(importedCode.BED))
                 {
                     if (SameCodes(importedCode, existingCode))
                     {
@@ -48,98 +70,111 @@ namespace TOne.WhS.SupplierPriceList.Business
                     else
                     {
                         DateTime existingCodeEED = importedCode.BED > existingCode.CodeEntity.BeginEffectiveDate ? importedCode.BED : existingCode.CodeEntity.BeginEffectiveDate;
-                        changedCodes.Add(new ChangedCode
+                        existingCode.ChangedCode = new ChangedCode
                         {
                             CodeId = existingCode.CodeEntity.SupplierCodeId,
                             EED = existingCodeEED
-                        });
+                        };
+                        importedCode.ChangedExistingCodes.Add(existingCode);
                     }
                 }
             }
         }
 
-        private void AddImportedCode(ImportedCode importedCode, List<NewCode> newCodes, ZonesByName allZones, ExistingZonesByName allExistingZones)
+        private bool AddImportedCode(ImportedCode importedCode, ZonesByName newAndExistingZones, ExistingZonesByName allExistingZones)
         {
             List<IZone> zones;
-            if(!allZones.TryGetValue(importedCode.ZoneName, out zones))
+            if(!newAndExistingZones.TryGetValue(importedCode.ZoneName, out zones))
             {
                 zones = new List<IZone>();
                 List<ExistingZone> matchExistingZones;
                 if (allExistingZones.TryGetValue(importedCode.ZoneName, out matchExistingZones))
                     zones.AddRange(matchExistingZones);
-                allZones.Add(importedCode.ZoneName, zones);
+                newAndExistingZones.Add(importedCode.ZoneName, zones);
+            }
+            var codeGroup = codeGroupManager.GetMatchCodeGroup(importedCode.Code);
+            if (codeGroup == null)
+            {
+                AddValidationError(importedCode, CodeValidationType.NoCodeGroup);
+                return false;
             }
             List<IZone> addedZones = new List<IZone>();
             DateTime currentCodeBED = importedCode.BED;
             bool shouldAddMoreCodes = true;
             foreach (var zone in zones.OrderBy(itm => itm.BED))
             {
-                if (!zone.EED.HasValue || zone.EED.Value > currentCodeBED)
+                if (zone.EED.VRGreaterThan(zone.BED) && zone.EED.VRGreaterThan(currentCodeBED))
                 {
-                    if (currentCodeBED < zone.BED)
+                    if (currentCodeBED < zone.BED)//add new zone to fill gap
                     {
-                        NewZone newZone = AddNewZone(importedCode, addedZones, currentCodeBED, zone.BED);
-                        AddNewCode(importedCode, ref currentCodeBED, newZone, newCodes, out shouldAddMoreCodes);
+                        NewZone newZone = AddNewZone(addedZones, importedCode.ZoneName, codeGroup.CountryId, currentCodeBED, zone.BED);
+                        AddNewCode(importedCode, codeGroup.CodeGroupId, ref currentCodeBED, newZone, out shouldAddMoreCodes);
                         if (!shouldAddMoreCodes)
                             break;
                     }
-                    AddNewCode(importedCode, ref currentCodeBED, zone, newCodes, out shouldAddMoreCodes);
+                    if(zone.CountryId != codeGroup.CountryId)
+                    {
+                        AddValidationError(importedCode, CodeValidationType.CodeGroupWrongCountry);
+                        return false;
+                    }
+                    AddNewCode(importedCode, codeGroup.CodeGroupId, ref currentCodeBED, zone, out shouldAddMoreCodes);
                     if (!shouldAddMoreCodes)
                         break;
                 }
             }
             if(shouldAddMoreCodes)
             {
-                NewZone newZone = AddNewZone(importedCode, addedZones, currentCodeBED, importedCode.EED);
-                AddNewCode(importedCode, ref currentCodeBED, newZone, newCodes, out shouldAddMoreCodes);
+                NewZone newZone = AddNewZone(addedZones, importedCode.ZoneName, codeGroup.CountryId, currentCodeBED, importedCode.EED);
+                AddNewCode(importedCode, codeGroup.CodeGroupId, ref currentCodeBED, newZone, out shouldAddMoreCodes);
             }
             if (addedZones.Count > 0)
                 zones.AddRange(addedZones);
+            return true;
         }
 
-        private NewZone AddNewZone(ImportedCode importedCode, List<IZone> addedZones, DateTime currentCodeBED, DateTime? eed)
+        private void AddValidationError(ImportedCode importedCode, CodeValidationType validationType)
         {
-            var codeGroup = codeGroupManager.GetMatchCodeGroup(importedCode.Code);
+            _validations.Add(new CodeValidation
+            {
+                Code = importedCode.Code,
+                ValidationType = validationType
+            });
+        }
 
+        private NewZone AddNewZone(List<IZone> addedZones, string zoneName, int countryId, DateTime bed, DateTime? eed)
+        {
             NewZone newZone = new NewZone
             {
-                Name = importedCode.ZoneName,
-                CountryId = codeGroup != null ? codeGroup.CountryId : 0,
-                BED = currentCodeBED,
+                Name = zoneName,
+                CountryId = countryId,
+                BED = bed,
                 EED = eed
             };
             addedZones.Add(newZone);
             return newZone;
         }
 
-        private void AddNewCode(ImportedCode importedCode, ref DateTime currentCodeBED, IZone zone, List<NewCode> newCodes, out bool shouldAddMoreCodes)
+        private void AddNewCode(ImportedCode importedCode, int codeGroupId, ref DateTime currentCodeBED, IZone zone, out bool shouldAddMoreCodes)
         {
-            var codeGroup = codeGroupManager.GetMatchCodeGroup(importedCode.Code);
-
+            shouldAddMoreCodes = false;
             var newCode = new NewCode
             {
                 Code = importedCode.Code,
-                CodeGroupId = codeGroup != null ? codeGroup.CodeGroupId : 0,
+                CodeGroupId = codeGroupId,
                 Zone = zone,
                 BED = currentCodeBED,
                 EED = importedCode.EED
             };
-            if (zone.EED.HasValue)
+            if(newCode.EED.VRGreaterThan(zone.EED))//this means that zone has EED value
             {
-                if (!newCode.EED.HasValue || newCode.EED.Value > zone.EED.Value)
-                    newCode.EED = zone.EED;
-            }          
-            newCodes.Add(newCode);
-            if (newCode.EED == importedCode.EED)
-            {
-                currentCodeBED = DateTime.MaxValue;
-                shouldAddMoreCodes = false;
-            }
-            else
-            {
+                newCode.EED = zone.EED;
                 currentCodeBED = newCode.EED.Value;
                 shouldAddMoreCodes = true;
-            }  
+            }
+
+            zone.NewCodes.Add(newCode);
+
+            importedCode.NewCodes.Add(newCode);
         }
 
         private bool SameCodes(ImportedCode importedCode, ExistingCode existingCode)
@@ -147,6 +182,75 @@ namespace TOne.WhS.SupplierPriceList.Business
             return importedCode.BED == existingCode.CodeEntity.BeginEffectiveDate
                 && importedCode.EED == existingCode.CodeEntity.EndEffectiveDate
                 && importedCode.ZoneName== existingCode.ParentZone.ZoneEntity.Name;
+        }
+
+        private void CloseNotImportedCodes(IEnumerable<ExistingCode> existingCodes, List<ChangedCode> changedCodes, DateTime codeCloseDate)
+        {
+            foreach (var existingCode in existingCodes)
+            {
+                if (!existingCode.IsImported)
+                {
+                    existingCode.ChangedCode = new ChangedCode
+                    {
+                        CodeId = existingCode.CodeEntity.SupplierCodeId,
+                        EED = codeCloseDate
+                    };
+                    changedCodes.Add(existingCode.ChangedCode);
+                }
+            }
+        }
+
+        private void CloseZonesWithNoCodes(IEnumerable<ExistingZone> existingZones, List<ChangedZone> changedZones)
+        {
+            foreach (var existingZone in existingZones)
+            {
+                DateTime? maxCodeEED = null;
+                bool hasCodes = false;
+                if (existingZone.ExistingCodes != null)
+                {
+                    foreach (var existingCode in existingZone.ExistingCodes)
+                    {
+                        if (existingCode.EED.VRGreaterThan(existingCode.CodeEntity.BeginEffectiveDate))
+                        {
+                            hasCodes = true;
+                            if (existingCode.EED.VRGreaterThan(maxCodeEED))
+                            {
+                                maxCodeEED = existingCode.EED;
+                                if (!maxCodeEED.HasValue)
+                                    break;
+                            }
+                        }
+                    }
+                }
+
+                if (existingZone.NewCodes != null)
+                {
+                    foreach (var newCode in existingZone.NewCodes)
+                    {
+                        if (newCode.EED.VRGreaterThan(newCode.BED))
+                        {
+                            hasCodes = true;
+                            if (newCode.EED.VRGreaterThan(maxCodeEED))
+                            {
+                                maxCodeEED = newCode.EED;
+                                if (!maxCodeEED.HasValue)
+                                    break;
+                            }
+                        }
+                    }
+                }
+                if (!hasCodes || maxCodeEED.HasValue)
+                {
+                    if (!hasCodes)
+                        maxCodeEED = existingZone.BED;
+                    existingZone.ChangedZone = new ChangedZone
+                    {
+                        ZoneId = existingZone.ZoneId,
+                        EED = maxCodeEED.Value
+                    };
+                    changedZones.Add(existingZone.ChangedZone);
+                }
+            }
         }
     }
 }
