@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeCarrierprofileSelector', ['WhS_BE_CarrierProfileAPIService', 'UtilsService', '$compile','VRUIUtilsService',
-function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsService) {
+app.directive('vrWhsBeSwitchSelector', ['WhS_BE_SwitchAPIService', 'UtilsService', '$compile','VRUIUtilsService',
+function (WhS_BE_SwitchAPIService, UtilsService, $compile, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -22,7 +22,7 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServ
                 ctrl.selectedvalues = [];
 
             ctrl.datasource = [];
-            var ctor = new carrierProfileCtor(ctrl, $scope, $attrs);
+            var ctor = new switchCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
         controllerAs: 'ctrl',
@@ -51,12 +51,12 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServ
             required = "isrequired";
         var disabled = "";
         return '<div  vr-loader="isLoadingDirective">'
-            + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CarrierProfileId" '
-        + required + ' label="Carrier Profile" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
+            + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SwitchId" '
+        + required + ' label="Switch" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
            + '</div>'
     }
 
-    function carrierProfileCtor(ctrl, $scope, $attrs) {
+    function switchCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
 
@@ -66,7 +66,7 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServ
         function defineAPI() {
             var api = {};
             api.getSelectedIds = function () {
-                return VRUIUtilsService.getIdSelectedIds('CarrierProfileId', $attrs, ctrl);
+                return VRUIUtilsService.getIdSelectedIds('SwitchId', $attrs, ctrl);
             }
             api.load = function (payload) {
 
@@ -75,13 +75,13 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServ
                     selectedIds = payload.selectedIds;
                 }
 
-                    return WhS_BE_CarrierProfileAPIService.GetCarrierProfilesInfo().then(function (response) {
+                    return WhS_BE_SwitchAPIService.GetSwitchesInfo().then(function (response) {
                         angular.forEach(response, function (item) {
                             ctrl.datasource.push(item);
 
                         });
                         if (selectedIds!=undefined)
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'CarrierProfileId', $attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'SwitchId', $attrs, ctrl);
 
                     });
 
