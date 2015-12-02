@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace QM.BusinessEntity.Entities
 {
-    public class Supplier
+    public class SupplierSettings
     {
-        public int SupplierId { get; set; }
-
-        public string Name { get; set; }
-
-        public SupplierSettings Settings { get; set; }
+        public Dictionary<string, Object> ExtendedSettings { get; set; }
     }
 }

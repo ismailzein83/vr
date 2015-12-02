@@ -23,9 +23,14 @@ namespace QM.BusinessEntity.Business
                 return zones.Select(z =>
                     new ZoneInfo
                     {
-                        ZoneId = z.ZoneId,
+                       // ZoneId = z.ZoneId,
                         Name = z.Name
                     });
+        }
+
+        internal void ReserveIDRange(int nbOfIds, out long startingId)
+        {
+            Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(typeof(ZoneManager), nbOfIds, out startingId);
         }
     }
 }
