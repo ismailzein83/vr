@@ -49,6 +49,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CliTesterDataManagerFactory.cs" />
+    <Compile Include="IDataManager.cs" />
+    <Compile Include="ITestCallDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

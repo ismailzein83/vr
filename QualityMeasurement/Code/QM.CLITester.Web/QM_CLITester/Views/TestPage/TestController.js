@@ -2,9 +2,9 @@
 
     "use strict";
 
-    testController.$inject = ['$scope', 'QM_CLITester_TestCall'];
+    testController.$inject = ['$scope', 'QM_CLITester_TestCall', 'VRNotificationService'];
 
-    function testController($scope, QM_CLITester_TestCall) {
+    function testController($scope, QM_CLITester_TestCall, VRNotificationService) {
 
 
         defineScope();
@@ -17,6 +17,8 @@
             $scope.suppliers = [];
             $scope.isGettingData = false;
             $scope.selectedCountry;
+            $scope.selectedBreakout;
+            $scope.selectedSupplier;
         }
 
         function load() {
@@ -58,17 +60,45 @@
             });
         }
 
+
+        function buildTestCallObjFromScope() {
+            var obj = {
+                SellingNumberPlanId: 0,
+                SupplierID: $scope.selectedSupplier.Id,
+                CountryID: $scope.selectedCountry.Id,
+                ZoneID: $scope.selectedBreakout.Id
+            };
+            return obj;
+        }
+
         function addNewTestCall() {
-            return QM_CLITester_TestCall.GetTestCall($scope.selectedCountry.Id, $scope.selectedBreakout.Id, $scope.selectedSupplier.Id).then(function (response) {
-                console.log(response);
-                //angular.forEach(response, function (itm) {
+            var testCallObject = buildTestCallObjFromScope();
+            return QM_CLITester_TestCall.AddNewTestCall(testCallObject)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded("Test Call", response, "Name")) {
 
+                    if ($scope.onTestCallAdded != undefined)
+                        $scope.onTestCallAdded(response.InsertedObject);
 
-                //});
-
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
             });
 
         }
+
+
+        //function addNewTestCall() {
+        //    return QM_CLITester_TestCall.AddNewTestCall($scope.selectedCountry.Id, $scope.selectedBreakout.Id, $scope.selectedSupplier.Id).then(function (response) {
+        //        console.log(response);
+        //        //angular.forEach(response, function (itm) {
+
+
+        //        //});
+
+        //    });
+
+        //}
 
     }
 

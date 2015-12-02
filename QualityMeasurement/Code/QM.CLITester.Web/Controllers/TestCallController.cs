@@ -6,6 +6,7 @@ using System.Web.Http;
 using QM.CLITester.Business;
 using QM.CLITester.Entities;
 using Vanrise.Web.Base;
+using Vanrise.Entities;
 
 namespace QM.CLITester.Web.Controllers
 {
@@ -15,7 +16,7 @@ namespace QM.CLITester.Web.Controllers
     {
         [HttpGet]
         [Route("GetCountries")]
-        public IEnumerable<Country> GetCountries()
+        public IEnumerable<CLITester.Entities.Country> GetCountries()
         {
             TestCallManager manager = new TestCallManager();
             return manager.GetCachedCountries();
@@ -37,12 +38,12 @@ namespace QM.CLITester.Web.Controllers
             return manager.GetCachedSuppliers();
         }
 
-        [HttpGet]
-        [Route("GetTestCall")]
-        public TestCallResult GetTestCall(string selectedCountry, string selectedBreakout, string selectedSupplier)
+        [HttpPost]
+        [Route("AddNewTestCall")]
+        public InsertOperationOutput<TestCallResult> AddNewTestCall(TestCallResult testCallResult)
         {
             TestCallManager manager = new TestCallManager();
-            return manager.TestCall(selectedCountry, selectedBreakout, selectedSupplier);
+            return manager.AddNewTestCall(testCallResult);
         }
     }
 }

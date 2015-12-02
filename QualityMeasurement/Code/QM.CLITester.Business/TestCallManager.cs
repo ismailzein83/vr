@@ -7,7 +7,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
+using QM.CLITester.Data;
 using QM.CLITester.Entities;
+using QM.BusinessEntity.Data;
 
 namespace QM.CLITester.Business
 {
@@ -108,10 +110,10 @@ namespace QM.CLITester.Business
             {
                 TestCallResult testCallResultNode = new TestCallResult
                 {
-                    Id = xnList[0]["Test_ID"] != null ? xnList[0]["Test_ID"].InnerText : ""
+                    Test_ID = xnList[0]["Test_ID"] != null ? xnList[0]["Test_ID"].InnerText : ""
                 };
-                if (testCallResultNode.Id != null)
-                    return responseTestCallResult(PostRequest("3011", "&jid=" + testCallResultNode.Id), testCallResultNode.Id);
+                if (testCallResultNode.Test_ID != null)
+                    return responseTestCallResult(PostRequest("3011", "&jid=" + testCallResultNode.Test_ID), testCallResultNode.Test_ID);
             }
             return null;
         }
@@ -134,12 +136,12 @@ namespace QM.CLITester.Business
                 TestCallResult testCallResultNode = new TestCallResult
                 {
                     Name = xnList[0]["Name"] != null ? xnList[0]["Name"].InnerText : "",
-                    Calls_Total = xnList[0]["Calls_Total"] != null ? xnList[0]["Calls_Total"].InnerText : "",
-                    Calls_Complete = xnList[0]["Calls_Complete"] != null ? xnList[0]["Calls_Complete"].InnerText : "",
-                    CLI_Success = xnList[0]["CLI_Success"] != null ? xnList[0]["CLI_Success"].InnerText : "",
-                    CLI_No_Result = xnList[0]["CLI_No_Result"] != null ? xnList[0]["CLI_No_Result"].InnerText : "",
-                    CLI_Fail = xnList[0]["CLI_Fail"] != null ? xnList[0]["CLI_Fail"].InnerText : "",
-                    PDD = xnList[0]["PDD"] != null ? xnList[0]["PDD"].InnerText : "",
+                    Calls_Total = xnList[0]["Calls_Total"] != null ? Int32.Parse(xnList[0]["Calls_Total"].InnerText) : 0,
+                    Calls_Complete = xnList[0]["Calls_Complete"] != null ? Int32.Parse(xnList[0]["Calls_Complete"].InnerText) : 0,
+                    CLI_Success = xnList[0]["CLI_Success"] != null ? Int32.Parse(xnList[0]["CLI_Success"].InnerText) : 0,
+                    CLI_No_Result = xnList[0]["CLI_No_Result"] != null ? Int32.Parse(xnList[0]["CLI_No_Result"].InnerText) : 0,
+                    CLI_Fail = xnList[0]["CLI_Fail"] != null ? Int32.Parse(xnList[0]["CLI_Fail"].InnerText) : 0,
+                    PDD = xnList[0]["PDD"] != null ? Int32.Parse(xnList[0]["PDD"].InnerText) : 0,
                     Share_URL = xnList[0]["Share_URL"] != null ? xnList[0]["Share_URL"].InnerText : ""
                 };
                 return testCallResultNode;
@@ -187,6 +189,31 @@ namespace QM.CLITester.Business
         public TestCallResult TestCall(string selectedCountry, string selectedBreakout, string selectedSupplier)
         {
             return ResponseTestCall(PostRequest("2012", "&profid=4992&vendid=" + selectedSupplier + "&ndbccgid=" + selectedCountry + "&ndbcgid=" + selectedBreakout));
+        }
+        public Vanrise.Entities.InsertOperationOutput<TestCallResult> AddNewTestCall(TestCallResult testCallResult)
+        {
+            Vanrise.Entities.InsertOperationOutput<TestCallResult> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<TestCallResult>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
+            int carrierAccountId = -1;
+
+            ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
+            bool insertActionSucc = dataManager.Insert(testCallResult, out carrierAccountId);
+            if (insertActionSucc)
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = testCallResult;
+            }
+
+            return insertOperationOutput;
+        }
+
+        public List<TestCallResult> GetTestCalls()
+        {
+            ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
+            return dataManager.GetTestCalls();
         }
     }
 
