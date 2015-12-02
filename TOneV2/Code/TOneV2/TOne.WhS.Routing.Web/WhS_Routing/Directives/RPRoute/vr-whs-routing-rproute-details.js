@@ -48,7 +48,7 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                     if (rpRouteDetail == undefined)
                         return;
                     
-                    WhS_Routing_RPRouteAPIService.GetRouteOptionDetails(routingDatabaseId, selectedItem.TemplateConfigID, rpRouteDetail.Entity.RoutingProductId, rpRouteDetail.Entity.SaleZoneId).then(function (response) {
+                    WhS_Routing_RPRouteAPIService.GetRouteOptionDetails(routingDatabaseId, selectedItem.TemplateConfigID, rpRouteDetail.RoutingProductId, rpRouteDetail.SaleZoneId).then(function (response) {
                         angular.forEach(response, function (item) {
                             ctrl.rpRouteOptions.push(item);
                         });

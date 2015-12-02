@@ -127,29 +127,25 @@ namespace TOne.WhS.Routing.Business
             return rslt;
         }
 
-        public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(int routingProductId, long saleZoneId, int supplierId)
+        public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(int routingDatabaseId, int routingProductId, long saleZoneId, int supplierId)
         {
-            RPRouteOptionSupplierDetail rpRouteOptionSupplierDetail = null;
-            RPRouteOptionSupplier rpRouteOptionSupplier = null;
+            IRPRouteDataManager routeManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
+            routeManager.DatabaseId = routingDatabaseId;
 
-            IEnumerable<RPRoute> rpRoutes = GetRPRoutes(new List<RPZone>() {
-                new RPZone() {
-                    RoutingProductId = routingProductId,
-                    SaleZoneId = saleZoneId
-                }
-            });
+            Dictionary<int, RPRouteOptionSupplier> dicRouteOptionSuppliers = routeManager.GetRouteOptionSuppliers(routingProductId, saleZoneId);
 
-            if (rpRoutes != null)
+            if (dicRouteOptionSuppliers == null || !dicRouteOptionSuppliers.ContainsKey(supplierId))
+                return null;
+
+
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            CarrierAccount supplier = carrierAccountManager.GetCarrierAccount(supplierId);
+
+            return new RPRouteOptionSupplierDetail()
             {
-                rpRoutes.ElementAt(0).OptionsDetailsBySupplier.TryGetValue(supplierId, out rpRouteOptionSupplier);
-                rpRouteOptionSupplierDetail = new RPRouteOptionSupplierDetail()
-                {
-                    SupplierName = new CarrierAccountManager().GetCarrierAccount(supplierId).Name,
-                    SupplierZones = rpRouteOptionSupplier.SupplierZones.MapRecords(item => new RPRouteOptionSupplierZoneDetail() { Entity = item, SupplierZoneName = new SupplierZoneManager().GetSupplierZone(item.SupplierZoneId).Name })
-                };
-            }
-
-            return rpRouteOptionSupplierDetail;
+                SupplierName = (supplier != null) ? supplier.Name : null,
+                SupplierZones = dicRouteOptionSuppliers[supplierId].SupplierZones.MapRecords(RPRouteOptionSupplierZoneDetailMapper)
+            };
         }
 
         public IEnumerable<RPRouteOptionDetail> GetRouteOptionDetails(int routingDatabaseId, int policyOptionConfigId, int routingProductId, long saleZoneId)
@@ -177,9 +173,11 @@ namespace TOne.WhS.Routing.Business
         {
             return new RPRouteDetail()
             {
-                Entity = rpRoute,
+                RoutingProductId = rpRoute.RoutingProductId,
+                SaleZoneId = rpRoute.SaleZoneId,
                 RoutingProductName = this.GetRoutingProductName(rpRoute.RoutingProductId),
                 SaleZoneName = this.GetSaleZoneName(rpRoute.SaleZoneId),
+                IsBlocked = rpRoute.IsBlocked,
                 RouteOptionsDetails = this.GetRouteOptionDetails(rpRoute.RPOptionsByPolicy, policyConfigId, numberOfOptions)
             };
         }
@@ -195,6 +193,20 @@ namespace TOne.WhS.Routing.Business
                 SupplierName = GetSupplierName(routeOption.SupplierId)
             };
         }
+
+        private RPRouteOptionSupplierZoneDetail RPRouteOptionSupplierZoneDetailMapper(RPRouteOptionSupplierZone rpRouteOptionSupplierZone)
+        {
+            SupplierZoneManager manager = new SupplierZoneManager();
+            SupplierZone supplierZone = manager.GetSupplierZone(rpRouteOptionSupplierZone.SupplierZoneId);
+
+            return new RPRouteOptionSupplierZoneDetail()
+            {
+                Entity = rpRouteOptionSupplierZone,
+                SupplierZoneName = supplierZone != null ? supplierZone.Name : null
+            };
+        }
+
+        
 
         private string GetRoutingProductName(int routingProductId)
         {
@@ -231,11 +243,11 @@ namespace TOne.WhS.Routing.Business
 
         private IEnumerable<RPRouteOptionDetail> GetRouteOptionDetails(Dictionary<int, IEnumerable<RPRouteOption>> dicRouteOptions, int policyConfigId, int numberOfOptions)
         {
-            if (dicRouteOptions != null && !dicRouteOptions.ContainsKey(policyConfigId))
+            if (dicRouteOptions == null || !dicRouteOptions.ContainsKey(policyConfigId))
                 return null;
 
-            IEnumerable<RPRouteOptionDetail> routeOptionDetails = dicRouteOptions[policyConfigId].MapRecords(RPRouteOptionMapper);
-            return routeOptionDetails.Take(numberOfOptions);
+            IEnumerable<RPRouteOption> routeOptionDetails = dicRouteOptions[policyConfigId].Take(numberOfOptions);
+            return routeOptionDetails.MapRecords(RPRouteOptionMapper);
         }
         
 

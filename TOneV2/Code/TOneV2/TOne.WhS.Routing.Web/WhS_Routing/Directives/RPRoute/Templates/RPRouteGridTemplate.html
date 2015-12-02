@@ -3,11 +3,14 @@
              pagingtype="'PagingOnScroll'"
              on-ready="onGridReady"
              menuactions="gridMenuActions"
-             defaultsortbyfieldname="'Entity.RoutingProductId'">
+             defaultsortbyfieldname="'RoutingProductId'">
 
     <vr-datagridcolumn headertext="'Routing Product'" field="'RoutingProductName'" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Sale Zone'" field="'SaleZoneName'" disablesorting></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'IsBlocked'" field="'Entity.IsBlocked'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Blocked'" field="'IsBlocked'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Route Options'" disablesorting>
+        <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
+    </vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>

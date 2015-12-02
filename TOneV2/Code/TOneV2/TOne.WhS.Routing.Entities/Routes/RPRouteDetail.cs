@@ -8,11 +8,15 @@ namespace TOne.WhS.Routing.Entities
 {
     public class RPRouteDetail
     {
-        public RPRoute Entity { get; set; }
+        public int RoutingProductId { get; set; }
+
+        public long SaleZoneId { get; set; }
 
         public string RoutingProductName { get; set; }
 
         public string SaleZoneName { get; set; }
+
+        public bool IsBlocked { get; set; }
 
         public IEnumerable<RPRouteOptionDetail> RouteOptionsDetails { get; set; }
     }

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'VRUIUtilsService', 'WhS_Routing_RPRouteAPIService', 'WhS_Routing_RouteRuleService',
-function (VRNotificationService, VRUIUtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RouteRuleService) {
+app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Routing_RPRouteAPIService', 'WhS_Routing_RouteRuleService',
+function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RouteRuleService) {
 
     var directiveDefinitionObject = {
 
@@ -27,9 +27,13 @@ function (VRNotificationService, VRUIUtilsService, WhS_Routing_RPRouteAPIService
     function customerRouteGrid($scope, ctrl, $attrs) {
         var gridAPI;
         var gridDrillDownTabsObj;
+        var routingDatabaseId;
 
         function initializeController() {
             $scope.rpRoutes = [];
+
+            var drillDownDefinitions = initDrillDownDefinitions();
+            gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -40,10 +44,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_Routing_RPRouteAPIService
                 function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-
-                        var drillDownDefinitions = initDrillDownDefinitions(query.RoutingDatabaseId);
-                        gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
-
+                        routingDatabaseId = query.RoutingDatabaseId;
                         return gridAPI.retrieveData(query);
                     }
 
@@ -57,7 +58,9 @@ function (VRNotificationService, VRUIUtilsService, WhS_Routing_RPRouteAPIService
 
                        if (response.Data != undefined) {
                            for (var i = 0; i < response.Data.length; i++) {
-                               gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                               var rpRouteDetail = response.Data[i];
+                               gridDrillDownTabsObj.setDrillDownExtensionObject(rpRouteDetail);
+                               setRouteOptionDetailsDirectiveonEachItem(rpRouteDetail);
                            }
                        }
 
@@ -69,6 +72,26 @@ function (VRNotificationService, VRUIUtilsService, WhS_Routing_RPRouteAPIService
             };
 
             defineMenuActions();
+        }
+
+        function setRouteOptionDetailsDirectiveonEachItem(rpRouteDetail) {
+            rpRouteDetail.RouteOptionsReadyDeferred = UtilsService.createPromiseDeferred();
+
+            rpRouteDetail.onRouteOptionsReady = function (api) {
+                rpRouteDetail.RouteOptionsAPI = api;
+                rpRouteDetail.RouteOptionsReadyDeferred.resolve();
+            };
+
+            rpRouteDetail.RouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
+            rpRouteDetail.RouteOptionsReadyDeferred.promise.then(function () {
+                var payload = {
+                    RoutingDatabaseId: routingDatabaseId,
+                    SaleZoneId: rpRouteDetail.SaleZoneId,
+                    RoutingProductId: rpRouteDetail.RoutingProductId,
+                    RouteOptions: rpRouteDetail.RouteOptionsDetails
+                };
+                VRUIUtilsService.callDirectiveLoad(rpRouteDetail.RouteOptionsAPI, payload, rpRouteDetail.RouteOptionsLoadDeferred);
+            });
         }
 
         function defineMenuActions() {
@@ -83,7 +106,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_Routing_RPRouteAPIService
             WhS_Routing_RouteRuleService.editRouteRule(dataItem.Entity.ExecutedRuleId);
         }
 
-        function initDrillDownDefinitions(routingDatabaseId) {
+        function initDrillDownDefinitions() {
             var drillDownDefinition = {};
 
             drillDownDefinition.title = "Details";

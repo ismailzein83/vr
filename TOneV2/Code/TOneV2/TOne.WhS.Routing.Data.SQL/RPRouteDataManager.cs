@@ -84,6 +84,23 @@ namespace TOne.WhS.Routing.Data.SQL
             return Vanrise.Common.Serializer.Deserialize<Dictionary<int, IEnumerable<RPRouteOption>>>(routeOptionsSerialized.ToString());
         }
 
+        public Dictionary<int, RPRouteOptionSupplier> GetRouteOptionSuppliers(int routingProductId, long saleZoneId)
+        {
+            object routeOptionSuppliersSerialized = ExecuteScalarText(query_GetRouteOptionSuppliers, (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@RoutingProductId", routingProductId));
+                cmd.Parameters.Add(new SqlParameter("@SaleZoneId", saleZoneId));
+            }
+            );
+
+            if (routeOptionSuppliersSerialized == null)
+                return null;
+
+            return Vanrise.Common.Serializer.Deserialize<Dictionary<int, RPRouteOptionSupplier>>(routeOptionSuppliersSerialized.ToString());
+        }
+
+        #region Private
+
         private RPRoute CustomerRouteMapper(IDataReader reader)
         {
             return new RPRoute()
@@ -96,6 +113,8 @@ namespace TOne.WhS.Routing.Data.SQL
                 RPOptionsByPolicy = reader["OptionsByPolicy"] != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, IEnumerable<RPRouteOption>>>(reader["OptionsByPolicy"].ToString()) : null
             };
         }
+
+        #endregion
 
         #region Queries
 
@@ -115,6 +134,11 @@ namespace TOne.WhS.Routing.Data.SQL
                                                         FROM [dbo].[ProductRoute] 
                                                         Where RoutingProductId = @RoutingProductId And SaleZoneId = @SaleZoneId";
 
+        private const string query_GetRouteOptionSuppliers = @"SELECT [OptionsDetailsBySupplier]
+                                                        FROM [dbo].[ProductRoute] 
+                                                        Where RoutingProductId = @RoutingProductId And SaleZoneId = @SaleZoneId";
+
         #endregion
+
     }
 }

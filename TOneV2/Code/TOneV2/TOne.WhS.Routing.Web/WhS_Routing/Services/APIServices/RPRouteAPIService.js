@@ -9,8 +9,9 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, "RPRoute", "GetFilteredRPRoutes"), input);
         }
 
-        function GetRPRouteOptionSupplier(routingProductId, saleZoneId, supplierId) {
+        function GetRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, "RPRoute", "GetRPRouteOptionSupplier"), {
+                routingDatabaseId: routingDatabaseId,
                 routingProductId: routingProductId,
                 saleZoneId: saleZoneId,
                 supplierId: supplierId

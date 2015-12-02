@@ -191,6 +191,7 @@
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleSettingsAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RoutingDatabaseAPIService.js" />
     <Content Include="WhS_Routing\Services\RouteRuleService.js" />
+    <Content Include="WhS_Routing\Services\RPRouteService.js" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRouteProcess.html" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRouteProcessController.js" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRoutesByCodePrefix.html" />
@@ -203,6 +204,8 @@
     <Content Include="WhS_Routing\Views\RouteRule\RouteRuleEditorController.js" />
     <Content Include="WhS_Routing\Views\RouteRule\RouteRuleManagement.html" />
     <Content Include="WhS_Routing\Views\RouteRule\RouteRuleManagementController.js" />
+    <Content Include="WhS_Routing\Views\RPRoute\RPRouteOptionSupplier.html" />
+    <Content Include="WhS_Routing\Views\RPRoute\RPRouteOptionSupplierController.js" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

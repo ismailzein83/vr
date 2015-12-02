@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsRoutingZonerouteoptions", ["WhS_Sales_MainService", "UtilsService",
-function (WhS_Sales_MainService, UtilsService) {
+app.directive("vrWhsRoutingZonerouteoptions", ["WhS_Routing_RPRouteService", "UtilsService",
+function (WhS_Routing_RPRouteService, UtilsService) {
     return {
         restrict: "E",
         scope: {
@@ -22,22 +22,24 @@ function (WhS_Sales_MainService, UtilsService) {
 
         var routingProductId;
         var saleZoneId;
+        var routingDatabaseId;
 
         function initCtrl() {
             ctrl.routeOptions = [];
 
             ctrl.viewSupplier = function (routeOption) {
-                WhS_Sales_MainService.viewRPRouteOptionSupplier(routingProductId, saleZoneId, routeOption.Entity.SupplierId, routeOption.Entity.SupplierName);
+                WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, routeOption.Entity.SupplierId, routeOption.Entity.SupplierName);
             };
 
-            getAPI();
+            defineAPI();
         }
 
-        function getAPI() {
+        function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
                 if (payload != undefined) {
+                    routingDatabaseId = payload.RoutingDatabaseId;
                     routingProductId = payload.RoutingProductId;
                     saleZoneId = payload.SaleZoneId;
 
