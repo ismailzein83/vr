@@ -32,6 +32,12 @@ namespace Vanrise.Common.Business
             var countries = GetCachedCountries();
             return countries.GetRecord(countryId);
         }
+
+        public Country GetCountry(string countryName)
+        {
+            var countries = GetCachedCountriesByNames();
+            return countries.GetRecord(countryName);
+        }
         public Vanrise.Entities.InsertOperationOutput<CountryDetail> AddCountry(Country country)
         {
             Vanrise.Entities.InsertOperationOutput<CountryDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CountryDetail>();
@@ -89,6 +95,26 @@ namespace Vanrise.Common.Business
                    ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
                    IEnumerable<Country> countries = dataManager.GetCountries();
                    return countries.ToDictionary(cn => cn.CountryId, cn => cn);
+               });
+        }
+
+        public Dictionary<string, Country> GetCachedCountriesByNames()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCountries",
+               () =>
+               {
+                   ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
+                   IEnumerable<Country> countries = dataManager.GetCountries();
+                   Dictionary<string, Country> dic = new Dictionary<string, Country>();
+                   if(countries != null)
+                   {
+                       foreach(var c in countries)
+                       {
+                           if (!dic.ContainsKey(c.Name))
+                               dic.Add(c.Name, c);
+                       }
+                   }
+                   return dic;
                });
         }
 
