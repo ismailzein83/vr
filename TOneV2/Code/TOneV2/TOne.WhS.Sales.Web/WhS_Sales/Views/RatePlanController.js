@@ -76,7 +76,12 @@
                 title: "Default Routing Product",
                 directive: "vr-whs-sales-defaultroutingproduct",
                 loadDirective: function (api) {
-                    return api.load(defaultItem);
+                    var defaultRoutingProductPayload = {
+                        defaultItem: defaultItem,
+                        onChange: onDefaultItemChange
+                    };
+
+                    return api.load(defaultRoutingProductPayload);
                 }
             }];
 
@@ -223,6 +228,10 @@
                     ZoneLetter: $scope.zoneLetters[$scope.selectedZoneLetterIndex]
                 };
             }
+        }
+
+        function onDefaultItemChange() {
+            saveChanges(true);
         }
 
         function saveChanges(shouldLoadGrid) {

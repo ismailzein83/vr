@@ -22,6 +22,7 @@ function (UtilsService, VRUIUtilsService) {
         this.initCtrl = initCtrl;
 
         var defaultItem;
+        var onChange;
         var counter = 0;
         var currentId;
         var newId;
@@ -38,8 +39,12 @@ function (UtilsService, VRUIUtilsService) {
                 counter++;
                 var selectedId = selectorAPI.getSelectedIds;
                     
-                if ((!newId && counter > 1) || (newId && counter > 2))
+                if ((!newId && counter > 1) || (newId && counter > 2)) {
                     defaultItem.IsDirty = true;
+
+                    if (onChange && typeof (onChange) == "function")
+                        onChange();
+                }
             };
 
             selectorReadyPromiseDeferred.promise.then(function () {
@@ -52,10 +57,11 @@ function (UtilsService, VRUIUtilsService) {
 
             api.load = function (payload) {
                 if (payload != undefined) {
-                    defaultItem = payload;
-                    currentId = payload.CurrentRoutingProductId;
-                    ctrl.CurrentName = payload.CurrentRoutingProductName;
-                    newId = payload.NewRoutingProductId;
+                    defaultItem = payload.defaultItem;
+                    onChange = payload.onChange;
+                    currentId = payload.defaultItem.CurrentRoutingProductId;
+                    ctrl.CurrentName = payload.defaultItem.CurrentRoutingProductName;
+                    newId = payload.defaultItem.NewRoutingProductId;
                 }
 
                 //if (ctrl.IsEditable == null) ctrl.IsEditable = false;

@@ -127,6 +127,12 @@ namespace TOne.WhS.Routing.Business
             return rslt;
         }
 
+        public RPRoute GetRPRoute(RPZone rpZone)
+        {
+            var rpRoutes = GetRPRoutes(new List<RPZone>() { rpZone });
+            return rpRoutes != null ? rpRoutes.ElementAt(0) : null;
+        }
+
         public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(int routingDatabaseId, int routingProductId, long saleZoneId, int supplierId)
         {
             IRPRouteDataManager routeManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
