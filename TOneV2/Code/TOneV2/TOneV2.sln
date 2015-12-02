@@ -244,8 +244,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.Routing.BP.Argumen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.Routing.BP", "TOne.WhS.Routing.BP\TOne.WhS.Routing.BP.csproj", "{84F18EF5-4751-4202-9584-C27399C920A7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{5FFF1DF6-B6F6-4340-837D-2A2522242F92}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WhS.Analytics", "WhS.Analytics", "{94FF9777-F09D-4444-877F-3E1A773E0D0E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.Analytics.Business", "TOne.WhS.Analytics.Business\TOne.WhS.Analytics.Business.csproj", "{ED3AD820-6C97-440E-A309-0EC0391B732A}"
