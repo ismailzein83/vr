@@ -71,7 +71,7 @@ app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesServi
                ctrl.isAllowed = true;
                ctrl.onexport = function () {
                   
-                   return BIVisualElementService.exportWidgetData(ctrl, ctrl.settings, ctrl.filter).then(function (response) {
+                   return BIVisualElementService.exportWidgetData(ctrl, settings, ctrl.filter).then(function (response) {
                        
                        return UtilsService.downloadFile(response.data, response.headers);
                    });

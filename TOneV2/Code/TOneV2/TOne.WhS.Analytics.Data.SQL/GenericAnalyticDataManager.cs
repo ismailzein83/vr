@@ -192,12 +192,12 @@ namespace TOne.WhS.Analytics.Data.SQL
                 //if (groupFieldConfig.CTEStatement != null)
                 //    AddStatementToCTEPart(ctePartBuilder, groupFieldConfig.CTEStatement);
 
-                if (groupField == AnalyticDimension.CodeGroup)
+                if (groupField == AnalyticDimension.Country)
                 {
-                    if (!lstCTEStatements.Contains(CTEStatement.CodeGroup))
+                    if (!lstCTEStatements.Contains(CTEStatement.Country))
                     {
-                        lstCTEStatements.Add(CTEStatement.CodeGroup);
-                        AddStatementToCTEPart(ctePartBuilder, CTEStatement.CodeGroup);
+                        lstCTEStatements.Add(CTEStatement.Country);
+                        AddStatementToCTEPart(ctePartBuilder, CTEStatement.Country);
                     }
                 }
 
@@ -285,12 +285,12 @@ namespace TOne.WhS.Analytics.Data.SQL
                     {
                         AnalyticDimensionConfig groupFieldConfig = dimensionsFilterConfig[dimensionFilter.Dimension];
 
-                        if (dimensionFilter.Dimension == AnalyticDimension.CodeGroup)
+                        if (dimensionFilter.Dimension == AnalyticDimension.Country)
                         {
-                            if (!lstCTEStatements.Contains(CTEStatement.CodeGroup))
+                            if (!lstCTEStatements.Contains(CTEStatement.Country))
                             {
-                                lstCTEStatements.Add(CTEStatement.CodeGroup);
-                                AddStatementToCTEPart(ctePartBuilder, CTEStatement.CodeGroup);
+                                lstCTEStatements.Add(CTEStatement.Country);
+                                AddStatementToCTEPart(ctePartBuilder, CTEStatement.Country);
                             }
                         }
 

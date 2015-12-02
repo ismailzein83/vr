@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsAnalyticsGenericfilter", [ 'UtilsService', 'VRNotificationService', 'WhS_Analytics_GenericAnalyticDimensionEnum', 'VRUIUtilsService',
-function ( UtilsService, VRNotificationService,WhS_Analytics_GenericAnalyticDimensionEnum, VRUIUtilsService) {
+app.directive("vrWhsAnalyticsGenericfilter", [ 'UtilsService', 'VRNotificationService', 'WhS_Analytics_GenericAnalyticDimensionEnum', 'VRUIUtilsService','WhS_Analytics_GenericAnalyticMeasureEnum','VRValidationService',
+function (UtilsService, VRNotificationService, WhS_Analytics_GenericAnalyticDimensionEnum, VRUIUtilsService, WhS_Analytics_GenericAnalyticMeasureEnum, VRValidationService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -20,6 +20,7 @@ function ( UtilsService, VRNotificationService,WhS_Analytics_GenericAnalyticDime
         }
     };
     function GenericFilter($scope, ctrl, $attrs) {
+
         this.initializeController = initializeController;
 
         var customerAccountDirectiveAPI;
@@ -48,42 +49,55 @@ function ( UtilsService, VRNotificationService,WhS_Analytics_GenericAnalyticDime
 
             ctrl.periods = [];
             ctrl.selectedCountries = [];
-
             ctrl.selectedCustomers = [];
-
             ctrl.selectedSuppliers = [];
             ctrl.selecteddimensions = [];
-            ctrl.onCustomerAccountDirectiveReady = function (api) {
+            ctrl.measureThresholds = [];
+
+            ctrl.fromdate = new Date();
+
+            ctrl.validateDateTime = function () {
+                return VRValidationService.validateTimeRange(ctrl.fromdate, ctrl.todate);
+            }
+
+            ctrl.onCustomerAccountDirectiveReady = function (api)
+            {
                 customerAccountDirectiveAPI = api;
                 customerAccountReadyPromiseDeferred.resolve();
             }
 
-            ctrl.onSupplierAccountDirectiveReady = function (api) {
+            ctrl.onSupplierAccountDirectiveReady = function (api)
+            {
                 supplierAccountDirectiveAPI = api;
                 supplierAccountReadyPromiseDeferred.resolve();
             }
 
-            ctrl.onCurrencyDirectiveReady = function (api) {
+            ctrl.onCurrencyDirectiveReady = function (api)
+            {
                 currencyDirectiveAPI = api;
                 currencyReadyPromiseDeferred.resolve();
             }
 
-            ctrl.onCountryDirectiveReady = function (api) {
+            ctrl.onCountryDirectiveReady = function (api)
+            {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
             }
 
-            ctrl.onSellingNumberPlanDirectiveReady = function (api) {
+            ctrl.onSellingNumberPlanDirectiveReady = function (api)
+            {
                 sellingNumberPlanDirectiveAPI = api;
                 sellingNumberPlanReadyPromiseDeferred.resolve();
             }
 
-            ctrl.onSaleZoneDirectiveReady = function (api) {
+            ctrl.onSaleZoneDirectiveReady = function (api)
+            {
                 saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
             }
 
-            ctrl.onSelectSellingNumberPlan = function (selectedItem) {
+            ctrl.onSelectSellingNumberPlan = function (selectedItem)
+            {
                 ctrl.showSaleZoneSelector = true;
 
                 var payload = {
@@ -94,140 +108,191 @@ function ( UtilsService, VRNotificationService,WhS_Analytics_GenericAnalyticDime
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
             }
 
-
-            ctrl.isrequired = function () {
-                return $attrs.isrequired != undefined;
+            ctrl.isrequired = function ()
+            {
+                return ctrl.periods.length==0;
             }
 
             defineAPI();
       
         }
 
-            function defineAPI() {
-                var api = {};
-                api.getData = function () {
-                    var filterCustomer = {
-                        Dimension: WhS_Analytics_GenericAnalyticDimensionEnum.Customer.value,
-                        FilterValues: customerAccountDirectiveAPI.getSelectedIds()
-                    };
-                    var filterSupplier = {
-                        Dimension: WhS_Analytics_GenericAnalyticDimensionEnum.Supplier.value,
-                        FilterValues: supplierAccountDirectiveAPI.getSelectedIds()
-                    };
+        function defineAPI() {
+            var api = {};
 
-                    var selectedfilters = [];
+            api.getData = function ()
+            {
+                var filterCustomer = {
+                    Dimension: WhS_Analytics_GenericAnalyticDimensionEnum.Customer.value,
+                    FilterValues: customerAccountDirectiveAPI.getSelectedIds()
+                };
 
-                    if (filterCustomer.FilterValues != undefined && filterCustomer.FilterValues.length > 0)
-                        selectedfilters.push(filterCustomer);
-                    if (filterSupplier.FilterValues != undefined && filterSupplier.FilterValues.length > 0)
-                        selectedfilters.push(filterSupplier);
+                var filterSupplier = {
+                    Dimension: WhS_Analytics_GenericAnalyticDimensionEnum.Supplier.value,
+                    FilterValues: supplierAccountDirectiveAPI.getSelectedIds()
+                };
 
-                    var selectedobject = {
-                           selecteddimensions: UtilsService.getPropValuesFromArray(ctrl.selecteddimensions, "value"),
-                           selectedfilters: selectedfilters,
-                           selectedperiod: ctrl.selectedperiod!=undefined?ctrl.selectedperiod.value:undefined,
-                           fromdate: ctrl.fromdate,
-                           todate: ctrl.todate,
-                           currency: currencyDirectiveAPI!=undefined?currencyDirectiveAPI.getSelectedIds():undefined
-                    };
-                    return selectedobject;
+                var selectedfilters = [];
+
+                if (filterCustomer.FilterValues != undefined && filterCustomer.FilterValues.length > 0)
+                    selectedfilters.push(filterCustomer);
+
+                if (filterSupplier.FilterValues != undefined && filterSupplier.FilterValues.length > 0)
+                    selectedfilters.push(filterSupplier);
+
+                var selectedThresholds = {};
+
+                for (var i = 0; i < ctrl.measureThresholds.length; i++)
+                {
+                    if (ctrl.measureThresholds[i].value == WhS_Analytics_GenericAnalyticMeasureEnum.ASR.value)
+                        selectedThresholds.asr = ctrl.measureThresholds[i].enteredValue;
+
+                    if (ctrl.measureThresholds[i].value == WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value)
+                        selectedThresholds.acd = ctrl.measureThresholds[i].enteredValue;
+
+                    if (ctrl.measureThresholds[i].value == WhS_Analytics_GenericAnalyticMeasureEnum.Attempts.value)
+                        selectedThresholds.attempts = ctrl.measureThresholds[i].enteredValue;
                 }
 
-                api.load = function (payload) {
-                    ctrl.isLoadCustomers;
-                    ctrl.isLoadSuppliers;
-                    ctrl.isLoadSellingNumberPlan;
-                    ctrl.isLoadCountries;
-                    ctrl.isLoadCurrencies;
-
-                    if (payload != undefined ) {
-
-                        if (payload.filters != undefined) {
-                            for (var i = 0; i < payload.filters.length; i++) {
-                                switch (payload.filters[i]) {
-                                    case WhS_Analytics_GenericAnalyticDimensionEnum.Customer.value: ctrl.isLoadCustomers = true; break;
-                                    case WhS_Analytics_GenericAnalyticDimensionEnum.Supplier.value: ctrl.isLoadSuppliers = true; break;
-                                    case WhS_Analytics_GenericAnalyticDimensionEnum.Zone.value: ctrl.isLoadSellingNumberPlan = true; break;
-                                    case WhS_Analytics_GenericAnalyticDimensionEnum.CodeGroup: ctrl.isLoadCountries = true; break;
-                                    case WhS_Analytics_GenericAnalyticDimensionEnum.Currency.value: ctrl.isLoadCurrencies = true; break;
-
-                                }
-                            }
-                        }
-                        if (payload.dimensions != undefined || payload.dimensions.length > 0)
-                            for (var i = 0; i < payload.dimensions.length; i++)
-                                for (var p in WhS_Analytics_GenericAnalyticDimensionEnum)
-                                    if (WhS_Analytics_GenericAnalyticDimensionEnum[p].value == payload.dimensions[i])
-                                        ctrl.dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
-
-                        if (payload.periods != undefined && payload.periods.length > 0)
-                            for (var i = 0; i < payload.periods.length; i++)
-                                for (var p in WhS_Analytics_GenericAnalyticDimensionEnum)
-                                    if (WhS_Analytics_GenericAnalyticDimensionEnum[p].value == payload.periods[i])
-                                        ctrl.periods.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
-                    }
-                    var promises = [];
-
-                    function loadSellingNumberPlanSection() {
-                        var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(loadSellingNumberPlanPromiseDeferred.promise);
-                        sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
-                            VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, undefined, loadSellingNumberPlanPromiseDeferred);
-                        });
-                    }
-
-                    function loadCustomers() {
-                        var loadCustomerAccountPromiseDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(loadCustomerAccountPromiseDeferred.promise);
-                        customerAccountReadyPromiseDeferred.promise.then(function () {
-                            VRUIUtilsService.callDirectiveLoad(customerAccountDirectiveAPI, undefined, loadCustomerAccountPromiseDeferred);
-                        });
-                    }
-
-                    function loadSuppliers() {
-                        var loadSupplierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(loadSupplierAccountPromiseDeferred.promise);
-                        supplierAccountReadyPromiseDeferred.promise.then(function () {
-                            VRUIUtilsService.callDirectiveLoad(supplierAccountDirectiveAPI, undefined, loadSupplierAccountPromiseDeferred);
-                        });
-                    }
-
-                    function loadCountries() {
-                        var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(loadCountryPromiseDeferred.promise);
-                        countryReadyPromiseDeferred.promise.then(function () {
-                            VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, undefined, loadCountryPromiseDeferred);
-                        });
-                    }
-
-                    function loadCurrencies() {
-                        var loadCurrencyPromiseDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(loadCurrencyPromiseDeferred.promise);
-                        currencyReadyPromiseDeferred.promise.then(function () {
-                            VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, undefined, loadCurrencyPromiseDeferred);
-                        });
-                    }
-
-                    
-                    if (ctrl.isLoadCustomers)
-                        loadCustomers();
-                    if (ctrl.isLoadSuppliers)
-                        loadSuppliers();
-                    if (ctrl.isLoadSellingNumberPlan)
-                        loadSellingNumberPlanSection();
-                    if (ctrl.isLoadCountries)
-                        loadCountries();
-                    if (ctrl.isLoadCurrencies)
-                        loadCurrencies();
-                    return UtilsService.waitMultiplePromises(promises);
-                }
-               
-                if (ctrl.onReady && typeof (ctrl.onReady) == 'function')
-                    ctrl.onReady(api);
+                var selectedobject = {
+                    selecteddimensions: UtilsService.getPropValuesFromArray(ctrl.selecteddimensions, "value"),
+                    selectedfilters: selectedfilters,
+                    selectedperiod: ctrl.selectedperiod != undefined ? ctrl.selectedperiod.value : undefined,
+                    selectedThresholds: selectedThresholds,
+                    fromdate: ctrl.fromdate,
+                    todate: ctrl.todate,
+                    currency: currencyDirectiveAPI != undefined ? currencyDirectiveAPI.getSelectedIds() : undefined
+                };
+                return selectedobject;
             }
 
+            api.load = function (payload)
+            {
+                ctrl.isLoadCustomers;
+                ctrl.isLoadSuppliers;
+                ctrl.isLoadSellingNumberPlan;
+                ctrl.isLoadCountries;
+                ctrl.isLoadCurrencies;
+
+                if (payload != undefined)
+                {
+                    if (payload.filters != undefined)
+                    {
+                        for (var i = 0; i < payload.filters.length; i++)
+                        {
+                            switch (payload.filters[i])
+                            {
+                                case WhS_Analytics_GenericAnalyticDimensionEnum.Customer.value: ctrl.isLoadCustomers = true; break;
+                                case WhS_Analytics_GenericAnalyticDimensionEnum.Supplier.value: ctrl.isLoadSuppliers = true; break;
+                                case WhS_Analytics_GenericAnalyticDimensionEnum.Zone.value: ctrl.isLoadSellingNumberPlan = true; break;
+                                case WhS_Analytics_GenericAnalyticDimensionEnum.Country: ctrl.isLoadCountries = true; break;
+                                case WhS_Analytics_GenericAnalyticDimensionEnum.Currency.value: ctrl.isLoadCurrencies = true; break;
+                            }
+                        }
+                    }
+
+                    for (var p in WhS_Analytics_GenericAnalyticDimensionEnum)
+                    {
+                        if (payload.dimensions != undefined || payload.dimensions.length > 0)
+                        {
+                            for (var i = 0; i < payload.dimensions.length; i++)
+                            {
+                                if (WhS_Analytics_GenericAnalyticDimensionEnum[p].value == payload.dimensions[i])
+                                    ctrl.dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
+                            }
+                        }
+
+                        if (payload.periods != undefined && payload.periods.length > 0)
+                        {
+                            for (var i = 0; i < payload.periods.length; i++)
+                            {
+                                if (WhS_Analytics_GenericAnalyticDimensionEnum[p].value == payload.periods[i])
+                                    ctrl.periods.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
+                            }
+                        }
+                    }
+
+                    if (payload.measureThresholds != undefined)
+                    {
+                        for (var i = 0; i < payload.measureThresholds.length; i++)
+                        {
+                            for (var p in WhS_Analytics_GenericAnalyticMeasureEnum)
+                            {
+                                if (WhS_Analytics_GenericAnalyticMeasureEnum[p].value == payload.measureThresholds[i])
+                                    ctrl.measureThresholds.push(WhS_Analytics_GenericAnalyticMeasureEnum[p]);
+                            }   
+                        }    
+                    }
+                }
+
+                var promises = [];
+
+                function loadSellingNumberPlanSection()
+                {
+                    var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadSellingNumberPlanPromiseDeferred.promise);
+                    sellingNumberPlanReadyPromiseDeferred.promise.then(function ()
+                    {
+                        VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, undefined, loadSellingNumberPlanPromiseDeferred);
+                    });
+                }
+
+                function loadCustomers()
+                {
+                    var loadCustomerAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadCustomerAccountPromiseDeferred.promise);
+                    customerAccountReadyPromiseDeferred.promise.then(function ()
+                    {
+                        VRUIUtilsService.callDirectiveLoad(customerAccountDirectiveAPI, undefined, loadCustomerAccountPromiseDeferred);
+                    });
+                }
+
+                function loadSuppliers()
+                {
+                    var loadSupplierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadSupplierAccountPromiseDeferred.promise);
+                    supplierAccountReadyPromiseDeferred.promise.then(function ()
+                    {
+                        VRUIUtilsService.callDirectiveLoad(supplierAccountDirectiveAPI, undefined, loadSupplierAccountPromiseDeferred);
+                    });
+                }
+
+                function loadCountries()
+                {
+                    var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadCountryPromiseDeferred.promise);
+                    countryReadyPromiseDeferred.promise.then(function ()
+                    {
+                        VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, undefined, loadCountryPromiseDeferred);
+                    });
+                }
+
+                function loadCurrencies() {
+                    var loadCurrencyPromiseDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadCurrencyPromiseDeferred.promise);
+                    currencyReadyPromiseDeferred.promise.then(function ()
+                    {
+                        VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, undefined, loadCurrencyPromiseDeferred);
+                    });
+                }
+
+                if (ctrl.isLoadCustomers)
+                    loadCustomers();
+                if (ctrl.isLoadSuppliers)
+                    loadSuppliers();
+                if (ctrl.isLoadSellingNumberPlan)
+                    loadSellingNumberPlanSection();
+                if (ctrl.isLoadCountries)
+                    loadCountries();
+                if (ctrl.isLoadCurrencies)
+                    loadCurrencies();
+                return UtilsService.waitMultiplePromises(promises);
+            }
+
+            if (ctrl.onReady && typeof (ctrl.onReady) == 'function')
+                ctrl.onReady(api);
         }
-    
+    }
     return directiveDefinitionObject;
 
 }]);

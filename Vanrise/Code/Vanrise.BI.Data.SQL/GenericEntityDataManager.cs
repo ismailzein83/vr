@@ -108,13 +108,14 @@ namespace Vanrise.BI.Data.SQL
             foreach (string value in columnsNames){
                 if(columns.Length==0)
                 {
-                    columns.Append(String.Format("{0}.CHILDREN",value));
+                    columns.Append(String.Format("NONEMPTYCROSSJOIN({0}.CHILDREN", value));
                 }
                 else{
-                    columns.Append(String.Format("* {0}.CHILDREN",value));
+                    columns.Append(String.Format(", {0}.CHILDREN",value));
                 } 
 
             }
+            columns.Append(String.Format(")"));
             return String.Format(@"TopCount({0}, {1}, {2})", columns.ToString(), count, columnBy);
         }
 

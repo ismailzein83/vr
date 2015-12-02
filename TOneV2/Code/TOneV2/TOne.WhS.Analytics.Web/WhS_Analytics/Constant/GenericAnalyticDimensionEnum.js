@@ -2,7 +2,7 @@
     Customer: { name: "Customer", value: 0, description: "Customer", type: "Text" },
     Supplier: { name: "Supplier", value: 1, description: "Supplier", type: "Text" },
     Zone: { name: "Zone", value: 2, description: "Zone", type: "Text" },
-    CodeGroup: { name: "CodeGroup", value: 3, description: "CodeGroup", type: "Text" },
+    Country: { name: "Country", value: 3, description: "Country", type: "Text" },
     Switch: { name: "Switch", value: 4, description: "Switch", type: "Text" },
     GateWayIn: { name: "GateWayIn", value: 5, description: "GateWayIn", type: "Text" },
     GateWayOut: { name: "GateWayOut", value: 6, description: "GateWayOut", type: "Text" },

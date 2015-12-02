@@ -6,7 +6,7 @@
                            numberprecision="dimension.numberPrecision" field="'DimensionValues[' + $index + '].Name'" columnindex="$index" widthfactor="15"></vr-datagridcolumn>
 
         <vr-datagridcolumn ng-repeat="measure in ctrl.selectedMeasures" ng-show="ctrl.selectedMeasures.length > 0" headertext="measure.description" type="measure.type" numberprecision="measure.numberPrecision"
-                           field="'MeasureValues.' + measure.name + ''" tag="measure" summaryfield="'MeasureValues.' + measure.name + ''" getcolor="getColor"></vr-datagridcolumn>
+                           field="'MeasureValues.' + measure.name + ''" tag="measure" summaryfield="'MeasureValues.' + measure.name + ''" getcolor="ctrl.getColor"></vr-datagridcolumn>
 
         <vr-datagridexpandablerow>
             <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>

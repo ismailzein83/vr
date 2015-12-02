@@ -9,11 +9,10 @@
         var gridApi;
         var filterDirectiveAPI;
         var filterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-
         var measures = [];
         var periods = [];
         var dimensions = [];
+
         defineScope();
         load();
 
@@ -41,7 +40,6 @@
             };
         }
 
-
         function loadGrid() {
             return gridApi.loadGrid(getQuery());
         }
@@ -54,13 +52,14 @@
                 FixedDimensionFields: selectedObject.selectedperiod,
                 MeasureFields: measures,
                 Dimensions: dimensions,
+                MeasureThreshold:selectedObject.selectedThresholds,
                 FromTime: selectedObject.fromdate,
                 ToTime: selectedObject.todate,
                 Currency: selectedObject.currency,
-                WithSummary: false,
             };
             return query;
         }
+
         function loadCharts() {
             var payload = getQuery();
             payload.measures = loadMeasuresChart();
@@ -75,8 +74,8 @@
             }).finally(function () {
                 $scope.isLoadingFilter = false;
             });
-
         }
+
         function loadFilterSection() {
             var loadFilterPromiseDeferred = UtilsService.createPromiseDeferred();
             filterReadyPromiseDeferred.promise.then(function () {
@@ -85,12 +84,13 @@
             });
             return loadFilterPromiseDeferred.promise;
         }
+
         function loadDimensions() {
 
             dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.Customer.value);
             dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.Supplier.value);
             dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.Zone.value);
-            dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.CodeGroup.value);
+            dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.Country.value);
             dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.Switch.value);
             // dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.GateWayIn.value);
             // dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.GateWayOut.value);
@@ -100,6 +100,7 @@
             dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.CodeBuy.value);
             return dimensions;
         }
+
         function loadPayload() {
             var payload = {};
             payload.dimensions = loadDimensions();
@@ -108,16 +109,20 @@
             payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.Customer.value);
             payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.Supplier.value);
             payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.Zone.value);
-            payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.CodeGroup.value);
+            payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.Country.value);
             payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.Switch.value);
             payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.PortIn.value);
             payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.PortOut.value);
-           // payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.ASR.value);
-           // payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.ACD.value);
-           // payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.Attempts.value);
+
+            payload.measureThresholds = [];
+            payload.measureThresholds.push(WhS_Analytics_GenericAnalyticMeasureEnum.ASR.value);
+            payload.measureThresholds.push(WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value);
+            payload.measureThresholds.push(WhS_Analytics_GenericAnalyticMeasureEnum.Attempts.value);
             return payload;
         }
+
         function loadMeasures() {
+            measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.Attempts.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.DeliveredAttempts.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.SuccessfulAttempts.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.DurationsInSeconds.value);
@@ -133,11 +138,12 @@
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.MaxDurationInSeconds.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.LastCDRAttempt.value);
         }
+
         function loadMeasuresChart() {
             var measures = [];
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.Attempts.value);
-            measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.ASR.value);
-            measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value);
+            measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.DurationsInSeconds.value);
+         //   measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value);
             // measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.NER.value);
 
             return measures;

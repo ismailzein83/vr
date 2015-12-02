@@ -11,7 +11,7 @@ namespace TOne.WhS.Analytics.Entities
         Customer = 0,
         Supplier = 1,
         Zone = 2,
-        CodeGroup = 3,
+        Country = 3,
         Switch = 4,
         GateWayIn = 5,
         GateWayOut = 6,

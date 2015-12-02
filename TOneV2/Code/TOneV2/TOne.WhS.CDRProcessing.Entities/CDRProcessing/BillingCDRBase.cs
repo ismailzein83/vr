@@ -15,8 +15,8 @@ namespace TOne.WhS.CDRProcessing.Entities
                 "Alert", "Connect", "Disconnect", "CGPN", "CDPN", "PortOut", "PortIn", "ReleaseCode", "ReleaseSource", "SaleZoneID", "SupplierZoneID", "OriginatingZoneID", "SaleCode"
                 , "SupplierCode");
         }
-        
-        public int ID { get; set; }
+
+        public long ID { get; set; }
         public int SwitchID { get; set; }
         public DateTime Attempt { get; set; }
         public int CustomerId { get; set; }

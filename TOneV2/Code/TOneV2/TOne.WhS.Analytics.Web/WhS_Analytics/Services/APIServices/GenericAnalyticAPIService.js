@@ -6,7 +6,6 @@
     function genericAnalyticAPIService(BaseAPIService, UtilsService, WhS_Analytics_ModuleConfig) {
 
         function GetFiltered(input) {
-          
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Analytics_ModuleConfig.moduleName, "GenericAnalytic", "GetFiltered"), input);
         }
 

@@ -193,7 +193,7 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
                              GetReaderValue<string>(reader, "PortIn"),
                              GetReaderValue<int>(reader,"SwitchID"));
                     if (!trafficStatistics.ContainsKey(key))
-                        trafficStatistics.Add(key, GetReaderValue<int>(reader, "ID"));
+                        trafficStatistics.Add(key, GetReaderValue<long>(reader, "ID"));
                 }
             }, batch.BatchStart, batch.BatchEnd);
 

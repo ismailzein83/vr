@@ -180,15 +180,21 @@ namespace Vanrise.BI.Business
 
             return result;
         }
-        public HttpResponseMessage ExportTopEntities(IEnumerable<EntityRecord> records, string entity, string[] measureTypesNames)
+        public HttpResponseMessage ExportTopEntities(IEnumerable<EntityRecord> records, List<string> entities, string[] measureTypesNames)
         {
             Workbook wbk = new Workbook();
+            Aspose.Cells.License license = new Aspose.Cells.License();
+            license.SetLicense("Aspose.Cells.lic");
             wbk.Worksheets.Clear();
             Worksheet RateWorkSheet = wbk.Worksheets.Add("Top Entity Report");
             int Irow = 1;
             int Icol = 1;
-            RateWorkSheet.Cells[Irow, Icol].PutValue(entity);
-            RateWorkSheet.Cells.SetColumnWidth(Icol, 20);
+            foreach (string entity in entities)
+            {
+                    Icol++;
+                    RateWorkSheet.Cells.SetColumnWidth(Icol, 20);
+                    RateWorkSheet.Cells[Irow, Icol].PutValue(entity);
+            }
             foreach (string header in measureTypesNames)
             {
                 Icol++;
@@ -200,7 +206,14 @@ namespace Vanrise.BI.Business
             {
                 Irow++;
                 Icol = 1;
-                RateWorkSheet.Cells[Irow, Icol].PutValue(record.EntityName);
+
+                foreach (string name in record.EntityName)
+                {
+                    Icol++;
+                    RateWorkSheet.Cells[Irow, Icol].PutValue(name);
+                }
+
+              
                 foreach (Decimal value in record.Values)
                 {
                     Icol++;
@@ -209,7 +222,7 @@ namespace Vanrise.BI.Business
 
             }
 
-            for (int i = 1; i <= measureTypesNames.Length+1; i++)
+            for (int i = 2; i <= measureTypesNames.Length + entities.Count()+1; i++)
             {
                 Cell cell = RateWorkSheet.Cells.GetCell(1, i);
                 Style style = cell.GetStyle();

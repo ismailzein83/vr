@@ -142,17 +142,17 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
            dr["PortIn"] = trafficStatistic.PortIn;
            dr["DeliveredAttempts"] = trafficStatistic.DeliveredAttempts;
            dr["SuccessfulAttempts"] = trafficStatistic.SuccessfulAttempts;
-
+           dr["SumOfPGAD"] = trafficStatistic.PGAD;
                dr["DeliveredNumberOfCalls"] = trafficStatistic.DeliveredNumberOfCalls;
                dr["CeiledDuration"] = trafficStatistic.CeiledDuration;
-               dr["SumOfPGAD"] = trafficStatistic.PGAD;
+             
                dr["UtilizationInSeconds"] = trafficStatistic.Utilization;
 
        }
        DataTable GetTrafficStatsTable()
        {
            DataTable dt = new DataTable(TRAFFICSTATISTIC_TABLENAME);
-           dt.Columns.Add("ID", typeof(int));
+           dt.Columns.Add("ID", typeof(long));
            dt.Columns.Add("CustomerId", typeof(int));
            dt.Columns.Add("SupplierId", typeof(int));
            dt.Columns.Add("Attempts", typeof(int));
@@ -169,10 +169,10 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
            dt.Columns.Add("DeliveredAttempts", typeof(int));
            dt.Columns.Add("SuccessfulAttempts", typeof(int));
 
-
-           dt.Columns.Add("DeliveredNumberOfCalls", typeof(int));
-           dt.Columns.Add("CeiledDuration", typeof(int));
            dt.Columns.Add("SumOfPGAD", typeof(int));
+           dt.Columns.Add("DeliveredNumberOfCalls", typeof(int));
+           dt.Columns.Add("CeiledDuration", typeof(long));
+           
            dt.Columns.Add("UtilizationInSeconds", typeof(decimal));
            return dt;
        }
@@ -199,7 +199,7 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
                              GetReaderValue<string>(reader, "PortIn"),
                              GetReaderValue<int>(reader, "SwitchID"));
                   if(!trafficStatistics.ContainsKey(key))
-                      trafficStatistics.Add(key,GetReaderValue<int>(reader,"ID"));
+                      trafficStatistics.Add(key, GetReaderValue<long>(reader, "ID"));
                }
            }, batch.BatchStart, batch.BatchEnd);
 
