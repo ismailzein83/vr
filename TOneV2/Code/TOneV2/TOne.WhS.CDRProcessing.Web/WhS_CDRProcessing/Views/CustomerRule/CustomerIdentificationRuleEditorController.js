@@ -84,7 +84,7 @@
         function load() {
             $scope.scopeModal.isLoading = true;
             if (isEditMode) {
-                $scope.title = UtilsService.buildTitleForUpdateEditor("Customer Rule");
+                $scope.title = UtilsService.buildTitleForUpdateEditor("Customer Identification Rule");
                 getCustomerRule().then(function () {
                     loadAllControls()
                         .finally(function () {
@@ -96,7 +96,7 @@
                 });
             }
             else {
-                $scope.title = UtilsService.buildTitleForAddEditor("Customer Rule");
+                $scope.title = UtilsService.buildTitleForAddEditor("Customer Identification Rule");
                 loadAllControls();
             }
 

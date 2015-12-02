@@ -82,7 +82,7 @@
         function load() {
             $scope.scopeModal.isLoading = true;
             if (isEditMode) {
-                $scope.title = UtilsService.buildTitleForUpdateEditor("Supplier Rule");
+                $scope.title = UtilsService.buildTitleForUpdateEditor("Supplier Identification Rule");
                 getSupplierRule().then(function () {
                     loadAllControls()
                         .finally(function () {
@@ -94,7 +94,7 @@
                 });
             }
             else {
-                $scope.title = UtilsService.buildTitleForAddEditor("Supplier Rule");
+                $scope.title = UtilsService.buildTitleForAddEditor("Supplier Identification Rule");
                 loadAllControls();
             }
 

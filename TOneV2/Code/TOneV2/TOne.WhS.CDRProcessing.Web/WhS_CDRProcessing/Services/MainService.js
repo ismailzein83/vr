@@ -43,7 +43,7 @@ app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationS
                 if (response) {
                     return WhS_CDRProcessing_CustomerIdentificationRuleAPIService.DeleteRule(customerRuleObj.Entity.RuleId)
                         .then(function (deletionResponse) {
-                            VRNotificationService.notifyOnItemDeleted("Customer Rule", deletionResponse);
+                            VRNotificationService.notifyOnItemDeleted("Customer Identification Rule", deletionResponse);
                             onCustomerIdentificationRuleObjDeleted(customerRuleObj);
                         })
                         .catch(function (error) {
@@ -81,7 +81,7 @@ app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationS
                 if (response) {
                     return WhS_CDRProcessing_SupplierIdentificationRuleAPIService.DeleteRule(supplierRuleObj.Entity.RuleId)
                         .then(function (deletionResponse) {
-                            VRNotificationService.notifyOnItemDeleted("Supplier Rule", deletionResponse);
+                            VRNotificationService.notifyOnItemDeleted("Supplier Identification Rule", deletionResponse);
                             onSupplierIdentificationRuleDeleted(supplierRuleObj);
                         })
                         .catch(function (error) {

@@ -62,7 +62,7 @@
 
 
             if (isEditMode) {
-                $scope.title = UtilsService.buildTitleForUpdateEditor("Supplier Rule");
+                $scope.title = UtilsService.buildTitleForUpdateEditor("Normalization Rule");
                 getNormalizationRule().then(function () {
                     loadAllControls()
                         .finally(function () {
@@ -74,7 +74,7 @@
                 });
             }
             else {
-                $scope.title = UtilsService.buildTitleForAddEditor("Supplier Rule");
+                $scope.title = UtilsService.buildTitleForAddEditor("Normalization Rule");
                 loadAllControls();
             }     
                           

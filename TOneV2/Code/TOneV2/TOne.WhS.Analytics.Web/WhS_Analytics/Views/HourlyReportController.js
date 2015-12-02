@@ -8,14 +8,12 @@
         var gridApi;
         var filterDirectiveAPI;
         var filterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-
         var measures = [];
         var periods = [];
         var dimensions = [];
+
         defineScope();
         load();
-       
 
         function defineScope() {
             $scope.onReadyGeneralChart = function (api) {
@@ -77,7 +75,6 @@
 
         }
 
-
         function loadFilterSection() {
             var loadFilterPromiseDeferred = UtilsService.createPromiseDeferred();
             filterReadyPromiseDeferred.promise.then(function () {
@@ -87,13 +84,12 @@
             return loadFilterPromiseDeferred.promise;
         }
 
-
         function loadDimensions() {
            
             dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.Customer.value);
             dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.Supplier.value);
             dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.Zone.value);
-            dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.CodeGroup.value);
+            dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.Country.value);
             dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.Switch.value);
            // dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.GateWayIn.value);
            // dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.GateWayOut.value);
@@ -119,13 +115,13 @@
             payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.Customer.value);
             payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.Supplier.value);
             payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.Zone.value);
-            payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.CodeGroup.value);
+            payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.Country.value);
             payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.Switch.value);
             payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.PortIn.value);
             payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.PortOut.value);
-            payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.ASR.value);
-            payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.ACD.value);
-            payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.Attempts.value);
+          //  payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.ASR.value);
+           // payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.ACD.value);
+          //  payload.filters.push(WhS_Analytics_GenericAnalyticDimensionEnum.Attempts.value);
             return payload;
         }
 
@@ -133,10 +129,10 @@
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.DeliveredAttempts.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.SuccessfulAttempts.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.ASR.value);
-           // measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.NER.value);
+            measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.NER.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value);
-           // measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.GrayArea.value);
-           // measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.GreenArea.value);
+            measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.GrayArea.value);
+            measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.GreenArea.value);
             //measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.CapacityUsageDetails.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.FailedAttempts.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.DurationsInSeconds.value);

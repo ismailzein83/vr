@@ -88,13 +88,13 @@ namespace TOne.WhS.Analytics.Data.SQL
                     ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
 
-            s_AllDimensionsConfig.Add(AnalyticDimension.CodeGroup,
+            s_AllDimensionsConfig.Add(AnalyticDimension.Country,
                 new AnalyticDimensionConfig
                 {
-                    IdColumn = "ourz.CodeGroup",
+                    IdColumn = "ourz.CountryID",
                     NameColumn = "c.Name",
-                    JoinStatements = new List<string>() { @" LEFT JOIN  TOneWhS_BE.SaleZone ourz ON ts.SaleZoneID = ourz.ID LEFT JOIN CodeGroup c ON ourz.CodeGroup = c.Code" },
-                    GroupByStatements = new List<string>() { " ourz.CodeGroup,  c.Name" },
+                    JoinStatements = new List<string>() { @" LEFT JOIN  TOneWhS_BE.SaleZone ourz ON ts.SaleZoneID = ourz.ID LEFT JOIN TOneWhS_Stats.Country c ON ourz.CountryID = c.ID" },
+                    GroupByStatements = new List<string>() { " ourz.CountryID,  c.Name" },
                     ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
 
