@@ -10,7 +10,7 @@ using Vanrise.Web.Base;
 namespace QM.CLITester.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "TestCall")]
-    [JSONWithTypeAttribute]
+   
     public class TestCallController : BaseAPIController
     {
         [HttpGet]
@@ -27,6 +27,22 @@ namespace QM.CLITester.Web.Controllers
         {
             TestCallManager manager = new TestCallManager();
             return manager.GetCachedBreakouts(selectedCountry);
+        }
+
+        [HttpGet]
+        [Route("GetSuppliers")]
+        public IEnumerable<Supplier> GetSuppliers()
+        {
+            TestCallManager manager = new TestCallManager();
+            return manager.GetCachedSuppliers();
+        }
+
+        [HttpGet]
+        [Route("GetTestCall")]
+        public TestCallResult GetTestCall(string selectedCountry, string selectedBreakout, string selectedSupplier)
+        {
+            TestCallManager manager = new TestCallManager();
+            return manager.TestCall(selectedCountry, selectedBreakout, selectedSupplier);
         }
     }
 }

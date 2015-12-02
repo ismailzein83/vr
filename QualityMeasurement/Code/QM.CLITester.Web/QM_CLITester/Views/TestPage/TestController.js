@@ -14,12 +14,14 @@
             $scope.addNewTestCall = addNewTestCall;
             $scope.countries = [];
             $scope.breakouts = [];
+            $scope.suppliers = [];
             $scope.isGettingData = false;
             $scope.selectedCountry;
         }
 
         function load() {
             getCountriesInfo();
+            getSuppliersInfo();
         }
 
         function getCountriesInfo() {
@@ -30,6 +32,16 @@
                 });
             });
         }
+
+        function getSuppliersInfo() {
+            return QM_CLITester_TestCall.GetSuppliers().then(function (response) {
+                $scope.suppliers.length = 0;
+                angular.forEach(response, function (itm) {
+                    $scope.suppliers.push(itm);
+                });
+            });
+        }
+
         $scope.previewBreakouts = function () {
             if ($scope.selectedCountry != undefined) {
                 $scope.isGettingData = true;
@@ -43,13 +55,19 @@
                 angular.forEach(response, function (itm) {
                     $scope.breakouts.push(itm);
                 });
-
-                console.log($scope.breakouts);
             });
         }
 
         function addNewTestCall() {
-            QM_CLITester_TestCall.GetCountries();
+            return QM_CLITester_TestCall.GetTestCall($scope.selectedCountry.Id, $scope.selectedBreakout.Id, $scope.selectedSupplier.Id).then(function (response) {
+                console.log(response);
+                //angular.forEach(response, function (itm) {
+
+
+                //});
+
+            });
+
         }
 
     }

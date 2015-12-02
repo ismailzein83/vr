@@ -99,6 +99,7 @@
     <Reference Include="System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -219,6 +220,10 @@
     <ProjectReference Include="..\QM.CLITester.Entities\QM.CLITester.Entities.csproj">
       <Project>{839f51fe-ebe9-469b-aac3-580910943c87}</Project>
       <Name>QM.CLITester.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QM.CLITester.Web\QM.CLITester.Web.csproj">
+      <Project>{3f030941-26b2-4f82-8265-f67b4d89232f}</Project>
+      <Name>QM.CLITester.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

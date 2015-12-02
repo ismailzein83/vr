@@ -3,6 +3,13 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
+
+                <vr-columns colnum="2">
+                    <vr-select hideremoveicon datatextfield="ShortName" isrequired datavaluefield="Id" label="Suppliers" datasource="suppliers"
+                               selectedvalues="selectedSupplier">
+                    </vr-select>
+                </vr-columns>
+
                 <vr-columns colnum="2">
                     <vr-select hideremoveicon datatextfield="Name" isrequired datavaluefield="Id" label="Countries" datasource="countries"
                                onselectionchanged="previewBreakouts" selectedvalues="selectedCountry">
@@ -20,7 +27,7 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Add" data-onclick="addNewTestCall"></vr-button>
+                    <vr-button type="Add" formname="formFilter" data-onclick="addNewTestCall"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
