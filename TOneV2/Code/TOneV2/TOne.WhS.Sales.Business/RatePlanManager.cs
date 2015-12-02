@@ -167,8 +167,8 @@ namespace TOne.WhS.Sales.Business
             if (zoneRoutingProduct != null)
             {
                 zoneItem.CurrentRoutingProductId = zoneRoutingProduct.RoutingProductId;
-                zoneItem.CurrentRoutingProductName = (zoneItem.CurrentRoutingProductId != null) ?
-                    new RoutingProductManager().GetRoutingProduct((int)zoneItem.CurrentRoutingProductId).Name : null;
+                zoneItem.CurrentRoutingProductName = zoneItem.CurrentRoutingProductId != null ? GetRoutingProductName((int)zoneItem.CurrentRoutingProductId) : null;
+
                 zoneItem.CurrentRoutingProductBED = zoneRoutingProduct.BED;
                 zoneItem.CurrentRoutingProductEED = zoneRoutingProduct.EED;
 
@@ -192,13 +192,13 @@ namespace TOne.WhS.Sales.Business
             if (zoneItem.NewRoutingProductId != null)
             {
                 zoneItem.EffectiveRoutingProductId = (int)zoneItem.NewRoutingProductId;
-                zoneItem.EffectiveRoutingProductName = new RoutingProductManager().GetRoutingProduct(zoneItem.EffectiveRoutingProductId).Name;
+                zoneItem.EffectiveRoutingProductName = GetRoutingProductName(zoneItem.EffectiveRoutingProductId);
             }
             else {
                 if (newDefaultRoutingProduct != null)
                 {
                     zoneItem.EffectiveRoutingProductId = newDefaultRoutingProduct.DefaultRoutingProductId;
-                    zoneItem.EffectiveRoutingProductName = new RoutingProductManager().GetRoutingProduct(newDefaultRoutingProduct.DefaultRoutingProductId).Name;
+                    zoneItem.EffectiveRoutingProductName = GetRoutingProductName(newDefaultRoutingProduct.DefaultRoutingProductId);
                 }
                 else if (zoneItem.CurrentRoutingProductId != null)
                 {
@@ -220,16 +220,34 @@ namespace TOne.WhS.Sales.Business
                 {
                     IEnumerable<RPRouteOption> routeOptions = new List<RPRouteOption>();
                     rpRoute.RPOptionsByPolicy.TryGetValue(1, out routeOptions);
-                    zoneItem.RouteOptions = routeOptions.MapRecords(item => new RPRouteOptionDetail() { Entity = new RPRouteOption() { SupplierId = item.SupplierId, SupplierRate = item.SupplierRate, Percentage = item.Percentage }, SupplierName = new CarrierAccountManager().GetCarrierAccount(item.SupplierId).Name });
+                    zoneItem.RouteOptions = routeOptions.MapRecords(item => new RPRouteOptionDetail() { Entity = new RPRouteOption() { SupplierId = item.SupplierId, SupplierRate = item.SupplierRate, Percentage = item.Percentage }, SupplierName = GetCarrierAccountName(item.SupplierId) });
                 }
             }
         }
 
+        //TO-DO: Handle the case when a customer isn't associated with a selling product
         private int GetSellingProductId(int customerId)
         {
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
             CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, DateTime.Now, false);
-            return customerSellingProduct.SellingProductId;
+            
+            return customerSellingProduct != null ? customerSellingProduct.SellingProductId : -1;
+        }
+
+        private string GetRoutingProductName(int routingProductId)
+        {
+            RoutingProductManager routingProductManager = new RoutingProductManager();
+            RoutingProduct routingProduct = routingProductManager.GetRoutingProduct(routingProductId);
+            
+            return routingProduct != null ? routingProduct.Name : null;
+        }
+
+        private string GetCarrierAccountName(int carrierAccountId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            CarrierAccount carrierAccount = carrierAccountManager.GetCarrierAccount(carrierAccountId);
+
+            return carrierAccount != null ? carrierAccount.Name : null;
         }
 
         #region Set Zone Item Changes

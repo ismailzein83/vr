@@ -78,16 +78,15 @@ function (UtilsService, VRUIUtilsService) {
                 return selectorLoadDeferred.promise;
             };
 
-            api.applyChanges = function (changes) {
-                changes.DefaultChanges = {};
-                setNewDefaultRoutingProduct(changes);
-                setDefaultRoutingProductChange(changes);
+            api.applyChanges = function (defaultChanges) {
+                setNewDefaultRoutingProduct(defaultChanges);
+                setDefaultRoutingProductChange(defaultChanges);
 
-                function setNewDefaultRoutingProduct(changes) {
+                function setNewDefaultRoutingProduct(defaultChanges) {
                     var selectedId = selectorAPI.getSelectedIds();
                     
                     if (selectedId != null) {
-                        changes.DefaultChanges.NewDefaultRoutingProduct = {
+                        defaultChanges.NewDefaultRoutingProduct = {
                             DefaultRoutingProductId: selectedId,
                             BED: new Date(),
                             EED: null
@@ -95,8 +94,8 @@ function (UtilsService, VRUIUtilsService) {
                     }
                 }
 
-                function setDefaultRoutingProductChange(changes) {
-                    changes.DefaultChanges.DefaultRoutingProductChange = null;
+                function setDefaultRoutingProductChange(defaultChanges) {
+                    defaultChanges.DefaultRoutingProductChange = null;
                 }
             };
 

@@ -59,7 +59,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 return loadZoneItems();
             };
 
-            api.applyChanges = function (changes) {
+            api.getZoneChanges = function () {
                 var zoneChanges = [];
 
                 for (var i = 0; i < $scope.zoneItems.length; i++) {
@@ -69,7 +69,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         applyChanges(zoneChanges, item);
                 }
 
-                changes.ZoneChanges = zoneChanges.length > 0 ? zoneChanges : null;
+                return zoneChanges.length > 0 ? zoneChanges : null;
             };
 
             return api;

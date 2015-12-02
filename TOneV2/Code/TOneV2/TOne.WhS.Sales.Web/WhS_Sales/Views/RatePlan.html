@@ -12,6 +12,7 @@
                                datavaluefield="value"
                                datatextfield="description"
                                entityname="Owner Type"
+                               isrequired="true"
                                hideremoveicon>
                     </vr-select>
                 </vr-columns>
@@ -19,6 +20,7 @@
                     <vr-whs-be-sellingproduct-selector on-ready="onSellingProductSelectorReady"
                                                        selectedvalues="selectedSellingProduct"
                                                        onselectionchanged="onSellingProductChanged"
+                                                       isrequired="showSellingProductSelector"
                                                        hideremoveicon>
                     </vr-whs-be-sellingproduct-selector>
                 </vr-columns>
@@ -26,6 +28,7 @@
                     <vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountSelectorReady"
                                                        selectedvalues="selectedCustomer"
                                                        onselectionchanged="onCarrierAccountChanged"
+                                                       isrequired="showCarrierAccountSelector"
                                                        getcustomers
                                                        hideremoveicon>
                     </vr-whs-be-carrieraccount-selector>
@@ -49,8 +52,8 @@
             </vr-columns>
         </vr-row>
 
-        <vr-row>
-            <vr-columns width="fullrow" ng-show="showZoneLetters">
+        <vr-row vr-loader="isLoadingZoneLetters" ng-show="showZoneLetters">
+            <vr-columns width="fullrow">
                 <vr-choices selectedindex="selectedZoneLetterIndex"
                             onselectionchanged="onZoneLetterSelectionChanged()">
                     <vr-choice ng-repeat="letter in zoneLetters">{{ letter | uppercase }}</vr-choice>

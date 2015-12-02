@@ -34,7 +34,7 @@
         function defineScope() {
             $scope.ownerTypes = UtilsService.getArrayEnum(WhS_Sales_SalePriceListOwnerTypeEnum);
             $scope.selectedOwnerType = $scope.ownerTypes[0];
-            $scope.showSellingProductSelector = false;
+            $scope.showSellingProductSelector = true;
             $scope.showCarrierAccountSelector = false;
 
             $scope.onOwnerTypeChanged = function () {
@@ -151,15 +151,19 @@
         function loadRatePlan() {
             var promises = [];
 
+            var isLoadingZoneLetters = true;
             var zoneLettersGetPromise = getZoneLetters();
             promises.push(zoneLettersGetPromise);
 
             zoneLettersGetPromise.then(function () {
                 if ($scope.zoneLetters.length > 0) {
-                    showRatePlan(true);
                     var gridLoadPromise = loadGrid();
                     promises.push(gridLoadPromise);
                 }
+            });
+
+            zoneLettersGetPromise.finally(function () {
+                isLoadingZoneLetters = false;
             });
 
             var defaultItemGetPromise = getDefaultItem();
@@ -176,7 +180,11 @@
                 }
             });
 
-            return UtilsService.waitMultiplePromises(promises);
+            return UtilsService.waitMultiplePromises(promises).then(function () {
+                showRatePlan(true);
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
 
             function getZoneLetters() {
                 return WhS_Sales_RatePlanAPIService.GetZoneLetters($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
@@ -193,10 +201,6 @@
             function getDefaultItem() {
                 return WhS_Sales_RatePlanAPIService.GetDefaultItem($scope.selectedOwnerType.value, getOwnerId());
             }
-
-            function defineDefaultItemTabs() {
-
-            }
         }
 
         function loadGrid() {
@@ -204,6 +208,10 @@
 
             gridReadyDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(gridAPI, getGridQuery(), gridLoadDeferred);
+            });
+
+            gridLoadDeferred.promise.catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
             });
 
             return gridLoadDeferred.promise;
@@ -223,27 +231,38 @@
             return WhS_Sales_RatePlanAPIService.SaveChanges(input).then(function (response) {
                 if (shouldLoadGrid)
                     loadGrid();
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
             });
             
             function getSaveChangesInput() {
-                var changes = {};
+                var changes = null;
 
-                if (defaultItem.IsDirty) {
-                    for (var i = 0; i < $scope.defaultItemTabs.length; i++) {
-                        var item = $scope.defaultItemTabs[i];
-
-                        if (item.directiveAPI)
-                            item.directiveAPI.applyChanges(changes);
-                    }
-                }
-
-                gridAPI.applyChanges(changes);
+                var defaultChanges = getDefaultChanges();
+                var zoneChanges = gridAPI.getZoneChanges();
 
                 return {
                     OwnerType: $scope.selectedOwnerType.value,
                     OwnerId: getOwnerId(),
-                    NewChanges: (changes.DefaultChanges != null || changes.ZoneChanges != null) ? changes : null
+                    NewChanges: (defaultChanges != null || zoneChanges != null) ? { DefaultChanges: defaultChanges, ZoneChanges: zoneChanges } : null
                 };
+
+                function getDefaultChanges() {
+                    var defaultChanges = null;
+
+                    if (defaultItem.IsDirty) {
+                        defaultChanges = {};
+
+                        for (var i = 0; i < $scope.defaultItemTabs.length; i++) {
+                            var item = $scope.defaultItemTabs[i];
+
+                            if (item.directiveAPI)
+                                item.directiveAPI.applyChanges(defaultChanges);
+                        }
+                    }
+
+                    return defaultChanges;
+                }
             }
         }
 
