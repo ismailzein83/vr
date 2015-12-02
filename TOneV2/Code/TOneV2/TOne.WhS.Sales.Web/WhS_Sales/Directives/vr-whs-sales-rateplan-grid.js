@@ -23,6 +23,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         var gridAPI;
         var gridQuery;
         var gridDrillDownTabs;
+        var ownerType;
+        var ownerId;
 
         function initCtrl() {
             $scope.zoneItems = [];
@@ -47,6 +49,18 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 loadDirective: function (zoneRoutingProductDirectiveAPI, zoneItem) {
                     return zoneRoutingProductDirectiveAPI.load(zoneItem);
                 }
+            }, {
+                title: "Rates",
+                directive: "vr-whs-be-salerate-grid",
+                loadDirective: function (saleRateGridAPI, zoneItem) {
+                    var query = {
+                        OwnerType: ownerType,
+                        OwnerId: ownerId,
+                        ZonesIds: [zoneItem.ZoneId],
+                        //EffectiveOn: new Date()
+                    };
+                    return saleRateGridAPI.loadGrid(query);
+                }
             }];
         }
 
@@ -54,6 +68,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             var api = {};
 
             api.load = function (query) {
+                ownerType = query.OwnerType;
+                ownerId = query.OwnerId;
                 gridQuery = query;
                 gridAPI.clearDataAndContinuePaging();
                 return loadZoneItems();
