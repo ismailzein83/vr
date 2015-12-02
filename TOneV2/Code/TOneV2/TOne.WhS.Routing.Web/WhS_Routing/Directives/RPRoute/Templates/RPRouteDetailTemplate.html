@@ -1,8 +1,6 @@
 ﻿<vr-row>
     <vr-columns width="1/4row">
-        <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" text="None" onselectitem="onPolicySelectItem"
-                   label="Policy Type" datasource="ctrl.policyOptions" selectedvalues="ctrl.selectedPolicyOption">
-        </vr-select>
+        <vr-whs-routing-rproutepolicy-selector on-ready="onRPRoutePolicySelectorReady" onselectitem="onPolicySelectItem" />
     </vr-columns>
 </vr-row>
 <vr-row>

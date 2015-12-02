@@ -70,18 +70,20 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                         return null;
                     return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfo(UtilsService.serializetoJson(filter), searchValue);
                 }
-
-                defineAPI();
             }
+
             ctrl.SelectorReady = function (api) {
                 selectorApi = api;
+                defineAPI();
             }
+
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    if (selectorApi != undefined)
-                        selectorApi.clearDataSource();
+
+                    selectorApi.clearDataSource();
+
                     var selectedIds;
                     if (payload != undefined) {
                         filter = payload.filter;

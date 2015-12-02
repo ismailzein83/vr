@@ -10,6 +10,9 @@
         var routingDatabaseSelectorAPI;
         var routingDatabaseReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var rpRoutePolicyAPI;
+        var rpRoutePolicyReadyPromiseDeffered = UtilsService.createPromiseDeferred();
+
         var routingProductSelectorAPI;
         var routingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -23,10 +26,17 @@
 
         function defineScope() {
 
+            $scope.numberOfOptions = 3;
+
             $scope.onRoutingDatabaseSelectorReady = function (api) {
                 routingDatabaseSelectorAPI = api;
                 routingDatabaseReadyPromiseDeferred.resolve();
             }
+
+            $scope.onRPRoutePolicySelectorReady = function (api) {
+                rpRoutePolicyAPI = api;
+                rpRoutePolicyReadyPromiseDeffered.resolve();
+            };
 
             $scope.onRoutingProductSelectorReady = function (api) {
                 routingProductSelectorAPI = api;
@@ -67,6 +77,8 @@
 
                 var query = {
                     RoutingDatabaseId: routingDatabaseSelectorAPI.getSelectedIds(),
+                    PolicyConfigId: rpRoutePolicyAPI.getSelectedIds(),
+                    NumberOfOptions: $scope.numberOfOptions,
                     RoutingProductIds: routingProductSelectorAPI.getSelectedIds(),
                     SaleZoneIds: saleZoneSelectorAPI.getSelectedIds()
                 };
@@ -77,7 +89,7 @@
         function load() {
             $scope.isLoadingFilterData = true;
 
-            return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadRoutingProductSelector, loadSellingNumberPlanSection]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadRPRoutePolicySelector, loadRoutingProductSelector, loadSellingNumberPlanSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterData = false;
@@ -92,6 +104,17 @@
             });
 
             return loadRoutingDatabasePromiseDeferred.promise;
+        }
+
+        function loadRPRoutePolicySelector()
+        {
+            var loadRPRoutePolicyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            rpRoutePolicyReadyPromiseDeffered.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(rpRoutePolicyAPI, undefined, loadRPRoutePolicyPromiseDeferred);
+            });
+
+            return loadRPRoutePolicyPromiseDeferred.promise;
         }
 
         function loadRoutingProductSelector() {

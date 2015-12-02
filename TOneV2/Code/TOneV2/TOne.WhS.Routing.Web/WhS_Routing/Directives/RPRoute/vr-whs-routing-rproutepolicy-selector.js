@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDatabaseAPIService', 'WhS_Routing_RoutingProcessTypeEnum', 'UtilsService', 'VRUIUtilsService',
-    function (WhS_Routing_RoutingDatabaseAPIService, WhS_Routing_RoutingProcessTypeEnum, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsRoutingRproutepolicySelector', ['WhS_Routing_RPRouteAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (WhS_Routing_RPRouteAPIService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -8,11 +8,10 @@ app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDataba
                 onReady: '=',
                 ismultipleselection: "@",
                 onselectionchanged: '=',
+                onselectitem: '=',
                 isrequired: "@",
                 selectedvalues: '=',
-                hideremoveicon: "@",
-                getcustomerroutes: "@",
-                getroutingproductroutes: "@"
+                hideremoveicon: "@"
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -23,7 +22,7 @@ app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDataba
                     ctrl.selectedvalues = [];
 
                 ctrl.datasource = [];
-                var ctor = new routingDatabaseCtor(ctrl, $scope, $attrs);
+                var ctor = new rpRoutePolicyCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
 
             },
@@ -44,9 +43,9 @@ app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDataba
 
         function getTemplate(attrs) {
             var multipleselection = "";
-            var label = "Database";
+            var label = "Policy";
             if (attrs.ismultipleselection != undefined) {
-                label = "Databases";
+                label = "Policies";
                 multipleselection = "ismultipleselection";
             }
             var required = "";
@@ -58,12 +57,12 @@ app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDataba
                 hideremoveicon = "hideremoveicon";
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Title" datavaluefield="RoutingDatabaseId" '
-            + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" ' + hideremoveicon + '></vr-select>'
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="TemplateConfigID" '
+            + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectitem="ctrl.onselectitem"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" ' + hideremoveicon + '></vr-select>'
                + '</div>'
         }
 
-        function routingDatabaseCtor(ctrl, $scope, $attrs) {
+        function rpRoutePolicyCtor(ctrl, $scope, $attrs) {
 
             function initializeController() {
                 defineAPI();
@@ -73,35 +72,29 @@ app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDataba
                 var api = {};
 
                 api.load = function (payload) {
-                    var filter;
+                    //var filter;
                     var selectedIds;
                     if (payload != undefined) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
                     }
 
-                    if (filter == undefined)
-                        filter = {};
+                    //var serializedFilter = {};
+                    //if (filter != undefined)
+                    //    serializedFilter = UtilsService.serializetoJson(filter);
 
-                    filter.ProcessType = $attrs.getcustomerroutes != undefined ?
-                        WhS_Routing_RoutingProcessTypeEnum.CustomerRoute.value : WhS_Routing_RoutingProcessTypeEnum.RoutingProductRoute.value;
-
-                    var serializedFilter = {};
-                    if (filter != undefined)
-                        serializedFilter = UtilsService.serializetoJson(filter);
-
-                    return WhS_Routing_RoutingDatabaseAPIService.GetRoutingDatabaseInfo(serializedFilter).then(function (response) {
+                    return WhS_Routing_RPRouteAPIService.GetPoliciesOptionTemplates().then(function (response) {
                         angular.forEach(response, function (itm) {
                             ctrl.datasource.push(itm);
                         });
                         if (selectedIds != undefined)
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'RoutingDatabaseId', $attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'TemplateConfigID', $attrs, ctrl);
 
                     });
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('RoutingDatabaseId', $attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('TemplateConfigID', $attrs, ctrl);
                 }
 
                 if (ctrl.onReady != null)

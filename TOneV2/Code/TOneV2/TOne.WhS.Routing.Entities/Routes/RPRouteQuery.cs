@@ -10,6 +10,10 @@ namespace TOne.WhS.Routing.Entities
     {
         public int RoutingDatabaseId { get; set; }
 
+        public int PolicyConfigId { get; set; }
+
+        public int NumberOfOptions { get; set; }
+
         public List<int> RoutingProductIds { get; set; }
 
         public List<int> SaleZoneIds { get; set; }
