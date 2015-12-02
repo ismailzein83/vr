@@ -74,6 +74,7 @@
     <Compile Include="ISupplierPriceListDataManager.cs" />
     <Compile Include="ISupplierRateDataManager.cs" />
     <Compile Include="ISupplierZoneDataManager.cs" />
+    <Compile Include="ISwitchDataManager.cs" />
     <Compile Include="IZoneServiceConfigDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

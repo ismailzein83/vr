@@ -1,0 +1,13 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="switches"
+                     on-ready="onGridReady"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="gridMenuActions"
+                     idfield="Entity.SwitchId">
+            <vr-datagridcolumn headertext="'ID'" field="'Entity.SwitchId'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Switch Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

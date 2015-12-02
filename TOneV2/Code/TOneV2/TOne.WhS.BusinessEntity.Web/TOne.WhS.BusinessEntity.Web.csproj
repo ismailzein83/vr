@@ -158,6 +158,7 @@
     <Compile Include="Controllers\SupplierCodeController.cs" />
     <Compile Include="Controllers\SupplierRateController.cs" />
     <Compile Include="Controllers\SupplierZoneController.cs" />
+    <Compile Include="Controllers\SwitchController.cs" />
     <Compile Include="Controllers\ZoneServiceConfigController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -265,14 +266,19 @@
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\Templates\SupplierZoneGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\vr-whs-be-supplierzone-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\vr-whs-be-supplierzone-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\Switch\Templates\SwitchGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Switch\vr-whs-be-switch-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\Switch\vr-whs-be-switch-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\Templates\ZoneServiceConfigGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-selector.js" />
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleCodeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierCodeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierRateAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\SwitchService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierCodeService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierRateService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierZoneService.js" />
@@ -362,6 +368,10 @@
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\Switch\SwitchEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\Switch\SwitchEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\Switch\SwitchManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\Switch\SwitchManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\ZoneServiceConfig\ZoneServiceConfigEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\ZoneServiceConfig\ZoneServiceConfigEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\ZoneServiceConfig\ZoneServiceConfigManagement.html" />
