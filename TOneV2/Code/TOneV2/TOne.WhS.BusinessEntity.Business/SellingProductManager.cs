@@ -34,6 +34,15 @@ namespace TOne.WhS.BusinessEntity.Business
             return sellingProducts.GetRecord(sellingProductId);
         }
 
+        public int? GetSellingNumberPlanId(int sellingProductId)
+        {
+            var sellingProduct = GetSellingProduct(sellingProductId);
+            if (sellingProduct == null)
+                return null;
+            else
+                return sellingProduct.SellingNumberPlanId;
+        }
+
 
         public TOne.Entities.InsertOperationOutput<SellingProductDetail> AddSellingProduct(SellingProduct sellingProduct)
         {

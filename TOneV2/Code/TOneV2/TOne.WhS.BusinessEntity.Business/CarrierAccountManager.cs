@@ -317,5 +317,14 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
+
+        public int? GetCustomerSellingNumberPlanId(int customerId)
+        {
+            var customer = GetCarrierAccount(customerId);
+            if (customer == null || customer.CustomerSettings == null)
+                return null;
+            else
+                return customer.CustomerSettings.SellingNumberPlanId;
+        }
     }
 }

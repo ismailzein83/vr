@@ -31,12 +31,57 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<RoutingProductInfo> GetRoutingProductInfo(RoutingProductInfoFilter filter)
         {
-            IEnumerable<RoutingProduct> routingProducts = GetAllRoutingProducts().Values;
+            var routingProducts = GetAllRoutingProducts();
+
+            HashSet<int> filteredRoutingProductIds = null;
+            int? excludedRoutingProductId = null;
+
+            Func<RoutingProduct, bool> filterAssignableToSaleEntity = null;
+
+            Func<RoutingProduct, bool> filterPredicate = (rp) =>
+                (
+                    (!excludedRoutingProductId.HasValue || rp.RoutingProductId != filter.ExcludedRoutingProductId.Value)
+                    &&
+                    (filteredRoutingProductIds == null || filteredRoutingProductIds.Contains(rp.RoutingProductId))
+                    &&
+                    (filterAssignableToSaleEntity == null || filterAssignableToSaleEntity(rp))
+                );
 
             if (filter != null)
-                routingProducts = routingProducts.FindAllRecords(routingProduct => filter.ExcludedRoutingProductId == null || routingProduct.RoutingProductId != filter.ExcludedRoutingProductId);
+            {
+                if (filter.AssignableToZoneId.HasValue)
+                {
+                    filteredRoutingProductIds = GetRoutingProductIdsBySaleZoneId(filter.AssignableToZoneId.Value);
+                }
+                else if (filter.AssignableToOwnerType.HasValue)
+                {
+                    if (!filter.AssignableToOwnerId.HasValue)
+                        return null;
+                    int? sellingNumberPlanId = null;
+                    switch (filter.AssignableToOwnerType.Value)
+                    {
+                        case SalePriceListOwnerType.SellingProduct:
+                            SellingProductManager sellingProductManager = new SellingProductManager();
+                            sellingNumberPlanId = sellingProductManager.GetSellingNumberPlanId(filter.AssignableToOwnerId.Value);
+                            break;
+                        case SalePriceListOwnerType.Customer:
+                            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                            sellingNumberPlanId = carrierAccountManager.GetCustomerSellingNumberPlanId(filter.AssignableToOwnerId.Value);
+                            break;
+                    }
+                    if (!sellingNumberPlanId.HasValue)
+                        return null;
+                    else
+                    {
+                        filterAssignableToSaleEntity = (rp) => (rp.SellingNumberPlanId == sellingNumberPlanId.Value && rp.Settings != null && rp.Settings.ZoneRelationType == RoutingProductZoneRelationType.AllZones);
+                    }
+                }
+                excludedRoutingProductId = filter.ExcludedRoutingProductId;
+            }
 
-            return routingProducts.MapRecords(RoutingProductInfoMapper);
+            
+
+            return routingProducts.MapRecords(RoutingProductInfoMapper, filterPredicate);
         }
 
         public TOne.Entities.InsertOperationOutput<RoutingProduct> AddRoutingProduct(RoutingProduct routingProduct)
