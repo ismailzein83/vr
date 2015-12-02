@@ -13,5 +13,7 @@ namespace TOne.WhS.Routing.Entities
         public string RoutingProductName { get; set; }
 
         public string SaleZoneName { get; set; }
+
+        public IEnumerable<RPRouteOptionDetail> RouteOptionsDetails { get; set; }
     }
 }

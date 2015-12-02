@@ -14,11 +14,4 @@ namespace TOne.WhS.Routing.Entities
 
         public Decimal? Percentage { get; set; }
     }
-
-    public class RPRouteOptionDetail
-    {
-        public RPRouteOption Entity { get; set; }
-
-        public string SupplierName { get; set; }
-    }
 }

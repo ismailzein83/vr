@@ -26,7 +26,7 @@ namespace TOne.WhS.Routing.Business
             {
                 ResultKey = rpRouteResult.ResultKey,
                 TotalCount = rpRouteResult.TotalCount,
-                Data = rpRouteResult.Data.MapRecords(RPRouteDetailMapper)
+                Data = rpRouteResult.Data.MapRecords(x => RPRouteDetailMapper(x, input.Query.PolicyConfigId, input.Query.NumberOfOptions))
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult);
@@ -173,13 +173,14 @@ namespace TOne.WhS.Routing.Business
 
         #region Private Memebers
 
-        private RPRouteDetail RPRouteDetailMapper(RPRoute rpRoute)
+        private RPRouteDetail RPRouteDetailMapper(RPRoute rpRoute, int policyConfigId, int numberOfOptions)
         {
             return new RPRouteDetail()
             {
                 Entity = rpRoute,
                 RoutingProductName = this.GetRoutingProductName(rpRoute.RoutingProductId),
-                SaleZoneName = this.GetSaleZoneName(rpRoute.SaleZoneId)
+                SaleZoneName = this.GetSaleZoneName(rpRoute.SaleZoneId),
+                RouteOptionsDetails = this.GetRouteOptionDetails(rpRoute.RPOptionsByPolicy, policyConfigId, numberOfOptions)
             };
         }
 
@@ -226,6 +227,15 @@ namespace TOne.WhS.Routing.Business
                 return supplier.Name;
 
             return "Not Found";
+        }
+
+        private IEnumerable<RPRouteOptionDetail> GetRouteOptionDetails(Dictionary<int, IEnumerable<RPRouteOption>> dicRouteOptions, int policyConfigId, int numberOfOptions)
+        {
+            if (dicRouteOptions != null && !dicRouteOptions.ContainsKey(policyConfigId))
+                return null;
+
+            IEnumerable<RPRouteOptionDetail> routeOptionDetails = dicRouteOptions[policyConfigId].MapRecords(RPRouteOptionMapper);
+            return routeOptionDetails.Take(numberOfOptions);
         }
         
 
