@@ -22,21 +22,15 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, "RPRoute", "GetPoliciesOptionTemplates"));
         }
         
-        function GetRouteOptionDetails(routingDatabaseId, policyOptionConfigId, routingProductId, saleZoneId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, "RPRoute", "GetRouteOptionDetails"),
-                {
-                    routingDatabaseId: routingDatabaseId,
-                    policyOptionConfigId: policyOptionConfigId,
-                    routingProductId: routingProductId,
-                    saleZoneId: saleZoneId
-                });
+        function GetFilteredRPRouteOptions(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, "RPRoute", "GetFilteredRPRouteOptions"), input);
         }
 
         return ({
             GetFilteredRPRoutes: GetFilteredRPRoutes,
             GetRPRouteOptionSupplier: GetRPRouteOptionSupplier,
             GetPoliciesOptionTemplates: GetPoliciesOptionTemplates,
-            GetRouteOptionDetails: GetRouteOptionDetails
+            GetFilteredRPRouteOptions: GetFilteredRPRouteOptions
         });
     }
 

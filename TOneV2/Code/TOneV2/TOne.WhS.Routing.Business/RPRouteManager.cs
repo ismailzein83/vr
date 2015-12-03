@@ -154,17 +154,17 @@ namespace TOne.WhS.Routing.Business
             };
         }
 
-        public IEnumerable<RPRouteOptionDetail> GetRouteOptionDetails(int routingDatabaseId, int policyOptionConfigId, int routingProductId, long saleZoneId)
+        public Vanrise.Entities.IDataRetrievalResult<RPRouteOptionDetail> GetFilteredRPRouteOptions(Vanrise.Entities.DataRetrievalInput<RPRouteOptionQuery> input)
         {
             IRPRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
-            manager.DatabaseId = routingDatabaseId;
+            manager.DatabaseId = input.Query.RoutingDatabaseId;
 
-            Dictionary<int, IEnumerable<RPRouteOption>> allOptions = manager.GetRouteOptions(routingProductId, saleZoneId);
-            if (allOptions == null || !allOptions.ContainsKey(policyOptionConfigId))
+            Dictionary<int, IEnumerable<RPRouteOption>> allOptions = manager.GetRouteOptions(input.Query.RoutingProductId, input.Query.SaleZoneId);
+            if (allOptions == null || !allOptions.ContainsKey(input.Query.PolicyOptionConfigId))
                 return null;
 
-            IEnumerable<RPRouteOption> routeOptionsByPolicy = allOptions[policyOptionConfigId];
-            return routeOptionsByPolicy.MapRecords(RPRouteOptionMapper);
+            IEnumerable<RPRouteOption> routeOptionsByPolicy = allOptions[input.Query.PolicyOptionConfigId];
+            return routeOptionsByPolicy.ToBigResult(input, null, RPRouteOptionMapper);
         }
 
         public IEnumerable<Vanrise.Entities.TemplateConfig> GetPoliciesOptionTemplates()

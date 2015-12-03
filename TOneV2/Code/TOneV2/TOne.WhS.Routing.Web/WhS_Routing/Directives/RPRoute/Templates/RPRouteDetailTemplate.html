@@ -5,13 +5,15 @@
 </vr-row>
 <vr-row>
     <vr-columns colnum="12" simplecol>
-        <vr-datagrid datasource="ctrl.rpRouteOptions">
+        <vr-datagrid datasource="ctrl.rpRouteOptions"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     on-ready="onGridReady"
+                     menuactions="gridMenuActions"
+                     defaultsortbyfieldname="'Entity.SupplierRate'">
             <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Supplier Rate'" field="'Entity.SupplierRate'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Percentage'" field="'Entity.Percentage'"></vr-datagridcolumn>
-            <!--<vr-datagridexpandablerow>
-                <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
-            </vr-datagridexpandablerow>-->
         </vr-datagrid>
     </vr-columns>
 </vr-row>

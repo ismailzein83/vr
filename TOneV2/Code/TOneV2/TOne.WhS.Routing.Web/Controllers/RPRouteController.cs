@@ -36,12 +36,12 @@ namespace TOne.WhS.Routing.Web.Controllers
             return manager.GetPoliciesOptionTemplates();
         }
 
-        [HttpGet]
-        [Route("GetRouteOptionDetails")]
-        public IEnumerable<RPRouteOptionDetail> GetRouteOptionDetails(int routingDatabaseId, int policyOptionConfigId, int routingProductId, long saleZoneId)
+        [HttpPost]
+        [Route("GetFilteredRPRouteOptions")]
+        public object GetFilteredRPRouteOptions(Vanrise.Entities.DataRetrievalInput<RPRouteOptionQuery> input)
         {
             RPRouteManager manager = new RPRouteManager();
-            return manager.GetRouteOptionDetails(routingDatabaseId, policyOptionConfigId, routingProductId, saleZoneId);
+            return GetWebResponse(input, manager.GetFilteredRPRouteOptions(input));
         }
     }
 }

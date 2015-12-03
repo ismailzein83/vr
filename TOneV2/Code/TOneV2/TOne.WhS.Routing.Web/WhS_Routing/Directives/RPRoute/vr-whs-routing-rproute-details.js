@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRouteAPIService', 'VRUIUtilsService',
-    function (UtilsService, WhS_Routing_RPRouteAPIService, VRUIUtilsService) {
+app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRouteAPIService', 'WhS_Routing_RPRouteService', 'VRUIUtilsService',
+    function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -30,6 +30,7 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
         };
 
         function rpRouteDetailsCtor(ctrl, $scope) {
+            var gridAPI;
             var rpRouteDetail;
             var routingDatabaseId;
 
@@ -44,16 +45,34 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                     rpRoutePolicyReadyPromiseDeffered.resolve();
                 };
 
+                $scope.onGridReady = function (api) {
+                    gridAPI = api;
+                };
+
+                $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                    return WhS_Routing_RPRouteAPIService.GetFilteredRPRouteOptions(dataRetrievalInput).then(function (response) {
+                        onResponseReady(response);
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });
+                };
+
                 $scope.onPolicySelectItem = function (selectedItem) {
                     if (rpRouteDetail == undefined)
                         return;
                     
-                    WhS_Routing_RPRouteAPIService.GetRouteOptionDetails(routingDatabaseId, selectedItem.TemplateConfigID, rpRouteDetail.RoutingProductId, rpRouteDetail.SaleZoneId).then(function (response) {
-                        angular.forEach(response, function (item) {
-                            ctrl.rpRouteOptions.push(item);
-                        });
-                    });
+                    var query = {
+                        RoutingDatabaseId: routingDatabaseId,
+                        PolicyOptionConfigId: selectedItem.TemplateConfigID,
+                        RoutingProductId: rpRouteDetail.RoutingProductId,
+                        SaleZoneId: rpRouteDetail.SaleZoneId
+                    };
+
+                    if (gridAPI != undefined)
+                        return gridAPI.retrieveData(query);
                 };
+
+                defineMenuActions();
 
                 defineAPI();
             }
@@ -79,6 +98,19 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function defineMenuActions() {
+                $scope.gridMenuActions = [{
+                    name: "More Details",
+                    clicked: openRouteOptionSupplier,
+                }
+                ];
+            }
+
+            function openRouteOptionSupplier(dataItem)
+            {
+                WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, rpRouteDetail.RoutingProductId, rpRouteDetail.SaleZoneId, dataItem.Entity.SupplierId, dataItem.SupplierName);
             }
 
             this.initializeController = initializeController;
