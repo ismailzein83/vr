@@ -48,7 +48,14 @@
   <ItemGroup>
     <Compile Include="BEDataManagerFactory.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="ISupplierDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QM.BusinessEntity.Entities\QM.BusinessEntity.Entities.csproj">
+      <Project>{b610fb7a-8278-4c68-bf4f-09c94bc5a8d0}</Project>
+      <Name>QM.BusinessEntity.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

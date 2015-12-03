@@ -8,6 +8,11 @@ namespace QM.BusinessEntity.Entities
 {
     public class SupplierSettings
     {
-        public Dictionary<string, Object> ExtendedSettings { get; set; }
+        public Dictionary<string, ExtendedSupplierSetting> ExtendedSettings { get; set; }
+    }
+
+    public abstract class ExtendedSupplierSetting
+    {
+        public abstract void Apply(Supplier supplier);
     }
 }

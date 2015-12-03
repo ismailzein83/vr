@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Xml;
 using QM.CLITester.Data;
 using QM.CLITester.Entities;
-using QM.BusinessEntity.Data;
 
 namespace QM.CLITester.Business
 {

@@ -50,10 +50,6 @@
     <Compile Include="TestCallManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\QM.BusinessEntity.Data\QM.BusinessEntity.Data.csproj">
-      <Project>{f088847e-2bcd-446a-b51a-3dbaaf7ac835}</Project>
-      <Name>QM.BusinessEntity.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\QM.CLITester.Data\QM.CLITester.Data.csproj">
       <Project>{c4b98a4d-00c9-4df6-87d0-416d4f1e5491}</Project>
       <Name>QM.CLITester.Data</Name>

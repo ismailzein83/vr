@@ -30,13 +30,6 @@ namespace QM.BusinessEntity.Business
         IEnumerable<T> GetChangedItems(ref object updatedHandle);
     }
 
-    public interface IChangedSourceZoneReader
-    {
-        bool UseSourceZoneId { get; }
-
-        IEnumerable<SourceZone> GetChangedZones(ref object updatedHandle);
-    }
-
     public abstract class SourceItemSynchronizer<TSourceItem, TItem, TSourceItemReader>
         where TSourceItem : ISourceItem
         where TItem : IItem
@@ -93,11 +86,11 @@ namespace QM.BusinessEntity.Business
                 }
                 UpdateItems(itemsToUpdate);
                 AddItems(itemsToAdd);
-                UpdateZoneUpdateHandle(itemUpdateHandle);
+                UpdateItemUpdateHandle(itemUpdateHandle);
             }
         }
 
-        private void UpdateZoneUpdateHandle(object itemUpdateHandle)
+        private void UpdateItemUpdateHandle(object itemUpdateHandle)
         {
             throw new NotImplementedException();
         }

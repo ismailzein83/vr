@@ -28,7 +28,7 @@ namespace QM.BusinessEntity.Entities
 
         public DateTime? EndEffectiveDate { get; set; }
 
-        public long ItemId
+        long IItem.ItemId
         {
             get
             {
