@@ -35,7 +35,7 @@ namespace TOne.WhS.Routing.Business
         public IEnumerable<RPRoute> GetRPRoutes(IEnumerable<RPZone> rpZones)
         {
             List<RPRoute> rslt = new List<RPRoute>();
-            foreach(var rpZone in rpZones)
+            foreach (var rpZone in rpZones)
             {
                 RPRoute route = new RPRoute
                 {
@@ -45,16 +45,16 @@ namespace TOne.WhS.Routing.Business
                     RPOptionsByPolicy = new Dictionary<int, IEnumerable<RPRouteOption>>()
                 };
                 var optionSupplier = new RPRouteOptionSupplier
-                    {
-                        SupplierId = 1,                        
-                        SupplierZones = new List<RPRouteOptionSupplierZone>()
-                    };
+                {
+                    SupplierId = 1,
+                    SupplierZones = new List<RPRouteOptionSupplierZone>()
+                };
                 optionSupplier.SupplierZones.Add(new RPRouteOptionSupplierZone
-                    {
-                        SupplierZoneId = 1190,
-                        SupplierCode = "444",
-                        SupplierRate = 0.2m
-                    });
+                {
+                    SupplierZoneId = 1190,
+                    SupplierCode = "444",
+                    SupplierRate = 0.2m
+                });
                 optionSupplier.SupplierZones.Add(new RPRouteOptionSupplierZone
                 {
                     SupplierZoneId = 1191,
@@ -127,10 +127,18 @@ namespace TOne.WhS.Routing.Business
             return rslt;
         }
 
+        public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones)
+        {
+            IRPRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
+            manager.DatabaseId = routingDatabaseId;
+
+            IEnumerable<RPRoute> rpRoutes = manager.GetRPRoutes(rpZones);
+            return rpRoutes.MapRecords(x => RPRouteDetailMapper(x, policyConfigId, numberOfOptions));
+        }
+
         public RPRoute GetRPRoute(RPZone rpZone)
         {
-            var rpRoutes = GetRPRoutes(new List<RPZone>() { rpZone });
-            return (rpRoutes != null && rpRoutes.Count() > 0) ? rpRoutes.ElementAt(0) : null;
+            throw new NotImplementedException();
         }
 
         public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(int routingDatabaseId, int routingProductId, long saleZoneId, int supplierId)
@@ -258,12 +266,5 @@ namespace TOne.WhS.Routing.Business
         
 
         #endregion
-    }
-
-    public class RPZone
-    {
-        public int RoutingProductId { get; set; }
-
-        public long SaleZoneId { get; set; }
     }
 }

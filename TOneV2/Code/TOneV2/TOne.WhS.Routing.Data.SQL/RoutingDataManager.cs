@@ -130,6 +130,7 @@ namespace TOne.WhS.Routing.Data.SQL
             query.AppendLine(query_CodeMatchTable);
             query.AppendLine(query_CodeSaleZoneTable);
             query.AppendLine(query_TableTypes);
+            query.AppendLine(query_RPZonesTableType);
             query.AppendLine(query_RoutingProductTable);
             ExecuteNonQueryText(query.ToString(), null);
         }
@@ -199,6 +200,10 @@ namespace TOne.WhS.Routing.Data.SQL
                                                     )
 
                                             ";
+
+        const string query_RPZonesTableType = @"CREATE TYPE [RPZonesType] AS TABLE(
+                                                    [RoutingProductId] [int] NOT NULL,                                                    
+                                                    [SaleZoneId] [bigint] NOT NULL)";
 
 
         const string query_RoutingProductTable = @"

@@ -18,6 +18,8 @@ namespace TOne.WhS.Routing.Data
 
         Dictionary<int, RPRouteOptionSupplier> GetRouteOptionSuppliers(int routingProductId, long saleZoneId);
 
+        IEnumerable<RPRoute> GetRPRoutes(IEnumerable<RPZone> rpZones);
+
     }
 
 }

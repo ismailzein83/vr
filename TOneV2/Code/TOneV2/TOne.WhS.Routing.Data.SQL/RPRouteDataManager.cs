@@ -66,7 +66,19 @@ namespace TOne.WhS.Routing.Data.SQL
 
             if (input.SortByColumnName != null)
                 input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
-            return RetrieveData(input, createTempTableAction, CustomerRouteMapper);
+            return RetrieveData(input, createTempTableAction, RPRouteMapper);
+        }
+
+        public IEnumerable<RPRoute> GetRPRoutes(IEnumerable<RPZone> rpZones)
+        {
+            DataTable dtRPZones = BuildRPZoneTable(rpZones);
+            return GetItemsText(query_GetRPRoutesByRPZones, RPRouteMapper, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@RPZoneList", SqlDbType.Structured);
+                dtPrm.TypeName = "RPZonesType";
+                dtPrm.Value = dtRPZones;
+                cmd.Parameters.Add(dtPrm);
+            });
         }
 
         public Dictionary<int, IEnumerable<RPRouteOption>> GetRouteOptions(int routingProductId, long saleZoneId)
@@ -101,7 +113,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #region Private
 
-        private RPRoute CustomerRouteMapper(IDataReader reader)
+        private RPRoute RPRouteMapper(IDataReader reader)
         {
             return new RPRoute()
             {
@@ -112,6 +124,22 @@ namespace TOne.WhS.Routing.Data.SQL
                 OptionsDetailsBySupplier = reader["OptionsDetailsBySupplier"] != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, RPRouteOptionSupplier>>(reader["OptionsDetailsBySupplier"].ToString()) : null,
                 RPOptionsByPolicy = reader["OptionsByPolicy"] != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, IEnumerable<RPRouteOption>>>(reader["OptionsByPolicy"].ToString()) : null
             };
+        }
+
+        DataTable BuildRPZoneTable(IEnumerable<RPZone> rpZones)
+        {
+            DataTable dtRPZonesInfo = new DataTable();
+            dtRPZonesInfo.Columns.Add("ZoneID", typeof(Int64));
+            dtRPZonesInfo.BeginLoadData();
+            foreach (var item in rpZones)
+            {
+                DataRow dr = dtRPZonesInfo.NewRow();
+                dr["RoutingProductId"] = item.RoutingProductId;
+                dr["SaleZoneID"] = item.SaleZoneId;
+                dtRPZonesInfo.Rows.Add(dr);
+            }
+            dtRPZonesInfo.EndLoadData();
+            return dtRPZonesInfo;
         }
 
         #endregion
@@ -137,6 +165,17 @@ namespace TOne.WhS.Routing.Data.SQL
         private const string query_GetRouteOptionSuppliers = @"SELECT [OptionsDetailsBySupplier]
                                                         FROM [dbo].[ProductRoute] 
                                                         Where RoutingProductId = @RoutingProductId And SaleZoneId = @SaleZoneId";
+
+        private const string query_GetRPRoutesByRPZones = @"                                                       
+                                           SELECT [RoutingProductId]
+                                                        ,[SaleZoneId]
+                                                        ,[ExecutedRuleId]
+                                                        ,[OptionsDetailsBySupplier]
+                                                        ,[OptionsByPolicy]
+                                                        ,[IsBlocked]
+                                           FROM [dbo].[ProductRoute] pr with(nolock)
+                                           JOIN @RPZoneList z 
+                                           ON z.RoutingProductId = pr.RoutingProductId AND z.SaleZoneId = pr.SaleZoneId";
 
         #endregion
 
