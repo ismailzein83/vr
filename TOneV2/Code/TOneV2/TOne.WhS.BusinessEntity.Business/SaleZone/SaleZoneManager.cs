@@ -160,21 +160,16 @@ namespace TOne.WhS.BusinessEntity.Business
             saleZoneDetail.Entity = saleZone;
 
             CountryManager manager = new CountryManager();
-            SellingNumberPlanManager sellingManager = new SellingNumberPlanManager();
-            if (saleZone.CountryId != null)
-            {
+            SellingNumberPlanManager sellingManager = new SellingNumberPlanManager();            
 
-                int countryId = (int)saleZone.CountryId;
-                var country = manager.GetCountry(countryId);
-                saleZoneDetail.CountryName = (country != null) ? country.Name : "";
-            }
-
-            if (saleZone.SellingNumberPlanId != null)
-            {
-                int sellingNumberPlanId = (int)saleZone.SellingNumberPlanId;
-                var sellingNumberPlan = sellingManager.GetSellingNumberPlan(sellingNumberPlanId);
-                saleZoneDetail.SellingNumberPlanName = (sellingNumberPlan != null) ? sellingNumberPlan.Name : "";
-            }
+            int countryId = saleZone.CountryId;
+            var country = manager.GetCountry(countryId);
+            saleZoneDetail.CountryName = (country != null) ? country.Name : "";
+           
+            int sellingNumberPlanId = saleZone.SellingNumberPlanId;
+            var sellingNumberPlan = sellingManager.GetSellingNumberPlan(sellingNumberPlanId);
+            saleZoneDetail.SellingNumberPlanName = (sellingNumberPlan != null) ? sellingNumberPlan.Name : "";
+           
 
             return saleZoneDetail;
         }
