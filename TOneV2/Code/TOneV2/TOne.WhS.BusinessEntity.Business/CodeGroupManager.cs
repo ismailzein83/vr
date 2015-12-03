@@ -127,12 +127,8 @@ namespace TOne.WhS.BusinessEntity.Business
             codeGroupDetail.Entity = codeGroup;
 
             CountryManager manager = new CountryManager();
-            if (codeGroup.CountryId != null)
-            {
-                int countryId = (int)codeGroup.CountryId;
-                codeGroupDetail.CountryName = manager.GetCountry(countryId).Name;
-            }
-
+            int countryId = codeGroup.CountryId;
+            codeGroupDetail.CountryName = manager.GetCountry(countryId).Name;
             return codeGroupDetail;
         }
         #endregion
