@@ -48,7 +48,7 @@
   <ItemGroup>
     <Compile Include="BEDataManagerFactory.cs" />
     <Compile Include="IDataManager.cs" />
-    <Compile Include="ISupplierDataManager.cs" />
+    <Compile Include="Supplier\ISupplierDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +57,7 @@
       <Name>QM.BusinessEntity.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

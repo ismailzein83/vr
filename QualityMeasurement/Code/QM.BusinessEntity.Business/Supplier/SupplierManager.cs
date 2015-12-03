@@ -5,14 +5,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace QM.BusinessEntity.Business
 {
     public class SupplierManager
     {
+        public Vanrise.Entities.IDataRetrievalResult<SupplierDetail> GetFilteredSuppliers(Vanrise.Entities.DataRetrievalInput<SupplierQuery> input)
+        {
+            var allSuppliers = GetCachedSuppliers();
+
+            Func<Supplier, bool> filterExpression = (prod) =>
+                 (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()));
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSuppliers.ToBigResult(input, filterExpression, SupplierDetailMapper));
+        }
+
+        public Supplier GetSupplier(int supplierId)
+        {
+            var suppliers = GetCachedSuppliers();
+            return suppliers.GetRecord(supplierId);
+        }
+
+        public IEnumerable<SupplierInfo> GetSuppliersInfo()
+        {
+            var suppliers = GetCachedSuppliers();
+            return suppliers.MapRecords(SupplierInfoMapper);
+        }
+
         public Vanrise.Entities.InsertOperationOutput<SupplierDetail> AddSupplier(Supplier supplier)
         {
             Vanrise.Entities.InsertOperationOutput<SupplierDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<SupplierDetail>();
+
             long startingId;
             ReserveIDRange(1, out startingId);
             supplier.SupplierId = (int)startingId;
@@ -20,28 +46,31 @@ namespace QM.BusinessEntity.Business
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
 
-            if(supplier.Settings != null &&supplier.Settings.ExtendedSettings != null)
+            int supplierId = -1;
+            if (supplier.Settings != null && supplier.Settings.ExtendedSettings != null)
             {
-                foreach(var extendedSetting in supplier.Settings.ExtendedSettings.Values)
+                foreach (var extendedSetting in supplier.Settings.ExtendedSettings.Values)
                 {
                     extendedSetting.Apply(supplier);
                 }
             }
 
             ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
-            bool insertActionSucc = dataManager.Insert(supplier);
+            bool insertActionSucc = dataManager.Insert(supplier, out supplierId);
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                SupplierDetail supplierDetail = SupplierDetailMapper(supplier);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = supplierDetail;
+                supplier.SupplierId = supplierId;
+                insertOperationOutput.InsertedObject = SupplierDetailMapper(supplier);
             }
+            else
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
 
             return insertOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<SupplierDetail> UpdateCarrierAccount(Supplier supplier)
+        public Vanrise.Entities.UpdateOperationOutput<SupplierDetail> UpdateSupplier(Supplier supplier)
         {
             if (supplier.Settings != null && supplier.Settings.ExtendedSettings != null)
             {
@@ -67,16 +96,33 @@ namespace QM.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = supplierDetail;
             }
-
+            else
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
 
-        public void ReserveIDRange(int nbOfIds, out long startingId)
-        {
-            Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(this.GetType(), nbOfIds, out startingId);
-        }
 
         #region Private Members
+
+        public Dictionary<int, Supplier> GetCachedSuppliers()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSuppliers",
+               () =>
+               {
+                   ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
+                   IEnumerable<Supplier> suppliers = dataManager.GetSuppliers();
+                   return suppliers.ToDictionary(cn => cn.SupplierId, cn => cn);
+               });
+        }
+
+        private SupplierInfo SupplierInfoMapper(Supplier supplier)
+        {
+            return new SupplierInfo()
+            {
+                SupplierId = supplier.SupplierId,
+                Name = supplier.Name,
+            };
+        }
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
@@ -98,6 +144,12 @@ namespace QM.BusinessEntity.Business
             return supplierDetail;
         }
 
+        private void ReserveIDRange(int nbOfIds, out long startingId)
+        {
+            Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(this.GetType(), nbOfIds, out startingId);
+        }
+
         #endregion
+
     }
 }

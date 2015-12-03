@@ -109,6 +109,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -118,10 +122,7 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="QM_BusinessEntity\Directives\" />
-    <Folder Include="QM_BusinessEntity\Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
@@ -129,13 +130,28 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="QM_BusinessEntity\Constant\ModuleConfig.js" />
-    <Content Include="QM_BusinessEntity\Views\Supplier\SupplierManagement.html" />
-    <Content Include="QM_BusinessEntity\Views\Supplier\SupplierManagementController.js" />
+    <Content Include="QM_BusinessEntity\Directives\Supplier\Templates\SupplierGridTemplate.html" />
+    <Content Include="QM_BusinessEntity\Directives\Supplier\vr-qm-be-supplier-grid.js" />
+    <Content Include="QM_BusinessEntity\Directives\Supplier\vr-qm-be-supplier-selector.js" />
+    <Content Include="QM_BusinessEntity\Services\APIServices\SupplierAPIService.js" />
+    <Content Include="QM_BusinessEntity\Services\SupplierService.js" />
+    <Content Include="QM_BusinessEntity\Views\Supplier\SupplierEditor.html" />
+    <Content Include="QM_BusinessEntity\Views\Supplier\SupplierEditorController.js" />
+    <Content Include="QM_BusinessEntity\Views\Supplier\SwitchManagement.html" />
+    <Content Include="QM_BusinessEntity\Views\Supplier\SwitchManagementController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QM.BusinessEntity.Business\QM.BusinessEntity.Business.csproj">
+      <Project>{e4d4007f-5889-4d28-9c4e-710d8908a60f}</Project>
+      <Name>QM.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QM.BusinessEntity.Entities\QM.BusinessEntity.Entities.csproj">
+      <Project>{b610fb7a-8278-4c68-bf4f-09c94bc5a8d0}</Project>
+      <Name>QM.BusinessEntity.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

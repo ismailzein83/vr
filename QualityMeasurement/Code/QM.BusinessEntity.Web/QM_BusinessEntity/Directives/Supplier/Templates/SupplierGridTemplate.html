@@ -1,0 +1,13 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="suppliers"
+                     on-ready="onGridReady"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="gridMenuActions"
+                     idfield="Entity.SupplierId">
+            <vr-datagridcolumn headertext="'ID'" field="'Entity.SupplierId'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Supplier Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

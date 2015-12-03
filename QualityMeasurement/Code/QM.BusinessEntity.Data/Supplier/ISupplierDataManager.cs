@@ -9,10 +9,12 @@ namespace QM.BusinessEntity.Data
 {
     public interface ISupplierDataManager : IDataManager
     {
-        bool AreSuppliersUpdated(ref object _updateHandle);
+        List<Supplier> GetSuppliers();
 
-        bool Insert(Supplier supplier);
+        bool Insert(Supplier supplier, out int insertedId);
 
         bool Update(Supplier supplier);
+
+        bool AreSuppliersUpdated(ref object updateHandle);
     }
 }
