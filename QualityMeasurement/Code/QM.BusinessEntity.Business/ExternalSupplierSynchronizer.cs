@@ -23,7 +23,6 @@ namespace QM.BusinessEntity.Business
             var changedSuppliers = changeSuppliersReader.GetChangedSuppliers(ref supplierUpdateHandle);
             if(changedSuppliers != null)
             {
-
             }
         }
 

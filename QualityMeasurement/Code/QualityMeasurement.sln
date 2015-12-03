@@ -49,9 +49,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QM.BusinessEntity.Data", "Q
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QM.BusinessEntity.Web", "QM.BusinessEntity.Web\QM.BusinessEntity.Web.csproj", "{DF8E18EB-E9CE-4BAD-8F06-6162BACA8796}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QM.CLITester.iTestIntegration", "QM.CLITester.iTestIntegration\QM.CLITester.iTestIntegration.csproj", "{9345E10C-5A25-4E94-9245-691523D20277}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QM.BusinessEntity.Data.SQL", "QM.BusinessEntity.Data.SQL\QM.BusinessEntity.Data.SQL.csproj", "{E44A16BA-5FCF-412B-8405-DFD0B8C91529}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 17
+		SccNumberOfProjects = 19
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -119,6 +123,14 @@ Global
 		SccProjectTopLevelParentUniqueName16 = QualityMeasurement.sln
 		SccProjectName16 = QM.BusinessEntity.Web
 		SccLocalPath16 = QM.BusinessEntity.Web
+		SccProjectUniqueName17 = QM.CLITester.iTestIntegration\\QM.CLITester.iTestIntegration.csproj
+		SccProjectTopLevelParentUniqueName17 = QualityMeasurement.sln
+		SccProjectName17 = QM.CLITester.iTestIntegration
+		SccLocalPath17 = QM.CLITester.iTestIntegration
+		SccProjectUniqueName18 = QM.BusinessEntity.Data.SQL\\QM.BusinessEntity.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName18 = QualityMeasurement.sln
+		SccProjectName18 = QM.BusinessEntity.Data.SQL
+		SccLocalPath18 = QM.BusinessEntity.Data.SQL
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -191,6 +203,14 @@ Global
 		{DF8E18EB-E9CE-4BAD-8F06-6162BACA8796}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF8E18EB-E9CE-4BAD-8F06-6162BACA8796}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF8E18EB-E9CE-4BAD-8F06-6162BACA8796}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9345E10C-5A25-4E94-9245-691523D20277}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9345E10C-5A25-4E94-9245-691523D20277}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9345E10C-5A25-4E94-9245-691523D20277}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9345E10C-5A25-4E94-9245-691523D20277}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E44A16BA-5FCF-412B-8405-DFD0B8C91529}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E44A16BA-5FCF-412B-8405-DFD0B8C91529}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E44A16BA-5FCF-412B-8405-DFD0B8C91529}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E44A16BA-5FCF-412B-8405-DFD0B8C91529}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -208,11 +228,13 @@ Global
 		{563B868D-C190-48FD-AEB6-16FDF5CE6D7F} = {56C9EC2C-BDF7-4BC0-8ECB-C0F12183EAD6}
 		{724B8B1B-B990-4F4A-B886-D299CFF49219} = {56C9EC2C-BDF7-4BC0-8ECB-C0F12183EAD6}
 		{3F030941-26B2-4F82-8265-F67B4D89232F} = {56C9EC2C-BDF7-4BC0-8ECB-C0F12183EAD6}
+		{9345E10C-5A25-4E94-9245-691523D20277} = {56C9EC2C-BDF7-4BC0-8ECB-C0F12183EAD6}
 		{B610FB7A-8278-4C68-BF4F-09C94BC5A8D0} = {C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6}
 		{41D4A666-01ED-43E6-BACD-0FEC6DD106E8} = {C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6}
 		{E4D4007F-5889-4D28-9C4E-710D8908A60F} = {C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6}
 		{F088847E-2BCD-446A-B51A-3DBAAF7AC835} = {C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6}
 		{DF8E18EB-E9CE-4BAD-8F06-6162BACA8796} = {C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6}
+		{E44A16BA-5FCF-412B-8405-DFD0B8C91529} = {C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6}
 		{2B9ADE39-9B14-4660-A225-D6FAF6BA03B9} = {D12106CC-2DB4-49FA-80BC-16497A1922D9}
 	EndGlobalSection
 EndGlobal
