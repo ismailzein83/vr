@@ -22,7 +22,7 @@
             <vr-select datasource="definitionTypes" datatextfield="value" datavaluefield="description" label="Chart Type" selectedvalues="selectedDefinitionType" hidefilterbox></vr-select>
         </vr-columns>
         <vr-columns width="1/2row" ng-show=" selectedOperationType.value == 'TopEntities'">
-            <vr-textbox value="topRecords" type="number" label="Number Of Records" minvalue="1"></vr-textbox>
+            <vr-textbox value="topRecords" type="number" label="Number Of Records" minvalue="1" maxvalue="100"></vr-textbox>
         </vr-columns>
     </vr-row>
 
