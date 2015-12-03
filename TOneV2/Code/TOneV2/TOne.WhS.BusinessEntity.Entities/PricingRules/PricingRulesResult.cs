@@ -11,5 +11,11 @@ namespace TOne.WhS.BusinessEntity.Entities
         public Decimal Rate { get; set; }
 
         public Decimal TotalAmount { get; set; }
+
+        public Decimal EffectiveDurationInSeconds { get; set; }
+
+        public Decimal ExtraChargeValue { get; set; }
+
+        public int RateType { get; set; }
     }
 }

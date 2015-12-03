@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.CDRProcessing.Entities;
+using TOne.WhS.CDRProcessing.QueueActivators;
 using Vanrise.Queueing.Entities;
 
-namespace TOne.WhS.CDRProcessing.QueueActivators.ExecutionFlows
+namespace TestRuntime.ExecutionFlows
 {
     public class AllFlows
     {
@@ -22,6 +23,9 @@ namespace TOne.WhS.CDRProcessing.QueueActivators.ExecutionFlows
             var storeDailyStats = new QueueStageExecutionActivity { StageName = "Store Daily Stats", QueueName = "StoreDailyStats", QueueTypeFQTN = typeof(TrafficStatisticDailyBatch).AssemblyQualifiedName, QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(StoreDailyStatsActivator).AssemblyQualifiedName } };
             var generateCDRPrices = new QueueStageExecutionActivity { StageName = "Generate CDR Prices", QueueName = "CDRPrices", QueueTypeFQTN = typeof(CDRMainBatch).AssemblyQualifiedName, QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(GenerateCDRPricesActivator).AssemblyQualifiedName } };
             var storeMainCDRs = new QueueStageExecutionActivity { StageName = "Store Main CDRs", QueueName = "MainCDRs", QueueTypeFQTN = typeof(CDRMainBatch).AssemblyQualifiedName, QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(StoreCDRMainActivator).AssemblyQualifiedName } };
+            var generateBillingStats = new QueueStageExecutionActivity { StageName = "Generate BillingStats", QueueName = "BillingStats", QueueTypeFQTN = typeof(CDRMainBatch).AssemblyQualifiedName, QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(GenerateBillingStatsActivator).AssemblyQualifiedName } };
+            var storeBillingStats = new QueueStageExecutionActivity { StageName = "Store BillingStats", QueueName = "StoreBillingStats", QueueTypeFQTN = typeof(BillingStatisticBatch).AssemblyQualifiedName, QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(StoreBillingStatsActivator).AssemblyQualifiedName } };
+            
             QueueExecutionFlowTree queueFlowTree = new QueueExecutionFlowTree
             {
                 Activities = new List<BaseExecutionActivity>
@@ -44,7 +48,22 @@ namespace TOne.WhS.CDRProcessing.QueueActivators.ExecutionFlows
                                                       Activities = new List<BaseExecutionActivity>
                                                       {
                                                           generateCDRPrices,
-                                                          storeMainCDRs
+                                                           new ParallelExecutionActivity {
+                                                                Activities = new List<BaseExecutionActivity>
+                                                                 {
+                                                                    storeMainCDRs,
+                                                                    new SequenceExecutionActivity
+                                                                          { 
+                                                                              Activities = new List<BaseExecutionActivity>   
+                                                                              {
+                                                                                  generateBillingStats,
+                                                                                  storeBillingStats,
+                                                                              }
+                                                                          }
+                                                                    
+                                                                 }
+                                                           }
+                                                          
                                                       }
                                                   },
                                                   new SequenceExecutionActivity 
@@ -52,16 +71,20 @@ namespace TOne.WhS.CDRProcessing.QueueActivators.ExecutionFlows
                                                       Activities = new List<BaseExecutionActivity>
                                                       {
                                                                   generateStats,
-                                                                  storeStats,
-                                                                  new SequenceExecutionActivity
-                                                                  { 
-                                                                      Activities = new List<BaseExecutionActivity>   
-                                                                        {
-                                                                              generateDailyStats,
-                                                                              storeDailyStats
-                                                                        }
-                                                                    },
-
+                                                                  new ParallelExecutionActivity {
+                                                                      Activities = new List<BaseExecutionActivity>
+                                                                      {
+                                                                          storeStats,
+                                                                          new SequenceExecutionActivity
+                                                                          { 
+                                                                              Activities = new List<BaseExecutionActivity>   
+                                                                              {
+                                                                                  generateDailyStats,
+                                                                                  storeDailyStats,
+                                                                              }
+                                                                          }
+                                                                      }
+                                                                  },
                                                       }
                                                   },
                                                   storeInvalidCDRs,

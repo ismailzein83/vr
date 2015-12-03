@@ -58,14 +58,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDRProcessingDataManagerFactory.cs" />
+    <Compile Include="IBillingStatisticDataManager.cs" />
     <Compile Include="ITrafficStatisticByIntervalDataManager.cs" />
     <Compile Include="ICDRDataManager.cs" />
     <Compile Include="ICDRFailedDataManager.cs" />
     <Compile Include="ICDRInvalidDataManager.cs" />
     <Compile Include="ICDRMainDataManager.cs" />
     <Compile Include="IDataManager.cs" />
-    <Compile Include="CustomerIdentificationRuleDataManager.cs" />
-    <Compile Include="ISupplierIdentificationRuleDataManager.cs" />
     <Compile Include="ITrafficStatisticDailyDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

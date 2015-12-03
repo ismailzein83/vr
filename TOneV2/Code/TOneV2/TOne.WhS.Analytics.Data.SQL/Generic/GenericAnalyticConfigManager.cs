@@ -93,7 +93,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                 {
                     IdColumn = "ourz.CountryID",
                     NameColumn = "c.Name",
-                    JoinStatements = new List<string>() { @" LEFT JOIN  TOneWhS_BE.SaleZone ourz ON ts.SaleZoneID = ourz.ID LEFT JOIN TOneWhS_Stats.Country c ON ourz.CountryID = c.ID" },
+                    JoinStatements = new List<string>() { @" LEFT JOIN  TOneWhS_BE.SaleZone ourz ON ts.SaleZoneID = ourz.ID LEFT JOIN [Common].Country c ON ourz.CountryID = c.ID" },
                     GroupByStatements = new List<string>() { " ourz.CountryID,  c.Name" },
                     ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });

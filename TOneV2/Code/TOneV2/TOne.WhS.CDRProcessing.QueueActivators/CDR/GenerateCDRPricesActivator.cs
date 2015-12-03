@@ -32,13 +32,18 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
                         cdr.Cost.CurrencyId = callCost.CurrencyId;
                         cdr.Cost.RateValue = callCost.RateValue;
                         cdr.Cost.TotalNet = callCost.TotalNet;
+                        cdr.Cost.EffectiveDurationInSeconds = callCost.EffectiveDurationInSeconds;
+                        cdr.Cost.ExtraChargeValue = callCost.ExtraChargeValue;
+                        cdr.Cost.RateType = callCost.RateType;
                 }
                 if (callSale != null)
                 {
                     cdr.Sale.CurrencyId = callSale.CurrencyId;
                     cdr.Sale.RateValue = callSale.RateValue;
                     cdr.Sale.TotalNet = callSale.TotalNet;
-
+                    cdr.Sale.EffectiveDurationInSeconds = callSale.EffectiveDurationInSeconds;
+                    cdr.Sale.ExtraChargeValue = callSale.ExtraChargeValue;
+                    cdr.Sale.RateType = callSale.RateType;
                 }
                 
             }

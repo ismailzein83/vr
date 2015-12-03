@@ -73,6 +73,7 @@ namespace TOne.WhS.BusinessEntity.Business
                             {
                                 isRateFound = true;
                                 result.Rate = rateToUse;
+                                result.RateType = rateTypeItem.RateTypeId;
                                 break;
                             }
                         }
@@ -100,6 +101,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     action.Execute(extraChargeContext, extraChargeTarget);
                 }
+                result.ExtraChargeValue = extraChargeTarget.Rate - result.Rate;
                 result.Rate = extraChargeTarget.Rate;
             }
         }
@@ -119,9 +121,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 (tariffPricingRule.Settings as PricingRuleTariffSettings).Execute(tariffContext, tariffTarget);
                 result.Rate = tariffTarget.EffectiveRate;
                 result.TotalAmount = tariffTarget.TotalAmount;
+                result.EffectiveDurationInSeconds = tariffTarget.EffectiveDurationInSeconds;
             }
             else
+            {
+                result.EffectiveDurationInSeconds = input.DurationInSeconds;
                 result.TotalAmount = result.Rate * Math.Ceiling((Decimal)(input.DurationInSeconds) / 60);
+            }
+               
         }
 
     }

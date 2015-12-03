@@ -25,7 +25,6 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
                 foreach (TrafficStatisticByIntervalBatch trafficStatisticBatch in trafficStatisticBatches)
                 {
                     outputItems.Add("Store Stats", trafficStatisticBatch);
-                    outputItems.Add("Generate Daily Stats", trafficStatisticBatch);
                 }
             }  
 

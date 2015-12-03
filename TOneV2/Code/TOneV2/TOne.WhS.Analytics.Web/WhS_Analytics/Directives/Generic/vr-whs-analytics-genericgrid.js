@@ -277,15 +277,15 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                 {
                     if (selectedDimensions.value == WhS_Analytics_GenericAnalyticDimensionEnum.Zone.value)
                     {
-                        var gatCountryIndex = UtilsService.getItemIndexByVal(dimensions, WhS_Analytics_GenericAnalyticDimensionEnum.Country.value, "value");
-                        if (gatCountryIndex != -1)
-                            dimensions.splice(gatCountryIndex, 1);
-                        var gatCodeBuyIndex = UtilsService.getItemIndexByVal(dimensions, WhS_Analytics_GenericAnalyticDimensionEnum.CodeBuy.value, "value");
-                        if (gatCodeBuyIndex != -1)
-                            dimensions.splice(gatCodeBuyIndex, 1);
-                        var gateCodeSalesIndex = UtilsService.getItemIndexByVal(dimensions, WhS_Analytics_GenericAnalyticDimensionEnum.CodeSales.value, "value");
-                        if (gateCodeSalesIndex != -1)
-                            dimensions.splice(gateCodeSalesIndex, 1);
+                        var countryIndex = UtilsService.getItemIndexByVal(dimensions, WhS_Analytics_GenericAnalyticDimensionEnum.Country.value, "value");
+                        if (countryIndex != -1)
+                            dimensions.splice(countryIndex, 1);
+                        var codeBuyIndex = UtilsService.getItemIndexByVal(dimensions, WhS_Analytics_GenericAnalyticDimensionEnum.CodeBuy.value, "value");
+                        if (codeBuyIndex != -1)
+                            dimensions.splice(codeBuyIndex, 1);
+                        var codeSalesIndex = UtilsService.getItemIndexByVal(dimensions, WhS_Analytics_GenericAnalyticDimensionEnum.CodeSales.value, "value");
+                        if (codeSalesIndex != -1)
+                            dimensions.splice(codeSalesIndex, 1);
                     }
                 }
 

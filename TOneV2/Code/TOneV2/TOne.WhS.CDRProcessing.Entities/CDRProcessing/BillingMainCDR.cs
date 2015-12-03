@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities.StatisticManagement;
 
 namespace TOne.WhS.CDRProcessing.Entities
 {
-    public class BillingMainCDR 
+    public class BillingMainCDR :IRawItem
     {
         static BillingMainCDR()
         {

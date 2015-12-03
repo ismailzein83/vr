@@ -14,6 +14,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public Decimal EffectiveRate { get; set; }
 
+        public Decimal EffectiveDurationInSeconds { get; set; }
         public Decimal TotalAmount { get; set; }
 
         public override PricingRuleType RuleType

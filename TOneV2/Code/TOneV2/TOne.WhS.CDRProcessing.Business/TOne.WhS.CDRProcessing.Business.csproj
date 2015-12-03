@@ -90,6 +90,7 @@
     <Compile Include="SupplierRule\Rules\StructureRulesBehaviors\RuleBehaviorByOutCarrier.cs" />
     <Compile Include="SupplierRule\Rules\StructureRulesBehaviors\RuleBehaviorByOutTrunk.cs" />
     <Compile Include="SupplierRule\SupplierIdentificationRuleManager.cs" />
+    <Compile Include="BillingStatisticManager.cs" />
     <Compile Include="TrafficStatistics\BaseTrafficStatisticManager.cs" />
     <Compile Include="TrafficStatistics\TrafficStatisticByIntervalManager.cs" />
     <Compile Include="TrafficStatistics\TrafficStatisticDailyManager.cs" />

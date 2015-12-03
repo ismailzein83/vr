@@ -101,9 +101,13 @@ namespace TOne.WhS.BusinessEntity.Business
                 var pricingRulesResult = purchasePricingRuleManager.ApplyPricingRules(purchasePricingRulesInput);
                 callSale = new CallCost
                 {
-                    RateValue = pricingRulesResult != null ? pricingRulesResult.Rate : supplierZoneRate.Rate.NormalRate,
-                    TotalNet = pricingRulesResult != null ? pricingRulesResult.TotalAmount : supplierZoneRate.Rate.NormalRate * (durationInSeconds / 60),
-                    CurrencyId = currencyId
+                    RateValue =  pricingRulesResult.Rate,
+                    TotalNet = pricingRulesResult.TotalAmount,
+                    CurrencyId = currencyId,
+                    EffectiveDurationInSeconds = pricingRulesResult.EffectiveDurationInSeconds,
+                    ExtraChargeValue = pricingRulesResult.ExtraChargeValue,
+                    RateType=pricingRulesResult.RateType
+
                 };
             }
             return callSale;

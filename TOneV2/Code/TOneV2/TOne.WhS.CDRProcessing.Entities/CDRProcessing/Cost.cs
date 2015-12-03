@@ -10,12 +10,17 @@ namespace TOne.WhS.CDRProcessing.Entities
     {
         static Cost()
         {
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(Cost), "RateValue", "TotalNet", "CurrencyId");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(Cost), "RateValue", "TotalNet", "CurrencyId", "EffectiveDurationInSeconds", "ExtraChargeValue", "RateType");
         }
         public decimal RateValue { get; set; }
 
         public decimal TotalNet { get; set; }
 
         public int CurrencyId { get; set; }
+
+        public Decimal EffectiveDurationInSeconds { get; set; }
+
+        public Decimal ExtraChargeValue { get; set; }
+        public int RateType { get; set; }
     }
 }

@@ -13,5 +13,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public decimal TotalNet { get; set; }
 
         public int CurrencyId { get; set; }
+        public Decimal ExtraChargeValue { get; set; }
+        public Decimal EffectiveDurationInSeconds { get; set; }
+        public int RateType { get; set; }
     }
 }

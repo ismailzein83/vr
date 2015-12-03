@@ -379,6 +379,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExecutionFlows\AllFlows.cs" />
     <Compile Include="Tasks\ABaghdadiTask.cs" />
     <Compile Include="Tasks\AliBalloukTask.cs" />
     <Compile Include="Tasks\HaSSanTask.cs" />

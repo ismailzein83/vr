@@ -42,6 +42,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.PricingRules.TariffSettings
                 target.TotalAmount += Math.Ceiling((accountedDuration * target.Rate) / 60);
                 target.EffectiveRate = target.Rate;
             }
+            target.EffectiveDurationInSeconds = accountedDuration;
               
 
             target.TotalAmount += (Decimal)CallFee;

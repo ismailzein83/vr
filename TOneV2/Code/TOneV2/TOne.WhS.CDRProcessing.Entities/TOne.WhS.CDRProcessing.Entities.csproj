@@ -111,6 +111,8 @@
     <Compile Include="SupplierRule\SupplierIdentificationRuleTarget.cs" />
     <Compile Include="TrafficStatistics\BaseTrafficStatistic.cs" />
     <Compile Include="TrafficStatistics\TrafficStatisticBatch.cs" />
+    <Compile Include="BillingStatistics\BillingStatistic.cs" />
+    <Compile Include="BillingStatistics\BillingStatisticBatch.cs" />
     <Compile Include="TrafficStatistics\TrafficStatisticByInterval.cs" />
     <Compile Include="TrafficStatistics\TrafficStatisticByIntervalBatch.cs" />
     <Compile Include="TrafficStatistics\TrafficStatisticDaily.cs" />

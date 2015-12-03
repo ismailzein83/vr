@@ -72,9 +72,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 callSale = new CallSale
                 {
-                    RateValue = pricingRulesResult != null ? pricingRulesResult.Rate : customerZoneRate.Rate.NormalRate,
-                    TotalNet = pricingRulesResult != null ? pricingRulesResult.TotalAmount : customerZoneRate.Rate.NormalRate * (durationInSeconds / 60),
-                    CurrencyId = currencyId
+                    RateValue =  pricingRulesResult.Rate ,
+                    TotalNet = pricingRulesResult.TotalAmount,
+                    CurrencyId = currencyId,
+                    EffectiveDurationInSeconds = pricingRulesResult.EffectiveDurationInSeconds,
+                    ExtraChargeValue = pricingRulesResult.ExtraChargeValue,
+                    RateType = pricingRulesResult.RateType,
+                    
                 };
             }
             return callSale;
