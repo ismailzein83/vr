@@ -44,6 +44,12 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
 
     }
+    $scope.getPageName = function () {
+        if ($scope.currentPage != null)
+            return $scope.currentPage.Name;
+        else
+            return "Home Page";
+    }
     $scope.pinned = true;
     $scope.pinpanel = function () {
 
