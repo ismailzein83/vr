@@ -8,6 +8,8 @@ namespace Vanrise.Entities
 {
     public class Time
     {
+      
+        #region ctor/Local Variables
         public Time() { }
         public Time(string time)
         {
@@ -16,10 +18,10 @@ namespace Vanrise.Entities
             {
                 switch (i)
                 {
-                    case 0: this.Hour = Convert.ToInt32(timeArray[i]); break;
-                    case 1: this.Minute = Convert.ToInt32(timeArray[i]); break;
-                    case 2: this.Second = Convert.ToInt32(timeArray[i]); break;
-                    case 3: this.MilliSecond = Convert.ToInt32(timeArray[i]); break;
+                    case 0: this.Hour = Int32.Parse(timeArray[i]); break;
+                    case 1: this.Minute = Int32.Parse(timeArray[i]); break;
+                    case 2: this.Second = Int32.Parse(timeArray[i]); break;
+                    case 3: this.MilliSecond = Int32.Parse(timeArray[i]); break;
                 }
             }
         }
@@ -30,14 +32,14 @@ namespace Vanrise.Entities
             this.Second = time.Second;
             this.MilliSecond = time.Millisecond;
         }
+      
+        #endregion
+
+        #region Public Methods
         public int Hour { get; set; }
-
         public int Minute { get; set; }
-
         public int Second { get; set; }
-
         public int MilliSecond { get; set; }
-
         public string ToShortTimeString()
         {
             return String.Format("{0}:{1}:{2}", this.Hour, this.Minute, this.Second);
@@ -46,22 +48,41 @@ namespace Vanrise.Entities
         {
             return String.Format("{0}:{1}:{2}:{3}", this.Hour, this.Minute, this.Second, this.MilliSecond);
         }
-        public bool isGreaterThan(DateTime time)
+        public bool GreaterThan(DateTime date)
         {
-            if (this.Hour > time.Hour)
+            return CompareTime(date.Hour, date.Minute, date.Second, date.Millisecond);
+        }
+        public bool GreaterThan(Time time)
+        {
+            return CompareTime(time.Hour, time.Minute, time.Second, time.MilliSecond);
+        }
+        public bool LessThan(DateTime date)
+        {
+            return !GreaterThan(date);
+        }
+        public bool LessThan(Time time)
+        {
+            return !GreaterThan(time);
+        }
+
+        #endregion
+
+        #region Private Methods
+        private bool CompareTime(int hour, int minute, int second, int milliSecond)
+        {
+            if (this.Hour > hour)
                 return true;
-            else if (this.Hour == time.Hour && this.Minute > time.Minute)
+            else if (this.Hour == hour && this.Minute > minute)
                 return true;
-            else if (this.Hour == time.Hour && this.Minute == time.Minute && this.Second > time.Second)
+            else if (this.Hour == hour && this.Minute == minute && this.Second > second)
                 return true;
-            else if (this.Hour == time.Hour && this.Minute == time.Minute && this.Second == time.Second && this.MilliSecond > time.Millisecond)
+            else if (this.Hour == hour && this.Minute == minute && this.Second == second && this.MilliSecond > milliSecond)
                 return true;
             else
                 return false;
         }
-        public bool isLessThan(DateTime time)
-        {
-            return !isGreaterThan(time);
-        }
+      
+        #endregion
+
     }
 }
