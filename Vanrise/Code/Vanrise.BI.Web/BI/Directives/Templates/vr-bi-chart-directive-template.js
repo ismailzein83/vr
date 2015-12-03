@@ -19,7 +19,6 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         $scope.selectedMeasureType;
         $scope.selectedTopMeasure;
         $scope.onSwitchValueChanged = function () {
-            console.log($scope.selectedTopMeasure);
             if ($scope.isPieChart)
                 $scope.selectedTopMeasure = undefined;
             else if(lastTopMeasureValue!=undefined)
