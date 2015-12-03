@@ -37,7 +37,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public Vanrise.Entities.InsertOperationOutput<SwitchDetail> AddSwitch(Switch whsSwitch)
         {
-            TOne.Entities.InsertOperationOutput<SwitchDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<SwitchDetail>();
+            Vanrise.Entities.InsertOperationOutput<SwitchDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<SwitchDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -64,7 +64,7 @@ namespace TOne.WhS.BusinessEntity.Business
             ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
 
             bool updateActionSucc = dataManager.Update(whsSwitch);
-            TOne.Entities.UpdateOperationOutput<SwitchDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<SwitchDetail>();
+            Vanrise.Entities.UpdateOperationOutput<SwitchDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<SwitchDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -83,7 +83,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public Vanrise.Entities.DeleteOperationOutput<SwitchDetail> DeleteSwitch(int switchId)
         {
             ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-            TOne.Entities.DeleteOperationOutput<SwitchDetail> deleteOperationOutput = new TOne.Entities.DeleteOperationOutput<SwitchDetail>();
+            Vanrise.Entities.DeleteOperationOutput<SwitchDetail> deleteOperationOutput = new Vanrise.Entities.DeleteOperationOutput<SwitchDetail>();
             bool updateActionSucc = dataManager.Delete(switchId);
             if (updateActionSucc)
             {
