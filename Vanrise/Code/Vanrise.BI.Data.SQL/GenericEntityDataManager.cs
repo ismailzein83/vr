@@ -21,11 +21,11 @@ namespace Vanrise.BI.Data.SQL
             set { _entityDefinitions = value; }
         }
 
-        public IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, List<String> customerIds, List<String> supplierIds,string customerColumnId, params string[] measureTypeNames)
+        public IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, List<String> customerIds, List<String> supplierIds, string customerColumnId, params string[] measureTypeNames)
         {
             return GetTimeValuesRecord(timeDimensionType, fromDate, toDate, null, measureTypeNames, customerIds, supplierIds, customerColumnId);
         }
-        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(List<string> entityTypeName, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, List<String> customerIds, List<String> supplierIds,string customerColumnId, params string[] measureTypesNames)
+        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(List<string> entityTypeName, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, List<String> customerIds, List<String> supplierIds, string customerColumnId, params string[] measureTypesNames)
         {
             List<string> entityIdColumn;
             List<string> entityNameColumn;
@@ -49,7 +49,7 @@ namespace Vanrise.BI.Data.SQL
 
             if (!measureTypesNames.Contains(topByMeasureTypeName))
             {
-                if (expressionsPart == null) 
+                if (expressionsPart == null)
                     expressionsPart = topMeasureColExp;
                 else
                     expressionsPart = string.Format(@"{0} 
@@ -58,7 +58,7 @@ namespace Vanrise.BI.Data.SQL
 
             string columnsPart = BuildQueryColumnsPart(measureColumns);
             string rowsPart = "";
-            if (queryFilter != null && queryFilter.Count>0)
+            if (queryFilter != null && queryFilter.Count > 0)
                 rowsPart = BuildQueryTopRows(topMeasureColumn, topCount, queryFilter, entityIdColumn, entityNameColumn);
             else
                 rowsPart = BuildQueryTopRowsParts(topMeasureColumn, topCount, entityNameColumn);
@@ -80,7 +80,7 @@ namespace Vanrise.BI.Data.SQL
                     List<string> EntityName = new List<string>();
                     foreach (string entity in entityNameColumn)
                     {
-                            EntityName.Add(reader[GetRowColumnToRead(entity)] as string);
+                        EntityName.Add(reader[GetRowColumnToRead(entity)] as string);
                     }
                     EntityRecord entityValue = new EntityRecord
                     {
@@ -99,20 +99,22 @@ namespace Vanrise.BI.Data.SQL
             });
             return rslt;
         }
-       
+
 
         #region Private Methods
-        protected string BuildQueryTopRowsParts(string columnBy, int count,  List<string> columnsNames)
+        protected string BuildQueryTopRowsParts(string columnBy, int count, List<string> columnsNames)
         {
-            StringBuilder columns=new StringBuilder();;
-            foreach (string value in columnsNames){
-                if(columns.Length==0)
+            StringBuilder columns = new StringBuilder(); ;
+            foreach (string value in columnsNames)
+            {
+                if (columns.Length == 0)
                 {
                     columns.Append(String.Format("NONEMPTYCROSSJOIN({0}.CHILDREN", value));
                 }
-                else{
-                    columns.Append(String.Format(", {0}.CHILDREN",value));
-                } 
+                else
+                {
+                    columns.Append(String.Format(", {0}.CHILDREN", value));
+                }
 
             }
             columns.Append(String.Format(")"));
@@ -126,7 +128,7 @@ namespace Vanrise.BI.Data.SQL
         protected string BuildQueryRows(List<DimensionFilter> queryFilter, List<string> entityIdColumn, List<string> entityNameColumn)
         {
             StringBuilder queryBuilder = null;
-         
+
             queryBuilder = new StringBuilder();
             StringBuilder columns = new StringBuilder();
             foreach (string value in entityNameColumn)
@@ -162,8 +164,8 @@ namespace Vanrise.BI.Data.SQL
                         }
                     }
                 }
-                
-                
+
+
 
             }
             queryBuilder.AppendFormat("{0} * {1}", ids.ToString(), columns.ToString());
@@ -187,7 +189,7 @@ namespace Vanrise.BI.Data.SQL
         private void GetEntityName(List<string> entitiesTypeName, out List<string> entitiesName)
         {
             entitiesName = new List<string>();
-           foreach (BIConfiguration<BIConfigurationEntity> obj in _entityDefinitions)
+            foreach (BIConfiguration<BIConfigurationEntity> obj in _entityDefinitions)
             {
                 foreach (string entityName in entitiesTypeName)
                     if (entityName == obj.Name)
@@ -195,24 +197,26 @@ namespace Vanrise.BI.Data.SQL
                         entitiesName.Add(obj.Name);
                     }
             }
-       }
+        }
 
-       void GetEntityColumns(List<string> entitiesTypeName, out List<string> idsColumn, out List<string> namesColumn)
+        void GetEntityColumns(List<string> entitiesTypeName, out List<string> idsColumn, out List<string> namesColumn)
         {
             idsColumn = new List<string>();
             namesColumn = new List<string>();
 
-            foreach (BIConfiguration<BIConfigurationEntity> obj in _entityDefinitions)
+            foreach (string entityTypeName in entitiesTypeName)
             {
-                foreach (string entityTypeName in entitiesTypeName)
+                foreach (BIConfiguration<BIConfigurationEntity> obj in _entityDefinitions)
                 {
+
                     if (entityTypeName == obj.Name)
                     {
                         idsColumn.Add(obj.Configuration.ColumnID);
                         namesColumn.Add(obj.Configuration.ColumnName);
                     }
+
+
                 }
-       
             }
 
         }
@@ -238,7 +242,7 @@ namespace Vanrise.BI.Data.SQL
 
             string query;
             if (supplierIds.Count != 0 || customerIds.Count != 0)
-                query = BuildQuery(columnsPart, rowsPart, filtersPart, supplierIds, customerIds, customerColumnId,expressionsPart);
+                query = BuildQuery(columnsPart, rowsPart, filtersPart, supplierIds, customerIds, customerColumnId, expressionsPart);
             else
                 query = BuildQuery(columnsPart, rowsPart, filtersPart, expressionsPart);
 
@@ -260,7 +264,7 @@ namespace Vanrise.BI.Data.SQL
             });
             return rslt.OrderBy(itm => itm.Time);
         }
-        protected string BuildQuery(string columnsPart, string rowsPartValue, string filtersPart, List<String> customerIds, List<String> supplierIds,string customerColumnId, string expressionsPart = null)
+        protected string BuildQuery(string columnsPart, string rowsPartValue, string filtersPart, List<String> customerIds, List<String> supplierIds, string customerColumnId, string expressionsPart = null)
         {
             StringBuilder customerfilter = new StringBuilder();
             StringBuilder supplierfilter = new StringBuilder();
@@ -273,8 +277,8 @@ namespace Vanrise.BI.Data.SQL
                         customerfilter.Append("* filter(");
                         customerfilter.Append(customerColumnId);
                         customerfilter.Append(".children as FilterValue,");
-                        
-                    } 
+
+                    }
                     else
                     {
                         customerfilter.Append(" or ");
@@ -344,10 +348,11 @@ namespace Vanrise.BI.Data.SQL
             {
                 if (measureTypeName == obj.Name)
                 {
-                    if (obj.Configuration.Expression != null && obj.Configuration.Expression!="")
+                    if (obj.Configuration.Expression != null && obj.Configuration.Expression != "")
                     {
                         queryExpression = obj.Configuration.Expression;
-                      return  obj.Configuration.ColumnName;}
+                        return obj.Configuration.ColumnName;
+                    }
                     else
                         return obj.Configuration.ColumnName;
                 }
@@ -356,7 +361,7 @@ namespace Vanrise.BI.Data.SQL
         }
         public Decimal[] GetMeasureValues(DateTime fromDate, DateTime toDate, params string[] measureTypeNames)
         {
-            return GetRecords( fromDate, toDate, null, measureTypeNames);
+            return GetRecords(fromDate, toDate, null, measureTypeNames);
         }
         private Decimal[] GetRecords(DateTime fromDate, DateTime toDate, string[] additionalFilters, string[] measureTypesNames)
         {
@@ -375,7 +380,7 @@ namespace Vanrise.BI.Data.SQL
                 }
             }
             string filtersPart = BuildQueryFiltersPart(filters);
-            string query = BuildQuery(columnsPart,null, filtersPart, expressionsPart);
+            string query = BuildQuery(columnsPart, null, filtersPart, expressionsPart);
 
             ExecuteReaderMDX(query, (reader) =>
             {
@@ -391,10 +396,10 @@ namespace Vanrise.BI.Data.SQL
             });
             return rslt;
         }
- 
-   
-       
-        
+
+
+
+
         #endregion
 
     }
