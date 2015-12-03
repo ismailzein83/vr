@@ -68,9 +68,10 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
     }
 
     function setSubViewValue(settings) {
-        
-        for (var i = 0; i < $scope.Entities.length; i++) {
-            for (j = 0; j < settings.EntityType.length; j++) {
+        $scope.selectedEntitiesType.length = 0;
+        for (j = 0; j < settings.EntityType.length; j++) {
+            for (var i = 0; i < $scope.Entities.length; i++) {
+
                 if ($scope.Entities[i].Name == settings.EntityType[j] && !UtilsService.contains($scope.selectedEntitiesType, $scope.Entities[i])) {
                     $scope.selectedEntitiesType.push($scope.Entities[i]);
 
@@ -168,7 +169,7 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
             angular.forEach(response, function (itm) {
                 $scope.Entities.push(itm);
             });
-            $scope.selectedEntitiesType.push($scope.Entities[0]);
+           // $scope.selectedEntitiesType.push($scope.Entities[0]);
         });
     }
 
