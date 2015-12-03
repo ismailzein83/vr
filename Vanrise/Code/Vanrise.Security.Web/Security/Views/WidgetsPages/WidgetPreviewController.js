@@ -41,7 +41,10 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
    
         
         $scope.scopeModal.widget = $scope.$parent.widget;
-        $scope.scopeModal.widget.SectionTitle = $scope.scopeModal.widget.Name;
+        if ($scope.scopeModal.widget != null) {
+            $scope.scopeModal.widget.SectionTitle = $scope.scopeModal.widget.Name;
+        }
+        
         $scope.scopeModal.onElementReady = function (api) {
             widgetAPI = api;
             widgetAPI.retrieveData($scope.scopeModal.filter);

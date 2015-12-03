@@ -153,8 +153,6 @@ namespace TOne.WhS.BusinessEntity.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                var allCarrierAccounts = GetCachedCarrierAccounts();
-
                 CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(carrierAccount);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = carrierAccountDetail;

@@ -13,10 +13,10 @@
             <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureTypes" onselectionchanged="onSelectionChanged" ismultipleselection hidefilterbox></vr-select>
         </vr-columns>
         <vr-columns width="1/2row" ng-show=" selectedOperationType.value == 'TopEntities'">
-            <vr-switch value="isPieChart" label="Pie Chart"></vr-switch>
+            <vr-switch value="isPieChart" label="Pie Chart" onvaluechanged="onSwitchValueChanged"></vr-switch>
         </vr-columns>
         <vr-columns width="1/2row" ng-show=" selectedOperationType.value == 'TopEntities' && !isPieChart ">
-            <vr-select datasource="selectedMeasureTypes" datatextfield="Name" datavaluefield="DisplayName" label="Top Measure" selectedvalues="selectedTopMeasure" isrequired hidefilterbox></vr-select>
+            <vr-select datasource="selectedMeasureTypes" datatextfield="Name" datavaluefield="DisplayName" label="Top Measure" selectedvalues="selectedTopMeasure" hidefilterbox></vr-select>
         </vr-columns>
         <vr-columns width="1/2row" ng-show=" selectedOperationType.value == 'MeasuresGroupedByTime' || !isPieChart">
             <vr-select datasource="definitionTypes" datatextfield="value" datavaluefield="description" label="Chart Type" selectedvalues="selectedDefinitionType" hidefilterbox></vr-select>

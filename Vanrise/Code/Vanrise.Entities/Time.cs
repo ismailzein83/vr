@@ -8,8 +8,13 @@ namespace Vanrise.Entities
 {
     public class Time
     {
+        
       
         #region ctor/Local Variables
+        static Time()
+        {
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(Time), "Hour", "Minute", "Second", "MilliSecond");
+        }
         public Time() { }
         public Time(string time)
         {
@@ -42,18 +47,26 @@ namespace Vanrise.Entities
         public int MilliSecond { get; set; }
         public string ToShortTimeString()
         {
-            return String.Format("{0}:{1}:{2}", this.Hour, this.Minute, this.Second);
+            return String.Format("{0:00}:{1:00}:{2:00}", this.Hour, this.Minute, this.Second);
         }
         public string ToLongTimeString()
         {
-            return String.Format("{0}:{1}:{2}:{3}", this.Hour, this.Minute, this.Second, this.MilliSecond);
+            return String.Format("{0:00}:{1:00}:{2:00}:{3:00}", this.Hour, this.Minute, this.Second, this.MilliSecond);
         }
         public bool GreaterThan(DateTime date)
         {
+            if (date == null)
+            {
+                throw new ArgumentException("Date should not be null");
+            }
             return CompareTime(date.Hour, date.Minute, date.Second, date.Millisecond);
         }
         public bool GreaterThan(Time time)
         {
+            if (time == null)
+            {
+                throw new ArgumentException("Time should not be null");
+            }
             return CompareTime(time.Hour, time.Minute, time.Second, time.MilliSecond);
         }
         public bool LessThan(DateTime date)
@@ -70,7 +83,7 @@ namespace Vanrise.Entities
         #region Private Methods
         private bool CompareTime(int hour, int minute, int second, int milliSecond)
         {
-            if (this.Hour > hour)
+            if (this.Hour > hour && this.Hour!=null)
                 return true;
             else if (this.Hour == hour && this.Minute > minute)
                 return true;

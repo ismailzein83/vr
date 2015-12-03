@@ -1,7 +1,7 @@
 ﻿VrChartDirectiveTemplateController.$inject = ['$scope', 'TimeDimensionTypeEnum', 'ChartDefinitionTypeEnum', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
 function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, ChartDefinitionTypeEnum, BIConfigurationAPIService, ChartSeriesTypeEnum, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
-    //var mainGridAPI;
+    var lastTopMeasureValue;
     loadParameters();
     defineScope();
     load();
@@ -18,16 +18,30 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         $scope.selectedMeasureTypes = [];
         $scope.selectedMeasureType;
         $scope.selectedTopMeasure;
+        $scope.onSwitchValueChanged = function () {
+            console.log($scope.selectedTopMeasure);
+            if ($scope.isPieChart)
+                $scope.selectedTopMeasure = undefined;
+            else if(lastTopMeasureValue!=undefined)
+                $scope.selectedTopMeasure = lastTopMeasureValue;
+
+        }
+
         $scope.onSelectionChanged = function () {
             if ($scope.selectedTopMeasure == undefined)
-                $scope.selectedMeasureType!=undefined?$scope.selectedTopMeasure=$scope.selectedMeasureType: $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
-            else {
-
-                if ($scope.selectedMeasureTypes.length>0 &&!UtilsService.contains($scope.selectedMeasureTypes, $scope.selectedTopMeasure))
-                    $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
-                else
-                    $scope.selectedTopMeasure = $scope.selectedMeasureType
+            {
+                $scope.selectedMeasureType != undefined ? $scope.selectedTopMeasure = $scope.selectedMeasureType : $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
             }
+            else {
+                if ($scope.selectedMeasureTypes.length > 0 && !UtilsService.contains($scope.selectedMeasureTypes, $scope.selectedTopMeasure))
+                {
+                    $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
+                }
+                    
+                else if ($scope.selectedMeasureType!=undefined)
+                    $scope.selectedTopMeasure = $scope.selectedMeasureType;
+            }
+            lastTopMeasureValue = $scope.selectedTopMeasure;
         }
         $scope.topRecords = 10;
         $scope.isPieChart = true;
@@ -97,11 +111,12 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         }
         $scope.isPieChart = settings.IsPieChart;
        
-        for (i = 0; i < $scope.Entities.length; i++) {
-            for (j = 0; j < settings.EntityType.length; j++) {
+        $scope.selectedEntitiesType.length = 0;
+        for (j = 0; j < settings.EntityType.length; j++)
+        {
+            for (i = 0; i < $scope.Entities.length; i++) {
                 if ($scope.Entities[i].Name == settings.EntityType[j] && !UtilsService.contains($scope.selectedEntitiesType, $scope.Entities[i])) {
                     $scope.selectedEntitiesType.push($scope.Entities[i]);
-
                 }
             }
         }
@@ -121,10 +136,8 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
                     if ($scope.selectedOperationType.value == "TopEntities" && settings.IsPieChart)
                         $scope.selectedMeasureType = $scope.Measures[j];
                     else
-                    {
+                    {  
                         $scope.selectedMeasureTypes.push($scope.Measures[j]);
-                        if ($scope.Measures[j].Name == settings.TopMeasure)
-                            $scope.selectedTopMeasure = $scope.Measures[j];
                     }
                        
                 }
@@ -133,6 +146,7 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
 
             }
         }
+        lastTopMeasureValue = $scope.selectedTopMeasure;
        
 
 
@@ -202,7 +216,7 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
             angular.forEach(response, function (itm) {
                 $scope.Entities.push(itm);
             });
-            $scope.selectedEntitiesType.push($scope.Entities[0])  ;
+          //  $scope.selectedEntitiesType.push($scope.Entities[0])  ;
         });
     }
 
