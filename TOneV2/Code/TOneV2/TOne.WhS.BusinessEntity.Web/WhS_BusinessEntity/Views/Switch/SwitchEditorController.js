@@ -22,7 +22,7 @@
             if (parameters != undefined && parameters != null) {
                 switchId = parameters.switchId;
             }
-           
+
             isEditMode = (switchId != undefined);
         }
 
@@ -72,12 +72,10 @@
 
 
         function buildSwitchObjFromScope() {
-
             var whsSwitch = {
                 SwitchId: (switchId != null) ? switchId : 0,
                 Name: $scope.name
             };
-
             return whsSwitch;
         }
 
@@ -85,7 +83,7 @@
             var switchObject = buildSwitchObjFromScope();
             return WhS_BE_SwitchAPIService.AddSwitch(switchObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Switch", response)) {
+                if (VRNotificationService.notifyOnItemAdded("Switch", response, "Name")) {
                     if ($scope.onSwitchAdded != undefined)
                         $scope.onSwitchAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -93,14 +91,14 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
-
         }
+
 
         function updateSwitch() {
             var switchObject = buildSwitchObjFromScope();
             WhS_BE_SwitchAPIService.UpdateSwitch(switchObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Switch", response)) {
+                if (VRNotificationService.notifyOnItemUpdated("Switch", response,"Name")) {
                     if ($scope.onSwitchUpdated != undefined)
                         $scope.onSwitchUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
