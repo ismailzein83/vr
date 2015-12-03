@@ -245,6 +245,7 @@
     <Content Include="Images\login.png" />
     <Content Include="Images\logoonheader.png" />
     <Content Include="Images\menu-icons\Administration.png" />
+    <Content Include="Images\menu-icons\CLITester.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
