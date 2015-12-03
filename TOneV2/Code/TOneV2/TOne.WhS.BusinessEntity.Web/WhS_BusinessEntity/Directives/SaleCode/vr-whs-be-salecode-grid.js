@@ -48,7 +48,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleCodeAPIService) {
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_BE_SaleCodeAPIService.GetFilteredSaleCode(dataRetrievalInput)
+                return WhS_BE_SaleCodeAPIService.GetFilteredSaleCodes(dataRetrievalInput)
                     .then(function (response) {
                          onResponseReady(response);
                     })

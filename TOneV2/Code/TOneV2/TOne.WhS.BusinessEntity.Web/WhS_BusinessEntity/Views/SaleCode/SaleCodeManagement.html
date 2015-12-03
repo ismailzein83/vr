@@ -3,7 +3,11 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-whs-be-codegroup-selector on-ready="onCodeGroupDirectiveReady"></vr-whs-be-codegroup-selector>
+                    <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" selectedvalues="selectedSellingNumberPlan" onselectitem="onSellingNumberPlanSelectItem" isrequired="true"></vr-whs-be-sellingnumberplan-selector>
+                </vr-columns>
+                <vr-columns width="normal" ng-show="selectedSellingNumberPlan!=undefined">
+                    <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady">
+                    </vr-whs-be-salezone-selector>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-datetimepicker type="date" label="Effective On" value="effectiveOn"></vr-datetimepicker>

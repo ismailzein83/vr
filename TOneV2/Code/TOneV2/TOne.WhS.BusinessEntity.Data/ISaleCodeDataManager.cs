@@ -10,7 +10,8 @@ namespace TOne.WhS.BusinessEntity.Data
     public interface ISaleCodeDataManager : IDataManager
     {
         IEnumerable<SaleCode> GetAllSaleCodes();
-        
+
+        Vanrise.Entities.BigResult<Entities.SaleCode> GetSaleCodeFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SaleCodeQuery> input);
         List<SaleCode> GetSaleCodesByZoneID(long zoneID, DateTime effectiveDate);
        
         List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn);

@@ -6,23 +6,24 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
-
+using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleCodeManager
     {
         public Vanrise.Entities.IDataRetrievalResult<SaleCodeDetail> GetFilteredSaleCodes(Vanrise.Entities.DataRetrievalInput<SaleCodeQuery> input)
         {
-            var allSaleCodes = GetAllSaleCodes();
-            Func<SaleCode, bool> filterExpression = (prod) =>
-                     (input.Query.Code == null || prod.Code.Contains(input.Query.Code))
-                  && (input.Query.CodeGroupId.Equals(prod.CodeGroupId))
-                  && ((!input.Query.EffectiveOn.HasValue || (prod.BeginEffectiveDate <= input.Query.EffectiveOn)))
-                  && ((!input.Query.EffectiveOn.HasValue || !prod.EndEffectiveDate.HasValue || (prod.EndEffectiveDate > input.Query.EffectiveOn)));
+            ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
+            Vanrise.Entities.BigResult<SaleCode> saleCodes = dataManager.GetSaleCodeFilteredFromTemp(input);
+            BigResult<SaleCodeDetail> customerRouteDetailResult = new BigResult<SaleCodeDetail>()
+            {
+                ResultKey = saleCodes.ResultKey,
+                TotalCount = saleCodes.TotalCount,
+                Data = saleCodes.Data.MapRecords(SaleCodeDetailMapper)
+            };
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSaleCodes.ToBigResult(input, filterExpression, SaleCodeDetailMapper));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult);
         }
-
         public Dictionary<long, SaleCode> GetAllSaleCodes()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllSaleZones", () =>
@@ -79,9 +80,10 @@ namespace TOne.WhS.BusinessEntity.Business
         private SaleCodeDetail SaleCodeDetailMapper(SaleCode saleCode)
         {
             SaleCodeDetail saleCodeDetail = new SaleCodeDetail();
+            SaleZoneManager szmnager = new SaleZoneManager();
 
             saleCodeDetail.Entity = saleCode;
-
+            saleCodeDetail.ZoneName = szmnager.GetSaleZone(saleCode.ZoneId).Name;
             return saleCodeDetail;
         }
 

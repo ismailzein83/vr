@@ -153,7 +153,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 return dataManager.GetSaleZones(sellingNumberPlanId);
             });
         }
-
         private SaleZoneDetail SaleZoneDetailMapper(SaleZone saleZone)
         {
             SaleZoneDetail saleZoneDetail = new SaleZoneDetail();
@@ -164,14 +163,17 @@ namespace TOne.WhS.BusinessEntity.Business
             SellingNumberPlanManager sellingManager = new SellingNumberPlanManager();
             if (saleZone.CountryId != null)
             {
+
                 int countryId = (int)saleZone.CountryId;
-                saleZoneDetail.CountryName = manager.GetCountry(countryId).Name;
+                var country = manager.GetCountry(countryId);
+                saleZoneDetail.CountryName = (country != null) ? country.Name : "";
             }
 
             if (saleZone.SellingNumberPlanId != null)
             {
                 int sellingNumberPlanId = (int)saleZone.SellingNumberPlanId;
-                saleZoneDetail.SellingNumberPlanName = sellingManager.GetSellingNumberPlan(sellingNumberPlanId).Name;
+                var sellingNumberPlan = sellingManager.GetSellingNumberPlan(sellingNumberPlanId);
+                saleZoneDetail.SellingNumberPlanName = (sellingNumberPlan != null) ? sellingNumberPlan.Name : "";
             }
 
             return saleZoneDetail;

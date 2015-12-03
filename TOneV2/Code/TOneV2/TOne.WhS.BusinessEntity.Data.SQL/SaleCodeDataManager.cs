@@ -17,7 +17,21 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
           
         }
+        public Vanrise.Entities.BigResult<Entities.SaleCode> GetSaleCodeFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SaleCodeQuery> input)
+        {
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                string zonesids = null;
+                if (input.Query.ZonesIds != null && input.Query.ZonesIds.Count() > 0)
+                    zonesids = string.Join<int>(",", input.Query.ZonesIds);
 
+
+
+                ExecuteNonQuerySP("TOneWhS_BE.sp_SaleCode_CreateTempByFiltered", tempTableName, input.Query.EffectiveOn, input.Query.SellingNumberPlanId, zonesids);
+            };
+
+            return RetrieveData(input, createTempTableAction, SaleCodeMapper);
+        }
         public IEnumerable<SaleCode> GetAllSaleCodes()
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetAll", SaleCodeMapper);

@@ -9,5 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SaleCodeDetail
     {
         public SaleCode Entity { get; set; }
+
+        public string ZoneName { get; set; }
     }
 }
