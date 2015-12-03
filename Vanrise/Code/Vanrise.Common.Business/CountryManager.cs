@@ -19,6 +19,15 @@ namespace Vanrise.Common.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCountries.ToBigResult(input, filterExpression, CountryDetailMapper));     
         }
 
+        public IEnumerable<CountryInfo> GeCountriesInfo()
+        {
+            var allCountries = GetCachedCountries();
+            if (allCountries == null)
+                return null;
+
+            return allCountries.MapRecords(CountryInfoMapper);
+        }
+
         public IEnumerable<Country> GetAllCountries()
         {
             var allCountries = GetCachedCountries();
@@ -135,6 +144,15 @@ namespace Vanrise.Common.Business
 
             countryDetail.Entity = country;            
             return countryDetail;
+        }
+
+        private CountryInfo CountryInfoMapper(Country country)
+        {
+            CountryInfo countryInfo = new CountryInfo();
+
+            countryInfo.CountryId = country.CountryId;
+            countryInfo.Name = country.Name;
+            return countryInfo;
         }
         #endregion
     }

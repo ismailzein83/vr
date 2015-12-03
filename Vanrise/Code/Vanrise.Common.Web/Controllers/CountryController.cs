@@ -24,10 +24,10 @@ namespace Vanrise.Web.Controllers
 
         [HttpGet]
         [Route("GetCountriesInfo")]
-        public IEnumerable<Country> GetCountriesInfo()
+        public IEnumerable<CountryInfo> GetCountriesInfo()
         {
             CountryManager manager = new CountryManager();
-            return manager.GetAllCountries();
+            return manager.GeCountriesInfo();
         }
         [HttpGet]
         [Route("GetCountry")]
