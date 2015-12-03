@@ -105,18 +105,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             CountryManager manager = new CountryManager();
             CarrierAccountManager caManager = new CarrierAccountManager();
-            if (supplierZone.CountryId != null)
-            {
-                int countryId = (int)supplierZone.CountryId;
-                supplierZoneDetail.CountryName = manager.GetCountry(countryId).Name;
-            }
-
-            if (supplierZone.SupplierId != null)
-            {
-                int supplierId = (int)supplierZone.SupplierId;
-                supplierZoneDetail.SupplierName = caManager.GetCarrierAccount(supplierId).Name;
-            }
-
+            int countryId = supplierZone.CountryId;
+            supplierZoneDetail.CountryName = manager.GetCountry(countryId).Name;
+            
+            int supplierId = supplierZone.SupplierId;
+            supplierZoneDetail.SupplierName = caManager.GetCarrierAccount(supplierId).Name;
             return supplierZoneDetail;
         }
         #endregion
