@@ -137,8 +137,8 @@
     <Content Include="QM_BusinessEntity\Services\SupplierService.js" />
     <Content Include="QM_BusinessEntity\Views\Supplier\SupplierEditor.html" />
     <Content Include="QM_BusinessEntity\Views\Supplier\SupplierEditorController.js" />
-    <Content Include="QM_BusinessEntity\Views\Supplier\SwitchManagement.html" />
-    <Content Include="QM_BusinessEntity\Views\Supplier\SwitchManagementController.js" />
+    <Content Include="QM_BusinessEntity\Views\Supplier\SupplierManagement.html" />
+    <Content Include="QM_BusinessEntity\Views\Supplier\SupplierManagementController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
