@@ -13,7 +13,8 @@ namespace QualityMeasurement.Web
             bundles.Add(new ScriptBundle("~/bundles/ModulesJavascripts").IncludeDirectory(
                 "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/QM_CLITester", "*.js", true));
+                "~/Client/Modules/QM_CLITester", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/QM_BusinessEntity", "*.js", true));
         }
     }
 }

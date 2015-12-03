@@ -47,9 +47,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QualityMeasurement.DevRunti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QM.BusinessEntity.Data", "QM.BusinessEntity.Data\QM.BusinessEntity.Data.csproj", "{F088847E-2BCD-446A-B51A-3DBAAF7AC835}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QM.BusinessEntity.Web", "QM.BusinessEntity.Web\QM.BusinessEntity.Web.csproj", "{DF8E18EB-E9CE-4BAD-8F06-6162BACA8796}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 16
+		SccNumberOfProjects = 17
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -113,6 +115,10 @@ Global
 		SccProjectTopLevelParentUniqueName15 = QualityMeasurement.sln
 		SccProjectName15 = QM.BusinessEntity.Data
 		SccLocalPath15 = QM.BusinessEntity.Data
+		SccProjectUniqueName16 = QM.BusinessEntity.Web\\QM.BusinessEntity.Web.csproj
+		SccProjectTopLevelParentUniqueName16 = QualityMeasurement.sln
+		SccProjectName16 = QM.BusinessEntity.Web
+		SccLocalPath16 = QM.BusinessEntity.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -181,6 +187,10 @@ Global
 		{F088847E-2BCD-446A-B51A-3DBAAF7AC835}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F088847E-2BCD-446A-B51A-3DBAAF7AC835}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F088847E-2BCD-446A-B51A-3DBAAF7AC835}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF8E18EB-E9CE-4BAD-8F06-6162BACA8796}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF8E18EB-E9CE-4BAD-8F06-6162BACA8796}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF8E18EB-E9CE-4BAD-8F06-6162BACA8796}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF8E18EB-E9CE-4BAD-8F06-6162BACA8796}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -202,6 +212,7 @@ Global
 		{41D4A666-01ED-43E6-BACD-0FEC6DD106E8} = {C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6}
 		{E4D4007F-5889-4D28-9C4E-710D8908A60F} = {C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6}
 		{F088847E-2BCD-446A-B51A-3DBAAF7AC835} = {C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6}
+		{DF8E18EB-E9CE-4BAD-8F06-6162BACA8796} = {C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6}
 		{2B9ADE39-9B14-4660-A225-D6FAF6BA03B9} = {D12106CC-2DB4-49FA-80BC-16497A1922D9}
 	EndGlobalSection
 EndGlobal
