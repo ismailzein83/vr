@@ -61,5 +61,23 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="QM_CLITester\" />
+    <Folder Include="QM_CLITester\Tables\" />
+    <Folder Include="QM_BE\" />
+    <Folder Include="QM_BE\Tables\" />
+    <Folder Include="QM_CLITester\Stored Procedures\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="QM_CLITester\Tables\TestCall.sql" />
+    <Build Include="QM_BE\Tables\Zone.sql" />
+    <Build Include="QM_BE\Tables\Supplier.sql" />
+    <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_GetRequestedTestCallResult.sql" />
+    <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_Update.sql" />
+    <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_GetRequestedTestCall.sql" />
+    <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_GetAll.sql" />
+    <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_Insert.sql" />
+    <Build Include="Security\QM_CLITester.sql" />
+    <Build Include="Security\QM_BE.sql" />
   </ItemGroup>
 </Project>
