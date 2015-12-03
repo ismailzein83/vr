@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html ng-app="mainModule">
+<html ng-app="mainModule" ng-controller="mainCtrl">
 <head>
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="/images/iconheader.ico" type="image/ico" />
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>@ViewBag.Title</title>
+    <title>{{currentPage.Name}}</title>
     @Styles.Render("~/Content/bootstrap")
     @Styles.Render("~/Content/AngularExtensions")
     @Styles.Render("~/Content/CodeMirrorStyle")
@@ -17,7 +17,7 @@
 
 
 </head>
-<body ng-controller="mainCtrl">
+<body>
 
     <nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
         <div class="container">
@@ -94,7 +94,7 @@
                             </li>
                         </ul>
 
-                    </div>                    
+                    </div>
                     <div id="collapse-{{item.Id}}" ng-class=" menuItemsCurrent.Id == item.Id ?'am-collapse':menuItemsCurrent.Id==null ? 'am-collapse':''" ng-show=" menuItemsCurrent.Id == item.Id ">
                         <div class="panel-body">
                             <div ng-repeat="c in item.Childs">
@@ -125,7 +125,7 @@
 
             </div>
 
-            <div id="collapsedmenu" style="background-color: #ddd; height: 100%; width: 40px; position: fixed;"  ng-show="toogled==false">
+            <div id="collapsedmenu" style="background-color: #ddd; height: 100%; width: 40px; position: fixed;" ng-show="toogled==false">
                 <div class="dropdown dropdown-custom-serf leftdiv">
                     <div class="dropdown-toggle dropdown-item" style="font-size: 17px;top:9px;left:5px;display:block">
                         <span class=" hand-cursor glyphicon glyphicon glyphicon-pushpin " ng-class="pinned==true?'unpined-icon':''" style="font-size: 17px !important;top: 8px;left: 10px;" ng-click="pinpanel()"></span>
