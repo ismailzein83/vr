@@ -2,9 +2,9 @@
 
     "use strict";
 
-    switchManagementController.$inject = ['$scope', 'WhS_BE_SwitchService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    supplierManagementController.$inject = ['$scope', 'QM_BE_SupplierService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function switchManagementController($scope, WhS_BE_SwitchService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function supplierManagementController($scope, QM_BE_SupplierService, UtilsService, VRUIUtilsService, VRNotificationService) {
         var gridAPI;
 
         defineScope();
@@ -22,7 +22,7 @@
                     return gridAPI.loadGrid(getFilterObject());
             };
 
-            $scope.AddNewSwitch = AddNewSwitch;
+            $scope.AddNewSupplier = AddNewSupplier;
 
             function getFilterObject() {
                 var query = {
@@ -36,14 +36,14 @@
         }
 
 
-        function AddNewSwitch() {
-            var onSwitchAdded = function (addedItem) {
-                gridAPI.onSwitchAdded(addedItem);
+        function AddNewSupplier() {
+            var onSupplierAdded = function (addedItem) {
+                gridAPI.onSupplierAdded(addedItem);
             };
 
-            WhS_BE_SwitchService.addSwitch(onSwitchAdded);
+            QM_BE_SupplierService.addSupplier(onSupplierAdded);
         }
     }
 
-    appControllers.controller('WhS_BE_SwitchManagementController', switchManagementController);
+    appControllers.controller('QM_BE_SupplierManagementController', supplierManagementController);
 })(appControllers);

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQmBeSupplierGrid", ["UtilsService", "VRNotificationService", "QM_BE_SwitchAPIService", "QM_BE_SwitchService",
-function (UtilsService, VRNotificationService, QM_BE_SwitchAPIService, QM_BE_SwitchService) {
+app.directive("vrQmBeSupplierGrid", ["UtilsService", "VRNotificationService", "QM_BE_SupplierAPIService", "QM_BE_SupplierService",
+function (UtilsService, VRNotificationService, QM_BE_SupplierAPIService, QM_BE_SupplierService) {
 
     var directiveDefinitionObject = {
 
@@ -84,7 +84,7 @@ function (UtilsService, VRNotificationService, QM_BE_SwitchAPIService, QM_BE_Swi
             var onSwitchUpdated = function (updatedItem) {
                 gridAPI.itemUpdated(updatedItem);
             };
-            WhS_BE_SwitchService.editSwitch(supplier.Entity.SupplierId, onSwitchUpdated);
+            QM_BE_SupplierService.editSupplier(supplier.Entity.SupplierId, onSwitchUpdated);
         }
 
 

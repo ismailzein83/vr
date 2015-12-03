@@ -1,6 +1,6 @@
-﻿<div vr-modalcontent ng-controller="WhS_BE_SwitchEditorController" vr-loader="isLoading" width="'55%'">
+﻿<div vr-modalcontent ng-controller="QM_BE_SupplierEditorController" vr-loader="isLoading" width="'55%'">
     <vr-modalbody>
-        <vr-form name="formSwitchEditor">
+        <vr-form name="formSupplierEditor">
             <vr-row>
                 <vr-columns width="normal">
                     <vr-textbox label="Name" value="name" />
@@ -11,7 +11,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formSwitchEditor" data-onclick="SaveSwitch"></vr-button>
+                <vr-button type="Save" formname="formSupplierEditor" data-onclick="SaveSupplier"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

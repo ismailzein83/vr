@@ -35,8 +35,12 @@ namespace QM.BusinessEntity.Data.SQL
         {
             object supplierId;
             int recordsEffected = ExecuteNonQuerySP("[QM_BE].[sp_Supplier_Insert]", out supplierId, supplier.Name);
-            insertedId = (int)supplierId;
-            return (recordsEffected > 0);
+            bool insertedSuccesfully = (recordsEffected > 0);
+            if (insertedSuccesfully)
+                insertedId = (int)supplierId;
+            else
+                insertedId = 0;
+            return insertedSuccesfully;
         }
 
         public bool Update(Supplier supplier)

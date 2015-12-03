@@ -2,15 +2,15 @@
 
     "use strict";
 
-    switchEditorController.$inject = ['$scope', 'WhS_BE_SwitchAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    supplierEditorController.$inject = ['$scope', 'QM_BE_SupplierAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
-    function switchEditorController($scope, WhS_BE_SwitchAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function supplierEditorController($scope, QM_BE_SupplierAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
         var isEditMode;
 
-        var switchId;
+        var supplierId;
 
-        var switchEntity;
+        var supplierEntity;
 
         loadParameters();
         defineScope();
@@ -20,20 +20,20 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
-                switchId = parameters.switchId;
+                supplierId = parameters.supplierId;
             }
 
-            isEditMode = (switchId != undefined);
+            isEditMode = (supplierId != undefined);
         }
 
         function defineScope() {
 
-            $scope.SaveSwitch = function () {
+            $scope.SaveSupplier = function () {
                 if (isEditMode) {
-                    return updateSwitch();
+                    return updateSupplier();
                 }
                 else {
-                    return insertSwitch();
+                    return insertSupplier();
                 }
             };
 
@@ -47,8 +47,8 @@
             $scope.isLoading = true;
 
             if (isEditMode) {
-                $scope.title = "Edit Switch";
-                getSwitch().then(function () {
+                $scope.title = "Edit Supplier";
+                getSupplier().then(function () {
                     $scope.isLoading = false;
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -56,36 +56,36 @@
                 });
             }
             else {
-                $scope.title = "New Switch";
+                $scope.title = "New Supplier";
                 $scope.isLoading = false;
             }
         }
 
 
-        function getSwitch() {
-            return WhS_BE_SwitchAPIService.GetSwitch(switchId).then(function (whsSwitch) {
-                switchEntity = whsSwitch;
-                $scope.name = switchEntity.Name;
+        function getSupplier() {
+            return QM_BE_SupplierAPIService.GetSupplier(supplierId).then(function (whsSupplier) {
+                supplierEntity = whsSupplier;
+                $scope.name = supplierEntity.Name;
             });
         }
 
 
 
-        function buildSwitchObjFromScope() {
-            var whsSwitch = {
-                SwitchId: (switchId != null) ? switchId : 0,
+        function buildSupplierObjFromScope() {
+            var whsSupplier = {
+                SupplierId: (supplierId != null) ? supplierId : 0,
                 Name: $scope.name
             };
-            return whsSwitch;
+            return whsSupplier;
         }
 
-        function insertSwitch() {
-            var switchObject = buildSwitchObjFromScope();
-            return WhS_BE_SwitchAPIService.AddSwitch(switchObject)
+        function insertSupplier() {
+            var supplierObject = buildSupplierObjFromScope();
+            return QM_BE_SupplierAPIService.AddSupplier(supplierObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Switch", response, "Name")) {
-                    if ($scope.onSwitchAdded != undefined)
-                        $scope.onSwitchAdded(response.InsertedObject);
+                if (VRNotificationService.notifyOnItemAdded("Supplier", response, "Name")) {
+                    if ($scope.onSupplierAdded != undefined)
+                        $scope.onSupplierAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -94,13 +94,13 @@
         }
 
 
-        function updateSwitch() {
-            var switchObject = buildSwitchObjFromScope();
-            WhS_BE_SwitchAPIService.UpdateSwitch(switchObject)
+        function updateSupplier() {
+            var supplierObject = buildSupplierObjFromScope();
+            QM_BE_SupplierAPIService.UpdateSupplier(supplierObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Switch", response,"Name")) {
-                    if ($scope.onSwitchUpdated != undefined)
-                        $scope.onSwitchUpdated(response.UpdatedObject);
+                if (VRNotificationService.notifyOnItemUpdated("Supplier", response,"Name")) {
+                    if ($scope.onSupplierUpdated != undefined)
+                        $scope.onSupplierUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -109,5 +109,5 @@
         }
     }
 
-    appControllers.controller('WhS_BE_SwitchEditorController', switchEditorController);
+    appControllers.controller('QM_BE_SupplierEditorController', supplierEditorController);
 })(appControllers);
