@@ -22,10 +22,7 @@ function (UtilsService, VRUIUtilsService) {
         this.initCtrl = initCtrl;
 
         var defaultItem;
-        var onChange;
         var counter = 0;
-        var currentId;
-        var newId;
         var selectorAPI;
         var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -39,11 +36,11 @@ function (UtilsService, VRUIUtilsService) {
                 counter++;
                 var selectedId = selectorAPI.getSelectedIds;
                     
-                if ((!newId && counter > 1) || (newId && counter > 2)) {
+                if ((!defaultItem.NewRoutingProductId && counter > 1) || (defaultItem.NewRoutingProductId && counter > 2)) {
                     defaultItem.IsDirty = true;
 
-                    if (onChange && typeof (onChange) == "function")
-                        onChange();
+                    if (defaultItem.onChange && typeof (defaultItem.onChange) == "function")
+                        defaultItem.onChange();
                 }
             };
 
@@ -56,23 +53,19 @@ function (UtilsService, VRUIUtilsService) {
             var api = {};
 
             api.load = function (payload) {
-                if (payload != undefined) {
-                    defaultItem = payload.defaultItem;
-                    onChange = payload.onChange;
-                    currentId = payload.defaultItem.CurrentRoutingProductId;
-                    ctrl.CurrentName = payload.defaultItem.CurrentRoutingProductName;
-                    newId = payload.defaultItem.NewRoutingProductId;
+                if (payload) {
+                    defaultItem = payload;
+                    ctrl.CurrentName = defaultItem.CurrentRoutingProductName;
+                    //ctrl.IsEditable = defaultItem.IsCurrentRoutingProductEditable == null ? false : defaultItem.IsCurrentRoutingProductEditable;
                 }
-
-                //if (ctrl.IsEditable == null) ctrl.IsEditable = false;
 
                 var selectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                 var selectorPayload = {
-                    filter: { ExcludedRoutingProductId: currentId },
-                    selectedIds: newId
+                    filter: { ExcludedRoutingProductId: defaultItem.CurrentRoutingProductId, AssignableToOwnerType: defaultItem.OwnerType, AssignableToOwnerId: defaultItem.OwnerId },
+                    selectedIds: defaultItem.NewRoutingProductId
                 };
-
+                
                 $scope.isLoading = true;
 
                 VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);

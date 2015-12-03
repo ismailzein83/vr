@@ -23,8 +23,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         var gridAPI;
         var gridQuery;
         var gridDrillDownTabs;
-        var ownerType;
-        var ownerId;
 
         function initCtrl() {
             $scope.zoneItems = [];
@@ -54,8 +52,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 directive: "vr-whs-be-salerate-grid",
                 loadDirective: function (saleRateGridAPI, zoneItem) {
                     var query = {
-                        OwnerType: ownerType,
-                        OwnerId: ownerId,
+                        OwnerType: gridQuery.OwnerType,
+                        OwnerId: gridQuery.OwnerId,
                         ZonesIds: [zoneItem.ZoneId],
                         //EffectiveOn: new Date()
                     };
@@ -68,8 +66,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             var api = {};
 
             api.load = function (query) {
-                ownerType = query.OwnerType;
-                ownerId = query.OwnerId;
                 gridQuery = query;
                 gridAPI.clearDataAndContinuePaging();
                 return loadZoneItems();
@@ -170,6 +166,65 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                 zoneItem.onNewRateEEDChange = function (zoneItem) {
                     zoneItem.IsDirty = true;
+                };
+
+                zoneItem.refreshZoneItem = function (zoneItem) {
+                    var zoneChanges = [];
+                    applyChanges(zoneChanges, zoneItem);
+
+                    var input = {
+                        OwnerType: gridQuery.OwnerType,
+                        OwnerId: gridQuery.OwnerId,
+                        NewChanges: {
+                            ZoneChanges: zoneChanges
+                        }
+                    };
+
+                    zoneItem.isLoadingRouteOptions = true;
+
+                    var promises = [];
+
+                    var saveChangesPromise = WhS_Sales_RatePlanAPIService.SaveChanges(input);
+                    promises.push(saveChangesPromise);
+
+                    saveChangesPromise.then(function () {
+                        var zoneItemGetPromise = WhS_Sales_RatePlanAPIService.GetZoneItem(gridQuery.OwnerType, gridQuery.OwnerId, gridQuery.RoutingDatabaseId, gridQuery.RPRoutePolicyConfigId, gridQuery.NumberOfOptions, zoneItem.ZoneId);
+                        promises.push(zoneItemGetPromise);
+
+                        zoneItemGetPromise.then(function (zoneItemResponse) {
+                            var zoneItemLoadDeferred = UtilsService.createPromiseDeferred();
+                            promises.push(zoneItemLoadDeferred);
+
+                            if (zoneItemResponse) {
+                                zoneItemLoadDeferred.resolve();
+                                var gridZoneItem = UtilsService.getItemByVal($scope.zoneItems, zoneItemResponse.ZoneId, "ZoneId");
+
+                                if (gridZoneItem) {
+                                    gridZoneItem.EffectiveRoutingProductId = zoneItemResponse.EffectiveRoutingProductId;
+                                    gridZoneItem.EffectiveRoutingProductName = zoneItemResponse.EffectiveRoutingProductName;
+
+                                    var routeOptionsLoadDeferred = UtilsService.createPromiseDeferred();
+                                    promises.push(routeOptionsLoadDeferred.promise);
+
+                                    var payload = {
+                                        SaleZoneId: zoneItemResponse.ZoneId,
+                                        RoutingProductId: zoneItemResponse.EffectiveRoutingProductId,
+                                        RouteOptions: zoneItemResponse.RouteOptions
+                                    };
+
+                                    VRUIUtilsService.callDirectiveLoad(zoneItem.RouteOptionsAPI, payload, routeOptionsLoadDeferred);
+                                }
+                            }
+                            else
+                                zoneItemLoadDeferred.reject();
+                        });
+                    });
+
+                    UtilsService.waitMultiplePromises(promises).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    }).finally(function () {
+                        zoneItem.isLoadingRouteOptions = false;
+                    });
                 };
 
                 function setRouteOptionProperties(zoneItem) {

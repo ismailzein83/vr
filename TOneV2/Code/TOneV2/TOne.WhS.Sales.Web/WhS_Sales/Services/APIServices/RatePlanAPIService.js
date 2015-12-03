@@ -10,6 +10,7 @@
             GetZoneLetters: GetZoneLetters,
             GetDefaultItem: GetDefaultItem,
             GetZoneItems: GetZoneItems,
+            GetZoneItem: GetZoneItem,
             SavePriceList: SavePriceList,
             SaveChanges: SaveChanges
         });
@@ -23,6 +24,17 @@
 
         function GetZoneItems(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetZoneItems"), input);
+        }
+
+        function GetZoneItem(ownerType, ownerId, routingDatabaseId, policyConfigId, numberOfOptions, zoneId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetZoneItem"), {
+                ownerType: ownerType,
+                ownerId: ownerId,
+                routingDatabaseId: routingDatabaseId,
+                policyConfigId: policyConfigId,
+                numberOfOptions: numberOfOptions,
+                zoneId: zoneId
+            });
         }
 
         function GetDefaultItem(ownerType, ownerId) {

@@ -36,6 +36,13 @@ namespace TOne.WhS.Sales.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetZoneItem")]
+        public ZoneItem GetZoneItem(int routingDatabaseId, int policyConfigId, int numberOfOptions, SalePriceListOwnerType ownerType, int ownerId, long zoneId)
+        {
+            return _manager.GetZoneItem(ownerType, ownerId, routingDatabaseId, policyConfigId, numberOfOptions, zoneId);
+        }
+
+        [HttpGet]
         [Route("GetDefaultItem")]
         public DefaultItem GetDefaultItem(SalePriceListOwnerType ownerType, int ownerId)
         {

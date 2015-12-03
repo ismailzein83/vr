@@ -38,13 +38,16 @@ function (WhS_Routing_RPRouteService, UtilsService) {
             var api = {};
 
             api.load = function (payload) {
+                ctrl.routeOptions = [];
+
                 if (payload != undefined) {
                     routingDatabaseId = payload.RoutingDatabaseId;
                     routingProductId = payload.RoutingProductId;
                     saleZoneId = payload.SaleZoneId;
 
-                    for (var i = 0; i < payload.RouteOptions.length; i++)
-                        ctrl.routeOptions.push(payload.RouteOptions[i]);
+                    if (payload.RouteOptions)
+                        for (var i = 0; i < payload.RouteOptions.length; i++)
+                            ctrl.routeOptions.push(payload.RouteOptions[i]);
                 }
             };
 

@@ -22,8 +22,6 @@ function (UtilsService, VRUIUtilsService) {
 
         var zoneItem;
         var counter = 0;
-        var currentId;
-        var newId;
         var selectorAPI;
         var selectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -36,8 +34,12 @@ function (UtilsService, VRUIUtilsService) {
             ctrl.onSelectionChange = function () {
                 counter++;
 
-                if ((!newId && counter > 1) || (newId && counter > 2))
+                if ((!zoneItem.NewRoutingProductId && counter > 1) || (zoneItem.NewRoutingProductId && counter > 2)) {
                     zoneItem.IsDirty = true;
+
+                    if (zoneItem.refreshZoneItem && typeof (zoneItem.refreshZoneItem) == "function")
+                        zoneItem.refreshZoneItem(zoneItem);
+                }
             };
 
             selectorReadyDeferred.promise.then(function () {
@@ -51,19 +53,17 @@ function (UtilsService, VRUIUtilsService) {
             api.load = function (payload) {
                 if (payload != undefined) {
                     zoneItem = payload;
-                    currentId = payload.CurrentRoutingProductId;
-                    ctrl.CurrentName = payload.CurrentRoutingProductName;
-                    newId = payload.NewRoutingProductId;
+                    ctrl.CurrentName = zoneItem.CurrentRoutingProductName;
                 }
 
                 var selectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                 selectorReadyDeferred.promise.then(function () {
                     var selectorPayload = {
-                        filter: { ExcludedRoutingProductId: currentId },
-                        selectedIds: newId
+                        filter: { ExcludedRoutingProductId: zoneItem.CurrentRoutingProductId, AssignableToZoneId: zoneItem.ZoneId },
+                        selectedIds: zoneItem.NewRoutingProductId
                     };
-
+                    
                     $scope.isLoading = true;
                     VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);
                     selectorLoadDeferred.promise.finally(function () {

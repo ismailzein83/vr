@@ -129,12 +129,13 @@ namespace TOne.WhS.Routing.Data.SQL
         DataTable BuildRPZoneTable(IEnumerable<RPZone> rpZones)
         {
             DataTable dtRPZonesInfo = new DataTable();
-            dtRPZonesInfo.Columns.Add("ZoneID", typeof(Int64));
+            dtRPZonesInfo.Columns.Add("RoutingProductID", typeof(Int32));
+            dtRPZonesInfo.Columns.Add("SaleZoneID", typeof(Int64));
             dtRPZonesInfo.BeginLoadData();
             foreach (var item in rpZones)
             {
                 DataRow dr = dtRPZonesInfo.NewRow();
-                dr["RoutingProductId"] = item.RoutingProductId;
+                dr["RoutingProductID"] = item.RoutingProductId;
                 dr["SaleZoneID"] = item.SaleZoneId;
                 dtRPZonesInfo.Rows.Add(dr);
             }
@@ -166,18 +167,16 @@ namespace TOne.WhS.Routing.Data.SQL
                                                         FROM [dbo].[ProductRoute] 
                                                         Where RoutingProductId = @RoutingProductId And SaleZoneId = @SaleZoneId";
 
-        private const string query_GetRPRoutesByRPZones = @"                                                       
-                                           SELECT [RoutingProductId]
-                                                        ,[SaleZoneId]
-                                                        ,[ExecutedRuleId]
-                                                        ,[OptionsDetailsBySupplier]
-                                                        ,[OptionsByPolicy]
-                                                        ,[IsBlocked]
-                                           FROM [dbo].[ProductRoute] pr with(nolock)
-                                           JOIN @RPZoneList z 
-                                           ON z.RoutingProductId = pr.RoutingProductId AND z.SaleZoneId = pr.SaleZoneId";
+        private const string query_GetRPRoutesByRPZones = @"SELECT pr.[RoutingProductId],
+                                                                pr.[SaleZoneId],
+                                                                pr.[ExecutedRuleId],
+                                                                pr.[OptionsDetailsBySupplier],
+                                                                pr.[OptionsByPolicy],
+                                                                pr.[IsBlocked]
+                                                            FROM [dbo].[ProductRoute] pr with(nolock)
+                                                            JOIN @RPZoneList z
+                                                            ON z.RoutingProductId = pr.RoutingProductId AND z.SaleZoneId = pr.SaleZoneId";
 
         #endregion
-
     }
 }
