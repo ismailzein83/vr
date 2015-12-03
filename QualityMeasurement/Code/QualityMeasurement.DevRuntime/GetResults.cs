@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using QM.CLITester.Business;
+using QM.CLITester.Entities;
 
 namespace QualityMeasurement.DevRuntime
 {
@@ -11,6 +13,7 @@ namespace QualityMeasurement.DevRuntime
     {
         private static Form1 f;
         private static readonly object _syncRoot = new object();
+        private static bool _locked;
 
         public void Start(Form1 f)
         {
@@ -23,11 +26,20 @@ namespace QualityMeasurement.DevRuntime
         {
             try
             {
-                lock (_syncRoot)
+                while (_locked != true)
                 {
+                    _locked = true;
+                    lock (_syncRoot)
+                    {
+                        //Get Result
+                        TestCallManager manager = new TestCallManager();
+                        List<TestCallResult> listTestCallResults = manager.GetRequestedTestCallResults();
+                        foreach (TestCallResult testCallResult in listTestCallResults)
+                            manager.TestCallResult(testCallResult);
 
-                    //Get Result
-
+                        _locked = false;
+                        Thread.Sleep(1000);
+                    }
                 }
             }
             catch (Exception ex)

@@ -25,11 +25,29 @@ namespace QM.CLITester.Data.SQL
         {
             return GetItemsSP("QM_CLITester.sp_TestCall_GetAll", TestCallMapper);
         }
+
+        public List<TestCallResult> GetRequestedTestCalls()
+        {
+            return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCall", TestCallMapper);
+        }
+        public List<TestCallResult> GetRequestedTestCallResults()
+        {
+            return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCallResult", TestCallMapper);
+        }
+
+        public bool Update(Entities.TestCallResult testCallResult)
+        {
+            int recordsEffected = ExecuteNonQuerySP("[QM_CLITester].[sp_TestCall_Update]", testCallResult.Id,
+                testCallResult.SupplierID, testCallResult.CountryID, testCallResult.ZoneID, testCallResult.Test_ID, testCallResult.Name, testCallResult.Calls_Total,
+                testCallResult.Calls_Complete, testCallResult.CLI_Success, testCallResult.CLI_No_Result, testCallResult.CLI_Fail, testCallResult.PDD, testCallResult.Status);
+            return (recordsEffected > 0);
+        }
+
         TestCallResult TestCallMapper(IDataReader reader)
         {
             TestCallResult testCallResult = new TestCallResult
             {
-                Id = (int)reader["ID"],
+                Id = (long)reader["ID"],
                 SupplierID = (int)reader["SupplierID"],
                 CountryID = (int)reader["CountryID"],
                 ZoneID = (int)reader["ZoneID"],

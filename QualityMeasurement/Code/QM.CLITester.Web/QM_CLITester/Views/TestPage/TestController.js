@@ -2,10 +2,11 @@
 
     "use strict";
 
-    testController.$inject = ['$scope', 'QM_CLITester_TestCall', 'VRNotificationService'];
+    testController.$inject = ['$scope', 'Qm_CliTester_TestCallAPIService', 'VRNotificationService', 'UtilsService'];
 
-    function testController($scope, QM_CLITester_TestCall, VRNotificationService) {
-
+    function testController($scope, Qm_CliTester_TestCallAPIService, VRNotificationService, UtilsService) {
+        var gridAPI;
+        var filter = {};
 
         defineScope();
         load();
@@ -15,19 +16,35 @@
             $scope.countries = [];
             $scope.breakouts = [];
             $scope.suppliers = [];
-            $scope.isGettingData = false;
+           
             $scope.selectedCountry;
             $scope.selectedBreakout;
             $scope.selectedSupplier;
+
+            setFilterObject();
+
+            $scope.onGridReady = function (api) {
+                gridAPI = api;
+                api.loadGrid(filter);
+            }
         }
 
         function load() {
-            getCountriesInfo();
-            getSuppliersInfo();
+            $scope.isGettingData = true;
+            UtilsService.waitMultipleAsyncOperations([getCountriesInfo, getSuppliersInfo]).then(function () {
+            }).finally(function () {
+                $scope.isGettingData = false;
+            });
+        }
+
+        function setFilterObject() {
+            filter = {
+                Test_ID: null
+            };
         }
 
         function getCountriesInfo() {
-            return QM_CLITester_TestCall.GetCountries().then(function (response) {
+            return Qm_CliTester_TestCallAPIService.GetCountries().then(function (response) {
                 $scope.countries.length = 0;
                 angular.forEach(response, function (itm) {
                     $scope.countries.push(itm);
@@ -36,7 +53,7 @@
         }
 
         function getSuppliersInfo() {
-            return QM_CLITester_TestCall.GetSuppliers().then(function (response) {
+            return Qm_CliTester_TestCallAPIService.GetSuppliers().then(function (response) {
                 $scope.suppliers.length = 0;
                 angular.forEach(response, function (itm) {
                     $scope.suppliers.push(itm);
@@ -46,17 +63,20 @@
 
         $scope.previewBreakouts = function () {
             if ($scope.selectedCountry != undefined) {
-                $scope.isGettingData = true;
                 getBreakoutsInfo($scope.selectedCountry.Id);
             }
         }
 
         function getBreakoutsInfo(selectedCountryId) {
-            return QM_CLITester_TestCall.GetBreakouts(selectedCountryId).then(function (response) {
+            $scope.isLoading = true;
+            return Qm_CliTester_TestCallAPIService.GetBreakouts(selectedCountryId).then(function(response) {
+
                 $scope.breakouts.length = 0;
-                angular.forEach(response, function (itm) {
+                angular.forEach(response, function(itm) {
                     $scope.breakouts.push(itm);
                 });
+            }).finally(function() {
+                $scope.isLoading = false;
             });
         }
 
@@ -73,34 +93,19 @@
 
         function addNewTestCall() {
             var testCallObject = buildTestCallObjFromScope();
-            return QM_CLITester_TestCall.AddNewTestCall(testCallObject)
+            return Qm_CliTester_TestCallAPIService.AddNewTestCall(testCallObject)
             .then(function (response) {
+                $scope.selectedSupplier = undefined;
+                $scope.selectedCountry = undefined;
+                $scope.selectedBreakout = undefined;
                 if (VRNotificationService.notifyOnItemAdded("Test Call", response, "Name")) {
-
                     if ($scope.onTestCallAdded != undefined)
                         $scope.onTestCallAdded(response.InsertedObject);
-
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
-
         }
-
-
-        //function addNewTestCall() {
-        //    return QM_CLITester_TestCall.AddNewTestCall($scope.selectedCountry.Id, $scope.selectedBreakout.Id, $scope.selectedSupplier.Id).then(function (response) {
-        //        console.log(response);
-        //        //angular.forEach(response, function (itm) {
-
-
-        //        //});
-
-        //    });
-
-        //}
-
     }
-
     appControllers.controller('QM_CLITester_TestController', testController);
 })(appControllers);

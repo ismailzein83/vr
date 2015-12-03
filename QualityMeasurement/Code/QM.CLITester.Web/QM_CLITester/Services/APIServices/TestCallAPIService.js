@@ -18,29 +18,23 @@
             return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetSuppliers"), {});
         }
 
-
-
         function AddNewTestCall(testCallObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "AddNewTestCall"), testCallObject);
         }
 
-        //function AddNewTestCall(selectedCountry, selectedBreakout, selectedSupplier) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "AddNewTestCall"),
-        //    {
-        //        selectedCountry: selectedCountry,
-        //        selectedBreakout: selectedBreakout,
-        //        selectedSupplier: selectedSupplier
-        //    });
-        //}
+        function GetFilteredTestCalls(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetFilteredTestCalls"), input);
+        }
 
         return ({
             GetCountries: GetCountries,
             GetBreakouts: GetBreakouts,
             GetSuppliers: GetSuppliers,
-            AddNewTestCall: AddNewTestCall
+            AddNewTestCall: AddNewTestCall,
+            GetFilteredTestCalls: GetFilteredTestCalls
         });
     }
 
-    appControllers.service('QM_CLITester_TestCall', TestCallAPIService);
+    appControllers.service('Qm_CliTester_TestCallAPIService', TestCallAPIService);
 
 })(appControllers);

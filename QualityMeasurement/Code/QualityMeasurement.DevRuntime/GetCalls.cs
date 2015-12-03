@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using QM.CLITester.Business;
+using QM.CLITester.Entities;
 
 namespace QualityMeasurement.DevRuntime
 {
@@ -11,12 +13,14 @@ namespace QualityMeasurement.DevRuntime
     {
         private static bool _locked;
         private static Form1 _form1;
+        private static readonly object _syncRoot = new object();
 
         public void Start(Form1 f)
         {
+
             _locked = false;
-            _form1 = f;
-            Thread thread = new Thread(GetCall);
+            GetCalls._form1 = f;
+            Thread thread = new Thread(new ThreadStart(GetCall));
             thread.IsBackground = true;
             thread.Start();
         }
@@ -28,11 +32,18 @@ namespace QualityMeasurement.DevRuntime
                 while (_locked != true)
                 {
                     _locked = true;
+                    lock (_syncRoot)
+                    {
+                        //Get Calls
+                        TestCallManager manager = new TestCallManager();
+                        List<TestCallResult> listTestCallResults = manager.GetRequestedTestCalls();
+                        foreach (TestCallResult testCallResult in listTestCallResults)
+                            manager.TestCall(testCallResult);
 
-                    //Get Calls
+                        _locked = false;
+                        Thread.Sleep(1000);
+                    }
 
-                    _locked = false;
-                    Thread.Sleep(1000);
                 }
             }
             catch (Exception ex)

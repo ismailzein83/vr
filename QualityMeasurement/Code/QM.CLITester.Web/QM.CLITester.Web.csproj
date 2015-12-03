@@ -156,9 +156,7 @@
     <Compile Include="Controllers\TestCallController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="QM_CLITester\Directives\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
@@ -175,6 +173,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="QM_CLITester\Constant\ModuleConfig.js" />
+    <Content Include="QM_CLITester\Directives\TestCall\Templates\TestCallGridTemplate.html" />
+    <Content Include="QM_CLITester\Directives\TestCall\vr-qm-clitester-testcall-grid.js" />
     <Content Include="QM_CLITester\Services\APIServices\TestCallAPIService.js" />
     <Content Include="QM_CLITester\Services\TestCallService.js" />
     <Content Include="QM_CLITester\Views\TestPage\Test.html" />

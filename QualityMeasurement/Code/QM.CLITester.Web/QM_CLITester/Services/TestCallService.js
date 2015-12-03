@@ -1,5 +1,5 @@
 ﻿
-app.service('WhS_BE_TestCallService', ['VRModalService',
+app.service('Qm_CliTester_TestCallService', ['VRModalService',
     function (VRModalService) {
 
        

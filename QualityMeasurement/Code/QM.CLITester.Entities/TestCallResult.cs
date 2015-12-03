@@ -8,7 +8,7 @@ namespace QM.CLITester.Entities
 {
     public class TestCallResult
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int SupplierID { get; set; }
         public int CountryID { get; set; }
         public int ZoneID { get; set; }
