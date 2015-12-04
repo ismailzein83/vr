@@ -60,7 +60,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 if (existingCode.CodeEntity.BeginEffectiveDate < importedCode.BED)
                     recentCodeZoneName = existingCode.ParentZone.ZoneEntity.Name;
                 existingCode.IsImported = true;
-                if (existingCode.EED.VRGreaterThan(importedCode.BED))
+                if (existingCode.EED.VRGreaterThan(importedCode.BED) && importedCode.EED.VRGreaterThan(existingCode.CodeEntity.BeginEffectiveDate))
                 {
                     if (SameCodes(importedCode, existingCode))
                     {
@@ -198,6 +198,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             foreach (var existingCode in existingCodes)
             {
+                //this has a bug, it should be handled in a different approach
                 if (!existingCode.IsImported)
                 {
                     existingCode.ChangedCode = new ChangedCode
@@ -249,16 +250,20 @@ namespace TOne.WhS.SupplierPriceList.Business
                         }
                     }
                 }
+
                 if (!hasCodes || maxCodeEED.HasValue)
                 {
                     if (!hasCodes)
                         maxCodeEED = existingZone.BED;
-                    existingZone.ChangedZone = new ChangedZone
+                    if (maxCodeEED != existingZone.EED)
                     {
-                        ZoneId = existingZone.ZoneId,
-                        EED = maxCodeEED.Value
-                    };
-                    changedZones.Add(existingZone.ChangedZone);
+                        existingZone.ChangedZone = new ChangedZone
+                        {
+                            ZoneId = existingZone.ZoneId,
+                            EED = maxCodeEED.Value
+                        };
+                        changedZones.Add(existingZone.ChangedZone);
+                    }
                 }
             }
         }

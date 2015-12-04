@@ -78,7 +78,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             {
                 if (existingRate.RateEntity.BeginEffectiveDate < importedRate.BED)
                     recentRateValue = existingRate.RateEntity.NormalRate;
-                if (existingRate.EED.VRGreaterThan(importedRate.BED))
+                if (existingRate.EED.VRGreaterThan(importedRate.BED) && importedRate.EED.VRGreaterThan(existingRate.RateEntity.BeginEffectiveDate))
                 {
                     if (SameRates(importedRate, existingRate))
                     {
