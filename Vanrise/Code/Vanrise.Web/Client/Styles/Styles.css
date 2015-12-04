@@ -33,7 +33,12 @@ font-size:12px !important;
         width:auto !important;
     }
 }
-
+@media (max-width: 992px ) {   
+    .responsive-container{
+        white-space: pre-line;
+        text-overflow: ellipsis;
+    }
+}
 .vr-user-label{
     font-weight: bold;
     color: #635F5F;
@@ -1533,7 +1538,7 @@ vr-datagrid[hideheader="true"] .vr-datagrid{
 .vr-datagrid-celltext {
     display: inline-block;
     width: 100%;
-    overflow: unset;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
