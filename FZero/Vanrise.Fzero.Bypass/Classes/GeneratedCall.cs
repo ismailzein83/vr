@@ -220,6 +220,22 @@ namespace Vanrise.Fzero.Bypass
                             NumberWithoutAreaCodeb_number = gc.b_number.Substring("964".Count() + 2);
                         }
 
+                        if (gc.b_number.StartsWith("240"))
+                        {
+                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("240".Count());
+                        }
+
+                        if (gc.b_number.StartsWith("+" + "240"))
+                        {
+                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("240".Count() + 1);
+                        }
+
+                        if (gc.b_number.StartsWith("00" + "240"))
+                        {
+                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("240".Count() + 2);
+                        }
+
+
                         foreach (MobileOperator j in lstMobileOperators)
                         {
                             if (j.User.FullName == Global_DefaultMobileOperator)
@@ -535,6 +551,22 @@ namespace Vanrise.Fzero.Bypass
                         }
 
 
+                        if (rc.CLI.StartsWith("240"))
+                        {
+                            NumberWithoutAreaCodeCLI = rc.CLI.Substring("240".Count());
+                        }
+
+                        if (rc.CLI.StartsWith("+" + "240"))
+                        {
+                            NumberWithoutAreaCodeCLI = rc.CLI.Substring("240".Count() + 1);
+                        }
+
+                        if (rc.CLI.StartsWith("00" + "240"))
+                        {
+                            NumberWithoutAreaCodeCLI = rc.CLI.Substring("240".Count() + 2);
+                        }
+
+
 
                         rc.MobileOperatorID = null;
 
@@ -735,6 +767,21 @@ namespace Vanrise.Fzero.Bypass
                         if (gc.b_number.StartsWith("00" + "964"))
                         {
                             NumberWithoutAreaCodeb_number = gc.b_number.Substring("964".Count() + 2);
+                        }
+
+                        if (gc.b_number.StartsWith("240"))
+                        {
+                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("240".Count());
+                        }
+
+                        if (gc.b_number.StartsWith("+" + "240"))
+                        {
+                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("240".Count() + 1);
+                        }
+
+                        if (gc.b_number.StartsWith("00" + "240"))
+                        {
+                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("240".Count() + 2);
                         }
 
 
@@ -1030,6 +1077,21 @@ namespace Vanrise.Fzero.Bypass
                 if (gc.CLI.StartsWith("00" + "964"))
                 {
                     NumberWithoutAreaCodeCLI = gc.CLI.Substring("964".Count() + 2);
+                }
+
+                if (gc.CLI.StartsWith("240"))
+                {
+                    NumberWithoutAreaCodeCLI = gc.CLI.Substring("240".Count());
+                }
+
+                if (gc.CLI.StartsWith("+" + "240"))
+                {
+                    NumberWithoutAreaCodeCLI = gc.CLI.Substring("240".Count() + 1);
+                }
+
+                if (gc.CLI.StartsWith("00" + "240"))
+                {
+                    NumberWithoutAreaCodeCLI = gc.CLI.Substring("240".Count() + 2);
                 }
 
 

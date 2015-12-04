@@ -309,6 +309,23 @@ namespace Vanrise.Fzero.Bypass
                             NumberWithoutAreaCodeCLI = RelatedNumber1.Substring("964".Count() + 2);
                         }
 
+
+                        if (RelatedNumber1.StartsWith("240"))
+                        {
+                            NumberWithoutAreaCodeCLI = RelatedNumber1.Substring("240".Count());
+                        }
+
+                        if (RelatedNumber1.StartsWith("+" + "240"))
+                        {
+                            NumberWithoutAreaCodeCLI = RelatedNumber1.Substring("240".Count() + 1);
+                        }
+
+                        if (RelatedNumber1.StartsWith("00" + "240"))
+                        {
+                            NumberWithoutAreaCodeCLI = RelatedNumber1.Substring("240".Count() + 2);
+                        }
+
+
                         if (RelatedNumber1.StartsWith("963"))
                         {
                             NumberWithoutAreaCodeCLI = RelatedNumber1.Substring("963".Count());
