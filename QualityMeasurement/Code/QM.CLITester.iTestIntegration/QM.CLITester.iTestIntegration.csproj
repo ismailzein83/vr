@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CLITesterConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupplierExtensionSettings.cs" />
   </ItemGroup>

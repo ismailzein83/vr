@@ -34,7 +34,7 @@ namespace QM.CLITester.Entities
 
     public enum GetTestProgressResult { TestCompleted, ProgressChanged, ProgressNotChanged, FailedWithRetry, FailedWithNoRetry }
 
-    public enum TestResult { NotCompleted, Succeeded, PartiallySucceeded, Failed, NotAnswered}
+    public enum CallTestResult { NotCompleted = 0, Succeeded = 1, PartiallySucceeded = 2, Failed = 3, NotAnswered = 4}
 
     public interface IGetTestProgressContext
     {
@@ -49,6 +49,6 @@ namespace QM.CLITester.Entities
 
         public Object TestProgress { get; set; }
 
-        public TestResult TestResult { get; set; }
+        public CallTestResult TestResult { get; set; }
     }
 }

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Breakout.cs" />
+    <Compile Include="CallTestStatus.cs" />
     <Compile Include="Country.cs" />
     <Compile Include="ICLITesterConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

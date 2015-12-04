@@ -25,6 +25,8 @@ namespace QualityMeasurement.DevRuntime
             thread.Start();
         }
 
+        ICLITesterConnector cliTestConnector = new QM.CLITester.iTestIntegration.CLITesterConnector();
+
         private void GetCall()
         {
             try
