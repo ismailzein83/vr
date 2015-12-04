@@ -82,8 +82,21 @@ namespace TOne.WhS.SupplierPriceList.Business
                 {
                     if (SameRates(importedRate, existingRate))
                     {
-                        shouldNotAddRate = true;
-                        break;
+                        if (importedRate.EED == existingRate.EED)
+                        {
+                            shouldNotAddRate = true;
+                            break;
+                        }
+                        else if(importedRate.EED.HasValue && importedRate.EED.VRLessThan(existingRate.EED))
+                        {
+                            existingRate.ChangedRate = new ChangedRate
+                            {
+                                RateId = existingRate.RateEntity.SupplierRateId,
+                                EED = importedRate.EED.Value 
+                            };
+                            importedRate.ChangedExistingRates.Add(existingRate);
+                        }
+
                     }
                     else
                     {
@@ -151,7 +164,6 @@ namespace TOne.WhS.SupplierPriceList.Business
         private bool SameRates(ImportedRate importedRate, ExistingRate existingRate)
         {
             return importedRate.BED == existingRate.RateEntity.BeginEffectiveDate
-               && importedRate.EED == existingRate.RateEntity.EndEffectiveDate
                && importedRate.NormalRate == existingRate.RateEntity.NormalRate
                && importedRate.CurrencyId == existingRate.RateEntity.CurrencyId
                && SameRateOtherRates(importedRate, existingRate);

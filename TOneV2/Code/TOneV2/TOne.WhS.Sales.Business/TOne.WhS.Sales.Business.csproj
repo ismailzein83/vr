@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CostCalculationMethodContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatePlanManager.cs" />
   </ItemGroup>

@@ -64,19 +64,30 @@ namespace TOne.WhS.SupplierPriceList.Business
                 {
                     if (SameCodes(importedCode, existingCode))
                     {
-                        shouldNotAddCode = true;
-                        break;
-                    }
-                    else
-                    {
-                        DateTime existingCodeEED = importedCode.BED > existingCode.CodeEntity.BeginEffectiveDate ? importedCode.BED : existingCode.CodeEntity.BeginEffectiveDate;
-                        existingCode.ChangedCode = new ChangedCode
+                        if (importedCode.EED == existingCode.EED)
                         {
-                            CodeId = existingCode.CodeEntity.SupplierCodeId,
-                            EED = existingCodeEED
-                        };
-                        importedCode.ChangedExistingCodes.Add(existingCode);
+                            shouldNotAddCode = true;
+                            break;
+                        }
+                        else if (importedCode.EED.HasValue && importedCode.EED.VRLessThan(existingCode.EED))
+                        {
+                            existingCode.ChangedCode = new ChangedCode
+                                {
+                                    CodeId = existingCode.CodeEntity.SupplierCodeId,
+                                    EED = importedCode.EED.Value
+                                };
+                            importedCode.ChangedExistingCodes.Add(existingCode);
+                            shouldNotAddCode = true;
+                            break;
+                        }
                     }
+                    DateTime existingCodeEED = importedCode.BED > existingCode.CodeEntity.BeginEffectiveDate ? importedCode.BED : existingCode.CodeEntity.BeginEffectiveDate;
+                    existingCode.ChangedCode = new ChangedCode
+                    {
+                        CodeId = existingCode.CodeEntity.SupplierCodeId,
+                        EED = existingCodeEED
+                    };
+                    importedCode.ChangedExistingCodes.Add(existingCode);
                 }
             }
         }
@@ -180,7 +191,6 @@ namespace TOne.WhS.SupplierPriceList.Business
         private bool SameCodes(ImportedCode importedCode, ExistingCode existingCode)
         {
             return importedCode.BED == existingCode.CodeEntity.BeginEffectiveDate
-                && importedCode.EED == existingCode.CodeEntity.EndEffectiveDate
                 && importedCode.ZoneName== existingCode.ParentZone.ZoneEntity.Name;
         }
 
