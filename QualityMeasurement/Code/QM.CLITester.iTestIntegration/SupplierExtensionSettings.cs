@@ -4,6 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using QM.BusinessEntity.Entities;
+using System.Net;
+using System.IO;
+using QM.CLITester.Entities;
+using System.Text.RegularExpressions;
+using System.Xml;
 //using QM.BusinessEntity.Data;
 //using Vanrise.Entities;
 
@@ -15,54 +20,44 @@ namespace QM.CLITester.iTestIntegration
 
         public bool IsNew { get; set; }
 
-        public override void Apply(Supplier supplier)
+        const string GoodAmpersand = "&amp;";
+
+        public override void Apply(BusinessEntity.Entities.Supplier supplier)
         {
-            //throw new NotImplementedException();
+            ServiceActions serviceActions = new ServiceActions();
+
+            responseSupplier(serviceActions.PostRequest("5020", "&sid=" + supplier.SupplierId + "&name=" + supplier.Name + "&type=sms&codec=alaw&prefix" + this.Prefix), supplier);
         }
 
-        //public InsertOperationOutput<Supplier> AddNewTestCall(Supplier supplier)
-        //{
-        //    InsertOperationOutput<Supplier> insertOperationOutput = new InsertOperationOutput<TestCallResult>();
+        private BusinessEntity.Entities.Supplier responseSupplier(string response, BusinessEntity.Entities.Supplier supplier)
+        {
+            Regex badAmpersand = new Regex("&(?![a-zA-Z]{2,6};|#[0-9]{2,4};)");
+            response = badAmpersand.Replace(response, GoodAmpersand);
 
-        //    insertOperationOutput.Result = InsertOperationResult.Failed;
-        //    insertOperationOutput.InsertedObject = null;
+            response = response.Replace("<" + supplier.SupplierId + ">", "<_" + supplier.SupplierId + ">");
 
-        //    int carrierAccountId = -1;
+            response = response.Replace("</" + supplier.SupplierId + ">", "</_" + supplier.SupplierId + ">");
 
-        //    ISupplierDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ISupplierDataManager>();
-        //    bool insertActionSucc = dataManager.Insert(supplier, out carrierAccountId);
-        //    if (insertActionSucc)
-        //    {
-        //        insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-        //        insertOperationOutput.InsertedObject = supplier;
-        //    }
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(response);
 
-        //    return insertOperationOutput;
-        //}
+            XmlNodeList xnList = xml.SelectNodes("/Vendors_List/_" + supplier.SupplierId);
+            if (xnList != null)
+            {
+                List<ExtendedSupplierSetting> extendedSettings = new List<ExtendedSupplierSetting>();
+                new List<ExtendedSupplierSetting>().Add(new SupplierExtensionSettings() { Prefix = xnList[0]["Prefix"] != null ? xnList[0]["Prefix"].InnerText : "" });
 
-        //public Vanrise.Entities.UpdateOperationOutput<TestCallResult> UpdateTestCallResult(TestCallResult testCallResult)
-        //{
-        //    ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
+                BusinessEntity.Entities.Supplier supplierNode = new BusinessEntity.Entities.Supplier
+                {
+                    Name = xnList[0]["Supplier_Name"] != null ? xnList[0]["Supplier_Name"].InnerText : "",
+                    Settings = new SupplierSettings() { ExtendedSettings = extendedSettings },
+                    SupplierId = supplier.SupplierId,
+                };
 
-        //    bool updateActionSucc = dataManager.Update(testCallResult);
-        //    Vanrise.Entities.UpdateOperationOutput<TestCallResult> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<TestCallResult>();
-
-        //    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-        //    updateOperationOutput.UpdatedObject = null;
-
-        //    if (updateActionSucc)
-        //    {
-        //        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-        //        updateOperationOutput.UpdatedObject = testCallResult;
-        //    }
-        //    else
-        //    {
-        //        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-        //    }
-
-        //    return updateOperationOutput;
-        //}
-
+                return supplierNode;
+            }
+            return null;
+        }
 
     }
 }
