@@ -14,7 +14,7 @@ namespace QM.CLITester.iTestIntegration
 
         public override void Apply(BusinessEntity.Entities.Supplier supplier)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }

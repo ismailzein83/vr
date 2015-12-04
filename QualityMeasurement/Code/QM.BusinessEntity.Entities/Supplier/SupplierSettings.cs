@@ -8,7 +8,7 @@ namespace QM.BusinessEntity.Entities
 {
     public class SupplierSettings
     {
-        public Dictionary<string, ExtendedSupplierSetting> ExtendedSettings { get; set; }
+        public List<ExtendedSupplierSetting> ExtendedSettings { get; set; }
     }
 
     public abstract class ExtendedSupplierSetting

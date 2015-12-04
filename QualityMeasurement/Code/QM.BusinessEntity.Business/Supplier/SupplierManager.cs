@@ -49,7 +49,7 @@ namespace QM.BusinessEntity.Business
             int supplierId = -1;
             if (supplier.Settings != null && supplier.Settings.ExtendedSettings != null)
             {
-                foreach (var extendedSetting in supplier.Settings.ExtendedSettings.Values)
+                foreach (var extendedSetting in supplier.Settings.ExtendedSettings)
                 {
                     extendedSetting.Apply(supplier);
                 }
@@ -74,7 +74,7 @@ namespace QM.BusinessEntity.Business
         {
             if (supplier.Settings != null && supplier.Settings.ExtendedSettings != null)
             {
-                foreach (var extendedSetting in supplier.Settings.ExtendedSettings.Values)
+                foreach (var extendedSetting in supplier.Settings.ExtendedSettings)
                 {
                     extendedSetting.Apply(supplier);
                 }
