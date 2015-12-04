@@ -122,11 +122,7 @@ namespace Vanrise.Fzero.Bypass
                             }
                         }
 
-                        gc.DurationInSeconds = Convert.ToInt32(DurationInSeconds); ;///1111111
-                                                                                    ///
-
-
-
+                        gc.DurationInSeconds = Convert.ToInt32(DurationInSeconds);                                                                                
                        
 
 
