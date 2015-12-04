@@ -2,32 +2,34 @@
 
     return ({
         sellNewZones: sellNewZones,
-        viewRPRouteOptionSupplier: viewRPRouteOptionSupplier
+        editSettings: editSettings
     });
 
     function sellNewZones(customerId, onCustomerZonesSold) {
-
-        var modalSettings = {
-        };
-
         var parameters = {
             CustomerId: customerId
         };
 
-        modalSettings.onScopeReady = function (modalScope) {
+        var settings = {};
+
+        settings.onScopeReady = function (modalScope) {
             modalScope.onCustomerZonesSold = onCustomerZonesSold;
         };
 
-        VRModalService.showModal("/Client/Modules/WhS_Sales/Views/SellNewZones.html", parameters, modalSettings);
+        VRModalService.showModal("/Client/Modules/WhS_Sales/Views/SellNewZones.html", parameters, settings);
     }
 
-    function viewRPRouteOptionSupplier(routingProductId, saleZoneId, supplierId) {
+    function editSettings(settings, onSettingsUpdate) {
         var parameters = {
-            RoutingProductId: routingProductId,
-            SaleZoneId: saleZoneId,
-            SupplierId: supplierId
+            settings: settings
         };
 
-        VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RPRouteOptionSupplier.html", parameters, null);
+        var modalSettings = {};
+
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.onSettingsUpdate = onSettingsUpdate;
+        };
+
+        VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanSettings.html", parameters, modalSettings);
     }
 }]);

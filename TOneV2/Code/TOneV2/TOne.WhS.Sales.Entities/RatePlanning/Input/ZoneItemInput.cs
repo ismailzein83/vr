@@ -29,5 +29,7 @@ namespace TOne.WhS.Sales.Entities
         public int RPRoutePolicyConfigId { get; set; }
 
         public int NumberOfOptions { get; set; }
+
+        public List<CostCalculationMethod> CostCalculations { get; set; }
     }
 }

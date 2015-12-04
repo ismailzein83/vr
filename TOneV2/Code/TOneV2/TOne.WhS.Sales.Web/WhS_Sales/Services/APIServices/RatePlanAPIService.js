@@ -11,6 +11,7 @@
             GetDefaultItem: GetDefaultItem,
             GetZoneItems: GetZoneItems,
             GetZoneItem: GetZoneItem,
+            GetCostCalculationMethodTemplates: GetCostCalculationMethodTemplates,
             SavePriceList: SavePriceList,
             SaveChanges: SaveChanges
         });
@@ -55,6 +56,9 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "SaveChanges"), input);
         }
 
+        function GetCostCalculationMethodTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetCostCalculationMethodTemplates"));
+        }
     }
 
     appControllers.service("WhS_Sales_RatePlanAPIService", ratePlanAPIService);

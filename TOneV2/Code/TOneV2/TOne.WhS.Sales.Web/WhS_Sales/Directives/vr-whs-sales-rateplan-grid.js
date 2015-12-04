@@ -95,6 +95,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             promises.push(zoneItemsGetPromise);
 
             zoneItemsGetPromise.then(function (response) {
+                console.log(response);
+
                 if (response != null) {
                     var zoneItems = [];
 

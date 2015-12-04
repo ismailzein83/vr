@@ -34,6 +34,8 @@
         var gridAPI;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var settings;
+
         defineScope();
         load();
         
@@ -127,8 +129,16 @@
                 
                 WhS_Sales_MainService.sellNewZones(customerId, onCustomerZonesSold);
             };
+            $scope.editSettings = function () {
+                WhS_Sales_MainService.editSettings(settings, onSettingsUpdate);
+            };
 
             defineSaveButtonMenuActions();
+        }
+
+        function onSettingsUpdate(updatedSettings) {
+            settings = updatedSettings;
+            VRNotificationService.showSuccess("Rate plan settings were successfully updated");
         }
 
         function load() {
@@ -249,7 +259,8 @@
 
             gridReadyDeferred.promise.then(function () {
                 var gridQuery = getGridQuery();
-                
+                console.log(gridQuery);
+
                 VRUIUtilsService.callDirectiveLoad(gridAPI, gridQuery, gridLoadDeferred);
             });
 
@@ -266,7 +277,8 @@
                     ZoneLetter: $scope.zoneLetters[$scope.selectedZoneLetterIndex],
                     RoutingDatabaseId: databaseSelectorAPI.getSelectedIds(),
                     RPRoutePolicyConfigId: policySelectorAPI.getSelectedIds(),
-                    NumberOfOptions: $scope.numberOfOptions
+                    NumberOfOptions: $scope.numberOfOptions,
+                    CostCalculations: settings ? settings.CostColumns : null
                 };
             }
         }

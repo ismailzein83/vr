@@ -7,6 +7,7 @@ using System.Web.Http;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace TOne.WhS.Sales.Web.Controllers
@@ -47,6 +48,13 @@ namespace TOne.WhS.Sales.Web.Controllers
         public DefaultItem GetDefaultItem(SalePriceListOwnerType ownerType, int ownerId)
         {
             return _manager.GetDefaultItem(ownerType, ownerId);
+        }
+
+        [HttpGet]
+        [Route("GetCostCalculationMethodTemplates")]
+        public List<TemplateConfig> GetCostCalculationMethodTemplates()
+        {
+            return _manager.GetCostCalculationMethodTemplates();
         }
 
         [HttpGet]

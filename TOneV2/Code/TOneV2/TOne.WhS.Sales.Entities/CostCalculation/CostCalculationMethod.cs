@@ -14,6 +14,4 @@ namespace TOne.WhS.Sales.Entities
 
         public abstract void CalculateCost(ICostCalculationMethodContext context);
     }
-
-
 }

@@ -9,6 +9,8 @@ using TOne.WhS.Routing.Entities;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
@@ -88,7 +90,7 @@ namespace TOne.WhS.Sales.Business
                             zoneItems.Add(zoneItem);
                         }
 
-                        SetRouteOptionsForZoneItems(input.Filter.RoutingDatabaseId, input.Filter.RPRoutePolicyConfigId, input.Filter.NumberOfOptions, zoneItems);
+                        SetRouteOptionsAndCostsForZoneItems(input.Filter.RoutingDatabaseId, input.Filter.RPRoutePolicyConfigId, input.Filter.NumberOfOptions, zoneItems, input.Filter.CostCalculations);
                     }
                 }
             }
@@ -238,7 +240,7 @@ namespace TOne.WhS.Sales.Business
             }
         }
 
-        private void SetRouteOptionsForZoneItems(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<ZoneItem> zoneItems)
+        private void SetRouteOptionsAndCostsForZoneItems(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<ZoneItem> zoneItems, IEnumerable<CostCalculationMethod> costCalculations)
         {
             IEnumerable<RPRouteDetail> rpRoutes = GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, zoneItems);
 
@@ -246,7 +248,21 @@ namespace TOne.WhS.Sales.Business
             {
                 RPRouteDetail rpRoute = rpRoutes.FindRecord(item => item.SaleZoneId == zoneItem.ZoneId);
                 if (rpRoute != null)
+                {
                     zoneItem.RouteOptions = rpRoute.RouteOptionsDetails;
+                    
+                    if (costCalculations != null)
+                    {
+                        zoneItem.CostCalculations = new List<ZoneItemRouteCostCalculations>();
+                        
+                        foreach (CostCalculationMethod method in costCalculations)
+                        {
+                            CostCalculationMethodContext context = new CostCalculationMethodContext() { Route = rpRoute };
+                            method.CalculateCost(context);
+                            zoneItem.CostCalculations.Add(new ZoneItemRouteCostCalculations() { Title = method.Title, Cost = context.Cost });
+                        }
+                    }
+                }
             }
         }
 
@@ -283,6 +299,12 @@ namespace TOne.WhS.Sales.Business
             CarrierAccount carrierAccount = carrierAccountManager.GetCarrierAccount(carrierAccountId);
 
             return carrierAccount != null ? carrierAccount.Name : null;
+        }
+
+        public List<TemplateConfig> GetCostCalculationMethodTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.CostCalculationMethod);
         }
 
         #region Set Zone Item Changes
