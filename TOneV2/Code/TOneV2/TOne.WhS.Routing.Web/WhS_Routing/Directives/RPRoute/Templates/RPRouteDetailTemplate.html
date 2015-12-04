@@ -9,9 +9,8 @@
                      dataretrievalfunction="dataRetrievalFunction"
                      pagingtype="'PagingOnScroll'"
                      on-ready="onGridReady"
-                     menuactions="gridMenuActions"
                      defaultsortbyfieldname="'Entity.SupplierRate'">
-            <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'" isclickable="'true'" onclicked="openRouteOptionSupplier"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Supplier Rate'" field="'Entity.SupplierRate'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Percentage'" field="'Entity.Percentage'"></vr-datagridcolumn>
         </vr-datagrid>

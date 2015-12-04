@@ -33,7 +33,7 @@ namespace TestRuntime.Tasks
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
-            RunCompleteProductRouteBuild();
+            //RunCompleteProductRouteBuild();
 
             //BPClient bpClient = new BPClient();
             //bpClient.CreateNewProcess(new CreateProcessInput

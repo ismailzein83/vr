@@ -72,7 +72,9 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                         return gridAPI.retrieveData(query);
                 };
 
-                defineMenuActions();
+                $scope.openRouteOptionSupplier = function (dataItem) {
+                    WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, rpRouteDetail.RoutingProductId, rpRouteDetail.SaleZoneId, dataItem.Entity.SupplierId, dataItem.SupplierName);
+                }
 
                 defineAPI();
             }
@@ -98,19 +100,6 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            }
-
-            function defineMenuActions() {
-                $scope.gridMenuActions = [{
-                    name: "More Details",
-                    clicked: openRouteOptionSupplier,
-                }
-                ];
-            }
-
-            function openRouteOptionSupplier(dataItem)
-            {
-                WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, rpRouteDetail.RoutingProductId, rpRouteDetail.SaleZoneId, dataItem.Entity.SupplierId, dataItem.SupplierName);
             }
 
             this.initializeController = initializeController;

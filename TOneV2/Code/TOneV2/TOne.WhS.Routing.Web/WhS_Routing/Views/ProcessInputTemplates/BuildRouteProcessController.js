@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-BuildRouteProcessController.$inject = ['$scope', 'UtilsService', 'WhS_Routing_RoutingDatabaseTypeEnum'];
+BuildRouteProcessController.$inject = ['$scope', 'UtilsService', 'WhS_Routing_RoutingDatabaseTypeEnum', 'WhS_Routing_RoutingProcessTypeEnum'];
 
-function BuildRouteProcessController($scope, UtilsService, WhS_Routing_RoutingDatabaseTypeEnum) {
+function BuildRouteProcessController($scope, UtilsService, WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_RoutingProcessTypeEnum) {
 
     defineScope();
     load();
@@ -18,6 +18,7 @@ function BuildRouteProcessController($scope, UtilsService, WhS_Routing_RoutingDa
                     $type: "TOne.WhS.Routing.BP.Arguments.RoutingProcessInput, TOne.WhS.Routing.BP.Arguments",
                     EffectiveTime: !$scope.isFuture ? $scope.effectiveOn : null,
                     RoutingDatabaseType: $scope.selectedRoutingDatabaseType.value,
+                    RoutingProcessType: WhS_Routing_RoutingProcessTypeEnum.CustomerRoute.value,
                     CodePrefixLength: $scope.codePrefixLength
                 }
             };

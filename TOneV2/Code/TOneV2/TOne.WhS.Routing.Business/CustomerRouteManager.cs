@@ -53,7 +53,7 @@ namespace TOne.WhS.Routing.Business
             if (customer != null)
                 return customer.Name;
 
-            return "Not Found";
+            return null;
         }
 
         private string GetZoneName(long zoneId)
@@ -64,7 +64,7 @@ namespace TOne.WhS.Routing.Business
             if (saleZone != null)
                 return saleZone.Name;
 
-            return "Not Found";
+            return null;
         }
 
         private List<CustomerRouteOptionDetail> GetRouteOptionDetails(CustomerRoute customerRoute)
