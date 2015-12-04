@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using QM.BusinessEntity.Entities;
-using QM.BusinessEntity.Data;
+//using QM.BusinessEntity.Data;
 //using Vanrise.Entities;
 
 namespace QM.CLITester.iTestIntegration
