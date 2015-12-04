@@ -11,7 +11,7 @@ namespace QM.BusinessEntity.Data
     {
         List<Supplier> GetSuppliers();
 
-        bool Insert(Supplier supplier, out int insertedId);
+        bool Insert(Supplier supplier);
 
         bool Update(Supplier supplier);
 

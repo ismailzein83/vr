@@ -28,6 +28,9 @@
 
         function defineScope() {
 
+            $scope.scopeModal = {};
+
+            setDirectiveTabs();
             $scope.SaveSupplier = function () {
                 if (isEditMode) {
                     return updateSupplier();
@@ -65,7 +68,7 @@
         function getSupplier() {
             return QM_BE_SupplierAPIService.GetSupplier(supplierId).then(function (whsSupplier) {
                 supplierEntity = whsSupplier;
-                $scope.name = supplierEntity.Name;
+                $scope.scopeModal.name = supplierEntity.Name;
             });
         }
 
@@ -74,7 +77,7 @@
         function buildSupplierObjFromScope() {
             var whsSupplier = {
                 SupplierId: (supplierId != null) ? supplierId : 0,
-                Name: $scope.name
+                Name: $scope.scopeModal.name
             };
             return whsSupplier;
         }
@@ -98,7 +101,7 @@
             var supplierObject = buildSupplierObjFromScope();
             QM_BE_SupplierAPIService.UpdateSupplier(supplierObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Supplier", response,"Name")) {
+                if (VRNotificationService.notifyOnItemUpdated("Supplier", response, "Name")) {
                     if ($scope.onSupplierUpdated != undefined)
                         $scope.onSupplierUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
@@ -106,6 +109,21 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
+        }
+
+        function setDirectiveTabs() {
+            $scope.directiveTabs = [];
+            var cliTab = {
+                title: "CLI Tester",
+                directive: "vr-qm-clitester-suppliersettings",
+                loadDirective: function (api) {
+                    var payload = {
+                        prefix: (supplierEntity.Settings != undefined) ? supplierEntity.Settings.Prefix : undefined
+                    };
+                    api.load(payload);
+                }
+            };
+            $scope.directiveTabs.push(cliTab);
         }
     }
 

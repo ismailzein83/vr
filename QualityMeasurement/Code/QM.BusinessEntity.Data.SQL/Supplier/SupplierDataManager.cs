@@ -31,16 +31,10 @@ namespace QM.BusinessEntity.Data.SQL
             return GetItemsSP("[QM_BE].[sp_Supplier_GetAll]", SupplierMapper);
         }
 
-        public bool Insert(Supplier supplier, out int insertedId)
+        public bool Insert(Supplier supplier)
         {
-            object supplierId;
-            int recordsEffected = ExecuteNonQuerySP("[QM_BE].[sp_Supplier_Insert]", out supplierId, supplier.Name);
-            bool insertedSuccesfully = (recordsEffected > 0);
-            if (insertedSuccesfully)
-                insertedId = (int)supplierId;
-            else
-                insertedId = 0;
-            return insertedSuccesfully;
+            int recordsEffected = ExecuteNonQuerySP("[QM_BE].[sp_Supplier_Insert]", supplier.SupplierId, supplier.Name);
+            return (recordsEffected > 0);
         }
 
         public bool Update(Supplier supplier)

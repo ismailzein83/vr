@@ -46,7 +46,6 @@ namespace QM.BusinessEntity.Business
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
 
-            int supplierId = -1;
             if (supplier.Settings != null && supplier.Settings.ExtendedSettings != null)
             {
                 foreach (var extendedSetting in supplier.Settings.ExtendedSettings)
@@ -56,12 +55,11 @@ namespace QM.BusinessEntity.Business
             }
 
             ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
-            bool insertActionSucc = dataManager.Insert(supplier, out supplierId);
+            bool insertActionSucc = dataManager.Insert(supplier);
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                supplier.SupplierId = supplierId;
                 insertOperationOutput.InsertedObject = SupplierDetailMapper(supplier);
             }
             else

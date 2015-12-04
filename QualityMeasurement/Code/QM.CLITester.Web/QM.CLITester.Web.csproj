@@ -162,6 +162,10 @@
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\QM.BusinessEntity.Data\QM.BusinessEntity.Data.csproj">
+      <Project>{f088847e-2bcd-446a-b51a-3dbaaf7ac835}</Project>
+      <Name>QM.BusinessEntity.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\QM.CLITester.Business\QM.CLITester.Business.csproj">
       <Project>{724b8b1b-b990-4f4a-b886-d299cff49219}</Project>
       <Name>QM.CLITester.Business</Name>
@@ -173,6 +177,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="QM_CLITester\Constant\ModuleConfig.js" />
+    <Content Include="QM_CLITester\Directives\Supplier\Templates\AddPrefixDirectiveTemplate.html" />
+    <Content Include="QM_CLITester\Directives\Supplier\vr-qm-clitester-suppliersettings.js" />
     <Content Include="QM_CLITester\Directives\TestCall\Templates\TestCallGridTemplate.html" />
     <Content Include="QM_CLITester\Directives\TestCall\vr-qm-clitester-testcall-grid.js" />
     <Content Include="QM_CLITester\Services\APIServices\TestCallAPIService.js" />
