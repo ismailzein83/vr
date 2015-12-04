@@ -6,6 +6,8 @@
 
     function RPRouteOptionSupplierController($scope, WhS_Routing_RPRouteAPIService, UtilsService, VRNavigationService, VRNotificationService) {
 
+        var gridReadyDeferred = UtilsService.createPromiseDeferred();
+        var routingDatabaseId;
         var routingProductId;
         var saleZoneId;
         var supplierId;
@@ -18,6 +20,7 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters) {
+                routingDatabaseId = parameters.RoutingDatabaseId;
                 routingProductId = parameters.RoutingProductId;
                 saleZoneId = parameters.SaleZoneId;
                 supplierId = parameters.SupplierId;
@@ -28,9 +31,20 @@
             $scope.supplierZones = [];
 
             $scope.onGridReady = function (api) {
+                gridReadyDeferred.resolve();
+                
+            };
+
+            $scope.close = function () {
+                $scope.modalContext.closeModal();
+            };
+        }
+
+        function load() {
+            gridReadyDeferred.promise.then(function () {
                 $scope.isLoading = true;
 
-                WhS_Routing_RPRouteAPIService.GetRPRouteOptionSupplier(routingProductId, saleZoneId, supplierId).then(function (response) {
+                WhS_Routing_RPRouteAPIService.GetRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId).then(function (response) {
                     if (response) {
                         $scope.title = "Supplier: " + response.SupplierName;
 
@@ -43,15 +57,7 @@
                 }).finally(function () {
                     $scope.isLoading = false;
                 });
-            };
-
-            $scope.close = function () {
-                $scope.modalContext.closeModal();
-            };
-        }
-
-        function load() {
-
+            });
         }
     }
 

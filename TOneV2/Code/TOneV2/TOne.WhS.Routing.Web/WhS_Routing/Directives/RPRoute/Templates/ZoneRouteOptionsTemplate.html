@@ -1,6 +1,6 @@
 ﻿<div>
     <a style="cursor: pointer; display: inline-block; text-align: center; padding: 0px 10px 0px 0px;"
-       title="Supplier: {{routeOption.SupplierName}}, Percentage: {{routeOption.Entity.Percentage}}%"
+       title="{{routeOption.SupplierName}}, Percentage: {{routeOption.Entity.Percentage}}%"
        ng-repeat="routeOption in ctrl.routeOptions"
        ng-click="ctrl.viewSupplier(routeOption)">
         {{routeOption.Entity.SupplierRate}}

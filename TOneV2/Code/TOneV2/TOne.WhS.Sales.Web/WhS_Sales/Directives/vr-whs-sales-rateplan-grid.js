@@ -238,8 +238,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     zoneItem.RouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
                     zoneItem.RouteOptionsReadyDeferred.promise.then(function () {
                         var payload = {
-                            SaleZoneId: zoneItem.ZoneId,
+                            RoutingDatabaseId: gridQuery.RoutingDatabaseId,
                             RoutingProductId: zoneItem.EffectiveRoutingProductId,
+                            SaleZoneId: zoneItem.ZoneId,
                             RouteOptions: zoneItem.RouteOptions
                         };
                         VRUIUtilsService.callDirectiveLoad(zoneItem.RouteOptionsAPI, payload, zoneItem.RouteOptionsLoadDeferred);
