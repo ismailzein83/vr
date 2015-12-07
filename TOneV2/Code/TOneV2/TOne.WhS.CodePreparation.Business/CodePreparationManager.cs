@@ -50,9 +50,9 @@ namespace TOne.WhS.CodePreparation.Business
                                     SaleCodeId = code.SaleCodeId,
                                     CodeValue = code.Code,
                                     ZoneId = code.ZoneId,
-                                    BeginEffectiveDate = code.BeginEffectiveDate,
+                                    BeginEffectiveDate = code.BED,
                                     CodeGroupId = code.CodeGroupId,
-                                    EndEffectiveDate = code.EndEffectiveDate,
+                                    EndEffectiveDate = code.EED,
                                 });
                             }
                         }
@@ -61,8 +61,8 @@ namespace TOne.WhS.CodePreparation.Business
                         saleZoneOut.Name = saleZone.Name;
                         saleZoneOut.SaleZoneId = saleZone.SaleZoneId;
                         saleZoneOut.SellingNumberPlanId = saleZone.SellingNumberPlanId;
-                        saleZoneOut.BeginEffectiveDate = saleZone.BeginEffectiveDate;
-                        saleZoneOut.EndEffectiveDate = saleZone.EndEffectiveDate;
+                        saleZoneOut.BeginEffectiveDate = saleZone.BED;
+                        saleZoneOut.EndEffectiveDate = saleZone.EED;
                         saleZoneOut.Codes = codes;
                         saleZoneDictionary.Add(saleZone.Name, saleZoneOut);
                     }

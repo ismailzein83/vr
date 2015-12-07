@@ -13,14 +13,14 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             if (date.HasValue)
             {
-                if (entity.BeginEffectiveDate <= date.Value && (!entity.EndEffectiveDate.HasValue || entity.EndEffectiveDate.Value > date.Value))
+                if (entity.BED <= date.Value && (!entity.EED.HasValue || entity.EED.Value > date.Value))
                     return true;
                 else
                     return false;
             }
             else
                 if (futureEntities)
-                    if (!entity.EndEffectiveDate.HasValue || entity.BeginEffectiveDate > DateTime.Now)
+                    if (!entity.EED.HasValue || entity.BED > DateTime.Now)
                         return true;
 
             return false;

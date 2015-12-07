@@ -51,12 +51,12 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public DateTime BED
         {
-            get { return ZoneEntity.BeginEffectiveDate; }
+            get { return ZoneEntity.BED; }
         }
 
         public DateTime? EED
         {
-            get { return ChangedZone != null ? ChangedZone.EED : ZoneEntity.EndEffectiveDate; }
+            get { return ChangedZone != null ? ChangedZone.EED : ZoneEntity.EED; }
         }
     }
 
@@ -72,7 +72,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public DateTime? EED
         {
-            get { return ChangedCode != null ? ChangedCode.EED : CodeEntity.EndEffectiveDate; }
+            get { return ChangedCode != null ? ChangedCode.EED : CodeEntity.EED; }
         }
     }
 
@@ -86,7 +86,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public DateTime? EED
         {
-            get { return ChangedRate != null ? ChangedRate.EED : RateEntity.EndEffectiveDate; }
+            get { return ChangedRate != null ? ChangedRate.EED : RateEntity.EED; }
         }
     }
 

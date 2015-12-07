@@ -14,8 +14,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public long ZoneId { get; set; }
 
-        public DateTime BeginEffectiveDate { get; set; }
+        public DateTime BED { get; set; }
 
-        public DateTime? EndEffectiveDate { get; set; }
+        public DateTime? EED { get; set; }
     }
 }

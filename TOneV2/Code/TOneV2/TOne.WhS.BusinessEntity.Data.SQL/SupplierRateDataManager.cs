@@ -26,8 +26,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             _columnMapper.Add("CurrencyName", "CurrencyID");
             _columnMapper.Add("SupplierZoneName", "ZoneID");
             _columnMapper.Add("SupplierRateId", "ID");
-            _columnMapper.Add("BeginEffectiveDate", "BED");
-            _columnMapper.Add("EndEffectiveDate", "EED");
         }
 
         public List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate)
@@ -69,8 +67,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 SupplierRateId = (long)reader["ID"],
                 ZoneId = (long)reader["ZoneID"],
                 PriceListId = GetReaderValue<int>(reader, "PriceListID"),
-                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
-                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED"),
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
                 CurrencyId = GetReaderValue<int?>(reader, "CurrencyId")
             };
             return supplierRate;

@@ -29,8 +29,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 CountryId = (int)reader["CountryID"],
                 SupplierZoneId = (long)reader["ID"],
                 Name = reader["Name"] as string,
-                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
-                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED")
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED")
             };
             return supplierZone;
         }

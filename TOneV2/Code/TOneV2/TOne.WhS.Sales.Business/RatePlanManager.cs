@@ -191,8 +191,8 @@ namespace TOne.WhS.Sales.Business
                 zoneItem.IsCurrentRateEditable = (zoneRate.Source == ownerType);
                 zoneItem.CurrentRateId = zoneRate.Rate.SaleRateId;
                 zoneItem.CurrentRate = zoneRate.Rate.NormalRate;
-                zoneItem.CurrentRateBED = zoneRate.Rate.BeginEffectiveDate;
-                zoneItem.CurrentRateEED = zoneRate.Rate.EndEffectiveDate;
+                zoneItem.CurrentRateBED = zoneRate.Rate.BED;
+                zoneItem.CurrentRateEED = zoneRate.Rate.EED;
             }
         }
 
@@ -494,8 +494,8 @@ namespace TOne.WhS.Sales.Business
                     PriceListId = priceListId,
                     CurrencyId = newRate.CurrencyId,
                     NormalRate = newRate.NormalRate,
-                    BeginEffectiveDate = newRate.BED,
-                    EndEffectiveDate = newRate.EED
+                    BED = newRate.BED,
+                    EED = newRate.EED
                 });
             }
 

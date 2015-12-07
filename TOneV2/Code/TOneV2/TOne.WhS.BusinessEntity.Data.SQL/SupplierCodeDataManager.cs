@@ -27,8 +27,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             _columnMapper.Add("SupplierCodeId", "ID");
             _columnMapper.Add("SupplierZoneName", "ZoneID");
-            _columnMapper.Add("BeginEffectiveDate", "BED");
-            _columnMapper.Add("EndEffectiveDate", "EED");
         }
 
         public List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate)
@@ -42,8 +40,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 Code = GetReaderValue<string>(reader, "Code"),
                 SupplierCodeId = GetReaderValue<long>(reader, "ID"),
                 ZoneId = (long)reader["ZoneID"],
-                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
-                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED"),
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
                 
             };
             return supplierCode;

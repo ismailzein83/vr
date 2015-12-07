@@ -41,8 +41,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                if (!ratesByZone.TryGetValue(rate.ZoneId,out rates)){
                    rates=new List<Rate>();
                    rates.Add(new Rate{
-                    BeginEffectiveDate=  rate.BeginEffectiveDate,
-                    EndEffectiveDate=rate.EndEffectiveDate,
+                    BeginEffectiveDate=  rate.BED,
+                    EndEffectiveDate=rate.EED,
                     NormalRate=rate.NormalRate,
                     SupplierRateId=rate.SupplierRateId,
                     ZoneId=rate.ZoneId,
@@ -54,8 +54,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                {
                    rates.Add(new Rate
                    {
-                       BeginEffectiveDate = rate.BeginEffectiveDate,
-                       EndEffectiveDate = rate.EndEffectiveDate,
+                       BeginEffectiveDate = rate.BED,
+                       EndEffectiveDate = rate.EED,
                        NormalRate = rate.NormalRate,
                        SupplierRateId = rate.SupplierRateId,
                        ZoneId = rate.ZoneId,

@@ -55,12 +55,12 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             shouldNotAddCode = false;
             recentCodeZoneName = null;
-            foreach (var existingCode in matchExistingCodes.OrderBy(itm => itm.CodeEntity.BeginEffectiveDate))
+            foreach (var existingCode in matchExistingCodes.OrderBy(itm => itm.CodeEntity.BED))
             {
-                if (existingCode.CodeEntity.BeginEffectiveDate < importedCode.BED)
+                if (existingCode.CodeEntity.BED < importedCode.BED)
                     recentCodeZoneName = existingCode.ParentZone.ZoneEntity.Name;
                 existingCode.IsImported = true;
-                if (existingCode.EED.VRGreaterThan(importedCode.BED) && importedCode.EED.VRGreaterThan(existingCode.CodeEntity.BeginEffectiveDate))
+                if (existingCode.EED.VRGreaterThan(importedCode.BED) && importedCode.EED.VRGreaterThan(existingCode.CodeEntity.BED))
                 {
                     if (SameCodes(importedCode, existingCode))
                     {
@@ -81,7 +81,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                             break;
                         }
                     }
-                    DateTime existingCodeEED = importedCode.BED > existingCode.CodeEntity.BeginEffectiveDate ? importedCode.BED : existingCode.CodeEntity.BeginEffectiveDate;
+                    DateTime existingCodeEED = importedCode.BED > existingCode.CodeEntity.BED ? importedCode.BED : existingCode.CodeEntity.BED;
                     existingCode.ChangedCode = new ChangedCode
                     {
                         CodeId = existingCode.CodeEntity.SupplierCodeId,
@@ -190,7 +190,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         private bool SameCodes(ImportedCode importedCode, ExistingCode existingCode)
         {
-            return importedCode.BED == existingCode.CodeEntity.BeginEffectiveDate
+            return importedCode.BED == existingCode.CodeEntity.BED
                 && importedCode.ZoneName== existingCode.ParentZone.ZoneEntity.Name;
         }
 
@@ -221,7 +221,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 {
                     foreach (var existingCode in existingZone.ExistingCodes)
                     {
-                        if (existingCode.EED.VRGreaterThan(existingCode.CodeEntity.BeginEffectiveDate))
+                        if (existingCode.EED.VRGreaterThan(existingCode.CodeEntity.BED))
                         {
                             hasCodes = true;
                             if (existingCode.EED.VRGreaterThan(maxCodeEED))

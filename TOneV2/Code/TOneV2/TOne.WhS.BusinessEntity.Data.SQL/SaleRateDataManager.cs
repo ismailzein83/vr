@@ -107,9 +107,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 row["NormalRate"] = newRate.NormalRate;
                 if (newRate.OtherRates != null)
                     row["OtherRates"] = Vanrise.Common.Serializer.Serialize(newRate.OtherRates);
-                row["BED"] = newRate.BeginEffectiveDate;
-                if (newRate.EndEffectiveDate != null)
-                    row["EED"] = newRate.EndEffectiveDate;
+                row["BED"] = newRate.BED;
+                if (newRate.EED != null)
+                    row["EED"] = newRate.EED;
                 table.Rows.Add(row);
             }
 
@@ -153,8 +153,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             saleRate.NormalRate = (decimal)reader["Rate"];
             saleRate.OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null;
 
-            saleRate.BeginEffectiveDate = (DateTime)reader["BED"];
-            saleRate.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED");
+            saleRate.BED = (DateTime)reader["BED"];
+            saleRate.EED = GetReaderValue<DateTime?>(reader, "EED");
 
             return saleRate;
         }

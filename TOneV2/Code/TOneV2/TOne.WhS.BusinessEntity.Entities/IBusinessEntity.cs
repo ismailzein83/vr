@@ -8,8 +8,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public interface IBusinessEntity
     {
-        DateTime BeginEffectiveDate { get; set; }
+        DateTime BED { get; set; }
 
-        DateTime? EndEffectiveDate { get; set; }
+        DateTime? EED { get; set; }
     }
 }

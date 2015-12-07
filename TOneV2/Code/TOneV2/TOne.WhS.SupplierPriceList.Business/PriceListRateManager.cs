@@ -61,7 +61,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                                     };
                                     changedRates.Add(existingRate.ChangedRate);
                                 }
-                                DateTime rateBED = existingRate.RateEntity.BeginEffectiveDate;
+                                DateTime rateBED = existingRate.RateEntity.BED;
                                 existingRate.ChangedRate.EED = zoneEED > rateBED ? zoneEED : rateBED;
                             }
                         }
@@ -76,9 +76,9 @@ namespace TOne.WhS.SupplierPriceList.Business
             recentRateValue = null;
             foreach (var existingRate in matchExistingRates)
             {
-                if (existingRate.RateEntity.BeginEffectiveDate < importedRate.BED)
+                if (existingRate.RateEntity.BED < importedRate.BED)
                     recentRateValue = existingRate.RateEntity.NormalRate;
-                if (existingRate.EED.VRGreaterThan(importedRate.BED) && importedRate.EED.VRGreaterThan(existingRate.RateEntity.BeginEffectiveDate))
+                if (existingRate.EED.VRGreaterThan(importedRate.BED) && importedRate.EED.VRGreaterThan(existingRate.RateEntity.BED))
                 {
                     if (SameRates(importedRate, existingRate))
                     {
@@ -100,7 +100,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                     }
                     else
                     {
-                        DateTime existingRateEED = importedRate.BED > existingRate.RateEntity.BeginEffectiveDate ? importedRate.BED : existingRate.RateEntity.BeginEffectiveDate;
+                        DateTime existingRateEED = importedRate.BED > existingRate.RateEntity.BED ? importedRate.BED : existingRate.RateEntity.BED;
                         existingRate.ChangedRate = new ChangedRate
                         {
                             RateId = existingRate.RateEntity.SupplierRateId,
@@ -163,9 +163,10 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         private bool SameRates(ImportedRate importedRate, ExistingRate existingRate)
         {
-            return importedRate.BED == existingRate.RateEntity.BeginEffectiveDate
+            return importedRate.BED == existingRate.RateEntity.BED
                && importedRate.NormalRate == existingRate.RateEntity.NormalRate
                && importedRate.CurrencyId == existingRate.RateEntity.CurrencyId
+               //TODO: compare CurrencyId of the Pricelists
                && SameRateOtherRates(importedRate, existingRate);
         }
 

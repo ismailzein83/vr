@@ -48,8 +48,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         addZone.Status = TOne.WhS.SupplierPriceList.Entities.Status.NotChanged;
                         addZone.Name = supplierZone.Name;
                         addZone.SupplierZoneId = supplierZone.SupplierZoneId;
-                        addZone.BeginEffectiveDate = supplierZone.BeginEffectiveDate;
-                        addZone.EndEffectiveDate = supplierZone.EndEffectiveDate;
+                        addZone.BeginEffectiveDate = supplierZone.BED;
+                        addZone.EndEffectiveDate = supplierZone.EED;
                 }
                 else
                 {
@@ -79,8 +79,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         Status = TOne.WhS.SupplierPriceList.Entities.Status.Updated,
                         Name = zone.Key,
                         SupplierZoneId=zone.Value.SupplierZoneId,
-                        BeginEffectiveDate = zone.Value.BeginEffectiveDate,
-                        EndEffectiveDate = zone.Value.EndEffectiveDate,
+                        BeginEffectiveDate = zone.Value.BED,
+                        EndEffectiveDate = zone.Value.EED,
                         NewRate = priceListZoneItem.Rate,
                         NewCodes = priceListZoneItem.Codes
                     });

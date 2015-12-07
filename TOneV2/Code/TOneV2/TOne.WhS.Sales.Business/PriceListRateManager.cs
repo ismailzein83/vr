@@ -16,9 +16,9 @@ namespace TOne.WhS.Sales.Business
             {
                 foreach(var existingRate in existingZoneRates)
                 {
-                    if(existingRate.EED.VRGreaterThan(newRate.BED) && newRate.EED.VRGreaterThan(existingRate.RateEntity.BeginEffectiveDate))
+                    if(existingRate.EED.VRGreaterThan(newRate.BED) && newRate.EED.VRGreaterThan(existingRate.RateEntity.BED))
                     {
-                        DateTime existingRateEED = newRate.BED > existingRate.RateEntity.BeginEffectiveDate ? newRate.BED : existingRate.RateEntity.BeginEffectiveDate;
+                        DateTime existingRateEED = newRate.BED > existingRate.RateEntity.BED ? newRate.BED : existingRate.RateEntity.BED;
                         existingRate.ChangedRate = new ChangedRate
                         {
                             RateId = existingRate.RateEntity.SaleRateId,

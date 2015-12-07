@@ -53,8 +53,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     codes = new List<Code>();
                     codes.Add(new Code
                     {
-                        BeginEffectiveDate = code.BeginEffectiveDate,
-                        EndEffectiveDate = code.EndEffectiveDate,
+                        BeginEffectiveDate = code.BED,
+                        EndEffectiveDate = code.EED,
                         CodeValue=code.Code,
                         SupplierCodeId=code.SupplierCodeId,
                         ZoneId = code.ZoneId,
@@ -67,8 +67,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 {
                     codes.Add(new Code
                     {
-                        BeginEffectiveDate = code.BeginEffectiveDate,
-                        EndEffectiveDate = code.EndEffectiveDate,
+                        BeginEffectiveDate = code.BED,
+                        EndEffectiveDate = code.EED,
                         CodeValue = code.Code,
                         ZoneId = code.ZoneId,
                         SupplierCodeId = code.SupplierCodeId,

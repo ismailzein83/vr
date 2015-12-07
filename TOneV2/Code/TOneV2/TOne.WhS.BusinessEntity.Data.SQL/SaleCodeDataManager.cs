@@ -48,8 +48,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 SaleCodeId = (long)reader["ID"],
                 Code = reader["Code"] as string,
                 ZoneId = GetReaderValue<long>(reader, "ZoneID"),
-                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
-                EndEffectiveDate = GetReaderValue<DateTime>(reader, "EED")
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime>(reader, "EED")
             };
             return saleCode;
         }

@@ -44,7 +44,7 @@ namespace TOne.WhS.Sales.Entities.RateManagement
 
         public DateTime? EED
         {
-            get { return ChangedRate != null ? ChangedRate.EED : RateEntity.EndEffectiveDate; }
+            get { return ChangedRate != null ? ChangedRate.EED : RateEntity.EED; }
         }
     }
 
