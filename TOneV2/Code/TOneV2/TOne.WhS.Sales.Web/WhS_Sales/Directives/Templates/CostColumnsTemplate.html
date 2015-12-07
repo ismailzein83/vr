@@ -19,9 +19,10 @@
             <vr-datagrid datasource="ctrl.dataSource"
                          ondeleterow="ctrl.removeDataItem"
                          enabledraggablerow="true"
+                         norowhighlightonclick="'true'"
                          hidegridmenu>
                 <vr-datagridcolumn headertext="'Name'" field="'name'" widthfactor="2" disablesorting></vr-datagridcolumn>
-                <vr-datagridcolumn widthfactor="8" disablesorting><vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady"></vr-directivewrapper></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Title'" widthfactor="8" disablesorting><vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady"></vr-directivewrapper></vr-datagridcolumn>
             </vr-datagrid>
         </vr-columns>
     </vr-row>

@@ -76,9 +76,9 @@ function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
                 var api = {};
 
                 api.load = function (settings) {
-                    if (settings && settings.CostColumns) {
-                        for (var i = 0; i < settings.CostColumns.length; i++) {
-                            var dataItem = getDataItem(settings.CostColumns[i]);
+                    if (settings && settings.CostCalculationMethods) {
+                        for (var i = 0; i < settings.CostCalculationMethods.length; i++) {
+                            var dataItem = getDataItem(settings.CostCalculationMethods[i]);
                             ctrl.dataSource.push(dataItem);
                         }
                     }
@@ -108,7 +108,7 @@ function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
                 };
 
                 api.getData = function () {
-                    var costColumns = [];
+                    var costCalculationMethods = [];
 
                     for (var i = 0; i < ctrl.dataSource.length; i++) {
                         if (ctrl.dataSource[i].directiveAPI) {
@@ -116,12 +116,12 @@ function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
 
                             if (data) {
                                 data.ConfigId = ctrl.dataSource[i].ConfigId;
-                                costColumns.push(data);
+                                costCalculationMethods.push(data);
                             }
                         }
                     }
                     
-                    return (costColumns.length > 0) ? costColumns : null;
+                    return (costCalculationMethods.length > 0) ? costCalculationMethods : null;
                 };
 
                 if (ctrl.onReady && typeof (ctrl.onReady) == "function")

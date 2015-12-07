@@ -1,3 +1,15 @@
-﻿<vr-columns width="1/2row">
-    <vr-textbox label="Title" value="ctrl.title" isrequired="true"></vr-textbox>
-</vr-columns>
+﻿<vr-row removeline>
+    <vr-columns width="1/4row">
+        <vr-textbox label="Title" value="ctrl.title" isrequired="true"></vr-textbox>
+    </vr-columns>
+
+    <vr-columns width="1/4row">
+        <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" text="None"
+                   label="Percentage Type" datasource="optionPercentageSettingsGroupTemplates" selectedvalues="selectedPercentageSettingsGroupTemplate">
+        </vr-select>
+    </vr-columns>
+
+    <vr-columns width="1/2row" ng-show="selectedPercentageSettingsGroupTemplate" vr-loader="isLoadingOptionPercentageSettingsSection">
+        <vr-directivewrapper directive="selectedPercentageSettingsGroupTemplate.Editor" on-ready="onOptionPercentageSettingsGroupDirectiveReady"></vr-directivewrapper>
+    </vr-columns>
+</vr-row>

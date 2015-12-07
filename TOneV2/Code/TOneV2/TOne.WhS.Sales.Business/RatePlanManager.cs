@@ -8,6 +8,7 @@ using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
+using TOne.WhS.Sales.Entities.RateManagement;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
@@ -90,7 +91,7 @@ namespace TOne.WhS.Sales.Business
                             zoneItems.Add(zoneItem);
                         }
 
-                        SetRouteOptionsAndCostsForZoneItems(input.Filter.RoutingDatabaseId, input.Filter.RPRoutePolicyConfigId, input.Filter.NumberOfOptions, zoneItems, input.Filter.CostCalculations);
+                        SetRouteOptionsAndCostsForZoneItems(input.Filter.RoutingDatabaseId, input.Filter.RPRoutePolicyConfigId, input.Filter.NumberOfOptions, zoneItems, input.Filter.CostCalculationMethods);
                     }
                 }
             }
@@ -240,26 +241,30 @@ namespace TOne.WhS.Sales.Business
             }
         }
 
-        private void SetRouteOptionsAndCostsForZoneItems(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<ZoneItem> zoneItems, IEnumerable<CostCalculationMethod> costCalculations)
+        private void SetRouteOptionsAndCostsForZoneItems(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<ZoneItem> zoneItems, IEnumerable<CostCalculationMethod> costCalculationMethods)
         {
             IEnumerable<RPRouteDetail> rpRoutes = GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, zoneItems);
 
-            foreach (ZoneItem zoneItem in zoneItems)
+            if (rpRoutes != null)
             {
-                RPRouteDetail rpRoute = rpRoutes.FindRecord(item => item.SaleZoneId == zoneItem.ZoneId);
-                if (rpRoute != null)
+                foreach (RPRouteDetail rpRoute in rpRoutes)
                 {
-                    zoneItem.RouteOptions = rpRoute.RouteOptionsDetails;
-                    
-                    if (costCalculations != null)
+                    ZoneItem zoneItem = zoneItems.FindRecord(itm => itm.ZoneId == rpRoute.SaleZoneId);
+
+                    if (zoneItem != null)
                     {
-                        zoneItem.CostCalculations = new List<ZoneItemRouteCostCalculations>();
-                        
-                        foreach (CostCalculationMethod method in costCalculations)
+                        zoneItem.RouteOptions = rpRoute.RouteOptionsDetails;
+
+                        if (costCalculationMethods != null && costCalculationMethods.Count() > 0)
                         {
-                            CostCalculationMethodContext context = new CostCalculationMethodContext() { Route = rpRoute };
-                            method.CalculateCost(context);
-                            zoneItem.CostCalculations.Add(new ZoneItemRouteCostCalculations() { Title = method.Title, Cost = context.Cost });
+                            zoneItem.Costs = new List<decimal>();
+
+                            foreach (CostCalculationMethod method in costCalculationMethods)
+                            {
+                                CostCalculationMethodContext context = new CostCalculationMethodContext() { Route = rpRoute };
+                                method.CalculateCost(context);
+                                zoneItem.Costs.Add(context.Cost);
+                            }
                         }
                     }
                 }
@@ -330,7 +335,7 @@ namespace TOne.WhS.Sales.Business
             SetZoneItemRoutingProductChanges(zoneItem, zoneChanges.NewRoutingProduct, zoneChanges.RoutingProductChange);
         }
 
-        private void SetZoneItemRateChanges(ZoneItem zoneItem, NewRate newRate, RateChange rateChange)
+        private void SetZoneItemRateChanges(ZoneItem zoneItem, Entities.NewRate newRate, RateChange rateChange)
         {
             if (newRate != null)
             {
@@ -438,19 +443,49 @@ namespace TOne.WhS.Sales.Business
                 {
                     int priceListId = AddPriceList(ownerType, ownerId);
 
-                    List<NewRate> newRates = changes.ZoneChanges.MapRecords(item => item.NewRate, item => item.NewRate != null).ToList();
-                    List<SaleRate> newSaleRates = MapNewRatesToSaleRates(newRates, priceListId).ToList();
-                    List<RateChange> rateChanges = changes.ZoneChanges.MapRecords(item => item.RateChange, item => item.RateChange != null).ToList();
-                    List<NewZoneRoutingProduct> newRoutingProducts = changes.ZoneChanges.MapRecords(item => item.NewRoutingProduct, item => item.NewRoutingProduct != null).ToList();
-                    List<ZoneRoutingProductChange> routingProductChanges = changes.ZoneChanges.MapRecords(item => item.RoutingProductChange, item => item.RoutingProductChange != null).ToList();
+                    IEnumerable<Entities.NewRate> newRates = changes.ZoneChanges.MapRecords(itm => itm.NewRate, itm => itm.NewRate != null);
+                    PriceListRateManager rateManager = new PriceListRateManager();
+                    
+                    Func<Entities.NewRate, Entities.RateManagement.NewRate> mappingExpression = (itm) =>
+                    {
+                        Entities.RateManagement.NewRate newRate = new Entities.RateManagement.NewRate()
+                        {
+                            ZoneId = itm.ZoneId,
+                            NormalRate = itm.NormalRate,
+                            OtherRates = itm.OtherRates,
+                            CurrencyId = itm.CurrencyId,
+                            BED = itm.BED,
+                            EED = itm.EED
+                        };
+
+                        IEnumerable<ExistingRate> existingRates = _dataManager.GetZoneExistingRates(ownerType, ownerId, newRate.ZoneId, newRate.BED);
+                        rateManager.ProcessNewRate(newRate, existingRates);
+
+                        return newRate;
+                    };
+
+                    IEnumerable<Entities.RateManagement.NewRate> managerNewRates = newRates.MapRecords(mappingExpression);
+
+                    List<RateChange> rateChanges = new List<RateChange>();
+                    foreach (Entities.RateManagement.NewRate newRate in managerNewRates)
+                    {
+                        if (newRate.ChangedExistingRates != null && newRate.ChangedExistingRates.Count > 0)
+                        {
+                            foreach (ExistingRate existingRate in newRate.ChangedExistingRates)
+                                rateChanges.Add(new RateChange() { RateId = existingRate.ChangedRate.RateId, EED = existingRate.ChangedRate.EED });
+                        }
+                    }
+                    
+                    IEnumerable<NewZoneRoutingProduct> newRoutingProducts = changes.ZoneChanges.MapRecords(item => item.NewRoutingProduct, item => item.NewRoutingProduct != null);
+                    IEnumerable<ZoneRoutingProductChange> routingProductChanges = changes.ZoneChanges.MapRecords(item => item.RoutingProductChange, item => item.RoutingProductChange != null);
 
                     ISaleRateDataManager saleRateDataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
 
                     if (rateChanges != null)
                         succeeded = saleRateDataManager.CloseRates(rateChanges);
 
-                    if (newSaleRates != null)
-                        succeeded = saleRateDataManager.InsertRates(newSaleRates);
+                    //if (newSaleRates != null)
+                    //    succeeded = saleRateDataManager.InsertRates(newSaleRates);
 
                     ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
 
@@ -482,11 +517,11 @@ namespace TOne.WhS.Sales.Business
             return priceListId;
         }
 
-        private IEnumerable<SaleRate> MapNewRatesToSaleRates(IEnumerable<NewRate> newRates, int priceListId)
+        private IEnumerable<SaleRate> MapNewRatesToSaleRates(IEnumerable<TOne.WhS.Sales.Entities.NewRate> newRates, int priceListId)
         {
             List<SaleRate> saleRates = new List<SaleRate>();
 
-            foreach (NewRate newRate in newRates)
+            foreach (Entities.NewRate newRate in newRates)
             {
                 saleRates.Add(new SaleRate()
                 {

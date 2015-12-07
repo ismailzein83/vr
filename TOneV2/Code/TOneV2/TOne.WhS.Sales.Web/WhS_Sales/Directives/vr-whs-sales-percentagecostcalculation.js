@@ -20,8 +20,12 @@ app.directive("vrWhsSalesPercentagecostcalculation", [function () {
     function PercentageCostCalculation(ctrl, $scope) {
         this.initCtrl = initCtrl;
 
+        var percentageDirectiveAPI;
+
         function initCtrl() {
             ctrl.title;
+
+            $scope.optionPercentageSettingsGroupTemplates = [];
 
             getAPI();
 
@@ -37,7 +41,8 @@ app.directive("vrWhsSalesPercentagecostcalculation", [function () {
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Sales.Entities.CostCalculation.Extensions.PercentageCostCalculation, TOne.WhS.Sales.Entities",
-                        Title: ctrl.title
+                        Title: ctrl.title,
+                        FixedOptionPercentage: percentageDirectiveAPI.getData()
                     };
                 };
 

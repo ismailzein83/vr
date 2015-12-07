@@ -12,6 +12,7 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.Sales.Web.Controllers
 {
+    [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "RatePlan")]
     public class RatePlanController : BaseAPIController
     {

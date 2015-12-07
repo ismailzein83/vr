@@ -51,13 +51,6 @@ namespace TOne.WhS.Sales.Entities
         
         public string EffectiveRoutingProductName { get; set; }
 
-        public List<ZoneItemRouteCostCalculations> CostCalculations { get; set; }
-    }
-
-    public class ZoneItemRouteCostCalculations
-    {
-        public string Title { get; set; }
-
-        public decimal Cost { get; set; }
+        public List<decimal> Costs { get; set; }
     }
 }

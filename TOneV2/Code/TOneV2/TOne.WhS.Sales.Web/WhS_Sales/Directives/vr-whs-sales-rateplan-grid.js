@@ -27,6 +27,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         function initCtrl() {
             $scope.zoneItems = [];
 
+            $scope.connector = {
+                costCalculationMethods: []
+            };
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(getGridDrillDownDefinitions(), gridAPI, null);
@@ -67,6 +71,14 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             api.load = function (query) {
                 gridQuery = query;
+                
+                if (query.CostCalculationMethods) {
+                    $scope.connector.costCalculationMethods = [];
+
+                    for (var i = 0; i < query.CostCalculationMethods.length; i++)
+                        $scope.connector.costCalculationMethods.push(query.CostCalculationMethods[i]);
+                }
+
                 gridAPI.clearDataAndContinuePaging();
                 return loadZoneItems();
             };

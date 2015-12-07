@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
+using TOne.WhS.Sales.Entities.RateManagement;
 
 namespace TOne.WhS.Sales.Data
 {
@@ -13,5 +15,7 @@ namespace TOne.WhS.Sales.Data
         bool InsertOrUpdateChanges(SalePriceListOwnerType ownerType, int ownerId, Changes changes, RatePlanStatus status);
 
         bool sp_RatePlan_SetStatusIfExists(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status);
+
+        IEnumerable<ExistingRate> GetZoneExistingRates(SalePriceListOwnerType ownerType, int ownerId, long zoneId, DateTime minEED);
     }
 }

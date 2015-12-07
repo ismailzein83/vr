@@ -137,8 +137,17 @@
         }
 
         function onSettingsUpdate(updatedSettings) {
-            settings = updatedSettings;
-            VRNotificationService.showSuccess("Rate plan settings were successfully updated");
+            if (updatedSettings) {
+                settings = {};
+
+                settings.CostCalculationMethods = [];
+                if (updatedSettings.CostCalculationMethods) {
+                    for (var i = 0; i < updatedSettings.CostCalculationMethods.length; i++)
+                        settings.CostCalculationMethods.push(updatedSettings.CostCalculationMethods[i]);
+                }
+            }
+
+            VRNotificationService.showSuccess("Rate plan settings were updated successfully");
         }
 
         function load() {
@@ -259,7 +268,6 @@
 
             gridReadyDeferred.promise.then(function () {
                 var gridQuery = getGridQuery();
-                console.log(gridQuery);
 
                 VRUIUtilsService.callDirectiveLoad(gridAPI, gridQuery, gridLoadDeferred);
             });
@@ -278,7 +286,7 @@
                     RoutingDatabaseId: databaseSelectorAPI.getSelectedIds(),
                     RPRoutePolicyConfigId: policySelectorAPI.getSelectedIds(),
                     NumberOfOptions: $scope.numberOfOptions,
-                    CostCalculations: settings ? settings.CostColumns : null
+                    CostCalculationMethods: settings ? settings.CostCalculationMethods : null
                 };
             }
         }

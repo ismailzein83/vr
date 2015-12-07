@@ -41,6 +41,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
@@ -50,6 +54,7 @@
     <Compile Include="CostCalculation\CostCalculationMethod.cs" />
     <Compile Include="CostCalculation\Extensions\AvgCostCalculation.cs" />
     <Compile Include="CostCalculation\Extensions\PercentageCostCalculation.cs" />
+    <Compile Include="CostCalculation\Extensions\RoutePercentageCostCalculation.cs" />
     <Compile Include="CostCalculation\ICostCalculationMethodContext.cs" />
     <Compile Include="RateManagement\ImportedRate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

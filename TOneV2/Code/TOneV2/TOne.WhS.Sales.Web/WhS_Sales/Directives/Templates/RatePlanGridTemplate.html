@@ -16,6 +16,11 @@
                     <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
                 </div>
             </vr-datagridcolumn>
+            
+            <vr-datagridcolumn ng-repeat="method in connector.costCalculationMethods" headertext="method.Title" type="'Number'" columnindex="3 + $index" disablesorting>
+                <span style="float: right; margin-right: 3px;"><vr-label isvalue>{{dataItem.Costs[0] | number: 2}}</vr-label></span>
+            </vr-datagridcolumn>
+
             <vr-datagridcolumn headertext="'Current Rate'" field="'CurrentRate'" type="'Number'" disablesorting></vr-datagridcolumn>
 
             <vr-datagridcolumn headertext="'New Rate'" disablesorting>

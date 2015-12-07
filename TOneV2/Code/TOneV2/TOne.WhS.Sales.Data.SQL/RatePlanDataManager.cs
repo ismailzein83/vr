@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
+using TOne.WhS.Sales.Entities.RateManagement;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.Sales.Data.SQL
@@ -31,6 +32,29 @@ namespace TOne.WhS.Sales.Data.SQL
         {
             int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_SetStatusIfExists", ownerType, ownerId, status);
             return affectedRows > 0;
+        }
+
+        public IEnumerable<ExistingRate> GetZoneExistingRates(SalePriceListOwnerType ownerType, int ownerId, long zoneId, DateTime minEED)
+        {
+            return GetItemsSP("TOneWhS_Sales.sp_SaleRate_GetZoneExistingRates", ExistingRateMapper, ownerType, ownerId, zoneId, minEED);
+        }
+
+        private ExistingRate ExistingRateMapper(IDataReader reader)
+        {
+            return new ExistingRate()
+            {
+                RateEntity = new SaleRate()
+                {
+                    SaleRateId = (int)reader["ID"],
+                    PriceListId = (int)reader["PriceListID"],
+                    ZoneId = (long)reader["ZoneID"],
+                    CurrencyId = GetReaderValue<int?>(reader, "CurrencyID"),
+                    NormalRate = (decimal)reader["Rate"],
+                    OtherRates = Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string),
+                    BED = (DateTime)reader["BED"],
+                    EED = GetReaderValue<DateTime?>(reader, "EED")
+                }
+            };
         }
 
         #endregion

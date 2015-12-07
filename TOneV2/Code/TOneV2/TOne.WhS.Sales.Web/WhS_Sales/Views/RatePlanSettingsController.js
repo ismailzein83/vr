@@ -31,7 +31,7 @@
 
             $scope.saveSettings = function () {
                 var settings = {};
-                settings.CostColumns = $scope.tabItems[0].directiveAPI ? $scope.tabItems[0].directiveAPI.getData() : null;
+                settings.CostCalculationMethods = $scope.tabItems[0].directiveAPI ? $scope.tabItems[0].directiveAPI.getData() : null;
 
                 if ($scope.onSettingsUpdate && typeof ($scope.onSettingsUpdate) == "function")
                     $scope.onSettingsUpdate(settings);
