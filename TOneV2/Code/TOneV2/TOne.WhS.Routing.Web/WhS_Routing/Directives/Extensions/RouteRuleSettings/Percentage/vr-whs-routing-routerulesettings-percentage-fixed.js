@@ -51,8 +51,7 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
                     for (var j = 0; j < ctrl.percentages.length; j++) {
                         totalPercentage = totalPercentage + parseInt(ctrl.percentages[j].percentage);
                     }
-                    console.log(100 - totalPercentage);
-                    console.log(value);
+                    
                     if (value > 100 - totalPercentage)
                         ctrl.disableButton = true;
                     else
