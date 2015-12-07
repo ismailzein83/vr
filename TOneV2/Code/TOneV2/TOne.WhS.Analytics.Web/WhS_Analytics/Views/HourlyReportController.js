@@ -16,11 +16,11 @@
         load();
 
         function defineScope() {
-            $scope.onReadyGeneralChart = function (api) {
+            $scope.onReadyGenericChart = function (api) {
                 chartApi = api;
             }
 
-            $scope.onReadyGeneralGrid = function (api) {
+            $scope.onReadyGenericGrid = function (api) {
                 gridApi = api;
             }
 
@@ -95,8 +95,8 @@
            // dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.GateWayOut.value);
             dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.PortIn.value);
             dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.PortOut.value);
-            dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.CodeSales.value);
-            dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.CodeBuy.value);
+        //    dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.CodeSales.value);
+          //  dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.CodeBuy.value);
             return dimensions;
         }
 
@@ -129,10 +129,10 @@
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.DeliveredAttempts.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.SuccessfulAttempts.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.ASR.value);
-            measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.NER.value);
+           // measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.NER.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value);
-            measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.GrayArea.value);
-            measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.GreenArea.value);
+          //  measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.GrayArea.value);
+          //  measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.GreenArea.value);
             //measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.CapacityUsageDetails.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.FailedAttempts.value);
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.DurationsInSeconds.value);

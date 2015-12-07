@@ -19,7 +19,6 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         public Func<IDataReader, AnalyticRecord, Object> GetMeasureValue { get; set; }
     }
-
     public class MeasureValueExpression
     {
         public string Expression { get; set; }
@@ -47,34 +46,33 @@ namespace TOne.WhS.Analytics.Data.SQL
         public static MeasureValueExpression MaxDurationInSeconds_Expression = new MeasureValueExpression { ColumnAlias = "Measure_MaxDurationInSeconds", Expression = "CONVERT(DECIMAL(10,2),Max (ts.MaxDurationInSeconds)/60.0)", ExpressionSummary = AnalyticSummary.Max.ToString("G") };
         public static MeasureValueExpression PGAD_Expression = new MeasureValueExpression { ColumnAlias = "Measure_PGAD", Expression = " case when (Sum(ts.SuccessfulAttempts))>0 then CONVERT(DECIMAL(10,2),Sum(ts.SumOfPGAD)/(Sum(ts.SuccessfulAttempts)))else 0 end", ExpressionSummary = AnalyticSummary.Avg.ToString("G") };
         public static MeasureValueExpression AveragePDD_Expression = new MeasureValueExpression { ColumnAlias = "Measure_AveragePDD", Expression = "  case when (Sum(ts.SuccessfulAttempts))>0 then CONVERT(DECIMAL(10,2),Sum(ts.SumOfPDDinSeconds)/(Sum(ts.SuccessfulAttempts)))else 0 end", ExpressionSummary = AnalyticSummary.Avg.ToString("G") };
-
         public static MeasureValueExpression NominalCapacityInE1s_Expression = new MeasureValueExpression { ColumnAlias = "Measure_NominalCapacityInE1s", Expression = " sum(isnull(CustCA.NominalCapacityInE1s,0))*30*60", JoinStatement = " LEFT JOIN [TOneWhS_BE].[CarrierAccount] AS CustCA WITH (NOLOCK) ON ts.CustomerID = CustCA.ID", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
-
         public static MeasureValueExpression BillingNumberOfCalls_Expression = new MeasureValueExpression { ColumnAlias = "Measure_BillingNumberOfCalls", Expression = "ISNULL(SUM(BS.NumberOfCalls), 0)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
-        public static MeasureValueExpression CostNets_Expression = new MeasureValueExpression { ColumnAlias = "Measure_CostNets", Expression = "ISNULL(SUM(BS.Cost_Nets / ISNULL(BS.CCLastRate,1)), 0)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
-        public static MeasureValueExpression SaleNets_Expression = new MeasureValueExpression { ColumnAlias = "Measure_SaleNets", Expression = "ISNULL(SUM(BS.Sale_Nets / ISNULL(BS.CSLastRate,1)), 0)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
-        public static MeasureValueExpression SaleRate_Expression = new MeasureValueExpression { ColumnAlias = "Measure_SaleRate", Expression = "ISNULL(SUM(BS.Sale_Rate / ISNULL(BS.CSLastRate,1)), 0)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
-        public static MeasureValueExpression CostRate_Expression = new MeasureValueExpression { ColumnAlias = "Measure_CostRate", Expression = "ISNULL(SUM(BS.Cost_Rate / ISNULL(BS.CCLastRate,1)), 0)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression CostNets_Expression = new MeasureValueExpression { ColumnAlias = "Measure_CostNets", Expression = " CAST( ISNULL(SUM(BS.CostNets / ISNULL(BS.CCLastRate,1)), 0) AS DECIMAL(18,2)) ", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression SaleNets_Expression = new MeasureValueExpression { ColumnAlias = "Measure_SaleNets", Expression = " CAST(ISNULL(SUM(BS.SaleNets / ISNULL(BS.CSLastRate,1)), 0) AS DECIMAL(18,2))", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression SaleRate_Expression = new MeasureValueExpression { ColumnAlias = "Measure_SaleRate", Expression = "CAST(ISNULL(SUM(BS.SaleRate / ISNULL(BS.CSLastRate,1)), 0) AS DECIMAL(18,2))", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression CostRate_Expression = new MeasureValueExpression { ColumnAlias = "Measure_CostRate", Expression = "CAST(ISNULL(SUM(BS.CostRate / ISNULL(BS.CCLastRate,1)), 0) AS DECIMAL(18,2))", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
         public static MeasureValueExpression PricedDuration_Expression = new MeasureValueExpression { ColumnAlias = "Measure_PricedDuration", Expression = "ISNULL(SUM(BS.CostDuration) / 60, 0)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
 
         #endregion
     }
     public class CTEStatement
     {
-        public const string Billing = "Billing_Currency AS ( SELECT BS.NumberOfCalls NumberOfCalls, BS.Cost_Nets Cost_Nets, BS.Sale_Nets  Sale_Nets, BS.CostDuration CostDuration, BS.SaleZoneID SaleZoneID, CS.LastRate CSLastRate, CC.LastRate CCLastRate FROM  Billing_Stats BS WITH(NOLOCK,Index(IX_Billing_Stats_Date))  LEFT JOIN Currency CS WITH (NOLOCK) ON  CS.CurrencyID = BS.sale_currency LEFT JOIN Currency CC WITH (NOLOCK) ON  CC.CurrencyID = BS.cost_currency WHERE  BS.CallDate >= @fromDate AND BS.CallDate < @ToDate )";
-        public const string Country = "OurZones AS (SELECT ID, Name, CountryID FROM [Common].SaleZone z WITH (NOLOCK))";
+        public const string ExchangeCurrency = "ExchangeRates As (select * from Common.getExchangeRates(@fromDate,@ToDate))";
+        public const string Billing = "BillingStats AS ( SELECT BS.CustomerID  ,BS.SupplierZoneID  , BS.CostCurrency,BS.CallDate,BS.SaleCurrency, BS.SupplierID,BS.NumberOfCalls NumberOfCalls, BS.CostNets CostNets, BS.SaleNets  SaleNets, BS.CostDuration CostDuration, BS.SaleZoneID SaleZoneID, ERC.Rate CSLastRate, ERS.Rate CCLastRate,BS.CostRate ,BS.SaleRate FROM  [TOneWhS_Analytic].BillingStats BS WITH(NOLOCK,Index(PK_BillingStats)) #EXCHANGEJOINPART# )";
+        public const string Country = "OurZones AS (SELECT ID, Name, CountryID FROM [TOneWhS_BE].SaleZone z WITH (NOLOCK))";
         public const string SwitchConnectivity = "SwitchConnectivity AS ( SELECT csc.CarrierAccountID AS  CarrierAccount ,csc.SwitchID AS SwitchID ,csc.Details AS Details ,csc.BeginEffectiveDate AS BeginEffectiveDate ,csc.EndEffectiveDate AS EndEffectiveDate ,csc.[Name] AS GateWayName ,csc.[ID] AS GateWayID FROM   CarrierSwitchConnectivity csc WITH(NOLOCK)  WHERE (csc.EndEffectiveDate IS null))";
-        public const string Currency = "DECLARE @MainExchangeRates TABLE( Currency VARCHAR(3), Date SMALLDATETIME, Rate FLOAT PRIMARY KEY(Currency, Date)) DECLARE @ExchangeRates TABLE( Currency VARCHAR(3), Date SMALLDATETIME, Rate FLOAT PRIMARY KEY(Currency, Date)) INSERT INTO @MainExchangeRates SELECT * FROM dbo.GetDailyExchangeRates(@FromDate, @ToDate) INSERT INTO @ExchangeRates Select exRate1.Currency , exRate1.Date , exRate1.Rate/ exRate2.Rate as Rate from @MainExchangeRates as exRate1 join @MainExchangeRates as exRate2 on exRate2.Currency = @Currency and exRate1.Date = exRate2.Date";
+        public const string ConvertedToCurrency = "ExchangeRatesConvertedToCurrency As(select * from Common.getExchangeRatesConvertedToCurrency(@Currency ,@FromDate, @ToDate))";
     }
-
     public class JoinStatement
     {
-        public const string Billing = "LEFT JOIN Billing_Currency BS WITH (NOLOCK) ON  ts.OurZoneID = BS.SaleZoneID";
+        public const string Billing = "LEFT JOIN BillingStats BS WITH (NOLOCK) ON  #BILLINGJOINSTATEMENT#";
+        public const string ConvertedToCurrency = "LEFT JOIN ExchangeRatesConvertedToCurrency ERC ON ERC.CurrencyID = bs.CostCurrency AND ERC.BED>=bs.CallDate and( ERC.EED IS NULL OR ERC.EED <bs.CallDate) LEFT JOIN ExchangeRatesConvertedToCurrency ERS ON ERS.CurrencyID = bs.SaleCurrency AND ERS.BED>=bs.CallDate and( ERS.EED IS NULL OR ERS.EED <bs.CallDate) ";
+        public const string ExchangeCurrency = "LEFT JOIN ExchangeRates ERC ON ERC.CurrencyID = bs.CostCurrency AND ERC.BED>=bs.CallDate and( ERC.EED IS NULL OR ERC.EED <bs.CallDate) LEFT JOIN ExchangeRates ERS ON ERS.CurrencyID = bs.SaleCurrency AND ERS.BED>=bs.CallDate and( ERS.EED IS NULL OR ERS.EED <bs.CallDate) ";
     }
-
     public class WhereStatement
     {
-        public const string Billing = "AND TS.CustomerID NOT IN (SELECT grasc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grasc) AND TS.SupplierID NOT IN (SELECT grasc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grasc)";
+        public const string Billing = "";//AND TS.CustomerID NOT IN (SELECT grasc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grasc) AND TS.SupplierID NOT IN (SELECT grasc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grasc)";
     }
 
 }

@@ -26,5 +26,7 @@
     SaleNets: { name: "SaleNets", value: 24, description: "Sale Nets", type: "Number" },
     Profit: { name: "Profit", value: 25, description: "Profit", type: "Number" },
     CapacityUsageDetails: { name: "CapacityUsageDetails", value: 26, description: "Capacity Usage Details", type: "MultiProgress" },
-    PricedDuration: { name: "PricedDuration", value: 27, description: "Priced Duration", type: "Number" }
+    PricedDuration: { name: "PricedDuration", value: 27, description: "Priced Duration", type: "Number" },
+    CostRate: { name: "CostRate", value: 28, description: "Cost Rate", type: "Number" },
+    SaleRate: { name: "SaleRate", value: 29, description: "Sale Rate", type: "Number" },
 });

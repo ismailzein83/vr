@@ -12,18 +12,20 @@ namespace TOne.WhS.Analytics.Data.SQL
 {
     public class GenericAnalyticDataManager : BaseTOneDataManager, IGenericAnalyticDataManager
     {
+
+        #region ctor/Local Variables
         public GenericAnalyticDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         { }
+        static string trafficStatsTableName = "TOneWhS_Analytic.TrafficStats";
+        static string trafficStatsByCodeTableName = "TOneWhS_Analytic.TrafficStats";
+        #endregion
+
+        #region Public Methods
         public AnalyticSummaryBigResult<AnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<GenericAnalyticQuery> input)
         {
-            GenericAnalyticConfigManager _manager = new GenericAnalyticConfigManager();
-            Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig = _manager.GetGroupFieldsConfig(input.Query.DimensionFields);
-
-            Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsFilterConfig = new Dictionary<AnalyticDimension,AnalyticDimensionConfig>();
 
             string tempTable = null;
-
             List<AnalyticDimension> fields = new List<AnalyticDimension>();
             if (input.Query.Filters != null)
             {
@@ -32,9 +34,10 @@ namespace TOne.WhS.Analytics.Data.SQL
                     fields.Add(add.Dimension);
                 }
             }
-            
-            dimensionsFilterConfig = _manager.GetGroupFieldsConfig(fields);
 
+            GenericAnalyticConfigManager _manager = new GenericAnalyticConfigManager();
+            Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig = _manager.GetGroupFieldsConfig(input.Query.DimensionFields);
+            Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsFilterConfig = _manager.GetGroupFieldsConfig(fields);
             Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig = _manager.GetMeasureFieldsConfig(input.Query.MeasureFields);
 
             Action<string> createTempTableIfNotExistsAction = (tempTableName) =>
@@ -42,7 +45,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                 tempTable = tempTableName;
                 string query = BuildAnalyticSummaryQuery(input, tempTableName, dimensionsConfig, measureFieldsConfig, dimensionsFilterConfig);
 
-                if(input.Query.Currency != null)
+                if (input.Query.Currency != null)
                     ExecuteNonQueryText(query, (cmd) =>
                     {
                         cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromTime));
@@ -58,7 +61,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             };
 
             Dictionary<string, string> columnsMappings = new Dictionary<string, string>();
-            for (int i = 0; i < input.Query.DimensionFields.Length; i++ )
+            for (int i = 0; i < input.Query.DimensionFields.Length; i++)
             {
                 var groupField = input.Query.DimensionFields[i];
                 columnsMappings.Add(String.Format("DimensionValues[{0}].Name", i), String.Format("DimensionName_{0}", groupField));
@@ -71,11 +74,6 @@ namespace TOne.WhS.Analytics.Data.SQL
                 if (measureFieldConfig.MappedSQLColumn != null)
                     columnsMappings.Add(String.Format("MeasureValues.{0}", input.Query.MeasureFields[i]), measureFieldConfig.MappedSQLColumn);
             }
-            
-            //return RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, dimensionsConfig, measureFieldsConfig), columnsMappings);
-            //AnalyticSummaryBigResult<AnalyticRecord> rslt = RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, dimensionsConfig, measureFieldsConfig), columnsMappings);
-
-
 
             AnalyticSummaryBigResult<AnalyticRecord> rslt = RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, dimensionsConfig, measureFieldsConfig)
             , columnsMappings, new AnalyticSummaryBigResult<AnalyticRecord>()) as AnalyticSummaryBigResult<AnalyticRecord>;
@@ -85,26 +83,19 @@ namespace TOne.WhS.Analytics.Data.SQL
             return rslt;
         }
 
+        #endregion
+
+        #region Private Methods
         private AnalyticRecord GetSummary(Vanrise.Entities.DataRetrievalInput<GenericAnalyticQuery> input, string tempTableName,
-            Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig,
-            Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig)
+          Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig,
+          Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig)
         {
 
             StringBuilder queryBuilder = new StringBuilder(@"SELECT #SELECTPART# FROM #TEMPTABLE# ts");
-
             StringBuilder selectPartBuilder = new StringBuilder();
-            //foreach (AnalyticDimension groupField in input.Query.DimensionFields)
-            //{
-            //    AnalyticDimensionConfig groupFieldConfig = dimensionsConfig[groupField];
-
-            //    if (!String.IsNullOrEmpty(groupFieldConfig.IdColumn))
-            //        AddColumnToSelectPart(selectPartBuilder, String.Format("{0}(DimensionId_{1}) AS DimensionId_{1}", groupFieldConfig.ExpressionSummary, groupField));
-
-            //    if (!String.IsNullOrEmpty(groupFieldConfig.NameColumn))
-            //        AddColumnToSelectPart(selectPartBuilder, String.Format("{0}(DimensionName_{1}) AS DimensionName_{1}", groupFieldConfig.ExpressionSummary, groupField));
-            //}
 
             //adding Measures related parts to the query
+            #region Adding Measure Related Parts
             List<string> addedMeasureColumns = new List<string>();
             foreach (AnalyticMeasureField measureField in input.Query.MeasureFields)
             {
@@ -116,30 +107,45 @@ namespace TOne.WhS.Analytics.Data.SQL
                         var measureColumn = exp(input.Query);
                         if (!addedMeasureColumns.Contains(measureColumn.ColumnAlias))
                         {
-                            AddColumnToSelectPart(selectPartBuilder,
-                                String.Format("{0}({1}) AS {1}",measureColumn.ExpressionSummary, measureColumn.ColumnAlias));
+                            AddColumnToStringBuilder(selectPartBuilder,
+                                String.Format("{0}({1}) AS {1}", measureColumn.ExpressionSummary, measureColumn.ColumnAlias));
 
                             addedMeasureColumns.Add(measureColumn.ColumnAlias);
                         }
                     }
                 }
             }
+            #endregion
 
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
             queryBuilder.Replace("#SELECTPART#", selectPartBuilder.ToString());
 
-            return GetItemText(queryBuilder.ToString(), (reader) => AnalyticRecordMapper(reader,null, measureFieldsConfig), null);
+            return GetItemText(queryBuilder.ToString(), (reader) => AnalyticRecordMapper(reader, null, measureFieldsConfig), null);
         }
 
 
-        private string BuildAnalyticSummaryQuery(Vanrise.Entities.DataRetrievalInput<GenericAnalyticQuery> input, string tempTableName, 
-            Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig, 
+        private string BuildAnalyticSummaryQuery(Vanrise.Entities.DataRetrievalInput<GenericAnalyticQuery> input, string tempTableName,
+            Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig,
             Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig,
             Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsFilterConfig)
         {
+
+            StringBuilder selectPartBuilder = new StringBuilder();
+            StringBuilder joinPartBuilder = new StringBuilder();
+            StringBuilder filterPartBuilder = new StringBuilder();
+            StringBuilder groupByPartBuilder = new StringBuilder();
+            StringBuilder ctePartBuilder = new StringBuilder();
+             StringBuilder billingJoinPartBuilder = new StringBuilder();
+
+            string tableNamePartBuilder = trafficStatsTableName;
+            string tableIndex = "IX_TrafficStats_DateTimeFirst";
+            List<string> lstCTEStatements = new List<string>();
+            List<string> lstJoinStatement = new List<string>();
+            List<string> lstWhereStatement = new List<string>();
+
+            #region MainQuery
             StringBuilder queryBuilder = new StringBuilder(@"IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
 	                                                        BEGIN
-                                                                #CURRENCY#
                                                                 ;WITH 
                                                                 #CTEPART#
                                                                 AllResult AS( 
@@ -152,34 +158,28 @@ namespace TOne.WhS.Analytics.Data.SQL
 			                                                    #GROUPBYPART#)
                                                                 SELECT * INTO #TEMPTABLE# FROM AllResult
                                                             END ");
-
-            StringBuilder selectPartBuilder = new StringBuilder();
-            StringBuilder joinPartBuilder = new StringBuilder();
-            StringBuilder filterPartBuilder = new StringBuilder();
-            StringBuilder groupByPartBuilder = new StringBuilder();
-            StringBuilder ctePartBuilder = new StringBuilder();
-            string tableNamePartBuilder = "TOneWhS_Stats.TrafficStats";
-            string tableIndex = "IX_TrafficStats_DateTimeFirst";
-            string currencyPartBuilder = "";
-
-            if (input.Query.Currency != null)
-                currencyPartBuilder = CTEStatement.Currency;
-
-            List<string> lstCTEStatements = new List<string>();
-            List<string> lstJoinStatement = new List<string>();
-            List<string> lstWhereStatement = new List<string>();
+            #endregion
             //adding group fields related parts to the query
+            #region Adding Group Fields Part
             foreach (AnalyticDimension groupField in input.Query.DimensionFields)
-            {                
+            {
                 AnalyticDimensionConfig groupFieldConfig = dimensionsConfig[groupField];
+                switch (groupField)
+                {
+                    case AnalyticDimension.Zone:AddPartOfJoinStatment(billingJoinPartBuilder," ts.SaleZoneID=BS.SaleZoneID "); break;
+                    case AnalyticDimension.SupplierZone: AddPartOfJoinStatment(billingJoinPartBuilder," ts.SupplierZoneID=BS.SupplierZoneID "); break;
+                    case AnalyticDimension.Supplier:AddPartOfJoinStatment(billingJoinPartBuilder," ts.SupplierID=BS.SupplierID "); break;
+                    case AnalyticDimension.Customer: AddPartOfJoinStatment(billingJoinPartBuilder," ts.CustomerID=BS.CustomerID "); break;
+                }
+               
 
                 if (groupFieldConfig.GroupByStatements != null)
                     foreach (var statement in groupFieldConfig.GroupByStatements)
                     {
-                        AddColumnToGroupByPart(groupByPartBuilder, statement);
+                        AddColumnToStringBuilder(groupByPartBuilder, statement);
                     }
 
-                if(groupFieldConfig.JoinStatements != null)
+                if (groupFieldConfig.JoinStatements != null)
                     foreach (var statement in groupFieldConfig.JoinStatements)
                     {
                         if (!lstJoinStatement.Contains(statement))
@@ -189,15 +189,12 @@ namespace TOne.WhS.Analytics.Data.SQL
                         }
                     }
 
-                //if (groupFieldConfig.CTEStatement != null)
-                //    AddStatementToCTEPart(ctePartBuilder, groupFieldConfig.CTEStatement);
-
                 if (groupField == AnalyticDimension.Country)
                 {
                     if (!lstCTEStatements.Contains(CTEStatement.Country))
                     {
                         lstCTEStatements.Add(CTEStatement.Country);
-                        AddStatementToCTEPart(ctePartBuilder, CTEStatement.Country);
+                        AddStatementToStringBuilder(ctePartBuilder, CTEStatement.Country);
                     }
                 }
 
@@ -210,73 +207,28 @@ namespace TOne.WhS.Analytics.Data.SQL
                 //    }
                 //}
 
-                if(!String.IsNullOrEmpty(groupFieldConfig.IdColumn))
-                    AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS DimensionId_{1}", groupFieldConfig.IdColumn, groupField));
-                
+                if (!String.IsNullOrEmpty(groupFieldConfig.IdColumn))
+                    AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS DimensionId_{1}", groupFieldConfig.IdColumn, groupField));
+
                 if (!String.IsNullOrEmpty(groupFieldConfig.NameColumn))
-                    AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS DimensionName_{1}", groupFieldConfig.NameColumn, groupField));
+                    AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS DimensionName_{1}", groupFieldConfig.NameColumn, groupField));
+
                 if (groupField == AnalyticDimension.CodeSales || groupField == AnalyticDimension.CodeBuy)
-                    tableNamePartBuilder = "TrafficStatsByCode";
+                    tableNamePartBuilder = trafficStatsByCodeTableName;
             }
+          
+            #endregion
 
-            //adding Measures related parts to the query
-            List<string> addedMeasureColumns = new List<string>();
-            foreach (AnalyticMeasureField measureField in input.Query.MeasureFields)
-            {
-                AnalyticMeasureFieldConfig measureFieldConfig = measureFieldsConfig[measureField];
-                if(measureFieldConfig.GetColumnsExpressions != null)
-                {
-                    foreach(var exp in measureFieldConfig.GetColumnsExpressions)
-                    {
-                        var measureColumn = exp(input.Query);
-                        if(!addedMeasureColumns.Contains(measureColumn.ColumnAlias))
-                        {
-                            AddColumnToSelectPart(selectPartBuilder, String.Format("{0} AS {1}", measureColumn.Expression, measureColumn.ColumnAlias));
-                            if (measureColumn.JoinStatement != null)
-                            {
-                                if (!lstJoinStatement.Contains(measureColumn.JoinStatement))
-                                {
-                                    lstJoinStatement.Add(measureColumn.JoinStatement);
-                                    AddStatementToJoinPart(joinPartBuilder, measureColumn.JoinStatement);
-                                }
-                            }   
-
-                            //Measures related to Billing
-                            if (measureField == AnalyticMeasureField.BillingNumberOfCalls || measureField == AnalyticMeasureField.CostNets ||
-                                measureField == AnalyticMeasureField.SaleNets || measureField == AnalyticMeasureField.Profit || measureField == AnalyticMeasureField.PricedDuration)
-                            {
-                                if(!lstCTEStatements.Contains(CTEStatement.Billing))
-                                {
-                                    lstCTEStatements.Add(CTEStatement.Billing);
-                                    AddStatementToCTEPart(ctePartBuilder, CTEStatement.Billing);
-                                }
-                                if (!lstJoinStatement.Contains(JoinStatement.Billing))
-                                {
-                                    lstJoinStatement.Add(JoinStatement.Billing);
-                                    AddStatementToJoinPart(joinPartBuilder, JoinStatement.Billing);
-                                }
-                                if (!lstWhereStatement.Contains(WhereStatement.Billing))
-                                {
-                                    lstWhereStatement.Add(WhereStatement.Billing);
-                                    AddFilterToFilterPart(filterPartBuilder, WhereStatement.Billing);
-                                }
-                            }
-
-                            addedMeasureColumns.Add(measureColumn.ColumnAlias);
-                        }
-                    }
-                }
-            }
+            #region Adding FilterPart
             if (input.Query.Filters != null)
             {
                 foreach (DimensionFilter dimensionFilter in input.Query.Filters)
                 {
 
                     if (dimensionFilter.Dimension == AnalyticDimension.CodeSales || dimensionFilter.Dimension == AnalyticDimension.CodeBuy)
-                        tableNamePartBuilder = "TrafficStatsByCode";
+                        tableNamePartBuilder = trafficStatsByCodeTableName;
 
                     AnalyticDimensionConfig filterFieldConfig = dimensionsFilterConfig[dimensionFilter.Dimension];
-
 
                     if (!String.IsNullOrEmpty(filterFieldConfig.IdColumn))
                         AddFilterToFilterPart(filterPartBuilder, dimensionFilter.FilterValues, filterFieldConfig.IdColumn);
@@ -290,15 +242,9 @@ namespace TOne.WhS.Analytics.Data.SQL
                             if (!lstCTEStatements.Contains(CTEStatement.Country))
                             {
                                 lstCTEStatements.Add(CTEStatement.Country);
-                                AddStatementToCTEPart(ctePartBuilder, CTEStatement.Country);
+                                AddStatementToStringBuilder(ctePartBuilder, CTEStatement.Country);
                             }
                         }
-
-                        //if (groupFieldConfig.CTEStatement != null)
-                        //{    
-                        //    AddStatementToCTEPart(ctePartBuilder, groupFieldConfig.CTEStatement);
-                        //}
-
                         if (groupFieldConfig.JoinStatements != null)
                             foreach (var statement in groupFieldConfig.JoinStatements)
                             {
@@ -311,33 +257,107 @@ namespace TOne.WhS.Analytics.Data.SQL
                     }
                 }
             }
-          
-            queryBuilder.Replace("#CURRENCY#", currencyPartBuilder);
+            #endregion
+            //adding Measures related parts to the query
+            #region Adding Measures Related Part 
+            List<string> addedMeasureColumns = new List<string>();
+            foreach (AnalyticMeasureField measureField in input.Query.MeasureFields)
+            {
+                AnalyticMeasureFieldConfig measureFieldConfig = measureFieldsConfig[measureField];
+                if (measureFieldConfig.GetColumnsExpressions != null)
+                {
+                    foreach (var exp in measureFieldConfig.GetColumnsExpressions)
+                    {
+                        var measureColumn = exp(input.Query);
+                        if (!addedMeasureColumns.Contains(measureColumn.ColumnAlias))
+                        {
+                            AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS {1}", measureColumn.Expression, measureColumn.ColumnAlias));
+                            if (measureColumn.JoinStatement != null)
+                            {
+                                if (!lstJoinStatement.Contains(measureColumn.JoinStatement))
+                                {
+                                    lstJoinStatement.Add(measureColumn.JoinStatement);
+                                    AddStatementToJoinPart(joinPartBuilder, measureColumn.JoinStatement);
+                                }
+                            }
+
+                            //Measures related to Billing
+                            if (measureField == AnalyticMeasureField.BillingNumberOfCalls || measureField == AnalyticMeasureField.CostNets ||
+                                measureField == AnalyticMeasureField.SaleNets || measureField == AnalyticMeasureField.Profit || measureField == AnalyticMeasureField.PricedDuration || measureField == AnalyticMeasureField.CostRate || measureField == AnalyticMeasureField.SaleRate)
+                            {
+                                if (!lstCTEStatements.Contains(CTEStatement.Billing))
+                                {
+
+                                    if (input.Query.Currency != null)
+                                    {
+
+                                        lstCTEStatements.Add(CTEStatement.ConvertedToCurrency);
+                                        AddStatementToStringBuilder(ctePartBuilder, CTEStatement.ConvertedToCurrency);
+                                    }
+                                    else
+                                    {
+                                        lstCTEStatements.Add(CTEStatement.ExchangeCurrency);
+                                        AddStatementToStringBuilder(ctePartBuilder, CTEStatement.ExchangeCurrency);
+                                    }
+                               //     lstCTEStatements.Add(CTEStatement.Country);
+                                    lstCTEStatements.Add(CTEStatement.Billing);
+                                //    AddStatementToStringBuilder(ctePartBuilder, CTEStatement.Country);
+                                    AddStatementToStringBuilder(ctePartBuilder, CTEStatement.Billing);
+
+
+                                }
+                                if (!lstJoinStatement.Contains(JoinStatement.Billing))
+                                {
+                                    lstJoinStatement.Add(JoinStatement.Billing);
+                                    AddStatementToJoinPart(joinPartBuilder, JoinStatement.Billing);
+                                }
+                                if (!lstWhereStatement.Contains(WhereStatement.Billing))
+                                {
+                                    lstWhereStatement.Add(WhereStatement.Billing);
+                                    AddStatementToStringBuilder(filterPartBuilder, WhereStatement.Billing);
+                                }
+                            }
+
+                            addedMeasureColumns.Add(measureColumn.ColumnAlias);
+                        }
+                    }
+                }
+            }
+            #endregion
+
+            #region Replacment Query
             queryBuilder.Replace("#TABLENAME#", tableNamePartBuilder);
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
             queryBuilder.Replace("#TABLEINDEX#", tableIndex);
             queryBuilder.Replace("#SELECTPART#", selectPartBuilder.ToString());
             queryBuilder.Replace("#JOINPART#", joinPartBuilder.ToString());
             queryBuilder.Replace("#FILTERPART#", filterPartBuilder.ToString());
-            
-            if(groupByPartBuilder.Length > 0)
+
+            if (groupByPartBuilder.Length > 0)
                 queryBuilder.Replace("#GROUPBYPART#", "GROUP BY " + groupByPartBuilder);
             else
                 queryBuilder.Replace("#GROUPBYPART#", "");
-
             queryBuilder.Replace("#CTEPART#", ctePartBuilder.ToString());
+            if (input.Query.Currency != null)
+                queryBuilder.Replace("#EXCHANGEJOINPART#", JoinStatement.ConvertedToCurrency);
+            else
+                queryBuilder.Replace("#EXCHANGEJOINPART#", JoinStatement.ExchangeCurrency);
+            
+            queryBuilder.Replace("#BILLINGJOINSTATEMENT#", billingJoinPartBuilder.ToString());
+            
+            #endregion
 
             return queryBuilder.ToString();
         }
 
-        public void AddFilterToFilterPart<T>(StringBuilder filterBuilder, List<T> values, string column)
+        private void AddFilterToFilterPart<T>(StringBuilder filterBuilder, List<T> values, string column)
         {
             if (values != null && values.Count() > 0)
             {
                 if (values[0].GetType() == typeof(string) || values[0].GetType() == typeof(DateTime))
                 {
                     StringBuilder builder = new StringBuilder();
-                    if(values.Count == 1)
+                    if (values.Count == 1)
                         builder.Append("'").Append(values[0]).Append("'");
                     else
                     {
@@ -347,89 +367,76 @@ namespace TOne.WhS.Analytics.Data.SQL
                         }
                         builder.Length--;
                     }
-                        
+
                     filterBuilder.AppendFormat(" AND {0} IN ({1}) ", column, builder);
                 }
                 else
                     filterBuilder.AppendFormat(" AND {0} IN ({1}) ", column, String.Join(", ", values));
             }
         }
-        public void AddFilterToFilterPart(StringBuilder filterBuilder, string statement)
+
+        private void AddColumnToStringBuilder(StringBuilder builder, string column)
+        {
+            if (builder.Length > 0)
+            {
+                builder.Append(" , ");
+            }
+            builder.Append(column);
+        }
+
+        private void AddStatementToStringBuilder(StringBuilder builder, string statement)
         {
             if (statement.Length != 0)
-                filterBuilder.Append(" " + statement + " ");
+                builder.Append(" " + statement + " , ");
         }
 
-        void AddColumnToSelectPart(StringBuilder selectPartBuilder, string column)
-        {
-            if(selectPartBuilder.Length > 0)
-            {
-                selectPartBuilder.Append(" , ");
-            }
-            selectPartBuilder.Append(column);
-        }
-
-        void AddColumnToGroupByPart(StringBuilder groupByPartBuilder, string column)
-        {
-            if (groupByPartBuilder.Length > 0)
-            {
-                groupByPartBuilder.Append(" , ");
-            }
-            groupByPartBuilder.Append(column);
-        }
-
-        void AddStatementToCTEPart(StringBuilder ctePartBuilder, string statement)
-        {
-            if (statement.Length != 0)
-                ctePartBuilder.Append( " " + statement + " , ");
-        }
-
-        void AddStatementToJoinPart(StringBuilder joinPartBuilder, string statement)
+        private void AddStatementToJoinPart(StringBuilder joinPartBuilder, string statement)
         {
             joinPartBuilder.Append(" " + statement + " ");
         }
+        private void AddPartOfJoinStatment(StringBuilder joinPartBuilder, string statement)
+        {
+            if (joinPartBuilder != null && joinPartBuilder.Length > 0)
+                joinPartBuilder.Append("AND");
+            joinPartBuilder.Append(" " + statement + " ");
+        }
 
-        AnalyticRecord AnalyticRecordMapper(IDataReader reader, Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig, Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig)
+        private AnalyticRecord AnalyticRecordMapper(IDataReader reader, Dictionary<AnalyticDimension, AnalyticDimensionConfig> dimensionsConfig, Dictionary<AnalyticMeasureField, AnalyticMeasureFieldConfig> measureFieldsConfig)
         {
             AnalyticRecord record = new AnalyticRecord()
             {
                 DimensionValues = dimensionsConfig != null ? new AnalyticDimensionValue[dimensionsConfig.Count] : new AnalyticDimensionValue[0],
                 MeasureValues = new Dictionary<AnalyticMeasureField, object>() // Object[measureFieldsConfig.Count]
             };
-
             var index = 0;
             if (dimensionsConfig != null)
-            foreach (var groupFieldConfig in dimensionsConfig)
-            {
-                object id = GetReaderValue<object>(reader, String.Format("DimensionId_{0}", groupFieldConfig.Key));
-                if (id != null)
+                foreach (var groupFieldConfig in dimensionsConfig)
                 {
-                    string nameColumnName = String.Format("DimensionName_{0}", groupFieldConfig.Key);
-                    record.DimensionValues[index] = new AnalyticDimensionValue
+                    object id = GetReaderValue<object>(reader, String.Format("DimensionId_{0}", groupFieldConfig.Key));
+                    if (id != null)
                     {
-                        Id = id,
-                        Name =  reader[nameColumnName].ToString()
-                    };
+                        string nameColumnName = String.Format("DimensionName_{0}", groupFieldConfig.Key);
+                        record.DimensionValues[index] = new AnalyticDimensionValue
+                        {
+                            Id = id,
+                            Name = reader[nameColumnName].ToString()
+                        };
+                    }
+
+                    index++;
                 }
-
-                index++;
-            }
-
             index = 0;
-
             foreach (var measureFieldConfig in measureFieldsConfig)
-            {                
+            {
                 if (measureFieldConfig.Value.GetMeasureValue != null)
-                    //record.MeasureValues[index] = measureFieldConfig.Value.GetMeasureValue(reader, record);
                     record.MeasureValues[measureFieldConfig.Key] = measureFieldConfig.Value.GetMeasureValue(reader, record);
-
                 index++;
             }
-
             index = 0;
-
-
             return record;
         }
+        
+        #endregion
+
     }
 }

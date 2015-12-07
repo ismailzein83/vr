@@ -152,6 +152,10 @@
     <Content Include="WhS_Analytics\Directives\Generic\Templates\GenericGridTemplate.html" />
     <Content Include="WhS_Analytics\Services\APIServices\GenericAnalyticAPIService.js" />
     <Content Include="WhS_Analytics\Services\GenericAnalyticService.js" />
+    <Content Include="WhS_Analytics\Views\CarrierSummary.html" />
+    <Content Include="WhS_Analytics\Views\CarrierSummaryController.js" />
+    <Content Include="WhS_Analytics\Views\DailyReport.html" />
+    <Content Include="WhS_Analytics\Views\DailyReportController.js" />
     <Content Include="WhS_Analytics\Views\TrafficMonitor.html" />
     <Content Include="WhS_Analytics\Views\TrafficMonitorController.js" />
     <Content Include="WhS_Analytics\Views\HourlyReport.html" />

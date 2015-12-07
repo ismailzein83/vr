@@ -18,6 +18,5 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         public string ExpressionSummary { get; set; }
 
-        //public string CTEStatement { get; set; }
     }
 }

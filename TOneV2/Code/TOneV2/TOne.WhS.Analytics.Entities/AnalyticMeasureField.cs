@@ -35,6 +35,8 @@ namespace TOne.WhS.Analytics.Entities
         SaleNets = 24,
         Profit = 25,
         CapacityUsageDetails = 26,
-        PricedDuration = 27
+        PricedDuration = 27,
+        CostRate=28,
+        SaleRate=29
     }
 }
