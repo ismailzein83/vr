@@ -58,7 +58,7 @@ app.directive('vrSwitch', ['SecurityService', function (SecurityService) {
                 var label = attrs.label;
                 if (label == undefined)
                     label = '';
-                return '<vr-label ng-if="withLable">' + label + '</vr-label><div><switch ng-model="value" ng-change="notifyUserChange()" class="green"></switch>'
+                return '<vr-label ng-if="withLable">' + label + '</vr-label><div style="min-height: 28px;"><switch ng-model="value" ng-change="notifyUserChange()" class="green"></switch>'
                     + '<span ng-if="hint!=undefined" ng-mouseenter="adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;top:-1px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{hint}}"></span>'
                     + '</div>';
             }
