@@ -42,8 +42,24 @@ namespace TOne.BusinessEntity.Data.SQL
                 CurrencyId = reader["CurrencyId"] as string
             };
         }
+        
 
+        public bool SavePriceList(PriceList pricelist, out int priceListId)
+        {
+            object id;
 
+            int recordesEffected = ExecuteNonQuerySP("BEntity.[sp_PriceList_Insert]", out id, 
+                                                                                      pricelist.SupplierId, 
+                                                                                      pricelist.CustomerId,
+                                                                                      pricelist.Description, 
+                                                                                      pricelist.CurrencyId, 
+                                                                                      pricelist.BeginEffectiveDate, 
+                                                                                      pricelist.EndEffectiveDate,pricelist.SourceFileName,
+                                                                                      pricelist.UserId, 
+                                                                                      pricelist.IsSend );
 
+            priceListId = (recordesEffected > 0) ? (Int32)id : -1;
+            return (recordesEffected > 0);
+        }
     }
 }

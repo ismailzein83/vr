@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.BusinessEntity.Entities;
 using TOne.Data.SQL;
+using Vanrise.Data.SQL;
 
 namespace TOne.BusinessEntity.Data.SQL
 {
@@ -189,8 +190,74 @@ namespace TOne.BusinessEntity.Data.SQL
                 CurrencyID = reader["CurrencyID"] as string,
                 Rate = GetReaderValue<float>(reader, "Rate"),
                 ExchangeDate = GetReaderValue<DateTime>(reader, "ExchangeDate"),
-                
+
             };
+        }
+
+
+        public void SaveRates(List<Rate> rates)
+        {
+            InsertBulkToTable(PrepareRatesDBApply(rates) as BaseBulkInsertInfo);
+        }
+
+        private object PrepareRatesDBApply(List<Rate> rates)
+        {
+            string filePath = GetFilePathForBulkInsert();
+            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
+            {
+                foreach (var r in rates)
+                {
+
+                    wr.WriteLine(String.Format("0^{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}", r.PriceListId, r.ZoneId, r.NormalRate, r.OffPeakRate, r.WeekendRate, (short)r.Change, r.ServicesFlag, r.BeginEffectiveDate.Value.ToString("yyyy-MM-dd HH:mm:00"), r.EndEffectiveDate.HasValue ? r.EndEffectiveDate.Value.ToString("yyyy-MM-dd HH:mm:00") : "", "", "", "", ""));
+                    //123^145^0^^^1^1^12/14/2015 2:26:28 PM
+
+                }
+                wr.Close();
+            }
+
+            return new BulkInsertInfo
+            {
+                TableName = "Rate",
+                DataFilePath = filePath,
+                TabLock = true,
+                FieldSeparator = '^'
+            };
+        }
+
+
+        public void UpdateRateEED(List<Rate> rates, string customerId)
+        {
+            DataTable dtRatesType = GetDataTable(rates, customerId);
+            ExecuteNonQuerySPCmd("[BEntity].[sp_Rate_UpdateEED]", (cmd) =>
+            {
+
+                var dtPrm = new SqlParameter("@Rates", SqlDbType.Structured);
+                dtPrm.TypeName = "BEntity.RateType";
+                dtPrm.Value = dtRatesType;
+                cmd.Parameters.Add(dtPrm);
+            });
+
+        }
+
+        private DataTable GetDataTable(List<Rate> rates, string customerId)
+        {
+            DataTable dtRates = new DataTable();
+            dtRates.Columns.Add("PriceListId", typeof(int));
+            dtRates.Columns.Add("CustomerId", typeof(string));
+            dtRates.Columns.Add("ZoneId", typeof(int));
+            dtRates.Columns.Add("EED", typeof(DateTime));
+            dtRates.BeginLoadData();
+            foreach (Rate rate in rates)
+            {
+                DataRow dr = dtRates.NewRow();
+                dr["PriceListId"] = rate.PriceListId;
+                dr["CustomerId"] = customerId;
+                dr["ZoneId"] = rate.ZoneId;
+                dr["EED"] = rate.EndEffectiveDate;
+                dtRates.Rows.Add(dr);
+            }
+            dtRates.EndLoadData();
+            return dtRates;
         }
     }
 }

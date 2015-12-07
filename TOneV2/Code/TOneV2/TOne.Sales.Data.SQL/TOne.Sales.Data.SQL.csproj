@@ -35,15 +35,45 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StateBackupDataManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">
+      <Project>{f0bcbe72-f000-46ae-85a4-79155751c767}</Project>
+      <Name>TOne.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Sales.Data\TOne.Sales.Data.csproj">
+      <Project>{5a32f27b-9ac1-49c7-8743-cdd126789047}</Project>
+      <Name>TOne.Sales.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Sales.Entities\TOne.Sales.Entities.csproj">
+      <Project>{260cf8e0-e04b-4fc2-875b-7a34dc5b4939}</Project>
+      <Name>TOne.Sales.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

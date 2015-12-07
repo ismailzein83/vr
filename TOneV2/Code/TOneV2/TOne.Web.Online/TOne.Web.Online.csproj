@@ -315,6 +315,22 @@
       <Project>{aee31608-d6e1-4005-9773-b1b970afd323}</Project>
       <Name>TOne.LCR.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.Sales.Business\TOne.Sales.Business.csproj">
+      <Project>{0cefa770-b642-440b-b660-ba2730138b1a}</Project>
+      <Name>TOne.Sales.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Sales.Data.SQL\TOne.Sales.Data.SQL.csproj">
+      <Project>{7699bd3d-8142-46f7-a5f5-d11fe359ca94}</Project>
+      <Name>TOne.Sales.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Sales.Data\TOne.Sales.Data.csproj">
+      <Project>{5a32f27b-9ac1-49c7-8743-cdd126789047}</Project>
+      <Name>TOne.Sales.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Sales.Entities\TOne.Sales.Entities.csproj">
+      <Project>{260cf8e0-e04b-4fc2-875b-7a34dc5b4939}</Project>
+      <Name>TOne.Sales.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

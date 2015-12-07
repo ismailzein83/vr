@@ -12,5 +12,7 @@ namespace TOne.BusinessEntity.Data
         List<PriceList> GetPriceList();
 
         PriceList GetPriceListById(int priceListId);
+
+        bool SavePriceList(PriceList pricelist, out int priceListId);
     }
 }

@@ -24,5 +24,11 @@ namespace TOne.BusinessEntity.Business
         {
             return _dataManager.GetPriceListById(priceListId);
         }
+
+        public bool SavePriceList(PriceList pricelist, out int priceListId)
+        {
+            return _dataManager.SavePriceList(pricelist, out priceListId);
+        }
+
     }
 }

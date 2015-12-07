@@ -14,5 +14,9 @@ namespace TOne.BusinessEntity.Data
         List<Rate> GetRate(int zoneId, string customerId, DateTime when);
 
         List<ExchangeRate> GetExchangeRates(DateTime Date);
+
+        void UpdateRateEED(List<Rate> rates, string customerId);
+
+        void SaveRates(List<Rate> rates);
     }
 }

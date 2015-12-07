@@ -28,5 +28,15 @@ namespace TOne.BusinessEntity.Business
         {
             return _dataManager.GetExchangeRates(Date);
         }
+
+        public void UpdateRateEED(List<Rate> rates, string customerId)
+        {
+            _dataManager.UpdateRateEED(rates, customerId);
+        }
+
+        public void SaveRates(List<Rate> rates)
+        {
+            _dataManager.SaveRates(rates);
+        }
     }
 }

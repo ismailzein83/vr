@@ -14,5 +14,10 @@ namespace TOne.BusinessEntity.Entities
         public string CurrencyId { get; set; }
         public Nullable<DateTime> EndEffectiveDate { get; set; }
         public Nullable<DateTime> BeginEffectiveDate { get; set; }
+        public string CustomerId { get; set; }
+        public string SupplierId { get; set; }
+        public int UserId { get; set; }
+        public bool IsSend { get; set; }
+        public string SourceFileName { get; set; }
     }
 }
