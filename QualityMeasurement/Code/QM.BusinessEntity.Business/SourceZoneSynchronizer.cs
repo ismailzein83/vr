@@ -30,6 +30,12 @@ namespace QM.BusinessEntity.Business
         Vanrise.Common.Business.CountryManager countryManager = new Vanrise.Common.Business.CountryManager();
         ZoneManager zoneManager = new ZoneManager();
 
+        public SourceZoneSynchronizer(ISourceItemReader<SourceZone> sourceItemReader)
+            : base(sourceItemReader)
+        {
+
+        }
+
         protected override void AddItems(List<Zone> itemsToAdd)
         {
             throw new NotImplementedException();

@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="CountryReaders\VanriseCountryReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SuppliersReaders\SupplierSQLReader.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

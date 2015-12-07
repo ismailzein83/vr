@@ -142,9 +142,9 @@ namespace QM.BusinessEntity.Business
             return supplierDetail;
         }
 
-        private void ReserveIDRange(int nbOfIds, out long startingId)
+        internal static void ReserveIDRange(int nbOfIds, out long startingId)
         {
-            Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(this.GetType(), nbOfIds, out startingId);
+            Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(typeof(SupplierManager), nbOfIds, out startingId);
         }
 
         #endregion

@@ -6,28 +6,27 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace QM.BusinessEntity.Business
-{
-    public interface ISourceItemReader<T> where T : ISourceItem
-    {
-        bool UseSourceItemId { get; }
-
-        IEnumerable<T> GetChangedItems(ref object updatedHandle);
-    }
+{  
 
     public abstract class SourceItemSynchronizer<TSourceItem, TItem, TSourceItemReader>
         where TSourceItem : ISourceItem
         where TItem : IItem
         where TSourceItemReader : ISourceItemReader<TSourceItem>
     {
+        TSourceItemReader _sourceItemReader;
+
+        public SourceItemSynchronizer(TSourceItemReader sourceItemReader)
+        {
+            _sourceItemReader = sourceItemReader;
+        }
         public void Synchronize()
         {
-            ISourceItemReader<TSourceItem> changedSourceItemReader = null;
             Object itemUpdateHandle = GetRecentUpdateHandle();
-            var sourceItems = changedSourceItemReader.GetChangedItems(ref itemUpdateHandle);
+            var sourceItems = _sourceItemReader.GetChangedItems(ref itemUpdateHandle);
             if (sourceItems != null)
             {
                 Dictionary<string, long> itemIdsBySourceId;
-                if (changedSourceItemReader.UseSourceItemId)
+                if (_sourceItemReader.UseSourceItemId)
                 {
                     var itemIds = sourceItems.Select(itm => long.Parse(itm.SourceId));
                     itemIdsBySourceId = GetExistingItemIds(itemIds);
@@ -50,16 +49,16 @@ namespace QM.BusinessEntity.Business
                     }
                     else
                     {
-                        if (changedSourceItemReader.UseSourceItemId)
+                        if (_sourceItemReader.UseSourceItemId)
                         {
                             if (!long.TryParse(sourceItem.SourceId, out itemId))
-                                throw new Exception(String.Format("SourceZoneId '{0}' is not a valid long", sourceItem.SourceId));
+                                throw new Exception(String.Format("SourceItemId '{0}' is not a valid long", sourceItem.SourceId));
                             item.ItemId = itemId;
                         }
                         itemsToAdd.Add(item);
                     }
                 }
-                if (itemsToAdd.Count > 0 && !changedSourceItemReader.UseSourceItemId)
+                if (itemsToAdd.Count > 0 && !_sourceItemReader.UseSourceItemId)
                 {
                     long startingId;
                     ReserveIdRange(itemsToAdd.Count, out startingId);

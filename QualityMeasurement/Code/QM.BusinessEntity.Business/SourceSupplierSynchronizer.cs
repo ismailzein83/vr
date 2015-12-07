@@ -9,6 +9,12 @@ namespace QM.BusinessEntity.Business
 {
     public class SourceSupplierSynchronizer : SourceItemSynchronizer<SourceSupplier, Supplier, ISourceItemReader<SourceSupplier>>
     {
+        public SourceSupplierSynchronizer(ISourceItemReader<SourceSupplier> sourceItemReader)
+            : base(sourceItemReader)
+        {
+
+        }
+
         protected override void AddItems(List<Supplier> itemsToAdd)
         {
             throw new NotImplementedException();
@@ -21,7 +27,10 @@ namespace QM.BusinessEntity.Business
 
         protected override Supplier BuildItemFromSource(SourceSupplier sourceZone)
         {
-            throw new NotImplementedException();
+            return new Supplier
+            {
+                Name = sourceZone.Name
+            };
         }
 
         protected override Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceZoneIds)
@@ -36,7 +45,7 @@ namespace QM.BusinessEntity.Business
 
         protected override void ReserveIdRange(int nbOfIds, out long startingId)
         {
-            throw new NotImplementedException();
+            SupplierManager.ReserveIDRange(nbOfIds, out startingId);
         }
     }
 }
