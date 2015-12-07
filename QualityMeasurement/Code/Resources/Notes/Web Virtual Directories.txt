@@ -7,3 +7,5 @@ Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
 Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
 QM_CLITester			C:\TFS\QualityMeasurement\Code\QM.CLITester.Web\QM_CLITester
 QM_BusinessEntity		C:\TFS\QualityMeasurement\Code\QM.BusinessEntity.Web\QM_BusinessEntity
+Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
+Integration				C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration

@@ -28,7 +28,7 @@ namespace QM.BusinessEntity.Business
                     });
         }
 
-        internal void ReserveIDRange(int nbOfIds, out long startingId)
+        internal static void ReserveIDRange(int nbOfIds, out long startingId)
         {
             Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(typeof(ZoneManager), nbOfIds, out startingId);
         }
