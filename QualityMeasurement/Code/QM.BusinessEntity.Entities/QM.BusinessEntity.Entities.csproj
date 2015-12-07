@@ -48,6 +48,7 @@
     <Compile Include="Country\ICountryReader.cs" />
     <Compile Include="ISourceItemReader.cs" />
     <Compile Include="Supplier\SourceSupplier.cs" />
+    <Compile Include="Supplier\SourceSupplierReader.cs" />
     <Compile Include="Supplier\SupplierQuery.cs" />
     <Compile Include="Zone\IZoneReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

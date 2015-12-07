@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace QM.BusinessEntity.MainExtensions.SuppliersReaders
 {
-    public class SupplierSQLReader : ISourceItemReader<SourceSupplier> 
+    public class SupplierTOneV2SQLReader : SourceSupplierReader 
     {
         public string ConnectionString { get; set; }
 
-        public bool UseSourceItemId
+        public override bool UseSourceItemId
         {
             get;
             set;
         }
 
-        public IEnumerable<SourceSupplier> GetChangedItems(ref object updatedHandle)
+        public override IEnumerable<SourceSupplier> GetChangedItems(ref object updatedHandle)
         {
             throw new NotImplementedException();
         }
