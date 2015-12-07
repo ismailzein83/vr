@@ -78,7 +78,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             {
                 if (existingRate.RateEntity.BED < importedRate.BED)
                     recentRateValue = existingRate.RateEntity.NormalRate;
-                if (existingRate.EED.VRGreaterThan(importedRate.BED) && importedRate.EED.VRGreaterThan(existingRate.RateEntity.BED))
+                if (existingRate.IsOverlapedWith(importedRate))
                 {
                     if (SameRates(importedRate, existingRate))
                     {
@@ -100,7 +100,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                     }
                     else
                     {
-                        DateTime existingRateEED = importedRate.BED > existingRate.RateEntity.BED ? importedRate.BED : existingRate.RateEntity.BED;
+                        DateTime existingRateEED = Utilities.Max(importedRate.BED, existingRate.BED);
                         existingRate.ChangedRate = new ChangedRate
                         {
                             RateId = existingRate.RateEntity.SupplierRateId,
@@ -128,7 +128,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             bool shouldAddMoreRates = true;
             foreach (var zone in zones.OrderBy(itm => itm.BED))
             {
-                if (zone.EED.VRGreaterThan(zone.BED) && zone.EED.VRGreaterThan(currentRateBED))
+                if (zone.EED.VRGreaterThan(zone.BED) && zone.EED.VRGreaterThan(currentRateBED) && importedRate.EED.VRGreaterThan(zone.BED))
                 {
                     AddNewRate(importedRate, ref currentRateBED, zone, out shouldAddMoreRates);
                     if (!shouldAddMoreRates)

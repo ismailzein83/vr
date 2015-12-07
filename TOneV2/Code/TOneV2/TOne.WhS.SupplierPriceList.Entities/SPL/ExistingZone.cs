@@ -60,15 +60,18 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         }
     }
 
-    public class ExistingCode
+    public class ExistingCode : Vanrise.Entities.IDateEffectiveSettings
     {
         public ExistingZone ParentZone { get; set; }
 
         public BusinessEntity.Entities.SupplierCode CodeEntity { get; set; }
 
-        public bool IsImported { get; set; }
-
         public ChangedCode ChangedCode { get; set; }
+
+        public DateTime BED
+        {
+            get { return CodeEntity.BED; }
+        }
 
         public DateTime? EED
         {
@@ -76,13 +79,18 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         }
     }
 
-    public class ExistingRate
+    public class ExistingRate : Vanrise.Entities.IDateEffectiveSettings
     {
         public ExistingZone ParentZone { get; set; }
 
         public BusinessEntity.Entities.SupplierRate RateEntity { get; set; }
 
         public ChangedRate ChangedRate { get; set; }
+
+        public DateTime BED
+        {
+            get { return RateEntity.BED; }
+        }
 
         public DateTime? EED
         {

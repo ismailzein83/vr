@@ -14,15 +14,11 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public CodeValidationType ValidationType { get; set; }
     }
-    public interface IZone
+    public interface IZone  : Vanrise.Entities.IDateEffectiveSettings
     {
         long ZoneId { get; }
 
         string Name { get; }
-
-        DateTime BED { get; }
-
-        DateTime? EED { get; }
 
         List<NewCode> NewCodes { get; }
 
@@ -75,7 +71,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
    
     public enum CodeChangeType { NotChanged = 0, New = 1, Deleted = 2, Moved = 3 }
     
-    public class ImportedCode
+    public class ImportedCode : Vanrise.Entities.IDateEffectiveSettings
     {
         public string Code { get; set; }
 
@@ -106,7 +102,12 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         }
     }
 
-    public class ImportedRate
+    public class ImportedCodesByCodeValue : Dictionary<string, ImportedCode>
+    {
+
+    }
+
+    public class ImportedRate : Vanrise.Entities.IDateEffectiveSettings
     {
         public string ZoneName { get; set; }
 
@@ -141,9 +142,9 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         }
     }
 
-    
 
-    public class NewCode
+
+    public class NewCode : Vanrise.Entities.IDateEffectiveSettings
     {
         public string Code { get; set; }
 
@@ -158,7 +159,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
     public enum RateChangeType { NotChanged = 0, New = 1, Increase = 2, Decrease = 3 }
 
-    public class NewRate
+    public class NewRate : Vanrise.Entities.IDateEffectiveSettings
     {
         public IZone Zone { get; set; }
 

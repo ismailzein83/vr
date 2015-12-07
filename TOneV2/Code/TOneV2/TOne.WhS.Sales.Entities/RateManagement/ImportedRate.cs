@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace TOne.WhS.Sales.Entities.RateManagement
 {
     public enum RateChangeType { NotChanged = 0, New = 1, Increase = 2, Decrease = 3 }
-    
-    public class NewRate
+
+    public class NewRate : Vanrise.Entities.IDateEffectiveSettings
     {
         public long ZoneId { get; set; }
 
@@ -36,11 +36,16 @@ namespace TOne.WhS.Sales.Entities.RateManagement
     }
 
 
-    public class ExistingRate
+    public class ExistingRate : Vanrise.Entities.IDateEffectiveSettings
     {
         public BusinessEntity.Entities.SaleRate RateEntity { get; set; }
 
         public ChangedRate ChangedRate { get; set; }
+
+        public DateTime BED
+        {
+            get { return RateEntity.BED; }
+        }
 
         public DateTime? EED
         {

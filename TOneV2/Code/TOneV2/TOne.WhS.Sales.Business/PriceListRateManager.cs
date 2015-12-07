@@ -16,9 +16,9 @@ namespace TOne.WhS.Sales.Business
             {
                 foreach(var existingRate in existingZoneRates)
                 {
-                    if(existingRate.EED.VRGreaterThan(newRate.BED) && newRate.EED.VRGreaterThan(existingRate.RateEntity.BED))
+                    if(existingRate.IsOverlapedWith(newRate))
                     {
-                        DateTime existingRateEED = newRate.BED > existingRate.RateEntity.BED ? newRate.BED : existingRate.RateEntity.BED;
+                        DateTime existingRateEED = Utilities.Max(newRate.BED, existingRate.BED);
                         existingRate.ChangedRate = new ChangedRate
                         {
                             RateId = existingRate.RateEntity.SaleRateId,

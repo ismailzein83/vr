@@ -14,9 +14,17 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         List<CodeValidation> _validations = new List<CodeValidation>();
 
-        public void ProcessCountryCodes(List<ImportedCode> importedCodes, ExistingCodesByCodeValue existingCodes, List<ChangedCode> changedCodes, ZonesByName newAndExistingZones, ExistingZonesByName existingZones, List<ChangedZone> changedZones, DateTime codeCloseDate)
+        public List<CodeValidation> Validations
         {
-            foreach(var importedCode in importedCodes.OrderBy(code => code.BED))
+            get
+            {
+                return _validations;
+            }
+        }
+
+        public void ProcessCountryCodes(ImportedCodesByCodeValue importedCodesByCodeValue, ExistingCodesByCodeValue existingCodes, List<ChangedCode> changedCodes, ZonesByName newAndExistingZones, ExistingZonesByName existingZones, List<ChangedZone> changedZones, DateTime codeCloseDate)
+        {
+            foreach (var importedCode in importedCodesByCodeValue.Values.OrderBy(code => code.BED))
             {
                 List<ExistingCode> matchExistingCodes;
                 if(existingCodes.TryGetValue(importedCode.Code, out matchExistingCodes))
@@ -47,7 +55,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                     }
                 }
             }
-            CloseNotImportedCodes(existingCodes.SelectMany(itm => itm.Value), changedCodes, codeCloseDate);
+            CloseNotImportedCodes(existingCodes.SelectMany(itm => itm.Value), importedCodesByCodeValue, changedCodes, codeCloseDate);
             CloseZonesWithNoCodes(existingZones.SelectMany(itm => itm.Value), changedZones);
         }
 
@@ -59,8 +67,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             {
                 if (existingCode.CodeEntity.BED < importedCode.BED)
                     recentCodeZoneName = existingCode.ParentZone.ZoneEntity.Name;
-                existingCode.IsImported = true;
-                if (existingCode.EED.VRGreaterThan(importedCode.BED) && importedCode.EED.VRGreaterThan(existingCode.CodeEntity.BED))
+                if (existingCode.IsOverlapedWith(importedCode))
                 {
                     if (SameCodes(importedCode, existingCode))
                     {
@@ -81,7 +88,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                             break;
                         }
                     }
-                    DateTime existingCodeEED = importedCode.BED > existingCode.CodeEntity.BED ? importedCode.BED : existingCode.CodeEntity.BED;
+                    DateTime existingCodeEED = Utilities.Max(importedCode.BED, existingCode.BED);
                     existingCode.ChangedCode = new ChangedCode
                     {
                         CodeId = existingCode.CodeEntity.SupplierCodeId,
@@ -114,7 +121,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             bool shouldAddMoreCodes = true;
             foreach (var zone in zones.OrderBy(itm => itm.BED))
             {
-                if (zone.EED.VRGreaterThan(zone.BED) && zone.EED.VRGreaterThan(currentCodeBED))
+                if (zone.EED.VRGreaterThan(zone.BED) && zone.EED.VRGreaterThan(currentCodeBED) && importedCode.EED.VRGreaterThan(zone.BED))
                 {
                     if (currentCodeBED < zone.BED)//add new zone to fill gap
                     {
@@ -191,15 +198,14 @@ namespace TOne.WhS.SupplierPriceList.Business
         private bool SameCodes(ImportedCode importedCode, ExistingCode existingCode)
         {
             return importedCode.BED == existingCode.CodeEntity.BED
-                && importedCode.ZoneName== existingCode.ParentZone.ZoneEntity.Name;
+                && importedCode.ZoneName == existingCode.ParentZone.ZoneEntity.Name;
         }
 
-        private void CloseNotImportedCodes(IEnumerable<ExistingCode> existingCodes, List<ChangedCode> changedCodes, DateTime codeCloseDate)
+        private void CloseNotImportedCodes(IEnumerable<ExistingCode> existingCodes, ImportedCodesByCodeValue importedCodesByCodeValue, List<ChangedCode> changedCodes, DateTime codeCloseDate)
         {
             foreach (var existingCode in existingCodes)
             {
-                //this has a bug, it should be handled in a different approach
-                if (!existingCode.IsImported)
+                if (!importedCodesByCodeValue.ContainsKey(existingCode.CodeEntity.Code))
                 {
                     existingCode.ChangedCode = new ChangedCode
                     {
