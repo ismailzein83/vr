@@ -11,57 +11,58 @@ namespace QM.CLITester.Data.SQL
 {
     public class TestCallDataManager : BaseSQLDataManager, ITestCallDataManager
     {
-        public bool Insert(TestCallResult testCallResult, out int insertedId)
+        public bool Insert(TestCall testCall, out int insertedId)
         {
             object testCallId;
 
-            int recordsEffected = ExecuteNonQuerySP("QM_CLITester.sp_TestCall_Insert", out testCallId, testCallResult.SupplierID, testCallResult.CountryID, testCallResult.ZoneID, testCallResult.Test_ID, testCallResult.Name, testCallResult.Calls_Total,
-                testCallResult.Calls_Complete, testCallResult.CLI_Success, testCallResult.CLI_No_Result, testCallResult.CLI_Fail, testCallResult.PDD, testCallResult.Status);
+            int recordsEffected = ExecuteNonQuerySP("QM_CLITester.sp_TestCall_Insert", out testCallId, testCall.SupplierID, testCall.CountryID, testCall.ZoneID, 
+                testCall.InitiateTestInformation, testCall.TestProgress, testCall.CallTestStatus, testCall.CallTestResult);
             insertedId = (int)testCallId;
             return (recordsEffected > 0);
         }
 
-        public List<TestCallResult> GetTestCalls()
+        public List<TestCall> GetTestCalls()
         {
             return GetItemsSP("QM_CLITester.sp_TestCall_GetAll", TestCallMapper);
         }
 
-        public List<TestCallResult> GetRequestedTestCalls()
+        public List<TestCall> GetTestCalls(int callTestStatus)
         {
-            return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCall", TestCallMapper);
-        }
-        public List<TestCallResult> GetRequestedTestCallResults()
-        {
-            return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCallResult", TestCallMapper);
+            return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCall", TestCallMapper, callTestStatus);
         }
 
-        public bool Update(Entities.TestCallResult testCallResult)
+        //public List<TestCallResult> GetRequestedTestCallResults()
+        //{
+        //    return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCallResult", TestCallMapper);
+        //}
+
+        public bool UpdateInitiateTest(string initiateTestOutput, CallTestStatus callTestStatus, long testCallID)
         {
-            int recordsEffected = ExecuteNonQuerySP("[QM_CLITester].[sp_TestCall_Update]", testCallResult.Id,
-                testCallResult.SupplierID, testCallResult.CountryID, testCallResult.ZoneID, testCallResult.Test_ID, testCallResult.Name, testCallResult.Calls_Total,
-                testCallResult.Calls_Complete, testCallResult.CLI_Success, testCallResult.CLI_No_Result, testCallResult.CLI_Fail, testCallResult.PDD, testCallResult.Status);
+            int recordsEffected = ExecuteNonQuerySP("[QM_CLITester].[sp_TestCall_UpdateInitiateTest]", testCallID,
+                initiateTestOutput, callTestStatus);
             return (recordsEffected > 0);
         }
 
-        TestCallResult TestCallMapper(IDataReader reader)
+        public bool UpdateTestProgress(string initiateTestOutput, CallTestResult callTestResult, long testCallID)
         {
-            TestCallResult testCallResult = new TestCallResult
+            int recordsEffected = ExecuteNonQuerySP("[QM_CLITester].[sp_TestCall_UpdateTestProgress]", testCallID,
+                initiateTestOutput, callTestResult);
+            return (recordsEffected > 0);
+        }
+
+        TestCall TestCallMapper(IDataReader reader)
+        {
+            TestCall testCallResult = new TestCall
             {
-                Id = (long)reader["ID"],
+                ID = (long)reader["ID"],
                 SupplierID = (int)reader["SupplierID"],
                 CountryID = (int)reader["CountryID"],
                 ZoneID = (int)reader["ZoneID"],
                 CreationDate = GetReaderValue<DateTime>(reader, "CreationDate"),
-                Test_ID = reader["Test_ID"] as string,
-                Name = reader["Name"] as string,
-                Calls_Total = (int)reader["Calls_Total"],
-                Calls_Complete = (int)reader["Calls_Complete"],
-                CLI_Success = (int)reader["CLI_Success"],
-                CLI_No_Result = (int)reader["CLI_No_Result"],
-                CLI_Fail = (int)reader["CLI_Fail"],
-                PDD = (int)reader["PDD"],
-                Share_URL = reader["Share_URL"] as string,
-                Status = (int)reader["Status"]
+                InitiateTestInformation = reader["InitiateTestInformation"] as string,
+                TestProgress = reader["TestProgress"] as string,
+                CallTestStatus = GetReaderValue<int?>(reader, "CallTestStatus"),
+                CallTestResult = GetReaderValue<int?>(reader, "CallTestResult")
             };
             return testCallResult;
         }

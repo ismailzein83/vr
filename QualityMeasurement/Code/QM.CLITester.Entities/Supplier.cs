@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QM.CLITester.Entities
 {
-    public class Supplier
+    public class Supplier2
     {
         public string Id { get; set; }
         public string Name { get; set; }

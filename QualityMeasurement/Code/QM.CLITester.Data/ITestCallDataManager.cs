@@ -9,11 +9,12 @@ namespace QM.CLITester.Data
 {
     public interface ITestCallDataManager : IDataManager
     {
-        bool Insert(TestCallResult carrierAccount, out int carrierAccountId);
-        List<TestCallResult> GetTestCalls();
+        bool Insert(TestCall carrierAccount, out int carrierAccountId);
+        List<TestCall> GetTestCalls();
 
-        List<TestCallResult> GetRequestedTestCalls();
-        List<TestCallResult> GetRequestedTestCallResults();
-        bool Update(TestCallResult testCallResult);
+        List<TestCall> GetTestCalls(int callTestStatus);
+        //List<TestCall> GetRequestedTestCallResults();
+        bool UpdateInitiateTest(string initiateTestOutput, CallTestStatus callTestStatus, long testCallID);
+        bool UpdateTestProgress(string initiateTestOutput, CallTestResult callTestStatus, long testCallID);
     }
 }

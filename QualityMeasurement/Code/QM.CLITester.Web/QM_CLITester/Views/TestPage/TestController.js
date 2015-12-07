@@ -2,12 +2,15 @@
 
     "use strict";
 
-    testController.$inject = ['$scope', 'Qm_CliTester_TestCallAPIService', 'VRNotificationService', 'UtilsService'];
+    testController.$inject = ['$scope', 'Qm_CliTester_TestCallAPIService', 'VRNotificationService', 'UtilsService', 'QM_BE_SupplierAPIService', 'VRUIUtilsService'];
 
-    function testController($scope, Qm_CliTester_TestCallAPIService, VRNotificationService, UtilsService) {
+    function testController($scope, Qm_CliTester_TestCallAPIService, VRNotificationService, UtilsService, QM_BE_SupplierAPIService, VRUIUtilsService) {
         var gridAPI;
         var filter = {};
 
+        var supplierDirectiveAPI;
+        var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        
         defineScope();
         load();
 
@@ -17,9 +20,10 @@
             $scope.breakouts = [];
             $scope.suppliers = [];
            
+            $scope.selectedSupplier;
+
             $scope.selectedCountry;
             $scope.selectedBreakout;
-            $scope.selectedSupplier;
 
             setFilterObject();
 
@@ -27,6 +31,12 @@
                 gridAPI = api;
                 api.loadGrid(filter);
             }
+
+            $scope.onSupplierDirectiveReady = function (api) {
+                supplierDirectiveAPI = api;
+                supplierReadyPromiseDeferred.resolve();
+            }
+
         }
 
         function load() {
@@ -52,6 +62,7 @@
             });
         }
 
+    
         function getSuppliersInfo() {
             return Qm_CliTester_TestCallAPIService.GetSuppliers().then(function (response) {
                 $scope.suppliers.length = 0;
@@ -60,6 +71,20 @@
                 });
             });
         }
+
+
+
+        //function getSuppliersInfo() {
+        //    var supplierLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        //    supplierReadyPromiseDeferred.promise
+        //        .then(function () {
+        //            var directivePayload;
+
+        //            VRUIUtilsService.callDirectiveLoad(supplierDirectiveAPI, directivePayload, supplierLoadPromiseDeferred);
+        //        });
+        //    return supplierLoadPromiseDeferred.promise;
+        //}
 
         $scope.previewBreakouts = function () {
             if ($scope.selectedCountry != undefined) {

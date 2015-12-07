@@ -41,7 +41,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService) 
 
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-                        setInterval(function () { return gridAPI.retrieveData(query); }, 2000);
+                        //setInterval(function () { return gridAPI.retrieveData(query); }, 2000);
                     }
                     return directiveAPI;
                 }

@@ -22,6 +22,9 @@ namespace QualityMeasurement.DevRuntime
             thread.IsBackground = true;
             thread.Start();
         }
+        
+        ICLITesterConnector cliTestConnector = new QM.CLITester.iTestIntegration.CLITesterConnector();
+
         private void GetResult()
         {
             try
@@ -33,9 +36,30 @@ namespace QualityMeasurement.DevRuntime
                     {
                         //Get Result
                         TestCallManager manager = new TestCallManager();
-                        List<TestCallResult> listTestCallResults = manager.GetRequestedTestCallResults();
-                        foreach (TestCallResult testCallResult in listTestCallResults)
-                            manager.TestCallResult(testCallResult);
+                        List<TestCall> listTestCall = manager.GetTestCalls((int)CallTestStatus.Initiated);
+
+                        foreach (TestCall testCall in listTestCall)
+                        {
+                            var getTestProgressContext = new GetTestProgressContext()
+                            {
+                                InitiateTestInformation = testCall.InitiateTestInformation,
+                                RecentTestProgress = testCall.TestProgress
+                            };
+                            var testProgressOutput = cliTestConnector.GetTestProgress(getTestProgressContext);
+
+
+                            switch (testProgressOutput.Result)
+                            {
+                                case GetTestProgressResult.TestCompleted:
+                                    manager.UpdateTestProgress(
+                                        testProgressOutput.TestProgress.ToString(), CallTestResult.Succeeded,
+                                        testCall.ID); break;
+                                case GetTestProgressResult.ProgressChanged:
+                                    manager.UpdateTestProgress(testProgressOutput.TestProgress.ToString(), CallTestResult.PartiallySucceeded, testCall.ID); break;
+                                default:
+                                    manager.UpdateTestProgress(testProgressOutput.TestProgress.ToString(), CallTestResult.PartiallySucceeded, testCall.ID); break;
+                            }
+                        }
 
                         _locked = false;
                         Thread.Sleep(1000);

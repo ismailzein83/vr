@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Practices.ObjectBuilder2;
+using QM.BusinessEntity.Entities;
 using QM.CLITester.Business;
 using QM.CLITester.Entities;
 
@@ -38,14 +40,44 @@ namespace QualityMeasurement.DevRuntime
                     {
                         //Get Calls
                         TestCallManager manager = new TestCallManager();
-                        List<TestCallResult> listTestCallResults = manager.GetRequestedTestCalls();
-                        foreach (TestCallResult testCallResult in listTestCallResults)
-                            manager.TestCall(testCallResult);
+                        List<TestCall> listTestCall = manager.GetTestCalls((int)CallTestStatus.New);
+                        
+                        foreach (TestCall testCall in listTestCall)
+                        {
+                            var initiateTestContext = new InitiateTestContext()
+                            {
+                                Supplier = new Supplier
+                                {
+                                    SupplierId = testCall.SupplierID
+                                },
+
+                                Zone = new Zone
+                                {
+                                    ZoneId = testCall.ZoneID
+                                },
+                                Country = new Vanrise.Entities.Country
+                                {
+                                    CountryId = testCall.CountryID
+                                }
+                            };
+                            var initiateTestOutput = cliTestConnector.InitiateTest(initiateTestContext);
+
+                            switch (initiateTestOutput.Result)
+                            {
+                                case InitiateTestResult.Created:
+                                    manager.UpdateInitiateTest(initiateTestOutput.InitiateTestInformation.ToString(), CallTestStatus.Initiated, testCall.ID); break;
+                                case InitiateTestResult.FailedWithRetry:
+                                    manager.UpdateInitiateTest(initiateTestOutput.InitiateTestInformation.ToString(), CallTestStatus.InitiationFailedWithRetry, testCall.ID); break;
+                                case InitiateTestResult.FailedWithNoRetry:
+                                    manager.UpdateInitiateTest(initiateTestOutput.InitiateTestInformation.ToString(), CallTestStatus.InitiationFailedWithNoRetry, testCall.ID); break;
+                                default:
+                                    manager.UpdateInitiateTest(initiateTestOutput.InitiateTestInformation.ToString(), CallTestStatus.InitiationFailedWithNoRetry, testCall.ID); break;
+                            }
+                        }
 
                         _locked = false;
                         Thread.Sleep(1000);
                     }
-
                 }
             }
             catch (Exception ex)

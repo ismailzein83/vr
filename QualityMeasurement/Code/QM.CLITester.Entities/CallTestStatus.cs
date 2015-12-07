@@ -13,7 +13,7 @@ namespace QM.CLITester.Entities
         InitiationFailedWithRetry = 20,
         PartiallyCompleted = 30,
         GetProgressFailedWithRetry = 40,
-        Completed = 5,
+        Completed = 50,
         InitiationFailedWithNoRetry = 60,
         GetProgressFailedWithNoRetry = 70
     }

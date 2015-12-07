@@ -22,7 +22,6 @@ namespace QM.CLITester.Entities
         BusinessEntity.Entities.Zone Zone { get; }
 
         Vanrise.Entities.Country Country { get; }
-
     }
 
     public class InitiateTestOutput
@@ -50,5 +49,22 @@ namespace QM.CLITester.Entities
         public Object TestProgress { get; set; }
 
         public CallTestResult TestResult { get; set; }
+    }
+
+    public class InitiateTestInformation
+    {
+        public string Test_ID { get; set; }
+    }
+
+    public class TestProgress
+    {
+        public string Name { get; set; }
+        public int Calls_Total { get; set; }
+        public int Calls_Complete { get; set; }
+        public int CLI_Success { get; set; }
+        public int CLI_No_Result { get; set; }
+        public int CLI_Fail { get; set; }
+        public int PDD { get; set; }
+        public string Share_URL { get; set; }
     }
 }
