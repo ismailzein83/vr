@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Common
 {
@@ -288,6 +289,37 @@ namespace Vanrise.Common
         public static bool VRLessThan(this DateTime? date, DateTime? targetDate)
         {
             return !date.VRGreaterThan(targetDate);
+        }
+
+        #endregion
+
+        #region Date Effective Settings
+
+        public static bool IsEffective(this IDateEffectiveSettings entity, DateTime? date, bool futureEntities)
+        {
+            if (date.HasValue)
+            {
+                if (entity.BED <= date.Value && entity.EED.VRGreaterThan(date))
+                    return true;
+                else
+                    return false;
+            }
+            else
+                if (futureEntities)
+                    if (!entity.EED.HasValue || entity.BED > DateTime.Now)
+                        return true;
+
+            return false;
+        }
+
+        public static bool IsEffective(this IDateEffectiveSettings entity, DateTime? date)
+        {
+            return IsEffective(entity, date, false);
+        }
+
+        public static bool IsOverlapedWith(this IDateEffectiveSettings entity, IDateEffectiveSettings target)
+        {
+            return entity.EED.VRGreaterThan(target.BED) && target.EED.VRGreaterThan(entity.BED);
         }
 
         #endregion
