@@ -12,9 +12,9 @@ namespace QM.CLITester.Data
         bool Insert(TestCall carrierAccount, out int carrierAccountId);
         List<TestCall> GetTestCalls();
 
-        List<TestCall> GetTestCalls(int callTestStatus);
+        List<TestCall> GetTestCalls(List<int> callTestStatus);
         //List<TestCall> GetRequestedTestCallResults();
-        bool UpdateInitiateTest(string initiateTestOutput, CallTestStatus callTestStatus, long testCallID);
-        bool UpdateTestProgress(string initiateTestOutput, CallTestResult callTestStatus, long testCallID);
+        bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus);
+        bool UpdateTestProgress(long testCallId, Object testProgress, CallTestStatus callTestStatus, CallTestResult? callTestResult);
     }
 }

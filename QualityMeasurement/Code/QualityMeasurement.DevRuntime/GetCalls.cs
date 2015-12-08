@@ -40,7 +40,9 @@ namespace QualityMeasurement.DevRuntime
                     {
                         //Get Calls
                         TestCallManager manager = new TestCallManager();
-                        List<TestCall> listTestCall = manager.GetTestCalls((int)CallTestStatus.New);
+                        List<int> listCallTestStatusInts = new List<int>();
+                        listCallTestStatusInts.Add((int)CallTestStatus.New);
+                        List<TestCall> listTestCall = manager.GetTestCalls(listCallTestStatusInts);
                         
                         foreach (TestCall testCall in listTestCall)
                         {
@@ -62,17 +64,20 @@ namespace QualityMeasurement.DevRuntime
                             };
                             var initiateTestOutput = cliTestConnector.InitiateTest(initiateTestContext);
 
+                            CallTestStatus callTestStatus;
+
                             switch (initiateTestOutput.Result)
                             {
                                 case InitiateTestResult.Created:
-                                    manager.UpdateInitiateTest(initiateTestOutput.InitiateTestInformation.ToString(), CallTestStatus.Initiated, testCall.ID); break;
+                                    callTestStatus =  CallTestStatus.Initiated; break;
                                 case InitiateTestResult.FailedWithRetry:
-                                    manager.UpdateInitiateTest(initiateTestOutput.InitiateTestInformation.ToString(), CallTestStatus.InitiationFailedWithRetry, testCall.ID); break;
+                                    callTestStatus =  CallTestStatus.InitiationFailedWithRetry; break;
                                 case InitiateTestResult.FailedWithNoRetry:
-                                    manager.UpdateInitiateTest(initiateTestOutput.InitiateTestInformation.ToString(), CallTestStatus.InitiationFailedWithNoRetry, testCall.ID); break;
+                                    callTestStatus =  CallTestStatus.InitiationFailedWithNoRetry; break;
                                 default:
-                                    manager.UpdateInitiateTest(initiateTestOutput.InitiateTestInformation.ToString(), CallTestStatus.InitiationFailedWithNoRetry, testCall.ID); break;
+                                    callTestStatus =  CallTestStatus.InitiationFailedWithNoRetry; break;
                             }
+                            manager.UpdateInitiateTest(testCall.ID, initiateTestOutput.InitiateTestInformation, callTestStatus); break;
                         }
 
                         _locked = false;

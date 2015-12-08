@@ -13,9 +13,9 @@ namespace QM.CLITester.Entities
         public int CountryID { get; set; }
         public int ZoneID { get; set; }
         public DateTime CreationDate { get; set; }
-        public string InitiateTestInformation { get; set; }
-        public string TestProgress { get; set; }
-        public int? CallTestStatus { get; set; }
-        public int? CallTestResult { get; set; }
+        public Object InitiateTestInformation { get; set; }
+        public Object TestProgress { get; set; }
+        public CallTestStatus CallTestStatus { get; set; }
+        public CallTestResult CallTestResult { get; set; }
     }
 }

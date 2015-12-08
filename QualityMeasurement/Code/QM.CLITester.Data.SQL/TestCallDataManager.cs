@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using QM.CLITester.Entities;
 using Vanrise.Data.SQL;
 using System.Data;
+using Vanrise.Common;
 
 namespace QM.CLITester.Data.SQL
 {
@@ -26,45 +27,51 @@ namespace QM.CLITester.Data.SQL
             return GetItemsSP("QM_CLITester.sp_TestCall_GetAll", TestCallMapper);
         }
 
-        public List<TestCall> GetTestCalls(int callTestStatus)
+        public List<TestCall> GetTestCalls(List<int> listCallTestStatus)
         {
-            return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCall", TestCallMapper, callTestStatus);
+            string callTestStatusids = null;
+            if (listCallTestStatus != null && listCallTestStatus.Count() > 0)
+                callTestStatusids = string.Join<int>(",", listCallTestStatus);
+
+            return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCall", TestCallMapper, callTestStatusids);
         }
 
-        //public List<TestCallResult> GetRequestedTestCallResults()
-        //{
-        //    return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCallResult", TestCallMapper);
-        //}
-
-        public bool UpdateInitiateTest(string initiateTestOutput, CallTestStatus callTestStatus, long testCallID)
+        public bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus)
         {
-            int recordsEffected = ExecuteNonQuerySP("[QM_CLITester].[sp_TestCall_UpdateInitiateTest]", testCallID,
-                initiateTestOutput, callTestStatus);
+            int recordsEffected = ExecuteNonQuerySP("[QM_CLITester].[sp_TestCall_UpdateInitiateTest]", testCallId,
+                initiateTestInformation != null ? Serializer.Serialize(initiateTestInformation) : null, callTestStatus);
             return (recordsEffected > 0);
         }
 
-        public bool UpdateTestProgress(string initiateTestOutput, CallTestResult callTestResult, long testCallID)
+        public bool UpdateTestProgress(long testCallId, Object testProgress, CallTestStatus callTestStatus, CallTestResult? callTestResult)
         {
-            int recordsEffected = ExecuteNonQuerySP("[QM_CLITester].[sp_TestCall_UpdateTestProgress]", testCallID,
-                initiateTestOutput, callTestResult);
+            int recordsEffected = ExecuteNonQuerySP("[QM_CLITester].[sp_TestCall_UpdateTestProgress]", testCallId,
+                testProgress != null ? Serializer.Serialize(testProgress) : null, callTestStatus, callTestResult);
             return (recordsEffected > 0);
         }
 
         TestCall TestCallMapper(IDataReader reader)
         {
-            TestCall testCallResult = new TestCall
+            TestCall testCall = new TestCall
             {
                 ID = (long)reader["ID"],
                 SupplierID = (int)reader["SupplierID"],
                 CountryID = (int)reader["CountryID"],
                 ZoneID = (int)reader["ZoneID"],
                 CreationDate = GetReaderValue<DateTime>(reader, "CreationDate"),
-                InitiateTestInformation = reader["InitiateTestInformation"] as string,
-                TestProgress = reader["TestProgress"] as string,
-                CallTestStatus = GetReaderValue<int?>(reader, "CallTestStatus"),
-                CallTestResult = GetReaderValue<int?>(reader, "CallTestResult")
+                CallTestStatus = GetReaderValue<CallTestStatus>(reader, "CallTestStatus"),
+                CallTestResult = GetReaderValue<CallTestResult>(reader, "CallTestResult")
             };
-            return testCallResult;
+
+            string initiateTestInformationSerialized = reader["InitiateTestInformation"] as string;
+            if (initiateTestInformationSerialized != null)
+                testCall.InitiateTestInformation = Serializer.Deserialize(initiateTestInformationSerialized);
+            
+            string testProgressSerialized = reader["TestProgress"] as string;
+            if (testProgressSerialized != null)
+                testCall.TestProgress = Serializer.Deserialize(testProgressSerialized);
+            
+            return testCall;
         }
     }
 }

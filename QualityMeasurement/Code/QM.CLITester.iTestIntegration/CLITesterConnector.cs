@@ -6,7 +6,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
-using Vanrise.Common;
 
 namespace QM.CLITester.iTestIntegration
 {
@@ -22,7 +21,7 @@ namespace QM.CLITester.iTestIntegration
         public GetTestProgressOutput GetTestProgress(IGetTestProgressContext context)
         {
             ServiceActions serviceActions = new ServiceActions();
-            return responseTestCallResult(serviceActions.PostRequest("3011", "&jid=" + Vanrise.Common.Serializer.Deserialize<InitiateTestInformation>(context.InitiateTestInformation.ToString())), context);
+            return responseTestCallResult(serviceActions.PostRequest("3011", "&jid=" + ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID), ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID);
         }
 
         private InitiateTestOutput ResponseTestCall(string response)
@@ -43,7 +42,7 @@ namespace QM.CLITester.iTestIntegration
                     initiateTestInformation.Test_ID = xnList[0]["Test_ID"] != null ? xnList[0]["Test_ID"].InnerText : "";
                     if (!String.IsNullOrEmpty(initiateTestInformation.Test_ID))
                     {
-                        testOutput.InitiateTestInformation = Vanrise.Common.Serializer.Serialize(initiateTestInformation);
+                        testOutput.InitiateTestInformation = initiateTestInformation;
                         testOutput.Result = InitiateTestResult.Created;
                     }
                     else
@@ -58,22 +57,22 @@ namespace QM.CLITester.iTestIntegration
             return testOutput;
         }
 
-        private GetTestProgressOutput responseTestCallResult(string response, IGetTestProgressContext context)
+        private GetTestProgressOutput responseTestCallResult(string response, string test_Id)
         {
             GetTestProgressOutput testProgressOutput = new GetTestProgressOutput();
             Regex badAmpersand = new Regex("&(?![a-zA-Z]{2,6};|#[0-9]{2,4};)");
             response = badAmpersand.Replace(response, GoodAmpersand);
 
-            response = response.Replace("<" + context.InitiateTestInformation + ">", "<_" + context.InitiateTestInformation + ">");
+            response = response.Replace("<" + test_Id + ">", "<_" + test_Id + ">");
 
-            response = response.Replace("</" + context.InitiateTestInformation + ">", "</_" + context.InitiateTestInformation + ">");
+            response = response.Replace("</" + test_Id + ">", "</_" + test_Id + ">");
 
             XmlDocument xml = new XmlDocument();
             if (!String.IsNullOrEmpty(response))
             {
                 xml.LoadXml(response);
 
-                XmlNodeList xnList = xml.SelectNodes("/Test_Status/_" + context.InitiateTestInformation);
+                XmlNodeList xnList = xml.SelectNodes("/Test_Status/_" + test_Id);
                 if (xnList != null)
                 {
                     TestProgress testProgress = new TestProgress
@@ -88,10 +87,19 @@ namespace QM.CLITester.iTestIntegration
                         Share_URL = xnList[0]["Share_URL"] != null ? xnList[0]["Share_URL"].InnerText : "",
                     };
 
-                    testProgressOutput.TestProgress = Vanrise.Common.Serializer.Serialize(testProgress);
-                    testProgressOutput.Result = (testProgress.Calls_Total == testProgress.Calls_Complete)
-                        ? GetTestProgressResult.TestCompleted
-                        : GetTestProgressResult.ProgressChanged;
+                    testProgressOutput.TestProgress = testProgress;
+                    if (testProgress.Calls_Total == testProgress.Calls_Complete)
+                    {
+                        testProgressOutput.Result = GetTestProgressResult.TestCompleted;
+                        testProgressOutput.CallTestResult = CallTestResult.Succeeded;
+                        return testProgressOutput;
+                    }
+
+                    testProgressOutput.Result = GetTestProgressResult.ProgressChanged;
+                    //testProgressOutput.Result = (testProgress.Calls_Total == testProgress.Calls_Complete)
+                    //    ? GetTestProgressResult.TestCompleted
+                    //    : GetTestProgressResult.ProgressChanged;
+                    //testProgressOutput.CallTestResult = CallTestResult.NotCompleted;
                     return testProgressOutput;
                 }
             }

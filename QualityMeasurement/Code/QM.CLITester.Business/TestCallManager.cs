@@ -18,7 +18,7 @@ namespace QM.CLITester.Business
     public class TestCallManager
     {
         private readonly Dictionary<string, Country> _dictionaryCountries = new Dictionary<string, Country>();
-        //private readonly List<Supplier> _listSuppliers = new List<Supplier>();
+        private readonly List<Supplier2> _listSuppliers = new List<Supplier2>();
         private string PostRequest(string functionCode, string parameters)
         {
             var request = (HttpWebRequest)WebRequest.Create("https://api.i-test.net/?t=" + functionCode + (parameters ?? ""));
@@ -76,97 +76,27 @@ namespace QM.CLITester.Business
                         }
                 }
         }
+        private void ResponseSuppliers(string response)
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(response);
 
-        //private void ResponseSuppliers(string response)
-        //{
-        //    XmlDocument xml = new XmlDocument();
-        //    xml.LoadXml(response);
-
-        //    XmlNodeList xnList = xml.SelectNodes("/Vendors_List/Supplier");
-        //    if (xnList != null)
-        //        foreach (XmlNode xn in xnList)
-        //        {
-        //            Supplier supplierNode = new Supplier
-        //            {
-        //                Id = xn["Supplier_ID"] != null ? xn["Supplier_ID"].InnerText : "",
-        //                Name = xn["Supplier_Name"] != null ? xn["Supplier_Name"].InnerText : "",
-        //                Prefix = xn["Prefix"] != null ? xn["Prefix"].InnerText : "",
-        //                Codec = xn["Codec"] != null ? xn["Codec"].InnerText : "",
-        //                ShortName = (xn["Supplier_Name"] != null ? xn["Supplier_Name"].InnerText : "") + " - " + (xn["Prefix"] != null ? xn["Prefix"].InnerText : "")
-        //            };
-        //            if (supplierNode.Id != "")
-        //                _listSuppliers.Add(supplierNode);
-        //        }
-        //}
-        const string GoodAmpersand = "&amp;";
-
-        //private TestCallResult ResponseTestCall(string response, TestCall testCall)
-        //{
-        //    Regex badAmpersand = new Regex("&(?![a-zA-Z]{2,6};|#[0-9]{2,4};)");
-        //    response = badAmpersand.Replace(response, GoodAmpersand);
-        //    XmlDocument xml = new XmlDocument();
-        //    xml.LoadXml(response);
-
-        //    XmlNodeList xnList = xml.SelectNodes("/Test_Initiation/Test");
-        //    if (xnList != null)
-        //    {
-        //        TestCall testCallResultNode = new TestCall
-        //        {
-        //            Test_ID = xnList[0]["Test_ID"] != null ? xnList[0]["Test_ID"].InnerText : "",
-        //            Id= testCall.Id,
-        //            SupplierID = testCall.SupplierID,
-        //            CountryID = testCall.CountryID,
-        //            ZoneID = testCall.ZoneID,
-        //            Status = 1
-        //        };
-
-        //        if (testCallResultNode.Test_ID != null && testCall.Test_ID != "")
-        //            UpdateTestCallResult(testCallResultNode);
-        //    }
-        //    return null;
-        //}
-
-        //private TestCallResult responseTestCallResult(string response, TestCallResult testCallResult)
-        //{
-        //    Regex badAmpersand = new Regex("&(?![a-zA-Z]{2,6};|#[0-9]{2,4};)");
-        //    response = badAmpersand.Replace(response, GoodAmpersand);
-
-        //    response = response.Replace("<" + testCallResult.Test_ID + ">", "<_" + testCallResult.Test_ID + ">");
-
-        //    response = response.Replace("</" + testCallResult.Test_ID + ">", "</_" + testCallResult.Test_ID + ">");
-
-        //    XmlDocument xml = new XmlDocument();
-        //    xml.LoadXml(response);
-
-        //    XmlNodeList xnList = xml.SelectNodes("/Test_Status/_" + testCallResult.Test_ID);
-        //    if (xnList != null)
-        //    {
-        //        TestCallResult testCallResultNode = new TestCallResult
-        //        {
-        //            Name = xnList[0]["Name"] != null ? xnList[0]["Name"].InnerText : "",
-        //            Calls_Total = xnList[0]["Calls_Total"] != null ? Int32.Parse(xnList[0]["Calls_Total"].InnerText) : 0,
-        //            Calls_Complete = xnList[0]["Calls_Complete"] != null ? Int32.Parse(xnList[0]["Calls_Complete"].InnerText) : 0,
-        //            CLI_Success = xnList[0]["CLI_Success"] != null ? Int32.Parse(xnList[0]["CLI_Success"].InnerText) : 0,
-        //            CLI_No_Result = xnList[0]["CLI_No_Result"] != null ? Int32.Parse(xnList[0]["CLI_No_Result"].InnerText) : 0,
-        //            CLI_Fail = xnList[0]["CLI_Fail"] != null ? Int32.Parse(xnList[0]["CLI_Fail"].InnerText) : 0,
-        //            PDD = xnList[0]["PDD"] != null ? Int32.Parse(xnList[0]["PDD"].InnerText) : 0,
-        //            Share_URL = xnList[0]["Share_URL"] != null ? xnList[0]["Share_URL"].InnerText : "",
-        //            Id = testCallResult.Id,
-        //            Test_ID = testCallResult.Test_ID,
-        //            SupplierID = testCallResult.SupplierID,
-        //            CountryID = testCallResult.CountryID,
-        //            ZoneID = testCallResult.ZoneID,
-        //            Status = 2
-        //        };
-
-        //        if (testCallResultNode.Calls_Total == testCallResultNode.Calls_Complete)
-        //            UpdateTestCallResult(testCallResultNode);   
-                
-        //        return testCallResultNode;
-        //    }
-        //    return null;
-        //}
-
+            XmlNodeList xnList = xml.SelectNodes("/Vendors_List/Supplier");
+            if (xnList != null)
+                foreach (XmlNode xn in xnList)
+                {
+                    Supplier2 supplierNode = new Supplier2
+                    {
+                        Id = xn["Supplier_ID"] != null ? xn["Supplier_ID"].InnerText : "",
+                        Name = xn["Supplier_Name"] != null ? xn["Supplier_Name"].InnerText : "",
+                        Prefix = xn["Prefix"] != null ? xn["Prefix"].InnerText : "",
+                        Codec = xn["Codec"] != null ? xn["Codec"].InnerText : "",
+                        ShortName = (xn["Supplier_Name"] != null ? xn["Supplier_Name"].InnerText : "") + " - " + (xn["Prefix"] != null ? xn["Prefix"].InnerText : "")
+                    };
+                    if (supplierNode.Id != "")
+                        _listSuppliers.Add(supplierNode);
+                }
+        }
         public IEnumerable<Country> GetCachedCountries()
         {
             List<Country> lstCountries = new List<Country>();
@@ -198,35 +128,26 @@ namespace QM.CLITester.Business
             return null;
         }
 
-        //public IEnumerable<Supplier> GetCachedSuppliers()
-        //{
-        //    if (_listSuppliers.Count == 0)
-        //        ResponseSuppliers(PostRequest("1012", null));
-        //    return _listSuppliers;
-        //}
-        public TestCallResult TestCall(TestCallResult testCallResult)
+        public IEnumerable<Supplier2> GetCachedSuppliers()
         {
-            return null;
-            //return ResponseTestCall(PostRequest("2012", "&profid=4992&vendid=" + testCallResult.SupplierID + "&ndbccgid=" + testCallResult.CountryID + "&ndbcgid=" + testCallResult.ZoneID), testCallResult);
-        }
-
-        public TestCallResult TestCallResult(TestCallResult testCallResult)
-        {
-            //if (testCallResult.Test_ID != null)
-                //return responseTestCallResult(PostRequest("3011", "&jid=" + testCallResult.Test_ID), testCallResult);
-            return null;
+            if (_listSuppliers.Count == 0)
+                ResponseSuppliers(PostRequest("1012", null));
+            return _listSuppliers;
         }
         public Vanrise.Entities.InsertOperationOutput<TestCall> AddNewTestCall(TestCall testCallResult)
         {
+            testCallResult.CallTestStatus = CallTestStatus.New;
+            testCallResult.CallTestResult = CallTestResult.NotCompleted;
+
             Vanrise.Entities.InsertOperationOutput<TestCall> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<TestCall>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
 
-            int carrierAccountId = -1;
+            int testCallId = -1;
 
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            bool insertActionSucc = dataManager.Insert(testCallResult, out carrierAccountId);
+            bool insertActionSucc = dataManager.Insert(testCallResult, out testCallId);
             if (insertActionSucc)
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
@@ -236,16 +157,16 @@ namespace QM.CLITester.Business
             return insertOperationOutput;
         }
 
-        public bool UpdateInitiateTest(string initiateTestOutput, CallTestStatus callTestStatus, long testCallID)
+        public bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus)
         {
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            return dataManager.UpdateInitiateTest(initiateTestOutput, callTestStatus, testCallID);
+            return dataManager.UpdateInitiateTest(testCallId, initiateTestInformation, callTestStatus);
         }
 
-        public bool UpdateTestProgress(string initiateTestOutput, CallTestResult callTestResult, long testCallID)
+        public bool UpdateTestProgress(long testCallId, Object testProgress, CallTestStatus callTestStatus, CallTestResult? callTestResult)
         {
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            return dataManager.UpdateTestProgress(initiateTestOutput, callTestResult, testCallID);
+            return dataManager.UpdateTestProgress(testCallId, testProgress, callTestStatus, callTestResult);
         }
 
         //public Vanrise.Entities.UpdateOperationOutput<TestCallResult> UpdateTestCallResult(TestCallResult testCallResult)
@@ -280,26 +201,17 @@ namespace QM.CLITester.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allTestCalls.ToBigResult(input, filterExpression));
         }
 
-
-
         public List<TestCall> GetTestCalls()
         {
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
             return dataManager.GetTestCalls();
         }
 
-        public List<TestCall> GetTestCalls(int callTestStatus)
+        public List<TestCall> GetTestCalls(List<int> callTestStatus)
         {
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
             return dataManager.GetTestCalls(callTestStatus);
         }
-
-
-        //public List<TestCallResult> GetRequestedTestCallResults()
-        //{
-        //    ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-        //    return dataManager.GetRequestedTestCallResults();
-        //}
     }
 
 }

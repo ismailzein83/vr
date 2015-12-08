@@ -36,7 +36,11 @@ namespace QualityMeasurement.DevRuntime
                     {
                         //Get Result
                         TestCallManager manager = new TestCallManager();
-                        List<TestCall> listTestCall = manager.GetTestCalls((int)CallTestStatus.Initiated);
+                        List<int> listCallTestStatusInts = new List<int>();
+                        listCallTestStatusInts.Add((int)CallTestStatus.Initiated);
+                        listCallTestStatusInts.Add((int)CallTestStatus.PartiallyCompleted);
+
+                        List<TestCall> listTestCall = manager.GetTestCalls(listCallTestStatusInts);
 
                         foreach (TestCall testCall in listTestCall)
                         {
@@ -47,18 +51,26 @@ namespace QualityMeasurement.DevRuntime
                             };
                             var testProgressOutput = cliTestConnector.GetTestProgress(getTestProgressContext);
 
-
+                            CallTestStatus callTestStatus;
                             switch (testProgressOutput.Result)
                             {
                                 case GetTestProgressResult.TestCompleted:
-                                    manager.UpdateTestProgress(
-                                        testProgressOutput.TestProgress.ToString(), CallTestResult.Succeeded,
-                                        testCall.ID); break;
+                                    callTestStatus = CallTestStatus.Completed;
+                                    break;
+                                case GetTestProgressResult.FailedWithRetry:
+                                    callTestStatus = CallTestStatus.GetProgressFailedWithRetry;
+                                    break;
+                                case GetTestProgressResult.FailedWithNoRetry:
+                                    callTestStatus = CallTestStatus.GetProgressFailedWithNoRetry;
+                                    break;
                                 case GetTestProgressResult.ProgressChanged:
-                                    manager.UpdateTestProgress(testProgressOutput.TestProgress.ToString(), CallTestResult.PartiallySucceeded, testCall.ID); break;
+                                    callTestStatus = CallTestStatus.PartiallyCompleted;
+                                    break;
                                 default:
-                                    manager.UpdateTestProgress(testProgressOutput.TestProgress.ToString(), CallTestResult.PartiallySucceeded, testCall.ID); break;
+                                    callTestStatus = testCall.CallTestStatus;
+                                    break;
                             }
+                            manager.UpdateTestProgress(testCall.ID, testProgressOutput.TestProgress, callTestStatus, testProgressOutput.CallTestResult);
                         }
 
                         _locked = false;

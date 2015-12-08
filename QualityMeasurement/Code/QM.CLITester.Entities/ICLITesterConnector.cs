@@ -48,7 +48,7 @@ namespace QM.CLITester.Entities
 
         public Object TestProgress { get; set; }
 
-        public CallTestResult TestResult { get; set; }
+        public CallTestResult CallTestResult { get; set; }
     }
 
     public class InitiateTestInformation

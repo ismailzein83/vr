@@ -108,7 +108,7 @@
 
         function buildTestCallObjFromScope() {
             var obj = {
-                SellingNumberPlanId: 0,
+                TestCallId: 0,
                 SupplierID: $scope.selectedSupplier.Id,
                 CountryID: $scope.selectedCountry.Id,
                 ZoneID: $scope.selectedBreakout.Id

@@ -3,20 +3,19 @@
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
-             idfield="Id">
+             idfield="Id" defaultsortdirection="'DESC'">
 
-    <vr-datagridcolumn headertext="'Id'" field="'Id'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Id'" field="'ID'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Supplier'" field="'SupplierID'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Country'" field="'CountryID'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Zone'" field="'ZoneID'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Creation Date'" field="'CreationDate'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Test ID'" field="'Test_ID'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Total'" field="'Calls_Total'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Complete'" field="'Calls_Complete'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Success'" field="'CLI_Success'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'No Result'" field="'CLI_No_Result'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'CLI Fail'" field="'CLI_Fail'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'PDD'" field="'PDD'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Status'" field="'Status'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Creation Date'" field="'CreationDate'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Call Status'" field="'CallTestStatusDescription'" tag="'CallTestStatus'" type="'Text'" getcolor="getColor"></vr-datagridcolumn>
+
+    <vr-datagridcolumn headertext="'Call Result'" field="'CallTestResultDescription'" tag="'CallTestResult'" type="'Text'" getcolor="getColor"></vr-datagridcolumn>
+
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+
 </vr-datagrid>
