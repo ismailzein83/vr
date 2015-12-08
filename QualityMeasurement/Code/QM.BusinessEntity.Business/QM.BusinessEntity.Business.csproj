@@ -60,6 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="CountryManager.cs" />
     <Compile Include="SourceItemSynchronizer.cs" />
     <Compile Include="Supplier\SourceSupplierSynchronizer.cs" />

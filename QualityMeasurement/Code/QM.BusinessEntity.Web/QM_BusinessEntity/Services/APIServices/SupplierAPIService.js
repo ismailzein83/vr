@@ -22,12 +22,15 @@
         function UpdateSupplier(supplierObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Supplier", "UpdateSupplier"), supplierObject);
         }
-
+        function GetSupplierSourceTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Supplier", "GetSupplierSourceTemplates"));
+        }
         return ({
             GetFilteredSuppliers: GetFilteredSuppliers,
             GetSupplier: GetSupplier,
             AddSupplier: AddSupplier,
-            UpdateSupplier: UpdateSupplier
+            UpdateSupplier: UpdateSupplier,
+            GetSupplierSourceTemplates: GetSupplierSourceTemplates
         });
     }
 

@@ -99,6 +99,12 @@ namespace QM.BusinessEntity.Business
             return updateOperationOutput;
         }
 
+        public List<Vanrise.Entities.TemplateConfig> GetSupplierSourceTemplates()
+        {
+
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.SourceSupplierReaderConfigType);
+        }
 
         #region Private Members
 

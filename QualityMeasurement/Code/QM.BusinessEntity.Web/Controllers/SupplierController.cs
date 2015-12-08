@@ -52,6 +52,13 @@ namespace QM.BusinessEntity.Web.Controllers
             SupplierManager manager = new SupplierManager();
             return manager.UpdateSupplier(whsSupplier);
         }
+        [HttpGet]
+        [Route("GetSupplierSourceTemplates")]
+        public List<TemplateConfig> GetSupplierSourceTemplates()
+        {
+            SupplierManager manager = new SupplierManager();
+            return manager.GetSupplierSourceTemplates();
+        }
 
     }
 }
