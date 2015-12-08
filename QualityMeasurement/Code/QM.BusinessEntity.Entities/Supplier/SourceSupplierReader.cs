@@ -13,7 +13,6 @@ namespace QM.BusinessEntity.Entities
         public abstract bool UseSourceItemId
         {
             get;
-            set;
         }
 
         public abstract IEnumerable<SourceSupplier> GetChangedItems(ref object updatedHandle);

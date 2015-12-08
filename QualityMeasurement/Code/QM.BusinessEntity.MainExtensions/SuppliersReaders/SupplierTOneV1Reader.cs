@@ -7,16 +7,13 @@ using System.Threading.Tasks;
 
 namespace QM.BusinessEntity.MainExtensions.SuppliersReaders
 {
-    public class SupplierTOneV2SQLReader : SourceSupplierReader 
+    public class SupplierTOneV1Reader : SourceSupplierReader
     {
         public string ConnectionString { get; set; }
 
         public override bool UseSourceItemId
         {
-            get
-            {
-                return true;
-            }
+            get { return false; ; }
         }
 
         public override IEnumerable<SourceSupplier> GetChangedItems(ref object updatedHandle)
