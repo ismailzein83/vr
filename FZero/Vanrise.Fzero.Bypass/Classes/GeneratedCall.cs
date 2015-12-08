@@ -25,7 +25,7 @@ namespace Vanrise.Fzero.Bypass
                         foreach (GeneratedCall generatedCall in context.GeneratedCalls.Where(x => x.ID == id).ToList())
                         {
                             generatedCall.ReportID = ReportID;
-                            generatedCall.MobileOperatorFeedbackID = (int) Enums.MobileOperatorFeedbacks.Pending;
+                            generatedCall.MobileOperatorFeedbackID = (int)Enums.MobileOperatorFeedbacks.Pending;
                             generatedCall.ReportingStatusID = (int)Enums.ReportingStatuses.Reported;
                             context.Entry(generatedCall).State = System.Data.EntityState.Modified;
                         }
@@ -66,6 +66,10 @@ namespace Vanrise.Fzero.Bypass
 
         public static void Confirm(int SourceID, DataTable dt, int? ImportedBy)
         {
+            List<string> CountryCodes = new List<string>();
+            CountryCodes.Add("964");
+            CountryCodes.Add("963");
+            CountryCodes.Add("240");
 
             List<Client> ListClients = Client.GetAllClients();
 
@@ -78,12 +82,12 @@ namespace Vanrise.Fzero.Bypass
             List<Carrier> ListNewCarriers = new List<Carrier>();
             List<OriginationNetwork> ListNewOriginationNetworks = new List<OriginationNetwork>();
 
-            
+
             List<CasesLog> ListCasesLogs = new List<CasesLog>();
             List<int> listIDs = new List<int>();
 
 
-            
+
             int Global_GMT = SysParameter.Global_GMT;
             string Global_DefaultMobileOperator = SysParameter.Global_DefaultMobileOperator;
 
@@ -122,8 +126,8 @@ namespace Vanrise.Fzero.Bypass
                             }
                         }
 
-                        gc.DurationInSeconds = Convert.ToInt32(DurationInSeconds);                                                                                
-                       
+                        gc.DurationInSeconds = Convert.ToInt32(DurationInSeconds);
+
 
 
 
@@ -164,72 +168,48 @@ namespace Vanrise.Fzero.Bypass
 
 
 
-                       
+
 
 
 
                         // Add Area Code to be Able to Know the Mobile Operator Prefix
                         string NumberWithoutAreaCodeb_number = gc.b_number;
-                       
+
                         if (gc.b_number.StartsWith("+"))
                         {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(1);
+                            NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(1);
                         }
 
                         if (gc.b_number.StartsWith("00"))
                         {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(2);
+                            NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(2);
                         }
 
                         if (gc.b_number.StartsWith("0"))
                         {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(1);
+                            NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(1);
                         }
 
-                        if (gc.b_number.StartsWith("963"))
+
+                        foreach (var code in CountryCodes)
                         {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("963".Count());
+                            if (gc.b_number.StartsWith(code))
+                            {
+                                NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(code.Count());
+                            }
+
+                            if (gc.b_number.StartsWith("+" + code))
+                            {
+                                NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(code.Count() + 1);
+                            }
+
+                            if (gc.b_number.StartsWith("00" + code))
+                            {
+                                NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(code.Count() + 2);
+                            }
                         }
 
-                        if (gc.b_number.StartsWith("+" + "963"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("963".Count() + 1);
-                        }
 
-                        if (gc.b_number.StartsWith("00" + "963"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("963".Count() + 2);
-                        }
-
-                        if (gc.b_number.StartsWith("964"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("964".Count());
-                        }
-
-                        if (gc.b_number.StartsWith("+" + "964"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("964".Count() + 1);
-                        }
-
-                        if (gc.b_number.StartsWith("00" + "964"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("964".Count() + 2);
-                        }
-
-                        if (gc.b_number.StartsWith("240"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("240".Count());
-                        }
-
-                        if (gc.b_number.StartsWith("+" + "240"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("240".Count() + 1);
-                        }
-
-                        if (gc.b_number.StartsWith("00" + "240"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("240".Count() + 2);
-                        }
 
 
                         foreach (MobileOperator j in lstMobileOperators)
@@ -317,74 +297,74 @@ namespace Vanrise.Fzero.Bypass
 
                         }
 
-                    
+
 
                     }
                     GeneratedCall.SaveBulk("GeneratedCalls", listGeneratesandRecievesGeneratedCalls);
 
 
-                    
-
-                     using (Entities context = new Entities())
-                     {
-                         listGeneratesandRecievesGeneratedCalls = context.GeneratedCalls.OrderByDescending(x => x.ID).Take(listGeneratesandRecievesGeneratedCalls.Count()).OrderBy(x => x.ID).ToList();
-                         listIDs = listGeneratesandRecievesGeneratedCalls.OrderByDescending(x => x.ID).Take(listGeneratesandRecievesGeneratedCalls.Count()).OrderBy(x => x.ID).Select(x => x.ID).ToList();
-
-                     }
 
 
-                     foreach (int ID in listIDs)
-                     {
-                         CasesLog cl1 = new CasesLog();
-                         cl1.UpdatedOn = DateTime.Now;
-                         cl1.ChangeTypeID = (int)Enums.ChangeType.ChangedStatus;
-                         cl1.GeneratedCallID=ID;
-                         cl1.StatusID = (int) Enums.Statuses.Pending;
-                         ListCasesLogs.Add(cl1);
-                     }
+                    using (Entities context = new Entities())
+                    {
+                        listGeneratesandRecievesGeneratedCalls = context.GeneratedCalls.OrderByDescending(x => x.ID).Take(listGeneratesandRecievesGeneratedCalls.Count()).OrderBy(x => x.ID).ToList();
+                        listIDs = listGeneratesandRecievesGeneratedCalls.OrderByDescending(x => x.ID).Take(listGeneratesandRecievesGeneratedCalls.Count()).OrderBy(x => x.ID).Select(x => x.ID).ToList();
 
-                    
+                    }
+
+
+                    foreach (int ID in listIDs)
+                    {
+                        CasesLog cl1 = new CasesLog();
+                        cl1.UpdatedOn = DateTime.Now;
+                        cl1.ChangeTypeID = (int)Enums.ChangeType.ChangedStatus;
+                        cl1.GeneratedCallID = ID;
+                        cl1.StatusID = (int)Enums.Statuses.Pending;
+                        ListCasesLogs.Add(cl1);
+                    }
 
 
 
 
 
-                     try
-                     {
-                         foreach (var i in listGeneratesandRecievesGeneratedCalls)
-                         {
-                             if (ListCarriers.Where(x => x.Name == i.Carrier.ToUpper()).Count() == 0)
-                             {
-                                 if (ListNewCarriers.Where(x => x.Name == i.Carrier.ToUpper()).Count() == 0)
-                                 {
-                                     Carrier TempCarrier = new Carrier();
-                                     TempCarrier.Name = i.Carrier.ToUpper();
-                                     ListNewCarriers.Add(TempCarrier);
-                                 }
-                             }
-                         }
-
-                         Vanrise.Fzero.Bypass.Carrier.SaveBulk("Carriers", ListNewCarriers);
 
 
-                         foreach (var i in listGeneratesandRecievesGeneratedCalls)
-                         {
-                             if (ListOriginationNetworks.Where(x => x.Name == i.OriginationNetwork.ToUpper()).Count() == 0)
-                             {
-                                 if (ListNewOriginationNetworks.Where(x => x.Name == i.OriginationNetwork.ToUpper()).Count() == 0)
-                                 {
-                                     OriginationNetwork TempOriginationNetwork = new OriginationNetwork();
-                                     TempOriginationNetwork.Name = i.OriginationNetwork.ToUpper();
-                                     ListNewOriginationNetworks.Add(TempOriginationNetwork);
-                                 }
-                             }
-                         }
+                    try
+                    {
+                        foreach (var i in listGeneratesandRecievesGeneratedCalls)
+                        {
+                            if (ListCarriers.Where(x => x.Name == i.Carrier.ToUpper()).Count() == 0)
+                            {
+                                if (ListNewCarriers.Where(x => x.Name == i.Carrier.ToUpper()).Count() == 0)
+                                {
+                                    Carrier TempCarrier = new Carrier();
+                                    TempCarrier.Name = i.Carrier.ToUpper();
+                                    ListNewCarriers.Add(TempCarrier);
+                                }
+                            }
+                        }
 
-                         Vanrise.Fzero.Bypass.OriginationNetwork.SaveBulk("OriginationNetworks", ListNewOriginationNetworks);
-                     }
-                     catch
-                     {
-                     }
+                        Vanrise.Fzero.Bypass.Carrier.SaveBulk("Carriers", ListNewCarriers);
+
+
+                        foreach (var i in listGeneratesandRecievesGeneratedCalls)
+                        {
+                            if (ListOriginationNetworks.Where(x => x.Name == i.OriginationNetwork.ToUpper()).Count() == 0)
+                            {
+                                if (ListNewOriginationNetworks.Where(x => x.Name == i.OriginationNetwork.ToUpper()).Count() == 0)
+                                {
+                                    OriginationNetwork TempOriginationNetwork = new OriginationNetwork();
+                                    TempOriginationNetwork.Name = i.OriginationNetwork.ToUpper();
+                                    ListNewOriginationNetworks.Add(TempOriginationNetwork);
+                                }
+                            }
+                        }
+
+                        Vanrise.Fzero.Bypass.OriginationNetwork.SaveBulk("OriginationNetworks", ListNewOriginationNetworks);
+                    }
+                    catch
+                    {
+                    }
 
 
 
@@ -412,7 +392,7 @@ namespace Vanrise.Fzero.Bypass
                         }
 
                         rc.DurationInSeconds = Convert.ToInt32(DurationInSeconds); ;///1111111
-                                                                                    ///
+                        ///
 
 
                         int ClientID = 1; ///ITPC
@@ -499,67 +479,48 @@ namespace Vanrise.Fzero.Bypass
 
                         // Add Area Code to be Able to Know the Mobile Operator Prefix
                         string NumberWithoutAreaCodeCLI = rc.CLI;
-                        
+
 
                         if (rc.CLI.StartsWith("+"))
                         {
-                            NumberWithoutAreaCodeCLI = rc.CLI.Substring(1);
+                            NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(1);
                         }
 
                         if (rc.CLI.StartsWith("00"))
                         {
-                            NumberWithoutAreaCodeCLI = rc.CLI.Substring(2);
+                            NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(2);
                         }
 
                         if (rc.CLI.StartsWith("0"))
                         {
-                            NumberWithoutAreaCodeCLI = rc.CLI.Substring(1);
-                        }
-
-                        if (rc.CLI.StartsWith("963"))
-                        {
-                            NumberWithoutAreaCodeCLI = rc.CLI.Substring("963".Count());
-                        }
-
-                        if (rc.CLI.StartsWith("+" + "963"))
-                        {
-                            NumberWithoutAreaCodeCLI = rc.CLI.Substring("963".Count() + 1);
-                        }
-
-                        if (rc.CLI.StartsWith("00" + "963"))
-                        {
-                            NumberWithoutAreaCodeCLI = rc.CLI.Substring("963".Count() + 2);
-                        }
-
-                        if (rc.CLI.StartsWith("964"))
-                        {
-                            NumberWithoutAreaCodeCLI = rc.CLI.Substring("964".Count());
-                        }
-
-                        if (rc.CLI.StartsWith("+" + "964"))
-                        {
-                            NumberWithoutAreaCodeCLI = rc.CLI.Substring("964".Count() + 1);
-                        }
-
-                        if (rc.CLI.StartsWith("00" + "964"))
-                        {
-                            NumberWithoutAreaCodeCLI = rc.CLI.Substring("964".Count() + 2);
+                            NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(1);
                         }
 
 
-                        if (rc.CLI.StartsWith("240"))
-                        {
-                            NumberWithoutAreaCodeCLI = rc.CLI.Substring("240".Count());
-                        }
 
-                        if (rc.CLI.StartsWith("+" + "240"))
-                        {
-                            NumberWithoutAreaCodeCLI = rc.CLI.Substring("240".Count() + 1);
-                        }
 
-                        if (rc.CLI.StartsWith("00" + "240"))
+
+
+
+
+
+
+                        foreach (var code in CountryCodes)
                         {
-                            NumberWithoutAreaCodeCLI = rc.CLI.Substring("240".Count() + 2);
+                            if (rc.CLI.StartsWith(code))
+                            {
+                                NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(code.Count());
+                            }
+
+                            if (rc.CLI.StartsWith("+" + code))
+                            {
+                                NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(code.Count() + 1);
+                            }
+
+                            if (rc.CLI.StartsWith("00" + code))
+                            {
+                                NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(code.Count() + 2);
+                            }
                         }
 
 
@@ -626,25 +587,6 @@ namespace Vanrise.Fzero.Bypass
 
 
 
-                  
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-                    
-
-
                     break;
 
 
@@ -655,16 +597,16 @@ namespace Vanrise.Fzero.Bypass
 
 
 
-                case (int) Enums.SourceTypes.GeneratesOnly:
+                case (int)Enums.SourceTypes.GeneratesOnly:
 
-                  
+
 
 
                     // Find Difference in GMT
-                            int GMTDifferenceGeneratesOnly = 0;
-                            GMTDifferenceGeneratesOnly = Global_GMT - source.GMT;
+                    int GMTDifferenceGeneratesOnly = 0;
+                    GMTDifferenceGeneratesOnly = Global_GMT - source.GMT;
 
-                            int CounterGeneratesOnly = 1;
+                    int CounterGeneratesOnly = 1;
                     List<GeneratedCall> listGeneratedCalls = new List<GeneratedCall>();
                     foreach (DataRow i in dt.Rows)
                     {
@@ -712,7 +654,7 @@ namespace Vanrise.Fzero.Bypass
                         gc.Type = Type;
 
 
-             
+
 
 
 
@@ -722,62 +664,39 @@ namespace Vanrise.Fzero.Bypass
 
                         if (gc.b_number.StartsWith("+"))
                         {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(1);
+                            NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(1);
                         }
 
                         if (gc.b_number.StartsWith("00"))
                         {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(2);
+                            NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(2);
                         }
 
                         if (gc.b_number.StartsWith("0"))
                         {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(1);
+                            NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(1);
                         }
 
-                        if (gc.b_number.StartsWith("963"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("963".Count());
-                        }
 
-                        if (gc.b_number.StartsWith("+" + "963"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("963".Count() + 1);
-                        }
 
-                        if (gc.b_number.StartsWith("00" + "963"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("963".Count() + 2);
-                        }
 
-                        if (gc.b_number.StartsWith("964"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("964".Count());
-                        }
 
-                        if (gc.b_number.StartsWith("+" + "964"))
+                        foreach (var code in CountryCodes)
                         {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("964".Count() + 1);
-                        }
+                            if (gc.b_number.StartsWith(code))
+                            {
+                                NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(code.Count());
+                            }
 
-                        if (gc.b_number.StartsWith("00" + "964"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("964".Count() + 2);
-                        }
+                            if (gc.b_number.StartsWith("+" + code))
+                            {
+                                NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(code.Count() + 1);
+                            }
 
-                        if (gc.b_number.StartsWith("240"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("240".Count());
-                        }
-
-                        if (gc.b_number.StartsWith("+" + "240"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("240".Count() + 1);
-                        }
-
-                        if (gc.b_number.StartsWith("00" + "240"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring("240".Count() + 2);
+                            if (gc.b_number.StartsWith("00" + code))
+                            {
+                                NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(code.Count() + 2);
+                            }
                         }
 
 
@@ -827,7 +746,7 @@ namespace Vanrise.Fzero.Bypass
                             Carrier = i["Carrier"].ToString().ToUpper();
                         }
                         gc.Carrier = Carrier;
-              
+
 
                         string OriginationNetwork = string.Empty;
                         if (i.Table.Columns.Contains("Origination Network"))
@@ -867,363 +786,60 @@ namespace Vanrise.Fzero.Bypass
                     GeneratedCall.SaveBulk("GeneratedCalls", listGeneratedCalls);
 
 
-                     using (Entities context = new Entities())
-                     {
-                         listIDs = context.GeneratedCalls.OrderByDescending(x => x.ID).Take(listGeneratedCalls.Count()).Select(x => x.ID).ToList();
-                     }
-
-
-                     foreach (int ID in listIDs)
-                     {
-                         CasesLog cl1 = new CasesLog();
-                         cl1.UpdatedOn = DateTime.Now;
-                         cl1.ChangeTypeID = (int)Enums.ChangeType.ChangedStatus;
-                         cl1.GeneratedCallID=ID;
-                         cl1.StatusID = (int)Enums.Statuses.Pending;
-                         ListCasesLogs.Add(cl1);
-                     }
-
-
-
-                     try
-                     {
-                                foreach (var i in listGeneratedCalls)
-                                    {
-                                        if (ListCarriers.Where(x => x.Name == i.Carrier.ToUpper()).Count() == 0)
-                                        {
-                                            if (ListNewCarriers.Where(x => x.Name == i.Carrier.ToUpper()).Count() == 0)
-                                            {
-                                                Carrier TempCarrier = new Carrier();
-                                                TempCarrier.Name = i.Carrier.ToUpper();
-                                                ListNewCarriers.Add(TempCarrier);
-                                            }
-                                        }
-                                    }
-
-                                    Vanrise.Fzero.Bypass.Carrier.SaveBulk("Carriers", ListNewCarriers);
-
-
-                                    foreach (var i in listGeneratedCalls)
-                                    {
-                                        if (ListOriginationNetworks.Where(x => x.Name == i.OriginationNetwork.ToUpper()).Count() == 0)
-                                        {
-                                            if (ListNewOriginationNetworks.Where(x => x.Name == i.OriginationNetwork.ToUpper()).Count() == 0)
-                                            {
-                                                OriginationNetwork TempOriginationNetwork = new OriginationNetwork();
-                                                TempOriginationNetwork.Name = i.OriginationNetwork.ToUpper();
-                                                ListNewOriginationNetworks.Add(TempOriginationNetwork);
-                                            }
-                                        }
-                                    }
-
-                                     Vanrise.Fzero.Bypass.OriginationNetwork.SaveBulk("OriginationNetworks", ListNewOriginationNetworks);
-                     }
-                     catch
-                     {
-                     }
-
-                  
-
-                     break;
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                case (int) Enums.SourceTypes.RecievesOnly:
-
-                   
-
-
-            // Find Difference in GMT
-                    int GMTDifferenceRecievesOnly = 0;
-                    GMTDifferenceRecievesOnly = Global_GMT - source.GMT;
-
-                    int CounterRecievesOnly = 1;
-            List<RecievedCall> listRecievedCalls = new List<RecievedCall>();
-            foreach (DataRow i in dt.Rows)
-            {
-                RecievedCall gc = new RecievedCall();
-                float DurationInSeconds = 0;
-                if (i.Table.Columns.Contains("Duration In Seconds"))
-                {
-                    if (i["Duration In Seconds"].ToString() != string.Empty)
+                    using (Entities context = new Entities())
                     {
-                        float.TryParse(i["Duration In Seconds"].ToString(), out DurationInSeconds);
+                        listIDs = context.GeneratedCalls.OrderByDescending(x => x.ID).Take(listGeneratedCalls.Count()).Select(x => x.ID).ToList();
                     }
-                }
 
-                gc.DurationInSeconds = Convert.ToInt32(DurationInSeconds); ;///1111111
-                                                                            ///
 
-                int ClientID = 1; ///ITPC
-                if (i.Table.Columns.Contains("ClientName"))
-                {
-                    if (i["ClientName"].ToString().Trim() != string.Empty)
+                    foreach (int ID in listIDs)
                     {
-                        if (ListClients.Where(x => x.Name == i["ClientName"].ToString().Trim()).Count() > 0)
+                        CasesLog cl1 = new CasesLog();
+                        cl1.UpdatedOn = DateTime.Now;
+                        cl1.ChangeTypeID = (int)Enums.ChangeType.ChangedStatus;
+                        cl1.GeneratedCallID = ID;
+                        cl1.StatusID = (int)Enums.Statuses.Pending;
+                        ListCasesLogs.Add(cl1);
+                    }
+
+
+
+                    try
+                    {
+                        foreach (var i in listGeneratedCalls)
                         {
-                            ClientID = ListClients.Where(x => x.Name == i["ClientName"].ToString().Trim()).FirstOrDefault().ID;
-                        }
-                    }
-                }
-
-                gc.ClientID = ClientID;
-
-
-                string a_number = string.Empty;
-                if (i.Table.Columns.Contains("a_number"))
-                {
-                    a_number = i["a_number"].ToString();
-                }
-                gc.a_number = a_number;
-
-
-                string b_number = string.Empty;
-                if (i.Table.Columns.Contains("b_number"))
-                {
-                    b_number = i["b_number"].ToString();
-                }
-                gc.b_number = b_number;
-
-                string CLI = string.Empty;
-                if (i.Table.Columns.Contains("CLI"))
-                {
-                    CLI = i["CLI"].ToString();
-                }
-                gc.CLI = CLI;
-
-
-
-                string Type = "SIP";
-                if (i.Table.Columns.Contains("Type"))
-                {
-                    Type = i["Type"].ToString();
-                }
-                gc.Type = Type;
-
-
-                string Reference = string.Empty;
-                if (i.Table.Columns.Contains("Reference"))
-                {
-                    Reference = i["Reference"].ToString();
-                }
-                gc.Reference = Reference;
-
-
-                string Carrier = string.Empty;
-                if (i.Table.Columns.Contains("Carrier"))
-                {
-                    Carrier = i["Carrier"].ToString().ToUpper();
-                }
-                gc.Carrier = Carrier;
-
-
-                string OriginationNetwork = string.Empty;
-                if (i.Table.Columns.Contains("Origination Network"))
-                {
-                    OriginationNetwork = i["Origination Network"].ToString().ToUpper();
-                }
-                gc.OriginationNetwork = OriginationNetwork;
-
-
-
-
-
-
-                          
-
-
-
-
-                // Add Area Code to be Able to Know the Mobile Operator Prefix
-                string NumberWithoutAreaCodeCLI = gc.CLI;
-
-                if (gc.CLI.StartsWith("+"))
-                {
-                    NumberWithoutAreaCodeCLI = gc.CLI.Substring(1);
-                }
-
-                if (gc.CLI.StartsWith("00"))
-                {
-                    NumberWithoutAreaCodeCLI = gc.CLI.Substring(2);
-                }
-
-                if (gc.CLI.StartsWith("0"))
-                {
-                    NumberWithoutAreaCodeCLI = gc.CLI.Substring(1);
-                }
-
-                if (gc.CLI.StartsWith("964"))
-                {
-                    NumberWithoutAreaCodeCLI = gc.CLI.Substring("964".Count());
-                }
-
-                if (gc.CLI.StartsWith("+" + "964"))
-                {
-                    NumberWithoutAreaCodeCLI = gc.CLI.Substring("964".Count() + 1);
-                }
-
-                if (gc.CLI.StartsWith("00" + "964"))
-                {
-                    NumberWithoutAreaCodeCLI = gc.CLI.Substring("964".Count() + 2);
-                }
-
-                if (gc.CLI.StartsWith("240"))
-                {
-                    NumberWithoutAreaCodeCLI = gc.CLI.Substring("240".Count());
-                }
-
-                if (gc.CLI.StartsWith("+" + "240"))
-                {
-                    NumberWithoutAreaCodeCLI = gc.CLI.Substring("240".Count() + 1);
-                }
-
-                if (gc.CLI.StartsWith("00" + "240"))
-                {
-                    NumberWithoutAreaCodeCLI = gc.CLI.Substring("240".Count() + 2);
-                }
-
-
-                if (gc.CLI.StartsWith("963"))
-                {
-                    NumberWithoutAreaCodeCLI = gc.CLI.Substring("963".Count());
-                }
-
-                if (gc.CLI.StartsWith("+" + "963"))
-                {
-                    NumberWithoutAreaCodeCLI = gc.CLI.Substring("963".Count() + 1);
-                }
-
-                if (gc.CLI.StartsWith("00" + "963"))
-                {
-                    NumberWithoutAreaCodeCLI = gc.CLI.Substring("963".Count() + 2);
-                }
-
-
-
-
-                foreach (MobileOperator j in lstMobileOperators)
-                {
-                    if (j.User.FullName == Global_DefaultMobileOperator)
-                    {
-                        gc.MobileOperatorID = j.ID;
-                    }
-                }
-
-
-                foreach (MobileOperator j in lstMobileOperators)
-                {
-                    List<string> Prefixes = j.User.Prefix.Split(';').ToList<string>();
-
-                    foreach (string p in Prefixes)
-                    {
-                        if (p != string.Empty)
-                        {
-                            int result = 0;
-                            if (int.TryParse(p, out result))
+                            if (ListCarriers.Where(x => x.Name == i.Carrier.ToUpper()).Count() == 0)
                             {
-                                if (NumberWithoutAreaCodeCLI.StartsWith(p))
+                                if (ListNewCarriers.Where(x => x.Name == i.Carrier.ToUpper()).Count() == 0)
                                 {
-                                    gc.MobileOperatorID = j.ID;
+                                    Carrier TempCarrier = new Carrier();
+                                    TempCarrier.Name = i.Carrier.ToUpper();
+                                    ListNewCarriers.Add(TempCarrier);
                                 }
                             }
-
-
                         }
-                    }
-                }
+
+                        Vanrise.Fzero.Bypass.Carrier.SaveBulk("Carriers", ListNewCarriers);
 
 
-
-                DateTime AttemptDateTime = new DateTime();
-                if (i.Table.Columns.Contains("Attempt Date Time"))
-                {
-                    if (i["Attempt Date Time"].ToString() != string.Empty)
-                    {
-                        DateTime.TryParse(i["Attempt Date Time"].ToString(), out AttemptDateTime);
-                        // Apply Difference in GMT
-                        AttemptDateTime = AttemptDateTime.AddHours(GMTDifferenceRecievesOnly);
-                    }
-                }
-                gc.AttemptDateTime = AttemptDateTime;
-
-              
-
-               
-
-                gc.ImportID = import.ID;
-                gc.SourceID = SourceID;
-                CounterRecievesOnly++;
-
-                if (AttemptDateTime != DateTime.Parse("1/1/0001 12:00:00 AM"))
-                {
-                    listRecievedCalls.Add(gc);
-
-                }
-
-
-            }
-            RecievedCall.SaveBulk("RecievedCalls", listRecievedCalls);
-
-
-
-
-
-
-
-            try
-            {
-                foreach (var i in listRecievedCalls)
-                {
-                    if (ListCarriers.Where(x => x.Name == i.Carrier.ToUpper()).Count() == 0)
-                    {
-                        if (ListNewCarriers.Where(x => x.Name == i.Carrier.ToUpper()).Count() == 0)
+                        foreach (var i in listGeneratedCalls)
                         {
-                            Carrier TempCarrier = new Carrier();
-                            TempCarrier.Name = i.Carrier.ToUpper();
-                            ListNewCarriers.Add(TempCarrier);
+                            if (ListOriginationNetworks.Where(x => x.Name == i.OriginationNetwork.ToUpper()).Count() == 0)
+                            {
+                                if (ListNewOriginationNetworks.Where(x => x.Name == i.OriginationNetwork.ToUpper()).Count() == 0)
+                                {
+                                    OriginationNetwork TempOriginationNetwork = new OriginationNetwork();
+                                    TempOriginationNetwork.Name = i.OriginationNetwork.ToUpper();
+                                    ListNewOriginationNetworks.Add(TempOriginationNetwork);
+                                }
+                            }
                         }
+
+                        Vanrise.Fzero.Bypass.OriginationNetwork.SaveBulk("OriginationNetworks", ListNewOriginationNetworks);
                     }
-                }
-
-                Vanrise.Fzero.Bypass.Carrier.SaveBulk("Carriers", ListNewCarriers);
-
-
-                foreach (var i in listRecievedCalls)
-                {
-                    if (ListOriginationNetworks.Where(x => x.Name == i.OriginationNetwork.ToUpper()).Count() == 0)
+                    catch
                     {
-                        if (ListNewOriginationNetworks.Where(x => x.Name == i.OriginationNetwork.ToUpper()).Count() == 0)
-                        {
-                            OriginationNetwork TempOriginationNetwork = new OriginationNetwork();
-                            TempOriginationNetwork.Name = i.OriginationNetwork.ToUpper();
-                            ListNewOriginationNetworks.Add(TempOriginationNetwork);
-                        }
                     }
-                }
-
-                Vanrise.Fzero.Bypass.OriginationNetwork.SaveBulk("OriginationNetworks", ListNewOriginationNetworks);
-            }
-            catch
-            {
-            }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1232,46 +848,250 @@ namespace Vanrise.Fzero.Bypass
 
 
 
+                case (int)Enums.SourceTypes.RecievesOnly:
+
+
+
+
+                    // Find Difference in GMT
+                    int GMTDifferenceRecievesOnly = 0;
+                    GMTDifferenceRecievesOnly = Global_GMT - source.GMT;
+
+                    int CounterRecievesOnly = 1;
+                    List<RecievedCall> listRecievedCalls = new List<RecievedCall>();
+                    foreach (DataRow i in dt.Rows)
+                    {
+                        RecievedCall gc = new RecievedCall();
+                        float DurationInSeconds = 0;
+                        if (i.Table.Columns.Contains("Duration In Seconds"))
+                        {
+                            if (i["Duration In Seconds"].ToString() != string.Empty)
+                            {
+                                float.TryParse(i["Duration In Seconds"].ToString(), out DurationInSeconds);
+                            }
+                        }
+
+                        gc.DurationInSeconds = Convert.ToInt32(DurationInSeconds); ;///1111111
+                        ///
+
+                        int ClientID = 1; ///ITPC
+                        if (i.Table.Columns.Contains("ClientName"))
+                        {
+                            if (i["ClientName"].ToString().Trim() != string.Empty)
+                            {
+                                if (ListClients.Where(x => x.Name == i["ClientName"].ToString().Trim()).Count() > 0)
+                                {
+                                    ClientID = ListClients.Where(x => x.Name == i["ClientName"].ToString().Trim()).FirstOrDefault().ID;
+                                }
+                            }
+                        }
+
+                        gc.ClientID = ClientID;
+
+
+                        string a_number = string.Empty;
+                        if (i.Table.Columns.Contains("a_number"))
+                        {
+                            a_number = i["a_number"].ToString();
+                        }
+                        gc.a_number = a_number;
+
+
+                        string b_number = string.Empty;
+                        if (i.Table.Columns.Contains("b_number"))
+                        {
+                            b_number = i["b_number"].ToString();
+                        }
+                        gc.b_number = b_number;
+
+                        string CLI = string.Empty;
+                        if (i.Table.Columns.Contains("CLI"))
+                        {
+                            CLI = i["CLI"].ToString();
+                        }
+                        gc.CLI = CLI;
+
+
+
+                        string Type = "SIP";
+                        if (i.Table.Columns.Contains("Type"))
+                        {
+                            Type = i["Type"].ToString();
+                        }
+                        gc.Type = Type;
+
+
+                        string Reference = string.Empty;
+                        if (i.Table.Columns.Contains("Reference"))
+                        {
+                            Reference = i["Reference"].ToString();
+                        }
+                        gc.Reference = Reference;
+
+
+                        string Carrier = string.Empty;
+                        if (i.Table.Columns.Contains("Carrier"))
+                        {
+                            Carrier = i["Carrier"].ToString().ToUpper();
+                        }
+                        gc.Carrier = Carrier;
+
+
+                        string OriginationNetwork = string.Empty;
+                        if (i.Table.Columns.Contains("Origination Network"))
+                        {
+                            OriginationNetwork = i["Origination Network"].ToString().ToUpper();
+                        }
+                        gc.OriginationNetwork = OriginationNetwork;
+
+
+
+                        // Add Area Code to be Able to Know the Mobile Operator Prefix
+                        string NumberWithoutAreaCodeCLI = gc.CLI;
+
+                        if (gc.CLI.StartsWith("+"))
+                        {
+                            NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(1);
+                        }
+
+                        if (gc.CLI.StartsWith("00"))
+                        {
+                            NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(2);
+                        }
+
+                        if (gc.CLI.StartsWith("0"))
+                        {
+                            NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(1);
+                        }
+
+
+
+
+                        foreach (var code in CountryCodes)
+                        {
+                            if (gc.CLI.StartsWith(code))
+                            {
+                                NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(code.Count());
+                            }
+
+                            if (gc.CLI.StartsWith("+" + code))
+                            {
+                                NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(code.Count() + 1);
+                            }
+
+                            if (gc.CLI.StartsWith("00" + code))
+                            {
+                                NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(code.Count() + 2);
+                            }
+                        }
+
+
+
+                        foreach (MobileOperator j in lstMobileOperators)
+                        {
+                            if (j.User.FullName == Global_DefaultMobileOperator)
+                            {
+                                gc.MobileOperatorID = j.ID;
+                            }
+                        }
+
+
+                        foreach (MobileOperator j in lstMobileOperators)
+                        {
+                            List<string> Prefixes = j.User.Prefix.Split(';').ToList<string>();
+
+                            foreach (string p in Prefixes)
+                            {
+                                if (p != string.Empty)
+                                {
+                                    int result = 0;
+                                    if (int.TryParse(p, out result))
+                                    {
+                                        if (NumberWithoutAreaCodeCLI.StartsWith(p))
+                                        {
+                                            gc.MobileOperatorID = j.ID;
+                                        }
+                                    }
+
+
+                                }
+                            }
+                        }
+
+
+
+                        DateTime AttemptDateTime = new DateTime();
+                        if (i.Table.Columns.Contains("Attempt Date Time"))
+                        {
+                            if (i["Attempt Date Time"].ToString() != string.Empty)
+                            {
+                                DateTime.TryParse(i["Attempt Date Time"].ToString(), out AttemptDateTime);
+                                // Apply Difference in GMT
+                                AttemptDateTime = AttemptDateTime.AddHours(GMTDifferenceRecievesOnly);
+                            }
+                        }
+                        gc.AttemptDateTime = AttemptDateTime;
 
 
 
 
 
+                        gc.ImportID = import.ID;
+                        gc.SourceID = SourceID;
+                        CounterRecievesOnly++;
+
+                        if (AttemptDateTime != DateTime.Parse("1/1/0001 12:00:00 AM"))
+                        {
+                            listRecievedCalls.Add(gc);
+
+                        }
 
 
+                    }
+                    RecievedCall.SaveBulk("RecievedCalls", listRecievedCalls);
 
 
+                    try
+                    {
+                        foreach (var i in listRecievedCalls)
+                        {
+                            if (ListCarriers.Where(x => x.Name == i.Carrier.ToUpper()).Count() == 0)
+                            {
+                                if (ListNewCarriers.Where(x => x.Name == i.Carrier.ToUpper()).Count() == 0)
+                                {
+                                    Carrier TempCarrier = new Carrier();
+                                    TempCarrier.Name = i.Carrier.ToUpper();
+                                    ListNewCarriers.Add(TempCarrier);
+                                }
+                            }
+                        }
+
+                        Vanrise.Fzero.Bypass.Carrier.SaveBulk("Carriers", ListNewCarriers);
 
 
+                        foreach (var i in listRecievedCalls)
+                        {
+                            if (ListOriginationNetworks.Where(x => x.Name == i.OriginationNetwork.ToUpper()).Count() == 0)
+                            {
+                                if (ListNewOriginationNetworks.Where(x => x.Name == i.OriginationNetwork.ToUpper()).Count() == 0)
+                                {
+                                    OriginationNetwork TempOriginationNetwork = new OriginationNetwork();
+                                    TempOriginationNetwork.Name = i.OriginationNetwork.ToUpper();
+                                    ListNewOriginationNetworks.Add(TempOriginationNetwork);
+                                }
+                            }
+                        }
 
+                        Vanrise.Fzero.Bypass.OriginationNetwork.SaveBulk("OriginationNetworks", ListNewOriginationNetworks);
+                    }
+                    catch
+                    {
+                    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    break;
             }
 
             CasesLog.SaveBulk("CasesLogs", ListCasesLogs);
-            //PerformLevelOneComparison();
         }
 
         public static void Confirm(string SourceName, DataTable dt, int? ImportedBy)
@@ -1281,13 +1101,13 @@ namespace Vanrise.Fzero.Bypass
 
         public static DataTable GetDataFromExcel(string filePath, string SourceName)
         {
-           return GetDataFromExcel(filePath, Source.Load(SourceName).ID);
+            return GetDataFromExcel(filePath, Source.Load(SourceName).ID);
         }
 
         public static DataTable GetDataFromXml(string filePath, string SourceName)
         {
             return GetDataFromXml(filePath, Source.Load(SourceName).ID);
-        } 
+        }
 
         public static DataTable GetDataFromExcel(string filePath, int SourceId)
         {
@@ -1350,7 +1170,7 @@ namespace Vanrise.Fzero.Bypass
             }
             return dtxls;
 
-        } 
+        }
 
         public static DataTable GetDataFromXml(string filePath, int SourceId)
         {
@@ -1391,7 +1211,7 @@ namespace Vanrise.Fzero.Bypass
                 return null;
             }
 
-           
+
         }
 
         public static bool SaveBulk(string tableName, List<GeneratedCall> listGeneratedCalls)
@@ -1496,7 +1316,7 @@ namespace Vanrise.Fzero.Bypass
                     cl1.ReportingStatusID = ReportingStatusID;
                     ListCasesLogs.Add(cl1);
                 }
-                
+
                 CasesLog.SaveBulk("CasesLogs", ListCasesLogs);
 
                 success = true;
@@ -1721,7 +1541,7 @@ namespace Vanrise.Fzero.Bypass
                     var _OnlyCount = new SqlParameter("@OnlyCount", true);
 
                     CountsList = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<vwCount>("prGetFraudCases_LoadonDemand @MobileOperatorID,  @StartDate, @EndDate, @ClientID, @OnnetorOffnet, @IsAdmin, @PageIndex,@PageSize,@OnlyCount", _MobileOperatorID, _FromAttemptDateTime, _ToAttemptDateTime, _ClientID, _OnnetorOffnet, _IsAdmin, _PageIndex, _PageSize, _OnlyCount).ToList();
-                   
+
                 }
             }
             catch (Exception err)
@@ -1874,31 +1694,31 @@ namespace Vanrise.Fzero.Bypass
                     if (LevelTwoComparisonIsObligatory)
                     {
                         GeneratedCallsList = context.GeneratedCalls
-                                          .Where(u => u.ID > 0 
+                                          .Where(u => u.ID > 0
                                             && u.Level1Comparison == true && u.Level2Comparison == false && (u.StatusID == (int)Enums.Statuses.Pending || u.StatusID == (int)Enums.Statuses.Clean))
                                             .OrderBy(u => u.ID)
                                             .ToList();
-                       
+
 
 
                     }
                     else
                     {
                         GeneratedCallsList = context.GeneratedCalls
-                                       .Where(u => u.ID > 0 
+                                       .Where(u => u.ID > 0
                                          && u.Level1Comparison == true && u.Level2Comparison == false && u.StatusID == (int)Enums.Statuses.Pending)
                                          .OrderBy(u => u.ID)
                                          .ToList();
 
 
-                    
+
                     }
 
                     int FirstID = 0;
                     int LastID = 0;
-                    GeneratedCall FirstCall= GeneratedCallsList.FirstOrDefault();
+                    GeneratedCall FirstCall = GeneratedCallsList.FirstOrDefault();
                     GeneratedCall LastCall = GeneratedCallsList.LastOrDefault();
-                    if (FirstCall != null  && LastCall !=null)
+                    if (FirstCall != null && LastCall != null)
                     {
                         try
                         {
@@ -1913,8 +1733,8 @@ namespace Vanrise.Fzero.Bypass
                     }
 
 
-                    
-                  
+
+
 
 
 
@@ -1953,7 +1773,7 @@ namespace Vanrise.Fzero.Bypass
                 }
 
 
-                
+
 
 
 
@@ -2062,7 +1882,7 @@ namespace Vanrise.Fzero.Bypass
 
             return RepeatedCasesList;
         }
-        
+
         public static List<ViewSummary> GetViewSummary(int ClientID, int MobileOperatorID, DateTime? FromAttemptDateTime, DateTime? ToAttemptDateTime)
         {
             List<ViewSummary> listViewSummary = new List<ViewSummary>();
