@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QM.BusinessEntity.MainExtensions.SuppliersReaders
+namespace QM.BusinessEntity.MainExtensions.SourceSuppliersReaders
 {
     public class SupplierTOneV2SQLReader : SourceSupplierReader 
     {
