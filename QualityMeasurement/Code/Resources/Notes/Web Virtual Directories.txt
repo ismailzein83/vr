@@ -9,3 +9,4 @@ QM_CLITester			C:\TFS\QualityMeasurement\Code\QM.CLITester.Web\QM_CLITester
 QM_BusinessEntity		C:\TFS\QualityMeasurement\Code\QM.BusinessEntity.Web\QM_BusinessEntity
 Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
 Integration				C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
+BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess

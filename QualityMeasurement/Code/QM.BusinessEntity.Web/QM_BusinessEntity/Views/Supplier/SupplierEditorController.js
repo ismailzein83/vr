@@ -15,7 +15,7 @@
         loadParameters();
         defineScope();
         load();
-
+        var supplierSettingAPI;
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
@@ -79,6 +79,14 @@
                 SupplierId: (supplierId != null) ? supplierId : 0,
                 Name: $scope.scopeModal.name
             };
+            var extendedSetting = [];
+            for (var i = 0 ; i < $scope.directiveTabs.length ; i++) {
+                if ($scope.directiveTabs[i].directiveAPI != undefined)
+                    extendedSetting[extendedSetting.length] = $scope.directiveTabs[i].directiveAPI.getData();
+            }
+            whsSupplier.Settings = {
+                ExtendedSettings: extendedSetting
+            }
             return whsSupplier;
         }
 
@@ -117,11 +125,13 @@
                 title: "CLI Tester",
                 directive: "vr-qm-clitester-suppliersettings",
                 loadDirective: function (api) {
+                    supplierSettingAPI = api;
                     var payload = {
-                        prefix: (supplierEntity.Settings != undefined) ? supplierEntity.Settings.Prefix : undefined
+                        prefix: (supplierEntity!= undefined &&  supplierEntity.Settings != undefined) ? supplierEntity.Settings.Prefix : undefined
                     };
                     api.load(payload);
-                }
+                },
+                dontLoad:false
             };
             $scope.directiveTabs.push(cliTab);
         }

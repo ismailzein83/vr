@@ -24,9 +24,9 @@ namespace QM.CLITester.iTestIntegration
 
         public override void Apply(BusinessEntity.Entities.Supplier supplier)
         {
-            ServiceActions serviceActions = new ServiceActions();
+            //ServiceActions serviceActions = new ServiceActions();
 
-            responseSupplier(serviceActions.PostRequest("5020", "&sid=" + supplier.SupplierId + "&name=" + supplier.Name + "&type=sms&codec=alaw&prefix" + this.Prefix), supplier);
+            //responseSupplier(serviceActions.PostRequest("5020", "&sid=" + supplier.SupplierId + "&name=" + supplier.Name + "&type=sms&codec=alaw&prefix" + this.Prefix), supplier);
         }
 
         private BusinessEntity.Entities.Supplier responseSupplier(string response, BusinessEntity.Entities.Supplier supplier)

@@ -39,7 +39,10 @@ namespace QM.BusinessEntity.Data.SQL
 
         public bool Update(Supplier supplier)
         {
-            int recordsEffected = ExecuteNonQuerySP("[QM_BE].[sp_Supplier_Update]", supplier.SupplierId, supplier.Name);
+             object setting = null;
+             if ( supplier.Settings != null)
+               setting =  Vanrise.Common.Serializer.Serialize(supplier.Settings);
+             int recordsEffected = ExecuteNonQuerySP("[QM_BE].[sp_Supplier_Update]", supplier.SupplierId, supplier.Name, setting);
             return (recordsEffected > 0);
         }
 

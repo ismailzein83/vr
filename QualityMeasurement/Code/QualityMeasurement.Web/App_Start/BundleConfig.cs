@@ -15,6 +15,7 @@ namespace QualityMeasurement.Web
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Integration", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/BusinessProcess", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/QM_CLITester", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/QM_BusinessEntity", "*.js", true));
         }

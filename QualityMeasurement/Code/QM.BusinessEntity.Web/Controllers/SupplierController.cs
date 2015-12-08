@@ -6,10 +6,13 @@ using System.Web.Http;
 using Vanrise.Entities;
 using Vanrise.Web.Base;
 
-namespace TOne.WhS.BusinessEntity.Web.Controllers
+namespace QM.BusinessEntity.Web.Controllers
 {
+   
     [RoutePrefix(Constants.ROUTE_PREFIX + "Supplier")]
-    public class WhSBE_SupplierController : BaseAPIController
+
+    [JSONWithTypeAttribute]
+    public class QMBE_SupplierController : BaseAPIController
     {
         [HttpPost]
         [Route("GetFilteredSuppliers")]

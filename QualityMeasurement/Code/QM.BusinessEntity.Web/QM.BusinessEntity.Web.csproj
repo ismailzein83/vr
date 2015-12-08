@@ -135,6 +135,8 @@
     <Content Include="QM_BusinessEntity\Directives\Supplier\vr-qm-be-supplier-selector.js" />
     <Content Include="QM_BusinessEntity\Services\APIServices\SupplierAPIService.js" />
     <Content Include="QM_BusinessEntity\Services\SupplierService.js" />
+    <Content Include="QM_BusinessEntity\Views\Supplier\SchedulerTaskAction\SupplierSynchronizeTemplate.html" />
+    <Content Include="QM_BusinessEntity\Views\Supplier\SchedulerTaskAction\SupplierSynchronizeTemplateController.js" />
     <Content Include="QM_BusinessEntity\Views\Supplier\SupplierEditor.html" />
     <Content Include="QM_BusinessEntity\Views\Supplier\SupplierEditorController.js" />
     <Content Include="QM_BusinessEntity\Views\Supplier\SupplierManagement.html" />

@@ -133,8 +133,36 @@
     </Reference>
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Client">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Data">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Data.SQL">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Extensions">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Web">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.WFActivities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -276,6 +304,10 @@
     <ProjectReference Include="..\QM.CLITester.Entities\QM.CLITester.Entities.csproj">
       <Project>{839f51fe-ebe9-469b-aac3-580910943c87}</Project>
       <Name>QM.CLITester.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QM.CLITester.iTestIntegration\QM.CLITester.iTestIntegration.csproj">
+      <Project>{9345e10c-5a25-4e94-9245-691523d20277}</Project>
+      <Name>QM.CLITester.iTestIntegration</Name>
     </ProjectReference>
     <ProjectReference Include="..\QM.CLITester.Web\QM.CLITester.Web.csproj">
       <Project>{3f030941-26b2-4f82-8265-f67b4d89232f}</Project>
