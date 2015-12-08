@@ -28,6 +28,15 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
         $scope.subViewConnector.getValue = function () {
             return getSubViewValue();
         }
+
+        $scope.onSelectionOperationChanged = function () {
+            if ($scope.selectedOperationType.value == "MeasuresGroupedByTime") {
+                $scope.entityRequired = false;
+            }
+            else {
+                $scope.entityRequired = true;
+            }
+        }
     }
 
     function getSubViewValue() {

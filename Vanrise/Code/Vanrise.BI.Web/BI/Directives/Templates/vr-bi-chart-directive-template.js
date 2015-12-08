@@ -24,12 +24,14 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
                 $scope.selectedTopMeasure = undefined;
                 $scope.singleMeasureRequired = true;
                 $scope.multipleMeasureRequired = false;
+                $scope.topMeasureRequired = false;
+                $scope.selectedTopMeasure = lastTopMeasureValue;
             }
-            else if (lastTopMeasureValue != undefined)
-            {
+            else {
                 $scope.singleMeasureRequired = false;
                 $scope.multipleMeasureRequired = true;
-                $scope.selectedTopMeasure = lastTopMeasureValue;
+                $scope.topMeasureRequired = true;
+                $scope.selectedTopMeasure = $scope.selectedMeasureTypes.length > 0 ? lastTopMeasureValue : undefined;
             }
 
         }
@@ -37,11 +39,15 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
             if ($scope.selectedOperationType.value == "MeasuresGroupedByTime")
             {
                 $scope.singleMeasureRequired = false;
+                $scope.topMeasureRequired = false;
                 $scope.multipleMeasureRequired = true;
+                $scope.entityRequired = false;
             }
             else {
                 $scope.singleMeasureRequired = true;
+                $scope.topMeasureRequired = false;
                 $scope.multipleMeasureRequired = false;
+                $scope.entityRequired = true;
             }
         }
 
@@ -55,7 +61,9 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
                 {
                     $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
                 }
-                    
+                else if(!$scope.isPieChart && $scope.selectedMeasureTypes.length== 0 )
+
+                    $scope.selectedTopMeasure = undefined;
                 else if ($scope.selectedMeasureType!=undefined)
                     $scope.selectedTopMeasure = $scope.selectedMeasureType;
             }

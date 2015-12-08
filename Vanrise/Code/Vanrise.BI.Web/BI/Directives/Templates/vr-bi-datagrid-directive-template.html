@@ -1,10 +1,10 @@
 ﻿<div ng-controller="BI_VrDatagridDirectiveTemplateController" >
     <vr-row>
     <vr-columns width="1/2row">
-        <vr-select datasource="operationTypes" datatextfield="description" datavaluefield="value" label="Data Type" selectedvalues="selectedOperationType" hidefilterbox></vr-select>
+        <vr-select datasource="operationTypes" datatextfield="description" datavaluefield="value" label="Data Type" selectedvalues="selectedOperationType" hidefilterbox onselectionchanged="onSelectionOperationChanged"></vr-select>
     </vr-columns>
         <vr-columns width="1/2row" ng-show=" selectedOperationType.value == 'TopEntities'">
-            <vr-select datasource="Entities" datatextfield="Name" datavaluefield="DisplayName" label="Entity" selectedvalues="selectedEntitiesType" ismultipleselection hidefilterbox isrequired></vr-select>
+            <vr-select datasource="Entities" datatextfield="Name" datavaluefield="DisplayName" label="Entity" selectedvalues="selectedEntitiesType" ismultipleselection hidefilterbox isrequired="entityRequired"></vr-select>
         </vr-columns>
         <vr-columns width="1/2row">
             <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureTypes" ismultipleselection onselectionchanged="onSelectionChanged" hidefilterbox isrequired></vr-select>
