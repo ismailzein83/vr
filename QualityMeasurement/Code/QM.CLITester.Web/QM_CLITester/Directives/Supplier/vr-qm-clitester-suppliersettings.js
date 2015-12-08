@@ -53,7 +53,7 @@ app.directive("vrQmClitesterSuppliersettings", [function () {
 
             api.load = function (payload) {
                 if (payload != undefined) {
-                    $scope.numberPrefix = payload.prefix;
+                    $scope.numberPrefix = payload.Prefix;
                 }
             }
 

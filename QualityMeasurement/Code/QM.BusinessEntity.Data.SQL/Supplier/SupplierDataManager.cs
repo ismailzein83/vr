@@ -21,7 +21,8 @@ namespace QM.BusinessEntity.Data.SQL
             Supplier supplier = new Supplier()
             {
                 SupplierId = (int)reader["ID"],
-                Name = reader["Name"] as string
+                Name = reader["Name"] as string,
+                Settings = Vanrise.Common.Serializer.Deserialize<SupplierSettings>(reader["Settings"] as string)
             };
             return supplier;
         }
@@ -33,16 +34,19 @@ namespace QM.BusinessEntity.Data.SQL
 
         public bool Insert(Supplier supplier)
         {
-            int recordsEffected = ExecuteNonQuerySP("[QM_BE].[sp_Supplier_Insert]", supplier.SupplierId, supplier.Name);
+            object settings = null;
+            if (supplier.Settings != null)
+                settings = Vanrise.Common.Serializer.Serialize(supplier.Settings);
+            int recordsEffected = ExecuteNonQuerySP("[QM_BE].[sp_Supplier_Insert]", supplier.SupplierId, supplier.Name, settings);
             return (recordsEffected > 0);
         }
 
         public bool Update(Supplier supplier)
         {
-             object setting = null;
+             object settings = null;
              if ( supplier.Settings != null)
-               setting =  Vanrise.Common.Serializer.Serialize(supplier.Settings);
-             int recordsEffected = ExecuteNonQuerySP("[QM_BE].[sp_Supplier_Update]", supplier.SupplierId, supplier.Name, setting);
+               settings =  Vanrise.Common.Serializer.Serialize(supplier.Settings);
+             int recordsEffected = ExecuteNonQuerySP("[QM_BE].[sp_Supplier_Update]", supplier.SupplierId, supplier.Name, settings);
             return (recordsEffected > 0);
         }
 

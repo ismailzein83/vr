@@ -69,6 +69,11 @@
             return QM_BE_SupplierAPIService.GetSupplier(supplierId).then(function (whsSupplier) {
                 supplierEntity = whsSupplier;
                 $scope.scopeModal.name = supplierEntity.Name;
+
+                for (var i = 0 ; i < $scope.directiveTabs.length ; i++) {
+                    if ($scope.directiveTabs[i].directiveAPI != undefined)
+                        $scope.directiveTabs[i].directiveAPI.load(supplierEntity.Settings.ExtendedSettings[i]);
+                }
             });
         }
 
@@ -79,6 +84,10 @@
                 SupplierId: (supplierId != null) ? supplierId : 0,
                 Name: $scope.scopeModal.name
             };
+
+
+            console.log($scope.directiveTabs)
+
             var extendedSetting = [];
             for (var i = 0 ; i < $scope.directiveTabs.length ; i++) {
                 if ($scope.directiveTabs[i].directiveAPI != undefined)
