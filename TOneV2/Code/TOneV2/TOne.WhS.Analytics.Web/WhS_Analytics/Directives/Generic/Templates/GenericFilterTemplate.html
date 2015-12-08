@@ -58,12 +58,6 @@
                     <vr-columns width="normal" ng-show="ctrl.isLoadCurrencies && advancedSelected">
                         <vr-common-currency-selector on-ready="ctrl.onCurrencyDirectiveReady" selectedvalues="ctrl.selectedCurrency"></vr-common-currency-selector>
                     </vr-columns>
-
-
-                    <vr-columns width="normal" ng-repeat="measure in ctrl.measureThresholds" ng-show="advancedSelected">
-                        <vr-label>{{measure.description}}</vr-label>
-                        <vr-textbox value="measure.enteredValue"></vr-textbox>
-                    </vr-columns>
                 </vr-row>
           
 </vr-columns>

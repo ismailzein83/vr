@@ -79,7 +79,8 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
                             MeasureFields: payload.measures,
                             FromTime: payload.FromTime,
                             ToTime: payload.ToTime,
-                            Currency: payload.Currency
+                            Currency: payload.Currency,
+                            TopRecords:10
                         }
                         var sortField;
 

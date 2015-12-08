@@ -18,7 +18,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         { }
         static string trafficStatsTableName = "TOneWhS_Analytic.TrafficStats";
-        static string trafficStatsByCodeTableName = "TOneWhS_Analytic.TrafficStats";
+        static string trafficStatsByCodeTableName = "TOneWhS_Analytic.TrafficStatsByCode";
         #endregion
 
         #region Public Methods
@@ -149,7 +149,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                                                                 ;WITH 
                                                                 #CTEPART#
                                                                 AllResult AS( 
-			                                                    SELECT #SELECTPART#
+			                                                    SELECT #TOPRECORDS# #SELECTPART#
 			                                                    FROM #TABLENAME# ts WITH(NOLOCK ,INDEX(#TABLEINDEX#))
                                                                 #JOINPART#
 			                                                    WHERE
@@ -189,14 +189,14 @@ namespace TOne.WhS.Analytics.Data.SQL
                         }
                     }
 
-                if (groupField == AnalyticDimension.Country)
-                {
-                    if (!lstCTEStatements.Contains(CTEStatement.Country))
-                    {
-                        lstCTEStatements.Add(CTEStatement.Country);
-                        AddStatementToStringBuilder(ctePartBuilder, CTEStatement.Country);
-                    }
-                }
+                //if (groupField == AnalyticDimension.Country)
+                //{
+                //    if (!lstCTEStatements.Contains(CTEStatement.Country))
+                //    {
+                //        lstCTEStatements.Add(CTEStatement.Country);
+                //        AddStatementToStringBuilder(ctePartBuilder, CTEStatement.Country);
+                //    }
+                //}
 
                 //if (groupField == AnalyticDimension.GateWayIn || groupField == AnalyticDimension.GateWayOut)
                 //{
@@ -237,14 +237,14 @@ namespace TOne.WhS.Analytics.Data.SQL
                     {
                         AnalyticDimensionConfig groupFieldConfig = dimensionsFilterConfig[dimensionFilter.Dimension];
 
-                        if (dimensionFilter.Dimension == AnalyticDimension.Country)
-                        {
-                            if (!lstCTEStatements.Contains(CTEStatement.Country))
-                            {
-                                lstCTEStatements.Add(CTEStatement.Country);
-                                AddStatementToStringBuilder(ctePartBuilder, CTEStatement.Country);
-                            }
-                        }
+                        //if (dimensionFilter.Dimension == AnalyticDimension.Country)
+                        //{
+                        //    if (!lstCTEStatements.Contains(CTEStatement.Country))
+                        //    {
+                        //        lstCTEStatements.Add(CTEStatement.Country);
+                        //        AddStatementToStringBuilder(ctePartBuilder, CTEStatement.Country);
+                        //    }
+                        //}
                         if (groupFieldConfig.JoinStatements != null)
                             foreach (var statement in groupFieldConfig.JoinStatements)
                             {
@@ -326,6 +326,8 @@ namespace TOne.WhS.Analytics.Data.SQL
             #endregion
 
             #region Replacment Query
+            
+            queryBuilder.Replace("#TOPRECORDS#",string.Format("{0}",input.Query.TopRecords!=null?"TOP("+input.Query.TopRecords+") ":""));
             queryBuilder.Replace("#TABLENAME#", tableNamePartBuilder);
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
             queryBuilder.Replace("#TABLEINDEX#", tableIndex);

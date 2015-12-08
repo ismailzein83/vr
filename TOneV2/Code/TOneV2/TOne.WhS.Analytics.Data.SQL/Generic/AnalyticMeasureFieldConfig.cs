@@ -60,7 +60,7 @@ namespace TOne.WhS.Analytics.Data.SQL
     {
         public const string ExchangeCurrency = "ExchangeRates As (select * from Common.getExchangeRates(@fromDate,@ToDate))";
         public const string Billing = "BillingStats AS ( SELECT BS.CustomerID  ,BS.SupplierZoneID  , BS.CostCurrency,BS.CallDate,BS.SaleCurrency, BS.SupplierID,BS.NumberOfCalls NumberOfCalls, BS.CostNets CostNets, BS.SaleNets  SaleNets, BS.CostDuration CostDuration, BS.SaleZoneID SaleZoneID, ERC.Rate CSLastRate, ERS.Rate CCLastRate,BS.CostRate ,BS.SaleRate FROM  [TOneWhS_Analytic].BillingStats BS WITH(NOLOCK,Index(PK_BillingStats)) #EXCHANGEJOINPART# )";
-        public const string Country = "OurZones AS (SELECT ID, Name, CountryID FROM [TOneWhS_BE].SaleZone z WITH (NOLOCK))";
+   //     public const string Country = "OurZones AS (SELECT ID, Name, CountryID FROM [TOneWhS_BE].SaleZone z WITH (NOLOCK))";
         public const string SwitchConnectivity = "SwitchConnectivity AS ( SELECT csc.CarrierAccountID AS  CarrierAccount ,csc.SwitchID AS SwitchID ,csc.Details AS Details ,csc.BeginEffectiveDate AS BeginEffectiveDate ,csc.EndEffectiveDate AS EndEffectiveDate ,csc.[Name] AS GateWayName ,csc.[ID] AS GateWayID FROM   CarrierSwitchConnectivity csc WITH(NOLOCK)  WHERE (csc.EndEffectiveDate IS null))";
         public const string ConvertedToCurrency = "ExchangeRatesConvertedToCurrency As(select * from Common.getExchangeRatesConvertedToCurrency(@Currency ,@FromDate, @ToDate))";
     }

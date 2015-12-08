@@ -56,9 +56,9 @@ namespace TOne.WhS.Analytics.Data.SQL
                new AnalyticDimensionConfig
                {
                    IdColumn = "ISNULL(ts.SaleZoneID,'N/A')",
-                   NameColumn = "z.Name",
-                   JoinStatements = new List<string>() { " JOIN TOneWhS_BE.SaleZone z WITH (NOLOCK) ON z.ID = ts.SaleZoneID " },
-                   GroupByStatements = new List<string>() { " ts.SaleZoneID, z.Name " },
+                   NameColumn = "salz.Name",
+                   JoinStatements = new List<string>() { " JOIN TOneWhS_BE.SaleZone salz WITH (NOLOCK) ON salz.ID = ts.SaleZoneID " },
+                   GroupByStatements = new List<string>() { " ts.SaleZoneID, salz.Name " },
                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                });
             #endregion
@@ -68,9 +68,9 @@ namespace TOne.WhS.Analytics.Data.SQL
                new AnalyticDimensionConfig
                {
                    IdColumn = "ISNULL(ts.SupplierZoneID,'N/A')",
-                   NameColumn = "z.Name",
-                   JoinStatements = new List<string>() { " JOIN Zone z WITH (NOLOCK) ON z.ZoneID = ts.SupplierZoneID " },
-                   GroupByStatements = new List<string>() { " ts.SupplierZoneID, z.Name " },
+                   NameColumn = "supz.Name",
+                   JoinStatements = new List<string>() { " JOIN TOneWhS_BE.SupplierZone supz WITH (NOLOCK) ON supz.ID = ts.SupplierZoneID " },
+                   GroupByStatements = new List<string>() { " ts.SupplierZoneID, supz.Name " },
                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                });
             #endregion
@@ -108,7 +108,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                 {
                     IdColumn = "ourz.CountryID",
                     NameColumn = "c.Name",
-                    JoinStatements = new List<string>() { @" LEFT JOIN  TOneWhS_BE.SaleZone ourz ON ts.SaleZoneID = ourz.ID LEFT JOIN [Common].Country c ON ourz.CountryID = c.ID" },
+                    JoinStatements = new List<string>() { @" JOIN  TOneWhS_BE.SaleZone ourz ON ts.SaleZoneID = ourz.ID JOIN [Common].Country c ON ourz.CountryID = c.ID" },
                     GroupByStatements = new List<string>() { " ourz.CountryID,  c.Name" },
                     ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
@@ -154,10 +154,10 @@ namespace TOne.WhS.Analytics.Data.SQL
             s_AllDimensionsConfig.Add(AnalyticDimension.CodeSales,
                 new AnalyticDimensionConfig
                 {
-                    IdColumn = "ts.OurCode",
-                    NameColumn = "ts.OurCode",
+                    IdColumn = "ts.SaleCode",
+                    NameColumn = "ts.SaleCode",
                     JoinStatements = null,
-                    GroupByStatements = new List<string>() { "ts.OurCode" },
+                    GroupByStatements = new List<string>() { "ts.SaleCode" },
                     ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
             #endregion

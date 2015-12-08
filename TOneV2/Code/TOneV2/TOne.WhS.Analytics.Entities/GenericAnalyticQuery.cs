@@ -21,6 +21,7 @@ namespace TOne.WhS.Analytics.Entities
         public List<DimensionFilter> Filters { get; set; }
 
         public bool WithSummary { get; set; }
+        public int? TopRecords { get; set; }
     }
     public class DimensionFilter
     {

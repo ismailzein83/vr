@@ -1,5 +1,7 @@
 ﻿
 <div ng-show="ctrl.showGrid">
+    <vr-button type="Edit" standalone data-onclick="ctrl.editSettings" ng-if="ctrl.mainGrid"></vr-button>
+
     <vr-datagrid datasource="ctrl.datasource" defaultsortbyfieldname="ctrl.sortField" pagingtype="'Pager'"
                  menuactions="gridMenuActions" dataretrievalfunction="ctrl.dataRetrievalFunction" on-ready="ctrl.gridReady">
         <vr-datagridcolumn ng-repeat="dimension in ctrl.dimensionFields" ng-show="ctrl.dimensionFields.length > 0" headertext="dimension.description" type="dimension.type"

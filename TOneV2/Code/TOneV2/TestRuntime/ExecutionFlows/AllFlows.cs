@@ -25,7 +25,8 @@ namespace TestRuntime.ExecutionFlows
             var storeMainCDRs = new QueueStageExecutionActivity { StageName = "Store Main CDRs", QueueName = "MainCDRs", QueueTypeFQTN = typeof(CDRMainBatch).AssemblyQualifiedName, QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(StoreCDRMainActivator).AssemblyQualifiedName } };
             var generateBillingStats = new QueueStageExecutionActivity { StageName = "Generate BillingStats", QueueName = "BillingStats", QueueTypeFQTN = typeof(CDRMainBatch).AssemblyQualifiedName, QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(GenerateBillingStatsActivator).AssemblyQualifiedName } };
             var storeBillingStats = new QueueStageExecutionActivity { StageName = "Store BillingStats", QueueName = "StoreBillingStats", QueueTypeFQTN = typeof(BillingStatisticBatch).AssemblyQualifiedName, QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(StoreBillingStatsActivator).AssemblyQualifiedName } };
-            
+            var generateStatsByCode = new QueueStageExecutionActivity { StageName = "Generate StatsByCode", QueueName = "StatsByCode", QueueTypeFQTN = typeof(CDRBillingBatch).AssemblyQualifiedName, QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(GenerateStatsByCodeActivator).AssemblyQualifiedName } };
+            var storeStatsByCode = new QueueStageExecutionActivity { StageName = "Store StatsByCode", QueueName = "StoreStatsByCode", QueueTypeFQTN = typeof(TrafficStatisticByCodeBatch).AssemblyQualifiedName, QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(StoreStatsByCodeActivator).AssemblyQualifiedName } };
             QueueExecutionFlowTree queueFlowTree = new QueueExecutionFlowTree
             {
                 Activities = new List<BaseExecutionActivity>
@@ -66,10 +67,13 @@ namespace TestRuntime.ExecutionFlows
                                                           
                                                       }
                                                   },
-                                                  new SequenceExecutionActivity 
-                                                  {
+                                                  new ParallelExecutionActivity {
                                                       Activities = new List<BaseExecutionActivity>
                                                       {
+                                                          new SequenceExecutionActivity 
+                                                          {
+                                                              Activities = new List<BaseExecutionActivity>
+                                                              {
                                                                   generateStats,
                                                                   new ParallelExecutionActivity {
                                                                       Activities = new List<BaseExecutionActivity>
@@ -85,6 +89,16 @@ namespace TestRuntime.ExecutionFlows
                                                                           }
                                                                       }
                                                                   },
+                                                              }
+                                                          },
+                                                          new SequenceExecutionActivity 
+                                                          {
+                                                              Activities = new List<BaseExecutionActivity>
+                                                              {
+                                                                  generateStatsByCode,
+                                                                  storeStatsByCode
+                                                              }
+                                                          },
                                                       }
                                                   },
                                                   storeInvalidCDRs,

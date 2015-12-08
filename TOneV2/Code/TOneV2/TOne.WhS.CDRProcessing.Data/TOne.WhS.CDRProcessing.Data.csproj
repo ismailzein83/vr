@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="CDRProcessingDataManagerFactory.cs" />
     <Compile Include="IBillingStatisticDataManager.cs" />
+    <Compile Include="ITrafficStatisticByCodeDataManager.cs" />
     <Compile Include="ITrafficStatisticByIntervalDataManager.cs" />
     <Compile Include="ICDRDataManager.cs" />
     <Compile Include="ICDRFailedDataManager.cs" />

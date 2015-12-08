@@ -37,8 +37,8 @@ namespace TestRuntime.Tasks
             host.Start();
 
             //var tree = Vanrise.Common.Serializer.Serialize(queueFlowTree);
-          //  var myflow = AllFlows.GetImportCDRFlow();
-            //var tree1 = Vanrise.Common.Serializer.Serialize("test");
+            var myflow = AllFlows.GetImportCDRFlow();
+            var tree1 = Vanrise.Common.Serializer.Serialize("test");
             //QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
             //var queuesByStages = executionFlowManager.GetQueuesByStages(2);
             //CDR cdr = new CDR

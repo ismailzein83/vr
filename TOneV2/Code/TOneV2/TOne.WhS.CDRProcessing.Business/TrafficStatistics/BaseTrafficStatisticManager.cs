@@ -12,29 +12,7 @@ namespace TOne.WhS.CDRProcessing.Business
         where T : BaseTrafficStatistic
         
     {
-        protected override T CreateStatisticItemFromRawItem(BillingCDRBase rawItem)
-        {
-            T statisticItem = Activator.CreateInstance<T>();
-            statisticItem.CustomerId = rawItem.CustomerId;
-            statisticItem.SupplierId = rawItem.SupplierId;
-            statisticItem.SaleZoneId=rawItem.SaleZoneID;
-            statisticItem.SupplierZoneId=rawItem.SupplierZoneID;
-            statisticItem.PortIn=rawItem.PortIn;
-            statisticItem.PortOut = rawItem.PortOut;
-            statisticItem.SwitchID = rawItem.SwitchID;
-            return statisticItem;
-        }
-
-        protected override string GetStatisticItemKey(T statisticItem)
-        {
-            return BaseTrafficStatistic.GetStatisticItemKey(statisticItem.CustomerId, statisticItem.SupplierId, statisticItem.SaleZoneId, statisticItem.SupplierZoneId, statisticItem.PortOut, statisticItem.PortIn,statisticItem.SwitchID);
-        }
-
-        protected override string GetStatisticItemKey(BillingCDRBase rawItem)
-        {
-            return BaseTrafficStatistic.GetStatisticItemKey(rawItem.CustomerId, rawItem.SupplierId, rawItem.SaleZoneID, rawItem.SupplierZoneID, rawItem.PortOut, rawItem.PortIn,rawItem.SwitchID);
-        }
-
+  
         protected override void UpdateStatisticItemFromRawItem(T statisticItem, BillingCDRBase item)
         {
             statisticItem.Attempts++;

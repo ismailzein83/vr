@@ -131,6 +131,10 @@ function (UtilsService, VRNotificationService, WhS_Analytics_GenericAnalyticDime
                     Dimension: WhS_Analytics_GenericAnalyticDimensionEnum.Supplier.value,
                     FilterValues: supplierAccountDirectiveAPI.getSelectedIds()
                 };
+                var filterZones = {
+                    Dimension: WhS_Analytics_GenericAnalyticDimensionEnum.Zone.value,
+                    FilterValues: saleZoneDirectiveAPI.getSelectedIds()
+                };
 
                 var selectedfilters = [];
 
@@ -140,25 +144,13 @@ function (UtilsService, VRNotificationService, WhS_Analytics_GenericAnalyticDime
                 if (filterSupplier.FilterValues != undefined && filterSupplier.FilterValues.length > 0)
                     selectedfilters.push(filterSupplier);
 
-                var selectedThresholds = {};
-
-                for (var i = 0; i < ctrl.measureThresholds.length; i++)
-                {
-                    if (ctrl.measureThresholds[i].value == WhS_Analytics_GenericAnalyticMeasureEnum.ASR.value)
-                        selectedThresholds.asr = ctrl.measureThresholds[i].enteredValue;
-
-                    if (ctrl.measureThresholds[i].value == WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value)
-                        selectedThresholds.acd = ctrl.measureThresholds[i].enteredValue;
-
-                    if (ctrl.measureThresholds[i].value == WhS_Analytics_GenericAnalyticMeasureEnum.Attempts.value)
-                        selectedThresholds.attempts = ctrl.measureThresholds[i].enteredValue;
-                }
+                if (filterZones.FilterValues != undefined && filterZones.FilterValues.length > 0)
+                    selectedfilters.push(filterZones);
 
                 var selectedobject = {
                     selecteddimensions: UtilsService.getPropValuesFromArray(ctrl.selecteddimensions, "value"),
                     selectedfilters: selectedfilters,
                     selectedperiod: ctrl.selectedperiod != undefined ? ctrl.selectedperiod.value : undefined,
-                    selectedThresholds: selectedThresholds,
                     fromdate: ctrl.fromdate,
                     todate: ctrl.todate,
                     currency: currencyDirectiveAPI != undefined ? currencyDirectiveAPI.getSelectedIds() : undefined
@@ -210,18 +202,6 @@ function (UtilsService, VRNotificationService, WhS_Analytics_GenericAnalyticDime
                                     ctrl.periods.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
                             }
                         }
-                    }
-
-                    if (payload.measureThresholds != undefined)
-                    {
-                        for (var i = 0; i < payload.measureThresholds.length; i++)
-                        {
-                            for (var p in WhS_Analytics_GenericAnalyticMeasureEnum)
-                            {
-                                if (WhS_Analytics_GenericAnalyticMeasureEnum[p].value == payload.measureThresholds[i])
-                                    ctrl.measureThresholds.push(WhS_Analytics_GenericAnalyticMeasureEnum[p]);
-                            }   
-                        }    
                     }
                 }
 

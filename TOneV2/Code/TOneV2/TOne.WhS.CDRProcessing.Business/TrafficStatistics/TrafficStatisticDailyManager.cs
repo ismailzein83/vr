@@ -32,12 +32,12 @@ namespace TOne.WhS.CDRProcessing.Business
 
         protected override string GetStatisticItemKey(TrafficStatisticDaily statisticItem)
         {
-            return BaseTrafficStatistic.GetStatisticItemKey(statisticItem.CustomerId, statisticItem.SupplierId, statisticItem.SaleZoneId, statisticItem.SupplierZoneId, statisticItem.PortOut, statisticItem.PortIn,statisticItem.SwitchID);
+            return TrafficStatisticDaily.GetStatisticItemKey(statisticItem.CustomerId, statisticItem.SupplierId, statisticItem.SaleZoneId, statisticItem.SupplierZoneId, statisticItem.PortOut, statisticItem.PortIn, statisticItem.SwitchID);
         }
 
         protected override string GetStatisticItemKey(TrafficStatisticByInterval rawItem)
         {
-            return BaseTrafficStatistic.GetStatisticItemKey(rawItem.CustomerId, rawItem.SupplierId, rawItem.SaleZoneId, rawItem.SupplierZoneId, rawItem.PortOut, rawItem.PortIn,rawItem.SwitchID);
+            return TrafficStatisticDaily.GetStatisticItemKey(rawItem.CustomerId, rawItem.SupplierId, rawItem.SaleZoneId, rawItem.SupplierZoneId, rawItem.PortOut, rawItem.PortIn, rawItem.SwitchID);
         }
 
         protected override Dictionary<string, long> GetStatisticItemsIdsByKeyFromDB(TrafficStatisticDailyBatch batch)

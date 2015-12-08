@@ -34,9 +34,6 @@ namespace TOne.WhS.CDRProcessing.Entities
         public int DeliveredNumberOfCalls { get; set; }
         public int PGAD { get; set; }
         public int CeiledDuration { get; set; }
-        public static string GetStatisticItemKey(int customerId, int supplierId, long saleZoneId, long supplierZoneId, string portOut, string portIn,int switchID)
-        {
-            return string.Format("{0}_{1}_{2}_{3}_{4}_{5}_{6}", customerId, supplierId, saleZoneId, supplierZoneId, portOut, portIn, switchID);
-        }
+
     }
 }

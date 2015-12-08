@@ -1,18 +1,15 @@
 ﻿"use strict";
 
-app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationService', 'WhS_Analytics_GenericAnalyticDimensionEnum', 'WhS_Analytics_GenericAnalyticAPIService', 'WhS_Analytics_GenericAnalyticMeasureEnum', 'VRUIUtilsService', 'WhS_Analytics_GenericAnalyticService',
+app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationService', 'WhS_Analytics_GenericAnalyticDimensionEnum', 'WhS_Analytics_GenericAnalyticAPIService', 'WhS_Analytics_GenericAnalyticMeasureEnum', 'VRUIUtilsService', 'WhS_Analytics_GenericAnalyticService', 'VRModalService',
     function (UtilsService, VRNotificationService,
-        WhS_Analytics_GenericAnalyticDimensionEnum, WhS_Analytics_GenericAnalyticAPIService, WhS_Analytics_GenericAnalyticMeasureEnum, VRUIUtilsService, WhS_Analytics_GenericAnalyticService)
-    {
+        WhS_Analytics_GenericAnalyticDimensionEnum, WhS_Analytics_GenericAnalyticAPIService, WhS_Analytics_GenericAnalyticMeasureEnum, VRUIUtilsService, WhS_Analytics_GenericAnalyticService, VRModalService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
-            scope:
-            {
+            scope: {
                 onReady: '='
             },
-            controller: function ($scope, $element, $attrs)
-            {
+            controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
 
@@ -29,8 +26,7 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
 
         };
 
-        function GenericGrid($scope, ctrl, $attrs)
-        {
+        function GenericGrid($scope, ctrl, $attrs) {
 
             this.initializeController = initializeController;
 
@@ -42,34 +38,53 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
             ctrl.toTime;
             ctrl.dimensions = [];
             ctrl.dimensionFields = [];
-            ctrl.parameters = {};
+            ctrl.parameters;
             var gridApi;
             var measureValues = [];
             var dimensionValues = [];
             var gridDrillDownTabsObj;
             var isSummary = false;
 
-            function initializeController()
-            {
-
-                ctrl.getColor = function (dataItem, coldef)
-                {
-                    if(ctrl.parameters != undefined)
+            function initializeController() {
+                ctrl.mainGrid = (ctrl.parameters == undefined);
+                ctrl.getColor = function (dataItem, coldef) {
+                    if (ctrl.parameters != undefined)
                         return WhS_Analytics_GenericAnalyticService.getMeasureColor(dataItem, coldef, ctrl.parameters);
                 }
+                ctrl.editSettings = function () {
+                    var settings = {
+                    };
 
-                ctrl.gridReady = function (api)
-                {
+                    settings.onScopeReady = function (modalScope) {
+                        modalScope.title = UtilsService.buildTitleForUpdateEditor("Measure Threshold");
+                        modalScope.onSaveSettings = function (parameters) {
+                            ctrl.parameters = parameters
+                        };
+                    };
+                    var measureThreshold = [];
+                    for (var i = 0; i < ctrl.selectedMeasures.length; i++) {
+                        switch (ctrl.selectedMeasures[i].value) {
+                            case WhS_Analytics_GenericAnalyticMeasureEnum.ASR.value: measureThreshold.push(WhS_Analytics_GenericAnalyticMeasureEnum.ASR.value); break;
+                            case WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value: measureThreshold.push(WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value); break;
+                            case WhS_Analytics_GenericAnalyticMeasureEnum.Attempts.value: measureThreshold.push(WhS_Analytics_GenericAnalyticMeasureEnum.Attempts.value); break;
+                        }
+                    }
+                    var parameters = {
+                        measureThresholds: measureThreshold
+                    };
+
+                    VRModalService.showModal('/Client/Modules/WhS_Analytics/Directives/Generic/Templates/GenericAnalyticGridSettings.html', parameters, settings);
+                }
+
+                ctrl.gridReady = function (api) {
                     gridApi = api;
-                    if(ctrl.onReady && typeof (ctrl.onReady) == 'function')
+                    if (ctrl.onReady && typeof (ctrl.onReady) == 'function')
                         ctrl.onReady(getDirectiveAPI());
 
-                    function getDirectiveAPI()
-                    {
+                    function getDirectiveAPI() {
                         var directiveAPI = {};
 
-                        directiveAPI.loadGrid = function (query)
-                        {
+                        directiveAPI.loadGrid = function (query) {
                             var filters = query.Filters;
                             ctrl.Currency = query.Currency;
                             dimensionValues.length = 0;
@@ -79,39 +94,33 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                             ctrl.dimensions.length = 0;
                             ctrl.dimensionFields.length = 0;
 
-
                             var queryFinalized = loadGridQuery(query);
 
                             var drillDownDefinitions = [];
 
                             applyDimentionsRules(ctrl.selectedDimensions, ctrl.dimensions);
 
-                            for(var i = 0; i < ctrl.dimensions.length; i++)
-                            {
+                            for (var i = 0; i < ctrl.dimensions.length; i++) {
                                 var selectedDimensions = [];
                                 var dimention = ctrl.dimensions[i];
-                                for(var j = 0; j < ctrl.selectedDimensions.length; j++)
-                                    if(ctrl.selectedDimensions[j].value != dimention.value)
+                                for (var j = 0; j < ctrl.selectedDimensions.length; j++)
+                                    if (ctrl.selectedDimensions[j].value != dimention.value)
                                         selectedDimensions.push(ctrl.selectedDimensions[j].value);
                                 setDrillDownData(ctrl.dimensions[i], selectedDimensions)
                             }
 
-                            function setDrillDownData(dimention, selectedDimensions)
-                            {
+                            function setDrillDownData(dimention, selectedDimensions) {
                                 var objData = {};
 
                                 objData.title = dimention.name;
 
                                 objData.directive = "vr-whs-analytics-genericgrid";
 
-                                objData.loadDirective = function (directiveAPI, dataItem)
-                                {
-                                    
+                                objData.loadDirective = function (directiveAPI, dataItem) {
+
                                     var selectedfilters = [];
-                                    for (var j = 0; j < ctrl.dimensionFields.length; j++)
-                                    {
-                                        selectedfilters.push(
-                                        {
+                                    for (var j = 0; j < ctrl.dimensionFields.length; j++) {
+                                        selectedfilters.push({
                                             Dimension: ctrl.dimensionFields[j].value,
                                             FilterValues: [dataItem.DimensionValues[j].Id]
                                         });
@@ -149,72 +158,52 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
 
                 };
 
-                ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady)
-                {
+                ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     ctrl.showGrid = true;
                     return WhS_Analytics_GenericAnalyticAPIService.GetFiltered(dataRetrievalInput)
-                        .then(function (response)
-                        {
-                            if(response.Data != undefined)
-                            {
-                                for(var i = 0; i < response.Data.length; i++)
-                                {
+                        .then(function (response) {
+                            if (response.Data != undefined) {
+                                for (var i = 0; i < response.Data.length; i++) {
                                     gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                                 }
                             }
-                            if(isSummary)
+                            if (isSummary)
                                 gridApi.setSummary(response.Summary);
 
                             onResponseReady(response);
                         });
                 };
 
-                ctrl.checkExpandablerow = function (groupKeys)
-                {
+                ctrl.checkExpandablerow = function (groupKeys) {
                     return groupKeys.length !== ctrl.groupKeys.length;
                 };
 
-                function loadGridQuery(query)
-                {
+                function loadGridQuery(query) {
                     dimensionValues.length = 0;
                     ctrl.fromTime = query.FromTime;
                     ctrl.toTime = query.ToTime;
-
-                    if(query.MeasureThreshold != undefined)
-                    {
-                        ctrl.parameters = {
-                            asr: query.MeasureThreshold.asr,
-                            attempts: query.MeasureThreshold.attempts,
-                            acd: query.MeasureThreshold.acd,
-                        };
+                    if (query.MeasureThreshold != undefined) {
+                        ctrl.parameters = query.MeasureThreshold;
+                        ctrl.mainGrid = false;
                     }
+                    for (var p in WhS_Analytics_GenericAnalyticDimensionEnum) {
 
-                    for(var p in WhS_Analytics_GenericAnalyticDimensionEnum)
-                    {
-
-                        if(WhS_Analytics_GenericAnalyticDimensionEnum[p].isDimention == true)
-                        {
+                        if (WhS_Analytics_GenericAnalyticDimensionEnum[p].isDimention == true) {
                             ctrl.dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
                         }
 
-                        if(query.DimensionsSelected != undefined)
-                        {
-                            for(var i = 0; i < query.DimensionsSelected.length; i++)
-                            {
-                                if(WhS_Analytics_GenericAnalyticDimensionEnum[p].value == query.DimensionsSelected[i])
-                                {
+                        if (query.DimensionsSelected != undefined) {
+                            for (var i = 0; i < query.DimensionsSelected.length; i++) {
+                                if (WhS_Analytics_GenericAnalyticDimensionEnum[p].value == query.DimensionsSelected[i]) {
                                     ctrl.selectedDimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
 
                                 }
 
                             }
                         }
-                        if(query.DimensionFields != undefined)
-                        {
-                            for(var i = 0; i < query.DimensionFields.length; i++)
-                            {
-                                if(WhS_Analytics_GenericAnalyticDimensionEnum[p].value == query.DimensionFields[i])
-                                {
+                        if (query.DimensionFields != undefined) {
+                            for (var i = 0; i < query.DimensionFields.length; i++) {
+                                if (WhS_Analytics_GenericAnalyticDimensionEnum[p].value == query.DimensionFields[i]) {
                                     ctrl.dimensionFields.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
                                     ctrl.selectedDimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
                                 }
@@ -222,16 +211,13 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                             }
                             dimensionValues = query.DimensionFields;
                         }
-                        if(query.FixedDimensionFields != undefined)
-                        {
-                            if(WhS_Analytics_GenericAnalyticDimensionEnum[p].value == query.FixedDimensionFields)
-                            {
+                        if (query.FixedDimensionFields != undefined) {
+                            if (WhS_Analytics_GenericAnalyticDimensionEnum[p].value == query.FixedDimensionFields) {
                                 ctrl.dimensionFields.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
                                 ctrl.selectedDimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
                                 ctrl.selectedPeriods.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
                                 dimensionValues.push(query.FixedDimensionFields);
-                                if(query.FixedDimensionFields == WhS_Analytics_GenericAnalyticDimensionEnum.Hour.value)
-                                {
+                                if (query.FixedDimensionFields == WhS_Analytics_GenericAnalyticDimensionEnum.Hour.value) {
                                     ctrl.dimensionFields.push(WhS_Analytics_GenericAnalyticDimensionEnum.Date);
                                     dimensionValues.push(WhS_Analytics_GenericAnalyticDimensionEnum.Date.value);
                                     ctrl.selectedDimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.Date);
@@ -242,11 +228,10 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                         }
                     }
 
-                    if(query.MeasureFields != undefined)
-                    {
-                        for(var i = 0; i < query.MeasureFields.length; i++)
-                            for(var p in WhS_Analytics_GenericAnalyticMeasureEnum)
-                                if(WhS_Analytics_GenericAnalyticMeasureEnum[p].value == query.MeasureFields[i])
+                    if (query.MeasureFields != undefined) {
+                        for (var i = 0; i < query.MeasureFields.length; i++)
+                            for (var p in WhS_Analytics_GenericAnalyticMeasureEnum)
+                                if (WhS_Analytics_GenericAnalyticMeasureEnum[p].value == query.MeasureFields[i])
                                     ctrl.selectedMeasures.push(WhS_Analytics_GenericAnalyticMeasureEnum[p]);
                         measureValues = query.MeasureFields;
                     }
@@ -261,90 +246,81 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                         WithSummary: isSummary
                     }
 
-                    if(ctrl.selectedPeriods.length > 0 || ctrl.selectedDimensions.length > 0)
+                    if (ctrl.selectedPeriods.length > 0 || ctrl.selectedDimensions.length > 0)
                         ctrl.sortField = 'DimensionValues[0].Name';
                     else
                         ctrl.sortField = 'MeasureValues.' + ctrl.selectedMeasures[0].name;
                     return queryFinalized;
                 }
 
-                function applyDimentionsRules(selectedDimensions, dimensions)
-                {
+                function applyDimentionsRules(selectedDimensions, dimensions) {
+                    var supplierZoneIndex = getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.SupplierZone.value, dimensions);
+                    if (supplierZoneIndex != -1)
+                        dimensions.splice(supplierZoneIndex, 1);
+                    if (getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.CodeSales.value, dimensions) == -1)
+                        dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.CodeSales);
+                    if (getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.CodeBuy.value, dimensions) == -1)
+                        dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.CodeBuy);
 
-                    for(var i = 0; i < selectedDimensions.length; i++)
-                    {
+                    for (var i = 0; i < selectedDimensions.length; i++) {
 
-                        switch(selectedDimensions[i].value)
-                        {
-                        case WhS_Analytics_GenericAnalyticDimensionEnum.Zone.value:
-                            var countryIndex = getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.Country.value, dimensions);
-                            if(countryIndex != -1)
-                                dimensions.splice(countryIndex, 1);
-                            //  var codeBuyIndex = UtilsService.getItemIndexByVal(dimensions, WhS_Analytics_GenericAnalyticDimensionEnum.CodeBuy.value, "value");
-                            //   if (codeBuyIndex != -1)
-                            //       dimensions.splice(codeBuyIndex, 1);
-                            //  var codeSalesIndex = UtilsService.getItemIndexByVal(dimensions, WhS_Analytics_GenericAnalyticDimensionEnum.CodeSales.value, "value");
-                            //   if (codeSalesIndex != -1)
-                            //     dimensions.splice(codeSalesIndex, 1);
-                            break;
-                        case WhS_Analytics_GenericAnalyticDimensionEnum.Supplier.value:
-                            if (getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.SupplierZone.value, dimensions) == -1)
-                                dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.SupplierZone);
-                            break;
-                            //case WhS_Analytics_GenericAnalyticDimensionEnum.PortIn.value || WhS_Analytics_GenericAnalyticDimensionEnum.PortOut.value:
-                            //    var gateWayOutIndex = getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.GateWayOut.value);
-                            //            if (gateWayOutIndex != -1)
-                            //                dimensions.splice(gateWayOutIndex, 1);
-                            //            var gateWayInIndex = getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.GateWayIn.value);
-                            //            if (gateWayInIndex != -1)
-                            //                dimensions.splice(gateWayInIndex, 1);
-                            //            break;
-                        default:
-                            var supplierZoneIndex = getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.SupplierZone.value, dimensions);
-                            if(supplierZoneIndex != -1)
-                                dimensions.splice(supplierZoneIndex, 1);
-                            break;
+                        switch (selectedDimensions[i].value) {
+                            case WhS_Analytics_GenericAnalyticDimensionEnum.Zone.value:
+                                var countryIndex = getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.Country.value, dimensions);
+                                if (countryIndex != -1)
+                                    dimensions.splice(countryIndex, 1);
+                                var codeBuyIndex = getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.CodeBuy.value, dimensions);
+                                if (codeBuyIndex != -1)
+                                    dimensions.splice(codeBuyIndex, 1);
+                                var codeSalesIndex = getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.CodeSales.value, dimensions);
+                                if (codeSalesIndex != -1)
+                                    dimensions.splice(codeSalesIndex, 1);
+                                break;
+                            case WhS_Analytics_GenericAnalyticDimensionEnum.Supplier.value:
+                                if (getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.SupplierZone.value, dimensions) == -1)
+                                    dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.SupplierZone);
+                                break;
+                                //case WhS_Analytics_GenericAnalyticDimensionEnum.PortIn.value || WhS_Analytics_GenericAnalyticDimensionEnum.PortOut.value:
+                                //    var gateWayOutIndex = getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.GateWayOut.value);
+                                //            if (gateWayOutIndex != -1)
+                                //                dimensions.splice(gateWayOutIndex, 1);
+                                //            var gateWayInIndex = getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.GateWayIn.value);
+                                //            if (gateWayInIndex != -1)
+                                //                dimensions.splice(gateWayInIndex, 1);
+                                //            break;
+                            case WhS_Analytics_GenericAnalyticDimensionEnum.Country.value:
+                                var codeBuyIndex = getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.CodeBuy.value, dimensions);
+                                if (codeBuyIndex != -1)
+                                    dimensions.splice(codeBuyIndex, 1);
+                                var codeSalesIndex = getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.CodeSales.value, dimensions);
+                                if (codeSalesIndex != -1)
+                                    dimensions.splice(codeSalesIndex, 1);
+                                break;
+                            case WhS_Analytics_GenericAnalyticDimensionEnum.CodeBuy.value:
+                                var countryIndex = getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.Country.value, dimensions);
+                                if (countryIndex != -1)
+                                    dimensions.splice(countryIndex, 1);
+                                break;
+                            case WhS_Analytics_GenericAnalyticDimensionEnum.CodeSales.value:
+                                var countryIndex = getDimentionIndex(WhS_Analytics_GenericAnalyticDimensionEnum.Country.value, dimensions);
+                                if (countryIndex != -1)
+                                    dimensions.splice(countryIndex, 1);
+                                break;
 
                         }
-
-                        //   applyCodeBuyRule(selectedDimensions[i], dimensions);
-                        //   applyCodeSalesRule(selectedDimensions[i], dimensions);
-
                     }
                     eliminateGroupKeysNotInParent(selectedDimensions, dimensions);
                 }
 
-                function getDimentionIndex(dimentionValue, dimensions)
-                {
+                function getDimentionIndex(dimentionValue, dimensions) {
                     return UtilsService.getItemIndexByVal(dimensions, dimentionValue, "value");
                 }
 
-                //function applyCodeBuyRule(selectedDimensions, dimensions)
-                //{
-                //    if (selectedDimensions.value == WhS_Analytics_GenericAnalyticDimensionEnum.Country.value)
-                //        return;
+                function eliminateGroupKeysNotInParent(selectedDimensions, dimensions) {
 
-                //    var codeBuyIndex = UtilsService.getItemIndexByVal(dimensions, WhS_Analytics_GenericAnalyticDimensionEnum.CodeBuy.value, "value");
-                //    if (codeBuyIndex != -1)
-                //        dimensions.splice(codeBuyIndex, 1);
-                //}
-
-                //function applyCodeSalesRule(selectedDimensions, dimensions)
-                //{
-                //    if (selectedDimensions.value == WhS_Analytics_GenericAnalyticDimensionEnum.Country.value)
-                //        return;
-                //    var codeSalesIndex = UtilsService.getItemIndexByVal(dimensions, WhS_Analytics_GenericAnalyticDimensionEnum.CodeSales.value, "value");
-                //    if (codeSalesIndex != -1)
-                //        dimensions.splice(codeSalesIndex, 1);
-                //}
-
-                function eliminateGroupKeysNotInParent(selectedDimensions, dimensions)
-                {
-
-                    for(var i = 0; i < selectedDimensions.length; i++)
-                    {
-                        for(var j = 0; j < dimensions.length; j++)
-                            if(selectedDimensions[i].value == dimensions[j].value)
+                    for (var i = 0; i < selectedDimensions.length; i++) {
+                        for (var j = 0; j < dimensions.length; j++)
+                            if (selectedDimensions[i].value == dimensions[j].value)
                                 dimensions.splice(j, 1);
                     }
                 }

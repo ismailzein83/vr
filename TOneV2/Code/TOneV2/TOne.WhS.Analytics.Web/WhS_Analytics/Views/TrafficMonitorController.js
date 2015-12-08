@@ -52,7 +52,6 @@
                 FixedDimensionFields: selectedObject.selectedperiod,
                 MeasureFields: measures,
                 Dimensions: dimensions,
-                MeasureThreshold:selectedObject.selectedThresholds,
                 FromTime: selectedObject.fromdate,
                 ToTime: selectedObject.todate,
                 Currency: selectedObject.currency,
@@ -96,8 +95,8 @@
             // dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.GateWayOut.value);
             dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.PortIn.value);
             dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.PortOut.value);
-          //  dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.CodeSales.value);
-          //  dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.CodeBuy.value);
+            dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.CodeSales.value);
+            dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.CodeBuy.value);
             return dimensions;
         }
 
