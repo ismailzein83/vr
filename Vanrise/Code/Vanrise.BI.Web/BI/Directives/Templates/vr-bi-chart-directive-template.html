@@ -1,16 +1,16 @@
 ﻿<div  ng-controller="BI_VrChartDirectiveTemplateController">
     <vr-row>
         <vr-columns width="1/2row">
-            <vr-select datasource="operationTypes" datatextfield="description" datavaluefield="value" label="Data Type" selectedvalues="selectedOperationType" isrequired="true" hidefilterbox></vr-select>
+            <vr-select datasource="operationTypes" datatextfield="description" datavaluefield="value" label="Data Type" selectedvalues="selectedOperationType" isrequired="true" hidefilterbox onselectionchanged="onSelectionOperationChanged"></vr-select>
         </vr-columns>
         <vr-columns width="1/2row" ng-show=" selectedOperationType.value == 'TopEntities'">
             <vr-select datasource="Entities" datatextfield="Name" datavaluefield="DisplayName" label="Entity" selectedvalues="selectedEntitiesType" ismultipleselection isrequired hidefilterbox></vr-select>
         </vr-columns>
         <vr-columns width="1/2row" ng-show=" selectedOperationType.value == 'TopEntities' && isPieChart">
-            <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureType" onselectionchanged="onSelectionChanged" hidefilterbox></vr-select>
+            <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureType" onselectionchanged="onSelectionChanged" hidefilterbox isrequired="singleMeasureRequired"></vr-select>
         </vr-columns>
         <vr-columns width="1/2row" ng-show=" selectedOperationType.value == 'MeasuresGroupedByTime' || !isPieChart">
-            <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureTypes" onselectionchanged="onSelectionChanged" ismultipleselection hidefilterbox></vr-select>
+            <vr-select datasource="Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="selectedMeasureTypes" onselectionchanged="onSelectionChanged" ismultipleselection hidefilterbox isrequired="multipleMeasureRequired"></vr-select>
         </vr-columns>
         <vr-columns width="1/2row" ng-show=" selectedOperationType.value == 'TopEntities'">
             <vr-switch value="isPieChart" label="Pie Chart" onvaluechanged="onSwitchValueChanged"></vr-switch>

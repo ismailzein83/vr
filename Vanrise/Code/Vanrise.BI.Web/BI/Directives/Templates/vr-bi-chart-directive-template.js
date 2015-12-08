@@ -20,10 +20,29 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         $scope.selectedTopMeasure;
         $scope.onSwitchValueChanged = function () {
             if ($scope.isPieChart)
+            {
                 $scope.selectedTopMeasure = undefined;
-            else if(lastTopMeasureValue!=undefined)
+                $scope.singleMeasureRequired = true;
+                $scope.multipleMeasureRequired = false;
+            }
+            else if (lastTopMeasureValue != undefined)
+            {
+                $scope.singleMeasureRequired = false;
+                $scope.multipleMeasureRequired = true;
                 $scope.selectedTopMeasure = lastTopMeasureValue;
+            }
 
+        }
+        $scope.onSelectionOperationChanged = function () {
+            if ($scope.selectedOperationType.value == "MeasuresGroupedByTime")
+            {
+                $scope.singleMeasureRequired = false;
+                $scope.multipleMeasureRequired = true;
+            }
+            else {
+                $scope.singleMeasureRequired = true;
+                $scope.multipleMeasureRequired = false;
+            }
         }
 
         $scope.onSelectionChanged = function () {
