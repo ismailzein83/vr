@@ -18,6 +18,11 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         $scope.selectedMeasureTypes = [];
         $scope.selectedMeasureType;
         $scope.selectedTopMeasure;
+        $scope.singleMeasureRequired = false;
+        $scope.topMeasureRequired = false;
+        $scope.multipleMeasureRequired = false;
+        $scope.entityRequired = false;
+        $scope.isPieChart = true;
         $scope.onSwitchValueChanged = function () {
             if ($scope.isPieChart)
             {
@@ -70,7 +75,7 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
             lastTopMeasureValue = $scope.selectedTopMeasure;
         }
         $scope.topRecords = 10;
-        $scope.isPieChart = true;
+       
         defineTimeDimensionTypes();
         $scope.subViewConnector.getValue = function () {
             return getSubViewValue();
@@ -160,10 +165,26 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
                 if (measureType == $scope.Measures[j].Name)
                 {
                     if ($scope.selectedOperationType.value == "TopEntities" && settings.IsPieChart)
+                    {
+                        $scope.singleMeasureRequired = true;
+                        $scope.multipleMeasureRequired = false;
+                        $scope.topMeasureRequired = false;
                         $scope.selectedMeasureType = $scope.Measures[j];
+                    }
+                        
                     else
                     {  
                         $scope.selectedMeasureTypes.push($scope.Measures[j]);
+                        $scope.multipleMeasureRequired = true;
+                        $scope.singleMeasureRequired = false;
+                        if ($scope.selectedOperationType.value == "MeasuresGroupedByTime") {
+                            $scope.topMeasureRequired = false;
+                            $scope.entityRequired = false;
+                        }
+                        else {
+                            $scope.topMeasureRequired = true;
+                            $scope.entityRequired = true;
+                        }
                     }
                        
                 }
