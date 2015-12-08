@@ -177,5 +177,6 @@
     <PostDeploy Include="TOne.PostDeployment.sql" />
     <None Include="CDRAnalysis.PostDeployment.sql" />
     <None Include="Common.PostDeployment.sql" />
+    <None Include="QualityMeasurement.PostDeployment.sql" />
   </ItemGroup>
 </Project>
