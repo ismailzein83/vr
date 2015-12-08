@@ -63,15 +63,9 @@ namespace TOne.WhS.Routing.BP.Activities
                         RouteBuilder builder = new RouteBuilder();
                         IEnumerable<RPRoute> productRoutes = builder.BuildRoutes(routingProductContext, preparedRPCodeMatch.SaleZoneId);
 
-                        foreach (RPRoute productRoute in productRoutes)
-                        {
-                            productRoutesBatch.RPRoutes.Add(productRoute);
-                            if (productRoutesBatch.RPRoutes.Count >= 10)
-                            {
-                                inputArgument.OutputQueue.Enqueue(productRoutesBatch);
-                                productRoutesBatch = new RPRouteBatch();
-                            }
-                        }
+                        productRoutesBatch.RPRoutes.AddRange(productRoutes);
+                        inputArgument.OutputQueue.Enqueue(productRoutesBatch);
+                        productRoutesBatch = new RPRouteBatch();
                     });
                 } while (!ShouldStop(handle) && hasItem);
 

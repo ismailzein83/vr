@@ -10,6 +10,7 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class CodeSaleZoneDataManager : RoutingDataManager, ICodeSaleZoneDataManager
     {
+        readonly string[] columns = { "Code", "SaleZoneId" };
         public void ApplyCodeToCodeSaleZoneTable(object preparedCodeMatches)
         {
             InsertBulkToTable(preparedCodeMatches as BaseBulkInsertInfo);
@@ -26,6 +27,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 TabLock = true,
                 KeepIdentity = false,
                 FieldSeparator = '^',
+                ColumnNames = columns
             };
         }
 

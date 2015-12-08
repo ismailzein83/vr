@@ -40,7 +40,7 @@ namespace TOne.WhS.Routing.BP.Activities
             CustomerZoneDetailByZone customerZoneDetailsByZone = null;
             ICustomerZoneDetailsDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerZoneDetailsDataManager>();
             dataManager.DatabaseId = inputArgument.RoutingDatabase;
-            IEnumerable<CustomerZoneDetail> customerZoneDetails = dataManager.GetFilteredCustomerZoneDetailsByZone(inputArgument.SaleCodes.Select(s => s.ZoneId));
+            IEnumerable<CustomerZoneDetail> customerZoneDetails = dataManager.GetFilteredCustomerZoneDetailsByZone(inputArgument.SaleCodes.Select(s => s.ZoneId).Distinct());
             if (customerZoneDetails != null)
             {
                 customerZoneDetailsByZone = new CustomerZoneDetailByZone();

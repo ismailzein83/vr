@@ -12,6 +12,7 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class CustomerRouteDataManager : RoutingDataManager, ICustomerRouteDataManager
     {
+        readonly string[] columns = { "CustomerId", "Code", "SaleZoneId", "Rate", "IsBlocked", "ExecutedRuleId", "RouteOptions" };
         public void ApplyCustomerRouteForDB(object preparedCustomerRoute)
         {
             InsertBulkToTable(preparedCustomerRoute as BaseBulkInsertInfo);
@@ -28,6 +29,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 TabLock = true,
                 KeepIdentity = false,
                 FieldSeparator = '^',
+                ColumnNames = columns,
             };
         }
 
@@ -39,8 +41,8 @@ namespace TOne.WhS.Routing.Data.SQL
         public void WriteRecordToStream(Entities.CustomerRoute record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.CustomerId, record.Code, record.SaleZoneId, 
-                record.Rate, record.IsBlocked ? 1:0, record.ExecutedRuleId, Vanrise.Common.Serializer.Serialize(record.Options, true));
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.CustomerId, record.Code, record.SaleZoneId,
+                record.Rate, record.IsBlocked ? 1 : 0, record.ExecutedRuleId, Vanrise.Common.Serializer.Serialize(record.Options, true));
         }
 
         public Vanrise.Entities.BigResult<Entities.CustomerRoute> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<Entities.CustomerRouteQuery> input)
@@ -77,7 +79,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 Rate = GetReaderValue<decimal>(reader, "Rate"),
                 IsBlocked = (bool)reader["IsBlocked"],
                 ExecutedRuleId = (int)reader["ExecutedRuleId"],
-                Options = reader["RouteOptions"] != null? Vanrise.Common.Serializer.Deserialize<List<RouteOption>>(reader["RouteOptions"].ToString()) : null
+                Options = reader["RouteOptions"] != null ? Vanrise.Common.Serializer.Deserialize<List<RouteOption>>(reader["RouteOptions"].ToString()) : null
             };
         }
 

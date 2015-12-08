@@ -264,34 +264,39 @@
           <DelegateInArgument x:TypeArguments="scg:IEnumerable(x:Int64)" Name="saleZoneRange" />
         </ActivityAction.Argument>
         <Sequence DisplayName="Sequence_RPBuildRoutes" sap2010:WorkflowViewState.IdRef="Sequence_3">
-          <local:RPBuildRoutingProducts sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Routing.BP.RPBuildRoutingProducts_1">
-            <local:RPBuildRoutingProducts.RoutingDatabaseId>
-              <InArgument x:TypeArguments="x:Int32">
-                <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
+          <Sequence.Variables>
+            <Variable x:TypeArguments="x:String" Name="variable1" />
+            <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="subRPBuildProcessEventPayload" />
+          </Sequence.Variables>
+          <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_2" WaitProcessCompleted="True">
+            <vbw:RunProcess.Input>
+              <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
+                <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new RPBuildRoutingProductInput() { FromZoneId = saleZoneRange.Min(),
+             ToZoneId = saleZoneRange.Max(), RoutingDatabaseId = routingDatabaseId, SupplierOptionPolicies = Input.SupplierZoneRPOptionPolicies}</mca:CSharpValue>
               </InArgument>
-            </local:RPBuildRoutingProducts.RoutingDatabaseId>
-            <local:RPBuildRoutingProducts.SaleZoneIds>
-              <InArgument x:TypeArguments="scg:IEnumerable(x:Int64)">
-                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int64)">saleZoneRange</mca:CSharpValue>
+            </vbw:RunProcess.Input>
+            <vbw:RunProcess.ProcessCompletedEventPayload>
+              <OutArgument x:TypeArguments="vb:ProcessCompletedEventPayload">
+                <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">subRPBuildProcessEventPayload</mca:CSharpReference>
+              </OutArgument>
+            </vbw:RunProcess.ProcessCompletedEventPayload>
+          </vbw:RunProcess>
+          <If sap2010:WorkflowViewState.IdRef="If_2">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">subRPBuildProcessEventPayload.ProcessStatus != BPInstanceStatus.Completed</mca:CSharpValue>
               </InArgument>
-            </local:RPBuildRoutingProducts.SaleZoneIds>
-            <local:RPBuildRoutingProducts.SupplierOptionPolicies>
-              <InArgument x:TypeArguments="scg:IEnumerable(twre:SupplierZoneToRPOptionPolicy)">
-                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:SupplierZoneToRPOptionPolicy)">Input.SupplierZoneRPOptionPolicies</mca:CSharpValue>
-              </InArgument>
-            </local:RPBuildRoutingProducts.SupplierOptionPolicies>
-            <sap2010:WorkflowViewState.ViewStateManager>
-              <sap2010:ViewStateManager>
-                <sap2010:ViewStateData Id="GetRPCodeMatches_1" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
-                <sap2010:ViewStateData Id="RPBuildRoutes_1" sap2010:WorkflowViewState.IdRef="ViewStateData_8" />
-                <sap2010:ViewStateData Id="PrepareProductRoutesForApply_1" sap2010:WorkflowViewState.IdRef="ViewStateData_9" />
-                <sap2010:ViewStateData Id="ApplyProductRoutesToDB_1" sap2010:WorkflowViewState.IdRef="ViewStateData_10" />
-                <sap2010:ViewStateData Id="Parallel_1" sap2010:WorkflowViewState.IdRef="ViewStateData_11" />
-                <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_12" />
-                <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RPBuildRoutingProducts_1" sap2010:WorkflowViewState.IdRef="ViewStateData_13" />
-              </sap2010:ViewStateManager>
-            </sap2010:WorkflowViewState.ViewStateManager>
-          </local:RPBuildRoutingProducts>
+            </If.Condition>
+            <If.Then>
+              <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_2">
+                <TerminateWorkflow.Reason>
+                  <InArgument x:TypeArguments="x:String">
+                    <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Sale Zone Range ('{0}','{1}') failed due to error: {2}", saleZoneRange.Min(),saleZoneRange.Max(), subRPBuildProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
+                  </InArgument>
+                </TerminateWorkflow.Reason>
+              </TerminateWorkflow>
+            </If.Then>
+          </If>
         </Sequence>
       </ActivityAction>
     </ParallelForEach>
@@ -302,7 +307,7 @@
         </InArgument>
       </twrba1:SetRoutingDatabaseReady.RoutingDatabaseId>
     </twrba1:SetRoutingDatabaseReady>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sMUYDsgIOAgEBUAtQrQECAQJUBVomAwGjAlsFcCQDAf4BcQWPARADAc4BkAEFqgEpAwGyAasBBd0BFwIBd94BBe4BJQIBW+8BBf8BHwIBP4ACBakCFwIBFaoCBbACJgIBC1cLV3ADAaQCaAtocAMBmgJjC2NoAwGRAl4LXmEDAYgCbQttcgMB/wFyB3gnAwH0AXkHjgEkAwHPAZMBC5MBaAMBxQGYAQuYAVkDAbwBnQELnQF2AwGzAa4BC64BZgMBqQG1AQnbARQCAXjmAQvmAVgCAW7hAQvhAWgCAWXrAQvrAWUCAVzyAQvyAVsCAVL3AQv3AXICAUn8AQv8AV0CAUCDAguDAngCATaKAgmnAhQCARatAgutAlkCAQx1DXWAAQMB9QGBAQ2BAXADAesBhgENhgFqAwHiAXwNfGADAdkBiwENiwFaAwHQAbkBC8oBHAMBkQHLAQvaARACAXmLAgumAioCARe8ARHCASADAZ4BxwERxwGEAQMBkwG5AXy5AYIBAwGSAc4BEc4BkQECAXrSAQ/YASMDAYUBjgIRjgJfAgEskwIRkwJsAgEimAIRmAKbAQIBGNUBFdUByQEDAYYB</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sNUYDtwIOAgEBUAtQrQECAQJUBVomAwG4AlsFcCQDAZMCcQWPARADAeMBkAEFqgEpAwHHAasBBd0BFwMBjAHeAQXuASUCAXDvAQX/AR8CAVSAAgWuAhcCARWvAgW1AiYCAQtXC1dwAwG5AmgLaHADAa8CYwtjaAMBpgJeC15hAwGdAm0LbXIDAZQCcgd4JwMBiQJ5B44BJAMB5AGTAQuTAWgDAdoBmAELmAFZAwHRAZ0BC50BdgMByAGuAQuuAWYDAb4BtQEJ2wEUAwGNAeYBC+YBWAMBgwHhAQvhAWgCAXrrAQvrAWUCAXHyAQvyAVsCAWf3AQv3AXICAV78AQv8AV0CAVWDAguDAngCAUuKAgmsAhQCARayAguyAlkCAQx1DXWAAQMBigKBAQ2BAXADAYAChgENhgFqAwH3AXwNfGADAe4BiwENiwFaAwHlAbkBC8oBHAMBpgHLAQvaARADAY4BjwILmwIcAgExnAILqwIQAgEXvAERwgEgAwGzAccBEccBhAEDAagBuQF8uQGCAQMBpwHOARHOAZEBAwGPAdIBD9gBIwMBmgGSAhGTAqMBAgE/mAIRmAKLAQIBM48CfI8CggECATKfAhGfApkBAgEYowIPqQIjAgEk1QEV1QHJAQMBmwGmAhWmAoACAgEl</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -337,37 +342,26 @@
       <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="554,546" />
       <sap2010:ViewStateData Id="GetDistinctSaleZoneIds_1" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="SplitListIntoGroups`1_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="ViewStateData_7" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ViewStateData_8" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ViewStateData_9" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ViewStateData_10" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ViewStateData_11" sap:VirtualizedContainerService.HintSize="1034,86" />
-      <sap2010:ViewStateData Id="ViewStateData_12" sap:VirtualizedContainerService.HintSize="1056,210">
+      <sap2010:ViewStateData Id="RunProcess_2" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,210" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="486,396">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ViewStateData_13" sap:VirtualizedContainerService.HintSize="1096,290" />
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RPBuildRoutingProducts_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,146">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_3" sap:VirtualizedContainerService.HintSize="554,296" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_3" sap:VirtualizedContainerService.HintSize="554,546" />
       <sap2010:ViewStateData Id="SetRoutingDatabaseReady_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,1504">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,1754">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RPRoutingProcess_1" sap:VirtualizedContainerService.HintSize="616,1584" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RPRoutingProcess_1" sap:VirtualizedContainerService.HintSize="616,1834" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -12,7 +12,7 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class CodeMatchesDataManager : RoutingDataManager, ICodeMatchesDataManager
     {
-
+        readonly string[] columns = { "CodePrefix", "Code", "Content" };
         public void ApplyCodeMatchesForDB(object preparedCodeMatches)
         {
             InsertBulkToTable(preparedCodeMatches as BaseBulkInsertInfo);
@@ -29,6 +29,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 TabLock = true,
                 KeepIdentity = false,
                 FieldSeparator = '^',
+                ColumnNames = columns
             };
         }
 
@@ -51,36 +52,23 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   sz.SaleZoneID
                                           FROM    [dbo].[CodeMatch] cm with(nolock)
                                           join    CodeSaleZone sz on sz.code = cm.code 
-                                          JOIN    @ZoneList z ON z.ID = sz.SaleZoneID";
+                                          where   sz.SaleZoneId between @FromZoneId and @ToZoneId";
 
         #endregion
 
 
-        public IEnumerable<RPCodeMatches> GetCodeMatches(IEnumerable<long> saleZoneIds)
+        public IEnumerable<RPCodeMatches> GetCodeMatches(long fromZoneId, long toZoneId)
         {
-            DataTable dtZoneIds = BuildZoneIdsTable(new HashSet<long>(saleZoneIds));
             return GetItemsText(query_GetCodeMatchesByZone, RPCodeMatchesMapper, (cmd) =>
             {
-                var dtPrm = new SqlParameter("@ZoneList", SqlDbType.Structured);
-                dtPrm.TypeName = "LongIDType";
-                dtPrm.Value = dtZoneIds;
-                cmd.Parameters.Add(dtPrm);
 
+                var dtPrm = new SqlParameter("@FromZoneId", SqlDbType.BigInt);
+                dtPrm.Value = fromZoneId;
+                cmd.Parameters.Add(dtPrm);
+                dtPrm = new SqlParameter("@ToZoneId", SqlDbType.BigInt);
+                dtPrm.Value = toZoneId;
+                cmd.Parameters.Add(dtPrm);
             });
-        }
-        DataTable BuildZoneIdsTable(HashSet<long> zoneIds)
-        {
-            DataTable dtZoneInfo = new DataTable();
-            dtZoneInfo.Columns.Add("ZoneID", typeof(Int64));
-            dtZoneInfo.BeginLoadData();
-            foreach (var z in zoneIds)
-            {
-                DataRow dr = dtZoneInfo.NewRow();
-                dr["ZoneID"] = z;
-                dtZoneInfo.Rows.Add(dr);
-            }
-            dtZoneInfo.EndLoadData();
-            return dtZoneInfo;
         }
         RPCodeMatches RPCodeMatchesMapper(IDataReader reader)
         {

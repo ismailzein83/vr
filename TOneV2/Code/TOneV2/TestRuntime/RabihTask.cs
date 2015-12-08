@@ -40,8 +40,8 @@ namespace TestRuntime
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
-
-            RunCompleteProductRouteBuild();
+            RunCompleteRouteBuild();
+            //RunCompleteProductRouteBuild();
             //RunPartialRouteBuild();
         }
 
@@ -68,11 +68,12 @@ namespace TestRuntime
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
+                InputArguments = new TOne.WhS.Routing.BP.Arguments.RoutingProcessInput
                 {
+                    CodePrefixLength = 2,
                     EffectiveTime = DateTime.Now,
-                    IsFuture = false,
-                    IsLcrOnly = false
+                    RoutingDatabaseType = RoutingDatabaseType.Current,
+                    RoutingProcessType = RoutingProcessType.CustomerRoute
                 }
 
             });

@@ -61,7 +61,6 @@
     <Compile Include="IRPRouteDataManager.cs" />
     <Compile Include="IRoutingDatabaseDataManager.cs" />
     <Compile Include="IRoutingDataManager.cs" />
-    <Compile Include="IRoutingProductOptionDataManager.cs" />
     <Compile Include="ISupplierZoneDetailsDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoutingDataManagerFactory.cs" />

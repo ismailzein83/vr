@@ -12,6 +12,7 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class RPRouteDataManager : RoutingDataManager, IRPRouteDataManager
     {
+        readonly string[] columns = { "RoutingProductId", "SaleZoneId", "ExecutedRuleId", "OptionsDetailsBySupplier", "OptionsByPolicy", "IsBlocked" };
         public void ApplyProductRouteForDB(object preparedProductRoute)
         {
             InsertBulkToTable(preparedProductRoute as BaseBulkInsertInfo);
@@ -28,6 +29,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 TabLock = true,
                 KeepIdentity = false,
                 FieldSeparator = '^',
+                ColumnNames = columns
             };
         }
 
@@ -50,7 +52,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
                 string routingProductIdsFilter = " 1=1 ";
                 string saleZoneIdsFilter = " 1=1 ";
-                
+
 
                 if (input.Query.RoutingProductIds != null && input.Query.RoutingProductIds.Count > 0)
                     routingProductIdsFilter = string.Format("RoutingProductId In({0})", string.Join(",", input.Query.RoutingProductIds));
@@ -90,7 +92,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 }
             );
 
-            if(routeOptionsSerialized == null)
+            if (routeOptionsSerialized == null)
                 return null;
 
             return Vanrise.Common.Serializer.Deserialize<Dictionary<int, IEnumerable<RPRouteOption>>>(routeOptionsSerialized.ToString());

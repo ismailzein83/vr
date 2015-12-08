@@ -13,6 +13,7 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class SupplierZoneDetailsDataManager : RoutingDataManager, ISupplierZoneDetailsDataManager
     {
+        readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue" };
         public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
@@ -24,6 +25,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 TabLock = true,
                 KeepIdentity = false,
                 FieldSeparator = '^',
+                ColumnNames = columns
             };
         }
         public object InitialiazeStreamForDBApply()
@@ -107,6 +109,6 @@ namespace TOne.WhS.Routing.Data.SQL
                                             ";
 
         #endregion
-         
+
     }
 }

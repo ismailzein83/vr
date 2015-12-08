@@ -44,7 +44,7 @@ namespace TOne.WhS.Routing.BP.Activities
             ISupplierZoneDetailsDataManager supplierZoneDetailsManager = RoutingDataManagerFactory.GetDataManager<ISupplierZoneDetailsDataManager>();
             supplierZoneDetailsManager.DatabaseId = inputArgument.RoutingDatabaseId;
 
-            IEnumerable<SupplierZoneDetail> supplierZoneDetails = supplierZoneDetailsManager.GetFilteredSupplierZoneDetailsBySupplierZone(inputArgument.SupplierCodes.Select(c => c.ZoneId));
+            IEnumerable<SupplierZoneDetail> supplierZoneDetails = supplierZoneDetailsManager.GetFilteredSupplierZoneDetailsBySupplierZone(inputArgument.SupplierCodes.Select(c => c.ZoneId).Distinct());
 
             if (supplierZoneDetails != null)
             {

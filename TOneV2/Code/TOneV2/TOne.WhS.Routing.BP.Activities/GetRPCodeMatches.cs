@@ -14,7 +14,8 @@ namespace TOne.WhS.Routing.BP.Activities
     public class GetRPCodeMatchesInput
     {
         public int RoutingDatabaseId { get; set; }
-        public IEnumerable<long> SaleZoneIds { get; set; }
+        public long FromZoneId { get; set; }
+        public long ToZoneId { get; set; }
         public BaseQueue<RPCodeMatchesByZone> OutputQueue { get; set; }
 
     }
@@ -24,7 +25,9 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InArgument<int> RoutingDatabaseId { get; set; }
         [RequiredArgument]
-        public InArgument<IEnumerable<long>> SaleZoneIds { get; set; }
+        public InArgument<long> FromZoneId { get; set; }
+        [RequiredArgument]
+        public InArgument<long> ToZoneId { get; set; }
         [RequiredArgument]
         public InOutArgument<BaseQueue<RPCodeMatchesByZone>> OutputQueue { get; set; }
 
@@ -32,7 +35,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             ICodeMatchesDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICodeMatchesDataManager>();
             dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
-            var codeMatches = dataManager.GetCodeMatches(inputArgument.SaleZoneIds);
+            var codeMatches = dataManager.GetCodeMatches(inputArgument.FromZoneId, inputArgument.ToZoneId);
             long currentZoneId = 0;
             Dictionary<long, SupplierCodeMatchWithRate> currentSupplierCodeMatchesWithRate = null;
             foreach (var codeMatch in codeMatches.OrderBy(c => c.SaleZoneId))
@@ -95,7 +98,8 @@ namespace TOne.WhS.Routing.BP.Activities
             {
                 OutputQueue = this.OutputQueue.Get(context),
                 RoutingDatabaseId = this.RoutingDatabaseId.Get(context),
-                SaleZoneIds = this.SaleZoneIds.Get(context)
+                FromZoneId = this.FromZoneId.Get(context),
+                ToZoneId = this.ToZoneId.Get(context)
             };
         }
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)

@@ -7,15 +7,14 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
- xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Activities;assembly=TOne.WhS.Routing.BP.Activities"
+ xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Arguments;assembly=TOne.WhS.Routing.BP.Arguments"
+ xmlns:twrba1="clr-namespace:TOne.WhS.Routing.BP.Activities;assembly=TOne.WhS.Routing.BP.Activities"
  xmlns:twre="clr-namespace:TOne.WhS.Routing.Entities;assembly=TOne.WhS.Routing.Entities"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
-    <x:Property Name="RoutingDatabaseId" Type="InArgument(x:Int32)" />
-    <x:Property Name="SaleZoneIds" Type="InArgument(scg:IEnumerable(x:Int64))" />
-    <x:Property Name="SupplierOptionPolicies" Type="InArgument(scg:IEnumerable(twre:SupplierZoneToRPOptionPolicy))" />
+    <x:Property Name="Input" Type="InArgument(twrba:RPBuildRoutingProductInput)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.RPBuildRoutingProducts_1</sap2010:WorkflowViewState.IdRef>
@@ -28,6 +27,7 @@
       <x:String>System.Text</x:String>
       <x:String>Vanrise.Queueing</x:String>
       <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>TOne.WhS.Routing.BP.Arguments</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -62,125 +62,130 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
-    <Sequence.Variables>
-      <Variable x:TypeArguments="vq:BaseQueue(twre:RPCodeMatchesByZone)" Name="queueCodeMatchesByZone">
-        <Variable.Default>
-          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:RPCodeMatchesByZone)">new MemoryQueue&lt;TOne.WhS.Routing.Entities.RPCodeMatchesByZone&gt;()</mca:CSharpValue>
-        </Variable.Default>
-      </Variable>
-      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="getCodeMatchesStatus" />
-      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="buildProductRoutesStatus" />
-      <Variable x:TypeArguments="vq:BaseQueue(twre:RPRouteBatch)" Name="queueProductRouteBatch" />
-      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedProductRoutesBatch" />
-      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareRouteProductBatchStatus" />
-    </Sequence.Variables>
     <Parallel DisplayName="Parallel_BuildProductRoutes" sap2010:WorkflowViewState.IdRef="Parallel_1">
-      <twrba:GetRPCodeMatches sap2010:WorkflowViewState.IdRef="GetRPCodeMatches_1">
-        <twrba:GetRPCodeMatches.OutputQueue>
+      <Parallel.Variables>
+        <Variable x:TypeArguments="vq:BaseQueue(twre:RPCodeMatchesByZone)" Name="queueCodeMatchesByZone">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:RPCodeMatchesByZone)">new MemoryQueue&lt;TOne.WhS.Routing.Entities.RPCodeMatchesByZone&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="getCodeMatchesStatus" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="buildProductRoutesStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(twre:RPRouteBatch)" Name="queueProductRouteBatch" />
+        <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedProductRoutesBatch" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareRouteProductBatchStatus" />
+      </Parallel.Variables>
+      <twrba1:GetRPCodeMatches sap2010:WorkflowViewState.IdRef="GetRPCodeMatches_2">
+        <twrba1:GetRPCodeMatches.FromZoneId>
+          <InArgument x:TypeArguments="x:Int64">
+            <mca:CSharpValue x:TypeArguments="x:Int64">Input.FromZoneId</mca:CSharpValue>
+          </InArgument>
+        </twrba1:GetRPCodeMatches.FromZoneId>
+        <twrba1:GetRPCodeMatches.OutputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(twre:RPCodeMatchesByZone)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:RPCodeMatchesByZone)">queueCodeMatchesByZone</mca:CSharpReference>
           </InOutArgument>
-        </twrba:GetRPCodeMatches.OutputQueue>
-        <twrba:GetRPCodeMatches.RoutingDatabaseId>
+        </twrba1:GetRPCodeMatches.OutputQueue>
+        <twrba1:GetRPCodeMatches.RoutingDatabaseId>
           <InArgument x:TypeArguments="x:Int32">
-            <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabaseId</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
           </InArgument>
-        </twrba:GetRPCodeMatches.RoutingDatabaseId>
-        <twrba:GetRPCodeMatches.SaleZoneIds>
-          <InArgument x:TypeArguments="scg:IEnumerable(x:Int64)">
-            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int64)">SaleZoneIds</mca:CSharpValue>
-          </InArgument>
-        </twrba:GetRPCodeMatches.SaleZoneIds>
-        <twrba:GetRPCodeMatches.Status>
+        </twrba1:GetRPCodeMatches.RoutingDatabaseId>
+        <twrba1:GetRPCodeMatches.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">getCodeMatchesStatus</mca:CSharpReference>
           </OutArgument>
-        </twrba:GetRPCodeMatches.Status>
-      </twrba:GetRPCodeMatches>
-      <twrba:RPBuildRoutes sap2010:WorkflowViewState.IdRef="RPBuildRoutes_1">
-        <twrba:RPBuildRoutes.InputQueue>
+        </twrba1:GetRPCodeMatches.Status>
+        <twrba1:GetRPCodeMatches.ToZoneId>
+          <InArgument x:TypeArguments="x:Int64">
+            <mca:CSharpValue x:TypeArguments="x:Int64">Input.ToZoneId</mca:CSharpValue>
+          </InArgument>
+        </twrba1:GetRPCodeMatches.ToZoneId>
+      </twrba1:GetRPCodeMatches>
+      <twrba1:RPBuildRoutes sap2010:WorkflowViewState.IdRef="RPBuildRoutes_1">
+        <twrba1:RPBuildRoutes.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(twre:RPCodeMatchesByZone)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:RPCodeMatchesByZone)">queueCodeMatchesByZone</mca:CSharpValue>
           </InArgument>
-        </twrba:RPBuildRoutes.InputQueue>
-        <twrba:RPBuildRoutes.OutputQueue>
+        </twrba1:RPBuildRoutes.InputQueue>
+        <twrba1:RPBuildRoutes.OutputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(twre:RPRouteBatch)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:RPRouteBatch)">queueProductRouteBatch</mca:CSharpReference>
           </InOutArgument>
-        </twrba:RPBuildRoutes.OutputQueue>
-        <twrba:RPBuildRoutes.PreviousActivityStatus>
+        </twrba1:RPBuildRoutes.OutputQueue>
+        <twrba1:RPBuildRoutes.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">getCodeMatchesStatus</mca:CSharpValue>
           </InArgument>
-        </twrba:RPBuildRoutes.PreviousActivityStatus>
-        <twrba:RPBuildRoutes.Status>
+        </twrba1:RPBuildRoutes.PreviousActivityStatus>
+        <twrba1:RPBuildRoutes.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">buildProductRoutesStatus</mca:CSharpReference>
           </OutArgument>
-        </twrba:RPBuildRoutes.Status>
-        <twrba:RPBuildRoutes.SupplierZoneRPOptionPolicies>
+        </twrba1:RPBuildRoutes.Status>
+        <twrba1:RPBuildRoutes.SupplierZoneRPOptionPolicies>
           <InArgument x:TypeArguments="scg:IEnumerable(twre:SupplierZoneToRPOptionPolicy)">
-            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:SupplierZoneToRPOptionPolicy)">SupplierOptionPolicies</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:SupplierZoneToRPOptionPolicy)">Input.SupplierOptionPolicies</mca:CSharpValue>
           </InArgument>
-        </twrba:RPBuildRoutes.SupplierZoneRPOptionPolicies>
-      </twrba:RPBuildRoutes>
-      <twrba:PrepareProductRoutesForApply sap2010:WorkflowViewState.IdRef="PrepareProductRoutesForApply_1">
-        <twrba:PrepareProductRoutesForApply.InputQueue>
+        </twrba1:RPBuildRoutes.SupplierZoneRPOptionPolicies>
+      </twrba1:RPBuildRoutes>
+      <twrba1:PrepareProductRoutesForApply sap2010:WorkflowViewState.IdRef="PrepareProductRoutesForApply_1">
+        <twrba1:PrepareProductRoutesForApply.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(twre:RPRouteBatch)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:RPRouteBatch)">queueProductRouteBatch</mca:CSharpValue>
           </InArgument>
-        </twrba:PrepareProductRoutesForApply.InputQueue>
-        <twrba:PrepareProductRoutesForApply.OutputQueue>
+        </twrba1:PrepareProductRoutesForApply.InputQueue>
+        <twrba1:PrepareProductRoutesForApply.OutputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedProductRoutesBatch</mca:CSharpReference>
           </InOutArgument>
-        </twrba:PrepareProductRoutesForApply.OutputQueue>
-        <twrba:PrepareProductRoutesForApply.PreviousActivityStatus>
+        </twrba1:PrepareProductRoutesForApply.OutputQueue>
+        <twrba1:PrepareProductRoutesForApply.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">buildProductRoutesStatus</mca:CSharpValue>
           </InArgument>
-        </twrba:PrepareProductRoutesForApply.PreviousActivityStatus>
-        <twrba:PrepareProductRoutesForApply.Status>
+        </twrba1:PrepareProductRoutesForApply.PreviousActivityStatus>
+        <twrba1:PrepareProductRoutesForApply.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareRouteProductBatchStatus</mca:CSharpReference>
           </OutArgument>
-        </twrba:PrepareProductRoutesForApply.Status>
-      </twrba:PrepareProductRoutesForApply>
-      <twrba:ApplyProductRoutesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyProductRoutesToDB_1">
-        <twrba:ApplyProductRoutesToDB.InputQueue>
+        </twrba1:PrepareProductRoutesForApply.Status>
+      </twrba1:PrepareProductRoutesForApply>
+      <twrba1:ApplyProductRoutesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyProductRoutesToDB_1">
+        <twrba1:ApplyProductRoutesToDB.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedProductRoutesBatch</mca:CSharpValue>
           </InArgument>
-        </twrba:ApplyProductRoutesToDB.InputQueue>
-        <twrba:ApplyProductRoutesToDB.PreviousActivityStatus>
+        </twrba1:ApplyProductRoutesToDB.InputQueue>
+        <twrba1:ApplyProductRoutesToDB.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareRouteProductBatchStatus</mca:CSharpValue>
           </InArgument>
-        </twrba:ApplyProductRoutesToDB.PreviousActivityStatus>
-        <twrba:ApplyProductRoutesToDB.RoutingDatabaseId>
+        </twrba1:ApplyProductRoutesToDB.PreviousActivityStatus>
+        <twrba1:ApplyProductRoutesToDB.RoutingDatabaseId>
           <InArgument x:TypeArguments="x:Int32">
-            <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabaseId</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
           </InArgument>
-        </twrba:ApplyProductRoutesToDB.RoutingDatabaseId>
-      </twrba:ApplyProductRoutesToDB>
+        </twrba1:ApplyProductRoutesToDB.RoutingDatabaseId>
+      </twrba1:ApplyProductRoutesToDB>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBCdWlsZFJvdXRpbmdQcm9kdWN0cy54YW1sF0ADqAEOAgEBRAtErQECAQJNBaYBEAIBDE4HYyADAYgBZAd+HQIBVX8HlAEsAgEslQEHpQEmAgENVg1WWwMBpwFgDWB1AwGdAVENUYcBAwGTAVsNW2YDAYkBcQ1xbQIBfmcNZ38CAXR2DXZ5AgFqbA1sgAECAWB7DXuLAQIBVowBDYwBcQIBS4IBDYIBeAIBQZEBDZEBfwIBN4cBDYcBgAECAS2dAQ2dAXcCASKYAQ2YAXgCARiiAQ2iAVsCAQ4=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBCdWlsZFJvdXRpbmdQcm9kdWN0cy54YW1sGEADrQEOAgEBQQWrARACAQJFDUWvAQIBA04HaCECAW5pB4MBHgIBRYQBB5kBLQIBJJoBB6oBJwIBC1sNW2EDAY8BYA1gdQMBhwFWDVaHAQIBf1ENUVoCAXdlDWVYAgFvdg12bQIBZmwNbH8CAV57DXt5AgFWcQ1xgAECAU6AAQ2AAZEBAgFGkQENkQFxAgE9hwENhwF4AgE1lgENlgF/AgEtjAENjAGAAQIBJaIBDaIBdwIBHJ0BDZ0BeAIBFKcBDacBYQIBDA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="GetRPCodeMatches_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetRPCodeMatches_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="RPBuildRoutes_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareProductRoutesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyProductRoutesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056,210">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1209,225">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RPBuildRoutingProducts_1" sap:VirtualizedContainerService.HintSize="1096,290" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RPBuildRoutingProducts_1" sap:VirtualizedContainerService.HintSize="1249,305" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -115,7 +115,6 @@ namespace TOne.WhS.Routing.Data.SQL
         {
             StringBuilder query = new StringBuilder();
             query.AppendLine(query_SupplierZoneDetailsTable);
-            query.AppendLine(query_CodeMatchTable);
             query.AppendLine(query_CodeSaleZoneTable);
             query.AppendLine(query_TableTypes);
             query.AppendLine(query_CustomerRouteTable);
@@ -174,9 +173,9 @@ namespace TOne.WhS.Routing.Data.SQL
                                                     ";
 
         const string query_CustomerRouteTable = @"       CREATE TABLE [dbo].[CustomerRoute](
-	                                                    [CustomerID] [int] NOT NULL,
+	                                                    [CustomerId] [int] NOT NULL,
 	                                                    [Code] [varchar](20) NOT NULL,
-	                                                    [SaleZoneID] [bigint] NOT NULL,
+	                                                    [SaleZoneId] [bigint] NOT NULL,
 	                                                    [Rate] [decimal](10, 7) NULL,
 	                                                    [IsBlocked] [bit] NOT NULL,
 	                                                    [ExecutedRuleId] [int] NOT NULL,

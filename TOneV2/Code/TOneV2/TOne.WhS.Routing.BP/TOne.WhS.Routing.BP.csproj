@@ -155,12 +155,6 @@
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="RPBuildRoutes.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </XamlAppDef>
-  </ItemGroup>
-  <ItemGroup>
     <XamlAppDef Include="RPBuildRoutingProducts.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
