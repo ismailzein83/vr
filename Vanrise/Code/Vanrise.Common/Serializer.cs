@@ -36,12 +36,15 @@ namespace Vanrise.Common
 
         public static T Deserialize<T>(string serialized)
         {
+            if (serialized == null)
+                return default(T);
             return JsonConvert.DeserializeObject<T>(serialized, s_Settings);
         }
 
         public static object Deserialize(string serialized)
         {
-            
+            if (serialized == null)
+                return null;
             return JsonConvert.DeserializeObject(serialized, null, s_Settings);
         }
 
