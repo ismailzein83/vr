@@ -26,7 +26,14 @@ namespace QM.CLITester.iTestIntegration
         {
             //ServiceActions serviceActions = new ServiceActions();
 
-            //responseSupplier(serviceActions.PostRequest("5020", "&sid=" + supplier.SupplierId + "&name=" + supplier.Name + "&type=sms&codec=alaw&prefix" + this.Prefix), supplier);
+            ////responseSupplier(serviceActions.PostRequest("5020", "sid=" + supplier.SupplierId + "&name=" + supplier.Name + "&type=sms&codec=alaw&prefix" + this.Prefix), supplier);
+
+            //SupplierExtensionSettings extendedSetting = (SupplierExtensionSettings)supplier.Settings.ExtendedSettings[0];
+            //extendedSetting.IsNew = true;
+
+            //supplier.Settings.ExtendedSettings.Add(extendedSetting);
+
+            //responseSupplier(serviceActions.PostRequest("5020", "&name=" + supplier.Name + "&type=sms&codec=alaw&prefix=" + this.Prefix), supplier);
         }
 
         private BusinessEntity.Entities.Supplier responseSupplier(string response, BusinessEntity.Entities.Supplier supplier)
@@ -41,7 +48,7 @@ namespace QM.CLITester.iTestIntegration
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(response);
 
-            XmlNodeList xnList = xml.SelectNodes("/Vendors_List/_" + supplier.SupplierId);
+            XmlNodeList xnList = xml.SelectNodes("/Supplier/_" + supplier.SupplierId);
             if (xnList != null)
             {
                 List<ExtendedSupplierSetting> extendedSettings = new List<ExtendedSupplierSetting>();
