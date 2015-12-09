@@ -10,14 +10,31 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
     public class PriceListRateManager
     {
-        public void ProcessCountryRates(List<ImportedRate> importedRates, ExistingRatesByZoneName existingRates, List<ChangedRate> changedRates, ZonesByName newAndExistingZones, ExistingZonesByName existingZones)
+        public void ProcessCountryRates(IProcessCountryRatesContext context)
         {
-            CloseRatesForClosedZones(existingZones.SelectMany(itm => itm.Value), changedRates);
+            ProcessCountryRates(context.ImportedRates, context.ExistingRates, context.NewAndExistingZones, context.ExistingZones);
+        }
+
+        private ExistingZonesByName StructureExistingZonesByName(IEnumerable<ExistingZone> enumerable)
+        {
+            throw new NotImplementedException();
+        }
+
+        private ExistingRatesByZoneName StructureExistingRatesByZoneName(IEnumerable<ExistingRate> existingRates)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ProcessCountryRates(IEnumerable<ImportedRate> importedRates, IEnumerable<ExistingRate> existingRates, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones)
+        {
+            CloseRatesForClosedZones(existingZones);
+            ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
+            ExistingRatesByZoneName existingRatesByZoneName = StructureExistingRatesByZoneName(existingRates);
             foreach(var importedRate in importedRates)
             {
                 List<NewRate> ratesToAdd = new List<NewRate>();
                 List<ExistingRate> matchExistingRates;
-                if(existingRates.TryGetValue(importedRate.ZoneName, out matchExistingRates))
+                if (existingRatesByZoneName.TryGetValue(importedRate.ZoneName, out matchExistingRates))
                 {
                     bool shouldNotAddRate;
                     Decimal? recentRateValue;
@@ -28,18 +45,18 @@ namespace TOne.WhS.SupplierPriceList.Business
                             importedRate.ChangeType = importedRate.NormalRate > recentRateValue.Value ? RateChangeType.Increase : RateChangeType.Decrease;
                         else
                             importedRate.ChangeType = RateChangeType.New;
-                        AddImportedRate(importedRate, newAndExistingZones, existingZones);
+                        AddImportedRate(importedRate, newAndExistingZones, existingZonesByName);
                     }
                 }
                 else
                 {
                     importedRate.ChangeType = RateChangeType.New;
-                    AddImportedRate(importedRate, newAndExistingZones, existingZones);
+                    AddImportedRate(importedRate, newAndExistingZones, existingZonesByName);
                 }
             }
         }
 
-        private void CloseRatesForClosedZones(IEnumerable<ExistingZone> existingZones, List<ChangedRate> changedRates)
+        private void CloseRatesForClosedZones(IEnumerable<ExistingZone> existingZones)
         {
             foreach (var existingZone in existingZones)
             {
@@ -59,7 +76,6 @@ namespace TOne.WhS.SupplierPriceList.Business
                                     {
                                         RateId = existingRate.RateEntity.SupplierRateId
                                     };
-                                    changedRates.Add(existingRate.ChangedRate);
                                 }
                                 DateTime rateBED = existingRate.RateEntity.BED;
                                 existingRate.ChangedRate.EED = zoneEED > rateBED ? zoneEED : rateBED;

@@ -10,7 +10,14 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
     {
         public BusinessEntity.Entities.SupplierZone ZoneEntity { get; set; }
 
-        public List<ExistingCode> ExistingCodes { get; set; }
+        List<ExistingCode> _existingCodes = new List<ExistingCode>();
+        public List<ExistingCode> ExistingCodes
+        {
+            get
+            {
+                return _existingCodes;
+            }
+        }
 
         List<NewCode> _newCodes = new List<NewCode>();
         public List<NewCode> NewCodes
@@ -21,7 +28,14 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             }
         }
 
-        public List<ExistingRate> ExistingRates { get; set; }
+        List<ExistingRate> _existingRates = new List<ExistingRate>();
+        public List<ExistingRate> ExistingRates
+        {
+            get
+            {
+                return _existingRates;
+            }
+        }
         
         List<NewRate> _newRates = new List<NewRate>();
         public List<NewRate> NewRates
