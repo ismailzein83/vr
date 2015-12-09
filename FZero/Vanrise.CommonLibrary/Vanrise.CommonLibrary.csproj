@@ -65,13 +65,24 @@
     <Compile Include="Security.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Dependencies\CommonWebComponents.dll" />
+    <Content Include="Dependencies\EntityFramework.dll" />
+    <Content Include="Dependencies\EntityFramework.xml" />
     <Content Include="Dependencies\log.txt" />
     <Content Include="Dependencies\log4net.dll" />
     <Content Include="Dependencies\log4net.xml" />
+    <Content Include="Dependencies\MySql.Data.dll" />
+    <Content Include="Dependencies\MySql.Data.Entity.EF5.dll" />
+    <Content Include="Dependencies\MySql.Web.dll" />
+    <Content Include="Dependencies\Newtonsoft.Json.dll" />
+    <Content Include="Dependencies\System.Net.Http.Formatting.dll" />
+    <Content Include="Dependencies\System.Net.Http.Formatting.xml" />
+    <Content Include="Dependencies\Telerik.Web.Design.dll" />
     <Content Include="Dependencies\Telerik.Web.UI.dll" />
+    <Content Include="Dependencies\Telerik.Web.UI.Skins.dll" />
+    <Content Include="Dependencies\Telerik.Web.UI.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Dependencies\log4net.dll.refresh" />
     <None Include="App.config" />
     <None Include="Documents\Application Workflow and Services.docx" />
     <None Include="Documents\Database Schema Documentation.docx" />
