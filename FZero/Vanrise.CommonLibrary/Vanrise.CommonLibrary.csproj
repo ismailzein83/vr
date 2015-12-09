@@ -68,6 +68,7 @@
     <Content Include="Dependencies\log.txt" />
     <Content Include="Dependencies\log4net.dll" />
     <Content Include="Dependencies\log4net.xml" />
+    <Content Include="Dependencies\Telerik.Web.UI.dll" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Dependencies\log4net.dll.refresh" />
