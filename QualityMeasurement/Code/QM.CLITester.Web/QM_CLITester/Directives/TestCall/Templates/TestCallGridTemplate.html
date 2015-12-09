@@ -1,15 +1,14 @@
 ﻿<vr-datagrid datasource="testcalls"
              on-ready="onGridReady"
-             dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
              idfield="Id" defaultsortdirection="'DESC'">
 
-    <vr-datagridcolumn headertext="'Id'" field="'ID'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Supplier'" field="'SupplierID'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Country'" field="'CountryID'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Zone'" field="'ZoneID'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Creation Date'" field="'CreationDate'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.ID'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Supplier'" field="'Entity.SupplierID'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Country'" field="'Entity.CountryID'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneID'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Creation Date'" field="'Entity.CreationDate'" type="'Date'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Call Status'" field="'CallTestStatusDescription'" tag="'CallTestStatus'" type="'Text'" getcolor="getColor"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Call Result'" field="'CallTestResultDescription'" tag="'CallTestResult'" type="'Text'" getcolor="getColor"></vr-datagridcolumn>
     <vr-datagridexpandablerow>

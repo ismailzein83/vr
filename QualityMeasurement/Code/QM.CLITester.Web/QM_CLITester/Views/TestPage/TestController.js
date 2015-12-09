@@ -6,7 +6,6 @@
 
     function testController($scope, Qm_CliTester_TestCallAPIService, VRNotificationService, UtilsService, QM_BE_SupplierAPIService, VRUIUtilsService) {
         var gridAPI;
-        var filter = {};
 
         var supplierDirectiveAPI;
         var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -21,15 +20,12 @@
             $scope.suppliers = [];
            
             $scope.selectedSupplier;
-
             $scope.selectedCountry;
             $scope.selectedBreakout;
 
-            setFilterObject();
-
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                api.loadGrid(filter);
+                api.loadGrid();
             }
 
             $scope.onSupplierDirectiveReady = function (api) {
@@ -47,11 +43,6 @@
             });
         }
 
-        function setFilterObject() {
-            filter = {
-                Test_ID: null
-            };
-        }
 
         function getCountriesInfo() {
             return Qm_CliTester_TestCallAPIService.GetCountries().then(function (response) {

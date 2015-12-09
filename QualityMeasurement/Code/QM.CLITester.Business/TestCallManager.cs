@@ -169,49 +169,20 @@ namespace QM.CLITester.Business
             return dataManager.UpdateTestProgress(testCallId, testProgress, callTestStatus, callTestResult);
         }
 
-        //public Vanrise.Entities.UpdateOperationOutput<TestCallResult> UpdateTestCallResult(TestCallResult testCallResult)
-        //{
-        //    ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-
-        //    bool updateActionSucc = dataManager.Update(testCallResult);
-        //    Vanrise.Entities.UpdateOperationOutput<TestCallResult> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<TestCallResult>();
-
-        //    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-        //    updateOperationOutput.UpdatedObject = null;
-
-        //    if (updateActionSucc)
-        //    {
-        //        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-        //        updateOperationOutput.UpdatedObject = testCallResult;
-        //    }
-        //    else
-        //    {
-        //        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-        //    }
-
-        //    return updateOperationOutput;
-        //}
-
-
-        public IDataRetrievalResult<TestCall> GetFilteredTestCalls(DataRetrievalInput<TestCallResultQuery> input)
+        public LastCallUpdateOutput GetUpdatedTestCalls(ref byte[] maxTimeStamp)
         {
-            TestCallManager manager = new TestCallManager();
-            var allTestCalls = manager.GetTestCalls();
-            Func<TestCall, bool> filterExpression = (x) => (input.Query.Test_ID == null);
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allTestCalls.ToBigResult(input, filterExpression));
-        }
+            LastCallUpdateOutput lastCallUpdateOutputs = new LastCallUpdateOutput();
+            List<int> listPendingCallTestStatus = new List<int>();
+            listPendingCallTestStatus.Add((int)CallTestStatus.Initiated);
+            listPendingCallTestStatus.Add((int)CallTestStatus.InitiationFailedWithRetry);
+            listPendingCallTestStatus.Add((int)CallTestStatus.New);
+            listPendingCallTestStatus.Add((int)CallTestStatus.PartiallyCompleted);
+            listPendingCallTestStatus.Add((int)CallTestStatus.GetProgressFailedWithRetry);
 
-        public List<TestCall> GetTestCalls()
-        {
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            return dataManager.GetTestCalls();
-        }
-
-        public List<TestCall> GetUpdatedTestCalls(object maxTimeStamp)
-        {
-            ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-
-            return dataManager.GetUpdatedTestCalls(ref maxTimeStamp);
+            lastCallUpdateOutputs.ListTestCallDetails = dataManager.GetUpdatedTestCalls(ref maxTimeStamp, listPendingCallTestStatus);
+            lastCallUpdateOutputs.MaxTimeStamp = maxTimeStamp;
+            return lastCallUpdateOutputs;
         }
 
         public List<TestCall> GetTestCalls(List<int> callTestStatus)

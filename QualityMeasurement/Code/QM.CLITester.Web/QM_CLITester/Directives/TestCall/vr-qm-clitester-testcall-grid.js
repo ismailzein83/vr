@@ -26,6 +26,11 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
 
     function TestCallGrid($scope, ctrl) {
 
+        var lastUpdateHandle;
+        var input = {
+            LastUpdateHandle: lastUpdateHandle
+        };
+
         var gridAPI;
         var gridDrillDownTabsObj;
         this.initializeController = initializeController;
@@ -45,112 +50,105 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
         $scope.arrayCallTestResult.push(Qm_CliTester_CallTestResultEnum.PartiallySucceeded);
         $scope.arrayCallTestResult.push(Qm_CliTester_CallTestResultEnum.Failed);
         $scope.arrayCallTestResult.push(Qm_CliTester_CallTestResultEnum.NotAnswered);
-
-        console.log($scope.arrayCallTestResult);
-        console.log($scope.arrayCallTestStatus);
         function initializeController() {
 
             var drillDownDefinitions = Qm_CliTester_TestCallService.getDrillDownDefinition();
             gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
-
 
             $scope.testcalls = [];
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
-                    ctrl.onReady(getDirectiveAPI());
-                function getDirectiveAPI() {
+                var timer = setInterval(function () {
 
-                    var directiveAPI = {};
-                    directiveAPI.loadGrid = function(query) {
-                        //setInterval(function () { return gridAPI.retrieveData(query); }, 2000);
-                        return gridAPI.retrieveData(query);
-                    };
-                    return directiveAPI;
-                }
-                   
+                    Qm_CliTester_TestCallAPIService.GetUpdatedTestCalls(input).then(function (response) {
+                        if (response != undefined) {
+                            for (var i = 0; i < response.ListTestCallDetails.length; i++) {
+                                var testCall = response.ListTestCallDetails[i];
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(testCall);
+                                var findTestCall = false;
+                                for (var j = 0; j < $scope.testcalls.length; j++) {
+                                    if ($scope.testcalls[j].Entity.ID == response.ListTestCallDetails[i].Entity.ID) {
+                                        $scope.testcalls[j] = response.ListTestCallDetails[i];
+                                        findTestCall = true;
+                                    }
+                                }
+                                if(!findTestCall)
+                                    $scope.testcalls.push(response.ListTestCallDetails[i]);
+                            }
+                        }
+                        input.LastUpdateHandle = response.MaxTimeStamp;
+                    });
+
+                }, 1000);
+
+                //clearInterval(timer);
             };
         }
-
-        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return Qm_CliTester_TestCallAPIService.GetFilteredTestCalls(dataRetrievalInput)
-                .then(function (response) {
-
-                    if (response.Data != undefined) {
-                        for (var i = 0; i < response.Data.length; i++) {
-                            response.Data[i].CallTestStatusDescription = setEnumDescription(response.Data[i].CallTestStatus, Qm_CliTester_CallTestStatusEnum);
-                            response.Data[i].CallTestResultDescription = setEnumDescription(response.Data[i].CallTestResult, Qm_CliTester_CallTestResultEnum);
-                            gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
-                        }
-                    }
-                    onResponseReady(response);
-
-                })
-                .catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                });
-        };
 
         $scope.getColor = function (dataItem, coldef) {
             return getMeasureColor(dataItem, coldef);
         };
     }
-    function setEnumDescription(value, varEnum) {
-        for (var p in varEnum)
-            if (varEnum[p].value == value)
-                return varEnum[p].description;
-    }
     function getCallTestStatusColor(value) {
-        if (value == Qm_CliTester_CallTestStatusEnum.New.value)
-            return LabelColorsEnum.New.color;
-
-        if (value == Qm_CliTester_CallTestStatusEnum.Initiated.value)
-            return LabelColorsEnum.Primary.color;
-
-        if (value == Qm_CliTester_CallTestStatusEnum.InitiationFailedWithRetry.value)
-            return LabelColorsEnum.Warning.color;
-        if (value == Qm_CliTester_CallTestStatusEnum.InitiationFailedWithNoRetry.value)
-            return LabelColorsEnum.WarningLevel2.color;
-
-
-        if (value == Qm_CliTester_CallTestStatusEnum.PartiallyCompleted.value)
-            return LabelColorsEnum.Processing.color;
-        if (value == Qm_CliTester_CallTestStatusEnum.Completed.value)
-            return LabelColorsEnum.Success.color;
-
-
-        if (value == Qm_CliTester_CallTestStatusEnum.GetProgressFailedWithRetry.value)
-            return LabelColorsEnum.WarningLevel1.color;
-        if (value == Qm_CliTester_CallTestStatusEnum.GetProgressFailedWithNoRetry.value)
-            return LabelColorsEnum.Failed.color;
-        return undefined;
+        switch(value) {
+            case Qm_CliTester_CallTestStatusEnum.New.value:
+                return LabelColorsEnum.New.color;
+                break;
+            case Qm_CliTester_CallTestStatusEnum.Initiated.value:
+                return LabelColorsEnum.Primary.color;
+                break;
+            case Qm_CliTester_CallTestStatusEnum.InitiationFailedWithRetry.value:
+                return LabelColorsEnum.Warning.color;
+                break;
+            case Qm_CliTester_CallTestStatusEnum.InitiationFailedWithNoRetry.value:
+                return LabelColorsEnum.WarningLevel2.color;
+                break;
+            case Qm_CliTester_CallTestStatusEnum.PartiallyCompleted.value:
+                return LabelColorsEnum.Processing.color;
+                break;
+            case Qm_CliTester_CallTestStatusEnum.Completed.value:
+                return LabelColorsEnum.Success.color;
+                break;
+            case Qm_CliTester_CallTestStatusEnum.GetProgressFailedWithRetry.value:
+                return LabelColorsEnum.WarningLevel1.color;
+                break;
+            case Qm_CliTester_CallTestStatusEnum.GetProgressFailedWithNoRetry.value:
+                return LabelColorsEnum.Failed.color;
+                break;
+            default:
+                return undefined;
+        }
     }
 
     function getCallTestResultColor(value) {
-        if (value == Qm_CliTester_CallTestResultEnum.NotCompleted.value)
-            return LabelColorsEnum.Processing.color;
-
-        if (value == Qm_CliTester_CallTestResultEnum.Succeeded.value)
-            return LabelColorsEnum.Success.color;
-
-        if (value == Qm_CliTester_CallTestResultEnum.PartiallySucceeded.value)
-            return LabelColorsEnum.WarningLevel1.color;
-
-        if (value == Qm_CliTester_CallTestResultEnum.Failed.value)
-            return LabelColorsEnum.Failed.color;
-
-        if (value == Qm_CliTester_CallTestResultEnum.NotAnswered.value)
-            return LabelColorsEnum.Warning.color;
-        return undefined;
+        switch (value) {
+            case Qm_CliTester_CallTestResultEnum.NotCompleted.value:
+                return LabelColorsEnum.Processing.color;
+                break;
+            case Qm_CliTester_CallTestResultEnum.Succeeded.value:
+                return LabelColorsEnum.Success.color;
+                break;
+            case Qm_CliTester_CallTestResultEnum.PartiallySucceeded.value:
+                return LabelColorsEnum.WarningLevel1.color;
+                break;
+            case Qm_CliTester_CallTestResultEnum.Failed.value:
+                return LabelColorsEnum.Failed.color;
+                break;
+            case Qm_CliTester_CallTestResultEnum.NotAnswered.value:
+                return LabelColorsEnum.Warning.color;
+                break;
+            default:
+                return undefined;
+        }
     }
 
     function getMeasureColor(dataItem, coldef) {
         if (coldef.tag === "CallTestStatus")
-            return getCallTestStatusColor(dataItem.CallTestStatus);
+            return getCallTestStatusColor(dataItem.Entity.CallTestStatus);
         else if (coldef.tag === "CallTestResult")
-            return getCallTestResultColor(dataItem.CallTestResult);
+            return getCallTestResultColor(dataItem.Entity.CallTestResult);
         return undefined;
     }
 

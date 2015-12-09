@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using QM.CLITester.Entities;
 using Vanrise.Data.SQL;
 using System.Data;
+using System.Reflection;
 using Vanrise.Common;
 
 namespace QM.CLITester.Data.SQL
@@ -22,11 +23,6 @@ namespace QM.CLITester.Data.SQL
             return (recordsEffected > 0);
         }
 
-        public List<TestCall> GetTestCalls()
-        {
-            return GetItemsSP("QM_CLITester.sp_TestCall_GetAll", TestCallMapper);
-        }
-
         public List<TestCall> GetTestCalls(List<int> listCallTestStatus)
         {
             string callTestStatusids = null;
@@ -35,9 +31,27 @@ namespace QM.CLITester.Data.SQL
             return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCall", TestCallMapper, callTestStatusids);
         }
 
-        public List<TestCall> GetUpdatedTestCalls(ref object maxTimeStamp)
+        public List<TestCallDetail> GetUpdatedTestCalls(ref byte[] maxTimeStamp, List<int> listPendingCallTestStatus)
         {
-            return GetItemsSP("QM_CLITester.sp_TestCall_GetAll", TestCallMapper, maxTimeStamp);
+            List<TestCallDetail> listTestCalls = new List<TestCallDetail>();
+            byte[] timestamp = null;
+
+            string callTestStatusids = null;
+            if (listPendingCallTestStatus.Any())
+                callTestStatusids = string.Join<int>(",", listPendingCallTestStatus);
+
+            ExecuteReaderSP("QM_CLITester.sp_TestCall_GetRecent", (reader) =>
+            {
+                while (reader.Read())
+                    listTestCalls.Add(TestCallDetailMapper(reader));
+
+                if (reader.NextResult())
+                    while (reader.Read())
+                        timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
+            },
+               maxTimeStamp, callTestStatusids);
+            maxTimeStamp = timestamp;
+            return listTestCalls;
         }
 
         public bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus)
@@ -76,6 +90,15 @@ namespace QM.CLITester.Data.SQL
                 testCall.TestProgress = Serializer.Deserialize(testProgressSerialized);
             
             return testCall;
+        }
+
+        TestCallDetail TestCallDetailMapper(IDataReader reader)
+        {
+            TestCallDetail testCallDetail = new TestCallDetail();
+            testCallDetail.Entity = TestCallMapper(reader);
+            testCallDetail.CallTestResultDescription = testCallDetail.Entity.CallTestResult.ToString();
+            testCallDetail.CallTestStatusDescription = testCallDetail.Entity.CallTestStatus.ToString();
+            return testCallDetail;
         }
     }
 }

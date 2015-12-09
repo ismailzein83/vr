@@ -48,19 +48,11 @@ namespace QM.CLITester.Web.Controllers
 
         [HttpPost]
         [Route("GetUpdatedTestCalls")]
-        public IEnumerable<TestCall> GetUpdatedTestCalls(object maxTimeStamp)
+        public LastCallUpdateOutput GetUpdatedTestCalls(LastCallUpdateInput input)
         {
             TestCallManager manager = new TestCallManager();
-            return manager.GetUpdatedTestCalls(maxTimeStamp);
-        }
-
-
-        [HttpPost]
-        [Route("GetFilteredTestCalls")]
-        public object GetFilteredTestCalls(Vanrise.Entities.DataRetrievalInput<TestCallResultQuery> input)
-        {
-            TestCallManager manager = new TestCallManager();
-            return GetWebResponse(input, manager.GetFilteredTestCalls(input));
+            byte[] maxTimeStamp = input.LastUpdateHandle;    
+            return manager.GetUpdatedTestCalls(ref maxTimeStamp);
         }
     }
 }
