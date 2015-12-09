@@ -17,8 +17,12 @@ function SupplierSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSe
 
             
         }
-
-       
+        $scope.schedulerTaskAction.getData = function () {
+            return {
+                $type: "QM.BusinessEntity.Business.SupplierSyncTaskActionArgument, QM.BusinessEntity.Business",
+                SourceSupplierReader: sourceTypeDirectiveAPI.getData()
+            };
+        };
             
     }
 

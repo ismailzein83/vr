@@ -180,9 +180,17 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\QM.BusinessEntity.Business\QM.BusinessEntity.Business.csproj">
+      <Project>{e4d4007f-5889-4d28-9c4e-710d8908a60f}</Project>
+      <Name>QM.BusinessEntity.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\QM.BusinessEntity.Entities\QM.BusinessEntity.Entities.csproj">
       <Project>{b610fb7a-8278-4c68-bf4f-09c94bc5a8d0}</Project>
       <Name>QM.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QM.BusinessEntity.MainExtensions\QM.BusinessEntity.MainExtensions.csproj">
+      <Project>{41d4a666-01ed-43e6-bacd-0fec6dd106e8}</Project>
+      <Name>QM.BusinessEntity.MainExtensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\QM.CLITester.Business\QM.CLITester.Business.csproj">
       <Project>{724b8b1b-b990-4f4a-b886-d299cff49219}</Project>

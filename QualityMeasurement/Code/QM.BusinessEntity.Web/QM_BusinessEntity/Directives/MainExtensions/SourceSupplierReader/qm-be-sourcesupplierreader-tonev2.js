@@ -46,7 +46,7 @@ app.directive("qmBeSourcesupplierreaderTonev2", [function () {
             api.getData = function () {
                 
                 return {
-                    $type: "QM.BusinessEntity.MainExtensions.SourceSuppliersReaders.SupplierTOneV2SQLReader, QM.BusinessEntity.MainExtension",
+                    $type: "QM.BusinessEntity.MainExtensions.SourceSuppliersReaders.SupplierTOneV2SQLReader, QM.BusinessEntity.MainExtensions",
                     ConnectionString: $scope.connectionString
                 };
             };

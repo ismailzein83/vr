@@ -45,7 +45,7 @@ app.directive("qmBeSourcesupplierreaderTonev1", [function () {
 
             api.getData = function () {
                 return {
-                    $type: "QM.BusinessEntity.MainExtensions.SourceSuppliersReaders.SupplierTOneV1Reader, QM.BusinessEntity.MainExtension",
+                    $type: "QM.BusinessEntity.MainExtensions.SourceSuppliersReaders.SupplierTOneV1Reader, QM.BusinessEntity.MainExtensions",
                     ConnectionString: $scope.connectionString
                 };
             };

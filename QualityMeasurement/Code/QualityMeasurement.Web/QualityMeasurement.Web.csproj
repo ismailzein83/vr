@@ -234,6 +234,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Runtime.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Web.dll</HintPath>
     </Reference>
