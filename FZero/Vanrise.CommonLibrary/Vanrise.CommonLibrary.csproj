@@ -75,6 +75,7 @@
     <Content Include="Dependencies\MySql.Data.Entity.EF5.dll" />
     <Content Include="Dependencies\MySql.Web.dll" />
     <Content Include="Dependencies\Newtonsoft.Json.dll" />
+    <Content Include="Dependencies\OpenPop.dll" />
     <Content Include="Dependencies\System.Net.Http.Formatting.dll" />
     <Content Include="Dependencies\System.Net.Http.Formatting.xml" />
     <Content Include="Dependencies\Telerik.Web.Design.dll" />
