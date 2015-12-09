@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data
     {
         BigResult<SupplierCode> GetFilteredSupplierCodes(Vanrise.Entities.DataRetrievalInput<SupplierCodeQuery> input);
 
-        List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate);
+        List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime? minimumDate);
         List<SupplierCode> GetSupplierCodes(int supplierId, DateTime effectiveOn);
 
         List<SupplierCode> GetActiveSupplierCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes, IEnumerable<RoutingSupplierInfo> supplierInfo);

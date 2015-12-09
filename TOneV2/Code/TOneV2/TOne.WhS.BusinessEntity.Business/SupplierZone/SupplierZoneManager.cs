@@ -24,6 +24,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allsupplierZones.ToBigResult(input, filterExpression, SupplierZoneDetailMapper));
         }
+        
         public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(SupplierZoneInfoFilter filter, string searchValue)
         {
             IEnumerable<SupplierZone> supplierZones = null;
@@ -34,13 +35,11 @@ namespace TOne.WhS.BusinessEntity.Business
             return supplierZones.MapRecords(SupplierZoneInfoMapper, x => x.Name.ToLower().Contains(searchValue.ToLower()));
            
         }
-        private IEnumerable<SupplierZone> GetSupplierZoneBySupplier(SupplierZoneInfoFilter filter)
+        
+        public List<SupplierZone> GetSupplierZonesEffectiveAfter(int supplierId, DateTime? minimumDate)
         {
-            IEnumerable<SupplierZone> supplierZones = GetCachedSupplierZones();
-            Func<SupplierZone, bool> filterExpression = (item) =>
-                 (item.SupplierId == filter.SupplierId);
-
-            return supplierZones.FindAllRecords(filterExpression);
+            ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
+            return dataManager.GetSupplierZonesEffectiveAfter(supplierId, minimumDate);
         }
        
         public List<SupplierZone> GetSupplierZones(int supplierId, DateTime effectiveDate)
@@ -112,6 +111,15 @@ namespace TOne.WhS.BusinessEntity.Business
             int supplierId = supplierZone.SupplierId;
             supplierZoneDetail.SupplierName = caManager.GetCarrierAccount(supplierId).Name;
             return supplierZoneDetail;
+        }
+
+        private IEnumerable<SupplierZone> GetSupplierZoneBySupplier(SupplierZoneInfoFilter filter)
+        {
+            IEnumerable<SupplierZone> supplierZones = GetCachedSupplierZones();
+            Func<SupplierZone, bool> filterExpression = (item) =>
+                 (item.SupplierId == filter.SupplierId);
+
+            return supplierZones.FindAllRecords(filterExpression);
         }
         #endregion
 

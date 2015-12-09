@@ -68,7 +68,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, supplierRateDetailResult);
         }
 
-        public List<SupplierRate> GetSupplierRatesEffectiveAfter(int supplierId, DateTime minimumDate)
+        public List<SupplierRate> GetSupplierRatesEffectiveAfter(int supplierId, DateTime? minimumDate)
         {
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
             return dataManager.GetSupplierRates(supplierId, minimumDate);

@@ -71,7 +71,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyDataToDB.cs" />
+    <Compile Include="GetDataFromPriceList.cs" />
+    <Compile Include="GetExistingCodes.cs" />
+    <Compile Include="GetExistingRates.cs" />
+    <Compile Include="GetExistingZones.cs" />
+    <Compile Include="PrepareExistingCodes.cs" />
+    <Compile Include="PrepareExistingRates.cs" />
+    <Compile Include="PrepareExistingZones.cs" />
     <Compile Include="ProcessCodes.cs" />
+    <Compile Include="ProcessCountryCodes.cs" />
+    <Compile Include="ProcessCountryRates.cs" />
     <Compile Include="ProcessRates.cs" />
     <Compile Include="ProcessZones.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

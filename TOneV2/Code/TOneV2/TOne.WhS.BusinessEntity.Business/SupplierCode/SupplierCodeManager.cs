@@ -12,7 +12,7 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierCodeManager
     {
-        public List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate)
+        public List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime? minimumDate)
         {
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
             return dataManager.GetSupplierCodesEffectiveAfter(supplierId, minimumDate);

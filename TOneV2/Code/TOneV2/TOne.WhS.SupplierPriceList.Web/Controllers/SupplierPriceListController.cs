@@ -31,7 +31,8 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
                     EffectiveDate = effectiveDate,
                     FileId = fileId,
                     SupplierAccountId = supplierAccountId,
-                    CurrencyId = currencyId
+                    CurrencyId = currencyId,
+                    DeletedCodesDate = DateTime.Now
                 }
 
             });

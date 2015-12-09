@@ -29,7 +29,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             _columnMapper.Add("SupplierZoneName", "ZoneID");
         }
 
-        public List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate)
+        public List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime? minimumDate)
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetByDate", SupplierCodeMapper, supplierId,minimumDate);
         }

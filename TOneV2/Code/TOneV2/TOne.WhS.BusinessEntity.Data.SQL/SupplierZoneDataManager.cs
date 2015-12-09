@@ -21,20 +21,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierZone_GetBySupplierId", SupplierZoneMapper, supplierId, effectiveDate);
         }
-        SupplierZone SupplierZoneMapper(IDataReader reader)
-        {
-            SupplierZone supplierZone = new SupplierZone
-            {
-                SupplierId = (int)reader["SupplierID"],
-                CountryId = (int)reader["CountryID"],
-                SupplierZoneId = (long)reader["ID"],
-                Name = reader["Name"] as string,
-                BED = GetReaderValue<DateTime>(reader, "BED"),
-                EED = GetReaderValue<DateTime?>(reader, "EED")
-            };
-            return supplierZone;
-        }
 
+        public List<SupplierZone> GetSupplierZonesEffectiveAfter(int supplierId, DateTime? minimumDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SupplierZone_GetByDate", SupplierZoneMapper, supplierId, minimumDate);
+        }
 
         public long ReserveIDRange(int numberOfIDs)
         {
@@ -51,6 +42,20 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public bool AreSupplierZonesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SupplierZone", ref updateHandle);
+        }
+
+        SupplierZone SupplierZoneMapper(IDataReader reader)
+        {
+            SupplierZone supplierZone = new SupplierZone
+            {
+                SupplierId = (int)reader["SupplierID"],
+                CountryId = (int)reader["CountryID"],
+                SupplierZoneId = (long)reader["ID"],
+                Name = reader["Name"] as string,
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED")
+            };
+            return supplierZone;
         }
     }
 }

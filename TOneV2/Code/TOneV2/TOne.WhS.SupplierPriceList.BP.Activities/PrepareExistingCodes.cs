@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Activities;
+using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.SupplierPriceList.Entities.SPL;
+using Vanrise.Common;
+
+namespace TOne.WhS.SupplierPriceList.BP.Activities
+{
+
+    public sealed class PrepareExistingCodes : CodeActivity
+    {
+        [RequiredArgument]
+        public InArgument<IEnumerable<SupplierCode>> ExistingCodeEntities { get; set; }
+
+        [RequiredArgument]
+        public InArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<IEnumerable<ExistingCode>> ExistingCodes { get; set; }
+
+        protected override void Execute(CodeActivityContext context)
+        {
+            IEnumerable<SupplierCode> existingCodeEntities = this.ExistingCodeEntities.Get(context);
+            Dictionary<long, ExistingZone> existingZonesByZoneId = this.ExistingZonesByZoneId.Get(context);
+
+            IEnumerable<ExistingCode> existingCodes = existingCodeEntities.MapRecords((codeEntity) => ExistingCodeMapper(codeEntity, existingZonesByZoneId));
+            ExistingCodes.Set(context, existingCodes);
+        }
+
+        ExistingCode ExistingCodeMapper(SupplierCode codeEntity, Dictionary<long, ExistingZone> existingZonesByZoneId)
+        {
+            return new ExistingCode()
+            {
+                CodeEntity = codeEntity,
+                ParentZone = existingZonesByZoneId[codeEntity.ZoneId]
+            };
+        }
+    }
+}
