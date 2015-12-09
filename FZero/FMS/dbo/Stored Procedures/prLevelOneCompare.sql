@@ -6,6 +6,14 @@
 CREATE PROCEDURE [dbo].[prLevelOneCompare]
 	
 AS
+
+
+DECLARE   @ConcatString VARCHAR(4000)
+SELECT   @ConcatString =  COALESCE(@ConcatString + ';', '') + fraudprefix FROM Clients 
+SELECT distinct Value as Prefix  into #DistinctPrefixes FROM dbo.split ( REPLACE(@ConcatString,';;',';')) where Value <>''
+
+
+
 Declare @LevelOneComparisonDateTime datetime
 set @LevelOneComparisonDateTime= GETDATE();
 
@@ -29,20 +37,29 @@ where ID in (	select	gc.Id
 						inner join RecievedCalls rc with(nolock,index=I_GeneratedCallsID) on gc.ID=rc.GeneratedCallID 
 				where	gc.b_number=rc.cli)
 
--- Normalizing b_number----------------------------------------------------------------------------------------------
-update GeneratedCalls set b_number=right(b_number,LEN ( b_number )-2) where b_number like '00964%' --67086
-update GeneratedCalls set b_number=right(b_number,LEN ( b_number )-1) where b_number like '+964%' --128
-update RecievedCalls set b_number=right(b_number,LEN ( b_number )-2) where b_number like '00964%' --30774
-update RecievedCalls set b_number=right(b_number,LEN ( b_number )-1) where b_number like '+964%' --128
-update GeneratedCalls set b_number=right(b_number,LEN ( b_number )-2) where b_number like '00963%' --67086
-update GeneratedCalls set b_number=right(b_number,LEN ( b_number )-1) where b_number like '+963%' --128
-update RecievedCalls set b_number=right(b_number,LEN ( b_number )-2) where b_number like '00963%' --30774
-update RecievedCalls set b_number=right(b_number,LEN ( b_number )-1) where b_number like '+963%' --128
-update GeneratedCalls set b_number=right(b_number,LEN ( b_number )-2) where b_number like '00961%' --67086
-update GeneratedCalls set b_number=right(b_number,LEN ( b_number )-1) where b_number like '+961%' --128
-update RecievedCalls set b_number=right(b_number,LEN ( b_number )-2) where b_number like '00961%' --30774
-update RecievedCalls set b_number=right(b_number,LEN ( b_number )-1) where b_number like '+961%' --128
 
+		DECLARE client_cursor CURSOR
+		FOR
+		   SELECT distinct Countrycode 
+		   FROM FMS.dbo.Clients
+		OPEN client_cursor
+		DECLARE @code sysname
+		FETCH NEXT FROM client_cursor INTO @code
+		WHILE (@@FETCH_STATUS <> -1)
+		BEGIN
+		   IF (@@FETCH_STATUS <> -2)
+		   BEGIN   
+
+			update GeneratedCalls set b_number=right(b_number,LEN ( b_number )-2) where b_number like '00'+@code+'%' 
+			update GeneratedCalls set b_number=right(b_number,LEN ( b_number )-1) where b_number like '+'+@code+'%'
+			update RecievedCalls set b_number=right(b_number,LEN ( b_number )-2) where b_number like '00'+@code+'%' 
+			update RecievedCalls set b_number=right(b_number,LEN ( b_number )-1) where b_number like '+'+@code+'%' 
+
+		   END
+		   FETCH NEXT FROM client_cursor INTO @code
+		END
+		CLOSE client_cursor
+		DEALLOCATE client_cursor
 
 
 
@@ -57,7 +74,7 @@ DECLARE @getID CURSOR
 SET @getID = CURSOR FOR
 SELECT  [ID] ,[a_number] ,[b_number] ,[AttemptDateTime] 
 FROM	GeneratedCalls  with(nolock,index=I_AttemptDateTime)
-where	attemptdatetime >DATEADD(dd, -1, GETDATE()) 
+where	attemptdatetime >DATEADD(dd, -2, GETDATE()) 
 		and Level1Comparison=0 and Level2Comparison=0 and StatusID=1
 OPEN @getID		FETCH NEXT FROM @getID INTO @ID  ,@a_number ,@b_number ,@AttemptDateTime
 WHILE @@FETCH_STATUS = 0
@@ -74,20 +91,12 @@ BEGIN
  Declare @HasEmptyCLI bit
   
  Declare @RecievedB_number varchar(50)
- Declare @RecievedB_number_without_964 varchar(50)
- Declare @RecievedB_number_without_963 varchar(50)
-
  Declare @RecievedFromAttemptDateTime datetime
  Declare @RecievedToAttemptDateTime datetime
  
  
  set @RecievedB_number = @b_number;
-
- Set @RecievedB_number_without_964= (SELECT '0'+REPLACE(@b_number, '964',''));
-
- Set @RecievedB_number_without_963= (SELECT '0'+REPLACE(@b_number, '963',''));
-
- Set @RecievedFromAttemptDateTime =(select DATEADD(minute,-1, @AttemptDateTime));
+  Set @RecievedFromAttemptDateTime =(select DATEADD(minute,-1, @AttemptDateTime));
  Set @RecievedToAttemptDateTime =(select DATEADD(minute,1, @AttemptDateTime));
 
  
@@ -104,7 +113,7 @@ if ((select COUNT(*) from #RecievedCalls) = 0)
 				ABS (DATEDIFF(SECOND, AttemptDateTime, @AttemptDateTime))as DateDifference 
 		from	RecievedCalls with(nolock,index=I_AttemptDateTime) 
 		where (AttemptDateTime >= @RecievedFromAttemptDateTime  and AttemptDateTime <= @RecievedToAttemptDateTime)
-				and (b_number =@RecievedB_number or b_number =@RecievedB_number_without_964 or b_number =@RecievedB_number_without_963) 
+				and (b_number =@RecievedB_number or b_number in (SELECT distinct '0'+REPLACE(@RecievedB_number, CountryCode,'') from Clients)) 
 				and (GeneratedCallID is NULL )				  
 		order by DateDifference;
    End
@@ -132,7 +141,8 @@ if ((select COUNT(*) from #RecievedCalls) >0)
 			End      
 			else if (@IsEqual=0 and @IsLocal=1)
 				Begin	
-					if ((select (case when @b_number like '964%' and @CLI like '07%' then  1 when @b_number like '963%' and @CLI like '09%' then  1  else 0 end) IsTermination )=1)
+					if ((select max(case when @CLI like Prefix+'%' and @b_number like  c.CountryCode +'%' then 1 else 0 end) IsTermination from #DistinctPrefixes dp inner join Clients c on  c.FraudPrefix like '%' +  dp.Prefix + '%')=1)
+					
 					Begin
 						update	GeneratedCalls 
 						set		StatusID=2, LevelOneComparisonDateTime=@LevelOneComparisonDateTime, Level1Comparison =1 

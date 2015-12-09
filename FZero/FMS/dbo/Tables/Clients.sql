@@ -7,6 +7,12 @@
     [ClientReport]      BIT           NULL,
     [ClientEmail]       NVARCHAR (50) NULL,
     [GMT]               INT           NULL,
+    [CountryCode]       VARCHAR (50)  NULL,
+    [PrefixLength]      INT           NULL,
+    [FraudPrefix]       VARCHAR (50)  NULL,
+    [Length]            INT           NULL,
     CONSTRAINT [PK_ClientNames] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
