@@ -69,15 +69,15 @@
   <ItemGroup>
     <Reference Include="MySql.Data, Version=6.7.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependecies\MySql.Data.dll</HintPath>
+      <HintPath>..\Vanrise.CommonLibrary\Dependencies\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data.Entity.EF5, Version=6.7.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependecies\MySql.Data.Entity.EF5.dll</HintPath>
+      <HintPath>..\Vanrise.CommonLibrary\Dependencies\MySql.Data.Entity.EF5.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Web, Version=6.7.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependecies\MySql.Web.dll</HintPath>
+      <HintPath>..\Vanrise.CommonLibrary\Dependencies\MySql.Web.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -147,9 +147,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Debug\FMSMysqlSln.vshost.exe" />
-    <Content Include="Dependecies\MySql.Data.dll" />
-    <Content Include="Dependecies\MySql.Data.Entity.EF5.dll" />
-    <Content Include="Dependecies\MySql.Web.dll" />
   </ItemGroup>
   <ItemGroup>
     <PublishFile Include="MySql.Data">

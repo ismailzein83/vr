@@ -54,10 +54,6 @@
     <StartupObject>Vanrise.Fzero.Services.LevelTwoComparison.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenPop, Version=2.0.0.288, Culture=neutral, PublicKeyToken=bebb5741791313cd, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\OpenPop.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
@@ -157,7 +153,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Debug\OpenPop.dll" />
-    <Content Include="Dependencies\OpenPop.dll" />
     <None Include="Service References\ServiceReference1\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

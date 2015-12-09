@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
-      <HintPath>..\..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\Vanrise.CommonLibrary\Dependencies\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -105,13 +105,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Content Include="Dependencies\EntityFramework.dll" />
-    <Content Include="Dependencies\log4net.dll" />
-    <Content Include="Dependencies\log4net.xml" />
-    <Content Include="Dependencies\Telerik.Web.UI.dll" />
-    <Content Include="Dependencies\Telerik.Web.UI.xml" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -54,9 +54,8 @@
     <StartupObject>Vanrise.Fzero.Services.Email.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenPop, Version=2.0.0.288, Culture=neutral, PublicKeyToken=bebb5741791313cd, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\OpenPop.dll</HintPath>
+    <Reference Include="OpenPop">
+      <HintPath>..\Vanrise.CommonLibrary\Dependencies\OpenPop.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -98,7 +97,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="bin\Debug\InstallUtil.InstallLog" />
-    <None Include="Dependencies\OpenPop.dll.refresh" />
     <None Include="Service References\ServiceReference1\FMS.DataLayer.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -151,7 +149,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Dependencies\OpenPop.dll" />
     <None Include="Service References\ServiceReference1\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

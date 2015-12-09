@@ -68,10 +68,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
-    <Reference Include="OpenPop, Version=2.0.0.288, Culture=neutral, PublicKeyToken=bebb5741791313cd, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\OpenPop.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
@@ -111,7 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Dependencies\OpenPop.dll.refresh" />
     <None Include="FMSDataSet.xsc">
       <DependentUpon>FMSDataSet.xsd</DependentUpon>
     </None>
@@ -154,9 +149,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Dependencies\OpenPop.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.CommonLibrary\Vanrise.CommonLibrary.csproj">
