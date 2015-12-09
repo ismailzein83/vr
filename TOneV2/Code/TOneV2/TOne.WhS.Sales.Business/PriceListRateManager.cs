@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.Sales.Entities;
 using TOne.WhS.Sales.Entities.RateManagement;
 using Vanrise.Common;
 

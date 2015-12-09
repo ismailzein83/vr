@@ -34,6 +34,7 @@ namespace TOne.WhS.Sales.Entities.CostCalculation.Extensions
                         cost += (option.Entity.SupplierRate * percentageOption.Percentage.Value);
                     currentIndex++;
                 }
+                context.Cost = cost / 100;
             }
         }
 
@@ -56,7 +57,6 @@ namespace TOne.WhS.Sales.Entities.CostCalculation.Extensions
                 set;
             }
         }
-
 
         #endregion
     }

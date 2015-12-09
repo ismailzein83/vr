@@ -1,8 +1,9 @@
-﻿app.service("WhS_Sales_MainService", ["VRModalService", function (VRModalService) {
+﻿app.service("WhS_Sales_RatePlanService", ["VRModalService", function (VRModalService) {
 
     return ({
         sellNewZones: sellNewZones,
-        editSettings: editSettings
+        editSettings: editSettings,
+        viewRecentChanges: viewRecentChanges
     });
 
     function sellNewZones(customerId, onCustomerZonesSold) {
@@ -31,5 +32,19 @@
         };
 
         VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanSettings.html", parameters, modalSettings);
+    }
+
+    function viewRecentChanges(ownerType, ownerId) {
+        var parameters = {
+            OwnerType: ownerType,
+            OwnerId: ownerId
+        };
+
+        var settings = {};
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "Rate Plan Recent Changes";
+        };
+
+        VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanRecentChanges.html", parameters, settings);
     }
 }]);

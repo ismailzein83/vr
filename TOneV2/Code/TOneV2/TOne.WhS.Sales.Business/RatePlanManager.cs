@@ -99,7 +99,7 @@ namespace TOne.WhS.Sales.Business
             return zoneItems;
         }
 
-        public ZoneItem GetZoneItem(SalePriceListOwnerType ownerType, int ownerId, int routingDatabaseId, int policyConfigId, int numberOfOptions, long zoneId)
+        public ZoneItem GetZoneItem(SalePriceListOwnerType ownerType, int ownerId, int routingDatabaseId, int policyConfigId, int numberOfOptions, long zoneId, List<CostCalculationMethod> costCalculationMethods)
         {
             ZoneItem zoneItem = new ZoneItem() { ZoneId = zoneId };
             zoneItem.ZoneName = GetZoneName(zoneId);
@@ -120,7 +120,21 @@ namespace TOne.WhS.Sales.Business
 
             IEnumerable<RPRouteDetail> rpRoutes = GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, new List<ZoneItem>() { zoneItem });
             if (rpRoutes != null && rpRoutes.Count() > 0)
+            {
                 zoneItem.RouteOptions = rpRoutes.ElementAt(0).RouteOptionsDetails;
+
+                if (costCalculationMethods != null && costCalculationMethods.Count() > 0)
+                {
+                    zoneItem.Costs = new List<decimal>();
+
+                    foreach (CostCalculationMethod method in costCalculationMethods)
+                    {
+                        CostCalculationMethodContext context = new CostCalculationMethodContext() { Route = rpRoutes.ElementAt(0) };
+                        method.CalculateCost(context);
+                        zoneItem.Costs.Add(context.Cost);
+                    }
+                }
+            }
 
             return zoneItem;
         }
@@ -249,21 +263,24 @@ namespace TOne.WhS.Sales.Business
             {
                 foreach (RPRouteDetail rpRoute in rpRoutes)
                 {
-                    ZoneItem zoneItem = zoneItems.FindRecord(itm => itm.ZoneId == rpRoute.SaleZoneId);
-
-                    if (zoneItem != null)
+                    if (rpRoute.RouteOptionsDetails != null)
                     {
-                        zoneItem.RouteOptions = rpRoute.RouteOptionsDetails;
+                        ZoneItem zoneItem = zoneItems.FindRecord(itm => itm.ZoneId == rpRoute.SaleZoneId);
 
-                        if (costCalculationMethods != null && costCalculationMethods.Count() > 0)
+                        if (zoneItem != null)
                         {
-                            zoneItem.Costs = new List<decimal>();
+                            zoneItem.RouteOptions = rpRoute.RouteOptionsDetails;
 
-                            foreach (CostCalculationMethod method in costCalculationMethods)
+                            if (costCalculationMethods != null && costCalculationMethods.Count() > 0)
                             {
-                                CostCalculationMethodContext context = new CostCalculationMethodContext() { Route = rpRoute };
-                                method.CalculateCost(context);
-                                zoneItem.Costs.Add(context.Cost);
+                                zoneItem.Costs = new List<decimal>();
+
+                                foreach (CostCalculationMethod method in costCalculationMethods)
+                                {
+                                    CostCalculationMethodContext context = new CostCalculationMethodContext() { Route = rpRoute };
+                                    method.CalculateCost(context);
+                                    zoneItem.Costs.Add(context.Cost);
+                                }
                             }
                         }
                     }
@@ -435,59 +452,49 @@ namespace TOne.WhS.Sales.Business
 
                     if (newDefaultRoutingProduct != null)
                         routingProductDataManager.InsertOrUpdateDefaultRoutingProduct(ownerType, ownerId, newDefaultRoutingProduct);
-                    else
+                    else if (defaultRoutingProductChange != null)
                         routingProductDataManager.UpdateDefaultRoutingProduct(ownerType, ownerId, defaultRoutingProductChange);
                 }
 
                 if (changes.ZoneChanges != null)
                 {
-                    int priceListId = AddPriceList(ownerType, ownerId);
-
-                    IEnumerable<Entities.NewRate> newRates = changes.ZoneChanges.MapRecords(itm => itm.NewRate, itm => itm.NewRate != null);
                     PriceListRateManager rateManager = new PriceListRateManager();
-                    
-                    Func<Entities.NewRate, Entities.RateManagement.NewRate> mappingExpression = (itm) =>
+                    ISaleRateDataManager saleRateDataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+                    ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
+
+                    IEnumerable<NewRate> newRates = null;
+                    List<RateChange> rateChanges = null;
+                    IEnumerable<NewZoneRoutingProduct> newRoutingProducts = null;
+                    IEnumerable<ZoneRoutingProductChange> routingProductChanges = null;
+
+                    int priceListId = AddPriceList(ownerType, ownerId);
+                    newRates = changes.ZoneChanges.MapRecords(itm => itm.NewRate, itm => itm.NewRate != null);
+
+                    if (newRates != null && newRates.Count() > 0)
                     {
-                        Entities.RateManagement.NewRate newRate = new Entities.RateManagement.NewRate()
+                        DateTime minBED = newRates.MapRecords(itm => itm.BED).OrderBy(itm => itm).FirstOrDefault();
+                        IEnumerable<long> zoneIds = newRates.MapRecords(itm => itm.ZoneId);
+                        IEnumerable<SaleRate> existingRates = saleRateDataManager.GetExistingRatesByZoneIds(ownerType, ownerId, zoneIds, minBED);
+                        
+                        foreach (NewRate newRate in newRates)
                         {
-                            ZoneId = itm.ZoneId,
-                            NormalRate = itm.NormalRate,
-                            OtherRates = itm.OtherRates,
-                            CurrencyId = itm.CurrencyId,
-                            BED = itm.BED,
-                            EED = itm.EED
-                        };
-
-                        IEnumerable<ExistingRate> existingRates = _dataManager.GetZoneExistingRates(ownerType, ownerId, newRate.ZoneId, newRate.BED);
-                        rateManager.ProcessNewRate(newRate, existingRates);
-
-                        return newRate;
-                    };
-
-                    IEnumerable<Entities.RateManagement.NewRate> managerNewRates = newRates.MapRecords(mappingExpression);
-
-                    List<RateChange> rateChanges = new List<RateChange>();
-                    foreach (Entities.RateManagement.NewRate newRate in managerNewRates)
-                    {
-                        if (newRate.ChangedExistingRates != null && newRate.ChangedExistingRates.Count > 0)
-                        {
-                            foreach (ExistingRate existingRate in newRate.ChangedExistingRates)
-                                rateChanges.Add(new RateChange() { RateId = existingRate.ChangedRate.RateId, EED = existingRate.ChangedRate.EED });
+                            IEnumerable<SaleRate> zoneExistingRates = existingRates.FindAllRecords(itm => itm.ZoneId == newRate.ZoneId && itm.IsOverlapedWith(newRate));
+                            rateManager.ProcessNewRate(newRate, zoneExistingRates.MapRecords(itm => new ExistingRate() { RateEntity = itm }));
                         }
+
+                        rateChanges = new List<RateChange>();
+                        foreach (NewRate newRate in newRates)
+                            rateChanges.AddRange(newRate.ChangedExistingRates.MapRecords(itm => new RateChange() { RateId = itm.ChangedRate.RateId, EED = itm.ChangedRate.EED }));
                     }
                     
-                    IEnumerable<NewZoneRoutingProduct> newRoutingProducts = changes.ZoneChanges.MapRecords(item => item.NewRoutingProduct, item => item.NewRoutingProduct != null);
-                    IEnumerable<ZoneRoutingProductChange> routingProductChanges = changes.ZoneChanges.MapRecords(item => item.RoutingProductChange, item => item.RoutingProductChange != null);
-
-                    ISaleRateDataManager saleRateDataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+                    newRoutingProducts = changes.ZoneChanges.MapRecords(itm => itm.NewRoutingProduct, itm => itm.NewRoutingProduct != null);
+                    routingProductChanges = changes.ZoneChanges.MapRecords(itm => itm.RoutingProductChange, itm => itm.RoutingProductChange != null);
 
                     if (rateChanges != null)
                         succeeded = saleRateDataManager.CloseRates(rateChanges);
 
-                    //if (newSaleRates != null)
-                    //    succeeded = saleRateDataManager.InsertRates(newSaleRates);
-
-                    ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
+                    if (newRates != null)
+                        succeeded = saleRateDataManager.InsertRates(newRates, priceListId);
 
                     if (routingProductChanges != null)
                         saleEntityRoutingProductDataManager.UpdateZoneRoutingProducts(ownerType, ownerId, routingProductChanges);
@@ -496,7 +503,7 @@ namespace TOne.WhS.Sales.Business
                         saleEntityRoutingProductDataManager.InsertOrUpdateZoneRoutingProducts(ownerType, ownerId, newRoutingProducts);
                 }
 
-                _dataManager.sp_RatePlan_SetStatusIfExists(ownerType, ownerId, RatePlanStatus.Completed);
+                _dataManager.SetRatePlanStatusIfExists(ownerType, ownerId, RatePlanStatus.Completed);
             }
 
             return succeeded;
@@ -517,24 +524,9 @@ namespace TOne.WhS.Sales.Business
             return priceListId;
         }
 
-        private IEnumerable<SaleRate> MapNewRatesToSaleRates(IEnumerable<TOne.WhS.Sales.Entities.NewRate> newRates, int priceListId)
+        public IEnumerable<Changes> GetRecentChanges(SalePriceListOwnerType ownerType, int ownerId)
         {
-            List<SaleRate> saleRates = new List<SaleRate>();
-
-            foreach (Entities.NewRate newRate in newRates)
-            {
-                saleRates.Add(new SaleRate()
-                {
-                    ZoneId = newRate.ZoneId,
-                    PriceListId = priceListId,
-                    CurrencyId = newRate.CurrencyId,
-                    NormalRate = newRate.NormalRate,
-                    BED = newRate.BED,
-                    EED = newRate.EED
-                });
-            }
-
-            return saleRates;
+            return _dataManager.GetRecentChanges(ownerType, ownerId, RatePlanStatus.Completed);
         }
 
         #endregion
@@ -546,7 +538,9 @@ namespace TOne.WhS.Sales.Business
             Changes existingChanges = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
             Changes allChanges = MergeChanges(existingChanges, input.NewChanges);
 
-            return _dataManager.InsertOrUpdateChanges(input.OwnerType, input.OwnerId, allChanges, RatePlanStatus.Draft);
+            if (allChanges != null)
+                return _dataManager.InsertOrUpdateChanges(input.OwnerType, input.OwnerId, allChanges, RatePlanStatus.Draft);
+            return true;
         }
 
         private Changes MergeChanges(Changes existingChanges, Changes newChanges)

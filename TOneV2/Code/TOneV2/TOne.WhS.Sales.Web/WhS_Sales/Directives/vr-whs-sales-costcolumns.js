@@ -33,8 +33,7 @@ function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
                 ctrl.onTemplateChange = function () {
                     ctrl.disableAddButton = (!ctrl.selectedTemplate);
                 };
-
-                ctrl.addCostColumn = function () {
+                ctrl.addDataItem = function () {
                     var dataItem = {
                         id: ctrl.dataSource.length + 1,
                         name: ctrl.selectedTemplate.Name,
@@ -50,7 +49,6 @@ function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
 
                     ctrl.dataSource.push(dataItem);
                 };
-
                 ctrl.removeDataItem = function (dataItem) {
                     var index = UtilsService.getItemIndexByVal(ctrl.dataSource, dataItem.id, "id");
                     ctrl.dataSource.splice(index, 1);
@@ -113,7 +111,7 @@ function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
                     for (var i = 0; i < ctrl.dataSource.length; i++) {
                         if (ctrl.dataSource[i].directiveAPI) {
                             var data = ctrl.dataSource[i].directiveAPI.getData();
-
+                            
                             if (data) {
                                 data.ConfigId = ctrl.dataSource[i].ConfigId;
                                 costCalculationMethods.push(data);

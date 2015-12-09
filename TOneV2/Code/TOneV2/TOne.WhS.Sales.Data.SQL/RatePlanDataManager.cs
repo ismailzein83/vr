@@ -28,33 +28,15 @@ namespace TOne.WhS.Sales.Data.SQL
             return affectedRows > 0;
         }
 
-        public bool sp_RatePlan_SetStatusIfExists(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status)
+        public bool SetRatePlanStatusIfExists(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status)
         {
             int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_SetStatusIfExists", ownerType, ownerId, status);
             return affectedRows > 0;
         }
 
-        public IEnumerable<ExistingRate> GetZoneExistingRates(SalePriceListOwnerType ownerType, int ownerId, long zoneId, DateTime minEED)
+        public IEnumerable<Changes> GetRecentChanges(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status)
         {
-            return GetItemsSP("TOneWhS_Sales.sp_SaleRate_GetZoneExistingRates", ExistingRateMapper, ownerType, ownerId, zoneId, minEED);
-        }
-
-        private ExistingRate ExistingRateMapper(IDataReader reader)
-        {
-            return new ExistingRate()
-            {
-                RateEntity = new SaleRate()
-                {
-                    SaleRateId = (int)reader["ID"],
-                    PriceListId = (int)reader["PriceListID"],
-                    ZoneId = (long)reader["ZoneID"],
-                    CurrencyId = GetReaderValue<int?>(reader, "CurrencyID"),
-                    NormalRate = (decimal)reader["Rate"],
-                    OtherRates = Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string),
-                    BED = (DateTime)reader["BED"],
-                    EED = GetReaderValue<DateTime?>(reader, "EED")
-                }
-            };
+            return GetItemsSP("TOneWhS_Sales.sp_RatePlan_GetRecent", ChangesMapper, ownerType, ownerId, status);
         }
 
         #endregion

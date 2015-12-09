@@ -63,6 +63,17 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     };
                     return saleRateGridAPI.loadGrid(query);
                 }
+            }, {
+                title: "Codes",
+                directive: "vr-whs-be-salecode-grid",
+                loadDirective: function (saleCodeGridAPI, zoneItem) {
+                    var query = {
+                        SellingNumberPlanId: null,
+                        ZonesIds: [zoneItem.ZoneId],
+                        //EffectiveOn: new Date()
+                    };
+                    return saleCodeGridAPI.loadGrid(query);
+                }
             }];
         }
 
@@ -82,7 +93,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 gridAPI.clearDataAndContinuePaging();
                 return loadZoneItems();
             };
-
             api.getZoneChanges = function () {
                 var zoneChanges = [];
 
@@ -107,8 +117,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             promises.push(zoneItemsGetPromise);
 
             zoneItemsGetPromise.then(function (response) {
-                console.log(response);
-
                 if (response != null) {
                     var zoneItems = [];
 
@@ -202,7 +210,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     promises.push(saveChangesPromise);
 
                     saveChangesPromise.then(function () {
-                        var zoneItemGetPromise = WhS_Sales_RatePlanAPIService.GetZoneItem(gridQuery.OwnerType, gridQuery.OwnerId, gridQuery.RoutingDatabaseId, gridQuery.RPRoutePolicyConfigId, gridQuery.NumberOfOptions, zoneItem.ZoneId);
+                        var zoneItemGetPromise = WhS_Sales_RatePlanAPIService.GetZoneItem(gridQuery.OwnerType, gridQuery.OwnerId, gridQuery.RoutingDatabaseId, gridQuery.RPRoutePolicyConfigId, gridQuery.NumberOfOptions, zoneItem.ZoneId, gridQuery.CostCalculationMethods);
                         promises.push(zoneItemGetPromise);
 
                         zoneItemGetPromise.then(function (zoneItemResponse) {

@@ -39,9 +39,9 @@ namespace TOne.WhS.Sales.Web.Controllers
 
         [HttpGet]
         [Route("GetZoneItem")]
-        public ZoneItem GetZoneItem(int routingDatabaseId, int policyConfigId, int numberOfOptions, SalePriceListOwnerType ownerType, int ownerId, long zoneId)
+        public ZoneItem GetZoneItem(int routingDatabaseId, int policyConfigId, int numberOfOptions, SalePriceListOwnerType ownerType, int ownerId, long zoneId, List<CostCalculationMethod> costCalculationMethods)
         {
-            return _manager.GetZoneItem(ownerType, ownerId, routingDatabaseId, policyConfigId, numberOfOptions, zoneId);
+            return _manager.GetZoneItem(ownerType, ownerId, routingDatabaseId, policyConfigId, numberOfOptions, zoneId, costCalculationMethods);
         }
 
         [HttpGet]
@@ -56,6 +56,13 @@ namespace TOne.WhS.Sales.Web.Controllers
         public List<TemplateConfig> GetCostCalculationMethodTemplates()
         {
             return _manager.GetCostCalculationMethodTemplates();
+        }
+
+        [HttpGet]
+        [Route("GetRecentChanges")]
+        public IEnumerable<Changes> GetRecentChanges(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            return _manager.GetRecentChanges(ownerType, ownerId);
         }
 
         [HttpGet]

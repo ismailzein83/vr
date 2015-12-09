@@ -35,7 +35,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return RetrieveData(input, createTempTableAction, SaleRateMapper);
 
         }
-
         public List<SaleRate> GetEffectiveSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByOwnerAndEffective", SaleRateMapper, ownerType, ownerId, effectiveOn);
@@ -70,53 +69,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return affectedRows > 0;
         }
-        public bool InsertRates(IEnumerable<SaleRate> newRates)
-        {
-            DataTable newRatesTable = BuildNewRatesTable(newRates);
-
-            int affectedRows = ExecuteNonQuerySPCmd("TOneWhS_BE.sp_SaleRate_InsertRates", (cmd) =>
-            {
-                SqlParameter tableParameter = new SqlParameter("@NewRates", SqlDbType.Structured);
-                tableParameter.Value = newRatesTable;
-                cmd.Parameters.Add(tableParameter);
-            });
-
-            return affectedRows > 0;
-        }
-        DataTable BuildNewRatesTable(IEnumerable<SaleRate> newRates)
-        {
-            DataTable table = new DataTable();
-
-            table.Columns.Add("ZoneID", typeof(long));
-            table.Columns.Add("PriceListID", typeof(int));
-            table.Columns.Add("CurrencyID", typeof(int));
-            table.Columns.Add("NormalRate", typeof(decimal));
-            table.Columns.Add("OtherRates", typeof(string));
-            table.Columns.Add("BED", typeof(DateTime));
-            table.Columns.Add("EED", typeof(DateTime));
-
-            table.BeginLoadData();
-
-            foreach (SaleRate newRate in newRates)
-            {
-                DataRow row = table.NewRow();
-                row["ZoneID"] = newRate.ZoneId;
-                row["PriceListID"] = newRate.PriceListId;
-                if (newRate.CurrencyId != null)
-                    row["CurrencyID"] = newRate.CurrencyId;
-                row["NormalRate"] = newRate.NormalRate;
-                if (newRate.OtherRates != null)
-                    row["OtherRates"] = Vanrise.Common.Serializer.Serialize(newRate.OtherRates);
-                row["BED"] = newRate.BED;
-                if (newRate.EED != null)
-                    row["EED"] = newRate.EED;
-                table.Rows.Add(row);
-            }
-
-            table.EndLoadData();
-
-            return table;
-        }
         DataTable BuildRateChangesTable(IEnumerable<RateChange> rateChanges)
         {
             DataTable table = new DataTable();
@@ -139,6 +91,58 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return table;
         }
+        public bool InsertRates(IEnumerable<NewRate> newRates, int priceListId)
+        {
+            DataTable newRatesTable = BuildNewRatesTable(newRates, priceListId);
+
+            int affectedRows = ExecuteNonQuerySPCmd("TOneWhS_BE.sp_SaleRate_InsertRates", (cmd) =>
+            {
+                SqlParameter tableParameter = new SqlParameter("@NewRates", SqlDbType.Structured);
+                tableParameter.Value = newRatesTable;
+                cmd.Parameters.Add(tableParameter);
+            });
+
+            return affectedRows > 0;
+        }
+        DataTable BuildNewRatesTable(IEnumerable<NewRate> newRates, int priceListId)
+        {
+            DataTable table = new DataTable();
+
+            table.Columns.Add("ZoneID", typeof(long));
+            table.Columns.Add("PriceListID", typeof(int));
+            table.Columns.Add("CurrencyID", typeof(int));
+            table.Columns.Add("NormalRate", typeof(decimal));
+            table.Columns.Add("OtherRates", typeof(string));
+            table.Columns.Add("BED", typeof(DateTime));
+            table.Columns.Add("EED", typeof(DateTime));
+
+            table.BeginLoadData();
+
+            foreach (NewRate newRate in newRates)
+            {
+                DataRow row = table.NewRow();
+                row["ZoneID"] = newRate.ZoneId;
+                row["PriceListID"] = priceListId;
+                if (newRate.CurrencyId != null)
+                    row["CurrencyID"] = newRate.CurrencyId;
+                row["NormalRate"] = newRate.NormalRate;
+                if (newRate.OtherRates != null)
+                    row["OtherRates"] = Vanrise.Common.Serializer.Serialize(newRate.OtherRates);
+                row["BED"] = newRate.BED;
+                if (newRate.EED != null)
+                    row["EED"] = newRate.EED;
+                table.Rows.Add(row);
+            }
+
+            table.EndLoadData();
+
+            return table;
+        }
+        public IEnumerable<SaleRate> GetExistingRatesByZoneIds(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> zoneIds, DateTime minEED)
+        {
+            string zoneIdsParameter = string.Join(",", zoneIds);
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetExistingByZoneIDs", SaleRateMapper, ownerType, ownerId, zoneIdsParameter, minEED);
+        }
 
         #region Mappers
 
@@ -159,8 +163,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return saleRate;
         }
 
-
         #endregion
-
     }
 }

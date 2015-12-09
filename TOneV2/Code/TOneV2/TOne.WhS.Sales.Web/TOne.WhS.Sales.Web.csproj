@@ -161,7 +161,9 @@
     <Content Include="WhS_Sales\Directives\vr-whs-sales-rateplan-grid.js" />
     <Content Include="WhS_Sales\Directives\vr-whs-sales-zoneroutingproduct.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanAPIService.js" />
-    <Content Include="WhS_Sales\Services\MainService.js" />
+    <Content Include="WhS_Sales\Services\RatePlanService.js" />
+    <Content Include="WhS_Sales\Views\RatePlanRecentChanges.html" />
+    <Content Include="WhS_Sales\Views\RatePlanRecentChangesController.js" />
     <Content Include="WhS_Sales\Views\RatePlanSettings.html" />
     <Content Include="WhS_Sales\Views\RatePlanSettingsController.js" />
     <Content Include="WhS_Sales\Views\RPRouteOptionSupplier.html" />

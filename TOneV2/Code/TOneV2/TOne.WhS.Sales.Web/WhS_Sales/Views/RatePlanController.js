@@ -4,7 +4,7 @@
 
     RatePlanController.$inject = [
         "$scope",
-        "WhS_Sales_MainService",
+        "WhS_Sales_RatePlanService",
         "WhS_Sales_RatePlanAPIService",
         "WhS_Sales_SalePriceListOwnerTypeEnum",
         "WhS_Sales_RatePlanStatusEnum",
@@ -13,7 +13,7 @@
         "VRNotificationService"
     ];
 
-    function RatePlanController($scope, WhS_Sales_MainService, WhS_Sales_RatePlanAPIService, WhS_Sales_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function RatePlanController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanAPIService, WhS_Sales_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
         
         var sellingProductSelectorAPI;
         var sellingProductSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -127,10 +127,13 @@
                     loadRatePlan();
                 };
                 
-                WhS_Sales_MainService.sellNewZones(customerId, onCustomerZonesSold);
+                WhS_Sales_RatePlanService.sellNewZones(customerId, onCustomerZonesSold);
             };
             $scope.editSettings = function () {
-                WhS_Sales_MainService.editSettings(settings, onSettingsUpdate);
+                WhS_Sales_RatePlanService.editSettings(settings, onSettingsUpdate);
+            };
+            $scope.viewRecentChanges = function () {
+                WhS_Sales_RatePlanService.viewRecentChanges($scope.selectedOwnerType.value, getOwnerId());
             };
 
             defineSaveButtonMenuActions();

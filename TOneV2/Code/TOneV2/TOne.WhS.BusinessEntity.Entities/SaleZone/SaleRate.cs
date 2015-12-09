@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SaleRate : IRate
+    public class SaleRate : IRate, Vanrise.Entities.IDateEffectiveSettings
     {
         public long SaleRateId { get; set; }
 

@@ -45,6 +45,7 @@ function (WhS_Routing_RPRouteService, UtilsService) {
                     routingProductId = payload.RoutingProductId;
                     saleZoneId = payload.SaleZoneId;
 
+                    ctrl.routeOptions = [];
                     if (payload.RouteOptions)
                         for (var i = 0; i < payload.RouteOptions.length; i++)
                             ctrl.routeOptions.push(payload.RouteOptions[i]);

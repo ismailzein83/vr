@@ -8,7 +8,7 @@ namespace TOne.WhS.Sales.Entities.RateManagement
 {
     public enum RateChangeType { NotChanged = 0, New = 1, Increase = 2, Decrease = 3 }
 
-    public class NewRate : Vanrise.Entities.IDateEffectiveSettings
+    public class NewRateV2 : Vanrise.Entities.IDateEffectiveSettings
     {
         public long ZoneId { get; set; }
 
