@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Vanrise.Runtime;
 
 namespace QualityMeasurement.DevRuntime
 {
@@ -11,9 +12,12 @@ namespace QualityMeasurement.DevRuntime
     {
         static void Main(string[] args)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            MainForm f = new MainForm();
+            f.ShowDialog();
+            Console.ReadKey();
+            return;
+
+            
         }
     }
 }
