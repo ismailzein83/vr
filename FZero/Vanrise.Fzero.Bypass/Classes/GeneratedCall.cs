@@ -66,12 +66,14 @@ namespace Vanrise.Fzero.Bypass
 
         public static void Confirm(int SourceID, DataTable dt, int? ImportedBy)
         {
-            List<string> CountryCodes = new List<string>();
-            CountryCodes.Add("964");
-            CountryCodes.Add("963");
-            CountryCodes.Add("240");
+            HashSet<string> CountryCodes = new HashSet<string>();
+
 
             List<Client> ListClients = Client.GetAllClients();
+
+            foreach (var i in ListClients)
+                CountryCodes.Add(i.CountryCode);
+
 
             List<Carrier> ListCarriers = Vanrise.Fzero.Bypass.Carrier.GetAllCarriers();
             List<OriginationNetwork> ListOriginationNetworks = Vanrise.Fzero.Bypass.OriginationNetwork.GetAllOriginationNetworks();
@@ -177,17 +179,17 @@ namespace Vanrise.Fzero.Bypass
 
                         if (gc.b_number.StartsWith("+"))
                         {
-                            NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(1);
+                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(1);
                         }
 
                         if (gc.b_number.StartsWith("00"))
                         {
-                            NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(2);
+                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(2);
                         }
 
-                        if (gc.b_number.StartsWith("0"))
+                        else if (gc.b_number.StartsWith("0"))
                         {
-                            NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(1);
+                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(1);
                         }
 
 
@@ -195,17 +197,17 @@ namespace Vanrise.Fzero.Bypass
                         {
                             if (gc.b_number.StartsWith(code))
                             {
-                                NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(code.Count());
+                                NumberWithoutAreaCodeb_number = gc.b_number.Substring(code.Count());
                             }
 
                             if (gc.b_number.StartsWith("+" + code))
                             {
-                                NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(code.Count() + 1);
+                                NumberWithoutAreaCodeb_number = gc.b_number.Substring(code.Count() + 1);
                             }
 
                             if (gc.b_number.StartsWith("00" + code))
                             {
-                                NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(code.Count() + 2);
+                                NumberWithoutAreaCodeb_number = gc.b_number.Substring(code.Count() + 2);
                             }
                         }
 
@@ -483,17 +485,17 @@ namespace Vanrise.Fzero.Bypass
 
                         if (rc.CLI.StartsWith("+"))
                         {
-                            NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(1);
+                            NumberWithoutAreaCodeCLI = rc.CLI.Substring(1);
                         }
 
                         if (rc.CLI.StartsWith("00"))
                         {
-                            NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(2);
+                            NumberWithoutAreaCodeCLI = rc.CLI.Substring(2);
                         }
 
-                        if (rc.CLI.StartsWith("0"))
+                        else if (rc.CLI.StartsWith("0"))
                         {
-                            NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(1);
+                            NumberWithoutAreaCodeCLI = rc.CLI.Substring(1);
                         }
 
 
@@ -509,17 +511,17 @@ namespace Vanrise.Fzero.Bypass
                         {
                             if (rc.CLI.StartsWith(code))
                             {
-                                NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(code.Count());
+                                NumberWithoutAreaCodeCLI = rc.CLI.Substring(code.Count());
                             }
 
                             if (rc.CLI.StartsWith("+" + code))
                             {
-                                NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(code.Count() + 1);
+                                NumberWithoutAreaCodeCLI = rc.CLI.Substring(code.Count() + 1);
                             }
 
                             if (rc.CLI.StartsWith("00" + code))
                             {
-                                NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(code.Count() + 2);
+                                NumberWithoutAreaCodeCLI = rc.CLI.Substring(code.Count() + 2);
                             }
                         }
 
@@ -664,17 +666,17 @@ namespace Vanrise.Fzero.Bypass
 
                         if (gc.b_number.StartsWith("+"))
                         {
-                            NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(1);
+                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(1);
                         }
 
                         if (gc.b_number.StartsWith("00"))
                         {
-                            NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(2);
+                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(2);
                         }
 
-                        if (gc.b_number.StartsWith("0"))
+                        else if (gc.b_number.StartsWith("0"))
                         {
-                            NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(1);
+                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(1);
                         }
 
 
@@ -685,17 +687,17 @@ namespace Vanrise.Fzero.Bypass
                         {
                             if (gc.b_number.StartsWith(code))
                             {
-                                NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(code.Count());
+                                NumberWithoutAreaCodeb_number = gc.b_number.Substring(code.Count());
                             }
 
                             if (gc.b_number.StartsWith("+" + code))
                             {
-                                NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(code.Count() + 1);
+                                NumberWithoutAreaCodeb_number = gc.b_number.Substring(code.Count() + 1);
                             }
 
                             if (gc.b_number.StartsWith("00" + code))
                             {
-                                NumberWithoutAreaCodeb_number = NumberWithoutAreaCodeb_number.Substring(code.Count() + 2);
+                                NumberWithoutAreaCodeb_number = gc.b_number.Substring(code.Count() + 2);
                             }
                         }
 
@@ -951,17 +953,17 @@ namespace Vanrise.Fzero.Bypass
 
                         if (gc.CLI.StartsWith("+"))
                         {
-                            NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(1);
+                            NumberWithoutAreaCodeCLI = gc.CLI.Substring(1);
                         }
 
                         if (gc.CLI.StartsWith("00"))
                         {
-                            NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(2);
+                            NumberWithoutAreaCodeCLI = gc.CLI.Substring(2);
                         }
 
-                        if (gc.CLI.StartsWith("0"))
+                        else if (gc.CLI.StartsWith("0"))
                         {
-                            NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(1);
+                            NumberWithoutAreaCodeCLI = gc.CLI.Substring(1);
                         }
 
 
@@ -971,17 +973,17 @@ namespace Vanrise.Fzero.Bypass
                         {
                             if (gc.CLI.StartsWith(code))
                             {
-                                NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(code.Count());
+                                NumberWithoutAreaCodeCLI = gc.CLI.Substring(code.Count());
                             }
 
                             if (gc.CLI.StartsWith("+" + code))
                             {
-                                NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(code.Count() + 1);
+                                NumberWithoutAreaCodeCLI = gc.CLI.Substring(code.Count() + 1);
                             }
 
                             if (gc.CLI.StartsWith("00" + code))
                             {
-                                NumberWithoutAreaCodeCLI = NumberWithoutAreaCodeCLI.Substring(code.Count() + 2);
+                                NumberWithoutAreaCodeCLI = gc.CLI.Substring(code.Count() + 2);
                             }
                         }
 

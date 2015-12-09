@@ -65,6 +65,10 @@
           <Property Name="ClientReport" Type="bit" />
           <Property Name="ClientEmail" Type="nvarchar" MaxLength="50" />
           <Property Name="GMT" Type="int" />
+          <Property Name="CountryCode" Type="varchar" MaxLength="50" />
+          <Property Name="PrefixLength" Type="int" />
+          <Property Name="FraudPrefix" Type="varchar" MaxLength="50" />
+          <Property Name="Length" Type="int" />
         </EntityType>
         <EntityType Name="EmailCCs">
           <Key>
@@ -1387,6 +1391,16 @@ warning 6002: The table/view 'FMS.dbo.vwRepeatedCase' does not have a primary ke
           <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Split" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="input" Type="varchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Value" Type="varchar" MaxLength="50" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="ActionTypes" EntityType="Self.ActionTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ApplicationUsers" EntityType="Self.ApplicationUsers" Schema="dbo" store:Type="Tables" />
@@ -2286,6 +2300,9 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
             <End Role="WebsiteMenu" EntitySet="WebsiteMenus" />
             <End Role="WebsiteMenu1" EntitySet="WebsiteMenus" />
           </AssociationSet>
+          <FunctionImport Name="Split" IsComposable="true" ReturnType="Collection(String)">
+            <Parameter Name="input" Mode="In" Type="String" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="delete_prSummary_Admin_Result">
           <Property Type="Int32" Name="ordered" Nullable="false" />
@@ -2678,6 +2695,10 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="ClientReport" Type="Boolean" />
           <Property Name="ClientEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="GMT" Type="Int32" />
+          <Property Name="CountryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PrefixLength" Type="Int32" />
+          <Property Name="FraudPrefix" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Length" Type="Int32" />
           <NavigationProperty Name="EmailCCs" Relationship="Model.FK_EmailCCs_Clients" FromRole="Client" ToRole="EmailCC" />
           <NavigationProperty Name="RecievedCalls" Relationship="Model.FK_RecievedCalls_Clients" FromRole="Client" ToRole="RecievedCall" />
           <NavigationProperty Name="Users" Relationship="Model.FK_Users_Clients" FromRole="Client" ToRole="User" />
@@ -4256,6 +4277,10 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <EntitySetMapping Name="Clients">
             <EntityTypeMapping TypeName="Model.Client">
               <MappingFragment StoreEntitySet="Clients">
+                <ScalarProperty Name="Length" ColumnName="Length" />
+                <ScalarProperty Name="FraudPrefix" ColumnName="FraudPrefix" />
+                <ScalarProperty Name="PrefixLength" ColumnName="PrefixLength" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
                 <ScalarProperty Name="GMT" ColumnName="GMT" />
                 <ScalarProperty Name="ClientEmail" ColumnName="ClientEmail" />
                 <ScalarProperty Name="ClientReport" ColumnName="ClientReport" />
@@ -4818,6 +4843,7 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Split" FunctionName="Model.Store.Split" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -1324,5 +1324,15 @@ namespace Vanrise.Fzero.Bypass
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<prGetReportedCalls_old_Result>("prGetReportedCalls_old", caseIDParameter, b_numberParameter, cLIParameter, fromSentDateTimeParameter, toSentDateTimeParameter, reportIDParameter, cLIMobileOperatorIDParameter, b_NumberMobileOperatorIDParameter, mobileOperatorFeedbackIDParameter, recommendedActionIDParameter, clientIDParameter);
         }
+    
+        [EdmFunction("Entities", "Split")]
+        public virtual IQueryable<string> Split(string input)
+        {
+            var inputParameter = input != null ?
+                new ObjectParameter("input", input) :
+                new ObjectParameter("input", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<string>("[Entities].[Split](@input)", inputParameter);
+        }
     }
 }

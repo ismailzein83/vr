@@ -29,6 +29,10 @@ namespace Vanrise.Fzero.Bypass
         public Nullable<bool> ClientReport { get; set; }
         public string ClientEmail { get; set; }
         public Nullable<int> GMT { get; set; }
+        public string CountryCode { get; set; }
+        public Nullable<int> PrefixLength { get; set; }
+        public string FraudPrefix { get; set; }
+        public Nullable<int> Length { get; set; }
     
         public virtual ICollection<EmailCC> EmailCCs { get; set; }
         public virtual ICollection<RecievedCall> RecievedCalls { get; set; }
