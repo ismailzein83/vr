@@ -47,6 +47,16 @@ namespace QM.CLITester.Web.Controllers
         }
 
         [HttpPost]
+        [Route("GetUpdatedTestCalls")]
+        public IEnumerable<TestCall> GetUpdatedTestCalls()
+        {
+            TestCallManager manager = new TestCallManager();
+            //return GetWebResponse(input, manager.GetFilteredTestCalls(input));
+            return null;
+        }
+
+
+        [HttpPost]
         [Route("GetFilteredTestCalls")]
         public object GetFilteredTestCalls(Vanrise.Entities.DataRetrievalInput<TestCallResultQuery> input)
         {

@@ -30,10 +30,14 @@ namespace QM.CLITester.Data.SQL
         public List<TestCall> GetTestCalls(List<int> listCallTestStatus)
         {
             string callTestStatusids = null;
-            if (listCallTestStatus != null && listCallTestStatus.Count() > 0)
+            if (listCallTestStatus.Any())
                 callTestStatusids = string.Join<int>(",", listCallTestStatus);
-
             return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCall", TestCallMapper, callTestStatusids);
+        }
+
+        public List<TestCall> GetUpdatedTestCalls(ref object maxTimeStamp)
+        {
+            return GetItemsSP("QM_CLITester.sp_TestCall_GetAll", TestCallMapper, maxTimeStamp);
         }
 
         public bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus)
