@@ -207,10 +207,8 @@ namespace QM.CLITester.Business
             return dataManager.GetTestCalls();
         }
 
-        public List<TestCall> GetUpdatedTestCalls()
+        public List<TestCall> GetUpdatedTestCalls(object maxTimeStamp)
         {
-            object maxTimeStamp = null;
-
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
 
             return dataManager.GetUpdatedTestCalls(ref maxTimeStamp);
