@@ -36,7 +36,7 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
                 $scope.singleMeasureRequired = false;
                 $scope.multipleMeasureRequired = true;
                 $scope.topMeasureRequired = true;
-                $scope.selectedTopMeasure = $scope.selectedMeasureTypes.length > 0 ? lastTopMeasureValue : undefined;
+                $scope.selectedTopMeasure = $scope.selectedMeasureTypes.length > 0 ? $scope.selectedMeasureTypes[0] : undefined;
             }
 
         }
@@ -59,17 +59,18 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         $scope.onSelectionChanged = function () {
             if ($scope.selectedTopMeasure == undefined)
             {
-                $scope.selectedMeasureType != undefined ? $scope.selectedTopMeasure = $scope.selectedMeasureType : $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
+                $scope.selectedMeasureType != undefined && $scope.isPieChart ? $scope.selectedTopMeasure = $scope.selectedMeasureType : $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
             }
             else {
                 if ($scope.selectedMeasureTypes.length > 0 && !UtilsService.contains($scope.selectedMeasureTypes, $scope.selectedTopMeasure))
                 {
                     $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
+
                 }
                 else if(!$scope.isPieChart && $scope.selectedMeasureTypes.length== 0 )
 
                     $scope.selectedTopMeasure = undefined;
-                else if ($scope.selectedMeasureType!=undefined)
+                else if ($scope.selectedMeasureType != undefined && $scope.isPieChart)
                     $scope.selectedTopMeasure = $scope.selectedMeasureType;
             }
             lastTopMeasureValue = $scope.selectedTopMeasure;
