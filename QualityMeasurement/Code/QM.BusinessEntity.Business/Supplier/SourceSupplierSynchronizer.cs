@@ -25,20 +25,16 @@ namespace QM.BusinessEntity.Business
             throw new NotImplementedException();
         }
 
-        protected override Supplier BuildItemFromSource(SourceSupplier sourceZone)
+        protected override Supplier BuildItemFromSource(SourceSupplier sourceItem)
         {
             return new Supplier
             {
-                Name = sourceZone.Name
+                Name = sourceItem.Name,
+                SourceId = sourceItem.SourceId
             };
         }
 
-        protected override Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceZoneIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override Dictionary<string, long> GetExistingItemIds(IEnumerable<long> itemIds)
+        protected override Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds)
         {
             throw new NotImplementedException();
         }

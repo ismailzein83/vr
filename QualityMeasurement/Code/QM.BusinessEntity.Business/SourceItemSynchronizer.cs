@@ -26,16 +26,8 @@ namespace QM.BusinessEntity.Business
             if (sourceItems != null)
             {
                 Dictionary<string, long> itemIdsBySourceId;
-                if (_sourceItemReader.UseSourceItemId)
-                {
-                    var itemIds = sourceItems.Select(itm => long.Parse(itm.SourceId));
-                    itemIdsBySourceId = GetExistingItemIds(itemIds);
-                }
-                else
-                {
-                    var sourceZoneIds = sourceItems.Select(itm => itm.SourceId);
-                    itemIdsBySourceId = GetExistingItemIds(sourceZoneIds);
-                }
+                var sourceItemIds = sourceItems.Select(itm => itm.SourceId);
+                itemIdsBySourceId = GetExistingItemIds(sourceItemIds);
                 List<TItem> itemsToAdd = new List<TItem>();
                 List<TItem> itemsToUpdate = new List<TItem>();
                 foreach (var sourceItem in sourceItems)
@@ -76,24 +68,22 @@ namespace QM.BusinessEntity.Business
 
         private void UpdateItemUpdateHandle(object itemUpdateHandle)
         {
-            throw new NotImplementedException();
+            
         }
 
         protected abstract void AddItems(List<TItem> itemsToAdd);
 
         protected abstract void UpdateItems(List<TItem> itemsToUpdate);
 
-        protected abstract TItem BuildItemFromSource(TSourceItem sourceZone);
+        protected abstract TItem BuildItemFromSource(TSourceItem sourceItem);
 
-        protected abstract Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceZoneIds);
-
-        protected abstract Dictionary<string, long> GetExistingItemIds(IEnumerable<long> itemIds);
+        protected abstract Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds);
 
         protected abstract void ReserveIdRange(int nbOfIds, out long startingId);
 
         private object GetRecentUpdateHandle()
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

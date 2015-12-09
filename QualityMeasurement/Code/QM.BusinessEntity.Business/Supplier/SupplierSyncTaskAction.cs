@@ -11,6 +11,9 @@ namespace QM.BusinessEntity.Business
     {
         public override void Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
         {
+            SupplierSyncTaskActionArgument supplierSyncTaskActionArgument = taskActionArgument as SupplierSyncTaskActionArgument;
+            SourceSupplierSynchronizer sourceSupplierSynchronizer = new SourceSupplierSynchronizer(supplierSyncTaskActionArgument.SourceSupplierReader);
+            sourceSupplierSynchronizer.Synchronize();
             Console.WriteLine("SupplierSyncTaskAction Executed");
             //throw new NotImplementedException();
         }

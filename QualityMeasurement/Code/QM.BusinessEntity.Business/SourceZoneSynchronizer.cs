@@ -46,23 +46,23 @@ namespace QM.BusinessEntity.Business
             throw new NotImplementedException();
         }
 
-        protected override Zone BuildItemFromSource(SourceZone sourceZone)
+        protected override Zone BuildItemFromSource(SourceZone sourceItem)
         {
             Zone zone = new Zone
             {
-                Name = sourceZone.Name,
-                BeginEffectiveDate = sourceZone.BeginEffectiveDate,
-                EndEffectiveDate = sourceZone.EndEffectiveDate
+                Name = sourceItem.Name,
+                BeginEffectiveDate = sourceItem.BeginEffectiveDate,
+                EndEffectiveDate = sourceItem.EndEffectiveDate
             };
-            var country = countryManager.GetCountry(sourceZone.CountryName);
+            var country = countryManager.GetCountry(sourceItem.CountryName);
             if (country == null)
             {
                 var addResult = countryManager.AddCountry(new Vanrise.Entities.Country
                 {
-                    Name = sourceZone.CountryName
+                    Name = sourceItem.CountryName
                 });
                 if (addResult.Result != Vanrise.Entities.InsertOperationResult.Succeeded)
-                    throw new Exception(String.Format("Cannot add Country '{0}'", sourceZone.CountryName));
+                    throw new Exception(String.Format("Cannot add Country '{0}'", sourceItem.CountryName));
                 country = addResult.InsertedObject.Entity;
             }
             zone.CountryId = country.CountryId;
@@ -74,12 +74,7 @@ namespace QM.BusinessEntity.Business
             ZoneManager.ReserveIDRange(nbOfIds, out startingId);
         }
 
-        protected override Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceZoneIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override Dictionary<string, long> GetExistingItemIds(IEnumerable<long> itemIds)
+        protected override Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds)
         {
             throw new NotImplementedException();
         }

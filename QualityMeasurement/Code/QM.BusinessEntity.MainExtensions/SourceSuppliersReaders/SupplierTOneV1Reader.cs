@@ -18,7 +18,18 @@ namespace QM.BusinessEntity.MainExtensions.SourceSuppliersReaders
 
         public override IEnumerable<SourceSupplier> GetChangedItems(ref object updatedHandle)
         {
-            throw new NotImplementedException();
+            List<SourceSupplier> lst = new List<SourceSupplier>();
+            lst.Add(new SourceSupplier
+            {
+                Name = "TOne V1",
+                SourceId = "TV11"
+            });
+            lst.Add(new SourceSupplier
+            {
+                Name = "TOne V1",
+                SourceId = "TV12"
+            });
+            return lst;
         }
     }
 }

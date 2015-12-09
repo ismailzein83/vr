@@ -12,6 +12,8 @@ namespace QM.BusinessEntity.Entities
 
         public string Name { get; set; }
 
+        public string SourceId { get; set; }
+
         public SupplierSettings Settings { get; set; }
 
         long IItem.ItemId
