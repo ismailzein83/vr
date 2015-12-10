@@ -47,26 +47,5 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             NewAndExistingZones.Set(context, processCountryCodesContext.NewAndExistingZones);
         }
-
-        private class ProcessCountryCodesContext : IProcessCountryCodesContext
-        {
-            public IEnumerable<ImportedCode> ImportedCodes { get; set; }
-
-            public IEnumerable<ExistingCode> ExistingCodes { get; set; }
-
-            public IEnumerable<ExistingZone> ExistingZones { get; set; }
-
-            public DateTime DeletedCodesDate { get; set; }
-
-            public ZonesByName NewAndExistingZones { get; set; }
-
-            public IEnumerable<NewCode> NewCodes { get; set; }
-
-            public IEnumerable<ChangedCode> ChangedCodes { get; set; }
-
-            public IEnumerable<NewZone> NewZones { get; set; }
-
-            public IEnumerable<ChangedZone> ChangedZones { get; set; }
-        }
     }
 }

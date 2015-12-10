@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
+using TOne.WhS.SupplierPriceList.Business;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -37,23 +38,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 ExistingZones = existingZones,
                 NewAndExistingZones = this.NewAndExistingZones.Get(context)
             };
-        }
-
-        private class ProcessCountryRatesContext : IProcessCountryRatesContext
-        {
-
-            public IEnumerable<ImportedRate> ImportedRates { get; set; }
-
-            public IEnumerable<ExistingRate> ExistingRates { get; set; }
-
-            public IEnumerable<ExistingZone> ExistingZones { get; set; }
-
-            public ZonesByName NewAndExistingZones { get; set; }
-
-
-            public IEnumerable<NewRate> NewRates { get; set; }
-
-            public IEnumerable<ChangedRate> ChangedRates { get; set; }
         }
     }
 }

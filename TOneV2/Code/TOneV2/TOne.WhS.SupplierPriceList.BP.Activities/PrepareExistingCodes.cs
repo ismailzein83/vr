@@ -32,11 +32,19 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         ExistingCode ExistingCodeMapper(SupplierCode codeEntity, Dictionary<long, ExistingZone> existingZonesByZoneId)
         {
-            return new ExistingCode()
+            ExistingZone existingZone;
+
+            if (!existingZonesByZoneId.TryGetValue(codeEntity.ZoneId, out existingZone))
+                throw new Exception(String.Format("Code Entity with Id {0} is not linked to Zone Id {1}", codeEntity.SupplierCodeId, codeEntity.ZoneId));
+
+            ExistingCode existingCode = new ExistingCode()
             {
                 CodeEntity = codeEntity,
-                ParentZone = existingZonesByZoneId[codeEntity.ZoneId]
+                ParentZone = existingZone
             };
+
+            existingCode.ParentZone.ExistingCodes.Add(existingCode);
+            return existingCode;
         }
     }
 }

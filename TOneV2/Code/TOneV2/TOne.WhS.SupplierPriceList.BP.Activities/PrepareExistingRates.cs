@@ -33,11 +33,19 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         ExistingRate ExistingRateMapper(SupplierRate rateEntity, Dictionary<long, ExistingZone> existingZonesByZoneId)
         {
-            return new ExistingRate()
+            ExistingZone existingZone;
+
+            if (!existingZonesByZoneId.TryGetValue(rateEntity.ZoneId, out existingZone))
+                throw new Exception(String.Format("Rate Entity with Id {0} is not linked to Zone Id {1}", rateEntity.SupplierRateId, rateEntity.ZoneId));
+
+            ExistingRate existingRate = new ExistingRate()
             {
                 RateEntity = rateEntity,
-                ParentZone = existingZonesByZoneId[rateEntity.ZoneId]
+                ParentZone = existingZone
             };
+
+            existingRate.ParentZone.ExistingRates.Add(existingRate);
+            return existingRate;
         }
     }
 }
