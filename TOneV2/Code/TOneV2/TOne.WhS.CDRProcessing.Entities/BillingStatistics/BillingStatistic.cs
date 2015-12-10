@@ -11,7 +11,7 @@ namespace TOne.WhS.CDRProcessing.Entities
     {
         static BillingStatistic()
         {
-            Time time = new Time();
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(Time), "Hour", "Minute", "Second", "MilliSecond");
             Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(BillingStatistic), "StatisticItemId","CallDate", "CustomerId", "SupplierId", "SaleZoneId", "SupplierZoneId",
                 "CostCurrency", "SaleCurrency", "NumberOfCalls", "FirstCallTime", "LastCallTime", "MinDuration", "MaxDuration", "NumberOfCalls", "AvgDuration", "CostNets",
                 "CostExtraCharges", "SaleNets", "SaleExtraCharges", "SaleRate", "CostRate", "SaleDuration", "CostDuration","SaleRateType","CostRateType");

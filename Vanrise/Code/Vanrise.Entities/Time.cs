@@ -11,10 +11,7 @@ namespace Vanrise.Entities
         
       
         #region ctor/Local Variables
-        static Time()
-        {
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(Time), "Hour", "Minute", "Second", "MilliSecond");
-        }
+       
         public Time() { }
         public Time(string time)
         {
