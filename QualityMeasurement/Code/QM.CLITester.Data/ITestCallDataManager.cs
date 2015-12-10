@@ -14,5 +14,6 @@ namespace QM.CLITester.Data
         List<TestCall> GetTestCalls(List<int> callTestStatus);
         bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus);
         bool UpdateTestProgress(long testCallId, Object testProgress, CallTestStatus callTestStatus, CallTestResult? callTestResult);
+        Vanrise.Entities.BigResult<Entities.TestCallDetail> GetTestCallFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.TestCallQuery> input);
     }
 }

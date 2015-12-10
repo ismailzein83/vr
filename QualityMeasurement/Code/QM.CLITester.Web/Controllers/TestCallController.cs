@@ -54,5 +54,13 @@ namespace QM.CLITester.Web.Controllers
             byte[] maxTimeStamp = input.LastUpdateHandle;    
             return manager.GetUpdatedTestCalls(ref maxTimeStamp);
         }
+
+        [HttpPost]
+        [Route("GetFilteredTestCalls")]
+        public object GetFilteredTestCalls(Vanrise.Entities.DataRetrievalInput<TestCallQuery> input)
+        {
+            TestCallManager manager = new TestCallManager();
+            return GetWebResponse(input, manager.GetFilteredTestCalls(input));
+        }
     }
 }

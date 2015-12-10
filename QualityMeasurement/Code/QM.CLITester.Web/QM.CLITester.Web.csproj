@@ -181,14 +181,18 @@
     <Content Include="QM_CLITester\Constant\ModuleConfig.js" />
     <Content Include="QM_CLITester\Directives\Supplier\Templates\AddPrefixDirectiveTemplate.html" />
     <Content Include="QM_CLITester\Directives\Supplier\vr-qm-clitester-suppliersettings.js" />
+    <Content Include="QM_CLITester\Directives\TestCall\Templates\HisTestCallGridTemplate.html" />
     <Content Include="QM_CLITester\Directives\TestCall\Templates\TestCallDetailsTemplate.html" />
     <Content Include="QM_CLITester\Directives\TestCall\Templates\TestCallGridTemplate.html" />
+    <Content Include="QM_CLITester\Directives\TestCall\vr-qm-clitester-histestcall-grid.js" />
     <Content Include="QM_CLITester\Directives\TestCall\vr-qm-clitester-testcall-grid.js" />
     <Content Include="QM_CLITester\Directives\TestCall\vr-qm-clitester-testcalldetails.js" />
     <Content Include="QM_CLITester\ModuleInitialization.js" />
     <Content Include="QM_CLITester\Services\APIServices\TestCallAPIService.js" />
     <Content Include="QM_CLITester\Services\TestCallDetailsService.js" />
     <Content Include="QM_CLITester\Services\TestCallService.js" />
+    <Content Include="QM_CLITester\Views\HistoryTestCall\HistoryTestCallManagement.html" />
+    <Content Include="QM_CLITester\Views\HistoryTestCall\HistoryTestCallManagementController.js" />
     <Content Include="QM_CLITester\Views\TestPage\Test.html" />
     <Content Include="QM_CLITester\Views\TestPage\TestController.js" />
   </ItemGroup>

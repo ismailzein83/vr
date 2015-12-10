@@ -8,7 +8,6 @@ using Vanrise.Data.SQL;
 using System.Data;
 using System.Reflection;
 using Vanrise.Common;
-
 namespace QM.CLITester.Data.SQL
 {
     public class TestCallDataManager : BaseSQLDataManager, ITestCallDataManager
@@ -18,7 +17,7 @@ namespace QM.CLITester.Data.SQL
             object testCallId;
 
             int recordsEffected = ExecuteNonQuerySP("QM_CLITester.sp_TestCall_Insert", out testCallId, testCall.SupplierID, testCall.CountryID, testCall.ZoneID, 
-                testCall.InitiateTestInformation, testCall.TestProgress, testCall.CallTestStatus, testCall.CallTestResult);
+                testCall.InitiateTestInformation, testCall.TestProgress, testCall.CallTestStatus, testCall.CallTestResult, testCall.UserID);
             insertedId = (int)testCallId;
             return (recordsEffected > 0);
         }
@@ -63,10 +62,26 @@ namespace QM.CLITester.Data.SQL
 
         public bool UpdateTestProgress(long testCallId, Object testProgress, CallTestStatus callTestStatus, CallTestResult? callTestResult)
         {
-            int recordsEffected = ExecuteNonQuerySP("[QM_CLITester].[sp_TestCall_UpdateTestProgress]", testCallId,
+            int recordsEffected = ExecuteNonQuerySP("QM_CLITester.sp_TestCall_UpdateTestProgress", testCallId,
                 testProgress != null ? Serializer.Serialize(testProgress) : null, callTestStatus, callTestResult);
             return (recordsEffected > 0);
         }
+
+        public Vanrise.Entities.BigResult<Entities.TestCallDetail> GetTestCallFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.TestCallQuery> input)
+        {
+            Dictionary<string,string> mapper=new Dictionary<string, string>();
+            mapper.Add("Entity.ID","ID");
+
+
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("QM_CLITester.sp_TestCall_CreateTempByFiltered", tempTableName, input.Query.SupplierID, input.Query.CountryID, input.Query.ZoneID);
+            };
+
+            return RetrieveData(input, createTempTableAction, TestCallDetailMapper, mapper);
+
+        }
+
 
         TestCall TestCallMapper(IDataReader reader)
         {

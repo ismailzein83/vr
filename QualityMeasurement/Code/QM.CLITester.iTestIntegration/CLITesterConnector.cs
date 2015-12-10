@@ -91,7 +91,19 @@ namespace QM.CLITester.iTestIntegration
                     if (testProgress.Calls_Total == testProgress.Calls_Complete)
                     {
                         testProgressOutput.Result = GetTestProgressResult.TestCompleted;
-                        testProgressOutput.CallTestResult = CallTestResult.Succeeded;
+                        if (testProgress.CLI_Fail == 1)
+                        {
+                            testProgressOutput.CallTestResult = CallTestResult.Failed;
+                        }
+                        else if (testProgress.CLI_Success == 1)
+                        {
+                            testProgressOutput.CallTestResult = CallTestResult.Succeeded;
+                        }   
+                            else if (testProgress.CLI_No_Result == 1)
+                            {
+                                testProgressOutput.CallTestResult = CallTestResult.NotAnswered;
+                            }
+                        
                         return testProgressOutput;
                     }
 

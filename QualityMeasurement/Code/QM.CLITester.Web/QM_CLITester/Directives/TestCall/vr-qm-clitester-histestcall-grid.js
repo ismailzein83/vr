@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrQmClitesterTestcallGrid", ["UtilsService", "VRNotificationService", "Qm_CliTester_TestCallAPIService", 'Qm_CliTester_TestCallService', 'VRUIUtilsService', 'LabelColorsEnum', 'Qm_CliTester_CallTestResultEnum', 'Qm_CliTester_CallTestStatusEnum',
+app.directive("vrQmClitesterHistestcallGrid", ["UtilsService", "VRNotificationService", "Qm_CliTester_TestCallAPIService", 'Qm_CliTester_TestCallService', 'VRUIUtilsService', 'LabelColorsEnum', 'Qm_CliTester_CallTestResultEnum', 'Qm_CliTester_CallTestStatusEnum',
 function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, Qm_CliTester_TestCallService, VRUIUtilsService, LabelColorsEnum, Qm_CliTester_CallTestResultEnum, Qm_CliTester_CallTestStatusEnum) {
 
     var directiveDefinitionObject = {
@@ -20,16 +20,11 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/QM_CLITester/Directives/TestCall/Templates/TestCallGridTemplate.html"
+        templateUrl: "/Client/Modules/QM_CLITester/Directives/TestCall/Templates/HisTestCallGridTemplate.html"
 
     };
 
     function TestCallGrid($scope, ctrl) {
-
-        var lastUpdateHandle;
-        var input = {
-            LastUpdateHandle: lastUpdateHandle
-        };
 
         var gridAPI;
         var gridDrillDownTabsObj;
@@ -43,64 +38,64 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
         $scope.arrayCallTestStatus.push(Qm_CliTester_CallTestStatusEnum.Completed);
         $scope.arrayCallTestStatus.push(Qm_CliTester_CallTestStatusEnum.InitiationFailedWithNoRetry);
         $scope.arrayCallTestStatus.push(Qm_CliTester_CallTestStatusEnum.GetProgressFailedWithNoRetry);
-        
+
         $scope.arrayCallTestResult = [];
         $scope.arrayCallTestResult.push(Qm_CliTester_CallTestResultEnum.NotCompleted);
         $scope.arrayCallTestResult.push(Qm_CliTester_CallTestResultEnum.Succeeded);
         $scope.arrayCallTestResult.push(Qm_CliTester_CallTestResultEnum.PartiallySucceeded);
         $scope.arrayCallTestResult.push(Qm_CliTester_CallTestResultEnum.Failed);
         $scope.arrayCallTestResult.push(Qm_CliTester_CallTestResultEnum.NotAnswered);
+
         function initializeController() {
 
             var drillDownDefinitions = Qm_CliTester_TestCallService.getDrillDownDefinition();
             gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
 
+
             $scope.testcalls = [];
-            var isGettingData = false;
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
-                var timer = setInterval(function () {
-                    if (!isGettingData) {
-                        Qm_CliTester_TestCallAPIService.GetUpdatedTestCalls(input).then(function (response) {
-                            isGettingData = true;
-                            if (response != undefined) {
-                                for (var i = 0; i < response.ListTestCallDetails.length; i++) {
-                                    var testCall = response.ListTestCallDetails[i];
-                                    gridDrillDownTabsObj.setDrillDownExtensionObject(testCall);
-                                    var findTestCall = false;
-                                    for (var j = 0; j < $scope.testcalls.length; j++) {
-                                        if ($scope.testcalls[j].Entity.ID == response.ListTestCallDetails[i].Entity.ID) {
-                                            $scope.testcalls[j] = response.ListTestCallDetails[i];
-                                            findTestCall = true;
-                                        }
-                                    }
-                                    if (input.LastUpdateHandle == undefined) {
-                                        $scope.testcalls.push(response.ListTestCallDetails[i]);
-                                    }
-                                    else
-                                        if (!findTestCall)
-                                            $scope.testcalls.unshift(response.ListTestCallDetails[i]);
-                                }
-                            }
-                            input.LastUpdateHandle = response.MaxTimeStamp;
-                            isGettingData = false;
-                        });
-                    }
-                }, 2000);
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
+                    ctrl.onReady(getDirectiveAPI());
+                function getDirectiveAPI() {
 
-                $scope.$on("$destroy", function () {
-                    clearTimeout(timer);
-                });
+                    var directiveAPI = {};
+                    directiveAPI.loadGrid = function (query) {
+                       
+                        return gridAPI.retrieveData(query);
+                    };
+                    return directiveAPI;
+                }
+
             };
         }
+
+        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            return Qm_CliTester_TestCallAPIService.GetFilteredTestCalls(dataRetrievalInput)
+                .then(function (response) {
+                    console.log("aasdasdsad");
+                    console.log(response.Data);
+                    if (response.Data != undefined) {
+                        for (var i = 0; i < response.Data.length; i++) {
+                            gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                        }
+                    }
+                    onResponseReady(response);
+
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
+        };
 
         $scope.getColor = function (dataItem, coldef) {
             return getMeasureColor(dataItem, coldef);
         };
     }
     function getCallTestStatusColor(value) {
-        switch(value) {
+        switch (value) {
             case Qm_CliTester_CallTestStatusEnum.New.value:
                 return LabelColorsEnum.New.color;
                 break;

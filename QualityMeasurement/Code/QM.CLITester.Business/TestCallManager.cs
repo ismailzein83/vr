@@ -138,7 +138,7 @@ namespace QM.CLITester.Business
         {
             testCallResult.CallTestStatus = CallTestStatus.New;
             testCallResult.CallTestResult = CallTestResult.NotCompleted;
-
+            testCallResult.UserID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             Vanrise.Entities.InsertOperationOutput<TestCall> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<TestCall>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -189,6 +189,20 @@ namespace QM.CLITester.Business
         {
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
             return dataManager.GetTestCalls(callTestStatus);
+        }
+
+        public IDataRetrievalResult<TestCallDetail> GetFilteredTestCalls(DataRetrievalInput<TestCallQuery> input)
+        {
+            if (input.Query.SupplierID == 0)
+                input.Query.SupplierID = null;
+            if (input.Query.ZoneID == 0)
+                input.Query.ZoneID = null;
+            if (input.Query.CountryID == 0)
+                input.Query.CountryID = null;
+
+            ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
+            Vanrise.Entities.BigResult<TestCallDetail> testCallDetails = dataManager.GetTestCallFilteredFromTemp(input);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, testCallDetails);
         }
     }
 

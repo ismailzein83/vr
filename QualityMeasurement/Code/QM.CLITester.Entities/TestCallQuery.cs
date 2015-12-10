@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace QM.CLITester.Entities
 {
-    public class TestCallResultQuery
+    public class TestCallQuery
     {
-        public string Test_ID { get; set; }
+        public int? SupplierID { get; set; }
+        public int? CountryID { get; set; }
+        public int? ZoneID { get; set; }
     }
 }

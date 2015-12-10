@@ -1,8 +1,8 @@
 ﻿<vr-datagrid datasource="testcalls"
-             on-ready="onGridReady"
+             on-ready="onGridReady" dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
-             idfield="Id">
+             idfield="Entity.ID">
 
     <vr-datagridcolumn headertext="'Id'" field="'Entity.ID'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Supplier'" field="'Entity.SupplierID'" type="'Text'"></vr-datagridcolumn>
