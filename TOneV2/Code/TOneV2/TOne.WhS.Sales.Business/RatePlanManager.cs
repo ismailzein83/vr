@@ -35,7 +35,7 @@ namespace TOne.WhS.Sales.Business
                 IEnumerable<SaleZone> saleZones = GetSellingProductZones(ownerId, DateTime.Now);
 
                 if (saleZones != null)
-                    zoneLetters = saleZones.MapRecords(zone => zone.Name[0], zone => zone.Name != null && zone.Name.Length > 0).Distinct().OrderBy(letter => letter);
+                    zoneLetters = saleZones.MapRecords(itm => char.ToUpper(itm.Name[0]), itm => itm.Name != null && itm.Name.Length > 0).Distinct().OrderBy(itm => itm);
             }
             else if (ownerType == SalePriceListOwnerType.Customer)
             {
@@ -164,11 +164,19 @@ namespace TOne.WhS.Sales.Business
 
         private IEnumerable<SaleZone> GetSellingProductZones(int sellingProductId, DateTime effectiveOn)
         {
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(sellingProductId, CarrierAccountType.Customer);
+            IEnumerable<SaleZone> zones = null;
 
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
-            return saleZoneManager.GetSaleZones(sellingNumberPlanId, effectiveOn);
+            SellingProductManager sellingProductManager = new SellingProductManager();
+            int? returnValue = sellingProductManager.GetSellingNumberPlanId(sellingProductId);
+            
+            if (returnValue != null)
+            {
+                int sellingNumberPlanId = (int)returnValue;
+                SaleZoneManager saleZoneManager = new SaleZoneManager();
+                zones = saleZoneManager.GetSaleZones(sellingNumberPlanId, effectiveOn);
+            }
+
+            return zones;
         }
 
         private IEnumerable<SaleZone> GetFilteredZones(IEnumerable<SaleZone> saleZones, ZoneItemFilter filter)

@@ -57,10 +57,10 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<char> GetCustomerZoneLetters(int customerId)
         {
             IEnumerable<char> letters = null;
-            IEnumerable<SaleZone> saleZones = this.GetCustomerSaleZones(customerId, DateTime.Now, false);
+            IEnumerable<SaleZone> saleZones = GetCustomerSaleZones(customerId, DateTime.Now, false);
 
             if (saleZones != null)
-                letters = saleZones.MapRecords(z => z.Name[0], z => z.Name != null && z.Name.Length > 0).Distinct().OrderBy(l => l);
+                letters = saleZones.MapRecords(itm => char.ToUpper(itm.Name[0]), itm => itm.Name != null && itm.Name.Length > 0).Distinct().OrderBy(itm => itm);
 
             return letters;
         }
@@ -75,7 +75,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 int sellingNumberPlanId = new CarrierAccountManager().GetSellingNumberPlanId(customerId, CarrierAccountType.Customer);
                 IEnumerable<int> countryIds = customerZones.Countries.MapRecords(item => item.CountryId);
                 saleZones = new SaleZoneManager().GetSaleZonesByCountryIds(sellingNumberPlanId, countryIds);
-                saleZones = saleZones.FindAllRecords(item => item.IsEffective(effectiveOn));
+                saleZones = saleZones.FindAllRecords(itm => itm.IsEffective(effectiveOn));
             }
 
             return saleZones;
