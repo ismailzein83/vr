@@ -123,6 +123,7 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CDRController.cs" />
     <Compile Include="Controllers\GenericAnalyticController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -141,21 +142,32 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_Analytics\Constant\BillingCDRMeasureEnum.js" />
+    <Content Include="WhS_Analytics\Constant\BillingCDROptionMeasureEnum.js" />
     <Content Include="WhS_Analytics\Constant\GenericAnalyticDimensionEnum.js" />
     <Content Include="WhS_Analytics\Constant\GenericAnalyticMeasureEnum.js" />
     <Content Include="WhS_Analytics\Constant\ModuleConfig.js" />
+    <Content Include="WhS_Analytics\Directives\CDRLog\Templates\CDRLogGridTemplate.html" />
+    <Content Include="WhS_Analytics\Directives\CDRLog\vr-whs-analytics-cdrlog-grid.js" />
+    <Content Include="WhS_Analytics\Directives\Generic\Templates\GenericSettingsTemplate.html" />
     <Content Include="WhS_Analytics\Directives\Generic\vr-whs-analytics-genericchart.js" />
     <Content Include="WhS_Analytics\Directives\Generic\vr-whs-analytics-genericfilter.js" />
     <Content Include="WhS_Analytics\Directives\Generic\vr-whs-analytics-genericgrid.js" />
     <Content Include="WhS_Analytics\Directives\Generic\Templates\GenericChartTemplate.html" />
     <Content Include="WhS_Analytics\Directives\Generic\Templates\GenericFilterTemplate.html" />
     <Content Include="WhS_Analytics\Directives\Generic\Templates\GenericGridTemplate.html" />
+    <Content Include="WhS_Analytics\Directives\Generic\vr-whs-analytics-genericsettings.js" />
+    <Content Include="WhS_Analytics\Services\APIServices\CDRLogAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\GenericAnalyticAPIService.js" />
     <Content Include="WhS_Analytics\Services\GenericAnalyticService.js" />
     <Content Include="WhS_Analytics\Views\CarrierSummary.html" />
     <Content Include="WhS_Analytics\Views\CarrierSummaryController.js" />
+    <Content Include="WhS_Analytics\Views\CDR\CDRLog.html" />
+    <Content Include="WhS_Analytics\Views\CDR\CDRLogController.js" />
     <Content Include="WhS_Analytics\Views\DailyReport.html" />
     <Content Include="WhS_Analytics\Views\DailyReportController.js" />
+    <Content Include="WhS_Analytics\Directives\Generic\Templates\GenericAnalyticGridSettings.html" />
+    <Content Include="WhS_Analytics\Directives\Generic\GenericAnalyticGridSettingsController.js" />
     <Content Include="WhS_Analytics\Views\TrafficMonitor.html" />
     <Content Include="WhS_Analytics\Views\TrafficMonitorController.js" />
     <Content Include="WhS_Analytics\Views\HourlyReport.html" />

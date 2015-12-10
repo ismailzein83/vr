@@ -14,6 +14,9 @@
                 switchId: switchId
             });
         }
+        function GetSwitchesInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "Switch", "GetSwitchesInfo"));
+        }
 
         function AddSwitch(switchObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "Switch", "AddSwitch"), switchObject);
@@ -33,7 +36,8 @@
             GetSwitch: GetSwitch,
             AddSwitch: AddSwitch,
             UpdateSwitch: UpdateSwitch,
-            DeleteSwitch: DeleteSwitch
+            DeleteSwitch: DeleteSwitch,
+            GetSwitchesInfo: GetSwitchesInfo
         });
     }
 

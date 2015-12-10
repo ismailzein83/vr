@@ -1,0 +1,31 @@
+﻿<vr-datagrid datasource="cdrLog"
+                on-ready="onGridReady"
+                dataretrievalfunction="dataRetrievalFunction"
+                pagingtype="'PagingOnScroll'"
+                menuactions="gridMenuActions"
+                idfield="Entity.ID">
+
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.ID'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Switch Name'" field="'SwitchName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Customer Name'" field="'CustomerName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Sale Zone Name'" field="'SaleZoneName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Supplier Name'" field="'SupplierName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Supplier Zone Name'" field="'SupplierZoneName'" type="'Text'"></vr-datagridcolumn>
+    <!--<vr-datagridcolumn headertext="'Originating Zone Name'" field="'OriginatingZoneName'" type="'Text'"></vr-datagridcolumn>-->
+    <vr-datagridcolumn headertext="'Call Date'" field="'Entity.Attempt'" type="'Datetime'"></vr-datagridcolumn>
+   
+    <vr-datagridcolumn headertext="'CGPN'" field="'Entity.CGPN'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'PDD'" field="'Entity.PDD'" type="'Number'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Number'" field="'Entity.CDPN'" type="'Text'"></vr-datagridcolumn>
+    <!--<vr-datagridcolumn headertext="'CDPNOut'" field="'Entity.CDPNOut'" type="'Text'"></vr-datagridcolumn>-->
+    <vr-datagridcolumn headertext="'Duration In Seconds'" field="'Entity.DurationInSeconds'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Release Code'" field="'Entity.ReleaseCode'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Release Source'" field="'Entity.ReleaseSource'" type="'Text'"></vr-datagridcolumn>
+
+    <!--<vr-datagridcolumn headertext="'Re.Routed'" field="'Entity.IsRerouted'" type="'Text'" disablesorting>
+
+        <vr-icon icontype="dataItem.Entity.IsRerouted"></vr-icon>
+    </vr-datagridcolumn>-->
+
+
+</vr-datagrid>

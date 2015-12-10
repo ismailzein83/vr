@@ -17,7 +17,7 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
         {
 
         }
-        readonly string[] columns = { "ID", "CustomerID", "SupplierID", "Attempt", "DurationInSeconds", "Alert", "Connect", "Disconnect", "PortOut", "PortIn", "SaleCode", "SaleZoneID", "SupplierCode", "SupplierZoneID", "CDPN", "CGPN", "ReleaseCode", "ReleaseSource" };
+        readonly string[] columns = { "ID", "CustomerID", "SupplierID", "Attempt", "DurationInSeconds", "Alert", "Connect", "Disconnect", "PortOut", "PortIn", "SaleCode", "SaleZoneID", "SupplierCode", "SupplierZoneID", "CDPN", "CGPN", "ReleaseCode", "ReleaseSource", "SwitchID" };
 
         #endregion
 
@@ -41,7 +41,7 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
         private void WriteRecordToStream(BillingInvalidCDR record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^",
                                      record.BillingCDR.ID,
                                      record.BillingCDR.CustomerId,
                                      record.BillingCDR.SupplierId,
@@ -59,7 +59,8 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
                                      record.BillingCDR.CDPN,
                                      record.BillingCDR.CGPN,
                                      record.BillingCDR.ReleaseCode,
-                                     record.BillingCDR.ReleaseSource);
+                                     record.BillingCDR.ReleaseSource,
+                                     record.BillingCDR.SwitchID);
 
         }
         private object FinishDBApplyStream(object dbApplyStream)

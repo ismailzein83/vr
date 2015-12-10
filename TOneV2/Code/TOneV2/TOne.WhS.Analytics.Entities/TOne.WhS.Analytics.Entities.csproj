@@ -46,12 +46,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnalyticDimension.cs" />
-    <Compile Include="AnalyticDimensionValue.cs" />
-    <Compile Include="AnalyticMeasureField.cs" />
-    <Compile Include="AnalyticRecord.cs" />
-    <Compile Include="AnalyticSummaryBigResult.cs" />
-    <Compile Include="GenericAnalyticQuery.cs" />
+    <Compile Include="CDRLog\CDRLog.cs" />
+    <Compile Include="CDRLog\CDRLogDetail.cs" />
+    <Compile Include="CDRLog\CDRLogFilter.cs" />
+    <Compile Include="GenericAnalytic\AnalyticDimension.cs" />
+    <Compile Include="GenericAnalytic\AnalyticDimensionValue.cs" />
+    <Compile Include="GenericAnalytic\AnalyticMeasureField.cs" />
+    <Compile Include="GenericAnalytic\AnalyticRecord.cs" />
+    <Compile Include="GenericAnalytic\AnalyticSummaryBigResult.cs" />
+    <Compile Include="CDRLog\CDRLogInput.cs" />
+    <Compile Include="GenericAnalytic\GenericAnalyticQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

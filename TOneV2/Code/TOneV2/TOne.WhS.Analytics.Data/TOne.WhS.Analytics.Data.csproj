@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyticsDataManagerFactory.cs" />
+    <Compile Include="ICDRDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IGenericAnalyticDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
