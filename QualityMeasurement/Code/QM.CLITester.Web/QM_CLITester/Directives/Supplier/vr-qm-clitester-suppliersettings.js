@@ -52,6 +52,8 @@ app.directive("vrQmClitesterSuppliersettings", [function () {
 
 
             api.load = function (payload) {
+                console.log('payload')
+                console.log(payload)
                 if (payload != undefined) {
                     $scope.numberPrefix = payload.Prefix;
                 }

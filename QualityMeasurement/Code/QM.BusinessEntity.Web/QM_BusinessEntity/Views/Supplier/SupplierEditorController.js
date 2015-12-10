@@ -12,6 +12,7 @@
 
         var supplierEntity;
 
+
         loadParameters();
         defineScope();
         load();
@@ -48,36 +49,51 @@
 
         function load() {
             $scope.isLoading = true;
-
             if (isEditMode) {
                 $scope.title = "Edit Supplier";
                 getSupplier().then(function () {
-                    $scope.isLoading = false;
+                    loadAllControls()
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.isLoading = false;
                 });
+
             }
             else {
                 $scope.title = "New Supplier";
-                $scope.isLoading = false;
+                loadAllControls();
             }
         }
+
+
+        function loadAllControls() {
+            $scope.scopeModal.name = supplierEntity.Name;
+
+            var promises = [];
+
+            for (var i = 0 ; i < $scope.directiveTabs.length ; i++) {
+                var promise = $scope.directiveTabs[i].readypromisedeferred.promise;
+                promises.push(promise);
+            }
+          
+            var j = 0;
+            angular.forEach(promises, function (promise) {
+                promise.then(function () {
+                    $scope.directiveTabs[j].directiveAPI.load(supplierEntity.Settings.ExtendedSettings[j]);
+                    j++;
+                });
+            })
+
+            $scope.isLoading = false;
+        }
+
 
 
         function getSupplier() {
             return QM_BE_SupplierAPIService.GetSupplier(supplierId).then(function (whsSupplier) {
                 supplierEntity = whsSupplier;
-                $scope.scopeModal.name = supplierEntity.Name;
-
-                for (var i = 0 ; i < $scope.directiveTabs.length ; i++) {
-                    if ($scope.directiveTabs[i].directiveAPI != undefined)
-                        $scope.directiveTabs[i].directiveAPI.load(supplierEntity.Settings.ExtendedSettings[i]);
-                }
             });
         }
-
-
 
         function buildSupplierObjFromScope() {
             var whsSupplier = {
@@ -85,8 +101,6 @@
                 Name: $scope.scopeModal.name
             };
 
-
-            console.log($scope.directiveTabs)
 
             var extendedSetting = [];
             for (var i = 0 ; i < $scope.directiveTabs.length ; i++) {
@@ -133,14 +147,12 @@
             var cliTab = {
                 title: "CLI Tester",
                 directive: "vr-qm-clitester-suppliersettings",
+                readypromisedeferred: UtilsService.createPromiseDeferred(),
                 loadDirective: function (api) {
-                    supplierSettingAPI = api;
-                    var payload = {
-                        prefix: (supplierEntity!= undefined &&  supplierEntity.Settings != undefined) ? supplierEntity.Settings.Prefix : undefined
-                    };
-                    api.load(payload);
+                    cliTab.supplierSettingAPI = api;
+                    cliTab.readypromisedeferred.resolve();
                 },
-                dontLoad:false
+                dontLoad: false
             };
             $scope.directiveTabs.push(cliTab);
         }
