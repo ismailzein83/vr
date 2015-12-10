@@ -49,14 +49,14 @@ namespace TOne.WhS.Analytics.Data.SQL
                     ExecuteNonQueryText(query, (cmd) =>
                     {
                         cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromTime));
-                        cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.ToTime));
-                        cmd.Parameters.Add(new SqlParameter("@Currency", input.Query.Currency));
+                        cmd.Parameters.Add(new SqlParameter("@ToDate", ToDBNullIfDefault(input.Query.ToTime)));
+                        cmd.Parameters.Add(new SqlParameter("@Currency",  input.Query.Currency));
                     });
                 else
                     ExecuteNonQueryText(query, (cmd) =>
                     {
                         cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromTime));
-                        cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.ToTime));
+                        cmd.Parameters.Add(new SqlParameter("@ToDate", ToDBNullIfDefault(input.Query.ToTime)));
                     });
             };
 
@@ -153,7 +153,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 			                                                    FROM #TABLENAME# ts WITH(NOLOCK ,INDEX(#TABLEINDEX#))
                                                                 #JOINPART#
 			                                                    WHERE
-			                                                    FirstCDRAttempt BETWEEN @FromDate AND @ToDate
+			                                                   (FirstCDRAttempt >= @FromDate  AND  (FirstCDRAttempt <=@ToDate or @ToDate IS NULL))
                                                                 #FILTERPART#
 			                                                    #GROUPBYPART#)
                                                                 SELECT * INTO #TEMPTABLE# FROM AllResult

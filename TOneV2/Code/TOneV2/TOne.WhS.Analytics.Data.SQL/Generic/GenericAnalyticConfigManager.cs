@@ -491,8 +491,8 @@ namespace TOne.WhS.Analytics.Data.SQL
                     GetMeasureValue = (reader, record) =>
                     {
                         var successfulAttempts = GetReaderValue<int>(reader, MeasureValueExpression.SuccessfulAttempts_Expression.ColumnAlias);
-                        var durationInMinutes = GetReaderValue<int>(reader, MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias) / 60;
-                        return successfulAttempts > 0 ? (durationInMinutes * successfulAttempts) : 0;
+                        var durationInSeconds= GetReaderValue<int>(reader, MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias);
+                        return successfulAttempts > 0 ? (durationInSeconds / (60 * successfulAttempts)) : 0;
                     }
                 });
             #endregion

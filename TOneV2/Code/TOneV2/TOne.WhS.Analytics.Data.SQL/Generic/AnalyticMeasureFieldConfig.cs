@@ -37,7 +37,7 @@ namespace TOne.WhS.Analytics.Data.SQL
         public static MeasureValueExpression FailedAttempts_Expression = new MeasureValueExpression { ColumnAlias = "Measure_FailedAttempts", Expression = "Sum(ts.Attempts-ts.SuccessfulAttempts)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
         public static MeasureValueExpression DeliveredAttempts_Expression = new MeasureValueExpression { ColumnAlias = "Measure_DeliveredAttempts", Expression = "Sum(ts.DeliveredAttempts)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
         public static MeasureValueExpression DurationsInSeconds_Expression = new MeasureValueExpression { ColumnAlias = "Measure_DurationInSeconds", Expression = "Sum(ts.DurationInSeconds)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
-        public static MeasureValueExpression PDDInSeconds_Expression = new MeasureValueExpression { ColumnAlias = "Measure_PDDInSeconds", Expression = "Sum(ts.SumOfPDDInSeconds)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
+        public static MeasureValueExpression PDDInSeconds_Expression = new MeasureValueExpression { ColumnAlias = "Measure_PDDInSeconds", Expression = "case when (Sum(ts.SuccessfulAttempts))>0 THEN Sum(ts.SumOfPDDInSeconds)/Sum(ts.SuccessfulAttempts) else 0 end", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
         public static MeasureValueExpression UtilizationInSeconds_Expression = new MeasureValueExpression { ColumnAlias = "Measure_UtilizationInSeconds", Expression = "AVG(ts.UtilizationInSeconds)", ExpressionSummary = AnalyticSummary.Avg.ToString("G") };
         public static MeasureValueExpression NumberOfCalls_Expression = new MeasureValueExpression { ColumnAlias = "Measure_NumberOfCalls", Expression = "Sum(ts.NumberOfCalls)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
         public static MeasureValueExpression DeliveredNumberOfCalls_Expression = new MeasureValueExpression { ColumnAlias = "Measure_DeliveredNumberOfCalls", Expression = "Sum(ts.DeliveredNumberOfCalls)", ExpressionSummary = AnalyticSummary.Sum.ToString("G") };
@@ -58,7 +58,7 @@ namespace TOne.WhS.Analytics.Data.SQL
     }
     public class CTEStatement
     {
-        public const string ExchangeCurrency = "ExchangeRates As (select * from Common.getExchangeRates(@fromDate,@ToDate))";
+        public const string ExchangeCurrency = "ExchangeRates As (select * from Common.getExchangeRates(@fromDate,@ToDate ))";
         public const string Billing = "BillingStats AS ( SELECT BS.CustomerID  ,BS.SupplierZoneID  , BS.CostCurrency,BS.CallDate,BS.SaleCurrency, BS.SupplierID,BS.NumberOfCalls NumberOfCalls, BS.CostNets CostNets, BS.SaleNets  SaleNets, BS.CostDuration CostDuration, BS.SaleZoneID SaleZoneID, ERC.Rate CSLastRate, ERS.Rate CCLastRate,BS.CostRate ,BS.SaleRate FROM  [TOneWhS_Analytic].BillingStats BS WITH(NOLOCK,Index(PK_BillingStats)) #EXCHANGEJOINPART# )";
    //     public const string Country = "OurZones AS (SELECT ID, Name, CountryID FROM [TOneWhS_BE].SaleZone z WITH (NOLOCK))";
         public const string SwitchConnectivity = "SwitchConnectivity AS ( SELECT csc.CarrierAccountID AS  CarrierAccount ,csc.SwitchID AS SwitchID ,csc.Details AS Details ,csc.BeginEffectiveDate AS BeginEffectiveDate ,csc.EndEffectiveDate AS EndEffectiveDate ,csc.[Name] AS GateWayName ,csc.[ID] AS GateWayID FROM   CarrierSwitchConnectivity csc WITH(NOLOCK)  WHERE (csc.EndEffectiveDate IS null))";

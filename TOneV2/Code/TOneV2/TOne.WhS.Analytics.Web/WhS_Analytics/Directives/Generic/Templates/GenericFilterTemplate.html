@@ -30,14 +30,14 @@
                    </vr-columns>
 
                    <vr-columns colnum="2">
-                       <vr-datetimepicker type="date" label="To:" value="ctrl.todate" isrequired customvalidate="ctrl.validateDateTime()"></vr-datetimepicker>
+                       <vr-datetimepicker type="date" label="To:" value="ctrl.todate" customvalidate="ctrl.validateDateTime()"></vr-datetimepicker>
                    </vr-columns>
 
                     <vr-columns width="normal" ng-show="ctrl.isLoadSellingNumberPlan && advancedSelected">
-                        <vr-whs-be-sellingnumberplan-selector on-ready="ctrl.onSellingNumberPlanDirectiveReady" onselectitem="ctrl.onSelectSellingNumberPlan"></vr-whs-be-sellingnumberplan-selector>
+                        <vr-whs-be-sellingnumberplan-selector on-ready="ctrl.onSellingNumberPlanDirectiveReady" onselectitem="ctrl.onSelectSellingNumberPlan" selectedvalues="ctrl.selectedSellingNumberPlan"></vr-whs-be-sellingnumberplan-selector>
                     </vr-columns>
 
-                    <vr-columns width="normal" ng-show="ctrl.isLoadSellingNumberPlan && advancedSelected && ctrl.showSaleZoneSelector" vr-loader="ctrl.isLoadingSaleZonesSelector">
+                    <vr-columns width="normal" ng-show="ctrl.isLoadSellingNumberPlan && advancedSelected && ctrl.selectedSellingNumberPlan!=undefined" vr-loader="ctrl.isLoadingSaleZonesSelector">
                         <vr-whs-be-salezone-selector ismultipleselection on-ready="ctrl.onSaleZoneDirectiveReady" />
                     </vr-columns>
 
