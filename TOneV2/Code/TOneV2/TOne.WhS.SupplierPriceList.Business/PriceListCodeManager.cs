@@ -29,19 +29,42 @@ namespace TOne.WhS.SupplierPriceList.Business
             ProcessCountryCodes(context.ImportedCodes, context.ExistingCodes, newAndExistingZones, context.ExistingZones, context.DeletedCodesDate);
         }
 
-        private Dictionary<long, ExistingZone> StructureExistingZonesById(IEnumerable<BusinessEntity.Entities.SupplierZone> existingZonesEntities)
+        private ExistingZonesByName StructureExistingZonesByName(IEnumerable <ExistingZone> existingZones)
         {
-            return existingZonesEntities.ToDictionary<BusinessEntity.Entities.SupplierZone, long, ExistingZone>((zoneEntity) => zoneEntity.SupplierZoneId, (zoneEntity) => new ExistingZone { ZoneEntity = zoneEntity });
-        }
+            ExistingZonesByName existingZonesByName = new ExistingZonesByName();
+            List<ExistingZone> existingZonesList = null;
 
-        private ExistingZonesByName StructureExistingZonesByName(IEnumerable <ExistingZone> existingZonesByZoneId)
-        {
-            throw new NotImplementedException();
+            foreach (ExistingZone item in existingZones)
+            {
+                if(!existingZonesByName.TryGetValue(item.Name, out existingZonesList))
+                {
+                    existingZonesList = new List<ExistingZone>();
+                    existingZonesByName.Add(item.Name, existingZonesList);
+                }
+
+                existingZonesList.Add(item);
+            }
+
+            return existingZonesByName;            
         }
 
         private ExistingCodesByCodeValue StructureExistingCodesByCodeValue(IEnumerable<ExistingCode> existingCodes)
         {
-            throw new NotImplementedException();
+            ExistingCodesByCodeValue existingCodesByCodeValue = new ExistingCodesByCodeValue();
+            List<ExistingCode> existingCodesList = null;
+
+            foreach (ExistingCode item in existingCodes)
+            {
+                if (!existingCodesByCodeValue.TryGetValue(item.CodeEntity.Code, out existingCodesList))
+                {
+                    existingCodesList = new List<ExistingCode>();
+                    existingCodesByCodeValue.Add(item.CodeEntity.Code, existingCodesList);
+                }
+
+                existingCodesList.Add(item);
+            }
+
+            return existingCodesByCodeValue;  
         }
 
         private void ProcessCountryCodes(IEnumerable<ImportedCode> importedCodes, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones, DateTime codeCloseDate)

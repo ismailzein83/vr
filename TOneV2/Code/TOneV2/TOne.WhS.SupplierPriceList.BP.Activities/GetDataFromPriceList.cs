@@ -62,7 +62,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 if (bEDDateFromExcel == null && effectiveDate != null)
                     bEDDateFromExcel = effectiveDate;
                 
-                if (bEDDateFromExcel < minimumDate)
+                if (minimumDate == DateTime.MinValue || bEDDateFromExcel < minimumDate)
                     minimumDate = (DateTime)bEDDateFromExcel;
                 
                 string zoneName = worksheet.Cells[count, 0].StringValue;
@@ -71,7 +71,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 {
                     importedCodesList.Add(new ImportedCode
                     {
-                        Code = codeValue,
+                        Code = codeValue.Trim(),
                         ZoneName = zoneName,
                         BED = bEDDateFromExcel.Value,
                         EED = eEDDateFromExcel

@@ -15,14 +15,43 @@ namespace TOne.WhS.SupplierPriceList.Business
             ProcessCountryRates(context.ImportedRates, context.ExistingRates, context.NewAndExistingZones, context.ExistingZones);
         }
 
-        private ExistingZonesByName StructureExistingZonesByName(IEnumerable<ExistingZone> enumerable)
+        private ExistingZonesByName StructureExistingZonesByName(IEnumerable<ExistingZone> existingZones)
         {
-            throw new NotImplementedException();
+            ExistingZonesByName existingZonesByName = new ExistingZonesByName();
+            List<ExistingZone> existingZonesList = null;
+
+            foreach (ExistingZone item in existingZones)
+            {
+                if (!existingZonesByName.TryGetValue(item.Name, out existingZonesList))
+                {
+                    existingZonesList = new List<ExistingZone>();
+                    existingZonesByName.Add(item.Name, existingZonesList);
+                }
+
+                existingZonesList.Add(item);
+            }
+
+            return existingZonesByName;            
+
         }
 
         private ExistingRatesByZoneName StructureExistingRatesByZoneName(IEnumerable<ExistingRate> existingRates)
         {
-            throw new NotImplementedException();
+            ExistingRatesByZoneName existingRatesByZoneName = new ExistingRatesByZoneName();
+            List<ExistingRate> existingRatesList = null;
+
+            foreach (ExistingRate item in existingRates)
+            {
+                if (!existingRatesByZoneName.TryGetValue(item.ParentZone.Name, out existingRatesList))
+                {
+                    existingRatesList = new List<ExistingRate>();
+                    existingRatesByZoneName.Add(item.ParentZone.Name, existingRatesList);
+                }
+
+                existingRatesList.Add(item);
+            }
+
+            return existingRatesByZoneName;  
         }
 
         private void ProcessCountryRates(IEnumerable<ImportedRate> importedRates, IEnumerable<ExistingRate> existingRates, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones)
