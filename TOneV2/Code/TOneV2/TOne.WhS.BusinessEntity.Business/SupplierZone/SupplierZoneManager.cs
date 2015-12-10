@@ -36,7 +36,7 @@ namespace TOne.WhS.BusinessEntity.Business
            
         }
         
-        public List<SupplierZone> GetSupplierZonesEffectiveAfter(int supplierId, DateTime? minimumDate)
+        public List<SupplierZone> GetSupplierZonesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
             ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
             return dataManager.GetSupplierZonesEffectiveAfter(supplierId, minimumDate);

@@ -29,7 +29,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public OutArgument<IEnumerable<ImportedRate>> ImportedRates { get; set; }
 
         [RequiredArgument]
-        public OutArgument<DateTime?> MinimumDate { get; set; }
+        public OutArgument<DateTime> MinimumDate { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
@@ -47,7 +47,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             List<ImportedCode> importedCodesList = new List<ImportedCode>();
             List<ImportedRate> importedRatesList = new List<ImportedRate>();
-            DateTime? minimumDate = null;
+            DateTime minimumDate = DateTime.MinValue;
 
             while (count < worksheet.Cells.Rows.Count)
             {
@@ -58,11 +58,13 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 DateTime? eEDDateFromExcel = null;
                 if (worksheet.Cells[count, 4].Value != null)
                     eEDDateFromExcel = Convert.ToDateTime(worksheet.Cells[count, 4].StringValue);
-                if (minimumDate == null)
-                    minimumDate = effectiveDate.HasValue ? effectiveDate : bEDDateFromExcel;
-                else if (!effectiveDate.HasValue && minimumDate > bEDDateFromExcel)
-                    minimumDate = bEDDateFromExcel;
 
+                if (bEDDateFromExcel == null && effectiveDate != null)
+                    bEDDateFromExcel = effectiveDate;
+                
+                if (bEDDateFromExcel < minimumDate)
+                    minimumDate = (DateTime)bEDDateFromExcel;
+                
                 string zoneName = worksheet.Cells[count, 0].StringValue;
                 string[] codes = worksheet.Cells[count, 1].StringValue.Split(',');
                 foreach (var codeValue in codes)
@@ -71,7 +73,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     {
                         Code = codeValue,
                         ZoneName = zoneName,
-                        BED = bEDDateFromExcel.HasValue ? bEDDateFromExcel.Value : effectiveDate.Value,
+                        BED = bEDDateFromExcel.Value,
                         EED = eEDDateFromExcel
                     });
                 }
@@ -80,7 +82,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 {
                     ZoneName = zoneName,
                     NormalRate = (decimal)worksheet.Cells[count, 2].FloatValue,
-                    BED = bEDDateFromExcel.HasValue ? bEDDateFromExcel.Value : effectiveDate.Value,
+                    BED = bEDDateFromExcel.Value,
                     EED = eEDDateFromExcel,
                 });
 

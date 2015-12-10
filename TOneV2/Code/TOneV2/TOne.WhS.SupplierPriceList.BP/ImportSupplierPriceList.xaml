@@ -55,7 +55,7 @@
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="Root" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="s:Nullable(s:DateTime)" Name="MinimumDate" />
+      <Variable x:TypeArguments="s:DateTime" Name="MinimumDate" />
       <Variable x:TypeArguments="scg:IEnumerable(twses:ImportedCode)" Name="ImportedCodes" />
       <Variable x:TypeArguments="scg:IEnumerable(twses:ImportedRate)" Name="ImportedRates" />
       <Variable x:TypeArguments="scg:IEnumerable(twbe:SupplierZone)" Name="ExistingZoneEntities" />
@@ -88,8 +88,8 @@
         </OutArgument>
       </twsba1:GetDataFromPriceList.ImportedRates>
       <twsba1:GetDataFromPriceList.MinimumDate>
-        <OutArgument x:TypeArguments="s:Nullable(s:DateTime)">
-          <mca:CSharpReference x:TypeArguments="s:Nullable(s:DateTime)">MinimumDate</mca:CSharpReference>
+        <OutArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpReference x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpReference>
         </OutArgument>
       </twsba1:GetDataFromPriceList.MinimumDate>
     </twsba1:GetDataFromPriceList>
@@ -101,8 +101,8 @@
           </OutArgument>
         </twsba1:GetExistingZones.ExistingZoneEntities>
         <twsba1:GetExistingZones.MinimumDate>
-          <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
-            <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">MinimumDate</mca:CSharpValue>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
           </InArgument>
         </twsba1:GetExistingZones.MinimumDate>
         <twsba1:GetExistingZones.SupplierId>
@@ -118,8 +118,8 @@
           </OutArgument>
         </twsba1:GetExistingCodes.ExistingCodeEntities>
         <twsba1:GetExistingCodes.MinimumDate>
-          <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
-            <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">MinimumDate</mca:CSharpValue>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
           </InArgument>
         </twsba1:GetExistingCodes.MinimumDate>
         <twsba1:GetExistingCodes.SupplierId>
@@ -135,8 +135,8 @@
           </OutArgument>
         </twsba1:GetExistingRates.ExistingRateEntities>
         <twsba1:GetExistingRates.MinimumDate>
-          <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
-            <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">MinimumDate</mca:CSharpValue>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
           </InArgument>
         </twsba1:GetExistingRates.MinimumDate>
         <twsba1:GetExistingRates.SupplierId>
@@ -158,7 +158,7 @@
         </OutArgument>
       </twsba1:PrepareExistingZones.ExistingZonesByZoneId>
     </twsba1:PrepareExistingZones>
-    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
+    <Parallel DisplayName="PrepareExistingCodesAndRates" sap2010:WorkflowViewState.IdRef="Parallel_2">
       <twsba1:PrepareExistingCodes sap2010:WorkflowViewState.IdRef="PrepareExistingCodes_1">
         <twsba1:PrepareExistingCodes.ExistingCodeEntities>
           <InArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">
@@ -243,7 +243,7 @@
         </InArgument>
       </twsba1:ProcessCountryRates.NewAndExistingZones>
     </twsba1:ProcessCountryRates>
-    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWwrOAP3AQ4CAQFFBV8jAwHEAmAFlAEQAwHUAZUBBaABIwMBuwGhAQXEARACAXDFAQXfASICATPgAQX1ASICAQJcC1xqAwH1AkgLSGoDAekCVwtXeQMB3QJNC01UAwHRAlILUnkDAcUCYQdxIQMBnwJyB4IBIQMB+gGDAQeTASEDAdUBmAELmAF3AwHIAZ0BC50BiQEDAbwBogEHsgElAwGWAbMBB8MBJQIBcc0BC80BcQIBZMgBC8gBYQIBWNIBC9IBgQECAUzcAQvcAW0CAUDXAQvXAXECATTjAQvjAXkCASftAQvtAXECARvoAQvoAYEBAgEP8gEL8gFlAgEDZA1kgQEDAbgCbg1uYQMBrAJpDWlkAwGgAnUNdYEBAwGTAn8Nf2EDAYcCeg16ZAMB+wGQAQ2QAWEDAe4BhgENhgGBAQMB4gGLAQ2LAWQDAdYBqgENqgF7AwGvAaUBDaUBeQMBowGvAQ2vAYMBAwGXAbYBDbYBeQMBigG7AQ27AXsCAX7AAQ3AAYMBAgFy</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWwrOAP3AQ4CAQFFBV8jAwHEAmAFlAEQAwHUAZUBBaABIwMBuwGhAQXEARACAXDFAQXfASICATPgAQX1ASICAQJcC1xeAwH1AkgLSGoDAekCVwtXeQMB3QJNC01UAwHRAlILUnkDAcUCYQdxIQMBnwJyB4IBIQMB+gGDAQeTASEDAdUBmAELmAF3AwHIAZ0BC50BiQEDAbwBogEHsgElAwGWAbMBB8MBJQIBcc0BC80BcQIBZMgBC8gBYQIBWNIBC9IBgQECAUzcAQvcAW0CAUDXAQvXAXECATTjAQvjAXkCASftAQvtAXECARvoAQvoAYEBAgEP8gEL8gFlAgEDZA1kgQEDAbgCbg1uYQMBrAJpDWlYAwGgAnUNdYEBAwGTAn8Nf2EDAYcCeg16WAMB+wGQAQ2QAWEDAe4BhgENhgGBAQMB4gGLAQ2LAVgDAdYBqgENqgF7AwGvAaUBDaUBeQMBowGvAQ2vAYMBAwGXAbYBDbYBeQMBigG7AQ27AXsCAX7AAQ3AAYMBAgFy</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

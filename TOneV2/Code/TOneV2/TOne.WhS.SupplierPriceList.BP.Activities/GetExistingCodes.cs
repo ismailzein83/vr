@@ -16,7 +16,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<int> SupplierId { get; set; }
 
         [RequiredArgument]
-        public InArgument<DateTime?> MinimumDate { get; set; }
+        public InArgument<DateTime> MinimumDate { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<SupplierCode>> ExistingCodeEntities { get; set; }
@@ -24,7 +24,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             int supplierId = context.GetValue(this.SupplierId);
-            DateTime? minDate = context.GetValue(this.MinimumDate);
+            DateTime minDate = context.GetValue(this.MinimumDate);
 
             SupplierCodeManager codeManager = new SupplierCodeManager();
             List<SupplierCode> suppCodes = codeManager.GetSupplierCodesEffectiveAfter(supplierId, minDate);

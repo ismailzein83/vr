@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data
     {
         BigResult<SupplierRate> GetFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input);
 
-        List<SupplierRate> GetSupplierRates(int supplierId, DateTime? minimumDate);
+        List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate);
 
         List<SupplierRate> GetAllSupplierRates(DateTime? effectiveOn, bool isEffectiveInFuture);
 

@@ -28,7 +28,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             _columnMapper.Add("SupplierRateId", "ID");
         }
 
-        public List<SupplierRate> GetSupplierRates(int supplierId, DateTime? minimumDate)
+        public List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate)
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetByDate", SupplierRateMapper, supplierId, minimumDate);
         }
