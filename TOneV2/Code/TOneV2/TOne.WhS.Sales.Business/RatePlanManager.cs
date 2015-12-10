@@ -50,7 +50,7 @@ namespace TOne.WhS.Sales.Business
 
         #region Get Zone Items
 
-        public IEnumerable<ZoneItem> GetZoneItems(ZoneItemInput input)
+        public IEnumerable<ZoneItem> GetZoneItems(ZoneItemsInput input)
         {
             List<ZoneItem> zoneItems = null;
             IEnumerable<SaleZone> zones = GetZones(input.Filter.OwnerType, input.Filter.OwnerId);
@@ -99,18 +99,18 @@ namespace TOne.WhS.Sales.Business
             return zoneItems;
         }
 
-        public ZoneItem GetZoneItem(SalePriceListOwnerType ownerType, int ownerId, int routingDatabaseId, int policyConfigId, int numberOfOptions, long zoneId, List<CostCalculationMethod> costCalculationMethods)
+        public ZoneItem GetZoneItem(ZoneItemInput input)
         {
-            ZoneItem zoneItem = new ZoneItem() { ZoneId = zoneId };
-            zoneItem.ZoneName = GetZoneName(zoneId);
+            ZoneItem zoneItem = new ZoneItem() { ZoneId = input.ZoneId };
+            zoneItem.ZoneName = GetZoneName(input.ZoneId);
 
-            SetZoneItemRate(ownerType, ownerId, zoneItem);
-            SetZoneItemRoutingProduct(ownerType, ownerId, zoneItem);
+            SetZoneItemRate(input.OwnerType, input.OwnerId, zoneItem);
+            SetZoneItemRoutingProduct(input.OwnerType, input.OwnerId, zoneItem);
 
-            Changes changes = _dataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
+            Changes changes = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
             if (changes != null && changes.ZoneChanges != null)
             {
-                ZoneChanges zoneChanges = changes.ZoneChanges.FindRecord(item => item.ZoneId == zoneId);
+                ZoneChanges zoneChanges = changes.ZoneChanges.FindRecord(itm => itm.ZoneId == input.ZoneId);
                 if (zoneChanges != null)
                     SetZoneItemChanges(zoneItem, zoneChanges);
             }
@@ -118,16 +118,16 @@ namespace TOne.WhS.Sales.Business
             NewDefaultRoutingProduct newDefaultRoutingProduct = (changes != null && changes.DefaultChanges != null) ? changes.DefaultChanges.NewDefaultRoutingProduct : null;
             SetZoneItemEffectiveRoutingProduct(zoneItem, newDefaultRoutingProduct);
 
-            IEnumerable<RPRouteDetail> rpRoutes = GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, new List<ZoneItem>() { zoneItem });
+            IEnumerable<RPRouteDetail> rpRoutes = GetRPRoutes(input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, new List<ZoneItem>() { zoneItem });
             if (rpRoutes != null && rpRoutes.Count() > 0)
             {
                 zoneItem.RouteOptions = rpRoutes.ElementAt(0).RouteOptionsDetails;
 
-                if (costCalculationMethods != null && costCalculationMethods.Count() > 0)
+                if (input.CostCalculationMethods != null && input.CostCalculationMethods.Count() > 0)
                 {
                     zoneItem.Costs = new List<decimal>();
 
-                    foreach (CostCalculationMethod method in costCalculationMethods)
+                    foreach (CostCalculationMethod method in input.CostCalculationMethods)
                     {
                         CostCalculationMethodContext context = new CostCalculationMethodContext() { Route = rpRoutes.ElementAt(0) };
                         method.CalculateCost(context);
@@ -532,12 +532,56 @@ namespace TOne.WhS.Sales.Business
             return priceListId;
         }
 
-        public IEnumerable<Changes> GetRecentChanges(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            return _dataManager.GetRecentChanges(ownerType, ownerId, RatePlanStatus.Completed);
-        }
-
         #endregion
+
+        public ChangesDetail GetChanges(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            ChangesDetail detailedChanges = null;
+            Changes changes = _dataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
+
+            if (changes != null)
+            {
+                if (changes.DefaultChanges != null)
+                {
+                    DefaultChangesDetail defaultChanges = new DefaultChangesDetail() { Entity = changes.DefaultChanges };
+                    var newDefaultRoutingProduct = defaultChanges.Entity.NewDefaultRoutingProduct;
+                    var defaultRoutingProductChange = defaultChanges.Entity.DefaultRoutingProductChange;
+
+                    int? routingProductId = null;
+                    if (newDefaultRoutingProduct != null) routingProductId = newDefaultRoutingProduct.DefaultRoutingProductId;
+                    else if (defaultRoutingProductChange != null) routingProductId = defaultRoutingProductChange.DefaultRoutingProductId;
+
+                    if (routingProductId != null)
+                        defaultChanges.DefaultRoutingProductName = GetRoutingProductName((int)routingProductId);
+
+                    detailedChanges.DefaultChanges = defaultChanges;
+                }
+
+                if (changes.ZoneChanges != null)
+                {
+                    List<ZoneChangesDetail> lst = new List<ZoneChangesDetail>();
+
+                    foreach (ZoneChanges zoneItemChanges in changes.ZoneChanges)
+                    {
+                        ZoneChangesDetail changesDetail = new ZoneChangesDetail() { Entity = zoneItemChanges };
+                        changesDetail.ZoneName = GetZoneName(zoneItemChanges.ZoneId);
+
+                        int? routingProductId = null;
+                        if (zoneItemChanges.NewRoutingProduct != null) routingProductId = zoneItemChanges.NewRoutingProduct.ZoneRoutingProductId;
+                        else if (zoneItemChanges.RoutingProductChange != null) routingProductId = zoneItemChanges.RoutingProductChange.ZoneRoutingProductId;
+
+                        if (routingProductId != null)
+                            changesDetail.ZoneRoutingProductName = GetRoutingProductName((int)routingProductId);
+
+                        lst.Add(changesDetail);
+                    }
+
+                    detailedChanges.ZoneChanges = lst;
+                }
+            }
+            
+            return detailedChanges;
+        }
 
         #region Save Changes
 
@@ -548,6 +592,7 @@ namespace TOne.WhS.Sales.Business
 
             if (allChanges != null)
                 return _dataManager.InsertOrUpdateChanges(input.OwnerType, input.OwnerId, allChanges, RatePlanStatus.Draft);
+            
             return true;
         }
 

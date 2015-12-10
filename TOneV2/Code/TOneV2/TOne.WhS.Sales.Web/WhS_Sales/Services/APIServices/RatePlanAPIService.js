@@ -12,7 +12,7 @@
             GetZoneItems: GetZoneItems,
             GetZoneItem: GetZoneItem,
             GetCostCalculationMethodTemplates: GetCostCalculationMethodTemplates,
-            GetRecentChanges: GetRecentChanges,
+            GetChanges: GetChanges,
             SavePriceList: SavePriceList,
             SaveChanges: SaveChanges
         });
@@ -28,16 +28,8 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetZoneItems"), input);
         }
 
-        function GetZoneItem(ownerType, ownerId, routingDatabaseId, policyConfigId, numberOfOptions, zoneId, costCalculationMethods) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetZoneItem"), {
-                ownerType: ownerType,
-                ownerId: ownerId,
-                routingDatabaseId: routingDatabaseId,
-                policyConfigId: policyConfigId,
-                numberOfOptions: numberOfOptions,
-                zoneId: zoneId,
-                costCalculationMethods: costCalculationMethods
-            });
+        function GetZoneItem(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetZoneItem"), input);
         }
 
         function GetDefaultItem(ownerType, ownerId) {
@@ -51,8 +43,8 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetCostCalculationMethodTemplates"));
         }
 
-        function GetRecentChanges(ownerType, ownerId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetRecentChanges"), {
+        function GetChanges(ownerType, ownerId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetChanges"), {
                 ownerType: ownerType,
                 ownerId: ownerId
             });

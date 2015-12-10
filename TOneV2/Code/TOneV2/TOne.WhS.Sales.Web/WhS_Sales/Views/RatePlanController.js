@@ -35,6 +35,7 @@
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
         var settings;
+        var isSavingPriceList;
 
         defineScope();
         load();
@@ -132,25 +133,13 @@
             $scope.editSettings = function () {
                 WhS_Sales_RatePlanService.editSettings(settings, onSettingsUpdate);
             };
-            $scope.viewRecentChanges = function () {
-                WhS_Sales_RatePlanService.viewRecentChanges($scope.selectedOwnerType.value, getOwnerId());
+            $scope.viewChanges = function () {
+                saveChanges(false).then(function () {
+                    WhS_Sales_RatePlanService.viewChanges($scope.selectedOwnerType.value, getOwnerId());
+                });
             };
 
             defineSaveButtonMenuActions();
-        }
-
-        function onSettingsUpdate(updatedSettings) {
-            if (updatedSettings) {
-                settings = {};
-
-                settings.CostCalculationMethods = [];
-                if (updatedSettings.CostCalculationMethods) {
-                    for (var i = 0; i < updatedSettings.CostCalculationMethods.length; i++)
-                        settings.CostCalculationMethods.push(updatedSettings.CostCalculationMethods[i]);
-                }
-            }
-
-            VRNotificationService.showSuccess("Rate plan settings were updated successfully");
         }
 
         function load() {
@@ -294,8 +283,26 @@
             }
         }
 
+        function onSettingsUpdate(updatedSettings) {
+            if (updatedSettings) {
+                settings = {};
+
+                settings.CostCalculationMethods = [];
+                if (updatedSettings.CostCalculationMethods) {
+                    for (var i = 0; i < updatedSettings.CostCalculationMethods.length; i++)
+                        settings.CostCalculationMethods.push(updatedSettings.CostCalculationMethods[i]);
+                }
+            }
+
+            VRNotificationService.showSuccess("Settings saved");
+            setTimeout(loadGrid, 500); // Otherwise, the notification doesn't show up. This requires more investigation
+        }
+
         function onDefaultItemChange() {
-            saveChanges(true);
+            if (!isSavingPriceList)
+                saveChanges(true);
+            else
+                isSavingPriceList = false;
         }
 
         function saveChanges(shouldLoadGrid) {
@@ -358,7 +365,9 @@
             }, {
                 name: "Draft",
                 clicked: function () {
-                    return saveChanges(false);
+                    return saveChanges(false).then(function () {
+                        VRNotificationService.showSuccess("Draft saved");
+                    });
                 }
             }];
 
@@ -369,6 +378,7 @@
                 promises.push(saveChangesPromise);
 
                 saveChangesPromise.then(function () {
+                    isSavingPriceList = true;
                     var savePriceListPromise = savePriceList();
                     promises.push(savePriceListPromise);
 
@@ -377,7 +387,9 @@
                     });
                 });
 
-                return UtilsService.waitMultiplePromises(promises).catch(function (error) {
+                return UtilsService.waitMultiplePromises(promises).then(function () {
+                    VRNotificationService.showSuccess("Price list saved");
+                }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
 

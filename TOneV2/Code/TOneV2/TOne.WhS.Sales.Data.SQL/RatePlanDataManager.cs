@@ -34,11 +34,6 @@ namespace TOne.WhS.Sales.Data.SQL
             return affectedRows > 0;
         }
 
-        public IEnumerable<Changes> GetRecentChanges(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status)
-        {
-            return GetItemsSP("TOneWhS_Sales.sp_RatePlan_GetRecent", ChangesMapper, ownerType, ownerId, status);
-        }
-
         #endregion
 
         #region Changes

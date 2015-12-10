@@ -26,7 +26,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
         function initCtrl() {
             $scope.zoneItems = [];
-
             $scope.connector = {
                 costCalculationMethods: []
             };
@@ -38,7 +37,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 if (ctrl.onReady && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getAPI());
             };
-
             $scope.loadMoreData = function () {
                 return loadZoneItems();
             };
@@ -110,9 +108,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         }
 
         function loadZoneItems() {
-            $scope.isLoading = true;
-
             var promises = [];
+
+            $scope.isLoading = true;
             var zoneItemsGetPromise = WhS_Sales_RatePlanAPIService.GetZoneItems(getZoneItemInput());
             promises.push(zoneItemsGetPromise);
 
@@ -191,62 +189,75 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 };
 
                 zoneItem.refreshZoneItem = function (zoneItem) {
-                    var zoneChanges = [];
-                    applyChanges(zoneChanges, zoneItem);
-
-                    var input = {
-                        OwnerType: gridQuery.OwnerType,
-                        OwnerId: gridQuery.OwnerId,
-                        NewChanges: {
-                            ZoneChanges: zoneChanges
-                        }
-                    };
-
-                    zoneItem.isLoadingRouteOptions = true;
-
                     var promises = [];
 
-                    var saveChangesPromise = WhS_Sales_RatePlanAPIService.SaveChanges(input);
+                    var saveChangesPromise = saveZoneItemChanges();
                     promises.push(saveChangesPromise);
 
                     saveChangesPromise.then(function () {
-                        var zoneItemGetPromise = WhS_Sales_RatePlanAPIService.GetZoneItem(gridQuery.OwnerType, gridQuery.OwnerId, gridQuery.RoutingDatabaseId, gridQuery.RPRoutePolicyConfigId, gridQuery.NumberOfOptions, zoneItem.ZoneId, gridQuery.CostCalculationMethods);
+                        var zoneItemGetPromise = WhS_Sales_RatePlanAPIService.GetZoneItem(getZoneItemInput());
                         promises.push(zoneItemGetPromise);
 
-                        zoneItemGetPromise.then(function (zoneItemResponse) {
-                            var zoneItemLoadDeferred = UtilsService.createPromiseDeferred();
-                            promises.push(zoneItemLoadDeferred);
+                        var routeOptionsLoadDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(routeOptionsLoadDeferred.promise);
 
-                            if (zoneItemResponse) {
-                                zoneItemLoadDeferred.resolve();
-                                var gridZoneItem = UtilsService.getItemByVal($scope.zoneItems, zoneItemResponse.ZoneId, "ZoneId");
+                        zoneItemGetPromise.then(function (response) {
+                            if (response) {
+                                var gridZoneItem = UtilsService.getItemByVal($scope.zoneItems, response.ZoneId, "ZoneId");
 
                                 if (gridZoneItem) {
-                                    gridZoneItem.EffectiveRoutingProductId = zoneItemResponse.EffectiveRoutingProductId;
-                                    gridZoneItem.EffectiveRoutingProductName = zoneItemResponse.EffectiveRoutingProductName;
+                                    gridZoneItem.EffectiveRoutingProductId = response.EffectiveRoutingProductId;
+                                    gridZoneItem.EffectiveRoutingProductName = response.EffectiveRoutingProductName;
 
-                                    var routeOptionsLoadDeferred = UtilsService.createPromiseDeferred();
-                                    promises.push(routeOptionsLoadDeferred.promise);
+                                    routeOptionsLoadDeferred.promise.finally(function () {
+                                        zoneItem.isLoadingRouteOptions = false;
+                                    });
 
                                     var payload = {
-                                        SaleZoneId: zoneItemResponse.ZoneId,
-                                        RoutingProductId: zoneItemResponse.EffectiveRoutingProductId,
-                                        RouteOptions: zoneItemResponse.RouteOptions
+                                        SaleZoneId: response.ZoneId,
+                                        RoutingProductId: response.EffectiveRoutingProductId,
+                                        RouteOptions: response.RouteOptions
                                     };
 
+                                    zoneItem.isLoadingRouteOptions = true;
                                     VRUIUtilsService.callDirectiveLoad(zoneItem.RouteOptionsAPI, payload, routeOptionsLoadDeferred);
                                 }
                             }
                             else
-                                zoneItemLoadDeferred.reject();
+                                routeOptionsLoadDeferred.reject();
                         });
                     });
 
                     UtilsService.waitMultiplePromises(promises).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
-                    }).finally(function () {
-                        zoneItem.isLoadingRouteOptions = false;
                     });
+
+                    function saveZoneItemChanges() {
+                        var zoneChanges = [];
+                        applyChanges(zoneChanges, zoneItem);
+
+                        var input = {
+                            OwnerType: gridQuery.OwnerType,
+                            OwnerId: gridQuery.OwnerId,
+                            NewChanges: {
+                                ZoneChanges: zoneChanges
+                            }
+                        };
+
+                        return WhS_Sales_RatePlanAPIService.SaveChanges(input);
+                    }
+
+                    function getZoneItemInput() {
+                        return {
+                            OwnerType: gridQuery.OwnerType,
+                            OwnerId: gridQuery.OwnerId,
+                            ZoneId: zoneItem.ZoneId,
+                            RoutingDatabaseId: gridQuery.RoutingDatabaseId,
+                            PolicyConfigId: gridQuery.RPRoutePolicyConfigId,
+                            NumberOfOptions: gridQuery.NumberOfOptions,
+                            CostCalculationMethods: gridQuery.CostCalculationMethods
+                        };
+                    }
                 };
 
                 function setRouteOptionProperties(zoneItem) {
@@ -283,7 +294,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 for (var i = 0; i < zoneItem.drillDownExtensionObject.drillDownDirectiveTabs.length; i++) {
                     var item = zoneItem.drillDownExtensionObject.drillDownDirectiveTabs[i];
 
-                    if (item.directiveAPI)
+                    if (item.directiveAPI && item.directiveAPI.applyChanges)
                         item.directiveAPI.applyChanges(zoneItemChanges);
                 }
 
@@ -305,7 +316,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             function setRateChange(zoneChanges, zoneItem) {
                 zoneChanges.RateChange = null;
-
+                return; // To be removed
                 if (zoneItem.IsCurrentRateEditable && !compareDates(zoneItem.CurrentRateEED, zoneItem.NewRateEED)) {
                     zoneChanges.RateChange = {
                         RateId: zoneItem.CurrentRateId,

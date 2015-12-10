@@ -3,7 +3,7 @@
     return ({
         sellNewZones: sellNewZones,
         editSettings: editSettings,
-        viewRecentChanges: viewRecentChanges
+        viewChanges: viewChanges
     });
 
     function sellNewZones(customerId, onCustomerZonesSold) {
@@ -34,7 +34,7 @@
         VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanSettings.html", parameters, modalSettings);
     }
 
-    function viewRecentChanges(ownerType, ownerId) {
+    function viewChanges(ownerType, ownerId) {
         var parameters = {
             OwnerType: ownerType,
             OwnerId: ownerId
@@ -45,6 +45,6 @@
             modalScope.title = "Rate Plan Recent Changes";
         };
 
-        VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanRecentChanges.html", parameters, settings);
+        VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanChanges.html", parameters, settings);
     }
 }]);

@@ -6,43 +6,33 @@
                      idfield="ZoneId"
                      norowhighlightonclick="'true'"
                      hidegridmenu>
-
             <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Effective Routing Product'" type="'Text'" disablesorting>
-                <vr-label isvalue>{{dataItem.EffectiveRoutingProductName}}</vr-label>
-            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Effective Routing Product'" field="'EffectiveRoutingProductName'" type="'Text'" disablesorting></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Route Options'" disablesorting>
                 <div vr-loader="dataItem.isLoadingRouteOptions">
                     <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
                 </div>
             </vr-datagridcolumn>
-            
             <vr-datagridcolumn ng-repeat="method in connector.costCalculationMethods" headertext="method.Title" field="'Costs[' + $index + ']'" type="'Number'" columnindex="3 + $index" disablesorting></vr-datagridcolumn>
-
             <vr-datagridcolumn headertext="'Current Rate'" field="'CurrentRate'" type="'Number'" disablesorting></vr-datagridcolumn>
-
             <vr-datagridcolumn headertext="'New Rate'" disablesorting>
                 <vr-textbox value="dataItem.NewRate" onvaluechanged="dataItem.onNewRateChanged(dataItem)"></vr-textbox>
             </vr-datagridcolumn>
-
             <vr-datagridcolumn headertext="'Begin Effective Date'" disablesorting>
                 <span vr-disabled="true">
                     <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.showNewRateBED"></vr-datetimepicker>
                 </span>
                 <vr-datetimepicker type="date" value="dataItem.NewRateBED" ng-show="dataItem.showNewRateBED"></vr-datetimepicker>
             </vr-datagridcolumn>
-
             <vr-datagridcolumn headertext="'End Effective Date'" disablesorting>
                 <span vr-disabled="!dataItem.IsCurrentRateEditable">
                     <vr-datetimepicker type="date" value="dataItem.CurrentRateEED" ng-hide="dataItem.showNewRateEED"></vr-datetimepicker>
                 </span>
                 <vr-datetimepicker type="date" value="dataItem.NewRateEED" onvaluechanged="dataItem.onNewRateEEDChange(dataItem)" ng-show="dataItem.showNewRateEED"></vr-datetimepicker>
             </vr-datagridcolumn>
-
             <vr-datagridexpandablerow>
                 <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
             </vr-datagridexpandablerow>
-
         </vr-datagrid>
     </vr-columns>
 </vr-row>

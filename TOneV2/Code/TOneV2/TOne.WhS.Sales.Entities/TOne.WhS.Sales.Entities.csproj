@@ -58,10 +58,12 @@
     <Compile Include="CostCalculation\ICostCalculationMethodContext.cs" />
     <Compile Include="RateManagement\ImportedRate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RatePlanning\ChangesDetail.cs" />
     <Compile Include="RatePlanning\DefaultChanges.cs" />
     <Compile Include="RatePlanning\BaseChanges.cs" />
     <Compile Include="RatePlanning\Changes.cs" />
     <Compile Include="RatePlanning\Enums.cs" />
+    <Compile Include="RatePlanning\Input\GetZoneItemInput.cs" />
     <Compile Include="RatePlanning\Input\SaveChangesInput.cs" />
     <Compile Include="RatePlanning\Input\ZoneItemInput.cs" />
     <Compile Include="RatePlanning\RateChanges.cs" />

@@ -2,15 +2,13 @@
 
     "use strict";
 
-    RatePlanRecentChangesController.$inject = ["$scope", "WhS_Sales_RatePlanAPIService", "WhS_BE_RoutingProductAPIService", "UtilsService", "VRNavigationService", "VRNotificationService"];
+    RatePlanChangesController.$inject = ["$scope", "WhS_Sales_RatePlanAPIService", "UtilsService", "VRNavigationService", "VRNotificationService"];
 
-    function RatePlanRecentChangesController($scope, WhS_Sales_RatePlanAPIService, WhS_BE_RoutingProductAPIService, UtilsService, VRNavigationService, VRNotificationService) {
+    function RatePlanChangesController($scope, WhS_Sales_RatePlanAPIService, UtilsService, VRNavigationService, VRNotificationService) {
 
         var ownerType;
         var ownerId;
-        var oldState;
-        var newState;
-        var routingProducts;
+        var changes;
 
         loadParameters();
         defineScope();
@@ -26,8 +24,7 @@
         }
 
         function defineScope() {
-            $scope.defaultRoutingProductChanges = [];
-            $scope.zoneChanges = [];
+            $scope.defaultItem;
 
             $scope.close = function () {
                 $scope.modalContext.closeModal();
@@ -36,38 +33,49 @@
 
         function load() {
             $scope.isLoading = true;
+            var promises = [];
 
-            UtilsService.waitMultipleAsyncOperations([getRecentChanges, getRoutingProducts]).then(function () {
-                setDefaultChanges();
-                setZoneChanges();
+            var getChangesPromise = getChanges();
+            promises.push(getChangesPromise);
+            
+            getChangesPromise.then(function () {
+                if (defaultChangesExist()) {
+                    var getDefaultItemPromise = getDefaultItem();
+                    promises.push(getDefaultItemPromise);
+                }
+            });
+
+            UtilsService.waitMultiplePromises(promises).then(function () {
+                console.log($scope.defaultItem);
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
             });
 
-            function getRecentChanges() {
-                return WhS_Sales_RatePlanAPIService.GetRecentChanges(ownerType, ownerId).then(function (response) {
-                    if (response) {
-                        if (response.length == 1)
-                            newState = response[0];
-                        else if (response.length == 2) {
-                            newState = response[0];
-                            oldState = response[1];
-                        }
+            function getChanges() {
+                return WhS_Sales_RatePlanAPIService.GetChanges(ownerType, ownerId).then(function (response) {
+                    changes = response;
+
+                    if (defaultChangesExist()) {
+                        var newDefaultRoutingProduct = changes.DefaultChanges.NewDefaultRoutingProduct;
+                        var defaultRoutingProductChange = changes.DefaultChanges.DefaultRoutingProductChange;
+
+                        $scope.defaultItem.newRoutingProductName = newDefaultRoutingProduct ? newDefaultRoutingProduct.Name : defaultRoutingProductChange.Name;
+                        $scope.defaultItem.newRoutingProductEED = newDefaultRoutingProduct ? newDefaultRoutingProduct.EED : defaultRoutingProductChange.EED;
                     }
                 });
             }
 
-            function getRoutingProducts() {
-                return WhS_BE_RoutingProductAPIService.GetRoutingProductInfo({}).then(function (response) {
-                    if (response) {
-                        routingProducts = [];
-
-                        for (var i = 0; i < response.length; i++)
-                            routingProducts.push(response[i]);
-                    }
+            function getDefaultItem() {
+                return WhS_Sales_RatePlanAPIService.GetDefaultItem(ownerType, ownerId).then(function (response) {
+                    $scope.defaultItem.currentRoutingProductName = response.CurrentRoutingProductName;
+                    $scope.defaultItem.currentRoutingProductEED = response.CurrentRoutingProductEED;
                 });
+            }
+
+            function defaultChangesExist() {
+                return (changes && changes.DefaultChanges && (changes.DefaultChanges.NewDefaultRoutingProduct || changes.DefaultChanges.DefaultRoutingProductChange))
             }
         }
 
@@ -156,6 +164,6 @@
         }
     }
 
-    appControllers.controller("WhS_Sales_RatePlanRecentChangesController", RatePlanRecentChangesController);
+    appControllers.controller("WhS_Sales_RatePlanChangesController", RatePlanChangesController);
 
 })(appControllers);
