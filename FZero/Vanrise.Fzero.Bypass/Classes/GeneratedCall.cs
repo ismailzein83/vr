@@ -167,50 +167,17 @@ namespace Vanrise.Fzero.Bypass
 
 
 
-
-
-
-
-
-
-
-                        // Add Area Code to be Able to Know the Mobile Operator Prefix
-                        string NumberWithoutAreaCodeb_number = gc.b_number;
+                        string Cleanb_number = gc.b_number;
 
                         if (gc.b_number.StartsWith("+"))
                         {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(1);
+                            Cleanb_number = gc.b_number.Substring(1);
                         }
 
-                        if (gc.b_number.StartsWith("00"))
+                        else if (gc.b_number.StartsWith("00"))
                         {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(2);
+                            Cleanb_number = gc.b_number.Substring(2);
                         }
-
-                        else if (gc.b_number.StartsWith("0"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(1);
-                        }
-
-
-                        foreach (var code in CountryCodes)
-                        {
-                            if (gc.b_number.StartsWith(code))
-                            {
-                                NumberWithoutAreaCodeb_number = gc.b_number.Substring(code.Count());
-                            }
-
-                            if (gc.b_number.StartsWith("+" + code))
-                            {
-                                NumberWithoutAreaCodeb_number = gc.b_number.Substring(code.Count() + 1);
-                            }
-
-                            if (gc.b_number.StartsWith("00" + code))
-                            {
-                                NumberWithoutAreaCodeb_number = gc.b_number.Substring(code.Count() + 2);
-                            }
-                        }
-
 
 
 
@@ -234,7 +201,7 @@ namespace Vanrise.Fzero.Bypass
                                     int result = 0;
                                     if (int.TryParse(p, out result))
                                     {
-                                        if (NumberWithoutAreaCodeb_number.StartsWith(p))
+                                        if (Cleanb_number.StartsWith(ListClients.Where(x => x.ID == j.User.ClientID.Value).First().CountryCode + p))
                                         {
                                             gc.MobileOperatorID = j.ID;
                                         }
@@ -474,11 +441,6 @@ namespace Vanrise.Fzero.Bypass
 
 
 
-
-
-
-
-
                         // Add Area Code to be Able to Know the Mobile Operator Prefix
                         string NumberWithoutAreaCodeCLI = rc.CLI;
 
@@ -524,6 +486,7 @@ namespace Vanrise.Fzero.Bypass
                                 NumberWithoutAreaCodeCLI = rc.CLI.Substring(code.Count() + 2);
                             }
                         }
+
 
 
 
@@ -662,45 +625,17 @@ namespace Vanrise.Fzero.Bypass
 
 
                         // Add Area Code to be Able to Know the Mobile Operator Prefix
-                        string NumberWithoutAreaCodeb_number = gc.b_number;
+                        string cleanb_number = gc.b_number;
 
                         if (gc.b_number.StartsWith("+"))
                         {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(1);
+                            cleanb_number = gc.b_number.Substring(1);
                         }
 
-                        if (gc.b_number.StartsWith("00"))
+                        else if (gc.b_number.StartsWith("00"))
                         {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(2);
+                            cleanb_number = gc.b_number.Substring(2);
                         }
-
-                        else if (gc.b_number.StartsWith("0"))
-                        {
-                            NumberWithoutAreaCodeb_number = gc.b_number.Substring(1);
-                        }
-
-
-
-
-
-                        foreach (var code in CountryCodes)
-                        {
-                            if (gc.b_number.StartsWith(code))
-                            {
-                                NumberWithoutAreaCodeb_number = gc.b_number.Substring(code.Count());
-                            }
-
-                            if (gc.b_number.StartsWith("+" + code))
-                            {
-                                NumberWithoutAreaCodeb_number = gc.b_number.Substring(code.Count() + 1);
-                            }
-
-                            if (gc.b_number.StartsWith("00" + code))
-                            {
-                                NumberWithoutAreaCodeb_number = gc.b_number.Substring(code.Count() + 2);
-                            }
-                        }
-
 
 
                         foreach (MobileOperator j in lstMobileOperators)
@@ -723,7 +658,7 @@ namespace Vanrise.Fzero.Bypass
                                     int result = 0;
                                     if (int.TryParse(p, out result))
                                     {
-                                        if (NumberWithoutAreaCodeb_number.StartsWith(p))
+                                        if (cleanb_number.StartsWith(ListClients.Where(x => x.ID == j.User.ClientID.Value).First().CountryCode + p))
                                         {
                                             gc.MobileOperatorID = j.ID;
                                         }
@@ -987,8 +922,8 @@ namespace Vanrise.Fzero.Bypass
                             }
                         }
 
-
-
+                        
+                        
                         foreach (MobileOperator j in lstMobileOperators)
                         {
                             if (j.User.FullName == Global_DefaultMobileOperator)
