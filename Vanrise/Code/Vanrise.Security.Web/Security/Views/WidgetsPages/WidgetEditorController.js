@@ -141,7 +141,9 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsS
                 angular.forEach(response, function (itm) {
                     $scope.widgets.push(itm);
                 });
-            });
+               
+        });
+       
 
     }
 

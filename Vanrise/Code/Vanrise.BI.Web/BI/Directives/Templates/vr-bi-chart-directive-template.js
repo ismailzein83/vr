@@ -135,29 +135,35 @@ function VrChartDirectiveTemplateController($scope, TimeDimensionTypeEnum, Chart
         };
     }
     function setSubViewValue(settings) {
+       
         if (settings == undefined)
             return;
-        for (var i = 0; i < $scope.definitionTypes.length; i++) {
-            if($scope.definitionTypes[i].value==settings.DefinitionType)
-                $scope.selectedDefinitionType = $scope.definitionTypes[i];
+        if (settings.DefinitionType != undefined) {
+            for (var i = 0; i < $scope.definitionTypes.length; i++) {
+                if ($scope.definitionTypes[i].value == settings.DefinitionType)
+                    $scope.selectedDefinitionType = $scope.definitionTypes[i];
+            }
         }
         $scope.isPieChart = settings.IsPieChart;
        
-        $scope.selectedEntitiesType.length = 0;
-        for (j = 0; j < settings.EntityType.length; j++)
-        {
-            for (i = 0; i < $scope.Entities.length; i++) {
-                if ($scope.Entities[i].Name == settings.EntityType[j] && !UtilsService.contains($scope.selectedEntitiesType, $scope.Entities[i])) {
-                    $scope.selectedEntitiesType.push($scope.Entities[i]);
+        if (settings.EntityType != undefined) {
+            $scope.selectedEntitiesType.length = 0;
+            for (j = 0; j < settings.EntityType.length; j++) {
+                for (i = 0; i < $scope.Entities.length; i++) {
+                    if ($scope.Entities[i].Name == settings.EntityType[j] && !UtilsService.contains($scope.selectedEntitiesType, $scope.Entities[i])) {
+                        $scope.selectedEntitiesType.push($scope.Entities[i]);
+                    }
                 }
             }
         }
        
         $scope.topRecords = settings.TopRecords;
-        for (var i = 0; i < $scope.operationTypes.length; i++) {
-          
-                if($scope.operationTypes[i].value==settings.OperationType)
-                    $scope.selectedOperationType=$scope.operationTypes[i];
+        if (settings.operationTypes != undefined) {
+            for (var i = 0; i < $scope.operationTypes.length; i++) {
+
+                if ($scope.operationTypes[i].value == settings.OperationType)
+                    $scope.selectedOperationType = $scope.operationTypes[i];
+            }
         }
         for (var i = 0; i < settings.MeasureTypes.length; i++) {
             var measureType = settings.MeasureTypes[i];

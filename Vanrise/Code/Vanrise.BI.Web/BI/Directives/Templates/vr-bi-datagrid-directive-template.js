@@ -77,16 +77,20 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
     }
 
     function setSubViewValue(settings) {
-        $scope.selectedEntitiesType.length = 0;
-        for (j = 0; j < settings.EntityType.length; j++) {
-            for (var i = 0; i < $scope.Entities.length; i++) {
+        if (settings.EntityType != undefined)
+        {
+            $scope.selectedEntitiesType.length = 0;
+            for (j = 0; j < settings.EntityType.length; j++) {
+                for (var i = 0; i < $scope.Entities.length; i++) {
 
-                if ($scope.Entities[i].Name == settings.EntityType[j] && !UtilsService.contains($scope.selectedEntitiesType, $scope.Entities[i])) {
-                    $scope.selectedEntitiesType.push($scope.Entities[i]);
+                    if ($scope.Entities[i].Name == settings.EntityType[j] && !UtilsService.contains($scope.selectedEntitiesType, $scope.Entities[i])) {
+                        $scope.selectedEntitiesType.push($scope.Entities[i]);
 
+                    }
                 }
             }
         }
+
         $scope.topRecords = settings.TopRecords;
         for (var i = 0; i < settings.MeasureTypes.length; i++) {
             var measureType=settings.MeasureTypes[i];
@@ -97,11 +101,15 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
                     $scope.selectedTopMeasure = $scope.Measures[j];
             }
         }
-        for (var i = 0; i < $scope.operationTypes.length; i++) {
 
-            if ($scope.operationTypes[i].value == settings.OperationType)
-                $scope.selectedOperationType = $scope.operationTypes[i];
+        if (settings.OperationType != undefined) {
+            for (var i = 0; i < $scope.operationTypes.length; i++) {
+
+                if ($scope.operationTypes[i].value == settings.OperationType)
+                    $scope.selectedOperationType = $scope.operationTypes[i];
+            }
         }
+      
     }
 
     function defineTimeDimensionTypes() {
@@ -115,11 +123,13 @@ function VrDatagridDirectiveTemplateController($scope, TimeDimensionTypeEnum,BIC
     }
 
     function load() {
+       
         defineNumberOfColumns();
         defineOperationTypes();
         defineChartSeriesTypes();
         $scope.isGettingData = true;
         UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities]).finally(function () {
+           
             if ($scope.subViewConnector.value != null && $scope.subViewConnector.value != undefined) {
                 setSubViewValue($scope.subViewConnector.value);
             }
