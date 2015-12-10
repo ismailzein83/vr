@@ -49,6 +49,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             public IEnumerable<ExistingZone> ExistingZones { get; set; }
 
             public ZonesByName NewAndExistingZones { get; set; }
+
+
+            public IEnumerable<NewRate> NewRates { get; set; }
+
+            public IEnumerable<ChangedRate> ChangedRates { get; set; }
         }
     }
 }

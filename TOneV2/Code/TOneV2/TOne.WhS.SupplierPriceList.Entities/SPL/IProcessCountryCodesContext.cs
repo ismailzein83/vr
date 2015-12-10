@@ -18,5 +18,13 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         DateTime DeletedCodesDate { get; }
 
         ZonesByName NewAndExistingZones { set; }
+
+        IEnumerable<NewCode> NewCodes { set; }
+
+        IEnumerable<ChangedCode> ChangedCodes { set; }
+
+        IEnumerable<NewZone> NewZones { set; }
+
+        IEnumerable<ChangedZone> ChangedZones { set; }
     }
 }

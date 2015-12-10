@@ -16,5 +16,9 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         IEnumerable<ExistingZone> ExistingZones { get; }
 
         ZonesByName NewAndExistingZones { get; }
+
+        IEnumerable<NewRate> NewRates { set; }
+
+        IEnumerable<ChangedRate> ChangedRates { set; }
     }
 }

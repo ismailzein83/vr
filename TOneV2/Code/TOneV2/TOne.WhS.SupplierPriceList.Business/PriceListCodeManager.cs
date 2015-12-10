@@ -26,7 +26,11 @@ namespace TOne.WhS.SupplierPriceList.Business
         {            
            ZonesByName newAndExistingZones = new ZonesByName();
            context.NewAndExistingZones = newAndExistingZones;
-            ProcessCountryCodes(context.ImportedCodes, context.ExistingCodes, newAndExistingZones, context.ExistingZones, context.DeletedCodesDate);
+           ProcessCountryCodes(context.ImportedCodes, context.ExistingCodes, newAndExistingZones, context.ExistingZones, context.DeletedCodesDate);
+           context.NewCodes = context.ImportedCodes.SelectMany(itm => itm.NewCodes);
+           context.NewZones = newAndExistingZones.SelectMany(itm => itm.Value.Where(izone => izone is NewZone)).Select(itm => itm as NewZone);
+           context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
+           context.ChangedCodes = context.ExistingCodes.Where(itm => itm.ChangedCode != null).Select(itm => itm.ChangedCode);
         }
 
         private ExistingZonesByName StructureExistingZonesByName(IEnumerable <ExistingZone> existingZones)

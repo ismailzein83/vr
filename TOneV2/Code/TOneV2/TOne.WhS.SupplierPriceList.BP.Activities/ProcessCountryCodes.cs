@@ -59,6 +59,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             public DateTime DeletedCodesDate { get; set; }
 
             public ZonesByName NewAndExistingZones { get; set; }
+
+            public IEnumerable<NewCode> NewCodes { get; set; }
+
+            public IEnumerable<ChangedCode> ChangedCodes { get; set; }
+
+            public IEnumerable<NewZone> NewZones { get; set; }
+
+            public IEnumerable<ChangedZone> ChangedZones { get; set; }
         }
     }
 }

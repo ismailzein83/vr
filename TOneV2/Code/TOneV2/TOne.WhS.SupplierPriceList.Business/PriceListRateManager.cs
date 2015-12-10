@@ -13,6 +13,8 @@ namespace TOne.WhS.SupplierPriceList.Business
         public void ProcessCountryRates(IProcessCountryRatesContext context)
         {
             ProcessCountryRates(context.ImportedRates, context.ExistingRates, context.NewAndExistingZones, context.ExistingZones);
+            context.NewRates = context.ImportedRates.SelectMany(itm => itm.NewRates);
+            context.ChangedRates = context.ExistingRates.Where(itm => itm.ChangedRate != null).Select(itm => itm.ChangedRate);
         }
 
         private ExistingZonesByName StructureExistingZonesByName(IEnumerable<ExistingZone> existingZones)
