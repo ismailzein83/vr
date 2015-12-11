@@ -51,6 +51,12 @@ namespace Vanrise.Data.SQL
         {
         }
 
+        public BaseSQLDataManager(string connectionString, bool getFromConfigSection)
+            :base(connectionString, getFromConfigSection)
+        {
+
+        }
+
         #endregion
 
         #region ExecuteNonQuery
