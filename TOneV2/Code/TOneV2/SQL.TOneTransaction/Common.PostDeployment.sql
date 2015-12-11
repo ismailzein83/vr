@@ -59,7 +59,8 @@ DELETE
 MERGE INTO runtime.[SchedulerTaskActionType] AS Target 
 USING (VALUES 
 	(1, N'Workflow', N'{"URL":"/Client/Modules/Runtime/Views/ActionTemplates/WFActionTemplate.html", "SystemType":false, "FQTN":"Vanrise.BusinessProcess.Extensions.WFTaskAction.WFSchedulerTaskAction, Vanrise.BusinessProcess.Extensions.WFTaskAction"}'),
-	(2, N'Data Source', N'{"URL":"", "SystemType":true, "FQTN":"Vanrise.Integration.Business.DSSchedulerTaskAction, Vanrise.Integration.Business"}')
+	(2, N'Data Source', N'{"URL":"", "SystemType":true, "FQTN":"Vanrise.Integration.Business.DSSchedulerTaskAction, Vanrise.Integration.Business"}'),
+	(3, N'Supplier Synchronize', N'{"URL":"/Client/Modules/QM_BusinessEntity/Views/Supplier/SchedulerTaskAction/SupplierSynchronizeTemplate.html","SystemType":false,"FQTN":"QM.BusinessEntity.Business.SupplierSyncTaskAction, QM.BusinessEntity.Business"}')
 ) 
 AS Source ([ID], [Name], [ActionTypeInfo])
 ON Target.[ID] = Source.[ID] 
