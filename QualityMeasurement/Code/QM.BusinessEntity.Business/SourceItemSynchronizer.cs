@@ -34,7 +34,7 @@ namespace QM.BusinessEntity.Business
                 {
                     var item = BuildItemFromSource(sourceItem);
                     long itemId;
-                    if (itemIdsBySourceId != null && itemIdsBySourceId.TryGetValue(sourceItem.SourceId, out itemId))
+                    if (itemIdsBySourceId != null && sourceItem.SourceId!=null && itemIdsBySourceId.TryGetValue(sourceItem.SourceId, out itemId))
                     {
                         item.ItemId = itemId;
                         itemsToUpdate.Add(item);

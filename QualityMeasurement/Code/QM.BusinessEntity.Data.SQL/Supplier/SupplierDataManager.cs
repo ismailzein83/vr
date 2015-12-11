@@ -54,14 +54,13 @@ namespace QM.BusinessEntity.Data.SQL
 
         public void InsertSynchronize(Supplier supplier)
         {
-           ExecuteNonQuerySP("[QM_BE].[sp_Supplier_InsertSynchronize]", supplier.SupplierId, supplier.Name , supplier.SourceId);
+           ExecuteNonQuerySP("[QM_BE].[sp_Supplier_InsertFromSource]", supplier.SupplierId, supplier.Name , supplier.SourceId);
         }
 
         public void UpdateSynchronize(Supplier supplier)
         {
            
-           ExecuteNonQuerySP("[QM_BE].[sp_Supplier_UpdateSynchronize]", supplier.SupplierId, supplier.Name);
-           // return (recordsEffected > 0);
+           ExecuteNonQuerySP("[QM_BE].[sp_Supplier_UpdateFromSource]", supplier.SupplierId, supplier.Name);
         }
         public bool AreSuppliersUpdated(ref object updateHandle)
         {

@@ -33,8 +33,11 @@ namespace QM.BusinessEntity.Business
             Dictionary<string, long> existingItemIds = new Dictionary<string, long>();
             foreach (var item in GetCachedSuppliers())
             {
-                if (sourceItemIds.Contains(item.Value.SourceId))
-                    existingItemIds.Add(item.Value.SourceId, (long)item.Value.SupplierId);
+                if (item.Value.SourceId != null)
+                {
+                    if (sourceItemIds.Contains(item.Value.SourceId))
+                        existingItemIds.Add(item.Value.SourceId, (long)item.Value.SupplierId);
+                }
             }
             return existingItemIds;
         }

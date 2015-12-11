@@ -39,13 +39,19 @@ namespace QM.BusinessEntity.MainExtensions.SourceSuppliersReaders
 
             private SourceSupplier SourceSupplierMapper(System.Data.IDataReader arg)
             {
-                throw new NotImplementedException();
+                SourceSupplier sourceSupplier = new SourceSupplier()
+                {
+                    SourceId = arg["ID"].ToString(),
+                    Name = arg["Name"] as string
+                };
+                return sourceSupplier;
             }
 
             const string query_getUpdatedSuppliers = @"SELECT
-			ca.ID,
-			ca.Name
-	FROM TOneWhS_BE.CarrierAccount ca   ";
+	        ca.ID,
+	        ca.Name
+	        FROM TOneWhS_BE.CarrierAccount ca  
+	        where ca.AccountType = 1 or ca.AccountType = 2";
         }
     }
 }
