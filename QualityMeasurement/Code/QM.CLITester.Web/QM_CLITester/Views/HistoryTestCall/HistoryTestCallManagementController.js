@@ -2,9 +2,11 @@
 
     "use strict";
 
-    Qm_CliTester_HistoryTestCallManagementController.$inject = ['$scope', 'Qm_CliTester_TestCallAPIService', 'UtilsService'];
+    Qm_CliTester_HistoryTestCallManagementController.$inject = ['$scope', 'Qm_CliTester_TestCallAPIService', 'UtilsService', 'Qm_CliTester_CallTestResultEnum',
+        'Qm_CliTester_CallTestStatusEnum', 'UsersAPIService'];
 
-    function Qm_CliTester_HistoryTestCallManagementController($scope, Qm_CliTester_TestCallAPIService, UtilsService) {
+    function Qm_CliTester_HistoryTestCallManagementController($scope, Qm_CliTester_TestCallAPIService, UtilsService, Qm_CliTester_CallTestResultEnum,
+        Qm_CliTester_CallTestStatusEnum, UsersAPIService) {
         var gridAPI;
         var filter = {};
 
@@ -16,10 +18,26 @@
             $scope.countries = [];
             $scope.breakouts = [];
             $scope.suppliers = [];
+            $scope.testStatus = [];
+            $scope.testResult = [];
+            $scope.users = [];
 
             $scope.selectedSupplier;
             $scope.selectedCountry;
             $scope.selectedBreakout;
+
+            $scope.selectedtestResults = [];
+            $scope.selectedtestStatus = [];
+            $scope.selectedUsers = [];
+            for (var prop in Qm_CliTester_CallTestStatusEnum) {
+                $scope.testStatus.push(Qm_CliTester_CallTestStatusEnum[prop]);
+            }
+
+            for (var prop in Qm_CliTester_CallTestResultEnum) {
+                $scope.testResult.push(Qm_CliTester_CallTestResultEnum[prop]);
+            }
+
+       
 
             $scope.searchClicked = function () {
                 if (gridAPI != undefined) {
@@ -36,6 +54,8 @@
 
         function load() {
             $scope.isGettingData = true;
+            loadUsers();
+
             UtilsService.waitMultipleAsyncOperations([getCountriesInfo, getSuppliersInfo]).then(function () {
             }).finally(function () {
                 $scope.isGettingData = false;
@@ -59,6 +79,13 @@
                 angular.forEach(response, function (itm) {
                     $scope.suppliers.push(itm);
                 });
+            });
+        }
+
+        function loadUsers() {
+            return UsersAPIService.GetUsers().then(function (response) {
+                console.log(response);
+                $scope.users = response;
             });
         }
 
@@ -111,6 +138,27 @@
             else {
                 filter.ToTime = $scope.toDate;
             }
+
+            if ($scope.selectedtestStatus == undefined)
+                filter.CallTestStatus = null;
+            else {
+                filter.CallTestStatus = UtilsService.getPropValuesFromArray($scope.selectedtestStatus,"value");
+            }
+
+            if ($scope.selectedtestResults == undefined)
+                filter.CallTestResult = null;
+            else {
+                filter.CallTestResult = UtilsService.getPropValuesFromArray($scope.selectedtestResults, "value");;
+            }
+
+            if ($scope.selectedUsers == undefined)
+                filter.UserIds = null;
+            else {
+                filter.UserIds = $scope.selectedUsers;
+            }
+
+
+            console.log(filter.UserIds);
         }
     }
 

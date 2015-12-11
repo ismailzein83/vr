@@ -46,7 +46,7 @@ namespace QM.CLITester.Web.Controllers
             return manager.AddNewTestCall(testCallResult);
         }
 
-        [HttpPost]
+        [HttpPost]  
         [Route("GetUpdatedTestCalls")]
         public LastCallUpdateOutput GetUpdatedTestCalls(LastCallUpdateInput input)
         {

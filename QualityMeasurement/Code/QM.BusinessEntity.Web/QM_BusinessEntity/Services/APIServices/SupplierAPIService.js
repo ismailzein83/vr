@@ -25,12 +25,18 @@
         function GetSupplierSourceTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Supplier", "GetSupplierSourceTemplates"));
         }
+
+        function GetSuppliersInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Supplier", "GetSuppliersInfo"));
+        }
+
         return ({
             GetFilteredSuppliers: GetFilteredSuppliers,
             GetSupplier: GetSupplier,
             AddSupplier: AddSupplier,
             UpdateSupplier: UpdateSupplier,
-            GetSupplierSourceTemplates: GetSupplierSourceTemplates
+            GetSupplierSourceTemplates: GetSupplierSourceTemplates,
+            GetSuppliersInfo: GetSuppliersInfo
         });
     }
 

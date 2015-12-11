@@ -8,6 +8,8 @@ using Vanrise.Data.SQL;
 using System.Data;
 using System.Reflection;
 using Vanrise.Common;
+using Vanrise.Security.Entities;
+
 namespace QM.CLITester.Data.SQL
 {
     public class TestCallDataManager : BaseSQLDataManager, ITestCallDataManager
@@ -26,7 +28,7 @@ namespace QM.CLITester.Data.SQL
         public List<TestCall> GetTestCalls(List<CallTestStatus> listCallTestStatus)
         {
             string callTestStatusids = null;
-            if (listCallTestStatus.Any())
+            if (listCallTestStatus != null && listCallTestStatus.Any())
                 callTestStatusids = string.Join<int>(",", Array.ConvertAll(listCallTestStatus.ToArray(), value => (int)value));
             return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCall", TestCallMapper, callTestStatusids);
         }
@@ -37,7 +39,7 @@ namespace QM.CLITester.Data.SQL
             byte[] timestamp = null;
 
             string callTestStatusids = null;
-            if (listPendingCallTestStatus.Any())
+            if (listPendingCallTestStatus!= null && listPendingCallTestStatus.Any())
                 callTestStatusids = string.Join<int>(",", Array.ConvertAll(listPendingCallTestStatus.ToArray(), value => (int)value));
 
             ExecuteReaderSP("QM_CLITester.sp_TestCall_GetRecent", (reader) =>
@@ -73,9 +75,23 @@ namespace QM.CLITester.Data.SQL
             Dictionary<string,string> mapper=new Dictionary<string, string>();
             mapper.Add("Entity.ID","ID");
 
+            string userids = null;
+            if (input.Query.UserIds != null && input.Query.UserIds.Any())
+                userids = string.Join(",", input.Query.UserIds.Select(x => x.UserId.ToString()).ToArray());
+
+
+            string callTestStatusids = null;
+            if (input.Query.CallTestStatus != null && input.Query.CallTestStatus.Any())
+                callTestStatusids = string.Join<int>(",", Array.ConvertAll(input.Query.CallTestStatus.ToArray(), value => (int)value));
+
+            string callTestResultsids = null;
+            if (input.Query.CallTestResult != null && input.Query.CallTestResult.Any())
+                callTestResultsids = string.Join<int>(",", Array.ConvertAll(input.Query.CallTestResult.ToArray(), value => (int)value));
+
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("QM_CLITester.sp_TestCall_CreateTempByFiltered", tempTableName, input.Query.SupplierID, input.Query.CountryID, input.Query.ZoneID, input.Query.FromTime, input.Query.ToTime);
+                ExecuteNonQuerySP("QM_CLITester.sp_TestCall_CreateTempByFiltered", tempTableName, userids, input.Query.SupplierID, input.Query.CountryID, input.Query.ZoneID, 
+                    input.Query.FromTime, input.Query.ToTime, callTestStatusids, callTestResultsids);
             };
 
             return RetrieveData(input, createTempTableAction, TestCallDetailMapper, mapper);

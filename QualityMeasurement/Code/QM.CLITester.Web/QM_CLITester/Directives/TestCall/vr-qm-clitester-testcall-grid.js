@@ -133,7 +133,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
     function getCallTestResultColor(value) {
         switch (value) {
             case Qm_CliTester_CallTestResultEnum.NotCompleted.value:
-                return LabelColorsEnum.Processing.color;
+                return LabelColorsEnum.Error.color;
                 break;
             case Qm_CliTester_CallTestResultEnum.Succeeded.value:
                 return LabelColorsEnum.Success.color;

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Practices.ObjectBuilder2;
+using QM.BusinessEntity.Business;
 using QM.BusinessEntity.Entities;
 using QM.CLITester.Business;
 using QM.CLITester.Entities;
@@ -46,14 +47,12 @@ namespace QualityMeasurement.DevRuntime
                     _locked = true;
                     lock (_syncRoot)
                     {
+                        SupplierManager supplierManager = new SupplierManager();
                         foreach (TestCall testCall in manager.GetTestCalls(listCallTestStatus))
                         {
                             var initiateTestContext = new InitiateTestContext()
                             {
-                                Supplier = new Supplier
-                                {
-                                    SupplierId = testCall.SupplierID
-                                },
+                                Supplier = supplierManager.GetSupplier(testCall.SupplierID),
 
                                 Zone = new Zone
                                 {

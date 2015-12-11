@@ -54,28 +54,28 @@
         }
 
     
-        function getSuppliersInfo() {
-            return Qm_CliTester_TestCallAPIService.GetSuppliers().then(function (response) {
-                $scope.suppliers.length = 0;
-                angular.forEach(response, function (itm) {
-                    $scope.suppliers.push(itm);
-                });
-            });
-        }
-
-
-
         //function getSuppliersInfo() {
-        //    var supplierLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        //    supplierReadyPromiseDeferred.promise
-        //        .then(function () {
-        //            var directivePayload;
-
-        //            VRUIUtilsService.callDirectiveLoad(supplierDirectiveAPI, directivePayload, supplierLoadPromiseDeferred);
+        //    return Qm_CliTester_TestCallAPIService.GetSuppliers().then(function (response) {
+        //        $scope.suppliers.length = 0;
+        //        angular.forEach(response, function (itm) {
+        //            $scope.suppliers.push(itm);
         //        });
-        //    return supplierLoadPromiseDeferred.promise;
+        //    });
         //}
+
+
+
+        function getSuppliersInfo() {
+            var supplierLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            supplierReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload;
+
+                    VRUIUtilsService.callDirectiveLoad(supplierDirectiveAPI, directivePayload, supplierLoadPromiseDeferred);
+                });
+            return supplierLoadPromiseDeferred.promise;
+        }
 
         $scope.previewBreakouts = function () {
             if ($scope.selectedCountry != undefined) {
@@ -100,7 +100,7 @@
         function buildTestCallObjFromScope() {
             var obj = {
                 TestCallId: 0,
-                SupplierID: $scope.selectedSupplier.Id,
+                SupplierID: $scope.selectedSupplier.SupplierId,
                 CountryID: $scope.selectedCountry.Id,
                 ZoneID: $scope.selectedBreakout.Id
             };
