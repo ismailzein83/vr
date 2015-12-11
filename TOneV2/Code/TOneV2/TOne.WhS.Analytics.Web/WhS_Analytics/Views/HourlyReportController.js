@@ -142,8 +142,8 @@
         function loadMeasuresChart() {
             var measures = [];
             measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.SuccessfulAttempts.value);
-            measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.ASR.value);
-            measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value);
+            measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.DurationsInSeconds.value);
+         //   measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value);
            // measures.push(WhS_Analytics_GenericAnalyticMeasureEnum.NER.value);
 
             return measures;

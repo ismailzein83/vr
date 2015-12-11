@@ -434,7 +434,11 @@ namespace TOne.WhS.Analytics.Data.SQL
                 {
                     GetColumnsExpressions = new List<Func<GenericAnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.DurationsInSeconds_Expression },
                     MappedSQLColumn = MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias,
-                    GetMeasureValue = (reader, record) => GetReaderValue<int>(reader, MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias)
+                    GetMeasureValue = (reader, record) =>
+                    {
+                        var durationInseconds = (GetReaderValue<int>(reader, MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias));
+                        return  durationInseconds/ 60;
+                    }
                 });
             #endregion
 
@@ -532,9 +536,9 @@ namespace TOne.WhS.Analytics.Data.SQL
             s_AllMeasureFieldsConfig.Add(AnalyticMeasureField.MaxDurationInSeconds,
               new AnalyticMeasureFieldConfig
               {
-                  GetColumnsExpressions = new List<Func<GenericAnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.MaxDurationInSeconds_Expression },
-                  MappedSQLColumn = MeasureValueExpression.MaxDurationInSeconds_Expression.ColumnAlias,
-                  GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.MaxDurationInSeconds_Expression.ColumnAlias)
+                  GetColumnsExpressions = new List<Func<GenericAnalyticQuery, MeasureValueExpression>> { (query) => MeasureValueExpression.MaxDurationInMin_Expression },
+                  MappedSQLColumn = MeasureValueExpression.MaxDurationInMin_Expression.ColumnAlias,
+                  GetMeasureValue = (reader, record) => GetReaderValue<Object>(reader, MeasureValueExpression.MaxDurationInMin_Expression.ColumnAlias)
               });
             #endregion
 
