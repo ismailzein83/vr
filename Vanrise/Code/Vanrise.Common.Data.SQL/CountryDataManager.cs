@@ -23,7 +23,8 @@ namespace Vanrise.Common.Data.SQL
             Country country = new Country
             {
                 CountryId = (int)reader["ID"],
-                Name = reader["Name"] as string
+                Name = reader["Name"] as string,
+                SourceId = reader["SourceId"] as string
                  
             };
 
@@ -41,15 +42,24 @@ namespace Vanrise.Common.Data.SQL
             return (recordsEffected > 0);
         }
 
-        public bool Insert(Country country, out int insertedId)
+        public bool Insert(Country country)
         {
-            object countryId;
+            
 
-            int recordsEffected = ExecuteNonQuerySP("common.sp_Country_Insert", out countryId, country.Name);
-            insertedId = (int)countryId;
+            int recordsEffected = ExecuteNonQuerySP("common.sp_Country_Insert", country.CountryId, country.Name);
+            
             return (recordsEffected > 0);
         }
+        public void InsertSynchronize(Country country)
+        {
+            ExecuteNonQuerySP("common.sp_Country_InsertFromSource", country.CountryId, country.Name, country.SourceId);
+        }
 
+        public void UpdateSynchronize(Country country)
+        {
+
+            ExecuteNonQuerySP("common.sp_Country_UpdateFromSource", country.CountryId, country.Name);
+        }
         public bool AreCountriesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("common.Country", ref updateHandle);

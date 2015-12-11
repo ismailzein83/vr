@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class Country
+    public class SourceCountry
     {
-       public int CountryId { get; set; }
+        public string SourceId  {get; set; }
 
-       public string Name { get; set; }
-
-       public string SourceId { get; set; }
- 
+        public string Name { get; set; }
     }
 }

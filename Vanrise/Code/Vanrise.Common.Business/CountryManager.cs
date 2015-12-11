@@ -54,15 +54,16 @@ namespace Vanrise.Common.Business
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
 
-            int countryId = -1;
+            long startingId;
+            ReserveIDRange(1, out startingId);
+            country.CountryId = (int)startingId;
 
             ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
-            bool insertActionSucc = dataManager.Insert(country, out countryId);
+            bool insertActionSucc = dataManager.Insert(country);
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                country.CountryId = countryId;
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;               
                 insertOperationOutput.InsertedObject = CountryDetailMapper(country);
             }
             else
@@ -72,6 +73,24 @@ namespace Vanrise.Common.Business
 
             return insertOperationOutput;
         }
+
+        public void InsertCountrySynchronize(Country country)
+        {
+            long startingId;
+            ReserveIDRange(1, out startingId);
+            country.CountryId = (int)startingId;
+
+            ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
+            dataManager.InsertSynchronize(country);
+        }
+        public void UpdatetCountrySynchronize(Country country)
+        {
+
+            ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
+             dataManager.UpdateSynchronize(country);
+        }
+
+        
         public Vanrise.Entities.UpdateOperationOutput<CountryDetail> UpdateCountry(Country country)
         {
             ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
@@ -153,6 +172,11 @@ namespace Vanrise.Common.Business
             countryInfo.CountryId = country.CountryId;
             countryInfo.Name = country.Name;
             return countryInfo;
+        }
+
+        internal static void ReserveIDRange(int nbOfIds, out long startingId)
+        {
+            Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(typeof(CountryManager), nbOfIds, out startingId);
         }
         #endregion
     }
