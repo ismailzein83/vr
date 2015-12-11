@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrTreeview', [function () {
+app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -17,12 +17,15 @@ app.directive('vrTreeview', [function () {
             wholerow: '@',
             draggabletree: '@',
             state: '@',
-            movesettings: '@'
+            movesettings: '@',
+            hasremotechildrenfield:'@',
+            loadremotechildren: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             var treeElement = $element.find('#divTree');
 
+            var incrementalId = 0;
             function fillTreeFromDataSource(treeArray, dataSource) {                
                 for (var i = 0; i < dataSource.length; i++) {
                     var sourceItem = dataSource[i];
@@ -33,14 +36,20 @@ app.directive('vrTreeview', [function () {
                         state: { },
                         children: []
                     };
+                    if (treeItem.id == undefined)
+                        treeItem.id = "generatedId_" + incrementalId++;
                     if (sourceItem.isOpened)
                         treeItem.state.opened = true;
                     if (sourceItem.isSelected)
                         treeItem.state.selected = true;
                     if (sourceItem.isDisabled)
                         treeItem.state.disabled = true;
-                    if (sourceItem[ctrl.datachildrenfield] != undefined)
+                    if (sourceItem[ctrl.datachildrenfield] != undefined && sourceItem[ctrl.datachildrenfield].length > 0)
                         fillTreeFromDataSource(treeItem.children, sourceItem[ctrl.datachildrenfield]);
+                    else if(sourceItem[ctrl.hasremotechildrenfield] == true) {
+                        treeItem.children = true;
+                        treeItem.state.opened = false;
+                    }
                     treeArray.push(treeItem);
                 }
             }
@@ -77,7 +86,28 @@ app.directive('vrTreeview', [function () {
                 var treeArray = [];
                 fillTreeFromDataSource(treeArray, datasource);
                 var treeData={
-                    core: { data: treeArray},
+                    core: {
+                        data: function (obj, callback) {
+
+                            if (obj.id == '#')//root node
+                                callback.call(this, treeArray);
+                            else {
+                                if (ctrl.loadremotechildren != undefined) {
+                                    
+                                    ctrl.loadremotechildren(obj.original.sourceItem)
+                                        .then(function (nodeChildrenSource) {
+                                            if (nodeChildrenSource != undefined && nodeChildrenSource != null) {
+                                                var nodeChildren = [];
+                                                fillTreeFromDataSource(nodeChildren, nodeChildrenSource);
+                                                callback.call(this, nodeChildren);
+                                            }
+
+                                        });
+                                }
+                            }
+                                
+                        }
+                    },
                     "state": { "key": "state_demo" },
                    
                 }
