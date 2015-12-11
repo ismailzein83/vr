@@ -28,13 +28,13 @@ app.directive("vrQmClitesterProfilesettings", [function () {
     };
 
     function getDirectiveTemplateUrl() {
-        return "/Client/Modules/QM_CLITester/Directives/Profile/Templates/AddPrefixDirectiveTemplate.html";
+        return "/Client/Modules/QM_CLITester/Directives/Profile/Templates/ProfileSettngsDirectiveTemplate.html";
     }
 
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
 
-        $scope.numberPrefix = undefined;
+        $scope.ringTime = undefined;
         
         function initializeController() {
             defineAPI();
@@ -46,13 +46,13 @@ app.directive("vrQmClitesterProfilesettings", [function () {
             api.getData = function () {
                 return {
                     $type: "QM.CLITester.iTestIntegration.ProfileExtensionSettings, QM.CLITester.iTestIntegration",
-                    Prefix: $scope.numberPrefix
+                    RingTime: $scope.ringTime
                 };
             };
 
             api.load = function (payload) {
                 if (payload != undefined) {
-                    $scope.numberPrefix = payload.Prefix;
+                    $scope.ringTime = payload.RingTime;
                 }
             }
 

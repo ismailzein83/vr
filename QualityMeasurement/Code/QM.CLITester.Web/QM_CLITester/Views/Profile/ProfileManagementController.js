@@ -2,16 +2,15 @@
 
     "use strict";
 
-    profileManagementController.$inject = ['$scope', 'QM_CLITester_ProfileService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    profileManagementController.$inject = ['$scope', 'Qm_CliTester_ProfileService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function profileManagementController($scope, QM_CLITester_ProfileService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function profileManagementController($scope, Qm_CliTester_ProfileService, UtilsService, VRUIUtilsService, VRNotificationService) {
         var gridAPI;
 
         defineScope();
         load();
 
         function defineScope() {
-            console.log('defineScope')
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid({});
@@ -36,5 +35,5 @@
 
     }
 
-    appControllers.controller('QM_CLITester_ProfileManagementController', profileManagementController);
+    appControllers.controller('Qm_CliTester_ProfileManagementController', profileManagementController);
 })(appControllers);

@@ -116,7 +116,7 @@
         function setDirectiveTabs() {
             $scope.directiveTabs = [];
             var cliTab = {
-                title: "CLI Tester",
+                title: "Settings",
                 directive: "vr-qm-clitester-profilesettings",
                 readypromisedeferred: UtilsService.createPromiseDeferred(),
                 loadDirective: function (api) {
@@ -129,5 +129,5 @@
         }
     }
 
-    appControllers.controller('Qm_CliTester_ProfileEditorController', Qm_CliTester_profileEditorController);
+    appControllers.controller('Qm_CliTester_ProfileEditorController', Qm_CliTester_ProfileEditorController);
 })(appControllers);

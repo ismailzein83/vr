@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQmClitesterProfileGrid", ["UtilsService", "VRNotificationService", "Qm_CliTester_SupplierAPIService", "Qm_CliTester_upplierService",
-function (UtilsService, VRNotificationService, Qm_CliTester_SupplierAPIService, Qm_CliTester_SupplierService) {
+app.directive("vrQmClitesterProfileGrid", ["UtilsService", "VRNotificationService", "Qm_CliTester_ProfileAPIService", "Qm_CliTester_ProfileService",
+function (UtilsService, VRNotificationService, Qm_CliTester_ProfileAPIService, Qm_CliTester_ProfileService) {
 
     var directiveDefinitionObject = {
 
@@ -32,11 +32,13 @@ function (UtilsService, VRNotificationService, Qm_CliTester_SupplierAPIService, 
             $scope.profiles = [];
 
             $scope.onGridReady = function (api) {
+
                 gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
                 function getDirectiveAPI() {
+
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
@@ -58,6 +60,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_SupplierAPIService, 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return Qm_CliTester_ProfileAPIService.GetFilteredProfiles(dataRetrievalInput)
                    .then(function (response) {
+                       
                        onResponseReady(response);
                    })
                    .catch(function (error) {
