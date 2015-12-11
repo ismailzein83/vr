@@ -89,12 +89,18 @@
 
             var extendedSetting = [];
             for (var i = 0 ; i < $scope.directiveTabs.length ; i++) {
+
+                console.log('$scope.directiveTabs[i].directiveAPI.getData()')
+
+                console.log($scope.directiveTabs[i].directiveAPI.getData())
+
                 if ($scope.directiveTabs[i].directiveAPI != undefined)
                     extendedSetting[extendedSetting.length] = $scope.directiveTabs[i].directiveAPI.getData();
             }
             profile.Settings = {
                 ExtendedSettings: extendedSetting
             }
+            console.log(profile)
             return profile;
         }
 
