@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQmBeSupplierGrid", ["UtilsService", "VRNotificationService", "QM_BE_SupplierAPIService", "QM_BE_SupplierService",
-function (UtilsService, VRNotificationService, QM_BE_SupplierAPIService, QM_BE_SupplierService) {
+app.directive("vrQmClitesterProfileGrid", ["UtilsService", "VRNotificationService", "Qm_CliTester_upplierAPIService", "Qm_CliTester_SupplierService",
+function (UtilsService, VRNotificationService, Qm_CliTester_SupplierAPIService, Qm_CliTester_SupplierService) {
 
     var directiveDefinitionObject = {
 
@@ -13,23 +13,23 @@ function (UtilsService, VRNotificationService, QM_BE_SupplierAPIService, QM_BE_S
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            var supplierGrid = new SupplierGrid($scope, ctrl, $attrs);
-            supplierGrid.initializeController();
+            var profileGrid = new ProfileGrid($scope, ctrl, $attrs);
+            profileGrid.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/QM_BusinessEntity/Directives/Supplier/Templates/SupplierGridTemplate.html"
+        templateUrl: "/Client/Modules/QM_CLITester/Directives/Profile/Templates/ProfileGridTemplate.html"
 
     };
 
-    function SupplierGrid($scope, ctrl, $attrs) {
+    function ProfileGrid($scope, ctrl, $attrs) {
         var gridAPI;
 
         function initializeController() {
-            $scope.suppliers = [];
+            $scope.profiles = [];
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -42,12 +42,12 @@ function (UtilsService, VRNotificationService, QM_BE_SupplierAPIService, QM_BE_S
                         return gridAPI.retrieveData(query);
                     }
 
-                    directiveAPI.onSupplierUpdated = function (supplierObject) {
-                        gridAPI.itemUpdated(supplierObject);
+                    directiveAPI.onProfileUpdated = function (profileObject) {
+                        gridAPI.itemUpdated(profileObject);
                     }
 
-                    directiveAPI.onSupplierAdded = function (supplierObject) {
-                        gridAPI.itemAdded(supplierObject);
+                    directiveAPI.onProfileAdded = function (profileObject) {
+                        gridAPI.itemAdded(profileObject);
                     }
 
                     return directiveAPI;
@@ -56,7 +56,7 @@ function (UtilsService, VRNotificationService, QM_BE_SupplierAPIService, QM_BE_S
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return QM_BE_SupplierAPIService.GetFilteredSuppliers(dataRetrievalInput)
+                return Qm_CliTester_ProfileAPIService.GetFilteredProfiles(dataRetrievalInput)
                    .then(function (response) {
                        onResponseReady(response);
                    })
@@ -71,16 +71,16 @@ function (UtilsService, VRNotificationService, QM_BE_SupplierAPIService, QM_BE_S
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-                clicked: editSupplier,
+                clicked: editProfile,
             }
             ];
         }
 
-        function editSupplier(supplier) {
-            var onSupplierUpdated = function (updatedItem) {
+        function editProfile(profile) {
+            var onProfileUpdated = function (updatedItem) {
                 gridAPI.itemUpdated(updatedItem);
             };
-            QM_BE_SupplierService.editSupplier(supplier.Entity.SupplierId, onSupplierUpdated);
+            Qm_CliTester_ProfileService.editProfile(profile.Entity.ProfileId, onProfileUpdated);
         }
 
 

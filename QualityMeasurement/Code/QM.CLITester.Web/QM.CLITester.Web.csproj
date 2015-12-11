@@ -153,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\TestCallController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -179,6 +180,11 @@
     <Content Include="QM_CLITester\Constant\CallTestResultEnum.js" />
     <Content Include="QM_CLITester\Constant\CallTestStatusEnum.js" />
     <Content Include="QM_CLITester\Constant\ModuleConfig.js" />
+    <Content Include="QM_CLITester\Directives\Profile\Templates\AddPrefixDirectiveTemplate.html" />
+    <Content Include="QM_CLITester\Directives\Profile\Templates\ProfileGridTemplate.html" />
+    <Content Include="QM_CLITester\Directives\Profile\vr-qm-clitester-profile-grid.js" />
+    <Content Include="QM_CLITester\Directives\Profile\vr-qm-clitester-profile-selector.js" />
+    <Content Include="QM_CLITester\Directives\Profile\vr-qm-clitester-profilesettings.js" />
     <Content Include="QM_CLITester\Directives\Supplier\Templates\AddPrefixDirectiveTemplate.html" />
     <Content Include="QM_CLITester\Directives\Supplier\vr-qm-clitester-suppliersettings.js" />
     <Content Include="QM_CLITester\Directives\TestCall\Templates\HisTestCallGridTemplate.html" />
@@ -188,11 +194,11 @@
     <Content Include="QM_CLITester\Directives\TestCall\vr-qm-clitester-testcall-grid.js" />
     <Content Include="QM_CLITester\Directives\TestCall\vr-qm-clitester-testcalldetails.js" />
     <Content Include="QM_CLITester\ModuleInitialization.js" />
+    <Content Include="QM_CLITester\Services\APIServices\ProfileAPIService.js" />
     <Content Include="QM_CLITester\Services\APIServices\TestCallAPIService.js" />
+    <Content Include="QM_CLITester\Services\ProfileService.js" />
     <Content Include="QM_CLITester\Services\TestCallDetailsService.js" />
     <Content Include="QM_CLITester\Services\TestCallService.js" />
-    <Content Include="QM_CLITester\Views\HistoryTestCall\HistoryTestCallManagement.html" />
-    <Content Include="QM_CLITester\Views\HistoryTestCall\HistoryTestCallManagementController.js" />
     <Content Include="QM_CLITester\Views\TestPage\Test.html" />
     <Content Include="QM_CLITester\Views\TestPage\TestController.js" />
   </ItemGroup>

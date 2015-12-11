@@ -40,17 +40,17 @@ namespace QM.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddSupplier")]
-        public InsertOperationOutput<SupplierDetail> AddSupplier(Supplier whsSupplier)
+        public InsertOperationOutput<SupplierDetail> AddSupplier(Supplier supplier)
         {
             SupplierManager manager = new SupplierManager();
-            return manager.AddSupplier(whsSupplier);
+            return manager.AddSupplier(supplier);
         }
         [HttpPost]
         [Route("UpdateSupplier")]
-        public UpdateOperationOutput<SupplierDetail> UpdateSupplier(Supplier whsSupplier)
+        public UpdateOperationOutput<SupplierDetail> UpdateSupplier(Supplier supplier)
         {
             SupplierManager manager = new SupplierManager();
-            return manager.UpdateSupplier(whsSupplier);
+            return manager.UpdateSupplier(supplier);
         }
         [HttpGet]
         [Route("GetSupplierSourceTemplates")]

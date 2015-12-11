@@ -1,0 +1,29 @@
+﻿<div vr-modalcontent ng-controller="Qm_CliTester_ProfileEditorController" vr-loader="isLoading" width="'55%'">
+    <vr-modalbody>
+        <vr-form name="formProfileEditor">
+            
+            <vr-row>
+                <vr-tabs>
+                    <vr-tab header="'Definition'">
+                        <vr-row>
+                            <vr-columns width="1/4row">
+                                <vr-textbox label="Name" value="scopeModal.name" isrequired />
+
+                            </vr-columns>
+                        </vr-row>
+                    </vr-tab>
+                    <vr-directivetab ng-repeat="tabItem in directiveTabs" tabitem="tabItem"></vr-directivetab>
+                </vr-tabs>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formProfileEditor" data-onclick="SaveProfile"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

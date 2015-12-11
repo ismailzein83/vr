@@ -67,7 +67,8 @@
 
 
         function loadAllControls() {
-            $scope.scopeModal.name = supplierEntity.Name;
+            if (supplierEntity != undefined)
+                $scope.scopeModal.name = supplierEntity.Name;
 
             var promises = [];
 
@@ -75,7 +76,7 @@
                 var promise = $scope.directiveTabs[i].readypromisedeferred.promise;
                 promises.push(promise);
             }
-          
+
             var j = 0;
             angular.forEach(promises, function (promise) {
                 promise.then(function () {
@@ -90,13 +91,13 @@
 
 
         function getSupplier() {
-            return QM_BE_SupplierAPIService.GetSupplier(supplierId).then(function (whsSupplier) {
-                supplierEntity = whsSupplier;
+            return QM_BE_SupplierAPIService.GetSupplier(supplierId).then(function (supplier) {
+                supplierEntity = supplier;
             });
         }
 
         function buildSupplierObjFromScope() {
-            var whsSupplier = {
+            var supplier = {
                 SupplierId: (supplierId != null) ? supplierId : 0,
                 Name: $scope.scopeModal.name
             };
@@ -107,10 +108,10 @@
                 if ($scope.directiveTabs[i].directiveAPI != undefined)
                     extendedSetting[extendedSetting.length] = $scope.directiveTabs[i].directiveAPI.getData();
             }
-            whsSupplier.Settings = {
+            supplier.Settings = {
                 ExtendedSettings: extendedSetting
             }
-            return whsSupplier;
+            return supplier;
         }
 
         function insertSupplier() {
