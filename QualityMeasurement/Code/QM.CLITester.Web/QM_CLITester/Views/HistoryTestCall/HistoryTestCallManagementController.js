@@ -24,14 +24,13 @@
             $scope.searchClicked = function () {
                 if (gridAPI != undefined) {
                     setFilterObject();
-                    console.log(filter);
                     return gridAPI.loadGrid(filter);
                 }
             };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                api.loadGrid(filter);
+                //api.loadGrid(filter);
             }
         }
 
@@ -56,7 +55,6 @@
 
         function getSuppliersInfo() {
             return Qm_CliTester_TestCallAPIService.GetSuppliers().then(function (response) {
-                console.log(response);
                 $scope.suppliers.length = 0;
                 angular.forEach(response, function (itm) {
                     $scope.suppliers.push(itm);
@@ -84,8 +82,6 @@
         }
 
         function setFilterObject() {
-            console.log("sele");
-            console.log($scope.selectedSupplier);
             if ($scope.selectedSupplier == undefined)
                 filter.SupplierID = null;
             else {
@@ -102,6 +98,18 @@
                 filter.ZoneID = null;
             else {
                 filter.ZoneID = $scope.selectedBreakout.Id;
+            }
+
+            if ($scope.fromDate == undefined)
+                filter.FromTime = null;
+            else {
+                filter.FromTime = $scope.fromDate;
+            }
+
+            if ($scope.toDate == undefined)
+                filter.ToTime = null;
+            else {
+                filter.ToTime = $scope.toDate;
             }
         }
     }

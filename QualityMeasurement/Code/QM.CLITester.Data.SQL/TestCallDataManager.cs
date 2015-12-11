@@ -17,7 +17,8 @@ namespace QM.CLITester.Data.SQL
             object testCallId;
 
             int recordsEffected = ExecuteNonQuerySP("QM_CLITester.sp_TestCall_Insert", out testCallId, testCall.SupplierID, testCall.CountryID, testCall.ZoneID, 
-                testCall.InitiateTestInformation, testCall.TestProgress, testCall.CallTestStatus, testCall.CallTestResult, testCall.UserID);
+                testCall.InitiateTestInformation, testCall.TestProgress, testCall.CallTestStatus, testCall.CallTestResult, testCall.InitiationRetryCount, 
+                testCall.GetProgressRetryCount, testCall.UserID);
             insertedId = (int)testCallId;
             return (recordsEffected > 0);
         }
@@ -74,7 +75,7 @@ namespace QM.CLITester.Data.SQL
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("QM_CLITester.sp_TestCall_CreateTempByFiltered", tempTableName, input.Query.SupplierID, input.Query.CountryID, input.Query.ZoneID);
+                ExecuteNonQuerySP("QM_CLITester.sp_TestCall_CreateTempByFiltered", tempTableName, input.Query.SupplierID, input.Query.CountryID, input.Query.ZoneID, input.Query.FromTime, input.Query.ToTime);
             };
 
             return RetrieveData(input, createTempTableAction, TestCallDetailMapper, mapper);
@@ -93,8 +94,8 @@ namespace QM.CLITester.Data.SQL
                 CreationDate = GetReaderValue<DateTime>(reader, "CreationDate"),
                 CallTestStatus = GetReaderValue<CallTestStatus>(reader, "CallTestStatus"),
                 CallTestResult = GetReaderValue<CallTestResult>(reader, "CallTestResult"),
-                InitiationRetryCount = (int)reader["InitiationRetryCount"],
-                GetProgressRetryCount = (int)reader["GetProgressRetryCount"],
+                InitiationRetryCount = reader["InitiationRetryCount"] == "" ? 0 : (int)reader["InitiationRetryCount"],
+                GetProgressRetryCount = reader["GetProgressRetryCount"] == "" ? 0 : (int)reader["GetProgressRetryCount"],
                 FailureMessage = reader["FailureMessage"] as string
             };
 

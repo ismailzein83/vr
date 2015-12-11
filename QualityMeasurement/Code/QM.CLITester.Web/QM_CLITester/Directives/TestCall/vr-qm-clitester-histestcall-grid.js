@@ -75,8 +75,6 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return Qm_CliTester_TestCallAPIService.GetFilteredTestCalls(dataRetrievalInput)
                 .then(function (response) {
-                    console.log("aasdasdsad");
-                    console.log(response.Data);
                     if (response.Data != undefined) {
                         for (var i = 0; i < response.Data.length; i++) {
                             gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);

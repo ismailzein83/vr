@@ -138,6 +138,8 @@ namespace QM.CLITester.Business
         {
             testCallResult.CallTestStatus = CallTestStatus.New;
             testCallResult.CallTestResult = CallTestResult.NotCompleted;
+            testCallResult.InitiationRetryCount = 0;
+            testCallResult.GetProgressRetryCount = 0;
             testCallResult.UserID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             Vanrise.Entities.InsertOperationOutput<TestCall> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<TestCall>();
 
