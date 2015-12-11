@@ -55,7 +55,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChangedSupplierCodeManager.cs" />
+    <Compile Include="ChangedSupplierRateManager.cs" />
+    <Compile Include="ChangedSupplierZoneManager.cs" />
     <Compile Include="ImportPriceListManager.cs" />
+    <Compile Include="NewSupplierCodeManager.cs" />
+    <Compile Include="NewSupplierRateManager.cs" />
     <Compile Include="NewSupplierZoneManager.cs" />
     <Compile Include="PriceListCodeManager.cs" />
     <Compile Include="PriceListRateManager.cs" />

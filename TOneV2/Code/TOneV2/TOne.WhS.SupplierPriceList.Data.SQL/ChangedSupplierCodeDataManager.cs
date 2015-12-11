@@ -3,27 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.Data.SQL;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.SupplierPriceList.Data.SQL
 {
-    public class NewSupplierZoneDataManager : BaseTOneDataManager, INewSupplierZoneDataManager
+    class ChangedSupplierCodeDataManager : BaseSQLDataManager, IChangedSupplierCodeDataManager
     {
-        public NewSupplierZoneDataManager()
+        public ChangedSupplierCodeDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
 
-        public void Insert(int supplierId, int priceListId, IEnumerable<Entities.SPL.NewZone> zonesList)
+        public void Insert(int priceListId, IEnumerable<Entities.SPL.ChangedCode> changedCodes)
         {
             object dbApplyStream = InitialiazeStreamForDBApply();
-            
-            foreach (NewZone zone in zonesList)
+
+            foreach (ChangedCode code in changedCodes)
             {
-                WriteRecordToStream(supplierId, priceListId, zone, dbApplyStream);
+                WriteRecordToStream(priceListId, code, dbApplyStream);
             }
 
             object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
@@ -35,16 +34,12 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             return base.InitializeStreamForBulkInsert();
         }
 
-        private void WriteRecordToStream(int supplierId, int priceListId, NewZone record, object dbApplyStream)
+        private void WriteRecordToStream(int priceListId, ChangedCode record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
-                       record.ZoneId,
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}",
+                       record.CodeId,
                        priceListId,
-                       record.CountryId,
-                       record.Name,
-                       supplierId,
-                       record.BED,
                        record.EED);
         }
 
@@ -54,7 +49,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             streamForBulkInsert.Close();
             return new StreamBulkInsertInfo
             {
-                TableName = "TOneWhS_BE.SPL_SupplierZone_New",
+                TableName = "TOneWhS_BE.SPL_SupplierCode_Changed",
                 Stream = streamForBulkInsert,
                 TabLock = false,
                 KeepIdentity = false,

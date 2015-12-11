@@ -70,7 +70,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyChangedCodesToDB.cs" />
+    <Compile Include="ApplyChangedRatesToDB.cs" />
+    <Compile Include="ApplyChangedZonesToDB.cs" />
     <Compile Include="ApplyDataToDB.cs" />
+    <Compile Include="ApplyNewCodesToDB.cs" />
+    <Compile Include="ApplyNewRatesToDB.cs" />
     <Compile Include="ApplyNewZonesToDB.cs" />
     <Compile Include="GetDataFromPriceList.cs" />
     <Compile Include="GetExistingCodes.cs" />

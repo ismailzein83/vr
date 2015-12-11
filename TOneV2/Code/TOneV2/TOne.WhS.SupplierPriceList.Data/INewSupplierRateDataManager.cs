@@ -7,8 +7,8 @@ using TOne.WhS.SupplierPriceList.Entities.SPL;
 
 namespace TOne.WhS.SupplierPriceList.Data
 {
-    public interface IChangedSupplierZoneDataManager : IDataManager
+    public interface INewSupplierRateDataManager : IDataManager
     {
-        void Insert(int priceListId, IEnumerable<ChangedZone> changedZones);
+        void Insert(int priceListId, IEnumerable<NewRate> ratesList);
     }
 }
