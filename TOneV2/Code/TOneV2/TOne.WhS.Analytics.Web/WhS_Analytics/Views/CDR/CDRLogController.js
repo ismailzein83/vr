@@ -1,21 +1,15 @@
-﻿CDRLogController.$inject = ['$scope', 'CDRAPIService', 'UtilsService', 'uiGridConstants', 'VRNavigationService', '$q', 'BusinessEntityAPIService_temp', 'CarrierAccountAPIService', 'WhS_Analytics_BillingCDRMeasureEnum', 'TrafficMonitorMeasureEnum', 'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'ZonesService', 'WhS_Analytics_BillingCDROptionMeasureEnum','VRUIUtilsService','VRValidationService'];
+﻿CDRLogController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', '$q', 'WhS_BE_SaleZoneAPIService', 'VRNotificationService', 'WhS_Analytics_BillingCDROptionMeasureEnum', 'VRUIUtilsService', 'VRValidationService'];
 
-function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, VRNavigationService, $q, BusinessEntityAPIService, CarrierAccountAPIService, BillingCDRMeasureEnum, TrafficMonitorMeasureEnum, CarrierTypeEnum, VRModalService, VRNotificationService, ZonesService, BillingCDROptionMeasureEnum, VRUIUtilsService, VRValidationService) {
+function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_SaleZoneAPIService, VRNotificationService, BillingCDROptionMeasureEnum, VRUIUtilsService, VRValidationService) {
 
     var receivedCustomerIds;
     var receivedSupplierIds;
-    var receivedZoneIds;
+    var receivedSaleZoneIds;
     var receivedSwitchIds;
-    var getDataAfterLoading=false;
+    var receivedSupplierZoneIds;
+    var sellingNumberPlanId;
     var mainGridAPI;
-    var measures = [];
-    var isEditMode = false;
-    var CDROption = [];
-    var isFilterScreenReady;
-
-
-    var cdrLogEntity;
-
+    var isModalMode = false;
 
     var customerAccountDirectiveAPI;
     var customerAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -35,7 +29,6 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     var supplierZoneDirectiveAPI;
     var supplierZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-
     defineScope();
     loadParameters();
     load();
@@ -46,23 +39,19 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             $scope.fromDate = parameters.fromDate;
             $scope.toDate = parameters.toDate;
             receivedCustomerIds = parameters.customerIds;
-            receivedZoneIds = parameters.zoneIds;
+            receivedSaleZoneIds = parameters.saleZoneIds;
             receivedSupplierIds = parameters.supplierIds;
             receivedSwitchIds = parameters.switchIds;
-            getDataAfterLoading = true;
+            receivedSupplierZoneIds = parameters.supplierZoneIds;
+            isModalMode = true;
         }
-        //if ($scope.fromDate != undefined)
-        //    isEditMode = true;
-        //else
-            isEditMode = false;
     }
+
     function defineScope() {
-        
 
         $scope.validateDateTime = function () {
             return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
         }
-        
 
         $scope.onSupplierZoneDirectiveReady = function (api) {
             supplierZoneDirectiveAPI = api;
@@ -94,43 +83,59 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             saleZoneReadyPromiseDeferred.resolve();
         }
 
-        $scope.onSelectSellingNumberPlan = function (selectedItem) {
-            $scope.showSaleZoneSelector = true;
+        $scope.onSelectSellingNumberPlan = function () {
+            if ($scope.selectedSellingNumberPlan != undefined) {
+                $scope.showSaleZoneSelector = true;
 
-            var payload = {
-                sellingNumberPlanId: selectedItem.SellingNumberPlanId,
-            }
-
-            var setLoader = function (value) { $scope.isLoadingSaleZonesSection = value };
-            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
-        }
-
-        $scope.onSelectSupplier = function (selectedItem) {
                 var payload = {
-                    filter: { SupplierId: selectedItem.CarrierAccountId },
+                    sellingNumberPlanId: $scope.selectedSellingNumberPlan.SellingNumberPlanId,
+                    selectedIds: receivedSaleZoneIds
                 }
-                var setLoader = function (value) { $scope.isLoadingSupplierZonesSection = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader);
+                var setLoader = function (value) {
+                    $scope.isLoadingSaleZonesSection = value
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
+            }
         }
+
+        $scope.useOneTime = true;
+        $scope.onSelectSupplier = function () {
+
+            if ($scope.selectedSuppliers.length == 1 && $scope.useOneTime) {
+                var payload = {
+                    filter: {
+                        SupplierId: $scope.selectedSuppliers[0].CarrierAccountId
+                    },
+                    selectedIds: receivedSupplierZoneIds
+                }
+                console.log(payload);
+                var setLoader = function (value) {
+                    $scope.isLoadingSupplierZonesSection = value
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader);
+            }
+            $scope.useOneTime = !$scope.useOneTime;
+        }
+
         $scope.nRecords = '100'
 
-        var date=new Date();
-        $scope.fromDate=new Date(date.getFullYear(),date.getMonth(),date.getDate(),00,00,00,00);
-        $scope.toDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 00, 00);
-        $scope.gridAllMeasuresScope = {};
-        $scope.measures = measures;
-        $scope.CDROption = CDROption;
+        var date = new Date();
+        $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 00, 00, 00, 00);
+
+        $scope.CDROption = [];
         $scope.selectedCDROption = BillingCDROptionMeasureEnum.All.value
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
+            if (isModalMode && !$scope.isLoading) {
+                mainGridAPI.loadGrid(getQuery());
+            }
         }
 
         $scope.getData = function () {
             return mainGridAPI.loadGrid(getQuery());
         };
 
-       
     }
 
     function getQuery() {
@@ -147,30 +152,30 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
 
     function load() {
         $scope.isLoading = true;
-        if (isEditMode) {
-            //getCDRLog().then(function () {
-            //    loadAllControls()
-            //        .finally(function () {
-            //            cdrLogEntity = undefined;
-            //        });
-            //}).catch(function () {
-            //    VRNotificationService.notifyExceptionWithClose(error, $scope);
-            //    $scope.isLoading = false;
-            //});
-        }
-        else {
+        if (isModalMode && (receivedSaleZoneIds != undefined) && receivedSaleZoneIds.length > 0) {
+            return WhS_BE_SaleZoneAPIService.GetSaleZone(receivedSaleZoneIds[0])
+                .then(function (response) {
+                    sellingNumberPlanId = response.SellingNumberPlanId;
+                    loadAllControls();
+                });
+        } else {
             loadAllControls();
         }
     }
 
     function loadAllControls() {
         return UtilsService.waitMultipleAsyncOperations([loadCustomers, loadSuppliers, loadSellingNumberPlanSection, loadCDROption, loadMeasures, loadSwitches])
-           .catch(function (error) {
-               VRNotificationService.notifyExceptionWithClose(error, $scope);
-           })
-          .finally(function () {
-              $scope.isLoading = false;
-          });
+            .then(function () {
+
+                if (isModalMode && mainGridAPI != undefined)
+                    mainGridAPI.loadGrid(getQuery());
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            })
+            .finally(function () {
+                $scope.isLoading = false;
+            });
     }
 
     function buildFilter() {
@@ -186,7 +191,10 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     function loadSwitches() {
         var loadSwitchPromiseDeferred = UtilsService.createPromiseDeferred();
         switchReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(switchDirectiveAPI, undefined, loadSwitchPromiseDeferred);
+            var payload = {
+                selectedIds: receivedSwitchIds
+            };
+            VRUIUtilsService.callDirectiveLoad(switchDirectiveAPI, payload, loadSwitchPromiseDeferred);
         });
         return loadSwitchPromiseDeferred.promise;
     }
@@ -194,7 +202,10 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     function loadSellingNumberPlanSection() {
         var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
         sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, undefined, loadSellingNumberPlanPromiseDeferred);
+            var payload = {
+                selectedIds: sellingNumberPlanId
+            };
+            VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, payload, loadSellingNumberPlanPromiseDeferred);
         });
         return loadSellingNumberPlanPromiseDeferred.promise;
     }
@@ -202,7 +213,11 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     function loadCustomers() {
         var loadCustomerAccountPromiseDeferred = UtilsService.createPromiseDeferred();
         customerAccountReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(customerAccountDirectiveAPI, undefined, loadCustomerAccountPromiseDeferred);
+            var payload = {
+                selectedIds: receivedCustomerIds
+            };
+
+            VRUIUtilsService.callDirectiveLoad(customerAccountDirectiveAPI, payload, loadCustomerAccountPromiseDeferred);
         });
 
         return loadCustomerAccountPromiseDeferred.promise;
@@ -211,27 +226,21 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     function loadSuppliers() {
         var loadSupplierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
         supplierAccountReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(supplierAccountDirectiveAPI, undefined, loadSupplierAccountPromiseDeferred);
+            var payload = {
+                selectedIds: receivedSupplierIds
+            };
+            VRUIUtilsService.callDirectiveLoad(supplierAccountDirectiveAPI, payload, loadSupplierAccountPromiseDeferred);
         });
         return loadSupplierAccountPromiseDeferred.promise;
     }
 
-    function loadMeasures() {
-        for (var prop in BillingCDRMeasureEnum) {
-            measures.push(BillingCDRMeasureEnum[prop]);
-        }
-    }
-
     function loadCDROption() {
         for (var prop in BillingCDROptionMeasureEnum) {
-            CDROption.push(BillingCDROptionMeasureEnum[prop]);
+            $scope.CDROption.push(BillingCDROptionMeasureEnum[prop]);
         }
         $scope.selectedCDROption = CDROption[2];
     }
 
-
 };
-
-
 
 appControllers.controller('WhS_Analytics_CDRLogController', CDRLogController);

@@ -17,10 +17,15 @@ namespace TOne.WhS.Analytics.Data.SQL
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
         private string mainCDRTableName="[TOneWhS_CDR].[CDRMain]";
         private string mainCDRTableAlias = "MainCDR";
+        private string mainCDRTableIndex = "IX_CDRMain_Attempt";
+
         private string invalidCDRTableName = "[TOneWhS_CDR].[CDRInvalid]";
         private string invalidCDRTableAlias = "InValidCDR";
+        private string invalidCDRTableIndex = "IX_CDRInvalid_Attempt";
+
         private string failedCDRTableName = "[TOneWhS_CDR].[CDRFailed]";
         private string failedCDRTableAlias = "FailedCDR";
+        private string failedCDRTableIndex = "IX_CDRFailed_Attempt";
 
         static CDRDataManager()
         {
@@ -55,7 +60,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                 ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.Filter, input.Query.CDRType), (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.From));
-                    cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.To));
+                    cmd.Parameters.Add(new SqlParameter("@ToDate", ToDBNullIfDefault(input.Query.To)));
                     cmd.Parameters.Add(new SqlParameter("@nRecords", input.Query.NRecords));
                 });
             };
@@ -71,16 +76,16 @@ namespace TOne.WhS.Analytics.Data.SQL
             switch (cdrType)
             {
                 case CDRType.All:
-                    queryData = String.Format(@"{0} UNION ALL {1}  UNION ALL {2}", GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter), GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter), GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter)); 
+                    queryData = String.Format(@"{0} UNION ALL {1}  UNION ALL {2}", GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter, mainCDRTableIndex), GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex), GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter, failedCDRTableIndex)); 
                     break;
                 case CDRType.Invalid:
-                    queryData = GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter); 
+                    queryData = GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex); 
                     break;
                 case CDRType.Failed:
-                    queryData = GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter); 
+                    queryData = GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter, failedCDRTableIndex); 
                     break;
                 case CDRType.Successful:
-                    queryData = GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter); 
+                    queryData = GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter, mainCDRTableIndex); 
                     break;
             }
 
@@ -92,7 +97,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             queryBuilder.Replace("#Query#", queryData);
             return queryBuilder.ToString();
         }
-        private string GetSingleQuery(string tableName, string alias, CDRLogFilter filter)
+        private string GetSingleQuery(string tableName, string alias, CDRLogFilter filter,string tableIndex)
         {
             StringBuilder queryBuilder = new StringBuilder();
             StringBuilder selectQueryPart = new StringBuilder();
@@ -100,8 +105,8 @@ namespace TOne.WhS.Analytics.Data.SQL
             AddFilterToQuery(filter, whereBuilder);
             queryBuilder.Append(String.Format(@"SELECT TOP(@nRecords)    
                                                #SELECTPART#
-                                               FROM {0} {1} 
-                                               WHERE ({1}.Attempt BETWEEN @FromDate AND @ToDate)  #WHEREPART# ",tableName,alias));
+                                               FROM {0} {1} WITH(NOLOCK ,INDEX(#TABLEINDEX#))
+                                               WHERE ({1}.Attempt>= @FromDate AND ({1}.Attempt<= @ToDate OR @ToDate IS NULL))  #WHEREPART# ", tableName, alias));
            
             selectQueryPart.Append(String.Format(@"
                         
@@ -123,6 +128,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
             queryBuilder.Replace("#SELECTPART#", selectQueryPart.ToString());
             queryBuilder.Replace("#WHEREPART#", whereBuilder.ToString());
+            queryBuilder.Replace("#TABLEINDEX#", tableIndex);
 
             return queryBuilder.ToString();
 

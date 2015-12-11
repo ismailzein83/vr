@@ -1,5 +1,5 @@
 ﻿
-app.service('VRCommon_SaleZoneService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'WhS_BE_SellingNumberPlanService',
+app.service('WhS_BE_SaleZoneService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'WhS_BE_SellingNumberPlanService',
     function (VRModalService, VRNotificationService, UtilsService, WhS_BE_SellingNumberPlanService) {
         return ({
             editSaleZone: editSaleZone,

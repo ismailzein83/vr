@@ -80,10 +80,10 @@ namespace TOne.WhS.Analytics.Data.SQL
              new AnalyticDimensionConfig
              {
                  IdColumn = "ISNULL(ts.CustomerID,0)",
-                 NameColumn = "custProf.Name",//"ISNULL(case when cust.NameSuffix != '' THEN  custProf.Name + '(' + cust.NameSuffix + ')' else custProf.Name end,'N/A')",
-                 JoinStatements = new List<string>() { @"LEFT JOIN TOneWhS_BE.CarrierAccount cust WITH (NOLOCK) ON cust.ID = ts.CustomerID
-                                                            LEFT JOIN TOneWhS_BE.CarrierProfile custProf on cust.CarrierProfileID = custProf.ID " },
-                 GroupByStatements = new List<string>() { " ts.CustomerID, custProf.Name " },//cust.NameSuffix, custProf.Name " },
+                 NameColumn = "cust.Name",//"ISNULL(case when cust.NameSuffix != '' THEN  custProf.Name + '(' + cust.NameSuffix + ')' else custProf.Name end,'N/A')",
+                 JoinStatements = new List<string>() { @"LEFT JOIN TOneWhS_BE.CarrierAccount cust WITH (NOLOCK) ON cust.ID = ts.CustomerID "},
+                                                           // LEFT JOIN TOneWhS_BE.CarrierProfile custProf on cust.CarrierProfileID = custProf.ID " },
+                 GroupByStatements = new List<string>() { " ts.CustomerID, cust.Name " },//cust.NameSuffix, custProf.Name " },
                  ExpressionSummary = AnalyticSummary.Sum.ToString("G")
              });
             #endregion
@@ -93,10 +93,10 @@ namespace TOne.WhS.Analytics.Data.SQL
                new AnalyticDimensionConfig
                {
                    IdColumn = "ISNULL(ts.SupplierID,0)",
-                   NameColumn = "suppProf.Name",//"ISNULL(case when supp.NameSuffix != '' THEN  suppProf.Name + '(' + supp.NameSuffix + ')' else suppProf.Name end,'N/A')",
-                   JoinStatements = new List<string>() { @"LEFT JOIN TOneWhS_BE.CarrierAccount supp WITH (NOLOCK) ON supp.ID = ts.SupplierID
-                                                            LEFT JOIN TOneWhS_BE.CarrierProfile suppProf on supp.CarrierProfileID = suppProf.ID " },
-                   GroupByStatements = new List<string>() { " ts.SupplierID,suppProf.Name " },// supp.NameSuffix, suppProf.Name " },
+                   NameColumn = "supp.Name",//"ISNULL(case when supp.NameSuffix != '' THEN  suppProf.Name + '(' + supp.NameSuffix + ')' else suppProf.Name end,'N/A')",
+                   JoinStatements = new List<string>() { @"LEFT JOIN TOneWhS_BE.CarrierAccount supp WITH (NOLOCK) ON supp.ID = ts.SupplierID "},
+                                                           // LEFT JOIN TOneWhS_BE.CarrierProfile suppProf on supp.CarrierProfileID = suppProf.ID " },
+                   GroupByStatements = new List<string>() { " ts.SupplierID,supp.Name " },// supp.NameSuffix, suppProf.Name " },
                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                });
             #endregion

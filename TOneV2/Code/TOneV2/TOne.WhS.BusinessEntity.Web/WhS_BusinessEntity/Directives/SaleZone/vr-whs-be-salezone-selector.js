@@ -110,7 +110,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                         var input = {
                             SellingNumberPlanId: sellingNumberPlanId,
                             SaleZoneIds: selectedIds,
-                            SaleZoneFilterSettings: { RoutingProductId: filter.SaleZoneFilterSettings != undefined ? filter.SaleZoneFilterSettings.RoutingProductId : undefined }
+                            SaleZoneFilterSettings: { RoutingProductId: (filter!=undefined && filter.SaleZoneFilterSettings != undefined) ? filter.SaleZoneFilterSettings.RoutingProductId : undefined }
                         };
 
                         return WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {

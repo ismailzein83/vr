@@ -21,7 +21,7 @@
                             <vr-datetimepicker type="dateTime" label="From" value="fromDate" isrequired customvalidate="validateDateTime()"></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-datetimepicker type="dateTime" label="To" value="toDate" isrequired customvalidate="validateDateTime()"></vr-datetimepicker>
+                            <vr-datetimepicker type="dateTime" label="To" value="toDate"  customvalidate="validateDateTime()"></vr-datetimepicker>
                         </vr-columns>
 
                         <vr-columns width="normal" ng-show="advancedSelected">
@@ -34,13 +34,13 @@
                         </vr-columns>
 
                         <vr-columns width="normal" ng-show="advancedSelected">
-                            <vr-whs-be-carrieraccount-selector ismultipleselection getsuppliers selectedvalues="selectedSuppliers" on-ready="onSupplierAccountDirectiveReady" onselectitem="onSelectSupplier"></vr-whs-be-carrieraccount-selector>
+                            <vr-whs-be-carrieraccount-selector ismultipleselection getsuppliers selectedvalues="selectedSuppliers" on-ready="onSupplierAccountDirectiveReady" onselectionchanged="onSelectSupplier"></vr-whs-be-carrieraccount-selector>
                         </vr-columns>
                         <vr-columns width="normal" ng-show="advancedSelected && selectedSuppliers.length==1" vr-loader="isLoadingSupplierZonesSection">
                             <vr-whs-be-supplierzone-selector on-ready="onSupplierZoneDirectiveReady" ismultipleselection></vr-whs-be-supplierzone-selector>
                         </vr-columns>
                         <vr-columns width="normal" ng-show="advancedSelected">
-                            <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" onselectitem="onSelectSellingNumberPlan" selectedvalues="selectedSellingNumberPlan"></vr-whs-be-sellingnumberplan-selector>
+                            <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" onselectionchanged="onSelectSellingNumberPlan" selectedvalues="selectedSellingNumberPlan"></vr-whs-be-sellingnumberplan-selector>
                         </vr-columns>
 
                         <vr-columns width="normal" ng-show="advancedSelected && selectedSellingNumberPlan!=undefined" vr-loader="isLoadingSaleZonesSelector">

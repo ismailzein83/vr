@@ -20,6 +20,11 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesInfoByIds"), input);
         }
 
+        function GetSaleZone(saleZoneId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SaleZone", "GetSaleZone"), { saleZoneId: saleZoneId });
+        }
+        
+
         function GetSaleZoneGroupTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SaleZone", "GetSaleZoneGroupTemplates"));
         }
@@ -35,7 +40,8 @@
             GetSaleZonesInfo: GetSaleZonesInfo,
             GetSaleZonesInfoByIds: GetSaleZonesInfoByIds,
             GetSaleZoneGroupTemplates: GetSaleZoneGroupTemplates,
-            GetSaleZonesByName: GetSaleZonesByName
+            GetSaleZonesByName: GetSaleZonesByName,
+            GetSaleZone: GetSaleZone
         });
     }
 

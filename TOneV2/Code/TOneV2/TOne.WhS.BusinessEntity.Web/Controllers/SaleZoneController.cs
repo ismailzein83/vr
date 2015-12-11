@@ -24,6 +24,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
 
         [HttpGet]
+        [Route("GetSaleZone")]
+        public SaleZone GetSaleZone(int saleZoneId)
+        {
+            SaleZoneManager manager = new SaleZoneManager();
+            return manager.GetSaleZone(saleZoneId);
+        }
+
+        [HttpGet]
         [Route("GetSaleZonesInfo")]
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter,int sellingNumberPlanId, string serializedFilter)
         {
