@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrQmClitesterProfilesettings", [function () {
+app.directive("vrQmClitesterProfilesettings", ['ProfileTypeEnum', 'UtilsService', function (ProfileTypeEnum, UtilsService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -34,6 +34,14 @@ app.directive("vrQmClitesterProfilesettings", [function () {
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
 
+        $scope.profileTypes = UtilsService.getArrayEnum(ProfileTypeEnum);
+        $scope.selectedProfileType = [];
+
+        $scope.type = undefined;
+        $scope.gatewayIP = undefined;
+        $scope.gatewayPort = undefined;
+        $scope.sourceNumber = undefined;
+        $scope.callTime = undefined;
         $scope.ringTime = undefined;
         
         function initializeController() {
@@ -46,12 +54,23 @@ app.directive("vrQmClitesterProfilesettings", [function () {
             api.getData = function () {
                 return {
                     $type: "QM.CLITester.iTestIntegration.ProfileExtensionSettings, QM.CLITester.iTestIntegration",
-                    RingTime: $scope.ringTime
+                    Type: $scope.selectedProfileType.value,
+                    GatewayIP: $scope.gatewayIP,
+                    GatewayPort: $scope.gatewayPort,
+                    SourceNumber: $scope.sourceNumber,
+                    CallTime: $scope.callTime,
+                    ringTime: $scope.ringTime
                 };
             };
 
             api.load = function (payload) {
                 if (payload != undefined) {
+
+                    $scope.selectedProfileType = UtilsService.getItemByVal($scope.profileTypes, payload.Type, "value");
+                    $scope.gatewayIP= payload.GatewayIP;
+                    $scope.gatewayPort= payload.GatewayPort;
+                    $scope.sourceNumber= payload.SourceNumber;
+                    $scope.callTime= payload.CallTime;
                     $scope.ringTime = payload.RingTime;
                 }
             }

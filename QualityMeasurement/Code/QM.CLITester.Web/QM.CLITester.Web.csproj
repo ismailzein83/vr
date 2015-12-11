@@ -180,6 +180,7 @@
     <Content Include="QM_CLITester\Constant\CallTestResultEnum.js" />
     <Content Include="QM_CLITester\Constant\CallTestStatusEnum.js" />
     <Content Include="QM_CLITester\Constant\ModuleConfig.js" />
+    <Content Include="QM_CLITester\Constant\ProfileTypeEnum.js" />
     <Content Include="QM_CLITester\Directives\Profile\Templates\ProfileSettngsDirectiveTemplate.html" />
     <Content Include="QM_CLITester\Directives\Profile\Templates\ProfileGridTemplate.html" />
     <Content Include="QM_CLITester\Directives\Profile\vr-qm-clitester-profile-grid.js" />
