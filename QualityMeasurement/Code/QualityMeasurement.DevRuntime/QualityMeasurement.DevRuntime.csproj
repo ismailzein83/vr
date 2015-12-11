@@ -184,6 +184,10 @@
       <Project>{e4d4007f-5889-4d28-9c4e-710d8908a60f}</Project>
       <Name>QM.BusinessEntity.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\QM.BusinessEntity.Data.SQL\QM.BusinessEntity.Data.SQL.csproj">
+      <Project>{e44a16ba-5fcf-412b-8405-dfd0b8c91529}</Project>
+      <Name>QM.BusinessEntity.Data.SQL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\QM.BusinessEntity.Entities\QM.BusinessEntity.Entities.csproj">
       <Project>{b610fb7a-8278-4c68-bf4f-09c94bc5a8d0}</Project>
       <Name>QM.BusinessEntity.Entities</Name>

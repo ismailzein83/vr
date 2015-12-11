@@ -24,13 +24,13 @@ namespace QM.BusinessEntity.MainExtensions.SourceSuppliersReaders
             List<SourceSupplier> lst = new List<SourceSupplier>();
             lst.Add(new SourceSupplier
             {
-                Name = "TOne V2",
-                SourceId = "TV22"
+                Name = "TOne V2 test",
+                SourceId = "1"
             });
             lst.Add(new SourceSupplier
             {
                 Name = "TOne V2",
-                SourceId = "TV22"
+                SourceId = "2"
             });
             return lst;
         }

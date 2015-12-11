@@ -13,7 +13,10 @@ namespace QM.BusinessEntity.Data
 
         bool Insert(Supplier supplier);
 
-        bool Update(Supplier supplier);
+        bool Update(Supplier supplier);       
+        void InsertSynchronize(Supplier supplier);
+
+        void UpdateSynchronize(Supplier supplier);
 
         bool AreSuppliersUpdated(ref object updateHandle);
     }

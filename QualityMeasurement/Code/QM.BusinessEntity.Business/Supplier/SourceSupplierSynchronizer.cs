@@ -17,12 +17,20 @@ namespace QM.BusinessEntity.Business
 
         protected override void AddItems(List<Supplier> itemsToAdd)
         {
-            throw new NotImplementedException();
+            SupplierManager supplierManager = new SupplierManager();
+            foreach (var s in itemsToAdd)
+            {
+                supplierManager.InsertSupplierSynchronize(s);
+            }
         }
 
         protected override void UpdateItems(List<Supplier> itemsToUpdate)
         {
-            throw new NotImplementedException();
+            SupplierManager supplierManager = new SupplierManager();
+            foreach (var s in itemsToUpdate)
+            {
+                supplierManager.UpdateSupplierSynchronize(s);
+            }
         }
 
         protected override Supplier BuildItemFromSource(SourceSupplier sourceItem)
@@ -36,7 +44,8 @@ namespace QM.BusinessEntity.Business
 
         protected override Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds)
         {
-            throw new NotImplementedException();
+            SupplierManager supplierManager = new SupplierManager();
+            return supplierManager.GetExistingItemIds(sourceItemIds);
         }
 
         protected override void ReserveIdRange(int nbOfIds, out long startingId)

@@ -22,6 +22,7 @@ namespace QM.BusinessEntity.Data.SQL
             {
                 SupplierId = (int)reader["ID"],
                 Name = reader["Name"] as string,
+                SourceId = reader["SourceSupplierID"] as string,
                 Settings = Vanrise.Common.Serializer.Deserialize<SupplierSettings>(reader["Settings"] as string)
             };
             return supplier;
@@ -31,6 +32,7 @@ namespace QM.BusinessEntity.Data.SQL
         {
             return GetItemsSP("[QM_BE].[sp_Supplier_GetAll]", SupplierMapper);
         }
+       
 
         public bool Insert(Supplier supplier)
         {
@@ -50,6 +52,17 @@ namespace QM.BusinessEntity.Data.SQL
             return (recordsEffected > 0);
         }
 
+        public void InsertSynchronize(Supplier supplier)
+        {
+           ExecuteNonQuerySP("[QM_BE].[sp_Supplier_InsertSynchronize]", supplier.SupplierId, supplier.Name , supplier.SourceId);
+        }
+
+        public void UpdateSynchronize(Supplier supplier)
+        {
+           
+           ExecuteNonQuerySP("[QM_BE].[sp_Supplier_UpdateSynchronize]", supplier.SupplierId, supplier.Name);
+           // return (recordsEffected > 0);
+        }
         public bool AreSuppliersUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("QM_BE.Supplier", ref updateHandle);

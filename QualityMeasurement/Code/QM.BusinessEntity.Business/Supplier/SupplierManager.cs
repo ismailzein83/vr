@@ -28,7 +28,16 @@ namespace QM.BusinessEntity.Business
             var suppliers = GetCachedSuppliers();
             return suppliers.GetRecord(supplierId);
         }
-
+        public Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds)
+        {
+            Dictionary<string, long> existingItemIds = new Dictionary<string, long>();
+            foreach (var item in GetCachedSuppliers())
+            {
+                if (sourceItemIds.Contains(item.Value.SourceId))
+                    existingItemIds.Add(item.Value.SourceId, (long)item.Value.SupplierId);
+            }
+            return existingItemIds;
+        }
         public IEnumerable<SupplierInfo> GetSuppliersInfo()
         {
             var suppliers = GetCachedSuppliers();
@@ -99,6 +108,19 @@ namespace QM.BusinessEntity.Business
             return updateOperationOutput;
         }
 
+        public void InsertSupplierSynchronize(Supplier supplier){
+            long startingId;
+            ReserveIDRange(1, out startingId);
+            supplier.SupplierId = (int)startingId;
+            ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
+            dataManager.InsertSynchronize(supplier);            
+        }
+        public void UpdateSupplierSynchronize(Supplier supplier)
+        {
+
+            ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
+            dataManager.UpdateSynchronize(supplier);
+        }
         public List<Vanrise.Entities.TemplateConfig> GetSupplierSourceTemplates()
         {
 
