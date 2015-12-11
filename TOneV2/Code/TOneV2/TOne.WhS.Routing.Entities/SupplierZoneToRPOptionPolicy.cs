@@ -9,7 +9,7 @@ namespace TOne.WhS.Routing.Entities
     public abstract class SupplierZoneToRPOptionPolicy
     {
         public int ConfigId { get; set; }
-
+        public bool IsDefault { get; set; }
         public abstract void Execute(ISupplierZoneToRPOptionPolicyExecutionContext context);
     }    
 }

@@ -40,7 +40,7 @@ namespace TestRuntime
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
-            RunCompleteRouteBuild();
+            //RunCompleteRouteBuild();
             //RunCompleteProductRouteBuild();
             //RunPartialRouteBuild();
         }
@@ -57,7 +57,7 @@ namespace TestRuntime
                     CodePrefixLength = 1,
                     IsFuture = false,
                     SaleZoneRange = 1000,
-                    SupplierZoneRPOptionPolicies = new List<SupplierZoneToRPOptionPolicy>() { new SupplierZoneToRPOptionHighestRatePolicy() { ConfigId = 1 }, new SupplierZoneToRPOptionLowestRatePolicy() { ConfigId = 2 }, new SupplierZoneToRPOptionAverageRatePolicy() { ConfigId = 3 } },
+                    SupplierZoneRPOptionPolicies = new List<SupplierZoneToRPOptionPolicy>() { new SupplierZoneToRPOptionHighestRatePolicy() { ConfigId = 27, IsDefault = true }, new SupplierZoneToRPOptionLowestRatePolicy() { ConfigId = 29 } },
                     RoutingProcessType = RoutingProcessType.RoutingProductRoute
                 }
             });
@@ -73,7 +73,8 @@ namespace TestRuntime
                     CodePrefixLength = 2,
                     EffectiveTime = DateTime.Now,
                     RoutingDatabaseType = RoutingDatabaseType.Current,
-                    RoutingProcessType = RoutingProcessType.CustomerRoute
+                    RoutingProcessType = RoutingProcessType.CustomerRoute,
+                    DivideProcessIntoSubProcesses = false
                 }
 
             });

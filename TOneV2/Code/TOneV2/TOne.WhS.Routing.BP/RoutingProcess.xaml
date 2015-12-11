@@ -97,7 +97,7 @@
         </InArgument>
       </twrba1:DropOldRoutingDatabases.ProcessType>
     </twrba1:DropOldRoutingDatabases>
-    <twrba1:CreateRoutingDatabase sap2010:WorkflowViewState.IdRef="CreateRoutingDatabase_2">
+    <twrba1:CreateRoutingDatabase>
       <twrba1:CreateRoutingDatabase.DatabaseId>
         <OutArgument x:TypeArguments="x:Int32">
           <mca:CSharpReference x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpReference>
@@ -108,6 +108,11 @@
           <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveTime</mca:CSharpValue>
         </InArgument>
       </twrba1:CreateRoutingDatabase.EffectiveTime>
+      <twrba1:CreateRoutingDatabase.Policies>
+        <InArgument x:TypeArguments="scg:List(twre:SupplierZoneToRPOptionPolicy)">
+          <mca:CSharpValue x:TypeArguments="scg:List(twre:SupplierZoneToRPOptionPolicy)">null</mca:CSharpValue>
+        </InArgument>
+      </twrba1:CreateRoutingDatabase.Policies>
       <twrba1:CreateRoutingDatabase.ProcessType>
         <InArgument x:TypeArguments="twre:RoutingProcessType">
           <mca:CSharpValue x:TypeArguments="twre:RoutingProcessType">Input.RoutingProcessType</mca:CSharpValue>
@@ -118,6 +123,7 @@
           <mca:CSharpValue x:TypeArguments="twre:RoutingDatabaseType">Input.RoutingDatabaseType</mca:CSharpValue>
         </InArgument>
       </twrba1:CreateRoutingDatabase.Type>
+      <sap2010:WorkflowViewState.IdRef>CreateRoutingDatabase_3</sap2010:WorkflowViewState.IdRef>
     </twrba1:CreateRoutingDatabase>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
       <twrba1:GetActiveCustomerInfos sap2010:WorkflowViewState.IdRef="GetActiveCustomerInfos_1">
@@ -262,13 +268,13 @@
         </InArgument>
       </twrba1:SetRoutingDatabaseReady.RoutingDatabaseId>
     </twrba1:SetRoutingDatabaseReady>
-    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ1Byb2Nlc3MueGFtbC1DA4oCDgIBAUgLSKcBAgESTQtNpwECAQpSC1KKAQIBAlgFXBEDAeYBXQVjJgMB3QFkBXkkAwG8AXoFnwEQAwGIAaABBdcBEAIBVdgBBYECFwIBI4ICBYgCJgIBGloJWnsDAecBYAtgcAMB3gFxC3FwAwHVAWwLbGoDAc0BZwtnYQMBxQF2C3ZyAwG9AXsHgQEnAwGzAYIBB4gBJwMBqgGJAQeeASQDAYkBoQEHuwErAgFvvAEH1gErAgFW2wEL2wFuAgFN4gEJ/wEUAgEkhQILhQJZAgEbfg1+iAEDAbQBhQENhQGHAQMBqwGRAQ2RAXgDAaIBlgENlgFsAwGaAYwBDYwBYAMBkgGbAQ2bAVQDAYoBqQENqQFsAwGAAa4BDa4BWwIBeKQBDaQBgAECAXC/AQ2/AWwCAWfEAQ3EAVsCAV/JAQ3JAX8CAVfjAQvuARwCATnvAQv+ARACASXmARHmAckCAgFE6wER6wGEAQIBO+MBfOMBggECATryARHyAbMBAgEm9gEP/AEjAgEv+QEV+QHJAQIBMA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ1Byb2Nlc3MueGFtbC5DA5ACDgIBAUgLSKcBAgESTQtNpwECAQpSC1KKAQIBAlgFXBEDAe4BXQVjJgMB5QFkBX8kAwG8AYABBaUBEAMBiAGmAQXdARACAVXeAQWHAhcCASOIAgWOAiYCARpaCVp7AwHvAWALYHADAeYBdgt2cAMB3QFsC2xqAwHVAWcLZ2EDAc0Bewt7cgMBxQFxC3FwAwG9AYEBB4cBJwMBswGIAQeOAScDAaoBjwEHpAEkAwGJAacBB8EBKwIBb8IBB9wBKwIBVuEBC+EBbgIBTegBCYUCFAIBJIsCC4sCWQIBG4QBDYQBiAEDAbQBiwENiwGHAQMBqwGXAQ2XAXgDAaIBnAENnAFsAwGaAZIBDZIBYAMBkgGhAQ2hAVQDAYoBrwENrwFsAwGAAbQBDbQBWwIBeKoBDaoBgAECAXDFAQ3FAWwCAWfKAQ3KAVsCAV/PAQ3PAX8CAVfpAQv0ARwCATn1AQuEAhACASXsARHsAckCAgFE8QER8QGEAQIBO+kBfOkBggECATr4ARH4AbMBAgEm/AEPggIjAgEv/wEV/wHJAQIBMA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="794,62" />
       <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="794,22" />
-      <sap2010:ViewStateData Id="CreateRoutingDatabase_2" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="CreateRoutingDatabase_3" sap:VirtualizedContainerService.HintSize="794,22" />
       <sap2010:ViewStateData Id="GetActiveCustomerInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetActiveSupplierInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareCodePrefixes_1" sap:VirtualizedContainerService.HintSize="200,40" />

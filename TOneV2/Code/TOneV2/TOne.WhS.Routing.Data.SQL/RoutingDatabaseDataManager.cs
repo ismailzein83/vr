@@ -24,10 +24,10 @@ namespace TOne.WhS.Routing.Data.SQL
         /// <param name="type">Routing Database Type</param>
         /// <param name="effectiveTime">Effective Date</param>
         /// <returns>Created Routing Database Id</returns>
-        public int CreateDatabase(string name, RoutingDatabaseType type, RoutingProcessType processType, DateTime? effectiveTime)
+        public int CreateDatabase(string name, RoutingDatabaseType type, RoutingProcessType processType, DateTime? effectiveTime, RoutingDatabaseInformation information)
         {
             object obj;
-            if (ExecuteNonQuerySP("TOneWhS_Routing.sp_RoutingDatabase_Insert", out obj, name, (byte)type, (byte)processType, effectiveTime) > 0)
+            if (ExecuteNonQuerySP("TOneWhS_Routing.sp_RoutingDatabase_Insert", out obj, name, (byte)type, (byte)processType, effectiveTime, information != null ? Vanrise.Common.Serializer.Serialize(information) : null) > 0)
             {
                 int databaseId = (int)obj;
                 RoutingDataManager routingDataManager = new RoutingDataManager();
@@ -39,6 +39,8 @@ namespace TOne.WhS.Routing.Data.SQL
             else
                 throw new Exception(String.Format("Could not add Routing Database '{0}' to database table", name));
         }
+
+
 
         /// <summary>
         /// Update Routing Ready Status to true.
@@ -92,19 +94,21 @@ namespace TOne.WhS.Routing.Data.SQL
 
         RoutingDatabase RoutingDatabaseMapper(IDataReader reader)
         {
+            RoutingProcessType processType = GetReaderValue<RoutingProcessType>(reader, "ProcessType");
             return new RoutingDatabase
             {
                 ID = (int)reader["ID"],
                 Title = reader["Title"] as string,
                 IsReady = GetReaderValue<bool>(reader, "IsReady"),
                 Type = GetReaderValue<RoutingDatabaseType>(reader, "Type"),
-                ProcessType = GetReaderValue<RoutingProcessType>(reader, "ProcessType"),
+                ProcessType = processType,
                 EffectiveTime = (DateTime?)reader["EffectiveTime"],
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
-                ReadyTime = GetReaderValue<DateTime>(reader, "ReadyTime")
+                ReadyTime = GetReaderValue<DateTime>(reader, "ReadyTime")//,
+                //Information = reader["Information"] != null ? Vanrise.Common.Serializer.Deserialize<RoutingDatabaseInformation>(reader["Information"].ToString()) : null
             };
         }
-        
+
         public List<RoutingDatabase> GetNotDeletedDatabases(RoutingProcessType processType)
         {
             return GetItemsSP("[TOneWhS_Routing].[sp_RoutingDatabase_GetNotDeletedByType]", RoutingDatabaseMapper, (byte)processType);

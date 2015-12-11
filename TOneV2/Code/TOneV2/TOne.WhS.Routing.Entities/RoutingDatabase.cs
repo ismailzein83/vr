@@ -18,5 +18,15 @@ namespace TOne.WhS.Routing.Entities
         public bool IsReady { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime ReadyTime { get; set; }
+        public RoutingDatabaseInformation Information { get; set; }
+    }
+
+    public abstract class RoutingDatabaseInformation
+    {
+    }
+    public class RPRoutingDatabaseInformation : RoutingDatabaseInformation
+    {
+        public int DefaultPolicyId { get; set; }
+        public int[] SelectedPoliciesIds { get; set; }
     }
 }

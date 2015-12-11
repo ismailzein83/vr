@@ -88,7 +88,7 @@
         </InArgument>
       </twrba1:DropOldRoutingDatabases.ProcessType>
     </twrba1:DropOldRoutingDatabases>
-    <twrba1:CreateRoutingDatabase sap2010:WorkflowViewState.IdRef="CreateRoutingDatabase_1">
+    <twrba1:CreateRoutingDatabase>
       <twrba1:CreateRoutingDatabase.DatabaseId>
         <OutArgument x:TypeArguments="x:Int32">
           <mca:CSharpReference x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpReference>
@@ -99,6 +99,11 @@
           <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveOn</mca:CSharpValue>
         </InArgument>
       </twrba1:CreateRoutingDatabase.EffectiveTime>
+      <twrba1:CreateRoutingDatabase.Policies>
+        <InArgument x:TypeArguments="scg:List(twre:SupplierZoneToRPOptionPolicy)">
+          <mca:CSharpValue x:TypeArguments="scg:List(twre:SupplierZoneToRPOptionPolicy)">Input.SupplierZoneRPOptionPolicies</mca:CSharpValue>
+        </InArgument>
+      </twrba1:CreateRoutingDatabase.Policies>
       <twrba1:CreateRoutingDatabase.ProcessType>
         <InArgument x:TypeArguments="twre:RoutingProcessType">
           <mca:CSharpValue x:TypeArguments="twre:RoutingProcessType">Input.RoutingProcessType</mca:CSharpValue>
@@ -109,6 +114,7 @@
           <mca:CSharpValue x:TypeArguments="twre:RoutingDatabaseType">Input.RoutingDatabaseType</mca:CSharpValue>
         </InArgument>
       </twrba1:CreateRoutingDatabase.Type>
+      <sap2010:WorkflowViewState.IdRef>CreateRoutingDatabase_2</sap2010:WorkflowViewState.IdRef>
     </twrba1:CreateRoutingDatabase>
     <Parallel DisplayName="Parallel_PrepareEntities" sap2010:WorkflowViewState.IdRef="Parallel_1">
       <twrba1:GetActiveSupplierInfos sap2010:WorkflowViewState.IdRef="GetActiveSupplierInfos_1">
@@ -307,12 +313,12 @@
         </InArgument>
       </twrba1:SetRoutingDatabaseReady.RoutingDatabaseId>
     </twrba1:SetRoutingDatabaseReady>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sNUYDtwIOAgEBUAtQrQECAQJUBVomAwG4AlsFcCQDAZMCcQWPARADAeMBkAEFqgEpAwHHAasBBd0BFwMBjAHeAQXuASUCAXDvAQX/AR8CAVSAAgWuAhcCARWvAgW1AiYCAQtXC1dwAwG5AmgLaHADAa8CYwtjaAMBpgJeC15hAwGdAm0LbXIDAZQCcgd4JwMBiQJ5B44BJAMB5AGTAQuTAWgDAdoBmAELmAFZAwHRAZ0BC50BdgMByAGuAQuuAWYDAb4BtQEJ2wEUAwGNAeYBC+YBWAMBgwHhAQvhAWgCAXrrAQvrAWUCAXHyAQvyAVsCAWf3AQv3AXICAV78AQv8AV0CAVWDAguDAngCAUuKAgmsAhQCARayAguyAlkCAQx1DXWAAQMBigKBAQ2BAXADAYAChgENhgFqAwH3AXwNfGADAe4BiwENiwFaAwHlAbkBC8oBHAMBpgHLAQvaARADAY4BjwILmwIcAgExnAILqwIQAgEXvAERwgEgAwGzAccBEccBhAEDAagBuQF8uQGCAQMBpwHOARHOAZEBAwGPAdIBD9gBIwMBmgGSAhGTAqMBAgE/mAIRmAKLAQIBM48CfI8CggECATKfAhGfApkBAgEYowIPqQIjAgEk1QEV1QHJAQMBmwGmAhWmAoACAgEl</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sNkYDvQIOAgEBUAtQrQECAQJUBVomAwHBAlsFdiQDAZMCdwWVARADAeMBlgEFsAEpAwHHAbEBBeMBFwMBjAHkAQX0ASUCAXD1AQWFAh8CAVSGAgW0AhcCARW1AgW7AiYCAQtXC1dwAwHCAm0LbXADAbgCYwtjaAMBrwJeC15hAwGmAnILcnIDAZ0CaAtojgEDAZQCeAd+JwMBiQJ/B5QBJAMB5AGZAQuZAWgDAdoBngELngFZAwHRAaMBC6MBdgMByAG0AQu0AWYDAb4BuwEJ4QEUAwGNAewBC+wBWAMBgwHnAQvnAWgCAXrxAQvxAWUCAXH4AQv4AVsCAWf9AQv9AXICAV6CAguCAl0CAVWJAguJAngCAUuQAgmyAhQCARa4Agu4AlkCAQx7DXuAAQMBigKHAQ2HAXADAYACjAENjAFqAwH3AYIBDYIBYAMB7gGRAQ2RAVoDAeUBvwEL0AEcAwGmAdEBC+ABEAMBjgGVAguhAhwCATGiAguxAhACARfCARHIASADAbMBzQERzQGEAQMBqAG/AXy/AYIBAwGnAdQBEdQBkQEDAY8B2AEP3gEjAwGaAZgCEZkCowECAT+eAhGeAosBAgEzlQJ8lQKCAQIBMqUCEaUCmQECARipAg+vAiMCASTbARXbAckBAwGbAawCFawCgAICASU=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="CreateRoutingDatabase_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="CreateRoutingDatabase_2" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="GetActiveSupplierInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareCodePrefixes_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />

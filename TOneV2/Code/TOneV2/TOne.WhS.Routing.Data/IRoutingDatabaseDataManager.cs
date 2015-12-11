@@ -9,7 +9,7 @@ namespace TOne.WhS.Routing.Data
 {
     public interface IRoutingDatabaseDataManager : IDataManager
     {
-        int CreateDatabase(string name, RoutingDatabaseType type, RoutingProcessType processType, DateTime? effectiveTime);
+        int CreateDatabase(string name, RoutingDatabaseType type, RoutingProcessType processType, DateTime? effectiveTime, RoutingDatabaseInformation information);
         bool SetReady(int databaseId);
         List<RoutingDatabase> GetNotDeletedDatabases();
         List<RoutingDatabase> GetNotDeletedDatabases(RoutingProcessType processType);

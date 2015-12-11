@@ -175,6 +175,12 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byrate.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\vr-whs-routing-routerulesettings-percentage-fixed.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\vr-whs-routing-routerulesettings-selective.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\SupplierZoneToRPOptionPolicies\Templates\SupplierZoneToRPOptionAverageRatePolicy.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\SupplierZoneToRPOptionPolicies\Templates\SupplierZoneToRPOptionHighestRatePolicy.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\SupplierZoneToRPOptionPolicies\Templates\SupplierZoneToRPOptionLowestRatePolicy.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\SupplierZoneToRPOptionPolicies\vr-whs-routing-policy-rate-average.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\SupplierZoneToRPOptionPolicies\vr-whs-routing-policy-rate-highest.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\SupplierZoneToRPOptionPolicies\vr-whs-routing-policy-rate-lowest.js" />
     <Content Include="WhS_Routing\Directives\RPRoute\Templates\RPRouteDetailTemplate.html" />
     <Content Include="WhS_Routing\Directives\RPRoute\Templates\RPRouteGridTemplate.html" />
     <Content Include="WhS_Routing\Directives\RPRoute\Templates\ZoneRouteOptionsTemplate.html" />
@@ -192,7 +198,9 @@
     <Content Include="WhS_Routing\Services\APIServices\RoutingDatabaseAPIService.js" />
     <Content Include="WhS_Routing\Services\RouteRuleService.js" />
     <Content Include="WhS_Routing\Services\RPRouteService.js" />
+    <Content Include="WhS_Routing\Views\ProcessInputTemplates\RPBuildProductRoutesProcess.html" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRouteProcess.html" />
+    <Content Include="WhS_Routing\Views\ProcessInputTemplates\RPBuildProductRoutesProcessController.js" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRouteProcessController.js" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRoutesByCodePrefix.html" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRoutesByCodePrefixController.js" />

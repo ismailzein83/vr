@@ -15,7 +15,7 @@ namespace TOne.WhS.Routing.BP.Arguments
         public RoutingProcessType RoutingProcessType { get; set; }
         public bool IsFuture { get; set; }
         public int SaleZoneRange { get; set; }
-        public IEnumerable<SupplierZoneToRPOptionPolicy> SupplierZoneRPOptionPolicies { get; set; }
+        public List<SupplierZoneToRPOptionPolicy> SupplierZoneRPOptionPolicies { get; set; }
         public override string GetTitle()
         {
             return String.Format("RP Routing Process for Effective Time {0}", EffectiveOn);
