@@ -23,6 +23,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public InArgument<ZonesByName> NewAndExistingZones { get; set; }
 
+        [RequiredArgument]
+        public OutArgument<IEnumerable<NewRate>> NewRates { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<IEnumerable<ChangedRate>> ChangedRates { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             Dictionary<long, ExistingZone> existingZonesByZoneId = this.ExistingZonesByZoneId.Get(context);

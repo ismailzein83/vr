@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.SupplierPriceList.Data;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -13,6 +14,13 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             ISupplierPriceListDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
             return dataManager.AddSupplierPriceList(supplierAccountId,currencyId, out supplierPriceListId);
+        }
+
+        public long ReserveIDRange(int numberOfIDs)
+        {
+            long startingId;
+            IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIDs, out startingId);
+            return startingId;
         }
     }
 }

@@ -65,6 +65,13 @@
       <Variable x:TypeArguments="scg:IEnumerable(twses:ExistingCode)" Name="ExistingCodes" />
       <Variable x:TypeArguments="scg:IEnumerable(twses:ExistingRate)" Name="ExistingRates" />
       <Variable x:TypeArguments="twses:ZonesByName" Name="NewAndExistingZones" />
+      <Variable x:TypeArguments="scg:IEnumerable(twses:NewCode)" Name="NewCodes" />
+      <Variable x:TypeArguments="scg:IEnumerable(twses:NewZone)" Name="NewZones" />
+      <Variable x:TypeArguments="scg:IEnumerable(twses:ChangedCode)" Name="ChangedCodes" />
+      <Variable x:TypeArguments="scg:IEnumerable(twses:ChangedZone)" Name="ChangedZones" />
+      <Variable x:TypeArguments="scg:IEnumerable(twses:NewRate)" Name="NewRates" />
+      <Variable x:TypeArguments="scg:IEnumerable(twses:ChangedRate)" Name="ChangedRates" />
+      <Variable x:TypeArguments="x:Int32" Name="PriceListId" />
     </Sequence.Variables>
     <twsba1:GetDataFromPriceList sap2010:WorkflowViewState.IdRef="GetDataFromPriceList_1">
       <twsba1:GetDataFromPriceList.EffectiveDate>
@@ -195,6 +202,16 @@
       </twsba1:PrepareExistingRates>
     </Parallel>
     <twsba1:ProcessCountryCodes sap2010:WorkflowViewState.IdRef="ProcessCountryCodes_1">
+      <twsba1:ProcessCountryCodes.ChangedCodes>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twses:ChangedCode)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ChangedCode)">ChangedCodes</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ProcessCountryCodes.ChangedCodes>
+      <twsba1:ProcessCountryCodes.ChangedZones>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twses:ChangedZone)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ChangedZone)">ChangedZones</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ProcessCountryCodes.ChangedZones>
       <twsba1:ProcessCountryCodes.DeletedCodesDate>
         <InArgument x:TypeArguments="s:DateTime">
           <mca:CSharpValue x:TypeArguments="s:DateTime">Input.DeletedCodesDate</mca:CSharpValue>
@@ -220,8 +237,23 @@
           <mca:CSharpReference x:TypeArguments="twses:ZonesByName">NewAndExistingZones</mca:CSharpReference>
         </OutArgument>
       </twsba1:ProcessCountryCodes.NewAndExistingZones>
+      <twsba1:ProcessCountryCodes.NewCodes>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twses:NewCode)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NewCode)">NewCodes</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ProcessCountryCodes.NewCodes>
+      <twsba1:ProcessCountryCodes.NewZones>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twses:NewZone)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NewZone)">NewZones</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ProcessCountryCodes.NewZones>
     </twsba1:ProcessCountryCodes>
     <twsba1:ProcessCountryRates sap2010:WorkflowViewState.IdRef="ProcessCountryRates_1">
+      <twsba1:ProcessCountryRates.ChangedRates>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twses:ChangedRate)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ChangedRate)">ChangedRates</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ProcessCountryRates.ChangedRates>
       <twsba1:ProcessCountryRates.ExistingRates>
         <OutArgument x:TypeArguments="scg:IEnumerable(twses:ExistingRate)">
           <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ExistingRate)">ExistingRates</mca:CSharpReference>
@@ -242,8 +274,35 @@
           <mca:CSharpValue x:TypeArguments="twses:ZonesByName">NewAndExistingZones</mca:CSharpValue>
         </InArgument>
       </twsba1:ProcessCountryRates.NewAndExistingZones>
+      <twsba1:ProcessCountryRates.NewRates>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twses:NewRate)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NewRate)">NewRates</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ProcessCountryRates.NewRates>
     </twsba1:ProcessCountryRates>
-    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWwrOAP3AQ4CAQFFBV8jAwHEAmAFlAEQAwHUAZUBBaABIwMBuwGhAQXEARACAXDFAQXfASICATPgAQX1ASICAQJcC1xeAwH1AkgLSGoDAekCVwtXeQMB3QJNC01UAwHRAlILUnkDAcUCYQdxIQMBnwJyB4IBIQMB+gGDAQeTASEDAdUBmAELmAF3AwHIAZ0BC50BiQEDAbwBogEHsgElAwGWAbMBB8MBJQIBcc0BC80BcQIBZMgBC8gBYQIBWNIBC9IBgQECAUzcAQvcAW0CAUDXAQvXAXECATTjAQvjAXkCASftAQvtAXECARvoAQvoAYEBAgEP8gEL8gFlAgEDZA1kgQEDAbgCbg1uYQMBrAJpDWlYAwGgAnUNdYEBAwGTAn8Nf2EDAYcCeg16WAMB+wGQAQ2QAWEDAe4BhgENhgGBAQMB4gGLAQ2LAVgDAdYBqgENqgF7AwGvAaUBDaUBeQMBowGvAQ2vAYMBAwGXAbYBDbYBeQMBigG7AQ27AXsCAX7AAQ3AAYMBAgFy</sads:DebugSymbol.Symbol>
+    <twsba1:ReserveIdsForNewEntities sap2010:WorkflowViewState.IdRef="ReserveIdsForNewEntities_1">
+      <twsba1:ReserveIdsForNewEntities.NewCodes>
+        <InArgument x:TypeArguments="scg:IEnumerable(twses:NewCode)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewCode)">NewCodes</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ReserveIdsForNewEntities.NewCodes>
+      <twsba1:ReserveIdsForNewEntities.NewRates>
+        <InArgument x:TypeArguments="scg:IEnumerable(twses:NewRate)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewRate)">NewRates</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ReserveIdsForNewEntities.NewRates>
+      <twsba1:ReserveIdsForNewEntities.NewZones>
+        <InArgument x:TypeArguments="scg:IEnumerable(twses:NewZone)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewZone)">NewZones</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ReserveIdsForNewEntities.NewZones>
+      <twsba1:ReserveIdsForNewEntities.PriceListId>
+        <OutArgument x:TypeArguments="x:Int32">
+          <mca:CSharpReference x:TypeArguments="x:Int32">PriceListId</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ReserveIdsForNewEntities.PriceListId>
+    </twsba1:ReserveIdsForNewEntities>
+    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWw2OAOyAg4CAQFMBWYjAwG5BWcFmwEQAwGKBJwBBacBIwMB4wOoAQXLARADAe4CzAEF+gEiAwHCAfsBBZoCIgIBT5sCBbACJwIBAmMLY14DAYYGTwtPagMB8wVeC155AwHgBVQLVFQDAc0FWQtZeQMBugVoB3ghAwH/BHkHiQEhAwHFBIoBB5oBIQMBiwSfAQufAXcDAfcDpAELpAGJAQMB5AOpAQe5ASUDAakDugEHygElAwHvAt4BC94BcQMB2wLyAQvyAW8DAcgC2QEL2QFhAwG1As8BC88BdwMBogL3AQv3AW8DAY8C4wEL4wGBAQMB/AHtAQvtAW0DAekB1AEL1AF3AwHWAegBC+gBcQMBwwH+AQv+AXcDAa8BlwILlwJvAwGcAYMCC4MCeQMBiQGNAguNAnECAXaIAguIAoEBAgFjkgILkgJlAgFQrQILrQJbAgE8ngILngJnAgEpowILowJnAgEWqAILqAJnAgEDaw1rgQEDAaYFdQ11YQMBkwVwDXBYAwGABXwNfIEBAwHsBIYBDYYBYQMB2QSBAQ2BAVgDAcYElwENlwFhAwGyBI0BDY0BgQEDAZ8EkgENkgFYAwGMBLEBDbEBewMB0AOsAQ2sAXkDAb0DtgENtgGDAQMBqgO9AQ29AXkDAZYDwgENwgF7AwGDA8cBDccBgwEDAfAC</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -258,14 +317,15 @@
       <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="794,86" />
       <sap2010:ViewStateData Id="ProcessCountryCodes_1" sap:VirtualizedContainerService.HintSize="794,22" />
       <sap2010:ViewStateData Id="ProcessCountryRates_1" sap:VirtualizedContainerService.HintSize="794,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,584">
+      <sap2010:ViewStateData Id="ReserveIdsForNewEntities_1" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,646">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="856,664" />
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="856,726" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -53,22 +53,32 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_Routing_RPRouteAPIService.GetFilteredRPRoutes(dataRetrievalInput)
-                   .then(function (response) {
+                var loadGridPromiseDeffered = UtilsService.createPromiseDeferred();
 
+                WhS_Routing_RPRouteAPIService.GetFilteredRPRoutes(dataRetrievalInput)
+                   .then(function (response) {
+                       var promises = [];
                        if (response.Data != undefined) {
                            for (var i = 0; i < response.Data.length; i++) {
                                var rpRouteDetail = response.Data[i];
                                gridDrillDownTabsObj.setDrillDownExtensionObject(rpRouteDetail);
-                               setRouteOptionDetailsDirectiveonEachItem(rpRouteDetail);
+                               promises.push(setRouteOptionDetailsDirectiveonEachItem(rpRouteDetail));
                            }
                        }
 
                        onResponseReady(response);
+
+                       UtilsService.waitMultiplePromises(promises).then(function () {
+                           loadGridPromiseDeffered.resolve();
+                       }).catch(function (error) {
+                           loadGridPromiseDeffered.reject();
+                       });
                    })
                    .catch(function (error) {
-                       VRNotificationService.notifyExceptionWithClose(error, $scope);
+                       VRNotificationService.notifyException(error, $scope);
                    });
+
+                return loadGridPromiseDeffered.promise;
             };
 
             defineMenuActions();
@@ -92,6 +102,8 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
                 };
                 VRUIUtilsService.callDirectiveLoad(rpRouteDetail.RouteOptionsAPI, payload, rpRouteDetail.RouteOptionsLoadDeferred);
             });
+
+            return rpRouteDetail.RouteOptionsLoadDeferred.promise;
         }
 
         function defineMenuActions() {

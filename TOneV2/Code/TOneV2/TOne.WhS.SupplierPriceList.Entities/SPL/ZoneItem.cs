@@ -146,6 +146,8 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
     public class NewCode : Vanrise.Entities.IDateEffectiveSettings
     {
+        public long CodeId { get; set; }
+
         public string Code { get; set; }
 
         public IZone Zone { get; set; }
@@ -161,6 +163,8 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
     public class NewRate : Vanrise.Entities.IDateEffectiveSettings
     {
+        public long RateId { get; set; }
+
         public IZone Zone { get; set; }
 
         public Decimal NormalRate { get; set; }

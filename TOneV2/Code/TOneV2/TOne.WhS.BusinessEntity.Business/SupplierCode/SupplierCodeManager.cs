@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -71,6 +72,13 @@ namespace TOne.WhS.BusinessEntity.Business
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, supplierCodeDetailResult);
+        }
+
+        public long ReserveIDRange(int numberOfIDs)
+        {
+            long startingId;
+            IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIDs, out startingId);
+            return startingId;
         }
 
     }

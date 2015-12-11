@@ -58,12 +58,13 @@ namespace TOne.WhS.BusinessEntity.Business
             return allSupplierZones.MapRecords(SupplierZoneInfoMapper, x => selectedIds.Contains(x.SupplierZoneId));
         }
 
-
         public long ReserveIDRange(int numberOfIDs)
         {
-            ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
-            return dataManager.ReserveIDRange(numberOfIDs);
+            long startingId;
+            IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIDs, out startingId);
+            return startingId;
         }
+
         #region Private Members
 
         List<SupplierZone> GetCachedSupplierZones()
