@@ -53,7 +53,7 @@
 
         function loadingGenericSettings() {
             var loadGenericSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
-            console.log(loadGenericSettingsPromiseDeferred);
+
             genericSettingsReadyPromiseDeferred.promise.then(function () {
                 var payload = loadPayload();
                 console.log(payload);

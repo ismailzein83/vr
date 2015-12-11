@@ -53,8 +53,8 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                     name: "CDRs",
                     clicked: function (dataItem) {
                         var parameters = {
-                            fromDate: ctrl.fromTime,
-                            toDate: ctrl.toTime,
+                            fromDate: UtilsService.cloneDateTime(ctrl.fromTime),
+                            toDate: UtilsService.cloneDateTime(ctrl.toTime),
                             customerIds: [],
                             saleZoneIds: [],
                             supplierIds: [],
@@ -184,6 +184,7 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
 
                 ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     ctrl.showGrid = true;
+
                     return WhS_Analytics_GenericAnalyticAPIService.GetFiltered(dataRetrievalInput)
                         .then(function (response) {
                             if (response.Data != undefined) {
@@ -210,46 +211,47 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                         ctrl.parameters = query.MeasureThreshold;
                         ctrl.mainGrid = false;
                     }
+
+                    if (query.DimensionsSelected != undefined) {
+                        for (var i = 0; i < query.DimensionsSelected.length; i++) {
+                            var enumObj = getEnumIfContain(query.DimensionsSelected[i]);
+                            if (enumObj != undefined)
+                                ctrl.selectedDimensions.push(enumObj);
+                        }
+                    }
+
+                    if (query.DimensionFields != undefined) {
+                        for (var i = 0; i < query.DimensionFields.length; i++) {
+                            var enumObj = getEnumIfContain(query.DimensionFields[i]);
+                            if (enumObj != undefined)
+                            {
+                                ctrl.dimensionFields.push(enumObj);
+                                ctrl.selectedDimensions.push(enumObj);
+                            }
+                        }
+                        dimensionValues = query.DimensionFields;
+                    }
+
+                    if (query.FixedDimensionFields != undefined) {
+                        var enumObj = getEnumIfContain(query.FixedDimensionFields);
+                        if (enumObj != undefined)
+                        {
+                            ctrl.dimensionFields.push(enumObj);
+                            ctrl.selectedDimensions.push(enumObj);
+                            ctrl.selectedPeriods.push(enumObj);
+                            dimensionValues.push(query.FixedDimensionFields);
+                            if (query.FixedDimensionFields == WhS_Analytics_GenericAnalyticDimensionEnum.Hour.value) {
+                                ctrl.dimensionFields.push(WhS_Analytics_GenericAnalyticDimensionEnum.Date);
+                                dimensionValues.push(WhS_Analytics_GenericAnalyticDimensionEnum.Date.value);
+                                ctrl.selectedDimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.Date);
+                                ctrl.selectedPeriods.push(WhS_Analytics_GenericAnalyticDimensionEnum.Date);
+                            }
+                        }
+                    }
+
                     for (var p in WhS_Analytics_GenericAnalyticDimensionEnum) {
-
-                        if (WhS_Analytics_GenericAnalyticDimensionEnum[p].isDimention == true) {
-                            ctrl.dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
-                        }
-
-                        if (query.DimensionsSelected != undefined) {
-                            for (var i = 0; i < query.DimensionsSelected.length; i++) {
-                                if (WhS_Analytics_GenericAnalyticDimensionEnum[p].value == query.DimensionsSelected[i]) {
-                                    ctrl.selectedDimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
-
-                                }
-
-                            }
-                        }
-                        if (query.DimensionFields != undefined) {
-                            for (var i = 0; i < query.DimensionFields.length; i++) {
-                                if (WhS_Analytics_GenericAnalyticDimensionEnum[p].value == query.DimensionFields[i]) {
-                                    ctrl.dimensionFields.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
-                                    ctrl.selectedDimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
-                                }
-
-                            }
-                            dimensionValues = query.DimensionFields;
-                        }
-                        if (query.FixedDimensionFields != undefined) {
-                            if (WhS_Analytics_GenericAnalyticDimensionEnum[p].value == query.FixedDimensionFields) {
-                                ctrl.dimensionFields.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
-                                ctrl.selectedDimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
-                                ctrl.selectedPeriods.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
-                                dimensionValues.push(query.FixedDimensionFields);
-                                if (query.FixedDimensionFields == WhS_Analytics_GenericAnalyticDimensionEnum.Hour.value) {
-                                    ctrl.dimensionFields.push(WhS_Analytics_GenericAnalyticDimensionEnum.Date);
-                                    dimensionValues.push(WhS_Analytics_GenericAnalyticDimensionEnum.Date.value);
-                                    ctrl.selectedDimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.Date);
-                                    ctrl.selectedPeriods.push(WhS_Analytics_GenericAnalyticDimensionEnum.Date);
-                                }
-                            }
-
-                        }
+                      if(WhS_Analytics_GenericAnalyticDimensionEnum[p].isDimention == true)
+                        ctrl.dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
                     }
 
                     if (query.MeasureFields != undefined) {
@@ -259,6 +261,7 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                                     ctrl.selectedMeasures.push(WhS_Analytics_GenericAnalyticMeasureEnum[p]);
                         measureValues = query.MeasureFields;
                     }
+
                     isSummary = $attrs.withsummary != undefined;
                     var queryFinalized = {
                         Filters: query.Filters,
@@ -269,12 +272,21 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                         Currency: query.Currency,
                         WithSummary: isSummary
                     }
-
                     if (ctrl.selectedPeriods.length > 0 || ctrl.selectedDimensions.length > 0)
                         ctrl.sortField = 'DimensionValues[0].Name';
                     else
                         ctrl.sortField = 'MeasureValues.' + ctrl.selectedMeasures[0].name;
                     return queryFinalized;
+                }
+
+                function getEnumIfContain(comparativeValue) {
+                    for (var p in WhS_Analytics_GenericAnalyticDimensionEnum) {
+                        if (WhS_Analytics_GenericAnalyticDimensionEnum[p].value == comparativeValue) {
+                            return WhS_Analytics_GenericAnalyticDimensionEnum[p];
+                        }
+                       
+                    }
+                    return undefined;
                 }
 
                 function applyDimentionsRules(selectedDimensions, dimensions) {

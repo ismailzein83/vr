@@ -156,7 +156,8 @@ function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_
         if (isModalMode && (receivedSaleZoneIds != undefined) && receivedSaleZoneIds.length > 0) {
             return WhS_BE_SaleZoneAPIService.GetSaleZone(receivedSaleZoneIds[0])
                 .then(function (response) {
-                    sellingNumberPlanId = response.SellingNumberPlanId;
+                    if (response!=null)
+                        sellingNumberPlanId = response.SellingNumberPlanId;
                     loadAllControls();
                 });
         } else {
@@ -239,7 +240,7 @@ function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_
         for (var prop in BillingCDROptionMeasureEnum) {
             $scope.CDROption.push(BillingCDROptionMeasureEnum[prop]);
         }
-        $scope.selectedCDROption = $scope.CDROption[2];
+        $scope.selectedCDROption = BillingCDROptionMeasureEnum.All;
     }
 
 };

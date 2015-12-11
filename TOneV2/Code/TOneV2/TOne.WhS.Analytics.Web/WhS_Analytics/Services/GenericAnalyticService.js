@@ -33,73 +33,63 @@
             VRModalService.showModal('/Client/Modules/WhS_Analytics/Views/CDR/CDRLog.html', parameters, {
                 useModalTemplate: true,
                 width: "80%",
-                maxHeight: "800px",
                 title: "CDR Log"
             });
         }
 
         function updateParametersFromDimentions(parameters, ctrl, dataItem) {
+           
             var dimentions = loadDimention();
-            if (ctrl === undefined)
-                return;
 
-            for (var i = 0; i < dimentions.length; i++) {
-                var dimention = dimentions[i];
-                for (var j = 0; j < ctrl.filters.length; j++) {
+            for (var j = 0; j < ctrl.filters.length; j++) {
+                for (var i = 0; i < dimentions.length; i++) {
+
+                    var dimention = dimentions[i];
                     if (dimention.value == ctrl.filters[j].Dimension) {
-
-                        switch (dimention.value) {
-                            case WhS_Analytics_GenericAnalyticDimensionEnum.Zone.value:
-                                parameters.saleZoneIds = ctrl.filters[j].FilterValues;
-                                break;
-                            case WhS_Analytics_GenericAnalyticDimensionEnum.Customer.value:
-                                parameters.customerIds = ctrl.filters[j].FilterValues;
-                                break;
-                            case WhS_Analytics_GenericAnalyticDimensionEnum.Supplier.value:
-                                parameters.supplierIds = ctrl.filters[j].FilterValues;
-                                break;
-                            case WhS_Analytics_GenericAnalyticDimensionEnum.Switch.value:
-                                parameters.switchIds = ctrl.filters[j].FilterValues;
-                                break;
-                            case WhS_Analytics_GenericAnalyticDimensionEnum.SupplierZone.value:
-                                parameters.supplierZoneIds = ctrl.filters[j].FilterValues;
-                                break;
-                        }
+                        var filtervalues = ctrl.filters[j].FilterValues;
+                        for (var k = 0; k < filtervalues.length; k++)
+                            addIdToParameters(dimention.value, filtervalues[k]);
                     }
-
                 }
             }
-            for (var i = 0; i < dimentions.length; i++) {
-                var dimention = dimentions[i];
-                for (var j = 0; j < ctrl.dimensionFields.length; j++) {
+
+            for (var j = 0; j < ctrl.dimensionFields.length; j++) {
+                for (var i = 0; i < dimentions.length; i++) {
+                    var dimention = dimentions[i];
                     if (dimention.value == ctrl.dimensionFields[j].value) {
-                        
-                        switch (dimention.value) {
-                            case WhS_Analytics_GenericAnalyticDimensionEnum.Zone.value:
-                                parameters.saleZoneIds.push(dataItem.DimensionValues[j].Id);
-                                break;
-                            case WhS_Analytics_GenericAnalyticDimensionEnum.Customer.value:
-                                parameters.customerIds.push(dataItem.DimensionValues[j].Id);
-                                break;
-                            case WhS_Analytics_GenericAnalyticDimensionEnum.Supplier.value:
-                                parameters.supplierIds.push(dataItem.DimensionValues[j].Id);
-                                break;
-                            case WhS_Analytics_GenericAnalyticDimensionEnum.Switch.value:
-                                parameters.switchIds.push(dataItem.DimensionValues[j].Id);
-                                break;
-                            case WhS_Analytics_GenericAnalyticDimensionEnum.SupplierZone.value:
-                                parameters.supplierZoneIds.push(dataItem.DimensionValues[j].Id);
-                                break;
-                        }
+                        addIdToParameters(dimention.value, dataItem.DimensionValues[j].Id);
                     }
-                    
                 }
             }
-      
-            
 
-          //  updateParametersFromGroupKeys(parameters, scope.gridParentScope, scope.dataItem);
+            function addIdToParameters(dimentionValue,idToBeAdded) {
+                switch (dimentionValue) {
+                    case WhS_Analytics_GenericAnalyticDimensionEnum.Zone.value:
+                        parameters.saleZoneIds.push(idToBeAdded);
+                        break;
+                    case WhS_Analytics_GenericAnalyticDimensionEnum.Customer.value:
+                        parameters.customerIds.push(idToBeAdded);
+                        break;
+                    case WhS_Analytics_GenericAnalyticDimensionEnum.Supplier.value:
+                        parameters.supplierIds.push(idToBeAdded);
+                        break;
+                    case WhS_Analytics_GenericAnalyticDimensionEnum.Switch.value:
+                        parameters.switchIds.push(idToBeAdded);
+                        break;
+                    case WhS_Analytics_GenericAnalyticDimensionEnum.SupplierZone.value:
+                        parameters.supplierZoneIds.push(idToBeAdded);
+                        break;
+                    case WhS_Analytics_GenericAnalyticDimensionEnum.Date.value:
+                        parameters.fromDate=idToBeAdded;
+                        break;
+                    case WhS_Analytics_GenericAnalyticDimensionEnum.Day.value:
+                        parameters.fromDate = idToBeAdded;
+                        break;
+                }
+            }
+
         }
+
         function loadDimention() {
             var dimentions=[];
             for(var p in WhS_Analytics_GenericAnalyticDimensionEnum )

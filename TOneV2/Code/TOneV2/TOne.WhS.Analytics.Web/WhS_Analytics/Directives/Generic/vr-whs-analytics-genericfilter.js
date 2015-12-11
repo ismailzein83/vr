@@ -191,7 +191,10 @@ function (UtilsService, VRNotificationService, WhS_Analytics_GenericAnalyticDime
                             {
                                 if (WhS_Analytics_GenericAnalyticDimensionEnum[p].value == payload.dimensions[i])
                                     ctrl.dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
+
                             }
+
+                           
                         }
 
                         if (payload.periods != undefined && payload.periods.length > 0)
@@ -202,6 +205,10 @@ function (UtilsService, VRNotificationService, WhS_Analytics_GenericAnalyticDime
                                     ctrl.periods.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
                             }
                         }
+                    }
+                    if(ctrl.dimensions.length>0)
+                    {
+                        ctrl.selecteddimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.Zone);
                     }
                 }
 
