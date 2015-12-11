@@ -1,6 +1,6 @@
 ﻿
-app.service('Qm_CliTester_ProfileService', ['Qm_CliTester_ProfileAPIService', 'VRModalService', 'VRNotificationService',
-    function (Qm_CliTester_ProfileAPIService, VRModalService, VRNotificationService) {
+app.service('QM_CLITester_ProfileService', ['QM_CLITester_ProfileAPIService', 'VRModalService', 'VRNotificationService',
+    function (QM_CLITester_ProfileAPIService, VRModalService, VRNotificationService) {
 
         return ({
             editProfile: editProfile

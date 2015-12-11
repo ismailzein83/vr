@@ -206,6 +206,8 @@
     <Content Include="QM_CLITester\Views\Profile\ProfileEditorController.js" />
     <Content Include="QM_CLITester\Views\Profile\ProfileManagement.html" />
     <Content Include="QM_CLITester\Views\Profile\ProfileManagementController.js" />
+    <Content Include="QM_CLITester\Views\Profile\SchedulerTaskAction\ProfileSynchronizeTemplate.html" />
+    <Content Include="QM_CLITester\Views\Profile\SchedulerTaskAction\ProfileSynchronizeTemplateController.js" />
     <Content Include="QM_CLITester\Views\TestPage\Test.html" />
     <Content Include="QM_CLITester\Views\TestPage\TestController.js" />
   </ItemGroup>

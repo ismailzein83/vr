@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrQmClitesterProfileSelector', ['Qm_CliTester_ProfileAPIService', 'UtilsService', '$compile', 'VRUIUtilsService',
-function (Qm_CliTester_ProfileAPIService, UtilsService, $compile, VRUIUtilsService) {
+app.directive('vrQmClitesterProfileSelector', ['QM_CLITester_ProfileAPIService', 'UtilsService', '$compile', 'VRUIUtilsService',
+function (QM_CLITester_ProfileAPIService, UtilsService, $compile, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -74,7 +74,7 @@ function (Qm_CliTester_ProfileAPIService, UtilsService, $compile, VRUIUtilsServi
                     selectedIds = payload.selectedIds;
                 }
 
-                return Qm_CliTester_ProfileAPIService.GetProfilesInfo().then(function (response) {
+                return QM_CLITester_ProfileAPIService.GetProfilesInfo().then(function (response) {
                     angular.forEach(response, function (item) {
                         ctrl.datasource.push(item);
 

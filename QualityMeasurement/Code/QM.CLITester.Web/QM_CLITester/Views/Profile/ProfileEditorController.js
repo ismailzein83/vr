@@ -2,9 +2,9 @@
 
     "use strict";
 
-    Qm_CliTester_ProfileEditorController.$inject = ['$scope', 'Qm_CliTester_ProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    QM_CLITester_ProfileEditorController.$inject = ['$scope', 'QM_CLITester_ProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
-    function Qm_CliTester_ProfileEditorController($scope, Qm_CliTester_ProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function QM_CLITester_ProfileEditorController($scope, QM_CLITester_ProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
         var profileId;
 
@@ -75,7 +75,7 @@
 
 
         function getProfile() {
-            return Qm_CliTester_ProfileAPIService.GetProfile(profileId).then(function (profile) {
+            return QM_CLITester_ProfileAPIService.GetProfile(profileId).then(function (profile) {
                 profileEntity = profile;
             });
         }
@@ -107,7 +107,7 @@
 
         function updateProfile() {
             var profileObject = buildProfileObjFromScope();
-            Qm_CliTester_ProfileAPIService.UpdateProfile(profileObject)
+            QM_CLITester_ProfileAPIService.UpdateProfile(profileObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Profile", response, "Name")) {
                     if ($scope.onProfileUpdated != undefined)
@@ -135,5 +135,5 @@
         }
     }
 
-    appControllers.controller('Qm_CliTester_ProfileEditorController', Qm_CliTester_ProfileEditorController);
+    appControllers.controller('QM_CLITester_ProfileEditorController', QM_CLITester_ProfileEditorController);
 })(appControllers);

@@ -27,5 +27,5 @@
         });
     }
 
-    appControllers.service('Qm_CliTester_ProfileAPIService', ProfileAPIService);
+    appControllers.service('QM_CLITester_ProfileAPIService', ProfileAPIService);
 })(appControllers);

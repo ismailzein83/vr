@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQmClitesterProfileGrid", ["UtilsService", "VRNotificationService", "Qm_CliTester_ProfileAPIService", "Qm_CliTester_ProfileService",
-function (UtilsService, VRNotificationService, Qm_CliTester_ProfileAPIService, Qm_CliTester_ProfileService) {
+app.directive("vrQmClitesterProfileGrid", ["UtilsService", "VRNotificationService", "QM_CLITester_ProfileAPIService", "QM_CLITester_ProfileService",
+function (UtilsService, VRNotificationService, QM_CLITester_ProfileAPIService, QM_CLITester_ProfileService) {
 
     var directiveDefinitionObject = {
 
@@ -58,7 +58,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_ProfileAPIService, Q
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return Qm_CliTester_ProfileAPIService.GetFilteredProfiles(dataRetrievalInput)
+                return QM_CLITester_ProfileAPIService.GetFilteredProfiles(dataRetrievalInput)
                    .then(function (response) {
                        
                        onResponseReady(response);
@@ -83,7 +83,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_ProfileAPIService, Q
             var onProfileUpdated = function (updatedItem) {
                 gridAPI.itemUpdated(updatedItem);
             };
-            Qm_CliTester_ProfileService.editProfile(profile.Entity.ProfileId, onProfileUpdated);
+            QM_CLITester_ProfileService.editProfile(profile.Entity.ProfileId, onProfileUpdated);
         }
 
 
