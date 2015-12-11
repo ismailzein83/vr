@@ -43,15 +43,23 @@ app.directive("vrQmClitesterSuppliersettings", [function () {
         function defineAPI() {
             var api = {};
 
+            var currentSettings;
+
             api.getData = function () {
-                return {
-                    $type: "QM.CLITester.iTestIntegration.SupplierExtensionSettings, QM.CLITester.iTestIntegration",
-                    Prefix: $scope.numberPrefix
-                };
+                var obj;
+                if (currentSettings != null)
+                    obj = currentSettings;
+                else
+                    obj = {
+                        $type: "QM.CLITester.iTestIntegration.SupplierExtensionSettings, QM.CLITester.iTestIntegration"
+                    };
+                obj.Prefix = $scope.numberPrefix;
+                return obj;
             };
 
             api.load = function (payload) {
                 if (payload != undefined) {
+                    currentSettings = payload;
                     $scope.numberPrefix = payload.Prefix;
                 }
             }

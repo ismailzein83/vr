@@ -15,7 +15,21 @@ namespace QM.CLITester.iTestIntegration
         public InitiateTestOutput InitiateTest(IInitiateTestContext context)
         {
             ServiceActions serviceActions = new ServiceActions();
-            return ResponseTestCall(serviceActions.PostRequest("2012", "&profid=4992&vendid=" + context.Supplier.SupplierId + "&ndbccgid=" + context.Country.CountryId + "&ndbcgid=" + context.Zone.ZoneId));
+            string itestSupplierId = null;
+            if(context.Supplier.Settings != null && context.Supplier.Settings.ExtendedSettings != null)
+            {
+                SupplierExtensionSettings supplierITestSettings = context.Supplier.Settings.ExtendedSettings.Where(itm => itm is SupplierExtensionSettings).FirstOrDefault() as SupplierExtensionSettings;
+                if (supplierITestSettings != null)
+                    itestSupplierId = supplierITestSettings.ITestSupplierId;
+            }
+            if (itestSupplierId == null)
+                return new InitiateTestOutput
+                {
+                    Result = InitiateTestResult.FailedWithNoRetry,
+                    FailureMessage = "Missing Supplier Configuration!"
+                };
+
+            return ResponseTestCall(serviceActions.PostRequest("2012", "&profid=4992&vendid=" + itestSupplierId + "&ndbccgid=" + context.Country.CountryId + "&ndbcgid=" + context.Zone.ZoneId));
         }
 
         public GetTestProgressOutput GetTestProgress(IGetTestProgressContext context)

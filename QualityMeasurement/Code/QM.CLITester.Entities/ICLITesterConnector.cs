@@ -29,6 +29,8 @@ namespace QM.CLITester.Entities
         public InitiateTestResult Result { get; set; }
 
         public Object InitiateTestInformation { get; set; }
+
+        public string FailureMessage { get; set; }
     }
 
     public enum GetTestProgressResult { TestCompleted, ProgressChanged, ProgressNotChanged, FailedWithRetry, FailedWithNoRetry }

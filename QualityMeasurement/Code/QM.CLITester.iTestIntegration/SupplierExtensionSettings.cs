@@ -16,55 +16,54 @@ namespace QM.CLITester.iTestIntegration
 {
     public class SupplierExtensionSettings : BusinessEntity.Entities.ExtendedSupplierSetting
     {
-        public string Prefix { get; set; }
-
-        public bool IsNew { get; set; }
+        public string Prefix { get; set; }        
 
         const string GoodAmpersand = "&amp;";
 
+        public string ITestSupplierId { get; set; }
+
         public override void Apply(BusinessEntity.Entities.Supplier supplier)
         {
-            //ServiceActions serviceActions = new ServiceActions();
-
-            ////responseSupplier(serviceActions.PostRequest("5020", "sid=" + supplier.SupplierId + "&name=" + supplier.Name + "&type=sms&codec=alaw&prefix" + this.Prefix), supplier);
-
-            //SupplierExtensionSettings extendedSetting = (SupplierExtensionSettings)supplier.Settings.ExtendedSettings[0];
-            //extendedSetting.IsNew = true;
-
-            //supplier.Settings.ExtendedSettings.Add(extendedSetting);
-
-            //responseSupplier(serviceActions.PostRequest("5020", "&name=" + supplier.Name + "&type=sms&codec=alaw&prefix=" + this.Prefix), supplier);
-        }
-
-        private BusinessEntity.Entities.Supplier responseSupplier(string response, BusinessEntity.Entities.Supplier supplier)
-        {
-            Regex badAmpersand = new Regex("&(?![a-zA-Z]{2,6};|#[0-9]{2,4};)");
-            response = badAmpersand.Replace(response, GoodAmpersand);
-
-            response = response.Replace("<" + supplier.SupplierId + ">", "<_" + supplier.SupplierId + ">");
-
-            response = response.Replace("</" + supplier.SupplierId + ">", "</_" + supplier.SupplierId + ">");
-
-            XmlDocument xml = new XmlDocument();
-            xml.LoadXml(response);
-
-            XmlNodeList xnList = xml.SelectNodes("/Supplier/_" + supplier.SupplierId);
-            if (xnList != null)
+            if(this.ITestSupplierId == null)
             {
-                List<ExtendedSupplierSetting> extendedSettings = new List<ExtendedSupplierSetting>();
-                new List<ExtendedSupplierSetting>().Add(new SupplierExtensionSettings() { Prefix = xnList[0]["Prefix"] != null ? xnList[0]["Prefix"].InnerText : "" });
-
-                BusinessEntity.Entities.Supplier supplierNode = new BusinessEntity.Entities.Supplier
+                this.ITestSupplierId = CreateSupplier();
+                if (this.ITestSupplierId == null)
+                    throw new Exception("Could not create Supplier at ITest");
+            }
+            UpdateSupplier(supplier);
+        }
+        ServiceActions _serviceActions = new ServiceActions();
+        private string CreateSupplier()
+        {
+            string dummySupplierName = Guid.NewGuid().ToString();
+            
+            string createSupplierResponse = _serviceActions.PostRequest("5020", String.Format("&name={0}&type=std&codec=alaw", dummySupplierName));
+            CheckSupplierResponse(createSupplierResponse);
+            string allSuppliersResponse = _serviceActions.PostRequest("1012", null);
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(allSuppliersResponse);
+            foreach(XmlNode nodeSupplier in doc.DocumentElement.ChildNodes)
+            {
+                XmlNode nodeSupplierName = nodeSupplier.SelectSingleNode("Supplier_Name");
+                if(nodeSupplierName.InnerText == dummySupplierName)
                 {
-                    Name = xnList[0]["Supplier_Name"] != null ? xnList[0]["Supplier_Name"].InnerText : "",
-                    Settings = new SupplierSettings() { ExtendedSettings = extendedSettings },
-                    SupplierId = supplier.SupplierId,
-                };
-
-                return supplierNode;
+                    XmlNode nodeSupplierId = nodeSupplier.SelectSingleNode("Supplier_ID");
+                    return nodeSupplierId.InnerText;
+                }
             }
             return null;
         }
 
+        private void CheckSupplierResponse(string createSupplierResponse)
+        {
+            if (createSupplierResponse == null || !createSupplierResponse.Contains("<Status>Success</Status>"))
+                throw new Exception(String.Format("Error when creating/updating supplier on ITest. Returned Response: {0}", createSupplierResponse));
+        }
+
+        private void UpdateSupplier(BusinessEntity.Entities.Supplier supplier)
+        {
+            string createSupplierResponse = _serviceActions.PostRequest("5020", String.Format("&sid={0}&name={1}&type=std&codec=alaw&prefix={2}", this.ITestSupplierId, supplier.Name, this.Prefix));
+            CheckSupplierResponse(createSupplierResponse);
+        }
     }
 }
