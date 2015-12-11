@@ -22,22 +22,22 @@ namespace QM.CLITester.Data.SQL
             return (recordsEffected > 0);
         }
 
-        public List<TestCall> GetTestCalls(List<int> listCallTestStatus)
+        public List<TestCall> GetTestCalls(List<CallTestStatus> listCallTestStatus)
         {
             string callTestStatusids = null;
             if (listCallTestStatus.Any())
-                callTestStatusids = string.Join<int>(",", listCallTestStatus);
+                callTestStatusids = string.Join<int>(",", Array.ConvertAll(listCallTestStatus.ToArray(), value => (int)value));
             return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCall", TestCallMapper, callTestStatusids);
         }
 
-        public List<TestCallDetail> GetUpdatedTestCalls(ref byte[] maxTimeStamp, List<int> listPendingCallTestStatus)
+        public List<TestCallDetail> GetUpdatedTestCalls(ref byte[] maxTimeStamp, List<CallTestStatus> listPendingCallTestStatus)
         {
             List<TestCallDetail> listTestCalls = new List<TestCallDetail>();
             byte[] timestamp = null;
 
             string callTestStatusids = null;
             if (listPendingCallTestStatus.Any())
-                callTestStatusids = string.Join<int>(",", listPendingCallTestStatus);
+                callTestStatusids = string.Join<int>(",", Array.ConvertAll(listPendingCallTestStatus.ToArray(), value => (int)value));
 
             ExecuteReaderSP("QM_CLITester.sp_TestCall_GetRecent", (reader) =>
             {
@@ -53,17 +53,17 @@ namespace QM.CLITester.Data.SQL
             return listTestCalls;
         }
 
-        public bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus)
+        public bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus, int initiationRetryCount, string failureMessage)
         {
             int recordsEffected = ExecuteNonQuerySP("[QM_CLITester].[sp_TestCall_UpdateInitiateTest]", testCallId,
-                initiateTestInformation != null ? Serializer.Serialize(initiateTestInformation) : null, callTestStatus);
+                initiateTestInformation != null ? Serializer.Serialize(initiateTestInformation) : null, callTestStatus, initiationRetryCount, failureMessage);
             return (recordsEffected > 0);
         }
 
-        public bool UpdateTestProgress(long testCallId, Object testProgress, CallTestStatus callTestStatus, CallTestResult? callTestResult)
+        public bool UpdateTestProgress(long testCallId, Object testProgress, CallTestStatus callTestStatus, CallTestResult? callTestResult, int getProgressRetryCount, string failureMessage)
         {
             int recordsEffected = ExecuteNonQuerySP("QM_CLITester.sp_TestCall_UpdateTestProgress", testCallId,
-                testProgress != null ? Serializer.Serialize(testProgress) : null, callTestStatus, callTestResult);
+                testProgress != null ? Serializer.Serialize(testProgress) : null, callTestStatus, callTestResult, getProgressRetryCount, failureMessage);
             return (recordsEffected > 0);
         }
 
@@ -72,14 +72,12 @@ namespace QM.CLITester.Data.SQL
             Dictionary<string,string> mapper=new Dictionary<string, string>();
             mapper.Add("Entity.ID","ID");
 
-
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("QM_CLITester.sp_TestCall_CreateTempByFiltered", tempTableName, input.Query.SupplierID, input.Query.CountryID, input.Query.ZoneID);
             };
 
             return RetrieveData(input, createTempTableAction, TestCallDetailMapper, mapper);
-
         }
 
 
@@ -91,9 +89,13 @@ namespace QM.CLITester.Data.SQL
                 SupplierID = (int)reader["SupplierID"],
                 CountryID = (int)reader["CountryID"],
                 ZoneID = (int)reader["ZoneID"],
+                UserID = (int)reader["UserID"],
                 CreationDate = GetReaderValue<DateTime>(reader, "CreationDate"),
                 CallTestStatus = GetReaderValue<CallTestStatus>(reader, "CallTestStatus"),
-                CallTestResult = GetReaderValue<CallTestResult>(reader, "CallTestResult")
+                CallTestResult = GetReaderValue<CallTestResult>(reader, "CallTestResult"),
+                InitiationRetryCount = (int)reader["InitiationRetryCount"],
+                GetProgressRetryCount = (int)reader["GetProgressRetryCount"],
+                FailureMessage = reader["FailureMessage"] as string
             };
 
             string initiateTestInformationSerialized = reader["InitiateTestInformation"] as string;
@@ -109,11 +111,12 @@ namespace QM.CLITester.Data.SQL
 
         TestCallDetail TestCallDetailMapper(IDataReader reader)
         {
-            TestCallDetail testCallDetail = new TestCallDetail();
-            testCallDetail.Entity = TestCallMapper(reader);
-            testCallDetail.CallTestResultDescription = testCallDetail.Entity.CallTestResult.ToString();
-            testCallDetail.CallTestStatusDescription = testCallDetail.Entity.CallTestStatus.ToString();
-            return testCallDetail;
+            return new TestCallDetail()
+            {
+                Entity = TestCallMapper(reader),
+                CallTestResultDescription = TestCallMapper(reader).CallTestResult.ToString(),
+                CallTestStatusDescription = TestCallMapper(reader).CallTestStatus.ToString()
+            };
         }
     }
 }

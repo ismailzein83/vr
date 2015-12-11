@@ -34,23 +34,34 @@ namespace QualityMeasurement.DevRuntime
                     _locked = true;
                     lock (_syncRoot)
                     {
-                        //Get Result
                         TestCallManager manager = new TestCallManager();
-                        List<int> listCallTestStatusInts = new List<int>();
-                        listCallTestStatusInts.Add((int)CallTestStatus.Initiated);
-                        listCallTestStatusInts.Add((int)CallTestStatus.PartiallyCompleted);
 
-                        List<TestCall> listTestCall = manager.GetTestCalls(listCallTestStatusInts);
+                        List<CallTestStatus> listCallTestStatus = new List<CallTestStatus>()
+                        {
+                            CallTestStatus.Initiated,
+                            CallTestStatus.PartiallyCompleted,
+                            CallTestStatus.GetProgressFailedWithRetry
+                        };
 
-                        foreach (TestCall testCall in listTestCall)
+                        foreach (TestCall testCall in manager.GetTestCalls(listCallTestStatus))
                         {
                             var getTestProgressContext = new GetTestProgressContext()
                             {
                                 InitiateTestInformation = testCall.InitiateTestInformation,
                                 RecentTestProgress = testCall.TestProgress
                             };
-                            var testProgressOutput = cliTestConnector.GetTestProgress(getTestProgressContext);
 
+                            GetTestProgressOutput testProgressOutput = new GetTestProgressOutput();
+                            try
+                            {
+                                testProgressOutput = cliTestConnector.GetTestProgress(getTestProgressContext);
+                            }
+                            catch (Exception ex)
+                            {
+                                testProgressOutput.Result = GetTestProgressResult.FailedWithRetry;
+                                testCall.FailureMessage = ex.Message;
+                            }
+                            
                             CallTestStatus callTestStatus;
                             switch (testProgressOutput.Result)
                             {
@@ -58,9 +69,15 @@ namespace QualityMeasurement.DevRuntime
                                     callTestStatus = CallTestStatus.Completed;
                                     break;
                                 case GetTestProgressResult.FailedWithRetry:
+                                {
                                     callTestStatus = CallTestStatus.GetProgressFailedWithRetry;
-                                    break;
-                                case GetTestProgressResult.FailedWithNoRetry:
+                                    if (testCall.GetProgressRetryCount < 5)
+                                        testCall.GetProgressRetryCount = testCall.GetProgressRetryCount + 1;
+                                    else
+                                        callTestStatus = CallTestStatus.GetProgressFailedWithNoRetry;
+                                    break;   
+                                }
+                                 case GetTestProgressResult.FailedWithNoRetry:
                                     callTestStatus = CallTestStatus.GetProgressFailedWithNoRetry;
                                     break;
                                 case GetTestProgressResult.ProgressChanged:
@@ -70,7 +87,8 @@ namespace QualityMeasurement.DevRuntime
                                     callTestStatus = testCall.CallTestStatus;
                                     break;
                             }
-                            manager.UpdateTestProgress(testCall.ID, testProgressOutput.TestProgress, callTestStatus, testProgressOutput.CallTestResult);
+                            if (testProgressOutput.Result != GetTestProgressResult.ProgressNotChanged)
+                                manager.UpdateTestProgress(testCall.ID, testProgressOutput.TestProgress, callTestStatus, testProgressOutput.CallTestResult, testCall.GetProgressRetryCount, testCall.FailureMessage);
                         }
 
                         _locked = false;

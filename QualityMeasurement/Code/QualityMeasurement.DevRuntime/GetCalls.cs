@@ -35,16 +35,18 @@ namespace QualityMeasurement.DevRuntime
             {
                 while (_locked != true)
                 {
+                    TestCallManager manager = new TestCallManager();
+
+                    List<CallTestStatus> listCallTestStatus = new List<CallTestStatus>()
+                        {
+                            CallTestStatus.New,
+                            CallTestStatus.InitiationFailedWithRetry
+                        };
+
                     _locked = true;
                     lock (_syncRoot)
                     {
-                        //Get Calls
-                        TestCallManager manager = new TestCallManager();
-                        List<int> listCallTestStatusInts = new List<int>();
-                        listCallTestStatusInts.Add((int)CallTestStatus.New);
-                        List<TestCall> listTestCall = manager.GetTestCalls(listCallTestStatusInts);
-                        
-                        foreach (TestCall testCall in listTestCall)
+                        foreach (TestCall testCall in manager.GetTestCalls(listCallTestStatus))
                         {
                             var initiateTestContext = new InitiateTestContext()
                             {
@@ -62,8 +64,18 @@ namespace QualityMeasurement.DevRuntime
                                     CountryId = testCall.CountryID
                                 }
                             };
-                            var initiateTestOutput = cliTestConnector.InitiateTest(initiateTestContext);
 
+                            InitiateTestOutput initiateTestOutput = new InitiateTestOutput();
+                            try
+                            {
+                                initiateTestOutput = cliTestConnector.InitiateTest(initiateTestContext);
+                            }
+                            catch (Exception ex)
+                            {
+                                initiateTestOutput.Result = InitiateTestResult.FailedWithRetry;
+                                testCall.FailureMessage = ex.Message;
+                            }
+                            
                             CallTestStatus callTestStatus;
 
                             switch (initiateTestOutput.Result)
@@ -71,13 +83,22 @@ namespace QualityMeasurement.DevRuntime
                                 case InitiateTestResult.Created:
                                     callTestStatus =  CallTestStatus.Initiated; break;
                                 case InitiateTestResult.FailedWithRetry:
-                                    callTestStatus =  CallTestStatus.InitiationFailedWithRetry; break;
+                                {
+                                    callTestStatus = CallTestStatus.InitiationFailedWithRetry;
+                                    if(testCall.InitiationRetryCount < 5)
+                                        testCall.InitiationRetryCount = testCall.InitiationRetryCount + 1;
+                                    else
+                                        callTestStatus = CallTestStatus.InitiationFailedWithNoRetry;
+                                    break;
+                                }
+                                    
                                 case InitiateTestResult.FailedWithNoRetry:
                                     callTestStatus =  CallTestStatus.InitiationFailedWithNoRetry; break;
                                 default:
-                                    callTestStatus =  CallTestStatus.InitiationFailedWithNoRetry; break;
+                                    callTestStatus =  CallTestStatus.InitiationFailedWithRetry; break;
                             }
-                            manager.UpdateInitiateTest(testCall.ID, initiateTestOutput.InitiateTestInformation, callTestStatus); break;
+
+                            manager.UpdateInitiateTest(testCall.ID, initiateTestOutput.InitiateTestInformation, callTestStatus, testCall.InitiationRetryCount, testCall.FailureMessage); break;
                         }
 
                         _locked = false;

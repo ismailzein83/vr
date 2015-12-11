@@ -21,12 +21,12 @@ namespace QM.CLITester.iTestIntegration
         public GetTestProgressOutput GetTestProgress(IGetTestProgressContext context)
         {
             ServiceActions serviceActions = new ServiceActions();
-            return responseTestCallResult(serviceActions.PostRequest("3011", "&jid=" + ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID), ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID);
+            return responseTestCallResult(serviceActions.PostRequest("3011", "&jid=" + ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID), ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID, context.RecentTestProgress);
         }
 
         private InitiateTestOutput ResponseTestCall(string response)
         {
-            InitiateTestOutput testOutput = new InitiateTestOutput();
+            InitiateTestOutput testOutput = new InitiateTestOutput();    
             InitiateTestInformation initiateTestInformation = new InitiateTestInformation();
             Regex badAmpersand = new Regex("&(?![a-zA-Z]{2,6};|#[0-9]{2,4};)");
             response = badAmpersand.Replace(response, GoodAmpersand);
@@ -53,70 +53,61 @@ namespace QM.CLITester.iTestIntegration
                 return testOutput;
             }
 
-            testOutput.Result = InitiateTestResult.FailedWithNoRetry;
+            testOutput.Result = InitiateTestResult.FailedWithRetry;
             return testOutput;
         }
 
-        private GetTestProgressOutput responseTestCallResult(string response, string test_Id)
+        private GetTestProgressOutput responseTestCallResult(string response, string testId, Object recentTestProgress)
         {
             GetTestProgressOutput testProgressOutput = new GetTestProgressOutput();
             Regex badAmpersand = new Regex("&(?![a-zA-Z]{2,6};|#[0-9]{2,4};)");
             response = badAmpersand.Replace(response, GoodAmpersand);
 
-            response = response.Replace("<" + test_Id + ">", "<_" + test_Id + ">");
+            response = response.Replace("<" + testId + ">", "<_" + testId + ">");
 
-            response = response.Replace("</" + test_Id + ">", "</_" + test_Id + ">");
+            response = response.Replace("</" + testId + ">", "</_" + testId + ">");
 
             XmlDocument xml = new XmlDocument();
             if (!String.IsNullOrEmpty(response))
             {
                 xml.LoadXml(response);
 
-                XmlNodeList xnList = xml.SelectNodes("/Test_Status/_" + test_Id);
+                XmlNodeList xnList = xml.SelectNodes("/Test_Status/_" + testId);
                 if (xnList != null)
                 {
                     TestProgress testProgress = new TestProgress
                     {
                         Name = xnList[0]["Name"] != null ? xnList[0]["Name"].InnerText : "",
-                        Calls_Total = xnList[0]["Calls_Total"] != null ? Int32.Parse(xnList[0]["Calls_Total"].InnerText) : 0,
-                        Calls_Complete = xnList[0]["Calls_Complete"] != null ? Int32.Parse(xnList[0]["Calls_Complete"].InnerText) : 0,
-                        CLI_Success = xnList[0]["CLI_Success"] != null ? Int32.Parse(xnList[0]["CLI_Success"].InnerText) : 0,
-                        CLI_No_Result = xnList[0]["CLI_No_Result"] != null ? Int32.Parse(xnList[0]["CLI_No_Result"].InnerText) : 0,
-                        CLI_Fail = xnList[0]["CLI_Fail"] != null ? Int32.Parse(xnList[0]["CLI_Fail"].InnerText) : 0,
-                        PDD = xnList[0]["PDD"] != null ? Int32.Parse(xnList[0]["PDD"].InnerText) : 0,
-                        Share_URL = xnList[0]["Share_URL"] != null ? xnList[0]["Share_URL"].InnerText : "",
+                        TotalCalls = xnList[0]["Calls_Total"] != null ? Int32.Parse(xnList[0]["Calls_Total"].InnerText) : 0,
+                        CompletedCalls = xnList[0]["Calls_Complete"] != null ? Int32.Parse(xnList[0]["Calls_Complete"].InnerText) : 0,
+                        CliSuccess = xnList[0]["CLI_Success"] != null ? Int32.Parse(xnList[0]["CLI_Success"].InnerText) : 0,
+                        CliNoResult = xnList[0]["CLI_No_Result"] != null ? Int32.Parse(xnList[0]["CLI_No_Result"].InnerText) : 0,
+                        CliFail = xnList[0]["CLI_Fail"] != null ? Int32.Parse(xnList[0]["CLI_Fail"].InnerText) : 0,
+                        Pdd = xnList[0]["PDD"] != null ? Int32.Parse(xnList[0]["PDD"].InnerText) : 0,
+                        ShareUrl = xnList[0]["Share_URL"] != null ? xnList[0]["Share_URL"].InnerText : ""
                     };
 
                     testProgressOutput.TestProgress = testProgress;
-                    if (testProgress.Calls_Total == testProgress.Calls_Complete)
+                    if (testProgress.TotalCalls == testProgress.CompletedCalls)
                     {
                         testProgressOutput.Result = GetTestProgressResult.TestCompleted;
-                        if (testProgress.CLI_Fail == 1)
-                        {
-                            testProgressOutput.CallTestResult = CallTestResult.Failed;
-                        }
-                        else if (testProgress.CLI_Success == 1)
-                        {
-                            testProgressOutput.CallTestResult = CallTestResult.Succeeded;
-                        }   
-                            else if (testProgress.CLI_No_Result == 1)
-                            {
-                                testProgressOutput.CallTestResult = CallTestResult.NotAnswered;
-                            }
+
+                        testProgressOutput.CallTestResult = (testProgress.CliFail == testProgress.TotalCalls) ? CallTestResult.Failed :
+                            (testProgress.CliSuccess == testProgress.TotalCalls) ? CallTestResult.Succeeded :
+                            (testProgress.CliNoResult == testProgress.TotalCalls ? CallTestResult.NotAnswered : CallTestResult.PartiallySucceeded); 
                         
                         return testProgressOutput;
                     }
 
-                    testProgressOutput.Result = GetTestProgressResult.ProgressChanged;
-                    //testProgressOutput.Result = (testProgress.Calls_Total == testProgress.Calls_Complete)
-                    //    ? GetTestProgressResult.TestCompleted
-                    //    : GetTestProgressResult.ProgressChanged;
-                    //testProgressOutput.CallTestResult = CallTestResult.NotCompleted;
+                    testProgressOutput.Result = (recentTestProgress == testProgressOutput.TestProgress) ?
+                        GetTestProgressResult.ProgressNotChanged : 
+                        GetTestProgressResult.ProgressChanged;
+
                     return testProgressOutput;
                 }
             }
 
-            testProgressOutput.Result = GetTestProgressResult.FailedWithNoRetry;
+            testProgressOutput.Result = GetTestProgressResult.FailedWithRetry;
             return testProgressOutput;
         }
     }

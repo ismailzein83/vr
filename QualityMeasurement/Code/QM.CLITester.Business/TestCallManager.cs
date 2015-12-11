@@ -157,27 +157,27 @@ namespace QM.CLITester.Business
             return insertOperationOutput;
         }
 
-        public bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus)
+        public bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus, int initiationRetryCount, string failureMessage)
         {
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            return dataManager.UpdateInitiateTest(testCallId, initiateTestInformation, callTestStatus);
+            return dataManager.UpdateInitiateTest(testCallId, initiateTestInformation, callTestStatus, initiationRetryCount, failureMessage);
         }
 
-        public bool UpdateTestProgress(long testCallId, Object testProgress, CallTestStatus callTestStatus, CallTestResult? callTestResult)
+        public bool UpdateTestProgress(long testCallId, Object testProgress, CallTestStatus callTestStatus, CallTestResult? callTestResult, int getProgressRetryCount, string failureMessage)
         {
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            return dataManager.UpdateTestProgress(testCallId, testProgress, callTestStatus, callTestResult);
+            return dataManager.UpdateTestProgress(testCallId, testProgress, callTestStatus, callTestResult, getProgressRetryCount, failureMessage);
         }
 
         public LastCallUpdateOutput GetUpdatedTestCalls(ref byte[] maxTimeStamp)
         {
             LastCallUpdateOutput lastCallUpdateOutputs = new LastCallUpdateOutput();
-            List<int> listPendingCallTestStatus = new List<int>();
-            listPendingCallTestStatus.Add((int)CallTestStatus.Initiated);
-            listPendingCallTestStatus.Add((int)CallTestStatus.InitiationFailedWithRetry);
-            listPendingCallTestStatus.Add((int)CallTestStatus.New);
-            listPendingCallTestStatus.Add((int)CallTestStatus.PartiallyCompleted);
-            listPendingCallTestStatus.Add((int)CallTestStatus.GetProgressFailedWithRetry);
+            List<CallTestStatus> listPendingCallTestStatus = new List<CallTestStatus>();
+            listPendingCallTestStatus.Add(CallTestStatus.Initiated);
+            listPendingCallTestStatus.Add(CallTestStatus.InitiationFailedWithRetry);
+            listPendingCallTestStatus.Add(CallTestStatus.New);
+            listPendingCallTestStatus.Add(CallTestStatus.PartiallyCompleted);
+            listPendingCallTestStatus.Add(CallTestStatus.GetProgressFailedWithRetry);
 
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
             lastCallUpdateOutputs.ListTestCallDetails = dataManager.GetUpdatedTestCalls(ref maxTimeStamp, listPendingCallTestStatus);
@@ -185,21 +185,14 @@ namespace QM.CLITester.Business
             return lastCallUpdateOutputs;
         }
 
-        public List<TestCall> GetTestCalls(List<int> callTestStatus)
+        public List<TestCall> GetTestCalls(List<CallTestStatus> listCallTestStatus)
         {
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            return dataManager.GetTestCalls(callTestStatus);
+            return dataManager.GetTestCalls(listCallTestStatus);
         }
 
         public IDataRetrievalResult<TestCallDetail> GetFilteredTestCalls(DataRetrievalInput<TestCallQuery> input)
         {
-            if (input.Query.SupplierID == 0)
-                input.Query.SupplierID = null;
-            if (input.Query.ZoneID == 0)
-                input.Query.ZoneID = null;
-            if (input.Query.CountryID == 0)
-                input.Query.CountryID = null;
-
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
             Vanrise.Entities.BigResult<TestCallDetail> testCallDetails = dataManager.GetTestCallFilteredFromTemp(input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, testCallDetails);
