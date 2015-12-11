@@ -21,18 +21,26 @@ namespace QM.BusinessEntity.MainExtensions.SourceSuppliersReaders
 
         public override IEnumerable<SourceSupplier> GetChangedItems(ref object updatedHandle)
         {
-            List<SourceSupplier> lst = new List<SourceSupplier>();
-            lst.Add(new SourceSupplier
+            TOneV2DataManager dataManager = new TOneV2DataManager(this.ConnectionString);
+            return dataManager.GetUpdatedSuppliers(ref updatedHandle);
+        }
+
+        private class TOneV2DataManager : BaseTOneDataManager
+        {
+            public TOneV2DataManager(string connectionString)
+                : base(connectionString)
+            { 
+            }
+
+            const string query_getUpdatedSuppliers = @"SELECT
+			                                                    ca.ID,
+			                                                    ca.Name
+	                                                    FROM TOneWhS_BE.CarrierAccount ca";
+
+            protected override string GetQuery()
             {
-                Name = "TOne V2 test",
-                SourceId = "1"
-            });
-            lst.Add(new SourceSupplier
-            {
-                Name = "TOne V2",
-                SourceId = "2"
-            });
-            return lst;
+                return query_getUpdatedSuppliers;
+            }
         }
     }
 }
