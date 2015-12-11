@@ -46,5 +46,14 @@ namespace QM.CLITester.Web.Controllers
             return manager.UpdateProfile(profile);
         }
 
+
+        [HttpGet]
+        [Route("GetProfileSourceTemplates")]
+        public List<TemplateConfig> GetProfileSourceTemplates()
+        {
+            ProfileManager manager = new ProfileManager();
+            return manager.GetProfileSourceTemplates();
+        }
+
     }
 }

@@ -41,6 +41,7 @@ function SupplierSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSe
     }
     function loadSourceType() {
         return QM_BE_SupplierAPIService.GetSupplierSourceTemplates().then(function (response) {
+            console.log(response)
             angular.forEach(response, function (item) {
                 $scope.sourceTypeTemplates.push(item);
             });

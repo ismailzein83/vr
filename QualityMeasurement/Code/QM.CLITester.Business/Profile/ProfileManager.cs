@@ -66,6 +66,12 @@ namespace QM.CLITester.Business
             return updateOperationOutput;
         }
 
+        public List<Vanrise.Entities.TemplateConfig> GetProfileSourceTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.SourceProfileReaderConfigType);
+        }
+
         #region Private Members
 
         public Dictionary<int, Profile> GetCachedProfiles()

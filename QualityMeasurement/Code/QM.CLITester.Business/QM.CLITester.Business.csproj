@@ -54,11 +54,16 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="GetTestProgressContext.cs" />
     <Compile Include="InitiateTestContext.cs" />
     <Compile Include="Profile\ProfileManager.cs" />
@@ -66,6 +71,10 @@
     <Compile Include="TestCallManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\QM.BusinessEntity.Business\QM.BusinessEntity.Business.csproj">
+      <Project>{e4d4007f-5889-4d28-9c4e-710d8908a60f}</Project>
+      <Name>QM.BusinessEntity.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\QM.BusinessEntity.Entities\QM.BusinessEntity.Entities.csproj">
       <Project>{b610fb7a-8278-4c68-bf4f-09c94bc5a8d0}</Project>
       <Name>QM.BusinessEntity.Entities</Name>

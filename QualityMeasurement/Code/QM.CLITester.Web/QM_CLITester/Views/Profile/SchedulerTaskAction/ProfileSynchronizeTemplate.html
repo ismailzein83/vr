@@ -1,5 +1,7 @@
-﻿<div>
+﻿<div ng-controller="QM_CLITester_ProfileSynchronizeTemplateController">
     <vr-section title="Profile Synchronize Action">
-       
+        <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Source Type" datasource="sourceTypeTemplates" text="None"
+                   selectedvalues="selectedSourceTypeTemplate" isrequired="true">
+        </vr-select>
     </vr-section>
 </div>
