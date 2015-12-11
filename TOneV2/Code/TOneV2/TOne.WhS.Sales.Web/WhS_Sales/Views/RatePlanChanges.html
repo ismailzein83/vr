@@ -1,27 +1,87 @@
-﻿<div vr-modalcontent ng-controller="WhS_Sales_RatePlanChangesController" vr-loader="isLoading" width="'50%'">
+﻿<div vr-modalcontent ng-controller="WhS_Sales_RatePlanChangesController" vr-loader="isLoading" width="'65%'">
     <vr-modalbody>
         <vr-form name="formSellNewZones">
             <vr-tabs>
                 <vr-tab header="'Summary'">
                     <vr-row>
-                        <vr-columns width="fullrow"><vr-label isvalue>Comming soon...</vr-label></vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-section title="Rate Changes">
+                                <vr-row>
+                                    <vr-columns width="fullrow">
+                                        <vr-label>New: </vr-label>
+                                        <vr-label isvalue>{{totalNewRates}}</vr-label>
+                                    </vr-columns>
+                                    <vr-columns width="fullrow">
+                                        <vr-label>Increases: </vr-label>
+                                        <vr-label isvalue>{{totalIncreasedRates}}</vr-label>
+                                    </vr-columns>
+                                    <vr-columns width="fullrow">
+                                        <vr-label>Decreases: </vr-label>
+                                        <vr-label isvalue>{{totalDecreasedRates}}</vr-label>
+                                    </vr-columns>
+                                    <vr-columns width="fullrow">
+                                        <vr-label>Changes: </vr-label>
+                                        <vr-label isvalue>{{totalRateChanges}}</vr-label>
+                                    </vr-columns>
+                                </vr-row>
+                            </vr-section>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-section title="Routing Product Changes">
+                                <vr-section title="Default Changes" level="2">
+                                    <vr-row>
+                                        <vr-columns width="fullrow" ng-show="defaultItem.newRoutingProductName">
+                                            <vr-label>New: </vr-label>
+                                            <vr-label isvalue>{{defaultItem.newRoutingProductName}}</vr-label>
+                                        </vr-columns>
+                                        <vr-columns width="fullrow" ng-hide="!defaultItem || defaultItem.newRoutingProductName">
+                                            <vr-label>Change: </vr-label>
+                                            <vr-label isvalue>{{defaultItem.newRoutingProductEED}}</vr-label>
+                                        </vr-columns>
+                                        <vr-columns width="fullrow" ng-hide="defaultItem">
+                                            <vr-label isvalue>No changes</vr-label>
+                                        </vr-columns>
+                                    </vr-row>
+                                </vr-section>
+                                <vr-section title="Zone Changes" level="2">
+                                    <vr-row>
+                                        <vr-columns width="fullrow">
+                                            <vr-label>New: </vr-label>
+                                            <vr-label isvalue>{{totalNewZoneRoutingProducts}}</vr-label>
+                                        </vr-columns>
+                                        <vr-columns width="fullrow">
+                                            <vr-label>Changes: </vr-label>
+                                            <vr-label isvalue>{{totalZoneRoutingProductChanges}}</vr-label>
+                                        </vr-columns>
+                                    </vr-row>
+                                </vr-section>
+                            </vr-section>
+                        </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Default Changes'">
                     <vr-row>
                         <vr-columns width="fullrow">
-                            <div ng-if="defaultRoutingProductChanges.length == 0"><vr-label isvalue>No routing product changes</vr-label></div>
-
-                            <vr-section title="Routing Product Changes" ng-if="defaultRoutingProductChanges.length > 0">
+                            <vr-label isvalue ng-hide="defaultItem">No default changes</vr-label>
+                            <vr-section title="Routing Product Changes" ng-show="defaultItem">
                                 <vr-row>
-                                    <vr-columns width="fullrow">
-                                        <vr-datagrid datasource="defaultRoutingProductChanges"
-                                                     hidegridmenu>
-                                            <vr-datagridcolumn headertext="'Old RP'" field="'oldRPName'" type="'Text'" disablesorting></vr-datagridcolumn>
-                                            <vr-datagridcolumn headertext="'Old RP EED'" field="'oldRPEED'" type="'Date'" disablesorting></vr-datagridcolumn>
-                                            <vr-datagridcolumn headertext="'New RP'" field="'newRPName'" type="'Text'" disablesorting></vr-datagridcolumn>
-                                            <vr-datagridcolumn headertext="'New RP EED'" field="'newRPEED'" type="'Date'" disablesorting></vr-datagridcolumn>
-                                        </vr-datagrid>
+                                    <vr-columns width="1/2row">
+                                        <vr-label>Current Routing Product Name:</vr-label>
+                                        <vr-label isvalue>{{defaultItem.currentRoutingProductName}}</vr-label>
+                                    </vr-columns>
+                                    <vr-columns width="1/2row">
+                                        <vr-label>New Routing Product Name:</vr-label>
+                                        <vr-label isvalue>{{defaultItem.newRoutingProductName}}</vr-label>
+                                    </vr-columns>
+                                </vr-row>
+                                <vr-row>
+                                    <vr-columns width="1/2row">
+                                        <vr-label>Current Routing Product EED:</vr-label>
+                                        <vr-label isvalue>{{defaultItem.currentRoutingProductEED}}</vr-label>
+                                    </vr-columns>
+                                    <vr-columns width="1/2row">
+                                        <vr-label>New Routing Product EED:</vr-label>
+                                        <vr-label isvalue>{{defaultItem.newRoutingProductEED}}</vr-label>
                                     </vr-columns>
                                 </vr-row>
                             </vr-section>
@@ -31,21 +91,21 @@
                 <vr-tab header="'Zone Changes'">
                     <vr-row>
                         <vr-columns width="fullrow">
-                            <div ng-if="zoneChanges.length == 0"><vr-label isvalue>No zone changes</vr-label></div>
-                            <div ng-if="zoneChanges.length > 0">
-                                <vr-datagrid datasource="zoneChanges"
-                                             hidegridmenu>
-                                    <vr-datagridcolumn headertext="'Zone'" field="'name'" type="'Text'" disablesorting></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Old Rate'" field="'oldRate'" type="'Number'" disablesorting></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Old Rate EED'" field="'oldRateEED'" type="'Date'" disablesorting></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'New Rate'" field="'newRate'" type="'Number'" disablesorting></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'New Rate EED'" field="'newRateEED'" type="'Date'" disablesorting></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Old RP'" field="'oldRPName'" type="'Text'" disablesorting></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Old RP EED'" field="'oldRPEED'" type="'Date'" disablesorting></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'New RP'" field="'newRPName'" type="'Text'" disablesorting></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'New RP EED'" field="'newRPEED'" type="'Date'" disablesorting></vr-datagridcolumn>
-                                </vr-datagrid>
-                            </div>
+                            <vr-label isvalue ng-hide="zoneChanges.length > 0">No zone changes</vr-label>
+                            <vr-datagrid datasource="zoneChanges"
+                                         idfield="zoneId"
+                                         ng-show="zoneChanges.length > 0"
+                                         hidegridmenu>
+                                <vr-datagridcolumn headertext="'Zone'" field="'zoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Current Rate'" field="'currentRate'" type="'Number'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Current Rate EED'" field="'currentRateEED'" type="'Date'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'New Rate'" field="'newRate'" type="'Number'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'New Rate EED'" field="'newRateEED'" type="'Date'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Current RP'" field="'currentRoutingProductName'" type="'Text'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Current RP EED'" field="'currentRoutingProductEED'" type="'Date'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'New RP'" field="'newRoutingProductName'" type="'Text'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'New RP EED'" field="'newRoutingProductEED'" type="'Date'" disablesorting></vr-datagridcolumn>
+                            </vr-datagrid>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
@@ -55,31 +115,10 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="save"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>
     </div>
 </div>
 
-<!--<vr-row>
-    <vr-columns width="1/2row">
-        <vr-row>
-            <vr-label>Old Routing Product:</vr-label>
-            <vr-label isvalue>{{defaultChanges.oldRPName}}</vr-label>
-        </vr-row>
-        <vr-row>
-            <vr-label>Old Routing Product EED:</vr-label>
-            <vr-label isvalue>{{defaultChanges.oldRPEED}}</vr-label>
-        </vr-row>
-    </vr-columns>
-    <vr-columns width="1/2row">
-        <vr-row>
-            <vr-label>New Routing Product:</vr-label>
-            <vr-label isvalue>{{defaultChanges.newRPName}}</vr-label>
-        </vr-row>
-        <vr-row>
-            <vr-label>New Routing Product EED:</vr-label>
-            <vr-label isvalue>{{defaultChanges.newRPEED}}</vr-label>
-        </vr-row>
-    </vr-columns>
-</vr-row>-->

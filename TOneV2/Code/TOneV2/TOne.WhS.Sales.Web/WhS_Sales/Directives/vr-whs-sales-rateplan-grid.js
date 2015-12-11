@@ -111,7 +111,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             var promises = [];
 
             $scope.isLoading = true;
-            var zoneItemsGetPromise = WhS_Sales_RatePlanAPIService.GetZoneItems(getZoneItemInput());
+            var zoneItemsGetPromise = WhS_Sales_RatePlanAPIService.GetZoneItems(getZoneItemsInput());
             promises.push(zoneItemsGetPromise);
 
             zoneItemsGetPromise.then(function (response) {
@@ -137,7 +137,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 $scope.isLoading = false;
             });
 
-            function getZoneItemInput() {
+            function getZoneItemsInput() {
                 var pageInfo = gridAPI.getPageInfo();
 
                 return {

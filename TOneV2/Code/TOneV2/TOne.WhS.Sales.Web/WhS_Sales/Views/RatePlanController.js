@@ -133,11 +133,6 @@
             $scope.editSettings = function () {
                 WhS_Sales_RatePlanService.editSettings(settings, onSettingsUpdate);
             };
-            $scope.viewChanges = function () {
-                saveChanges(false).then(function () {
-                    WhS_Sales_RatePlanService.viewChanges($scope.selectedOwnerType.value, getOwnerId());
-                });
-            };
 
             defineSaveButtonMenuActions();
         }
@@ -307,7 +302,7 @@
 
         function saveChanges(shouldLoadGrid) {
             var input = getSaveChangesInput();
-
+            
             return WhS_Sales_RatePlanAPIService.SaveChanges(input).then(function (response) {
                 if (shouldLoadGrid)
                     loadGrid();
@@ -377,21 +372,28 @@
                 var saveChangesPromise = saveChanges(false);
                 promises.push(saveChangesPromise);
 
-                saveChangesPromise.then(function () {
-                    isSavingPriceList = true;
-                    var savePriceListPromise = savePriceList();
-                    promises.push(savePriceListPromise);
+                var savePriceListDeferred = UtilsService.createPromiseDeferred();
+                promises.push(savePriceListDeferred.promise);
 
-                    savePriceListPromise.then(function () {
-                        loadRatePlan();
-                    });
+                saveChangesPromise.then(function () {
+                    WhS_Sales_RatePlanService.viewChanges($scope.selectedOwnerType.value, getOwnerId(), onRatePlanChangesClose);
                 });
 
-                return UtilsService.waitMultiplePromises(promises).then(function () {
-                    VRNotificationService.showSuccess("Price list saved");
-                }).catch(function (error) {
+                return UtilsService.waitMultiplePromises(promises).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
+
+                function onRatePlanChangesClose(save) {
+                    if (save) {
+                        isSavingPriceList = true;
+                        savePriceList().then(function () {
+                            savePriceListDeferred.resolve();
+                            VRNotificationService.showSuccess("Price list saved");
+                            setTimeout(loadRatePlan, 500); // Otherwise, the notification will not show properly
+                        }).catch(function (error) { savePriceListDeferred.reject(); });
+                    }
+                    else savePriceListDeferred.resolve();
+                }
 
                 function savePriceList() {
                     return WhS_Sales_RatePlanAPIService.SavePriceList($scope.selectedOwnerType.value, getOwnerId());

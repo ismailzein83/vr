@@ -24,10 +24,22 @@
         }
 
         function defineScope() {
+            $scope.totalNewRates = 0;
+            $scope.totalIncreasedRates = 0;
+            $scope.totalDecreasedRates = 0;
+            $scope.totalRateChanges = 0;
+            $scope.totalNewZoneRoutingProducts = 0;
+            $scope.totalZoneRoutingProductChanges = 0;
+
             $scope.defaultItem;
+            $scope.zoneChanges = [];
+
+            $scope.save = function () {
+                closeModal(true);
+            };
 
             $scope.close = function () {
-                $scope.modalContext.closeModal();
+                closeModal(false);
             };
         }
 
@@ -38,16 +50,31 @@
             var getChangesPromise = getChanges();
             promises.push(getChangesPromise);
             
+            var defaultItemGetDeferred = UtilsService.createPromiseDeferred();
+            promises.push(defaultItemGetDeferred.promise);
+
+            var zoneItemsGetDeferred = UtilsService.createPromiseDeferred();
+            promises.push(zoneItemsGetDeferred.promise);
+
             getChangesPromise.then(function () {
-                if (defaultChangesExist()) {
-                    var getDefaultItemPromise = getDefaultItem();
-                    promises.push(getDefaultItemPromise);
+                if (changes && changes.DefaultChanges && (changes.DefaultChanges.Entity.NewDefaultRoutingProduct || changes.DefaultChanges.Entity.DefaultRoutingProductChange)) {
+                    getDefaultItem().then(function () {
+                        defaultItemGetDeferred.resolve();
+                    }).catch(function (error) { defaultItemGetDeferred.reject(); });
                 }
+                else
+                    defaultItemGetDeferred.resolve();
+
+                if (changes && changes.ZoneChanges) {
+                    getZoneItems().then(function () {
+                        zoneItemsGetDeferred.resolve();
+                    }).catch(function (error) { zoneItemsGetDeferred.reject(); });
+                }
+                else
+                    zoneItemsGetDeferred.resolve();
             });
 
-            UtilsService.waitMultiplePromises(promises).then(function () {
-                console.log($scope.defaultItem);
-            }).catch(function (error) {
+            UtilsService.waitMultiplePromises(promises).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -56,111 +83,112 @@
             function getChanges() {
                 return WhS_Sales_RatePlanAPIService.GetChanges(ownerType, ownerId).then(function (response) {
                     changes = response;
-
-                    if (defaultChangesExist()) {
-                        var newDefaultRoutingProduct = changes.DefaultChanges.NewDefaultRoutingProduct;
-                        var defaultRoutingProductChange = changes.DefaultChanges.DefaultRoutingProductChange;
-
-                        $scope.defaultItem.newRoutingProductName = newDefaultRoutingProduct ? newDefaultRoutingProduct.Name : defaultRoutingProductChange.Name;
-                        $scope.defaultItem.newRoutingProductEED = newDefaultRoutingProduct ? newDefaultRoutingProduct.EED : defaultRoutingProductChange.EED;
-                    }
                 });
             }
 
             function getDefaultItem() {
                 return WhS_Sales_RatePlanAPIService.GetDefaultItem(ownerType, ownerId).then(function (response) {
+                    $scope.defaultItem = {};
+
+                    // Set current properties
                     $scope.defaultItem.currentRoutingProductName = response.CurrentRoutingProductName;
-                    $scope.defaultItem.currentRoutingProductEED = response.CurrentRoutingProductEED;
+                    if (response.CurrentRoutingProductEED) {
+                        var currentEED = new Date(response.CurrentRoutingProductEED);
+                        $scope.defaultItem.currentRoutingProductEED = currentEED.toDateString();
+                    }
+                    else $scope.defaultItem.currentRoutingProductEED = "NULL";
+
+                    // Set new properties
+                    var newDefaultRoutingProduct = changes.DefaultChanges.Entity.NewDefaultRoutingProduct;
+                    var defaultRoutingProductChange = changes.DefaultChanges.Entity.DefaulRoutingProductChange;
+
+                    $scope.defaultItem.newRoutingProductName = changes.DefaultChanges.DefaultRoutingProductName;
+                    $scope.defaultItem.newRoutingProductEED = newDefaultRoutingProduct ? newDefaultRoutingProduct.EED : defaultRoutingProductChange.EED;
+
+                    if ($scope.defaultItem.newRoutingProductEED) {
+                        var newEED = new Date($scope.defaultItem.newRoutingProductEED);
+                        $scope.defaultItem.newRoutingProductEED = newEED.toDateString();
+                    }
+                    else $scope.defaultItem.newRoutingProductEED = "NULL";
                 });
             }
 
-            function defaultChangesExist() {
-                return (changes && changes.DefaultChanges && (changes.DefaultChanges.NewDefaultRoutingProduct || changes.DefaultChanges.DefaultRoutingProductChange))
+            function getZoneItems() {
+                var entities = UtilsService.getPropValuesFromArray(changes.ZoneChanges, "Entity");
+                var zoneIds = UtilsService.getPropValuesFromArray(entities, "ZoneId");
+
+                return WhS_Sales_RatePlanAPIService.GetZoneItems({
+                    Filter: {
+                        OwnerType: ownerType,
+                        OwnerId: ownerId,
+                        ZoneIds: zoneIds
+                    }
+                }).then(function (response) {
+                    if (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            var gridItem = {};
+
+                            // Set current properties
+                            gridItem.zoneId = response[i].ZoneId;
+                            gridItem.zoneName = response[i].ZoneName;
+                            gridItem.currentRate = response[i].CurrentRate;
+                            gridItem.currentRateEED = response[i].CurrentRateEED;
+                            gridItem.currentRoutingProductName = response[i].CurrentRoutingProductName;
+                            gridItem.currentRoutingProductEED = response[i].CurrentRoutingProductEED;
+
+                            // Set new properties
+                            var itmChanges = UtilsService.getItemByVal(changes.ZoneChanges, gridItem.zoneName, "ZoneName"); // It should be by Entity.ZoneId, but nested properties aren't supported by UtilsService.getItemByVal
+                            if (itmChanges) {
+                                if (itmChanges.Entity.NewRate) {
+                                    gridItem.newRate = itmChanges.Entity.NewRate.NormalRate;
+                                    gridItem.newRateEED = itmChanges.Entity.NewRate.EED;
+                                }
+                                else if (itmChanges.Entity.RateChange)
+                                    gridItem.newRateEED = itmChanges.Entity.RateChange.EED;
+
+                                if (itmChanges.Entity.NewRoutingProduct) {
+                                    gridItem.newRoutingProductName = itmChanges.ZoneRoutingProductName;
+                                    gridItem.newRoutingProductEED = itmChanges.Entity.NewRoutingProduct.EED;
+                                }
+                                else if (itmChanges.Entity.RoutingProductChange)
+                                    gridItem.newRoutingProductEED = itmChanges.Entity.RoutingProductChange.EED;
+                            }
+
+                            updateSummary(gridItem);
+                            $scope.zoneChanges.push(gridItem);
+                        }
+                    }
+                });
+
+                function updateSummary(gridItem) {
+                    if (gridItem) {
+                        // Update rate properties
+                        if (gridItem.currentRate && gridItem.newRate) {
+                            var currentRate = Number(gridItem.currentRate);
+                            var newRate = Number(gridItem.newRate);
+
+                            if (newRate > currentRate) $scope.totalIncreasedRates++;
+                            else if (newRate < currentRate) $scope.totalDecreasedRates++;
+                        }
+                        else if (gridItem.newRate)
+                            $scope.totalNewRates++;
+                        else if (gridItem.currentRate && gridItem.newRateEED)
+                            $scope.totalRateChanges++;
+
+                        // Update routing product properties
+                        if (gridItem.newRoutingProductName)
+                            $scope.totalNewZoneRoutingProducts++;
+                        else if (gridItem.currentRoutingProductName && gridItem.newRoutingProductEED)
+                            $scope.totalZoneRoutingProductChanges++;
+                    }
+                }
             }
         }
 
-        function setDefaultChanges() {
-            var oldChanges = oldState ? oldState.DefaultChanges : null;
-            var newChanges = newState ? newState.DefaultChanges : null;
-
-            console.log(oldChanges);
-            console.log(newChanges);
-
-            if ((oldChanges && newChanges) || (!oldChanges && newChanges)) {
-                var dataItem = {};
-
-                if (oldChanges && oldChanges.NewDefaultRoutingProduct) {
-                    var routingProduct = UtilsService.getItemByVal(routingProducts, oldChanges.NewDefaultRoutingProduct.DefaultRoutingProductId, "RoutingProductId");
-                    dataItem.oldRPName = routingProduct ? routingProduct.Name : null;
-                    dataItem.oldRPEED = oldChanges.NewDefaultRoutingProduct.EED;
-                }
-
-                if (newChanges && newChanges.NewDefaultRoutingProduct) {
-                    var routingProduct = UtilsService.getItemByVal(routingProducts, newChanges.NewDefaultRoutingProduct.DefaultRoutingProductId, "RoutingProductId");
-                    dataItem.newRPName = routingProduct ? routingProduct.Name : null;
-                    dataItem.newRPEED = newChanges.NewDefaultRoutingProduct.EED;
-                }
-
-                $scope.defaultRoutingProductChanges.push(dataItem);
-            }
-        }
-
-        function setZoneChanges() {
-            var oldChanges = oldState ? oldState.ZoneChanges : null;
-            var newChanges = newState ? newState.ZoneChanges : null;
-
-            if (oldChanges && newChanges) {
-                for (var i = 0; i < oldChanges.length; i++) {
-                    var oldItem = oldChanges[i];
-                    var newItem = UtilsService.getItemByVal(newChanges, oldItem.ZoneId, "ZoneId");
-                    addDataItem(oldItem, newItem);
-                }
-            }
-            else if (oldChanges) {
-                for (var i = 0; i < oldChanges.length; i++) {
-                    var oldItem = oldChanges[i];
-                    addDataItem(oldItem, null);
-                }
-            }
-            else if (newChanges) {
-                for (var i = 0; i < newChanges.length; i++) {
-                    var newItem = newChanges[i];
-                    addDataItem(null, newItem);
-                }
-            }
-
-            function addDataItem(oldItem, newItem) {
-                var dataItem = {};
-
-                if (oldItem) {
-                    dataItem.name = oldItem.ZoneId;
-                    if (oldItem.NewRate) {
-                        dataItem.oldRate = oldItem.NewRate.NormalRate;
-                        dataItem.oldRateEEd = oldItem.NewRate.EED;
-                    }
-                    if (oldItem.NewRoutingProduct) {
-                        var oldRoutingProduct = UtilsService.getItemByVal(routingProducts, oldItem.NewRoutingProduct.ZoneRoutingProductId, "RoutingProductId");
-                        dataItem.oldRPName = oldRoutingProduct ? oldRoutingProduct.Name : null;
-                        dataItem.oldRPEED = oldItem.NewRoutingProduct.EED;
-                    }
-                }
-                
-                if (newItem) {
-                    if (!dataItem.name)
-                        dataItem.name = newItem.ZoneId;
-                    if (newItem.NewRate) {
-                        dataItem.newRate = newItem.NewRate.NormalRate;
-                        dataItem.newRateEED = newItem.NewRate.EED;
-                    }
-                    if (newItem.NewRoutingProduct) {
-                        var newRoutingProduct = UtilsService.getItemByVal(routingProducts, newItem.NewRoutingProduct.ZoneRoutingProductId, "RoutingProductId");
-                        dataItem.newRPName = newRoutingProduct ? newRoutingProduct.Name : null;
-                        dataItem.newRPEED = newItem.NewRoutingProduct.EED;
-                    }
-                }
-
-                $scope.zoneChanges.push(dataItem);
-            }
+        function closeModal(save) {
+            if ($scope.onRatePlanChangesClose)
+                $scope.onRatePlanChangesClose(save);
+            $scope.modalContext.closeModal();
         }
     }
 

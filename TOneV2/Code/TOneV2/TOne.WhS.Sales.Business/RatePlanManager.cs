@@ -61,12 +61,13 @@ namespace TOne.WhS.Sales.Business
 
                 if (zones != null)
                 {
-                    zones = GetPagedZones(zones, input.FromRow, input.ToRow);
+                    if (input.Filter.ZoneIds == null)
+                        zones = GetPagedZones(zones, input.FromRow, input.ToRow);
 
                     if (zones != null)
                     {
                         zoneItems = new List<ZoneItem>();
-                        Changes changes = _dataManager.GetChanges(input.Filter.OwnerType, input.Filter.OwnerId, RatePlanStatus.Draft);
+                        Changes changes = input.Filter.ZoneIds == null ? _dataManager.GetChanges(input.Filter.OwnerType, input.Filter.OwnerId, RatePlanStatus.Draft) : null;
 
                         foreach (SaleZone zone in zones)
                         {
@@ -78,20 +79,24 @@ namespace TOne.WhS.Sales.Business
                             SetZoneItemRate(input.Filter.OwnerType, input.Filter.OwnerId, zoneItem);
                             SetZoneItemRoutingProduct(input.Filter.OwnerType, input.Filter.OwnerId, zoneItem);
 
-                            if (changes != null && changes.ZoneChanges != null)
+                            if (input.Filter.ZoneIds == null)
                             {
-                                ZoneChanges zoneChanges = changes.ZoneChanges.FindRecord(item => item.ZoneId == zoneItem.ZoneId);
-                                if (zoneChanges != null)
-                                    SetZoneItemChanges(zoneItem, zoneChanges);
+                                if (changes != null && changes.ZoneChanges != null)
+                                {
+                                    ZoneChanges zoneChanges = changes.ZoneChanges.FindRecord(itm => itm.ZoneId == zoneItem.ZoneId);
+                                    if (zoneChanges != null)
+                                        SetZoneItemChanges(zoneItem, zoneChanges);
+                                }
+
+                                NewDefaultRoutingProduct newDefaultRoutingProduct = (changes != null && changes.DefaultChanges != null) ? changes.DefaultChanges.NewDefaultRoutingProduct : null;
+                                SetZoneItemEffectiveRoutingProduct(zoneItem, newDefaultRoutingProduct);
                             }
-
-                            NewDefaultRoutingProduct newDefaultRoutingProduct = (changes != null && changes.DefaultChanges != null) ? changes.DefaultChanges.NewDefaultRoutingProduct : null;
-                            SetZoneItemEffectiveRoutingProduct(zoneItem, newDefaultRoutingProduct);
-
+                            
                             zoneItems.Add(zoneItem);
                         }
 
-                        SetRouteOptionsAndCostsForZoneItems(input.Filter.RoutingDatabaseId, input.Filter.RPRoutePolicyConfigId, input.Filter.NumberOfOptions, zoneItems, input.Filter.CostCalculationMethods);
+                        if (input.Filter.ZoneIds == null)
+                            SetRouteOptionsAndCostsForZoneItems(input.Filter.RoutingDatabaseId, input.Filter.RPRoutePolicyConfigId, input.Filter.NumberOfOptions, zoneItems, input.Filter.CostCalculationMethods);
                     }
                 }
             }
@@ -181,7 +186,9 @@ namespace TOne.WhS.Sales.Business
 
         private IEnumerable<SaleZone> GetFilteredZones(IEnumerable<SaleZone> saleZones, ZoneItemFilter filter)
         {
-            return saleZones.FindAllRecords(item => item.Name != null && item.Name.Length > 0 && char.ToLower(item.Name.ElementAt(0)) == char.ToLower(filter.ZoneLetter));
+            if (filter.ZoneIds != null)
+                return saleZones.FindAllRecords(itm => filter.ZoneIds.Contains(itm.SaleZoneId));
+            return saleZones.FindAllRecords(itm => itm.Name != null && itm.Name.Length > 0 && char.ToLower(itm.Name.ElementAt(0)) == char.ToLower(filter.ZoneLetter));
         }
 
         private IEnumerable<SaleZone> GetPagedZones(IEnumerable<SaleZone> saleZones, int fromRow, int toRow)
@@ -541,6 +548,8 @@ namespace TOne.WhS.Sales.Business
 
             if (changes != null)
             {
+                detailedChanges = new ChangesDetail();
+
                 if (changes.DefaultChanges != null)
                 {
                     DefaultChangesDetail defaultChanges = new DefaultChangesDetail() { Entity = changes.DefaultChanges };
@@ -563,17 +572,17 @@ namespace TOne.WhS.Sales.Business
 
                     foreach (ZoneChanges zoneItemChanges in changes.ZoneChanges)
                     {
-                        ZoneChangesDetail changesDetail = new ZoneChangesDetail() { Entity = zoneItemChanges };
-                        changesDetail.ZoneName = GetZoneName(zoneItemChanges.ZoneId);
+                        ZoneChangesDetail itm = new ZoneChangesDetail() { Entity = zoneItemChanges };
+                        itm.ZoneName = GetZoneName(zoneItemChanges.ZoneId);
 
                         int? routingProductId = null;
                         if (zoneItemChanges.NewRoutingProduct != null) routingProductId = zoneItemChanges.NewRoutingProduct.ZoneRoutingProductId;
                         else if (zoneItemChanges.RoutingProductChange != null) routingProductId = zoneItemChanges.RoutingProductChange.ZoneRoutingProductId;
 
                         if (routingProductId != null)
-                            changesDetail.ZoneRoutingProductName = GetRoutingProductName((int)routingProductId);
+                            itm.ZoneRoutingProductName = GetRoutingProductName((int)routingProductId);
 
-                        lst.Add(changesDetail);
+                        lst.Add(itm);
                     }
 
                     detailedChanges.ZoneChanges = lst;

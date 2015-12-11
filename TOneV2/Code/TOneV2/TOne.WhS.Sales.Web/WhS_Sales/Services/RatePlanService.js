@@ -34,7 +34,7 @@
         VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanSettings.html", parameters, modalSettings);
     }
 
-    function viewChanges(ownerType, ownerId) {
+    function viewChanges(ownerType, ownerId, onRatePlanChangesClose) {
         var parameters = {
             OwnerType: ownerType,
             OwnerId: ownerId
@@ -42,7 +42,8 @@
 
         var settings = {};
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Rate Plan Recent Changes";
+            modalScope.title = "Rate Plan Changes";
+            modalScope.onRatePlanChangesClose = onRatePlanChangesClose;
         };
 
         VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanChanges.html", parameters, settings);
