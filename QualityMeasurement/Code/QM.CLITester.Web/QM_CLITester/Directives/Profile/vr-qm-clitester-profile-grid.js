@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrQmClitesterProfileGrid", ["UtilsService", "VRNotificationService", "Qm_CliTester_upplierAPIService", "Qm_CliTester_SupplierService",
+app.directive("vrQmClitesterProfileGrid", ["UtilsService", "VRNotificationService", "Qm_CliTester_SupplierAPIService", "Qm_CliTester_upplierService",
 function (UtilsService, VRNotificationService, Qm_CliTester_SupplierAPIService, Qm_CliTester_SupplierService) {
 
     var directiveDefinitionObject = {

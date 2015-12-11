@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    profileAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Qm_CliTester_ModuleConfig'];
+    ProfileAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Qm_CliTester_ModuleConfig'];
 
-    function profileAPIService(BaseAPIService, UtilsService, Qm_CliTester_ModuleConfig) {
+    function ProfileAPIService(BaseAPIService, UtilsService, Qm_CliTester_ModuleConfig) {
 
         function GetFilteredProfiles(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(Qm_CliTester_ModuleConfig.moduleName, "Profile", "GetFilteredProfiles"), input);
@@ -26,5 +26,5 @@
         });
     }
 
-    appControllers.service('Qm_CliTester_ProfileAPIService', profileAPIService);
+    appControllers.service('Qm_CliTester_ProfileAPIService', ProfileAPIService);
 })(appControllers);

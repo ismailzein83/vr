@@ -2,9 +2,9 @@
 
     "use strict";
 
-    profileEditorController.$inject = ['$scope', 'Qm_CliTester_ProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    Qm_CliTester_ProfileEditorController.$inject = ['$scope', 'Qm_CliTester_ProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
-    function profileEditorController($scope, Qm_CliTester_ProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function Qm_CliTester_ProfileEditorController($scope, Qm_CliTester_ProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
         var profileId;
 
@@ -129,5 +129,5 @@
         }
     }
 
-    appControllers.controller('Qm_CliTester_ProfileEditorController', profileEditorController);
+    appControllers.controller('Qm_CliTester_ProfileEditorController', Qm_CliTester_profileEditorController);
 })(appControllers);
