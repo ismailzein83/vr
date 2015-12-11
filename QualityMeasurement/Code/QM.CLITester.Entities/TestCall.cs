@@ -18,5 +18,8 @@ namespace QM.CLITester.Entities
         public Object TestProgress { get; set; }
         public CallTestStatus CallTestStatus { get; set; }
         public CallTestResult CallTestResult { get; set; }
+        public int InitiationRetryCount { get; set; }
+        public int GetProgressRetryCount { get; set; }
+        public string FailureMessage { get; set; }
     }
 }

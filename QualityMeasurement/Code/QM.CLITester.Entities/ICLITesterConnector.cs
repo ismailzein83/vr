@@ -59,12 +59,12 @@ namespace QM.CLITester.Entities
     public class TestProgress
     {
         public string Name { get; set; }
-        public int Calls_Total { get; set; }
-        public int Calls_Complete { get; set; }
-        public int CLI_Success { get; set; }
-        public int CLI_No_Result { get; set; }
-        public int CLI_Fail { get; set; }
-        public int PDD { get; set; }
-        public string Share_URL { get; set; }
+        public int TotalCalls { get; set; }
+        public int CompletedCalls { get; set; }
+        public int CliSuccess { get; set; }
+        public int CliNoResult { get; set; }
+        public int CliFail { get; set; }
+        public int Pdd { get; set; }
+        public string ShareUrl { get; set; }
     }
 }
