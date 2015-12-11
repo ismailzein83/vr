@@ -199,6 +199,12 @@
     <Content Include="QM_CLITester\Services\ProfileService.js" />
     <Content Include="QM_CLITester\Services\TestCallDetailsService.js" />
     <Content Include="QM_CLITester\Services\TestCallService.js" />
+    <Content Include="QM_CLITester\Views\HistoryTestCall\HistoryTestCallManagement.html" />
+    <Content Include="QM_CLITester\Views\HistoryTestCall\HistoryTestCallManagementController.js" />
+    <Content Include="QM_CLITester\Views\Profile\ProfileEditor.html" />
+    <Content Include="QM_CLITester\Views\Profile\ProfileEditorController.js" />
+    <Content Include="QM_CLITester\Views\Profile\ProfileManagement.html" />
+    <Content Include="QM_CLITester\Views\Profile\ProfileManagementController.js" />
     <Content Include="QM_CLITester\Views\TestPage\Test.html" />
     <Content Include="QM_CLITester\Views\TestPage\TestController.js" />
   </ItemGroup>
