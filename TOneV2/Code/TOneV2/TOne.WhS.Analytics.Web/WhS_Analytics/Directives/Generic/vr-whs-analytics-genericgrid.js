@@ -46,11 +46,33 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
             var isSummary = false;
 
             function initializeController() {
+
                 ctrl.mainGrid = (ctrl.parameters == undefined);
+
+                ctrl.gridMenuActions = [{
+                    name: "CDRs",
+                    clicked: function (dataItem) {
+                        var parameters = {
+                            fromDate: ctrl.fromTime,
+                            toDate: ctrl.toTime,
+                            customerIds: [],
+                            saleZoneIds: [],
+                            supplierIds: [],
+                            switchIds: [],
+                            supplierZoneIds:[]
+                        };
+
+                        WhS_Analytics_GenericAnalyticService.updateParametersFromDimentions(parameters, ctrl, dataItem);
+                        WhS_Analytics_GenericAnalyticService.showCdrLog(parameters);
+
+                    }
+                }];
+
                 ctrl.getColor = function (dataItem, coldef) {
                     if (ctrl.parameters != undefined)
                         return WhS_Analytics_GenericAnalyticService.getMeasureColor(dataItem, coldef, ctrl.parameters);
                 }
+
                 ctrl.editSettings = function () {
                     var settings = {
                     };
@@ -85,6 +107,7 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                         var directiveAPI = {};
 
                         directiveAPI.loadGrid = function (query) {
+                            ctrl.filters = query.Filters;
                             var filters = query.Filters;
                             ctrl.Currency = query.Currency;
                             dimensionValues.length = 0;
@@ -125,6 +148,7 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                                             FilterValues: [dataItem.DimensionValues[j].Id]
                                         });
                                     }
+
                                     for (var i = 0; i < filters.length; i++)
                                         selectedfilters.push(filters[i]);
 
