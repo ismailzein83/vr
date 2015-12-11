@@ -2,7 +2,8 @@
 
     "use strict";
 
-    genericAnalyticGridSettingsController.$inject = ['$scope', 'VRNavigationService','UtilsService','VRUIUtilsService'];
+    genericAnalyticGridSettingsController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+
     function genericAnalyticGridSettingsController($scope, VRNavigationService, UtilsService, VRUIUtilsService) {
 
         var genericSettingsAPI;
@@ -13,15 +14,17 @@
         loadParameters();
         defineScope();
         load();
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 measureThresholds = parameters.measureThresholds;
             }
         }
+
         function defineScope() {
 
-            $scope.onGenericSettingsReady = function (api) {   
+            $scope.onGenericSettingsReady = function (api) {
                 genericSettingsAPI = api;
                 genericSettingsReadyPromiseDeferred.resolve();
             }
@@ -35,14 +38,17 @@
                 $scope.modalContext.closeModal();
             };
         }
+
         function load() {
             $scope.isLoadingGenericSettings = true;
-            loadingGenericSettings().catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-                $scope.isLoadingGenericSettings = false;
-            }).finally(function () {
-                $scope.isLoadingGenericSettings = false;
-            });
+            loadingGenericSettings()
+                .catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                    $scope.isLoadingGenericSettings = false;
+                })
+                .finally(function () {
+                    $scope.isLoadingGenericSettings = false;
+                });
         }
 
         function loadingGenericSettings() {

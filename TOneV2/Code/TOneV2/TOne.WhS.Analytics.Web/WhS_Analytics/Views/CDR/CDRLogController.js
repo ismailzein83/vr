@@ -44,6 +44,7 @@ function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_
             receivedSwitchIds = parameters.switchIds;
             receivedSupplierZoneIds = parameters.supplierZoneIds;
             isModalMode = true;
+            $scope.advancedSelected = true;
         }
     }
 
@@ -164,7 +165,7 @@ function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadCustomers, loadSuppliers, loadSellingNumberPlanSection, loadCDROption, loadMeasures, loadSwitches])
+        return UtilsService.waitMultipleAsyncOperations([loadCustomers, loadSuppliers, loadSellingNumberPlanSection, loadCDROption, loadSwitches])
             .then(function () {
 
                 if (isModalMode && mainGridAPI != undefined)
@@ -238,7 +239,7 @@ function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_
         for (var prop in BillingCDROptionMeasureEnum) {
             $scope.CDROption.push(BillingCDROptionMeasureEnum[prop]);
         }
-        $scope.selectedCDROption = CDROption[2];
+        $scope.selectedCDROption = $scope.CDROption[2];
     }
 
 };
