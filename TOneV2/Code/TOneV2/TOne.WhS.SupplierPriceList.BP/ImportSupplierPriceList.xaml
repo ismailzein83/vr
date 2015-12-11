@@ -302,7 +302,27 @@
         </OutArgument>
       </twsba1:ReserveIdsForNewEntities.PriceListId>
     </twsba1:ReserveIdsForNewEntities>
-    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWw2OAOyAg4CAQFMBWYjAwG5BWcFmwEQAwGKBJwBBacBIwMB4wOoAQXLARADAe4CzAEF+gEiAwHCAfsBBZoCIgIBT5sCBbACJwIBAmMLY14DAYYGTwtPagMB8wVeC155AwHgBVQLVFQDAc0FWQtZeQMBugVoB3ghAwH/BHkHiQEhAwHFBIoBB5oBIQMBiwSfAQufAXcDAfcDpAELpAGJAQMB5AOpAQe5ASUDAakDugEHygElAwHvAt4BC94BcQMB2wLyAQvyAW8DAcgC2QEL2QFhAwG1As8BC88BdwMBogL3AQv3AW8DAY8C4wEL4wGBAQMB/AHtAQvtAW0DAekB1AEL1AF3AwHWAegBC+gBcQMBwwH+AQv+AXcDAa8BlwILlwJvAwGcAYMCC4MCeQMBiQGNAguNAnECAXaIAguIAoEBAgFjkgILkgJlAgFQrQILrQJbAgE8ngILngJnAgEpowILowJnAgEWqAILqAJnAgEDaw1rgQEDAaYFdQ11YQMBkwVwDXBYAwGABXwNfIEBAwHsBIYBDYYBYQMB2QSBAQ2BAVgDAcYElwENlwFhAwGyBI0BDY0BgQEDAZ8EkgENkgFYAwGMBLEBDbEBewMB0AOsAQ2sAXkDAb0DtgENtgGDAQMBqgO9AQ29AXkDAZYDwgENwgF7AwGDA8cBDccBgwEDAfAC</sads:DebugSymbol.Symbol>
+    <Parallel DisplayName="ApplyNewAndChangedDataToTempTables" sap2010:WorkflowViewState.IdRef="Parallel_3">
+      <twsba1:ApplyNewZonesToDB>
+        <twsba1:ApplyNewZonesToDB.NewZones>
+          <InArgument x:TypeArguments="scg:IEnumerable(twses:NewZone)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewZone)">NewZones</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ApplyNewZonesToDB.NewZones>
+        <twsba1:ApplyNewZonesToDB.PriceListId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">PriceListId</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ApplyNewZonesToDB.PriceListId>
+        <twsba1:ApplyNewZonesToDB.SupplierId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ApplyNewZonesToDB.SupplierId>
+        <sap2010:WorkflowViewState.IdRef>ApplyNewZonesToDB_1</sap2010:WorkflowViewState.IdRef>
+      </twsba1:ApplyNewZonesToDB>
+    </Parallel>
+    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWw7OAPGAg4CAQFMBWYjAwH0BWcFmwEQAwHFBJwBBacBIwMBngSoAQXLARADAakDzAEF+gEiAwH9AfsBBZoCIgMBigGbAgWwAicCAT2xAgXEAhACAQJjC2NeAwHBBk8LT2oDAa4GXgteeQMBmwZUC1RUAwGIBlkLWXkDAfUFaAd4IQMBugV5B4kBIQMBgAWKAQeaASEDAcYEnwELnwF3AwGyBKQBC6QBiQEDAZ8EqQEHuQElAwHkA7oBB8oBJQMBqgPeAQveAXEDAZYD8gEL8gFvAwGDA9kBC9kBYQMB8ALPAQvPAXcDAd0C9wEL9wFvAwHKAuMBC+MBgQEDAbcC7QEL7QFtAwGkAtQBC9QBdwMBkQLoAQvoAXEDAf4B/gEL/gF3AwHqAZcCC5cCbwMB1wGDAguDAnkDAcQBjQILjQJxAwGxAYgCC4gCgQEDAZ4BkgILkgJlAwGLAa0CC60CWwIBd54CC54CZwIBZKMCC6MCZwIBUagCC6gCZwIBPrICB8MCIgIBA2sNa4EBAwHhBXUNdWEDAc4FcA1wWAMBuwV8DXyBAQMBpwWGAQ2GAWEDAZQFgQENgQFYAwGBBZcBDZcBYQMB7QSNAQ2NAYEBAwHaBJIBDZIBWAMBxwSxAQ2xAXsDAYsErAENrAF5AwH4A7YBDbYBgwEDAeUDvQENvQF5AwHRA8IBDcIBewMBvgPHAQ3HAYMBAwGrA7oCDboCVQIBKr8CDb8CYQIBF7UCDbUCaQIBBA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -318,14 +338,16 @@
       <sap2010:ViewStateData Id="ProcessCountryCodes_1" sap:VirtualizedContainerService.HintSize="794,22" />
       <sap2010:ViewStateData Id="ProcessCountryRates_1" sap:VirtualizedContainerService.HintSize="794,22" />
       <sap2010:ViewStateData Id="ReserveIdsForNewEntities_1" sap:VirtualizedContainerService.HintSize="794,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,646">
+      <sap2010:ViewStateData Id="ApplyNewZonesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="794,86" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,772">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="856,726" />
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="856,852" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

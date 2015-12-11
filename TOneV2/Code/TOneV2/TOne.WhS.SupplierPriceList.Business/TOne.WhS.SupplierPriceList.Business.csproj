@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImportPriceListManager.cs" />
+    <Compile Include="NewSupplierZoneManager.cs" />
     <Compile Include="PriceListCodeManager.cs" />
     <Compile Include="PriceListRateManager.cs" />
     <Compile Include="ProcessCountryCodesContext.cs" />

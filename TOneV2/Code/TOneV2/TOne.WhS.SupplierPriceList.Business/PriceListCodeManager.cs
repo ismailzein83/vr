@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.Common;
 
@@ -11,6 +12,9 @@ namespace TOne.WhS.SupplierPriceList.Business
     public class PriceListCodeManager
     {
         BusinessEntity.Business.CodeGroupManager codeGroupManager = new BusinessEntity.Business.CodeGroupManager();
+
+        //TODO: this is used by testing and needs to be removed when DI is applied for testing on this module
+        public Dictionary<int, TOne.WhS.BusinessEntity.Entities.CodeGroup> _codeGroupsMocData { get; set; }
 
         List<CodeValidation> _validations = new List<CodeValidation>();
 
@@ -163,7 +167,13 @@ namespace TOne.WhS.SupplierPriceList.Business
                     zones.AddRange(matchExistingZones);
                 newAndExistingZones.Add(importedCode.ZoneName, zones);
             }
-            var codeGroup = codeGroupManager.GetMatchCodeGroup(importedCode.Code);
+
+            TOne.WhS.BusinessEntity.Entities.CodeGroup codeGroup;
+            if (_codeGroupsMocData != null)
+                codeGroup = this.GetMatchCodeGroupUsedForTesting(importedCode.Code);
+            else
+                codeGroup = codeGroupManager.GetMatchCodeGroup(importedCode.Code);
+            
             if (codeGroup == null)
             {
                 AddValidationError(importedCode, CodeValidationType.NoCodeGroup);
@@ -324,5 +334,17 @@ namespace TOne.WhS.SupplierPriceList.Business
                 }
             }
         }
+
+
+        #region Test Data
+
+        private TOne.WhS.BusinessEntity.Entities.CodeGroup GetMatchCodeGroupUsedForTesting(string code)
+        {
+            TOne.WhS.BusinessEntity.Business.CodeIterator<TOne.WhS.BusinessEntity.Entities.CodeGroup> codeIterator =
+                new CodeIterator<TOne.WhS.BusinessEntity.Entities.CodeGroup>(_codeGroupsMocData.Values);
+            return codeIterator.GetLongestMatch(code);
+        }
+
+        #endregion
     }
 }

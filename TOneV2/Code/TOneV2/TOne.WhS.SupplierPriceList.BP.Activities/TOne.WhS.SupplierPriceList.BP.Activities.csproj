@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyDataToDB.cs" />
+    <Compile Include="ApplyNewZonesToDB.cs" />
     <Compile Include="GetDataFromPriceList.cs" />
     <Compile Include="GetExistingCodes.cs" />
     <Compile Include="GetExistingRates.cs" />
