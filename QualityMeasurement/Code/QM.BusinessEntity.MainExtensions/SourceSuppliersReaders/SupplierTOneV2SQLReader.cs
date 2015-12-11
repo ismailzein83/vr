@@ -21,26 +21,31 @@ namespace QM.BusinessEntity.MainExtensions.SourceSuppliersReaders
 
         public override IEnumerable<SourceSupplier> GetChangedItems(ref object updatedHandle)
         {
-            TOneV2DataManager dataManager = new TOneV2DataManager(this.ConnectionString);
+            DataManager dataManager = new DataManager(this.ConnectionString);
             return dataManager.GetUpdatedSuppliers(ref updatedHandle);
         }
 
-        private class TOneV2DataManager : BaseTOneDataManager
+        private class DataManager : Vanrise.Data.SQL.BaseSQLDataManager
         {
-            public TOneV2DataManager(string connectionString)
-                : base(connectionString)
+            public DataManager(string connectionString)
+                : base(connectionString, false)
             { 
             }
 
-            const string query_getUpdatedSuppliers = @"SELECT
-			                                                    ca.ID,
-			                                                    ca.Name
-	                                                    FROM TOneWhS_BE.CarrierAccount ca";
-
-            protected override string GetQuery()
+            public List<SourceSupplier> GetUpdatedSuppliers(ref object updateHandle)
             {
-                return query_getUpdatedSuppliers;
+                return GetItemsText(query_getUpdatedSuppliers, SourceSupplierMapper, null);
             }
+
+            private SourceSupplier SourceSupplierMapper(System.Data.IDataReader arg)
+            {
+                throw new NotImplementedException();
+            }
+
+            const string query_getUpdatedSuppliers = @"SELECT
+			ca.ID,
+			ca.Name
+	FROM TOneWhS_BE.CarrierAccount ca   ";
         }
     }
 }
