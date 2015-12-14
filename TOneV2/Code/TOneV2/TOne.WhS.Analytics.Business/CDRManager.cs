@@ -16,17 +16,17 @@ namespace TOne.WhS.Analytics.Business
 {
     public class CDRManager
     {
-        private readonly CarrierAccountManager carrierAccountManager;
-        private readonly SwitchManager switchManager;
-        private readonly SaleZoneManager saleZoneManager;
-        private readonly SupplierZoneManager supplierZoneManager;
+        private readonly CarrierAccountManager _carrierAccountManager;
+        private readonly SwitchManager _switchManager;
+        private readonly SaleZoneManager _saleZoneManager;
+        private readonly SupplierZoneManager _supplierZoneManager;
 
         public CDRManager()
         {
-            carrierAccountManager = new CarrierAccountManager();
-            switchManager = new SwitchManager();
-            saleZoneManager = new SaleZoneManager();
-            supplierZoneManager = new SupplierZoneManager();
+            _carrierAccountManager = new CarrierAccountManager();
+            _switchManager = new SwitchManager();
+            _saleZoneManager = new SaleZoneManager();
+            _supplierZoneManager = new SupplierZoneManager();
         }
         public Vanrise.Entities.IDataRetrievalResult<CDRLogDetail> GetCDRLogData(Vanrise.Entities.DataRetrievalInput<CDRLogInput> input)
         {
@@ -43,13 +43,13 @@ namespace TOne.WhS.Analytics.Business
 
         public CDRLogDetail CDRLogDetailMapper(CDRLog cdrLog)
         {
-            CarrierAccount customer=  carrierAccountManager.GetCarrierAccount(cdrLog.CustomerID);
-            CarrierAccount supplier = carrierAccountManager.GetCarrierAccount(cdrLog.SupplierID);
+            CarrierAccount customer=  _carrierAccountManager.GetCarrierAccount(cdrLog.CustomerID);
+            CarrierAccount supplier = _carrierAccountManager.GetCarrierAccount(cdrLog.SupplierID);
 
-            SaleZone salezone = saleZoneManager.GetSaleZone(cdrLog.SaleZoneID);
-            SupplierZone supplierzone = supplierZoneManager.GetSupplierZone(cdrLog.SupplierZoneID);
+            SaleZone salezone = _saleZoneManager.GetSaleZone(cdrLog.SaleZoneID);
+            SupplierZone supplierzone = _supplierZoneManager.GetSupplierZone(cdrLog.SupplierZoneID);
 
-            Switch switchEntity = switchManager.GetSwitch(cdrLog.SwitchID);
+            Switch switchEntity = _switchManager.GetSwitch(cdrLog.SwitchID);
             CDRLogDetail cdrLogDetail = new CDRLogDetail
             {
                 Entity = cdrLog,

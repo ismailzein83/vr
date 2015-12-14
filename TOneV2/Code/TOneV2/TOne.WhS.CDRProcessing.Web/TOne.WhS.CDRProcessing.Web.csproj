@@ -128,6 +128,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Controllers\SwitchIdentificationRuleController.cs" />
     <Compile Include="Controllers\CustomerIdentificationRuleController.cs" />
     <Compile Include="Controllers\NormalizationRuleController.cs" />
     <Compile Include="Controllers\SupplierIdentificationRuleController.cs" />
@@ -157,6 +158,9 @@
     <Content Include="WhS_CDRProcessing\Directives\NormalizationRule\vr-whs-cdrprocessing-normalizationrule-grid.js" />
     <Content Include="WhS_CDRProcessing\Directives\SupplierRule\Templates\SupplierIdentificationRuleGrid.html" />
     <Content Include="WhS_CDRProcessing\Directives\SupplierRule\vr-whs-cdrprocessing-supplieridentificationrule-grid.js" />
+    <Content Include="WhS_CDRProcessing\Directives\SwitchRule\Templates\SwitchIdentificationRuleGrid.html" />
+    <Content Include="WhS_CDRProcessing\Directives\SwitchRule\vr-whs-cdrprocessing-switchidentificationrule-grid.js" />
+    <Content Include="WhS_CDRProcessing\Services\APIServices\SwitchIdentificationRuleAPIService.js" />
     <Content Include="WhS_CDRProcessing\Services\APIServices\CustomerIdentificationRuleAPIService.js" />
     <Content Include="WhS_CDRProcessing\Services\APIServices\NormalizationRuleAPIService.js" />
     <Content Include="WhS_CDRProcessing\Services\APIServices\SupplierIdentificationRuleAPIService.js" />
@@ -173,6 +177,10 @@
     <Content Include="WhS_CDRProcessing\Views\SupplierRule\SupplierIdentificationRuleEditorController.js" />
     <Content Include="WhS_CDRProcessing\Views\SupplierRule\SupplierIdentificationRuleManagement.html" />
     <Content Include="WhS_CDRProcessing\Views\SupplierRule\SupplierIdentificationRuleManagementController.js" />
+    <Content Include="WhS_CDRProcessing\Views\SwitchRule\SwitchIdentificationRuleEditor.html" />
+    <Content Include="WhS_CDRProcessing\Views\SwitchRule\SwitchIdentificationRuleEditorController.js" />
+    <Content Include="WhS_CDRProcessing\Views\SwitchRule\SwitchIdentificationRuleManagement.html" />
+    <Content Include="WhS_CDRProcessing\Views\SwitchRule\SwitchIdentificationRuleManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

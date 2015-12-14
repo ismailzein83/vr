@@ -13,10 +13,10 @@ namespace TOne.WhS.Analytics.Business
 {
     public class RawCDRManager
     {
-        private readonly SwitchManager switchManager;
+        private readonly SwitchManager _switchManager;
         public RawCDRManager()
         {
-            switchManager = new SwitchManager();
+            _switchManager = new SwitchManager();
         }
         public Vanrise.Entities.IDataRetrievalResult<RawCDRLogDetail> GetRawCDRData(Vanrise.Entities.DataRetrievalInput<RawCDRInput> input)
         {
@@ -32,7 +32,7 @@ namespace TOne.WhS.Analytics.Business
         }
         public RawCDRLogDetail RawCDRLogDetailMapper(RawCDRLog rawCDRLog)
         {
-            Switch switchEntity = switchManager.GetSwitch(rawCDRLog.SwitchID);
+            Switch switchEntity = _switchManager.GetSwitch(rawCDRLog.SwitchID);
 
             RawCDRLogDetail rawCDRLogDetail = new RawCDRLogDetail
             {

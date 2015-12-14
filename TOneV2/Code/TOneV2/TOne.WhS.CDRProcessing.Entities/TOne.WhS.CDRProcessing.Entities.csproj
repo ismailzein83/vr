@@ -109,6 +109,14 @@
     <Compile Include="SupplierRule\SupplierIdentificationRuleQuery.cs" />
     <Compile Include="SupplierRule\SupplierIdentificationRuleSettings.cs" />
     <Compile Include="SupplierRule\SupplierIdentificationRuleTarget.cs" />
+    <Compile Include="SwitchRule\IRule\IRuleSwitchDataSourceCriteria.cs" />
+    <Compile Include="SwitchRule\IRule\IRuleSwitchDataSourceTarget.cs" />
+    <Compile Include="SwitchRule\SwitchIdentificationRule.cs" />
+    <Compile Include="SwitchRule\SwitchIdentificationRuleCriteria.cs" />
+    <Compile Include="SwitchRule\SwitchIdentificationRuleDetail.cs" />
+    <Compile Include="SwitchRule\SwitchIdentificationRuleQuery.cs" />
+    <Compile Include="SwitchRule\SwitchIdentificationRuleSettings.cs" />
+    <Compile Include="SwitchRule\SwitchIdentificationRuleTarget.cs" />
     <Compile Include="TrafficStatistics\BaseTrafficStatistic.cs" />
     <Compile Include="TrafficStatistics\TrafficStatisticBatch.cs" />
     <Compile Include="BillingStatistics\BillingStatistic.cs" />

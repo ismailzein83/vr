@@ -12,7 +12,11 @@ app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationS
         deleteSupplierIdentificationRule: deleteSupplierIdentificationRule,
         editNormalizationRule: editNormalizationRule,
         addNormalizationRule: addNormalizationRule,
-        deleteNormalizationRule: deleteNormalizationRule
+        deleteNormalizationRule: deleteNormalizationRule,
+        addSwitchIdentificationRule: addSwitchIdentificationRule,
+        editSwitchIdentificationRule: editSwitchIdentificationRule,
+        deleteSwitchIdentificationRule: deleteSwitchIdentificationRule,
+
     });
 
     function addCustomerIdentificationRule(onCustomerIdentificationRuleAdded) {
@@ -36,7 +40,6 @@ app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationS
         };
         VRModalService.showModal('/Client/Modules/WhS_CDRProcessing/Views/CustomerRule/CustomerIdentificationRuleEditor.html', parameters, settings);
     }
-    
     function deleteCustomerIdentificationRule($scope, customerRuleObj, onCustomerIdentificationRuleObjDeleted) {
         VRNotificationService.showConfirmation()
             .then(function (response) {
@@ -52,6 +55,7 @@ app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationS
                 }
             });
     }
+
     function addSupplierIdentificationRule(onSupplierIdentificationRuleAdded) {
         var settings = {};
 
@@ -74,7 +78,6 @@ app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationS
 
         VRModalService.showModal('/Client/Modules/WhS_CDRProcessing/Views/SupplierRule/SupplierIdentificationRuleEditor.html', parameters, settings);
     }
-
     function deleteSupplierIdentificationRule($scope,supplierRuleObj, onSupplierIdentificationRuleDeleted) {
         VRNotificationService.showConfirmation()
             .then(function (response) {
@@ -90,6 +93,7 @@ app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationS
                 }
             });
     }
+
     function editNormalizationRule(normalizationRuleDetail, onNormalizationRuleUpdated) {
         var modalSettings = {};
 
@@ -105,7 +109,6 @@ app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationS
 
         VRModalService.showModal("/Client/Modules/WhS_CDRProcessing/Views/NormalizationRule/NormalizationRuleEditor.html", parameters, modalSettings);
     }
-
     function addNormalizationRule(onNormalizationRuleAdded) {
         var modalSettings = {};
 
@@ -118,7 +121,6 @@ app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationS
 
         VRModalService.showModal("/Client/Modules/WhS_CDRProcessing/Views/NormalizationRule/NormalizationRuleEditor.html", parameters, modalSettings);
     }
-
     function deleteNormalizationRule(ruleDetail, onNormalizationRuleDeleted) {
 
         VRNotificationService.showConfirmation()
@@ -129,6 +131,43 @@ app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationS
                         .then(function (deletionResponse) {
                             if (VRNotificationService.notifyOnItemDeleted("Normalization Rule", deletionResponse))
                                 onNormalizationRuleDeleted(ruleDetail);
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                }
+            });
+    }
+
+    function addSwitchIdentificationRule(onSwitchIdentificationRuleAdded) {
+        var settings = {};
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.onSwitchIdentificationRuleAdded = onSwitchIdentificationRuleAdded;
+        };
+        var parameters = {
+        };
+        VRModalService.showModal('/Client/Modules/WhS_CDRProcessing/Views/SwitchRule/SwitchIdentificationRuleEditor.html', parameters, settings);
+    }
+    function editSwitchIdentificationRule(obj, onSwitchIdentificationRuleUpdated) {
+        var settings = {};
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.onSwitchIdentificationRuleUpdated = onSwitchIdentificationRuleUpdated;
+        };
+        var parameters = {
+            RuleId: obj.RuleId,
+        };
+        VRModalService.showModal('/Client/Modules/WhS_CDRProcessing/Views/SwitchRule/SwitchIdentificationRuleEditor.html', parameters, settings);
+    }
+    function deleteSwitchIdentificationRule($scope, switchRuleObj, onSwitchIdentificationRuleObjDeleted) {
+        VRNotificationService.showConfirmation()
+            .then(function (response) {
+                if (response) {
+                    return WhS_CDRProcessing_CustomerIdentificationRuleAPIService.DeleteRule(switchRuleObj.Entity.RuleId)
+                        .then(function (deletionResponse) {
+                            VRNotificationService.notifyOnItemDeleted("Switch Identification Rule", deletionResponse);
+                            onSwitchIdentificationRuleObjDeleted(switchRuleObj);
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);

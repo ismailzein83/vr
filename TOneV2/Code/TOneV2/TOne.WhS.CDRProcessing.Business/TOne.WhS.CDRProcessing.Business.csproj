@@ -53,6 +53,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
@@ -91,6 +94,8 @@
     <Compile Include="SupplierRule\Rules\StructureRulesBehaviors\RuleBehaviorByOutTrunk.cs" />
     <Compile Include="SupplierRule\SupplierIdentificationRuleManager.cs" />
     <Compile Include="BillingStatisticManager.cs" />
+    <Compile Include="SwitchRule\Rules\StructureRulesBehaviors\RuleBehaviorByDataSource.cs" />
+    <Compile Include="SwitchRule\SwitchIdentificationRuleManager.cs" />
     <Compile Include="TrafficStatistics\BaseTrafficStatisticManager.cs" />
     <Compile Include="TrafficStatistics\TrafficStatisticByCodeManager.cs" />
     <Compile Include="TrafficStatistics\TrafficStatisticByIntervalManager.cs" />
