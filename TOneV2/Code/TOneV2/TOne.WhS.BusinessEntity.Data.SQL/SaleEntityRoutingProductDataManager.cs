@@ -74,11 +74,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return affectedRows > 0;
         }
 
-        public bool InsertOrUpdateZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<NewZoneRoutingProduct> newZoneRoutingProducts)
+        public bool InsertZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<NewZoneRoutingProduct> newZoneRoutingProducts)
         {
             DataTable newZoneRoutingProductsTable = BuildNewZoneRoutingProductsTable(newZoneRoutingProducts);
 
-            int affectedRows = ExecuteNonQuerySPCmd("TOneWhs_BE.sp_SaleEntityRoutingProduct_InsertOrUpdateZoneRoutingProducts", (cmd) => {
+            int affectedRows = ExecuteNonQuerySPCmd("TOneWhs_BE.sp_SaleEntityRoutingProduct_InsertZoneRoutingProducts", (cmd) =>
+            {
                 cmd.Parameters.Add(new SqlParameter("@OwnerType", ownerType));
                 cmd.Parameters.Add(new SqlParameter("@OwnerID", ownerId));
                 
@@ -141,6 +142,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             DataTable table = new DataTable();
 
             table.Columns.Add("ZoneID", typeof(long));
+            table.Columns.Add("RoutingProductID", typeof(int));
             table.Columns.Add("EED", typeof(DateTime));
 
             table.BeginLoadData();
@@ -149,7 +151,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 DataRow row = table.NewRow();
 
-                row["ZoneID"] = change.ZoneRoutingProductId;
+                row["ZoneID"] = change.ZoneId;
+                row["RoutingProductID"] = change.ZoneRoutingProductId;
                 
                 if (change.EED != null)
                     row["EED"] = change.EED;

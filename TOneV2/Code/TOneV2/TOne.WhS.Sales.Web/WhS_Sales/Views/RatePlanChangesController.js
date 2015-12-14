@@ -2,9 +2,9 @@
 
     "use strict";
 
-    RatePlanChangesController.$inject = ["$scope", "WhS_Sales_RatePlanAPIService", "UtilsService", "VRNavigationService", "VRNotificationService"];
+    RatePlanChangesController.$inject = ["$scope", "WhS_Sales_RatePlanAPIService", "WhS_Sales_RateChangeTypeEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
 
-    function RatePlanChangesController($scope, WhS_Sales_RatePlanAPIService, UtilsService, VRNavigationService, VRNotificationService) {
+    function RatePlanChangesController($scope, WhS_Sales_RatePlanAPIService, WhS_Sales_RateChangeTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
 
         var ownerType;
         var ownerId;
@@ -32,7 +32,8 @@
             $scope.totalZoneRoutingProductChanges = 0;
 
             $scope.defaultItem;
-            $scope.zoneChanges = [];
+            $scope.zoneRateChanges = [];
+            $scope.zoneRoutingProductChanges = [];
 
             $scope.save = function () {
                 closeModal(true);
@@ -83,33 +84,17 @@
             function getChanges() {
                 return WhS_Sales_RatePlanAPIService.GetChanges(ownerType, ownerId).then(function (response) {
                     changes = response;
+                    console.log(changes);
                 });
             }
 
             function getDefaultItem() {
                 return WhS_Sales_RatePlanAPIService.GetDefaultItem(ownerType, ownerId).then(function (response) {
                     $scope.defaultItem = {};
-
-                    // Set current properties
+                    
                     $scope.defaultItem.currentRoutingProductName = response.CurrentRoutingProductName;
-                    if (response.CurrentRoutingProductEED) {
-                        var currentEED = new Date(response.CurrentRoutingProductEED);
-                        $scope.defaultItem.currentRoutingProductEED = currentEED.toDateString();
-                    }
-                    else $scope.defaultItem.currentRoutingProductEED = "NULL";
-
-                    // Set new properties
-                    var newDefaultRoutingProduct = changes.DefaultChanges.Entity.NewDefaultRoutingProduct;
-                    var defaultRoutingProductChange = changes.DefaultChanges.Entity.DefaulRoutingProductChange;
-
-                    $scope.defaultItem.newRoutingProductName = changes.DefaultChanges.DefaultRoutingProductName;
-                    $scope.defaultItem.newRoutingProductEED = newDefaultRoutingProduct ? newDefaultRoutingProduct.EED : defaultRoutingProductChange.EED;
-
-                    if ($scope.defaultItem.newRoutingProductEED) {
-                        var newEED = new Date($scope.defaultItem.newRoutingProductEED);
-                        $scope.defaultItem.newRoutingProductEED = newEED.toDateString();
-                    }
-                    else $scope.defaultItem.newRoutingProductEED = "NULL";
+                    $scope.defaultItem.newRoutingProductName = changes.DefaultChanges.Entity.NewDefaultRoutingProduct ? changes.DefaultChanges.DefaultRoutingProductName : null;
+                    $scope.defaultItem.effectiveOn = new Date().toDateString();
                 });
             }
 
@@ -126,59 +111,86 @@
                 }).then(function (response) {
                     if (response) {
                         for (var i = 0; i < response.length; i++) {
-                            var gridItem = {};
-
-                            // Set current properties
-                            gridItem.zoneId = response[i].ZoneId;
-                            gridItem.zoneName = response[i].ZoneName;
-                            gridItem.currentRate = response[i].CurrentRate;
-                            gridItem.currentRateEED = response[i].CurrentRateEED;
-                            gridItem.currentRoutingProductName = response[i].CurrentRoutingProductName;
-                            gridItem.currentRoutingProductEED = response[i].CurrentRoutingProductEED;
-
-                            // Set new properties
-                            var itmChanges = UtilsService.getItemByVal(changes.ZoneChanges, gridItem.zoneName, "ZoneName"); // It should be by Entity.ZoneId, but nested properties aren't supported by UtilsService.getItemByVal
-                            if (itmChanges) {
-                                if (itmChanges.Entity.NewRate) {
-                                    gridItem.newRate = itmChanges.Entity.NewRate.NormalRate;
-                                    gridItem.newRateEED = itmChanges.Entity.NewRate.EED;
-                                }
-                                else if (itmChanges.Entity.RateChange)
-                                    gridItem.newRateEED = itmChanges.Entity.RateChange.EED;
-
-                                if (itmChanges.Entity.NewRoutingProduct) {
-                                    gridItem.newRoutingProductName = itmChanges.ZoneRoutingProductName;
-                                    gridItem.newRoutingProductEED = itmChanges.Entity.NewRoutingProduct.EED;
-                                }
-                                else if (itmChanges.Entity.RoutingProductChange)
-                                    gridItem.newRoutingProductEED = itmChanges.Entity.RoutingProductChange.EED;
-                            }
-
-                            updateSummary(gridItem);
-                            $scope.zoneChanges.push(gridItem);
+                            var zoneItem = response[i];
+                            var zoneItemChanges = UtilsService.getItemByVal(changes.ZoneChanges, zoneItem.ZoneName, "ZoneName"); // It should be by Entity.ZoneId, but nested properties aren't supported by UtilsService.getItemByVal
+                            addRateChange(zoneItem, zoneItemChanges);
+                            addRoutingProductChange(zoneItem, zoneItemChanges);
                         }
                     }
                 });
 
-                function updateSummary(gridItem) {
-                    if (gridItem) {
-                        // Update rate properties
-                        if (gridItem.currentRate && gridItem.newRate) {
-                            var currentRate = Number(gridItem.currentRate);
-                            var newRate = Number(gridItem.newRate);
+                function addRateChange(zoneItem, zoneItemChanges) {
+                    if (zoneItemChanges && (zoneItemChanges.Entity.NewRate || zoneItemChanges.Entity.RateChange)) {
+                        var newRate = zoneItemChanges.Entity.NewRate ? zoneItemChanges.Entity.NewRate.NormalRate : null;
 
-                            if (newRate > currentRate) $scope.totalIncreasedRates++;
-                            else if (newRate < currentRate) $scope.totalDecreasedRates++;
+                        var dataItem = {
+                            zoneId: zoneItem.ZoneId,
+                            zoneName: zoneItem.ZoneName,
+                            currentRate: zoneItem.CurrentRate,
+                            newRate: newRate
+                        };
+
+                        setRateChangeType(dataItem);
+                        setEffectiveDates(dataItem, zoneItemChanges.Entity.NewRate, zoneItemChanges.Entity.RateChange);
+
+                        $scope.zoneRateChanges.push(dataItem);
+                        updateRateSummary(dataItem);
+                    }
+
+                    function setRateChangeType(dataItem) {
+                        var currentRate = dataItem.currentRate;
+                        var newRate = dataItem.newRate;
+
+                        if (currentRate && newRate) {
+                            if (Number(newRate) > Number(currentRate))
+                                dataItem.changeType = WhS_Sales_RateChangeTypeEnum.Increase.description;
+                            else if (Number(newRate) < Number(currentRate))
+                                dataItem.changeType = WhS_Sales_RateChangeTypeEnum.Decrease.description;
                         }
-                        else if (gridItem.newRate)
-                            $scope.totalNewRates++;
-                        else if (gridItem.currentRate && gridItem.newRateEED)
-                            $scope.totalRateChanges++;
+                        else if (newRate)
+                            dataItem.changeType = WhS_Sales_RateChangeTypeEnum.New.description;
+                        else
+                            dataItem.changeType = WhS_Sales_RateChangeTypeEnum.Close.description;
+                    }
+                    function setEffectiveDates(dataItem, newRateEntity, rateChangeEntity) {
+                        dataItem.effectiveOn = rateChangeEntity ? rateChangeEntity.EED : newRateEntity.BED;
+                        dataItem.effectiveUntil = newRateEntity ? newRateEntity.EED : null;
+                    }
+                    function updateRateSummary(dataItem) {
+                        if (!dataItem)
+                            return;
 
-                        // Update routing product properties
-                        if (gridItem.newRoutingProductName)
+                        if (dataItem.currentRate && dataItem.newRate) {
+                            if (Number(dataItem.newRate) > Number(dataItem.currentRate))
+                                $scope.totalIncreasedRates++;
+                            else if (Number(dataItem.newRate) < Number(dataItem.currentRate))
+                                $scope.totalDecreasedRates++;
+                        }
+                        else if (dataItem.newRate)
+                            $scope.totalNewRates++;
+                        else if (dataItem.currentRate && dataItem.effectiveOn)
+                            $scope.totalRateChanges++;
+                    }
+                }
+                function addRoutingProductChange(zoneItem, zoneItemChanges) {
+                    if (zoneItemChanges && (zoneItemChanges.Entity.NewRoutingProduct || zoneItemChanges.Entity.RoutingProductChange)) {
+                        var dataItem = {
+                            zoneId: zoneItem.ZoneId,
+                            zoneName: zoneItem.ZoneName,
+                            currentRoutingProduct: zoneItem.CurrentRoutingProductName,
+                            newRoutingProduct: zoneItemChanges.Entity.NewRoutingProduct ?
+                                zoneItemChanges.ZoneRoutingProductName : null,
+                            effectiveOn: new Date()
+                        };
+
+                        $scope.zoneRoutingProductChanges.push(dataItem);
+                        updateRoutingProductSummary(dataItem);
+                    }
+
+                    function updateRoutingProductSummary(dataItem) {
+                        if (dataItem.newRoutingProduct)
                             $scope.totalNewZoneRoutingProducts++;
-                        else if (gridItem.currentRoutingProductName && gridItem.newRoutingProductEED)
+                        else if (dataItem.currentRoutingProduct && dataItem.effectiveOn)
                             $scope.totalZoneRoutingProductChanges++;
                     }
                 }

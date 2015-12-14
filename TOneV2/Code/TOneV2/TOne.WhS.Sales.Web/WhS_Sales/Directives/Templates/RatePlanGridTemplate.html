@@ -7,7 +7,9 @@
                      norowhighlightonclick="'true'"
                      hidegridmenu>
             <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Effective Routing Product'" field="'EffectiveRoutingProductName'" type="'Text'" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Effective Routing Product'" type="'Text'" disablesorting>
+                <vr-label isvalue>{{dataItem.EffectiveRoutingProductName}}</vr-label>
+            </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Route Options'" disablesorting>
                 <div vr-loader="dataItem.isLoadingRouteOptions">
                     <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>

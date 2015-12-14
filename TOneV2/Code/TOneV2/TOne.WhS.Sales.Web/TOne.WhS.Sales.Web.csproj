@@ -146,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_Sales\Constants\ModuleConfig.js" />
+    <Content Include="WhS_Sales\Constants\RateChangeTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\SalePriceListOwnerTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\RatePlanStatusEnum.js" />
     <Content Include="WhS_Sales\Directives\Templates\AvgCostCalculation.html" />

@@ -30,7 +30,6 @@ function (UtilsService, VRUIUtilsService) {
                 selectorAPI = api;
                 selectorReadyDeferred.resolve();
             };
-
             ctrl.onSelectionChange = function () {
                 counter++;
 
@@ -41,7 +40,6 @@ function (UtilsService, VRUIUtilsService) {
                         zoneItem.refreshZoneItem(zoneItem);
                 }
             };
-
             selectorReadyDeferred.promise.then(function () {
                 getAPI();
             });
@@ -49,7 +47,6 @@ function (UtilsService, VRUIUtilsService) {
 
         function getAPI() {
             var api = {};
-
             api.load = function (payload) {
                 if (payload != undefined) {
                     zoneItem = payload;
@@ -59,9 +56,18 @@ function (UtilsService, VRUIUtilsService) {
                 var selectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                 selectorReadyDeferred.promise.then(function () {
+                    var selectedIds;
+                    if (zoneItem.NewRoutingProductId)
+                        selectedIds = [zoneItem.NewRoutingProductId];
+                    else if (zoneItem.NewRoutingProductEED)
+                        selectedIds = [-1];
+
+                    console.log(selectedIds);
+
                     var selectorPayload = {
                         filter: { ExcludedRoutingProductId: zoneItem.CurrentRoutingProductId, AssignableToZoneId: zoneItem.ZoneId },
-                        selectedIds: zoneItem.NewRoutingProductId
+                        selectedIds: zoneItem.selectedIds,
+                        defaultItems: [{ RoutingProductId: -1, Name: "(Reset To Default)" }]
                     };
                     
                     $scope.isLoading = true;
@@ -73,14 +79,12 @@ function (UtilsService, VRUIUtilsService) {
 
                 return selectorLoadDeferred.promise;
             };
-
             api.applyChanges = function (zoneItemChanges) {
                 if (zoneItem.IsDirty) {
                     setNewRoutingProduct(zoneItemChanges);
                     setRoutingProductChange(zoneItemChanges);
                 }
             };
-
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
@@ -89,7 +93,7 @@ function (UtilsService, VRUIUtilsService) {
             zoneItemChanges.NewRoutingProduct = null;
             var selectedId = selectorAPI.getSelectedIds();
 
-            if (selectedId != null) {
+            if (selectedId && selectedId != -1) {
                 zoneItemChanges.NewRoutingProduct = {
                     ZoneId: zoneItemChanges.ZoneId,
                     ZoneRoutingProductId: selectedId,
@@ -98,9 +102,14 @@ function (UtilsService, VRUIUtilsService) {
                 };
             }
         }
-
         function setRoutingProductChange(zoneItemChanges) {
-            zoneItemChanges.RoutingProductChange = null;
+            var selectedId = selectorAPI.getSelectedIds();
+
+            zoneItemChanges.RoutingProductChange = (selectedId && selectedId == -1) ? {
+                ZoneId: zoneItem.ZoneId,
+                ZoneRoutingProductId: zoneItem.CurrentRoutingProductId,
+                EED: new Date()
+            } : null;
         }
     }
 }]);

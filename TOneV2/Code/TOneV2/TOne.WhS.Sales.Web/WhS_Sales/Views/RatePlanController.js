@@ -35,7 +35,7 @@
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
         var settings;
-        var isSavingPriceList;
+        var isSavingPriceList; // This flag var prevents the app from saving an empty state after the user saves a price list
 
         defineScope();
         load();
