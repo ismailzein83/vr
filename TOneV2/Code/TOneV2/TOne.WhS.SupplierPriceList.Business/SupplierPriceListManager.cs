@@ -22,5 +22,11 @@ namespace TOne.WhS.SupplierPriceList.Business
             IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIDs, out startingId);
             return startingId;
         }
+
+        public bool AddPriceListAndSyncImportedDataWithDB(int priceListId, int supplierId, int currencyId)
+        {
+            ISupplierPriceListDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
+            return dataManager.AddPriceListAndSyncImportedDataWithDB(priceListId, supplierId, currencyId);
+        }
     }
 }

@@ -23,5 +23,12 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             supplierPriceListId = (int)priceListID;
             return (recordesEffected > 0);
         }
+
+
+        public bool AddPriceListAndSyncImportedDataWithDB(int priceListId, int supplierId, int currencyId)
+        {
+            int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierPriceList_SyncWithImportedData", priceListId, supplierId, currencyId);
+            return (recordesEffected > 0);
+        }
     }
 }

@@ -255,9 +255,9 @@
         </OutArgument>
       </twsba1:ProcessCountryRates.ChangedRates>
       <twsba1:ProcessCountryRates.ExistingRates>
-        <OutArgument x:TypeArguments="scg:IEnumerable(twses:ExistingRate)">
-          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ExistingRate)">ExistingRates</mca:CSharpReference>
-        </OutArgument>
+        <InArgument x:TypeArguments="scg:IEnumerable(twses:ExistingRate)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ExistingRate)">ExistingRates</mca:CSharpValue>
+        </InArgument>
       </twsba1:ProcessCountryRates.ExistingRates>
       <twsba1:ProcessCountryRates.ExistingZonesByZoneId>
         <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">
@@ -381,7 +381,24 @@
         </twsba1:ApplyChangedRatesToDB.PriceListId>
       </twsba1:ApplyChangedRatesToDB>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWxKOAOBAw4CAQFMBWYjAwG3B2cFmwEQAwGIBpwBBacBIwMB4QWoAQXLARADAewEzAEF+gEiAwHAA/sBBZoCIgMBzQKbAgWwAicDAYACsQIF/wIQAgECYwtjXgMBhAhPC09qAwHxB14LXnkDAd4HVAtUVAMBywdZC1l5AwG4B2gHeCEDAf0GeQeJASEDAcMGigEHmgEhAwGJBp8BC58BdwMB9QWkAQukAYkBAwHiBakBB7kBJQMBpwW6AQfKASUDAe0E3gEL3gFxAwHZBPIBC/IBbwMBxgTZAQvZAWEDAbMEzwELzwF3AwGgBPcBC/cBbwMBjQTjAQvjAYEBAwH6A+0BC+0BbQMB5wPUAQvUAXcDAdQD6AEL6AFxAwHBA/4BC/4BdwMBrQOXAguXAm8DAZoDgwILgwJ5AwGHA40CC40CcQMB9AKIAguIAoEBAwHhApICC5ICZQMBzgKtAgutAlsDAboCngILngJnAwGnAqMCC6MCZwMBlAKoAguoAmcDAYECsgIHwgIiAwHGAcMCB84CJgMBnwHPAgfaAiICAXjbAgfmAiYCAVHnAgfyAiICASrzAgf+AiYCAQNrDWuBAQMBpAd1DXVhAwGRB3ANcFgDAf4GfA18gQEDAeoGhgENhgFhAwHXBoEBDYEBWAMBxAaXAQ2XAWEDAbAGjQENjQGBAQMBnQaSAQ2SAVgDAYoGsQENsQF7AwHOBawBDawBeQMBuwW2AQ22AYMBAwGoBb0BDb0BeQMBlAXCAQ3CAXsDAYEFxwENxwGDAQMB7gS6Ag26AlUDAe0BvwINvwJhAwHaAbUCDbUCaQMBxwHLAg3LAlUDAbMBxgINxgJxAwGgAdcCDdcCVQMBjAHSAg3SAmkCAXnjAg3jAlUCAWXeAg3eAnECAVLvAg3vAlUCAT7qAg3qAmkCASv7Ag37AlUCARf2Ag32AnECAQQ=</sads:DebugSymbol.Symbol>
+    <twsba1:SyncImportedDataWithDB sap2010:WorkflowViewState.IdRef="SyncImportedDataWithDB_1">
+      <twsba1:SyncImportedDataWithDB.CurrencyId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
+        </InArgument>
+      </twsba1:SyncImportedDataWithDB.CurrencyId>
+      <twsba1:SyncImportedDataWithDB.PriceListId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">PriceListId</mca:CSharpValue>
+        </InArgument>
+      </twsba1:SyncImportedDataWithDB.PriceListId>
+      <twsba1:SyncImportedDataWithDB.SupplierId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
+        </InArgument>
+      </twsba1:SyncImportedDataWithDB.SupplierId>
+    </twsba1:SyncImportedDataWithDB>
+    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWxOOAOSAw4CAQFMBWYjAwHxB2cFmwEQAwHCBpwBBacBIwMBmwaoAQXLARADAaYFzAEF+gEiAwH6A/sBBZoCIgMBhwObAgWwAicDAboCsQIF/wIQAgE8gAMFkAMlAgECYwtjXgMBvghPC09qAwGrCF4LXnkDAZgIVAtUVAMBhQhZC1l5AwHyB2gHeCEDAbcHeQeJASEDAf0GigEHmgEhAwHDBp8BC58BdwMBrwakAQukAYkBAwGcBqkBB7kBJQMB4QW6AQfKASUDAacF3gEL3gFxAwGTBfIBC/IBbwMBgAXZAQvZAWEDAe0EzwELzwF3AwHaBPcBC/cBbwMBxwTjAQvjAYEBAwG0BO0BC+0BbQMBoQTUAQvUAXcDAY4E6AEL6AFxAwH7A/4BC/4BdwMB5wOXAguXAm8DAdQDgwILgwJxAwHBA40CC40CcQMBrgOIAguIAoEBAwGbA5ICC5ICZQMBiAOtAgutAlsDAfQCngILngJnAwHhAqMCC6MCZwMBzgKoAguoAmcDAbsCsgIHwgIiAwGAAsMCB84CJgMB2QHPAgfaAiIDAbIB2wIH5gImAwGLAecCB/ICIgIBZPMCB/4CJgIBPYgDC4gDUwIBKY0DC40DXwIBFoMDC4MDWAIBA2sNa4EBAwHeB3UNdWEDAcsHcA1wWAMBuAd8DXyBAQMBpAeGAQ2GAWEDAZEHgQENgQFYAwH+BpcBDZcBYQMB6gaNAQ2NAYEBAwHXBpIBDZIBWAMBxAaxAQ2xAXsDAYgGrAENrAF5AwH1BbYBDbYBgwEDAeIFvQENvQF5AwHOBcIBDcIBewMBuwXHAQ3HAYMBAwGoBboCDboCVQMBpwK/Ag2/AmEDAZQCtQINtQJpAwGBAssCDcsCVQMB7QHGAg3GAnEDAdoB1wIN1wJVAwHGAdICDdICaQMBswHjAg3jAlUDAZ8B3gIN3gJxAwGMAe8CDe8CVQIBeOoCDeoCaQIBZfsCDfsCVQIBUfYCDfYCcQIBPg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -404,14 +421,15 @@
       <sap2010:ViewStateData Id="ApplyNewRatesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyChangedRatesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="1514,86" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1536,772">
+      <sap2010:ViewStateData Id="SyncImportedDataWithDB_1" sap:VirtualizedContainerService.HintSize="1514,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1536,834">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="1576,852" />
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="1576,914" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

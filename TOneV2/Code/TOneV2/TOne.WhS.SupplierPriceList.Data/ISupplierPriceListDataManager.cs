@@ -9,5 +9,7 @@ namespace TOne.WhS.SupplierPriceList.Data
     public interface ISupplierPriceListDataManager : IDataManager
     {
         bool AddSupplierPriceList(int supplierAccountId, int? currencyId, out int supplierPriceListId);
+
+        bool AddPriceListAndSyncImportedDataWithDB(int priceListId, int supplierId, int currencyId);
     }
 }

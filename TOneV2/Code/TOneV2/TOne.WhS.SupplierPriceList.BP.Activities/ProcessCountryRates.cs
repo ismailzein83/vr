@@ -15,7 +15,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<IEnumerable<ImportedRate>> ImportedRates { get; set; }
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<ExistingRate>> ExistingRates { get; set; }
+        public InArgument<IEnumerable<ExistingRate>> ExistingRates { get; set; }
 
         [RequiredArgument]
         public InArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }
@@ -44,6 +44,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 ExistingZones = existingZones,
                 NewAndExistingZones = this.NewAndExistingZones.Get(context)
             };
+
+            PriceListRateManager manager = new PriceListRateManager();
+            manager.ProcessCountryRates(processCountryRateContext);
+
+            NewRates.Set(context, processCountryRateContext.NewRates);
+            ChangedRates.Set(context, processCountryRateContext.ChangedRates);
         }
     }
 }

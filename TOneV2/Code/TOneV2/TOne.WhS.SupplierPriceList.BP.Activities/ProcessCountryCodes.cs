@@ -58,6 +58,10 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             plCodeManager.ProcessCountryCodes(processCountryCodesContext);
 
             NewAndExistingZones.Set(context, processCountryCodesContext.NewAndExistingZones);
+            NewZones.Set(context, processCountryCodesContext.NewZones);
+            ChangedZones.Set(context, processCountryCodesContext.ChangedZones);
+            NewCodes.Set(context, processCountryCodesContext.NewCodes);
+            ChangedCodes.Set(context, processCountryCodesContext.ChangedCodes);
         }
     }
 }
