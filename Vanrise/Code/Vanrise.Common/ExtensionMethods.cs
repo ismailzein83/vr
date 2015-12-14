@@ -58,7 +58,7 @@ namespace Vanrise.Common
             Func<Q, bool> filterExpression, Func<Q, R> mapper)
         {
             IEnumerable<Q> filteredResults = dic.Values.ApplyFiltering(filterExpression);
-            IEnumerable<R> processedResults = filteredResults.Select(mapper).ApplySortingAndPaging(input);
+            IEnumerable<R> processedResults = filteredResults.Select(mapper).ApplySortingAndPaging(input).ToList();
 
             Vanrise.Entities.BigResult<R> rslt = new Vanrise.Entities.BigResult<R>
             {
@@ -92,7 +92,7 @@ namespace Vanrise.Common
             if (dic == null)
                 return null;
 
-            return dic.Values.Where(predicate);
+            return dic.Values.Where(predicate).ToList();
         }
 
         public static R MapRecord<T, Q, R>(this Dictionary<T, Q> dic, Func<Q, R> mappingExpression, Func<Q, bool> filterExpression)
@@ -113,7 +113,7 @@ namespace Vanrise.Common
             if (dic == null)
                 return null;
 
-            return dic.Values.Select(mappingExpression);
+            return dic.Values.Select(mappingExpression).ToList();
         }
 
         public static IEnumerable<M> MapRecords<Q, T, M>(this Dictionary<Q,T> dic, Func<T, M> mappingExpression, Func<T, bool> filterExpression)
@@ -126,7 +126,7 @@ namespace Vanrise.Common
             if (filteredResults == null)
                 return null;
 
-            return filteredResults.Select(mappingExpression);
+            return filteredResults.Select(mappingExpression).ToList();
         }
 
         #endregion
@@ -154,7 +154,7 @@ namespace Vanrise.Common
             Func<T, bool> filterExpression, Func<T, Q> mapper)
         {
             IEnumerable<T> filteredResults = list.ApplyFiltering(filterExpression);
-            IEnumerable<Q> processedResults = filteredResults.Select(mapper).ApplySortingAndPaging(input);
+            IEnumerable<Q> processedResults = filteredResults.Select(mapper).ApplySortingAndPaging(input).ToList();
 
             Vanrise.Entities.BigResult<Q> rslt = new Vanrise.Entities.BigResult<Q>
             {
@@ -178,7 +178,7 @@ namespace Vanrise.Common
             if (list == null)
                 return null;
 
-            return list.Where(predicate);
+            return list.Where(predicate).ToList();
         }
 
         public static Q MapRecord<T, Q>(this IEnumerable<T> list, Func<T, Q> mappingExpression, Func<T, bool> filterExpression)
@@ -192,7 +192,7 @@ namespace Vanrise.Common
             if (filteredResults == null)
                 return default(Q);
 
-            return filteredResults.Select(mappingExpression).First();
+            return filteredResults.Select(mappingExpression).FirstOrDefault();
 
 
         }
@@ -202,7 +202,7 @@ namespace Vanrise.Common
             if (list == null)
                 return null;
 
-            return list.Select(mappingExpression);
+            return list.Select(mappingExpression).ToList();
         }
 
         public static IEnumerable<Q> MapRecords<T, Q>(this IEnumerable<T> list, Func<T, Q> mappingExpression, Func<T, bool> filterExpression)
@@ -215,7 +215,7 @@ namespace Vanrise.Common
             if (filteredResults == null)
                 return null;
 
-            return filteredResults.Select(mappingExpression);
+            return filteredResults.Select(mappingExpression).ToList();
         }
 
         private static IEnumerable<T> ApplyFiltering<T>(this IEnumerable<T> list, Func<T, bool> filterExpression)
@@ -223,7 +223,7 @@ namespace Vanrise.Common
             if (filterExpression == null)
                 return list;
 
-            return list.Where(filterExpression);
+            return list.Where(filterExpression).ToList();
         }
 
         private static IEnumerable<T> ApplySortingAndPaging<T>(this IEnumerable<T> list, Vanrise.Entities.DataRetrievalInput input)

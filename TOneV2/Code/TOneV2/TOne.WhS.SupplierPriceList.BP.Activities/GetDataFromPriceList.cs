@@ -21,6 +21,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         [RequiredArgument]
         public InArgument<DateTime?> EffectiveDate { get; set; }
+        
+        [RequiredArgument]
+        public InArgument<int> CurrencyId { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<ImportedCode>> ImportedCodes { get; set; }
@@ -33,6 +36,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
+            int currencyId = this.CurrencyId.Get(context);
+
             DateTime startReading = DateTime.Now;
             VRFileManager fileManager = new VRFileManager();
             VRFile file = fileManager.GetFile(FileId.Get(context));
@@ -82,6 +87,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 {
                     ZoneName = zoneName,
                     NormalRate = (decimal)worksheet.Cells[count, 2].FloatValue,
+                    CurrencyId = currencyId,
                     BED = bEDDateFromExcel.Value,
                     EED = eEDDateFromExcel,
                 });
