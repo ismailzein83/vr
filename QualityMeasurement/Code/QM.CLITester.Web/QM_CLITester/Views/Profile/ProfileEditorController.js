@@ -77,6 +77,8 @@
         function getProfile() {
             return QM_CLITester_ProfileAPIService.GetProfile(profileId).then(function (profile) {
                 profileEntity = profile;
+                console.log('profileEntity')
+                console.log(profileEntity)
             });
         }
 
