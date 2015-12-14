@@ -78,21 +78,26 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                 var api = {};
 
                 api.load = function (payload) {
-
                     selectorApi.clearDataSource();
 
                     var filter = {};
                     var selectedIds;
+                    var defaultItems;
+
                     if (payload != undefined) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
+                        defaultItems = payload.defaultItems;
                     }
 
                     return WhS_BE_RoutingProductAPIService.GetRoutingProductInfo(UtilsService.serializetoJson(filter)).then(function (response) {
-                        ctrl.datasource = []; // clear data source to avoid duplication
-                        angular.forEach(response, function (itm) {
-                            ctrl.datasource.push(itm);
-                        });
+                        if (defaultItems) {
+                            for (var i = 0; i < defaultItems.length; i++)
+                                ctrl.datasource.push(defaultItems[i]);
+                        }
+
+                        for (var i = 0; i < response.length; i++)
+                            ctrl.datasource.push(response[i]);
 
                         if (selectedIds != undefined)
                             VRUIUtilsService.setSelectedValues(selectedIds, 'RoutingProductId', $attrs, ctrl);
