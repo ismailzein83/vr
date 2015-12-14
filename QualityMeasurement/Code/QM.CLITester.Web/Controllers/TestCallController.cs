@@ -40,7 +40,7 @@ namespace QM.CLITester.Web.Controllers
 
         [HttpPost]
         [Route("AddNewTestCall")]
-        public InsertOperationOutput<TestCall> AddNewTestCall(TestCall testCallResult)
+        public InsertOperationOutput<TestCallQueryInsert> AddNewTestCall(TestCallQueryInsert testCallResult)
         {
             TestCallManager manager = new TestCallManager();
             return manager.AddNewTestCall(testCallResult);

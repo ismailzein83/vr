@@ -67,6 +67,7 @@
     <Compile Include="TestCall.cs" />
     <Compile Include="TestCallDetail.cs" />
     <Compile Include="TestCallQuery.cs" />
+    <Compile Include="TestCallQueryInsert.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QM.BusinessEntity.Entities\QM.BusinessEntity.Entities.csproj">

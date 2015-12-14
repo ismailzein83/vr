@@ -134,14 +134,14 @@ namespace QM.CLITester.Business
                 ResponseSuppliers(PostRequest("1012", null));
             return _listSuppliers;
         }
-        public Vanrise.Entities.InsertOperationOutput<TestCall> AddNewTestCall(TestCall testCallResult)
+        public Vanrise.Entities.InsertOperationOutput<TestCallQueryInsert> AddNewTestCall(TestCallQueryInsert testCallResult)
         {
             testCallResult.CallTestStatus = CallTestStatus.New;
             testCallResult.CallTestResult = CallTestResult.NotCompleted;
             testCallResult.InitiationRetryCount = 0;
             testCallResult.GetProgressRetryCount = 0;
             testCallResult.UserID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            Vanrise.Entities.InsertOperationOutput<TestCall> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<TestCall>();
+            Vanrise.Entities.InsertOperationOutput<TestCallQueryInsert> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<TestCallQueryInsert>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;

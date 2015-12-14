@@ -113,10 +113,20 @@ namespace QM.CLITester.iTestIntegration
                         return testProgressOutput;
                     }
 
-                    testProgressOutput.Result = (recentTestProgress == testProgressOutput.TestProgress) ?
+                    if(recentTestProgress != null)
+                    testProgressOutput.Result = ((((TestProgress)recentTestProgress).CliFail == ((TestProgress)testProgressOutput.TestProgress).CliFail) &&
+                    (((TestProgress)recentTestProgress).CliNoResult == ((TestProgress)testProgressOutput.TestProgress).CliNoResult) &&
+                    (((TestProgress)recentTestProgress).CliSuccess == ((TestProgress)testProgressOutput.TestProgress).CliSuccess) &&
+                    (((TestProgress)recentTestProgress).CompletedCalls == ((TestProgress)testProgressOutput.TestProgress).CompletedCalls) &&
+                    (((TestProgress)recentTestProgress).Pdd == ((TestProgress)testProgressOutput.TestProgress).Pdd) &&
+                    (((TestProgress)recentTestProgress).TotalCalls == ((TestProgress)testProgressOutput.TestProgress).TotalCalls)) ?
                         GetTestProgressResult.ProgressNotChanged : 
                         GetTestProgressResult.ProgressChanged;
-
+                    else
+                    {
+                        testProgressOutput.Result =  testProgressOutput.TestProgress == null ? GetTestProgressResult.ProgressNotChanged :
+                        GetTestProgressResult.ProgressChanged;
+                    }
                     return testProgressOutput;
                 }
             }

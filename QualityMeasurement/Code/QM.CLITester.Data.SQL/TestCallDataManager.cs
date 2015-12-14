@@ -17,15 +17,21 @@ namespace QM.CLITester.Data.SQL
 {
     public class TestCallDataManager : BaseSQLDataManager, ITestCallDataManager
     {
-        public bool Insert(TestCall testCall, out int insertedId)
+        public bool Insert(TestCallQueryInsert testCall, out int insertedId)
         {
             object testCallId;
-
-            int recordsEffected = ExecuteNonQuerySP("QM_CLITester.sp_TestCall_Insert", out testCallId, testCall.SupplierID, testCall.CountryID, testCall.ZoneID, 
-                testCall.InitiateTestInformation, testCall.TestProgress, testCall.CallTestStatus, testCall.CallTestResult, testCall.InitiationRetryCount, 
+            bool rec = false;
+            foreach (int supplierId in testCall.SupplierID)
+            {
+                int recordsEffected = ExecuteNonQuerySP("QM_CLITester.sp_TestCall_Insert", out testCallId, supplierId, testCall.CountryID, testCall.ZoneID,
+                testCall.CallTestStatus, testCall.CallTestResult, testCall.InitiationRetryCount,
                 testCall.GetProgressRetryCount, testCall.UserID);
-            insertedId = (int)testCallId;
-            return (recordsEffected > 0);
+                insertedId = (int)testCallId;
+                if (recordsEffected > 0)
+                    rec = true;
+            }
+            insertedId = 0;
+            return rec;
         }
 
         public List<TestCall> GetTestCalls(List<CallTestStatus> listCallTestStatus)

@@ -19,7 +19,7 @@
             $scope.breakouts = [];
             $scope.suppliers = [];
            
-            $scope.selectedSupplier;
+            $scope.selectedSupplier = [];
             $scope.selectedCountry;
             $scope.selectedBreakout;
 
