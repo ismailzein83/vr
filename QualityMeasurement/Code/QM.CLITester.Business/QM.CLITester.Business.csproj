@@ -67,6 +67,9 @@
     <Compile Include="GetTestProgressContext.cs" />
     <Compile Include="InitiateTestContext.cs" />
     <Compile Include="Profile\ProfileManager.cs" />
+    <Compile Include="Profile\SourceProfileSynchronizer.cs" />
+    <Compile Include="Profile\ProfileSyncTaskAction.cs" />
+    <Compile Include="Profile\ProfileSyncTaskActionArgument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestCallManager.cs" />
   </ItemGroup>

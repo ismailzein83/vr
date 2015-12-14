@@ -8,23 +8,27 @@ function ProfileSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSer
     var sourceTypeDirectiveAPI;
     var sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
     function defineScope() {
+        
         $scope.sourceTypeTemplates = [];
 
         $scope.onSourceTypeDirectiveReady = function (api) {
-
-            console.log(onSourceTypeDirectiveReady)
-
             sourceTypeDirectiveAPI = api;
             var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
-
-
         }
         $scope.schedulerTaskAction.getData = function () {
-            return {
+            console.log('ProfileSynchronizeTemplateController.$scope.schedulerTaskAction.getData')
+
+
+            var data = 
+             {
                 $type: "QM.CLITester.Business.ProfileSyncTaskActionArgument, QM.CLITester.Business",
                 SourceProfileReader: sourceTypeDirectiveAPI.getData()
-            };
+             };
+
+            console.log(data)
+
+            return data;
         };
 
     }

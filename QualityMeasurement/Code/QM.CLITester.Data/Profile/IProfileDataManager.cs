@@ -13,6 +13,10 @@ namespace QM.CLITester.Data
 
         bool Update(Profile profile);
 
+        void InsertSynchronize(Profile profile);
+
+        void UpdateSynchronize(Profile profile);
+
         bool AreProfilesUpdated(ref object updateHandle);
     }
 }

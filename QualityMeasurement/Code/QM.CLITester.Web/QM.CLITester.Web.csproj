@@ -167,6 +167,10 @@
       <Project>{f088847e-2bcd-446a-b51a-3dbaaf7ac835}</Project>
       <Name>QM.BusinessEntity.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\QM.BusinessEntity.Entities\QM.BusinessEntity.Entities.csproj">
+      <Project>{b610fb7a-8278-4c68-bf4f-09c94bc5a8d0}</Project>
+      <Name>QM.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\QM.CLITester.Business\QM.CLITester.Business.csproj">
       <Project>{724b8b1b-b990-4f4a-b886-d299cff49219}</Project>
       <Name>QM.CLITester.Business</Name>

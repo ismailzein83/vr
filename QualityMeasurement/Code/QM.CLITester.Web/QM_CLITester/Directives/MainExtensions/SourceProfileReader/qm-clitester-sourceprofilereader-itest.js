@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("qmClitesterSourceprofilereaderITest", [function () {
-
+app.directive("qmClitesterSourceprofilereaderItest", [function () {
+   
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -32,6 +32,7 @@ app.directive("qmClitesterSourceprofilereaderITest", [function () {
     }
 
     function DirectiveConstructor($scope, ctrl) {
+        console.log('qmClitesterSourceprofilereaderITest.DirectiveConstructor')
         this.initializeController = initializeController;
 
         $scope.dummy = undefined;

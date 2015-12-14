@@ -45,5 +45,15 @@ namespace QM.CLITester.Data.SQL
         {
             return base.IsDataUpdated("QM_CLITester.Profile", ref updateHandle);
         }
+
+        public void InsertSynchronize(Profile profile)
+        {
+            ExecuteNonQuerySP("[QM_CLITester].[sp_Profile_InsertFromSource]", profile.ProfileId, profile.Name, profile.SourceId);
+        }
+
+        public void UpdateSynchronize(Profile profile)
+        {
+            ExecuteNonQuerySP("[QM_CLITester].[sp_Profile_UpdateFromSource]", profile.ProfileId, profile.Name);
+        }
     }
 }

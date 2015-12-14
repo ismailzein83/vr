@@ -29,6 +29,20 @@ namespace QM.CLITester.Business
             return profiles.GetRecord(profileId);
         }
 
+        public Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds)
+        {
+            Dictionary<string, long> existingItemIds = new Dictionary<string, long>();
+            foreach (var item in GetCachedProfiles())
+            {
+                if (item.Value.SourceId != null)
+                {
+                    if (sourceItemIds.Contains(item.Value.SourceId))
+                        existingItemIds.Add(item.Value.SourceId, (long)item.Value.ProfileId);
+                }
+            }
+            return existingItemIds;
+        }
+
         public IEnumerable<ProfileInfo> GetProfilesInfo()
         {
             var profiles = GetCachedProfiles();
@@ -64,6 +78,22 @@ namespace QM.CLITester.Business
             else
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
+        }
+
+        public void InsertProfileSynchronize(Profile profile)
+        {
+            long startingId;
+            ReserveIDRange(1, out startingId);
+            profile.ProfileId = (int)startingId;
+            IProfileDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<IProfileDataManager>();
+            dataManager.InsertSynchronize(profile);
+        }
+
+        public void UpdateProfileSynchronize(Profile profile)
+        {
+
+            IProfileDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<IProfileDataManager>();
+            dataManager.UpdateSynchronize(profile);
         }
 
         public List<Vanrise.Entities.TemplateConfig> GetProfileSourceTemplates()
