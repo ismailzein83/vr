@@ -98,9 +98,10 @@
 
 
         function buildTestCallObjFromScope() {
+            console.log($scope.selectedSupplier);
             var obj = {
                 TestCallId: 0,
-                SupplierID: $scope.selectedSupplier.SupplierId,
+                SupplierID: UtilsService.getPropValuesFromArray($scope.selectedSupplier, "SupplierId"),
                 CountryID: $scope.selectedCountry.Id,
                 ZoneID: $scope.selectedBreakout.Id
             };
@@ -109,9 +110,10 @@
 
         function addNewTestCall() {
             var testCallObject = buildTestCallObjFromScope();
+            
             return Qm_CliTester_TestCallAPIService.AddNewTestCall(testCallObject)
             .then(function (response) {
-                $scope.selectedSupplier = undefined;
+                $scope.selectedSupplier = [];
                 $scope.selectedCountry = undefined;
                 $scope.selectedBreakout = undefined;
                 if (VRNotificationService.notifyOnItemAdded("Test Call", response, "Name")) {

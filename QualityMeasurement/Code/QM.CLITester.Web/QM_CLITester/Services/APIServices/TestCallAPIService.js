@@ -29,13 +29,18 @@
             return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetFilteredTestCalls"), input);
         }
 
+        function GetTestCallSourceTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetTestCallSourceTemplates"));
+        }
+
         return ({
             GetCountries: GetCountries,
             GetBreakouts: GetBreakouts,
             GetSuppliers: GetSuppliers,
             AddNewTestCall: AddNewTestCall,
             GetUpdatedTestCalls: GetUpdatedTestCalls,
-            GetFilteredTestCalls: GetFilteredTestCalls
+            GetFilteredTestCalls: GetFilteredTestCalls,
+            GetTestCallSourceTemplates: GetTestCallSourceTemplates
         });
     }
 

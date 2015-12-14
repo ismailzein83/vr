@@ -147,7 +147,7 @@
             if ($scope.selectedtestResults == undefined)
                 filter.CallTestResult = null;
             else {
-                filter.CallTestResult = UtilsService.getPropValuesFromArray($scope.selectedtestResults, "value");;
+                filter.CallTestResult = UtilsService.getPropValuesFromArray($scope.selectedtestResults, "value");
             }
 
             if ($scope.selectedUsers == undefined)

@@ -62,5 +62,13 @@ namespace QM.CLITester.Web.Controllers
             TestCallManager manager = new TestCallManager();
             return GetWebResponse(input, manager.GetFilteredTestCalls(input));
         }
+
+        [HttpGet]
+        [Route("GetTestCallSourceTemplates")]
+        public List<TemplateConfig> GetSupplierSourceTemplates()
+        {
+            TestCallManager manager = new TestCallManager();
+            return manager.GetTestCallSourceTemplates();
+        }
     }
 }

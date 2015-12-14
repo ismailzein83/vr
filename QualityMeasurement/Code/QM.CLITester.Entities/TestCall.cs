@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities.EntitySynchronization;
 
 namespace QM.CLITester.Entities
 {
-    public class TestCall
+    public class TestCall : Vanrise.Entities.EntitySynchronization.IItem
     {
         public long ID { get; set; }
         public int SupplierID { get; set; }
@@ -21,5 +22,17 @@ namespace QM.CLITester.Entities
         public int InitiationRetryCount { get; set; }
         public int GetProgressRetryCount { get; set; }
         public string FailureMessage { get; set; }
+
+        long IItem.ItemId
+        {
+            get
+            {
+                return ID;
+            }
+            set
+            {
+                this.ID = (long)value;
+            }
+        }
     }
 }

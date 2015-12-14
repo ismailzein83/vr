@@ -10,6 +10,7 @@ using System.Xml;
 using QM.CLITester.Data;
 using QM.CLITester.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Country = QM.CLITester.Entities.Country2;
 
@@ -199,6 +200,13 @@ namespace QM.CLITester.Business
             Vanrise.Entities.BigResult<TestCallDetail> testCallDetails = dataManager.GetTestCallFilteredFromTemp(input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, testCallDetails);
         }
+
+        public List<Vanrise.Entities.TemplateConfig> GetTestCallSourceTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.SourceTestCallReaderConfigType);
+        }
+
     }
 
 }
