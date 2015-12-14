@@ -10,7 +10,10 @@ CREATE PROCEDURE [common].[sp_Currency_update]
 	
 AS
 BEGIN
-	UPDATE common.Currency
-	SET Name=@Name , Symbol = @Symbol
-	WHERE ID = @ID
+IF NOT EXISTS(SELECT 1 FROM common.[Currency] WHERE ID != @ID AND Symbol = @Symbol)
+	BEGIN
+		UPDATE common.Currency
+		SET Name=@Name , Symbol = @Symbol
+		WHERE ID = @ID
+	END
 END

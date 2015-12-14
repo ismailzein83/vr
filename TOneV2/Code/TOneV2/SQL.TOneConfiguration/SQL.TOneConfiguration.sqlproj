@@ -81,6 +81,7 @@
     <Folder Include="StatisticManagement\Tables\" />
     <Folder Include="StatisticManagement\Functions\" />
     <Folder Include="StatisticManagement\Stored Procedures\" />
+    <Folder Include="common\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -195,6 +196,14 @@
     <Build Include="StatisticManagement\Stored Procedures\sp_StatisticBatch_UnLock.sql" />
     <Build Include="StatisticManagement\Stored Procedures\sp_StatisticBatch_TryLock.sql" />
     <Build Include="Security\StatisticManagement.sql" />
+    <Build Include="common\Tables\City.sql" />
+    <Build Include="common\Functions\getExchangeRatesConvertedToCurrency.sql" />
+    <Build Include="common\Functions\getExchangeRates.sql" />
+    <Build Include="common\Stored Procedures\sp_Country_UpdateFromSource.sql" />
+    <Build Include="common\Stored Procedures\sp_Country_InsertFromSource.sql" />
+    <Build Include="common\Stored Procedures\sp_City_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_City_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_City_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

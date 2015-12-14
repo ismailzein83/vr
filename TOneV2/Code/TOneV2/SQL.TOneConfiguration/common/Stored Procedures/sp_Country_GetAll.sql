@@ -10,6 +10,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 	SELECT	cn.ID,
-			cn.Name
+			cn.Name,
+			cn.SourceID
 	FROM	[common].Country  as cn WITH(NOLOCK) 
 END
