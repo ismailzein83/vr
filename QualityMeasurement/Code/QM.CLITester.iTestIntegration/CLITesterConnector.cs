@@ -9,10 +9,10 @@ using System.Xml;
 
 namespace QM.CLITester.iTestIntegration
 {
-    public class CLITesterConnector : ICLITesterConnector
+    public class CLITesterConnector : CLITesterConnectorBase
     {
         const string GoodAmpersand = "&amp;";
-        public InitiateTestOutput InitiateTest(IInitiateTestContext context)
+        public override InitiateTestOutput InitiateTest(IInitiateTestContext context)
         {
             ServiceActions serviceActions = new ServiceActions();
             string itestSupplierId = null;
@@ -32,7 +32,7 @@ namespace QM.CLITester.iTestIntegration
             return ResponseTestCall(serviceActions.PostRequest("2012", "&profid=4992&vendid=" + itestSupplierId + "&ndbccgid=" + context.Country.CountryId + "&ndbcgid=" + context.Zone.ZoneId));
         }
 
-        public GetTestProgressOutput GetTestProgress(IGetTestProgressContext context)
+        public override GetTestProgressOutput GetTestProgress(IGetTestProgressContext context)
         {
             ServiceActions serviceActions = new ServiceActions();
             return responseTestCallResult(serviceActions.PostRequest("3011", "&jid=" + ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID), ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID, context.RecentTestProgress);

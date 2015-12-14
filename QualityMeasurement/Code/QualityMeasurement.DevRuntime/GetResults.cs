@@ -23,7 +23,7 @@ namespace QualityMeasurement.DevRuntime
             thread.Start();
         }
         
-        ICLITesterConnector cliTestConnector = new QM.CLITester.iTestIntegration.CLITesterConnector();
+        CLITesterConnectorBase cliTestConnector = new QM.CLITester.iTestIntegration.CLITesterConnector();
 
         private void GetResult()
         {

@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CLITestTasks\InitiateTestTaskActionArgument.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="GetTestProgressContext.cs" />
     <Compile Include="InitiateTestContext.cs" />

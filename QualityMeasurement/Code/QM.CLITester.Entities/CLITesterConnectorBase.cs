@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace QM.CLITester.Entities
 {    
-    public interface ICLITesterConnector
+    public abstract class CLITesterConnectorBase
     {
-        InitiateTestOutput InitiateTest(IInitiateTestContext context);
+        public int ConfigId { get; set; }
 
-        GetTestProgressOutput GetTestProgress(IGetTestProgressContext context);
+        public abstract InitiateTestOutput InitiateTest(IInitiateTestContext context);
+
+        public abstract GetTestProgressOutput GetTestProgress(IGetTestProgressContext context);
     }
 
     public enum InitiateTestResult { Created, FailedWithRetry, FailedWithNoRetry }
