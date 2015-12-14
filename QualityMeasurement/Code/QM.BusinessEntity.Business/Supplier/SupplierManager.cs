@@ -111,18 +111,18 @@ namespace QM.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public void InsertSupplierSynchronize(Supplier supplier){
+        public void AddSupplierFromeSource(Supplier supplier){
             long startingId;
             ReserveIDRange(1, out startingId);
             supplier.SupplierId = (int)startingId;
             ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
-            dataManager.InsertSynchronize(supplier);            
+            dataManager.InsertSupplierFromeSource(supplier);            
         }
-        public void UpdateSupplierSynchronize(Supplier supplier)
+        public void UpdateSupplierFromeSource(Supplier supplier)
         {
 
             ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
-            dataManager.UpdateSynchronize(supplier);
+            dataManager.UpdateSupplierFromeSource(supplier);
         }
         public List<Vanrise.Entities.TemplateConfig> GetSupplierSourceTemplates()
         {

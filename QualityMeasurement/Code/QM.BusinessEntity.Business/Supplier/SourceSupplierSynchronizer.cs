@@ -22,7 +22,7 @@ namespace QM.BusinessEntity.Business
             SupplierManager supplierManager = new SupplierManager();
             foreach (var s in itemsToAdd)
             {
-                supplierManager.InsertSupplierSynchronize(s);
+                supplierManager.AddSupplierFromeSource(s);
             }
         }
 
@@ -31,7 +31,7 @@ namespace QM.BusinessEntity.Business
             SupplierManager supplierManager = new SupplierManager();
             foreach (var s in itemsToUpdate)
             {
-                supplierManager.UpdateSupplierSynchronize(s);
+                supplierManager.UpdateSupplierFromeSource(s);
             }
         }
 

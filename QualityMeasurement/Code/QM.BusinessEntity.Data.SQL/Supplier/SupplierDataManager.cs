@@ -52,12 +52,12 @@ namespace QM.BusinessEntity.Data.SQL
             return (recordsEffected > 0);
         }
 
-        public void InsertSynchronize(Supplier supplier)
+        public void InsertSupplierFromeSource(Supplier supplier)
         {
            ExecuteNonQuerySP("[QM_BE].[sp_Supplier_InsertFromSource]", supplier.SupplierId, supplier.Name , supplier.SourceId);
         }
 
-        public void UpdateSynchronize(Supplier supplier)
+        public void UpdateSupplierFromeSource(Supplier supplier)
         {
            
            ExecuteNonQuerySP("[QM_BE].[sp_Supplier_UpdateFromSource]", supplier.SupplierId, supplier.Name);
