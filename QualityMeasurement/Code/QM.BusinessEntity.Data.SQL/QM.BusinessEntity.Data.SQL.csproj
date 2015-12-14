@@ -50,6 +50,9 @@
     <Reference Include="Vanrise.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

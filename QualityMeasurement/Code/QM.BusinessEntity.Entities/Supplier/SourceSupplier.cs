@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QM.BusinessEntity.Entities
 {
-    public class SourceSupplier : ISourceItem
+    public class SourceSupplier : Vanrise.Entities.EntitySynchronization.ISourceItem
     {
 
         public string SourceId

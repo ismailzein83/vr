@@ -7,7 +7,7 @@ using Vanrise.Entities.EntitySynchronization;
 
 namespace QM.BusinessEntity.Entities
 {
-    public abstract class SourceSupplierReader : ISourceItemReader<SourceSupplier> 
+    public abstract class SourceZoneReader : Vanrise.Entities.EntitySynchronization.ISourceItemReader<SourceZone>
     {
         public int ConfigId { get; set; }
 
@@ -16,6 +16,12 @@ namespace QM.BusinessEntity.Entities
             get;
         }
 
-        public abstract IEnumerable<SourceSupplier> GetChangedItems(ref object updatedHandle);
+        public abstract IEnumerable<SourceZone> GetChangedItems(ref object updatedHandle);
+
+        public Vanrise.Entities.SourceCountryReader CountryReader
+        {
+            get;
+            set;
+        }
     }
 }

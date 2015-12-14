@@ -3,20 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities.EntitySynchronization;
 
 namespace QM.BusinessEntity.Entities
 {
-    public interface ISourceItem
-    {
-        string SourceId { get; }
-    }
-
-    public interface IItem
-    {
-        long ItemId { get; set; }
-    }
-
-    public class Zone : IItem
+    public class Zone : Vanrise.Entities.EntitySynchronization.IItem
     {
         public long ZoneId { get; set; }
 

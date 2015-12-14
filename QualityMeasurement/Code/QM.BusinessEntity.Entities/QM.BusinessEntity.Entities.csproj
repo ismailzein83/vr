@@ -41,21 +41,22 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Country\Country.cs" />
-    <Compile Include="Country\CountryInfo.cs" />
-    <Compile Include="Country\ICountryReader.cs" />
     <Compile Include="ISourceItemReader.cs" />
     <Compile Include="Supplier\SourceSupplier.cs" />
     <Compile Include="Supplier\SourceSupplierReader.cs" />
     <Compile Include="Supplier\SupplierQuery.cs" />
-    <Compile Include="Zone\IZoneReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Supplier\Supplier.cs" />
     <Compile Include="Supplier\SupplierDetail.cs" />
     <Compile Include="Supplier\SupplierInfo.cs" />
     <Compile Include="Supplier\SupplierSettings.cs" />
+    <Compile Include="Zone\SourceZone.cs" />
+    <Compile Include="Zone\SourceZoneReader.cs" />
     <Compile Include="Zone\Zone.cs" />
     <Compile Include="Zone\ZoneInfo.cs" />
   </ItemGroup>

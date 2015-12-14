@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Business.EntitySynchronization;
+using Vanrise.Entities.EntitySynchronization;
 
 namespace QM.BusinessEntity.Business
 {

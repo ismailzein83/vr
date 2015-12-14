@@ -58,12 +58,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CountryReaders\VanriseCountryReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SourceSuppliersReaders\SupplierTOneV1Reader.cs" />
     <Compile Include="SourceSuppliersReaders\SupplierTOneV2SQLReader.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="CountryReaders\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QM.BusinessEntity.Entities\QM.BusinessEntity.Entities.csproj">
       <Project>{b610fb7a-8278-4c68-bf4f-09c94bc5a8d0}</Project>

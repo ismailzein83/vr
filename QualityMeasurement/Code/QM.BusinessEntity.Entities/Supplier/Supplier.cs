@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities.EntitySynchronization;
 
 namespace QM.BusinessEntity.Entities
 {
-    public class Supplier : IItem
+    public class Supplier : Vanrise.Entities.EntitySynchronization.IItem
     {
         public int SupplierId { get; set; }
 
