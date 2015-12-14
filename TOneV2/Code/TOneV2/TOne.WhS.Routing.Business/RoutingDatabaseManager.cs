@@ -36,7 +36,8 @@ namespace TOne.WhS.Routing.Business
             return new RoutingDatabaseInfo()
             {
                 RoutingDatabaseId = routingDatabase.ID,
-                Title = routingDatabase.Title
+                Title = routingDatabase.Title,
+                Information = routingDatabase.Information
             };
         }
 

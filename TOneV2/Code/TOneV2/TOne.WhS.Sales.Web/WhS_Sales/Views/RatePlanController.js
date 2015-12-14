@@ -14,7 +14,7 @@
     ];
 
     function RatePlanController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanAPIService, WhS_Sales_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
-        
+
         var sellingProductSelectorAPI;
         var sellingProductSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -39,7 +39,7 @@
 
         defineScope();
         load();
-        
+
         function defineScope() {
             $scope.ownerTypes = UtilsService.getArrayEnum(WhS_Sales_SalePriceListOwnerTypeEnum);
             $scope.selectedOwnerType = $scope.ownerTypes[0];
@@ -88,6 +88,23 @@
                 databaseSelectorReadyDeferred.resolve();
             };
 
+            $scope.onRoutingDatabaseSelectorChange = function (item) {
+
+                var payload;
+
+                if (item != undefined && item.Information != undefined)
+                    payload = {
+                        filteredIds: item.Information.SelectedPoliciesIds,
+                        selectedId: item.Information.DefaultPolicyId
+                    };
+                else {
+                    payload = {
+                        filteredIds: []
+                    };
+                }
+                policySelectorAPI.load(payload);
+            }
+
             $scope.onPolicySelectorReady = function (api) {
                 policySelectorAPI = api;
                 policySelectorReadyDeferred.resolve();
@@ -127,7 +144,7 @@
                 var onCustomerZonesSold = function (customerZones) {
                     loadRatePlan();
                 };
-                
+
                 WhS_Sales_RatePlanService.sellNewZones(customerId, onCustomerZonesSold);
             };
             $scope.editSettings = function () {
@@ -221,7 +238,7 @@
 
                 for (var i = 0; i < $scope.defaultItemTabs.length; i++) {
                     var item = $scope.defaultItemTabs[i];
-                    
+
                     if (item.directiveAPI)
                         item.loadDirective(item.directiveAPI);
                 }
@@ -237,7 +254,7 @@
                 return WhS_Sales_RatePlanAPIService.GetZoneLetters($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
                     if (response != null) {
                         $scope.zoneLetters = [];
-                        
+
                         for (var i = 0; i < response.length; i++) {
                             $scope.zoneLetters.push(response[i]);
                         }
@@ -302,14 +319,14 @@
 
         function saveChanges(shouldLoadGrid) {
             var input = getSaveChangesInput();
-            
+
             return WhS_Sales_RatePlanAPIService.SaveChanges(input).then(function (response) {
                 if (shouldLoadGrid)
                     loadGrid();
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
-            
+
             function getSaveChangesInput() {
                 var changes = null;
 

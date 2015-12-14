@@ -67,38 +67,60 @@ app.directive('vrWhsRoutingRproutepolicySelector', ['WhS_Routing_RPRouteAPIServi
             function initializeController() {
                 defineAPI();
             }
-
+            var policies;
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    //var filter;
-                    var selectedIds;
-                    if (payload != undefined) {
-                        filter = payload.filter;
-                        selectedIds = payload.selectedIds;
+                    ctrl.datasource.length = 0;
+                    var filteredIds;
+                    var selectedId;
+
+                    if (policies != undefined) {
+                        fillPolicies(payload);
                     }
-
-                    //var serializedFilter = {};
-                    //if (filter != undefined)
-                    //    serializedFilter = UtilsService.serializetoJson(filter);
-
-                    return WhS_Routing_RPRouteAPIService.GetPoliciesOptionTemplates().then(function (response) {
-                        angular.forEach(response, function (itm) {
-                            ctrl.datasource.push(itm);
+                    else {
+                        policies = [];
+                        return WhS_Routing_RPRouteAPIService.GetPoliciesOptionTemplates().then(function (response) {
+                            angular.forEach(response, function (itm) {
+                                policies.push(itm);
+                            });
+                            fillPolicies(payload);
                         });
-                        if (selectedIds != undefined)
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'TemplateConfigID', $attrs, ctrl);
-
-                    });
+                    }
                 }
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('TemplateConfigID', $attrs, ctrl);
                 }
 
+                api.getFilteredPolicies = function () {
+                    if (policies != undefined)
+                        return policies;
+                    else
+                        return ctrl.datasource;
+
+                }
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function fillPolicies(payload) {
+                if (payload != undefined) {
+                    angular.forEach(payload.filteredIds, function (filteredId) {
+                        var policy = UtilsService.getItemByVal(policies, filteredId, 'TemplateConfigID');
+                        if (policy != null)
+                            ctrl.datasource.push(policy);
+                    });
+                    if (payload.selectedId != undefined)
+                        VRUIUtilsService.setSelectedValues(payload.selectedId, 'TemplateConfigID', $attrs, ctrl);
+                }
+                else {
+                    angular.forEach(ctrl.policies, function (itm) {
+                        ctrl.datasource.push(itm);
+                    });
+                }
             }
 
             this.initializeController = initializeController;

@@ -104,8 +104,8 @@ namespace TOne.WhS.Routing.Data.SQL
                 ProcessType = processType,
                 EffectiveTime = (DateTime?)reader["EffectiveTime"],
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
-                ReadyTime = GetReaderValue<DateTime>(reader, "ReadyTime")//,
-                //Information = reader["Information"] != null ? Vanrise.Common.Serializer.Deserialize<RoutingDatabaseInformation>(reader["Information"].ToString()) : null
+                ReadyTime = GetReaderValue<DateTime>(reader, "ReadyTime"),
+                Information = reader["Information"] != null ? Vanrise.Common.Serializer.Deserialize<RoutingDatabaseInformation>(reader["Information"].ToString()) : null
             };
         }
 

@@ -84,7 +84,7 @@ function RPBuildProductRoutesProcessController($scope, WhS_Routing_RPRouteAPISer
 
         });
 
-        return poilicy.rpSupplierPoliciesReadyPromiseDeferred.promise;
+        return poilicy.rpSupplierPoliciesLoadPromiseDeferred.promise;
     }
 
     $scope.onSelectCheckChanged = function (dataItem) {
