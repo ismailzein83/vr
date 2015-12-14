@@ -72,9 +72,6 @@ UPDATE SET	[ID] = Source.[ID],
 WHEN NOT MATCHED BY TARGET THEN 
 INSERT ([ID], [Name], [ActionTypeInfo])
 VALUES ([ID], [Name], [ActionTypeInfo])
----- delete rows that are in the target but not the source 
-WHEN NOT MATCHED BY SOURCE THEN 
-DELETE
 ;
 
 MERGE INTO integration.[AdapterType] AS Target 
