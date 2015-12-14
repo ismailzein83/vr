@@ -53,6 +53,7 @@
     <Compile Include="ICDRDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IGenericAnalyticDataManager.cs" />
+    <Compile Include="IRawCDRDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -57,6 +57,9 @@
     <Compile Include="CDRLog\CDRLogInput.cs" />
     <Compile Include="GenericAnalytic\GenericAnalyticQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RawCDR\RawCDRLogDetail.cs" />
+    <Compile Include="RawCDR\RawCDRLog.cs" />
+    <Compile Include="RawCDR\RawCDRInput.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

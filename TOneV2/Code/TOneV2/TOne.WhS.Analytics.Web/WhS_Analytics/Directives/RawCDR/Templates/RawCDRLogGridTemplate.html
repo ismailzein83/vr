@@ -1,0 +1,39 @@
+﻿
+<div ng-show="ctrl.showGrid" vr-loader="ctrl.isLoadingGrid">
+    <vr-datagrid datasource="rawCDRLog"
+                 on-ready="onGridReady"
+                 dataretrievalfunction="dataRetrievalFunction"
+                 pagingtype="'PagingOnScroll'"
+                 menuactions="gridMenuActions"
+                 idfield="Entity.ID">
+
+        <vr-datagridcolumn headertext="'CDR ID'" field="'Entity.ID'" widthfactor="2"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'SwitchName'" field="'SwitchName'" widthfactor="3"></vr-datagridcolumn>
+        <!--<vr-datagridcolumn headertext="'IDonSwitch'" field="'IDonSwitch'" widthfactor="10"></vr-datagridcolumn>-->
+        <!--<vr-datagridcolumn headertext="'Tag'" field="'Tag'" widthfactor="5"></vr-datagridcolumn>-->
+        <vr-datagridcolumn headertext="'AttemptDateTime'" field="'Entity.Attempt'" type="'Date'" widthfactor="5"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'AlertDateTime'" field="'Entity.Alert'" type="'Date'" widthfactor="5"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'ConnectDateTime'" field="'Entity.Connect'" type="'Date'" widthfactor="5"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'DisconnectDateTime'" field="'Entity.Disconnect'" type="'Date'" widthfactor="5"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'DurationInSeconds'" field="'Entity.DurationInSeconds'" type="'Number'" widthfactor="5"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'IN TRUNK'" field="'Entity.InTrunk'" widthfactor="5"></vr-datagridcolumn>
+        <!--<vr-datagridcolumn headertext="'IN CIRCUIT'" field="'IN_CIRCUIT'" widthfactor="5"></vr-datagridcolumn>-->
+        <vr-datagridcolumn headertext="'IN CARRIER'" field="'Entity.InCarrier'" widthfactor="5"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'IN IP'" field="'Entity.PortIn'" widthfactor="5"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'OUT TRUNK'" field="'Entity.OutTrunk'" widthfactor="5"></vr-datagridcolumn>
+        <!--<vr-datagridcolumn headertext="'OUT CIRCUIT'" field="'OUT_CIRCUIT'" widthfactor="5"></vr-datagridcolumn>-->
+        <vr-datagridcolumn headertext="'OUT CARRIER'" field="'Entity.OutCarrier'" widthfactor="5"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'OUT IP'" field="'Entity.PortOut'" widthfactor="5"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'CGPN'" field="'Entity.CGPN'" widthfactor="5"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'CDPN'" field="'Entity.CDPN'" widthfactor="5"></vr-datagridcolumn>
+        <!--<vr-datagridcolumn headertext="'CDPNOut'" field="'CDPNOut'" widthfactor="5"></vr-datagridcolumn>-->
+        <!--<vr-datagridcolumn headertext="'CAUSE FROM RELEASE CODE'" field="'CAUSE_FROM_RELEASE_CODE'" widthfactor="5"></vr-datagridcolumn>-->
+        <!--<vr-datagridcolumn headertext="'CAUSE FROM'" field="'CAUSE_FROM'" widthfactor="5"></vr-datagridcolumn>-->
+        <!--<vr-datagridcolumn headertext="'CAUSE TO RELEASE CODE'" field="'CAUSE_TO_RELEASE_CODE'" widthfactor="5"></vr-datagridcolumn>-->
+        <!--<vr-datagridcolumn headertext="'CAUSE TO'" field="'CAUSE_TO'" widthfactor="5"></vr-datagridcolumn>-->
+        <!--<vr-datagridcolumn headertext="'IsRerouted'" field="'IsRerouted'" widthfactor="5" disablesorting><vr-icon icontype="dataItem.IsRerouted"></vr-icon></vr-datagridcolumn>-->
+        <!--<vr-datagridcolumn headertext="'Extra Fields'" field="'Extra_Fields'" widthfactor="5"></vr-datagridcolumn>-->
+
+
+    </vr-datagrid>
+</div>

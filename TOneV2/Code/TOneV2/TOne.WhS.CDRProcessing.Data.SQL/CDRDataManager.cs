@@ -17,7 +17,7 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
         {
 
         }
-        readonly string[] columns = { "ID", "Attempt", "InCarrier", "InTrunk", "CDPN", "OutTrunk", "OutCarrier", "DurationInSeconds", "Alert", "Connect", "Disconnect", "CGPN", "PortOut", "PortIn", "ReleaseCode", "ReleaseSource" };
+        readonly string[] columns = { "ID", "Attempt", "InCarrier", "InTrunk", "CDPN", "OutTrunk", "OutCarrier", "DurationInSeconds", "Alert", "Connect", "Disconnect", "CGPN", "PortOut", "PortIn", "ReleaseCode", "ReleaseSource","SwitchID" };
 
         #endregion
 
@@ -41,7 +41,7 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
         private void WriteRecordToStream(CDR record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}",
                                      record.ID,
                                      record.Attempt,
                                      record.InCarrier,
@@ -57,7 +57,8 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
                                      record.PortOut,
                                      record.PortIn,
                                      record.ReleaseCode,
-                                     record.ReleaseSource);
+                                     record.ReleaseSource,
+                                     record.SwitchID);
 
         }
         private void ApplyRawCDRsToDB(Object preparedCDRs)

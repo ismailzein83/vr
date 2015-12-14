@@ -32,13 +32,13 @@ namespace TOne.WhS.Analytics.Business
         {
             ICDRDataManager _datamanager = AnalyticsDataManagerFactory.GetDataManager<ICDRDataManager>();
             var cdrLogResult = _datamanager.GetCDRLogData(input);
-            BigResult<CDRLogDetail> CDRLogBigResultDetailMapper = new BigResult<CDRLogDetail>
+            BigResult<CDRLogDetail> cdrLogBigResultDetailMapper = new BigResult<CDRLogDetail>
             {
                 Data = cdrLogResult.Data.MapRecords(CDRLogDetailMapper),
                 ResultKey = cdrLogResult.ResultKey,
                 TotalCount = cdrLogResult.TotalCount
             };
-          return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, CDRLogBigResultDetailMapper);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cdrLogBigResultDetailMapper);
         }
 
         public CDRLogDetail CDRLogDetailMapper(CDRLog cdrLog)

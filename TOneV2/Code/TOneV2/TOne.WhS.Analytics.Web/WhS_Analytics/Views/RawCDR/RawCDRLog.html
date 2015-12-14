@@ -1,0 +1,84 @@
+﻿<vr-panel ng-controller="WhS_Analytics_RawCDRLogController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
+            <vr-row removeline>
+                <vr-columns colnum="fullrow">
+                    <vr-choices-filter selectedindex="selectedFilternIndex">
+                        <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
+                        <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+                    </vr-choices-filter>
+
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns colnum="fullrow">
+                    <vr-row>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker type="dateTime" label="From" value="fromDate" isrequired></vr-datetimepicker>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker type="dateTime" label="To" value="toDate" isrequired></vr-datetimepicker>
+                        </vr-columns>
+                        <vr-columns width="normal" ng-show="advancedSelected">
+                            <vr-textbox value="nRecords" label="Limit Results to"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="normal" ng-show="advancedSelected">
+                            <vr-whs-be-switch-selector on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
+                        </vr-columns>
+
+                        <vr-columns width="normal" ng-show="advancedSelected">
+                            <vr-textbox value="inCarrier" label="In Carrier"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="normal" ng-show="advancedSelected">
+                            <vr-textbox value="outCarrier" label="Out Carrier"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="normal" ng-init="option=1" ng-show="advancedSelected">
+                            <vr-choices islabelswitch selectedindex="selectedConnectionIndex" onselectionchanged="onSelectionChanged()">
+                                <vr-choice isselected="inSelected">CDPN In</vr-choice>
+                                <vr-choice isselected="outSelected">CDPN Out</vr-choice>
+                            </vr-choices>
+                            <vr-textbox ng-show="inSelected" value="inCDPN"></vr-textbox>
+                            <vr-textbox ng-show="outSelected" value="outCDPN"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="normal" ng-show="advancedSelected">
+                            <vr-textbox value="cgpn" label="CGPN"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="normal" ng-show="advancedSelected">
+                            <vr-select datasource="durationType" datatextfield="description" datavaluefield="value" selectedvalues="selectedDurationType" label="Duration In" isrequired></vr-select>
+                        </vr-columns>
+                        <vr-columns width="normal" ng-show="advancedSelected">
+                            <vr-textbox value="minDuration" label="Min Duration"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="normal" ng-show="advancedSelected">
+                            <vr-textbox value="maxDuration" label="Max Duration"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="fullrow" ng-show="advancedSelected">
+                            <div style="display:inline-block;width:calc(100% - 19px)">
+                                <vr-label>Where Condition</vr-label>
+                                <textarea rows="3" class="form-control" ng-model="whereCondtion" style="width:100%;resize:none;display:inline"></textarea>
+
+                            </div>
+                            <span class="hand-cursor glyphicon glyphicon-info-sign" aria-hidden="true" style="top:-30px" ng-click="onInfoClick()"></span>
+                        </vr-columns>
+
+                    </vr-row>
+
+                </vr-columns>
+            </vr-row>
+        </div>
+    </vr-form>
+
+    <vr-row>
+        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+
+            <div transclude-to="buttons">
+                <vr-button type="Search" formname="formFilter" data-onclick="getData"></vr-button>
+            </div>
+        </vr-actionbar>
+    </vr-row>
+    <div>
+        <vr-whs-analytics-rawcdrlog-grid on-ready="onMainGridReady"></vr-whs-analytics-rawcdrlog-grid>
+    </div>
+
+
+</vr-panel>

@@ -54,6 +54,7 @@
     <Compile Include="CDRManager.cs" />
     <Compile Include="GenericAnalyticManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RawCDRManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.Analytics.Data\TOne.WhS.Analytics.Data.csproj">
