@@ -56,6 +56,7 @@
     <Compile Include="Country\CountryDetail.cs" />
     <Compile Include="Country\CountryQuery.cs" />
     <Compile Include="Country\SourceCountry.cs" />
+    <Compile Include="Country\SourceCountryReader.cs" />
     <Compile Include="Currency\CurrencyExchangeRateDetail.cs" />
     <Compile Include="Currency\CurrencyExchangeRateQuery.cs" />
     <Compile Include="Currency\CurrencyExchangeRate.cs" />
@@ -64,6 +65,9 @@
     <Compile Include="CustomAttributes\AuthorizationAttribute.cs" />
     <Compile Include="BigResult.cs" />
     <Compile Include="DeleteOperationOutput.cs" />
+    <Compile Include="EntitySynchronization\IItem.cs" />
+    <Compile Include="EntitySynchronization\ISourceItem.cs" />
+    <Compile Include="EntitySynchronization\ISourceItemReader.cs" />
     <Compile Include="ExcelResult.cs" />
     <Compile Include="File\FileUploadResult.cs" />
     <Compile Include="IDateEffectiveSettings.cs" />

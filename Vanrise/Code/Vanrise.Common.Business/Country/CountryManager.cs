@@ -47,6 +47,11 @@ namespace Vanrise.Common.Business
             var countries = GetCachedCountriesByNames();
             return countries.GetRecord(countryName);
         }
+
+        public Country GetCountryBySourceId(string sourceId)
+        {
+            return GetCachedCountries().FindRecord(itm => itm.SourceId == sourceId);
+        }
         public Vanrise.Entities.InsertOperationOutput<CountryDetail> AddCountry(Country country)
         {
             Vanrise.Entities.InsertOperationOutput<CountryDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CountryDetail>();
@@ -74,7 +79,7 @@ namespace Vanrise.Common.Business
             return insertOperationOutput;
         }
 
-        public void InsertCountrySynchronize(Country country)
+        public void AddCountryFromSource(Country country)
         {
             long startingId;
             ReserveIDRange(1, out startingId);
@@ -83,14 +88,14 @@ namespace Vanrise.Common.Business
             ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
             dataManager.InsertSynchronize(country);
         }
-        public void UpdatetCountrySynchronize(Country country)
+      
+        public void UpdateCountryFromSource(Country country)
         {
 
             ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
              dataManager.UpdateSynchronize(country);
         }
-
-        
+                
         public Vanrise.Entities.UpdateOperationOutput<CountryDetail> UpdateCountry(Country country)
         {
             ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();

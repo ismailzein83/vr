@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class SourceCountry
+    public class SourceCountry : EntitySynchronization.ISourceItem
     {
         public string SourceId  {get; set; }
 
