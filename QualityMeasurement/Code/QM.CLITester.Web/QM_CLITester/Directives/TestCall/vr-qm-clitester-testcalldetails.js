@@ -42,12 +42,12 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService) 
 
                     if (item.Entity.TestProgress != null && item.Entity.TestProgress != undefined) {
                         ctrl.name = item.Entity.TestProgress.Name;
-                        ctrl.callTotal = item.Entity.TestProgress.Calls_Total;
-                        ctrl.callComplete = item.Entity.TestProgress.Calls_Complete;
-                        ctrl.cliSuccess = item.Entity.TestProgress.CLI_Success;
-                        ctrl.cliNoResult = item.Entity.TestProgress.CLI_No_Result;
-                        ctrl.fail = item.Entity.TestProgress.CLI_Fail;
-                        ctrl.pdd = item.Entity.TestProgress.PDD;
+                        ctrl.callTotal = item.Entity.TestProgress.TotalCalls;
+                        ctrl.callComplete = item.Entity.TestProgress.CompletedCalls;
+                        ctrl.cliSuccess = item.Entity.TestProgress.CliSuccess;
+                        ctrl.cliNoResult = item.Entity.TestProgress.CliNoResult;
+                        ctrl.fail = item.Entity.TestProgress.CliFail;
+                        ctrl.pdd = item.Entity.TestProgress.Pdd;
                     }
                 }
 

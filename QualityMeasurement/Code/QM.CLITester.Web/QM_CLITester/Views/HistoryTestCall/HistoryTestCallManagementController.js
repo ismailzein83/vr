@@ -84,7 +84,6 @@
 
         function loadUsers() {
             return UsersAPIService.GetUsers().then(function (response) {
-                console.log(response);
                 $scope.users = response;
             });
         }
@@ -156,9 +155,6 @@
             else {
                 filter.UserIds = $scope.selectedUsers;
             }
-
-
-            console.log(filter.UserIds);
         }
     }
 

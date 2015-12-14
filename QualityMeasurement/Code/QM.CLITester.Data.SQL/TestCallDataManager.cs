@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,8 @@ using System.Data;
 using System.Reflection;
 using Vanrise.Common;
 using Vanrise.Security.Entities;
+using QM.BusinessEntity.Business;
+using QM.BusinessEntity.Entities;
 
 namespace QM.CLITester.Data.SQL
 {
@@ -90,8 +93,8 @@ namespace QM.CLITester.Data.SQL
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("QM_CLITester.sp_TestCall_CreateTempByFiltered", tempTableName, userids, input.Query.SupplierID, input.Query.CountryID, input.Query.ZoneID, 
-                    input.Query.FromTime, input.Query.ToTime, callTestStatusids, callTestResultsids);
+                ExecuteNonQuerySP("QM_CLITester.sp_TestCall_CreateTempByFiltered", tempTableName, userids, input.Query.SupplierID, input.Query.CountryID, input.Query.ZoneID,
+                    input.Query.FromTime, input.Query.ToTime == DateTime.MinValue ? DateTime.Now : input.Query.ToTime, callTestStatusids, callTestResultsids);
             };
 
             return RetrieveData(input, createTempTableAction, TestCallDetailMapper, mapper);
@@ -128,11 +131,13 @@ namespace QM.CLITester.Data.SQL
 
         TestCallDetail TestCallDetailMapper(IDataReader reader)
         {
+            SupplierManager supplierManager = new SupplierManager();
             return new TestCallDetail()
             {
                 Entity = TestCallMapper(reader),
-                CallTestResultDescription = TestCallMapper(reader).CallTestResult.ToString(),
-                CallTestStatusDescription = TestCallMapper(reader).CallTestStatus.ToString()
+                CallTestStatusDescription = Utilities.GetEnumAttribute<CallTestStatus, DescriptionAttribute>((CallTestStatus)TestCallMapper(reader).CallTestStatus).Description,
+                CallTestResultDescription = Utilities.GetEnumAttribute<CallTestResult, DescriptionAttribute>((CallTestResult)TestCallMapper(reader).CallTestResult).Description,
+                SupplierName = supplierManager.GetSupplier(TestCallMapper(reader).SupplierID).Name
             };
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,7 +36,23 @@ namespace QM.CLITester.Entities
 
     public enum GetTestProgressResult { TestCompleted, ProgressChanged, ProgressNotChanged, FailedWithRetry, FailedWithNoRetry }
 
-    public enum CallTestResult { NotCompleted = 0, Succeeded = 1, PartiallySucceeded = 2, Failed = 3, NotAnswered = 4}
+    public enum CallTestResult
+    {
+        [Description("Not Completed")]
+        NotCompleted = 0,
+
+        [Description("Succeeded")]
+        Succeeded = 1,
+
+        [Description("Partially Succeeded")]
+        PartiallySucceeded = 2,
+
+        [Description("Failed")]
+        Failed = 3,
+
+        [Description("Not Answered")]
+        NotAnswered = 4
+    }
 
     public interface IGetTestProgressContext
     {
