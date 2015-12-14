@@ -1,13 +1,7 @@
-﻿using QM.BusinessEntity.Business;
-using QM.BusinessEntity.Entities;
-using QM.CLITester.Business;
-using QM.CLITester.Entities;
-using QM.CLITester.Entities;
-using System;
+﻿using QM.CLITester.Entities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Vanrise.Common.Business.EntitySynchronization;
+using Vanrise.Entities.EntitySynchronization;
 
 namespace QM.CLITester.Business
 {
