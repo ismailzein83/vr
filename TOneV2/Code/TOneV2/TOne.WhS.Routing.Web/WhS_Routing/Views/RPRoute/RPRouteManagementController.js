@@ -63,6 +63,22 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneSelectorAPI, payload, setLoader);
             }
 
+            $scope.onRoutingDatabaseSelectorChange = function (item) {
+
+                var payload;
+
+                if (item != undefined && item.Information != undefined)
+                    payload = {
+                        filteredIds: item.Information.SelectedPoliciesIds,
+                        selectedId: item.Information.DefaultPolicyId
+                    };
+                else {
+                    payload = {
+                        filteredIds: []
+                    };
+                }
+                rpRoutePolicyAPI.load(payload);
+            }
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -80,7 +96,9 @@
                     PolicyConfigId: rpRoutePolicyAPI.getSelectedIds(),
                     NumberOfOptions: $scope.numberOfOptions,
                     RoutingProductIds: routingProductSelectorAPI.getSelectedIds(),
-                    SaleZoneIds: saleZoneSelectorAPI.getSelectedIds()
+                    SaleZoneIds: saleZoneSelectorAPI.getSelectedIds(),
+                    FilteredPolicies: rpRoutePolicyAPI.getFilteredPoliciesIds(),
+                    DefaultPolicyId: rpRoutePolicyAPI.getDefaultPolicyId()
                 };
                 return query;
             }
@@ -106,8 +124,7 @@
             return loadRoutingDatabasePromiseDeferred.promise;
         }
 
-        function loadRPRoutePolicySelector()
-        {
+        function loadRPRoutePolicySelector() {
             var loadRPRoutePolicyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             rpRoutePolicyReadyPromiseDeffered.promise.then(function () {

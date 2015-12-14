@@ -94,11 +94,17 @@ app.directive('vrWhsRoutingRproutepolicySelector', ['WhS_Routing_RPRouteAPIServi
                     return VRUIUtilsService.getIdSelectedIds('TemplateConfigID', $attrs, ctrl);
                 }
 
-                api.getFilteredPolicies = function () {
-                    if (policies != undefined)
-                        return policies;
+                api.getDefaultPolicyId = function () {
+                    return UtilsService.getItemByVal(ctrl.datasource, true, 'IsDefault').TemplateConfigID;
+                }
+
+                api.getFilteredPoliciesIds = function () {
+                    var filteredPolicies;
+                    if (ctrl.datasource != undefined)
+                        filteredPolicies = ctrl.datasource;
                     else
-                        return ctrl.datasource;
+                        fillPolicies = policies;
+                    return UtilsService.getPropValuesFromArray(filteredPolicies, 'TemplateConfigID')
 
                 }
 
@@ -110,14 +116,18 @@ app.directive('vrWhsRoutingRproutepolicySelector', ['WhS_Routing_RPRouteAPIServi
                 if (payload != undefined) {
                     angular.forEach(payload.filteredIds, function (filteredId) {
                         var policy = UtilsService.getItemByVal(policies, filteredId, 'TemplateConfigID');
-                        if (policy != null)
+                        if (policy != null) {
+                            policy.IsDefault = false;
+                            if (payload.selectedId == policy.TemplateConfigID)
+                                policy.IsDefault = true;
                             ctrl.datasource.push(policy);
+                        }
                     });
                     if (payload.selectedId != undefined)
                         VRUIUtilsService.setSelectedValues(payload.selectedId, 'TemplateConfigID', $attrs, ctrl);
                 }
                 else {
-                    angular.forEach(ctrl.policies, function (itm) {
+                    angular.forEach(policies, function (itm) {
                         ctrl.datasource.push(itm);
                     });
                 }

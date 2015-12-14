@@ -28,7 +28,8 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
         var gridAPI;
         var gridDrillDownTabsObj;
         var routingDatabaseId;
-
+        var policies;
+        var defaultPolicyId;
         function initializeController() {
             $scope.rpRoutes = [];
 
@@ -45,6 +46,8 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         routingDatabaseId = query.RoutingDatabaseId;
+                        policies = query.FilteredPolicies;
+                        defaultPolicyId = query.DefaultPolicyId;
                         return gridAPI.retrieveData(query);
                     }
 
@@ -127,7 +130,9 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
             drillDownDefinition.loadDirective = function (directiveAPI, rpRouteDetail) {
                 var payload = {
                     rpRouteDetail: rpRouteDetail,
-                    routingDatabaseId: routingDatabaseId
+                    routingDatabaseId: routingDatabaseId,
+                    filteredPolicies: policies,
+                    defaultPolicyId: defaultPolicyId
                 };
 
                 return directiveAPI.load(payload);

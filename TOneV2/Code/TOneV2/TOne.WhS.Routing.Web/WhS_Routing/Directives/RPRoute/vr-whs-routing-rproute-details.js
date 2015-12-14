@@ -33,7 +33,8 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
             var gridAPI;
             var rpRouteDetail;
             var routingDatabaseId;
-
+            var policies;
+            var defaultPolicyId;
             var rpRoutePolicyAPI;
             var rpRoutePolicyReadyPromiseDeffered = UtilsService.createPromiseDeferred();
 
@@ -60,7 +61,7 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                 $scope.onPolicySelectItem = function (selectedItem) {
                     if (rpRouteDetail == undefined)
                         return;
-                    
+
                     var query = {
                         RoutingDatabaseId: routingDatabaseId,
                         PolicyOptionConfigId: selectedItem.TemplateConfigID,
@@ -83,16 +84,21 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined)
-                    {
+                    if (payload != undefined) {
                         rpRouteDetail = payload.rpRouteDetail;
                         routingDatabaseId = payload.routingDatabaseId;
+                        policies = payload.filteredPolicies;
+                        defaultPolicyId = payload.defaultPolicyId
                     }
 
                     var loadRPRoutePolicyPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     rpRoutePolicyReadyPromiseDeffered.promise.then(function () {
-                        VRUIUtilsService.callDirectiveLoad(rpRoutePolicyAPI, undefined, loadRPRoutePolicyPromiseDeferred);
+                        var payload = {
+                            filteredIds: policies,
+                            selectedId: defaultPolicyId
+                        };
+                        VRUIUtilsService.callDirectiveLoad(rpRoutePolicyAPI, payload, loadRPRoutePolicyPromiseDeferred);
                     });
 
                     return loadRPRoutePolicyPromiseDeferred.promise;
