@@ -1,10 +1,14 @@
 ﻿using QM.CLITester.Entities;
+using System;
 using System.Collections.Generic;
+using System.Xml;
 
-namespace QM.CLITester.MainExtensions.SourceProfilesReaders
+namespace QM.CLITester.iTestIntegration.SourceProfilesReaders
 {
-    public class ProfileiTestReader : SourceProfileReader 
+    public class ProfileiTestReader : SourceProfileReader
     {
+        ServiceActions _serviceActions = new ServiceActions();
+
         public string Dummy { get; set; }
 
         public override bool UseSourceItemId
@@ -17,7 +21,30 @@ namespace QM.CLITester.MainExtensions.SourceProfilesReaders
 
         public override IEnumerable<SourceProfile> GetChangedItems(ref object updatedHandle)
         {
-            return new List<SourceProfile>();
+            string allProfilesResponse = _serviceActions.PostRequest("1011", null);
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(allProfilesResponse);
+            List<SourceProfile> sourceProfiles = new List<SourceProfile>();
+            foreach (XmlNode nodeProfile in doc.DocumentElement.ChildNodes)
+            {
+                SourceProfile sourceProfile = new SourceProfile();
+                sourceProfile.Name = nodeProfile.SelectSingleNode("Profile_Name").InnerText;
+                sourceProfile.SourceId = nodeProfile.SelectSingleNode("Profile_ID").InnerText;
+
+                ProfileExtensionSettings settings = new ProfileExtensionSettings();
+                settings.GatewayIP = nodeProfile.SelectSingleNode("Profile_IP").InnerText;
+                settings.GatewayPort = nodeProfile.SelectSingleNode("Profile_Port").InnerText;
+                settings.SourceNumber = nodeProfile.SelectSingleNode("Profile_Src_Number").InnerText;
+
+
+                sourceProfile.Settings = new ProfileSettings();
+
+                sourceProfile.Settings.ExtendedSettings = new List<ExtendedProfileSetting>();
+
+                sourceProfile.Settings.ExtendedSettings.Add(settings);
+                sourceProfiles.Add(sourceProfile);
+            }
+            return sourceProfiles;
         }
 
     }

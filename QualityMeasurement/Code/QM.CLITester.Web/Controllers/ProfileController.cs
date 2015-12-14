@@ -1,6 +1,5 @@
 ﻿using QM.CLITester.Business;
 using QM.CLITester.Entities;
-using QM.CLITester.Web;
 using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.Entities;

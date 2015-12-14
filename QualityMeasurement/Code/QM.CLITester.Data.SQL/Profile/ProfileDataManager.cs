@@ -18,7 +18,8 @@ namespace QM.CLITester.Data.SQL
             {
                 ProfileId = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                Settings = Vanrise.Common.Serializer.Deserialize<ProfileSettings>(reader["Settings"] as string)
+                Settings = Vanrise.Common.Serializer.Deserialize<ProfileSettings>(reader["Settings"] as string),
+                SourceId = reader["SourceProfileID"] as string
             };
             return profile;
         }
@@ -44,12 +45,20 @@ namespace QM.CLITester.Data.SQL
 
         public void InsertSynchronize(Profile profile)
         {
-            ExecuteNonQuerySP("[QM_CLITester].[sp_Profile_InsertFromSource]", profile.ProfileId, profile.Name, profile.SourceId);
+            object settings = null;
+            if (profile.Settings != null)
+                settings = Vanrise.Common.Serializer.Serialize(profile.Settings);
+
+                ExecuteNonQuerySP("[QM_CLITester].[sp_Profile_InsertFromSource]", profile.ProfileId, profile.Name, profile.SourceId, settings);
         }
 
         public void UpdateSynchronize(Profile profile)
         {
-            ExecuteNonQuerySP("[QM_CLITester].[sp_Profile_UpdateFromSource]", profile.ProfileId, profile.Name);
+            object settings = null;
+            if (profile.Settings != null)
+                settings = Vanrise.Common.Serializer.Serialize(profile.Settings);
+
+                ExecuteNonQuerySP("[QM_CLITester].[sp_Profile_UpdateFromSource]", profile.ProfileId, profile.Name, settings);
         }
     }
 }

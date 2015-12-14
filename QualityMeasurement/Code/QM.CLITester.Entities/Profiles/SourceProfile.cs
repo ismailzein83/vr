@@ -12,5 +12,7 @@ namespace QM.CLITester.Entities
         }
 
         public string Name { get; set; }
+
+        public ProfileSettings Settings { get; set; }
     }
 }

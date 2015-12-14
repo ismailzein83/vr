@@ -36,7 +36,8 @@ namespace QM.CLITester.Business
             return new Profile
             {
                 Name = sourceItem.Name,
-                SourceId = sourceItem.SourceId
+                SourceId = sourceItem.SourceId, 
+                Settings = sourceItem.Settings
             };
         }
 
