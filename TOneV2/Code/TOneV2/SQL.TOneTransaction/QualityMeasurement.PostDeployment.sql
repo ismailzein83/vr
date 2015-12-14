@@ -9,3 +9,25 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+MERGE INTO runtime.[SchedulerTaskActionType] AS Target 
+USING (VALUES 
+	(1, N'Workflow', N'{"URL":"/Client/Modules/Runtime/Views/ActionTemplates/WFActionTemplate.html", "SystemType":false, "FQTN":"Vanrise.BusinessProcess.Extensions.WFTaskAction.WFSchedulerTaskAction, Vanrise.BusinessProcess.Extensions.WFTaskAction"}'),
+	(2, N'Data Source', N'{"URL":"", "SystemType":true, "FQTN":"Vanrise.Integration.Business.DSSchedulerTaskAction, Vanrise.Integration.Business"}'),
+	(3, N'Supplier Synchronize', N'{"URL":"/Client/Modules/QM_BusinessEntity/Views/Supplier/SchedulerTaskAction/SupplierSynchronizeTemplate.html","SystemType":false,"FQTN":"QM.BusinessEntity.Business.SupplierSyncTaskAction, QM.BusinessEntity.Business"}'),
+	(4, N'Profile Synchronize', N'{"URL":"/Client/Modules/QM_CLITester/Views/Profile/SchedulerTaskAction/ProfileSynchronizeTemplate.html","SystemType":false,"FQTN":"QM.CLITester.Business.ProfileSyncTaskAction, QM.CLITester.Business"}'),
+	(5, N'Zone Synchronize', N'{"URL":"/Client/Modules/QM_BusinessEntity/Views/Zone/SchedulerTaskAction/ZoneSynchronizeTemplate.html","SystemType":false,"FQTN":"QM.BusinessEntity.Business.ZoneSyncTaskAction, QM.BusinessEntity.Business"}')
+
+
+) 
+AS Source ([ID], [Name], [ActionTypeInfo])
+ON Target.[ID] = Source.[ID] 
+-- update matched rows 
+WHEN MATCHED THEN 
+UPDATE SET	[ID] = Source.[ID],
+			[Name] = Source.[Name],
+			[ActionTypeInfo]  = Source.[ActionTypeInfo]
+-- insert new rows 
+WHEN NOT MATCHED BY TARGET THEN 
+INSERT ([ID], [Name], [ActionTypeInfo])
+VALUES ([ID], [Name], [ActionTypeInfo])
+;

@@ -59,12 +59,7 @@ DELETE
 MERGE INTO runtime.[SchedulerTaskActionType] AS Target 
 USING (VALUES 
 	(1, N'Workflow', N'{"URL":"/Client/Modules/Runtime/Views/ActionTemplates/WFActionTemplate.html", "SystemType":false, "FQTN":"Vanrise.BusinessProcess.Extensions.WFTaskAction.WFSchedulerTaskAction, Vanrise.BusinessProcess.Extensions.WFTaskAction"}'),
-	(2, N'Data Source', N'{"URL":"", "SystemType":true, "FQTN":"Vanrise.Integration.Business.DSSchedulerTaskAction, Vanrise.Integration.Business"}'),
-	(3, N'Supplier Synchronize', N'{"URL":"/Client/Modules/QM_BusinessEntity/Views/Supplier/SchedulerTaskAction/SupplierSynchronizeTemplate.html","SystemType":false,"FQTN":"QM.BusinessEntity.Business.SupplierSyncTaskAction, QM.BusinessEntity.Business"}'),
-	(4, N'Profile Synchronize', N'{"URL":"/Client/Modules/QM_CLITester/Views/Profile/SchedulerTaskAction/ProfileSynchronizeTemplate.html","SystemType":false,"FQTN":"QM.CLITester.Business.ProfileSyncTaskAction, QM.CLITester.Business"}'),
-	(5, N'Zone Synchronize', N'{"URL":"/Client/Modules/QM_BusinessEntity/Views/Zone/SchedulerTaskAction/ZoneSynchronizeTemplate.html","SystemType":false,"FQTN":"QM.BusinessEntity.Business.ZoneSyncTaskAction, QM.BusinessEntity.Business"}')
-
-
+	(2, N'Data Source', N'{"URL":"", "SystemType":true, "FQTN":"Vanrise.Integration.Business.DSSchedulerTaskAction, Vanrise.Integration.Business"}')
 ) 
 AS Source ([ID], [Name], [ActionTypeInfo])
 ON Target.[ID] = Source.[ID] 
