@@ -11,6 +11,9 @@ function ProfileSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSer
         $scope.sourceTypeTemplates = [];
 
         $scope.onSourceTypeDirectiveReady = function (api) {
+
+            console.log(onSourceTypeDirectiveReady)
+
             sourceTypeDirectiveAPI = api;
             var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
@@ -20,7 +23,7 @@ function ProfileSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSer
         $scope.schedulerTaskAction.getData = function () {
             return {
                 $type: "QM.CLITester.Business.ProfileSyncTaskActionArgument, QM.CLITester.Business",
-                SourceSupplierReader: sourceTypeDirectiveAPI.getData()
+                SourceProfileReader: sourceTypeDirectiveAPI.getData()
             };
         };
 
@@ -50,7 +53,7 @@ function ProfileSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSer
 
         });
     }
-    
+
 
 }
 appControllers.controller('QM_CLITester_ProfileSynchronizeTemplateController', ProfileSynchronizeTemplateController);

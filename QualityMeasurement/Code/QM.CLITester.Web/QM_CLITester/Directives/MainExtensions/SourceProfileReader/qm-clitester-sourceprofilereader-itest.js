@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("qmClitesterSourcepprofilereaderITest", [function () {
+app.directive("qmClitesterSourceprofilereaderITest", [function () {
 
     var directiveDefinitionObject = {
         restrict: "E",
