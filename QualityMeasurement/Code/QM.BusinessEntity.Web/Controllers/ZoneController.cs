@@ -26,10 +26,10 @@ namespace QM.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetZonesInfo")]
-        public IEnumerable<ZoneInfo> GetZonesInfo()
+        public IEnumerable<ZoneInfo> GetZonesInfo(int CountryId)
         {
             ZoneManager manager = new ZoneManager();
-            return manager.GetZonesInfo();
+            return manager.GetZonesInfo(CountryId);
         }
 
     }

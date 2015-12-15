@@ -20,7 +20,7 @@ namespace QM.BusinessEntity.Data.SQL
         {
             Zone Zone = new Zone()
             {
-                ZoneId = (int)reader["ID"],
+                ZoneId = (long)reader["ID"],
                 Name = reader["Name"] as string,
                 SourceId = reader["SourceZoneID"] as string,
                 CountryId = (int)reader["CountryID"],
@@ -38,6 +38,11 @@ namespace QM.BusinessEntity.Data.SQL
         public bool AreZonesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("QM_BE.Zone", ref updateHandle);
+        }
+
+        public List<Zone> GetZonesByCountry(int CountryId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

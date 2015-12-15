@@ -19,10 +19,10 @@ namespace QM.BusinessEntity.Business
             return manager.GetTemplateConfigurations(Constants.SourceZoneReaderConfigType);
         }
 
-        public IEnumerable<ZoneInfo> GetZonesInfo()
+        public IEnumerable<ZoneInfo> GetZonesInfo(int CountryId)
         {
             var zones = GetCachedZones();
-            return zones.MapRecords(ZoneInfoMapper);
+            return zones.MapRecords(ZoneInfoMapper,x=>x.CountryId==CountryId);
         }
 
        

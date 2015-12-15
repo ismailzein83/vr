@@ -70,11 +70,14 @@ function (QM_BE_ZoneAPIService, UtilsService, $compile, VRUIUtilsService) {
             api.load = function (payload) {
 
                 var selectedIds;
+                var countryId;
+
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
+                    countryId = payload.countryId;
                 }
 
-                return QM_BE_ZoneAPIService.GetZonesInfo().then(function (response) {
+                return QM_BE_ZoneAPIService.GetZonesInfo(countryId).then(function (response) {
                     angular.forEach(response, function (item) {
                         ctrl.datasource.push(item);
 

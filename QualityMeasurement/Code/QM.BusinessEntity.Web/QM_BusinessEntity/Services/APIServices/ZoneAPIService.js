@@ -5,16 +5,19 @@
 
     function zoneAPIService(BaseAPIService, UtilsService, QM_BE_ModuleConfig) {
 
-    
+
         function GetZoneSourceTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Zone", "GetZoneSourceTemplates"));
         }
 
-        function GetZonesInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Zone", "GetZonesInfo"));
+        function GetZonesInfo(countryId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Zone", "GetZonesInfo"),
+                {
+                    countryId: countryId
+                });
         }
 
-        
+
         return ({
             GetZoneSourceTemplates: GetZoneSourceTemplates,
             GetZonesInfo: GetZonesInfo
