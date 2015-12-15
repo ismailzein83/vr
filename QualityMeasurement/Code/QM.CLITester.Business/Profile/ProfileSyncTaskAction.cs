@@ -12,7 +12,6 @@ namespace QM.CLITester.Business
             SourceProfileSynchronizer sourceProfileSynchronizer = new SourceProfileSynchronizer(ProfileSyncTaskActionArgument.SourceProfileReader);
             sourceProfileSynchronizer.Synchronize();
             Console.WriteLine("ProfileSyncTaskAction Executed");
-            //throw new NotImplementedException();
         }
     }
 }
