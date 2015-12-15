@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -24,6 +25,15 @@ namespace TOne.WhS.BusinessEntity.Business
                    ISupplierPriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
                    return dataManager.GetPriceLists();
                });
+        }
+
+        public IEnumerable<SupplierPriceList> GetFilteredSupplierPriceLists(SupplierPricelistFilter filter)
+        {
+            List<SupplierPriceList> priceLists = GetCachedPriceLists();
+            Func<SupplierPriceList, bool> filterExpression = (item) =>
+                (item.SupplierId == filter.SupplierId);
+
+            return priceLists.FindAllRecords(filterExpression);
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {

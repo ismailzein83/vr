@@ -1,0 +1,11 @@
+﻿<vr-panel ng-controller="WhS_BE_SupplierPricelistController" vr-loader="isGettingData">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-whs-be-carrieraccount-selector getsuppliers on-ready="onSupplierReady" isrequired="true"></vr-whs-be-carrieraccount-selector>
+                </vr-columns>
+            </vr-row>
+        </div>
+    </vr-form>
+</vr-panel>
