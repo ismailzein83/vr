@@ -52,7 +52,7 @@ function (QM_BE_ZoneAPIService, UtilsService, $compile, VRUIUtilsService) {
         var disabled = "";
         return '<div  vr-loader="isLoadingDirective">'
             + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="ZoneId" '
-        + required + ' label="Zone" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
+        + required + ' label="Zones" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
            + '</div>'
     }
 

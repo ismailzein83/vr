@@ -52,7 +52,7 @@ function (QM_BE_SupplierAPIService, UtilsService, $compile, VRUIUtilsService) {
         var disabled = "";
         return '<div  vr-loader="isLoadingDirective">'
             + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SupplierId" '
-        + required + ' label="Supplier" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
+        + required + ' label="Suppliers" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
            + '</div>'
     }
 
