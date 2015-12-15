@@ -123,9 +123,9 @@
             if ($scope.selectedSuppliers.length > 0)
                 filter.SupplierIDs = null;
             else {
-                filter.SupplierIDs = UtilsService.getPropValuesFromArray($scope.selectedSuppliers, "SupplierId");
-                console.log('UtilsService.getPropValuesFromArray($scope.selectedSuppliers, "SupplierId")')
-                console.log(UtilsService.getPropValuesFromArray($scope.selectedSuppliers, "SupplierId"))
+                filter.SupplierIDs = UtilsService.getPropValuesFromArray($scope.selectedtestResults, "value");
+                console.log('ilter.SupplierIDs')
+                console.log(ilter.SupplierIDs)
             }
 
             if ($scope.selectedCountry == undefined)
