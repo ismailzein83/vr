@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 app.directive("qmBeSourcesupplierreaderTonev2", [function () {
-
+    
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -23,12 +23,14 @@ app.directive("qmBeSourcesupplierreaderTonev2", [function () {
             }
         },
         templateUrl: function (element, attrs) {
+         
             return getDirectiveTemplateUrl();
         }
     };
 
     function getDirectiveTemplateUrl() {
-        return "/Client/Modules/QM_BusinessEntity/Directives/MainExtensions/SourceSupplierReader/Templates/SouceSupplierReaderTOneV2.html";
+       
+        return "/Client/Modules/QM_BusinessEntity/Directives/MainExtensions/SourceSupplierReader/Templates/SourceSupplierReaderTOneV2.html";
     }
 
     function DirectiveConstructor($scope, ctrl) {

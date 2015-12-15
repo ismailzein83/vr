@@ -1,28 +1,37 @@
-﻿SupplierSynchronizeTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'QM_BE_SupplierAPIService'];
+﻿SupplierSynchronizeTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'QM_BE_SupplierAPIService'];
 
-function SupplierSynchronizeTemplateController($scope, UtilsService, VRUIUtilsService , QM_BE_SupplierAPIService) {
+function SupplierSynchronizeTemplateController($scope, UtilsService, VRUIUtilsService, VRNotificationService , QM_BE_SupplierAPIService) {
 
+    var sourceTemplateDirectiveAPI;
+    var sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
     defineScope();
     load();
     var sourceConfigId;
-    var sourceTypeDirectiveAPI;
-    var sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+    
     function defineScope() {
         $scope.sourceTypeTemplates = [];
 
         $scope.onSourceTypeDirectiveReady = function (api) {
-            sourceTypeDirectiveAPI = api;
-            var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
-            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
+            sourceTemplateDirectiveAPI = api;
+            sourceDirectiveReadyPromiseDeferred.resolve();
 
             
         }
         $scope.schedulerTaskAction.getData = function () {
-            return {
-                $type: "QM.BusinessEntity.Business.SupplierSyncTaskActionArgument, QM.BusinessEntity.Business",
-                SourceSupplierReader: sourceTypeDirectiveAPI.getData()
-            };
+
+            var schedulerTaskAction;
+            if ($scope.selectedSourceTypeTemplate != undefined) {
+                if (sourceTemplateDirectiveAPI != undefined) {
+                    schedulerTaskAction = {};
+                    schedulerTaskAction.$type = "QM.BusinessEntity.Business.SupplierSyncTaskActionArgument, QM.BusinessEntity.Business",
+                    schedulerTaskAction.SourceSupplierReader = sourceTemplateDirectiveAPI.getData();
+                    schedulerTaskAction.SourceSupplierReader.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
+                }
+            }
+            return schedulerTaskAction;
+
         };
+        
             
     }
 
@@ -31,7 +40,7 @@ function SupplierSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSe
         loadAllControls();
     }
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadSourceType])
+        return UtilsService.waitMultipleAsyncOperations([loadSourceType, loadSourceTemplate])
           .catch(function (error) {
               VRNotificationService.notifyExceptionWithClose(error, $scope);
           })
@@ -41,7 +50,8 @@ function SupplierSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSe
     }
     function loadSourceType() {
         return QM_BE_SupplierAPIService.GetSupplierSourceTemplates().then(function (response) {
-            console.log(response)
+            if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.SourceSupplierReader != undefined)
+              sourceConfigId = $scope.schedulerTaskAction.data.SourceSupplierReader.ConfigId;
             angular.forEach(response, function (item) {
                 $scope.sourceTypeTemplates.push(item);
             });
@@ -52,6 +62,19 @@ function SupplierSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSe
         });
     }
 
+    function loadSourceTemplate() {
+        var loadSourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
+        sourceDirectiveReadyPromiseDeferred.promise.then(function () {
+            var payload;
+            if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.SourceSupplierReader != undefined)
+                payload = {
+                    connectionString:$scope.schedulerTaskAction.data.SourceSupplierReader.ConnectionString
+                };
+            VRUIUtilsService.callDirectiveLoad(sourceTemplateDirectiveAPI, payload, loadSourceTemplatePromiseDeferred);
+        });
+
+        return loadSourceTemplatePromiseDeferred.promise;
+    }
    
 }
 appControllers.controller('QM_BE_SupplierSynchronizeTemplateController', SupplierSynchronizeTemplateController);

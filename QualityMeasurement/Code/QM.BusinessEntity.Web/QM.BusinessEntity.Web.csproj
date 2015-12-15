@@ -125,6 +125,7 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\ZoneController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -132,11 +133,12 @@
     <Content Include="QM_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceSupplierReader\qm-be-sourcesupplierreader-tonev1.js" />
     <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceSupplierReader\qm-be-sourcesupplierreader-tonev2.js" />
-    <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceSupplierReader\Templates\SouceSupplierReaderTOneV2.html" />
-    <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceSupplierReader\Templates\SouceSupplierReaderTOneV1.html" />
+    <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceSupplierReader\Templates\SourceSupplierReaderTOneV2.html" />
+    <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceSupplierReader\Templates\SourceSupplierReaderTOneV1.html" />
     <Content Include="QM_BusinessEntity\Directives\Supplier\Templates\SupplierGridTemplate.html" />
     <Content Include="QM_BusinessEntity\Directives\Supplier\vr-qm-be-supplier-grid.js" />
     <Content Include="QM_BusinessEntity\Directives\Supplier\vr-qm-be-supplier-selector.js" />
+    <Content Include="QM_BusinessEntity\Services\APIServices\ZoneAPIService.js" />
     <Content Include="QM_BusinessEntity\Services\APIServices\SupplierAPIService.js" />
     <Content Include="QM_BusinessEntity\Services\SupplierService.js" />
     <Content Include="QM_BusinessEntity\Views\Supplier\SchedulerTaskAction\SupplierSynchronizeTemplate.html" />
@@ -145,6 +147,8 @@
     <Content Include="QM_BusinessEntity\Views\Supplier\SupplierEditorController.js" />
     <Content Include="QM_BusinessEntity\Views\Supplier\SupplierManagement.html" />
     <Content Include="QM_BusinessEntity\Views\Supplier\SupplierManagementController.js" />
+    <Content Include="QM_BusinessEntity\Views\Zone\SchedulerTaskAction\ZoneSynchronizeTemplate.html" />
+    <Content Include="QM_BusinessEntity\Views\Zone\SchedulerTaskAction\ZoneSynchronizeTemplateController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">

@@ -67,6 +67,7 @@
     <Compile Include="Supplier\SupplierManager.cs" />
     <Compile Include="Supplier\SupplierSyncTaskAction.cs" />
     <Compile Include="Supplier\SupplierSyncTaskActionArgument.cs" />
+    <Compile Include="Zone\ZoneSyncTaskAction.cs" />
     <Compile Include="Zone\ZoneManager.cs" />
     <Compile Include="Zone\ZoneSyncTaskActionArgument.cs" />
   </ItemGroup>

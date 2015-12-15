@@ -28,7 +28,7 @@ app.directive("qmBeSourcesupplierreaderTonev1", [function () {
     };
 
     function getDirectiveTemplateUrl() {
-        return "/Client/Modules/QM_BusinessEntity/Directives/MainExtensions/SourceSupplierReader/Templates/SouceSupplierReaderTOneV1.html";
+        return "/Client/Modules/QM_BusinessEntity/Directives/MainExtensions/SourceSupplierReader/Templates/SourceSupplierReaderTOneV1.html";
     }
 
     function DirectiveConstructor($scope, ctrl) {
