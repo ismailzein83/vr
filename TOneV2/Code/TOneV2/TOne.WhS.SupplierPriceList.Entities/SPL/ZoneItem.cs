@@ -77,6 +77,8 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public string ZoneName { get; set; }
 
+        public int? CodeGroupId { get; set; }
+
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }

@@ -11,6 +11,7 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
+using TOne.WhS.SupplierPriceList.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -26,10 +27,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<int> CurrencyId { get; set; }
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<ImportedCode>> ImportedCodes { get; set; }
-
-        [RequiredArgument]
-        public OutArgument<IEnumerable<ImportedRate>> ImportedRates { get; set; }
+        public OutArgument<IEnumerable<ImportedData>> ImportedData { get; set; }
 
         [RequiredArgument]
         public OutArgument<DateTime> MinimumDate { get; set; }
@@ -50,9 +48,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             int count = 1;
             DateTime? effectiveDate = EffectiveDate.Get(context);
 
-            List<ImportedCode> importedCodesList = new List<ImportedCode>();
-            List<ImportedRate> importedRatesList = new List<ImportedRate>();
             DateTime minimumDate = DateTime.MinValue;
+
+            Dictionary<int, ImportedData> importedDataByCountryId = new Dictionary<int, ImportedData>();
+            ImportedData countryData;
+
+            BusinessEntity.Business.CodeGroupManager codeGroupManager = new BusinessEntity.Business.CodeGroupManager();
 
             while (count < worksheet.Cells.Rows.Count)
             {
@@ -72,18 +73,33 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 
                 string zoneName = worksheet.Cells[count, 0].StringValue;
                 string[] codes = worksheet.Cells[count, 1].StringValue.Split(',');
+
+                TOne.WhS.BusinessEntity.Entities.CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(codes[0]);
+                if(!importedDataByCountryId.TryGetValue(codeGroup.CountryId, out countryData))
+                {
+                    countryData = new ImportedData()
+                    {
+                        CountryId = codeGroup.CountryId,
+                        ImportedCodes = new List<ImportedCode>(),
+                        ImportedRates = new List<ImportedRate>()
+                    };
+
+                    importedDataByCountryId.Add(codeGroup.CountryId, countryData);
+                }
+
                 foreach (var codeValue in codes)
                 {
-                    importedCodesList.Add(new ImportedCode
+                    countryData.ImportedCodes.Add(new ImportedCode
                     {
                         Code = codeValue.Trim(),
+                        CodeGroupId = (codeGroup != null) ? codeGroup.CodeGroupId : (int?)null,
                         ZoneName = zoneName,
                         BED = bEDDateFromExcel.Value,
                         EED = eEDDateFromExcel
                     });
                 }
 
-                importedRatesList.Add(new ImportedRate()
+                countryData.ImportedRates.Add(new ImportedRate()
                 {
                     ZoneName = zoneName,
                     NormalRate = (decimal)worksheet.Cells[count, 2].FloatValue,
@@ -98,8 +114,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             TimeSpan spent = DateTime.Now.Subtract(startReading);
             context.WriteTrackingMessage(LogEntryType.Information, "Reading Excel File Having {0} Records done and Takes: {1}", worksheet.Cells.Rows.Count, spent);
             
-            ImportedCodes.Set(context, importedCodesList);
-            ImportedRates.Set(context, importedRatesList);
+            ImportedData.Set(context, importedDataByCountryId.Values);
             MinimumDate.Set(context, minimumDate);
         }
     }

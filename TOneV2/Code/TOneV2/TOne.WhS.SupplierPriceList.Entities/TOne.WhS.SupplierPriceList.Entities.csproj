@@ -62,6 +62,7 @@
     <Compile Include="SPL\IProcessCountryRatesContext.cs" />
     <Compile Include="SPL\ZoneItem.cs" />
     <Compile Include="SupplierPriceList.cs" />
+    <Compile Include="ImportedData.cs" />
     <Compile Include="Zone.cs" />
   </ItemGroup>
   <ItemGroup>
