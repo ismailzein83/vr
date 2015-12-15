@@ -60,7 +60,7 @@ function (UtilsService, VRNotificationService, QM_CLITester_ProfileAPIService, Q
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return QM_CLITester_ProfileAPIService.GetFilteredProfiles(dataRetrievalInput)
                    .then(function (response) {
-                       
+
                        onResponseReady(response);
                    })
                    .catch(function (error) {

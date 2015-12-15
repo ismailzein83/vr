@@ -40,13 +40,11 @@ function ProfileSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSer
             $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, data.SourceProfileReader.ConfigId, "TemplateConfigID");
         }
 
-        if (sourceTypeDirectiveAPI != undefined)
-        {
+        if (sourceTypeDirectiveAPI != undefined) {
             sourceTypeDirectiveAPI.load(data.SourceProfileReader)
             isFormLoaded = true;
         }
-        else
-        {
+        else {
             isFormLoaded = false;
         }
     }

@@ -43,7 +43,7 @@ app.directive("vrQmClitesterProfilesettings", ['ProfileTypeEnum', 'UtilsService'
         $scope.sourceNumber = undefined;
         $scope.callTime = undefined;
         $scope.ringTime = undefined;
-        
+
         function initializeController() {
             defineAPI();
         }
@@ -67,10 +67,10 @@ app.directive("vrQmClitesterProfilesettings", ['ProfileTypeEnum', 'UtilsService'
                 if (payload != undefined) {
 
                     $scope.selectedProfileType = UtilsService.getItemByVal($scope.profileTypes, payload.Type, "value");
-                    $scope.gatewayIP= payload.GatewayIP;
-                    $scope.gatewayPort= payload.GatewayPort;
-                    $scope.sourceNumber= payload.SourceNumber;
-                    $scope.callTime= payload.CallTime;
+                    $scope.gatewayIP = payload.GatewayIP;
+                    $scope.gatewayPort = payload.GatewayPort;
+                    $scope.sourceNumber = payload.SourceNumber;
+                    $scope.callTime = payload.CallTime;
                     $scope.ringTime = payload.RingTime;
                 }
             }
