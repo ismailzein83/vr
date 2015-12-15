@@ -97,9 +97,15 @@ namespace QM.CLITester.Data.SQL
             if (input.Query.CallTestResult != null && input.Query.CallTestResult.Any())
                 callTestResultsids = string.Join<int>(",", Array.ConvertAll(input.Query.CallTestResult.ToArray(), value => (int)value));
 
+            string suppliersids = null;
+            if (input.Query.SupplierIDs != null && input.Query.SupplierIDs.Any())
+                suppliersids = string.Join<int>(",", Array.ConvertAll(input.Query.SupplierIDs.ToArray(), value => (int)value));
+
+
+
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("QM_CLITester.sp_TestCall_CreateTempByFiltered", tempTableName, userids, input.Query.SupplierID, input.Query.CountryID, input.Query.ZoneID,
+                ExecuteNonQuerySP("QM_CLITester.sp_TestCall_CreateTempByFiltered", tempTableName, userids, suppliersids, input.Query.CountryID, input.Query.ZoneID,
                     input.Query.FromTime, input.Query.ToTime == DateTime.MinValue ? DateTime.Now : input.Query.ToTime, callTestStatusids, callTestResultsids);
             };
 

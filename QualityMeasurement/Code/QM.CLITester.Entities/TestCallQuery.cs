@@ -10,7 +10,7 @@ namespace QM.CLITester.Entities
     public class TestCallQuery
     {
         public List<UserInfo> UserIds { get; set; }
-        public int? SupplierID { get; set; }
+        public List<int> SupplierIDs { get; set; }
         public int? CountryID { get; set; }
         public int? ZoneID { get; set; }
         public DateTime FromTime { get; set; }

@@ -26,7 +26,7 @@
             $scope.testResult = [];
             $scope.users = [];
 
-            $scope.selectedSupplier;
+            $scope.selectedSuppliers = [];
             $scope.selectedCountry;
             $scope.selectedBreakout;
 
@@ -41,7 +41,7 @@
                 $scope.testResult.push(Qm_CliTester_CallTestResultEnum[prop]);
             }
 
-       
+
 
             $scope.searchClicked = function () {
                 if (gridAPI != undefined) {
@@ -120,10 +120,12 @@
         }
 
         function setFilterObject() {
-            if ($scope.selectedSupplier == undefined)
-                filter.SupplierID = null;
+            if ($scope.selectedSuppliers.length > 0)
+                filter.SupplierIDs = null;
             else {
-                filter.SupplierID = $scope.selectedSupplier.SupplierId;
+                filter.SupplierIDs = UtilsService.getPropValuesFromArray($scope.selectedSuppliers, "SupplierId");
+                console.log('UtilsService.getPropValuesFromArray($scope.selectedSuppliers, "SupplierId")')
+                console.log(UtilsService.getPropValuesFromArray($scope.selectedSuppliers, "SupplierId"))
             }
 
             if ($scope.selectedCountry == undefined)
@@ -153,7 +155,7 @@
             if ($scope.selectedtestStatus == undefined)
                 filter.CallTestStatus = null;
             else {
-                filter.CallTestStatus = UtilsService.getPropValuesFromArray($scope.selectedtestStatus,"value");
+                filter.CallTestStatus = UtilsService.getPropValuesFromArray($scope.selectedtestStatus, "value");
             }
 
             if ($scope.selectedtestResults == undefined)
@@ -167,6 +169,7 @@
             else {
                 filter.UserIds = $scope.selectedUsers;
             }
+            console.log(filter)
         }
     }
 
