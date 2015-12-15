@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments
 {
-    public enum IntervalType { Minute = 0, Hour = 1 };
+    public enum IntervalType { Minute = 0, Hour = 1 , Second = 2};
 
     public class IntervalTimeTaskTriggerArgument : TimeTaskTriggerArgument
     {

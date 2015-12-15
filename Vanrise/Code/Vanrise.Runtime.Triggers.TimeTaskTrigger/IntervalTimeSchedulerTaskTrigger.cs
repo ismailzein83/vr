@@ -30,6 +30,9 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
                     case IntervalType.Minute:
                         nextRunTime = DateTime.Now.AddMinutes(intervalTimeTaskTriggerArgument.Interval);
                         break;
+                    case IntervalType.Second:
+                        nextRunTime = DateTime.Now.AddSeconds(intervalTimeTaskTriggerArgument.Interval);
+                        break;
                 }
             }
 
