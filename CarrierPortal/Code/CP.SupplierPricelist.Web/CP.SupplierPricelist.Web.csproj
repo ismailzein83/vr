@@ -117,12 +117,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="CP_SupplierPricelist\Constant\" />
     <Folder Include="CP_SupplierPricelist\Directives\" />
     <Folder Include="CP_SupplierPricelist\Services\" />
     <Folder Include="CP_SupplierPricelist\Views\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +138,9 @@
       <Project>{168d3bea-bde1-47e2-8a35-ed3ed9e65547}</Project>
       <Name>CP.SupplierPricelist.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CP_SupplierPricelist\Constant\ModuleConfig.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
