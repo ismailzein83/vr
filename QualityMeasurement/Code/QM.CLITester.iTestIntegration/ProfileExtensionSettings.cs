@@ -53,13 +53,13 @@ namespace QM.CLITester.iTestIntegration
 
         public override void Apply(Entities.Profile profile)
         {
-            if (this.ITestProfileId == null)
-            {
-                this.ITestProfileId = CreateProfile();
-                if (this.ITestProfileId == null)
-                    throw new Exception("Could not create Profile at ITest");
-            }
-            UpdateProfile(profile);
+            //if (this.ITestProfileId == null)
+            //{
+            //    this.ITestProfileId = CreateProfile();
+            //    if (this.ITestProfileId == null)
+            //        throw new Exception("Could not create Profile at ITest");
+            //}
+            //UpdateProfile(profile);
         }
 
         private string CreateProfile()

@@ -32,7 +32,7 @@ app.directive("qmClitesterSourceprofilereaderItest", [function () {
     }
 
     function DirectiveConstructor($scope, ctrl) {
-        console.log('qmClitesterSourceprofilereaderITest.DirectiveConstructor')
+        
         this.initializeController = initializeController;
 
         $scope.dummy = undefined;

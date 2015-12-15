@@ -1,41 +1,66 @@
-﻿ProfileSynchronizeTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'QM_CLITester_ProfileAPIService'];
+﻿ProfileSynchronizeTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'QM_CLITester_ProfileAPIService', 'VRNotificationService'];
 
-function ProfileSynchronizeTemplateController($scope, UtilsService, VRUIUtilsService, QM_CLITester_ProfileAPIService) {
+function ProfileSynchronizeTemplateController($scope, UtilsService, VRUIUtilsService, QM_CLITester_ProfileAPIService, VRNotificationService) {
 
     defineScope();
     load();
     var sourceConfigId;
     var sourceTypeDirectiveAPI;
+
     var sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
     function defineScope() {
-        
+
         $scope.sourceTypeTemplates = [];
 
         $scope.onSourceTypeDirectiveReady = function (api) {
             sourceTypeDirectiveAPI = api;
-            var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
-            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
+            loadForm();
         }
+
         $scope.schedulerTaskAction.getData = function () {
-            console.log('ProfileSynchronizeTemplateController.$scope.schedulerTaskAction.getData')
+            var sourceProfileReader;
+            sourceProfileReader = sourceTypeDirectiveAPI.getData();
+            sourceProfileReader.ConfigID = $scope.selectedSourceTypeTemplate.TemplateConfigID;
 
-
-            var data = 
-             {
+            return {
                 $type: "QM.CLITester.Business.ProfileSyncTaskActionArgument, QM.CLITester.Business",
-                SourceProfileReader: sourceTypeDirectiveAPI.getData()
-             };
-
-            console.log(data)
-
-            return data;
+                SourceProfileReader: sourceProfileReader
+            };
         };
-
     }
+
+
+    var isFormLoaded;
+    function loadForm() {
+        if ($scope.schedulerTaskAction.data == undefined || isFormLoaded)
+            return;
+
+        var data = $scope.schedulerTaskAction.data;
+        if (data != null) {
+            $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, data.SourceProfileReader.ConfigId, "TemplateConfigID");
+        }
+
+        if (sourceTypeDirectiveAPI != undefined)
+        {
+            sourceTypeDirectiveAPI.load(data.SourceProfileReader)
+            isFormLoaded = true;
+        }
+        else
+        {
+            isFormLoaded = false;
+        }
+    }
+
+
 
     function load() {
         $scope.isLoading = true;
-        loadAllControls();
+        loadAllControls().then(function () {
+            loadForm()
+        }).catch(function () {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+            $scope.isLoading = false;
+        });
     }
     function loadAllControls() {
         return UtilsService.waitMultipleAsyncOperations([loadSourceType])
