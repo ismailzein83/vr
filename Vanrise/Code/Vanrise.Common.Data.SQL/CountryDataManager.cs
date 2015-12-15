@@ -13,7 +13,7 @@ namespace Vanrise.Common.Data.SQL
     {
 
         public CountryDataManager()
-            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey"))
+            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
         {
 
         }
