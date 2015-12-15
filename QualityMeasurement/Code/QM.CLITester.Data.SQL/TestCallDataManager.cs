@@ -49,7 +49,7 @@ namespace QM.CLITester.Data.SQL
             byte[] timestamp = null;
 
             string callTestStatusids = null;
-            if (listPendingCallTestStatus!= null && listPendingCallTestStatus.Any())
+            if (listPendingCallTestStatus != null && listPendingCallTestStatus.Any())
                 callTestStatusids = string.Join<int>(",", Array.ConvertAll(listPendingCallTestStatus.ToArray(), value => (int)value));
 
             ExecuteReaderSP("QM_CLITester.sp_TestCall_GetRecent", (reader) =>
@@ -82,13 +82,8 @@ namespace QM.CLITester.Data.SQL
 
         public Vanrise.Entities.BigResult<Entities.TestCallDetail> GetTestCallFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.TestCallQuery> input)
         {
-            Dictionary<string,string> mapper=new Dictionary<string, string>();
-            mapper.Add("Entity.ID","ID");
-
-            string userids = null;
-            if (input.Query.UserIds != null && input.Query.UserIds.Any())
-                userids = string.Join<int>(",", Array.ConvertAll(input.Query.UserIds.ToArray(), value => (int)value));
-
+            Dictionary<string, string> mapper = new Dictionary<string, string>();
+            mapper.Add("Entity.ID", "ID");
 
             string callTestStatusids = null;
             if (input.Query.CallTestStatus != null && input.Query.CallTestStatus.Any())
@@ -98,9 +93,22 @@ namespace QM.CLITester.Data.SQL
             if (input.Query.CallTestResult != null && input.Query.CallTestResult.Any())
                 callTestResultsids = string.Join<int>(",", Array.ConvertAll(input.Query.CallTestResult.ToArray(), value => (int)value));
 
+            string userids = null;
+            if (input.Query.UserIds != null && input.Query.UserIds.Any())
+                userids = string.Join<int>(",", Array.ConvertAll(input.Query.UserIds.ToArray(), value => (int)value));
+
             string supplierids = null;
             if (input.Query.SupplierIds != null && input.Query.SupplierIds.Any())
                 supplierids = string.Join<int>(",", Array.ConvertAll(input.Query.SupplierIds.ToArray(), value => (int)value));
+
+
+            string profileids = null;
+            if (input.Query.ProfileIds != null && input.Query.ProfileIds.Any())
+                profileids = string.Join<int>(",", Array.ConvertAll(input.Query.ProfileIds.ToArray(), value => (int)value));
+
+            string countryids = null;
+            if (input.Query.CountryIds != null && input.Query.CountryIds.Any())
+                countryids = string.Join<int>(",", Array.ConvertAll(input.Query.CountryIds.ToArray(), value => (int)value));
 
             string zoneids = null;
             if (input.Query.ZoneIds != null && input.Query.ZoneIds.Any())
@@ -110,8 +118,8 @@ namespace QM.CLITester.Data.SQL
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("QM_CLITester.sp_TestCall_CreateTempByFiltered", tempTableName, userids, supplierids, input.Query.CountryID, zoneids,
-                    input.Query.FromTime, input.Query.ToTime == DateTime.MinValue ? DateTime.Now : input.Query.ToTime, callTestStatusids, callTestResultsids);
+                ExecuteNonQuerySP("QM_CLITester.sp_TestCall_CreateTempByFiltered", tempTableName, callTestStatusids, callTestResultsids, userids, supplierids, profileids, countryids, zoneids,
+                    input.Query.FromTime, input.Query.ToTime == DateTime.MinValue ? DateTime.Now : input.Query.ToTime);
             };
 
             return RetrieveData(input, createTempTableAction, TestCallDetailMapper, mapper);
@@ -127,30 +135,30 @@ namespace QM.CLITester.Data.SQL
                 CountryID = (int)reader["CountryID"],
                 ZoneID = (int)reader["ZoneID"],
                 UserID = (int)reader["UserID"],
-                ProfileID = reader["ProfileID"] == "" ? 0 : (int)reader["ProfileID"],
+                ProfileID =  GetReaderValue<int> (reader,"ProfileID"),
                 CreationDate = GetReaderValue<DateTime>(reader, "CreationDate"),
                 CallTestStatus = GetReaderValue<CallTestStatus>(reader, "CallTestStatus"),
                 CallTestResult = GetReaderValue<CallTestResult>(reader, "CallTestResult"),
-                InitiationRetryCount = reader["InitiationRetryCount"] == "" ? 0 : (int)reader["InitiationRetryCount"],
-                GetProgressRetryCount = reader["GetProgressRetryCount"] == "" ? 0 : (int)reader["GetProgressRetryCount"],
+                InitiationRetryCount = GetReaderValue<int>(reader, "InitiationRetryCount"),
+                GetProgressRetryCount = GetReaderValue<int>(reader, "GetProgressRetryCount"),
                 FailureMessage = reader["FailureMessage"] as string
             };
 
             string initiateTestInformationSerialized = reader["InitiateTestInformation"] as string;
             if (initiateTestInformationSerialized != null)
                 testCall.InitiateTestInformation = Serializer.Deserialize(initiateTestInformationSerialized);
-            
+
             string testProgressSerialized = reader["TestProgress"] as string;
             if (testProgressSerialized != null)
                 testCall.TestProgress = Serializer.Deserialize(testProgressSerialized);
-            
+
             return testCall;
         }
 
         TestCallDetail TestCallDetailMapper(IDataReader reader)
         {
             SupplierManager supplierManager = new SupplierManager();
-            ZoneManager zoneManager= new ZoneManager();
+            ZoneManager zoneManager = new ZoneManager();
             CountryManager countryManager = new CountryManager();
 
             return new TestCallDetail()
@@ -159,7 +167,9 @@ namespace QM.CLITester.Data.SQL
                 CallTestStatusDescription = Utilities.GetEnumAttribute<CallTestStatus, DescriptionAttribute>((CallTestStatus)TestCallMapper(reader).CallTestStatus).Description,
                 CallTestResultDescription = Utilities.GetEnumAttribute<CallTestResult, DescriptionAttribute>((CallTestResult)TestCallMapper(reader).CallTestResult).Description,
                 SupplierName = supplierManager.GetSupplier(TestCallMapper(reader).SupplierID) == null ? "" : supplierManager.GetSupplier(TestCallMapper(reader).SupplierID).Name,
-                CountryName = countryManager.GetCountry(TestCallMapper(reader).CountryID) == null ? "" : countryManager.GetCountry(TestCallMapper(reader).CountryID).Name
+                CountryName = countryManager.GetCountry(TestCallMapper(reader).CountryID) == null ? "" : countryManager.GetCountry(TestCallMapper(reader).CountryID).Name,
+                ZoneName = zoneManager.GetZone(TestCallMapper(reader).ZoneID) == null ? "" : zoneManager.GetZone(TestCallMapper(reader).ZoneID).Name,
+
             };
         }
     }

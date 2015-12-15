@@ -10,11 +10,17 @@
 
         var gridAPI;
 
+        var profileDirectiveAPI;
+        var profileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var supplierDirectiveAPI;
         var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var zoneDirectiveAPI;
         var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var countryDirectiveAPI;
+        var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var filter = {};
 
@@ -26,18 +32,19 @@
             $scope.countries = [];
             $scope.zones = [];
             $scope.suppliers = [];
+            $scope.profiles = [];
             $scope.testStatus = [];
             $scope.testResult = [];
             $scope.users = [];
 
             $scope.selectedSuppliers = [];
+            $scope.selectedProfiles = [];
             $scope.selectedZones = [];
-
-            $scope.selectedCountry;
-
+            $scope.selectedCountries=[];
             $scope.selectedtestResults = [];
             $scope.selectedtestStatus = [];
             $scope.selectedUsers = [];
+
             for (var prop in Qm_CliTester_CallTestStatusEnum) {
                 $scope.testStatus.push(Qm_CliTester_CallTestStatusEnum[prop]);
             }
@@ -59,6 +66,15 @@
                 gridAPI = api;
             }
 
+            $scope.onCountryDirectiveReady = function (api) {
+                countryDirectiveAPI = api;
+                countryReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onProfileDirectiveReady = function (api) {
+                profileDirectiveAPI = api;
+                profileReadyPromiseDeferred.resolve();
+            }
 
             $scope.onSupplierDirectiveReady = function (api) {
                 supplierDirectiveAPI = api;
@@ -69,13 +85,27 @@
                 zoneDirectiveAPI = api;
                 zoneReadyPromiseDeferred.resolve();
             }
+
+
+            $scope.onCountrySelectItem = function (selectedItem) {
+                if (selectedItem != undefined) {
+                    var setLoader = function (value) { $scope.isLoadingZonesSelector = value };
+
+                    var payload = {
+                        countryId: selectedItem.CountryId
+                    }
+
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader);
+                }
+            }
+
         }
 
         function load() {
             $scope.isGettingData = true;
             loadUsers();
 
-            UtilsService.waitMultipleAsyncOperations([getCountriesInfo, getSuppliersInfo]).then(function () {
+            UtilsService.waitMultipleAsyncOperations([getCountriesInfo, getSuppliersInfo, getProfilesInfo]).then(function () {
             }).finally(function () {
                 $scope.isGettingData = false;
             });
@@ -83,12 +113,15 @@
 
 
         function getCountriesInfo() {
-            return Qm_CliTester_TestCallAPIService.GetCountries().then(function (response) {
-                $scope.countries.length = 0;
-                angular.forEach(response, function (itm) {
-                    $scope.countries.push(itm);
+            var countryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            countryReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload;
+
+                    VRUIUtilsService.callDirectiveLoad(countryDirectiveAPI, directivePayload, countryLoadPromiseDeferred);
                 });
-            });
+            return countryLoadPromiseDeferred.promise;
         }
 
 
@@ -104,16 +137,23 @@
             return supplierLoadPromiseDeferred.promise;
         }
 
+
+        function getProfilesInfo() {
+            var profileLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            profileReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload;
+
+                    VRUIUtilsService.callDirectiveLoad(profileDirectiveAPI, directivePayload, profileLoadPromiseDeferred);
+                });
+            return profileLoadPromiseDeferred.promise;
+        }
+
         function loadUsers() {
             return UsersAPIService.GetUsers().then(function (response) {
                 $scope.users = response;
             });
-        }
-
-        $scope.previewZones = function () {
-            if ($scope.selectedCountry != undefined) {
-                getZonesInfo($scope.selectedCountry.Id);
-            }
         }
 
         function getZonesInfo(selectedCountryId) {
@@ -132,6 +172,13 @@
 
         function setFilterObject() {
 
+            if ($scope.selectedUsers.length == 0)
+                filter.UserIDs = null;
+            else {
+                filter.UserIDs = UtilsService.getPropValuesFromArray($scope.selectedUsers, "UserId");
+            }
+
+
             if ($scope.selectedSuppliers.length == 0)
                 filter.SupplierIDs = null;
             else {
@@ -145,11 +192,16 @@
                 filter.ZoneIDs = UtilsService.getPropValuesFromArray($scope.selectedZones, "ZoneId");
             }
 
-
-            if ($scope.selectedCountry == undefined)
-                filter.CountryID = null;
+            if ($scope.selectedCountries.length == 0)
+                filter.Countries = null;
             else {
-                filter.CountryID = $scope.selectedCountry.Id;
+                filter.Countries = UtilsService.getPropValuesFromArray($scope.selectedCountries, "CountryId");
+            }
+
+            if ($scope.selectedProfiles.length == 0)
+                filter.ProfileIDs = null;
+            else {
+                filter.ProfileIDs = UtilsService.getPropValuesFromArray($scope.selectedProfiles, "ProfileId");
             }
 
 
@@ -176,13 +228,6 @@
             else {
                 filter.CallTestResult = UtilsService.getPropValuesFromArray($scope.selectedtestResults, "value");
             }
-
-            if ($scope.selectedUsers == undefined)
-                filter.UserIds = null;
-            else {
-                filter.UserIds = UtilsService.getPropValuesFromArray($scope.selectedUsers, "UserId");
-            }
-            console.log(filter)
         }
     }
 

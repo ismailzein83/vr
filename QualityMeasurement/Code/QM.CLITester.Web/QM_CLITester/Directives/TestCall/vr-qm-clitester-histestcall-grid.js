@@ -29,22 +29,10 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
         var gridAPI;
         var gridDrillDownTabsObj;
         this.initializeController = initializeController;
-        $scope.arrayCallTestStatus = [];
-        $scope.arrayCallTestStatus.push(Qm_CliTester_CallTestStatusEnum.New);
-        $scope.arrayCallTestStatus.push(Qm_CliTester_CallTestStatusEnum.Initiated);
-        $scope.arrayCallTestStatus.push(Qm_CliTester_CallTestStatusEnum.InitiationFailedWithRetry);
-        $scope.arrayCallTestStatus.push(Qm_CliTester_CallTestStatusEnum.PartiallyCompleted);
-        $scope.arrayCallTestStatus.push(Qm_CliTester_CallTestStatusEnum.GetProgressFailedWithRetry);
-        $scope.arrayCallTestStatus.push(Qm_CliTester_CallTestStatusEnum.Completed);
-        $scope.arrayCallTestStatus.push(Qm_CliTester_CallTestStatusEnum.InitiationFailedWithNoRetry);
-        $scope.arrayCallTestStatus.push(Qm_CliTester_CallTestStatusEnum.GetProgressFailedWithNoRetry);
 
-        $scope.arrayCallTestResult = [];
-        $scope.arrayCallTestResult.push(Qm_CliTester_CallTestResultEnum.NotCompleted);
-        $scope.arrayCallTestResult.push(Qm_CliTester_CallTestResultEnum.Succeeded);
-        $scope.arrayCallTestResult.push(Qm_CliTester_CallTestResultEnum.PartiallySucceeded);
-        $scope.arrayCallTestResult.push(Qm_CliTester_CallTestResultEnum.Failed);
-        $scope.arrayCallTestResult.push(Qm_CliTester_CallTestResultEnum.NotAnswered);
+        $scope.arrayCallTestStatus = UtilsService.getArrayEnum(Qm_CliTester_CallTestStatusEnum);
+        $scope.arrayCallTestResult = UtilsService.getArrayEnum(Qm_CliTester_CallTestResultEnum);
+      
 
         function initializeController() {
 

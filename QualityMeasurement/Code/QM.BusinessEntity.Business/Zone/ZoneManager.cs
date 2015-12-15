@@ -41,6 +41,12 @@ namespace QM.BusinessEntity.Business
             dataManager.UpdateZoneFromSource(zone);
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
+
+        public Zone GetZone(int zoneId)
+        {
+            var zones = GetCachedZones();
+            return zones.GetRecord(zoneId);
+        }
        
         #region Private Members
 
