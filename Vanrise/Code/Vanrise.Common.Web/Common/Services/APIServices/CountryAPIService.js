@@ -23,12 +23,16 @@
         function AddCountry(countryObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "Country", "AddCountry"), countryObject);
         }
+        function GetCountrySourceTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "Country", "GetCountrySourceTemplates"));
+        }
         return ({
             GetFilteredCountries: GetFilteredCountries,
             GetCountriesInfo: GetCountriesInfo,
             GetCountry: GetCountry,
             UpdateCountry: UpdateCountry,
-            AddCountry: AddCountry
+            AddCountry: AddCountry,
+            GetCountrySourceTemplates: GetCountrySourceTemplates 
         });
     }
 

@@ -1,0 +1,12 @@
+﻿<vr-section title="Country Synchronize Action">
+    <vr-row>
+        <vr-columns width="1/3row">
+            <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Country Source Type" datasource="countrySourceTypeTemplates" text="None"
+                        selectedvalues="selectedCountrySourceTypeTemplate" isrequired="true">
+            </vr-select>
+        </vr-columns>
+        <vr-columns width="fullrow" vr-loader="isLoadingCountrySourceTypeDirective" ng-if="selectedCountrySourceTypeTemplate.Editor">
+            <vr-directivewrapper directive="selectedCountrySourceTypeTemplate.Editor" on-ready="oncountrySourceTypeDirectiveReady"></vr-directivewrapper>
+        </vr-columns>
+    </vr-row>
+</vr-section>

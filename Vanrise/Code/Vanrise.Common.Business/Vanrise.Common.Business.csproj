@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CityManager.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Country\CountryManager.cs" />
     <Compile Include="Country\SourceCountrySynchronizer.cs" />
     <Compile Include="CurrencyExchangeRateManager.cs" />

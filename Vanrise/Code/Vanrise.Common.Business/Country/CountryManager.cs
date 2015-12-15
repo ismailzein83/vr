@@ -118,6 +118,14 @@ namespace Vanrise.Common.Business
             }
             return updateOperationOutput;
         }
+
+        public List<Vanrise.Entities.TemplateConfig> GetCountrySourceTemplates()
+        {
+
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.SourceCountryReaderConfigType);
+        }
+
         #region Private Members
 
         public Dictionary<int, Country> GetCachedCountries()

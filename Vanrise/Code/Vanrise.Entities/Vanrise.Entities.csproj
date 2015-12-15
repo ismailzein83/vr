@@ -55,6 +55,7 @@
     <Compile Include="Country\Country.cs" />
     <Compile Include="Country\CountryDetail.cs" />
     <Compile Include="Country\CountryQuery.cs" />
+    <Compile Include="Country\CountryTOneV2SQLReader.cs" />
     <Compile Include="Country\SourceCountry.cs" />
     <Compile Include="Country\SourceCountryReader.cs" />
     <Compile Include="Currency\CurrencyExchangeRateDetail.cs" />

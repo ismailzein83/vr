@@ -51,6 +51,13 @@ namespace Vanrise.Web.Controllers
             CountryManager manager = new CountryManager();
             return manager.UpdateCountry(country);
         }
+        [HttpGet]
+        [Route("GetCountrySourceTemplates")]
+        public List<TemplateConfig> GetCountrySourceTemplates()
+        {
+            CountryManager manager = new CountryManager();
+            return manager.GetCountrySourceTemplates();
+        }
        
     }
 }
