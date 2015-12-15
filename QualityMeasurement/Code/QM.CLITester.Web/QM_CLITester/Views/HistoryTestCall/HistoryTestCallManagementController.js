@@ -40,7 +40,7 @@
             $scope.selectedSuppliers = [];
             $scope.selectedProfiles = [];
             $scope.selectedZones = [];
-            $scope.selectedCountries=[];
+            $scope.selectedCountries = [];
             $scope.selectedtestResults = [];
             $scope.selectedtestStatus = [];
             $scope.selectedUsers = [];
@@ -88,7 +88,7 @@
 
 
             $scope.onCountrySelectItem = function (selectedItem) {
-                if (selectedItem != undefined) {
+                if ($scope.selectedCountries.length == 1 && selectedItem != undefined) {
                     var setLoader = function (value) { $scope.isLoadingZonesSelector = value };
 
                     var payload = {
@@ -96,6 +96,9 @@
                     }
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader);
+                }
+                else {
+                    $scope.selectedZones.length = 0;
                 }
             }
 

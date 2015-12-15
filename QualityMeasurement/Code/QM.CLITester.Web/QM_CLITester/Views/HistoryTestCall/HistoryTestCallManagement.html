@@ -41,13 +41,13 @@
 
 
                     <vr-columns colnum="2">
-                        <vr-common-country-selector on-ready="onCountryDirectiveReady" selectedvalues="selectedCountry" onselectitem="onCountrySelectItem"></vr-common-country-selector>
+                        <vr-common-country-selector on-ready="onCountryDirectiveReady" selectedvalues="selectedCountries" onselectitem="onCountrySelectItem" ismultipleselection      ></vr-common-country-selector>
                     </vr-columns>
 
 
 
-                    <vr-columns colnum="2" vr-loader="isLoading" ng-show="selectedCountry!=undefined">
-                        <vr-qm-be-zone-selector on-ready="onZoneDirectiveReady" selectedvalues="selectedZone" ></vr-qm-be-zone-selector>
+                    <vr-columns colnum="2" vr-loader="isLoading" ng-show="selectedCountries.length==1">
+                        <vr-qm-be-zone-selector on-ready="onZoneDirectiveReady" selectedvalues="selectedZones"></vr-qm-be-zone-selector>{{selectedZone}}
                     </vr-columns>
 
                 </vr-row>
