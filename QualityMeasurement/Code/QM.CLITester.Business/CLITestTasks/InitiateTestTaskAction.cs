@@ -32,24 +32,17 @@ namespace QM.CLITester.Business
                 CallTestStatus.InitiationFailedWithRetry
             };
             SupplierManager supplierManager = new SupplierManager();
+            ProfileManager profileManager = new ProfileManager();
+            Vanrise.Common.Business.CountryManager countryManager = new Vanrise.Common.Business.CountryManager();
+            ZoneManager zoneManager = new ZoneManager();
             foreach (TestCall testCall in manager.GetTestCalls(listCallTestStatus))
             {
                 var initiateTestContext = new InitiateTestContext()
                 {
                     Supplier = supplierManager.GetSupplier(testCall.SupplierID),
-
-                    Profile = new Profile
-                    {
-                      ProfileId  = testCall.ProfileID
-                    },
-                    Zone = new Zone
-                    {
-                        ZoneId = testCall.ZoneID
-                    },
-                    Country = new Vanrise.Entities.Country
-                    {
-                        CountryId = testCall.CountryID
-                    }
+                    Profile = profileManager.GetProfile(testCall.ProfileID),
+                    Country = countryManager.GetCountry(testCall.CountryID),
+                    Zone = zoneManager.GetZone(testCall.ZoneID)
                 };
 
                 InitiateTestOutput initiateTestOutput = new InitiateTestOutput();
@@ -61,7 +54,7 @@ namespace QM.CLITester.Business
                 catch (Exception ex)
                 {
                     initiateTestOutput.Result = InitiateTestResult.FailedWithRetry;
-                    testCall.FailureMessage = ex.Message;
+                    initiateTestOutput.FailureMessage = ex.Message;
                 }
 
                 CallTestStatus callTestStatus;
@@ -90,7 +83,7 @@ namespace QM.CLITester.Business
                 }
 
                 manager.UpdateInitiateTest(testCall.ID, initiateTestOutput.InitiateTestInformation, callTestStatus,
-                    testCall.InitiationRetryCount, testCall.FailureMessage);
+                    testCall.InitiationRetryCount, initiateTestOutput.FailureMessage);
             }
         }
     }

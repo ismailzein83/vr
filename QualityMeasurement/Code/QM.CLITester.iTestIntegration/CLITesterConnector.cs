@@ -30,41 +30,38 @@ namespace QM.CLITester.iTestIntegration
                     FailureMessage = "Missing Supplier Configuration!"
                 };
 
-            string itestProfileId = null;
-            ProfileManager profileManager = new ProfileManager();
-            itestProfileId = profileManager.GetProfile(context.Profile.ProfileId).SourceId;
+            string itestProfileId = context.Profile.SourceId;
+            //if (context.Profile.Settings != null && context.Profile.Settings.ExtendedSettings != null)
+            //{
+            //    ProfileExtensionSettings profileITestSettings = context.Profile.Settings.ExtendedSettings.Where(itm => itm is ProfileExtensionSettings).FirstOrDefault() as ProfileExtensionSettings;
+            //    if (profileITestSettings != null)
+            //        itestSupplierId = profileITestSettings.ITestProfileId;
+            //}
             if (itestProfileId == null)
                 return new InitiateTestOutput
                 {
                     Result = InitiateTestResult.FailedWithNoRetry,
-                    FailureMessage = "Missing Profile Source Id!"
+                    FailureMessage = "Missing Profile Configuration!"
                 };
 
-            string itestCountryId = null;
-            CountryManager countryManager = new CountryManager();
-            
-            itestCountryId = countryManager.GetCountry(context.Country.CountryId).SourceId;
-            //if (itestCountryId == null)
-            //    return new InitiateTestOutput
-            //    {
-            //        Result = InitiateTestResult.FailedWithNoRetry,
-            //        FailureMessage = "Missing Country Source Id!"
-            //    };
+            string itestCountryId = context.Country.SourceId;//Temporary
 
-            string itestZoneId = null;
-            ZoneManager zoneManager = new ZoneManager();
+            if (itestCountryId == null)
+                return new InitiateTestOutput
+                {
+                    Result = InitiateTestResult.FailedWithNoRetry,
+                    FailureMessage = "Missing Country Configuration!"
+                };
 
-            //itestZoneId = zoneManager.GetCountry(context.Zone.ZoneId).SourceId;
-            //if (itestZoneId == null)
-            //    return new InitiateTestOutput
-            //    {
-            //        Result = InitiateTestResult.FailedWithNoRetry,
-            //        FailureMessage = "Missing Zone Source Id!"
-            //    };
+            string itestBreakoutId = context.Zone.SourceId;
 
-            itestCountryId = "1092";
-            itestZoneId = "8122";
-            return ResponseInitiateTest(serviceActions.PostRequest("2012", "&profid=" + itestProfileId + "&vendid=" + itestSupplierId + "&ndbccgid=" + itestCountryId + "&ndbcgid=" + itestZoneId));
+            if (itestBreakoutId == null)
+                return new InitiateTestOutput
+                {
+                    Result = InitiateTestResult.FailedWithNoRetry,
+                    FailureMessage = "Missing Breakout Configuration!"
+                };
+            return ResponseInitiateTest(serviceActions.PostRequest("2012", "&profid=" + itestProfileId + "&vendid=" + itestSupplierId + "&ndbccgid=" + itestCountryId + "&ndbcgid=" + itestBreakoutId));
         }
 
         public override GetTestProgressOutput GetTestProgress(IGetTestProgressContext context)
@@ -98,6 +95,7 @@ namespace QM.CLITester.iTestIntegration
                     }
                     else
                     {
+                        testOutput.FailureMessage = response;
                         testOutput.Result = InitiateTestResult.FailedWithRetry;
                     }
                 }

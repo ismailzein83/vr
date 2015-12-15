@@ -185,10 +185,14 @@
     <Content Include="QM_CLITester\Constant\CallTestStatusEnum.js" />
     <Content Include="QM_CLITester\Constant\ModuleConfig.js" />
     <Content Include="QM_CLITester\Constant\ProfileTypeEnum.js" />
+    <Content Include="QM_CLITester\Directives\MainExtensions\ITest\CountryReader\qm-clitester-sourcecountryreader-itest.js" />
+    <Content Include="QM_CLITester\Directives\MainExtensions\ITest\CountryReader\Templates\SourceCountryReaderItest.html" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\qm-clitester-testconnector-initiatetest-itest.js" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\qm-clitester-testconnector-testprogress-itest.js" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\Templates\TestConnector-InitiateTest-ITest.html" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\Templates\TestConnector-TestProgress-ITest.html" />
+    <Content Include="QM_CLITester\Directives\MainExtensions\ITest\ZoneReader\qm-clitester-sourcezonereader-itest.js" />
+    <Content Include="QM_CLITester\Directives\MainExtensions\ITest\ZoneReader\Templates\SourceZoneReaderItest.html" />
     <Content Include="QM_CLITester\Directives\MainExtensions\SourceProfileReader\qm-clitester-sourceprofilereader-itest.js" />
     <Content Include="QM_CLITester\Directives\MainExtensions\SourceProfileReader\Templates\SouceProfileReaderiTest.html" />
     <Content Include="QM_CLITester\Directives\Profile\Templates\ProfileSettngsDirectiveTemplate.html" />

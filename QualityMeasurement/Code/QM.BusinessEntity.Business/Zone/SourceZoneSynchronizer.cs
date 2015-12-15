@@ -52,6 +52,7 @@ namespace QM.BusinessEntity.Business
             Zone zone = new Zone
             {
                 Name = sourceItem.Name,
+                SourceId = sourceItem.SourceId,
                 BeginEffectiveDate = sourceItem.BeginEffectiveDate,
                 EndEffectiveDate = sourceItem.EndEffectiveDate
             };
