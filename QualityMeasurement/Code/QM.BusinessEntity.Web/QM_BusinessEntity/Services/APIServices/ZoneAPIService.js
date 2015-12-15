@@ -10,9 +10,14 @@
             return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Zone", "GetZoneSourceTemplates"));
         }
 
+        function GetZonesInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Zone", "GetZonesInfo"));
+        }
+
         
         return ({
-            GetZoneSourceTemplates: GetZoneSourceTemplates
+            GetZoneSourceTemplates: GetZoneSourceTemplates,
+            GetZonesInfo: GetZonesInfo
         });
     }
 

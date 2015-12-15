@@ -23,5 +23,14 @@ namespace QM.BusinessEntity.Web.Controllers
             return manager.GetZoneSourceTemplates();
         }
 
+
+        [HttpGet]
+        [Route("GetZonesInfo")]
+        public IEnumerable<ZoneInfo> GetZonesInfo()
+        {
+            ZoneManager manager = new ZoneManager();
+            return manager.GetZonesInfo();
+        }
+
     }
 }

@@ -140,6 +140,7 @@
     <Content Include="QM_BusinessEntity\Directives\Supplier\Templates\SupplierGridTemplate.html" />
     <Content Include="QM_BusinessEntity\Directives\Supplier\vr-qm-be-supplier-grid.js" />
     <Content Include="QM_BusinessEntity\Directives\Supplier\vr-qm-be-supplier-selector.js" />
+    <Content Include="QM_BusinessEntity\Directives\Zone\vr-qm-be-zone-selector.js" />
     <Content Include="QM_BusinessEntity\Services\APIServices\ZoneAPIService.js" />
     <Content Include="QM_BusinessEntity\Services\APIServices\SupplierAPIService.js" />
     <Content Include="QM_BusinessEntity\Services\SupplierService.js" />

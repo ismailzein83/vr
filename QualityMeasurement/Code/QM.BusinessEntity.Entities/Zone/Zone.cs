@@ -11,6 +11,8 @@ namespace QM.BusinessEntity.Entities
     {
         public long ZoneId { get; set; }
 
+        public string SourceId { get; set; }
+
         public int CountryId { get; set; }
 
         public string Name { get; set; }

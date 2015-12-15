@@ -8,7 +8,7 @@ namespace QM.BusinessEntity.Entities
 {
     public class ZoneInfo
     {
-        public string ZoneId { get; set; }
+        public long ZoneId { get; set; }
 
         public string Name { get; set; }
     }
