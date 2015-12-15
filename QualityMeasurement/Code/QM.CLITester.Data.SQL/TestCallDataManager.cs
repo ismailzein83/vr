@@ -12,6 +12,7 @@ using Vanrise.Common;
 using Vanrise.Security.Entities;
 using QM.BusinessEntity.Business;
 using QM.BusinessEntity.Entities;
+using Vanrise.Common.Business;
 
 namespace QM.CLITester.Data.SQL
 {
@@ -144,12 +145,16 @@ namespace QM.CLITester.Data.SQL
         TestCallDetail TestCallDetailMapper(IDataReader reader)
         {
             SupplierManager supplierManager = new SupplierManager();
+            ZoneManager zoneManager= new ZoneManager();
+            CountryManager countryManager = new CountryManager();
+
             return new TestCallDetail()
             {
                 Entity = TestCallMapper(reader),
                 CallTestStatusDescription = Utilities.GetEnumAttribute<CallTestStatus, DescriptionAttribute>((CallTestStatus)TestCallMapper(reader).CallTestStatus).Description,
                 CallTestResultDescription = Utilities.GetEnumAttribute<CallTestResult, DescriptionAttribute>((CallTestResult)TestCallMapper(reader).CallTestResult).Description,
-                SupplierName = supplierManager.GetSupplier(TestCallMapper(reader).SupplierID).Name
+                SupplierName = supplierManager.GetSupplier(TestCallMapper(reader).SupplierID) == null ? "" : supplierManager.GetSupplier(TestCallMapper(reader).SupplierID).Name,
+                CountryName = countryManager.GetCountry(TestCallMapper(reader).CountryID) == null ? "" : countryManager.GetCountry(TestCallMapper(reader).CountryID).Name
             };
         }
     }
