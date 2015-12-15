@@ -23,11 +23,16 @@
             return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "Profile", "GetProfileSourceTemplates"));
         }
 
+        function GetProfilesInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "Profile", "GetProfilesInfo"));
+        }
+
         return ({
             GetFilteredProfiles: GetFilteredProfiles,
             GetProfile: GetProfile,
             UpdateProfile: UpdateProfile,
-            GetProfileSourceTemplates: GetProfileSourceTemplates
+            GetProfileSourceTemplates: GetProfileSourceTemplates,
+            GetProfilesInfo: GetProfilesInfo
         });
     }
 

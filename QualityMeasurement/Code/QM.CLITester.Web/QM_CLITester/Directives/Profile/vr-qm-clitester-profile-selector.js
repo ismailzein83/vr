@@ -88,6 +88,7 @@ function (QM_CLITester_ProfileAPIService, UtilsService, $compile, VRUIUtilsServi
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
+
         }
         this.initializeController = initializeController;
     }
