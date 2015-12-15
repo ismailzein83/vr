@@ -40,6 +40,46 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Serialization" />
+    <Reference Include="TOne.WhS.BusinessEntity.Entities">
+      <HintPath>..\..\..\..\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Entities\bin\Debug\TOne.WhS.BusinessEntity.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.SupplierPriceList.Business">
+      <HintPath>..\..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.SupplierPriceList.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.SupplierPriceList.Entities">
+      <HintPath>..\..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.SupplierPriceList.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Entities\bin\Debug\Vanrise.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Entities\bin\Debug\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\..\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Entities\bin\Debug\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Entities\bin\Debug\Vanrise.Rules.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Entities\bin\Debug\Vanrise.Rules.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Entities\bin\Debug\Vanrise.Rules.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Entities\bin\Debug\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -54,6 +94,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="connect.cs" />
+    <Compile Include="ExistingCodes.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
