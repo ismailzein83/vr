@@ -17,27 +17,41 @@ namespace Vanrise.Common.Business
 
         protected override void AddItems(List<Country> itemsToAdd)
         {
-            throw new NotImplementedException();
+            CountryManager countryManager = new CountryManager();
+            foreach (var c in itemsToAdd)
+            {
+                countryManager.AddCountryFromSource(c);
+            }
         }
 
         protected override void UpdateItems(List<Country> itemsToUpdate)
         {
-            throw new NotImplementedException();
+            CountryManager countryManager = new CountryManager();
+            foreach (var c in itemsToUpdate)
+            {
+                countryManager.UpdateCountryFromSource(c);
+            }
+
         }
 
         protected override Country BuildItemFromSource(SourceCountry sourceItem)
         {
-            throw new NotImplementedException();
-        }
 
+            Country country = new Country
+            {
+                Name = sourceItem.Name,
+                SourceId= sourceItem.SourceId
+            };
+            return country;
+        }
         protected override Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds)
         {
-            throw new NotImplementedException();
+            return new CountryManager().GetExistingItemIds(sourceItemIds);
         }
 
         protected override void ReserveIdRange(int nbOfIds, out long startingId)
         {
-            throw new NotImplementedException();
+            CountryManager.ReserveIDRange(nbOfIds, out startingId);
         }
     }
 }

@@ -21,36 +21,43 @@ namespace QM.BusinessEntity.MainExtensions.SourceZonesReaders
 
         public override IEnumerable<SourceZone> GetChangedItems(ref object updatedHandle)
         {
-            throw new NotImplementedException();
+            DataManager dataManager = new DataManager(this.ConnectionString);
+            return dataManager.GetUpdatedZones(ref updatedHandle);
         }
 
         private class DataManager : Vanrise.Data.SQL.BaseSQLDataManager
         {
-//            public DataManager(string connectionString)
-//                : base(connectionString, false)
-//            { 
-//            }
+            public DataManager(string connectionString)
+                : base(connectionString, false)
+            {
+            }
 
-//            public List<SourceSupplier> GetUpdatedSuppliers(ref object updateHandle)
-//            {
-//                return GetItemsText(query_getUpdatedSuppliers, SourceSupplierMapper, null);
-//            }
+            public List<SourceZone> GetUpdatedZones(ref object updateHandle)
+            {
+                return GetItemsText(query_getUpdatedZones, SourceZonerMapper, null);
+            }
 
-//            private SourceSupplier SourceSupplierMapper(System.Data.IDataReader arg)
-//            {
-//                SourceSupplier sourceSupplier = new SourceSupplier()
-//                {
-//                    SourceId = arg["ID"].ToString(),
-//                    Name = arg["Name"] as string
-//                };
-//                return sourceSupplier;
-//            }
+            private SourceZone SourceZonerMapper(System.Data.IDataReader arg)
+            {
+                SourceZone sourceZone = new SourceZone()
+                {
+                    SourceId = arg["ID"].ToString(),
+                    SourceCountryId = arg["CountryID"].ToString(),
+                    Name = arg["Name"] as string,
+                    CountryName = " ",
+                    BeginEffectiveDate = GetReaderValue<DateTime>(arg, "BED"),
+                    EndEffectiveDate = GetReaderValue<DateTime>(arg, "EED")
 
-//            const string query_getUpdatedSuppliers = @"SELECT
-//	        ca.ID,
-//	        ca.Name
-//	        FROM TOneWhS_BE.CarrierAccount ca  
-//	        where ca.AccountType = 1 or ca.AccountType = 2";
+                };
+                return sourceZone;
+            }
+
+            const string query_getUpdatedZones = @"SELECT [ID]
+              ,[CountryID]
+              ,[Name]
+              ,[BED]
+              ,[EED]
+               FROM [TOneWhS_BE].[SaleZone]";
         }
     }
 }

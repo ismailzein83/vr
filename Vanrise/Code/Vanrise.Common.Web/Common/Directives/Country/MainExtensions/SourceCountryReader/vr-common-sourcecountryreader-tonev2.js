@@ -45,8 +45,8 @@ app.directive("vrCommonSourcecountryreaderTonev2", [function () {
 
             api.getData = function () {
                 
-                return {
-                    $type: "QM.BusinessEntity.MainExtensions.SourceSuppliersReaders.SupplierTOneV2SQLReader, QM.BusinessEntity.MainExtensions",
+                return {   
+                    $type: "Vanrise.Common.MainExtensions.CountryTOneV2SQLReader, Vanrise.Common.MainExtensions",
                     ConnectionString: $scope.connectionString
                 };
             };

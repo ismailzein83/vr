@@ -107,6 +107,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.MainExtensions">
+      <HintPath>..\Output\Vanrise.Common.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -151,10 +154,8 @@
     <Content Include="Common\Directives\City\vr-common-city-selector.js" />
     <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\Templates\CountrySourceReaderSelector.html" />
     <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\vr-common-country-sourcereader-selector.js" />
-    <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\qm-be-sourcesupplierreader-tonev1.js" />
-    <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\qm-be-sourcesupplierreader-tonev2.js" />
-    <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\Templates\SouceSupplierReaderTOneV1.html" />
-    <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\Templates\SouceSupplierReaderTOneV2.html" />
+    <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\vr-common-sourcecountryreader-tonev2.js" />
+    <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\Templates\SourceCountryReaderTOneV2.html" />
     <Content Include="Common\Directives\Country\Templates\CountryGridTemplate.html" />
     <Content Include="Common\Directives\Country\vr-common-country-grid.js" />
     <Content Include="Common\Directives\Country\vr-common-country-selector.js" />

@@ -9,8 +9,8 @@ namespace Vanrise.Common.Data
         List<Country> GetCountries();
         bool Update(Country country);
         bool Insert(Country country);
-        void InsertSynchronize(Country country);
-        void UpdateSynchronize(Country country);
+        void InsertFromSource(Country country);
+        void UpdateFromSource(Country country);
         bool AreCountriesUpdated(ref object updateHandle);
        
     }

@@ -86,14 +86,17 @@ namespace Vanrise.Common.Business
             country.CountryId = (int)startingId;
 
             ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
-            dataManager.InsertSynchronize(country);
+            dataManager.InsertFromSource(country);
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+
         }
       
         public void UpdateCountryFromSource(Country country)
         {
 
             ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
-             dataManager.UpdateSynchronize(country);
+             dataManager.UpdateFromSource(country);
+             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
                 
         public Vanrise.Entities.UpdateOperationOutput<CountryDetail> UpdateCountry(Country country)
@@ -124,6 +127,20 @@ namespace Vanrise.Common.Business
 
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.SourceCountryReaderConfigType);
+        }
+
+        public Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds)
+        {
+            Dictionary<string, long> existingItemIds = new Dictionary<string, long>();
+            foreach (var item in GetCachedCountries())
+            {
+                if (item.Value.SourceId != null)
+                {
+                    if (sourceItemIds.Contains(item.Value.SourceId))
+                        existingItemIds.Add(item.Value.SourceId, (long)item.Value.CountryId);
+                }
+            }
+            return existingItemIds;
         }
 
         #region Private Members
@@ -191,6 +208,7 @@ namespace Vanrise.Common.Business
         {
             Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(typeof(CountryManager), nbOfIds, out startingId);
         }
+      
         #endregion
     }
 }

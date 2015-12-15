@@ -48,8 +48,8 @@ app.directive("qmBeSourcezonereaderTonev2", [function () {
             api.getData = function () {
                 
                 return {
-                   // $type: "QM.BusinessEntity.MainExtensions.SourceSuppliersReaders.SupplierTOneV2SQLReader, QM.BusinessEntity.MainExtensions",
-                //    ConnectionString: $scope.connectionString
+                    $type: "QM.BusinessEntity.MainExtensions.SourceZonesReaders.ZoneTOneV2SQLReader, QM.BusinessEntity.MainExtensions",
+                    ConnectionString: $scope.connectionString
                 };
             };
 

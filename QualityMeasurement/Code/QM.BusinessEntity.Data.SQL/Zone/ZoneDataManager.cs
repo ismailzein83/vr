@@ -35,6 +35,16 @@ namespace QM.BusinessEntity.Data.SQL
             return GetItemsSP("[QM_BE].[sp_Zone_GetAll]", ZoneMapper);
         }
 
+        public void InsertZoneFromSource(Zone zone)
+        {
+            ExecuteNonQuerySP("[QM_BE].[sp_Zone_InsertFromSource]", zone.ZoneId, zone.Name, zone.SourceId , zone.CountryId , zone.BeginEffectiveDate);
+        }
+
+        public void UpdateZoneFromSource(Zone zone)
+        {
+
+            ExecuteNonQuerySP("[QM_BE].[sp_Zone_UpdateFromSource]", zone.ZoneId, zone.Name);
+        }
         public bool AreZonesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("QM_BE.Zone", ref updateHandle);

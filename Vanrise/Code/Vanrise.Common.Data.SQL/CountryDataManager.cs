@@ -50,12 +50,12 @@ namespace Vanrise.Common.Data.SQL
             
             return (recordsEffected > 0);
         }
-        public void InsertSynchronize(Country country)
+        public void InsertFromSource(Country country)
         {
             ExecuteNonQuerySP("common.sp_Country_InsertFromSource", country.CountryId, country.Name, country.SourceId);
         }
 
-        public void UpdateSynchronize(Country country)
+        public void UpdateFromSource(Country country)
         {
 
             ExecuteNonQuerySP("common.sp_Country_UpdateFromSource", country.CountryId, country.Name);

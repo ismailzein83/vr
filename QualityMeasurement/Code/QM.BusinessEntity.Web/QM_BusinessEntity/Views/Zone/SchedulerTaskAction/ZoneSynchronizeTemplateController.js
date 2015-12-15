@@ -6,20 +6,16 @@ function zoneSynchronizeTemplateController($scope, UtilsService, VRUIUtilsServic
     var sourceTypeDirectiveAPI;
     var sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
     var countrySourceTypeDirectiveAPI;
-    var countrySourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+    var countrySourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();   
     defineScope();
     load();
-  
-
-    console.log(sourceDirectiveReadyPromiseDeferred)
 
     function defineScope() {
         $scope.sourceTypeTemplates = [];
 
         $scope.onSourceTypeDirectiveReady = function (api) {
             sourceTypeDirectiveAPI = api;
-            var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
-            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
+            sourceDirectiveReadyPromiseDeferred.resolve();
         }
 
         $scope.onSourceCountryDirectiveReady = function (api) {
@@ -28,11 +24,21 @@ function zoneSynchronizeTemplateController($scope, UtilsService, VRUIUtilsServic
         }
 
         $scope.schedulerTaskAction.getData = function () {
-            return {
-                $type: "QM.BusinessEntity.Business.ZoneSyncTaskActionArgument, QM.BusinessEntity.Business",
-                SourceZoneReader: sourceTypeDirectiveAPI.getData(),
-                SourceCountryReader: null
-            };
+            var schedulerTaskAction;
+            if ($scope.selectedSourceTypeTemplate != undefined) {
+                if (sourceTypeDirectiveAPI != undefined) {
+                    schedulerTaskAction = {};
+                    schedulerTaskAction.$type = "QM.BusinessEntity.Business.ZoneSyncTaskActionArgument, QM.BusinessEntity.Business",
+                    schedulerTaskAction.SourceZoneReader = sourceTypeDirectiveAPI.getData();
+                    schedulerTaskAction.SourceZoneReader.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
+                }
+                if (countrySourceTypeDirectiveAPI != undefined) {
+                    schedulerTaskAction.SourceCountryReader = countrySourceTypeDirectiveAPI.getData();
+                }
+                
+            }
+            return schedulerTaskAction;
+
         };
             
     }
@@ -42,7 +48,7 @@ function zoneSynchronizeTemplateController($scope, UtilsService, VRUIUtilsServic
         loadAllControls();
     }
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadSourceType, loadCountrySourceType])
+        return UtilsService.waitMultipleAsyncOperations([loadSourceType, loadZoneTemplateDirective, loadCountrySourceType])
           .catch(function (error) {
               VRNotificationService.notifyExceptionWithClose(error, $scope);
           })
@@ -52,24 +58,39 @@ function zoneSynchronizeTemplateController($scope, UtilsService, VRUIUtilsServic
     }
     function loadSourceType() {
         return QM_BE_ZoneAPIService.GetZoneSourceTemplates().then(function (response) {
-            console.log(response)
             angular.forEach(response, function (item) {
                 $scope.sourceTypeTemplates.push(item);
             });
-
+            if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.SourceZoneReader != undefined)
+                sourceConfigId = $scope.schedulerTaskAction.data.SourceZoneReader.ConfigId;
             if (sourceConfigId != undefined)
                 $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
 
         });
     }
+    function loadZoneTemplateDirective() {
+        var loadZoneSourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
+        sourceDirectiveReadyPromiseDeferred.promise.then(function () {
+            var payload;
+            if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.SourceZoneReader != undefined)
+                payload = {
+                    connectionString: $scope.schedulerTaskAction.data.SourceZoneReader.ConnectionString
+                };
+            VRUIUtilsService.callDirectiveLoad(sourceTypeDirectiveAPI, payload, loadZoneSourceTemplatePromiseDeferred);
+        });
 
+        return loadZoneSourceTemplatePromiseDeferred.promise;
+    }
     function loadCountrySourceType() {
         
         var loadCountrySourcePromiseDeferred = UtilsService.createPromiseDeferred();
         countrySourceDirectiveReadyPromiseDeferred.promise.then(function () {
-            var payload = {
-            };
-
+            var payload = { };
+            if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.SourceCountryReader != undefined)
+                payload = {
+                    connectionString: $scope.schedulerTaskAction.data.SourceCountryReader.ConnectionString,
+                    sourceConfigId: $scope.schedulerTaskAction.data.SourceCountryReader.ConfigId
+                };
             VRUIUtilsService.callDirectiveLoad(countrySourceTypeDirectiveAPI, payload, loadCountrySourcePromiseDeferred);
         });
 

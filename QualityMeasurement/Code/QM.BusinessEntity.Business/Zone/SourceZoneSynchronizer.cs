@@ -31,12 +31,20 @@ namespace QM.BusinessEntity.Business
 
         protected override void AddItems(List<Zone> itemsToAdd)
         {
-            throw new NotImplementedException();
+            ZoneManager zoneManager = new ZoneManager();
+            foreach (var z in itemsToAdd)
+            {
+                zoneManager.AddZoneFromeSource(z);
+            }
         }
 
         protected override void UpdateItems(List<Zone> itemsToUpdate)
         {
-            throw new NotImplementedException();
+             ZoneManager zoneManager = new ZoneManager();
+             foreach (var z in itemsToUpdate)
+            {
+                zoneManager.UpdateZoneFromeSource(z);
+            }
         }
 
         protected override Zone BuildItemFromSource(SourceZone sourceItem)
@@ -82,7 +90,8 @@ namespace QM.BusinessEntity.Business
 
         protected override Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds)
         {
-            throw new NotImplementedException();
+            ZoneManager zonemanager = new ZoneManager();
+            return zoneManager.GetExistingItemIds(sourceItemIds);
         }
     }
 }
