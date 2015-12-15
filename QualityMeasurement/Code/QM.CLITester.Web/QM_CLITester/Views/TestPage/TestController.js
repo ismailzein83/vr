@@ -52,19 +52,7 @@
                 });
             });
         }
-
     
-        //function getSuppliersInfo() {
-        //    return Qm_CliTester_TestCallAPIService.GetSuppliers().then(function (response) {
-        //        $scope.suppliers.length = 0;
-        //        angular.forEach(response, function (itm) {
-        //            $scope.suppliers.push(itm);
-        //        });
-        //    });
-        //}
-
-
-
         function getSuppliersInfo() {
             var supplierLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 

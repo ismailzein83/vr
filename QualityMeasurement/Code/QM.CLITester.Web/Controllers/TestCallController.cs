@@ -30,14 +30,6 @@ namespace QM.CLITester.Web.Controllers
             return manager.GetCachedBreakouts(selectedCountry);
         }
 
-        [HttpGet]
-        [Route("GetSuppliers")]
-        public IEnumerable<Supplier2> GetSuppliers()
-        {
-            TestCallManager manager = new TestCallManager();
-            return manager.GetCachedSuppliers();
-        }
-
         [HttpPost]
         [Route("AddNewTestCall")]
         public InsertOperationOutput<TestCallQueryInsert> AddNewTestCall(TestCallQueryInsert testCallResult)
@@ -65,7 +57,7 @@ namespace QM.CLITester.Web.Controllers
 
         [HttpGet]
         [Route("GetTestCallSourceTemplates")]
-        public List<TemplateConfig> GetSupplierSourceTemplates()
+        public List<TemplateConfig> GetTestCallSourceTemplates()
         {
             TestCallManager manager = new TestCallManager();
             return manager.GetTestCallSourceTemplates();
