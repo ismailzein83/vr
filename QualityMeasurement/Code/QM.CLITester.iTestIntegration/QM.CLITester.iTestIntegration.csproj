@@ -44,6 +44,9 @@
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
     </Reference>
@@ -63,9 +66,17 @@
     <Compile Include="SupplierExtensionSettings.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\QM.BusinessEntity.Business\QM.BusinessEntity.Business.csproj">
+      <Project>{e4d4007f-5889-4d28-9c4e-710d8908a60f}</Project>
+      <Name>QM.BusinessEntity.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\QM.BusinessEntity.Entities\QM.BusinessEntity.Entities.csproj">
       <Project>{b610fb7a-8278-4c68-bf4f-09c94bc5a8d0}</Project>
       <Name>QM.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QM.CLITester.Business\QM.CLITester.Business.csproj">
+      <Project>{724b8b1b-b990-4f4a-b886-d299cff49219}</Project>
+      <Name>QM.CLITester.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\QM.CLITester.Entities\QM.CLITester.Entities.csproj">
       <Project>{839f51fe-ebe9-469b-aac3-580910943c87}</Project>

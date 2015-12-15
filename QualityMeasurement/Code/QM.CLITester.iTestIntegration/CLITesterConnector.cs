@@ -6,7 +6,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
-
+using QM.CLITester.Business;
+using Vanrise.Common.Business;
+using QM.BusinessEntity.Business;
 namespace QM.CLITester.iTestIntegration
 {
     public class CLITesterConnector : CLITesterConnectorBase
@@ -28,7 +30,41 @@ namespace QM.CLITester.iTestIntegration
                     FailureMessage = "Missing Supplier Configuration!"
                 };
 
-            return ResponseInitiateTest(serviceActions.PostRequest("2012", "&profid=" + context.Profile.ProfileId +"&vendid=" + itestSupplierId + "&ndbccgid=" + context.Country.CountryId + "&ndbcgid=" + context.Zone.ZoneId));
+            string itestProfileId = null;
+            ProfileManager profileManager = new ProfileManager();
+            itestProfileId = profileManager.GetProfile(context.Profile.ProfileId).SourceId;
+            if (itestProfileId == null)
+                return new InitiateTestOutput
+                {
+                    Result = InitiateTestResult.FailedWithNoRetry,
+                    FailureMessage = "Missing Profile Source Id!"
+                };
+
+            string itestCountryId = null;
+            CountryManager countryManager = new CountryManager();
+            
+            itestCountryId = countryManager.GetCountry(context.Country.CountryId).SourceId;
+            //if (itestCountryId == null)
+            //    return new InitiateTestOutput
+            //    {
+            //        Result = InitiateTestResult.FailedWithNoRetry,
+            //        FailureMessage = "Missing Country Source Id!"
+            //    };
+
+            string itestZoneId = null;
+            ZoneManager zoneManager = new ZoneManager();
+
+            //itestZoneId = zoneManager.GetCountry(context.Zone.ZoneId).SourceId;
+            //if (itestZoneId == null)
+            //    return new InitiateTestOutput
+            //    {
+            //        Result = InitiateTestResult.FailedWithNoRetry,
+            //        FailureMessage = "Missing Zone Source Id!"
+            //    };
+
+            itestCountryId = "1092";
+            itestZoneId = "8122";
+            return ResponseInitiateTest(serviceActions.PostRequest("2012", "&profid=" + itestProfileId + "&vendid=" + itestSupplierId + "&ndbccgid=" + itestCountryId + "&ndbcgid=" + itestZoneId));
         }
 
         public override GetTestProgressOutput GetTestProgress(IGetTestProgressContext context)
