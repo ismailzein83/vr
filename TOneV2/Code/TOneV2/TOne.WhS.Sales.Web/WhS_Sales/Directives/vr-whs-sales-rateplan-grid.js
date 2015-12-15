@@ -202,7 +202,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         promises.push(routeOptionsLoadDeferred.promise);
 
                         zoneItemGetPromise.then(function (response) {
-                            console.log(response);
                             if (response) {
                                 var gridZoneItem = UtilsService.getItemByVal($scope.zoneItems, response.ZoneId, "ZoneId");
 

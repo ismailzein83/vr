@@ -57,16 +57,18 @@ function (UtilsService, VRUIUtilsService) {
 
                 selectorReadyDeferred.promise.then(function () {
                     var selectedIds;
-                    if (zoneItem.NewRoutingProductId)
-                        selectedIds = [zoneItem.NewRoutingProductId];
-                    else if (zoneItem.NewRoutingProductEED)
-                        selectedIds = [-1];
-
-                    console.log(selectedIds);
+                    if (zoneItem.NewRoutingProductId) {
+                        selectedIds = [];
+                        selectedIds.push(zoneItem.NewRoutingProductId);
+                    }
+                    else if (zoneItem.NewRoutingProductEED) {
+                        selectedIds = [];
+                        selectedIds.push(-1);
+                    }
 
                     var selectorPayload = {
                         filter: { ExcludedRoutingProductId: zoneItem.CurrentRoutingProductId, AssignableToZoneId: zoneItem.ZoneId },
-                        selectedIds: zoneItem.selectedIds,
+                        selectedIds: selectedIds,
                         defaultItems: [{ RoutingProductId: -1, Name: "(Reset To Default)" }]
                     };
                     
@@ -83,6 +85,7 @@ function (UtilsService, VRUIUtilsService) {
                 if (zoneItem.IsDirty) {
                     setNewRoutingProduct(zoneItemChanges);
                     setRoutingProductChange(zoneItemChanges);
+                    console.log(zoneItemChanges);
                 }
             };
             if (ctrl.onReady != null)

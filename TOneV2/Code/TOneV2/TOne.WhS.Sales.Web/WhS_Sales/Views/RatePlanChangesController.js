@@ -100,7 +100,7 @@
 
             function getZoneItems() {
                 var entities = UtilsService.getPropValuesFromArray(changes.ZoneChanges, "Entity");
-                var zoneIds = UtilsService.getPropValuesFromArray(entities, "ZoneId");
+                var zoneIds = entities ? UtilsService.getPropValuesFromArray(entities, "ZoneId") : [];
 
                 return WhS_Sales_RatePlanAPIService.GetZoneItems({
                     Filter: {
