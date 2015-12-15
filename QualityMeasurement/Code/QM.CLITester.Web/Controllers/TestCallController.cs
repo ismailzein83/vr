@@ -56,11 +56,19 @@ namespace QM.CLITester.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetTestCallSourceTemplates")]
-        public List<TemplateConfig> GetTestCallSourceTemplates()
+        [Route("GetInitiateTestTemplates")]
+        public List<TemplateConfig> GetInitiateTestTemplates()
         {
             TestCallManager manager = new TestCallManager();
-            return manager.GetTestCallSourceTemplates();
+            return manager.GetInitiateTestTemplates();
+        }
+
+        [HttpGet]
+        [Route("GetTestProgressTemplates")]
+        public List<TemplateConfig> GetTestProgressTemplates()
+        {
+            TestCallManager manager = new TestCallManager();
+            return manager.GetTestProgressTemplates();
         }
     }
 }

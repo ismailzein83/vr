@@ -11,7 +11,6 @@ namespace QM.CLITester.iTestIntegration
 {
     public class CLITesterConnector : CLITesterConnectorBase
     {
-        const string GoodAmpersand = "&amp;";
         public override InitiateTestOutput InitiateTest(IInitiateTestContext context)
         {
             ServiceActions serviceActions = new ServiceActions();
@@ -29,16 +28,18 @@ namespace QM.CLITester.iTestIntegration
                     FailureMessage = "Missing Supplier Configuration!"
                 };
 
-            return ResponseTestCall(serviceActions.PostRequest("2012", "&profid=4992&vendid=" + itestSupplierId + "&ndbccgid=" + context.Country.CountryId + "&ndbcgid=" + context.Zone.ZoneId));
+            return ResponseInitiateTest(serviceActions.PostRequest("2012", "&profid=4992&vendid=" + itestSupplierId + "&ndbccgid=" + context.Country.CountryId + "&ndbcgid=" + context.Zone.ZoneId));
         }
 
         public override GetTestProgressOutput GetTestProgress(IGetTestProgressContext context)
         {
             ServiceActions serviceActions = new ServiceActions();
-            return responseTestCallResult(serviceActions.PostRequest("3011", "&jid=" + ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID), ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID, context.RecentTestProgress);
+            return ResponseTestProgress(serviceActions.PostRequest("3011", "&jid=" + ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID), ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID, context.RecentTestProgress);
         }
 
-        private InitiateTestOutput ResponseTestCall(string response)
+        #region Private Members
+        const string GoodAmpersand = "&amp;";
+        private InitiateTestOutput ResponseInitiateTest(string response)
         {
             InitiateTestOutput testOutput = new InitiateTestOutput();    
             InitiateTestInformation initiateTestInformation = new InitiateTestInformation();
@@ -71,7 +72,7 @@ namespace QM.CLITester.iTestIntegration
             return testOutput;
         }
 
-        private GetTestProgressOutput responseTestCallResult(string response, string testId, Object recentTestProgress)
+        private GetTestProgressOutput ResponseTestProgress(string response, string testId, Object recentTestProgress)
         {
             GetTestProgressOutput testProgressOutput = new GetTestProgressOutput();
             Regex badAmpersand = new Regex("&(?![a-zA-Z]{2,6};|#[0-9]{2,4};)");
@@ -134,5 +135,6 @@ namespace QM.CLITester.iTestIntegration
             testProgressOutput.Result = GetTestProgressResult.FailedWithRetry;
             return testProgressOutput;
         }
+        #endregion
     }
 }

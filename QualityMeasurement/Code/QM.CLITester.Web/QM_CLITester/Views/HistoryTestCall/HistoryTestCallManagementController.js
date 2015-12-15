@@ -2,12 +2,16 @@
 
     "use strict";
 
-    Qm_CliTester_HistoryTestCallManagementController.$inject = ['$scope', 'Qm_CliTester_TestCallAPIService', 'UtilsService', 'Qm_CliTester_CallTestResultEnum',
-        'Qm_CliTester_CallTestStatusEnum', 'UsersAPIService'];
+    Qm_CliTester_HistoryTestCallManagementController.$inject = ['$scope', 'Qm_CliTester_TestCallAPIService', 'UtilsService', 'Qm_CliTester_CallTestResultEnum', 'QM_BE_SupplierAPIService',
+        'Qm_CliTester_CallTestStatusEnum', 'UsersAPIService', 'VRUIUtilsService'];
 
-    function Qm_CliTester_HistoryTestCallManagementController($scope, Qm_CliTester_TestCallAPIService, UtilsService, Qm_CliTester_CallTestResultEnum,
-        Qm_CliTester_CallTestStatusEnum, UsersAPIService) {
+    function Qm_CliTester_HistoryTestCallManagementController($scope, Qm_CliTester_TestCallAPIService, UtilsService, Qm_CliTester_CallTestResultEnum, QM_BE_SupplierAPIService,
+        Qm_CliTester_CallTestStatusEnum, UsersAPIService, VRUIUtilsService) {
         var gridAPI;
+
+        var supplierDirectiveAPI;
+        var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var filter = {};
 
         defineScope();
@@ -48,7 +52,12 @@
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                //api.loadGrid(filter);
+            }
+
+
+            $scope.onSupplierDirectiveReady = function (api) {
+                supplierDirectiveAPI = api;
+                supplierReadyPromiseDeferred.resolve();
             }
         }
 
@@ -74,12 +83,15 @@
 
 
         function getSuppliersInfo() {
-            return Qm_CliTester_TestCallAPIService.GetSuppliers().then(function (response) {
-                $scope.suppliers.length = 0;
-                angular.forEach(response, function (itm) {
-                    $scope.suppliers.push(itm);
+            var supplierLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            supplierReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload;
+
+                    VRUIUtilsService.callDirectiveLoad(supplierDirectiveAPI, directivePayload, supplierLoadPromiseDeferred);
                 });
-            });
+            return supplierLoadPromiseDeferred.promise;
         }
 
         function loadUsers() {
@@ -111,7 +123,7 @@
             if ($scope.selectedSupplier == undefined)
                 filter.SupplierID = null;
             else {
-                filter.SupplierID = $scope.selectedSupplier.Id;
+                filter.SupplierID = $scope.selectedSupplier.SupplierId;
             }
 
             if ($scope.selectedCountry == undefined)

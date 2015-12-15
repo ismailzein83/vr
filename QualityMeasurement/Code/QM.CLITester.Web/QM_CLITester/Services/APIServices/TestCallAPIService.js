@@ -25,18 +25,22 @@
             return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetFilteredTestCalls"), input);
         }
 
-        function GetTestCallSourceTemplates() {
-            return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetTestCallSourceTemplates"));
+        function GetInitiateTestTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetInitiateTestTemplates"));
+        }
+
+        function GetTestProgressTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetTestProgressTemplates"));
         }
 
         return ({
             GetCountries: GetCountries,
             GetBreakouts: GetBreakouts,
-            GetSuppliers: GetSuppliers,
             AddNewTestCall: AddNewTestCall,
             GetUpdatedTestCalls: GetUpdatedTestCalls,
             GetFilteredTestCalls: GetFilteredTestCalls,
-            GetTestCallSourceTemplates: GetTestCallSourceTemplates
+            GetInitiateTestTemplates: GetInitiateTestTemplates,
+            GetTestProgressTemplates: GetTestProgressTemplates
         });
     }
 

@@ -186,7 +186,9 @@
     <Content Include="QM_CLITester\Constant\ModuleConfig.js" />
     <Content Include="QM_CLITester\Constant\ProfileTypeEnum.js" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\qm-clitester-testconnector-initiatetest-itest.js" />
+    <Content Include="QM_CLITester\Directives\MainExtensions\ITest\qm-clitester-testconnector-testprogress-itest.js" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\Templates\TestConnector-InitiateTest-ITest.html" />
+    <Content Include="QM_CLITester\Directives\MainExtensions\ITest\Templates\TestConnector-TestProgress-ITest.html" />
     <Content Include="QM_CLITester\Directives\MainExtensions\SourceProfileReader\qm-clitester-sourceprofilereader-itest.js" />
     <Content Include="QM_CLITester\Directives\MainExtensions\SourceProfileReader\Templates\SouceProfileReaderiTest.html" />
     <Content Include="QM_CLITester\Directives\Profile\Templates\ProfileSettngsDirectiveTemplate.html" />
@@ -218,6 +220,8 @@
     <Content Include="QM_CLITester\Views\Profile\SchedulerTaskAction\ProfileSynchronizeTemplateController.js" />
     <Content Include="QM_CLITester\Views\TestPage\SchedulerTaskAction\InitiateTestTemplate.html" />
     <Content Include="QM_CLITester\Views\TestPage\SchedulerTaskAction\InitiateTestTemplateController.js" />
+    <Content Include="QM_CLITester\Views\TestPage\SchedulerTaskAction\TestProgressTemplate.html" />
+    <Content Include="QM_CLITester\Views\TestPage\SchedulerTaskAction\TestProgressTemplateController.js" />
     <Content Include="QM_CLITester\Views\TestPage\Test.html" />
     <Content Include="QM_CLITester\Views\TestPage\TestController.js" />
   </ItemGroup>

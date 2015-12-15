@@ -1,12 +1,12 @@
-﻿using QM.BusinessEntity.Business;
-using QM.BusinessEntity.Entities;
-using QM.CLITester.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Runtime.Entities;
+using QM.BusinessEntity.Business;
+using QM.BusinessEntity.Entities;
+using QM.CLITester.Entities;
 
 namespace QM.CLITester.Business
 {
@@ -17,6 +17,7 @@ namespace QM.CLITester.Business
         {
             InitiateTestTaskActionArgument initiateTestTaskActionArgument =
                 taskActionArgument as InitiateTestTaskActionArgument;
+
             if (initiateTestTaskActionArgument == null)
                 throw new Exception(
                     String.Format("taskActionArgument '{0}' is not of type InitiateTestTaskActionArgument",

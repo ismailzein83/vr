@@ -1,6 +1,6 @@
-﻿InitiateTestTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'Qm_CliTester_TestCallAPIService'];
+﻿TestProgressTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'Qm_CliTester_TestCallAPIService'];
 
-function InitiateTestTemplateController($scope, UtilsService, VRUIUtilsService, Qm_CliTester_TestCallAPIService) {
+function TestProgressTemplateController($scope, UtilsService, VRUIUtilsService, Qm_CliTester_TestCallAPIService) {
 
     defineScope();
     load();
@@ -14,22 +14,20 @@ function InitiateTestTemplateController($scope, UtilsService, VRUIUtilsService, 
             sourceTypeDirectiveAPI = api;
             var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
-
-
         }
         $scope.schedulerTaskAction.getData = function () {
             return {
-                $type: "QM.CLITester.Business.InitiateTestTaskActionArgument, QM.CLITester.Business",
+                $type: "QM.CLITester.Business.TestProgressTaskActionArgument, QM.CLITester.Business",
                 CLITestConnector: sourceTypeDirectiveAPI.getData()
             };
         };
-
     }
 
     function load() {
         $scope.isLoading = true;
         loadAllControls();
     }
+
     function loadAllControls() {
         return UtilsService.waitMultipleAsyncOperations([loadSourceType])
           .catch(function (error) {
@@ -40,7 +38,7 @@ function InitiateTestTemplateController($scope, UtilsService, VRUIUtilsService, 
          });
     }
     function loadSourceType() {
-        return Qm_CliTester_TestCallAPIService.GetInitiateTestTemplates().then(function (response) {
+        return Qm_CliTester_TestCallAPIService.GetTestProgressTemplates().then(function (response) {
             angular.forEach(response, function (item) {
                 $scope.sourceTypeTemplates.push(item);
             });
@@ -50,4 +48,4 @@ function InitiateTestTemplateController($scope, UtilsService, VRUIUtilsService, 
         });
     }
 }
-appControllers.controller('QM_CliTester_InitiateTestTemplateController', InitiateTestTemplateController);
+appControllers.controller('QM_CliTester_TestProgressTemplateController', TestProgressTemplateController);

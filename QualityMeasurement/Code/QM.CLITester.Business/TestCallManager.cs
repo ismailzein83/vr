@@ -115,16 +115,21 @@ namespace QM.CLITester.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, testCallDetails);
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetTestCallSourceTemplates()
+        public List<Vanrise.Entities.TemplateConfig> GetInitiateTestTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SourceTestCallReaderConfigType);
+            return manager.GetTemplateConfigurations(Constants.CliTesterConnectorInitiateTest);
+        }
+
+        public List<Vanrise.Entities.TemplateConfig> GetTestProgressTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.CliTesterConnectorTestProgress);
         }
 
         #region Private Members
 
         private readonly Dictionary<string, Country> _dictionaryCountries = new Dictionary<string, Country>();
-        private readonly List<Supplier2> _listSuppliers = new List<Supplier2>();
         private string PostRequest(string functionCode, string parameters)
         {
             var request = (HttpWebRequest)WebRequest.Create("https://api.i-test.net/?t=" + functionCode + (parameters ?? ""));
@@ -182,28 +187,6 @@ namespace QM.CLITester.Business
                         }
                 }
         }
-        private void ResponseSuppliers(string response)
-        {
-            XmlDocument xml = new XmlDocument();
-            xml.LoadXml(response);
-
-            XmlNodeList xnList = xml.SelectNodes("/Vendors_List/Supplier");
-            if (xnList != null)
-                foreach (XmlNode xn in xnList)
-                {
-                    Supplier2 supplierNode = new Supplier2
-                    {
-                        Id = xn["Supplier_ID"] != null ? xn["Supplier_ID"].InnerText : "",
-                        Name = xn["Supplier_Name"] != null ? xn["Supplier_Name"].InnerText : "",
-                        Prefix = xn["Prefix"] != null ? xn["Prefix"].InnerText : "",
-                        Codec = xn["Codec"] != null ? xn["Codec"].InnerText : "",
-                        ShortName = (xn["Supplier_Name"] != null ? xn["Supplier_Name"].InnerText : "") + " - " + (xn["Prefix"] != null ? xn["Prefix"].InnerText : "")
-                    };
-                    if (supplierNode.Id != "")
-                        _listSuppliers.Add(supplierNode);
-                }
-        }
-        
         #endregion
     }
 

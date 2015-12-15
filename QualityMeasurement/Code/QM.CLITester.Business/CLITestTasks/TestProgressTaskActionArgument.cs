@@ -7,7 +7,7 @@ using QM.CLITester.Entities;
 
 namespace QM.CLITester.Business
 {
-    public class InitiateTestTaskActionArgument : Vanrise.Runtime.Entities.BaseTaskActionArgument
+    public class TestProgressTaskActionArgument : Vanrise.Runtime.Entities.BaseTaskActionArgument
     {
         public CLITesterConnectorBase CLITestConnector { get; set; }
     }
