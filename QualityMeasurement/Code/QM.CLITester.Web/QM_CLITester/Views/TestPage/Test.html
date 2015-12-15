@@ -5,19 +5,19 @@
             <vr-row removeline>
 
                 <vr-columns colnum="2">
+                    <vr-qm-clitester-profile-selector on-ready="onProfileDirectiveReady" selectedvalues="selectedProfile" isrequired></vr-qm-clitester-profile-selector>
+                </vr-columns>
+
+                <vr-columns colnum="2">
                     <vr-qm-be-supplier-selector on-ready="onSupplierDirectiveReady" selectedvalues="selectedSupplier" isrequired ismultipleselection></vr-qm-be-supplier-selector>
                 </vr-columns>
 
                 <vr-columns colnum="2">
-                    <vr-select hideremoveicon datatextfield="Name" isrequired datavaluefield="Id" label="Countries" datasource="countries"
-                               onselectionchanged="previewBreakouts" selectedvalues="selectedCountry">
-                    </vr-select>
+                    <vr-common-country-selector on-ready="onCountryDirectiveReady" selectedvalues="selectedCountry" isrequired onselectitem="onCountrySelectItem"></vr-common-country-selector>
                 </vr-columns>
 
-                <vr-columns colnum="2" vr-loader="isLoading">
-                    <vr-select hideremoveicon datatextfield="Name" isrequired datavaluefield="Id" ng-show="selectedCountry!=undefined" label="Breakouts" datasource="breakouts"
-                               selectedvalues="selectedBreakout">
-                    </vr-select>
+                <vr-columns colnum="2" vr-loader="isLoading" ng-show="selectedCountry!=undefined">
+                    <vr-qm-be-zone-selector on-ready="onZoneDirectiveReady" selectedvalues="selectedZone" isrequired></vr-qm-be-zone-selector>
                 </vr-columns>
 
             </vr-row>

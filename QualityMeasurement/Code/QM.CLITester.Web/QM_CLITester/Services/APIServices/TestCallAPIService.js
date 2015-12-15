@@ -5,13 +5,13 @@
 
     function TestCallAPIService(BaseAPIService, UtilsService, QM_CLITester_ModuleConfig) {
 
-        function GetCountries() {
-            return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetCountries"));
-        }
+        //function GetCountries() {
+        //    return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetCountries"));
+        //}
 
-        function GetBreakouts(selectedCountry) {
-            return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetBreakouts"), { selectedCountry: selectedCountry });
-        }
+        //function GetBreakouts(selectedCountry) {
+        //    return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetBreakouts"), { selectedCountry: selectedCountry });
+        //}
 
         function AddNewTestCall(testCallObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "AddNewTestCall"), testCallObject);
@@ -34,8 +34,8 @@
         }
 
         return ({
-            GetCountries: GetCountries,
-            GetBreakouts: GetBreakouts,
+            //GetCountries: GetCountries,
+            //GetBreakouts: GetBreakouts,
             AddNewTestCall: AddNewTestCall,
             GetUpdatedTestCalls: GetUpdatedTestCalls,
             GetFilteredTestCalls: GetFilteredTestCalls,

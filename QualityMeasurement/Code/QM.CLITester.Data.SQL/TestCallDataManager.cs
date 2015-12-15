@@ -26,7 +26,7 @@ namespace QM.CLITester.Data.SQL
             {
                 int recordsEffected = ExecuteNonQuerySP("QM_CLITester.sp_TestCall_Insert", out testCallId, supplierId, testCall.CountryID, testCall.ZoneID,
                 testCall.CallTestStatus, testCall.CallTestResult, testCall.InitiationRetryCount,
-                testCall.GetProgressRetryCount, testCall.UserID);
+                testCall.GetProgressRetryCount, testCall.UserID, testCall.ProfileID);
                 insertedId = (int)testCallId;
                 if (recordsEffected > 0)
                     rec = true;
@@ -127,6 +127,7 @@ namespace QM.CLITester.Data.SQL
                 CountryID = (int)reader["CountryID"],
                 ZoneID = (int)reader["ZoneID"],
                 UserID = (int)reader["UserID"],
+                ProfileID = reader["ProfileID"] == "" ? 0 : (int)reader["ProfileID"],
                 CreationDate = GetReaderValue<DateTime>(reader, "CreationDate"),
                 CallTestStatus = GetReaderValue<CallTestStatus>(reader, "CallTestStatus"),
                 CallTestResult = GetReaderValue<CallTestResult>(reader, "CallTestResult"),

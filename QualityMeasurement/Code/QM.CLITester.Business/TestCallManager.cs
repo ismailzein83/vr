@@ -12,43 +12,11 @@ using QM.CLITester.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
-using Country = QM.CLITester.Entities.Country2;
 
 namespace QM.CLITester.Business
 {
     public class TestCallManager
     {
-        public IEnumerable<Country> GetCachedCountries()
-        {
-            List<Country> lstCountries = new List<Country>();
-            if (_dictionaryCountries.Count == 0)
-                ResponseCountryBreakout(PostRequest("1022", null));
-
-            foreach (var v in _dictionaryCountries)
-            {
-                Country2 country = new Country
-                {
-                    Id = v.Value.Id,
-                    Name = v.Value.Name
-                };
-
-                lstCountries.Add(country);
-            }
-            return lstCountries;
-        }
-
-        public IEnumerable<Breakout> GetCachedBreakouts(string selectedCountry)
-        {
-            if (_dictionaryCountries.Count == 0)
-                ResponseCountryBreakout(PostRequest("1022", null));
-            Country2 country = new Country();
-            if (_dictionaryCountries.TryGetValue(selectedCountry, out country))
-            {
-                return country.Breakouts;
-            }
-            return null;
-        }
-
         public Vanrise.Entities.InsertOperationOutput<TestCallQueryInsert> AddNewTestCall(TestCallQueryInsert testCallResult)
         {
             testCallResult.CallTestStatus = CallTestStatus.New;
@@ -126,68 +94,6 @@ namespace QM.CLITester.Business
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.CliTesterConnectorTestProgress);
         }
-
-        #region Private Members
-
-        private readonly Dictionary<string, Country> _dictionaryCountries = new Dictionary<string, Country>();
-        private string PostRequest(string functionCode, string parameters)
-        {
-            var request = (HttpWebRequest)WebRequest.Create("https://api.i-test.net/?t=" + functionCode + (parameters ?? ""));
-
-            var postData = "email=myahya2@vanrise.com";
-            postData += "&pass=123456789";
-            var data = Encoding.ASCII.GetBytes(postData);
-
-            request.Method = "POST";
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.ContentLength = data.Length;
-
-            using (var stream = request.GetRequestStream())
-            {
-                stream.Write(data, 0, data.Length);
-            }
-
-            var response = (HttpWebResponse)request.GetResponse();
-            return new StreamReader(response.GetResponseStream()).ReadToEnd();
-        }
-
-        private void ResponseCountryBreakout(string response)
-        {
-            XmlDocument xml = new XmlDocument();
-            xml.LoadXml(response);
-
-            XmlNodeList xnList = xml.SelectNodes("/NDB_List/Breakout");
-            if (xnList != null)
-                foreach (XmlNode xn in xnList)
-                {
-                    Country2 countryNode = new Country
-                    {
-                        Id = xn["Country_ID"] != null ? xn["Country_ID"].InnerText : "",
-                        Name = xn["Country_Name"] != null ? xn["Country_Name"].InnerText : ""
-                    };
-                    Breakout breakoutNode = new Breakout
-                    {
-                        Id = xn["Breakout_ID"] != null ? xn["Breakout_ID"].InnerText : "",
-                        Name = xn["Breakout_Name"] != null ? xn["Breakout_Name"].InnerText : ""
-                    };
-
-                    if (countryNode.Name != "")
-                        if (!_dictionaryCountries.ContainsKey(countryNode.Id))
-                        {
-                            countryNode.Breakouts = new List<Breakout>();
-                            countryNode.Breakouts.Add(breakoutNode);
-                            _dictionaryCountries.Add(countryNode.Id, countryNode);
-                        }
-                        else
-                        {
-                            Country2 country = new Country();
-                            if (_dictionaryCountries.TryGetValue(countryNode.Id, out country))
-                                if (!country.Breakouts.Exists(x => x.Id == breakoutNode.Id))
-                                    country.Breakouts.Add(breakoutNode);
-                        }
-                }
-        }
-        #endregion
     }
 
 }

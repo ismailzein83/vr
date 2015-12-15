@@ -14,21 +14,6 @@ namespace QM.CLITester.Web.Controllers
    
     public class TestCallController : BaseAPIController
     {
-        [HttpGet]
-        [Route("GetCountries")]
-        public IEnumerable<CLITester.Entities.Country2> GetCountries()
-        {
-            TestCallManager manager = new TestCallManager();
-            return manager.GetCachedCountries();
-        }
-
-        [HttpGet]
-        [Route("GetBreakouts")]
-        public IEnumerable<Breakout> GetBreakouts(string selectedCountry)
-        {
-            TestCallManager manager = new TestCallManager();
-            return manager.GetCachedBreakouts(selectedCountry);
-        }
 
         [HttpPost]
         [Route("AddNewTestCall")]

@@ -28,7 +28,7 @@ namespace QM.CLITester.iTestIntegration
                     FailureMessage = "Missing Supplier Configuration!"
                 };
 
-            return ResponseInitiateTest(serviceActions.PostRequest("2012", "&profid=4992&vendid=" + itestSupplierId + "&ndbccgid=" + context.Country.CountryId + "&ndbcgid=" + context.Zone.ZoneId));
+            return ResponseInitiateTest(serviceActions.PostRequest("2012", "&profid=" + context.Profile.ProfileId +"&vendid=" + itestSupplierId + "&ndbccgid=" + context.Country.CountryId + "&ndbcgid=" + context.Zone.ZoneId));
         }
 
         public override GetTestProgressOutput GetTestProgress(IGetTestProgressContext context)

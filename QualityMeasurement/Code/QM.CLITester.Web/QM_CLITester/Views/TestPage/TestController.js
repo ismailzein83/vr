@@ -7,9 +7,18 @@
     function testController($scope, Qm_CliTester_TestCallAPIService, VRNotificationService, UtilsService, QM_BE_SupplierAPIService, VRUIUtilsService) {
         var gridAPI;
 
+        var profileDirectiveAPI;
+        var profileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var supplierDirectiveAPI;
         var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         
+        var zoneDirectiveAPI;
+        var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var countryDirectiveAPI;
+        var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
 
@@ -18,7 +27,8 @@
             $scope.countries = [];
             $scope.breakouts = [];
             $scope.suppliers = [];
-           
+
+            $scope.selectedProfile;
             $scope.selectedSupplier = [];
             $scope.selectedCountry;
             $scope.selectedBreakout;
@@ -28,31 +38,61 @@
                 api.loadGrid();
             }
 
+            $scope.onProfileDirectiveReady = function (api) {
+                profileDirectiveAPI = api;
+                profileReadyPromiseDeferred.resolve();
+            }
+
             $scope.onSupplierDirectiveReady = function (api) {
                 supplierDirectiveAPI = api;
                 supplierReadyPromiseDeferred.resolve();
             }
 
+            $scope.onZoneDirectiveReady = function (api) {
+                zoneDirectiveAPI = api;
+                zoneReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onCountryDirectiveReady = function (api) {
+                countryDirectiveAPI = api;
+                countryReadyPromiseDeferred.resolve();
+            }
+
+
+            $scope.onCountrySelectItem = function (selectedItem) {
+                if (selectedItem != undefined) {
+                    var setLoader = function (value) { $scope.isLoadingZonesSelector = value };
+
+                    var payload = {
+                        countryId: selectedItem.CountryId
+                    }
+
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader);
+                }
+            }
         }
 
         function load() {
             $scope.isGettingData = true;
-            UtilsService.waitMultipleAsyncOperations([getCountriesInfo, getSuppliersInfo]).then(function () {
+            UtilsService.waitMultipleAsyncOperations([getCountriesInfo, getSuppliersInfo, getProfilesInfo]).then(function () {
             }).finally(function () {
                 $scope.isGettingData = false;
             });
         }
-
-
-        function getCountriesInfo() {
-            return Qm_CliTester_TestCallAPIService.GetCountries().then(function (response) {
-                $scope.countries.length = 0;
-                angular.forEach(response, function (itm) {
-                    $scope.countries.push(itm);
-                });
-            });
-        }
     
+
+        function getProfilesInfo() {
+            var profileLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            supplierReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload;
+
+                    VRUIUtilsService.callDirectiveLoad(profileDirectiveAPI, directivePayload, profileLoadPromiseDeferred);
+                });
+            return profileLoadPromiseDeferred.promise;
+        }
+
         function getSuppliersInfo() {
             var supplierLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -65,33 +105,25 @@
             return supplierLoadPromiseDeferred.promise;
         }
 
-        $scope.previewBreakouts = function () {
-            if ($scope.selectedCountry != undefined) {
-                getBreakoutsInfo($scope.selectedCountry.Id);
-            }
-        }
+        function getCountriesInfo() {
+            var countryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        function getBreakoutsInfo(selectedCountryId) {
-            $scope.isLoading = true;
-            return Qm_CliTester_TestCallAPIService.GetBreakouts(selectedCountryId).then(function(response) {
+            countryReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload;
 
-                $scope.breakouts.length = 0;
-                angular.forEach(response, function(itm) {
-                    $scope.breakouts.push(itm);
+                    VRUIUtilsService.callDirectiveLoad(countryDirectiveAPI, directivePayload, countryLoadPromiseDeferred);
                 });
-            }).finally(function() {
-                $scope.isLoading = false;
-            });
+            return countryLoadPromiseDeferred.promise;
         }
-
 
         function buildTestCallObjFromScope() {
-            console.log($scope.selectedSupplier);
             var obj = {
                 TestCallId: 0,
                 SupplierID: UtilsService.getPropValuesFromArray($scope.selectedSupplier, "SupplierId"),
-                CountryID: $scope.selectedCountry.Id,
-                ZoneID: $scope.selectedBreakout.Id
+                CountryID: $scope.selectedCountry.CountryId,
+                ZoneID: $scope.selectedZone.ZoneId,
+                ProfileID: $scope.selectedProfile.ProfileId
             };
             return obj;
         }
@@ -103,6 +135,7 @@
             .then(function (response) {
                 $scope.selectedSupplier = [];
                 $scope.selectedCountry = undefined;
+                $scope.selectedProfile = undefined;
                 $scope.selectedBreakout = undefined;
                 if (VRNotificationService.notifyOnItemAdded("Test Call", response, "Name")) {
                     if ($scope.onTestCallAdded != undefined)

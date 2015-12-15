@@ -38,6 +38,10 @@ namespace QM.CLITester.Business
                 {
                     Supplier = supplierManager.GetSupplier(testCall.SupplierID),
 
+                    Profile = new Profile
+                    {
+                      ProfileId  = testCall.ProfileID
+                    },
                     Zone = new Zone
                     {
                         ZoneId = testCall.ZoneID

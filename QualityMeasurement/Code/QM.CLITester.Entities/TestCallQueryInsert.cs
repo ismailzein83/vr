@@ -12,6 +12,7 @@ namespace QM.CLITester.Entities
         public int CountryID { get; set; }
         public int ZoneID { get; set; }
         public int UserID { get; set; }
+        public int ProfileID { get; set; }
         public CallTestStatus CallTestStatus { get; set; }
         public CallTestResult CallTestResult { get; set; }
         public int InitiationRetryCount { get; set; }

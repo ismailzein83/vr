@@ -20,6 +20,7 @@ namespace QM.CLITester.Entities
 
     public interface IInitiateTestContext
     {
+        CLITester.Entities.Profile Profile { get; }
         BusinessEntity.Entities.Supplier Supplier { get; }
 
         BusinessEntity.Entities.Zone Zone { get; }
