@@ -1,18 +1,12 @@
-﻿using System;
+﻿using QM.BusinessEntity.Business;
+using QM.CLITester.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using QM.CLITester.Entities;
-using Vanrise.Data.SQL;
 using System.Data;
-using System.Reflection;
+using System.Linq;
 using Vanrise.Common;
-using Vanrise.Security.Entities;
-using QM.BusinessEntity.Business;
-using QM.BusinessEntity.Entities;
-using Vanrise.Common.Business;
+using Vanrise.Data.SQL;
 
 namespace QM.CLITester.Data.SQL
 {
@@ -87,7 +81,7 @@ namespace QM.CLITester.Data.SQL
 
             string userids = null;
             if (input.Query.UserIds != null && input.Query.UserIds.Any())
-                userids = string.Join(",", input.Query.UserIds.Select(x => x.UserId.ToString()).ToArray());
+                userids = string.Join<int>(",", Array.ConvertAll(input.Query.UserIds.ToArray(), value => (int)value));
 
 
             string callTestStatusids = null;
@@ -98,15 +92,19 @@ namespace QM.CLITester.Data.SQL
             if (input.Query.CallTestResult != null && input.Query.CallTestResult.Any())
                 callTestResultsids = string.Join<int>(",", Array.ConvertAll(input.Query.CallTestResult.ToArray(), value => (int)value));
 
-            string suppliersids = null;
-            if (input.Query.SupplierIDs != null && input.Query.SupplierIDs.Any())
-                suppliersids = string.Join<int>(",", Array.ConvertAll(input.Query.SupplierIDs.ToArray(), value => (int)value));
+            string supplierids = null;
+            if (input.Query.SupplierIds != null && input.Query.SupplierIds.Any())
+                supplierids = string.Join<int>(",", Array.ConvertAll(input.Query.SupplierIds.ToArray(), value => (int)value));
+
+            string zoneids = null;
+            if (input.Query.ZoneIds != null && input.Query.ZoneIds.Any())
+                zoneids = string.Join<int>(",", Array.ConvertAll(input.Query.ZoneIds.ToArray(), value => (int)value));
 
 
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("QM_CLITester.sp_TestCall_CreateTempByFiltered", tempTableName, userids, suppliersids, input.Query.CountryID, input.Query.ZoneID,
+                ExecuteNonQuerySP("QM_CLITester.sp_TestCall_CreateTempByFiltered", tempTableName, userids, supplierids, input.Query.CountryID, zoneids,
                     input.Query.FromTime, input.Query.ToTime == DateTime.MinValue ? DateTime.Now : input.Query.ToTime, callTestStatusids, callTestResultsids);
             };
 

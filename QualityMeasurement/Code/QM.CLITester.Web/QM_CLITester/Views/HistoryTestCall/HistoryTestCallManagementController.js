@@ -2,15 +2,19 @@
 
     "use strict";
 
-    Qm_CliTester_HistoryTestCallManagementController.$inject = ['$scope', 'Qm_CliTester_TestCallAPIService', 'UtilsService', 'Qm_CliTester_CallTestResultEnum', 'QM_BE_SupplierAPIService',
-        'Qm_CliTester_CallTestStatusEnum', 'UsersAPIService', 'VRUIUtilsService'];
+    Qm_CliTester_HistoryTestCallManagementController.$inject = ['$scope', 'Qm_CliTester_TestCallAPIService', 'UtilsService', 'Qm_CliTester_CallTestResultEnum', 'Qm_CliTester_CallTestStatusEnum',
+        'UsersAPIService', 'VRUIUtilsService'];
 
-    function Qm_CliTester_HistoryTestCallManagementController($scope, Qm_CliTester_TestCallAPIService, UtilsService, Qm_CliTester_CallTestResultEnum, QM_BE_SupplierAPIService,
-        Qm_CliTester_CallTestStatusEnum, UsersAPIService, VRUIUtilsService) {
+    function Qm_CliTester_HistoryTestCallManagementController($scope, Qm_CliTester_TestCallAPIService, UtilsService, Qm_CliTester_CallTestResultEnum, Qm_CliTester_CallTestStatusEnum,
+        UsersAPIService, VRUIUtilsService) {
+
         var gridAPI;
 
         var supplierDirectiveAPI;
         var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var zoneDirectiveAPI;
+        var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var filter = {};
 
@@ -20,15 +24,16 @@
         function defineScope() {
 
             $scope.countries = [];
-            $scope.breakouts = [];
+            $scope.zones = [];
             $scope.suppliers = [];
             $scope.testStatus = [];
             $scope.testResult = [];
             $scope.users = [];
 
             $scope.selectedSuppliers = [];
+            $scope.selectedZones = [];
+
             $scope.selectedCountry;
-            $scope.selectedBreakout;
 
             $scope.selectedtestResults = [];
             $scope.selectedtestStatus = [];
@@ -58,6 +63,11 @@
             $scope.onSupplierDirectiveReady = function (api) {
                 supplierDirectiveAPI = api;
                 supplierReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onZoneDirectiveReady = function (api) {
+                zoneDirectiveAPI = api;
+                zoneReadyPromiseDeferred.resolve();
             }
         }
 
@@ -100,33 +110,41 @@
             });
         }
 
-        $scope.previewBreakouts = function () {
+        $scope.previewZones = function () {
             if ($scope.selectedCountry != undefined) {
-                getBreakoutsInfo($scope.selectedCountry.Id);
+                getZonesInfo($scope.selectedCountry.Id);
             }
         }
 
-        function getBreakoutsInfo(selectedCountryId) {
+        function getZonesInfo(selectedCountryId) {
             $scope.isLoading = true;
-            return Qm_CliTester_TestCallAPIService.GetBreakouts(selectedCountryId).then(function (response) {
+            zoneReadyPromiseDeferred.promise
+                .then(function () {
+                    var payload = {
+                        countryId: selectedCountryId
+                    };
 
-                $scope.breakouts.length = 0;
-                angular.forEach(response, function (itm) {
-                    $scope.breakouts.push(itm);
+                    zoneDirectiveAPI.load(payload);
+                }).finally(function () {
+                    $scope.isLoading = false;
                 });
-            }).finally(function () {
-                $scope.isLoading = false;
-            });
         }
 
         function setFilterObject() {
-            if ($scope.selectedSuppliers.length > 0)
+
+            if ($scope.selectedSuppliers.length == 0)
                 filter.SupplierIDs = null;
             else {
-                filter.SupplierIDs = UtilsService.getPropValuesFromArray($scope.selectedtestResults, "value");
-                console.log('ilter.SupplierIDs')
-                console.log(ilter.SupplierIDs)
+                filter.SupplierIDs = UtilsService.getPropValuesFromArray($scope.selectedSuppliers, "SupplierId");
             }
+
+
+            if ($scope.selectedZones.length == 0)
+                filter.ZoneIDs = null;
+            else {
+                filter.ZoneIDs = UtilsService.getPropValuesFromArray($scope.selectedZones, "ZoneId");
+            }
+
 
             if ($scope.selectedCountry == undefined)
                 filter.CountryID = null;
@@ -134,11 +152,6 @@
                 filter.CountryID = $scope.selectedCountry.Id;
             }
 
-            if ($scope.selectedBreakout == undefined)
-                filter.ZoneID = null;
-            else {
-                filter.ZoneID = $scope.selectedBreakout.Id;
-            }
 
             if ($scope.fromDate == undefined)
                 filter.FromTime = null;
@@ -167,7 +180,7 @@
             if ($scope.selectedUsers == undefined)
                 filter.UserIds = null;
             else {
-                filter.UserIds = $scope.selectedUsers;
+                filter.UserIds = UtilsService.getPropValuesFromArray($scope.selectedUsers, "UserId");
             }
             console.log(filter)
         }
