@@ -29,29 +29,34 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
             function fillTreeFromDataSource(treeArray, dataSource) {                
                 for (var i = 0; i < dataSource.length; i++) {
                     var sourceItem = dataSource[i];
-                    var treeItem = {
-                        sourceItem: sourceItem,
-                        id: sourceItem[ctrl.datavaluefield],
-                        text: sourceItem[ctrl.datatextfield],
-                        state: { },
-                        children: []
-                    };
-                    if (treeItem.id == undefined)
-                        treeItem.id = "generatedId_" + incrementalId++;
-                    if (sourceItem.isOpened)
-                        treeItem.state.opened = true;
-                    if (sourceItem.isSelected)
-                        treeItem.state.selected = true;
-                    if (sourceItem.isDisabled)
-                        treeItem.state.disabled = true;
-                    if (sourceItem[ctrl.datachildrenfield] != undefined && sourceItem[ctrl.datachildrenfield].length > 0)
-                        fillTreeFromDataSource(treeItem.children, sourceItem[ctrl.datachildrenfield]);
-                    else if(sourceItem[ctrl.hasremotechildrenfield] == true) {
-                        treeItem.children = true;
-                        treeItem.state.opened = false;
-                    }
+                    var treeItem = createTreeItemFromSource(sourceItem);
                     treeArray.push(treeItem);
                 }
+            }
+
+            function createTreeItemFromSource(sourceItem) {
+                var treeItem = {
+                    sourceItem: sourceItem,
+                    id: sourceItem[ctrl.datavaluefield],
+                    text: sourceItem[ctrl.datatextfield],
+                    state: {},
+                    children: []
+                };
+                if (treeItem.id == undefined)
+                    treeItem.id = "generatedId_" + incrementalId++;
+                if (sourceItem.isOpened)
+                    treeItem.state.opened = true;
+                if (sourceItem.isSelected)
+                    treeItem.state.selected = true;
+                if (sourceItem.isDisabled)
+                    treeItem.state.disabled = true;
+                if (sourceItem[ctrl.datachildrenfield] != undefined && sourceItem[ctrl.datachildrenfield].length > 0)
+                    fillTreeFromDataSource(treeItem.children, sourceItem[ctrl.datachildrenfield]);
+                else if (sourceItem[ctrl.hasremotechildrenfield] == true) {
+                    treeItem.children = true;
+                    treeItem.state.opened = false;
+                }
+                return treeItem;
             }
 
            
@@ -87,6 +92,7 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                 fillTreeFromDataSource(treeArray, datasource);
                 var treeData={
                     core: {
+                        'check_callback': true,
                         data: function (obj, callback) {
 
                             if (obj.id == '#')//root node
@@ -168,6 +174,15 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
   
                 });
             };
+
+            api.createNode = function (node) {
+                var treeItem = createTreeItemFromSource(node);
+                var parentNode = treeElement.jstree('get_selected');
+                if (parentNode != undefined) {
+                    var nodeId = treeElement.jstree(true).create_node(parentNode, treeItem);
+                }
+            }
+
             function getFullTreeData(treeArray, jsonTree, treeElement) {
                
                 for (var i = 0; i < jsonTree.length; i++) {
