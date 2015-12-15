@@ -1,12 +1,18 @@
-﻿using QM.BusinessEntity.Business;
-using QM.CLITester.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Linq;
-using Vanrise.Common;
+using System.Text;
+using System.Threading.Tasks;
+using QM.CLITester.Entities;
 using Vanrise.Data.SQL;
+using System.Data;
+using System.Reflection;
+using Vanrise.Common;
+using Vanrise.Security.Entities;
+using QM.BusinessEntity.Business;
+using QM.BusinessEntity.Entities;
+using Vanrise.Common.Business;
 
 namespace QM.CLITester.Data.SQL
 {
