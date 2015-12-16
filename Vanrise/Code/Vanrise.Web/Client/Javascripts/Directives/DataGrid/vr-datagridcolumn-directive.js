@@ -12,7 +12,9 @@
 
                     var headerDescription = iAttrs.headerdescription != undefined ? $scope.$eval(iAttrs.headerdescription) : undefined;
                     var field = iAttrs.field != undefined ? $scope.$eval(iAttrs.field) : undefined;
+                    var isFieldDynamic = iAttrs.isfielddynamic != undefined ? $scope.$eval(iAttrs.isfielddynamic) : undefined;
                     var summaryField = iAttrs.summaryfield != undefined ? $scope.$eval(iAttrs.summaryfield) : undefined;
+                    var tooltipField = iAttrs.tooltipfield != undefined ? $scope.$eval(iAttrs.tooltipfield) : undefined;
                     var widthFactor = iAttrs.widthfactor != undefined ? $scope.$eval(iAttrs.widthfactor) : undefined;
                     var enableHiding = iAttrs.enablehiding != undefined ? $scope.$eval(iAttrs.enablehiding) : undefined;
                     var isClickable = iAttrs.isclickable != undefined ? $scope.$eval(iAttrs.isclickable) : undefined;
@@ -28,7 +30,9 @@
                         disableSorting:disableSorting,
                         headerDescription:headerDescription,
                         field: field,
+                        isFieldDynamic: isFieldDynamic,
                         summaryField: summaryField,
+                        tooltipField: tooltipField,
                         widthFactor: widthFactor,
                         enableHiding: enableHiding,
                         isClickable: isClickable,

@@ -130,10 +130,10 @@
 
     };
  
-    var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" title="{{::#COLUMNVALUES#.dataValue #CELLFILTER#}}" >'
+    var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" title="{{#CELLTOOLTIP#}}" >'
         + ''
-      + '<a ng-if="#COLUMNVALUES#.isClickable"  ng-class="::#COLUMNVALUES#.cellClass" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem)" style="cursor:pointer;"> {{::#COLUMNVALUES#.dataValue #CELLFILTER#}}#PERCENTAGE#</a>'
-      + '<span ng-if="!#COLUMNVALUES#.isClickable" ng-style="::$parent.ctrl.cellLayoutStyle" ng-class="::#COLUMNVALUES#.cellClass"> {{::#COLUMNVALUES#.dataValue #CELLFILTER#}}#PERCENTAGE#</span>'
+      + '<a ng-if="#ISCLICKABLE#"  ng-class="#CELLCLASS#" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem)" style="cursor:pointer;"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</a>'
+      + '<span ng-if="!#ISCLICKABLE#" ng-style="::$parent.ctrl.cellLayoutStyle" ng-class="#CELLCLASS#"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</span>'
       + ''
    + '</div>';
 
@@ -185,7 +185,9 @@
                 description:(col.headerDescription != undefined)? col.headerDescription :(  col.headerText != undefined ? col.headerText : col.field),
                 headerCellTemplate: headerTemplate,//'/Client/Templates/Grid/HeaderTemplate.html',//template,
                 field: col.field,
+                isFieldDynamic: col.isFieldDynamic,
                 summaryField: col.summaryField,
+                tooltipField: col.tooltipField,
                 enableSorting: col.enableSorting != undefined ? col.enableSorting : false,
                 type:col.type,
                 tag: col.tag,
@@ -445,6 +447,35 @@
                 calculateDataColumnsSectionWidth();
             };
 
+            ctrl.getCellValue = function (dataItem, colDef) {
+                return eval('dataItem.' + colDef.field);
+            };
+
+            ctrl.getCellTooltip = function (dataItem, colDef) {
+                if (colDef.tooltipField != undefined)
+                    return eval('dataItem.' + colDef.tooltipField);
+                else if(colDef.field != undefined)
+                    return eval('dataItem.' + colDef.field);
+            };
+
+            ctrl.getCellClass = function (dataItem, colDef) {
+                if (colDef.getcolor != undefined)
+                    return colDef.getcolor(dataItem, colDef);
+                if (colDef.cellClass == undefined)
+                    return 'span-summary';
+            };
+
+            ctrl.isColumnClickable = function (dataItem, colDef) {
+                if (colDef == undefined || colDef.isClickableAttr == undefined)
+                    return false;
+                else {
+                    if (typeof (colDef.isClickableAttr) == 'function')
+                        return colDef.isClickableAttr(dataItem);
+                    else
+                        return colDef.isClickableAttr;
+                }
+            };
+
             scope.$watchCollection('ctrl.datasource', onDataSourceChanged);
             scope.$watchCollection('ctrl.updateItems', onDataSourceChanged);
 
@@ -459,12 +490,8 @@
                         dataItem.isColumnValuesFilled = true;
                     }
                 }
-
-                
-
             }
-
-            
+                        
         }
 
         function getDataItemColumnProperty(colDef) {
@@ -509,7 +536,19 @@
                     ctrl.rowHtml += '<vr-progressbar gridvalue="' + gridvalue + '" ></vr-progressbar></div>';
                 }else
                 {
-                    var cellTemplate = UtilsService.replaceAll(currentColumn.cellTemplate, "#COLUMNVALUES#", dataItemColumnPropertyPath);
+                    var cellTemplate = currentColumn.cellTemplate;
+                    if (currentColumn.isFieldDynamic) {
+                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "ctrl.getCellValue(dataItem, colDef)");
+                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "ctrl.getCellTooltip(dataItem, colDef)");
+                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCLASS#", "ctrl.getCellClass(dataItem, colDef)");
+                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#ISCLICKABLE#", "ctrl.isColumnClickable(dataItem, colDef)"); 
+                    }
+                    else {
+                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "::" + dataItemColumnPropertyPath + ".dataValue");
+                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "::" + dataItemColumnPropertyPath + ".tooltip");
+                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCLASS#", "::" + dataItemColumnPropertyPath + ".cellClass");
+                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#ISCLICKABLE#", dataItemColumnPropertyPath + ".isClickable");
+                    }
                     cellTemplate = UtilsService.replaceAll(cellTemplate, "colDef", currentColumnHtml);
                     ctrl.rowHtml += '<div class="vr-datagrid-cell">'
                         + '    <div class="vr-datagrid-celltext ">'
@@ -677,15 +716,16 @@
         }
 
         function filldataItemColumnValues(dataItem, colDef) {
-            try{
-                
+            try {
+
                 var colValuesObj = {};
                 if (colDef.field != undefined)
-                    colValuesObj.dataValue = eval('dataItem.' + colDef.field);
+                    colValuesObj.dataValue = ctrl.getCellValue(dataItem, colDef);
+                colValuesObj.tooltip = ctrl.getCellTooltip(dataItem, colDef);
 
-                colValuesObj.cellClass = getCellClass(colDef, dataItem);
+                colValuesObj.cellClass = ctrl.getCellClass(dataItem, colDef);
 
-                colValuesObj.isClickable = isColumnClickable(colDef, dataItem);
+                colValuesObj.isClickable = ctrl.isColumnClickable(dataItem, colDef);
 
                 if (dataItem.columnsValues == undefined)
                     dataItem.columnsValues = {};
@@ -695,24 +735,6 @@
             catch (ex) {
 
             }
-
-            function getCellClass(colDef, dataItem) {
-                if (colDef.getcolor != undefined)
-                    return colDef.getcolor(dataItem, colDef);
-                if (colDef.cellClass == undefined)
-                    return 'span-summary';
-            }
-
-            function isColumnClickable(colDef, dataItem) {
-                if (colDef == undefined || colDef.isClickableAttr == undefined)
-                    return false;
-                else {
-                    if (typeof (colDef.isClickableAttr) == 'function')
-                        return colDef.isClickableAttr(dataItem);
-                    else
-                        return colDef.isClickableAttr;
-                }
-            };
         }
 
         function fillSummaryDataItemColumnValues(colDef) {
