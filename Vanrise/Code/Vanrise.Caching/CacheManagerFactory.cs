@@ -8,10 +8,11 @@ namespace Vanrise.Caching
 {
     public static class CacheManagerFactory
     {
-        static ConcurrentDictionary<Type, ICacheManager> s_defaultCacheManagers = new ConcurrentDictionary<Type, ICacheManager>();
+        internal static ConcurrentDictionary<Type, ICacheManager> s_defaultCacheManagers = new ConcurrentDictionary<Type, ICacheManager>();       
 
         public static T GetCacheManager<T>(Guid? cacheManagerId = null) where T : class, ICacheManager
         {
+            CacheCleaner.CleanCacheIfNeeded();
             if (cacheManagerId == null)
             {
                 if (!s_defaultCacheManagers.ContainsKey(typeof(T)))
@@ -21,9 +22,8 @@ namespace Vanrise.Caching
             }
             else
             {
-                var cacheManager = GetCacheManager<SystemCacheManager>();
+                var cacheManager = GetCacheManager<CacheManagerForManagers>();
                 return cacheManager.GetOrCreateObject(String.Format("CacheManager_{0}", cacheManagerId),
-                    SystemCacheObjectType.CacheManager,
                     () =>
                     {
                         return CreateCacheManagerObj<T>();
@@ -31,10 +31,12 @@ namespace Vanrise.Caching
             }
         }
 
+       
+
         public static void RemoveCacheManager(Guid cacheManagerId)
         {
-            var cacheManager = GetCacheManager<SystemCacheManager>();
-            cacheManager.RemoveObjectFromCache(String.Format("CacheManager_{0}", cacheManagerId), SystemCacheObjectType.CacheManager);
+            var cacheManager = GetCacheManager<CacheManagerForManagers>();
+            cacheManager.RemoveObjectFromCache(String.Format("CacheManager_{0}", cacheManagerId));
         }
 
         private static T CreateCacheManagerObj<T>()
@@ -59,9 +61,15 @@ namespace Vanrise.Caching
             return false;
         }
     }
-
-    internal enum SystemCacheObjectType { CacheManager }
-    internal class SystemCacheManager : BaseCacheManager<SystemCacheObjectType>
+    
+    internal class CacheManagerForManagers : BaseCacheManager
     {
+        public override CacheObjectSize ApproximateObjectSize
+        {
+            get
+            {
+                return CacheObjectSize.ExtraSmall;
+            }
+        }
     }
 }

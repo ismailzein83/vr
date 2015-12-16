@@ -93,10 +93,6 @@
       <Project>{1e5344d3-558e-445f-8329-fc78455eb715}</Project>
       <Name>Resources</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">
-      <Project>{c00d0633-b945-4edb-8348-5c91aaac19c7}</Project>
-      <Name>Vanrise.Caching</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>

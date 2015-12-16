@@ -6,8 +6,17 @@ using System.Collections.Concurrent;
 
 namespace Vanrise.Caching
 {
+    public enum CacheObjectSize : short
+    {
+        ExtraSmall = 0, Small = 1, Medium = 2, Large = 3, ExtraLarge = 4
+    }
     public interface ICacheManager
     {
+        IEnumerable<CachedObject> GetAllCachedObjects();
+
+        void RemoveObjectFromCache(CachedObject cachedObject);
+
+        CacheObjectSize ApproximateObjectSize { get; }
     }
 
     public abstract class BaseCacheManager<ParamType> : ICacheManager
@@ -19,7 +28,7 @@ namespace Vanrise.Caching
         #region Local Variables
 
         ConcurrentDictionary<string, object> _cacheNameLocks = new ConcurrentDictionary<string, object>();
-        ConcurrentDictionary<ParamType, ConcurrentDictionary<string, object>> _cacheDictionaries = new ConcurrentDictionary<ParamType, ConcurrentDictionary<string, object>>();
+        ConcurrentDictionary<ParamType, ConcurrentDictionary<string, CachedObject>> _cacheDictionaries = new ConcurrentDictionary<ParamType, ConcurrentDictionary<string, CachedObject>>();
 
         #endregion
 
@@ -27,57 +36,89 @@ namespace Vanrise.Caching
 
         public T GetOrCreateObject<T>(string cacheName, ParamType parameter, Func<T> createObject)
         {            
-            T obj;
+            CachedObject cachedObject;
             CheckCacheDictionaryExpiration(parameter);
-            if (!TryGetObjectFromCache(cacheName, parameter, out obj))
+            if (!TryGetObjectFromCache(cacheName, parameter, out cachedObject))
             {
                 lock (GetCacheNameLockObject(cacheName, parameter))
                 {
-                    if (!TryGetObjectFromCache(cacheName, parameter, out obj))
+                    if (!TryGetObjectFromCache(cacheName, parameter, out cachedObject))
                     {
-                        obj = createObject();
-                        AddObjectToCache(cacheName, parameter, obj);
+                        T obj = createObject();
+                        cachedObject = new CachedObject(obj)
+                        {
+                            CacheName = cacheName,
+                            ApproximateSize = this.ApproximateObjectSize
+                        };
+                        AddObjectToCache(cacheName, parameter, cachedObject);
                     }
                 }
             }
-            return obj;
+            lock (cachedObject)
+            {
+                cachedObject.LastAccessedTime = DateTime.Now;
+            }
+            return cachedObject.Object != null ? (T)cachedObject.Object : default(T);
         }
 
         public virtual void RemoveObjectFromCache(string cacheName, ParamType parameter)
         {
-            ConcurrentDictionary<string, object> objectTypeCaches = GetCacheDictionary(parameter);
-            object dummy;
+            ConcurrentDictionary<string, CachedObject> objectTypeCaches = GetCacheDictionary(parameter);
+            CachedObject dummy;
             objectTypeCaches.TryRemove(cacheName, out dummy);
+        }
+
+        public virtual void RemoveObjectFromCache(CachedObject cachedObject)
+        {
+            foreach(var cacheDictionary in _cacheDictionaries.Values)
+            {
+                CachedObject matchObj;
+                if (cacheDictionary.TryGetValue(cachedObject.CacheName, out matchObj))
+                {
+                    if(matchObj == cachedObject)
+                    {
+                        cacheDictionary.TryRemove(cachedObject.CacheName, out matchObj);
+                        break;
+                    }
+                }
+            }
+        }
+
+
+        public virtual IEnumerable<CachedObject> GetAllCachedObjects()
+        {
+            return _cacheDictionaries.Values.SelectMany(itm => itm.Values);
+        }
+
+        public virtual CacheObjectSize ApproximateObjectSize
+        {
+            get
+            {
+                return CacheObjectSize.Medium;
+            }
         }
 
         #endregion
 
         #region Overridable
 
-        protected virtual bool TryGetObjectFromCache<T>(string cacheName, ParamType parameter, out T cachedObject)
+        protected virtual bool TryGetObjectFromCache(string cacheName, ParamType parameter, out CachedObject cachedObject)
         {
-            ConcurrentDictionary<string, object> objectTypeCaches = GetCacheDictionary(parameter);
-
-            object obj;
-            bool exists = objectTypeCaches.TryGetValue(cacheName, out obj);
-            if (exists)
-                cachedObject = (T)obj;
-            else
-                cachedObject = default(T);
-            return exists;
+            ConcurrentDictionary<string, CachedObject> objectTypeCaches = GetCacheDictionary(parameter);
+            return objectTypeCaches.TryGetValue(cacheName, out cachedObject);
         }
 
-        protected virtual void AddObjectToCache<T>(string cacheName, ParamType parameter, T obj)
+        protected virtual void AddObjectToCache(string cacheName, ParamType parameter, CachedObject cachedObject)
         {
-            ConcurrentDictionary<string, object> objectTypeCaches = GetCacheDictionary(parameter);
-            objectTypeCaches.TryAdd(cacheName, obj);
+            ConcurrentDictionary<string, CachedObject> objectTypeCaches = GetCacheDictionary(parameter);
+            objectTypeCaches.TryAdd(cacheName, cachedObject);
         }
-                
-        protected virtual ConcurrentDictionary<string, object> GetCacheDictionary(ParamType parameter)
+
+        protected virtual ConcurrentDictionary<string, CachedObject> GetCacheDictionary(ParamType parameter)
         {
-            ConcurrentDictionary<string, object> objectTypeCaches;
+            ConcurrentDictionary<string, CachedObject> objectTypeCaches;
             if (!_cacheDictionaries.ContainsKey(parameter))
-                _cacheDictionaries.TryAdd(parameter, new ConcurrentDictionary<string, object>());
+                _cacheDictionaries.TryAdd(parameter, new ConcurrentDictionary<string, CachedObject>());
 
             objectTypeCaches = _cacheDictionaries[parameter];
             return objectTypeCaches;
@@ -128,7 +169,7 @@ namespace Vanrise.Caching
 
         public void SetCacheExpired(ParamType parameter)
         {
-            ConcurrentDictionary<string, object> cacheDictionary = GetCacheDictionary(parameter);
+            ConcurrentDictionary<string, CachedObject> cacheDictionary = GetCacheDictionary(parameter);
             if (cacheDictionary != null)
                 cacheDictionary.Clear();
         }
@@ -143,11 +184,16 @@ namespace Vanrise.Caching
 
     public abstract class BaseCacheManager : BaseCacheManager<Object>
     {
-        ConcurrentDictionary<string, object> _cacheDictionary = new ConcurrentDictionary<string, object>();
+        ConcurrentDictionary<string, CachedObject> _cacheDictionary = new ConcurrentDictionary<string, CachedObject>();
 
-        protected override ConcurrentDictionary<string, object> GetCacheDictionary(object parameter)
+        protected override ConcurrentDictionary<string, CachedObject> GetCacheDictionary(object parameter)
         {
             return _cacheDictionary;
+        }
+
+        public override IEnumerable<CachedObject> GetAllCachedObjects()
+        {
+            return _cacheDictionary.Values;
         }
 
         object dummyParameterType = new object();
@@ -155,6 +201,17 @@ namespace Vanrise.Caching
         public T GetOrCreateObject<T>(string cacheName, Func<T> createObject)
         {
             return base.GetOrCreateObject(cacheName, dummyParameterType, createObject);
+        }
+
+        public void RemoveObjectFromCache(string cacheName)
+        {
+            base.RemoveObjectFromCache(cacheName, dummyParameterType);
+        }
+
+        public override void RemoveObjectFromCache(CachedObject cachedObject)
+        {
+            CachedObject dummy;
+            _cacheDictionary.TryRemove(cachedObject.CacheName, out dummy);
         }
 
         protected virtual bool ShouldSetCacheExpired()
