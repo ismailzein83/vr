@@ -59,12 +59,7 @@ namespace Vanrise.Caching
                     if (memorySize < s_cleanCacheMemoryThreshold)
                         return;
                     DateTime startTime = DateTime.Now;
-                    List<ICacheManager> allCacheManagers = new List<ICacheManager>();
-                    allCacheManagers.AddRange(CacheManagerFactory.s_defaultCacheManagers.Values);
-                    CacheManagerForManagers cacheManagerForManagers = CacheManagerFactory.GetCacheManager<CacheManagerForManagers>();
-                    var cachedCacheManagers = cacheManagerForManagers.GetAllCachedObjects();
-                    if (cachedCacheManagers != null)
-                        allCacheManagers.AddRange(cachedCacheManagers.Select(itm => itm.Object as ICacheManager));
+                    List<ICacheManager> allCacheManagers = GetAllCacheManagers();
 
                     List<CachedObjectWithCacheManager> allCachedObjects = new List<CachedObjectWithCacheManager>();
                     Dictionary<CacheObjectSize, CacheObjectSizeSummary> cacheObjectSizeSummaries = new Dictionary<CacheObjectSize, CacheObjectSizeSummary>();
@@ -109,19 +104,7 @@ namespace Vanrise.Caching
                     {
                         GC.Collect();
                         //GC.WaitForPendingFinalizers();
-                        StringBuilder msgBuilder = new StringBuilder();
-                        msgBuilder.AppendLine(String.Format("Cache Cleaned. Taken Time {0} sec", (DateTime.Now - startTime).TotalSeconds));
-                        msgBuilder.AppendLine(String.Format("memory size '{0}'", memorySize));
-                        msgBuilder.AppendLine(String.Format("removed items from cache '{0}'", removedItems));
-                        msgBuilder.AppendLine(String.Format("remaining items in cache '{0}'", orderedCachedObjects.Count));
-                        msgBuilder.AppendLine("Removed Items Information:");
-                        msgBuilder.AppendLine(String.Format("Older Cache Object: {0} sec. Newer Cache Object: {1} sec", (DateTime.Now - olderCacheAccessTime).TotalSeconds, (DateTime.Now - newerCacheAccessTime).TotalSeconds));
-                        foreach (var itm in cacheObjectSizeSummaries)
-                        {
-                            msgBuilder.AppendLine(String.Format("{0}/{1} removed '{2}' size", itm.Value.RemovedItems, itm.Value.NumberOfItems, itm.Key));
-                        }
-                        msgBuilder.AppendLine();
-                        Common.LoggerFactory.GetLogger().WriteWarning(msgBuilder.ToString());
+                        LogWarning(memorySize, (DateTime.Now - startTime).TotalSeconds, cacheObjectSizeSummaries, orderedCachedObjects.Count, removedItems, olderCacheAccessTime, newerCacheAccessTime);
                         //CleanCacheAsync();
                     }
                 }
@@ -140,6 +123,34 @@ namespace Vanrise.Caching
 
             });
             task.Start();
+        }
+
+        private static List<ICacheManager> GetAllCacheManagers()
+        {
+            List<ICacheManager> allCacheManagers = new List<ICacheManager>();
+            allCacheManagers.AddRange(CacheManagerFactory.s_defaultCacheManagers.Values);
+            CacheManagerForManagers cacheManagerForManagers = CacheManagerFactory.GetCacheManager<CacheManagerForManagers>();
+            var cachedCacheManagers = cacheManagerForManagers.GetAllCachedObjects();
+            if (cachedCacheManagers != null)
+                allCacheManagers.AddRange(cachedCacheManagers.Select(itm => itm.Object as ICacheManager));
+            return allCacheManagers;
+        }
+
+        private static void LogWarning(long memorySize, double takenTime, Dictionary<CacheObjectSize, CacheObjectSizeSummary> cacheObjectSizeSummaries, int remainingItemsInCache, int removedItems, DateTime olderCacheAccessTime, DateTime newerCacheAccessTime)
+        {
+            StringBuilder msgBuilder = new StringBuilder();
+            msgBuilder.AppendLine(String.Format("Cache Cleaned. Taken Time {0} sec", takenTime));
+            msgBuilder.AppendLine(String.Format("memory size '{0}'", memorySize));
+            msgBuilder.AppendLine(String.Format("removed items from cache '{0}'", removedItems));
+            msgBuilder.AppendLine(String.Format("remaining items in cache '{0}'", remainingItemsInCache));
+            msgBuilder.AppendLine("Removed Items Information:");
+            msgBuilder.AppendLine(String.Format("Older Cache Object: {0} sec. Newer Cache Object: {1} sec", (DateTime.Now - olderCacheAccessTime).TotalSeconds, (DateTime.Now - newerCacheAccessTime).TotalSeconds));
+            foreach (var itm in cacheObjectSizeSummaries)
+            {
+                msgBuilder.AppendLine(String.Format("{0}/{1} removed '{2}' size", itm.Value.RemovedItems, itm.Value.NumberOfItems, itm.Key));
+            }
+            msgBuilder.AppendLine();
+            Common.LoggerFactory.GetLogger().WriteWarning(msgBuilder.ToString());
         }
 
         private class CachedObjectWithCacheManager
