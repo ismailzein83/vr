@@ -16,7 +16,11 @@
                     </vr-columns>
                     <vr-columns width="1/2row">
                         <vr-select hideremoveicon datatextfield="description" isrequired datavaluefield="value" label="Carrier Type" datasource="carrierAccountTypes"
-                                   selectedvalues="selectedCarrierAccountType">
+                                   selectedvalues="selectedCarrierAccountType" onselectionchanged="onCarrierTypeSelectionChanged" vr-disabled="isEditMode" />
+                    </vr-columns>
+
+                    <vr-columns width="1/2row" vr-loader="isLoadingSellingNumberPlan" ng-show="showSellingNumberPlan">
+                        <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" isdisabled="isEditMode"></vr-whs-be-sellingnumberplan-selector>
                     </vr-columns>
 
 

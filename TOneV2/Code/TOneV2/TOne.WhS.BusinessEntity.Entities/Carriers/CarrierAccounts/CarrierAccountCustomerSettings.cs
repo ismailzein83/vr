@@ -9,8 +9,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     public class CarrierAccountCustomerSettings
     {
-        public int SellingNumberPlanId { get; set; }
-
         public int? DefaultRoutingProductId { get; set; }
         public  RoutingStatus RoutingStatus { get; set; }
     }

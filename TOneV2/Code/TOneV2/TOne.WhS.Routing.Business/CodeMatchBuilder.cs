@@ -161,9 +161,9 @@ namespace TOne.WhS.Routing.Business
         {
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             var customerAccount = carrierAccountManager.GetCarrierAccount(customerId);
-            if (customerAccount == null || customerAccount.CustomerSettings == null)
+            if (customerAccount == null || customerAccount.SellingNumberPlanId == null)
                 return null;
-            int sellingNumberPlanId = customerAccount.CustomerSettings.SellingNumberPlanId;
+            int sellingNumberPlanId = (int)customerAccount.SellingNumberPlanId;
             return GetSellingNumberPlanSaleCodeIterator(sellingNumberPlanId, effectiveOn);
            
         }

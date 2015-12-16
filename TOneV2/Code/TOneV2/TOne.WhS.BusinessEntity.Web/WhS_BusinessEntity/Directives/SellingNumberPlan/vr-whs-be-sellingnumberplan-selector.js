@@ -10,6 +10,7 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                 onselectionchanged: '=',
                 selectedvalues: '=',
                 isrequired: "@",
+                isdisabled: "=",
                 onselectitem: "=",
                 ondeselectitem: "="
             },
@@ -59,7 +60,7 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
 
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SellingNumberPlanId" '
-            + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Selling Number Plan" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+            + required + ' label="' + label + '" datasource="ctrl.datasource" vr-disabled="ctrl.isdisabled" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Selling Number Plan" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                + '</div>'
         }
 

@@ -24,7 +24,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             object carrierAccountId;
 
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Insert", out carrierAccountId, carrierAccount.Name, carrierAccount.CarrierProfileId, carrierAccount.AccountType, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Insert", out carrierAccountId, carrierAccount.Name, carrierAccount.CarrierProfileId, carrierAccount.AccountType, carrierAccount.SellingNumberPlanId, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
                 Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings));
             insertedId = (int)carrierAccountId;
             return (recordsEffected > 0);
@@ -55,7 +55,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 AccountType = (CarrierAccountType)GetReaderValue<int>(reader, "AccountType"),
                 SupplierSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSupplierSettings>(reader["SupplierSettings"] as string),
                 CustomerSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountCustomerSettings>(reader["CustomerSettings"] as string),
-                SellingNumberPlanID = GetReaderValue<int?>(reader, "SellingNumberPlanID"),
+                SellingNumberPlanId = GetReaderValue<int?>(reader, "SellingNumberPlanID"),
                 CarrierProfileId = (int)reader["CarrierProfileId"],
                 CarrierAccountSettings = reader["CarrierAccountSettings"] as string != null ? Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSettings>(reader["CarrierAccountSettings"] as string) : null,
 
