@@ -76,7 +76,7 @@ function (QM_BE_ZoneAPIService, UtilsService, $compile, VRUIUtilsService) {
                     selectedIds = payload.selectedIds;
                     countryId = payload.countryId;
                 }
-
+                ctrl.datasource = [];
                 return QM_BE_ZoneAPIService.GetZonesInfo(countryId).then(function (response) {
                     angular.forEach(response, function (item) {
                         ctrl.datasource.push(item);

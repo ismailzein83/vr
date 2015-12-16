@@ -5,20 +5,20 @@
 
     function TestCallAPIService(BaseAPIService, UtilsService, QM_CLITester_ModuleConfig) {
 
-        //function GetCountries() {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetCountries"));
-        //}
-
-        //function GetBreakouts(selectedCountry) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetBreakouts"), { selectedCountry: selectedCountry });
-        //}
-
         function AddNewTestCall(testCallObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "AddNewTestCall"), testCallObject);
         }
 
-        function GetUpdatedTestCalls(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetUpdatedTestCalls"), input);
+        //function GetUpdatedTestCalls(input) {
+        //    return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetUpdatedTestCalls"), input);
+        //}
+
+        function GetUpdated(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetUpdated"), input);
+        }
+
+        function GetBeforeId(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetBeforeId"), input);
         }
 
         function GetFilteredTestCalls(input) {
@@ -34,13 +34,13 @@
         }
 
         return ({
-            //GetCountries: GetCountries,
-            //GetBreakouts: GetBreakouts,
             AddNewTestCall: AddNewTestCall,
-            GetUpdatedTestCalls: GetUpdatedTestCalls,
+            //GetUpdatedTestCalls: GetUpdatedTestCalls,
             GetFilteredTestCalls: GetFilteredTestCalls,
             GetInitiateTestTemplates: GetInitiateTestTemplates,
-            GetTestProgressTemplates: GetTestProgressTemplates
+            GetTestProgressTemplates: GetTestProgressTemplates,
+            GetUpdated: GetUpdated,
+            GetBeforeId: GetBeforeId
         });
     }
 

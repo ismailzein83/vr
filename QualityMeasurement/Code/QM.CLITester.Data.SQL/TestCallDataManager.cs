@@ -43,26 +43,55 @@ namespace QM.CLITester.Data.SQL
             return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCall", TestCallMapper, callTestStatusids);
         }
 
-        public List<TestCallDetail> GetUpdatedTestCalls(ref byte[] maxTimeStamp, List<CallTestStatus> listPendingCallTestStatus)
+        //public List<TestCallDetail> GetUpdatedTestCalls(ref byte[] maxTimeStamp, List<CallTestStatus> listPendingCallTestStatus)
+        //{
+        //    List<TestCallDetail> listTestCalls = new List<TestCallDetail>();
+        //    byte[] timestamp = null;
+
+        //    string callTestStatusids = null;
+        //    if (listPendingCallTestStatus != null && listPendingCallTestStatus.Any())
+        //        callTestStatusids = string.Join<int>(",", Array.ConvertAll(listPendingCallTestStatus.ToArray(), value => (int)value));
+
+        //    ExecuteReaderSP("QM_CLITester.sp_TestCall_GetRecent", (reader) =>
+        //    {
+        //        while (reader.Read())
+        //            listTestCalls.Add(TestCallDetailMapper(reader));
+
+        //        if (reader.NextResult())
+        //            while (reader.Read())
+        //                timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
+        //    },
+        //       maxTimeStamp, callTestStatusids);
+        //    maxTimeStamp = timestamp;
+        //    return listTestCalls;
+        //}
+        public List<TestCallDetail> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows)
         {
             List<TestCallDetail> listTestCalls = new List<TestCallDetail>();
             byte[] timestamp = null;
 
-            string callTestStatusids = null;
-            if (listPendingCallTestStatus != null && listPendingCallTestStatus.Any())
-                callTestStatusids = string.Join<int>(",", Array.ConvertAll(listPendingCallTestStatus.ToArray(), value => (int)value));
-
-            ExecuteReaderSP("QM_CLITester.sp_TestCall_GetRecent", (reader) =>
+            ExecuteReaderSP("QM_CLITester.sp_TestCall_GetUpdated", (reader) =>
             {
                 while (reader.Read())
                     listTestCalls.Add(TestCallDetailMapper(reader));
-
                 if (reader.NextResult())
                     while (reader.Read())
                         timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
             },
-               maxTimeStamp, callTestStatusids);
+               maxTimeStamp, nbOfRows);
             maxTimeStamp = timestamp;
+            return listTestCalls;
+        }
+        public List<TestCallDetail> GetBeforeId(LastCallUpdateInput input)
+        {
+            List<TestCallDetail> listTestCalls = new List<TestCallDetail>();
+
+            ExecuteReaderSP("QM_CLITester.sp_TestCall_GetBeforeID", (reader) =>
+            {
+                while (reader.Read())
+                    listTestCalls.Add(TestCallDetailMapper(reader));
+            },
+               input.LessThanID, input.NbOfRows);
             return listTestCalls;
         }
 

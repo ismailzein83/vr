@@ -54,21 +54,42 @@ namespace QM.CLITester.Business
             return dataManager.UpdateTestProgress(testCallId, testProgress, callTestStatus, callTestResult, getProgressRetryCount, failureMessage);
         }
 
-        public LastCallUpdateOutput GetUpdatedTestCalls(ref byte[] maxTimeStamp)
+        //public LastCallUpdateOutput GetUpdatedTestCalls(ref byte[] maxTimeStamp)
+        //{
+        //    LastCallUpdateOutput lastCallUpdateOutputs = new LastCallUpdateOutput();
+        //    List<CallTestStatus> listPendingCallTestStatus = new List<CallTestStatus>();
+        //    listPendingCallTestStatus.Add(CallTestStatus.Initiated);
+        //    listPendingCallTestStatus.Add(CallTestStatus.InitiationFailedWithRetry);
+        //    listPendingCallTestStatus.Add(CallTestStatus.New);
+        //    listPendingCallTestStatus.Add(CallTestStatus.PartiallyCompleted);
+        //    listPendingCallTestStatus.Add(CallTestStatus.GetProgressFailedWithRetry);
+
+        //    ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
+        //    lastCallUpdateOutputs.ListTestCallDetails = dataManager.GetUpdatedTestCalls(ref maxTimeStamp, listPendingCallTestStatus);
+        //    lastCallUpdateOutputs.MaxTimeStamp = maxTimeStamp;
+        //    return lastCallUpdateOutputs;
+        //}
+
+        public LastCallUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows)
         {
             LastCallUpdateOutput lastCallUpdateOutputs = new LastCallUpdateOutput();
-            List<CallTestStatus> listPendingCallTestStatus = new List<CallTestStatus>();
-            listPendingCallTestStatus.Add(CallTestStatus.Initiated);
-            listPendingCallTestStatus.Add(CallTestStatus.InitiationFailedWithRetry);
-            listPendingCallTestStatus.Add(CallTestStatus.New);
-            listPendingCallTestStatus.Add(CallTestStatus.PartiallyCompleted);
-            listPendingCallTestStatus.Add(CallTestStatus.GetProgressFailedWithRetry);
 
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            lastCallUpdateOutputs.ListTestCallDetails = dataManager.GetUpdatedTestCalls(ref maxTimeStamp, listPendingCallTestStatus);
+            lastCallUpdateOutputs.ListTestCallDetails = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows);
             lastCallUpdateOutputs.MaxTimeStamp = maxTimeStamp;
             return lastCallUpdateOutputs;
         }
+
+        public LastCallUpdateOutput GetBeforeId(LastCallUpdateInput input)
+        {
+            LastCallUpdateOutput lastCallUpdateOutputs = new LastCallUpdateOutput();
+
+            ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
+            lastCallUpdateOutputs.ListTestCallDetails = dataManager.GetBeforeId(input);
+            lastCallUpdateOutputs.MaxTimeStamp = null;
+            return lastCallUpdateOutputs;
+        }
+
 
         public List<TestCall> GetTestCalls(List<CallTestStatus> listCallTestStatus)
         {

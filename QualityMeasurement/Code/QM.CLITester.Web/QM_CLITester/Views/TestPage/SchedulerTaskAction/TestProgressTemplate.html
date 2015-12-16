@@ -2,10 +2,17 @@
     <vr-section title="Test Progress Action">
         <vr-row>
             <vr-columns width="1/3row">
+
                 <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Connector" datasource="sourceTypeTemplates" text="None"
                            selectedvalues="selectedSourceTypeTemplate" isrequired="true">
                 </vr-select>
+
+                <vr-textbox label="Retry Count" type="number" decimalprecision="0" value="retrycount" minvalue="0" maxvalue="10" isrequired></vr-textbox>
+
+
             </vr-columns>
+        </vr-row>
+        <vr-row>
             <vr-columns width="fullrow" vr-loader="isLoadingSourceTypeDirective" ng-if="selectedSourceTypeTemplate.Editor">
                 <vr-directivewrapper directive="selectedSourceTypeTemplate.Editor" on-ready="onSourceTypeDirectiveReady"></vr-directivewrapper>
             </vr-columns>

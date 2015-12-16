@@ -26,9 +26,11 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
 
     function TestCallGrid($scope, ctrl) {
 
-        var lastUpdateHandle;
+        var lastUpdateHandle, lessThanID, nbOfRows;
         var input = {
-            LastUpdateHandle: lastUpdateHandle
+            LastUpdateHandle: lastUpdateHandle,
+            LessThanID: lessThanID,
+            NbOfRows: nbOfRows
         };
 
         var gridAPI;
@@ -37,6 +39,11 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
 
         $scope.arrayCallTestStatus = UtilsService.getArrayEnum(Qm_CliTester_CallTestStatusEnum);
         $scope.arrayCallTestResult = UtilsService.getArrayEnum(Qm_CliTester_CallTestResultEnum);
+
+        $scope.loadMoreData = function () {
+            return getData();
+        }
+
 
         function initializeController() {
 
@@ -50,11 +57,16 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
 
                 var timer = setInterval(function () {
                     if (!isGettingData) {
-                        Qm_CliTester_TestCallAPIService.GetUpdatedTestCalls(input).then(function (response) {
+                        var pageInfo = gridAPI.getPageInfo();
+                        input.NbOfRows = pageInfo.toRow - pageInfo.fromRow;
+                        
+                        Qm_CliTester_TestCallAPIService.GetUpdated(input).then(function (response) {
                             isGettingData = true;
+                            console.log(response);
                             if (response != undefined) {
                                 for (var i = 0; i < response.ListTestCallDetails.length; i++) {
                                     var testCall = response.ListTestCallDetails[i];
+
                                     gridDrillDownTabsObj.setDrillDownExtensionObject(testCall);
                                     var findTestCall = false;
                                     for (var j = 0; j < $scope.testcalls.length; j++) {
@@ -83,10 +95,38 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
             };
         }
 
+        function getData() {
+            
+            var pageInfo = gridAPI.getPageInfo();
+            var minId = 0;
+
+            for (var i = 0; i < $scope.testcalls.length; i++) {
+
+                if (i == 0)
+                    minId = $scope.testcalls[i].Entity.ID;
+                else {
+                    if ($scope.testcalls[i].Entity.ID < minId) {
+                        minId = $scope.testcalls[i].Entity.ID;
+                    }
+                }
+            }
+            input.LessThanID = minId;
+            input.NbOfRows = pageInfo.toRow - pageInfo.fromRow;
+            return Qm_CliTester_TestCallAPIService.GetBeforeId(input).then(function (response) {
+                if (response != undefined) {
+                    for (var i = 0; i < response.ListTestCallDetails.length; i++) {
+                        var testCall = response.ListTestCallDetails[i];
+                        $scope.testcalls.push(testCall);
+                    }
+                }
+            });
+        }
+
         $scope.getColor = function (dataItem, coldef) {
             return getMeasureColor(dataItem, coldef);
         };
     }
+
     function getCallTestStatusColor(value) {
         switch(value) {
             case Qm_CliTester_CallTestStatusEnum.New.value:

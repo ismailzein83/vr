@@ -61,13 +61,15 @@ namespace QM.CLITester.iTestIntegration
                     Result = InitiateTestResult.FailedWithNoRetry,
                     FailureMessage = "Missing Breakout Configuration!"
                 };
-            return ResponseInitiateTest(serviceActions.PostRequest("2012", "&profid=" + itestProfileId + "&vendid=" + itestSupplierId + "&ndbccgid=" + itestCountryId + "&ndbcgid=" + itestBreakoutId));
+            return ResponseInitiateTest(serviceActions.PostRequest("2012", String.Format("&profid={0}&vendid={1}&ndbccgid={2}&ndbcgid={3}", itestProfileId, itestSupplierId, itestCountryId, itestBreakoutId)));
         }
 
         public override GetTestProgressOutput GetTestProgress(IGetTestProgressContext context)
         {
             ServiceActions serviceActions = new ServiceActions();
-            return ResponseTestProgress(serviceActions.PostRequest("3011", "&jid=" + ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID), ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID, context.RecentTestProgress);
+            return ResponseTestProgress(
+                serviceActions.PostRequest("3011", String.Format("&jid={0}", ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID)),
+                ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID, context.RecentTestProgress);
         }
 
         #region Private Members
