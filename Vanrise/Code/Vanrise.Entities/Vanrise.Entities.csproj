@@ -70,6 +70,7 @@
     <Compile Include="EntitySynchronization\ISourceItemReader.cs" />
     <Compile Include="ExcelResult.cs" />
     <Compile Include="File\FileUploadResult.cs" />
+    <Compile Include="GenericConfig\GenericConfiguration.cs" />
     <Compile Include="IDateEffectiveSettings.cs" />
     <Compile Include="InsertOperationOutput.cs" />
     <Compile Include="IDataRetrievalResult.cs" />
