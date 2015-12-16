@@ -106,7 +106,7 @@
                 }
 
                 function withLocalFiter() {
-                    return ($attrs.withlocalfilter != undefined);
+                    return !(controller.hidefilterbox === "" || controller.hidefilterbox);
                 }
 
                 function getInputeStyle() {
