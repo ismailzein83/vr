@@ -41,6 +41,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onSellingProductAdded = function (sellingProductObject) {
+                        setDataItemExtension(sellingProductObject);
                         gridAPI.itemAdded(sellingProductObject);
                     }
                     return directiveAPI;
@@ -104,17 +105,13 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
             var query = {
                 SellingProductsIds: [dataItem.Entity.SellingProductId]
             }
-            if (dataItem.extensionObject.custormerSellingProductGridAPI!=undefined)
-             dataItem.extensionObject.custormerSellingProductGridAPI.loadGrid(query);
+
             var onCustomerSellingProductAdded = function (customerSellingProductObj) {
                 if (dataItem.extensionObject.custormerSellingProductGridAPI != undefined)
                 {
                     for (var i = 0; i < customerSellingProductObj.length; i++) {
-                        if (customerSellingProductObj[i].Status == 0 && gridAPI != undefined)
                             dataItem.extensionObject.custormerSellingProductGridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
-                        else if (customerSellingProductObj[i].Status == 1 && gridAPI != undefined) {
-                            dataItem.extensionObject.custormerSellingProductGridAPI.onCustomerSellingProductUpdated(customerSellingProductObj[i]);
-                        }
+
                     }
                 }
             };

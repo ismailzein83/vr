@@ -53,6 +53,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onCarrierAccountAdded = function (carrierAccountObject) {
+                        setDataItemExtension(carrierAccountObject);
                         gridAPI.itemAdded(carrierAccountObject);
                     }
                     return directiveAPI;
@@ -137,11 +138,8 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                 if (dataItem.extensionObject.custormerSellingProductGridAPI != undefined)
                 {
                     for (var i = 0; i < customerSellingProductObj.length; i++) {
-                        if (customerSellingProductObj[i].Status == 0 && gridAPI != undefined)
                             dataItem.extensionObject.custormerSellingProductGridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
-                        else if (customerSellingProductObj[i].Status == 1 && gridAPI != undefined) {
-                            dataItem.extensionObject.custormerSellingProductGridAPI.onCustomerSellingProductUpdated(customerSellingProductObj[i]);
-                        }
+                        
                     }
                 }
             };

@@ -15,7 +15,7 @@
         var carrierAccountId;
         var carrierProfileId;
         var carrierAccountEntity;
-       
+        $scope.scopeModal = {};
 
         defineScope();
         loadParameters();
@@ -27,38 +27,38 @@
                 carrierAccountId = parameters.CarrierAccountId;
                 carrierProfileId = parameters.CarrierProfileId
             }
-            $scope.isEditMode = (carrierAccountId != undefined);
-            $scope.disableCarrierProfile = ((carrierProfileId != undefined) && !$scope.isEditMode);
+            $scope.scopeModal.isEditMode = (carrierAccountId != undefined);
+            $scope.scopeModal.disableCarrierProfile = ((carrierProfileId != undefined) && !$scope.scopeModal.isEditMode);
 
         }
 
         function defineScope() {
             
-            $scope.SaveCarrierAccount = function () {
-                if ($scope.isEditMode) {
+            $scope.scopeModal.SaveCarrierAccount = function () {
+                if ($scope.scopeModal.isEditMode) {
                     return updateCarrierAccount();
                 } else {
                     return insertCarrierAccount();
                 }
             };
 
-            $scope.onSellingNumberPlanDirectiveReady = function (api) {
+            $scope.scopeModal.onSellingNumberPlanDirectiveReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
             }
 
-            $scope.onCarrierProfileDirectiveReady = function (api) {
+            $scope.scopeModal.onCarrierProfileDirectiveReady = function (api) {
                 carrierProfileDirectiveAPI = api;
                 carrierProfileReadyPromiseDeferred.resolve();
 
             }
 
-            $scope.onCarrierTypeSelectionChanged = function () {
-                if ($scope.selectedCarrierAccountType != undefined)
+            $scope.scopeModal.onCarrierTypeSelectionChanged = function () {
+                if ($scope.scopeModal.selectedCarrierAccountType != undefined)
                 {
-                    if ($scope.selectedCarrierAccountType.value == WhS_Be_CarrierAccountTypeEnum.Customer.value || $scope.selectedCarrierAccountType.value == WhS_Be_CarrierAccountTypeEnum.Exchange.value) {
+                    if ($scope.scopeModal.selectedCarrierAccountType.value == WhS_Be_CarrierAccountTypeEnum.Customer.value || $scope.scopeModal.selectedCarrierAccountType.value == WhS_Be_CarrierAccountTypeEnum.Exchange.value) {
                         if (sellingNumberPlanDirectiveAPI != undefined) {
-                            $scope.showSellingNumberPlan = true;
-                            var setLoader = function (value) { $scope.isLoadingSellingNumberPlan = value };
+                            $scope.scopeModal.showSellingNumberPlan = true;
+                            var setLoader = function (value) { $scope.scopeModal.isLoadingSellingNumberPlan = value };
                             var payload = {
                                 selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.SellingNumberPlanId != null) ? carrierAccountEntity.SellingNumberPlanId : undefined
                             }
@@ -66,37 +66,37 @@
                         }
                     }
                     else
-                        $scope.showSellingNumberPlan = false;
+                        $scope.scopeModal.showSellingNumberPlan = false;
                 }
           
             }
             
 
-            $scope.close = function () {
+            $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
             };
 
-            $scope.customerTabShow = function () {
-                if ($scope.selectedCarrierAccountType != undefined && $scope.selectedCarrierAccountType.value != WhS_Be_CarrierAccountTypeEnum.Supplier.value)
-                    return true;
-                return false;
-            }
+            //$scope.scopeModal.customerTabShow = function () {
+            //    if ($scope.selectedCarrierAccountType != undefined && $scope.selectedCarrierAccountType.value != WhS_Be_CarrierAccountTypeEnum.Supplier.value)
+            //        return true;
+            //    return false;
+            //}
 
-            $scope.SupplierTabShow = function () {
-                if ($scope.selectedCarrierAccountType != undefined && $scope.selectedCarrierAccountType.value != WhS_Be_CarrierAccountTypeEnum.Customer.value)
-                    return true;
-                return false;
-            }
+            //$scope.scopeModal.SupplierTabShow = function () {
+            //    if ($scope.selectedCarrierAccountType != undefined && $scope.selectedCarrierAccountType.value != WhS_Be_CarrierAccountTypeEnum.Customer.value)
+            //        return true;
+            //    return false;
+            //}
 
         }
 
         function load() {
 
-            $scope.isLoading = true;
+            $scope.scopeModal.isLoading = true;
 
             defineCarrierAccountTypes();
 
-            if ($scope.isEditMode) {
+            if ($scope.scopeModal.isEditMode) {
                 getCarrierAccount()
                     .then(function () {
                         loadAllControls()
@@ -106,7 +106,7 @@
                     })
                     .catch(function () {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
-                        $scope.isLoading = false;
+                        $scope.scopeModal.isLoading = false;
                     });
             } else {
                 loadAllControls();
@@ -120,7 +120,7 @@
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
                 .finally(function () {
-                    $scope.isLoading = false;
+                    $scope.scopeModal.isLoading = false;
                 });
         }
 
@@ -149,8 +149,8 @@
         function buildCarrierAccountObjFromScope() {
             var obj = {
                 CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
-                Name: $scope.name,
-                AccountType: $scope.selectedCarrierAccountType.value,
+                Name: $scope.scopeModal.name,
+                AccountType: $scope.scopeModal.selectedCarrierAccountType.value,
                 CarrierProfileId: carrierProfileDirectiveAPI.getSelectedIds(),
                 SellingNumberPlanId:sellingNumberPlanDirectiveAPI.getSelectedIds(),
                 SupplierSettings: {},
@@ -161,10 +161,10 @@
 
         function loadFilterBySection() {
             if (carrierAccountEntity != undefined) {
-                $scope.name = carrierAccountEntity.Name;
-                for (var i = 0; i < $scope.carrierAccountTypes.length; i++)
-                    if (carrierAccountEntity.AccountType == $scope.carrierAccountTypes[i].value)
-                        $scope.selectedCarrierAccountType = $scope.carrierAccountTypes[i];
+                $scope.scopeModal.name = carrierAccountEntity.Name;
+                for (var i = 0; i < $scope.scopeModal.carrierAccountTypes.length; i++)
+                    if (carrierAccountEntity.AccountType == $scope.scopeModal.carrierAccountTypes[i].value)
+                        $scope.scopeModal.selectedCarrierAccountType = $scope.scopeModal.carrierAccountTypes[i];
             }
         }
 
@@ -185,9 +185,9 @@
         }
 
         function defineCarrierAccountTypes() {
-            $scope.carrierAccountTypes = [];
+            $scope.scopeModal.carrierAccountTypes = [];
             for (var p in WhS_Be_CarrierAccountTypeEnum)
-                $scope.carrierAccountTypes.push(WhS_Be_CarrierAccountTypeEnum[p]);
+                $scope.scopeModal.carrierAccountTypes.push(WhS_Be_CarrierAccountTypeEnum[p]);
 
         }
 

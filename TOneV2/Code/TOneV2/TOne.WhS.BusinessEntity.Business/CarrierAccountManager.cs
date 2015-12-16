@@ -12,7 +12,13 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class CarrierAccountManager
     {
-
+        CarrierProfileManager _carrierProfileManager;
+        SellingNumberPlanManager _sellingNumberPlanManager;
+        public CarrierAccountManager()
+        {
+            _carrierProfileManager = new CarrierProfileManager();
+            _sellingNumberPlanManager = new SellingNumberPlanManager();
+        }
         #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<CarrierAccountDetail> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
         {
@@ -266,15 +272,21 @@ namespace TOne.WhS.BusinessEntity.Business
 
             carrierAccountDetail.Entity = carrierAccount;
 
-            CarrierProfileManager manager = new CarrierProfileManager();
-            var carrierProfiles = manager.GetCachedCarrierProfiles();
+
+            var carrierProfiles = _carrierProfileManager.GetCachedCarrierProfiles();
             var carrierProfile = carrierProfiles.FindRecord(itm => itm.Value.CarrierProfileId == carrierAccount.CarrierProfileId);
             if (carrierProfile.Value != null)
             {
                 carrierAccountDetail.CarrierProfileName = carrierProfile.Value.Name;
             }
             carrierAccountDetail.AccountTypeDescription = carrierAccount.AccountType.ToString();
-
+            if(carrierAccount.SellingNumberPlanId!=null)
+            {
+                var sellingNumberPlan = _sellingNumberPlanManager.GetSellingNumberPlan((int)carrierAccount.SellingNumberPlanId);
+                if (sellingNumberPlan != null)
+                    carrierAccountDetail.SellingNumberPlanName = sellingNumberPlan.Name;
+            }
+            
             return carrierAccountDetail;
         }
         private RoutingCustomerInfo RoutingCustomerInfoMapper(CarrierAccount carrierAccount)

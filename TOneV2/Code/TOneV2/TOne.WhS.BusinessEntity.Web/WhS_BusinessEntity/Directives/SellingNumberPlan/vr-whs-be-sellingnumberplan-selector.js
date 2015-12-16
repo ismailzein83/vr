@@ -9,7 +9,7 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                 ismultipleselection: "@",
                 onselectionchanged: '=',
                 selectedvalues: '=',
-                isrequired: "@",
+                isrequired: "=",
                 isdisabled: "=",
                 onselectitem: "=",
                 ondeselectitem: "="
@@ -54,13 +54,10 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                 multipleselection = "ismultipleselection";
             }
 
-            var required = "";
-            if (attrs.isrequired != undefined)
-                required = "isrequired";
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SellingNumberPlanId" '
-            + required + ' label="' + label + '" datasource="ctrl.datasource" vr-disabled="ctrl.isdisabled" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Selling Number Plan" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+               + '<vr-select ' + multipleselection + '  isrequired="ctrl.isrequired" datatextfield="Name" datavaluefield="SellingNumberPlanId" '
+               + ' label="' + label + '" datasource="ctrl.datasource" vr-disabled="ctrl.isdisabled" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Selling Number Plan" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                + '</div>'
         }
 
