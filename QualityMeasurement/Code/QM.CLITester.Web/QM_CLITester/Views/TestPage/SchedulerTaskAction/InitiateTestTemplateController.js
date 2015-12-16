@@ -14,13 +14,15 @@ function InitiateTestTemplateController($scope, UtilsService, VRUIUtilsService, 
             sourceTypeDirectiveAPI = api;
             var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
-
-
         }
         $scope.schedulerTaskAction.getData = function () {
+
+            var CLITestConnectorObj = sourceTypeDirectiveAPI.getData();
+            CLITestConnectorObj.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
             return {
                 $type: "QM.CLITester.Business.InitiateTestTaskActionArgument, QM.CLITester.Business",
-                CLITestConnector: sourceTypeDirectiveAPI.getData()
+                CLITestConnector: CLITestConnectorObj,
+                MaximumRetryCount: $scope.maximumRetryCount
             };
         };
 
@@ -28,6 +30,8 @@ function InitiateTestTemplateController($scope, UtilsService, VRUIUtilsService, 
 
     function load() {
         $scope.isLoading = true;
+        if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined)
+            $scope.maximumRetryCount = $scope.schedulerTaskAction.data.MaximumRetryCount;
         loadAllControls();
     }
     function loadAllControls() {
@@ -41,6 +45,8 @@ function InitiateTestTemplateController($scope, UtilsService, VRUIUtilsService, 
     }
     function loadSourceType() {
         return Qm_CliTester_TestCallAPIService.GetInitiateTestTemplates().then(function (response) {
+            if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.CLITestConnector != undefined)
+                sourceConfigId =  $scope.schedulerTaskAction.data.CLITestConnector.ConfigId;
             angular.forEach(response, function (item) {
                 $scope.sourceTypeTemplates.push(item);
             });
@@ -49,5 +55,6 @@ function InitiateTestTemplateController($scope, UtilsService, VRUIUtilsService, 
                 $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
         });
     }
+
 }
 appControllers.controller('QM_CliTester_InitiateTestTemplateController', InitiateTestTemplateController);

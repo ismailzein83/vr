@@ -24,6 +24,8 @@ namespace QM.CLITester.Business
                         initiateTestTaskActionArgument));
             if (initiateTestTaskActionArgument.CLITestConnector == null)
                 throw new ArgumentNullException("initiateTestTaskActionArgument.CLITestConnector");
+
+//            initiateTestTaskActionArgument.RetryCount
             TestCallManager manager = new TestCallManager();
 
             List<CallTestStatus> listCallTestStatus = new List<CallTestStatus>()

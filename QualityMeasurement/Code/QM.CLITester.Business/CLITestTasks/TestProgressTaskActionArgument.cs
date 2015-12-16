@@ -10,5 +10,6 @@ namespace QM.CLITester.Business
     public class TestProgressTaskActionArgument : Vanrise.Runtime.Entities.BaseTaskActionArgument
     {
         public CLITesterConnectorBase CLITestConnector { get; set; }
+        public int MaximumRetryCount { get; set; }
     }
 }

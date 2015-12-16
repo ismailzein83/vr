@@ -16,15 +16,21 @@ function TestProgressTemplateController($scope, UtilsService, VRUIUtilsService, 
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
         }
         $scope.schedulerTaskAction.getData = function () {
+            var CLITestConnectorObj = sourceTypeDirectiveAPI.getData();
+            CLITestConnectorObj.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
+
             return {
                 $type: "QM.CLITester.Business.TestProgressTaskActionArgument, QM.CLITester.Business",
-                CLITestConnector: sourceTypeDirectiveAPI.getData()
+                CLITestConnector: CLITestConnectorObj,
+                MaximumRetryCount: $scope.maximumRetryCount
             };
         };
     }
 
     function load() {
         $scope.isLoading = true;
+        if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined)
+            $scope.maximumRetryCount = $scope.schedulerTaskAction.data.MaximumRetryCount;
         loadAllControls();
     }
 
@@ -39,6 +45,8 @@ function TestProgressTemplateController($scope, UtilsService, VRUIUtilsService, 
     }
     function loadSourceType() {
         return Qm_CliTester_TestCallAPIService.GetTestProgressTemplates().then(function (response) {
+            if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.CLITestConnector != undefined)
+                sourceConfigId = $scope.schedulerTaskAction.data.CLITestConnector.ConfigId;
             angular.forEach(response, function (item) {
                 $scope.sourceTypeTemplates.push(item);
             });
