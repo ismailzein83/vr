@@ -11,6 +11,7 @@ namespace TOne.WhS.Sales.Entities
         public long ZoneId { get; set; }
         public string ZoneName { get; set; }
         public decimal? CurrentRate { get; set; }
+        public bool IsCurrentRateInherited { get; set; }
         public decimal? NewRate { get; set; }
         public RateChangeType ChangeType { get; set; }
         public DateTime EffectiveOn { get; set; }

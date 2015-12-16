@@ -217,11 +217,17 @@
             var zoneLettersGetPromise = getZoneLetters();
             promises.push(zoneLettersGetPromise);
 
+            var loadGridDeferred = UtilsService.createPromiseDeferred();
+            promises.push(loadGridDeferred.promise);
+
             zoneLettersGetPromise.then(function () {
                 if ($scope.zoneLetters.length > 0) {
-                    var gridLoadPromise = loadGrid();
-                    promises.push(gridLoadPromise);
+                    loadGrid().then(function () {
+                        loadGridDeferred.resolve();
+                    }).catch(function (error) { loadGridDeferred.reject(); });
                 }
+                else
+                    loadGridDeferred.resolve();
             });
 
             zoneLettersGetPromise.finally(function () {

@@ -445,7 +445,11 @@ namespace TOne.WhS.Sales.Business
                             locator.GetSellingProductZoneRate(input.Query.OwnerId, zoneItmChanges.ZoneId) :
                             locator.GetCustomerZoneRate(input.Query.OwnerId, GetSellingProductId(input.Query.OwnerId), zoneItmChanges.ZoneId);
 
-                        if (rate != null) detail.CurrentRate = rate.Rate.NormalRate;
+                        if (rate != null)
+                        {
+                            detail.CurrentRate = rate.Rate.NormalRate;
+                            detail.IsCurrentRateInherited = (input.Query.OwnerType == SalePriceListOwnerType.Customer && rate.Source == SalePriceListOwnerType.SellingProduct);
+                        }
 
                         if (zoneItmChanges.NewRate != null)
                         {
@@ -488,6 +492,11 @@ namespace TOne.WhS.Sales.Business
                 {
                     details = new List<ZoneRoutingProductChangesDetail>();
                     SaleEntityZoneRoutingProductLocator locator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(DateTime.Now));
+                    
+                    DefaultItem defaultItem = GetDefaultItem(input.Query.OwnerType, input.Query.OwnerId);
+                    int? currentDefaultRoutingProductId = null;
+                    if (defaultItem != null && defaultItem.CurrentRoutingProductId != null)
+                        currentDefaultRoutingProductId = (int)defaultItem.CurrentRoutingProductId;
 
                     foreach (ZoneChanges zoneItmChanges in zoneChanges)
                     {
@@ -500,12 +509,14 @@ namespace TOne.WhS.Sales.Business
                             locator.GetSellingProductZoneRoutingProduct(input.Query.OwnerId, zoneItmChanges.ZoneId) :
                             locator.GetCustomerZoneRoutingProduct(input.Query.OwnerId, GetSellingProductId(input.Query.OwnerId), zoneItmChanges.ZoneId);
 
-                        if (routingProduct != null) detail.CurrentRoutingProductName = GetRoutingProductName(routingProduct.RoutingProductId);
+                        detail.CurrentRoutingProductName = routingProduct != null ? GetRoutingProductName(routingProduct.RoutingProductId) : null;
+                        detail.IsCurrentRoutingProductInherited = (currentDefaultRoutingProductId != null && routingProduct.RoutingProductId == (int)currentDefaultRoutingProductId);
 
                         if (zoneItmChanges.NewRoutingProduct != null)
                         {
                             detail.NewRoutingProductName = GetRoutingProductName(zoneItmChanges.NewRoutingProduct.ZoneRoutingProductId);
                             detail.EffectiveOn = zoneItmChanges.NewRoutingProduct.BED;
+                            detail.IsNewRoutingProductInherited = (currentDefaultRoutingProductId != null && zoneItmChanges.NewRoutingProduct.ZoneRoutingProductId == (int)currentDefaultRoutingProductId);
                         }
                         else if (zoneItmChanges.RoutingProductChange != null)
                             detail.EffectiveOn = zoneItmChanges.RoutingProductChange.EED;
@@ -543,6 +554,8 @@ namespace TOne.WhS.Sales.Business
                     (locatorResult.Source == SaleEntityZoneRoutingProductSource.ProductDefault && ownerType == SalePriceListOwnerType.SellingProduct) ||
                     (locatorResult.Source == SaleEntityZoneRoutingProductSource.CustomerDefault && ownerType == SalePriceListOwnerType.Customer)
                 );
+
+                defaultItem.IsCurrentRoutingProductInherited = (ownerType == SalePriceListOwnerType.Customer && locatorResult.Source == SaleEntityZoneRoutingProductSource.ProductDefault);
             }
 
             SetDefaultItemChanges(ownerType, ownerId, defaultItem);
