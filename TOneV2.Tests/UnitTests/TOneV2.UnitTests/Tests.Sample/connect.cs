@@ -99,6 +99,85 @@ namespace Tests.Sample
 
         }
 
+
+
+        public List<SupplierZone> getresultzonedata(string query)
+        {
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.190;Database=mvtsprodemo;User ID=sa;Password=qc@qa");
+            var ddd = new List<SupplierZone>();
+            SqlDataAdapter da = new SqlDataAdapter();
+            myConn.Open();
+            DataSet ds1 = new DataSet();
+            string sQueryString1 = "";
+            sQueryString1 = query;
+            da.SelectCommand = new SqlCommand(sQueryString1, myConn);
+            da.Fill(ds1, "table");
+            myConn.Close();
+
+
+
+            return ds1.Tables[0].AsEnumerable().Select(row => new SupplierZone
+            {
+                SupplierZoneId = row.Field<int>("zoneid"),
+                Name = row.Field<string>("zonename"),
+                BED = row.Field<DateTime>("bed"),
+                EED = row.Field<DateTime?>("eed")
+            }).ToList();
+
+
+        }
+
+        public List<SupplierCode> getresultcodedata(string query)
+        {
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.190;Database=mvtsprodemo;User ID=sa;Password=qc@qa");
+            var ddd = new List<SupplierCode>();
+            SqlDataAdapter da = new SqlDataAdapter();
+            myConn.Open();
+            DataSet ds1 = new DataSet();
+            string sQueryString1 = "";
+            sQueryString1 = query;
+            da.SelectCommand = new SqlCommand(sQueryString1, myConn);
+            da.Fill(ds1, "table");
+            myConn.Close();
+
+
+
+            return ds1.Tables[0].AsEnumerable().Select(row => new SupplierCode
+            {
+                SupplierCodeId = row.Field<int>("codeid"),
+                Code = row.Field<string>("code"),
+                BED = row.Field<DateTime>("bed"),
+                EED = row.Field<DateTime?>("eed")
+            }).ToList();
+
+
+        }
+        public List<SupplierRate> getresultratedata(string query)
+        {
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.190;Database=mvtsprodemo;User ID=sa;Password=qc@qa");
+            var ddd = new List<SupplierRate>();
+            SqlDataAdapter da = new SqlDataAdapter();
+            myConn.Open();
+            DataSet ds1 = new DataSet();
+            string sQueryString1 = "";
+            sQueryString1 = query;
+            da.SelectCommand = new SqlCommand(sQueryString1, myConn);
+            da.Fill(ds1, "table");
+            myConn.Close();
+
+
+
+            return ds1.Tables[0].AsEnumerable().Select(row => new SupplierRate
+            {
+                SupplierRateId = row.Field<int>("rateid"),
+                NormalRate = row.Field<Decimal>("rate"),              
+                BED = row.Field<DateTime>("bed"),
+                EED = row.Field<DateTime?>("eed")
+            }).ToList();
+
+
+        }
+
         public List<ImportedRate> getnewrate(string query)
         {
             SqlConnection myConn = new SqlConnection("Server=192.168.110.190;Database=mvtsprodemo;User ID=sa;Password=qc@qa");
