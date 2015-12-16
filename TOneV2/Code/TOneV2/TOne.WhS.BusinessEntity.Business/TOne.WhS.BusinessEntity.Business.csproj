@@ -119,7 +119,7 @@
     <Compile Include="SaleZone\SellingNumberPlanManager.cs" />
     <Compile Include="SaleZone\SaleEntityZoneRateLocator.cs" />
     <Compile Include="SupplierRate\ISupplierRateReader.cs" />
-    <Compile Include="SupplierZone\SupplierCodeCacheManager.cs" />
+    <Compile Include="SupplierCode\SupplierCodeCacheManager.cs" />
     <Compile Include="SupplierCode\SupplierCodeManager.cs" />
     <Compile Include="SupplierZone\SupplierPriceListManager.cs" />
     <Compile Include="SupplierRate\SupplierRateCacheManager.cs" />

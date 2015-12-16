@@ -12,6 +12,14 @@ namespace TOne.WhS.BusinessEntity.Business
         ISaleRateDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
         object _updateHandle;
 
+        public override Vanrise.Caching.CacheObjectSize ApproximateObjectSize
+        {
+            get
+            {
+                return Vanrise.Caching.CacheObjectSize.ExtraLarge;
+            }
+        }
+
         protected override bool ShouldSetCacheExpired(object parameter)
         {
             return _dataManager.AreSaleRatesUpdated(ref _updateHandle);

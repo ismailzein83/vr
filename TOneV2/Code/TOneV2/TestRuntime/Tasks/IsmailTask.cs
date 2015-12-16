@@ -22,6 +22,8 @@ namespace TestRuntime
     {
         public void Execute()
         {
+            //TestCacheCleaner();
+
             //var saleZoneDataManager = new SaleZoneDataManager();
             //object lastReceivedTimeStamp = null;
             //while(true)
@@ -209,6 +211,68 @@ namespace TestRuntime
             //        RateEffectiveOn = DateTime.Now
             //    }
             //});
+        }
+
+        private void TestCacheCleaner()
+        {
+            int itemsAdded = 0;
+            while (true)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManagerSmall>().GetOrCreateObject(Guid.NewGuid().ToString(),
+                       () => GenerateBigList(100));
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager1>().GetOrCreateObject(Guid.NewGuid().ToString(),
+                       () => GenerateBigList(10000));
+                }
+
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManagerLarge>(Guid.NewGuid()).GetOrCreateObject(Guid.NewGuid().ToString(),
+                    () => GenerateBigList(1000000));
+
+                // System.Threading.Thread.Sleep(50);
+                Console.WriteLine(++itemsAdded);
+
+            }
+        }
+
+        private List<string> GenerateBigList(int count)
+        {
+            List<string> lst = new List<string>();
+            for(int i=0;i < count;i++)
+            {
+                lst.Add(String.Format("Item Nb : {0}", i));
+            }
+            return lst;
+        }
+
+        private class CacheManager1 : Vanrise.Caching.BaseCacheManager
+        {
+
+        }
+
+        private class CacheManagerLarge : Vanrise.Caching.BaseCacheManager
+        {
+            public override Vanrise.Caching.CacheObjectSize ApproximateObjectSize
+            {
+                get
+                {
+                    return Vanrise.Caching.CacheObjectSize.Large;
+                }
+            }
+        }
+
+        private class CacheManagerSmall : Vanrise.Caching.BaseCacheManager
+        {
+            public override Vanrise.Caching.CacheObjectSize ApproximateObjectSize
+            {
+                get
+                {
+                    return Vanrise.Caching.CacheObjectSize.Small;
+                }
+            }
         }
 
         //static bool _isRunning;

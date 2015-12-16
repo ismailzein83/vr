@@ -8,5 +8,12 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierCodeCacheManager : Vanrise.Caching.BaseCacheManager
     {
+        public override Vanrise.Caching.CacheObjectSize ApproximateObjectSize
+        {
+            get
+            {
+                return Vanrise.Caching.CacheObjectSize.ExtraLarge;
+            }
+        }
     }
 }

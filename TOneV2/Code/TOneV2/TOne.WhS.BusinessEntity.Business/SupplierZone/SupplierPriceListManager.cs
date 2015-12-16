@@ -40,6 +40,14 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierPriceListDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
             object _updateHandle;
 
+            public override Vanrise.Caching.CacheObjectSize ApproximateObjectSize
+            {
+                get
+                {
+                    return Vanrise.Caching.CacheObjectSize.Large;
+                }
+            }
+
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.ArGetPriceListsUpdated(ref _updateHandle);
