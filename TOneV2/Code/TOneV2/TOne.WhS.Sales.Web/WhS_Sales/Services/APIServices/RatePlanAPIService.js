@@ -13,6 +13,8 @@
             GetZoneItem: GetZoneItem,
             GetCostCalculationMethodTemplates: GetCostCalculationMethodTemplates,
             GetChanges: GetChanges,
+            GetFilteredZoneRateChanges: GetFilteredZoneRateChanges,
+            GetFilteredZoneRoutingProductChanges: GetFilteredZoneRoutingProductChanges,
             SavePriceList: SavePriceList,
             SaveChanges: SaveChanges
         });
@@ -48,6 +50,14 @@
                 ownerType: ownerType,
                 ownerId: ownerId
             });
+        }
+
+        function GetFilteredZoneRateChanges(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetFilteredZoneRateChanges"), input);
+        }
+
+        function GetFilteredZoneRoutingProductChanges(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetFilteredZoneRoutingProductChanges"), input);
         }
 
         function SavePriceList(ownerType, ownerId) {

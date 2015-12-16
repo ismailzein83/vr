@@ -85,7 +85,6 @@ function (UtilsService, VRUIUtilsService) {
                 if (zoneItem.IsDirty) {
                     setNewRoutingProduct(zoneItemChanges);
                     setRoutingProductChange(zoneItemChanges);
-                    console.log(zoneItemChanges);
                 }
             };
             if (ctrl.onReady != null)

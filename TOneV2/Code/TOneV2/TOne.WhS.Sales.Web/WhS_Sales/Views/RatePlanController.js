@@ -307,7 +307,7 @@
             }
 
             VRNotificationService.showSuccess("Settings saved");
-            setTimeout(loadGrid, 500); // Otherwise, the notification doesn't show up. This requires more investigation
+            loadGrid();
         }
 
         function onDefaultItemChange() {
@@ -406,7 +406,7 @@
                         savePriceList().then(function () {
                             savePriceListDeferred.resolve();
                             VRNotificationService.showSuccess("Price list saved");
-                            setTimeout(loadRatePlan, 500); // Otherwise, the notification will not show properly
+                            loadRatePlan();
                         }).catch(function (error) { savePriceListDeferred.reject(); });
                     }
                     else savePriceListDeferred.resolve();

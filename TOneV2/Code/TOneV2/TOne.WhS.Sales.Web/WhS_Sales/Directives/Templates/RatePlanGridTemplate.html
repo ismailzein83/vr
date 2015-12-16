@@ -24,13 +24,13 @@
                 <span vr-disabled="true">
                     <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.showNewRateBED"></vr-datetimepicker>
                 </span>
-                <vr-datetimepicker type="date" value="dataItem.NewRateBED" ng-show="dataItem.showNewRateBED"></vr-datetimepicker>
+                <vr-datetimepicker type="date" value="dataItem.NewRateBED" ng-show="dataItem.showNewRateBED" customvalidate="dataItem.validateDateTime()"></vr-datetimepicker>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'End Effective Date'" disablesorting>
                 <span vr-disabled="!dataItem.IsCurrentRateEditable">
                     <vr-datetimepicker type="date" value="dataItem.CurrentRateEED" ng-hide="dataItem.showNewRateEED"></vr-datetimepicker>
                 </span>
-                <vr-datetimepicker type="date" value="dataItem.NewRateEED" onvaluechanged="dataItem.onNewRateEEDChange(dataItem)" ng-show="dataItem.showNewRateEED"></vr-datetimepicker>
+                <vr-datetimepicker type="date" value="dataItem.NewRateEED" onvaluechanged="dataItem.onNewRateEEDChange(dataItem)" ng-show="dataItem.showNewRateEED" customvalidate="dataItem.validateDateTime()"></vr-datetimepicker>
             </vr-datagridcolumn>
             <vr-datagridexpandablerow>
                 <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>

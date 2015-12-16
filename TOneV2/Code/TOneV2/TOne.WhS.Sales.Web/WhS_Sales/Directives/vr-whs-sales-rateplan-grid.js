@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService",
-    function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
+app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VRValidationService",
+    function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService) {
     return {
         restrict: "E",
         scope: {
@@ -29,7 +29,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             $scope.connector = {
                 costCalculationMethods: []
             };
-
+            
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(getGridDrillDownDefinitions(), gridAPI, null);
@@ -258,6 +258,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             CostCalculationMethods: gridQuery.CostCalculationMethods
                         };
                     }
+                };
+
+                zoneItem.validateDateTime = function () {
+                    return VRValidationService.validateTimeRange(zoneItem.NewRateBED, zoneItem.NewRateEED);
                 };
 
                 function setRouteOptionProperties(zoneItem) {

@@ -35,6 +35,6 @@ namespace TOne.WhS.Sales.Entities
     {
         public long RateId { get; set; }
 
-        public DateTime? EED { get; set; }
+        public DateTime EED { get; set; }
     }
 }

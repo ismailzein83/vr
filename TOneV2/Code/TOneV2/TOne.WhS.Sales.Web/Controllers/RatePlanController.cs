@@ -65,6 +65,20 @@ namespace TOne.WhS.Sales.Web.Controllers
             return _manager.GetChanges(ownerType, ownerId);
         }
 
+        [HttpPost]
+        [Route("GetFilteredZoneRateChanges")]
+        public object GetFilteredZoneRateChanges(Vanrise.Entities.DataRetrievalInput<ZoneRateChangesQuery> input)
+        {
+            return GetWebResponse(input, _manager.GetFilteredZoneRateChanges(input));
+        }
+        
+        [HttpPost]
+        [Route("GetFilteredZoneRoutingProductChanges")]
+        public object GetFilteredZoneRoutingProductChanges(Vanrise.Entities.DataRetrievalInput<ZoneRoutingProductChangesQuery> input)
+        {
+            return GetWebResponse(input, _manager.GetFilteredZoneRoutingProductChanges(input));
+        }
+
         [HttpGet]
         [Route("SavePriceList")]
         public void SavePriceList(SalePriceListOwnerType ownerType, int ownerId)

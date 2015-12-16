@@ -420,6 +420,104 @@ namespace TOne.WhS.Sales.Business
 
         #endregion
 
+        public Vanrise.Entities.IDataRetrievalResult<ZoneRateChangesDetail> GetFilteredZoneRateChanges(Vanrise.Entities.DataRetrievalInput<ZoneRateChangesQuery> input)
+        {
+            List<ZoneRateChangesDetail> details = null;
+            Changes changes = _dataManager.GetChanges(input.Query.OwnerType, input.Query.OwnerId, RatePlanStatus.Draft);
+
+            if (changes != null && changes.ZoneChanges != null)
+            {
+                IEnumerable<ZoneChanges> zoneChanges = changes.ZoneChanges.FindAllRecords(itm => itm.NewRate != null || itm.RateChange != null);
+
+                if (zoneChanges != null)
+                {
+                    details = new List<ZoneRateChangesDetail>();
+                    SaleEntityZoneRateLocator locator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(DateTime.Now));
+
+                    foreach (ZoneChanges zoneItmChanges in zoneChanges)
+                    {
+                        ZoneRateChangesDetail detail = new ZoneRateChangesDetail();
+
+                        detail.ZoneId = zoneItmChanges.ZoneId;
+                        detail.ZoneName = GetZoneName(zoneItmChanges.ZoneId);
+
+                        SaleEntityZoneRate rate = (input.Query.OwnerType == SalePriceListOwnerType.SellingProduct) ?
+                            locator.GetSellingProductZoneRate(input.Query.OwnerId, zoneItmChanges.ZoneId) :
+                            locator.GetCustomerZoneRate(input.Query.OwnerId, GetSellingProductId(input.Query.OwnerId), zoneItmChanges.ZoneId);
+
+                        if (rate != null) detail.CurrentRate = rate.Rate.NormalRate;
+
+                        if (zoneItmChanges.NewRate != null)
+                        {
+                            detail.NewRate = zoneItmChanges.NewRate.NormalRate;
+                            detail.EffectiveOn = zoneItmChanges.NewRate.BED;
+                            detail.EffectiveUntil = zoneItmChanges.NewRate.EED;
+                        }
+                        else if (zoneItmChanges.RateChange != null)
+                            detail.EffectiveOn = zoneItmChanges.RateChange.EED;
+
+                        if (detail.CurrentRate != null && detail.NewRate != null)
+                        {
+                            if (detail.NewRate > detail.CurrentRate)
+                                detail.ChangeType = Entities.RateChangeType.Increase;
+                            else if (detail.NewRate < detail.CurrentRate)
+                                detail.ChangeType = Entities.RateChangeType.Decrease;
+                        }
+                        else if (detail.NewRate != null)
+                            detail.ChangeType = Entities.RateChangeType.New;
+                        else
+                            detail.ChangeType = Entities.RateChangeType.Close;
+
+                        details.Add(detail);
+                    }
+                }
+            }
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, details.ToBigResult(input, null));
+        }
+        public Vanrise.Entities.IDataRetrievalResult<ZoneRoutingProductChangesDetail> GetFilteredZoneRoutingProductChanges(Vanrise.Entities.DataRetrievalInput<ZoneRoutingProductChangesQuery> input)
+        {
+            List<ZoneRoutingProductChangesDetail> details = null;
+            Changes changes = _dataManager.GetChanges(input.Query.OwnerType, input.Query.OwnerId, RatePlanStatus.Draft);
+
+            if (changes != null && changes.ZoneChanges != null)
+            {
+                IEnumerable<ZoneChanges> zoneChanges = changes.ZoneChanges.FindAllRecords(itm => itm.NewRoutingProduct != null || itm.RoutingProductChange != null);
+
+                if (zoneChanges != null)
+                {
+                    details = new List<ZoneRoutingProductChangesDetail>();
+                    SaleEntityZoneRoutingProductLocator locator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(DateTime.Now));
+
+                    foreach (ZoneChanges zoneItmChanges in zoneChanges)
+                    {
+                        ZoneRoutingProductChangesDetail detail = new ZoneRoutingProductChangesDetail();
+
+                        detail.ZoneId = zoneItmChanges.ZoneId;
+                        detail.ZoneName = GetZoneName(zoneItmChanges.ZoneId);
+
+                        SaleEntityZoneRoutingProduct routingProduct = (input.Query.OwnerType == SalePriceListOwnerType.SellingProduct) ?
+                            locator.GetSellingProductZoneRoutingProduct(input.Query.OwnerId, zoneItmChanges.ZoneId) :
+                            locator.GetCustomerZoneRoutingProduct(input.Query.OwnerId, GetSellingProductId(input.Query.OwnerId), zoneItmChanges.ZoneId);
+
+                        if (routingProduct != null) detail.CurrentRoutingProductName = GetRoutingProductName(routingProduct.RoutingProductId);
+
+                        if (zoneItmChanges.NewRoutingProduct != null)
+                        {
+                            detail.NewRoutingProductName = GetRoutingProductName(zoneItmChanges.NewRoutingProduct.ZoneRoutingProductId);
+                            detail.EffectiveOn = zoneItmChanges.NewRoutingProduct.BED;
+                        }
+                        else if (zoneItmChanges.RoutingProductChange != null)
+                            detail.EffectiveOn = zoneItmChanges.RoutingProductChange.EED;
+
+                        details.Add(detail);
+                    }
+                }
+            }
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, details.ToBigResult(input, null));
+        }
+
         #region Get Default Item
 
         public DefaultItem GetDefaultItem(SalePriceListOwnerType ownerType, int ownerId)

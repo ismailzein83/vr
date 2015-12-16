@@ -45,11 +45,11 @@
                                 </vr-section>
                                 <vr-section title="Zone Changes" level="2">
                                     <vr-row>
-                                        <vr-columns width="fullrow">
+                                        <vr-columns width="1/4row">
                                             <vr-label>New: </vr-label>
                                             <vr-label isvalue>{{totalNewZoneRoutingProducts}}</vr-label>
                                         </vr-columns>
-                                        <vr-columns width="fullrow">
+                                        <vr-columns width="1/4row">
                                             <vr-label>Changes: </vr-label>
                                             <vr-label isvalue>{{totalZoneRoutingProductChanges}}</vr-label>
                                         </vr-columns>
@@ -86,16 +86,18 @@
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-label isvalue ng-hide="zoneRateChanges.length > 0">No zone rate changes</vr-label>
-                            <vr-datagrid datasource="zoneRateChanges"
-                                         idfield="zoneId"
-                                         ng-show="zoneRateChanges.length > 0"
-                                         hidegridmenu>
-                                <vr-datagridcolumn headertext="'Zone'" field="'zoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Current Rate'" field="'currentRate'" type="'Number'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Change Type'" field="'changeType'" type="'Text'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'New Rate'" field="'newRate'" type="'Number'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Effective On'" field="'effectiveOn'" type="'Date'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Effective Until'" field="'effectiveUntil'" type="'Date'" disablesorting></vr-datagridcolumn>
+                            <vr-datagrid on-ready="onRateGridReady"
+                                         dataretrievalfunction="rateDataRetrievalFunction"
+                                         datasource="zoneRateChanges"
+                                         pagingtype="'PagingOnScroll'"
+                                         idfield="ZoneId"
+                                         ng-show="zoneRateChanges.length > 0">
+                                <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Current Rate'" field="'CurrentRate'" type="'Number'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'New Rate'" field="'NewRate'" type="'Number'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Change Type'" field="'ChangeType'" type="'Text'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Effective On'" field="'EffectiveOn'" type="'Date'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Effective Until'" field="'EffectiveUntil'" type="'Date'"></vr-datagridcolumn>
                             </vr-datagrid>
                         </vr-columns>
                     </vr-row>
@@ -104,14 +106,16 @@
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-label isvalue ng-hide="zoneRoutingProductChanges.length > 0">No zone routing product changes</vr-label>
-                            <vr-datagrid datasource="zoneRoutingProductChanges"
-                                         idfield="zoneId"
-                                         ng-show="zoneRoutingProductChanges.length > 0"
-                                         hidegridmenu>
-                                <vr-datagridcolumn headertext="'Zone'" field="'zoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Current Routing Product'" field="'currentRoutingProduct'" type="'Text'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'New Routing Product'" field="'newRoutingProduct'" type="'Text'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Effective On'" field="'effectiveOn'" type="'Date'" disablesorting></vr-datagridcolumn>
+                            <vr-datagrid on-ready="onRoutingProductGridReady"
+                                         dataretrievalfunction="routingProductDataRetrievalFunction"
+                                         datasource="zoneRoutingProductChanges"
+                                         pagingtype="'PagingOnScroll'"
+                                         idfield="ZoneId"
+                                         ng-show="zoneRoutingProductChanges.length > 0">
+                                <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Current Routing Product'" field="'CurrentRoutingProductName'" type="'Text'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'New Routing Product'" field="'NewRoutingProductName'" type="'Text'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Effective On'" field="'EffectiveOn'" type="'Date'"></vr-datagridcolumn>
                             </vr-datagrid>
                         </vr-columns>
                     </vr-row>

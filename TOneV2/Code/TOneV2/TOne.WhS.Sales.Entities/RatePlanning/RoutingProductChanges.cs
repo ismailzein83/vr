@@ -23,7 +23,7 @@ namespace TOne.WhS.Sales.Entities
 
         public int ZoneRoutingProductId { get; set; }
 
-        public DateTime? EED { get; set; }
+        public DateTime EED { get; set; }
     }
 
     public class NewDefaultRoutingProduct
@@ -39,6 +39,6 @@ namespace TOne.WhS.Sales.Entities
     {
         public int DefaultRoutingProductId { get; set; }
 
-        public DateTime? EED { get; set; }
+        public DateTime EED { get; set; }
     }
 }

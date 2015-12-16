@@ -26,10 +26,9 @@ app.directive("vrWhsSalesPercentagecostcalculation", ["WhS_Routing_RoutRuleSetti
 
         function initCtrl() {
             defineScope();
-            getTemplates().then(function () {
-                if (ctrl.onReady && typeof (ctrl.onReady) == "function")
-                    ctrl.onReady(getAPI());
-            });
+
+            if (ctrl.onReady && typeof (ctrl.onReady) == "function")
+                ctrl.onReady(getAPI());
 
             function defineScope() {
                 $scope.title;
@@ -40,15 +39,6 @@ app.directive("vrWhsSalesPercentagecostcalculation", ["WhS_Routing_RoutRuleSetti
                     directiveAPI = api;
                     directiveReadyDeferred.resolve();
                 };
-            }
-            function getTemplates() {
-                return WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionPercentageSettingsTemplates().then(function (response) {
-                    if (response) {
-                        for (var i = 0; i < response.length; i++) {
-                            $scope.templates.push(response[i]);
-                        }
-                    }
-                });
             }
             function getAPI() {
                 var api = {};
@@ -61,6 +51,9 @@ app.directive("vrWhsSalesPercentagecostcalculation", ["WhS_Routing_RoutRuleSetti
                     }
 
                     var promises = [];
+
+                    var getTemplatesPromise = getTemplates();
+                    promises.push(getTemplatesPromise);
 
                     if (directivePayload) {
                         directiveReadyDeferred.promise.then(function () {
@@ -86,6 +79,15 @@ app.directive("vrWhsSalesPercentagecostcalculation", ["WhS_Routing_RoutRuleSetti
                 };
 
                 return api;
+            }
+            function getTemplates() {
+                return WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionPercentageSettingsTemplates().then(function (response) {
+                    if (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            $scope.templates.push(response[i]);
+                        }
+                    }
+                });
             }
         }
     }
