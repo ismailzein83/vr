@@ -153,7 +153,9 @@
     <Content Include="Common\Directives\City\vr-common-city-grid.js" />
     <Content Include="Common\Directives\City\vr-common-city-selector.js" />
     <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\Templates\CountrySourceReaderSelector.html" />
+    <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\Templates\SourceCountryReaderTOneV1.html" />
     <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\vr-common-country-sourcereader-selector.js" />
+    <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\vr-common-sourcecountryreader-tonev1.js" />
     <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\vr-common-sourcecountryreader-tonev2.js" />
     <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\Templates\SourceCountryReaderTOneV2.html" />
     <Content Include="Common\Directives\Country\Templates\CountryGridTemplate.html" />

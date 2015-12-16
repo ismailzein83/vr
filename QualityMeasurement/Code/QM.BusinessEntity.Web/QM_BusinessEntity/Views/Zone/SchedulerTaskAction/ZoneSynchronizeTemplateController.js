@@ -31,6 +31,9 @@ function zoneSynchronizeTemplateController($scope, UtilsService, VRUIUtilsServic
                     schedulerTaskAction.$type = "QM.BusinessEntity.Business.ZoneSyncTaskActionArgument, QM.BusinessEntity.Business",
                     schedulerTaskAction.SourceZoneReader = sourceTypeDirectiveAPI.getData();
                     schedulerTaskAction.SourceZoneReader.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
+                    if(countrySourceTypeDirectiveAPI != undefined){
+                        schedulerTaskAction.SourceZoneReader.CountryReader = countrySourceTypeDirectiveAPI.getData();
+                    }
                 }
                 if (countrySourceTypeDirectiveAPI != undefined) {
                     schedulerTaskAction.SourceCountryReader = countrySourceTypeDirectiveAPI.getData();

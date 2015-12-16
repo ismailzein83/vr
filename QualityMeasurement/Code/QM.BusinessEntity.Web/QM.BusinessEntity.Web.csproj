@@ -134,7 +134,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="QM_BusinessEntity\Constant\ModuleConfig.js" />
+    <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceZoneReader\qm-be-sourcezonereader-tonev1.js" />
     <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceZoneReader\qm-be-sourcezonereader-tonev2.js" />
+    <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceZoneReader\Templates\SourceZoneReaderTOneV1.html" />
     <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceZoneReader\Templates\SourceZoneReaderTOneV2.html" />
     <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceSupplierReader\qm-be-sourcesupplierreader-tonev1.js" />
     <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceSupplierReader\qm-be-sourcesupplierreader-tonev2.js" />

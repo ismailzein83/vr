@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace QM.BusinessEntity.MainExtensions.SourceZonesReaders
 {
-    public class ZoneTOneV2SQLReader : SourceZoneReader 
+    public class ZoneTOneV1SQLReader : SourceZoneReader 
     {
         public string ConnectionString { get; set; }
 
@@ -41,24 +41,24 @@ namespace QM.BusinessEntity.MainExtensions.SourceZonesReaders
             {
                 SourceZone sourceZone = new SourceZone()
                 {
-                    SourceId = arg["ID"].ToString(),
-                    SourceCountryId = arg["CountryID"].ToString(),
-                    Name = arg["Name"] as string,
-                    CountryName = " ",
-                    BeginEffectiveDate = GetReaderValue<DateTime>(arg, "BED"),
-                    EndEffectiveDate = GetReaderValue<DateTime>(arg, "EED")
+                    SourceId = arg["ZoneID"].ToString(),
+                    SourceCountryId = arg["CodeGroup"].ToString(),
+                    Name = arg["ZoneName"] as string,
+                    CountryName = arg["CountryName"] as string,
+                    BeginEffectiveDate = GetReaderValue<DateTime>(arg, "BeginEffectiveDate"),
+                    EndEffectiveDate = GetReaderValue<DateTime>(arg, "EndEffectiveDate")
 
                 };
                 return sourceZone;
             }
 
-            const string query_getUpdatedZones = @"SELECT [ID]
-              ,[CountryID]
-              ,[Name]
-              ,[BED]
-              ,[EED]
-               FROM [TOneWhS_BE].[SaleZone]
-               where [CountryID] > 0";
+            const string query_getUpdatedZones = @"SELECT [ZoneID]
+                  ,[CodeGroup]
+                  ,z.[Name] As ZoneName
+                  ,c.[Name] as CountryName
+                  ,[BeginEffectiveDate]
+                  ,[EndEffectiveDate]
+                FROM [dbo].[Zone] z join [dbo].[CodeGroup] c on z.CodeGroup = c.Code where ZoneID > 0 and z.SupplierID ='SYS' ";
         }
     }
 }
