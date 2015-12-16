@@ -37,9 +37,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtime", "Runtime", "{4871
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarrierPortal.DevRuntime", "CarrierPortal.DevRuntime\CarrierPortal.DevRuntime.csproj", "{197126C1-BC0D-4BD0-8016-811FC8DD41D5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CP.SupplierPriceList.TOneV1Integration", "CP.SupplierPriceList.TOneV1Integration\CP.SupplierPriceList.TOneV1Integration.csproj", "{031E385D-9222-4E25-9C0E-3ECB12675667}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 12
+		SccNumberOfProjects = 13
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -87,6 +89,10 @@ Global
 		SccProjectTopLevelParentUniqueName11 = CarrierPortal.sln
 		SccProjectName11 = CarrierPortal.DevRuntime
 		SccLocalPath11 = CarrierPortal.DevRuntime
+		SccProjectUniqueName12 = CP.SupplierPriceList.TOneV1Integration\\CP.SupplierPriceList.TOneV1Integration.csproj
+		SccProjectTopLevelParentUniqueName12 = CarrierPortal.sln
+		SccProjectName12 = CP.SupplierPriceList.TOneV1Integration
+		SccLocalPath12 = CP.SupplierPriceList.TOneV1Integration
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +145,10 @@ Global
 		{197126C1-BC0D-4BD0-8016-811FC8DD41D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{197126C1-BC0D-4BD0-8016-811FC8DD41D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{197126C1-BC0D-4BD0-8016-811FC8DD41D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{031E385D-9222-4E25-9C0E-3ECB12675667}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{031E385D-9222-4E25-9C0E-3ECB12675667}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{031E385D-9222-4E25-9C0E-3ECB12675667}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{031E385D-9222-4E25-9C0E-3ECB12675667}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -155,6 +165,7 @@ Global
 		{45737C32-8ADD-4C04-AF8D-9A370077791E} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{168D3BEA-BDE1-47E2-8A35-ED3ED9E65547} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{862ACF40-050C-423F-BAE1-66CDD06E5EB0} = {73B89280-7691-435A-98E3-F5F84801BE36}
+		{031E385D-9222-4E25-9C0E-3ECB12675667} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{197126C1-BC0D-4BD0-8016-811FC8DD41D5} = {48718904-3FAE-427C-8D91-693120859DDC}
 	EndGlobalSection
 EndGlobal
