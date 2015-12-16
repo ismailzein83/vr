@@ -31,7 +31,9 @@ namespace TOne.WhS.BusinessEntity.Business
                   &&
                  (input.Query.CarrierAccountsIds == null || input.Query.CarrierAccountsIds.Contains(item.CarrierAccountId))
                    &&
-                 (input.Query.AccountsTypes == null || input.Query.AccountsTypes.Contains(item.AccountType));
+                 (input.Query.AccountsTypes == null || input.Query.AccountsTypes.Contains(item.AccountType))
+                  &&
+                 (input.Query.SellingNumberPlanIds == null || input.Query.SellingNumberPlanIds.Contains(item.SellingNumberPlanId));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression, CarrierAccountDetailMapper));
         }
