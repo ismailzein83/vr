@@ -12,29 +12,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
     public class CarrierAccountDataManager : BaseSQLDataManager, ICarrierAccountDataManager
     {
 
-        public CarrierAccountDataManager()
-            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+        #region ctor/Local Variables
+        public CarrierAccountDataManager(): base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
-
         }
+        #endregion
 
-        private CarrierAccount CarrierAccountMapper(IDataReader reader)
-        {
-            CarrierAccount carrierAccount = new CarrierAccount
-            {
-                CarrierAccountId = (int)reader["ID"],
-                Name = reader["Name"] as string,
-                AccountType = (CarrierAccountType)GetReaderValue<int>(reader, "AccountType"),
-                SupplierSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSupplierSettings>(reader["SupplierSettings"] as string),
-                CustomerSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountCustomerSettings>(reader["CustomerSettings"] as string),
-                CarrierProfileId = (int)reader["CarrierProfileId"],
-                CarrierAccountSettings = reader["CarrierAccountSettings"] as string != null ? Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSettings>(reader["CarrierAccountSettings"] as string) : null,
-
-            };
-            return carrierAccount;
-        }
-
-
+        #region Public Methods
         public bool Insert(CarrierAccount carrierAccount, out int insertedId)
         {
 
@@ -45,8 +29,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             insertedId = (int)carrierAccountId;
             return (recordsEffected > 0);
         }
-
-
         public bool Update(CarrierAccount carrierAccount)
         {
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Update", carrierAccount.CarrierAccountId, carrierAccount.Name, carrierAccount.CarrierProfileId, carrierAccount.AccountType, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
@@ -57,13 +39,29 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_CarrierAccount_GetAll", CarrierAccountMapper);
         }
-
-
         public bool AreCarrierAccountsUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.CarrierAccount", ref updateHandle);
         }
+        #endregion
 
+        #region Private Methods
+        private CarrierAccount CarrierAccountMapper(IDataReader reader)
+        {
+            CarrierAccount carrierAccount = new CarrierAccount
+            {
+                CarrierAccountId = (int)reader["ID"],
+                Name = reader["Name"] as string,
+                AccountType = (CarrierAccountType)GetReaderValue<int>(reader, "AccountType"),
+                SupplierSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSupplierSettings>(reader["SupplierSettings"] as string),
+                CustomerSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountCustomerSettings>(reader["CustomerSettings"] as string),
+                SellingNumberPlanID = GetReaderValue<int?>(reader, "SellingNumberPlanID"),
+                CarrierProfileId = (int)reader["CarrierProfileId"],
+                CarrierAccountSettings = reader["CarrierAccountSettings"] as string != null ? Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSettings>(reader["CarrierAccountSettings"] as string) : null,
+
+            };
+            return carrierAccount;
+        }
         internal static DataTable BuildRoutingCustomerInfoTable(IEnumerable<RoutingCustomerInfo> customerInfos)
         {
             DataTable dtCustomerInfos = GetRoutingCustomerInfoTable();
@@ -77,7 +75,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             dtCustomerInfos.EndLoadData();
             return dtCustomerInfos;
         }
-        static DataTable GetRoutingCustomerInfoTable()
+        private static DataTable GetRoutingCustomerInfoTable()
         {
             DataTable dtCustomerInfos = new DataTable();
             dtCustomerInfos.Columns.Add("CustomerId", typeof(Int32));
@@ -96,12 +94,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             dtSupplierInfos.EndLoadData();
             return dtSupplierInfos;
         }
-        static DataTable GetRoutingSupplierInfoTable()
+        private static DataTable GetRoutingSupplierInfoTable()
         {
             DataTable dtSupplierInfos = new DataTable();
             dtSupplierInfos.Columns.Add("SupplierId", typeof(Int32));
             return dtSupplierInfos;
         }
+        #endregion
 
     }
 }

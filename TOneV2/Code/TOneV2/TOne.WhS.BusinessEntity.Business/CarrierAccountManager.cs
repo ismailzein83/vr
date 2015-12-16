@@ -34,8 +34,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetCachedCarrierAccounts().Values;
         }
 
-
-
         public CarrierAccount GetCarrierAccount(int carrierAccountId)
         {
             var CarrierAccounts = GetCachedCarrierAccounts();
@@ -160,7 +158,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return updateOperationOutput;
         }
-
         public int GetSellingNumberPlanId(int carrierAccountId, CarrierAccountType carrierAccountType)
         {
             if (carrierAccountType == CarrierAccountType.Supplier)
@@ -168,7 +165,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return this.GetCarrierAccount(carrierAccountId).CustomerSettings.SellingNumberPlanId;
         }
-
         public IEnumerable<RoutingCustomerInfo> GetRoutingActiveCustomers()
         {
             IEnumerable<CarrierAccount> carrierAccounts = GetCarrierAccountsByType(true, false, null, null);
@@ -183,7 +179,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierAccounts.MapRecords(RoutingSupplierInfolMapper, filterExpression);
         
         }
-
         public IEnumerable<CarrierAccount> GetNotAssignableCustomersToSellingProduct(int sellingProductId)
         {
            SellingProductManager sellingProductManager = new SellingProductManager();
@@ -195,7 +190,6 @@ namespace TOne.WhS.BusinessEntity.Business
                && (!customerSellingProducts.Any(y => y.CustomerId == x.CarrierAccountId )));
          
         }
-
 
         #region Private Members
 
@@ -209,7 +203,6 @@ namespace TOne.WhS.BusinessEntity.Business
                    return carrierAccounts.ToDictionary(kvp => kvp.CarrierAccountId, kvp => kvp);
                });
         }
-
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ICarrierAccountDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
@@ -220,7 +213,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 return _dataManager.AreCarrierAccountsUpdated(ref _updateHandle);
             }
         }
-
         private CarrierAccountInfo CarrierAccountInfoMapper(CarrierAccount carrierAccount)
         {
             return new CarrierAccountInfo()
@@ -229,7 +221,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 Name = carrierAccount.Name,
             };
         }
-
         private IEnumerable<CarrierAccount> GetCarrierAccountsByIds(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
             var carrierAccounts = this.GetCarrierAccountsByType(getCustomers, getSuppliers, null, null);
@@ -240,7 +231,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return carrierAccounts.FindAllRecords(filterExpression);
         }
-
         private IEnumerable<CarrierAccount> GetCarrierAccountsByType(bool getCustomers, bool getSuppliers, SupplierFilterSettings supplierFilterSettings, CustomerFilterSettings customerFilterSettings)
         {
             Dictionary<int, CarrierAccount> carrierAccounts = GetCachedCarrierAccounts();
@@ -265,7 +255,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 };
             return carrierAccounts.FindAllRecords(filterExpression);
         }
-
         private CarrierAccountDetail CarrierAccountDetailMapper(CarrierAccount carrierAccount)
         {
             CarrierAccountDetail carrierAccountDetail = new CarrierAccountDetail();
@@ -297,8 +286,6 @@ namespace TOne.WhS.BusinessEntity.Business
             routingSupplierInfo.SupplierId = carrierAccount.CarrierAccountId;
             return routingSupplierInfo;
         }
-
-
         private AccountManagerCarrier AccountManagerCarrierMapper(CarrierAccount carrierAccount)
         {
             AccountManagerManager accountManagerManager = new AccountManagerManager();

@@ -15,6 +15,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Name { get; set; }
         public int CarrierProfileId { get; set; }
 
+        public int? SellingNumberPlanID { get; set; }
         public CarrierAccountType AccountType { get; set; }
         public CarrierAccountSettings CarrierAccountSettings { get; set; } 
 
