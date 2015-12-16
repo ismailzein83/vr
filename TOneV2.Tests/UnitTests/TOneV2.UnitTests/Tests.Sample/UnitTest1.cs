@@ -130,24 +130,21 @@ namespace Tests.Sample
 
         }
 
-
-
-         [TestMethod]
-        public void Pricelist_test_cases()
+        private bool process_pricelist_testcase(string testcase)
         {
-            string testcase = "testcase1";
+           
             MocData data = GetMocDatadatabase(testcase);
-          //  MocData data = GetMocData();
+            //  MocData data = GetMocData();
             Dictionary<long, ExistingZone> existingZonesByZoneId = this.GetExistingZones(data.SupplierZones);
             List<ExistingCode> existingCodes = this.GetExistingCodes(existingZonesByZoneId, data.SupplierCodes);
             List<ExistingRate> existingRates = this.GetExistingRates(existingZonesByZoneId, data.SupplierRates);
 
             //List<ImportedCode> importedCodes = this.GetImportedCodesTest1();
             //List<ImportedRate> importedRates = this.GetImportedRate();
-             connect con = new connect();
+            connect con = new connect();
 
-             List<ImportedCode> importedCodes = con.getnewcode("SELECT [zonename]      ,[code]      ,[rate]      ,[bed]      ,[service]      ,[otherrate],currency  FROM [MVTSProDemo].[dbo].[importeddatacases] where testcase='" + testcase + "'");
-             List<ImportedRate> importedRates = con.getnewrate("SELECT distinct [zonename]   ,[rate]      ,[bed]      ,[service]      ,[otherrate],currency  FROM [MVTSProDemo].[dbo].[importeddatacases] where testcase='" + testcase + "'");
+            List<ImportedCode> importedCodes = con.getnewcode("SELECT [zonename]      ,[code]      ,[rate]      ,[bed]      ,[service]      ,[otherrate],currency  FROM [MVTSProDemo].[dbo].[importeddatacases] where testcase='" + testcase + "'");
+            List<ImportedRate> importedRates = con.getnewrate("SELECT distinct [zonename]   ,[rate]      ,[bed]      ,[service]      ,[otherrate],currency  FROM [MVTSProDemo].[dbo].[importeddatacases] where testcase='" + testcase + "'");
             ProcessCountryCodesContext processCodeContext = new ProcessCountryCodesContext()
             {
                 ImportedCodes = importedCodes,
@@ -163,14 +160,14 @@ namespace Tests.Sample
 
             ProcessCountryRatesContext processRateContext = new ProcessCountryRatesContext()
             {
-                ExistingZones =existingZonesByZoneId.Values,
+                ExistingZones = existingZonesByZoneId.Values,
                 ExistingRates = existingRates,
                 ImportedRates = importedRates,
                 NewAndExistingZones = processCodeContext.NewAndExistingZones
 
             };
 
-           
+
             PriceListRateManager managers = new PriceListRateManager();
             managers.ProcessCountryRates(processRateContext);
 
@@ -192,22 +189,141 @@ namespace Tests.Sample
             List<NewZone> nz = zonesNew.ToList();
             List<ChangedCode> s = codesChanged.ToList();
             List<ChangedZone> zc = zonesChanges.ToList();
-            DataTable dt = new DataTable();
-     
-            dt.Columns.Add("code");
-            dt.Columns.Add("eed");
-            string codeschanged = "";
-            foreach(ChangedCode c in s)
+
+
+            // check new zones
+            bool newzone = false;
+            bool newcode = false;
+            bool newrate = false;
+            bool changedzone = false;
+            bool changedcode = false;
+            bool changedrate = false;
+            List<SupplierZone> resultzone = con.getresultzonedata("SELECT [zoneid] ,[zonename]  ,[bed] ,[eed] FROM [resultzone] where zoneid =0 and testcase='" + testcase + "'");
+            if (resultzone.Count < 1)
             {
-                DataRow ros = dt.NewRow();
-                ros[0] = c.CodeId;
-                ros[1] = c.EED;
-                codeschanged = codeschanged + "," +c.CodeId;
-                dt.Rows.Add(ros);
+                newzone = true;
+            }
+            else
+            {
+                foreach (SupplierZone z in resultzone)
+                {
+                    if (nz.Any(zone => zone.Name == z.Name && zone.BED == z.BED && zone.EED == z.EED))
+                    {
+                        newzone = true;
+                    }
+                }
             }
 
-            string x = codeschanged;
+            // check new codes
+            List<SupplierCode> resultcode = con.getresultcodedata("SELECT [codeid]      ,[code]      ,[bed]      ,[eed]  FROM [resultcode] where codeid =0 and testcase='" + testcase + "'");
+            if (resultcode.Count < 1)
+            {
+                newcode = true;
+            }
+            else
+            {
+                foreach (SupplierCode z in resultcode)
+                {
+                    if (nc.Any(code => code.Code == z.Code && code.BED == z.BED && code.EED == z.EED))
+                    {
+                        newcode = true;
+                    }
+                }
+            }
 
+            // check new rates 
+
+            List<SupplierRate> resultrate = con.getresultratedata("SELECT [rateid]      ,[rate]      ,[bed]      ,[eed]      ,[service]  FROM [resultrate] where rateid =0 and testcase='" + testcase + "'");
+            if (resultrate.Count < 1)
+            {
+                newrate = true;
+            }
+            else
+            {
+                foreach (SupplierRate z in resultrate)
+                {
+                    if (nr.Any(rate => rate.NormalRate == z.NormalRate && rate.BED == z.BED && rate.EED == z.EED))
+                    {
+                        newrate = true;
+                    }
+                }
+            }
+
+            // check changed zones
+
+            List<SupplierZone> resultzonechanged = con.getresultzonedata("SELECT [zoneid] ,[zonename]  ,[bed] ,[eed] FROM [resultzone] where zoneid >0 and testcase='" + testcase + "'");
+            if (resultzonechanged.Count < 1)
+            {
+                newzone = true;
+            }
+            else
+            {
+                foreach (SupplierZone z in resultzonechanged)
+                {
+                    if (zonesChanges.Any(zone => zone.ZoneId == z.SupplierZoneId && zone.EED == z.EED))
+                    {
+                        newzone = true;
+                    }
+                }
+            }
+
+            // check changed codes
+
+            List<SupplierCode> resultcodechanged = con.getresultcodedata("SELECT [codeid]      ,[code]      ,[bed]      ,[eed]  FROM [resultcode] where codeid >0 and testcase='" + testcase + "'");
+            if (resultcodechanged.Count < 1)
+            {
+                changedcode = true;
+            }
+            else
+            {
+                foreach (SupplierCode z in resultcodechanged)
+                {
+                    if (codesChanged.Any(code => code.CodeId == z.SupplierCodeId && code.EED == z.EED))
+                    {
+                        changedcode = true;
+                    }
+                }
+            }
+
+            // check changed rates
+
+            List<SupplierRate> resultratechanged = con.getresultratedata("SELECT [rateid]      ,[rate]      ,[bed]      ,[eed]      ,[service]  FROM [resultrate] where rateid >0 and testcase='" + testcase + "'");
+            if (resultratechanged.Count < 1)
+            {
+                changedrate = true;
+            }
+            else
+            {
+                foreach (SupplierRate z in resultratechanged)
+                {
+                    if (changedrates.Any(rate => rate.RateId == z.SupplierRateId && rate.EED == z.EED))
+                    {
+                        changedrate = true;
+                    }
+                }
+            }
+            /// other tests
+
+            //DataTable dt = new DataTable();
+
+            //dt.Columns.Add("code");
+            //dt.Columns.Add("eed");
+
+            //foreach(ChangedCode c in s)
+            //{
+            //    DataRow ros = dt.NewRow();
+            //    ros[0] = c.CodeId;
+            //    ros[1] = c.EED;
+            //    dt.Rows.Add(ros);
+            //}
+            return (newzone && newcode && newrate && changedzone && changedcode && changedrate);
+
+        }
+
+         [TestMethod]
+        public void Pricelist_test_cases()
+        {
+            Assert.IsTrue(process_pricelist_testcase("testcase1"));
              //  Zone Lebanon fixed should be closed  - its not mentioned in closed zones
              // codes eed are set to datetime, while it should be set to date with time 00:00:00
              // RAte for Zone lebanon fixed should be also closed , its not mentioned in changed zones
