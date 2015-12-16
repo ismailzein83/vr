@@ -16,6 +16,7 @@ app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationS
         addSwitchIdentificationRule: addSwitchIdentificationRule,
         editSwitchIdentificationRule: editSwitchIdentificationRule,
         deleteSwitchIdentificationRule: deleteSwitchIdentificationRule,
+        addNewCDRField: addNewCDRField
 
     });
 
@@ -174,5 +175,16 @@ app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationS
                         });
                 }
             });
+    }
+
+    function addNewCDRField(onCDRFieldAdded) {
+        var settings = {};
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.onCDRFieldAdded = onCDRFieldAdded;
+        };
+        var parameters = {
+        };
+        VRModalService.showModal('/Client/Modules/WhS_CDRProcessing/Views/CDRFields/DefineCDRFieldsEditor.html', parameters, settings);
     }
 }]);

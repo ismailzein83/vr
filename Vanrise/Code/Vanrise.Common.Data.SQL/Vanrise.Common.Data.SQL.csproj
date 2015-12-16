@@ -46,6 +46,7 @@
     <Compile Include="CityDataManager.cs" />
     <Compile Include="CountryDataManager.cs" />
     <Compile Include="CurrencyExchangeRateDataManager.cs" />
+    <Compile Include="GenericConfigurationDataManager.cs" />
     <Compile Include="IDManagerDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatisticBatchDataManager.cs" />

@@ -107,6 +107,7 @@
   <ItemGroup>
     <Content Include="Integration\Constants\MappingResultEnum.js" />
     <Content Include="Integration\Constants\ExecutionStatusEnum.js" />
+    <Content Include="Integration\Directives\DataSource\vr-integration-datasource-selector.js" />
     <Content Include="Integration\Services\APIServices\DataSourceAPIService.js" />
     <Content Include="Integration\Services\APIServices\DataSourceImportedBatchAPIService.js" />
     <Content Include="Integration\Services\APIServices\DataSourceLogAPIService.js" />

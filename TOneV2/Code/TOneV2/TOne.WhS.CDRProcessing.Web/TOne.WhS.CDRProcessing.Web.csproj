@@ -107,6 +107,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
@@ -128,6 +132,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Controllers\DefineCDRFieldsController.cs" />
     <Compile Include="Controllers\SwitchIdentificationRuleController.cs" />
     <Compile Include="Controllers\CustomerIdentificationRuleController.cs" />
     <Compile Include="Controllers\NormalizationRuleController.cs" />
@@ -152,6 +157,8 @@
   <ItemGroup>
     <Content Include="WhS_CDRProcessing\Constant\ModuleConfig.js" />
     <Content Include="WhS_CDRProcessing\Constant\PhoneNumberTypeEnum.js" />
+    <Content Include="WhS_CDRProcessing\Directives\CDRFields\Templates\DefineCDRFieldsGrid.html" />
+    <Content Include="WhS_CDRProcessing\Directives\CDRFields\vr-whs-cdrprocessing-definecdrfields-grid.js" />
     <Content Include="WhS_CDRProcessing\Directives\CustomerRule\Templates\CustomerIdentificationRuleGrid.html" />
     <Content Include="WhS_CDRProcessing\Directives\CustomerRule\vr-whs-cdrprocessing-customeridentificationrule-grid.js" />
     <Content Include="WhS_CDRProcessing\Directives\NormalizationRule\Templates\NormalizationRuleGrid.html" />
@@ -160,11 +167,16 @@
     <Content Include="WhS_CDRProcessing\Directives\SupplierRule\vr-whs-cdrprocessing-supplieridentificationrule-grid.js" />
     <Content Include="WhS_CDRProcessing\Directives\SwitchRule\Templates\SwitchIdentificationRuleGrid.html" />
     <Content Include="WhS_CDRProcessing\Directives\SwitchRule\vr-whs-cdrprocessing-switchidentificationrule-grid.js" />
+    <Content Include="WhS_CDRProcessing\Services\APIServices\DefineCDRFieldsAPIService.js" />
     <Content Include="WhS_CDRProcessing\Services\APIServices\SwitchIdentificationRuleAPIService.js" />
     <Content Include="WhS_CDRProcessing\Services\APIServices\CustomerIdentificationRuleAPIService.js" />
     <Content Include="WhS_CDRProcessing\Services\APIServices\NormalizationRuleAPIService.js" />
     <Content Include="WhS_CDRProcessing\Services\APIServices\SupplierIdentificationRuleAPIService.js" />
     <Content Include="WhS_CDRProcessing\Services\MainService.js" />
+    <Content Include="WhS_CDRProcessing\Views\CDRFields\DefineCDRFieldsEditor.html" />
+    <Content Include="WhS_CDRProcessing\Views\CDRFields\DefineCDRFieldsEditorController.js" />
+    <Content Include="WhS_CDRProcessing\Views\CDRFields\DefineCDRFieldsManagement.html" />
+    <Content Include="WhS_CDRProcessing\Views\CDRFields\DefineCDRFieldsManagementController.js" />
     <Content Include="WhS_CDRProcessing\Views\CustomerRule\CustomerIdentificationRuleEditor.html" />
     <Content Include="WhS_CDRProcessing\Views\CustomerRule\CustomerIdentificationRuleEditorController.js" />
     <Content Include="WhS_CDRProcessing\Views\CustomerRule\CustomerIdentificationRuleManagement.html" />

@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDRFailedManager.cs" />
+    <Compile Include="CDRFields\DefineCDRFieldsManager.cs" />
     <Compile Include="CDRInvalidManager.cs" />
     <Compile Include="CDRMainManager.cs" />
     <Compile Include="CDRManager.cs" />

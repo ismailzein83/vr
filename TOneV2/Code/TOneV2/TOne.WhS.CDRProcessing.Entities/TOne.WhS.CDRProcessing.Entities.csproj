@@ -64,6 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseCarrierIdentificationRule.cs" />
+    <Compile Include="CDRFields\CDRFields.cs" />
+    <Compile Include="CDRFields\CDRFieldsQuery.cs" />
     <Compile Include="CDRProcessing\BillingCDRBase.cs" />
     <Compile Include="CDRProcessing\BillingFailedCDR.cs" />
     <Compile Include="CDRProcessing\BillingInvalidCDR.cs" />
