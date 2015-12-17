@@ -508,9 +508,9 @@ namespace TOne.WhS.Sales.Business
                         SaleEntityZoneRoutingProduct routingProduct = (input.Query.OwnerType == SalePriceListOwnerType.SellingProduct) ?
                             locator.GetSellingProductZoneRoutingProduct(input.Query.OwnerId, zoneItmChanges.ZoneId) :
                             locator.GetCustomerZoneRoutingProduct(input.Query.OwnerId, GetSellingProductId(input.Query.OwnerId), zoneItmChanges.ZoneId);
-
+                        
                         detail.CurrentRoutingProductName = routingProduct != null ? GetRoutingProductName(routingProduct.RoutingProductId) : null;
-                        detail.IsCurrentRoutingProductInherited = (currentDefaultRoutingProductId != null && routingProduct.RoutingProductId == (int)currentDefaultRoutingProductId);
+                        detail.IsCurrentRoutingProductInherited = !IsCurrentRoutingProductEditable(input.Query.OwnerType, routingProduct.Source);
 
                         if (zoneItmChanges.NewRoutingProduct != null)
                         {
@@ -527,6 +527,16 @@ namespace TOne.WhS.Sales.Business
             }
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, details.ToBigResult(input, null));
+        }
+
+        private bool IsCurrentRoutingProductEditable(SalePriceListOwnerType ownerType, SaleEntityZoneRoutingProductSource rpSource)
+        {
+            if (ownerType == SalePriceListOwnerType.SellingProduct && (rpSource == SaleEntityZoneRoutingProductSource.ProductDefault || rpSource == SaleEntityZoneRoutingProductSource.ProductZone))
+                return true;
+            else if (ownerType == SalePriceListOwnerType.Customer && (rpSource == SaleEntityZoneRoutingProductSource.CustomerDefault || rpSource == SaleEntityZoneRoutingProductSource.CustomerZone))
+                return true;
+            else
+                return false;
         }
 
         #region Get Default Item
@@ -554,8 +564,6 @@ namespace TOne.WhS.Sales.Business
                     (locatorResult.Source == SaleEntityZoneRoutingProductSource.ProductDefault && ownerType == SalePriceListOwnerType.SellingProduct) ||
                     (locatorResult.Source == SaleEntityZoneRoutingProductSource.CustomerDefault && ownerType == SalePriceListOwnerType.Customer)
                 );
-
-                defaultItem.IsCurrentRoutingProductInherited = (ownerType == SalePriceListOwnerType.Customer && locatorResult.Source == SaleEntityZoneRoutingProductSource.ProductDefault);
             }
 
             SetDefaultItemChanges(ownerType, ownerId, defaultItem);

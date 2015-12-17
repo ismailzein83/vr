@@ -149,6 +149,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             function extendZoneItem(zoneItem) {
                 zoneItem.IsDirty = false;
+                var currentRateEED = new Date(zoneItem.CurrentRateEED); // Maintains the original value of zoneItem.CurrentRateEED in case the user deletes the new rate
                 setRouteOptionProperties(zoneItem);
 
                 zoneItem.IsCurrentRateEditable = (zoneItem.IsCurrentRateEditable == null) ? false : zoneItem.IsCurrentRateEditable;
@@ -168,6 +169,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     if (zoneItem.NewRate) {
                         zoneItem.showNewRateBED = true;
                         zoneItem.showNewRateEED = true;
+                        zoneItem.CurrentRateEED = currentRateEED;
 
                         if (!zoneItem.AreNewDatesSet) {
                             zoneItem.NewRateBED = (zoneItem.CurrentRate == null || Number(zoneItem.NewRate) > zoneItem.CurrentRate) ? new Date(new Date().setDate(new Date().getDate() + 7)) : new Date();
@@ -260,7 +262,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     }
                 };
 
-                zoneItem.validateDateTime = function () {
+                zoneItem.validateRateChangeDates = function () {
+                    return VRValidationService.validateTimeRange(zoneItem.CurrentRateBED, zoneItem.CurrentRateEED);
+                };
+
+                zoneItem.validateNewRateDates = function () {
                     return VRValidationService.validateTimeRange(zoneItem.NewRateBED, zoneItem.NewRateEED);
                 };
 

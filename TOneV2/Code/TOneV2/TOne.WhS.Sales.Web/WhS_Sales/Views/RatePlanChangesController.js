@@ -140,7 +140,7 @@
                 return WhS_Sales_RatePlanAPIService.GetDefaultItem(ownerType, ownerId).then(function (response) {
                     $scope.defaultItem = {};
                     
-                    $scope.defaultItem.currentRoutingProductName = response.CurrentRoutingProductName;
+                    $scope.defaultItem.currentRoutingProductName = !response.IsCurrentRoutingProductEditable ? response.CurrentRoutingProductName + " (Inherited)" : null;
                     $scope.defaultItem.newRoutingProductName = changes.DefaultChanges.Entity.NewDefaultRoutingProduct ? changes.DefaultChanges.DefaultRoutingProductName : null;
                     $scope.defaultItem.effectiveOn = new Date().toDateString();
                 });
@@ -173,8 +173,6 @@
                                             $scope.totalIncreasedRates++;
                                         else if (Number(newRate) < Number(currentRate))
                                             $scope.totalDecreasedRates++;
-                                        else
-                                            console.log("Same");
                                     }
                                     else if (newRate) {
                                         $scope.totalNewRates++;

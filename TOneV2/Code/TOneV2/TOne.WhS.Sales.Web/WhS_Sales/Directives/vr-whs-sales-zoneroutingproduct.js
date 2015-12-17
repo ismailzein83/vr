@@ -50,7 +50,7 @@ function (UtilsService, VRUIUtilsService) {
             api.load = function (payload) {
                 if (payload != undefined) {
                     zoneItem = payload;
-                    ctrl.CurrentName = zoneItem.CurrentRoutingProductName;
+                    ctrl.CurrentName = !zoneItem.IsCurrentRoutingProductEditable ? zoneItem.CurrentRoutingProductName + " (Inherited)" : zoneItem.CurrentRoutingProductName;
                 }
 
                 var selectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -69,7 +69,7 @@ function (UtilsService, VRUIUtilsService) {
                     var selectorPayload = {
                         filter: { ExcludedRoutingProductId: zoneItem.CurrentRoutingProductId, AssignableToZoneId: zoneItem.ZoneId },
                         selectedIds: selectedIds,
-                        defaultItems: [{ RoutingProductId: -1, Name: "(Reset To Default)" }]
+                        defaultItems: zoneItem.IsCurrentRoutingProductEditable ? [{ RoutingProductId: -1, Name: "(Reset To Default)" }] : null
                     };
                     
                     $scope.isLoading = true;

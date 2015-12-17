@@ -55,7 +55,7 @@ function (UtilsService, VRUIUtilsService) {
             api.load = function (payload) {
                 if (payload) {
                     defaultItem = payload;
-                    ctrl.CurrentName = (defaultItem.IsCurrentRoutingProductInherited) ? defaultItem.CurrentRoutingProductName + " (Inherited)" : defaultItem.CurrentRoutingProductName;
+                    ctrl.CurrentName = (!defaultItem.IsCurrentRoutingProductEditable) ? defaultItem.CurrentRoutingProductName + " (Inherited)" : defaultItem.CurrentRoutingProductName;
                     //ctrl.IsEditable = defaultItem.IsCurrentRoutingProductEditable == null ? false : defaultItem.IsCurrentRoutingProductEditable;
                 }
 

@@ -19,8 +19,6 @@ namespace TOne.WhS.Sales.Entities
 
         public DateTime? CurrentRoutingProductEED { get; set; }
 
-        public bool IsCurrentRoutingProductInherited { get; set; }
-
         public int? NewRoutingProductId { get; set; }
 
         public DateTime? NewRoutingProductBED { get; set; }
