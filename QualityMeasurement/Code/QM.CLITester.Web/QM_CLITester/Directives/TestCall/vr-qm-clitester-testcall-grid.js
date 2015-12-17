@@ -71,11 +71,13 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
                                     for (var j = 0; j < $scope.testcalls.length; j++) {
 
                                         //Get the minimun ID Test Call to send as parameter to getData();
-                                        if (i == 0)
-                                            minId = $scope.testcalls[i].Entity.ID;
-                                        else {
-                                            if ($scope.testcalls[i].Entity.ID < minId) {
-                                                minId = $scope.testcalls[i].Entity.ID;
+                                        if (i == 0) {//just in the first check all test calls list
+                                            if (j == 0)
+                                                minId = $scope.testcalls[j].Entity.ID;
+                                            else {
+                                                if ($scope.testcalls[j].Entity.ID < minId) {
+                                                    minId = $scope.testcalls[j].Entity.ID;
+                                                }
                                             }
                                         }
                                         ///////////////////////////////////////////////////////////////////
@@ -110,9 +112,8 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
         }
 
         function getData() {
-            
-            var pageInfo = gridAPI.getPageInfo();
 
+            var pageInfo = gridAPI.getPageInfo();
             input.LessThanID = minId;
             input.NbOfRows = pageInfo.toRow - pageInfo.fromRow;
             return Qm_CliTester_TestCallAPIService.GetBeforeId(input).then(function (response) {
