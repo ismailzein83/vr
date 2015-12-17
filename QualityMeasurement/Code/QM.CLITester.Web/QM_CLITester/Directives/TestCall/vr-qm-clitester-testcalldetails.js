@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQmClitesterTestcalldetails", ["UtilsService", "VRNotificationService", "Qm_CliTester_TestCallAPIService", 
-function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService) {
+app.directive("vrQmClitesterTestcalldetails", [ 
+function () {
 
     var directiveDefinitionObject = {
 

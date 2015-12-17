@@ -1,6 +1,6 @@
 ﻿
-app.service('QM_BE_SupplierService', ['QM_BE_SupplierAPIService', 'VRModalService', 'VRNotificationService',
-    function (QM_BE_SupplierAPIService, VRModalService, VRNotificationService) {
+app.service('QM_BE_SupplierService', ['QM_BE_SupplierAPIService', 'VRModalService',
+    function (QM_BE_SupplierAPIService, VRModalService) {
 
         return ({
             addSupplier: addSupplier,

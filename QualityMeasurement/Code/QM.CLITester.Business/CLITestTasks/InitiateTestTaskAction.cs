@@ -25,7 +25,6 @@ namespace QM.CLITester.Business
             if (initiateTestTaskActionArgument.CLITestConnector == null)
                 throw new ArgumentNullException("initiateTestTaskActionArgument.CLITestConnector");
 
-//            initiateTestTaskActionArgument.RetryCount
             TestCallManager manager = new TestCallManager();
 
             List<CallTestStatus> listCallTestStatus = new List<CallTestStatus>()
@@ -69,7 +68,7 @@ namespace QM.CLITester.Business
                     case InitiateTestResult.FailedWithRetry:
                     {
                         callTestStatus = CallTestStatus.InitiationFailedWithRetry;
-                        if (testCall.InitiationRetryCount < 5)
+                        if (testCall.InitiationRetryCount < initiateTestTaskActionArgument.MaximumRetryCount)
                             testCall.InitiationRetryCount = testCall.InitiationRetryCount + 1;
                         else
                             callTestStatus = CallTestStatus.InitiationFailedWithNoRetry;

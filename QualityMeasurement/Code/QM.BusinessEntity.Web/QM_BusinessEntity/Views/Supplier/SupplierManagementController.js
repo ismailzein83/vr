@@ -2,9 +2,9 @@
 
     "use strict";
 
-    supplierManagementController.$inject = ['$scope', 'QM_BE_SupplierService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    supplierManagementController.$inject = ['$scope', 'QM_BE_SupplierService'];
 
-    function supplierManagementController($scope, QM_BE_SupplierService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function supplierManagementController($scope, QM_BE_SupplierService) {
         var gridAPI;
 
         defineScope();

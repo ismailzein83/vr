@@ -61,7 +61,7 @@ namespace QM.CLITester.Business
                     case GetTestProgressResult.FailedWithRetry:
                         {
                             callTestStatus = CallTestStatus.GetProgressFailedWithRetry;
-                            if (testCall.GetProgressRetryCount < 5)
+                            if (testCall.GetProgressRetryCount < testProgressTaskActionArgument.MaximumRetryCount)
                                 testCall.GetProgressRetryCount = testCall.GetProgressRetryCount + 1;
                             else
                                 callTestStatus = CallTestStatus.GetProgressFailedWithNoRetry;

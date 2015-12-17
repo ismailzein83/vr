@@ -2,9 +2,9 @@
 
     "use strict";
 
-    QM_CLITester_ProfileEditorController.$inject = ['$scope', 'QM_CLITester_ProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    QM_CLITester_ProfileEditorController.$inject = ['$scope', 'QM_CLITester_ProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-    function QM_CLITester_ProfileEditorController($scope, QM_CLITester_ProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function QM_CLITester_ProfileEditorController($scope, QM_CLITester_ProfileAPIService, UtilsService, VRNotificationService, VRNavigationService) {
 
         var profileId;
 
@@ -14,7 +14,6 @@
         loadParameters();
         defineScope();
         load();
-        var profileSettingAPI;
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 

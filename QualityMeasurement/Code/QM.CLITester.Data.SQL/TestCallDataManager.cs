@@ -1,6 +1,4 @@
-﻿using QM.BusinessEntity.Business;
-using QM.CLITester.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,6 +7,8 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Data.SQL;
 using Vanrise.Security.Business;
+using QM.BusinessEntity.Business;
+using QM.CLITester.Entities;
 
 namespace QM.CLITester.Data.SQL
 {
@@ -39,28 +39,6 @@ namespace QM.CLITester.Data.SQL
             return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCall", TestCallMapper, callTestStatusids);
         }
 
-        //public List<TestCallDetail> GetUpdatedTestCalls(ref byte[] maxTimeStamp, List<CallTestStatus> listPendingCallTestStatus)
-        //{
-        //    List<TestCallDetail> listTestCalls = new List<TestCallDetail>();
-        //    byte[] timestamp = null;
-
-        //    string callTestStatusids = null;
-        //    if (listPendingCallTestStatus != null && listPendingCallTestStatus.Any())
-        //        callTestStatusids = string.Join<int>(",", Array.ConvertAll(listPendingCallTestStatus.ToArray(), value => (int)value));
-
-        //    ExecuteReaderSP("QM_CLITester.sp_TestCall_GetRecent", (reader) =>
-        //    {
-        //        while (reader.Read())
-        //            listTestCalls.Add(TestCallDetailMapper(reader));
-
-        //        if (reader.NextResult())
-        //            while (reader.Read())
-        //                timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
-        //    },
-        //       maxTimeStamp, callTestStatusids);
-        //    maxTimeStamp = timestamp;
-        //    return listTestCalls;
-        //}
         public List<TestCallDetail> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows)
         {
             List<TestCallDetail> listTestCalls = new List<TestCallDetail>();

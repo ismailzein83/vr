@@ -9,8 +9,6 @@ namespace QM.CLITester.iTestIntegration.SourceProfilesReaders
     {
         ServiceActions _serviceActions = new ServiceActions();
 
-        public string Dummy { get; set; }
-
         public override bool UseSourceItemId
         {
             get

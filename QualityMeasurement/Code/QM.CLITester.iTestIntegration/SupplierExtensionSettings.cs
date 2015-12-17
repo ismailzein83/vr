@@ -14,15 +14,13 @@ using System.Xml;
 
 namespace QM.CLITester.iTestIntegration
 {
-    public class SupplierExtensionSettings : BusinessEntity.Entities.ExtendedSupplierSetting
+    public class SupplierExtensionSettings : ExtendedSupplierSetting
     {
         public string Prefix { get; set; }        
 
-        const string GoodAmpersand = "&amp;";
-
         public string ITestSupplierId { get; set; }
 
-        public override void Apply(BusinessEntity.Entities.Supplier supplier)
+        public override void Apply(Supplier supplier)
         {
             if(this.ITestSupplierId == null)
             {
@@ -60,7 +58,7 @@ namespace QM.CLITester.iTestIntegration
                 throw new Exception(String.Format("Error when creating/updating supplier on ITest. Returned Response: {0}", createSupplierResponse));
         }
 
-        private void UpdateSupplier(BusinessEntity.Entities.Supplier supplier)
+        private void UpdateSupplier(Supplier supplier)
         {
             string createSupplierResponse = _serviceActions.PostRequest("5020", String.Format("&sid={0}&name={1}&type=std&codec=alaw&prefix={2}", this.ITestSupplierId, supplier.Name, this.Prefix));
             CheckSupplierResponse(createSupplierResponse);

@@ -49,7 +49,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Breakout.cs" />
     <Compile Include="CallTestStatus.cs" />
     <Compile Include="CLITesterConnectorBase.cs" />
     <Compile Include="LastCallUpdateInput.cs" />

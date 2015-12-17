@@ -15,19 +15,19 @@ namespace QM.CLITester.Business
 
         protected override void AddItems(List<Profile> itemsToAdd)
         {
-            ProfileManager ProfileManager = new ProfileManager();
+            ProfileManager profileManager = new ProfileManager();
             foreach (var s in itemsToAdd)
             {
-                ProfileManager.InsertProfileSynchronize(s);
+                profileManager.InsertProfileSynchronize(s);
             }
         }
 
         protected override void UpdateItems(List<Profile> itemsToUpdate)
         {
-            ProfileManager ProfileManager = new ProfileManager();
+            ProfileManager profileManager = new ProfileManager();
             foreach (var s in itemsToUpdate)
             {
-                ProfileManager.UpdateProfileSynchronize(s);
+                profileManager.UpdateProfileSynchronize(s);
             }
         }
 
@@ -43,8 +43,8 @@ namespace QM.CLITester.Business
 
         protected override Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds)
         {
-            ProfileManager ProfileManager = new ProfileManager();
-            return ProfileManager.GetExistingItemIds(sourceItemIds);
+            ProfileManager profileManager = new ProfileManager();
+            return profileManager.GetExistingItemIds(sourceItemIds);
         }
 
         protected override void ReserveIdRange(int nbOfIds, out long startingId)

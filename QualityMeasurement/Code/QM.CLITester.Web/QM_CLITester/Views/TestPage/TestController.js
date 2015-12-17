@@ -25,13 +25,13 @@
         function defineScope() {
             $scope.addNewTestCall = addNewTestCall;
             $scope.countries = [];
-            $scope.breakouts = [];
+            $scope.zones = [];
             $scope.suppliers = [];
 
             $scope.selectedProfile;
             $scope.selectedSupplier = [];
             $scope.selectedCountry;
-            $scope.selectedBreakout;
+            $scope.selectedZone;
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -74,14 +74,18 @@
 
         function load() {
             $scope.isGettingData = true;
-            UtilsService.waitMultipleAsyncOperations([getCountriesInfo, getSuppliersInfo, getProfilesInfo]).then(function () {
-            }).finally(function () {
+            UtilsService.waitMultipleAsyncOperations([loadCountries, loadSuppliers, loadProfiles]).then(function () {
+            })
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            })
+            .finally(function () {
                 $scope.isGettingData = false;
             });
         }
     
 
-        function getProfilesInfo() {
+        function loadProfiles() {
             var profileLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             supplierReadyPromiseDeferred.promise
@@ -93,7 +97,7 @@
             return profileLoadPromiseDeferred.promise;
         }
 
-        function getSuppliersInfo() {
+        function loadSuppliers() {
             var supplierLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             supplierReadyPromiseDeferred.promise
@@ -105,7 +109,7 @@
             return supplierLoadPromiseDeferred.promise;
         }
 
-        function getCountriesInfo() {
+        function loadCountries() {
             var countryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             countryReadyPromiseDeferred.promise
@@ -136,7 +140,7 @@
                 $scope.selectedSupplier = [];
                 $scope.selectedCountry = undefined;
                 $scope.selectedProfile = undefined;
-                $scope.selectedBreakout = undefined;
+                $scope.selectedZone = undefined;
                 if (VRNotificationService.notifyOnItemAdded("Test Call", response, "Name")) {
                     if ($scope.onTestCallAdded != undefined)
                         $scope.onTestCallAdded(response.InsertedObject);

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    supplierEditorController.$inject = ['$scope', 'QM_BE_SupplierAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    supplierEditorController.$inject = ['$scope', 'QM_BE_SupplierAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-    function supplierEditorController($scope, QM_BE_SupplierAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function supplierEditorController($scope, QM_BE_SupplierAPIService, UtilsService, VRNotificationService, VRNavigationService) {
 
         var isEditMode;
 
@@ -16,7 +16,7 @@
         loadParameters();
         defineScope();
         load();
-        var supplierSettingAPI;
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 

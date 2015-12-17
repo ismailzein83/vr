@@ -9,7 +9,7 @@ namespace QM.CLITester.Business
 {
     public class InitiateTestContext : IInitiateTestContext
     {
-        public CLITester.Entities.Profile Profile
+        public Profile Profile
         {
             get;
             set;

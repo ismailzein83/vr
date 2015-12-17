@@ -3,7 +3,7 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilterData">
             <vr-row removeline>
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-textbox value="name" label="Name"></vr-textbox>
                 </vr-columns>
             </vr-row>
@@ -17,7 +17,7 @@
             </vr-actionbar>
         </vr-row>
         <vr-row>
-            <vr-columns colnum="12" simplecol>
+            <vr-columns width="fullrow">
                 <vr-qm-be-supplier-grid on-ready="onGridReady"></vr-qm-be-supplier-grid>
             </vr-columns>
         </vr-row>

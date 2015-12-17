@@ -2,9 +2,9 @@
 
     "use strict";
 
-    profileManagementController.$inject = ['$scope', 'QM_CLITester_ProfileService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    profileManagementController.$inject = ['$scope'];
 
-    function profileManagementController($scope, QM_CLITester_ProfileService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function profileManagementController($scope) {
         var gridAPI;
 
         defineScope();

@@ -8,8 +8,8 @@ namespace QM.CLITester.Business
     {
         public override void Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
         {
-            ProfileSyncTaskActionArgument ProfileSyncTaskActionArgument = taskActionArgument as ProfileSyncTaskActionArgument;
-            SourceProfileSynchronizer sourceProfileSynchronizer = new SourceProfileSynchronizer(ProfileSyncTaskActionArgument.SourceProfileReader);
+            ProfileSyncTaskActionArgument profileSyncTaskActionArgument = taskActionArgument as ProfileSyncTaskActionArgument;
+            SourceProfileSynchronizer sourceProfileSynchronizer = new SourceProfileSynchronizer(profileSyncTaskActionArgument.SourceProfileReader);
             sourceProfileSynchronizer.Synchronize();
             Console.WriteLine("ProfileSyncTaskAction Executed");
         }

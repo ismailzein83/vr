@@ -44,7 +44,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
             return getData();
         }
 
-
+        var minId = undefined;
         function initializeController() {
 
             var drillDownDefinitions = Qm_CliTester_TestCallService.getDrillDownDefinition();
@@ -62,7 +62,6 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
                         
                         Qm_CliTester_TestCallAPIService.GetUpdated(input).then(function (response) {
                             isGettingData = true;
-                            console.log(response);
                             if (response != undefined) {
                                 for (var i = 0; i < response.ListTestCallDetails.length; i++) {
                                     var testCall = response.ListTestCallDetails[i];
@@ -70,17 +69,32 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
                                     gridDrillDownTabsObj.setDrillDownExtensionObject(testCall);
                                     var findTestCall = false;
                                     for (var j = 0; j < $scope.testcalls.length; j++) {
-                                        if ($scope.testcalls[j].Entity.ID == response.ListTestCallDetails[i].Entity.ID) {
-                                            $scope.testcalls[j] = response.ListTestCallDetails[i];
+
+                                        //Get the minimun ID Test Call to send as parameter to getData();
+                                        if (i == 0)
+                                            minId = $scope.testcalls[i].Entity.ID;
+                                        else {
+                                            if ($scope.testcalls[i].Entity.ID < minId) {
+                                                minId = $scope.testcalls[i].Entity.ID;
+                                            }
+                                        }
+                                        ///////////////////////////////////////////////////////////////////
+
+
+                                        //Check if this test call exist in test call Details, if a new call
+                                        // then unshift in the list(put the item in the top of the list)
+                                        if ($scope.testcalls[j].Entity.ID == testCall.Entity.ID) {
+                                            $scope.testcalls[j] = testCall;
                                             findTestCall = true;
                                         }
+                                        //////////////////////////////////////////////////////////////
                                     }
                                     if (input.LastUpdateHandle == undefined) {
-                                        $scope.testcalls.push(response.ListTestCallDetails[i]);
+                                        $scope.testcalls.push(testCall);
                                     }
                                     else
                                         if (!findTestCall)
-                                            $scope.testcalls.unshift(response.ListTestCallDetails[i]);
+                                            $scope.testcalls.unshift(testCall);
                                 }
                             }
                             input.LastUpdateHandle = response.MaxTimeStamp;
@@ -98,18 +112,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
         function getData() {
             
             var pageInfo = gridAPI.getPageInfo();
-            var minId = 0;
 
-            for (var i = 0; i < $scope.testcalls.length; i++) {
-
-                if (i == 0)
-                    minId = $scope.testcalls[i].Entity.ID;
-                else {
-                    if ($scope.testcalls[i].Entity.ID < minId) {
-                        minId = $scope.testcalls[i].Entity.ID;
-                    }
-                }
-            }
             input.LessThanID = minId;
             input.NbOfRows = pageInfo.toRow - pageInfo.fromRow;
             return Qm_CliTester_TestCallAPIService.GetBeforeId(input).then(function (response) {

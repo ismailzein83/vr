@@ -23,15 +23,6 @@ namespace QM.CLITester.Web.Controllers
             return manager.AddNewTestCall(testCallResult);
         }
 
-        //[HttpPost]  
-        //[Route("GetUpdatedTestCalls")]
-        //public LastCallUpdateOutput GetUpdatedTestCalls(LastCallUpdateInput input)
-        //{
-        //    TestCallManager manager = new TestCallManager();
-        //    byte[] maxTimeStamp = input.LastUpdateHandle;
-        //    return manager.GetUpdatedTestCalls(ref maxTimeStamp);
-        //}
-
         [HttpPost]
         [Route("GetUpdated")]
         public LastCallUpdateOutput GetUpdated(LastCallUpdateInput input)

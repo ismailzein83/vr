@@ -49,7 +49,6 @@ function (QM_CLITester_ProfileAPIService, UtilsService, $compile, VRUIUtilsServi
         var required = "";
         if (attrs.isrequired != undefined)
             required = "isrequired";
-        var disabled = "";
         return '<div  vr-loader="isLoadingDirective">'
             + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="ProfileId" '
         + required + ' label="Profiles" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
