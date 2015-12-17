@@ -4,25 +4,25 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
 
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-datetimepicker type="date" label="From:" value="fromDate" isrequired></vr-datetimepicker>
                 </vr-columns>
 
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-datetimepicker type="date" label="To:" value="toDate"></vr-datetimepicker>
                 </vr-columns>
 
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-select label="Call Test Status" datasource="testStatus"
                                datatextfield="description" datavaluefield="value" selectedvalues="selectedtestStatus" ismultipleselection></vr-select>
                 </vr-columns>
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-select label="Call Test Result" datasource="testResult"
                                datatextfield="description" datavaluefield="value"
                                selectedvalues="selectedtestResults" ismultipleselection></vr-select>
                 </vr-columns>
                 
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-select label="Users" datasource="users"
                                datatextfield="Name" datavaluefield="UserId"
                                selectedvalues="selectedUsers" ismultipleselection></vr-select>
@@ -31,22 +31,22 @@
                 </vr-row>
                 <vr-row removeline>
 
-                    <vr-columns colnum="2">
+                    <vr-columns width="normal">
                         <vr-qm-clitester-profile-selector on-ready="onProfileDirectiveReady" selectedvalues="selectedProfiles" ismultipleselection></vr-qm-clitester-profile-selector>
                     </vr-columns>
 
-                    <vr-columns colnum="2">
+                    <vr-columns width="normal">
                         <vr-qm-be-supplier-selector on-ready="onSupplierDirectiveReady" selectedvalues="selectedSuppliers" ismultipleselection></vr-qm-be-supplier-selector>
                     </vr-columns>
 
 
-                    <vr-columns colnum="2">
+                    <vr-columns width="normal">
                         <vr-common-country-selector on-ready="onCountryDirectiveReady" selectedvalues="selectedCountries" onselectionchanged="onCountrySelectionChanged" ismultipleselection></vr-common-country-selector>
                     </vr-columns>
 
 
 
-                    <vr-columns colnum="2" vr-loader="isLoading" ng-show="selectedCountries.length==1">
+                    <vr-columns width="normal" vr-loader="isLoading" ng-show="selectedCountries.length==1">
                         <vr-qm-be-zone-selector on-ready="onZoneDirectiveReady" selectedvalues="selectedZones" ismultipleselection></vr-qm-be-zone-selector>
                     </vr-columns>
 

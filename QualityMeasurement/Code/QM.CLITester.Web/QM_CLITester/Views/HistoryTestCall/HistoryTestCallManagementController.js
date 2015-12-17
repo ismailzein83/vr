@@ -87,16 +87,12 @@
             }
 
             $scope.onCountrySelectionChanged = function (items, datasource) {
-                console.log('item')
-                console.log(items)
                 if (items.length == 1) {
                     var setLoader = function (value) { $scope.isLoadingZonesSelector = value };
 
                     var payload = {
                         countryId: items[0].CountryId
                     }
-
-                    console.log(payload)
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader);
                 }
                 else {
