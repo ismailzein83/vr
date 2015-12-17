@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesDefaultroutingproduct", ["UtilsService", "VRUIUtilsService",
-function (UtilsService, VRUIUtilsService) {
+app.directive("vrWhsSalesDefaultroutingproduct", ["WhS_Sales_SalePriceListOwnerTypeEnum", "UtilsService", "VRUIUtilsService",
+function (WhS_Sales_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) {
 
     return {
         restrict: "E",
@@ -55,15 +55,22 @@ function (UtilsService, VRUIUtilsService) {
             api.load = function (payload) {
                 if (payload) {
                     defaultItem = payload;
-                    ctrl.CurrentName = (!defaultItem.IsCurrentRoutingProductEditable) ? defaultItem.CurrentRoutingProductName + " (Inherited)" : defaultItem.CurrentRoutingProductName;
-                    //ctrl.IsEditable = defaultItem.IsCurrentRoutingProductEditable == null ? false : defaultItem.IsCurrentRoutingProductEditable;
+                    ctrl.CurrentName = defaultItem.IsCurrentRoutingProductEditable === false ? defaultItem.CurrentRoutingProductName + " (Inherited)" : defaultItem.CurrentRoutingProductName;
                 }
 
                 var selectorLoadDeferred = UtilsService.createPromiseDeferred();
 
+                var selectedIds;
+                if (defaultItem.NewRoutingProductId)
+                    selectedIds = [defaultItem.NewRoutingProductId];
+                else if (defaultItem.NewRoutingProductEED)
+                    selectedIds = [-1];
+
                 var selectorPayload = {
                     filter: { ExcludedRoutingProductId: defaultItem.CurrentRoutingProductId, AssignableToOwnerType: defaultItem.OwnerType, AssignableToOwnerId: defaultItem.OwnerId },
-                    selectedIds: defaultItem.NewRoutingProductId
+                    selectedIds: selectedIds,
+                    defaultItems: (defaultItem.OwnerType == WhS_Sales_SalePriceListOwnerTypeEnum.Customer.value && defaultItem.IsCurrentRoutingProductEditable) ?
+                        [{ RoutingProductId: -1, Name: "(Reset To Default)" }] : null
                 };
                 
                 $scope.isLoading = true;
@@ -84,7 +91,7 @@ function (UtilsService, VRUIUtilsService) {
                 function setNewDefaultRoutingProduct(defaultChanges) {
                     var selectedId = selectorAPI.getSelectedIds();
                     
-                    if (selectedId != null) {
+                    if (selectedId && selectedId != -1) {
                         defaultChanges.NewDefaultRoutingProduct = {
                             DefaultRoutingProductId: selectedId,
                             BED: new Date(),
@@ -94,7 +101,12 @@ function (UtilsService, VRUIUtilsService) {
                 }
 
                 function setDefaultRoutingProductChange(defaultChanges) {
-                    defaultChanges.DefaultRoutingProductChange = null;
+                    var selectedId = selectorAPI.getSelectedIds();
+
+                    defaultChanges.DefaultRoutingProductChange = (selectedId && selectedId == -1) ? {
+                        DefaultRoutingProductId: defaultItem.CurrentRoutingProductId,
+                        EED: new Date()
+                    } : null;
                 }
             };
 

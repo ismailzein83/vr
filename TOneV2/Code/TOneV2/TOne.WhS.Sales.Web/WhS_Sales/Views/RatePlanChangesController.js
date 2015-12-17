@@ -47,7 +47,7 @@
             };
             $scope.rateDataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_Sales_RatePlanAPIService.GetFilteredZoneRateChanges(dataRetrievalInput).then(function (response) {
-                    if (response.Data) {
+                    if (response && response.Data) {
                         for (var i = 0; i < response.Data.length; i++) {
                             if (response.Data[i].IsCurrentRateInherited)
                                 response.Data[i].CurrentRate += " (Inherited)";
@@ -55,8 +55,8 @@
                             var changeType = UtilsService.getEnum(WhS_Sales_RateChangeTypeEnum, "value", response.Data[i].ChangeType);
                             response.Data[i].ChangeType = changeType ? changeType.description : null;
                         }
+                        onResponseReady(response);
                     }
-                    onResponseReady(response);
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
@@ -68,15 +68,15 @@
             };
             $scope.routingProductDataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_Sales_RatePlanAPIService.GetFilteredZoneRoutingProductChanges(dataRetrievalInput).then(function (response) {
-                    if (response.Data) {
+                    if (response && response.Data) {
                         for (var i = 0; i < response.Data.length; i++) {
                             if (response.Data[i].IsCurrentRoutingProductInherited)
                                 response.Data[i].CurrentRoutingProductName += " (Inherited)";
                             else if (response.Data[i].IsNewRoutingProductInherited)
                                 response.Data[i].NewRoutingProductName += " (Inherited)";
                         }
+                        onResponseReady(response);
                     }
-                    onResponseReady(response);
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
@@ -140,7 +140,9 @@
                 return WhS_Sales_RatePlanAPIService.GetDefaultItem(ownerType, ownerId).then(function (response) {
                     $scope.defaultItem = {};
                     
-                    $scope.defaultItem.currentRoutingProductName = !response.IsCurrentRoutingProductEditable ? response.CurrentRoutingProductName + " (Inherited)" : null;
+                    $scope.defaultItem.currentRoutingProductName = response.CurrentRoutingProductName ? response.CurrentRoutingProductName : "None";
+                    $scope.defaultItem.currentRoutingProductName = response.IsCurrentRoutingProductEditable === false ?
+                        $scope.defaultItem.currentRoutingProductName += " (Inherited)" : $scope.defaultItem.currentRoutingProductName;
                     $scope.defaultItem.newRoutingProductName = changes.DefaultChanges.Entity.NewDefaultRoutingProduct ? changes.DefaultChanges.DefaultRoutingProductName : null;
                     $scope.defaultItem.effectiveOn = new Date().toDateString();
                 });

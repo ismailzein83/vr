@@ -149,7 +149,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             function extendZoneItem(zoneItem) {
                 zoneItem.IsDirty = false;
-                var currentRateEED = new Date(zoneItem.CurrentRateEED); // Maintains the original value of zoneItem.CurrentRateEED in case the user deletes the new rate
+                var currentRateEED = zoneItem.CurrentRateEED ? new Date(zoneItem.CurrentRateEED) : null; // Maintains the original value of zoneItem.CurrentRateEED in case the user deletes the new rate
                 setRouteOptionProperties(zoneItem);
 
                 zoneItem.IsCurrentRateEditable = (zoneItem.IsCurrentRateEditable == null) ? false : zoneItem.IsCurrentRateEditable;

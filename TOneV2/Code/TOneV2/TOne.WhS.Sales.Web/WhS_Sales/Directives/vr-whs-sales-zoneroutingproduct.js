@@ -50,7 +50,7 @@ function (UtilsService, VRUIUtilsService) {
             api.load = function (payload) {
                 if (payload != undefined) {
                     zoneItem = payload;
-                    ctrl.CurrentName = !zoneItem.IsCurrentRoutingProductEditable ? zoneItem.CurrentRoutingProductName + " (Inherited)" : zoneItem.CurrentRoutingProductName;
+                    ctrl.CurrentName = zoneItem.IsCurrentRoutingProductEditable === false ? zoneItem.CurrentRoutingProductName + " (Inherited)" : zoneItem.CurrentRoutingProductName;
                 }
 
                 var selectorLoadDeferred = UtilsService.createPromiseDeferred();
