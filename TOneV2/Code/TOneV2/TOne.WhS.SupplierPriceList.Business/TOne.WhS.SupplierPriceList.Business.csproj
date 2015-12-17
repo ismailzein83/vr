@@ -68,6 +68,8 @@
     <Compile Include="ProcessCountryRatesContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupplierPriceListManager.cs" />
+    <Compile Include="Validation\CodeRuleTarget.cs" />
+    <Compile Include="Validation\ZoneRuleTarget.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">

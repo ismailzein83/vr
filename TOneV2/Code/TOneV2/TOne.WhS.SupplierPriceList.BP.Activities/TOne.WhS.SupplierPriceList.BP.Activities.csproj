@@ -92,7 +92,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadFromExcelProcess.cs" />
     <Compile Include="ReserveIdsForNewEntities.cs" />
+    <Compile Include="StructureDataByZones.cs" />
+    <Compile Include="StructureDataByCountries.cs" />
     <Compile Include="SyncImportedDataWithDB.cs" />
+    <Compile Include="ValidateInputData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">

@@ -71,7 +71,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
    
     public enum CodeChangeType { NotChanged = 0, New = 1, Deleted = 2, Moved = 3 }
     
-    public class ImportedCode : Vanrise.Entities.IDateEffectiveSettings
+    public class ImportedCode : Vanrise.Entities.IDateEffectiveSettings, IRuleTarget
     {
         public string Code { get; set; }
 
@@ -102,6 +102,23 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
                 return _changedExistingCodes;
             }
         }
+
+        public MessageSeverity Severity { get; set; }
+
+        public string Message 
+        { 
+            get 
+            { 
+                return string.Format("Code {0} is not assigned to any code group", Code);
+            } 
+        }
+
+        public void SetExecluded()
+        {
+            this.IsExecluded = true;
+        }
+
+        public bool IsExecluded { get; set; }
     }
 
     public class ImportedCodesByCodeValue : Dictionary<string, ImportedCode>
@@ -144,7 +161,34 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         }
     }
 
+    public class ImportedZone : IRuleTarget
+    {
+        public string ZoneName { get; set; }
 
+        public List<ImportedCode> ImportedCodes { get; set; }
+
+        public List<ImportedRate> ImportedRates { get; set; }
+
+        public MessageSeverity Severity { get; set; }
+
+        public string Message { get { return string.Format("Zone {0} is execluded", ZoneName); } }
+
+        public void SetExecluded()
+        {
+            this.IsExecluded = true;
+        }
+
+        public bool IsExecluded { get; set; }
+    }
+
+    public class ImportedCountry
+    {
+        public int CountryId { get; set; }
+
+        public List<ImportedCode> ImportedCodes { get; set; }
+
+        public List<ImportedRate> ImportedRates { get; set; }
+    }
 
     public class NewCode : Vanrise.Entities.IDateEffectiveSettings
     {

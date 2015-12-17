@@ -50,6 +50,8 @@
     <Compile Include="Code.cs" />
     <Compile Include="CodesByCode.cs" />
     <Compile Include="Enumerations.cs" />
+    <Compile Include="Validation\BusinessRule.cs" />
+    <Compile Include="Validation\IRuleTarget.cs" />
     <Compile Include="SPL\IProcessCountryCodesContext.cs" />
     <Compile Include="PriceListByZone.cs" />
     <Compile Include="PriceListCodeItem.cs" />
@@ -62,7 +64,6 @@
     <Compile Include="SPL\IProcessCountryRatesContext.cs" />
     <Compile Include="SPL\ZoneItem.cs" />
     <Compile Include="SupplierPriceList.cs" />
-    <Compile Include="ImportedData.cs" />
     <Compile Include="Zone.cs" />
   </ItemGroup>
   <ItemGroup>
