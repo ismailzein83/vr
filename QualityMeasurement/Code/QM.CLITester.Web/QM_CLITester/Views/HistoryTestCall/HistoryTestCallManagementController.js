@@ -87,6 +87,7 @@
             }
 
             $scope.onCountrySelectionChanged = function (items, datasource) {
+                console.log(items)
                 if (items.length == 1) {
                     var setLoader = function (value) { $scope.isLoadingZonesSelector = value };
 
@@ -181,10 +182,11 @@
             }
 
             if ($scope.selectedCountries.length == 0)
-                filter.Countries = null;
+                filter.CountryIDs = null;
             else {
-                filter.Countries = UtilsService.getPropValuesFromArray($scope.selectedCountries, "CountryId");
+                filter.CountryIDs = UtilsService.getPropValuesFromArray($scope.selectedCountries, "CountryId");
             }
+
 
             if ($scope.selectedProfiles.length == 0)
                 filter.ProfileIDs = null;

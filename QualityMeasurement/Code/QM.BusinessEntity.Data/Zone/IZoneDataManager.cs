@@ -12,7 +12,6 @@ namespace QM.BusinessEntity.Data
         void InsertZoneFromSource(Zone zone);
         void UpdateZoneFromSource(Zone zone);
         List<Zone> GetZones();
-
         bool AreZonesUpdated(ref object updateHandle);
     }
 }

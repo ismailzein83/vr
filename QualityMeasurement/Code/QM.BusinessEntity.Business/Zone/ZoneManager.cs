@@ -3,15 +3,44 @@ using QM.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Common.Business;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace QM.BusinessEntity.Business
 {
     public class ZoneManager
     {
+
+        public Vanrise.Entities.IDataRetrievalResult<ZoneDetail> GetFilteredZones(Vanrise.Entities.DataRetrievalInput<ZoneQuery> input)
+        {
+            var allZones = GetAllZones();
+            Func<Zone, bool> filterExpression = (prod) =>
+                     (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    && (input.Query.Countries == null || input.Query.Countries.Contains(prod.CountryId))
+                  && ((!input.Query.EffectiveOn.HasValue || (prod.BeginEffectiveDate <= input.Query.EffectiveOn)))
+                  && ((!input.Query.EffectiveOn.HasValue || !prod.EndEffectiveDate.HasValue || (prod.EndEffectiveDate > input.Query.EffectiveOn)));
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allZones.ToBigResult(input, filterExpression, ZoneDetailMapper));
+        }
+
+        public Dictionary<long, Zone> GetAllZones()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllZones", () =>
+            {
+                IZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<IZoneDataManager>();
+                IEnumerable<Zone> allZones = dataManager.GetZones();
+                Dictionary<long, Zone> allZonesDic = new Dictionary<long, Zone>();
+                if (allZones != null)
+                {
+                    foreach (var zone in allZones)
+                    {
+                        allZonesDic.Add(zone.ZoneId, zone);
+                    }
+                }
+                return allZonesDic;
+            });
+        }
+
         public List<Vanrise.Entities.TemplateConfig> GetZoneSourceTemplates()
         {
 
@@ -89,6 +118,22 @@ namespace QM.BusinessEntity.Business
             };
         }
 
+        private ZoneDetail ZoneDetailMapper(Zone zone)
+        {
+            ZoneDetail zoneDetail = new ZoneDetail();
+
+            zoneDetail.Entity = zone;
+
+            CountryManager manager = new CountryManager();
+
+            int countryId = zone.CountryId;
+            var country = manager.GetCountry(countryId);
+            zoneDetail.CountryName = (country != null) ? country.Name : "";
+
+
+            return zoneDetail;
+        }
+
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IZoneDataManager _dataManager = BEDataManagerFactory.GetDataManager<IZoneDataManager>();
@@ -102,6 +147,14 @@ namespace QM.BusinessEntity.Business
 
 
         #endregion
+
+
+
+
+
+
+       
+
 
     }
 }

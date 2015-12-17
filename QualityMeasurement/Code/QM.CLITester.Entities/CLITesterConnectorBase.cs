@@ -86,7 +86,7 @@ namespace QM.CLITester.Entities
         public int CliSuccess { get; set; }
         public int CliNoResult { get; set; }
         public int CliFail { get; set; }
-        public Decimal Pdd { get; set; }
+        public decimal Pdd { get; set; }
         public string ShareUrl { get; set; }
     }
 }

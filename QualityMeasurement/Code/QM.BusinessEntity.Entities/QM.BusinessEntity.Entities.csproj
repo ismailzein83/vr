@@ -55,6 +55,8 @@
     <Compile Include="Supplier\SupplierDetail.cs" />
     <Compile Include="Supplier\SupplierInfo.cs" />
     <Compile Include="Supplier\SupplierSettings.cs" />
+    <Compile Include="Zone\ZoneDetail.cs" />
+    <Compile Include="Zone\ZoneQuery.cs" />
     <Compile Include="Zone\SourceZone.cs" />
     <Compile Include="Zone\SourceZoneReader.cs" />
     <Compile Include="Zone\Zone.cs" />

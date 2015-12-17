@@ -11,10 +11,17 @@ namespace QM.BusinessEntity.Data.SQL
 {
     public class ZoneDataManager : BaseSQLDataManager, IZoneDataManager
     {
+         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+
         public ZoneDataManager()
             : base("MainDBConnString")
         {
         }
+
+
+
+       
+
 
         public Zone ZoneMapper(IDataReader reader)
         {
@@ -45,14 +52,11 @@ namespace QM.BusinessEntity.Data.SQL
 
             ExecuteNonQuerySP("[QM_BE].[sp_Zone_UpdateFromSource]", zone.ZoneId, zone.Name);
         }
+
         public bool AreZonesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("QM_BE.Zone", ref updateHandle);
         }
-
-        public List<Zone> GetZonesByCountry(int CountryId)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

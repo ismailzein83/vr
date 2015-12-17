@@ -145,10 +145,14 @@
     <Content Include="QM_BusinessEntity\Directives\Supplier\Templates\SupplierGridTemplate.html" />
     <Content Include="QM_BusinessEntity\Directives\Supplier\vr-qm-be-supplier-grid.js" />
     <Content Include="QM_BusinessEntity\Directives\Supplier\vr-qm-be-supplier-selector.js" />
+    <Content Include="QM_BusinessEntity\Directives\Zone\Templates\ZoneGridTemplate.html" />
+    <Content Include="QM_BusinessEntity\Directives\Zone\vr-qm-be-zone-grid.js" />
     <Content Include="QM_BusinessEntity\Directives\Zone\vr-qm-be-zone-selector.js" />
+    <Content Include="QM_BusinessEntity\ModuleInitialization.js" />
     <Content Include="QM_BusinessEntity\Services\APIServices\ZoneAPIService.js" />
     <Content Include="QM_BusinessEntity\Services\APIServices\SupplierAPIService.js" />
     <Content Include="QM_BusinessEntity\Services\SupplierService.js" />
+    <Content Include="QM_BusinessEntity\Services\ZoneService.js" />
     <Content Include="QM_BusinessEntity\Views\Supplier\SchedulerTaskAction\SupplierSynchronizeTemplate.html" />
     <Content Include="QM_BusinessEntity\Views\Supplier\SchedulerTaskAction\SupplierSynchronizeTemplateController.js" />
     <Content Include="QM_BusinessEntity\Views\Supplier\SupplierEditor.html" />
@@ -157,6 +161,8 @@
     <Content Include="QM_BusinessEntity\Views\Supplier\SupplierManagementController.js" />
     <Content Include="QM_BusinessEntity\Views\Zone\SchedulerTaskAction\ZoneSynchronizeTemplate.html" />
     <Content Include="QM_BusinessEntity\Views\Zone\SchedulerTaskAction\ZoneSynchronizeTemplateController.js" />
+    <Content Include="QM_BusinessEntity\Views\Zone\ZoneManagement.html" />
+    <Content Include="QM_BusinessEntity\Views\Zone\ZoneManagementController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">

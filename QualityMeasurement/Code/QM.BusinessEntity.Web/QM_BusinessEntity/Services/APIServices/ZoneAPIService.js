@@ -5,6 +5,9 @@
 
     function zoneAPIService(BaseAPIService, UtilsService, QM_BE_ModuleConfig) {
 
+        function GetFilteredZones(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Zone", "GetFilteredZones"), input);
+        }
 
         function GetZoneSourceTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Zone", "GetZoneSourceTemplates"));
@@ -20,7 +23,8 @@
 
         return ({
             GetZoneSourceTemplates: GetZoneSourceTemplates,
-            GetZonesInfo: GetZonesInfo
+            GetZonesInfo: GetZonesInfo,
+            GetFilteredZones: GetFilteredZones
         });
     }
 
