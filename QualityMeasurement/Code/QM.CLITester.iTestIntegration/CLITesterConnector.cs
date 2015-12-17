@@ -73,13 +73,12 @@ namespace QM.CLITester.iTestIntegration
         }
 
         #region Private Members
-        const string GoodAmpersand = "&amp;";
+
         private InitiateTestOutput ResponseInitiateTest(string response)
         {
             InitiateTestOutput testOutput = new InitiateTestOutput();    
             InitiateTestInformation initiateTestInformation = new InitiateTestInformation();
-            Regex badAmpersand = new Regex("&(?![a-zA-Z]{2,6};|#[0-9]{2,4};)");
-            response = badAmpersand.Replace(response, GoodAmpersand);
+
             XmlDocument xml = new XmlDocument();
             if (!String.IsNullOrEmpty(response))
             {
@@ -111,11 +110,8 @@ namespace QM.CLITester.iTestIntegration
         private GetTestProgressOutput ResponseTestProgress(string response, string testId, Object recentTestProgress)
         {
             GetTestProgressOutput testProgressOutput = new GetTestProgressOutput();
-            Regex badAmpersand = new Regex("&(?![a-zA-Z]{2,6};|#[0-9]{2,4};)");
-            response = badAmpersand.Replace(response, GoodAmpersand);
 
             response = response.Replace("<" + testId + ">", "<_" + testId + ">");
-
             response = response.Replace("</" + testId + ">", "</_" + testId + ">");
 
             XmlDocument xml = new XmlDocument();
@@ -151,25 +147,30 @@ namespace QM.CLITester.iTestIntegration
                     }
 
                     if(recentTestProgress != null)
-                    testProgressOutput.Result = ((((TestProgress)recentTestProgress).CliFail == ((TestProgress)testProgressOutput.TestProgress).CliFail) &&
-                    (((TestProgress)recentTestProgress).CliNoResult == ((TestProgress)testProgressOutput.TestProgress).CliNoResult) &&
-                    (((TestProgress)recentTestProgress).CliSuccess == ((TestProgress)testProgressOutput.TestProgress).CliSuccess) &&
-                    (((TestProgress)recentTestProgress).CompletedCalls == ((TestProgress)testProgressOutput.TestProgress).CompletedCalls) &&
-                    (((TestProgress)recentTestProgress).Pdd == ((TestProgress)testProgressOutput.TestProgress).Pdd) &&
-                    (((TestProgress)recentTestProgress).TotalCalls == ((TestProgress)testProgressOutput.TestProgress).TotalCalls)) ?
-                        GetTestProgressResult.ProgressNotChanged : 
-                        GetTestProgressResult.ProgressChanged;
+                        testProgressOutput.Result = CompareTestProgress((TestProgress)recentTestProgress, (TestProgress)testProgressOutput.TestProgress) ?
+                            GetTestProgressResult.ProgressNotChanged : GetTestProgressResult.ProgressChanged;
                     else
-                    {
                         testProgressOutput.Result =  testProgressOutput.TestProgress == null ? GetTestProgressResult.ProgressNotChanged :
                         GetTestProgressResult.ProgressChanged;
-                    }
+
                     return testProgressOutput;
                 }
             }
 
             testProgressOutput.Result = GetTestProgressResult.FailedWithRetry;
             return testProgressOutput;
+        }
+
+        private bool CompareTestProgress(TestProgress recentTestProgress, TestProgress testProgress)
+        {
+            return (
+                (recentTestProgress.CliFail == testProgress.CliFail) &&
+                (recentTestProgress.CliNoResult == testProgress.CliNoResult) &&
+                (recentTestProgress.CliSuccess == testProgress.CliSuccess) &&
+                (recentTestProgress.CompletedCalls == testProgress.CompletedCalls) &&
+                (recentTestProgress.Pdd == testProgress.Pdd) &&
+                (recentTestProgress.TotalCalls == testProgress.TotalCalls)
+                );
         }
         #endregion
     }

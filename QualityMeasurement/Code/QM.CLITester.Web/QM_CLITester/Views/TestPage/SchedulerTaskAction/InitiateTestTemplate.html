@@ -12,7 +12,7 @@
                 </vr-select>
             </vr-columns>
             <vr-columns width="fullrow" vr-loader="isLoadingSourceTypeDirective" ng-if="selectedSourceTypeTemplate.Editor">
-                <vr-section title="selectedSourceTypeTemplate.Name" level="2">
+                <vr-section title="{{selectedSourceTypeTemplate.Name}}" level="2">
                     <vr-directivewrapper directive="selectedSourceTypeTemplate.Editor" on-ready="onSourceTypeDirectiveReady"></vr-directivewrapper>
                 </vr-section>
             </vr-columns>
