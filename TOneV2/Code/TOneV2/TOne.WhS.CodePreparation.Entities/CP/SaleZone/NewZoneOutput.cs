@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.CodePreparation.Entities.CP
 {
-    public class NewZone
+    public class NewZoneOutput
     {
-        public string Name { get; set; }
-
-        public int CountryId { get; set; }
+        public string Message { get; set; }
+        public ZoneItem ZoneItem { get; set; }
+        public NewZoneOutputResult Result { get; set; }
     }
 }

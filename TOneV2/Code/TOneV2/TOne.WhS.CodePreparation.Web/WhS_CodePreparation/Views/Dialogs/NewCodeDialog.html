@@ -1,0 +1,27 @@
+﻿<div vr-modalcontent ng-controller="whs-codepreparation-newcodedialog" vr-loader="isGettingData">
+    <vr-modalbody>
+        <vr-form name="formCodeDialog">
+            <vr-row removeline>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="code" label="Code" isrequired></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="1/2row">
+                    <vr-datetimepicker type="dateTime" label="Begin Effective Date" value="bed" isrequired></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-datetimepicker type="dateTime" label="End Effective Date" value="eed"></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formCodeDialog" data-onclick="saveCode"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

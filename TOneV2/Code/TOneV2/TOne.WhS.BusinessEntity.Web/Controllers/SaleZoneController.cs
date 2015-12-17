@@ -33,12 +33,20 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetSaleZonesInfo")]
-        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter,int sellingNumberPlanId, string serializedFilter)
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, int sellingNumberPlanId, string serializedFilter)
         {
             SaleZoneInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SaleZoneInfoFilter>(serializedFilter) : null;
             SaleZoneManager manager = new SaleZoneManager();
-            return manager.GetSaleZonesInfo(nameFilter,sellingNumberPlanId, filter);
+            return manager.GetSaleZonesInfo(nameFilter, sellingNumberPlanId, filter);
         }
+
+        //[HttpGet]
+        //[Route("GetSaleZonesInfoByCountryId")]
+        //public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByCountryId(int sellingNumberPlanId, int countryId)
+        //{
+        //    SaleZoneManager manager = new SaleZoneManager();
+        //    return manager.GetSaleZonesByCountryId(sellingNumberPlanId, countryId);
+        //}
 
         [HttpPost]
         [Route("GetSaleZonesInfoByIds")]

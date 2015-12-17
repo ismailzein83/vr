@@ -100,6 +100,16 @@ namespace TOne.WhS.BusinessEntity.Business
             return allSaleZones;
         }
 
+        public IEnumerable<SaleZone> GetSaleZonesByCountryId(int sellingNumberPlanId, int countryId)
+        {
+            IEnumerable<SaleZone> allSaleZones = GetCachedSaleZones(sellingNumberPlanId);
+
+            if (allSaleZones != null)
+                allSaleZones = allSaleZones.FindAllRecords(z => z.BED <= DateTime.Now && (!z.EED.HasValue || (z.EED > DateTime.Now)) && countryId == z.CountryId);
+
+            return allSaleZones;
+        }
+
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, int sellingNumberPlanId, SaleZoneInfoFilter filter)
         {
             string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
@@ -160,16 +170,16 @@ namespace TOne.WhS.BusinessEntity.Business
             saleZoneDetail.Entity = saleZone;
 
             CountryManager manager = new CountryManager();
-            SellingNumberPlanManager sellingManager = new SellingNumberPlanManager();            
+            SellingNumberPlanManager sellingManager = new SellingNumberPlanManager();
 
             int countryId = saleZone.CountryId;
             var country = manager.GetCountry(countryId);
             saleZoneDetail.CountryName = (country != null) ? country.Name : "";
-           
+
             int sellingNumberPlanId = saleZone.SellingNumberPlanId;
             var sellingNumberPlan = sellingManager.GetSellingNumberPlan(sellingNumberPlanId);
             saleZoneDetail.SellingNumberPlanName = (sellingNumberPlan != null) ? sellingNumberPlan.Name : "";
-           
+
 
             return saleZoneDetail;
         }

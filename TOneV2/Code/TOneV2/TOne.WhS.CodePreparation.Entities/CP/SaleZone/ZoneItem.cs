@@ -19,5 +19,7 @@ namespace TOne.WhS.CodePreparation.Entities.CP
         public DateTime? EED { get; set; }
 
         public ZoneItemStatus Status { get; set; }
+
+        public int CountryId { get; set; }
     }
 }

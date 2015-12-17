@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.Data.SQL;
 using TOne.WhS.CodePreparation.Entities;
+using TOne.WhS.CodePreparation.Entities.CP;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.CodePreparation.Data.SQL
@@ -26,7 +27,6 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         {
             return base.InitializeStreamForBulkInsert();
         }
-
         public void WriteRecordToZonesStream(Zone record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
@@ -39,7 +39,6 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                        record.EndEffectiveDate,
                        (record.Status != Status.New) ? 1 : 0);
         }
-
         public void WriteRecordToCodesStream(Code record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
@@ -52,12 +51,10 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                        record.EndEffectiveDate,
                        (record.Status != Status.New) ? 1 : 0);
         }
-
         public void ApplySaleZonesForDB(object preparedSaleZones)
         {
             InsertBulkToTable(preparedSaleZones as BaseBulkInsertInfo);
         }
-
         public void InsertCodePreparationObject(Dictionary<string, Zone> saleZones, int sellingNumberPlanId)
         {
             GenerateTempTablesName(sellingNumberPlanId);
@@ -86,7 +83,6 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             MergingDataAndFinalizing();
 
         }
-
         private object FinishDBApplyStream(object dbApplyStream, string tempTable)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
@@ -100,9 +96,16 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                 FieldSeparator = '^',
             };
         }
+        public Changes GetChanges(int sellingNumberPlanId, CodePreparationStatus status)
+        {
+            return GetItemSP("TOneWhS_CP.sp_CodePreparation_GetChanges", ChangesMapper, sellingNumberPlanId, status);
 
-
-
+        }
+        public bool InsertOrUpdateChanges(int sellingNumberPlanId, Changes changes, CodePreparationStatus status)
+        {
+            int affectedRows = ExecuteNonQuerySP("TOneWhS_CP.sp_CodePreparation_InsertOrUpdateChanges", sellingNumberPlanId, changes != null ? Vanrise.Common.Serializer.Serialize(changes) : null, status);
+            return affectedRows > 0;
+        }
         public string BuildApplyZonesQuery(string tempTable)
         {
             StringBuilder queryBuilder = new StringBuilder(@"
@@ -137,7 +140,6 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             queryBuilder.Replace("#TableName#", tempTable);
             return queryBuilder.ToString();
         }
-
         public void MergingDataAndFinalizing()
         {
             ExecuteNonQueryText(BuildApplyZonesQuery(tempZoneTable), null);
@@ -193,7 +195,6 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             });
 
         }
-
         private void GenerateTempTablesName(int sellingNumberPlanId)
         {
             this.tempZoneTable = String.Format("[dbo].[TempTableForSaleZones_{0}_{1}]", sellingNumberPlanId, Guid.NewGuid());
@@ -201,5 +202,9 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         }
         private string tempZoneTable;
         private string tempCodeTable;
+        private Changes ChangesMapper(IDataReader reader)
+        {
+            return Vanrise.Common.Serializer.Deserialize<Changes>(reader["Changes"] as string);
+        }
     }
 }

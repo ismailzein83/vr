@@ -13,11 +13,13 @@ using TOne.WhS.CodePreparation.Business;
 using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Web.Base;
+using TOne.WhS.CodePreparation.Entities.CP;
+using TOne.WhS.CodePreparation.Entities;
 
 namespace TOne.WhS.CodePreparation.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "CodePreparation")]
-    public class CodePreparationController:BaseAPIController
+    public class CodePreparationController : BaseAPIController
     {
         [HttpGet]
         [Route("UploadSaleZonesList")]
@@ -25,16 +27,16 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
         {
             CodePreparationManager manager = new CodePreparationManager();
             BPClient bpClient = new BPClient();
-           return bpClient.CreateNewProcess(new CreateProcessInput
-            {
-                InputArguments = new CodePreparationProcessInput
-                {
-                    EffectiveDate = effectiveDate,
-                    FileId = fileId,
-                    SellingNumberPlanId = sellingNumberPlanId,
-                }
+            return bpClient.CreateNewProcess(new CreateProcessInput
+             {
+                 InputArguments = new CodePreparationProcessInput
+                 {
+                     EffectiveDate = effectiveDate,
+                     FileId = fileId,
+                     SellingNumberPlanId = sellingNumberPlanId,
+                 }
 
-            });
+             });
         }
         [HttpGet]
         [Route("DownloadImportCodePreparationTemplate")]
@@ -56,6 +58,54 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
                 FileName = String.Format("ImportPriceListTemplate.xls")
             };
             return response;
+        }
+
+        [HttpGet]
+        [Route("GetChanges")]
+        public Changes GetChanges(int sellingNumberPlanId)
+        {
+            CodePreparationManager manager = new CodePreparationManager();
+            return manager.GetChanges(sellingNumberPlanId);
+        }
+
+        [HttpPost]
+        [Route("SaveChanges")]
+        public bool SaveChanges(SaveChangesInput input)
+        {
+            CodePreparationManager manager = new CodePreparationManager();
+            return manager.SaveChanges(input);
+        }
+
+        [HttpPost]
+        [Route("SaveNewZone")]
+        public NewZoneOutput SaveNewZone(NewZoneInput input)
+        {
+            CodePreparationManager manager = new CodePreparationManager();
+            return manager.SaveNewZone(input);
+        }
+
+        [HttpPost]
+        [Route("SaveNewCode")]
+        public NewCodeOutput SaveNewCode(NewCodeInput input)
+        {
+            CodePreparationManager manager = new CodePreparationManager();
+            return manager.SaveNewCode(input);
+        }
+
+        [HttpGet]
+        [Route("GetZoneItems")]
+        public List<ZoneItem> GetZoneItems(int sellingNumberPlanId, int countryId)
+        {
+            CodePreparationManager manager = new CodePreparationManager();
+            return manager.GetZoneItems(sellingNumberPlanId, countryId);
+        }
+
+        [HttpPost]
+        [Route("GetCodeItems")]
+        public object GetCodeItems(Vanrise.Entities.DataRetrievalInput<GetCodeItemInput> input)
+        {
+            CodePreparationManager manager = new CodePreparationManager();
+            return GetWebResponse(input, manager.GetCodeItems(input));
         }
     }
 }

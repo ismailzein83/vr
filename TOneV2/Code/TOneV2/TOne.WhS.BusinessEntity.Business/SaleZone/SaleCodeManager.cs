@@ -24,23 +24,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult);
         }
-        public Dictionary<long, SaleCode> GetAllSaleCodes()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllSaleZones", () =>
-            {
-                ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-                IEnumerable<SaleCode> allSaleCodes = dataManager.GetAllSaleCodes();
-                Dictionary<long, SaleCode> allSaleCodesDic = new Dictionary<long, SaleCode>();
-                if (allSaleCodes != null)
-                {
-                    foreach (var saleCode in allSaleCodes)
-                    {
-                        allSaleCodesDic.Add(saleCode.SaleCodeId, saleCode);
-                    }
-                }
-                return allSaleCodesDic;
-            });
-        }
+
         public List<SaleCode> GetSaleCodesByZoneID(long zoneID,DateTime effectiveDate)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();

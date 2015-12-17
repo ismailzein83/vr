@@ -117,6 +117,10 @@
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -151,9 +155,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_CodePreparation\Constant\ModuleConfig.js" />
+    <Content Include="WhS_CodePreparation\Directives\CodePreparation\Templates\CodePreparationSaleCodesGridTemplate.html" />
+    <Content Include="WhS_CodePreparation\Directives\CodePreparation\vr-whs-codepreparation-codesgrid.js" />
     <Content Include="WhS_CodePreparation\Services\CodePreparationAPIService.js" />
     <Content Include="WhS_CodePreparation\Views\CodePreparation.html" />
     <Content Include="WhS_CodePreparation\Views\CodePreparationController.js" />
+    <Content Include="WhS_CodePreparation\Views\CodePreparationManagement.html" />
+    <Content Include="WhS_CodePreparation\Views\CodePreparationManagementController.js" />
+    <Content Include="WhS_CodePreparation\Views\Dialogs\NewCodeDialog.html" />
+    <Content Include="WhS_CodePreparation\Views\Dialogs\NewZoneDialog.html" />
+    <Content Include="WhS_CodePreparation\Views\Dialogs\NewCodeDialogController.js" />
+    <Content Include="WhS_CodePreparation\Views\Dialogs\NewZoneDialogController.js" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

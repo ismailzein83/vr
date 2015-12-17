@@ -1,16 +1,28 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    supplierZoneAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_CodePrep_ModuleConfig'];
+    codePreparationAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_CodePrep_ModuleConfig'];
 
-    function supplierZoneAPIService(BaseAPIService, UtilsService, WhS_CodePrep_ModuleConfig) {
+    function codePreparationAPIService(BaseAPIService, UtilsService, WhS_CodePrep_ModuleConfig) {
 
         function UploadSaleZonesList(sellingNumberPlanId, fileId, effectiveDate) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName,"CodePreparation","UploadSaleZonesList"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "UploadSaleZonesList"), {
                 sellingNumberPlanId: sellingNumberPlanId,
                 fileId: fileId,
                 effectiveDate: effectiveDate
             });
+        }
+
+
+        function GetZoneItems(sellingNumberPlanId, countryId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "GetZoneItems"), {
+                sellingNumberPlanId: sellingNumberPlanId,
+                countryId: countryId
+            });
+        }
+
+        function GetCodeItems(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "GetCodeItems"), input);
         }
         function DownloadImportCodePreparationTemplate() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "DownloadImportCodePreparationTemplate"), {}, {
@@ -18,12 +30,32 @@
                 responseTypeAsBufferArray: true
             });
         }
+        function SaveChanges(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "SaveChanges"), input);
+        }
+        function SaveNewZone(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "SaveNewZone"), input);
+        }
+        function SaveNewCode(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "SaveNewCode"), input);
+        }
+        function GetChanges(sellingNumberPlanId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "GetChanges"), {
+                sellingNumberPlanId: sellingNumberPlanId
+            });
+        }
 
         return ({
             UploadSaleZonesList: UploadSaleZonesList,
-            DownloadImportCodePreparationTemplate: DownloadImportCodePreparationTemplate
+            DownloadImportCodePreparationTemplate: DownloadImportCodePreparationTemplate,
+            GetChanges: GetChanges,
+            SaveChanges: SaveChanges,
+            SaveNewCode: SaveNewCode,
+            SaveNewZone: SaveNewZone,
+            GetZoneItems: GetZoneItems,
+            GetCodeItems: GetCodeItems
         });
     }
 
-    appControllers.service('WhS_CodePrep_CodePrepAPIService', supplierZoneAPIService);
+    appControllers.service('WhS_CodePrep_CodePrepAPIService', codePreparationAPIService);
 })(appControllers);

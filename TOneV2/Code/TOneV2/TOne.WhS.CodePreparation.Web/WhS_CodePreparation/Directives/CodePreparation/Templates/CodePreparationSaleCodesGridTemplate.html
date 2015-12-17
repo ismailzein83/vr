@@ -1,0 +1,15 @@
+﻿<vr-datagrid datasource="salecodes"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             defaultsortbyfieldname="'Code'">
+    <vr-datagridcolumn headertext="'Selected'" widthfactor="3" disablesorting>
+        <vr-check value="dataItem.IsSelected"></vr-check>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Zone'" field="ZoneName" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Code'" field="'Code'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Begin Effective Date'" field="'BED'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'End Effective Date'" field="'EED'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'Status'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>
