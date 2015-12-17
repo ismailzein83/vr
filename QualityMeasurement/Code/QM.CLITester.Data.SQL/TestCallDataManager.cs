@@ -1,18 +1,14 @@
-﻿using System;
+﻿using QM.BusinessEntity.Business;
+using QM.CLITester.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using QM.CLITester.Entities;
-using Vanrise.Data.SQL;
 using System.Data;
-using System.Reflection;
+using System.Linq;
 using Vanrise.Common;
-using Vanrise.Security.Entities;
-using QM.BusinessEntity.Business;
-using QM.BusinessEntity.Entities;
 using Vanrise.Common.Business;
+using Vanrise.Data.SQL;
+using Vanrise.Security.Business;
 
 namespace QM.CLITester.Data.SQL
 {
@@ -189,6 +185,7 @@ namespace QM.CLITester.Data.SQL
             SupplierManager supplierManager = new SupplierManager();
             ZoneManager zoneManager = new ZoneManager();
             CountryManager countryManager = new CountryManager();
+            UserManager userManager = new UserManager();
 
             return new TestCallDetail()
             {
@@ -196,9 +193,9 @@ namespace QM.CLITester.Data.SQL
                 CallTestStatusDescription = Utilities.GetEnumAttribute<CallTestStatus, DescriptionAttribute>((CallTestStatus)TestCallMapper(reader).CallTestStatus).Description,
                 CallTestResultDescription = Utilities.GetEnumAttribute<CallTestResult, DescriptionAttribute>((CallTestResult)TestCallMapper(reader).CallTestResult).Description,
                 SupplierName = supplierManager.GetSupplier(TestCallMapper(reader).SupplierID) == null ? "" : supplierManager.GetSupplier(TestCallMapper(reader).SupplierID).Name,
+                UserName = userManager.GetUserbyId(TestCallMapper(reader).UserID) == null ? "" : userManager.GetUserbyId(TestCallMapper(reader).UserID).Name,
                 CountryName = countryManager.GetCountry(TestCallMapper(reader).CountryID) == null ? "" : countryManager.GetCountry(TestCallMapper(reader).CountryID).Name,
                 ZoneName = zoneManager.GetZone(TestCallMapper(reader).ZoneID) == null ? "" : zoneManager.GetZone(TestCallMapper(reader).ZoneID).Name,
-
             };
         }
     }

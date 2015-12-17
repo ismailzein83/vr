@@ -158,20 +158,6 @@
             });
         }
 
-        function getZonesInfo(selectedCountryId) {
-            $scope.isLoading = true;
-            zoneReadyPromiseDeferred.promise
-                .then(function () {
-                    var payload = {
-                        countryId: selectedCountryId
-                    };
-
-                    zoneDirectiveAPI.load(payload);
-                }).finally(function () {
-                    $scope.isLoading = false;
-                });
-        }
-
         function setFilterObject() {
 
             if ($scope.selectedUsers.length == 0)
