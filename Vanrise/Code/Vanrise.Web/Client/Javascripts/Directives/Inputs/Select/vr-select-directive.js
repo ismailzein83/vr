@@ -55,6 +55,51 @@
                     return VRValidationService.validate(controller.selectedvalues, $scope, $attrs);
                 };
 
+                controller.boundDataSource = [];
+                var itemsToAddToSource;
+                $scope.$watch('isDropDownOpened', function (newValue, oldValue) {
+                    $scope.effectiveDataSource = getdatasource();
+                    refreshBoundDataSource();
+                });
+
+                $scope.$watchCollection('effectiveDataSource', function (newValue, oldValue) {
+                    refreshBoundDataSource();
+                });
+                
+
+                function refreshBoundDataSource()
+                {
+                    if (!$scope.isDropDownOpened)
+                        return;
+                    controller.boundDataSource.length = 0;
+                    
+                    if ($scope.effectiveDataSource != undefined) {
+                        itemsToAddToSource = [];
+                        for (var i = 0; i < $scope.effectiveDataSource.length; i++)
+                            itemsToAddToSource.push($scope.effectiveDataSource[i]);
+                        addBatchItemsToSource();
+                    }
+                }
+
+                function addBatchItemsToSource() {
+                    var numberOfItems = 10;
+                    for (var i = 0; i < numberOfItems; i++) {
+                        if (itemsToAddToSource.length > 0) {
+                            controller.boundDataSource.push(itemsToAddToSource[0]);
+                            itemsToAddToSource.splice(0, 1);
+                        }
+                    }
+                    
+                    if (itemsToAddToSource.length > 0) {
+                        setTimeout(function () {
+                            addBatchItemsToSource();
+                            $scope.$apply(function () {
+
+                            });
+                        }, 250);
+                    }
+                }
+
                 //Configuration
                 angular.extend(this, {
                     ValidationMessagesEnum: validationMessagesEnum,
@@ -69,7 +114,8 @@
                 //Configuration
 
                 function isDropDownOpened() {
-                    return vrSelectSharedObject.isDropDownOpened($attrs.id);
+                    $scope.isDropDownOpened = vrSelectSharedObject.isDropDownOpened($attrs.id);
+                    return $scope.isDropDownOpened;
                 }
 
                 function isHideRemoveIcon() {
@@ -134,6 +180,8 @@
                 function setdatasource(datasource) {
                     if (isRemoteLoad()) controller.data = datasource;
                     else controller.datasource = datasource;
+                    $scope.effectiveDataSource = getdatasource();
+                    refreshBoundDataSource();
                 }
 
                 function muteAction(e) {
