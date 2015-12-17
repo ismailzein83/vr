@@ -68,26 +68,21 @@ function (QM_BE_ZoneAPIService, UtilsService, $compile, VRUIUtilsService) {
                 return VRUIUtilsService.getIdSelectedIds('ZoneId', $attrs, ctrl);
             }
             api.load = function (payload) {
-
+                
+                var filter;
                 var selectedIds;
-                var countryId;
-
                 if (payload != undefined) {
+                    filter = payload.filter;
                     selectedIds = payload.selectedIds;
-                    countryId = payload.countryId;
                 }
-                ctrl.datasource = [];
-                console.log('ctrl.datasource')
-                console.log(ctrl.datasource)
-                return QM_BE_ZoneAPIService.GetZonesInfo(countryId).then(function (response) {
-                    angular.forEach(response, function (item) {
-                        ctrl.datasource.push(item);
+                var serializedFilter = {};
+                ctrl.filter = undefined
+                if (filter != undefined) {
+                    ctrl.filter = filter;
+                    serializedFilter = UtilsService.serializetoJson(filter);
+                }
 
-                    });
-                    if (selectedIds != undefined)
-                        VRUIUtilsService.setSelectedValues(selectedIds, 'ZoneId', $attrs, ctrl);
-
-                });
+                return getZonesInfo($attrs, ctrl, selectedIds, serializedFilter);
 
             }
 
@@ -96,5 +91,21 @@ function (QM_BE_ZoneAPIService, UtilsService, $compile, VRUIUtilsService) {
         }
         this.initializeController = initializeController;
     }
+
+    function getZonesInfo(attrs, ctrl, selectedIds, serializedFilter) {
+        console.log('serializedFilter')
+        console.log(serializedFilter)
+        return QM_BE_ZoneAPIService.GetZonesInfo(serializedFilter).then(function (response) {
+            ctrl.datasource.length = 0;
+            angular.forEach(response, function (itm) {
+                ctrl.datasource.push(itm);
+            });
+
+            if (selectedIds != undefined) {
+                VRUIUtilsService.setSelectedValues(selectedIds, 'ZoneId', attrs, ctrl);
+            }
+        });
+    }
+
     return directiveDefinitionObject;
 }]);

@@ -32,7 +32,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
 
         $scope.arrayCallTestStatus = UtilsService.getArrayEnum(Qm_CliTester_CallTestStatusEnum);
         $scope.arrayCallTestResult = UtilsService.getArrayEnum(Qm_CliTester_CallTestResultEnum);
-      
+
 
         function initializeController() {
 

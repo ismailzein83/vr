@@ -31,6 +31,7 @@ function (UtilsService, VRNotificationService, QM_BE_ZoneAPIService) {
         function initializeController() {
            
             $scope.zones = [];
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 
@@ -39,15 +40,20 @@ function (UtilsService, VRNotificationService, QM_BE_ZoneAPIService) {
                 function getDirectiveAPI() {
                    
                     var directiveAPI = {};
+
                     directiveAPI.loadGrid = function (query) {
-                       
                         return gridAPI.retrieveData(query);
                     }
+
                    
                     return directiveAPI;
                 }
             };
+
+          
+
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                console.log(dataRetrievalInput)
                 return QM_BE_ZoneAPIService.GetFilteredZones(dataRetrievalInput)
                     .then(function (response) {
                          onResponseReady(response);

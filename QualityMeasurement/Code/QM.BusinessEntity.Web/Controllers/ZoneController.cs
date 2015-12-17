@@ -25,12 +25,12 @@ namespace QM.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetZonesInfo")]
-        public IEnumerable<ZoneInfo> GetZonesInfo(int countryId)
+        public IEnumerable<ZoneInfo> GetZonesInfo(string serializedFilter)
         {
+            ZoneInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<ZoneInfoFilter>(serializedFilter) : null;
             ZoneManager manager = new ZoneManager();
-            return manager.GetZonesInfo(countryId);
+            return manager.GetZonesInfo(filter);
         }
-
 
 
         [HttpPost]

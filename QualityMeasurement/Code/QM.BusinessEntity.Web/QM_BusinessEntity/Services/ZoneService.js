@@ -14,7 +14,7 @@ app.service('Qm_BE_ZoneService', ['VRModalService', 'VRNotificationService', 'Ut
             drillDownDefinition.loadDirective = function (directiveAPI, countryItem) {
                 countryItem.codeGroupGridAPI = directiveAPI;
                 var query = {
-                    CountriesIds: [countryItem.Entity.CountryId],
+                    CountryIds: [countryItem.Entity.CountryId],
                 };
                 return countryItem.codeGroupGridAPI.loadGrid(query);
             };

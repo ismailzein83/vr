@@ -16,7 +16,7 @@ namespace QM.BusinessEntity.Business
             var allZones = GetAllZones();
             Func<Zone, bool> filterExpression = (prod) =>
                      (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
-                    && (input.Query.Countries == null || input.Query.Countries.Contains(prod.CountryId))
+                    && (input.Query.CountryIds == null || input.Query.CountryIds.Contains(prod.CountryId))
                   && ((!input.Query.EffectiveOn.HasValue || (prod.BeginEffectiveDate <= input.Query.EffectiveOn)))
                   && ((!input.Query.EffectiveOn.HasValue || !prod.EndEffectiveDate.HasValue || (prod.EndEffectiveDate > input.Query.EffectiveOn)));
 
@@ -48,11 +48,35 @@ namespace QM.BusinessEntity.Business
             return manager.GetTemplateConfigurations(Constants.SourceZoneReaderConfigType);
         }
 
-        public IEnumerable<ZoneInfo> GetZonesInfo(int CountryId)
+        public IEnumerable<ZoneInfo> GetZonesInfo(ZoneInfoFilter filter)
         {
-            var zones = GetCachedZones();
-            return zones.MapRecords(ZoneInfoMapper,x=>x.CountryId==CountryId);
+            IEnumerable<Zone> zones = null;
+
+            if (filter != null)
+            {
+                zones = this.GetZonesByCountry(filter.CountryId);
+            }
+            else
+            {
+                var cachedZones = GetCachedZones();
+                if (cachedZones != null)
+                    zones = cachedZones.Values;
+            }
+
+            return zones.MapRecords(ZoneInfoMapper);
         }
+
+
+        private IEnumerable<Zone> GetZonesByCountry(int? countryId)
+        {
+            Dictionary<long, Zone> zones = GetCachedZones();
+
+            Func<Zone, bool> filterExpression = (x) =>
+                (countryId == null || countryId == x.CountryId);
+            return zones.FindAllRecords(filterExpression);
+        }
+
+
 
         public void AddZoneFromeSource(Zone zone)
         {
@@ -76,7 +100,7 @@ namespace QM.BusinessEntity.Business
             var zones = GetCachedZones();
             return zones.GetRecord(zoneId);
         }
-       
+
         #region Private Members
 
         internal static void ReserveIDRange(int nbOfIds, out long startingId)
@@ -153,7 +177,7 @@ namespace QM.BusinessEntity.Business
 
 
 
-       
+
 
 
     }

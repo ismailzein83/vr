@@ -57,7 +57,7 @@
             filter = {
                 Name: $scope.name,
                 EffectiveOn: $scope.effectiveOn,
-                Countries: countryDirectiveApi.getSelectedIds()
+                CountryIds: countryDirectiveApi.getSelectedIds()
             };
            
         }

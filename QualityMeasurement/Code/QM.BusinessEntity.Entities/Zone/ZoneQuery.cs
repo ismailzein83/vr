@@ -5,7 +5,7 @@ namespace QM.BusinessEntity.Entities
 {
     public class ZoneQuery
     {
-        public List<int> Countries { get; set; }
+        public List<int> CountryIds { get; set; }
         public string Name { get; set; }
         public DateTime? EffectiveOn { get; set; }
     }

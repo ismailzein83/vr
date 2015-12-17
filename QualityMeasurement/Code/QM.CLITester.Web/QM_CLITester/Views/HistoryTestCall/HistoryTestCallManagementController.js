@@ -87,13 +87,15 @@
             }
 
             $scope.onCountrySelectionChanged = function (items, datasource) {
-                console.log(items)
                 if (items.length == 1) {
                     var setLoader = function (value) { $scope.isLoadingZonesSelector = value };
 
                     var payload = {
-                        countryId: items[0].CountryId
+                        filter: {
+                            CountryId: items[0].CountryId
+                        }
                     }
+
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader);
                 }
                 else {
@@ -182,9 +184,9 @@
             }
 
             if ($scope.selectedCountries.length == 0)
-                filter.CountryIDs = null;
+                filter.CountryIds = null;
             else {
-                filter.CountryIDs = UtilsService.getPropValuesFromArray($scope.selectedCountries, "CountryId");
+                filter.CountryIds = UtilsService.getPropValuesFromArray($scope.selectedCountries, "CountryId");
             }
 
 
@@ -218,6 +220,7 @@
             else {
                 filter.CallTestResult = UtilsService.getPropValuesFromArray($scope.selectedtestResults, "value");
             }
+
         }
     }
 

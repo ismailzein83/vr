@@ -13,10 +13,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Zone", "GetZoneSourceTemplates"));
         }
 
-        function GetZonesInfo(countryId) {
+        function GetZonesInfo(serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Zone", "GetZonesInfo"),
                 {
-                    countryId: countryId
+                    serializedFilter: serializedFilter
                 });
         }
 

@@ -62,9 +62,10 @@
             $scope.onCountrySelectItem = function (selectedItem) {
                 if (selectedItem != undefined) {
                     var setLoader = function (value) { $scope.isLoadingZonesSelector = value };
-
                     var payload = {
-                        countryId: selectedItem.CountryId
+                        filter: {
+                            CountryId: selectedItem.CountryId
+                        }
                     }
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader);
