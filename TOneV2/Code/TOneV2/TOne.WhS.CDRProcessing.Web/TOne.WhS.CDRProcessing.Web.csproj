@@ -145,6 +145,10 @@
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
+      <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
+      <Name>TOne.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.CDRProcessing.Business\TOne.WhS.CDRProcessing.Business.csproj">
       <Project>{5a382aba-4399-4274-b9b7-046e47aa946a}</Project>
       <Name>TOne.WhS.CDRProcessing.Business</Name>
@@ -157,6 +161,16 @@
   <ItemGroup>
     <Content Include="WhS_CDRProcessing\Constant\ModuleConfig.js" />
     <Content Include="WhS_CDRProcessing\Constant\PhoneNumberTypeEnum.js" />
+    <Content Include="WhS_CDRProcessing\Directives\CDRFields\CDRFieldTypeExtensions\Templates\SelectiveBooleanDirectiveTemplate.html" />
+    <Content Include="WhS_CDRProcessing\Directives\CDRFields\CDRFieldTypeExtensions\Templates\SelectiveDateTimeDirectiveTemplate.html" />
+    <Content Include="WhS_CDRProcessing\Directives\CDRFields\CDRFieldTypeExtensions\Templates\SelectiveChoicesDirectiveTemplate.html" />
+    <Content Include="WhS_CDRProcessing\Directives\CDRFields\CDRFieldTypeExtensions\Templates\SelectiveNumberDirectiveTemplate.html" />
+    <Content Include="WhS_CDRProcessing\Directives\CDRFields\CDRFieldTypeExtensions\Templates\SelectiveTextDirectiveTemplate.html" />
+    <Content Include="WhS_CDRProcessing\Directives\CDRFields\CDRFieldTypeExtensions\vr-whs-cdrprocessing-boolean-selective.js" />
+    <Content Include="WhS_CDRProcessing\Directives\CDRFields\CDRFieldTypeExtensions\vr-whs-cdrprocessing-datetime-selective.js" />
+    <Content Include="WhS_CDRProcessing\Directives\CDRFields\CDRFieldTypeExtensions\vr-whs-cdrprocessing-choices-selective.js" />
+    <Content Include="WhS_CDRProcessing\Directives\CDRFields\CDRFieldTypeExtensions\vr-whs-cdrprocessing-number-selective.js" />
+    <Content Include="WhS_CDRProcessing\Directives\CDRFields\CDRFieldTypeExtensions\vr-whs-cdrprocessing-text-selective.js" />
     <Content Include="WhS_CDRProcessing\Directives\CDRFields\Templates\DefineCDRFieldsGrid.html" />
     <Content Include="WhS_CDRProcessing\Directives\CDRFields\vr-whs-cdrprocessing-definecdrfields-grid.js" />
     <Content Include="WhS_CDRProcessing\Directives\CustomerRule\Templates\CustomerIdentificationRuleGrid.html" />

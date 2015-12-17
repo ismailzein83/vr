@@ -9,7 +9,7 @@ namespace Vanrise.Common.Data
 {
     public interface IGenericConfigurationDataManager:IDataManager
     {
-        void UpdateConfiguration(string ownerKey, int typeId,GenericConfiguration genericConfig);
+        bool UpdateConfiguration(string ownerKey, int typeId,GenericConfiguration genericConfig);
         Dictionary<string, GenericConfiguration> GetALllConfigurations();
         bool AreGenericConfigurationsUpdated(ref object updateHandle);
     }

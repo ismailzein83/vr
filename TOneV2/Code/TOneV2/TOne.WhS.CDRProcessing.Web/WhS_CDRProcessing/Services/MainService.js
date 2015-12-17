@@ -16,7 +16,8 @@ app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationS
         addSwitchIdentificationRule: addSwitchIdentificationRule,
         editSwitchIdentificationRule: editSwitchIdentificationRule,
         deleteSwitchIdentificationRule: deleteSwitchIdentificationRule,
-        addNewCDRField: addNewCDRField
+        addNewCDRField: addNewCDRField,
+        editCDRField: editCDRField
 
     });
 
@@ -187,4 +188,17 @@ app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationS
         };
         VRModalService.showModal('/Client/Modules/WhS_CDRProcessing/Views/CDRFields/DefineCDRFieldsEditor.html', parameters, settings);
     }
+
+    function editCDRField(obj, onCDRFieldUpdated) {
+        var settings = {};
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.onCDRFieldUpdated = onCDRFieldUpdated;
+        };
+        var parameters = {
+            ID: obj.ID,
+        };
+        VRModalService.showModal('/Client/Modules/WhS_CDRProcessing/Views/CDRFields/DefineCDRFieldsEditor.html', parameters, settings);
+    }
+
 }]);

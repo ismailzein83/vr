@@ -64,8 +64,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseCarrierIdentificationRule.cs" />
+    <Compile Include="CDRFields\BaseFieldType.cs" />
     <Compile Include="CDRFields\CDRFields.cs" />
     <Compile Include="CDRFields\CDRFieldsQuery.cs" />
+    <Compile Include="CDRFields\CDRFieldsType\CDRFieldBooleanType.cs" />
+    <Compile Include="CDRFields\CDRFieldsType\CDRFieldChoicesType.cs" />
+    <Compile Include="CDRFields\CDRFieldsType\CDRFieldDateTimeType.cs" />
+    <Compile Include="CDRFields\CDRFieldsType\CDRFieldNumberType.cs" />
+    <Compile Include="CDRFields\CDRFieldsType\CDRFieldTextType.cs" />
+    <Compile Include="CDRFields\CDRFieldsType\Choices.cs" />
     <Compile Include="CDRProcessing\BillingCDRBase.cs" />
     <Compile Include="CDRProcessing\BillingFailedCDR.cs" />
     <Compile Include="CDRProcessing\BillingInvalidCDR.cs" />

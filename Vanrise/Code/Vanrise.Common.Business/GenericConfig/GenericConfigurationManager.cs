@@ -10,14 +10,14 @@ namespace Vanrise.Common.Business
 {
     public abstract class GenericConfigurationManager<T> where T : GenericConfiguration
     {
-        public void UpdateConfiguration(T genericConfig)
+        public bool UpdateConfiguration(T genericConfig)
         {
             string ownerKey = genericConfig.OwnerKey;
             if (ownerKey == null)
                 ownerKey = Guid.Empty.ToString();
             int typeId = TypeManager.Instance.GetTypeId(this.GetType());
             IGenericConfigurationDataManager dataManager = CommonDataManagerFactory.GetDataManager<IGenericConfigurationDataManager>();
-            dataManager.UpdateConfiguration(ownerKey, typeId, genericConfig);
+          return  dataManager.UpdateConfiguration(ownerKey, typeId, genericConfig);
         }
 
         public T GetConfiguration(string ownerKey)
@@ -25,10 +25,12 @@ namespace Vanrise.Common.Business
             if (ownerKey == null)
                 ownerKey = Guid.Empty.ToString();
             int typeId = TypeManager.Instance.GetTypeId(this.GetType());
-            string key = String.Concat("{0}_{1}", ownerKey, typeId);
+            string key = String.Format("{0}_{1}", ownerKey, typeId);
             var genericConfigurations = GetCachedGenericConfigurations();
-
-          return genericConfigurations.GetRecord(key) as T;
+            var instance = genericConfigurations.GetRecord(key) as T;
+            if (instance == null)
+                instance = Activator.CreateInstance<T>();
+            return instance;
         }
 
         #region Private Classes

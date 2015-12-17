@@ -7,7 +7,6 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.CDRProcessing.Entities
 {
-    public enum FieldType {Text=0,Number=1,DateTime=2,Boolean=3,Choices=4 }
     public class CDRFields : GenericConfiguration
     {
         public List<CDRField> Fields { get; set; }
@@ -18,8 +17,9 @@ namespace TOne.WhS.CDRProcessing.Entities
     }
     public class CDRField
     {
+        public int ID { get; set; }
         public string FieldName { get; set; }
-        public FieldType Type { get; set; }
+        public BaseFieldType Type { get; set; }
 
     }
     public class CDRFieldDetail

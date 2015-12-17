@@ -10,6 +10,7 @@ using Vanrise.Web.Base;
 namespace TOne.WhS.CDRProcessing.Web.Controllers
 {
    [RoutePrefix(Constants.ROUTE_PREFIX + "DefineCDRFields")]
+    [JSONWithTypeAttribute]
     public class DefineCDRFieldsController:BaseAPIController
     {
          [HttpPost]
@@ -22,17 +23,33 @@ namespace TOne.WhS.CDRProcessing.Web.Controllers
 
          [HttpPost]
          [Route("UpdateCDRField")]
-         public void UpdateCDRField(CDRField cdrField)
+         public TOne.Entities.UpdateOperationOutput<CDRFieldDetail> UpdateCDRField(CDRField cdrField)
          {
              DefineCDRFieldsManager manager = new DefineCDRFieldsManager();
-            // manager.UpdateCDRField(cdrFields);
+            return manager.UpdateCDRField(cdrField);
          }
+
          [HttpPost]
          [Route("AddCDRField")]
-         public void AddCDRField(CDRField cdrField)
+         public TOne.Entities.InsertOperationOutput<CDRFieldDetail> AddCDRField(CDRField cdrField)
          {
              DefineCDRFieldsManager manager = new DefineCDRFieldsManager();
-             manager.AddCDRField(cdrField);
+            return manager.AddCDRField(cdrField);
+         }
+
+         [HttpGet]
+         [Route("GetCDRFieldTypeTemplates")]
+         public List<Vanrise.Entities.TemplateConfig> GetCDRFieldTypeTemplates()
+         {
+             DefineCDRFieldsManager manager = new DefineCDRFieldsManager();
+             return manager.GetCDRFieldTypeTemplates();
+         }
+         [HttpGet]
+         [Route("GetCDRField")]
+         public CDRField GetCDRField(int cdrFieldId)
+         {
+             DefineCDRFieldsManager manager = new DefineCDRFieldsManager();
+             return manager.GetCDRField(cdrFieldId);
          }
     }
 }

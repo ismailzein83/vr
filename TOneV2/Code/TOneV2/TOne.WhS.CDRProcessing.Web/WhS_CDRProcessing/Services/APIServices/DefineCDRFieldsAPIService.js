@@ -16,10 +16,20 @@
         function AddCDRField(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_CDRProcessing_ModuleConfig.moduleName, "DefineCDRFields", "AddCDRField"), input);
         }
+        function GetCDRFieldTypeTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CDRProcessing_ModuleConfig.moduleName, "DefineCDRFields", "GetCDRFieldTypeTemplates"));
+        }
+        
+        function GetCDRField(cdrFieldId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CDRProcessing_ModuleConfig.moduleName, "DefineCDRFields", "GetCDRField"), { cdrFieldId: cdrFieldId });
+        }
+
         return ({
             GetFilteredCDRFields: GetFilteredCDRFields,
             UpdateCDRField: UpdateCDRField,
-            AddCDRField: AddCDRField
+            AddCDRField: AddCDRField,
+            GetCDRFieldTypeTemplates: GetCDRFieldTypeTemplates,
+            GetCDRField: GetCDRField
         });
     }
 

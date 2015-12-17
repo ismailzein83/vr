@@ -4,19 +4,32 @@
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-textbox value="description" label="Description" isrequired></vr-textbox>
+                        <vr-columns width="1/3row">
+                            <vr-textbox value="scopeModal.name" label="Field Name" isrequired></vr-textbox>
                         </vr-columns>
                     </vr-row>
-                </vr-tab>
+                    <vr-row>
+                        <vr-section title="Field Type">
+                            <vr-columns width="1/4row">
+                                <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Selective Type" datasource="scopeModal.cdrFieldTypeTemplates" text="None"
+                                           selectedvalues="scopeModal.selectedCDRFieldTypeTemplate" isrequired>
+                                </vr-select>
+                            </vr-columns>
+                            <vr-columns width="3/4row" vr-loader="scopeModal.isLoadingDirective">
+                                <vr-directivewrapper directive="scopeModal.selectedCDRFieldTypeTemplate.Editor" on-ready="scopeModal.onDirectiveReady"></vr-directivewrapper>
+                            </vr-columns>
+                        </vr-section>
+                    </vr-row>
+                       
+              </vr-tab>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" validationcontext="defineCDRFieldsEditorGroup" data-onclick="SaveCDRField"></vr-button>
-                <vr-button type="Close" data-onclick="close"></vr-button>
+                <vr-button type="Save" validationcontext="defineCDRFieldsEditorGroup" data-onclick="scopeModal.SaveCDRField"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
             </div>
         </vr-actionbar>
 

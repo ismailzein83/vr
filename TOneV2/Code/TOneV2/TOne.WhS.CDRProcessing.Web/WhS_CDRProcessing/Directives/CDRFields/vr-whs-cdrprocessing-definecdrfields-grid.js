@@ -65,7 +65,7 @@ function (UtilsService, VRNotificationService, WhS_CDRProcessing_MainService, Wh
             var defaultMenuActions = [
                         {
                             name: "Edit",
-                           // clicked: editCustomerIdentificationRule,
+                            clicked: editCDRField,
                         },
                          {
                              name: "Delete",
@@ -78,13 +78,13 @@ function (UtilsService, VRNotificationService, WhS_CDRProcessing_MainService, Wh
             }
         }
 
-        //function editCustomerIdentificationRule(customerRuleObj) {
-        //    var onCustomerIdentificationRuleUpdated = function (customerRule) {
-        //        gridAPI.itemUpdated(customerRule);
-        //    }
+        function editCDRField(cdrFieldObj) {
+            var onCDRFieldUpdated = function (cdrField) {
+                gridAPI.itemUpdated(cdrField);
+            }
 
-        //    WhS_CDRProcessing_MainService.editCustomerIdentificationRule(customerRuleObj.Entity, onCustomerIdentificationRuleUpdated);
-        //}
+            WhS_CDRProcessing_MainService.editCDRField(cdrFieldObj.Entity, onCDRFieldUpdated);
+        }
         //function deleteCustomerIdentificationRule(customerRuleObj) {
         //    var onCustomerIdentificationRuleObjDeleted = function (customerRule) {
         //        gridAPI.itemDeleted(customerRule);
