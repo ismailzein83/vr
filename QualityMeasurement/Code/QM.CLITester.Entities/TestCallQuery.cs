@@ -9,9 +9,9 @@ namespace QM.CLITester.Entities
 {
     public class TestCallQuery
     {
-        public List<int> CallTestStatus { get; set; }
+        public List<CallTestStatus> CallTestStatus { get; set; }
 
-        public List<int> CallTestResult { get; set; }
+        public List<CallTestResult> CallTestResult { get; set; }
 
         public List<int> UserIds { get; set; }
 

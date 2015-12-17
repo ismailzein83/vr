@@ -51,7 +51,8 @@
   <ItemGroup>
     <Compile Include="CallTestStatus.cs" />
     <Compile Include="CLITesterConnectorBase.cs" />
-    <Compile Include="LastCallUpdateInput.cs" />
+    <Compile Include="GetBeforeIdInput.cs" />
+    <Compile Include="GetUpdatedInput.cs" />
     <Compile Include="LastCallUpdateOutput.cs" />
     <Compile Include="Profiles\ProfileSettings.cs" />
     <Compile Include="Profiles\Profile.cs" />

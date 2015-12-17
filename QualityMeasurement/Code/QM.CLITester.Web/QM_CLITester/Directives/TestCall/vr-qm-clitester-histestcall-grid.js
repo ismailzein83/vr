@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQmClitesterHistestcallGrid", ["UtilsService", "VRNotificationService", "Qm_CliTester_TestCallAPIService", 'Qm_CliTester_TestCallService', 'VRUIUtilsService', 'LabelColorsEnum', 'Qm_CliTester_CallTestResultEnum', 'Qm_CliTester_CallTestStatusEnum',
-function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, Qm_CliTester_TestCallService, VRUIUtilsService, LabelColorsEnum, Qm_CliTester_CallTestResultEnum, Qm_CliTester_CallTestStatusEnum) {
+app.directive("vrQmClitesterHistestcallGrid", ["UtilsService", "VRNotificationService", "Qm_CliTester_TestCallAPIService", 'Qm_CliTester_TestCallService', 'VRUIUtilsService', 'Qm_CliTester_CallTestResultEnum', 'Qm_CliTester_CallTestStatusEnum',
+function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, Qm_CliTester_TestCallService, VRUIUtilsService, Qm_CliTester_CallTestResultEnum, Qm_CliTester_CallTestStatusEnum) {
 
     var directiveDefinitionObject = {
 
@@ -76,69 +76,13 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
                 });
         };
 
-        $scope.getColor = function (dataItem, coldef) {
-            return getMeasureColor(dataItem, coldef);
+        $scope.getColorStatus = function (dataItem) {
+            return Qm_CliTester_TestCallService.getCallTestStatusColor(dataItem.Entity.CallTestStatus);
         };
-    }
-    function getCallTestStatusColor(value) {
-        switch (value) {
-            case Qm_CliTester_CallTestStatusEnum.New.value:
-                return LabelColorsEnum.New.color;
-                break;
-            case Qm_CliTester_CallTestStatusEnum.Initiated.value:
-                return LabelColorsEnum.Primary.color;
-                break;
-            case Qm_CliTester_CallTestStatusEnum.InitiationFailedWithRetry.value:
-                return LabelColorsEnum.Warning.color;
-                break;
-            case Qm_CliTester_CallTestStatusEnum.InitiationFailedWithNoRetry.value:
-                return LabelColorsEnum.WarningLevel2.color;
-                break;
-            case Qm_CliTester_CallTestStatusEnum.PartiallyCompleted.value:
-                return LabelColorsEnum.Processing.color;
-                break;
-            case Qm_CliTester_CallTestStatusEnum.Completed.value:
-                return LabelColorsEnum.Success.color;
-                break;
-            case Qm_CliTester_CallTestStatusEnum.GetProgressFailedWithRetry.value:
-                return LabelColorsEnum.WarningLevel1.color;
-                break;
-            case Qm_CliTester_CallTestStatusEnum.GetProgressFailedWithNoRetry.value:
-                return LabelColorsEnum.Failed.color;
-                break;
-            default:
-                return undefined;
-        }
-    }
 
-    function getCallTestResultColor(value) {
-        switch (value) {
-            case Qm_CliTester_CallTestResultEnum.NotCompleted.value:
-                return LabelColorsEnum.Processing.color;
-                break;
-            case Qm_CliTester_CallTestResultEnum.Succeeded.value:
-                return LabelColorsEnum.Success.color;
-                break;
-            case Qm_CliTester_CallTestResultEnum.PartiallySucceeded.value:
-                return LabelColorsEnum.WarningLevel1.color;
-                break;
-            case Qm_CliTester_CallTestResultEnum.Failed.value:
-                return LabelColorsEnum.Failed.color;
-                break;
-            case Qm_CliTester_CallTestResultEnum.NotAnswered.value:
-                return LabelColorsEnum.Warning.color;
-                break;
-            default:
-                return undefined;
-        }
-    }
-
-    function getMeasureColor(dataItem, coldef) {
-        if (coldef.tag === "CallTestStatus")
-            return getCallTestStatusColor(dataItem.Entity.CallTestStatus);
-        else if (coldef.tag === "CallTestResult")
-            return getCallTestResultColor(dataItem.Entity.CallTestResult);
-        return undefined;
+        $scope.getColorResult = function (dataItem) {
+            return Qm_CliTester_TestCallService.getCallTestResultColor(dataItem.Entity.CallTestResult);
+        };
     }
 
     return directiveDefinitionObject;

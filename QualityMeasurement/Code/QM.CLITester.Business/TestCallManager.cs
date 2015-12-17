@@ -17,27 +17,25 @@ namespace QM.CLITester.Business
 {
     public class TestCallManager
     {
-        public Vanrise.Entities.InsertOperationOutput<TestCallQueryInsert> AddNewTestCall(TestCallQueryInsert testCallResult)
+        public Vanrise.Entities.InsertOperationOutput<TestCallQueryInput> AddNewTestCall(TestCallQueryInput testCallResult)
         {
-            testCallResult.CallTestStatus = CallTestStatus.New;
-            testCallResult.CallTestResult = CallTestResult.NotCompleted;
-            testCallResult.InitiationRetryCount = 0;
-            testCallResult.GetProgressRetryCount = 0;
-            testCallResult.UserID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            Vanrise.Entities.InsertOperationOutput<TestCallQueryInsert> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<TestCallQueryInsert>();
+            Vanrise.Entities.InsertOperationOutput<TestCallQueryInput> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<TestCallQueryInput>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
 
-            int testCallId = -1;
-
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            bool insertActionSucc = dataManager.Insert(testCallResult, out testCallId);
-            if (insertActionSucc)
+            bool insertActionSucc = true;
+
+            foreach (int supplierId in testCallResult.SupplierID)
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = testCallResult;
+                if (!dataManager.Insert(supplierId, testCallResult.CountryID, testCallResult.ZoneID, (int)CallTestStatus.New, (int)CallTestResult.NotCompleted, 0,0,
+                    Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId(),testCallResult.ProfileID))
+                    insertActionSucc = false;
             }
+            
+            if (insertActionSucc)
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
 
             return insertOperationOutput;
         }
@@ -64,14 +62,10 @@ namespace QM.CLITester.Business
             return lastCallUpdateOutputs;
         }
 
-        public LastCallUpdateOutput GetBeforeId(LastCallUpdateInput input)
+        public List<TestCallDetail> GetBeforeId(GetBeforeIdInput input)
         {
-            LastCallUpdateOutput lastCallUpdateOutputs = new LastCallUpdateOutput();
-
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            lastCallUpdateOutputs.ListTestCallDetails = dataManager.GetBeforeId(input);
-            lastCallUpdateOutputs.MaxTimeStamp = null;
-            return lastCallUpdateOutputs;
+            return  dataManager.GetBeforeId(input);
         }
 
 

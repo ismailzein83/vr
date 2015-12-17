@@ -9,7 +9,6 @@ function InitiateTestTemplateController($scope, UtilsService, VRUIUtilsService, 
     var sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
     function defineScope() {
         $scope.sourceTypeTemplates = [];
-
         $scope.onSourceTypeDirectiveReady = function (api) {
             sourceTypeDirectiveAPI = api;
             var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
@@ -30,6 +29,7 @@ function InitiateTestTemplateController($scope, UtilsService, VRUIUtilsService, 
 
     function load() {
         $scope.isLoading = true;
+        
         if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined)
             $scope.maximumRetryCount = $scope.schedulerTaskAction.data.MaximumRetryCount;
         loadAllControls();
@@ -40,6 +40,7 @@ function InitiateTestTemplateController($scope, UtilsService, VRUIUtilsService, 
               VRNotificationService.notifyExceptionWithClose(error, $scope);
           })
          .finally(function () {
+             console.log($scope.selectedSourceTypeTemplate.Name);
              $scope.isLoading = false;
          });
     }

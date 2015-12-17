@@ -17,7 +17,7 @@ namespace QM.CLITester.Web.Controllers
 
         [HttpPost]
         [Route("AddNewTestCall")]
-        public InsertOperationOutput<TestCallQueryInsert> AddNewTestCall(TestCallQueryInsert testCallResult)
+        public InsertOperationOutput<TestCallQueryInput> AddNewTestCall(TestCallQueryInput testCallResult)
         {
             TestCallManager manager = new TestCallManager();
             return manager.AddNewTestCall(testCallResult);
@@ -25,7 +25,7 @@ namespace QM.CLITester.Web.Controllers
 
         [HttpPost]
         [Route("GetUpdated")]
-        public LastCallUpdateOutput GetUpdated(LastCallUpdateInput input)
+        public LastCallUpdateOutput GetUpdated(GetUpdatedInput input)
         {
             TestCallManager manager = new TestCallManager();
             byte[] maxTimeStamp = input.LastUpdateHandle;
@@ -34,7 +34,7 @@ namespace QM.CLITester.Web.Controllers
 
         [HttpPost]
         [Route("GetBeforeId")]
-        public LastCallUpdateOutput GetBeforeId(LastCallUpdateInput input)
+        public List<TestCallDetail> GetBeforeId(GetBeforeIdInput input)
         {
             TestCallManager manager = new TestCallManager();
             return manager.GetBeforeId(input);
