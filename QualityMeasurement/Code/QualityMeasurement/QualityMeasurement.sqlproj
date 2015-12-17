@@ -67,17 +67,38 @@
     <Folder Include="QM_BE\Tables\" />
     <Folder Include="QM_CLITester\Stored Procedures\" />
     <Folder Include="Security\" />
+    <Folder Include="QM_CLITester\Functions\" />
+    <Folder Include="QM_BE\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="QM_CLITester\Tables\TestCall.sql" />
     <Build Include="QM_BE\Tables\Zone.sql" />
     <Build Include="QM_BE\Tables\Supplier.sql" />
-    <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_GetRequestedTestCallResult.sql" />
-    <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_Update.sql" />
     <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_GetRequestedTestCall.sql" />
     <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_GetAll.sql" />
     <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_Insert.sql" />
     <Build Include="Security\QM_CLITester.sql" />
     <Build Include="Security\QM_BE.sql" />
+    <Build Include="QM_CLITester\Tables\Profile.sql" />
+    <Build Include="QM_CLITester\Functions\ParseStringList.sql" />
+    <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_UpdateTestProgress.sql" />
+    <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_UpdateInitiateTest.sql" />
+    <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_GetUpdated.sql" />
+    <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_GetRecent.sql" />
+    <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_GetBeforeID.sql" />
+    <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_CreateTempByFiltered.sql" />
+    <Build Include="QM_CLITester\Stored Procedures\sp_Profile_UpdateFromSource.sql" />
+    <Build Include="QM_CLITester\Stored Procedures\sp_Profile_Update.sql" />
+    <Build Include="QM_CLITester\Stored Procedures\sp_Profile_InsertFromSource.sql" />
+    <Build Include="QM_CLITester\Stored Procedures\sp_Profile_GetAll.sql" />
+    <Build Include="QM_BE\Stored Procedures\sp_Zone_UpdateFromSource.sql" />
+    <Build Include="QM_BE\Stored Procedures\sp_Zone_InsertFromSource.sql" />
+    <Build Include="QM_BE\Stored Procedures\sp_Zone_GetByCountry.sql" />
+    <Build Include="QM_BE\Stored Procedures\sp_Zone_GetAll.sql" />
+    <Build Include="QM_BE\Stored Procedures\sp_Supplier_UpdateFromSource.sql" />
+    <Build Include="QM_BE\Stored Procedures\sp_Supplier_Update.sql" />
+    <Build Include="QM_BE\Stored Procedures\sp_Supplier_InsertFromSource.sql" />
+    <Build Include="QM_BE\Stored Procedures\sp_Supplier_Insert.sql" />
+    <Build Include="QM_BE\Stored Procedures\sp_Supplier_GetAll.sql" />
   </ItemGroup>
 </Project>

@@ -3,25 +3,35 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [QM_CLITester].[sp_TestCall_GetRequestedTestCall]
+CREATE PROCEDURE [QM_CLITester].[sp_TestCall_GetRequestedTestCall]
+	@CallTestStatusIDs varchar(max)
 AS
 BEGIN
+DECLARE @CallTestStatusIDsTable TABLE (CallTestStatusID int)
+INSERT INTO @CallTestStatusIDsTable (CallTestStatusID)
+select Convert(int, ParsedString) from [QM_CLITester].[ParseStringList](@CallTestStatusIDs)
+
+
 	SET NOCOUNT ON;
-	SELECT   
-		[ID]
+	SELECT    
+      [ID]
+      ,[UserID]
       ,[SupplierID]
       ,[CountryID]
       ,[ZoneID]
+      ,[ProfileID]
       ,[CreationDate]
-      ,[Test_ID]
-      ,[Name]
-      ,[Calls_Total]
-      ,[Calls_Complete]
-      ,[CLI_Success]
-      ,[CLI_No_Result]
-      ,[CLI_Fail]
-      ,[PDD]
-      ,[Share_URL]
-      ,[Status]
-	FROM	[QM_CLITester].[TestCall] where Status = 0
+      ,[CallTestStatus]
+      ,[CallTestResult]
+      ,[InitiateTestInformation]
+      ,[TestProgress]
+      ,[InitiationRetryCount]
+      ,[GetProgressRetryCount]
+      ,[FailureMessage]
+      ,[timestamp]
+      
+      
+	FROM	[QM_CLITester].[TestCall] where
+	
+	(@CallTestStatusIDs  is null or [QM_CLITester].[TestCall].CallTestStatus in (select CallTestStatusID from @CallTestStatusIDsTable))
 END
