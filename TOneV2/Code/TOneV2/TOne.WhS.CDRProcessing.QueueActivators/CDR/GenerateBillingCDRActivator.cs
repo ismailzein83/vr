@@ -30,7 +30,7 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
              CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             foreach(CDR cdr in cdrBatch.CDRs){
                   DateTime StartIdentification = DateTime.Now;
-                  BillingCDRBase baseCDR = GenerateBillingCdr(cdr);
+                  BillingCDRBase baseCDR = GenerateBillingCdr(cdr, cdrBatch.DataSourceID);
                   CarrierAccount supplier = carrierAccountManager.GetCarrierAccount(baseCDR.SupplierId);
                   CarrierAccount customer = carrierAccountManager.GetCarrierAccount(baseCDR.CustomerId); 
 
@@ -80,7 +80,7 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
 
         }
 
-        private BillingCDRBase GenerateBillingCdr(CDR cdr)
+        private BillingCDRBase GenerateBillingCdr(CDR cdr,int dataSourceId)
         {
             BillingCDRBase billingCDRMapped = new BillingCDRBase();
             CustomerIdentificationRuleTarget customerIdentificationRuleTarget = new Entities.CustomerIdentificationRuleTarget
@@ -97,30 +97,44 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
                 OutCarrier = cdr.OutCarrier,
                 OutTrunk = cdr.OutTrunk
             };
+
+            SwitchIdentificationRuleTarget switchIdentificationRuleTarget = new SwitchIdentificationRuleTarget
+            {
+                EffectiveOn = cdr.Attempt,
+                DataSource = dataSourceId
+
+            };
+
             billingCDRMapped = GetBillingCDRBase(cdr, billingCDRMapped);
            
             CustomerIdentificationRuleManager customerManager = new CustomerIdentificationRuleManager();
             SupplierIdentificationRuleManager supplierManager = new SupplierIdentificationRuleManager();
+            SwitchIdentificationRuleManager   switchManager   = new SwitchIdentificationRuleManager();
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             CodeMatchBuilder codeMatchBuilder = new CodeMatchBuilder();
             CustomerIdentificationRule customerIdentificationRule = customerManager.GetMatchRule(customerIdentificationRuleTarget);
             SupplierIdentificationRule supplierIdentificationRule = supplierManager.GetMatchRule(supplierIdentificationRuleTarget);
+            SwitchIdentificationRule switchIdentificationRule = switchManager.GetMatchRule(switchIdentificationRuleTarget);
+
             SaleCodeMatch saleCodeMatch = null;
-            CarrierAccount customer = null;
             if (customerIdentificationRule!=null)
             {
                 billingCDRMapped.CustomerId = customerIdentificationRule.Settings.CustomerId;
                 saleCodeMatch = codeMatchBuilder.GetSaleCodeMatch(cdr.CDPN, customerIdentificationRule.Settings.CustomerId, cdr.Attempt);
-                customer = carrierAccountManager.GetCarrierAccount(customerIdentificationRule.Settings.CustomerId);
+
+            }
+            
+            if(switchIdentificationRule!=null){
+                billingCDRMapped.SwitchID=switchIdentificationRule.Settings.SwitchId;
             }
 
+
             SupplierCodeMatch supplierCodeMatch = null;
-            CarrierAccount supplier = null;
+
             if (supplierIdentificationRule != null)
             {
                 billingCDRMapped.SupplierId = supplierIdentificationRule.Settings.SupplierId;
                 supplierCodeMatch = codeMatchBuilder.GetSupplierCodeMatch(cdr.CDPN, supplierIdentificationRule.Settings.SupplierId, cdr.Attempt);
-                supplier = carrierAccountManager.GetCarrierAccount(supplierIdentificationRule.Settings.SupplierId);
             }
          
            
@@ -141,7 +155,6 @@ namespace TOne.WhS.CDRProcessing.QueueActivators
         private BillingCDRBase GetBillingCDRBase(CDR cdrBase, BillingCDRBase cdr)
         {
             cdr.Alert = cdrBase.Alert;
-            cdr.SwitchID = cdrBase.SwitchID;
             cdr.Attempt = cdrBase.Attempt;
             cdr.CDPN = cdrBase.CDPN;
             cdr.CGPN = cdrBase.CGPN;

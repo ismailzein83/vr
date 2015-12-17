@@ -13,7 +13,7 @@ namespace TOne.WhS.CDRProcessing.Entities
         static CDRBatch()
         {
             CDR cdr = new CDR();
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(CDRBatch), "CDRs");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(CDRBatch), "CDRs", "DataSourceID");
         }
         public List<CDR> CDRs { get; set; }
         public override string GenerateDescription()

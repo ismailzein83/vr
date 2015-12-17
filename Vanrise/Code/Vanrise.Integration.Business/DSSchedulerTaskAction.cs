@@ -81,6 +81,7 @@ namespace Vanrise.Integration.Business
                     {
                         try
                         {
+                             outputItem.Item.DataSourceID = dataSource.DataSourceId;
                             _logger.WriteInformation("Enqueuing item '{0}' to stage '{1}'", outputItem.Item.GenerateDescription(), outputItem.StageName);
 
                             long queueItemId = queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
