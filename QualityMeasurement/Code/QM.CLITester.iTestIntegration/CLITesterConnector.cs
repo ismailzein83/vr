@@ -134,7 +134,7 @@ namespace QM.CLITester.iTestIntegration
                         CliSuccess = xnList[0]["CLI_Success"] != null ? Int32.Parse(xnList[0]["CLI_Success"].InnerText) : 0,
                         CliNoResult = xnList[0]["CLI_No_Result"] != null ? Int32.Parse(xnList[0]["CLI_No_Result"].InnerText) : 0,
                         CliFail = xnList[0]["CLI_Fail"] != null ? Int32.Parse(xnList[0]["CLI_Fail"].InnerText) : 0,
-                        Pdd = xnList[0]["PDD"] != null ? Int32.Parse(xnList[0]["PDD"].InnerText) : 0,
+                        Pdd = xnList[0]["PDD"] != null ? Decimal.Parse(xnList[0]["PDD"].InnerText) : 0,
                         ShareUrl = xnList[0]["Share_URL"] != null ? xnList[0]["Share_URL"].InnerText : ""
                     };
 
