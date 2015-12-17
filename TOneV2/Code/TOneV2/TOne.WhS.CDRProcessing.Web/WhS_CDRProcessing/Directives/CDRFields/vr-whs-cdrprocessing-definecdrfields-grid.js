@@ -69,7 +69,7 @@ function (UtilsService, VRNotificationService, WhS_CDRProcessing_MainService, Wh
                         },
                          {
                              name: "Delete",
-                            // clicked: deleteCustomerIdentificationRule,
+                             clicked: deleteCDRField,
                          }
             ];
 
@@ -85,13 +85,13 @@ function (UtilsService, VRNotificationService, WhS_CDRProcessing_MainService, Wh
 
             WhS_CDRProcessing_MainService.editCDRField(cdrFieldObj.Entity, onCDRFieldUpdated);
         }
-        //function deleteCustomerIdentificationRule(customerRuleObj) {
-        //    var onCustomerIdentificationRuleObjDeleted = function (customerRule) {
-        //        gridAPI.itemDeleted(customerRule);
-        //    };
+        function deleteCDRField(cdrFieldObj) {
+            var onCDRFieldObjDeleted = function (cdrField) {
+                gridAPI.itemDeleted(cdrField);
+            };
 
-        //    WhS_CDRProcessing_MainService.deleteCustomerIdentificationRule($scope,customerRuleObj, onCustomerIdentificationRuleObjDeleted);
-        //}
+            WhS_CDRProcessing_MainService.deleteCDRField($scope, cdrFieldObj, onCDRFieldObjDeleted);
+        }
     }
 
     return directiveDefinitionObject;

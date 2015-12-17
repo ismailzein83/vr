@@ -34,6 +34,11 @@ app.directive('vrWhsCdrprocessingChoicesSelective', ['UtilsService',
 
             function initializeController() {
                 ctrl.values = [];
+                ctrl.isValid = function () {
+                    if (ctrl.values.length > 0)
+                        return null;
+                    return "You Should Add At Least One Choice."
+                }
                 ctrl.disableAddButton = true;
                 ctrl.addValue = function () {
                     ctrl.values.push(AddChoice(ctrl.value));
@@ -56,14 +61,14 @@ app.directive('vrWhsCdrprocessingChoicesSelective', ['UtilsService',
 
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        $scope.values = payload.Choices;
+                        ctrl.values = payload.Choices;
                     }
                 }
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.CDRProcessing.Entities.CDRFieldChoicesType, TOne.WhS.CDRProcessing.Entities",
-                        Choices: $scope.values
+                        Choices: ctrl.values
                     };
                 }
 

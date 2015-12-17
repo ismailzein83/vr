@@ -2,9 +2,9 @@
 
     "use strict";
 
-    defineCDRFieldsManagementController.$inject = ['$scope', 'WhS_CDRProcessing_MainService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    defineCDRFieldsManagementController.$inject = ['$scope', 'WhS_CDRProcessing_MainService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService','WhS_CDRProcessing_DefineCDRFieldsAPIService'];
 
-    function defineCDRFieldsManagementController($scope, WhS_CDRProcessing_MainService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function defineCDRFieldsManagementController($scope, WhS_CDRProcessing_MainService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_CDRProcessing_DefineCDRFieldsAPIService) {
         var gridAPI;
 
         defineScope();
@@ -15,7 +15,8 @@
                 if (!$scope.isGettingData && gridAPI != undefined)
                     return gridAPI.loadGrid(getFilterObject());
             };
-
+            $scope.selectedCDRFieldTypeTemplate=[];
+            $scope.cdrFieldTypeTemplates = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 var filter = {};
@@ -27,14 +28,28 @@
 
         function load() {
             $scope.isLoadingFilterData = true;
-           
+            loadCDRFieldTypeTemplates().catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.isLoadingFilterData = false;
+            })
+               .finally(function () {
+                   $scope.isLoadingFilterData = false;
+            });
         }
 
         function getFilterObject() {
             var data = {
-                Description: $scope.description,
+                Name: $scope.name,
+                TypeIds: UtilsService.getPropValuesFromArray($scope.selectedCDRFieldTypeTemplate, "TemplateConfigID")
             };
             return data;
+        }
+        function loadCDRFieldTypeTemplates() {
+            return WhS_CDRProcessing_DefineCDRFieldsAPIService.GetCDRFieldTypeTemplates().then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.cdrFieldTypeTemplates.push(item);
+                });
+            });
         }
 
         function AddNewCDRField() {

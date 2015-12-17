@@ -1,7 +1,7 @@
 ﻿
-app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'WhS_CDRProcessing_CustomerIdentificationRuleAPIService', 'WhS_CDRProcessing_SupplierIdentificationRuleAPIService', 'WhS_CDRProcessing_NormalizationRuleAPIService',
+app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'WhS_CDRProcessing_CustomerIdentificationRuleAPIService', 'WhS_CDRProcessing_SupplierIdentificationRuleAPIService', 'WhS_CDRProcessing_NormalizationRuleAPIService','WhS_CDRProcessing_DefineCDRFieldsAPIService',
 
-    function (VRModalService, VRNotificationService, UtilsService, WhS_CDRProcessing_CustomerIdentificationRuleAPIService, WhS_CDRProcessing_SupplierIdentificationRuleAPIService, WhS_CDRProcessing_NormalizationRuleAPIService) {
+    function (VRModalService, VRNotificationService, UtilsService, WhS_CDRProcessing_CustomerIdentificationRuleAPIService, WhS_CDRProcessing_SupplierIdentificationRuleAPIService, WhS_CDRProcessing_NormalizationRuleAPIService, WhS_CDRProcessing_DefineCDRFieldsAPIService) {
 
     return ({
         addCustomerIdentificationRule: addCustomerIdentificationRule,
@@ -17,7 +17,8 @@ app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationS
         editSwitchIdentificationRule: editSwitchIdentificationRule,
         deleteSwitchIdentificationRule: deleteSwitchIdentificationRule,
         addNewCDRField: addNewCDRField,
-        editCDRField: editCDRField
+        editCDRField: editCDRField,
+        deleteCDRField: deleteCDRField
 
     });
 
@@ -199,6 +200,22 @@ app.service('WhS_CDRProcessing_MainService', ['VRModalService', 'VRNotificationS
             ID: obj.ID,
         };
         VRModalService.showModal('/Client/Modules/WhS_CDRProcessing/Views/CDRFields/DefineCDRFieldsEditor.html', parameters, settings);
+    }
+
+    function deleteCDRField($scope, obj, onCDRFieldObjDeleted) {
+        VRNotificationService.showConfirmation()
+            .then(function (response) {
+                if (response) {
+                    return WhS_CDRProcessing_DefineCDRFieldsAPIService.DeleteCDRField(obj.Entity.ID)
+                        .then(function (deletionResponse) {
+                            VRNotificationService.notifyOnItemDeleted("CDR Field", deletionResponse);
+                            onCDRFieldObjDeleted(obj);
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                }
+            });
     }
 
 }]);

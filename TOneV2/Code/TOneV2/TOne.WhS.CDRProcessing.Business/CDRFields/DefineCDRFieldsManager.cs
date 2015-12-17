@@ -15,7 +15,9 @@ namespace TOne.WhS.CDRProcessing.Business
             var config = GetChachedCDRFields();
 
             Func<CDRField, bool> filterExpression = (prod) =>
-                (input.Query.Name == null || prod.FieldName.ToLower().Contains(input.Query.Name.ToLower()));
+                (input.Query.Name == null || prod.FieldName.ToLower().Contains(input.Query.Name.ToLower()))
+                &&
+                (input.Query.TypeIds == null || input.Query.TypeIds.Contains(prod.Type.ConfigId));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, config.Fields.ToBigResult(input, filterExpression, MapToDetails));
         }
         public TOne.Entities.UpdateOperationOutput<CDRFieldDetail> UpdateCDRField(CDRField cdrField)
@@ -46,6 +48,27 @@ namespace TOne.WhS.CDRProcessing.Business
             return updateOperationOutput;
 
         }
+
+        public TOne.Entities.DeleteOperationOutput<CDRFieldDetail> DeleteCDRField(int cdrFieldId)
+        {
+            TOne.Entities.DeleteOperationOutput<CDRFieldDetail> deleteOperationOutput = new TOne.Entities.DeleteOperationOutput<CDRFieldDetail>();
+            deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Failed;
+            DefineCDRFieldsManager manager = new DefineCDRFieldsManager();
+            var cdrFields = GetChachedCDRFields();
+            bool deleteActionSucc=false;
+            if (cdrFields.Fields.Any(x => x.ID == cdrFieldId))
+            {
+                cdrFields.Fields.Remove(cdrFields.Fields.FindRecord(x => x.ID == cdrFieldId));
+                deleteActionSucc = base.UpdateConfiguration(cdrFields);
+            }
+            if (deleteActionSucc)
+            {
+                deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
+            }
+
+            return deleteOperationOutput;
+        }
+
         public TOne.Entities.InsertOperationOutput<CDRFieldDetail> AddCDRField(CDRField cdrField)
         {
 

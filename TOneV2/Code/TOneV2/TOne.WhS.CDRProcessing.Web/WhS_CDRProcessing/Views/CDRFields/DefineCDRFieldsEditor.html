@@ -15,7 +15,7 @@
                                            selectedvalues="scopeModal.selectedCDRFieldTypeTemplate" isrequired>
                                 </vr-select>
                             </vr-columns>
-                            <vr-columns width="3/4row" vr-loader="scopeModal.isLoadingDirective">
+                            <vr-columns width="3/4row" vr-loader="scopeModal.isLoadingDirective" ng-if="scopeModal.selectedCDRFieldTypeTemplate!=undefined">
                                 <vr-directivewrapper directive="scopeModal.selectedCDRFieldTypeTemplate.Editor" on-ready="scopeModal.onDirectiveReady"></vr-directivewrapper>
                             </vr-columns>
                         </vr-section>

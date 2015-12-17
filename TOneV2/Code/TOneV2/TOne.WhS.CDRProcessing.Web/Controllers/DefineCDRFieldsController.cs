@@ -44,6 +44,14 @@ namespace TOne.WhS.CDRProcessing.Web.Controllers
              DefineCDRFieldsManager manager = new DefineCDRFieldsManager();
              return manager.GetCDRFieldTypeTemplates();
          }
+
+         [HttpGet]
+         [Route("DeleteCDRField")]
+         public TOne.Entities.DeleteOperationOutput<CDRFieldDetail> DeleteCDRField(int cdrFieldId)
+         {
+             DefineCDRFieldsManager manager = new DefineCDRFieldsManager();
+             return manager.DeleteCDRField(cdrFieldId);
+         }
          [HttpGet]
          [Route("GetCDRField")]
          public CDRField GetCDRField(int cdrFieldId)

@@ -15,7 +15,7 @@
 
         loadParameters();
         defineScope();
-        load();
+        load(); 
 
         function loadParameters() {
             

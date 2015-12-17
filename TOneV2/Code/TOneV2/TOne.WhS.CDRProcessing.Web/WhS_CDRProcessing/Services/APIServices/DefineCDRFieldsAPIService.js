@@ -23,13 +23,17 @@
         function GetCDRField(cdrFieldId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_CDRProcessing_ModuleConfig.moduleName, "DefineCDRFields", "GetCDRField"), { cdrFieldId: cdrFieldId });
         }
+        function DeleteCDRField(cdrFieldId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CDRProcessing_ModuleConfig.moduleName, "DefineCDRFields", "DeleteCDRField"), { cdrFieldId: cdrFieldId });
+        }
 
         return ({
             GetFilteredCDRFields: GetFilteredCDRFields,
             UpdateCDRField: UpdateCDRField,
             AddCDRField: AddCDRField,
             GetCDRFieldTypeTemplates: GetCDRFieldTypeTemplates,
-            GetCDRField: GetCDRField
+            GetCDRField: GetCDRField,
+            DeleteCDRField: DeleteCDRField
         });
     }
 

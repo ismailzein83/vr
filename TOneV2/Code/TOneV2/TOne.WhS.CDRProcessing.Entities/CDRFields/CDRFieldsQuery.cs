@@ -9,5 +9,7 @@ namespace TOne.WhS.CDRProcessing.Entities
     public class CDRFieldsQuery
     {
         public string Name { get; set; }
+        public List<int> TypeIds { get; set; }
+
     }
 }
