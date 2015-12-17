@@ -172,6 +172,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Download Template',
                     class: 'glyphicon glyphicon-download'
                 };
+            case 'Settings':
+                return {
+                    text: 'Settings',
+                    class: 'glyphicon glyphicon-cog'
+                }
         }
     }
 }]);
