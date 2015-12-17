@@ -388,6 +388,9 @@
     <Content Include="WhS_BusinessEntity\Views\ZoneServiceConfig\ZoneServiceConfigManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\ZoneServiceConfig\ZoneServiceConfigManagementController.js" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="WhS_BusinessEntity\Templates\CodeGroupTemplate.xlsx" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
