@@ -67,7 +67,7 @@ BEGIN
 			  ,[timestamp]
 			INTO #RESULT
 			FROM 
-			[QualityMeasurement_Dev].[QM_CLITester].[TestCall]      
+			[QM_CLITester].[TestCall]      
             WHERE 
             (@UserIDs  IS NULL OR [QM_CLITester].[TestCall].UserID IN (select UserID from @UserIDsTable))
             AND (CreationDate BETWEEN @FromDate AND @ToDate)
