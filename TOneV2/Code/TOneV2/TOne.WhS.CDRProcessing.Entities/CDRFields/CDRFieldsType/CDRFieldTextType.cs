@@ -8,6 +8,5 @@ namespace TOne.WhS.CDRProcessing.Entities
 {
     public class CDRFieldTextType : BaseFieldType
     {
-        public string Value { get; set; }
     }
 }

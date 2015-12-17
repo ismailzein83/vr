@@ -40,15 +40,15 @@ app.directive('vrWhsCdrprocessingTextSelective', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined) {
-                        ctrl.typeValue = payload.Value;
-                    }
+                    //if (payload != undefined) {
+                    //    ctrl.typeValue = payload.Value;
+                    //}
                 }
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.CDRProcessing.Entities.CDRFieldTextType, TOne.WhS.CDRProcessing.Entities",
-                        Value: ctrl.typeValue
+                      //  Value: ctrl.typeValue
                     };
                 }
 

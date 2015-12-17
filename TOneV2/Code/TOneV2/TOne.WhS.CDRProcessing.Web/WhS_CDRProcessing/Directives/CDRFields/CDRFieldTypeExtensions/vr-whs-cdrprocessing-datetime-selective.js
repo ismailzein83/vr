@@ -40,15 +40,15 @@ app.directive('vrWhsCdrprocessingDatetimeSelective', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined) {
-                        ctrl.date = payload.Date;
-                    }
+                    //if (payload != undefined) {
+                    //    ctrl.date = payload.Date;
+                    //}
                 }
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.CDRProcessing.Entities.CDRFieldDateTimeType, TOne.WhS.CDRProcessing.Entities",
-                        Date: ctrl.date
+                      //  Date: ctrl.date
                     };
                 }
 

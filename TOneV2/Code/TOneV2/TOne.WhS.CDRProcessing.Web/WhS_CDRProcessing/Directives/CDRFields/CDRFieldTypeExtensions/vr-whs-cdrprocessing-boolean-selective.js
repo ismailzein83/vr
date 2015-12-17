@@ -40,15 +40,15 @@ app.directive('vrWhsCdrprocessingBooleanSelective', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined) {
-                        ctrl.isAllow = payload.Allow;
-                    }
+                    //if (payload != undefined) {
+                    //    ctrl.isAllow = payload.Allow;
+                    //}
                 }
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.CDRProcessing.Entities.CDRFieldBooleanType, TOne.WhS.CDRProcessing.Entities",
-                        Allow: ctrl.isAllow
+                    //    Allow: ctrl.isAllow
                     };
                 }
 

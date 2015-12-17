@@ -120,7 +120,7 @@
             var cdrFieldObject = buildCDRFieldObjectObjFromScope();
             return WhS_CDRProcessing_DefineCDRFieldsAPIService.AddCDRField(cdrFieldObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("CDR Field", response)) {
+                if (VRNotificationService.notifyOnItemAdded("CDR Field", response, "Name")) {
                     if ($scope.onCDRFieldAdded != undefined)
                         $scope.onCDRFieldAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -134,9 +134,9 @@
         function updateCDRField() {
             var cdrFieldObject = buildCDRFieldObjectObjFromScope();
             cdrFieldObject.ID = cdrFieldID;
-            WhS_CDRProcessing_DefineCDRFieldsAPIService.UpdateCDRField(cdrFieldObject)
+            return WhS_CDRProcessing_DefineCDRFieldsAPIService.UpdateCDRField(cdrFieldObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("CDR Field", response)) {
+                if (VRNotificationService.notifyOnItemUpdated("CDR Field", response, "Name")) {
                     if ($scope.onCDRFieldUpdated != undefined)
                         $scope.onCDRFieldUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();

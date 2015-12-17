@@ -8,6 +8,6 @@ namespace TOne.WhS.CDRProcessing.Entities
 {
     public class CDRFieldBooleanType:BaseFieldType
     {
-        public Boolean Allow { get; set; }
+       
     }
 }

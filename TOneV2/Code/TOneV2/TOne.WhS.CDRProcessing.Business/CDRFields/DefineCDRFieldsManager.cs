@@ -27,16 +27,20 @@ namespace TOne.WhS.CDRProcessing.Business
             updateOperationOutput.UpdatedObject = null;
 
             var cdrFields = GetChachedCDRFields();
-            bool updateActionSucc;
-            if (cdrFields.Fields.Any(x => x.FieldName == cdrField.FieldName))
+            bool updateActionSucc=false;
+            if (cdrFields.Fields.Any(x => x.ID == cdrField.ID))
             {
-                cdrFields.Fields.FindRecord(x => x.FieldName == cdrField.FieldName).FieldName = cdrField.FieldName;
-                cdrFields.Fields.FindRecord(x => x.FieldName == cdrField.FieldName).Type = cdrField.Type;
-                updateActionSucc = base.UpdateConfiguration(cdrFields);
-            }
-            else
-            {
-                updateActionSucc = false;
+                if (cdrFields.Fields.FindRecord(x => x.ID == cdrField.ID).FieldName != cdrField.FieldName && cdrFields.Fields.Exists(x => x.FieldName == cdrField.FieldName))
+                {
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                }
+                else
+                {
+                    cdrFields.Fields.FindRecord(x => x.ID == cdrField.ID).FieldName = cdrField.FieldName;
+                    cdrFields.Fields.FindRecord(x => x.ID == cdrField.ID).Type = cdrField.Type;
+                    updateActionSucc = base.UpdateConfiguration(cdrFields);
+                }
+                
             }
 
             if (updateActionSucc)
@@ -78,12 +82,20 @@ namespace TOne.WhS.CDRProcessing.Business
             insertOperationOutput.InsertedObject = null;
 
             var cdrFields = GetChachedCDRFields();
-            cdrField.ID = cdrFields.Fields.Count() + 1;
-            if (!cdrFields.Fields.Any(x => x.FieldName == cdrField.FieldName))
-                cdrFields.Fields.Add(cdrField);
-
-            bool insertActionSucc = base.UpdateConfiguration(cdrFields);
-
+             bool insertActionSucc=false;
+            
+            if (!cdrFields.Fields.Exists(x => x.FieldName == cdrField.FieldName))
+            {
+                 cdrField.ID = cdrFields.Fields.Count() + 1;
+                 cdrFields.Fields.Add(cdrField);
+                 insertActionSucc = base.UpdateConfiguration(cdrFields);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+                
+ 
             if (insertActionSucc)
             {
                 

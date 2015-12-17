@@ -8,6 +8,5 @@ namespace TOne.WhS.CDRProcessing.Entities
 {
     public class CDRFieldDateTimeType:BaseFieldType
     {
-        public DateTime Date { get; set; }
     }
 }
