@@ -513,6 +513,9 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
     function buildTitleForAddEditor(entityType) {
         return "New " + entityType;
     }
+    function buildTitleForUploadEditor(entityType) {
+        return "Upload " + entityType;
+    }
 
     function buildTitleForUpdateEditor(entityTitle, entityType) {
         var title = "Edit "
@@ -569,7 +572,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         createPromiseDeferred: createPromiseDeferred,
         convertToPromiseIfUndefined: convertToPromiseIfUndefined,
         serializetoJson: serializetoJson,
-        generateJSVariableName: generateJSVariableName
+        generateJSVariableName: generateJSVariableName,
+        buildTitleForUploadEditor: buildTitleForUploadEditor
     });
 
 }]);

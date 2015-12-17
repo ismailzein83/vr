@@ -14,12 +14,18 @@
 
         function defineScope() {
             $scope.searchClicked = function () {
+
                 if (!$scope.isGettingData && gridAPI != undefined) {
                     setFilterObject();
                     return gridAPI.loadGrid(filter);
                 }
                     
             };
+            $scope.uploadCodeGroup = function () {
+                var onCodeGroupUploaded = function () {
+                };
+                WhS_BE_CodeGroupService.uploadCodeGroup(onCodeGroupUploaded);
+            }
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();

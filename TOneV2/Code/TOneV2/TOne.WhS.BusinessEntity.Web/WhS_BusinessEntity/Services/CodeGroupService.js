@@ -5,7 +5,8 @@ app.service('WhS_BE_CodeGroupService', ['VRModalService', 'VRNotificationService
         return ({
             addCodeGroup: addCodeGroup,
             editCodeGroup: editCodeGroup,
-            registerDrillDownToCountry: registerDrillDownToCountry
+            registerDrillDownToCountry: registerDrillDownToCountry,
+            uploadCodeGroup: uploadCodeGroup
         });
         
         function registerDrillDownToCountry() {
@@ -71,6 +72,18 @@ app.service('WhS_BE_CodeGroupService', ['VRModalService', 'VRNotificationService
             };
 
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CodeGroup/CodeGroupEditor.html', parameters, settings);
+        }
+
+        function uploadCodeGroup(onCodeGroupUploaded) {
+            var settings = {
+
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onCodeGroupUploaded = onCodeGroupUploaded;
+            };
+
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CodeGroup/CodeGroupUploadEditor.html', null, settings);
         }
 
     }]);

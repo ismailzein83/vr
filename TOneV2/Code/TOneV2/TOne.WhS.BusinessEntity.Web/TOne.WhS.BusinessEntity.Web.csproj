@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells, Version=8.2.2.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -332,6 +336,8 @@
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupUploadEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupUploadEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeManagement.html" />
