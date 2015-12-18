@@ -46,8 +46,10 @@ namespace Vanrise.Common.Business
 
         public Country GetCountry(string countryName)
         {
+            if (countryName == null)
+                return null;
             var countries = GetCachedCountriesByNames();
-            return countries.GetRecord(countryName);
+            return countries.GetRecord(countryName.ToLower());
         }
 
         public Country GetCountryBySourceId(string sourceId)
@@ -248,7 +250,7 @@ namespace Vanrise.Common.Business
                        foreach (var c in countries)
                        {
                            if (!dic.ContainsKey(c.Name))
-                               dic.Add(c.Name, c);
+                               dic.Add(c.Name.ToLower(), c);
                        }
                    }
                    return dic;
