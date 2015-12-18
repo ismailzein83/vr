@@ -92,9 +92,15 @@ namespace TOne.WhS.SupplierPriceList.Business
                     if(!shouldNotAddCode)
                     {
                         if (recentCodeZoneName != null && importedCode.ZoneName != recentCodeZoneName)
+                        {
                             importedCode.ChangeType = CodeChangeType.Moved;
+                            importedCode.ProcessInfo.RecentZoneName = recentCodeZoneName;
+                        }
                         else
+                        {
                             importedCode.ChangeType = CodeChangeType.New;
+                        }
+
                         AddImportedCode(importedCode, newAndExistingZones, existingZonesByName);
                     }
                 }

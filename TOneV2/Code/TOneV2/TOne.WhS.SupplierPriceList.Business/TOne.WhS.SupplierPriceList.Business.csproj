@@ -67,6 +67,7 @@
     <Compile Include="ProcessCountryCodesContext.cs" />
     <Compile Include="ProcessCountryRatesContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SupplierCodePreviewManager.cs" />
     <Compile Include="SupplierPriceListManager.cs" />
     <Compile Include="SupplierZonePreviewManager.cs" />
     <Compile Include="Validation\CodeRuleTarget.cs" />

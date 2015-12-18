@@ -57,6 +57,7 @@
     <Compile Include="INewSupplierCodeDataManager.cs" />
     <Compile Include="INewSupplierRateDataManager.cs" />
     <Compile Include="INewSupplierZoneDataManager.cs" />
+    <Compile Include="ISupplierCodePreviewDataManager.cs" />
     <Compile Include="ISupplierPriceListDataManager.cs" />
     <Compile Include="ISupplierZonePreviewDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

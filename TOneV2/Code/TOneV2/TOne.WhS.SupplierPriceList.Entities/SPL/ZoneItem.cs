@@ -73,6 +73,11 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
     
     public class ImportedCode : Vanrise.Entities.IDateEffectiveSettings, IRuleTarget
     {
+        public ImportedCode()
+        {
+            this.ProcessInfo = new CodeProcessInfo();
+        }
+
         public string Code { get; set; }
 
         public string ZoneName { get; set; }
@@ -103,6 +108,8 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             }
         }
 
+        public CodeProcessInfo ProcessInfo { get; set; }
+
         public MessageSeverity Severity { get; set; }
 
         public string Message 
@@ -119,6 +126,11 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         }
 
         public bool IsExecluded { get; set; }
+    }
+
+    public class CodeProcessInfo
+    {
+        public string RecentZoneName { get; set; }
     }
 
     public class ImportedCodesByCodeValue : Dictionary<string, ImportedCode>

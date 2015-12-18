@@ -73,6 +73,7 @@
     <Compile Include="ApplyChangedCodesToDB.cs" />
     <Compile Include="ApplyChangedRatesToDB.cs" />
     <Compile Include="ApplyChangedZonesToDB.cs" />
+    <Compile Include="ApplyCodePreviewDataToDB.cs" />
     <Compile Include="ApplyDataToDB.cs" />
     <Compile Include="ApplyNewCodesToDB.cs" />
     <Compile Include="ApplyNewRatesToDB.cs" />
