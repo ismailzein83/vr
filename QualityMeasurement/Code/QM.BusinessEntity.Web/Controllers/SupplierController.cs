@@ -77,7 +77,7 @@ namespace QM.BusinessEntity.Web.Controllers
             memorystream.Write(fileInBytes, 0, fileInBytes.Length);
             memorystream.Seek(0, SeekOrigin.Begin);
 
-            return GetExcelResponse(memorystream, "Supplier Import Template");
+            return GetExcelResponse(memorystream, "Supplier Import Template.xls");
         }
 
 

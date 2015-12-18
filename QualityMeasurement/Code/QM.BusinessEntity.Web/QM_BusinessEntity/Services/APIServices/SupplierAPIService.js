@@ -31,7 +31,11 @@
         }
 
         function DownloadImportSupplierTemplate() {
-            return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Supplier", "DownloadImportSupplierTemplate"));
+            return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Supplier", "DownloadImportSupplierTemplate"), {},
+                {
+                    returnAllResponseParameters: true,
+                    responseTypeAsBufferArray: true
+                });
         }
 
         function UploadSuppliers(fileId) {
