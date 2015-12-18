@@ -13,7 +13,7 @@ public partial class Default : BasePage
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!Current.User.IsAuthenticated)
-            Response.Redirect("Login.aspx");
+            Response.Redirect("Login.aspx",false);
         lblTotalCalls.Text = CDRRepository.GetTotalCallsITPC().ToString();
         lblCLIDel.Text = CDRRepository.GetTotalCallsZain().ToString();
         lblCLINonDel.Text = CDRRepository.GetTotalCallsST().ToString();
