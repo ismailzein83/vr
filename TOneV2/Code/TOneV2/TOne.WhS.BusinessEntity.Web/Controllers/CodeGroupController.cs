@@ -1,5 +1,4 @@
-﻿using Aspose.Cells;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -59,31 +58,17 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("UploadCodeGroupList")]
-        public HttpResponseMessage UploadCodeGroupList(int fileId)
+        public object UploadCodeGroupList(int fileId)
         {
-            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
-            return response;
+            CodeGroupManager manager = new CodeGroupManager();
+            return manager.UploadCodeGroupList(fileId);
         }
         [HttpGet]
         [Route("DownloadCodeGroupListTemplate")]
-        public HttpResponseMessage DownloadCodeGroupListTemplate()
+        public object DownloadCodeGroupListTemplate()
         {
-            string obj = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["DownloadCodeGroupTemplatePath"]);
-            Workbook workbook = new Workbook(obj);
-            Aspose.Cells.License license = new Aspose.Cells.License();
-            license.SetLicense("Aspose.Cells.lic");
-            MemoryStream memoryStream = new MemoryStream();
-            memoryStream = workbook.SaveToStream();
-            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
-            memoryStream.Position = 0;
-            response.Content = new StreamContent(memoryStream);
-
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-            {
-                FileName = String.Format("ImportPriceListTemplate.xls")
-            };
-            return response;
+            CodeGroupManager manager = new CodeGroupManager();
+            return manager.DownloadCodeGroupListTemplate();
         }
        
     }

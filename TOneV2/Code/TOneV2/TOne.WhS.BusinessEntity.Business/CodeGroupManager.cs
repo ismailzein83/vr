@@ -1,12 +1,19 @@
-﻿using System;
+﻿using Aspose.Cells;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -95,6 +102,68 @@ namespace TOne.WhS.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             }
             return updateOperationOutput;
+        }
+
+        public object UploadCodeGroupList(int fileId)
+        {
+            VRFileManager fileManager = new VRFileManager();
+            VRFile file = fileManager.GetFile(fileId);
+            byte[] bytes = file.Content;
+            MemoryStream memStreamRate = new MemoryStream(bytes);
+            Workbook objExcel = new Workbook(memStreamRate);
+            Worksheet worksheet = objExcel.Worksheets[0];
+            int count = 1;
+            Dictionary<string, string> addedCountriesByCodeGroup = new Dictionary<string, string>();
+            while (count < worksheet.Cells.Rows.Count)
+            {
+                string codeGroup = worksheet.Cells[count, 0].StringValue;
+                string country = worksheet.Cells[count, 1].StringValue;
+                if (!addedCountriesByCodeGroup.ContainsKey(codeGroup))
+                    addedCountriesByCodeGroup.Add(codeGroup, country); 
+            }
+            CountryManager countryManager = new CountryManager();
+            Dictionary<string, Country> cachedCountries = countryManager.GetCachedCountriesByNames();
+
+            List<CodeGroup> ImportedCodeGroup = new List<CodeGroup>();
+           
+            foreach (var code in addedCountriesByCodeGroup)
+            {
+                Country countryKey;
+                if(cachedCountries.TryGetValue(code.Value,out countryKey))
+                {
+                    ImportedCodeGroup.Add(new CodeGroup
+                    {
+                        Code=code.Key,
+                        CountryId = countryKey.CountryId
+                    });
+                }
+                else
+                {
+
+                }
+            }
+
+            return new object();
+        }
+
+        public object DownloadCodeGroupListTemplate()
+        {
+            string obj = ""; //HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["DownloadCodeGroupTemplatePath"]);
+            Workbook workbook = new Workbook(obj);
+            Aspose.Cells.License license = new Aspose.Cells.License();
+            license.SetLicense("Aspose.Cells.lic");
+            MemoryStream memoryStream = new MemoryStream();
+            memoryStream = workbook.SaveToStream();
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            memoryStream.Position = 0;
+            response.Content = new StreamContent(memoryStream);
+
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = String.Format("ImportPriceListTemplate.xls")
+            };
+            return response;
         }
         #region Private Members
 
