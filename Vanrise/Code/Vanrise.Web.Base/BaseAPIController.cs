@@ -40,5 +40,12 @@ namespace Vanrise.Web.Base
             };
             return response;
         }
+        protected object GetExcelResponse(byte[] bytes,string fileName)
+        {
+            MemoryStream stream = new System.IO.MemoryStream();
+            stream.Write(bytes, 0, bytes.Length);
+            stream.Seek(0, System.IO.SeekOrigin.Begin);
+            return GetExcelResponse(stream,fileName);
+        }
     }
 }

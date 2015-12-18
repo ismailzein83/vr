@@ -28,6 +28,9 @@
         function UploadCodeGroupList(fileId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CodeGroup", "UploadCodeGroupList"), {
                 fileId: fileId,
+            }, {
+                returnAllResponseParameters: true,
+                responseTypeAsBufferArray: true
             });
         }
         function DownloadCodeGroupListTemplate() {

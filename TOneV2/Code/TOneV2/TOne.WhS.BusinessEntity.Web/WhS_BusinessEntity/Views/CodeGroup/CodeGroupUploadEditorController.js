@@ -10,6 +10,7 @@ function codeGroupUploadEditorController($scope, VRUIUtilsService, UtilsService,
   
         $scope.upload = function () {
             return WhS_BE_CodeGroupAPIService.UploadCodeGroupList($scope.codeGroupList.fileId).then(function (response) {
+                UtilsService.downloadFile(response.data, response.headers);
             });
         }
         $scope.downloadTemplate = function () {

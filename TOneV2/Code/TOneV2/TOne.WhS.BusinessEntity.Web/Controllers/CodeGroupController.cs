@@ -61,14 +61,16 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object UploadCodeGroupList(int fileId)
         {
             CodeGroupManager manager = new CodeGroupManager();
-            return manager.UploadCodeGroupList(fileId);
+            MemoryStream memStreamRate = manager.UploadCodeGroupList(fileId);
+            return GetExcelResponse(memStreamRate, "ImportedCodeGroupResults.xls");  
         }
         [HttpGet]
         [Route("DownloadCodeGroupListTemplate")]
         public object DownloadCodeGroupListTemplate()
         {
             CodeGroupManager manager = new CodeGroupManager();
-            return manager.DownloadCodeGroupListTemplate();
+            byte[] bytes = manager.DownloadCodeGroupListTemplate();
+            return GetExcelResponse(bytes, "ImportPriceListTemplate.xls");  
         }
        
     }

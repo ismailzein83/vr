@@ -13,6 +13,8 @@ namespace TOne.WhS.BusinessEntity.Data
         List<CodeGroup> GetCodeGroups();
         bool Update(CodeGroup codeGroup);
         bool Insert(CodeGroup codeGroup, out int insertedId);
+
+        void SaveCodeGroupToDB(List<CodeGroup> codeGroups);
         bool AreCodeGroupUpdated(ref object updateHandle);
        
     }

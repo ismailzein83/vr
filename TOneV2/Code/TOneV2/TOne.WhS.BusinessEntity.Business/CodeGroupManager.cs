@@ -1,6 +1,7 @@
 ﻿using Aspose.Cells;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -104,8 +105,9 @@ namespace TOne.WhS.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public object UploadCodeGroupList(int fileId)
+        public MemoryStream UploadCodeGroupList(int fileId)
         {
+
             VRFileManager fileManager = new VRFileManager();
             VRFile file = fileManager.GetFile(fileId);
             byte[] bytes = file.Content;
@@ -113,57 +115,101 @@ namespace TOne.WhS.BusinessEntity.Business
             Workbook objExcel = new Workbook(memStreamRate);
             Worksheet worksheet = objExcel.Worksheets[0];
             int count = 1;
+            List<String> headers = new List<string>();
+            headers.Add(worksheet.Cells[0, 0].StringValue);
+            headers.Add(worksheet.Cells[0, 1].StringValue);
+            headers.Add("Result");
+
             Dictionary<string, string> addedCountriesByCodeGroup = new Dictionary<string, string>();
             while (count < worksheet.Cells.Rows.Count)
             {
                 string codeGroup = worksheet.Cells[count, 0].StringValue;
                 string country = worksheet.Cells[count, 1].StringValue;
                 if (!addedCountriesByCodeGroup.ContainsKey(codeGroup))
-                    addedCountriesByCodeGroup.Add(codeGroup, country); 
+                    addedCountriesByCodeGroup.Add(codeGroup, country);
+                count++;
             }
+
+
+
+            //Return Excel Result
+            Workbook returnedExcel = new Workbook();
+            Aspose.Cells.License license = new Aspose.Cells.License();
+            license.SetLicense("Aspose.Cells.lic");
+            returnedExcel.Worksheets.Clear();
+            Worksheet RateWorkSheet = returnedExcel.Worksheets.Add("Result");
+            int rowIndex = 0;
+            int colIndex = 0;
+
+            foreach (var header in headers)
+            {
+
+                RateWorkSheet.Cells.SetColumnWidth(colIndex, 20);
+                RateWorkSheet.Cells[rowIndex, colIndex].PutValue(header);
+                Cell cell = RateWorkSheet.Cells.GetCell(rowIndex, colIndex);
+                Style style = cell.GetStyle();
+                style.Font.Name = "Times New Roman";
+                style.Font.Color = Color.FromArgb(255, 0, 0); ;
+                style.Font.Size = 14;
+                style.Font.IsBold = true;
+                cell.SetStyle(style);
+                colIndex++;
+            }
+            rowIndex++;
+            colIndex = 0;
+
+           
             CountryManager countryManager = new CountryManager();
             Dictionary<string, Country> cachedCountries = countryManager.GetCachedCountriesByNames();
+            Dictionary<string, CodeGroup> cachedCodeGroups = GetCachedCodeGroupsByCode();
 
-            List<CodeGroup> ImportedCodeGroup = new List<CodeGroup>();
+            List<CodeGroup> importedCodeGroup = new List<CodeGroup>();
            
             foreach (var code in addedCountriesByCodeGroup)
             {
-                Country countryKey;
-                if(cachedCountries.TryGetValue(code.Value,out countryKey))
+                Country country=null;
+                CodeGroup codeGroup = null;
+                if (cachedCountries.TryGetValue(code.Value, out country) && !cachedCodeGroups.TryGetValue(code.Key, out codeGroup))
                 {
-                    ImportedCodeGroup.Add(new CodeGroup
+                    importedCodeGroup.Add(new CodeGroup
                     {
                         Code=code.Key,
-                        CountryId = countryKey.CountryId
+                        CountryId = country.CountryId
                     });
                 }
                 else
                 {
-
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue(code.Key);
+                    colIndex++;
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue(code.Value);
+                    colIndex++;
+                    if (country == null && codeGroup != null)
+                      RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Country Not Exists and CodeGroup Exists");
+                    else if (country == null && codeGroup == null)
+                        RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Country Not Exists");
+                    else if (country != null && codeGroup != null)
+                        RateWorkSheet.Cells[rowIndex, colIndex].PutValue("CodeGroup Exists");
+                    colIndex = 0;
+                    rowIndex++;
                 }
             }
 
-            return new object();
+            ICodeGroupDataManager dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
+            dataManager.SaveCodeGroupToDB(importedCodeGroup);
+
+            MemoryStream memoryStream = new MemoryStream();
+            memoryStream = returnedExcel.SaveToStream();
+
+            return memoryStream;
         }
 
-        public object DownloadCodeGroupListTemplate()
+        public byte[] DownloadCodeGroupListTemplate()
         {
-            string obj = ""; //HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["DownloadCodeGroupTemplatePath"]);
-            Workbook workbook = new Workbook(obj);
-            Aspose.Cells.License license = new Aspose.Cells.License();
-            license.SetLicense("Aspose.Cells.lic");
-            MemoryStream memoryStream = new MemoryStream();
-            memoryStream = workbook.SaveToStream();
-            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
-            memoryStream.Position = 0;
-            response.Content = new StreamContent(memoryStream);
+            string physicalFilePath = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["DownloadCodeGroupTemplatePath"]);
+           
+            byte[] bytes = File.ReadAllBytes(physicalFilePath);
 
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-            {
-                FileName = String.Format("ImportPriceListTemplate.xls")
-            };
-            return response;
+            return bytes;  
         }
         #region Private Members
 
@@ -175,6 +221,16 @@ namespace TOne.WhS.BusinessEntity.Business
                    ICodeGroupDataManager dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
                    IEnumerable<CodeGroup> codegroups = dataManager.GetCodeGroups();
                    return codegroups.ToDictionary(cg => cg.CodeGroupId, cg => cg);
+               });
+        }
+        public Dictionary<string, CodeGroup> GetCachedCodeGroupsByCode()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCodeGroupsByCode",
+               () =>
+               {
+                   ICodeGroupDataManager dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
+                   IEnumerable<CodeGroup> codegroups = dataManager.GetCodeGroups();
+                   return codegroups.ToDictionary(cg => cg.Code, cg => cg);
                });
         }
 

@@ -237,7 +237,7 @@ namespace Vanrise.Common.Business
 
         public Dictionary<string, Country> GetCachedCountriesByNames()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCountries",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCountriesByName",
                () =>
                {
                    ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
