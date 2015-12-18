@@ -249,7 +249,7 @@ namespace Vanrise.Common.Business
                    {
                        foreach (var c in countries)
                        {
-                           if (!dic.ContainsKey(c.Name))
+                           if (!dic.ContainsKey(c.Name.ToLower()))
                                dic.Add(c.Name.ToLower(), c);
                        }
                    }

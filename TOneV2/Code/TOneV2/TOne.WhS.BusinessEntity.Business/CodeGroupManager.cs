@@ -119,7 +119,7 @@ namespace TOne.WhS.BusinessEntity.Business
             headers.Add(worksheet.Cells[0, 0].StringValue);
             headers.Add(worksheet.Cells[0, 1].StringValue);
             headers.Add("Result");
-
+            headers.Add("Error Message");
             Dictionary<string, string> addedCountriesByCodeGroup = new Dictionary<string, string>();
             while (count < worksheet.Cells.Rows.Count)
             {
@@ -160,28 +160,39 @@ namespace TOne.WhS.BusinessEntity.Business
 
            
             CountryManager countryManager = new CountryManager();
-            Dictionary<string, Country> cachedCountries = countryManager.GetCachedCountriesByNames();
             Dictionary<string, CodeGroup> cachedCodeGroups = GetCachedCodeGroupsByCode();
 
             List<CodeGroup> importedCodeGroup = new List<CodeGroup>();
            
             foreach (var code in addedCountriesByCodeGroup)
             {
-                Country country=null;
+                RateWorkSheet.Cells[rowIndex, colIndex].PutValue(code.Key);
+                colIndex++;
+                RateWorkSheet.Cells[rowIndex, colIndex].PutValue(code.Value);
+                colIndex++;
+
+                Country country = countryManager.GetCountry(code.Value.ToLower());
                 CodeGroup codeGroup = null;
-                if (cachedCountries.TryGetValue(code.Value, out country) && !cachedCodeGroups.TryGetValue(code.Key, out codeGroup))
+                if (country!=null && !cachedCodeGroups.TryGetValue(code.Key, out codeGroup))
                 {
                     importedCodeGroup.Add(new CodeGroup
                     {
                         Code=code.Key,
                         CountryId = country.CountryId
                     });
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Succeed");
+                    colIndex = 0;
+                    rowIndex++;
                 }
                 else
                 {
-                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue(code.Key);
-                    colIndex++;
-                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue(code.Value);
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
+                    Cell cell = RateWorkSheet.Cells.GetCell(rowIndex, colIndex);
+                    Style style = cell.GetStyle();
+                    style.Font.Color = Color.FromArgb(255, 0, 0); ;
+                    style.Font.IsBold = true;
+                    cell.SetStyle(style);
+
                     colIndex++;
                     if (country == null && codeGroup != null)
                       RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Country Not Exists and CodeGroup Exists");
@@ -189,6 +200,9 @@ namespace TOne.WhS.BusinessEntity.Business
                         RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Country Not Exists");
                     else if (country != null && codeGroup != null)
                         RateWorkSheet.Cells[rowIndex, colIndex].PutValue("CodeGroup Exists");
+                  
+
+
                     colIndex = 0;
                     rowIndex++;
                 }
