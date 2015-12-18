@@ -150,6 +150,11 @@
             $scope.editSettings = function () {
                 WhS_Sales_RatePlanService.editSettings(settings, onSettingsUpdate);
             };
+            $scope.validateRatePlan = function () {
+                if (!$scope.showZoneLetters || ($scope.zoneLetters && $scope.zoneLetters.length > 0))
+                    return null;
+                return "Consider selling then owner some zones";
+            };
 
             defineSaveButtonMenuActions();
         }
