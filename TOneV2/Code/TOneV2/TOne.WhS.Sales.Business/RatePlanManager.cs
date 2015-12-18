@@ -268,20 +268,14 @@ namespace TOne.WhS.Sales.Business
         {
             if (zoneItem.NewRoutingProductId != null)
                 SetEffectiveRoutingProductProperties(zoneItem, (int)zoneItem.NewRoutingProductId);
-            else if (zoneRoutingProductChange != null)
-            {
-                SaleEntityZoneRoutingProduct effectiveDefaultRoutingProduct = GetEffectiveDefaultRoutingProduct(newDefaultRoutingProduct, ownerType, ownerId);
-                if (effectiveDefaultRoutingProduct != null)
-                    SetEffectiveRoutingProductProperties(zoneItem, effectiveDefaultRoutingProduct.RoutingProductId);
-            }
-            else
+            else if (zoneRoutingProductChange == null)
             {
                 SaleEntityZoneRoutingProduct currentZoneRoutingProduct = GetCurrentZoneRoutingProduct(ownerType, ownerId, zoneItem.ZoneId);
-                SaleEntityZoneRoutingProduct effectiveDefaultRoutingProduct = GetEffectiveDefaultRoutingProduct(newDefaultRoutingProduct, ownerType, ownerId);
+                SaleEntityZoneRoutingProduct effectiveDefaultRoutingProduct = GetEffectiveDefaultRoutingProduct(ownerType, ownerId, newDefaultRoutingProduct);
 
                 if (ownerType == SalePriceListOwnerType.SellingProduct)
                 {
-                    if (currentZoneRoutingProduct != null && currentZoneRoutingProduct.Source == SaleEntityZoneRoutingProductSource.ProductZone)
+                    if (currentZoneRoutingProduct != null)
                         SetEffectiveRoutingProductProperties(zoneItem, currentZoneRoutingProduct.RoutingProductId);
                     else if (effectiveDefaultRoutingProduct != null)
                         SetEffectiveRoutingProductProperties(zoneItem, effectiveDefaultRoutingProduct.RoutingProductId);
@@ -309,7 +303,7 @@ namespace TOne.WhS.Sales.Business
                 return zrpLocator.GetCustomerZoneRoutingProduct(ownerId, GetSellingProductId(ownerId), zoneId);
         }
 
-        private SaleEntityZoneRoutingProduct GetEffectiveDefaultRoutingProduct(NewDefaultRoutingProduct newDefaultRoutingProduct, SalePriceListOwnerType ownerType, int ownerId)
+        private SaleEntityZoneRoutingProduct GetEffectiveDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, NewDefaultRoutingProduct newDefaultRoutingProduct)
         {
             if (newDefaultRoutingProduct != null)
             {
