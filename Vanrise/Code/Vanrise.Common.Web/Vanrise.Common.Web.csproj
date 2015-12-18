@@ -43,6 +43,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells, Version=8.2.2.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Resources\DLLs\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -180,6 +184,8 @@
     <Content Include="Common\Views\City\CityEditorController.js" />
     <Content Include="Common\Views\City\CityManagement.html" />
     <Content Include="Common\Views\City\CityManagementController.js" />
+    <Content Include="Common\Views\Country\CountryUploaderController.js" />
+    <Content Include="Common\Views\Country\CountryUploader.html" />
     <Content Include="Common\Views\Country\CountryEditor.html" />
     <Content Include="Common\Views\Country\CountryEditorController.js" />
     <Content Include="Common\Views\Country\CountryManagement.html" />
@@ -206,6 +212,12 @@
     <Content Include="Common\Views\Samples\TABSSample\TabsController.js" />
     <Content Include="Common\Views\StartupPage.html" />
     <Content Include="Common\Views\Support.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Common\Template\Country Add sample.xls" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Common\Template\Country Update sample.xls" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

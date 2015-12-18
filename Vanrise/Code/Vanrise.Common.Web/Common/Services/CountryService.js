@@ -6,7 +6,8 @@ app.service('VRCommon_CountryService', ['VRModalService', 'VRNotificationService
             editCountry: editCountry,
             addCountry: addCountry,
             addDrillDownDefinition: addDrillDownDefinition,
-            getDrillDownDefinition: getDrillDownDefinition
+            getDrillDownDefinition: getDrillDownDefinition,
+            uploadCountrires: uploadCountrires
 
         });
         function editCountry(countryId, onCountryUpdated) {
@@ -34,7 +35,15 @@ app.service('VRCommon_CountryService', ['VRModalService', 'VRNotificationService
             VRModalService.showModal('/Client/Modules/Common/Views/Country/CountryEditor.html', parameters, settings);
         }
 
-        
+        function uploadCountrires() {
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.title = "Upload Countrires";
+            };
+            var parameters = {};
+
+            VRModalService.showModal('/Client/Modules/Common/Views/Country/CountryUploader.html', parameters, settings);
+        }
 
         function addDrillDownDefinition(drillDownDefinition) {
             drillDownDefinitions.push(drillDownDefinition);

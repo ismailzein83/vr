@@ -16,7 +16,7 @@ namespace Vanrise.Common.Business
             Func<Country, bool> filterExpression = (prod) =>
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCountries.ToBigResult(input, filterExpression, CountryDetailMapper));     
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCountries.ToBigResult(input, filterExpression, CountryDetailMapper));
         }
 
         public IEnumerable<CountryInfo> GeCountriesInfo()
@@ -52,6 +52,69 @@ namespace Vanrise.Common.Business
         {
             return GetCachedCountries().FindRecord(itm => itm.SourceId == sourceId);
         }
+
+        public string AddCountries(List<string> addedCountires)
+        {
+            string message = "";
+            int insertedCount = 0;
+            int notInsertedCount = 0;
+
+            foreach (var a in addedCountires)
+            {
+                Country foundedCountry = GetCachedCountries().FindRecord(it => it.Name.ToLower().Equals(a.ToLower()));
+                if (foundedCountry != null)
+                {
+                    notInsertedCount++;
+                }
+                else {
+                    foundedCountry.Name = a;
+                    long startingId;
+                    ReserveIDRange(1, out startingId);
+                    foundedCountry.CountryId = (int)startingId;
+                    ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
+                    bool insertresult = dataManager.Insert(foundedCountry);
+                    if (insertresult) insertedCount++;
+                    else {
+                         notInsertedCount++;
+                    }
+                }
+
+            }
+            message = String.Format("{0} countries added and {1} are already exists", insertedCount, notInsertedCount);
+
+            return message;
+        }
+
+        public string UpdateCountires(Dictionary<string, string> updatedCountries)
+        {
+            string message = "";
+            int updatedCount = 0;
+            int notUpdatedCount = 0;
+            
+            foreach (var a in updatedCountries)
+            {
+                Country foundedCountry = GetCachedCountries().FindRecord(it => it.Name.ToLower().Equals(a.Value.ToLower()));
+                if (foundedCountry != null)
+                {
+                    notUpdatedCount++;
+                }
+
+                else
+                {
+                    foundedCountry.Name = a.Value;
+                    ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
+
+                    bool updatedresult = dataManager.Update(foundedCountry);
+                    if (updatedresult) updatedCount++;
+                    else {
+                         notUpdatedCount++;
+                    }
+                }
+
+            }
+            message = String.Format("{0} countries updated and {1} are the same", updatedCount, notUpdatedCount);
+            return message;
+        }
         public Vanrise.Entities.InsertOperationOutput<CountryDetail> AddCountry(Country country)
         {
             Vanrise.Entities.InsertOperationOutput<CountryDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CountryDetail>();
@@ -68,7 +131,7 @@ namespace Vanrise.Common.Business
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;               
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = CountryDetailMapper(country);
             }
             else
@@ -90,15 +153,15 @@ namespace Vanrise.Common.Business
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
 
         }
-      
+
         public void UpdateCountryFromSource(Country country)
         {
 
             ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
-             dataManager.UpdateFromSource(country);
-             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            dataManager.UpdateFromSource(country);
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
-                
+
         public Vanrise.Entities.UpdateOperationOutput<CountryDetail> UpdateCountry(Country country)
         {
             ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
@@ -164,9 +227,9 @@ namespace Vanrise.Common.Business
                    ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
                    IEnumerable<Country> countries = dataManager.GetCountries();
                    Dictionary<string, Country> dic = new Dictionary<string, Country>();
-                   if(countries != null)
+                   if (countries != null)
                    {
-                       foreach(var c in countries)
+                       foreach (var c in countries)
                        {
                            if (!dic.ContainsKey(c.Name))
                                dic.Add(c.Name, c);
@@ -191,7 +254,7 @@ namespace Vanrise.Common.Business
         {
             CountryDetail countryDetail = new CountryDetail();
 
-            countryDetail.Entity = country;            
+            countryDetail.Entity = country;
             return countryDetail;
         }
 
@@ -208,7 +271,7 @@ namespace Vanrise.Common.Business
         {
             Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(typeof(CountryManager), nbOfIds, out startingId);
         }
-      
+
         #endregion
     }
 }

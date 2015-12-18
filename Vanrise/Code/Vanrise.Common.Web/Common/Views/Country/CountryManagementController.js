@@ -17,12 +17,16 @@
             };
 
             $scope.onGridReady = function (api) {
-                gridAPI = api;            
+                gridAPI = api;
                 api.loadGrid(filter);
             }
             $scope.addNewCountry = addNewCountry;
-        }
 
+            $scope.uploadNewCountries = function () {
+               
+                VRCommon_CountryService.uploadCountrires(); 
+            }
+        }
         function load() {
 
            
@@ -46,6 +50,7 @@
             };
             VRCommon_CountryService.addCountry(onCountryAdded);
         }
+       // function uploadCountires() 
 
     }
 

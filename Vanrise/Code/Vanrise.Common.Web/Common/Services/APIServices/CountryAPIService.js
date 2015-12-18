@@ -26,13 +26,30 @@
         function GetCountrySourceTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "Country", "GetCountrySourceTemplates"));
         }
+
+        function DownloadCountriesTemplate(type) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "Country", "DownloadCountriesTemplate"),
+                {
+                    type: type
+                },
+                {
+                    returnAllResponseParameters: true,
+                    responseTypeAsBufferArray: true
+                }
+            );
+        }
+        function UploadCountries(countryFile) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "Country", "UploadCountries"), countryFile);
+        }
         return ({
             GetFilteredCountries: GetFilteredCountries,
             GetCountriesInfo: GetCountriesInfo,
             GetCountry: GetCountry,
             UpdateCountry: UpdateCountry,
             AddCountry: AddCountry,
-            GetCountrySourceTemplates: GetCountrySourceTemplates 
+            GetCountrySourceTemplates: GetCountrySourceTemplates,
+            DownloadCountriesTemplate: DownloadCountriesTemplate,
+            UploadCountries: UploadCountries
         });
     }
 
