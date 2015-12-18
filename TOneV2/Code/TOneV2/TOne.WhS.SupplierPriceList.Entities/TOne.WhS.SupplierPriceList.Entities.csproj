@@ -50,6 +50,7 @@
     <Compile Include="Code.cs" />
     <Compile Include="CodesByCode.cs" />
     <Compile Include="Enumerations.cs" />
+    <Compile Include="PreviewData\ZonePreview.cs" />
     <Compile Include="Validation\BusinessRule.cs" />
     <Compile Include="Validation\IRuleTarget.cs" />
     <Compile Include="SPL\IProcessCountryCodesContext.cs" />

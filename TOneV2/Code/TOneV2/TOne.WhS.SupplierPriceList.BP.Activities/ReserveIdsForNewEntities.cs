@@ -20,19 +20,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<NewRate>> NewRates { get; set; }
 
-        [RequiredArgument]
-        public OutArgument<int> PriceListId { get; set; }
-
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<NewZone> zoneList = NewZones.Get(context);
             IEnumerable<NewCode> codeList = NewCodes.Get(context);
             IEnumerable<NewRate> rateList = NewRates.Get(context);
-
-            TOne.WhS.SupplierPriceList.Business.SupplierPriceListManager priceListManager = new TOne.WhS.SupplierPriceList.Business.SupplierPriceListManager();
-            int priceListId = (int)priceListManager.ReserveIDRange(1);
-
-            PriceListId.Set(context, priceListId);
 
             SupplierZoneManager zoneManager = new SupplierZoneManager();
             long zoneStartingId = zoneManager.ReserveIDRange(zoneList.Count());
