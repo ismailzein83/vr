@@ -15,7 +15,7 @@ namespace QM.BusinessEntity.Entities
     {
         public abstract void Apply(Supplier supplier);
 
-        public virtual string[] GetExcelColumnNames()
+        public virtual ExcelColumnInfo[] GetExcelColumnNames()
         {
             return null;
         }
@@ -24,5 +24,14 @@ namespace QM.BusinessEntity.Entities
         {
 
         }
+    }
+
+    public class ExcelColumnInfo
+    {
+        public string ColumnName { get; set; }
+
+        public string SampleValue1 { get; set; }
+
+        public string SampleValue2 { get; set; }
     }
 }

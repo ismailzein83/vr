@@ -16,13 +16,13 @@ namespace QM.CLITester.iTestIntegration
 {
     public class SupplierExtensionSettings : ExtendedSupplierSetting
     {
-        public string Prefix { get; set; }        
+        public string Prefix { get; set; }
 
         public string ITestSupplierId { get; set; }
 
         public override void Apply(Supplier supplier)
         {
-            if(this.ITestSupplierId == null)
+            if (this.ITestSupplierId == null)
             {
                 this.ITestSupplierId = CreateSupplier();
                 if (this.ITestSupplierId == null)
@@ -34,16 +34,16 @@ namespace QM.CLITester.iTestIntegration
         private string CreateSupplier()
         {
             string dummySupplierName = Guid.NewGuid().ToString();
-            
+
             string createSupplierResponse = _serviceActions.PostRequest("5020", String.Format("&name={0}&type=std&codec=alaw", dummySupplierName));
             CheckSupplierResponse(createSupplierResponse);
             string allSuppliersResponse = _serviceActions.PostRequest("1012", null);
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(allSuppliersResponse);
-            foreach(XmlNode nodeSupplier in doc.DocumentElement.ChildNodes)
+            foreach (XmlNode nodeSupplier in doc.DocumentElement.ChildNodes)
             {
                 XmlNode nodeSupplierName = nodeSupplier.SelectSingleNode("Supplier_Name");
-                if(nodeSupplierName.InnerText == dummySupplierName)
+                if (nodeSupplierName.InnerText == dummySupplierName)
                 {
                     XmlNode nodeSupplierId = nodeSupplier.SelectSingleNode("Supplier_ID");
                     return nodeSupplierId.InnerText;
@@ -65,9 +65,17 @@ namespace QM.CLITester.iTestIntegration
         }
 
         const string EXCELFIELD_PREFIX = "Prefix";
-        public override string[] GetExcelColumnNames()
+        public override ExcelColumnInfo[] GetExcelColumnNames()
         {
-            return new string[] { EXCELFIELD_PREFIX };
+            return new ExcelColumnInfo[] 
+            {
+                new ExcelColumnInfo
+                {
+                     ColumnName = EXCELFIELD_PREFIX,
+                     SampleValue1 = "4444444",
+                     SampleValue2 = "55555"
+                }
+            };
         }
 
         public override void ApplyExcelFields(Supplier supplier, Dictionary<string, object> excelFields)
@@ -77,5 +85,4 @@ namespace QM.CLITester.iTestIntegration
                 this.Prefix = prefix as string;
         }
     }
-
 }
