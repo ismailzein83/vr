@@ -49,6 +49,7 @@
     <Compile Include="CP\Changes.cs" />
     <Compile Include="CP\ChangesDetail.cs" />
     <Compile Include="CP\SaleCode\CodeItem.cs" />
+    <Compile Include="CP\SaleCode\DeletedCode.cs" />
     <Compile Include="CP\SaleCode\NewCode.cs" />
     <Compile Include="CP\SaleCode\NewCodeOutput.cs" />
     <Compile Include="CP\SaleZone\NewZone.cs" />
