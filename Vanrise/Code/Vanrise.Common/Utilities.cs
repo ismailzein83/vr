@@ -48,6 +48,27 @@ namespace Vanrise.Common
             return default(Q);
         }
 
+        public static IEnumerable<Type> GetAllImplementations(Type baseType)
+        {
+            List<Type> lst = new List<Type>();
+            foreach(var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (Type t in assembly.GetTypes())
+                {
+                    if (baseType.IsAssignableFrom(t) && t.IsClass && !t.IsAbstract)
+                    {
+                        lst.Add(t);
+                    }
+                }
+            }
+            return lst;
+        }
+
+        public static IEnumerable<Type> GetAllImplementations<T>()
+        {
+            return GetAllImplementations(typeof(T));
+        }
+
         public static DateTime Max(DateTime date1, DateTime date2)
         {
             return date1 > date2 ? date1 : date2;
