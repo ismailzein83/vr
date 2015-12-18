@@ -1,0 +1,15 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="datarecordTypes"
+                     on-ready="onGridReady"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="gridMenuActions"
+                     idfield="Entity.DataRecordTypeId">
+
+            <vr-datagridcolumn headertext="'ID'" field="'Entity.DataRecordTypeId'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Parent Name'" field="'ParentName'" type="'Text'"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

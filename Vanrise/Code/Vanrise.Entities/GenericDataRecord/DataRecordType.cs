@@ -12,7 +12,7 @@ namespace Vanrise.Entities.GenericDataRecord
 
         public string Name { get; set; }
 
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
 
         public List<DataRecordField> Fields { get; set; }
     }

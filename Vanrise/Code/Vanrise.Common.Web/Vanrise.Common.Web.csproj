@@ -126,6 +126,8 @@
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CurrencyExchangeRateController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
+    <Compile Include="Controllers\DataRecordFieldController.cs" />
+    <Compile Include="Controllers\DataRecordTypeController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -167,15 +169,22 @@
     <Content Include="Common\Directives\Currency\Templates\CurrencyGridTemplate.html" />
     <Content Include="Common\Directives\Currency\vr-common-currency-selector.js" />
     <Content Include="Common\Directives\Currency\vr-common-currency-grid.js" />
+    <Content Include="Common\Directives\GenericDataRecord\Templates\DataRecordTypeGrid.html" />
+    <Content Include="Common\Directives\GenericDataRecord\Templates\DataRecordFieldGrid.html" />
+    <Content Include="Common\Directives\GenericDataRecord\vr-common-datarecordtype-grid.js" />
+    <Content Include="Common\Directives\GenericDataRecord\vr-common-datarecordfield-grid.js" />
     <Content Include="Common\ModuleInitialization.js" />
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
     <Content Include="Common\Services\APIServices\CountryAPIService.js" />
     <Content Include="Common\Services\APIServices\CurrencyExchangeRateAPIService.js" />
     <Content Include="Common\Services\APIServices\CurrencyAPIService.js" />
+    <Content Include="Common\Services\APIServices\DataRecordFieldAPIService.js" />
+    <Content Include="Common\Services\APIServices\DataRecordTypeAPIService.js" />
     <Content Include="Common\Services\CityService.js" />
     <Content Include="Common\Services\CurrencyExchangeRateService.js" />
     <Content Include="Common\Services\CurrencyService.js" />
     <Content Include="Common\Services\CountryService.js" />
+    <Content Include="Common\Services\DataRecordFieldService.js" />
     <Content Include="Common\Views\City\CityEditor.html" />
     <Content Include="Common\Views\City\CityEditorController.js" />
     <Content Include="Common\Views\City\CityManagement.html" />
@@ -196,6 +205,12 @@
     <Content Include="Common\Views\Currency\CurrencyManagement.html" />
     <Content Include="Common\Views\Error.html" />
     <Content Include="Common\Views\ErrorController.js" />
+    <Content Include="Common\Views\GenericDataRecord\DataRecordFieldEditor.html" />
+    <Content Include="Common\Views\GenericDataRecord\DataRecordFieldEditorController.js" />
+    <Content Include="Common\Views\GenericDataRecord\DataRecordFieldManagement.html" />
+    <Content Include="Common\Views\GenericDataRecord\DataRecordFieldManagementController.js" />
+    <Content Include="Common\Views\GenericDataRecord\DataRecordTypeManagement.html" />
+    <Content Include="Common\Views\GenericDataRecord\DataRecordTypeManagementController.js" />
     <Content Include="Common\Views\Samples\AppendixSample\appendix-directive.js" />
     <Content Include="Common\Views\Samples\AppendixSample\appendix-list-directive.js" />
     <Content Include="Common\Views\Samples\AppendixSample\appendix-service.js" />

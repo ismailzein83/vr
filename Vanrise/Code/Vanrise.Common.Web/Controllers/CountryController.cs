@@ -13,7 +13,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Data;
 
-namespace Vanrise.Web.Controllers
+namespace Vanrise.Common.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "Country")]
     public class VRCommon_CountryController : BaseAPIController

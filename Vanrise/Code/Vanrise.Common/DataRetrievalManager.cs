@@ -134,7 +134,6 @@ namespace Vanrise.Common
             memoryStream = wbk.SaveToStream();
            
             excelResult.ExcelFileStream = memoryStream;
-            wbk.Save("D:\\book1.xlsx", SaveFormat.Xlsx);
             return excelResult;
         }
     }

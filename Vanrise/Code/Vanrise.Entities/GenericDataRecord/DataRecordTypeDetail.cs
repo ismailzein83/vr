@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities.GenericDataRecord
 {
-    public abstract class DataRecordFieldType
+    public class DataRecordTypeDetail
     {
-        public int ConfigId { get; set; }
+        public DataRecordType Entity { get; set; }
+        public string ParentName { get; set; }
     }
 }

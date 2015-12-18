@@ -13,7 +13,7 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Web.Base;
 
-namespace Vanrise.Web.Controllers
+namespace Vanrise.Common.Web
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "File")]
     public class VRCommon_FileController : BaseAPIController

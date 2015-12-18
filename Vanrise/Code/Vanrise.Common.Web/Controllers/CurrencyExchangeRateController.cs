@@ -7,7 +7,7 @@ using Vanrise.Entities;
 using Vanrise.Web.Base;
 using Vanrise.Common;
 using Vanrise.Common.Business;
-namespace Vanrise.Web.Controllers
+namespace Vanrise.Common.Web.Controllers
 {
    [RoutePrefix(Constants.ROUTE_PREFIX + "CurrencyExchangeRate")]
     public class VRCommon_CurrencyExchangeRateController : BaseAPIController 
