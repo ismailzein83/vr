@@ -11,7 +11,7 @@ namespace QM.CLITester.Data
     {
         bool Insert(int supplierId, int countryId, int zoneId, int callTestStatus, int callTestResult,
             int initiationRetryCount, int getProgressRetryCount, int userId, int profileId);
-        List<TestCallDetail> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows);
+        List<TestCallDetail> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int userId);
         List<TestCallDetail> GetBeforeId(GetBeforeIdInput input);
         List<TestCall> GetTestCalls(List<CallTestStatus> listCallTestStatus);
         bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus, int initiationRetryCount, string failureMessage);

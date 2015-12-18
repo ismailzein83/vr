@@ -15,6 +15,19 @@ namespace QM.CLITester.iTestIntegration
     {
         public override InitiateTestOutput InitiateTest(IInitiateTestContext context)
         {
+            if (context.Country == null)
+                throw new ArgumentNullException("context.Country");
+
+            if (context.Zone == null)
+                throw new ArgumentNullException("context.Zone");
+
+            if (context.Profile == null)
+                throw new ArgumentNullException("context.Profile");
+
+            if (context.Supplier == null)
+                throw new ArgumentNullException("context.Supplier");
+
+
             ServiceActions serviceActions = new ServiceActions();
             string itestSupplierId = null;
             if(context.Supplier.Settings != null && context.Supplier.Settings.ExtendedSettings != null)
@@ -118,20 +131,23 @@ namespace QM.CLITester.iTestIntegration
             if (!String.IsNullOrEmpty(response))
             {
                 xml.LoadXml(response);
-
+                
                 XmlNodeList xnList = xml.SelectNodes("/Test_Status/_" + testId);
+                
                 if (xnList != null)
                 {
+                    var node = xnList[0];
+
                     TestProgress testProgress = new TestProgress
                     {
-                        Name = xnList[0]["Name"] != null ? xnList[0]["Name"].InnerText : "",
-                        TotalCalls = xnList[0]["Calls_Total"] != null ? Int32.Parse(xnList[0]["Calls_Total"].InnerText) : 0,
-                        CompletedCalls = xnList[0]["Calls_Complete"] != null ? Int32.Parse(xnList[0]["Calls_Complete"].InnerText) : 0,
-                        CliSuccess = xnList[0]["CLI_Success"] != null ? Int32.Parse(xnList[0]["CLI_Success"].InnerText) : 0,
-                        CliNoResult = xnList[0]["CLI_No_Result"] != null ? Int32.Parse(xnList[0]["CLI_No_Result"].InnerText) : 0,
-                        CliFail = xnList[0]["CLI_Fail"] != null ? Int32.Parse(xnList[0]["CLI_Fail"].InnerText) : 0,
-                        Pdd = xnList[0]["PDD"] != null ? Decimal.Parse(xnList[0]["PDD"].InnerText) : 0,
-                        ShareUrl = xnList[0]["Share_URL"] != null ? xnList[0]["Share_URL"].InnerText : ""
+                        Name = node["Name"] != null ? node["Name"].InnerText : "",
+                        TotalCalls = node["Calls_Total"] != null ? Int32.Parse(node["Calls_Total"].InnerText) : 0,
+                        CompletedCalls = node["Calls_Complete"] != null ? Int32.Parse(node["Calls_Complete"].InnerText) : 0,
+                        CliSuccess = node["CLI_Success"] != null ? Int32.Parse(node["CLI_Success"].InnerText) : 0,
+                        CliNoResult = node["CLI_No_Result"] != null ? Int32.Parse(node["CLI_No_Result"].InnerText) : 0,
+                        CliFail = node["CLI_Fail"] != null ? Int32.Parse(node["CLI_Fail"].InnerText) : 0,
+                        Pdd = node["PDD"] != null ? Decimal.Parse(node["PDD"].InnerText) : 0,
+                        ShareUrl = node["Share_URL"] != null ? node["Share_URL"].InnerText : ""
                     };
 
                     testProgressOutput.TestProgress = testProgress;

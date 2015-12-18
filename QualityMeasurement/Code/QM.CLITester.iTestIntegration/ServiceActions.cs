@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -16,8 +17,8 @@ namespace QM.CLITester.iTestIntegration
         {
             var request = (HttpWebRequest)WebRequest.Create("https://api.i-test.net/?t=" + functionCode + (parameters ?? ""));
 
-            var postData = "email=myahya2@vanrise.com";
-            postData += "&pass=123456789";
+            var postData = String.Format("email={0}&pass={1}", ConfigurationSettings.AppSettings["Email"], ConfigurationSettings.AppSettings["Password"]);
+            
             var data = Encoding.ASCII.GetBytes(postData);
 
             request.Method = "POST";

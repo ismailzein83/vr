@@ -57,13 +57,14 @@ namespace QM.CLITester.Business
             LastCallUpdateOutput lastCallUpdateOutputs = new LastCallUpdateOutput();
 
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            lastCallUpdateOutputs.ListTestCallDetails = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows);
+            lastCallUpdateOutputs.ListTestCallDetails = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId());
             lastCallUpdateOutputs.MaxTimeStamp = maxTimeStamp;
             return lastCallUpdateOutputs;
         }
 
         public List<TestCallDetail> GetBeforeId(GetBeforeIdInput input)
         {
+            input.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
             return  dataManager.GetBeforeId(input);
         }

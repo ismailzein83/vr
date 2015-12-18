@@ -44,7 +44,7 @@ namespace QM.CLITester.Data.SQL
             return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCall", TestCallMapper, callTestStatusids);
         }
 
-        public List<TestCallDetail> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows)
+        public List<TestCallDetail> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int userId)
         {
             List<TestCallDetail> listTestCalls = new List<TestCallDetail>();
             byte[] timestamp = null;
@@ -57,13 +57,13 @@ namespace QM.CLITester.Data.SQL
                     while (reader.Read())
                         timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
             },
-               maxTimeStamp, nbOfRows);
+               maxTimeStamp, nbOfRows, userId);
             maxTimeStamp = timestamp;
             return listTestCalls;
         }
         public List<TestCallDetail> GetBeforeId(GetBeforeIdInput input)
         {
-            return GetItemsSP("[QM_CLITester].[sp_TestCall_GetBeforeID]", TestCallDetailMapper, input.LessThanID, input.NbOfRows);
+            return GetItemsSP("[QM_CLITester].[sp_TestCall_GetBeforeID]", TestCallDetailMapper, input.LessThanID, input.NbOfRows, input.UserId);
         }
 
         public bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus, int initiationRetryCount, string failureMessage)

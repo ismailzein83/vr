@@ -214,6 +214,8 @@
     <Content Include="QM_CLITester\Services\ProfileService.js" />
     <Content Include="QM_CLITester\Services\TestCallDetailsService.js" />
     <Content Include="QM_CLITester\Services\TestCallService.js" />
+    <Content Include="QM_CLITester\Views\Dashboard\DashboardManagement.html" />
+    <Content Include="QM_CLITester\Views\Dashboard\DashboardManagementController.js" />
     <Content Include="QM_CLITester\Views\HistoryTestCall\HistoryTestCallManagement.html" />
     <Content Include="QM_CLITester\Views\HistoryTestCall\HistoryTestCallManagementController.js" />
     <Content Include="QM_CLITester\Views\Profile\ProfileEditor.html" />
