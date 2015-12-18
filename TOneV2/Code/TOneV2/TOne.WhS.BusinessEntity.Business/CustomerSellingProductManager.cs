@@ -144,6 +144,17 @@ namespace TOne.WhS.BusinessEntity.Business
 
         }
 
+        public int? GetEffectiveSellingProductId(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            int? sellingProductId = null;
+            CustomerSellingProduct customerSellingProduct = GetEffectiveSellingProduct(customerId, effectiveOn, isEffectiveInFuture);
+            
+            if (customerSellingProduct != null)
+                sellingProductId = customerSellingProduct.SellingProductId;
+
+            return sellingProductId;
+        }
+
         #region Private Members
 
         Dictionary<int,CustomerSellingProduct> GetCachedOrderedCustomerSellingProducts()

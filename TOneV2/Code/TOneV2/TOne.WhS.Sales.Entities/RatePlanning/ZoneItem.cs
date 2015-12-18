@@ -22,6 +22,7 @@ namespace TOne.WhS.Sales.Entities
         public Decimal? NewRate { get; set; }
         public DateTime? NewRateBED { get; set; }
         public DateTime? NewRateEED { get; set; }
+        public DateTime? RateChangeEED { get; set; }
 
         #endregion
 
@@ -35,6 +36,7 @@ namespace TOne.WhS.Sales.Entities
         public int? NewRoutingProductId { get; set; }
         public DateTime? NewRoutingProductBED { get; set; }
         public DateTime? NewRoutingProductEED { get; set; }
+        public DateTime? RoutingProductChangeEED { get; set; }
         public int EffectiveRoutingProductId { get; set; }
         public string EffectiveRoutingProductName { get; set; }
         
