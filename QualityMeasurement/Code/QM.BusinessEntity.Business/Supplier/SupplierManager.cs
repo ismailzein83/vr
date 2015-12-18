@@ -1,13 +1,12 @@
-﻿using QM.BusinessEntity.Data;
+﻿using Aspose.Cells;
+using QM.BusinessEntity.Data;
 using QM.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Common.Business;
-using Vanrise.Entities;
 
 namespace QM.BusinessEntity.Business
 {
@@ -129,6 +128,52 @@ namespace QM.BusinessEntity.Business
 
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.SourceSupplierReaderConfigType);
+        }
+
+        public string AddSuppliers(int fileId)
+        {
+            DataTable supplierDataTable = new DataTable();
+            VRFileManager fileManager = new VRFileManager();
+            byte[] bytes = fileManager.GetFile(fileId).Content;
+            var fileStream = new System.IO.MemoryStream(bytes);
+            ExportTableOptions options = new ExportTableOptions();
+            options.CheckMixedValueType = true;
+            Workbook wbk = new Workbook(fileStream);
+            wbk.CalculateFormula();
+            string message = "";
+            int insertedCount = 0;
+            int notInsertedCount = 0;
+
+            if (wbk.Worksheets[0].Cells.MaxDataRow > -1 && wbk.Worksheets[0].Cells.MaxDataColumn > -1)
+                supplierDataTable = wbk.Worksheets[0].Cells.ExportDataTableAsString(0, 0, wbk.Worksheets[0].Cells.MaxDataRow + 1, wbk.Worksheets[0].Cells.MaxDataColumn + 1);
+
+            for (int i = 1; i < supplierDataTable.Rows.Count; i++)
+            {
+                Supplier supplier = GetCachedSuppliers().FindRecord(it => it.Name.ToLower().Equals(supplierDataTable.Rows[i][0].ToString().ToLower()));
+                if (supplier == null)
+                {
+                    supplier = new Supplier();
+                    long startingId;
+                    ReserveIDRange(1, out startingId);
+                    supplier.SupplierId = (int)startingId;
+                    supplier.Name = supplierDataTable.Rows[i][0].ToString();
+
+                    ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
+                    bool insertActionSucc = dataManager.Insert(supplier);
+                    if (insertActionSucc)
+                        insertedCount++;
+                    else
+                        notInsertedCount++;
+                }
+                else
+                {
+                    notInsertedCount++;
+                }
+            }
+
+            message = String.Format("{0} suppliers added and {1} already exists", insertedCount, notInsertedCount);
+
+            return message;
         }
 
         #region Private Members

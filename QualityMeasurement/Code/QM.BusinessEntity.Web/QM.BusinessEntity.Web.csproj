@@ -164,6 +164,8 @@
     <Content Include="QM_BusinessEntity\Views\Supplier\SupplierEditorController.js" />
     <Content Include="QM_BusinessEntity\Views\Supplier\SupplierManagement.html" />
     <Content Include="QM_BusinessEntity\Views\Supplier\SupplierManagementController.js" />
+    <Content Include="QM_BusinessEntity\Views\Supplier\SupplierUploader.html" />
+    <Content Include="QM_BusinessEntity\Views\Supplier\SupplierUploaderController.js" />
     <Content Include="QM_BusinessEntity\Views\Zone\SchedulerTaskAction\ZoneSynchronizeTemplate.html" />
     <Content Include="QM_BusinessEntity\Views\Zone\SchedulerTaskAction\ZoneSynchronizeTemplateController.js" />
     <Content Include="QM_BusinessEntity\Views\Zone\ZoneManagement.html" />
@@ -182,6 +184,9 @@
       <Project>{b610fb7a-8278-4c68-bf4f-09c94bc5a8d0}</Project>
       <Name>QM.BusinessEntity.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="QM_BusinessEntity\Templates\ImportSupplierTemplate.xls" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

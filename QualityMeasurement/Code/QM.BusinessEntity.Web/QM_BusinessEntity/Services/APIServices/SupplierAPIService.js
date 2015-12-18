@@ -30,13 +30,25 @@
             return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Supplier", "GetSuppliersInfo"));
         }
 
+        function DownloadImportSupplierTemplate() {
+            return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Supplier", "DownloadImportSupplierTemplate"));
+        }
+
+        function UploadSuppliers(fileId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Supplier", "UploadSuppliers"), {
+                fileId: fileId
+            })
+        }
+
         return ({
             GetFilteredSuppliers: GetFilteredSuppliers,
             GetSupplier: GetSupplier,
             AddSupplier: AddSupplier,
             UpdateSupplier: UpdateSupplier,
             GetSupplierSourceTemplates: GetSupplierSourceTemplates,
-            GetSuppliersInfo: GetSuppliersInfo
+            GetSuppliersInfo: GetSuppliersInfo,
+            DownloadImportSupplierTemplate: DownloadImportSupplierTemplate,
+            UploadSuppliers: UploadSuppliers
         });
     }
 

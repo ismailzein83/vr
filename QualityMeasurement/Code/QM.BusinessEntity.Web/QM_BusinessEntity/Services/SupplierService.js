@@ -4,7 +4,8 @@ app.service('QM_BE_SupplierService', ['QM_BE_SupplierAPIService', 'VRModalServic
 
         return ({
             addSupplier: addSupplier,
-            editSupplier: editSupplier
+            editSupplier: editSupplier,
+            uploadSuppliers: uploadSuppliers
         });
 
         function addSupplier(onSupplierAdded) {
@@ -32,6 +33,20 @@ app.service('QM_BE_SupplierService', ['QM_BE_SupplierAPIService', 'VRModalServic
                 modalScope.onSupplierUpdated = onSupplierUpdated;
             };
             VRModalService.showModal('/Client/Modules/QM_BusinessEntity/Views/Supplier/SupplierEditor.html', parameters, modalSettings);
+        }
+
+        function uploadSuppliers(modalScope) {
+
+            var modalSettings = {};
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.title = "Upload Suppliers"
+
+
+            }
+            var parameters = {  };
+            
+
+            VRModalService.showModal('/Client/Modules/QM_BusinessEntity/Views/Supplier/SupplierUploader.html', parameters, modalSettings);
         }
 
     }]);

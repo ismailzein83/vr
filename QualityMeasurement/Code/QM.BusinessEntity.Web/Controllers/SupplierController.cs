@@ -1,10 +1,11 @@
 ﻿using QM.BusinessEntity.Business;
 using QM.BusinessEntity.Entities;
-using QM.BusinessEntity.Web;
 using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.Entities;
 using Vanrise.Web.Base;
+using System.Web;
+using System.IO;
 
 namespace QM.BusinessEntity.Web.Controllers
 {
@@ -45,6 +46,7 @@ namespace QM.BusinessEntity.Web.Controllers
             SupplierManager manager = new SupplierManager();
             return manager.AddSupplier(supplier);
         }
+
         [HttpPost]
         [Route("UpdateSupplier")]
         public UpdateOperationOutput<SupplierDetail> UpdateSupplier(Supplier supplier)
@@ -52,6 +54,7 @@ namespace QM.BusinessEntity.Web.Controllers
             SupplierManager manager = new SupplierManager();
             return manager.UpdateSupplier(supplier);
         }
+
         [HttpGet]
         [Route("GetSupplierSourceTemplates")]
         public List<TemplateConfig> GetSupplierSourceTemplates()
@@ -59,6 +62,36 @@ namespace QM.BusinessEntity.Web.Controllers
             SupplierManager manager = new SupplierManager();
             return manager.GetSupplierSourceTemplates();
         }
+
+
+        [HttpGet]
+        [Route("DownloadImportSupplierTemplate")]
+        public object DownloadImportSupplierTemplate()
+        {
+            var templatePath = "~/Client/Modules/QM_BusinessEntity/Templates/ImportSupplierTemplate.xls";
+            string physicalPath = HttpContext.Current.Server.MapPath(templatePath);
+            byte[] fileInBytes = File.ReadAllBytes(physicalPath);
+
+
+            MemoryStream memorystream = new MemoryStream();
+            memorystream.Write(fileInBytes, 0, fileInBytes.Length);
+            memorystream.Seek(0, SeekOrigin.Begin);
+
+            return GetExcelResponse(memorystream, "Supplier Import Template");
+        }
+
+
+
+        [HttpGet]
+        [Route("UploadSuppliers")]
+
+        public string UploadSuppliers(int fileId)
+        {
+            SupplierManager manager = new SupplierManager();
+            return manager.AddSuppliers(fileId);
+        }
+
+
 
     }
 }

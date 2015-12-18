@@ -2,9 +2,9 @@
 
     "use strict";
 
-    supplierManagementController.$inject = ['$scope', 'QM_BE_SupplierService'];
+    supplierUploaderController.$inject = ['$scope', 'QM_BE_SupplierService'];
 
-    function supplierManagementController($scope, QM_BE_SupplierService) {
+    function supplierUploaderController($scope, QM_BE_SupplierService) {
         var gridAPI;
 
         defineScope();
@@ -23,6 +23,7 @@
             };
 
             $scope.AddNewSupplier = AddNewSupplier;
+            $scope.UploadNewSuppliers = UploadNewSuppliers;
 
             function getFilterObject() {
                 var query = {
@@ -35,6 +36,9 @@
         function load() {
         }
 
+        function UploadNewSuppliers() {
+            QM_BE_SupplierService.uploadSuppliers();
+        }
 
         function AddNewSupplier() {
             var onSupplierAdded = function (addedItem) {
@@ -45,5 +49,5 @@
         }
     }
 
-    appControllers.controller('QM_BE_SupplierManagementController', supplierManagementController);
+    appControllers.controller('QM_BE_SupplierManagementController', supplierUploaderController);
 })(appControllers);
