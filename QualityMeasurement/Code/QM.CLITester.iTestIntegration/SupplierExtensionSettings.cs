@@ -63,5 +63,19 @@ namespace QM.CLITester.iTestIntegration
             string createSupplierResponse = _serviceActions.PostRequest("5020", String.Format("&sid={0}&name={1}&type=std&codec=alaw&prefix={2}", this.ITestSupplierId, supplier.Name, this.Prefix));
             CheckSupplierResponse(createSupplierResponse);
         }
+
+        const string EXCELFIELD_PREFIX = "Prefix";
+        public override string[] GetExcelColumnNames()
+        {
+            return new string[] { EXCELFIELD_PREFIX };
+        }
+
+        public override void ApplyExcelFields(Supplier supplier, Dictionary<string, object> excelFields)
+        {
+            object prefix;
+            if (excelFields.TryGetValue(EXCELFIELD_PREFIX, out prefix))
+                this.Prefix = prefix as string;
+        }
     }
+
 }

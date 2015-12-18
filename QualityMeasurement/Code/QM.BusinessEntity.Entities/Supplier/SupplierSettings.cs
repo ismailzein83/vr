@@ -14,5 +14,15 @@ namespace QM.BusinessEntity.Entities
     public abstract class ExtendedSupplierSetting
     {
         public abstract void Apply(Supplier supplier);
+
+        public virtual string[] GetExcelColumnNames()
+        {
+            return null;
+        }
+
+        public virtual void ApplyExcelFields(Supplier supplier, Dictionary<string, object> excelFields)
+        {
+
+        }
     }
 }
