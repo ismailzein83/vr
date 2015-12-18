@@ -71,6 +71,9 @@
     <Compile Include="ExcelResult.cs" />
     <Compile Include="File\FileUploadResult.cs" />
     <Compile Include="GenericConfig\GenericConfiguration.cs" />
+    <Compile Include="GenericDataRecord\DataRecordField.cs" />
+    <Compile Include="GenericDataRecord\DataRecordFieldType.cs" />
+    <Compile Include="GenericDataRecord\DataRecordType.cs" />
     <Compile Include="IDateEffectiveSettings.cs" />
     <Compile Include="InsertOperationOutput.cs" />
     <Compile Include="IDataRetrievalResult.cs" />
