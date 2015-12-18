@@ -14,6 +14,19 @@ namespace QM.CLITester.Data.SQL
 {
     public class TestCallDataManager : BaseSQLDataManager, ITestCallDataManager
     {
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+        static TestCallDataManager()
+        {
+            _columnMapper.Add("SupplierName", "SupplierId");
+            _columnMapper.Add("UserName", "UserId");
+            _columnMapper.Add("CountryName", "CountryId");
+            _columnMapper.Add("ZoneName", "ZoneId");
+            _columnMapper.Add("CallTestStatusDescription", "CallTestStatus");
+            _columnMapper.Add("CallTestResultDescription", "CallTestResult");
+            _columnMapper.Add("Entity.ID", "ID");
+            _columnMapper.Add("Entity.CreationDate", "CreationDate");
+        }
+
         public bool Insert(int supplierId, int countryId, int zoneId, int callTestStatus, int callTestResult, int initiationRetryCount, int getProgressRetryCount, int userId, int profileId)
         {
             object testCallId;
@@ -69,9 +82,6 @@ namespace QM.CLITester.Data.SQL
 
         public Vanrise.Entities.BigResult<TestCallDetail> GetTestCallFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<TestCallQuery> input)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("Entity.ID", "ID");
-
             string callTestStatusids = null;
             if (input.Query.CallTestStatus != null && input.Query.CallTestStatus.Any())
                 callTestStatusids = string.Join(",", input.Query.CallTestStatus.Select(itm => (int)itm));
@@ -107,7 +117,7 @@ namespace QM.CLITester.Data.SQL
                     input.Query.FromTime, input.Query.ToTime == DateTime.MinValue ? DateTime.Now : input.Query.ToTime);
             };
 
-            return RetrieveData(input, createTempTableAction, TestCallDetailMapper, mapper);
+            return RetrieveData(input, createTempTableAction, TestCallDetailMapper, _columnMapper);
         }
 
         TestCall TestCallMapper(IDataReader reader)

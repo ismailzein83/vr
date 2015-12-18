@@ -63,7 +63,11 @@ namespace QM.BusinessEntity.Business
                     zones = cachedZones.Values;
             }
 
-            return zones.MapRecords(ZoneInfoMapper);
+            Func<Zone, bool> filterExpression = (prod) =>
+                (((prod.BeginEffectiveDate <= DateTime.Now)))
+                && ((!prod.EndEffectiveDate.HasValue || (prod.EndEffectiveDate > DateTime.Now)));
+
+            return zones.MapRecords(ZoneInfoMapper, filterExpression);
         }
 
 

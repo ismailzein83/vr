@@ -53,7 +53,6 @@ function (UtilsService, VRNotificationService, QM_BE_ZoneAPIService) {
           
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                console.log(dataRetrievalInput)
                 return QM_BE_ZoneAPIService.GetFilteredZones(dataRetrievalInput)
                     .then(function (response) {
                          onResponseReady(response);

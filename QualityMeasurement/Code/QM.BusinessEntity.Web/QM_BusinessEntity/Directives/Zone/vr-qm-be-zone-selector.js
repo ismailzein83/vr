@@ -93,8 +93,6 @@ function (QM_BE_ZoneAPIService, UtilsService, $compile, VRUIUtilsService) {
     }
 
     function getZonesInfo(attrs, ctrl, selectedIds, serializedFilter) {
-        console.log('serializedFilter')
-        console.log(serializedFilter)
         return QM_BE_ZoneAPIService.GetZonesInfo(serializedFilter).then(function (response) {
             ctrl.datasource.length = 0;
             angular.forEach(response, function (itm) {
