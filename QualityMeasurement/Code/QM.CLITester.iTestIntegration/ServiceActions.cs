@@ -15,9 +15,9 @@ namespace QM.CLITester.iTestIntegration
     {
         public string PostRequest(string functionCode, string parameters)
         {
-            var request = (HttpWebRequest)WebRequest.Create("https://api.i-test.net/?t=" + functionCode + (parameters ?? ""));
-
-            var postData = String.Format("email={0}&pass={1}", ConfigurationSettings.AppSettings["Email"], ConfigurationSettings.AppSettings["Password"]);
+            var request = (HttpWebRequest)WebRequest.Create(String.Format("{0}/?t={1}{2}", ConfigurationSettings.AppSettings["CliTester_ITest_Url"], functionCode, (parameters ?? "")));
+            
+            var postData = String.Format("email={0}&pass={1}", ConfigurationSettings.AppSettings["CliTester_ITest_Email"], ConfigurationSettings.AppSettings["CliTester_ITest_Password"]);
             
             var data = Encoding.ASCII.GetBytes(postData);
 
