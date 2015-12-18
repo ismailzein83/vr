@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -22,14 +23,19 @@ namespace Vanrise.Web.Base
 
         protected object GetExcelResponse(ExcelResult excelResult)
         {
+            return GetExcelResponse(excelResult.ExcelFileStream, "ExcelReport.xls");
+        }
+
+        protected object GetExcelResponse(Stream stream, string fileName)
+        {
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
-            excelResult.ExcelFileStream.Position = 0;
-            response.Content = new StreamContent(excelResult.ExcelFileStream);
+            stream.Position = 0;
+            response.Content = new StreamContent(stream);
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileName = String.Format("ExcelReport.xls")
+                FileName  = System.Web.HttpUtility.JavaScriptStringEncode(fileName)
             };
             return response;
         }
