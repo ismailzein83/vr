@@ -73,9 +73,14 @@ namespace TOne.WhS.SupplierPriceList.Business
                     if (!shouldNotAddRate)
                     {
                         if (recentRateValue.HasValue)
+                        {
                             importedRate.ChangeType = importedRate.NormalRate > recentRateValue.Value ? RateChangeType.Increase : RateChangeType.Decrease;
+                            importedRate.ProcessInfo.RecentRate = recentRateValue;
+                        }
                         else
+                        {
                             importedRate.ChangeType = RateChangeType.New;
+                        }
                         AddImportedRate(importedRate, newAndExistingZones, existingZonesByName);
                     }
                 }

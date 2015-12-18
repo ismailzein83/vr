@@ -13,18 +13,13 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     public sealed class ApplyCodePreviewDataToDB : CodeActivity
     {
         [RequiredArgument]
-        public InArgument<IEnumerable<NewCode>> NewCodes { get; set; }
-
-        [RequiredArgument]
         public InArgument<IEnumerable<ImportedCode>> ImportedCodes { get; set; }
-
 
         [RequiredArgument]
         public InArgument<int> PriceListId { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
-            IEnumerable<NewCode> newCodeList = this.NewCodes.Get(context);
             IEnumerable<ImportedCode> importedCodesList = this.ImportedCodes.Get(context);
             int priceListId = this.PriceListId.Get(context);
 
@@ -34,6 +29,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             {
                 foreach (ImportedCode item in importedCodesList)
                 {
+                    if (item.ChangeType == CodeChangeType.NotChanged)
+                        continue;
+
                     codePreviewList.Add(new CodePreview()
                     {
                          Code = item.Code,

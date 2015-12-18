@@ -78,6 +78,7 @@
     <Compile Include="ApplyNewCodesToDB.cs" />
     <Compile Include="ApplyNewRatesToDB.cs" />
     <Compile Include="ApplyNewZonesToDB.cs" />
+    <Compile Include="ApplyRatePreviewDataToDB.cs" />
     <Compile Include="ApplyZonePreviewDataToDB.cs" />
     <Compile Include="GetDataFromPriceList.cs" />
     <Compile Include="GetExistingCodes.cs" />

@@ -140,6 +140,11 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
     public class ImportedRate : Vanrise.Entities.IDateEffectiveSettings
     {
+        public ImportedRate()
+        {
+            this.ProcessInfo = new RateProcessInfo();
+        }
+
         public string ZoneName { get; set; }
 
         public Decimal NormalRate { get; set; }
@@ -171,6 +176,13 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
                 return _changedExistingRates;
             }
         }
+
+        public RateProcessInfo ProcessInfo { get; set; }
+    }
+
+    public class RateProcessInfo
+    {
+        public Decimal? RecentRate { get; set; }
     }
 
     public class ImportedZone : IRuleTarget
