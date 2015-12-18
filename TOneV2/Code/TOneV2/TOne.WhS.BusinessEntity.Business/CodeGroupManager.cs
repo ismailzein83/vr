@@ -187,12 +187,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 else
                 {
                     RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
-                    Cell cell = RateWorkSheet.Cells.GetCell(rowIndex, colIndex);
-                    Style style = cell.GetStyle();
-                    style.Font.Color = Color.FromArgb(255, 0, 0); ;
-                    style.Font.IsBold = true;
-                    cell.SetStyle(style);
-
+                  
                     colIndex++;
                     if (country == null && codeGroup != null)
                       RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Country Not Exists and CodeGroup Exists");
@@ -200,9 +195,6 @@ namespace TOne.WhS.BusinessEntity.Business
                         RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Country Not Exists");
                     else if (country != null && codeGroup != null)
                         RateWorkSheet.Cells[rowIndex, colIndex].PutValue("CodeGroup Exists");
-                  
-
-
                     colIndex = 0;
                     rowIndex++;
                 }
