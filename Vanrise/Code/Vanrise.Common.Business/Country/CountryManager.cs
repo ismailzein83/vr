@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Aspose.Cells;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
@@ -53,33 +55,47 @@ namespace Vanrise.Common.Business
             return GetCachedCountries().FindRecord(itm => itm.SourceId == sourceId);
         }
 
-        public string AddCountries(List<string> addedCountires)
+        public string AddCountries(int fileId)
         {
+            DataTable countryDataTable = new DataTable();
+            VRFileManager fileManager = new VRFileManager();
+            byte[] bytes = fileManager.GetFile(fileId).Content;
+            var fileStream = new System.IO.MemoryStream(bytes);
+            ExportTableOptions options = new ExportTableOptions();
+            options.CheckMixedValueType = true;
+            Workbook wbk = new Workbook(fileStream);
+            wbk.CalculateFormula();
             string message = "";
-            int insertedCount = 0;
+            int insertedCount = 0 ;
             int notInsertedCount = 0;
 
-            foreach (var a in addedCountires)
+            if (wbk.Worksheets[0].Cells.MaxDataRow > -1 && wbk.Worksheets[0].Cells.MaxDataColumn > -1)
+                countryDataTable = wbk.Worksheets[0].Cells.ExportDataTableAsString(0, 0, wbk.Worksheets[0].Cells.MaxDataRow + 1, wbk.Worksheets[0].Cells.MaxDataColumn + 1);
+            
+            for (int i = 1; i < countryDataTable.Rows.Count; i++)
             {
-                Country foundedCountry = GetCachedCountries().FindRecord(it => it.Name.ToLower().Equals(a.ToLower()));
-                if (foundedCountry != null)
+                Country country = GetCachedCountries().FindRecord(it => it.Name.ToLower().Equals(countryDataTable.Rows[i][0].ToString().ToLower()));
+                if (country == null)
+                {
+                    country = new Country();
+                    long startingId;
+                    ReserveIDRange(1, out startingId);
+                    country.CountryId = (int)startingId;
+                    country.Name = countryDataTable.Rows[i][0].ToString();
+
+                    ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
+                    bool insertActionSucc = dataManager.Insert(country);
+                    if (insertActionSucc)
+                        insertedCount++;
+                    else                           
+                        notInsertedCount++;
+                }
+                else
                 {
                     notInsertedCount++;
                 }
-                else {
-                    foundedCountry.Name = a;
-                    long startingId;
-                    ReserveIDRange(1, out startingId);
-                    foundedCountry.CountryId = (int)startingId;
-                    ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
-                    bool insertresult = dataManager.Insert(foundedCountry);
-                    if (insertresult) insertedCount++;
-                    else {
-                         notInsertedCount++;
-                    }
-                }
-
             }
+           
             message = String.Format("{0} countries added and {1} are already exists", insertedCount, notInsertedCount);
 
             return message;

@@ -1,5 +1,4 @@
-﻿using Aspose.Cells;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -67,70 +66,25 @@ namespace Vanrise.Web.Controllers
 
         [HttpGet]
         [Route("DownloadCountriesTemplate")]
-        public HttpResponseMessage DownloadCountriesTemplate(int type)
+        public object DownloadCountriesTemplate()
         {
+            var template = "~/Client/Modules/Common/Template/Country Add sample.xls";
+            string physicalPath = HttpContext.Current.Server.MapPath(template);
+            byte[] bytes = File.ReadAllBytes(physicalPath);
 
-            var template = type == 1 ? "~/Client/Modules/Common/Template/Country Add sample.xls" : "~/Client/Modules/Common/Template/Country Update sample.xls";
-            string obj = HttpContext.Current.Server.MapPath(template);
-            Workbook workbook = new Workbook(obj);
-            Aspose.Cells.License license = new Aspose.Cells.License();
-            license.SetLicense("Aspose.Cells.lic");
-            MemoryStream memoryStream = new MemoryStream();
-            memoryStream = workbook.SaveToStream();
-            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
-            memoryStream.Position = 0;
-            response.Content = new StreamContent(memoryStream);
-
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-            {
-                FileName = String.Format("CountiesTemplate.xls")
-            };
-            return response;
+            MemoryStream memStreamRate = new System.IO.MemoryStream();
+            memStreamRate.Write(bytes, 0, bytes.Length);
+            memStreamRate.Seek(0, System.IO.SeekOrigin.Begin);
+            return GetExcelResponse(memStreamRate,"Country Template.xls");
         }
 
 
-        [HttpPost]
-        [Route("DownloadCountriesTemplate")]
-        public string UploadCountries(CountryFile file)
+        [HttpGet]
+        [Route("UploadCountries")]
+        public string UploadCountries(int fileID)
         {
-            //DataSet data = new DataSet();
-            DataTable countryDataTable = new DataTable();
-            VRFileManager fileManager = new VRFileManager();
             CountryManager manager = new CountryManager();
-            byte[] bytes = fileManager.GetFile(file.FileId).Content;
-
-            var fileStream = new System.IO.MemoryStream(bytes);
-            ExportTableOptions options = new ExportTableOptions();
-            options.CheckMixedValueType = true;
-            Workbook wbk = new Workbook(fileStream);
-            wbk.CalculateFormula();
-            string message = "";
-           
-            if (wbk.Worksheets[0].Cells.MaxDataRow > -1 && wbk.Worksheets[0].Cells.MaxDataColumn > -1)
-                countryDataTable = wbk.Worksheets[0].Cells.ExportDataTableAsString(0, 0, wbk.Worksheets[0].Cells.MaxDataRow + 1, wbk.Worksheets[0].Cells.MaxDataColumn + 1);
-            if (file.Type == 1)
-            {
-                List<string> countriesToAdd = new List<string>();
-                for (int i = 1; i < countryDataTable.Rows.Count; i++)
-                {
-                    countriesToAdd.Add(countryDataTable.Rows[i][0].ToString());
-                }
-                message = manager.AddCountries(countriesToAdd);
-            }
-            else if (file.Type == 2)
-            {
-                Dictionary<string, string> countriesToUpdate = new Dictionary<string, string>();
-
-                for (int i = 1; i < countryDataTable.Rows.Count; i++)
-                {
-                    
-                    countriesToUpdate.Add(countryDataTable.Rows[i][0].ToString(), countryDataTable.Rows[i][1].ToString());
-                }
-
-                message = manager.UpdateCountires(countriesToUpdate);
-            }
-            return message;
+            return manager.AddCountries(fileID);
         }
     }
 }

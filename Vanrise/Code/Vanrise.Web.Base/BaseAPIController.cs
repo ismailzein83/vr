@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Web;
 using System.Web.Http;
 using Vanrise.Entities;
 
@@ -35,7 +36,7 @@ namespace Vanrise.Web.Base
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileName  = System.Web.HttpUtility.JavaScriptStringEncode(fileName)
+                FileName = HttpUtility.UrlPathEncode(fileName)
             };
             return response;
         }

@@ -363,8 +363,9 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         var success = false;
         headers = headers();
         var matcher = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/i;
+
         var results = headers['content-disposition'].match(matcher);
-        var filename = results[1];
+        var filename = replaceAll(results[1], "%20", " ");
         var contentType = headers['content-type'] || octetStreamMime;
         try {
             var blob = new Blob([data], { type: contentType });

@@ -51,7 +51,6 @@
     </Compile>
     <Compile Include="City\CityInfoFilter.cs" />
     <Compile Include="City\CityQuery.cs" />
-    <Compile Include="Country\CountryFile.cs" />
     <Compile Include="Country\CountryInfo.cs" />
     <Compile Include="Country\Country.cs" />
     <Compile Include="Country\CountryDetail.cs" />

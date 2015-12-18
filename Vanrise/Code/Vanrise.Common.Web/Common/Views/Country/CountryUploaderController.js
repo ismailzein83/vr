@@ -10,26 +10,15 @@
         defineScope();
         load();
         function defineScope() {
-            $scope.uploadTypes = [
-                { value: 1, name: "Add New Countries" },
-                { value: 2, name: "Update New Countries" }
-            ]
-
             $scope.downloadTemplate = function () {
 
-                return VRCommon_CountryAPIService.DownloadCountriesTemplate(
-                    $scope.selectedUploadType.value
-                    ).then(function (response) {
+                return VRCommon_CountryAPIService.DownloadCountriesTemplate().then(function (response) {
                     UtilsService.downloadFile(response.data, response.headers);
                 });
             }
 
-            $scope.uploadCountires = function () {
-                var countryFile = {
-                    FileId: file.fileId,
-                    Type:$scope.selectedUploadType.value
-                }
-                return VRCommon_CountryAPIService.uploadCountires(countryFile).then(function (response) {
+            $scope.uploadCountires = function () {                
+                return VRCommon_CountryAPIService.UploadCountries($scope.file.fileId).then(function (response) {
                     VRNotificationService.showInformation(response)
                 });
             }
