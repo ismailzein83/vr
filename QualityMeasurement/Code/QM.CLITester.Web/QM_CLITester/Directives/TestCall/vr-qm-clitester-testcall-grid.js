@@ -45,10 +45,32 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
         }
 
         var minId = undefined;
+        function buildTestCallObj(dataItem) {
+            var obj = {
+                TestCallId: 0,
+                SupplierID: [dataItem.Entity.SupplierID],
+                CountryID: dataItem.Entity.CountryID,
+                ZoneID: dataItem.Entity.ZoneID,
+                ProfileID: dataItem.Entity.ProfileID
+            };
+            return obj;
+        }
+
         function initializeController() {
 
             var drillDownDefinitions = Qm_CliTester_TestCallService.getDrillDownDefinition();
             gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+
+
+            $scope.gridMenuActions = [{
+                name: "Retest",
+                clicked: function (dataItem) {
+                    var testCallObject = buildTestCallObj(dataItem);
+                    console.log(testCallObject);
+                    Qm_CliTester_TestCallAPIService.ReTestCall(testCallObject);
+                }
+            }];
+
 
             $scope.testcalls = [];
             var isGettingData = false;
@@ -136,7 +158,6 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
             return Qm_CliTester_TestCallService.getCallTestResultColor(dataItem.Entity.CallTestResult);
         };
     }
-
     return directiveDefinitionObject;
 
 }]);

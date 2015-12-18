@@ -9,6 +9,10 @@
             return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "AddNewTestCall"), testCallObject);
         }
 
+        function ReTestCall(testCallObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "ReTestCall"), testCallObject);
+        }
+
         function GetUpdated(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetUpdated"), input);
         }
@@ -31,6 +35,7 @@
 
         return ({
             AddNewTestCall: AddNewTestCall,
+            ReTestCall: ReTestCall,
             GetFilteredTestCalls: GetFilteredTestCalls,
             GetInitiateTestTemplates: GetInitiateTestTemplates,
             GetTestProgressTemplates: GetTestProgressTemplates,
