@@ -4,9 +4,13 @@ using QM.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
+using System.Drawing;
 
 namespace QM.BusinessEntity.Business
 {
@@ -110,12 +114,13 @@ namespace QM.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public void AddSupplierFromeSource(Supplier supplier){
+        public void AddSupplierFromeSource(Supplier supplier)
+        {
             long startingId;
             ReserveIDRange(1, out startingId);
             supplier.SupplierId = (int)startingId;
             ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
-            dataManager.InsertSupplierFromeSource(supplier);            
+            dataManager.InsertSupplierFromeSource(supplier);
         }
         public void UpdateSupplierFromeSource(Supplier supplier)
         {
@@ -175,6 +180,74 @@ namespace QM.BusinessEntity.Business
 
             return message;
         }
+
+
+        public IDataRetrievalResult<T> ExportTemplate<T>()
+        {
+            //default Export is Excel
+
+            ExcelResult<T> excelResult = new ExcelResult<T>();
+
+
+            Workbook wbk = new Workbook();
+            Aspose.Cells.License license = new Aspose.Cells.License();
+            license.SetLicense("Aspose.Cells.lic");
+            wbk.Worksheets.Clear();
+            Worksheet workSheet = wbk.Worksheets.Add("Result");
+            int rowIndex = 0;
+            int colIndex = 0;
+
+            PropertyInfo[] properties = typeof(T).GetProperties();
+            PropertyInfo entityProperty = null;
+            PropertyInfo[] entityProperties = null;
+
+            //filling header
+            foreach (var prop in properties)
+            {
+                if (prop.Name == "Entity")
+                {
+                    entityProperty = prop;
+                    entityProperties = prop.PropertyType.GetProperties();
+                    continue;
+                }
+                workSheet.Cells.SetColumnWidth(colIndex, 20);
+                workSheet.Cells[rowIndex, colIndex].PutValue(prop.Name);
+                Cell cell = workSheet.Cells.GetCell(rowIndex, colIndex);
+                Style style = cell.GetStyle();
+                style.Font.Name = "Times New Roman";
+                style.Font.Color = Color.FromArgb(255, 0, 0); ;
+                style.Font.Size = 14;
+                style.Font.IsBold = true;
+                cell.SetStyle(style);
+                colIndex++;
+            }
+            if (entityProperties != null)
+            {
+                foreach (var prop in entityProperties)
+                {
+                    workSheet.Cells.SetColumnWidth(colIndex, 20);
+                    workSheet.Cells[rowIndex, colIndex].PutValue(prop.Name);
+                    Cell cell = workSheet.Cells.GetCell(rowIndex, colIndex);
+                    Style style = cell.GetStyle();
+                    style.Font.Name = "Times New Roman";
+                    style.Font.Color = Color.FromArgb(255, 0, 0); ;
+                    style.Font.Size = 14;
+                    style.Font.IsBold = true;
+                    cell.SetStyle(style);
+                    colIndex++;
+                }
+            }
+            rowIndex++;
+            colIndex = 0;
+
+            MemoryStream memoryStream = new MemoryStream();
+            memoryStream = wbk.SaveToStream();
+
+            excelResult.ExcelFileStream = memoryStream;
+            wbk.Save("D:\\book1.xlsx", SaveFormat.Xlsx);
+            return excelResult;
+        }
+
 
         #region Private Members
 
