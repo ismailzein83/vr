@@ -15,5 +15,7 @@ namespace TOne.WhS.CodePreparation.Entities.CP
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
+
+        public bool IsExcluded { get; set; }
     }
 }
