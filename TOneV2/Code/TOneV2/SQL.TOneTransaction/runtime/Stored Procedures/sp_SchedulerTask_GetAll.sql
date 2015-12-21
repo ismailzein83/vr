@@ -22,6 +22,7 @@ BEGIN
       ,TR.[TriggerTypeInfo]
       ,AC.[ActionTypeInfo]
       ,SC.[TaskSettings]
+      ,SC.[OwnerId]
       from runtime.ScheduleTask SC
       JOIN runtime.SchedulerTaskTriggerType TR on SC.TriggerTypeId = TR.ID
       JOIN runtime.SchedulerTaskActionType AC on SC.ActionTypeId = AC.ID

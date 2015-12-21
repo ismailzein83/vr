@@ -23,6 +23,7 @@ BEGIN
 			  ,TR.[TriggerTypeInfo]
 			  ,AC.[ActionTypeInfo]
 			  ,SC.[TaskSettings]
+			  ,SC.[OwnerId]
 			
 			INTO #RESULT
 			
