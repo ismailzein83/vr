@@ -176,6 +176,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 return {
                     text: 'Settings',
                     class: 'glyphicon glyphicon-cog'
+                };
+            case 'Move':
+                return {
+                    text: 'Move',
+                    class: 'glyphicon glyphicon-move'
                 }
         }
     }
