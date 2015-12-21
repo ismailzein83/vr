@@ -3,138 +3,157 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Data;
 using Vanrise.Entities.GenericDataRecord;
 
 namespace Vanrise.Common.Business.GenericDataRecord
 {
     public class DataRecordFieldManager
     {
+        readonly DataRecordTypeManager _dataRecordTypeManager;
+        public DataRecordFieldManager()
+        {
+            _dataRecordTypeManager = new DataRecordTypeManager();
+
+        }
         public Vanrise.Entities.IDataRetrievalResult<DataRecordFieldDetail> GetFilteredDataRecordFields(Vanrise.Entities.DataRetrievalInput<DataRecordFieldQuery> input)
         {
-            DataRecordTypeManager manager = new DataRecordTypeManager();
 
-            var dataRecordType = manager.GetDataRecordType(input.Query.DataRecordTypeId);
+            var dataRecordType = GetChachedDataRecordFields();
 
             Func<DataRecordField, bool> filterExpression = (prod) =>
                 (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
                 &&
-                (input.Query.TypeIds == null || input.Query.TypeIds.Contains(prod.Type.ConfigId));
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataRecordType.Fields.ToBigResult(input, filterExpression, MapToDetails));
+                (input.Query.TypeIds == null || input.Query.TypeIds.Contains(prod.Type.ConfigId))
+                &&
+                (input.Query.DataRecordTypeId == prod.DataRecordTypeID);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataRecordType.ToBigResult(input, filterExpression, MapToDetails));
         }
-        //public Vanrise.Entities.UpdateOperationOutput<DataRecordFieldDetail> UpdateDataRecordField(DataRecordField dataRecordField)
-        //{
-        //    Vanrise.Entities.UpdateOperationOutput<DataRecordFieldDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<DataRecordFieldDetail>();
-        //    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-        //    updateOperationOutput.UpdatedObject = null;
+        public Vanrise.Entities.UpdateOperationOutput<DataRecordFieldDetail> UpdateDataRecordField(DataRecordField dataRecordField)
+        {
+            Vanrise.Entities.UpdateOperationOutput<DataRecordFieldDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<DataRecordFieldDetail>();
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+            IDataRecordFieldDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IDataRecordFieldDataManager>();
 
-        //    var cdrFields = GetChachedCDRFields();
-        //    bool updateActionSucc = false;
-        //    if (cdrFields.Fields.Any(x => x.ID == dataRecordField.ID))
-        //    {
-        //        if (cdrFields.Fields.FindRecord(x => x.ID == dataRecordField.ID).FieldName != dataRecordField.Name && cdrFields.Fields.Exists(x => x.FieldName == dataRecordField.Name))
-        //        {
-        //            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-        //        }
-        //        else
-        //        {
-        //            cdrFields.Fields.FindRecord(x => x.ID == dataRecordField.ID).FieldName = dataRecordField.Name;
-        //            cdrFields.Fields.FindRecord(x => x.ID == dataRecordField.ID).Type = dataRecordField.Type;
-        //            updateActionSucc = base.UpdateConfiguration(cdrFields);
-        //        }
+            var dataRecordFields = GetChachedDataRecordFields();
+            bool updateActionSucc = false;
+            if (dataRecordFields.Any(x => x.Key == dataRecordField.ID))
+            {
+                var records = dataRecordFields.FindAllRecords(x => x.DataRecordTypeID == dataRecordField.DataRecordTypeID);
+                if (records.Any(x => x.Name == dataRecordField.Name && x.ID != dataRecordField.ID))
+                {
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                }
+                else
+                {
+                    updateActionSucc = _dataManager.Update(dataRecordField);
+                }
 
-        //    }
+            }
 
-        //    if (updateActionSucc)
-        //    {
-        //        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-        //        updateOperationOutput.UpdatedObject = MapToDetails(dataRecordField);
-        //    }
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = MapToDetails(dataRecordField);
+            }
 
-        //    return updateOperationOutput;
+            return updateOperationOutput;
 
-        //}
+        }
+        public Vanrise.Entities.DeleteOperationOutput<DataRecordFieldDetail> DeleteDataRecordField(int dataRecordFieldId)
+        {
+            Vanrise.Entities.DeleteOperationOutput<DataRecordFieldDetail> deleteOperationOutput = new Vanrise.Entities.DeleteOperationOutput<DataRecordFieldDetail>();
+            deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Failed;
+            IDataRecordFieldDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IDataRecordFieldDataManager>();
+            var dataRecordFields = GetChachedDataRecordFields();
+            bool deleteActionSucc = false;
+            if (dataRecordFields.Any(x => x.Key == dataRecordFieldId))
+            {
+                deleteActionSucc = _dataManager.Delete(dataRecordFieldId);
+            }
+            if (deleteActionSucc)
+            {
+                deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
+            }
 
-        //public Vanrise.Entities.DeleteOperationOutput<DataRecordFieldDetail> DeleteCDRField(int dataRecordFieldId)
-        //{
-        //    Vanrise.Entities.DeleteOperationOutput<DataRecordFieldDetail> deleteOperationOutput = new Vanrise.Entities.DeleteOperationOutput<DataRecordFieldDetail>();
-        //    deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Failed;
-        //  //  DefineCDRFieldsManager manager = new DefineCDRFieldsManager();
-        //    var cdrFields = GetChachedCDRFields();
-        //    bool deleteActionSucc = false;
-        //    if (cdrFields.Fields.Any(x => x.ID == dataRecordFieldId))
-        //    {
-        //        cdrFields.Fields.Remove(cdrFields.Fields.FindRecord(x => x.ID == dataRecordFieldId));
-        //      //  deleteActionSucc = base.UpdateConfiguration(cdrFields);
-        //    }
-        //    if (deleteActionSucc)
-        //    {
-        //        deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
-        //    }
+            return deleteOperationOutput;
+        }
+        public Vanrise.Entities.InsertOperationOutput<DataRecordFieldDetail> AddDataRecordField(DataRecordField dataRecordField)
+        {
 
-        //    return deleteOperationOutput;
-        //}
+            Vanrise.Entities.InsertOperationOutput<DataRecordFieldDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<DataRecordFieldDetail>();
 
-        //public Vanrise.Entities.InsertOperationOutput<DataRecordFieldDetail> AddCDRField(DataRecordField dataRecordField)
-        //{
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            int insertedId = -1;
+            IDataRecordFieldDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IDataRecordFieldDataManager>();
+            bool insertActionSucc = false;
+            var dataRecordFields = GetChachedDataRecordFields();
+            if (!dataRecordFields.Any(x => x.Value.Name == dataRecordField.Name && x.Value.DataRecordTypeID == dataRecordField.DataRecordTypeID))
+            {
+                insertActionSucc = _dataManager.Insert(dataRecordField, out  insertedId);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
 
-        //    Vanrise.Entities.InsertOperationOutput<DataRecordFieldDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<DataRecordFieldDetail>();
+            if (insertActionSucc)
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                dataRecordField.ID = insertedId;
+                insertOperationOutput.InsertedObject = MapToDetails(dataRecordField);
+            }
 
-        //    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-        //    insertOperationOutput.InsertedObject = null;
-
-        //    var cdrFields = GetChachedCDRFields();
-        //    bool insertActionSucc = false;
-
-        //    if (!cdrFields.Fields.Exists(x => x.FieldName == dataRecordField.Name))
-        //    {
-        //        dataRecordField.ID = cdrFields.Fields.Count() + 1;
-        //        cdrFields.Fields.Add(dataRecordField);
-        //     //   insertActionSucc = base.UpdateConfiguration(dataRecordField);
-        //    }
-        //    else
-        //    {
-        //        insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
-        //    }
-
-
-        //    if (insertActionSucc)
-        //    {
-
-        //        insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-        //        insertOperationOutput.InsertedObject = MapToDetails(dataRecordField);
-        //    }
-
-        //    return insertOperationOutput;
-        //}
-
-        //public DataRecordField GetCDRField(int cdrFieldId)
-        //{
-        //    var cdrFields = GetChachedCDRFields();
-        //    return cdrFields.Fields.FindRecord(x => x.ID == cdrFieldId);
-        //}
+            return insertOperationOutput;
+        }
+        public DataRecordField GetDataRecordField(int dataRecordFieldId)
+        {
+            var dataRecordFields = GetChachedDataRecordFields();
+            return dataRecordFields.FindRecord(x => x.ID == dataRecordFieldId);
+        }
         public List<Vanrise.Entities.TemplateConfig> GetDataRecordFieldTypeTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.CDRFieldConfigType);
         }
-        private DataRecordFieldDetail MapToDetails(DataRecordField cdrField)
+
+        #region Private Classes
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
+            IDataRecordFieldDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IDataRecordFieldDataManager>();
+            object _updateHandle;
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreDataRecordFieldUpdated(ref _updateHandle);
+            }
+        }
+        protected Dictionary<int, DataRecordField> GetChachedDataRecordFields()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetChachedDataRecordFields",
+              () =>
+              {
+                  IDataRecordFieldDataManager dataManager = CommonDataManagerFactory.GetDataManager<IDataRecordFieldDataManager>();
+                  var dataRecordTypes = dataManager.GetALllDataRecordFields();
+
+                  return dataRecordTypes.ToDictionary(x => x.ID, x => x);
+              });
+        }
+        private DataRecordFieldDetail MapToDetails(DataRecordField dataRecordField)
+        {
+            DataRecordType parentTypeName = _dataRecordTypeManager.GetDataRecordType(dataRecordField.DataRecordTypeID);
             var templates = GetDataRecordFieldTypeTemplates();
-            var template = templates.FindRecord(x => x.TemplateConfigID == cdrField.Type.ConfigId);
+            var template = templates.FindRecord(x => x.TemplateConfigID == dataRecordField.Type.ConfigId);
+
             return new DataRecordFieldDetail
             {
-                Entity = cdrField,
+                Entity = dataRecordField,
+                DataRecordTypeDescription = parentTypeName != null ? parentTypeName.Name : null,
                 TypeDescription = template != null ? template.Name : null
             };
         }
-        //private DataRecordFieldType GetChachedCDRFields()
-        //{
-        //    var cdrFields = base.GetConfiguration(null);
-        //    if (cdrFields.Fields == null)
-        //    {
-        //        cdrFields.Fields = new List<DataRecordField>();
-        //    }
-        //    return cdrFields;
-        //}
+
+        #endregion
     }
 }

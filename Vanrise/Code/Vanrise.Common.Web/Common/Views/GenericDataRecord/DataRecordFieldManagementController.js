@@ -65,5 +65,5 @@
         }
     }
 
-    appControllers.controller('VRCommon__DataRecordFieldManagementController', dataRecordFieldManagementController);
+    appControllers.controller('VRCommon_DataRecordFieldManagementController', dataRecordFieldManagementController);
 })(appControllers);

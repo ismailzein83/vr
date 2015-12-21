@@ -10,6 +10,10 @@
             <vr-datagridcolumn headertext="'ID'" field="'Entity.DataRecordTypeId'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Parent Name'" field="'ParentName'" type="'Text'"></vr-datagridcolumn>
+
+            <vr-datagridexpandablerow>
+                <vr-common-datarecordfield-grid on-ready="dataItem.extensionObject.onGridReady"></vr-common-datarecordfield-grid>
+            </vr-datagridexpandablerow>
         </vr-datagrid>
     </vr-columns>
 </vr-row>

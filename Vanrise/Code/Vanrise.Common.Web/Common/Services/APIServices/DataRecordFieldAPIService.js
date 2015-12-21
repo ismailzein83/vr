@@ -22,18 +22,21 @@
         }
 
         function GetDataRecordField(dataRecordFieldId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "DataRecordField", "GetDataRecordField"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "DataRecordField", "GetDataRecordField"),
+            {
                 dataRecordFieldId: dataRecordFieldId
             });
         }
 
         function DeleteDataRecordField(dataRecordFieldId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "DataRecordField", "DeleteDataRecordField"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "DataRecordField", "DeleteDataRecordField"),
+            {
                 dataRecordFieldId: dataRecordFieldId
             });
         }
 
-        return ({
+        return (
+        {
             GetFilteredDataRecordFields: GetFilteredDataRecordFields,
             UpdateDataRecordField: UpdateDataRecordField,
             AddDataRecordField: AddDataRecordField,

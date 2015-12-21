@@ -2,19 +2,23 @@
 
     function (VRModalService, VRNotificationService, UtilsService, VRCommon_DataRecordFieldAPIService) {
 
-        return ({
+        return (
+        {
             addDataRecordField: addDataRecordField,
             editDataRecordField: editDataRecordField,
             deleteDataRecordField: deleteDataRecordField
         });
 
-        function addDataRecordField(onDataRecordFieldAdded) {
+        function addDataRecordField(onDataRecordFieldAdded, dataItem) {
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.onDataRecordFieldAdded = onDataRecordFieldAdded;
             };
             var parameters = {};
+            if (dataItem != undefined) {
+                parameters.DataRecordTypeId = dataItem.DataRecordTypeId;
+            }
             VRModalService.showModal('/Client/Modules/Common/Views/GenericDataRecord/DataRecordFieldEditor.html', parameters, settings);
         }
 
@@ -34,7 +38,7 @@
             VRNotificationService.showConfirmation()
                 .then(function (response) {
                     if (response) {
-                        return VRCommon_DataRecordFieldAPIService.DeleteCDRField(obj.Entity.ID)
+                        return VRCommon_DataRecordFieldAPIService.DeleteDataRecordField(obj.Entity.ID)
                             .then(function (deletionResponse) {
                                 VRNotificationService.notifyOnItemDeleted("Data Record Field", deletionResponse);
                                 onDataRecordFieldDeleted(obj);
@@ -46,4 +50,5 @@
                 });
         }
 
-    }]);
+    }
+]);

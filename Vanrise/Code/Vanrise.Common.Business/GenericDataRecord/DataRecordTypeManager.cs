@@ -24,10 +24,12 @@ namespace Vanrise.Common.Business.GenericDataRecord
                 return null;
 
             var dataRecordTypes = GetChachedDataRecordTypes();
-            return dataRecordTypes.FindRecord(x => x.DataRecordTypeId == dataRecordTypeId);
+            var returnedObj=dataRecordTypes.FindRecord(x => x.DataRecordTypeId == dataRecordTypeId);
+            if(returnedObj.Fields==null)
+                returnedObj.Fields=new List<DataRecordField>();
+            return returnedObj;
         }
-       
-      
+
         #region Private Classes
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {

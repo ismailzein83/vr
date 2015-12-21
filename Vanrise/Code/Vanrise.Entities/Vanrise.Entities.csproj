@@ -71,6 +71,7 @@
     <Compile Include="ExcelResult.cs" />
     <Compile Include="File\FileUploadResult.cs" />
     <Compile Include="GenericConfig\GenericConfiguration.cs" />
+    <Compile Include="GenericDataRecord\Choices.cs" />
     <Compile Include="GenericDataRecord\DataRecordField.cs" />
     <Compile Include="GenericDataRecord\DataRecordFieldDetail.cs" />
     <Compile Include="GenericDataRecord\DataRecordFieldQuery.cs" />
