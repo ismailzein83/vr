@@ -33,6 +33,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CodeGroupManager manager = new CodeGroupManager();
             return manager.GetAllCodeGroups();
         }
+    
         [HttpGet]
         [Route("GetCodeGroup")]
         public CodeGroup GetCodeGroup(int codeGroupId)
@@ -48,6 +49,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CodeGroupManager manager = new CodeGroupManager();
             return manager.AddCodeGroup(codeGroup);
         }
+      
         [HttpPost]
         [Route("UpdateCodeGroup")]
         public TOne.Entities.UpdateOperationOutput<CodeGroupDetail> UpdateCodeGroup(CodeGroup codeGroup)
@@ -64,6 +66,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.UploadCodeGroupList(fileId);
             
         }
+       
         [HttpGet]
         [Route("DownloadCodeGroupListTemplate")]
         public object DownloadCodeGroupListTemplate()
@@ -72,6 +75,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             byte[] bytes = manager.DownloadCodeGroupListTemplate();
             return GetExcelResponse(bytes, "ImportPriceListTemplate.xls");  
         }
+    
         [HttpGet]
         [Route("DownloadCodeGroupLog")]
         public object DownloadCodeGroupLog(long fileID)
