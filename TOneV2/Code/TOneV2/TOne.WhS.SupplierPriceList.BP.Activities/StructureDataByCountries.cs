@@ -27,14 +27,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             Dictionary<int, ImportedCountry> importedCountriesByCountryId = new Dictionary<int, ImportedCountry>();
             ImportedCountry importedCountry;
 
-            CodeGroupManager codeGroupManager = new CodeGroupManager();
-
             foreach (ImportedZone zone in importedZonesList)
             {
-                if(!zone.IsExecluded)
+                if(!zone.IsExcluded)
                 {
                     //This should be validated when data is imported, that all codes has code groups and are linked to countries
-                    int countryId = codeGroupManager.GetCodeGroup(zone.ImportedCodes.First().CodeGroupId.Value).CountryId;
+                    int countryId = zone.ImportedCodes.First().CodeGroup.CountryId;
                     if(!importedCountriesByCountryId.TryGetValue(countryId, out importedCountry))
                     {
                         importedCountry = new ImportedCountry();

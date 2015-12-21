@@ -22,7 +22,8 @@ namespace TOne.WhS.SupplierPriceList.Business
                 var firstCode = zone.ImportedCodes.FirstOrDefault();
                 if (firstCode != null)
                 {
-                    Func<ImportedCode, bool> pred = new Func<ImportedCode, bool>((code) => code.CountryId != firstCode.CountryId);
+                    int? firstCodeCountryId = firstCode.CodeGroup != null ? firstCode.CodeGroup.CountryId : (int?)null;
+                    Func<ImportedCode, bool> pred = new Func<ImportedCode, bool>((code) => code.CodeGroup != null && code.CodeGroup.CountryId != firstCodeCountryId.Value);
                     result = !zone.ImportedCodes.Any(pred);
                 }
             }

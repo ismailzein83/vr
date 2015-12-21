@@ -13,7 +13,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         public override bool Validate(IRuleTarget target)
         {
             ImportedCode code = target as ImportedCode;
-            return code.CodeGroupId != null;
+            return code.CodeGroup != null;
         }
     }
 }

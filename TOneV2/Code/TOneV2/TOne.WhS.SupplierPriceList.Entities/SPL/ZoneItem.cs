@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
@@ -82,9 +83,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public string ZoneName { get; set; }
 
-        public int? CodeGroupId { get; set; }
-
-        public int? CountryId { get; set; }
+        public CodeGroup CodeGroup { get; set; }
 
         public DateTime BED { get; set; }
 
@@ -112,13 +111,13 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public CodeProcessInfo ProcessInfo { get; set; }
 
-        public bool IsExecluded { get; set; }
+        public bool IsExcluded { get; set; }
 
         public string Message { get; set; }
         
         public void SetExcluded()
         {
-            throw new NotImplementedException();
+            this.IsExcluded = true;
         }
     }
 
@@ -132,7 +131,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
     }
 
-    public class ImportedRate : Vanrise.Entities.IDateEffectiveSettings
+    public class ImportedRate : Vanrise.Entities.IDateEffectiveSettings, IRuleTarget
     {
         public ImportedRate()
         {
@@ -172,6 +171,15 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         }
 
         public RateProcessInfo ProcessInfo { get; set; }
+
+        public bool IsExcluded { get; set; }
+
+        public string Message { get; set; }
+
+        public void SetExcluded()
+        {
+            this.IsExcluded = true;
+        }
     }
 
     public class RateProcessInfo
@@ -187,17 +195,22 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public List<ImportedRate> ImportedRates { get; set; }
 
-        public bool IsExecluded { get; set; }
+        public bool IsExcluded { get; set; }
 
         public string Message { get; set; }
 
         public void SetExcluded()
         {
-            this.IsExecluded = true;
+            this.IsExcluded = true;
 
             foreach (ImportedCode code in this.ImportedCodes)
             {
-                code.IsExecluded = true;
+                code.SetExcluded();
+            }
+
+            foreach (ImportedRate rate in ImportedRates)
+            {
+                rate.SetExcluded();
             }
         }
     }

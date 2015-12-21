@@ -82,8 +82,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     importedCodesList.Add(new ImportedCode
                     {
                         Code = codeValue.Trim(),
-                        CodeGroupId = (codeGroup != null) ? codeGroup.CodeGroupId : (int?)null,
-                        CountryId = (codeGroup != null) ? codeGroup.CountryId : (int?)null,
+                        CodeGroup = codeGroup,
                         ZoneName = zoneName,
                         BED = bEDDateFromExcel.Value,
                         EED = eEDDateFromExcel
