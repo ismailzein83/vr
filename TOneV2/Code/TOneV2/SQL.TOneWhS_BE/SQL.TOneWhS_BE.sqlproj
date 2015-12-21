@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{32b9f6e3-d55c-46af-96f7-8a811b7b38a0}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -162,7 +162,6 @@
     <Build Include="TOneWhS_BE\User Defined Types\CustomerSellingProduct.sql" />
     <Build Include="Security\TOneWhS_Sales.sql" />
     <Build Include="Security\TOneWhS_Routing.sql" />
-    <Build Include="Security\TOneWhS_CDR.sql" />
     <Build Include="TOneWhS_Routing\Tables\RoutingDatabase.sql" />
     <Build Include="TOneWhS_Routing\Stored Procedures\sp_RoutingDatabase_SetReady.sql" />
     <Build Include="TOneWhS_Routing\Stored Procedures\sp_RoutingDatabase_GetReadyDBIDByType.sql" />
