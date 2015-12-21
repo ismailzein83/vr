@@ -131,8 +131,7 @@ namespace QM.BusinessEntity.Business
             return manager.GetTemplateConfigurations(Constants.SourceSupplierReaderConfigType);
         }
 
-        enum Actions {Add, Update };
-
+        
         public string AddSuppliers(int fileId, bool AllowUpdateIfExisting)
         {
             DataTable supplierDataTable = new DataTable();
@@ -169,13 +168,28 @@ namespace QM.BusinessEntity.Business
                     ReserveIDRange(1, out startingId);
                     supplier.SupplierId = (int)startingId;
                     supplier.Name = supplierDataTable.Rows[i][0].ToString();
-                    ApplySettingsforAllImplementations(supplierDataTable, ref insertedCount, ref notInsertedCount, ref updatedCount, dataManager, implementations, extendedFields, i, supplier, Actions.Add);
-                   
+                    ApplySettings(supplierDataTable, ref insertedCount, ref notInsertedCount, ref updatedCount, dataManager, implementations, extendedFields, i, ref supplier);
+
+                    bool insertActionSucc = dataManager.Insert(supplier);
+                    if (insertActionSucc)
+                        insertedCount++;
+                    else
+                        notInsertedCount++;
+
+
                 }
                 else
                 {
                     if (AllowUpdateIfExisting)
-                        ApplySettingsforAllImplementations(supplierDataTable, ref insertedCount, ref notInsertedCount, ref updatedCount, dataManager, implementations, extendedFields, i, supplier, Actions.Update);
+                    {
+                        ApplySettings(supplierDataTable, ref insertedCount, ref notInsertedCount, ref updatedCount, dataManager, implementations, extendedFields, i, ref supplier);
+
+                        bool updateActionSucc = dataManager.Update(supplier);
+                        if (updateActionSucc)
+                            updatedCount++;
+                        else
+                            notInsertedCount++;
+                    }
                     else
                         notInsertedCount++;
                 }
@@ -186,41 +200,28 @@ namespace QM.BusinessEntity.Business
             return message;
         }
 
-        private static void ApplySettingsforAllImplementations(DataTable supplierDataTable, ref int insertedCount, ref int notInsertedCount, ref int updatedCount, ISupplierDataManager dataManager, IEnumerable<Type> implementations, List<string> extendedFields, int i, Supplier supplier, Actions action)
+        private static void ApplySettings(DataTable supplierDataTable, ref int insertedCount, ref int notInsertedCount, ref int updatedCount, ISupplierDataManager dataManager, IEnumerable<Type> implementations, List<string> extendedFields, int i, ref Supplier supplier)
         {
-            foreach (Type type in implementations)
+            if (supplier.Settings == null)
             {
-                ExtendedSupplierSetting baseClass = Activator.CreateInstance(type) as ExtendedSupplierSetting;
-                if (baseClass == null)
-                    throw new Exception(String.Format("invalid logger type {0}", baseClass.GetType()));
-
-                Dictionary<string, object> excelFields = new Dictionary<string, object>();
-
-                for (int j = 1; j < supplierDataTable.Columns.Count; j++)
-                    excelFields.Add(extendedFields[j - 1], supplierDataTable.Rows[i][j].ToString());
-
-                baseClass.ApplyExcelFields(supplier, excelFields);
                 supplier.Settings = new SupplierSettings();
                 supplier.Settings.ExtendedSettings = new List<ExtendedSupplierSetting>();
-                supplier.Settings.ExtendedSettings.Add(baseClass);
 
-                if(action == Actions.Update)
+                foreach (Type type in implementations)
                 {
-                    bool updateActionSucc = dataManager.Update(supplier);
-                    if (updateActionSucc)
-                        updatedCount++;
-                    else
-                        notInsertedCount++;
+                    ExtendedSupplierSetting baseClass = Activator.CreateInstance(type) as ExtendedSupplierSetting;
+                    if (baseClass == null)
+                        throw new Exception(String.Format("invalid logger type {0}", baseClass.GetType()));
+
+                    Dictionary<string, object> excelFields = new Dictionary<string, object>();
+
+                    for (int j = 1; j < supplierDataTable.Columns.Count; j++)
+                        excelFields.Add(extendedFields[j - 1], supplierDataTable.Rows[i][j].ToString());
+
+                    baseClass.ApplyExcelFields(supplier, excelFields);
+
+                    supplier.Settings.ExtendedSettings.Add(baseClass);
                 }
-                else if (action == Actions.Add)
-                {
-                    bool insertActionSucc = dataManager.Insert(supplier);
-                    if (insertActionSucc)
-                        insertedCount++;
-                    else
-                        notInsertedCount++;
-                }
-               
             }
         }
 
