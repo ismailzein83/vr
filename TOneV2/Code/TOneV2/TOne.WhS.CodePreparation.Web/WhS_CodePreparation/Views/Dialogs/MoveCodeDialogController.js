@@ -9,9 +9,9 @@
         var countryId;
         var codeEntity;
         var sellingNumberPlanId;
-        var zoneName;
+        var currentZoneName;
         var zoneId;
-
+        
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -24,8 +24,9 @@
                 zoneId = parameters.ZoneId;
                 $scope.codes = parameters.Codes;
                 countryId = parameters.CountryId;
-                zoneName = parameters.ZoneName;
+                currentZoneName = parameters.ZoneName;
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
+                $scope.saleZones = parameters.ZoneDataSource;
             }
 
             load();
@@ -33,10 +34,11 @@
         function defineScope() {
             $scope.bed;
             $scope.eed;
-            $scope.codes;
-
-            $scope.moveCode = function () {
-
+            $scope.codes = [];
+            $scope.saleZones;
+            $scope.selectedZone;
+            $scope.moveCodes = function () {
+                return moveCodes();
             };
 
             $scope.close = function () {
@@ -53,23 +55,12 @@
         function load() {
 
             $scope.isGettingData = true;
-            if (zoneId != undefined) {
-                $scope.title = UtilsService.buildTitleForAddEditor("Move Code for " + zoneName);
-                loadAllControls();
-            }
-            else {
-                loadAllControls();
-                $scope.title = UtilsService.buildTitleForAddEditor("Move Code for " + zoneName);
-            }
+            loadAllControls();
+            $scope.title = UtilsService.buildTitleForAddEditor("Move Code for " + currentZoneName);
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSaleZones])
-              .catch(function (error) {
-                  VRNotificationService.notifyExceptionWithClose(error, $scope);
-              })
-             .finally(function () {
-                 $scope.isLoading = false;
-             });
+            $scope.isLoading = false;
+            $scope.isGettingData = false;
         }
 
 
@@ -83,48 +74,41 @@
             return loadSaleZonesPromiseDeferred.promise;
         }
 
-
-        function getCode() {
-
-        }
-
-        function buildCodeObjFromScope() {
+        function buildCodeMoveObjFromScope() {
             var obj = {
                 Codes: $scope.codes,
-                ZoneName: zoneName,
+                CurrentZoneName: currentZoneName,
+                NewZoneName: $scope.selectedZone.Name,
                 BED: $scope.bed,
                 EED: $scope.eed
             };
             return obj;
         }
 
-        function getNewCodeFromCodeObj(codeObj) {
+        function getMoveCodeInput(codeObj) {
             return {
                 SellingNumberPlanId: sellingNumberPlanId,
                 CountryId: countryId,
-                ZoneId: zoneId,
-                NewCode: codeObj
+                Codes: codeObj.Codes,
+                CurrentZoneName: codeObj.CurrentZoneName,
+                NewZoneName: codeObj.NewZoneName,
+                BED: codeObj.BED,
+                EED: codeObj.EED
             }
         }
 
-        function fillScopeFromCodeObj(code) {
-            $scope.name = code.Code;
-            $scope.title = UtilsService.buildTitleForUpdateEditor($scope.code, "Move Code for " + zoneName);
-        }
-
-        function insertCode() {
-            var codeItem = buildCodeObjFromScope();
-
-            var input = getNewCodeFromCodeObj(codeItem);
-            return WhS_CodePrep_CodePrepAPIService.SaveNewCode(input)
+        function moveCodes() {
+            var moveItem = buildCodeMoveObjFromScope();
+            var input = getMoveCodeInput(moveItem);
+            return WhS_CodePrep_CodePrepAPIService.MoveCodes(input)
             .then(function (response) {
                 if (response.Result == 0) {
                     VRNotificationService.showWarning(response.Message);
                 }
                 else if (response.Result == 1) {
                     VRNotificationService.showSuccess(response.Message);
-                    if ($scope.onCodeAdded != undefined)
-                        $scope.onCodeAdded(codeItem);
+                    if ($scope.onCodesMoved != undefined)
+                        $scope.onCodesMoved(response);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {

@@ -29,4 +29,5 @@ namespace TOne.WhS.CodePreparation.Entities
         Existing = 0,
         Inserted = 1
     }
+
 }

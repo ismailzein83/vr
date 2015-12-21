@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public SaleCodeDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
-          
+
         }
         public Vanrise.Entities.BigResult<Entities.SaleCode> GetSaleCodeFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SaleCodeQuery> input)
         {
@@ -37,7 +37,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetAll", SaleCodeMapper);
         }
 
-        public List<SaleCode> GetSaleCodesByZoneID(long zoneID,DateTime effectiveDate)
+        public List<SaleCode> GetSaleCodesByZoneID(long zoneID, DateTime effectiveDate)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_ByZondId", SaleCodeMapper, zoneID, effectiveDate);
         }
@@ -76,6 +76,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public bool AreZonesUpdated(ref object lastReceivedDataInfo)
         {
             return IsDataUpdated("TOneWhS_BE.SaleCode", ref lastReceivedDataInfo);
+        }
+
+
+        public List<SaleCode> GetSaleCodesByZoneName(int sellingNumberPlanId, string zoneName, DateTime effectiveDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_ByZondName", SaleCodeMapper, sellingNumberPlanId, zoneName, effectiveDate);
         }
     }
 }

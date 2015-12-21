@@ -9,8 +9,10 @@ namespace TOne.WhS.CodePreparation.Entities.CP
     public class MoveCodeInput
     {
         public int SellingNumberPlanId { get; set; }
-        public string ZoneName { get; set; }
-        public string OtherZoneName { get; set; }
+        public string CurrentZoneName { get; set; }
+        public string NewZoneName { get; set; }
+        public DateTime BED { get; set; }
+        public DateTime? EED { get; set; }
         public ZoneItemStatus Status { get; set; }
         public List<string> Codes { get; set; }
     }

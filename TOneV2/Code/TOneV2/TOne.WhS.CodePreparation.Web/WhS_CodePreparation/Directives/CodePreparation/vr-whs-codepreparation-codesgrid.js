@@ -47,7 +47,14 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
                     directiveAPI.onCodeAdded = function (codeItemObject) {
                         gridAPI.itemAdded(codeItemObject);
                     }
-
+                    directiveAPI.getSelectedCodes = function () {
+                        var selectedCodes = [];
+                        angular.forEach($scope.salecodes, function (itm) {
+                            if (itm.IsSelected)
+                                selectedCodes.push(itm);
+                        });
+                        return selectedCodes;
+                    };
                     return directiveAPI;
                 }
             };
@@ -61,6 +68,8 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
+
+
         }
 
         function defineMenuActions() {
@@ -73,7 +82,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
 
         function moveCode() { }
 
-        
+
     }
 
     return directiveDefinitionObject;

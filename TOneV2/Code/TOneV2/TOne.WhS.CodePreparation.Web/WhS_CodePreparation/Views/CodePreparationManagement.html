@@ -20,7 +20,7 @@
                 <vr-button type="Search" formname="formFilter" validationcontext="filterGroupValid" data-onclick="searchClicked"></vr-button>
                 <vr-button type="Add" text="New Zone" ng-show="currentNode != undefined && currentNode.type == 'Country'" formname="formFilter" validationcontext="filterGroupValid" data-onclick="newZoneClicked"></vr-button>
                 <vr-button type="Add" text="New Code" ng-show="currentNode != undefined && currentNode.type == 'Zone'" formname="formFilter" validationcontext="filterGroupValid" data-onclick="newCodeClicked"></vr-button>
-
+                <vr-button type="Move" text="Move Codes" formname="formFilter" validationcontext="filterGroupValid" data-onclick="moveCodesClicked"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>

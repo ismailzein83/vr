@@ -58,6 +58,10 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
                 angular.forEach(response, function (itm) {
                     effectiveZones.push(mapZoneToNode(itm));
                 });
+                var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, countryNode.nodeId, 'nodeId');
+                var parentNode = $scope.nodes[countryIndex];
+                parentNode.effectiveZones = effectiveZones;
+                $scope.nodes[countryIndex] = parentNode;
                 effectiveZonesPromiseDeffered.resolve(effectiveZones);
             });
             return effectiveZonesPromiseDeffered.promise;
@@ -102,6 +106,10 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         $scope.newCodeClicked = function () {
             addNewCode();
         }
+
+        $scope.moveCodesClicked = function () {
+            moveCodes();
+        }
     }
 
     function loadParameters() {
@@ -141,6 +149,10 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         }
     }
 
+    function onCodesMoved(response) {
+        console.log(response);
+    }
+
     function addNewZone() {
         var parameters = {
             CountryId: $scope.currentNode.nodeId,
@@ -170,6 +182,49 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         };
 
         VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/NewCodeDialog.html", parameters, settings);
+    }
+
+    function moveCodes() {
+
+        var codes = codesGridAPI.getSelectedCodes();
+        console.log(codes);
+        var parameters = {
+            ZoneId: $scope.currentNode.nodeId,
+            ZoneName: $scope.currentNode.nodeName,
+            SellingNumberPlanId: filter.sellingNumberPlanId,
+            CountryId: $scope.currentNode.countryId,
+            ZoneStatus: $scope.currentNode.status,
+            ZoneDataSource: GetCurrentCountryNodeZones(),
+            Codes: UtilsService.getPropValuesFromArray(codes, 'Code')
+        };
+        var settings = {};
+        settings.onScopeReady = function (modalScope) {
+            modalScope.onCodesMoved = onCodesMoved;
+        };
+
+        VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/MoveCodeDialog.html", parameters, settings);
+    }
+
+    function GetCurrentCountryNodeZones() {
+        var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.countryId, 'nodeId');
+        var countryNode = $scope.nodes[countryIndex];
+        return getZoneInfos(countryNode.effectiveZones);
+    }
+
+    function getZoneInfos(zoneNodes) {
+        var zoneInfos = [];
+        angular.forEach(zoneNodes, function (itm) {
+            zoneInfos.push(mapZoneInfoFromNode(itm));
+        });
+
+        return zoneInfos;
+    }
+
+    function mapZoneInfoFromNode(zoneItem) {
+        return {
+            SaleZoneId: zoneItem.nodeId,
+            Name: zoneItem.nodeName
+        };
     }
 
     function getCountries() {

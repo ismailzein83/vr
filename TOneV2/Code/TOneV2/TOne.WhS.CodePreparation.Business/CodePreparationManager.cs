@@ -14,6 +14,7 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using TOne.WhS.CodePreparation.Entities.CP;
 using Vanrise.Common.Business;
+using System.ComponentModel;
 
 namespace TOne.WhS.CodePreparation.Business
 {
@@ -235,6 +236,8 @@ namespace TOne.WhS.CodePreparation.Business
         List<CodeItem> MapCodeItemsFromSaleCodes(IEnumerable<SaleCode> saleCodes)
         {
             List<CodeItem> codeItems = new List<CodeItem>();
+            CodeItemStatus codeItemStatus = CodeItemStatus.ExistingNotChanged;
+            string statusDescription = Utilities.GetEnumAttribute<CodeItemStatus, DescriptionAttribute>(codeItemStatus).Description;
             foreach (var saleCode in saleCodes)
             {
                 CodeItem codeItem = new CodeItem()
@@ -242,7 +245,8 @@ namespace TOne.WhS.CodePreparation.Business
                     BED = saleCode.BED,
                     Code = saleCode.Code,
                     EED = saleCode.EED,
-                    Status = CodeItemStatus.ExistingNotChanged,
+                    Status = codeItemStatus,
+                    StatusDescription = statusDescription == null ? codeItemStatus.ToString() : statusDescription,
                     CodeId = saleCode.SaleCodeId
                 };
                 codeItems.Add(codeItem);
@@ -252,6 +256,8 @@ namespace TOne.WhS.CodePreparation.Business
         List<CodeItem> MapCodeItemsFromChanges(IEnumerable<NewCode> newCodes)
         {
             List<CodeItem> codeItems = new List<CodeItem>();
+            CodeItemStatus codeItemStatus = CodeItemStatus.New;
+            string statusDescription = Utilities.GetEnumAttribute<CodeItemStatus, DescriptionAttribute>(codeItemStatus).Description;
             foreach (var newCode in newCodes)
             {
                 CodeItem codeItem = new CodeItem()
@@ -259,7 +265,8 @@ namespace TOne.WhS.CodePreparation.Business
                     BED = newCode.BED,
                     Code = newCode.Code,
                     EED = newCode.EED,
-                    Status = CodeItemStatus.New
+                    Status = CodeItemStatus.New,
+                    StatusDescription = statusDescription == null ? codeItemStatus.ToString() : statusDescription
 
                 };
                 codeItems.Add(codeItem);
@@ -338,7 +345,79 @@ namespace TOne.WhS.CodePreparation.Business
 
         public MoveCodeOutput MoveCodes(MoveCodeInput input)
         {
-            throw new NotImplementedException();
+            ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
+            Changes existingChanges = dataManager.GetChanges(input.SellingNumberPlanId, CodePreparationStatus.Draft);
+            if (existingChanges == null)
+                existingChanges = new Changes();
+            SaleCodeManager saleCodeManager = new SaleCodeManager();
+            List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesByZoneName(input.SellingNumberPlanId, input.CurrentZoneName, DateTime.Now);
+            MoveCodeOutput output = new MoveCodeOutput();
+            var codeItems = GetCodeItems(saleCodes, existingChanges.NewCodes);
+            foreach (var code in input.Codes)
+            {
+                var codeItem = codeItems.FindRecord(c => c.Code == code);
+
+                if (codeItem != null)
+                {
+                    DeletedCode deletedCode = new DeletedCode()
+                    {
+                        BED = codeItem.BED,
+                        Code = code,
+                        EED = input.BED,
+                        ZoneName = input.CurrentZoneName
+                    };
+                    existingChanges.DeletedCode.Add(deletedCode);
+                }
+
+                existingChanges.NewCodes.RemoveAll(c => c.Code == codeItem.Code);
+                NewCode newCode = new NewCode()
+                {
+                    BED = input.BED,
+                    Code = code,
+                    EED = input.EED,
+                    ZoneName = input.NewZoneName
+                };
+                existingChanges.NewCodes.Add(newCode);
+            }
+            dataManager.InsertOrUpdateChanges(input.SellingNumberPlanId, existingChanges, CodePreparationStatus.Draft);
+            output.Message = "Codes Moved Successfully";
+            return output;
+        }
+
+        List<SaleCode> GetSaleCodesByZoneName(int sellingNumberPlan, string zoneName)
+        {
+            SaleCodeManager saleCodemanager = new SaleCodeManager();
+            return saleCodemanager.GetSaleCodesByZoneName(sellingNumberPlan, zoneName, DateTime.Now);
+        }
+
+        List<CodeItem> GetCodeItems(List<SaleCode> saleCodes, List<NewCode> newCodes)
+        {
+            List<CodeItem> codeItems = new List<CodeItem>();
+            foreach (var saleCode in saleCodes)
+            {
+                CodeItem codeItem = new CodeItem()
+                {
+                    BED = saleCode.BED,
+                    Code = saleCode.Code,
+                    EED = saleCode.EED,
+                    Status = CodeItemStatus.ExistingNotChanged,
+                    CodeId = saleCode.SaleCodeId
+                };
+                codeItems.Add(codeItem);
+            }
+            foreach (var newCode in newCodes)
+            {
+                CodeItem codeItem = new CodeItem()
+                {
+                    BED = newCode.BED,
+                    Code = newCode.Code,
+                    EED = newCode.EED,
+                    Status = CodeItemStatus.New
+
+                };
+                codeItems.Add(codeItem);
+            }
+            return codeItems;
         }
 
         #endregion

@@ -1,12 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TOne.WhS.CodePreparation.Entities.CP
 {
-    public enum CodeItemStatus { ExistingNotChanged = 0, New = 1, ExistingClosed = 2, ExistingMoved = 3, NewMoved = 4 }
+    public enum CodeItemStatus
+    {
+        [Description("Existing Not Changed")]
+        ExistingNotChanged = 0,
+        [Description("New")]
+        New = 1,
+        [Description("Existing Closed")]
+        ExistingClosed = 2,
+        [Description("Existing Moved")]
+        ExistingMoved = 3,
+        [Description("New Moved")]
+        NewMoved = 4
+    }
 
     public class CodeItem
     {
@@ -19,6 +32,8 @@ namespace TOne.WhS.CodePreparation.Entities.CP
         public DateTime? EED { get; set; }
 
         public CodeItemStatus Status { get; set; }
+
+        public string StatusDescription { get; set; }
 
         /// <summary>
         /// in case the Code is moved, this property stores the Zone Name of the other code. the other code is the existing code if this is the new one and vice versa
