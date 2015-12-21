@@ -1,18 +1,24 @@
-﻿Create PROCEDURE TOneWhS_Routing.[sp_RoutingDatabase_Insert] 
+﻿CREATE PROCEDURE [TOneWhS_Routing].[sp_RoutingDatabase_Insert] 
    @Title nvarchar(255),
-   @Type int,
+   @Type tinyint,
+   @ProcessType tinyint,
    @EffectiveTime datetime,
+   @Information nvarchar(max),
    @ID int out
 AS
 BEGIN
 	INSERT INTO TOneWhS_Routing.[RoutingDatabase]
            ([Title]
            ,[Type]
-           ,[EffectiveTime])
+           ,[ProcessType]
+           ,[EffectiveTime]
+           ,[Information])
      VALUES
            (@Title,
            @Type,
-           @EffectiveTime)
+           @ProcessType,
+           @EffectiveTime,
+           @Information)
            
      SET @ID = @@IDENTITY
 END

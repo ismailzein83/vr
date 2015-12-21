@@ -1,9 +1,12 @@
 ﻿CREATE TABLE [TOneWhS_BE].[SupplierPriceList] (
-    [ID]         INT IDENTITY (1, 1) NOT NULL,
-    [SupplierID] INT NOT NULL,
-    [CurrencyID] INT NULL,
+    [ID]         INT        NOT NULL,
+    [SupplierID] INT        NOT NULL,
+    [CurrencyID] INT        NOT NULL,
+    [timestamp]  ROWVERSION NULL,
     CONSTRAINT [PK_SupplierPriceList] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

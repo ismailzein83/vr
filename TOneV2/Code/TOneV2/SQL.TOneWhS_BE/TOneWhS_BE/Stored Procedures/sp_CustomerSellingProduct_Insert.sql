@@ -32,11 +32,8 @@ BEGIN
 		END
 
 	CLOSE CustomerSellingProduct  
-		Delete From TOneWhS_BE.CustomerSellingProduct
-		Where ID in (select ID from @UpdatedCustomerSellingProducts)
+		--Delete From TOneWhS_BE.CustomerSellingProduct
+		--Where ID in (select ID from @UpdatedCustomerSellingProducts)
 		
-select *,ca.Name as CustomerName ,pp.Name as SellingProductName from @tempTable tt 
-LEFT JOIN TOneWhS_BE.CarrierAccount ca ON tt.CustomerID=ca.ID 
-LEFT Join TOneWhS_BE.CarrierProfile cp ON ca.CarrierProfileID=cp.ID
-LEFT Join TOneWhS_BE.SellingProduct pp ON tt.SellingProductID=pp.ID     ;
+select *  from @tempTable tt;
 END

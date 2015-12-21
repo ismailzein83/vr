@@ -1,0 +1,18 @@
+﻿-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetEffectiveDefaults]
+	@EffectiveOn DATETIME
+AS
+BEGIN
+	SELECT OwnerType,
+		OwnerID,
+		RoutingProductID,
+		BED,
+		EED
+	FROM TOneWhS_BE.SaleEntityRoutingProduct
+	WHERE ZoneID IS NULL
+		AND BED <= @EffectiveOn AND (EED IS NULL OR EED > @EffectiveOn)
+END

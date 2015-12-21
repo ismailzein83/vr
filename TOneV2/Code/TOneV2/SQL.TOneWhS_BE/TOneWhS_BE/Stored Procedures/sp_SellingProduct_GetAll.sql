@@ -15,9 +15,5 @@ BEGIN
       ,pp.DefaultRoutingProductID
       ,pp.[SellingNumberPlanID]
       ,pp.[Settings]
-      ,snp.Name as SellingNumberPlanName
-      , rp.Name as DefaultRoutingProductName 
       from TOneWhS_BE.SellingProduct pp
-      JOIN TOneWhS_BE.SellingNumberPlan snp ON pp.SellingNumberPlanID=snp.ID
-      LEFT JOIN TOneWhS_BE.RoutingProduct rp ON (pp.DefaultRoutingProductID=rp.ID)
 END

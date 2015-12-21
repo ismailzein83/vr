@@ -3,15 +3,17 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [TOneWhS_BE].[sp_CarrierProfile_Update]
+CREATE PROCEDURE [TOneWhS_BE].[sp_CarrierProfile_Update]
 	@ID int,
 	@Name nvarchar(255),
 	@Settings nvarchar(MAX)
 AS
 BEGIN
-
+IF NOT EXISTS(select 1 from TOneWhS_BE.CarrierProfile where Name = @Name and Id!=@ID) 
+BEGIN
 	Update TOneWhS_BE.CarrierProfile
 	Set Name = @Name,
 		Settings=@Settings
 	Where ID = @ID
+END
 END

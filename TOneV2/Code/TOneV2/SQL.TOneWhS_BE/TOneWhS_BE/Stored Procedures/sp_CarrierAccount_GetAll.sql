@@ -11,10 +11,8 @@ BEGIN
 		    ca.Name,
 			ca.CustomerSettings,
 			ca.SupplierSettings,
-			cp.Name as CarrierProfileName
-	FROM TOneWhS_BE.CarrierAccount ca  
-	Join TOneWhS_BE.CarrierProfile cp ON ca.CarrierProfileID=cp.ID                         
-
-		
+			ca.SellingNumberPlanID,
+			ca.CarrierAccountSettings
+	FROM TOneWhS_BE.CarrierAccount ca                   
 	SET NOCOUNT OFF
 END

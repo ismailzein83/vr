@@ -10,8 +10,11 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_CodeGroup_Update]
 AS
 BEGIN
 
-	Update TOneWhS_BE.CodeGroup
+IF NOT EXISTS(SELECT 1 FROM TOneWhS_BE.[CodeGroup] WHERE ID != @ID AND Code = @Code)
+	BEGIN
+		Update TOneWhS_BE.CodeGroup
 	Set Code = @Code ,
 		CountryID = @CountryID
 	Where ID = @ID
+	END
 END

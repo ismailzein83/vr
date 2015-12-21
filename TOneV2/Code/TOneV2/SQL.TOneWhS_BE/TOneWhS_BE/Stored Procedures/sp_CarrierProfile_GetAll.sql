@@ -10,6 +10,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 	SELECT	cp.ID,
-			cp.Name
+			cp.Name,
+			cp.Settings
 	FROM	[TOneWhS_BE].CarrierProfile  as cp WITH(NOLOCK) 
 END

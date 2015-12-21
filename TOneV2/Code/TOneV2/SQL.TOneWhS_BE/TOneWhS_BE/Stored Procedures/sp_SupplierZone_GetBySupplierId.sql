@@ -15,6 +15,7 @@ BEGIN
 
 	SELECT  sz.[ID]
 		  ,sz.[Name]
+		  ,sz.CountryID
 		  ,sz.SupplierID
 		  ,sz.BED
 		  ,sz.EED

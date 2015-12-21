@@ -1,0 +1,28 @@
+﻿CREATE TABLE [TOneWhS_Analytic].[BillingStats] (
+    [ID]               BIGINT          NOT NULL,
+    [CallDate]         DATETIME        NOT NULL,
+    [CustomerID]       INT             NOT NULL,
+    [SupplierID]       INT             NOT NULL,
+    [SupplierZoneID]   BIGINT          NOT NULL,
+    [SaleZoneID]       BIGINT          NOT NULL,
+    [CostCurrency]     INT             NULL,
+    [SaleCurrency]     INT             NULL,
+    [NumberOfCalls]    INT             NULL,
+    [FirstCallTime]    VARCHAR (8)     NULL,
+    [LastCallTime]     VARCHAR (8)     NULL,
+    [MinDuration]      INT             NULL,
+    [MaxDuration]      INT             NULL,
+    [AvgDuration]      NUMERIC (13, 8) NULL,
+    [CostNets]         NUMERIC (13, 8) NULL,
+    [CostExtraCharges] NUMERIC (13, 8) NULL,
+    [SaleNets]         NUMERIC (13, 8) NULL,
+    [SaleExtraCharges] NUMERIC (13, 8) NULL,
+    [SaleRate]         NUMERIC (13, 8) NULL,
+    [CostRate]         NUMERIC (13, 8) NULL,
+    [SaleDuration]     INT             NULL,
+    [CostDuration]     INT             NULL,
+    [SaleRateType]     INT             NULL,
+    [CostRateType]     INT             NULL,
+    CONSTRAINT [PK_BillingStats] PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+

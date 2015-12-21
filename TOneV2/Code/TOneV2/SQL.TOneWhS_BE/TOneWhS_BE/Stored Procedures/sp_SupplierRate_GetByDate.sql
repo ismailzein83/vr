@@ -14,12 +14,14 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT  sr.[ID]
-		  ,sr.Rate
+		  ,sr.NormalRate
+		  ,sr.OtherRates
 		  ,sr.PriceListID
+		  ,pl.CurrencyId
 		  ,sr.ZoneID
 		  ,sr.BED
 		  ,sr.EED
-	  FROM [TOneWhS_BE].SupplierRate sr LEFT JOIN [TOneWhS_BE].SupplierZone sz ON sr.ZoneID=sz.ID 
+	  FROM [TOneWhS_BE].SupplierRate sr LEFT JOIN [TOneWhS_BE].SupplierPriceList pl ON sr.PriceListID = pl.ID 
 	  Where  (sr.EED is null or sr.EED > @when)
-		and sz.SupplierID=@SupplierId
+		and pl.SupplierID=@SupplierId
 END
