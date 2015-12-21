@@ -1,6 +1,6 @@
 ﻿
-<vr-panel ng-controller="Qm_CliTester_HistoryTestCallManagementController">
-    <vr-form name="formFilter" vr-loader="isGettingData">
+<vr-panel ng-controller="Qm_CliTester_DashboardManagementController">
+    <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
 
@@ -24,7 +24,7 @@
         <vr-row>
             <vr-columns width="1/2row">
                 <vr-section title="Total Calls" vr-loader="isGettingEntityStatistics">
-                    <vr-chart data-on-ready="c.chartSelectedEntityReady"></vr-chart>
+                    <vr-chart data-on-ready="chartSelectedEntityReady"></vr-chart>
                 </vr-section>
             </vr-columns>
         </vr-row>

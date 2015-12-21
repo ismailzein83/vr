@@ -21,6 +21,10 @@
             return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetBeforeId"), input);
         }
 
+        function GetTotalCallsByUserId() {
+            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetTotalCallsByUserId"));
+        }
+
         function GetFilteredTestCalls(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetFilteredTestCalls"), input);
         }
@@ -37,6 +41,7 @@
             AddNewTestCall: AddNewTestCall,
             ReTestCall: ReTestCall,
             GetFilteredTestCalls: GetFilteredTestCalls,
+            GetTotalCallsByUserId: GetTotalCallsByUserId,
             GetInitiateTestTemplates: GetInitiateTestTemplates,
             GetTestProgressTemplates: GetTestProgressTemplates,
             GetUpdated: GetUpdated,

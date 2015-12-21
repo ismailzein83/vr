@@ -66,6 +66,11 @@ namespace QM.CLITester.Data.SQL
             return GetItemsSP("[QM_CLITester].[sp_TestCall_GetBeforeID]", TestCallDetailMapper, input.LessThanID, input.NbOfRows, input.UserId);
         }
 
+        public List<TotalCallsChart> GetTotalCallsByUserId(int userId)
+        {
+            return GetItemsSP("[QM_CLITester].[sp_TestCall_GetTotalCallsByUserId]", TotalCallsByUserIdMapper, userId);
+        }
+
         public bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus, int initiationRetryCount, string failureMessage)
         {
             int recordsEffected = ExecuteNonQuerySP("[QM_CLITester].[sp_TestCall_UpdateInitiateTest]", testCallId,
@@ -165,6 +170,15 @@ namespace QM.CLITester.Data.SQL
                 UserName = userManager.GetUserbyId(TestCallMapper(reader).UserID) == null ? "" : userManager.GetUserbyId(TestCallMapper(reader).UserID).Name,
                 CountryName = countryManager.GetCountry(TestCallMapper(reader).CountryID) == null ? "" : countryManager.GetCountry(TestCallMapper(reader).CountryID).Name,
                 ZoneName = zoneManager.GetZone(TestCallMapper(reader).ZoneID) == null ? "" : zoneManager.GetZone(TestCallMapper(reader).ZoneID).Name,
+            };
+        }
+
+        TotalCallsChart TotalCallsByUserIdMapper(IDataReader reader)
+        {
+            return new TotalCallsChart()
+            {
+                CreationDate = reader["CreationDate"] as string,
+                TotalCalls = (int)reader["TotalCalls"]
             };
         }
     }

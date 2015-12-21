@@ -41,6 +41,16 @@ namespace QM.CLITester.Web.Controllers
             return manager.GetUpdated(ref maxTimeStamp, input.NbOfRows);
         }
 
+
+        [HttpPost]
+        [Route("GetTotalCallsByUserId")]
+        public List<TotalCallsChart> GetTotalCallsByUserId()
+        {
+            TestCallManager manager = new TestCallManager();
+            return manager.GetTotalCallsByUserId();
+        }
+
+
         [HttpPost]
         [Route("GetBeforeId")]
         public List<TestCallDetail> GetBeforeId(GetBeforeIdInput input)

@@ -75,6 +75,11 @@ namespace QM.CLITester.Business
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
             return dataManager.GetTestCalls(listCallTestStatus);
         }
+        public List<TotalCallsChart> GetTotalCallsByUserId()
+        {
+            ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
+            return dataManager.GetTotalCallsByUserId(Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId());
+        }
 
         public IDataRetrievalResult<TestCallDetail> GetFilteredTestCalls(DataRetrievalInput<TestCallQuery> input)
         {
