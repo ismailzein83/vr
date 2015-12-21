@@ -45,14 +45,19 @@
   <ItemGroup>
     <Compile Include="Code.cs" />
     <Compile Include="CodePreparationImport.cs" />
+    <Compile Include="CP\SaleCode\MoveCodeOutput.cs" />
     <Compile Include="CP\SaleCode\ChangedCode.cs" />
     <Compile Include="CP\Changes.cs" />
     <Compile Include="CP\ChangesDetail.cs" />
     <Compile Include="CP\SaleCode\CodeItem.cs" />
     <Compile Include="CP\SaleCode\DeletedCode.cs" />
+    <Compile Include="CP\SaleCode\GetCodeItemInput.cs" />
+    <Compile Include="CP\SaleCode\MoveCodeInput.cs" />
     <Compile Include="CP\SaleCode\NewCode.cs" />
+    <Compile Include="CP\SaleCode\NewCodeInput.cs" />
     <Compile Include="CP\SaleCode\NewCodeOutput.cs" />
     <Compile Include="CP\SaleZone\NewZone.cs" />
+    <Compile Include="CP\SaleZone\NewZoneInput.cs" />
     <Compile Include="CP\SaleZone\NewZoneOutput.cs" />
     <Compile Include="CP\SaleZone\ZoneItem.cs" />
     <Compile Include="Enums.cs" />

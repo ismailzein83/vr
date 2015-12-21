@@ -26,15 +26,17 @@
     </vr-row>
     <vr-row removeline>
         <vr-columns width="1/4row">
-            <vr-treeview on-ready="countriesTreeReady"
-                         datachildrenfield="effectiveZones"
-                         datavaluefield="nodeId"
-                         datatextfield="nodeName"
-                         selecteditem="currentNode"
-                         hasremotechildrenfield="hasRemoteChildren"
-                         loadremotechildren="loadEffectiveSaleZones"
-                         onvaluechanged="countriesTreeValueChanged">
-            </vr-treeview>
+            <div style="max-height:400px;overflow-y:auto">
+                <vr-treeview on-ready="countriesTreeReady"
+                             datachildrenfield="effectiveZones"
+                             datavaluefield="nodeId"
+                             datatextfield="nodeName"
+                             selecteditem="currentNode"
+                             hasremotechildrenfield="hasRemoteChildren"
+                             loadremotechildren="loadEffectiveSaleZones"
+                             onvaluechanged="countriesTreeValueChanged">
+                </vr-treeview>
+            </div>
         </vr-columns>
         <vr-columns width="3/4row">
             <vr-whs-codepreparation-codesgrid on-ready="saleCodesGridReady">

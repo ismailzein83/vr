@@ -11,11 +11,11 @@
         var editMode;
         var zoneEntity;
         var sellingNumberPlanId;
-
         var disableCountry;
 
         defineScope();
         loadParameters();
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
@@ -27,6 +27,7 @@
             editMode = (zoneId != undefined);
             load();
         }
+
         function defineScope() {
             $scope.bed;
             $scope.eed;
@@ -47,10 +48,9 @@
         }
 
         function load() {
-
             $scope.isGettingData = true;
             if (countryId != undefined) {
-                $scope.title = UtilsService.buildTitleForAddEditor($scope.countryName + " Zone");
+                $scope.title = UtilsService.buildTitleForAddEditor("Zone for Country " + $scope.countryName);
                 loadAllControls();
             }
             else if (editMode) {
@@ -68,10 +68,10 @@
                 $scope.title = UtilsService.buildTitleForAddEditor("Zone");
             }
         }
+
         function loadAllControls() {
             $scope.isGettingData = false;
         }
-
 
         function getZone() {
 
@@ -96,16 +96,9 @@
             $scope.name = zone.Name;
             $scope.title = UtilsService.buildTitleForUpdateEditor($scope.name, "Zone");
         }
+
         function insertZone() {
             var zoneItem = buildZoneObjFromScope();
-            //var zoneChanges = [];
-            //applyChanges(zoneChanges, zoneItem);
-            //var input = {
-            //    SellingNumberPlanId: sellingNumberPlanId,
-            //    NewChanges: {
-            //        NewZones: zoneChanges
-            //    }
-            //};
             var input = getNewZoneFromZoneObj(zoneItem);
             return WhS_CodePrep_CodePrepAPIService.SaveNewZone(input)
             .then(function (response) {
@@ -123,19 +116,10 @@
                 VRNotificationService.notifyException(error, $scope);
             });
         }
+
         function updateZone() {
 
         }
-
-        function applyChanges(zoneChanges, zoneItem) {
-            var zoneItemNew = {
-                Name: zoneItem.Name,
-                CountryId: zoneItem.CountryId,
-            };
-            //return zoneItemNew;
-            zoneChanges.push(zoneItemNew);
-        }
-
     }
 
     appControllers.controller('whs-codepreparation-newzonedialog', newZoneDialogController);

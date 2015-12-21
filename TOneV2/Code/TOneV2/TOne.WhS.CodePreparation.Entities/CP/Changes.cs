@@ -8,7 +8,13 @@ namespace TOne.WhS.CodePreparation.Entities.CP
 {
     public class Changes
     {
-        public List<ChangedCode> CodeChanges { get; set; }
+        public Changes()
+        {
+            DeletedCode = new List<DeletedCode>();
+            NewCodes = new List<NewCode>();
+            NewZones = new List<NewZone>();
+        }
+        public List<DeletedCode> DeletedCode { get; set; }
         public List<NewCode> NewCodes { get; set; }
         public List<NewZone> NewZones { get; set; }
     }

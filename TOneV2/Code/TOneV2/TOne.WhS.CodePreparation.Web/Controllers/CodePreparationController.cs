@@ -92,6 +92,14 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
             return manager.SaveNewCode(input);
         }
 
+        [HttpPost]
+        [Route("MoveCodes")]
+        public MoveCodeOutput SaveNewCode(MoveCodeInput input)
+        {
+            CodePreparationManager manager = new CodePreparationManager();
+            return manager.MoveCodes(input);
+        }
+
         [HttpGet]
         [Route("GetZoneItems")]
         public List<ZoneItem> GetZoneItems(int sellingNumberPlanId, int countryId)

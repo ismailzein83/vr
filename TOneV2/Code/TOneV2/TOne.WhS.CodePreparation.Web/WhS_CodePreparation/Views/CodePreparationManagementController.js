@@ -1,8 +1,11 @@
 ﻿CodePreparationManagementController.$inject = ['$scope', 'WhS_CodePrep_CodePrepAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcessService', 'VRUIUtilsService', 'UtilsService', 'VRCommon_CountryAPIService', 'WhS_BE_SaleZoneAPIService', 'VRModalService', 'VRNotificationService'];
 
 function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcessService, VRUIUtilsService, UtilsService, VRCommon_CountryAPIService, WhS_BE_SaleZoneAPIService, VRModalService, VRNotificationService) {
+
+    //#region Global Variables
+
     var sellingNumberPlanDirectiveAPI;
-    var sellingNumberPlanReadyPromiseDeferred;
+    var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
     var treeAPI;
     var codesGridAPI;
     var currencyDirectiveAPI;
@@ -10,11 +13,19 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
     var countries = [];
     var filter;
     var codesFilter;
+
+    //#endregion
+
+    //#region Load
+
     defineScope();
     loadParameters();
     load();
-    function loadParameters() {
-    }
+
+    //#endregion
+
+    //#region Functions
+
     function defineScope() {
         $scope.nodes = [];
         $scope.sellingNumberPlans = [];
@@ -24,8 +35,7 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
 
         $scope.onSellingNumberPlanSelectorReady = function (api) {
             sellingNumberPlanDirectiveAPI = api;
-            var setLoader = function (value) { $scope.isLoadingSellingNumberPlan = value };
-            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, undefined, setLoader, sellingNumberPlanReadyPromiseDeferred);
+            sellingNumberPlanReadyPromiseDeferred.resolve();
         }
 
         $scope.countriesTreeReady = function (api) {
@@ -35,7 +45,6 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         $scope.countriesTreeValueChanged = function () {
             if ($scope.currentNode != undefined) {
                 if ($scope.currentNode.type == 'Zone') {
-                    console.log($scope.currentNode);
                     setCodesFilterObject();
                     return codesGridAPI.loadGrid(codesFilter);
                 }
@@ -55,11 +64,30 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         }
 
         $scope.onSellingNumberPlanSelectorChanged = function (selectedPlan) {
-            treeAPI.refreshTree($scope.nodes);
+
+            countries.length = 0;
+
+            $scope.isLoading = true;
+
+            UtilsService.waitMultipleAsyncOperations([getCountries], [buildCountriesTree]).then(function () {
+                $scope.isLoading = false;
+            }).catch(function (error) {
+                $scope.isLoading = false;
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            });
         }
 
         $scope.searchClicked = function () {
             filter = getFilter();
+            $scope.isLoading = true;
+
+            UtilsService.waitMultipleAsyncOperations([getCountries]).then(function () {
+                buildCountriesTree();
+                $scope.isLoading = false;
+            }).catch(function (error) {
+                $scope.isLoading = false;
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            });
             treeAPI.refreshTree($scope.nodes);
         };
 
@@ -68,24 +96,47 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         }
 
         $scope.newZoneClicked = function () {
-            console.log('New Zone Button Clicked');
             addNewZone();
         }
+
         $scope.newCodeClicked = function () {
-            console.log('New Code Button Clicked');
             addNewCode();
         }
     }
+
+    function loadParameters() {
+    }
+
+    function load() {
+        $scope.isLoading = true;
+
+        UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlans]).then(function () {
+            $scope.isLoading = false;
+        }).catch(function (error) {
+            $scope.isLoading = false;
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+        });
+    }
+
+    function loadSellingNumberPlans() {
+        var loadSNPPromiseDeferred = UtilsService.createPromiseDeferred();
+        sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
+            var payload = {};
+            VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, payload, loadSNPPromiseDeferred);
+        });
+
+        return loadSNPPromiseDeferred.promise;
+    }
+
     function onZoneAdded(addedZone) {
         if (addedZone != undefined) {
-            console.log(addedZone);
-            addZoneNode(addedZone);
+            var node = mapZoneToNode(addedZone);
+            treeAPI.createNode(node);
         }
     }
 
     function onCodeAdded(addedCode) {
         if (addedCode != undefined) {
-            console.log(addedCode);
             codesGridAPI.onCodeAdded(addedCode);
         }
     }
@@ -93,7 +144,6 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
     function addNewZone() {
         var parameters = {
             CountryId: $scope.currentNode.nodeId,
-            ZoneId: undefined,
             CountryName: $scope.currentNode.nodeName,
             SellingNumberPlanId: filter.sellingNumberPlanId
         };
@@ -111,6 +161,7 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
             ZoneId: $scope.currentNode.nodeId,
             ZoneName: $scope.currentNode.nodeName,
             SellingNumberPlanId: filter.sellingNumberPlanId,
+            CountryId: $scope.currentNode.countryId,
             ZoneStatus: $scope.currentNode.status
         };
         var settings = {};
@@ -120,22 +171,9 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
 
         VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/NewCodeDialog.html", parameters, settings);
     }
-    function load() {
-        $scope.isLoading = true;
 
-        UtilsService.waitMultipleAsyncOperations([getCountries]).then(function () {
-            buildCountriesTree();
-        }).catch(function (error) {
-            $scope.isLoading = false;
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        });
-    }
-    function getFilter() {
-        return {
-            sellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds()
-        };
-    }
     function getCountries() {
+        countries.length = 0;
         return VRCommon_CountryAPIService.GetCountriesInfo().then(function (response) {
             angular.forEach(response, function (itm) {
                 countries.push(itm);
@@ -151,8 +189,9 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
             $scope.nodes.push(node);
         }
         treeAPI.refreshTree($scope.nodes);
-        $scope.isLoading = false;
+
     }
+
     function mapCountryToNode(country) {
         return {
             nodeId: country.CountryId,
@@ -170,35 +209,31 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
             hasRemoteChildren: false,
             effectiveZones: [],
             type: 'Zone',
-            status: zoneInfo.Status
+            status: zoneInfo.Status,
+            countryId: zoneInfo.CountryId
         };
     }
 
-    function addZoneNode(zoneItem) {
-        var node = {
-            nodeId: 0,
-            nodeName: zoneItem.Name,
-            hasRemoteChildren: false,
-            effectiveZones: [],
-            type: 'Zone',
-            status: zoneItem.Status
-        };
-        treeAPI.createNode(node);
-        //treeAPI.refreshTree($scope.nodes);
-    }
+    //#endregion
 
+    //#region Filters
     function setCodesFilterObject() {
-        //var zones = [];
-        //zones.push($scope.currentNode.nodeId);
         codesFilter = {
             SellingNumberPlanId: filter.sellingNumberPlanId,
             ZoneId: $scope.currentNode.nodeId,
             ZoneName: $scope.currentNode.nodeName,
-            ZoneItemStatus: $scope.currentNode.status
+            ZoneItemStatus: $scope.currentNode.status,
+            CountryId: $scope.currentNode.countryId
         };
     }
+
+    function getFilter() {
+        return {
+            sellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds()
+        };
+    }
+
+    //#endregion
+
 };
-
-
-
 appControllers.controller('WhS_CodePreparation_CodePreparationManagementController', CodePreparationManagementController);

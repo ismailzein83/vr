@@ -61,9 +61,6 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
-
-
-            defineMenuActions();
         }
 
         function defineMenuActions() {

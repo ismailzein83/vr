@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.WhS.CodePreparation.Entities.CP;
 
-namespace TOne.WhS.CodePreparation.Entities
+namespace TOne.WhS.CodePreparation.Entities.CP
 {
-    public class SaveChangesInput
+    public class NewZoneInput
     {
         public int SellingNumberPlanId { get; set; }
-        public Changes NewChanges { get; set; }
+        public NewZone NewZone { get; set; }
     }
 }

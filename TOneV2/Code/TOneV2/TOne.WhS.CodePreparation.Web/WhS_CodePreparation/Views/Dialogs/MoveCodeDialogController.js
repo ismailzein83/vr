@@ -2,48 +2,51 @@
 
     "use strict";
 
-    newCodeDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    moveCodeDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function newCodeDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function moveCodeDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
         var countryId;
-        var editMode;
         var codeEntity;
         var sellingNumberPlanId;
         var zoneName;
         var zoneId;
+
+        var saleZoneDirectiveAPI;
+        var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         loadParameters();
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 zoneId = parameters.ZoneId;
-                $scope.code = parameters.Code;
+                $scope.codes = parameters.Codes;
                 countryId = parameters.CountryId;
                 zoneName = parameters.ZoneName;
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
             }
-            editMode = ($scope.code != undefined);
+
             load();
         }
         function defineScope() {
             $scope.bed;
             $scope.eed;
-            $scope.code;
+            $scope.codes;
 
-            $scope.saveCode = function () {
-                if (editMode) {
-                    return updateCode();
-                }
-                else {
-                    return insertCode();
-                }
+            $scope.moveCode = function () {
+
             };
 
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
 
+            $scope.onSaleZoneDirectiveReady = function (api) {
+                saleZoneDirectiveAPI = api;
+                saleZoneReadyPromiseDeferred.resolve();
+            }
 
         }
 
@@ -51,26 +54,33 @@
 
             $scope.isGettingData = true;
             if (zoneId != undefined) {
-                $scope.title = UtilsService.buildTitleForAddEditor("Code for " + zoneName);
+                $scope.title = UtilsService.buildTitleForAddEditor("Move Code for " + zoneName);
                 loadAllControls();
-            }
-            else if (editMode) {
-                getCode().then(function () {
-                    loadAllControls()
-                        .finally(function () {
-                            codeEntity = undefined;
-                        });
-                }).catch(function () {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
             }
             else {
                 loadAllControls();
-                $scope.title = UtilsService.buildTitleForAddEditor("Code for " + zoneName);
+                $scope.title = UtilsService.buildTitleForAddEditor("Move Code for " + zoneName);
             }
         }
         function loadAllControls() {
-            $scope.isGettingData = false;
+            return UtilsService.waitMultipleAsyncOperations([loadSaleZones])
+              .catch(function (error) {
+                  VRNotificationService.notifyExceptionWithClose(error, $scope);
+              })
+             .finally(function () {
+                 $scope.isLoading = false;
+             });
+        }
+
+
+        function loadSaleZones() {
+            var loadSaleZonesPromiseDeferred = UtilsService.createPromiseDeferred();
+            sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
+                var payload = {};
+                VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, payload, loadSaleZonesPromiseDeferred);
+            });
+
+            return loadSaleZonesPromiseDeferred.promise;
         }
 
 
@@ -80,7 +90,7 @@
 
         function buildCodeObjFromScope() {
             var obj = {
-                Code: $scope.code,
+                Codes: $scope.codes,
                 ZoneName: zoneName,
                 BED: $scope.bed,
                 EED: $scope.eed
@@ -99,8 +109,9 @@
 
         function fillScopeFromCodeObj(code) {
             $scope.name = code.Code;
-            $scope.title = UtilsService.buildTitleForUpdateEditor($scope.code, "Code for " + zoneName);
+            $scope.title = UtilsService.buildTitleForUpdateEditor($scope.code, "Move Code for " + zoneName);
         }
+
         function insertCode() {
             var codeItem = buildCodeObjFromScope();
 
@@ -120,18 +131,7 @@
                 VRNotificationService.notifyException(error, $scope);
             });
         }
-        function updateCode() {
-
-        }
-
-        function applyChanges(codeChanges, codeItem) {
-            var codeItemNew = {
-
-            };
-            codeChanges.push(codeItemNew);
-        }
-
     }
 
-    appControllers.controller('whs-codepreparation-newcodedialog', newCodeDialogController);
+    appControllers.controller('whs-codepreparation-movecodedialog', moveCodeDialogController);
 })(appControllers);
