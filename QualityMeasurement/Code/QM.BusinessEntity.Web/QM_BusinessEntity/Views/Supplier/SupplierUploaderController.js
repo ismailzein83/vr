@@ -18,13 +18,14 @@
         }
 
         function UploadSuppliers() {
-            return QM_BE_SupplierAPIService.UploadSuppliers($scope.uploadedFile.fileId).then(function (response) {
+            return QM_BE_SupplierAPIService.UploadSuppliersList($scope.uploadedFile.fileId, $scope.chkAllowUpdate).then(function (response) {
                 VRNotificationService.showInformation(response)
             });
         }
 
         function DownloadTemplate() {
             return QM_BE_SupplierAPIService.DownloadImportSupplierTemplate().then(function (response) {
+                console.log(response)
                 UtilsService.downloadFile(response.data, response.headers);
             });
         }

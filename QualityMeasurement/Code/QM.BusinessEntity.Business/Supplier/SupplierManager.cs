@@ -4,13 +4,9 @@ using QM.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using Vanrise.Common;
 using Vanrise.Common.Business;
-using Vanrise.Entities;
-using System.Drawing;
 
 namespace QM.BusinessEntity.Business
 {
@@ -135,7 +131,9 @@ namespace QM.BusinessEntity.Business
             return manager.GetTemplateConfigurations(Constants.SourceSupplierReaderConfigType);
         }
 
-        public string AddSuppliers(int fileId)
+        enum Actions {Add, Update };
+
+        public string AddSuppliers(int fileId, bool AllowUpdateIfExisting)
         {
             DataTable supplierDataTable = new DataTable();
             VRFileManager fileManager = new VRFileManager();
@@ -148,9 +146,18 @@ namespace QM.BusinessEntity.Business
             string message = "";
             int insertedCount = 0;
             int notInsertedCount = 0;
+            int updatedCount = 0;
 
             if (wbk.Worksheets[0].Cells.MaxDataRow > -1 && wbk.Worksheets[0].Cells.MaxDataColumn > -1)
                 supplierDataTable = wbk.Worksheets[0].Cells.ExportDataTableAsString(0, 0, wbk.Worksheets[0].Cells.MaxDataRow + 1, wbk.Worksheets[0].Cells.MaxDataColumn + 1);
+
+
+            ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
+            IEnumerable<Type> implementations = Utilities.GetAllImplementations<ExtendedSupplierSetting>();
+
+            List<string> extendedFields = new List<string>();
+            for (int i = 1; i < supplierDataTable.Columns.Count; i++)
+                extendedFields.Add(supplierDataTable.Rows[0][i].ToString());
 
             for (int i = 1; i < supplierDataTable.Rows.Count; i++)
             {
@@ -162,90 +169,59 @@ namespace QM.BusinessEntity.Business
                     ReserveIDRange(1, out startingId);
                     supplier.SupplierId = (int)startingId;
                     supplier.Name = supplierDataTable.Rows[i][0].ToString();
+                    ApplySettingsforAllImplementations(supplierDataTable, ref insertedCount, ref notInsertedCount, ref updatedCount, dataManager, implementations, extendedFields, i, supplier, Actions.Add);
+                   
+                }
+                else
+                {
+                    if (AllowUpdateIfExisting)
+                        ApplySettingsforAllImplementations(supplierDataTable, ref insertedCount, ref notInsertedCount, ref updatedCount, dataManager, implementations, extendedFields, i, supplier, Actions.Update);
+                    else
+                        notInsertedCount++;
+                }
+            }
 
-                    ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
+            message = String.Format("{0} suppliers added, {1} already exists, and {2} updated.", insertedCount, notInsertedCount, updatedCount);
+
+            return message;
+        }
+
+        private static void ApplySettingsforAllImplementations(DataTable supplierDataTable, ref int insertedCount, ref int notInsertedCount, ref int updatedCount, ISupplierDataManager dataManager, IEnumerable<Type> implementations, List<string> extendedFields, int i, Supplier supplier, Actions action)
+        {
+            foreach (Type type in implementations)
+            {
+                ExtendedSupplierSetting baseClass = Activator.CreateInstance(type) as ExtendedSupplierSetting;
+                if (baseClass == null)
+                    throw new Exception(String.Format("invalid logger type {0}", baseClass.GetType()));
+
+                Dictionary<string, object> excelFields = new Dictionary<string, object>();
+
+                for (int j = 1; j < supplierDataTable.Columns.Count; j++)
+                    excelFields.Add(extendedFields[j - 1], supplierDataTable.Rows[i][j].ToString());
+
+                baseClass.ApplyExcelFields(supplier, excelFields);
+                supplier.Settings = new SupplierSettings();
+                supplier.Settings.ExtendedSettings = new List<ExtendedSupplierSetting>();
+                supplier.Settings.ExtendedSettings.Add(baseClass);
+
+                if(action == Actions.Update)
+                {
+                    bool updateActionSucc = dataManager.Update(supplier);
+                    if (updateActionSucc)
+                        updatedCount++;
+                    else
+                        notInsertedCount++;
+                }
+                else if (action == Actions.Add)
+                {
                     bool insertActionSucc = dataManager.Insert(supplier);
                     if (insertActionSucc)
                         insertedCount++;
                     else
                         notInsertedCount++;
                 }
-                else
-                {
-                    notInsertedCount++;
-                }
+               
             }
-
-            message = String.Format("{0} suppliers added and {1} already exists", insertedCount, notInsertedCount);
-
-            return message;
-        }
-
-
-        public IDataRetrievalResult<T> ExportTemplate<T>()
-        {
-            //default Export is Excel
-
-            ExcelResult<T> excelResult = new ExcelResult<T>();
-
-
-            Workbook wbk = new Workbook();
-            Aspose.Cells.License license = new Aspose.Cells.License();
-            license.SetLicense("Aspose.Cells.lic");
-            wbk.Worksheets.Clear();
-            Worksheet workSheet = wbk.Worksheets.Add("Result");
-            int rowIndex = 0;
-            int colIndex = 0;
-
-            PropertyInfo[] properties = typeof(T).GetProperties();
-            PropertyInfo entityProperty = null;
-            PropertyInfo[] entityProperties = null;
-
-            //filling header
-            foreach (var prop in properties)
-            {
-                if (prop.Name == "Entity")
-                {
-                    entityProperty = prop;
-                    entityProperties = prop.PropertyType.GetProperties();
-                    continue;
-                }
-                workSheet.Cells.SetColumnWidth(colIndex, 20);
-                workSheet.Cells[rowIndex, colIndex].PutValue(prop.Name);
-                Cell cell = workSheet.Cells.GetCell(rowIndex, colIndex);
-                Style style = cell.GetStyle();
-                style.Font.Name = "Times New Roman";
-                style.Font.Color = Color.FromArgb(255, 0, 0); ;
-                style.Font.Size = 14;
-                style.Font.IsBold = true;
-                cell.SetStyle(style);
-                colIndex++;
-            }
-            if (entityProperties != null)
-            {
-                foreach (var prop in entityProperties)
-                {
-                    workSheet.Cells.SetColumnWidth(colIndex, 20);
-                    workSheet.Cells[rowIndex, colIndex].PutValue(prop.Name);
-                    Cell cell = workSheet.Cells.GetCell(rowIndex, colIndex);
-                    Style style = cell.GetStyle();
-                    style.Font.Name = "Times New Roman";
-                    style.Font.Color = Color.FromArgb(255, 0, 0); ;
-                    style.Font.Size = 14;
-                    style.Font.IsBold = true;
-                    cell.SetStyle(style);
-                    colIndex++;
-                }
-            }
-            rowIndex++;
-            colIndex = 0;
-
-            MemoryStream memoryStream = new MemoryStream();
-            memoryStream = wbk.SaveToStream();
-
-            excelResult.ExcelFileStream = memoryStream;
-            wbk.Save("D:\\book1.xlsx", SaveFormat.Xlsx);
-            return excelResult;
         }
 
 

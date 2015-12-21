@@ -38,10 +38,12 @@
                 });
         }
 
-        function UploadSuppliers(fileId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Supplier", "UploadSuppliers"), {
-                fileId: fileId
-            })
+
+        function UploadSuppliersList(fileId, allowUpdate) {
+            return BaseAPIService.get(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, "Supplier", "UploadSuppliersList"), {
+                fileId: fileId,
+                allowUpdate: allowUpdate
+            });
         }
 
         return ({
@@ -52,7 +54,7 @@
             GetSupplierSourceTemplates: GetSupplierSourceTemplates,
             GetSuppliersInfo: GetSuppliersInfo,
             DownloadImportSupplierTemplate: DownloadImportSupplierTemplate,
-            UploadSuppliers: UploadSuppliers
+            UploadSuppliersList: UploadSuppliersList
         });
     }
 

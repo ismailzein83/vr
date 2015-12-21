@@ -68,47 +68,27 @@ namespace QM.BusinessEntity.Web.Controllers
         [Route("DownloadImportSupplierTemplate")]
         public object DownloadImportSupplierTemplate()
         {
-            //var templatePath = "~/Client/Modules/QM_BusinessEntity/Templates/ImportSupplierTemplate.xls";
-            //string physicalPath = HttpContext.Current.Server.MapPath(templatePath);
-            //byte[] fileInBytes = File.ReadAllBytes(physicalPath);
+            var templatePath = "~/Client/Modules/QM_BusinessEntity/Templates/ImportSupplierTemplate.xls";
+            string physicalPath = HttpContext.Current.Server.MapPath(templatePath);
+            byte[] fileInBytes = File.ReadAllBytes(physicalPath);
 
+            MemoryStream memorystream = new MemoryStream();
+            memorystream.Write(fileInBytes, 0, fileInBytes.Length);
+            memorystream.Seek(0, SeekOrigin.Begin);
 
-            //MemoryStream memorystream = new MemoryStream();
-            //memorystream.Write(fileInBytes, 0, fileInBytes.Length);
-            //memorystream.Seek(0, SeekOrigin.Begin);
-
-            //return GetExcelResponse(memorystream, "Supplier Import Template.xls");
-
-
-            SupplierManager manager = new SupplierManager();
-            return manager.ExportTemplate<Supplier>();
-
-
+            return GetExcelResponse(memorystream, "Supplier Import Template.xls");
         }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
         [HttpGet]
-        [Route("UploadSuppliers")]
+        [Route("UploadSuppliersList")]
 
-        public string UploadSuppliers(int fileId)
+        public string UploadSuppliersList(int fileId, bool allowUpdate)
         {
             SupplierManager manager = new SupplierManager();
-            return manager.AddSuppliers(fileId);
+            return manager.AddSuppliers(fileId, allowUpdate);
         }
-
-
 
     }
 }

@@ -72,8 +72,7 @@ namespace QM.CLITester.iTestIntegration
                 new ExcelColumnInfo
                 {
                      ColumnName = EXCELFIELD_PREFIX,
-                     SampleValue1 = "4444444",
-                     SampleValue2 = "55555"
+                     SampleValues = new string[]{"4444444","55555"}
                 }
             };
         }

@@ -30,8 +30,6 @@ namespace QM.BusinessEntity.Entities
     {
         public string ColumnName { get; set; }
 
-        public string SampleValue1 { get; set; }
-
-        public string SampleValue2 { get; set; }
+        public string[] SampleValues { get; set; }
     }
 }

@@ -5,7 +5,7 @@ app.service('QM_BE_SupplierService', ['QM_BE_SupplierAPIService', 'VRModalServic
         return ({
             addSupplier: addSupplier,
             editSupplier: editSupplier,
-            uploadSuppliers: uploadSuppliers
+            uploadNewSuppliers: uploadNewSuppliers
         });
 
         function addSupplier(onSupplierAdded) {
@@ -35,7 +35,7 @@ app.service('QM_BE_SupplierService', ['QM_BE_SupplierAPIService', 'VRModalServic
             VRModalService.showModal('/Client/Modules/QM_BusinessEntity/Views/Supplier/SupplierEditor.html', parameters, modalSettings);
         }
 
-        function uploadSuppliers(modalScope) {
+        function uploadNewSuppliers(modalScope) {
 
             var modalSettings = {};
             modalSettings.onScopeReady = function (modalScope) {

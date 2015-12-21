@@ -37,7 +37,7 @@
         }
 
         function UploadNewSuppliers() {
-            QM_BE_SupplierService.uploadSuppliers();
+            QM_BE_SupplierService.uploadNewSuppliers();
         }
 
         function AddNewSupplier() {
