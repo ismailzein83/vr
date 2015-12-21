@@ -46,6 +46,7 @@
     <Compile Include="Code.cs" />
     <Compile Include="CodePreparationImport.cs" />
     <Compile Include="CP\ExistingCode.cs" />
+    <Compile Include="CP\IProcessCountryCodesContext.cs" />
     <Compile Include="CP\SaleCode\MoveCodeOutput.cs" />
     <Compile Include="CP\SaleCode\ChangedCode.cs" />
     <Compile Include="CP\Changes.cs" />

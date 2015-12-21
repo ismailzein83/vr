@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.CodePreparation.Entities.CP
 {
-    public class ExistingCode
+    public interface IProcessCountryCodesContext
     {
-
     }
 }
