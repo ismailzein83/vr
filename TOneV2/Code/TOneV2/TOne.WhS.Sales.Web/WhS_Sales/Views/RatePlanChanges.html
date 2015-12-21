@@ -28,11 +28,11 @@
                                 </vr-section>
                                 <vr-section title="Routing Product Changes" level="2">
                                     <vr-row>
-                                        <vr-columns width="1/2row">
+                                        <vr-columns width="fullrow">
                                             <vr-label>New: </vr-label>
                                             <vr-label isvalue>{{totalNewZoneRoutingProducts}}</vr-label>
                                         </vr-columns>
-                                        <vr-columns width="1/2row">
+                                        <vr-columns width="fullrow">
                                             <vr-label>Changes: </vr-label>
                                             <vr-label isvalue>{{totalZoneRoutingProductChanges}}</vr-label>
                                         </vr-columns>
@@ -48,9 +48,9 @@
                                             <vr-label>New: </vr-label>
                                             <vr-label isvalue>{{defaultItem.newRoutingProductName}}</vr-label>
                                         </vr-columns>
-                                        <vr-columns width="fullrow" ng-hide="!defaultItem || defaultItem.newRoutingProductName">
+                                        <vr-columns width="fullrow" ng-show="defaultItem.changedToRoutingProductName">
                                             <vr-label>Change: </vr-label>
-                                            <vr-label isvalue>{{defaultItem.newRoutingProductEED}}</vr-label>
+                                            <vr-label isvalue>{{defaultItem.routingProductChangeEED}}</vr-label>
                                         </vr-columns>
                                         <vr-columns width="fullrow" ng-hide="defaultItem">
                                             <vr-label isvalue>No changes</vr-label>
@@ -74,6 +74,10 @@
                                     <vr-columns width="1/3row" ng-show="defaultItem.newRoutingProductName">
                                         <vr-label>New:</vr-label>
                                         <vr-label isvalue>{{defaultItem.newRoutingProductName}}</vr-label>
+                                    </vr-columns>
+                                    <vr-columns width="1/3row" ng-show="defaultItem.changedToRoutingProductName">
+                                        <vr-label>Changed To:</vr-label>
+                                        <vr-label isvalue>{{defaultItem.changedToRoutingProductName}}</vr-label>
                                     </vr-columns>
                                     <vr-columns width="1/3row">
                                         <vr-label>Effective On:</vr-label>

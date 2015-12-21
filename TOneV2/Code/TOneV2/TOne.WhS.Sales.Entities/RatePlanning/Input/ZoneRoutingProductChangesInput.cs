@@ -7,9 +7,10 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class ZoneRateChangesQuery
+    public class ZoneRoutingProductChangesInput
     {
         public SalePriceListOwnerType OwnerType { get; set; }
+
         public int OwnerId { get; set; }
     }
 }

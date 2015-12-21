@@ -20,9 +20,8 @@ namespace TOne.WhS.Sales.Entities
         public int OwnerId { get; set; }
         public char ZoneLetter { get; set; }
         public int RoutingDatabaseId { get; set; }
-        public int RPRoutePolicyConfigId { get; set; }
+        public int PolicyConfigId { get; set; }
         public int NumberOfOptions { get; set; }
         public List<CostCalculationMethod> CostCalculationMethods { get; set; }
-        public IEnumerable<long> ZoneIds { get; set; } // This property was added so that the Rate Plan Changes page could use the same functionality to get the current zone rates and routing products
     }
 }

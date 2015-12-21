@@ -18,10 +18,12 @@ namespace TOne.WhS.Sales.Business
     public class RatePlanManager
     {
         IRatePlanDataManager _dataManager;
+        RoutingProductManager _routingProductManager;
 
         public RatePlanManager()
         {
             _dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+            _routingProductManager = new RoutingProductManager();
         }
 
         public IEnumerable<char> GetZoneLetters(SalePriceListOwnerType ownerType, int ownerId)
@@ -76,7 +78,7 @@ namespace TOne.WhS.Sales.Business
                 }
 
                 IEnumerable<RPZone> rpZones = zoneItems.MapRecords(itm => new RPZone() { RoutingProductId = itm.EffectiveRoutingProductId, SaleZoneId = itm.ZoneId });
-                ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.Filter.RoutingDatabaseId, input.Filter.RPRoutePolicyConfigId, input.Filter.NumberOfOptions, rpZones, input.Filter.CostCalculationMethods);
+                ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.Filter.RoutingDatabaseId, input.Filter.PolicyConfigId, input.Filter.NumberOfOptions, rpZones, input.Filter.CostCalculationMethods);
                 routeOptionSetter.SetZoneRouteOptionsAndCosts(zoneItems);
             }
 
@@ -103,23 +105,26 @@ namespace TOne.WhS.Sales.Business
             routingProductSetter.SetZoneRoutingProduct(zoneItem);
 
             RPZone rpZone = new RPZone() { RoutingProductId = zoneItem.EffectiveRoutingProductId, SaleZoneId = zoneItem.ZoneId };
-            ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.RoutingDatabaseId, input.PolicyId, input.NumberOfOptions, new List<RPZone>() { rpZone }, input.CostCalculationMethods);
+            ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, new List<RPZone>() { rpZone }, input.CostCalculationMethods);
             routeOptionSetter.SetZoneRouteOptionsAndCosts(new List<ZoneItem>() { zoneItem });
 
             return zoneItem;
         }
 
-        private int? GetSellingProductId(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, bool isEffectiveInFuture)
+        #region Private Methods
+
+        int? GetSellingProductId(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, bool isEffectiveInFuture)
         {
             if (ownerType == SalePriceListOwnerType.Customer)
             {
                 CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
                 return customerSellingProductManager.GetEffectiveSellingProductId(ownerId, effectiveOn, isEffectiveInFuture); // Review what isEffectiveFuture does
             }
-            return null;
+            else // If the owner is a selling product
+                return ownerId;
         }
 
-        private int? GetSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)
+        int? GetSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)
         {
             if (ownerType == SalePriceListOwnerType.SellingProduct)
             {
@@ -132,6 +137,8 @@ namespace TOne.WhS.Sales.Business
                 return carrierAccountManager.GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
             }
         }
+        
+        #endregion
 
         #region Remove
 
@@ -175,153 +182,48 @@ namespace TOne.WhS.Sales.Business
             return manager.GetTemplateConfigurations(Constants.CostCalculationMethod);
         }
 
-        // Remove the call to GetSellingProductId
-        public Vanrise.Entities.IDataRetrievalResult<ZoneRateChangesDetail> GetFilteredZoneRateChanges(Vanrise.Entities.DataRetrievalInput<ZoneRateChangesQuery> input)
+        public ChangesSummary GetChangesSummary(SalePriceListOwnerType ownerType, int ownerId)
         {
-            List<ZoneRateChangesDetail> details = null;
-            Changes changes = _dataManager.GetChanges(input.Query.OwnerType, input.Query.OwnerId, RatePlanStatus.Draft);
-
-            if (changes != null && changes.ZoneChanges != null)
-            {
-                IEnumerable<ZoneChanges> zoneChanges = changes.ZoneChanges.FindAllRecords(itm => itm.NewRate != null || itm.RateChange != null);
-
-                if (zoneChanges != null)
-                {
-                    details = new List<ZoneRateChangesDetail>();
-                    SaleEntityZoneRateLocator locator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(DateTime.Now));
-
-                    foreach (ZoneChanges zoneItmChanges in zoneChanges)
-                    {
-                        ZoneRateChangesDetail detail = new ZoneRateChangesDetail();
-
-                        detail.ZoneId = zoneItmChanges.ZoneId;
-                        detail.ZoneName = GetZoneName(zoneItmChanges.ZoneId);
-
-                        SaleEntityZoneRate rate = (input.Query.OwnerType == SalePriceListOwnerType.SellingProduct) ?
-                            locator.GetSellingProductZoneRate(input.Query.OwnerId, zoneItmChanges.ZoneId) :
-                            locator.GetCustomerZoneRate(input.Query.OwnerId, (int)GetSellingProductId(input.Query.OwnerType, input.Query.OwnerId, DateTime.Now, false), zoneItmChanges.ZoneId);
-
-                        if (rate != null)
-                        {
-                            detail.CurrentRate = rate.Rate.NormalRate;
-                            detail.IsCurrentRateInherited = (input.Query.OwnerType == SalePriceListOwnerType.Customer && rate.Source == SalePriceListOwnerType.SellingProduct);
-                        }
-
-                        if (zoneItmChanges.NewRate != null)
-                        {
-                            detail.NewRate = zoneItmChanges.NewRate.NormalRate;
-                            detail.EffectiveOn = zoneItmChanges.NewRate.BED;
-                            detail.EffectiveUntil = zoneItmChanges.NewRate.EED;
-                        }
-                        else if (zoneItmChanges.RateChange != null)
-                            detail.EffectiveOn = zoneItmChanges.RateChange.EED;
-
-                        if (detail.CurrentRate != null && detail.NewRate != null)
-                        {
-                            if (detail.NewRate > detail.CurrentRate)
-                                detail.ChangeType = Entities.RateChangeType.Increase;
-                            else if (detail.NewRate < detail.CurrentRate)
-                                detail.ChangeType = Entities.RateChangeType.Decrease;
-                        }
-                        else if (detail.NewRate != null)
-                            detail.ChangeType = Entities.RateChangeType.New;
-                        else
-                            detail.ChangeType = Entities.RateChangeType.Close;
-
-                        details.Add(detail);
-                    }
-                }
-            }
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, details.ToBigResult(input, null));
+            int? sellingProductId = GetSellingProductId(ownerType, ownerId, DateTime.Now, false);
+            ChangesManager changesManager = new ChangesManager(ownerType, ownerId, sellingProductId, DateTime.Now);
+            return changesManager.GetChangesSummary();
         }
 
-        // Remove the call to GetSellingProductId
-        public Vanrise.Entities.IDataRetrievalResult<ZoneRoutingProductChangesDetail> GetFilteredZoneRoutingProductChanges(Vanrise.Entities.DataRetrievalInput<ZoneRoutingProductChangesQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<ZoneRateChangesDetail> GetFilteredZoneRateChanges(Vanrise.Entities.DataRetrievalInput<ZoneRateChangesInput> input)
         {
-            List<ZoneRoutingProductChangesDetail> details = null;
-            Changes changes = _dataManager.GetChanges(input.Query.OwnerType, input.Query.OwnerId, RatePlanStatus.Draft);
-
-            if (changes != null && changes.ZoneChanges != null)
-            {
-                IEnumerable<ZoneChanges> zoneChanges = changes.ZoneChanges.FindAllRecords(itm => itm.NewRoutingProduct != null || itm.RoutingProductChange != null);
-
-                if (zoneChanges != null)
-                {
-                    details = new List<ZoneRoutingProductChangesDetail>();
-                    SaleEntityZoneRoutingProductLocator locator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(DateTime.Now));
-                    
-                    DefaultItem defaultItem = GetDefaultItem(input.Query.OwnerType, input.Query.OwnerId);
-                    int? currentDefaultRoutingProductId = null;
-                    if (defaultItem != null && defaultItem.CurrentRoutingProductId != null)
-                        currentDefaultRoutingProductId = (int)defaultItem.CurrentRoutingProductId;
-
-                    foreach (ZoneChanges zoneItmChanges in zoneChanges)
-                    {
-                        ZoneRoutingProductChangesDetail detail = new ZoneRoutingProductChangesDetail();
-
-                        detail.ZoneId = zoneItmChanges.ZoneId;
-                        detail.ZoneName = GetZoneName(zoneItmChanges.ZoneId);
-
-                        SaleEntityZoneRoutingProduct routingProduct = (input.Query.OwnerType == SalePriceListOwnerType.SellingProduct) ?
-                            locator.GetSellingProductZoneRoutingProduct(input.Query.OwnerId, zoneItmChanges.ZoneId) :
-                            locator.GetCustomerZoneRoutingProduct(input.Query.OwnerId, (int)GetSellingProductId(input.Query.OwnerType, input.Query.OwnerId, DateTime.Now, false), zoneItmChanges.ZoneId);
-                        
-                        detail.CurrentRoutingProductName = routingProduct != null ? GetRoutingProductName(routingProduct.RoutingProductId) : null;
-                        if (routingProduct != null)
-                            detail.IsCurrentRoutingProductInherited =  !IsCurrentRoutingProductEditable(input.Query.OwnerType, routingProduct.Source);
-
-                        if (zoneItmChanges.NewRoutingProduct != null)
-                        {
-                            detail.NewRoutingProductName = GetRoutingProductName(zoneItmChanges.NewRoutingProduct.ZoneRoutingProductId);
-                            detail.EffectiveOn = zoneItmChanges.NewRoutingProduct.BED;
-                            detail.IsNewRoutingProductInherited = (currentDefaultRoutingProductId != null && zoneItmChanges.NewRoutingProduct.ZoneRoutingProductId == (int)currentDefaultRoutingProductId);
-                        }
-                        else if (zoneItmChanges.RoutingProductChange != null)
-                            detail.EffectiveOn = zoneItmChanges.RoutingProductChange.EED;
-
-                        details.Add(detail);
-                    }
-                }
-            }
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, details.ToBigResult(input, null));
+            int? sellingProductId = GetSellingProductId(input.Query.OwnerType, input.Query.OwnerId, DateTime.Now, false);
+            ChangesManager changesManager = new ChangesManager(input.Query.OwnerType, input.Query.OwnerId, sellingProductId, DateTime.Now);
+            IEnumerable<ZoneRateChangesDetail> zoneRateChanges = changesManager.GetFilteredZoneRateChanges();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, zoneRateChanges.ToBigResult(input, null));
         }
 
-        private bool IsCurrentRoutingProductEditable(SalePriceListOwnerType ownerType, SaleEntityZoneRoutingProductSource rpSource)
+        public Vanrise.Entities.IDataRetrievalResult<ZoneRoutingProductChangesDetail> GetFilteredZoneRoutingProductChanges(Vanrise.Entities.DataRetrievalInput<ZoneRoutingProductChangesInput> input)
         {
-            if (ownerType == SalePriceListOwnerType.SellingProduct && (rpSource == SaleEntityZoneRoutingProductSource.ProductDefault || rpSource == SaleEntityZoneRoutingProductSource.ProductZone))
-                return true;
-            else if (ownerType == SalePriceListOwnerType.Customer && (rpSource == SaleEntityZoneRoutingProductSource.CustomerDefault || rpSource == SaleEntityZoneRoutingProductSource.CustomerZone))
-                return true;
-            else
-                return false;
+            int? sellingProductId = GetSellingProductId(input.Query.OwnerType, input.Query.OwnerId, DateTime.Now, false);
+            ChangesManager changesManager = new ChangesManager(input.Query.OwnerType, input.Query.OwnerId, sellingProductId, DateTime.Now);
+            IEnumerable<ZoneRoutingProductChangesDetail> zoneRoutingProductChanges = changesManager.GetFilteredZoneRoutingProductChanges();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, zoneRoutingProductChanges.ToBigResult(input, null));
         }
-
+        
         // Remove the call to GetSellingProductId
         public DefaultItem GetDefaultItem(SalePriceListOwnerType ownerType, int ownerId)
         {
             DefaultItem defaultItem = new DefaultItem();
             
             SaleEntityZoneRoutingProductLocator locator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(DateTime.Now));
-            SaleEntityZoneRoutingProduct locatorResult;
-            
-            locatorResult = (ownerType == SalePriceListOwnerType.SellingProduct) ?
+            SaleEntityZoneRoutingProduct routingProduct;
+
+            routingProduct = (ownerType == SalePriceListOwnerType.SellingProduct) ?
                 locator.GetSellingProductDefaultRoutingProduct(ownerId) :
                 locator.GetCustomerDefaultRoutingProduct(ownerId, (int)GetSellingProductId(ownerType, ownerId, DateTime.Now, false));
 
-            if (locatorResult != null)
+            if (routingProduct != null)
             {
-                defaultItem.CurrentRoutingProductId = locatorResult.RoutingProductId;
-                defaultItem.CurrentRoutingProductName = (defaultItem.CurrentRoutingProductId != null) ?
-                    new RoutingProductManager().GetRoutingProduct((int)defaultItem.CurrentRoutingProductId).Name : null;
-                defaultItem.CurrentRoutingProductBED = locatorResult.BED;
-                defaultItem.CurrentRoutingProductEED = locatorResult.EED;
-
-                defaultItem.IsCurrentRoutingProductEditable = (
-                    (locatorResult.Source == SaleEntityZoneRoutingProductSource.ProductDefault && ownerType == SalePriceListOwnerType.SellingProduct) ||
-                    (locatorResult.Source == SaleEntityZoneRoutingProductSource.CustomerDefault && ownerType == SalePriceListOwnerType.Customer)
-                );
+                defaultItem.CurrentRoutingProductId = routingProduct.RoutingProductId;
+                defaultItem.CurrentRoutingProductName = _routingProductManager.GetRoutingProductName(routingProduct.RoutingProductId);
+                defaultItem.CurrentRoutingProductBED = routingProduct.BED;
+                defaultItem.CurrentRoutingProductEED = routingProduct.EED;
+                defaultItem.IsCurrentRoutingProductEditable = IsDefaultRoutingProductEditable(ownerType, routingProduct.Source);
             }
 
             SetDefaultItemChanges(ownerType, ownerId, defaultItem);
@@ -329,22 +231,32 @@ namespace TOne.WhS.Sales.Business
             return defaultItem;
         }
 
+        bool IsDefaultRoutingProductEditable(SalePriceListOwnerType ownerType, SaleEntityZoneRoutingProductSource routingProductSource)
+        {
+            if (ownerType == SalePriceListOwnerType.SellingProduct && routingProductSource == SaleEntityZoneRoutingProductSource.ProductDefault)
+                return true;
+            else if (ownerType == SalePriceListOwnerType.Customer && routingProductSource == SaleEntityZoneRoutingProductSource.CustomerDefault)
+                return true;
+            return false;
+        }
+
         private void SetDefaultItemChanges(SalePriceListOwnerType ownerType, int ownerId, DefaultItem defaultItem)
         {
-            Changes existingChanges = _dataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
+            Changes changes = _dataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
 
-            if (existingChanges != null && existingChanges.DefaultChanges != null)
+            if (changes != null && changes.DefaultChanges != null)
             {
-                NewDefaultRoutingProduct newRoutingProduct = existingChanges.DefaultChanges.NewDefaultRoutingProduct;
-                DefaultRoutingProductChange routingProductChange = existingChanges.DefaultChanges.DefaultRoutingProductChange;
+                NewDefaultRoutingProduct newRoutingProduct = changes.DefaultChanges.NewDefaultRoutingProduct;
+                DefaultRoutingProductChange routingProductChange = changes.DefaultChanges.DefaultRoutingProductChange;
 
                 if (newRoutingProduct != null)
                 {
                     defaultItem.NewRoutingProductId = newRoutingProduct.DefaultRoutingProductId;
+                    defaultItem.NewRoutingProductName = _routingProductManager.GetRoutingProductName(newRoutingProduct.DefaultRoutingProductId);
                     defaultItem.NewRoutingProductBED = newRoutingProduct.BED;
                     defaultItem.NewRoutingProductEED = newRoutingProduct.EED;
                 }
-                else if (routingProductChange != null)
+                else if (defaultItem.CurrentRoutingProductId != null && routingProductChange != null)
                     defaultItem.RoutingProductChangeEED = routingProductChange.EED;
             }
         }
@@ -435,57 +347,6 @@ namespace TOne.WhS.Sales.Business
             bool added = _dataManager.InsertPriceList(priceList, out priceListId);
 
             return priceListId;
-        }
-
-        public ChangesDetail GetChanges(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            ChangesDetail detailedChanges = null;
-            Changes changes = _dataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
-
-            if (changes != null)
-            {
-                detailedChanges = new ChangesDetail();
-
-                if (changes.DefaultChanges != null)
-                {
-                    DefaultChangesDetail defaultChanges = new DefaultChangesDetail() { Entity = changes.DefaultChanges };
-                    var newDefaultRoutingProduct = defaultChanges.Entity.NewDefaultRoutingProduct;
-                    var defaultRoutingProductChange = defaultChanges.Entity.DefaultRoutingProductChange;
-
-                    int? routingProductId = null;
-                    if (newDefaultRoutingProduct != null) routingProductId = newDefaultRoutingProduct.DefaultRoutingProductId;
-                    else if (defaultRoutingProductChange != null) routingProductId = defaultRoutingProductChange.DefaultRoutingProductId;
-
-                    if (routingProductId != null)
-                        defaultChanges.DefaultRoutingProductName = GetRoutingProductName((int)routingProductId);
-
-                    detailedChanges.DefaultChanges = defaultChanges;
-                }
-
-                if (changes.ZoneChanges != null)
-                {
-                    List<ZoneChangesDetail> lst = new List<ZoneChangesDetail>();
-
-                    foreach (ZoneChanges zoneItemChanges in changes.ZoneChanges)
-                    {
-                        ZoneChangesDetail itm = new ZoneChangesDetail() { Entity = zoneItemChanges };
-                        itm.ZoneName = GetZoneName(zoneItemChanges.ZoneId);
-
-                        int? routingProductId = null;
-                        if (zoneItemChanges.NewRoutingProduct != null) routingProductId = zoneItemChanges.NewRoutingProduct.ZoneRoutingProductId;
-                        else if (zoneItemChanges.RoutingProductChange != null) routingProductId = zoneItemChanges.RoutingProductChange.ZoneRoutingProductId;
-
-                        if (routingProductId != null)
-                            itm.ZoneRoutingProductName = GetRoutingProductName((int)routingProductId);
-
-                        lst.Add(itm);
-                    }
-
-                    detailedChanges.ZoneChanges = lst;
-                }
-            }
-            
-            return detailedChanges;
         }
 
         public bool SaveChanges(SaveChangesInput input)

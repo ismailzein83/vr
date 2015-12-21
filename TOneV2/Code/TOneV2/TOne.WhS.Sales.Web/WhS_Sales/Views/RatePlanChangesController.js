@@ -72,8 +72,6 @@
                         for (var i = 0; i < response.Data.length; i++) {
                             if (response.Data[i].IsCurrentRoutingProductInherited)
                                 response.Data[i].CurrentRoutingProductName += " (Inherited)";
-                            else if (response.Data[i].IsNewRoutingProductInherited)
-                                response.Data[i].NewRoutingProductName += " (Inherited)";
                         }
                         onResponseReady(response);
                     }
@@ -97,32 +95,11 @@
             promises.push(rateGridReadyDeferred.promise);
             promises.push(routingProductGridReadyDeferred.promise);
 
-            var getChangesPromise = getChanges();
-            promises.push(getChangesPromise);
+            var getChangesSummaryPromise = getChangesSummary();
+            promises.push(getChangesSummaryPromise);
             
-            var getDefaultItemDeferred = UtilsService.createPromiseDeferred();
-            promises.push(getDefaultItemDeferred.promise);
-
-            var zoneItemsGetDeferred = UtilsService.createPromiseDeferred();
-            promises.push(zoneItemsGetDeferred.promise);
-
-            getChangesPromise.then(function () {
-                if (changes && changes.DefaultChanges && (changes.DefaultChanges.Entity.NewDefaultRoutingProduct || changes.DefaultChanges.Entity.DefaultRoutingProductChange)) {
-                    getDefaultItem().then(function () {
-                        getDefaultItemDeferred.resolve();
-                    }).catch(function (error) { getDefaultItemDeferred.reject(); });
-                }
-                else
-                    getDefaultItemDeferred.resolve();
-
-                if (changes && changes.ZoneChanges) {
-                    getZoneItems().then(function () {
-                        zoneItemsGetDeferred.resolve();
-                    }).catch(function (error) { zoneItemsGetDeferred.reject(); });
-                }
-                else
-                    zoneItemsGetDeferred.resolve();
-            });
+            var getDefaultItemPromise = getDefaultItem();
+            promises.push(getDefaultItemPromise);
 
             UtilsService.waitMultiplePromises(promises).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -130,73 +107,31 @@
                 $scope.isLoading = false;
             });
 
-            function getChanges() {
-                return WhS_Sales_RatePlanAPIService.GetChanges(ownerType, ownerId).then(function (response) {
-                    changes = response;
+            function getChangesSummary() {
+                return WhS_Sales_RatePlanAPIService.GetChangesSummary(ownerType, ownerId).then(function (response) {
+                    if (response) {
+                        $scope.totalNewRates = response.TotalNewRates;
+                        $scope.totalIncreasedRates = response.TotalRateIncreases;
+                        $scope.totalDecreasedRates = response.TotalRateDecreases;
+                        $scope.totalRateChanges = response.TotalRateChanges;
+                        $scope.totalNewZoneRoutingProducts = response.TotalNewZoneRoutingProducts;
+                        $scope.totalZoneRoutingProductChanges = response.TotalZoneRoutingProductChanges;
+                    }
                 });
             }
 
             function getDefaultItem() {
                 return WhS_Sales_RatePlanAPIService.GetDefaultItem(ownerType, ownerId).then(function (response) {
-                    $scope.defaultItem = {};
-                    
-                    $scope.defaultItem.currentRoutingProductName = response.CurrentRoutingProductName ? response.CurrentRoutingProductName : "None";
-                    $scope.defaultItem.currentRoutingProductName = response.IsCurrentRoutingProductEditable === false ?
-                        $scope.defaultItem.currentRoutingProductName += " (Inherited)" : $scope.defaultItem.currentRoutingProductName;
-                    $scope.defaultItem.newRoutingProductName = changes.DefaultChanges.Entity.NewDefaultRoutingProduct ? changes.DefaultChanges.DefaultRoutingProductName : null;
-                    $scope.defaultItem.effectiveOn = new Date().toDateString();
-                });
-            }
-
-            function getZoneItems() {
-                var entities = UtilsService.getPropValuesFromArray(changes.ZoneChanges, "Entity");
-                var zoneIds = entities ? UtilsService.getPropValuesFromArray(entities, "ZoneId") : [];
-
-                return WhS_Sales_RatePlanAPIService.GetZoneItems({
-                    Filter: {
-                        OwnerType: ownerType,
-                        OwnerId: ownerId,
-                        ZoneIds: zoneIds
+                    console.log(response);
+                    if (response && (response.NewRoutingProductId || (response.CurrentRoutingProductId && response.RoutingProductChangeEED))) {
+                        $scope.defaultItem = {};
+                        $scope.defaultItem.currentRoutingProductName = response.CurrentRoutingProductName ? response.CurrentRoutingProductName : "None";
+                        $scope.defaultItem.currentRoutingProductName = response.IsCurrentRoutingProductEditable === false ? $scope.defaultItem.currentRoutingProductName += " (Inherited)" : $scope.defaultItem.currentRoutingProductName;
+                        $scope.defaultItem.newRoutingProductName = response.NewRoutingProductName;
+                        $scope.defaultItem.changedToRoutingProductName = !response.NewRoutingProductName ? "(Default)" : null;
+                        $scope.defaultItem.effectiveOn = new Date().toDateString();
                     }
-                }).then(function (response) {
-                    if (response) {
-                        for (var i = 0; i < response.length; i++) {
-                            var zoneItem = response[i];
-                            var zoneItemChanges = UtilsService.getItemByVal(changes.ZoneChanges, zoneItem.ZoneName, "ZoneName"); // It should be by Entity.ZoneId, but nested properties aren't supported by UtilsService.getItemByVal
-
-                            if (zoneItemChanges) {
-                                // Update rate summary totals
-                                if (zoneItemChanges.Entity.NewRate || zoneItemChanges.Entity.RateChange) {
-                                    var currentRate = zoneItem.CurrentRate;
-                                    var newRate = zoneItemChanges.Entity.NewRate ? zoneItemChanges.Entity.NewRate.NormalRate : null;
-
-                                    if (currentRate && newRate) {
-                                        if (Number(newRate) > Number(currentRate))
-                                            $scope.totalIncreasedRates++;
-                                        else if (Number(newRate) < Number(currentRate))
-                                            $scope.totalDecreasedRates++;
-                                    }
-                                    else if (newRate) {
-                                        $scope.totalNewRates++;
-                                    }
-                                    else if (currentRate) { // && effectiveOn
-                                        $scope.totalRateChanges++;
-                                    }
-                                }
-
-                                // Update routing product summary totals
-                                if (zoneItemChanges.Entity.NewRoutingProduct || zoneItemChanges.Entity.RoutingProductChange) {
-                                    var currentRoutingProductId = zoneItem.CurrentRoutingProductId;
-                                    var newRoutingProductId = zoneItemChanges.Entity.NewRoutingProduct ? zoneItemChanges.Entity.NewRoutingProduct.ZoneRoutingProductId : null;
-
-                                    if (newRoutingProductId)
-                                        $scope.totalNewZoneRoutingProducts++;
-                                    else if (currentRoutingProductId) // && effectiveOn
-                                        $scope.totalZoneRoutingProductChanges++;
-                                }
-                            }
-                        }
-                    }
+                    console.log($scope.defaultItem);
                 });
             }
         }

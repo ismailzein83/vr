@@ -303,7 +303,7 @@
                     OwnerId: getOwnerId(),
                     ZoneLetter: $scope.zoneLetters[$scope.selectedZoneLetterIndex],
                     RoutingDatabaseId: databaseSelectorAPI.getSelectedIds(),
-                    RPRoutePolicyConfigId: policySelectorAPI.getSelectedIds(),
+                    PolicyConfigId: policySelectorAPI.getSelectedIds(),
                     NumberOfOptions: $scope.numberOfOptions,
                     CostCalculationMethods: settings ? settings.CostCalculationMethods : null
                 };

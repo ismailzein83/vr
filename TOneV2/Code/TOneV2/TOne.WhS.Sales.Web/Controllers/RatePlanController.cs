@@ -59,22 +59,22 @@ namespace TOne.WhS.Sales.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetChanges")]
-        public ChangesDetail GetChanges(SalePriceListOwnerType ownerType, int ownerId)
+        [Route("GetChangesSummary")]
+        public ChangesSummary GetChangesSummary(SalePriceListOwnerType ownerType, int ownerId)
         {
-            return _manager.GetChanges(ownerType, ownerId);
+            return _manager.GetChangesSummary(ownerType, ownerId);
         }
 
         [HttpPost]
         [Route("GetFilteredZoneRateChanges")]
-        public object GetFilteredZoneRateChanges(Vanrise.Entities.DataRetrievalInput<ZoneRateChangesQuery> input)
+        public object GetFilteredZoneRateChanges(Vanrise.Entities.DataRetrievalInput<ZoneRateChangesInput> input)
         {
             return GetWebResponse(input, _manager.GetFilteredZoneRateChanges(input));
         }
         
         [HttpPost]
         [Route("GetFilteredZoneRoutingProductChanges")]
-        public object GetFilteredZoneRoutingProductChanges(Vanrise.Entities.DataRetrievalInput<ZoneRoutingProductChangesQuery> input)
+        public object GetFilteredZoneRoutingProductChanges(Vanrise.Entities.DataRetrievalInput<ZoneRoutingProductChangesInput> input)
         {
             return GetWebResponse(input, _manager.GetFilteredZoneRoutingProductChanges(input));
         }
