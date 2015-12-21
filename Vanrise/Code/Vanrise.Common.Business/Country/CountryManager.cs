@@ -102,37 +102,6 @@ namespace Vanrise.Common.Business
 
             return message;
         }
-
-        public string UpdateCountires(Dictionary<string, string> updatedCountries)
-        {
-            string message = "";
-            int updatedCount = 0;
-            int notUpdatedCount = 0;
-            
-            foreach (var a in updatedCountries)
-            {
-                Country foundedCountry = GetCachedCountries().FindRecord(it => it.Name.ToLower().Equals(a.Value.ToLower()));
-                if (foundedCountry != null)
-                {
-                    notUpdatedCount++;
-                }
-
-                else
-                {
-                    foundedCountry.Name = a.Value;
-                    ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
-
-                    bool updatedresult = dataManager.Update(foundedCountry);
-                    if (updatedresult) updatedCount++;
-                    else {
-                         notUpdatedCount++;
-                    }
-                }
-
-            }
-            message = String.Format("{0} countries updated and {1} are the same", updatedCount, notUpdatedCount);
-            return message;
-        }
         public Vanrise.Entities.InsertOperationOutput<CountryDetail> AddCountry(Country country)
         {
             Vanrise.Entities.InsertOperationOutput<CountryDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CountryDetail>();
