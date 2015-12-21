@@ -83,6 +83,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     {
                         Code = codeValue.Trim(),
                         CodeGroupId = (codeGroup != null) ? codeGroup.CodeGroupId : (int?)null,
+                        CountryId = (codeGroup != null) ? codeGroup.CountryId : (int?)null,
                         ZoneName = zoneName,
                         BED = bEDDateFromExcel.Value,
                         EED = eEDDateFromExcel

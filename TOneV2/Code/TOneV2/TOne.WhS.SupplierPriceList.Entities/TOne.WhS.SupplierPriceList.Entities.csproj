@@ -54,7 +54,6 @@
     <Compile Include="PreviewData\RatePreview.cs" />
     <Compile Include="PreviewData\SPLPreviewQuery.cs" />
     <Compile Include="PreviewData\ZonePreview.cs" />
-    <Compile Include="Validation\BaseRuleTarget.cs" />
     <Compile Include="Validation\BusinessRule.cs" />
     <Compile Include="Validation\IRuleTarget.cs" />
     <Compile Include="SPL\IProcessCountryCodesContext.cs" />

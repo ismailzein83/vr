@@ -6,22 +6,17 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.SupplierPriceList.Entities
 {
-    public enum RuleActionType { Info = 0, Warning = 1, ExecludeItem = 2, StopExecution = 3};
+    public enum RuleActionType { Inform = 0, Warn = 1, ExecludeItem = 2, StopExecution = 3};
 
-    public abstract class BaseBusinessRule
+    public abstract class BusinessRule
     {
         public string CheckType { get; set; }
 
         public RuleActionType ActionType { get; set; }
 
-        public abstract void SetExecluded();
+        public List<string> TargetFQTNList { get; set; }
 
-        public abstract bool isValid();
+        public abstract bool Validate(IRuleTarget target);
         
-    }
-    
-    public abstract class BusinessRule<T> : BaseBusinessRule
-    {
-        public IEnumerable<T> data { get; set; } 
     }
 }

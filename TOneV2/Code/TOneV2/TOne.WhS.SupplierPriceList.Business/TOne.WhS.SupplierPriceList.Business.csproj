@@ -71,8 +71,8 @@
     <Compile Include="SupplierPriceListManager.cs" />
     <Compile Include="SupplierRatePreviewManager.cs" />
     <Compile Include="SupplierZonePreviewManager.cs" />
-    <Compile Include="Validation\CodeRuleTarget.cs" />
-    <Compile Include="Validation\ZoneRuleTarget.cs" />
+    <Compile Include="ValidationRules\CodeGroupRule.cs" />
+    <Compile Include="ValidationRules\MultipleCountryRule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">

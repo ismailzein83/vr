@@ -25,40 +25,72 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            IEnumerable<BaseBusinessRule> rules = this.GetRulesConfiguration(context);
-
-            rules.Where(x => x.ActionType == RuleActionType.StopExecution).ToList().ForEach((rule) =>
-            {
-                if (!rule.isValid())
-                    this.StopExecution.Set(context, true);
-            });
-
-            rules.Where(x => x.ActionType == RuleActionType.ExecludeItem).ToList().ForEach((rule) =>
-            {
-                rule.SetExecluded();
-            });
-        }
-
-        private IEnumerable<BaseBusinessRule> GetRulesConfiguration(CodeActivityContext context)
-        {
             IEnumerable<ImportedZone> importedZones = this.ImportedZones.Get(context);
             IEnumerable<ImportedCode> importedCodes = this.ImportedCodes.Get(context);
 
-            CodeRuleTarget codeGroupNotFoundRule = new CodeRuleTarget()
+            List<IRuleTarget> targets = new List<IRuleTarget>();
+            targets.AddRange(importedCodes);
+            targets.AddRange(importedZones);
+
+            this.ExecuteValidation(context, targets);
+        }
+
+        private void ExecuteValidation(CodeActivityContext context, IEnumerable<IRuleTarget> targets)
+        {
+            IEnumerable<BusinessRule> rules = this.GetRulesConfiguration();
+
+            foreach (BusinessRule rule in rules)
+            {
+                foreach (string targetFQTN in rule.TargetFQTNList)
+                {
+                    Type targetType = Type.GetType(targetFQTN);
+                    foreach (IRuleTarget target in targets)
+                    {
+                        if (target.GetType() == targetType)
+                        {
+                            bool valid = rule.Validate(target);
+
+                            if (!valid)
+                            {
+                                switch (rule.ActionType)
+                                {
+                                    case RuleActionType.StopExecution:
+                                        this.StopExecution.Set(context, true);
+                                        return;
+                                    case RuleActionType.ExecludeItem:
+                                        target.SetExcluded();
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<BusinessRule> GetRulesConfiguration()
+        {
+            List<string> codeGroupRuleTargets = new List<string>();
+            codeGroupRuleTargets.Add("TOne.WhS.SupplierPriceList.Entities.SPL.ImportedCode, TOne.WhS.SupplierPriceList.Entities");
+
+            BusinessRule codeGroupNotFoundRule = new CodeGroupRule()
             {
                 CheckType = "Code Group Not Found",
                 ActionType = RuleActionType.StopExecution,
-                data = importedCodes
+                TargetFQTNList = codeGroupRuleTargets
             };
 
-            ZoneRuleTarget multipleCountriesInSameZoneRule = new ZoneRuleTarget()
+            List<string> multCountryRuleTargets = new List<string>();
+            multCountryRuleTargets.Add("TOne.WhS.SupplierPriceList.Entities.SPL.ImportedZone, TOne.WhS.SupplierPriceList.Entities");
+
+            BusinessRule multipleCountriesInSameZoneRule = new MultipleCountryRule()
             {
                 CheckType = "Multiple Countries are found in Same Zone",
-                ActionType = RuleActionType.StopExecution,
-                data = importedZones
+                ActionType = RuleActionType.ExecludeItem,
+                TargetFQTNList = multCountryRuleTargets
             };
 
-            List<BaseBusinessRule> rules = new List<BaseBusinessRule>();
+            List<BusinessRule> rules = new List<BusinessRule>();
             rules.Add(codeGroupNotFoundRule);
             rules.Add(multipleCountriesInSameZoneRule);
 

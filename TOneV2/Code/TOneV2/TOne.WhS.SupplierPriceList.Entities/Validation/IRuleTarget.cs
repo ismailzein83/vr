@@ -6,15 +6,11 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.SupplierPriceList.Entities
 {
-    public enum MessageSeverity { Info = 0, Warning = 1, Error = 2};
-
     public interface IRuleTarget
     {
-        MessageSeverity Severity { get; set; }
-
         string Message { get; }
 
-        bool IsExecluded { get;  set; }
+        void SetExcluded();
 
     }
 }

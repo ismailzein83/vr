@@ -84,6 +84,8 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public int? CodeGroupId { get; set; }
 
+        public int? CountryId { get; set; }
+
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
@@ -110,17 +112,14 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public CodeProcessInfo ProcessInfo { get; set; }
 
-        public MessageSeverity Severity { get; set; }
-
-        public string Message 
-        { 
-            get 
-            { 
-                return string.Format("Code {0} is not assigned to any code group", Code);
-            } 
-        }
-
         public bool IsExecluded { get; set; }
+
+        public string Message { get; set; }
+        
+        public void SetExcluded()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class CodeProcessInfo
@@ -188,11 +187,19 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public List<ImportedRate> ImportedRates { get; set; }
 
-        public MessageSeverity Severity { get; set; }
-
-        public string Message { get { return string.Format("Zone {0} is execluded", ZoneName); } }
-
         public bool IsExecluded { get; set; }
+
+        public string Message { get; set; }
+
+        public void SetExcluded()
+        {
+            this.IsExecluded = true;
+
+            foreach (ImportedCode code in this.ImportedCodes)
+            {
+                code.IsExecluded = true;
+            }
+        }
     }
 
     public class ImportedCountry
