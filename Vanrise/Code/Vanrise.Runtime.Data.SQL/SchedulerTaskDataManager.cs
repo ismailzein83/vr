@@ -53,8 +53,8 @@ namespace Vanrise.Runtime.Data.SQL
             object taskId;
 
             int recordesEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_Insert", out taskId, taskObject.Name, 
-                taskObject.IsEnabled, taskObject.TaskType, SchedulerTaskStatus.NotStarted, taskObject.TriggerTypeId, taskObject.ActionTypeId, 
-                Common.Serializer.Serialize(taskObject.TaskSettings));
+                taskObject.IsEnabled, taskObject.TaskType, SchedulerTaskStatus.NotStarted, taskObject.TriggerTypeId, taskObject.ActionTypeId,
+                Common.Serializer.Serialize(taskObject.TaskSettings), taskObject.OwnerId);
             insertedId = (int)taskId;
             return (recordesEffected > 0);
         }
@@ -113,7 +113,8 @@ namespace Vanrise.Runtime.Data.SQL
                 ActionTypeId = (int)reader["ActionTypeId"],
                 TriggerInfo = Common.Serializer.Deserialize<TriggerTypeInfo>(reader["TriggerTypeInfo"] as string),
                 ActionInfo = Common.Serializer.Deserialize<ActionTypeInfo>(reader["ActionTypeInfo"] as string),
-                TaskSettings = Common.Serializer.Deserialize<SchedulerTaskSettings>(reader["TaskSettings"] as string)
+                TaskSettings = Common.Serializer.Deserialize<SchedulerTaskSettings>(reader["TaskSettings"] as string),
+                OwnerId = (int)reader["OwnerId"]
             };
             return task;
         }

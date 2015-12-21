@@ -53,6 +53,7 @@ namespace Vanrise.Runtime.Entities
         public TriggerTypeInfo TriggerInfo { get; set; }
 
         public ActionTypeInfo ActionInfo { get; set; }
+        public int OwnerId { get; set; }
 
         public SchedulerTaskSettings TaskSettings { get; set; }
 

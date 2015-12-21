@@ -48,7 +48,7 @@ namespace Vanrise.Runtime.Business
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             int taskId = -1;
-
+            taskObject.OwnerId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
             bool insertActionSucc = dataManager.AddTask(taskObject, out taskId);
 
