@@ -15,5 +15,10 @@ namespace TOne.WhS.SupplierPriceList.Business
             ISupplierCodePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierCodePreviewDataManager>();
             dataManager.Insert(priceListId, codePreviewList);
         }
+        public Vanrise.Entities.IDataRetrievalResult<CodePreview> GetFilteredCodePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
+        {
+            ISupplierCodePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierCodePreviewDataManager>();
+            return dataManager.GetCodePreviewFilteredFromTemp(input);
+        }
     }
 }

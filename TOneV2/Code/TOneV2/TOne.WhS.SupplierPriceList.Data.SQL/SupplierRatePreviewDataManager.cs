@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.SupplierPriceList.Entities;
-using TOne.WhS.SupplierPriceList.Entities.PreviewData;
+using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.SupplierPriceList.Data.SQL
@@ -31,7 +32,16 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
             ApplyForDB(prepareToApplyInfo);
         }
+        public Vanrise.Entities.BigResult<Entities.RatePreview> GetRatePreviewFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SPLPreviewQuery> input)
+        {
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
 
+                ExecuteNonQuerySP("[TOneWhS_SPL].[sp_SupplierRate_Preview_CreateTempByFiltered]", tempTableName, input.Query.PriceListId);
+            };
+
+            return RetrieveData(input, createTempTableAction, RatePreviewMapper);
+        }
 
         private object InitialiazeStreamForDBApply()
         {
@@ -65,7 +75,19 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 FieldSeparator = '^',
             };
         }
-
+        private RatePreview RatePreviewMapper(IDataReader reader)
+        {
+            RatePreview ratePreview = new RatePreview
+            {
+                ZoneName = reader["Name"] as string,
+                ChangeType = (RateChangeType)GetReaderValue<int>(reader, "ChangeType"),
+                RecentRate = GetReaderValue<decimal>(reader, "RecentRate"),
+                NewRate = GetReaderValue<decimal>(reader, "NewRate"),
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime>(reader, "EED")
+            };
+            return ratePreview;
+        }
         private void ApplyForDB(object preparedObject)
         {
             InsertBulkToTable(preparedObject as BaseBulkInsertInfo);

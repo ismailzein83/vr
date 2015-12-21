@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.SupplierPriceList.Entities;
+using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.SupplierPriceList.Data.SQL
@@ -29,6 +31,17 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 
             object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
             ApplyForDB(prepareToApplyInfo);
+        }
+
+        public Vanrise.Entities.BigResult<Entities.CodePreview> GetCodePreviewFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SPLPreviewQuery> input)
+        {
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+
+                ExecuteNonQuerySP("[TOneWhS_SPL].[sp_SupplierCode_Preview_CreateTempByFiltered]", tempTableName, input.Query.PriceListId);
+            };
+
+            return RetrieveData(input, createTempTableAction, CodePreviewMapper);
         }
 
         private object InitialiazeStreamForDBApply()
@@ -67,6 +80,19 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         private void ApplyForDB(object preparedObject)
         {
             InsertBulkToTable(preparedObject as BaseBulkInsertInfo);
+        }
+        private CodePreview CodePreviewMapper(IDataReader reader)
+        {
+            CodePreview codePreview = new CodePreview
+            {
+                Code =  reader["Code"] as string,
+                ChangeType = (CodeChangeType)GetReaderValue<int>(reader, "ChangeType"),
+                RecentZoneName = reader["RecentZoneName"] as string,
+                ZoneName = reader["ZoneName"] as string,
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime>(reader, "EED")
+            };
+            return codePreview;
         }
     }
 }

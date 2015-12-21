@@ -1,0 +1,39 @@
+﻿<div vr-modalcontent ng-controller="WhS_SupPL_SupplierPriceListPreviewController" vr-loader="isGettingData" width="'70%'">
+    <vr-modalbody>
+        <vr-form name="formSellNewZones">
+            <vr-tabs>
+                <vr-tab header="'Supplier Zone Changes'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-spl-zonepreview-grid></vr-spl-zonepreview-grid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Supplier Code Changes'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-spl-codepreview-grid></vr-spl-codepreview-grid>
+                        </vr-columns>
+                      
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Supplier Rate Changes'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-spl-ratepreview-grid></vr-spl-ratepreview-grid>
+                        </vr-columns>
+
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="save"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

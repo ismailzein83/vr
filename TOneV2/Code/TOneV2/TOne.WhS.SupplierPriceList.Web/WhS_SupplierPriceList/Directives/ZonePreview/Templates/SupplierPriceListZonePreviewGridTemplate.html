@@ -1,0 +1,11 @@
+﻿<vr-datagrid datasource="changedZones"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="[]" >
+
+    <vr-datagridcolumn headertext="'Name'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Change Type'" field="'ChangeType'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Begin Effective Date'" field="'BED'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'End Effective Date'" field="'EED'" type="'Datetime'"></vr-datagridcolumn>
+</vr-datagrid>

@@ -117,6 +117,10 @@
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -127,10 +131,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_SupplierPriceList\Directives\RatePreview\Templates\SupplierPriceListRatePreviewGridTemplate.html" />
+    <Content Include="WhS_SupplierPriceList\Directives\RatePreview\vr-spl-ratepreview-grid.js" />
+    <Content Include="WhS_SupplierPriceList\Directives\ZonePreview\Templates\SupplierPriceListZonePreviewGridTemplate.html" />
+    <Content Include="WhS_SupplierPriceList\Directives\ZonePreview\vr-spl-zonepreview-grid.js" />
+    <Content Include="WhS_SupplierPriceList\Directives\CodePreview\Templates\SupplierPriceListCodePreviewGridTemplate.html" />
+    <Content Include="WhS_SupplierPriceList\Directives\CodePreview\vr-spl-codepreview-grid.js" />
+    <Content Include="WhS_SupplierPriceList\Services\APIServices\SupplierPriceListPreviewAPIService.js" />
+    <Content Include="WhS_SupplierPriceList\Services\APIServices\SupplierPriceListAPIService.js" />
+    <Content Include="WhS_SupplierPriceList\Services\SupplierPriceListService.js" />
     <Content Include="WhS_SupplierPriceList\Template\Supplier Price List Sample.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\SupplierPriceListPreviewController.cs" />
     <Compile Include="Controllers\SupplierPriceListController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -143,10 +157,19 @@
       <Project>{05b7b8cf-6d2a-4bef-ae8b-af5fc3940baa}</Project>
       <Name>TOne.WhS.SupplierPriceList.BP.Arguments</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Business\TOne.WhS.SupplierPriceList.Business.csproj">
+      <Project>{ecd63186-7d8e-4cbb-8e90-c1fff4a806a0}</Project>
+      <Name>TOne.WhS.SupplierPriceList.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Entities\TOne.WhS.SupplierPriceList.Entities.csproj">
+      <Project>{0940dc86-5421-4324-87cd-3f3ad458f4f6}</Project>
+      <Name>TOne.WhS.SupplierPriceList.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_SupplierPriceList\Constant\ModuleConfig.js" />
-    <Content Include="WhS_SupplierPriceList\Services\SupplierPriceListAPIService.js" />
+    <Content Include="WhS_SupplierPriceList\Views\SupplierPriceListPreview.html" />
+    <Content Include="WhS_SupplierPriceList\Views\SupplierPriceListPreviewrController.js" />
     <Content Include="WhS_SupplierPriceList\Views\SupplierPriceList.html" />
     <Content Include="WhS_SupplierPriceList\Views\SupplierPriceListController.js" />
   </ItemGroup>

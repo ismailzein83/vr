@@ -52,6 +52,7 @@
     <Compile Include="CodesByCode.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="PreviewData\RatePreview.cs" />
+    <Compile Include="PreviewData\SPLPreviewQuery.cs" />
     <Compile Include="PreviewData\ZonePreview.cs" />
     <Compile Include="Validation\BaseRuleTarget.cs" />
     <Compile Include="Validation\BusinessRule.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +31,16 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
             ApplyForDB(prepareToApplyInfo);
         }
+        public Vanrise.Entities.BigResult<Entities.ZonePreview> GetZonePreviewFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SPLPreviewQuery> input)
+        {
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                
+                ExecuteNonQuerySP("[TOneWhS_SPL].[sp_SupplierZone_Preview_CreateTempByFiltered]", tempTableName, input.Query.PriceListId);
+            };
 
+            return RetrieveData(input, createTempTableAction, ZonePreviewMapper);
+        }
         private object InitialiazeStreamForDBApply()
         {
             return base.InitializeStreamForBulkInsert();
@@ -65,6 +75,18 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         private void ApplyForDB(object preparedObject)
         {
             InsertBulkToTable(preparedObject as BaseBulkInsertInfo);
+        }
+
+        private ZonePreview ZonePreviewMapper(IDataReader reader)
+        {
+            ZonePreview zonePreview = new ZonePreview
+            {
+                ZoneName= reader["Name"] as string,
+                ChangeType = (ZoneChangeType)GetReaderValue<int>(reader, "ChangeType"),
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime>(reader, "EED")
+            };
+            return zonePreview;
         }
     }
 }

@@ -10,5 +10,6 @@ namespace TOne.WhS.SupplierPriceList.Data
     public interface ISupplierZonePreviewDataManager : IDataManager
     {
         void Insert(int priceListId, IEnumerable<ZonePreview> zonePreviewList);
+        Vanrise.Entities.BigResult<Entities.ZonePreview> GetZonePreviewFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SPLPreviewQuery> input);
     }
 }

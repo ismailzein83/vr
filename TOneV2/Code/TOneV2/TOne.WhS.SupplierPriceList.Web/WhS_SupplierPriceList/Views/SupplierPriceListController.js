@@ -1,6 +1,6 @@
-﻿SupplierPriceListController.$inject = ['$scope', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcessService','VRUIUtilsService','UtilsService'];
+﻿SupplierPriceListController.$inject = ['$scope', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcessService', 'VRUIUtilsService', 'UtilsService', 'WhS_SupPL_SupplierPriceListService'];
 
-function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcessService, VRUIUtilsService, UtilsService) {
+function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcessService, VRUIUtilsService, UtilsService, WhS_SupPL_SupplierPriceListService) {
     defineScope();
     var carrierAccountDirectiveAPI;
     var carrierAccountReadyPromiseDeferred;
@@ -38,6 +38,10 @@ function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIServi
                 UtilsService.downloadFile(response.data, response.headers);
             });
         }
+        $scope.previewSupplierPriceList = function () {
+            WhS_SupPL_SupplierPriceListService.previewSupplierPriceList();
+        }
+        
 
     }
     function load() {

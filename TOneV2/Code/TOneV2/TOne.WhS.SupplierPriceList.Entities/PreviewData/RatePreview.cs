@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 
-namespace TOne.WhS.SupplierPriceList.Entities.PreviewData
+namespace TOne.WhS.SupplierPriceList.Entities
 {
     public class RatePreview
     {

@@ -15,5 +15,10 @@ namespace TOne.WhS.SupplierPriceList.Business
             ISupplierZonePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierZonePreviewDataManager>();
             dataManager.Insert(priceListId, zonePreviewList);
         }
+        public Vanrise.Entities.IDataRetrievalResult<ZonePreview> GetFilteredZonePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
+        {
+            ISupplierZonePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierZonePreviewDataManager>();
+            return dataManager.GetZonePreviewFilteredFromTemp(input);
+        }
     }
 }
