@@ -36,6 +36,7 @@
 
         var settings;
         var isSavingPriceList; // This flag var prevents the app from saving an empty state after the user saves a price list
+        var isLoadingRatePlan; // This flag var prevents the app from getting the zone items twice when clicking the search button
 
         defineScope();
         load();
@@ -217,6 +218,7 @@
 
         function loadRatePlan() {
             var promises = [];
+            isLoadingRatePlan = true;
 
             var isLoadingZoneLetters = true;
             var zoneLettersGetPromise = getZoneLetters();
@@ -259,6 +261,8 @@
                 showRatePlan(true);
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                isLoadingRatePlan = false;
             });
 
             function getZoneLetters() {
@@ -324,8 +328,6 @@
         function onDefaultItemChange() {
             if (!isSavingPriceList)
                 saveChanges(true);
-            else
-                isSavingPriceList = false;
         }
 
         function saveChanges(shouldLoadGrid) {
@@ -409,6 +411,8 @@
 
                 return UtilsService.waitMultiplePromises(promises).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    isSavingPriceList = false;
                 });
 
                 function onRatePlanChangesClose(save) {

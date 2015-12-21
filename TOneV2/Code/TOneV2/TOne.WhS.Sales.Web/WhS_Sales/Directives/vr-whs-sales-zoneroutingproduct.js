@@ -57,14 +57,10 @@ function (UtilsService, VRUIUtilsService) {
 
                 selectorReadyDeferred.promise.then(function () {
                     var selectedIds;
-                    if (zoneItem.NewRoutingProductId) {
-                        selectedIds = [];
-                        selectedIds.push(zoneItem.NewRoutingProductId);
-                    }
-                    else if (zoneItem.NewRoutingProductEED) {
-                        selectedIds = [];
-                        selectedIds.push(-1);
-                    }
+                    if (zoneItem.NewRoutingProductId)
+                        selectedIds = [zoneItem.NewRoutingProductId];
+                    else if (zoneItem.CurrentRoutingProductId && zoneItem.RoutingProductChangeEED)
+                        selectedIds = [-1];
 
                     var selectorPayload = {
                         filter: { ExcludedRoutingProductId: zoneItem.CurrentRoutingProductId, AssignableToZoneId: zoneItem.ZoneId },

@@ -224,6 +224,16 @@ namespace TOne.WhS.BusinessEntity.Business
             return routingProductIds;
         }
 
+        public string GetRoutingProductName(int routingProductId)
+        {
+            RoutingProduct routingProduct = GetRoutingProduct(routingProductId);
+            
+            if (routingProductId != null)
+                return routingProduct.Name;
+            
+            return null;
+        }
+
         #region Private Methods
 
         private RoutingProductInfo RoutingProductInfoMapper(RoutingProduct routingProduct)

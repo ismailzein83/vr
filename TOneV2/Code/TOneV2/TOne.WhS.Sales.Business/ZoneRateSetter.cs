@@ -15,14 +15,17 @@ namespace TOne.WhS.Sales.Business
         SalePriceListOwnerType _ownerType;
         int _ownerId;
         int? _sellingProductId;
+        DateTime _effectiveOn;
+
         IEnumerable<NewRate> _newRates;
         IEnumerable<RateChange> _rateChanges;
 
-        public ZoneRateSetter(SalePriceListOwnerType ownerType, int ownerId, int? sellingProductId, Changes changes)
+        public ZoneRateSetter(SalePriceListOwnerType ownerType, int ownerId, int? sellingProductId, DateTime effectiveOn, Changes changes)
         {
             _ownerType = ownerType;
             _ownerId = ownerId;
             _sellingProductId = sellingProductId;
+            _effectiveOn = effectiveOn;
 
             if (changes != null && changes.ZoneChanges != null)
             {
@@ -33,7 +36,7 @@ namespace TOne.WhS.Sales.Business
 
         public void SetZoneRate(ZoneItem zoneItem)
         {
-            SaleEntityZoneRateLocator rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(DateTime.Now));
+            SaleEntityZoneRateLocator rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(_effectiveOn));
 
             SaleEntityZoneRate rate = (_ownerType == SalePriceListOwnerType.SellingProduct) ?
                 rateLocator.GetSellingProductZoneRate(_ownerId, zoneItem.ZoneId) :

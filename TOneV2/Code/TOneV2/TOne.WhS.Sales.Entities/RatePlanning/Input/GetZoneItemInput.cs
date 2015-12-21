@@ -13,7 +13,7 @@ namespace TOne.WhS.Sales.Entities
         public int OwnerId { get; set; }
         public long ZoneId { get; set; }
         public int RoutingDatabaseId { get; set; }
-        public int PolicyConfigId { get; set; }
+        public int PolicyId { get; set; }
         public int NumberOfOptions { get; set; }
         public IEnumerable<CostCalculationMethod> CostCalculationMethods { get; set; }
     }

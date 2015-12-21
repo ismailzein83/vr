@@ -17,7 +17,7 @@ namespace TOne.WhS.Sales.Business
 {
     public class RatePlanManager
     {
-        private IRatePlanDataManager _dataManager;
+        IRatePlanDataManager _dataManager;
 
         public RatePlanManager()
         {
@@ -58,7 +58,7 @@ namespace TOne.WhS.Sales.Business
                 zoneItems = new List<ZoneItem>();
                 Changes changes = _dataManager.GetChanges(input.Filter.OwnerType, input.Filter.OwnerId, RatePlanStatus.Draft);
 
-                ZoneRateSetter rateSetter = new ZoneRateSetter(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, changes);
+                ZoneRateSetter rateSetter = new ZoneRateSetter(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, DateTime.Now, changes);
                 ZoneRoutingProductSetter routingProductSetter = new ZoneRoutingProductSetter(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, DateTime.Now, changes);
                 
                 foreach (SaleZone zone in zones)
@@ -81,6 +81,32 @@ namespace TOne.WhS.Sales.Business
             }
 
             return zoneItems;
+        }
+
+        public ZoneItem GetZoneItem(ZoneItemInput input)
+        {
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+
+            ZoneItem zoneItem = new ZoneItem()
+            {
+                ZoneId = input.ZoneId,
+                ZoneName = saleZoneManager.GetSaleZoneName(input.ZoneId)
+            };
+
+            int? sellingProductId = GetSellingProductId(input.OwnerType, input.OwnerId, DateTime.Now, false);
+            Changes changes = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
+
+            ZoneRateSetter rateSetter = new ZoneRateSetter(input.OwnerType, input.OwnerId, sellingProductId, DateTime.Now, changes);
+            rateSetter.SetZoneRate(zoneItem);
+
+            ZoneRoutingProductSetter routingProductSetter = new ZoneRoutingProductSetter(input.OwnerType, input.OwnerId, sellingProductId, DateTime.Now, changes);
+            routingProductSetter.SetZoneRoutingProduct(zoneItem);
+
+            RPZone rpZone = new RPZone() { RoutingProductId = zoneItem.EffectiveRoutingProductId, SaleZoneId = zoneItem.ZoneId };
+            ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.RoutingDatabaseId, input.PolicyId, input.NumberOfOptions, new List<RPZone>() { rpZone }, input.CostCalculationMethods);
+            routeOptionSetter.SetZoneRouteOptionsAndCosts(new List<ZoneItem>() { zoneItem });
+
+            return zoneItem;
         }
 
         private int? GetSellingProductId(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, bool isEffectiveInFuture)
@@ -106,128 +132,6 @@ namespace TOne.WhS.Sales.Business
                 return carrierAccountManager.GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
             }
         }
-
-        #region Refactor
-
-        public ZoneItem GetZoneItem(ZoneItemInput input)
-        {
-            /*
-            ZoneItem zoneItem = new ZoneItem() { ZoneId = input.ZoneId };
-            zoneItem.ZoneName = GetZoneName(input.ZoneId);
-
-            Changes changes = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
-            NewDefaultRoutingProduct newDefaultRoutingProduct = (changes != null && changes.DefaultChanges != null) ? changes.DefaultChanges.NewDefaultRoutingProduct : null;
-            ZoneChanges zoneChanges = null;
-            ZoneRoutingProductChange zoneRoutingProductChange = null;
-
-            if (changes != null && changes.ZoneChanges != null)
-            {
-                zoneChanges = changes.ZoneChanges.FindRecord(itm => itm.ZoneId == input.ZoneId);
-
-                if (zoneChanges != null)
-                {
-                    SetZoneItemChanges(zoneItem, zoneChanges);
-                    zoneRoutingProductChange = zoneChanges.RoutingProductChange;
-                }
-            }
-
-            SetZoneItemRate(input.OwnerType, input.OwnerId, zoneItem);
-            //SetZoneItemRoutingProduct(input.OwnerType, input.OwnerId, zoneItem, newDefaultRoutingProduct, zoneRoutingProductChange);
-            SetZoneItemRoutingProduct(input.OwnerType, input.OwnerId, zoneItem, newDefaultRoutingProduct);
-
-            IEnumerable<RPRouteDetail> rpRoutes = GetRPRoutes(input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, new List<ZoneItem>() { zoneItem });
-            if (rpRoutes != null && rpRoutes.Count() > 0)
-            {
-                zoneItem.RouteOptions = rpRoutes.ElementAt(0).RouteOptionsDetails;
-
-                if (input.CostCalculationMethods != null && input.CostCalculationMethods.Count() > 0)
-                {
-                    zoneItem.Costs = new List<decimal>();
-
-                    foreach (CostCalculationMethod method in input.CostCalculationMethods)
-                    {
-                        CostCalculationMethodContext context = new CostCalculationMethodContext() { Route = rpRoutes.ElementAt(0) };
-                        method.CalculateCost(context);
-                        zoneItem.Costs.Add(context.Cost);
-                    }
-                }
-            }
-
-            return zoneItem;
-            */
-            return null;
-        }
-        
-        #endregion
-
-        #region Review
-        /*
-        private void SetZoneItemEffectiveRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, ZoneItem zoneItem, NewDefaultRoutingProduct newDefaultRoutingProduct)
-        {
-            if (zoneItem.NewRoutingProductId != null)
-                SetEffectiveRoutingProductProperties(zoneItem, (int)zoneItem.NewRoutingProductId);
-            else
-            {
-                SaleEntityZoneRoutingProduct currentZoneRoutingProduct = GetCurrentZoneRoutingProduct(ownerType, ownerId, zoneItem.ZoneId);
-                SaleEntityZoneRoutingProduct effectiveDefaultRoutingProduct = GetEffectiveDefaultRoutingProduct(ownerType, ownerId, newDefaultRoutingProduct);
-
-                if (ownerType == SalePriceListOwnerType.SellingProduct)
-                {
-                    if (currentZoneRoutingProduct != null)
-                        SetEffectiveRoutingProductProperties(zoneItem, currentZoneRoutingProduct.RoutingProductId);
-                    else if (effectiveDefaultRoutingProduct != null)
-                        SetEffectiveRoutingProductProperties(zoneItem, effectiveDefaultRoutingProduct.RoutingProductId);
-                }
-                else // Customer
-                {
-                    if (currentZoneRoutingProduct != null && currentZoneRoutingProduct.Source == SaleEntityZoneRoutingProductSource.CustomerZone)
-                        SetEffectiveRoutingProductProperties(zoneItem, currentZoneRoutingProduct.RoutingProductId);
-                    else if (effectiveDefaultRoutingProduct != null && effectiveDefaultRoutingProduct.Source == SaleEntityZoneRoutingProductSource.CustomerDefault)
-                        SetEffectiveRoutingProductProperties(zoneItem, effectiveDefaultRoutingProduct.RoutingProductId);
-                    else if (currentZoneRoutingProduct != null) // Product Zone
-                        SetEffectiveRoutingProductProperties(zoneItem, currentZoneRoutingProduct.RoutingProductId); // Product Default
-                    else if (effectiveDefaultRoutingProduct != null)
-                        SetEffectiveRoutingProductProperties(zoneItem, effectiveDefaultRoutingProduct.RoutingProductId);
-                }
-            }
-        }
-
-        private SaleEntityZoneRoutingProduct GetCurrentZoneRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, long zoneId)
-        {
-            SaleEntityZoneRoutingProductLocator zrpLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(DateTime.Now));
-            if (ownerType == SalePriceListOwnerType.SellingProduct)
-                return zrpLocator.GetSellingProductZoneRoutingProduct(ownerId, zoneId);
-            else
-                return zrpLocator.GetCustomerZoneRoutingProduct(ownerId, GetSellingProductId(ownerId), zoneId);
-        }
-
-        private SaleEntityZoneRoutingProduct GetEffectiveDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, NewDefaultRoutingProduct newDefaultRoutingProduct)
-        {
-            if (newDefaultRoutingProduct != null)
-            {
-                return new SaleEntityZoneRoutingProduct()
-                {
-                    RoutingProductId = newDefaultRoutingProduct.DefaultRoutingProductId,
-                    BED = newDefaultRoutingProduct.BED,
-                    EED = newDefaultRoutingProduct.EED,
-                    Source = ownerType == SalePriceListOwnerType.SellingProduct ? SaleEntityZoneRoutingProductSource.ProductDefault : SaleEntityZoneRoutingProductSource.CustomerDefault
-                };
-            }
-
-            SaleEntityZoneRoutingProductLocator zrpLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(DateTime.Now));
-            if (ownerType == SalePriceListOwnerType.SellingProduct)
-                return zrpLocator.GetSellingProductDefaultRoutingProduct(ownerId);
-            else
-                return zrpLocator.GetCustomerDefaultRoutingProduct(ownerId, GetSellingProductId(ownerId));
-        }
-
-        private void SetEffectiveRoutingProductProperties(ZoneItem zoneItem, int routingProductId)
-        {
-            zoneItem.EffectiveRoutingProductId = routingProductId;
-            zoneItem.EffectiveRoutingProductName = GetRoutingProductName(routingProductId);
-        }
-        */
-        #endregion
 
         #region Remove
 
@@ -441,7 +345,7 @@ namespace TOne.WhS.Sales.Business
                     defaultItem.NewRoutingProductEED = newRoutingProduct.EED;
                 }
                 else if (routingProductChange != null)
-                    defaultItem.NewRoutingProductEED = routingProductChange.EED;
+                    defaultItem.RoutingProductChangeEED = routingProductChange.EED;
             }
         }
 

@@ -141,6 +141,16 @@ namespace TOne.WhS.BusinessEntity.Business
             return allZones.MapRecords(SaleZoneInfoMapper, zoneFilter);
         }
 
+        public string GetSaleZoneName(long saleZoneId)
+        {
+            SaleZone saleZone = GetSaleZone(saleZoneId);
+
+            if (saleZone != null)
+                return saleZone.Name;
+
+            return null;
+        }
+
         #region Private Members
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager

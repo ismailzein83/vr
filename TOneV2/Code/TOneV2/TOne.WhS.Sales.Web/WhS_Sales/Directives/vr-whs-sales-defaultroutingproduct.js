@@ -63,7 +63,7 @@ function (WhS_Sales_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) 
                 var selectedIds;
                 if (defaultItem.NewRoutingProductId)
                     selectedIds = [defaultItem.NewRoutingProductId];
-                else if (defaultItem.NewRoutingProductEED)
+                else if (defaultItem.CurrentRoutingProductId && defaultItem.RoutingProductChangeEED)
                     selectedIds = [-1];
 
                 var selectorPayload = {
