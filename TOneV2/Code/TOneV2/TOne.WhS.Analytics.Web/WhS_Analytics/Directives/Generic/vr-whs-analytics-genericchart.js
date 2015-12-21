@@ -122,7 +122,7 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
 
                         if (isHour)
                         {
-                            console.log(response.Data);
+                            
                             for (var i = 0; i < response.Data.length; i++)
                             {
                                 if (!UtilsService.contains(dates, response.Data[i].DimensionValues[1].Name)) {
