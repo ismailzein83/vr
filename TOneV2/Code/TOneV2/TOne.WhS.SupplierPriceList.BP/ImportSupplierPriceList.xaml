@@ -126,6 +126,11 @@
       </twsba1:StructureDataByZones.ImportedZones>
     </twsba1:StructureDataByZones>
     <twsba1:ValidateInputData sap2010:WorkflowViewState.IdRef="ValidateInputData_1">
+      <twsba1:ValidateInputData.ImportedCodes>
+        <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedCode)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedCode)">ImportedCodes</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ValidateInputData.ImportedCodes>
       <twsba1:ValidateInputData.ImportedZones>
         <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">ImportedZones</mca:CSharpValue>
@@ -479,7 +484,7 @@
                       </InArgument>
                     </twsba1:ApplyCodePreviewDataToDB.PriceListId>
                   </twsba1:ApplyCodePreviewDataToDB>
-                  <twsba1:ApplyRatePreviewDataToDB>
+                  <twsba1:ApplyRatePreviewDataToDB sap2010:WorkflowViewState.IdRef="ApplyRatePreviewDataToDB_1">
                     <twsba1:ApplyRatePreviewDataToDB.ImportedRates>
                       <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedRate)">
                         <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedRate)">ImportedRates</mca:CSharpValue>
@@ -490,7 +495,6 @@
                         <mca:CSharpValue x:TypeArguments="x:Int32">PriceListId</mca:CSharpValue>
                       </InArgument>
                     </twsba1:ApplyRatePreviewDataToDB.PriceListId>
-                    <sap2010:WorkflowViewState.IdRef>ApplyRatePreviewDataToDB_1</sap2010:WorkflowViewState.IdRef>
                   </twsba1:ApplyRatePreviewDataToDB>
                 </Parallel>
               </Sequence>
@@ -516,7 +520,7 @@
         </Sequence>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWxqOAOIBA4CAQFPBW4jAwGvDG8FfyMDAewLgAEFiwEgAwG/C4wBBYYECgIBAlILUlgDAZ4NawtrXgMBiA1XC1dqAwHyDGYLZnkDAdwMXAtcVAMBxgxhC2F5AwGwDHwLfHkDAZkMdwt3cQMBgwxyC3JxAwHtC4gBC4gBXwMB1guDAQuDAXEDAcALjwELjwFYAgEDkwEJhAQUAgEZlAELnwEtAwGSC6ABC6YBKgMB+wqnAQvyAxUCAV3zAwuDBCsCARqXARGXAYYBAwGpC5wBEZwBdwMBkwujARGjAWEDAfwKqgERqgF+AwHlCrEBD/ADGgIBXvsDEfsDWQIBR4AEEYAEZQIBMfYDEfYDXgIBG7IBEeYBHAMBkgnnARHyAS8DAeMI8wERlgIcAwHWB5cCEcUCLgMBhgbGAhHlAi4DAfsE5gIR9gIzAwG1BPcCEe8DHAIBX7MBE8MBLQMBnwrEARPUAS0DAdkJ1QET5QEtAwGTCeoBF+oBgwEDAfsI7wEX7wGVAQMB5Aj0AROEAjEDAZ0IhQITlQIxAwHXB6kCF6kCfQMBvwe9Ahe9AnsDAagHpAIXpAJtAwGRB5oCF5oCgwEDAfoGwgIXwgJ7AwHjBq4CF64CjQEDAcwGuAIXuAJ5AwG1Bp8CF58CgwEDAZ4GswIXswKFAQMBhwbJAhfJAoMBAwHvBeICF+ICewMB2AXOAhfOAn0DAcEF2AIX2AKFAQMBqgXTAhfTAo0BAwGTBd0CF90CcQMB/ATpAhfpAnMDAeQE7gIX7gJzAwHNBPMCF/MCcwMBtgT4AhOIAy4DAe8DiQMTlAMyAwHAA5UDE6ADLgMBkQOhAxOsAzIDAeICrQMTuAMuAwGzArkDE8QDMgMBhALFAxPVAzUDAb4B1gMT4QM1AwGPAeIDE+4DNQIBYLYBGbYBjQEDAc4KwAEZwAFtAwG3CrsBGbsBZAMBoArHARnHAY0BAwGICtEBGdEBbQMB8QnMARnMAWQDAdoJ4gEZ4gFtAwHCCdgBGdgBjQEDAasJ3QEZ3QFkAwGUCfwBGfwBhwEDAcwI9wEZ9wGFAQMBtQiBAhmBAo8BAwGeCIgCGYgChQEDAYYIjQIZjQKHAQMB7weSAhmSAo8BAwHYB4ADGYADYQMBngSFAxmFA20DAYcE+wIZ+wJ1AwHwA5EDGZEDYQMB2AOMAxmMA30DAcEDnQMZnQNhAwGpA5gDGZgDdQMBkgOpAxmpA2EDAfoCpAMZpAN9AwHjArUDGbUDYQMBywKwAxmwA3UDAbQCwQMZwQNhAwGcArwDGbwDfQMBhQLSAxnSA2EDAe0BzQMZzQN1AwHWAcgDGcgDjwEDAb8B3gMZ3gNhAwGnAdkDGdkDfwMBkAHqAxnqA2ECAXjlAxnlA38CAWE=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWxrOAOMBA4CAQFPBW4jAwHFDG8FfyMDAYIMgAEFkAEgAwG/C5EBBYoECgIBAlILUlgDAbQNawtrXgMBng1XC1dqAwGIDWYLZnkDAfIMXAtcVAMB3AxhC2F5AwHGDHwLfHkDAa8Mdwt3cQMBmQxyC3JxAwGDDI0BC40BXwMB7AuIAQuIAXEDAdYLgwELgwFxAwHAC5QBC5QBWAIBA5gBCYgEFAIBGZkBC6QBLQMBkgulAQurASoDAfsKrAEL9gMVAgFd9wMLhwQrAgEanAERnAGGAQMBqQuhARGhAXcDAZMLqAERqAFhAwH8Cq8BEa8BfgMB5Qq2AQ/0AxoCAV7/AxH/A1kCAUeEBBGEBGUCATH6AxH6A14CARu3ARHrARwDAZIJ7AER9wEvAwHjCPgBEZsCHAMB1gecAhHKAi4DAYYGywIR6gIuAwH7BOsCEfsCMwMBtQT8AhHzAxwCAV+4ARPIAS0DAZ8KyQET2QEtAwHZCdoBE+oBLQMBkwnvARfvAYMBAwH7CPQBF/QBlQEDAeQI+QETiQIxAwGdCIoCE5oCMQMB1weuAheuAn0DAb8HwgIXwgJ7AwGoB6kCF6kCbQMBkQefAhefAoMBAwH6BscCF8cCewMB4wazAhezAo0BAwHMBr0CF70CeQMBtQakAhekAoMBAwGeBrgCF7gChQEDAYcGzgIXzgKDAQMB7wXnAhfnAnsDAdgF0wIX0wJ9AwHBBd0CF90ChQEDAaoF2AIX2AKNAQMBkwXiAhfiAnEDAfwE7gIX7gJzAwHkBPMCF/MCcwMBzQT4Ahf4AnMDAbYE/QITjQMuAwHvA44DE5kDMgMBwAOaAxOlAy4DAZEDpgMTsQMyAwHiArIDE70DLgMBswK+AxPJAzIDAYQCygMT2gM1AwG+AdsDE+YDNQMBjwHnAxPyAzUCAWC7ARm7AY0BAwHOCsUBGcUBbQMBtwrAARnAAWQDAaAKzAEZzAGNAQMBiArWARnWAW0DAfEJ0QEZ0QFkAwHaCecBGecBbQMBwgndARndAY0BAwGrCeIBGeIBZAMBlAmBAhmBAocBAwHMCPwBGfwBhQEDAbUIhgIZhgKPAQMBngiNAhmNAoUBAwGGCJICGZIChwEDAe8HlwIZlwKPAQMB2AeFAxmFA2EDAZ4EigMZigNtAwGHBIADGYADdQMB8AOWAxmWA2EDAdgDkQMZkQN9AwHBA6IDGaIDYQMBqQOdAxmdA3UDAZIDrgMZrgNhAwH6AqkDGakDfQMB4wK6Axm6A2EDAcsCtQMZtQN1AwG0AsYDGcYDYQMBnALBAxnBA30DAYUC1wMZ1wNhAwHtAdIDGdIDdQMB1gHNAxnNA48BAwG/AeMDGeMDYQMBpwHeAxneA38DAZAB7wMZ7wNhAgF46gMZ6gN/AgFh</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

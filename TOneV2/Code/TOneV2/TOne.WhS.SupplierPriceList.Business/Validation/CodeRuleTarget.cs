@@ -8,20 +8,22 @@ using TOne.WhS.SupplierPriceList.Entities.SPL;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    public class CodeRuleTarget : IRuleTarget
+    public class CodeRuleTarget : BusinessRule<ImportedCode>
     {
-        public ImportedCode ImportedCode { get; set; }
+        public override bool isValid()
+        {
+            foreach (ImportedCode code in base.data)
+            {
+                if (code.CodeGroupId == null)
+                    return false;
+            }
 
-        public MessageSeverity Severity { get; set; }
+            return true;
+        }
 
-        public string Message { get { return ""; } }
-
-        public void SetExecluded()
+        public override void SetExecluded()
         {
             throw new NotImplementedException();
         }
-
-
-        public bool IsExecluded { get; set; }
     }
 }

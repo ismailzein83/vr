@@ -3,38 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    public class ZoneRuleTarget : IRuleTarget
+    public class ZoneRuleTarget : BusinessRule<ImportedZone>
     {
-        public ZoneRuleTarget(ImportedZone importedZone)
+        public override void SetExecluded()
         {
-            this.ImportedZone = importedZone;
-            this.IsExecluded = false;
-        }
+            CodeGroupManager codeGroupManager = new CodeGroupManager();
 
-        public ImportedZone ImportedZone { get; set; }
-
-        public MessageSeverity Severity { get; set; }
-
-        public string Message { get { return ""; } }
-
-        public void SetExecluded()
-        {
-            this.ImportedZone.SetExecluded();
-
-            if(this.ImportedZone.ImportedCodes != null)
+            foreach (ImportedZone zone in base.data)
             {
-                foreach (ImportedCode code in this.ImportedZone.ImportedCodes)
+                if (zone.ImportedCodes != null)
                 {
-                    code.SetExecluded();
+                    var firstCode = zone.ImportedCodes.FirstOrDefault();
+                    if (firstCode != null && !firstCode.IsExecluded)
+                    {
+                        int countryIdOfFirstCode = firstCode.CodeGroupId != null ? codeGroupManager.GetCodeGroup(firstCode.CodeGroupId.Value).CountryId : -1;
+                        Func<ImportedCode, bool> pred = new Func<ImportedCode, bool>((code) =>
+                        !code.IsExecluded && codeGroupManager.GetCodeGroup(code.CodeGroupId.Value) != null
+                            && codeGroupManager.GetCodeGroup(code.CodeGroupId.Value).CountryId != countryIdOfFirstCode);
+
+                        if (zone.ImportedCodes.Any(pred))
+                        {
+                            zone.IsExecluded = true;
+                            foreach (ImportedCode code in zone.ImportedCodes)
+                                code.IsExecluded = true;
+                        }
+                    }
                 }
             }
         }
 
-        public bool IsExecluded { get; set; }
+        public override bool isValid()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

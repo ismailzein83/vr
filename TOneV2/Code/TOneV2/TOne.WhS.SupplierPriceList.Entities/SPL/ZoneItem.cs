@@ -120,11 +120,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             } 
         }
 
-        public void SetExecluded()
-        {
-            this.IsExecluded = true;
-        }
-
         public bool IsExecluded { get; set; }
     }
 
@@ -196,11 +191,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         public MessageSeverity Severity { get; set; }
 
         public string Message { get { return string.Format("Zone {0} is execluded", ZoneName); } }
-
-        public void SetExecluded()
-        {
-            this.IsExecluded = true;
-        }
 
         public bool IsExecluded { get; set; }
     }

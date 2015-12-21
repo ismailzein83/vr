@@ -14,8 +14,6 @@ namespace TOne.WhS.SupplierPriceList.Entities
 
         string Message { get; }
 
-        void SetExecluded();
-
         bool IsExecluded { get;  set; }
 
     }
