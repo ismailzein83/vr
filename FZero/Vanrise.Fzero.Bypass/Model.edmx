@@ -201,6 +201,8 @@
           <Property Name="Code" Type="varchar" MaxLength="10" />
           <Property Name="AutoReport" Type="bit" Nullable="false" />
           <Property Name="RepeatedCases" Type="bit" Nullable="false" />
+          <Property Name="EnableAutoBlock" Type="bit" Nullable="false" />
+          <Property Name="AutoBlockEmail" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="OriginationNetworks">
           <Key>
@@ -1401,6 +1403,18 @@ warning 6002: The table/view 'FMS.dbo.vwRepeatedCase' does not have a primary ke
             </CollectionType>
           </ReturnType>
         </Function>
+        <Function Name="SplitwithValue" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="input" Type="varchar" Mode="In" />
+          <Parameter Name="ExtraValue" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Value" Type="varchar" MaxLength="50" />
+                <Property Name="ExtraValue" Type="int" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="ActionTypes" EntityType="Self.ActionTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ApplicationUsers" EntityType="Self.ApplicationUsers" Schema="dbo" store:Type="Tables" />
@@ -2085,6 +2099,13 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
             <Parameter Name="RecommendedActionID" Mode="In" Type="Int32" />
             <Parameter Name="ClientID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="Split" IsComposable="true" ReturnType="Collection(String)">
+          <Parameter Name="input" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SplitwithValue" IsComposable="true" ReturnType="Collection(Model.SplitwithValue_Result)">
+            <Parameter Name="input" Mode="In" Type="String" />
+            <Parameter Name="ExtraValue" Mode="In" Type="Int32" />
+          </FunctionImport>
           <EntitySet Name="ActionTypes" EntityType="Model.ActionType" />
           <EntitySet Name="ApplicationUsers" EntityType="Model.ApplicationUser" />
           <EntitySet Name="AppTypes" EntityType="Model.AppType" />
@@ -2300,9 +2321,6 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
             <End Role="WebsiteMenu" EntitySet="WebsiteMenus" />
             <End Role="WebsiteMenu1" EntitySet="WebsiteMenus" />
           </AssociationSet>
-          <FunctionImport Name="Split" IsComposable="true" ReturnType="Collection(String)">
-            <Parameter Name="input" Mode="In" Type="String" />
-          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="delete_prSummary_Admin_Result">
           <Property Type="Int32" Name="ordered" Nullable="false" />
@@ -2623,6 +2641,10 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Type="String" Name="RecommendedActionName" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="MobileOperatorFeedbackName" Nullable="true" MaxLength="20" />
         </ComplexType>
+        <ComplexType Name="SplitwithValue_Result">
+          <Property Type="String" Name="Value" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="ExtraValue" Nullable="true" />
+        </ComplexType>
         <EntityType Name="ActionType">
           <Key>
             <PropertyRef Name="ID" />
@@ -2847,6 +2869,8 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="AutoReport" Type="Boolean" Nullable="false" />
           <Property Name="RepeatedCases" Type="Boolean" Nullable="false" />
+          <Property Name="EnableAutoBlock" Type="Boolean" Nullable="false" />
+          <Property Name="AutoBlockEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="EmailCCs" Relationship="Model.FK_EmailCCs_MobileOperators" FromRole="MobileOperator" ToRole="EmailCC" />
           <NavigationProperty Name="GeneratedCalls" Relationship="Model.FK_GeneratedCalls_MobileOperators" FromRole="MobileOperator" ToRole="GeneratedCall" />
           <NavigationProperty Name="User" Relationship="Model.FK_Customers_Users" FromRole="MobileOperator" ToRole="User" />
@@ -4220,6 +4244,15 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Split" FunctionName="Model.Store.Split" />
+          <FunctionImportMapping FunctionImportName="SplitwithValue" FunctionName="Model.Store.SplitwithValue">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Model.SplitwithValue_Result">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="ExtraValue" ColumnName="ExtraValue" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="ActionTypes">
             <EntityTypeMapping TypeName="Model.ActionType">
               <MappingFragment StoreEntitySet="ActionTypes">
@@ -4427,6 +4460,8 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <EntitySetMapping Name="MobileOperators">
             <EntityTypeMapping TypeName="Model.MobileOperator">
               <MappingFragment StoreEntitySet="MobileOperators">
+                <ScalarProperty Name="AutoBlockEmail" ColumnName="AutoBlockEmail" />
+                <ScalarProperty Name="EnableAutoBlock" ColumnName="EnableAutoBlock" />
                 <ScalarProperty Name="RepeatedCases" ColumnName="RepeatedCases" />
                 <ScalarProperty Name="AutoReport" ColumnName="AutoReport" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
@@ -4843,7 +4878,6 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="Split" FunctionName="Model.Store.Split" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

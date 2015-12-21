@@ -56,6 +56,31 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         }
     }
 
+    public string AutoBlockEmail
+    {
+        get
+        {
+            return txtAutoBlockEmail.Text;
+        }
+        set
+        {
+            txtAutoBlockEmail.Text = value;
+        }
+    }
+
+    public bool EnableAutoBlock
+    {
+        get
+        {
+            return chkEnableAutoBlock.Checked;
+        }
+        set
+        {
+            chkEnableAutoBlock.Checked = value;
+        }
+    }
+
+
     public string Mobile
     {
         get
@@ -203,6 +228,8 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         txtPrefix.ReadOnly = !Enabled;
         txtWebsite.ReadOnly = !Enabled;
         ddlGMT.Enabled = Enabled;
+        txtAutoBlockEmail.ReadOnly = !Enabled;
+        chkEnableAutoBlock.Enabled = Enabled;
     }
 
     public string IsValidData()
@@ -262,6 +289,16 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         }
 
 
+        if (string.IsNullOrWhiteSpace(AutoBlockEmail)&& EnableAutoBlock)
+        {
+            return "AutoBlock email required";
+        }
+        else if (!Manager.IsValidEmail(AutoBlockEmail))
+        {
+            return "AutoBlock email not valid";
+        }
+
+
         if (! txtUserNameReadOnly)
         {
             if (string.IsNullOrWhiteSpace(MobileOperatorUserName))
@@ -296,6 +333,8 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         MobileOperatorUserName = MobileOperator.User.UserName.Trim();
         ProfileName = MobileOperator.User.FullName.ToString().Trim();
         GMT = MobileOperator.User.GMT.ToString().Trim();
+        EnableAutoBlock = MobileOperator.EnableAutoBlock;
+        AutoBlockEmail = MobileOperator.AutoBlockEmail;
 
         if (SysParameter.Global_DefaultMobileOperator != MobileOperator.User.FullName)
         {
@@ -344,6 +383,8 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         MobileOperator.User.FullName = ProfileName;
         MobileOperator.User.EmailAddress = Email;
         MobileOperator.User.GMT = GMT.ToInt();
+        MobileOperator.EnableAutoBlock = EnableAutoBlock;
+        MobileOperator.AutoBlockEmail = AutoBlockEmail;
 
         if (!txtUserNameReadOnly)
         {

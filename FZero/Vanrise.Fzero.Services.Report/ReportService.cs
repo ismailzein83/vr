@@ -38,19 +38,11 @@ namespace Vanrise.Fzero.Services.Report
         protected override void OnStart(string[] args)
         {
             base.RequestAdditionalTime(15000); // 10 minutes timeout for startup
-            //Debugger.Launch(); // launch and attach debugger
-            ErrorLog("1");
             aTimer = new System.Timers.Timer(7200000);// 2 hours
-            ErrorLog("2");
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            ErrorLog("3");
             aTimer.Interval = 7200000;// 2 hours
-            ErrorLog("4");
             aTimer.Enabled = true;
-            ErrorLog("5");
-
             GC.KeepAlive(aTimer);
-            ErrorLog("6");
             OnTimedEvent(null, null);
         }
 
@@ -58,19 +50,14 @@ namespace Vanrise.Fzero.Services.Report
         {
             try
             {
-                ErrorLog("7");
                 if (HttpHelper.CheckInternetConnection("mail.vanrise.com", 26))
                 {
-                    ErrorLog("8");
                     foreach (MobileOperator i in MobileOperator.GetMobileOperators())
                     {
-                        ErrorLog("9");
                         if (i.AutoReport && i.User.ClientID != null)
                         {
-                            ErrorLog("9");
-                            List<string> DistinctCLIs = new List<string>();
+                            HashSet<string> DistinctCLIs = new HashSet<string>();
                             List<ViewGeneratedCall> listFraudCases = GeneratedCall.GetFraudCases(i.User.ClientID, i.ID);
-                            ErrorLog("10");
                             List<int> listDistinctFraudCases = new List<int>();
                             List<int> listRepeatedFraudCases = new List<int>();
                             foreach (ViewGeneratedCall v in listFraudCases)
@@ -97,7 +84,7 @@ namespace Vanrise.Fzero.Services.Report
                             {
                                 GeneratedCall.UpdateReportStatus(listDistinctFraudCases, (int)Enums.ReportingStatuses.TobeReported, null);
 
-                                SendReport(listDistinctFraudCases, i.User.FullName, (int)Enums.Statuses.Fraud, i.ID, i.User.EmailAddress, i.User.ClientID.Value, (i.User.GMT - SysParameter.Global_GMT));
+                                SendReport(DistinctCLIs, listDistinctFraudCases, i.User.FullName, (int)Enums.Statuses.Fraud, i.ID, i.User.EmailAddress, i.User.ClientID.Value, (i.User.GMT - SysParameter.Global_GMT));
                             }
 
 
@@ -118,7 +105,7 @@ namespace Vanrise.Fzero.Services.Report
           
         }
 
-        private void SendReport(List<int> ListIds, string MobileOperatorName, int StatusID, int MobileOperatorID, string EmailAddress, int ClientID, int DifferenceInGMT)
+        private void SendReport(HashSet<string> CLIs, List<int> ListIds, string MobileOperatorName, int StatusID, int MobileOperatorID, string EmailAddress, int ClientID, int DifferenceInGMT)
         {
             ReportViewer rvToOperator = new ReportViewer();
             Vanrise.Fzero.Bypass.Report report = new Vanrise.Fzero.Bypass.Report();
@@ -252,18 +239,26 @@ namespace Vanrise.Fzero.Services.Report
 
 
             string CCs = EmailCC.GetEmailCCs(MobileOperatorID, ClientID);
-          
+            string profile_name = "FMS_Profile";
 
             if (ClientID == 3)
-            {
-                EmailManager.SendReporttoMobileSyrianOperator(filenameExcel + ";" + filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Syria_Profile");
+                profile_name = "FMS_Syria_Profile";
 
-            }
+
+
+            if (ClientID == 3)
+                EmailManager.SendReporttoMobileSyrianOperator(filenameExcel + ";" + filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+
             else
-            {
-                EmailManager.SendReporttoMobileOperator(filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Profile");
+                EmailManager.SendReporttoMobileOperator(filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
 
+            MobileOperator mobileOperator = Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperatorID);
+
+            if (mobileOperator.EnableAutoBlock && !string.IsNullOrEmpty(mobileOperator.AutoBlockEmail))
+            {
+                EmailManager.SendAutoBlockReport(mobileOperator.AutoBlockEmail, CLIs, report.ReportID, profile_name);
             }
+
 
         }
 

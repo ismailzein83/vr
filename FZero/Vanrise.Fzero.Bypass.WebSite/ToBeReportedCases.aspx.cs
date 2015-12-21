@@ -18,7 +18,7 @@ public partial class ToBeReportedCases : BasePage
 {
     #region Properties
 
-    
+
     #endregion
 
     #region Methods
@@ -36,7 +36,7 @@ public partial class ToBeReportedCases : BasePage
         ddlSearchStatus.Items.FindItemByValue(((int)Enums.Statuses.Pending).ToString()).Visible = false;
         ddlSearchStatus.Items.FindItemByValue(((int)Enums.Statuses.DistintFraud).ToString()).Visible = false;
 
-        ddlSearchMobileOperator.Items.Add( new RadComboBoxItem(Resources.Resources.AllDashes, "0"));
+        ddlSearchMobileOperator.Items.Add(new RadComboBoxItem(Resources.Resources.AllDashes, "0"));
         foreach (MobileOperator i in Vanrise.Fzero.Bypass.MobileOperator.GetMobileOperatorsList())
         {
             ddlSearchMobileOperator.Items.Add(new RadComboBoxItem(i.User.FullName, i.ID.ToString()));
@@ -47,7 +47,7 @@ public partial class ToBeReportedCases : BasePage
 
     private void SetCaptions()
     {
-       
+
         ((MasterPage)Master).PageHeaderTitle = Resources.Resources.ToBeReportedCases;
 
 
@@ -62,8 +62,8 @@ public partial class ToBeReportedCases : BasePage
         gvGeneratedCalls.Columns[columnIndex++].HeaderText = Resources.Resources.DateTime;
         gvGeneratedCalls.Columns[columnIndex++].HeaderText = Resources.Resources.IndirectCLI;
 
-        
-        
+
+
     }
 
     private void ClearSearchForm()
@@ -94,7 +94,7 @@ public partial class ToBeReportedCases : BasePage
     #endregion
 
     #region Events
-    
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!CurrentUser.IsAuthenticated)
@@ -148,14 +148,14 @@ public partial class ToBeReportedCases : BasePage
             }
 
             gvGeneratedCalls.Rebind();
-            
+
         }
-        
+
     }
 
     protected void btnCancel_Click(object sender, EventArgs e)
     {
-        
+
     }
 
     protected void gvGeneratedCalls_NeedDataSource(object source, Telerik.Web.UI.GridNeedDataSourceEventArgs e)
@@ -314,7 +314,9 @@ public partial class ToBeReportedCases : BasePage
                 ReportDataSource rptDataSourceDataSet1 = new ReportDataSource("DataSet1", AppType.GetAppTypes());
                 rvToOperator.LocalReport.DataSources.Add(rptDataSourceDataSet1);
 
-                ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedCalls(report.ReportID, (Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.GMT - SysParameter.Global_GMT)));
+                MobileOperator mobileOperator = Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator);
+
+                ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedCalls(report.ReportID, (mobileOperator.User.GMT - SysParameter.Global_GMT)));
                 rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
 
 
@@ -366,11 +368,11 @@ public partial class ToBeReportedCases : BasePage
                 {
                     if (ddlSearchClient.SelectedValue.ToInt() == 3)
                     {
-                        EmailManager.SendReporttoMobileSyrianOperator(filenameExcel +";"+filenamePDF, Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        EmailManager.SendReporttoMobileSyrianOperator(filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
                     }
                     else
                     {
-                        EmailManager.SendReporttoMobileOperator(filenamePDF, Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        EmailManager.SendReporttoMobileOperator(filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
 
                     }
 
@@ -379,19 +381,30 @@ public partial class ToBeReportedCases : BasePage
                 {
                     if (ddlSearchClient.SelectedValue.ToInt() == 3)
                     {
-                        EmailManager.SendReporttoMobileSyrianOperator(filenameExcel + ";" + filenamePDF, Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        EmailManager.SendReporttoMobileSyrianOperator(filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
                     }
                     else
                     {
-                        EmailManager.SendReporttoMobileOperator(filenameExcel, Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        EmailManager.SendReporttoMobileOperator(filenameExcel, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
 
                     }
 
                 }
 
 
+                if (mobileOperator.EnableAutoBlock && !string.IsNullOrEmpty(mobileOperator.AutoBlockEmail))
+                {
+                    HashSet<string> ListCLIs = new HashSet<string>();
+                    foreach (GridDataItem item in gvGeneratedCalls.Items)
+                    {
+                        if (item.Selected)
+                        {
+                            ListCLIs.Add(item.GetDataKeyValue("CLI").ToString());
+                        }
+                    }
 
-
+                    EmailManager.SendAutoBlockReport(mobileOperator.AutoBlockEmail, ListCLIs, report.ReportID, profile_name);
+                }
 
 
                 gvGeneratedCalls.Rebind();
@@ -407,7 +420,7 @@ public partial class ToBeReportedCases : BasePage
         {
             ShowAlert("Email not sent, kindly try again later");
         }
-      
+
 
     }
 
@@ -503,5 +516,5 @@ public partial class ToBeReportedCases : BasePage
 
     #endregion
 
-   
+
 }

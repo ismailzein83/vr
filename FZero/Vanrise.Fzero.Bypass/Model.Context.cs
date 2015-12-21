@@ -1334,5 +1334,19 @@ namespace Vanrise.Fzero.Bypass
     
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<string>("[Entities].[Split](@input)", inputParameter);
         }
+    
+        [EdmFunction("Entities", "SplitwithValue")]
+        public virtual IQueryable<SplitwithValue_Result> SplitwithValue(string input, Nullable<int> extraValue)
+        {
+            var inputParameter = input != null ?
+                new ObjectParameter("input", input) :
+                new ObjectParameter("input", typeof(string));
+    
+            var extraValueParameter = extraValue.HasValue ?
+                new ObjectParameter("ExtraValue", extraValue) :
+                new ObjectParameter("ExtraValue", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<SplitwithValue_Result>("[Entities].[SplitwithValue](@input, @ExtraValue)", inputParameter, extraValueParameter);
+        }
     }
 }

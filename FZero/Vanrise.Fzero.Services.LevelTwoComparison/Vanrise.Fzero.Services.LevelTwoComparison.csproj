@@ -109,12 +109,6 @@
     <None Include="Service References\ServiceReference1\service1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ServiceReference1\Vanrise.Fzero.Services.LevelTwoComparison.ServiceReference1.generatedCall.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\ServiceReference1\Vanrise.Fzero.Services.LevelTwoComparison.ServiceReference1.RecievedEmail.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
     <None Include="Service References\ServiceReference1\WcfServiceLibraryImport.xsd">
       <SubType>Designer</SubType>
     </None>

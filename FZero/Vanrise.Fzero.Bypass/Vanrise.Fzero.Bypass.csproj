@@ -316,6 +316,9 @@
     <Compile Include="SourceType.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="SplitwithValue_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

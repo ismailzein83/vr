@@ -232,7 +232,7 @@
                                                     <Selecting AllowRowSelect="true" UseClientSelectColumnOnly="true" />
                                                     <ClientEvents OnRowSelecting="RowSelecting" />
                                                 </ClientSettings>
-                                                <MasterTableView DataKeyNames="ID, ReportingStatusID" ClientDataKeyNames="ID, ReportingStatusID" ShowGroupFooter="true">
+                                                <MasterTableView DataKeyNames="ID, ReportingStatusID, CLI" ClientDataKeyNames="ID, ReportingStatusID, CLI" ShowGroupFooter="true">
                                                     <Columns>
                                                         <telerik:GridClientSelectColumn UniqueName="Select"></telerik:GridClientSelectColumn>
                                                         <telerik:GridBoundColumn DataField="CaseID" UniqueName="CaseID" Aggregate="Count" />

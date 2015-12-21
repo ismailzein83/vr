@@ -20,6 +20,29 @@ namespace Vanrise.Fzero.Bypass
             }
         }
 
+
+        public static void SendAutoBlockReport(string toEmail, HashSet<string> CLIs, string ReportID, string profile_name)
+        {
+            string CLIConcatenated = string.Empty;
+            int ID = (int)Enums.EmailTemplates.AutoBlockReport;
+            EmailTemplate template = EmailTemplate.Load(ID);
+            if (template.IsActive)
+            {
+                Email email = new Email() { EmailTemplateID = ID };
+                email.DestinationEmail = toEmail;
+                email.Subject = template.Subject.Replace("%ReportID%", ReportID);
+                email.CC = string.Empty;
+
+
+                foreach (var i in CLIs)
+                    CLIConcatenated += "<br />" + i + "<br />";
+
+                email.Body = template.MessageBody.Replace("%CLIs%", CLIConcatenated).Replace("%Total%", CLIs.Count.ToString());
+                Email.SendMailWithAttachement(email, string.Empty, profile_name);
+            }
+        }
+
+
         public static void SendReporttoMobileOperator(string AttachedPath, string toEmail, string OperatorLink, string CC, string ReportID, string profile_name)
         {
             int ID = (int)Enums.EmailTemplates.ReporttoMobileOperator;
@@ -147,22 +170,22 @@ namespace Vanrise.Fzero.Bypass
             if (template.IsActive)
             {
                 string Cases = string.Empty;
-              
+
 
                 foreach (string i in cases)
                 {
                     Cases += "<li>" + i + "</li>";
                 }
-               
-                    Cases = "<ul>" + Cases + "</ul>";
-               
 
-                    Email email = new Email() { EmailTemplateID = id };
-                    email.DestinationEmail = toEmail;
-                    email.Subject = template.Subject;
-                    email.Body = template.MessageBody.Replace("%Cases%", Cases).Replace("%ReportID%", ReportID);
+                Cases = "<ul>" + Cases + "</ul>";
 
-                    Email.SendMail(email, profile_name);
+
+                Email email = new Email() { EmailTemplateID = id };
+                email.DestinationEmail = toEmail;
+                email.Subject = template.Subject;
+                email.Body = template.MessageBody.Replace("%Cases%", Cases).Replace("%ReportID%", ReportID);
+
+                Email.SendMail(email, profile_name);
             }
         }
 
