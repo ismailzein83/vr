@@ -105,9 +105,9 @@ namespace TOne.WhS.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public MemoryStream UploadCodeGroupList(int fileId)
+        public UploadCodeGroupLog UploadCodeGroupList(int fileId)
         {
-
+            UploadCodeGroupLog uploadCodeGroupLog = new UploadCodeGroupLog();
             VRFileManager fileManager = new VRFileManager();
             VRFile file = fileManager.GetFile(fileId);
             byte[] bytes = file.Content;
@@ -158,12 +158,12 @@ namespace TOne.WhS.BusinessEntity.Business
             rowIndex++;
             colIndex = 0;
 
-           
+
             CountryManager countryManager = new CountryManager();
             Dictionary<string, CodeGroup> cachedCodeGroups = GetCachedCodeGroupsByCode();
 
             List<CodeGroup> importedCodeGroup = new List<CodeGroup>();
-           
+
             foreach (var code in addedCountriesByCodeGroup)
             {
                 RateWorkSheet.Cells[rowIndex, colIndex].PutValue(code.Key);
@@ -173,13 +173,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 Country country = countryManager.GetCountry(code.Value.ToLower());
                 CodeGroup codeGroup = null;
-                if (country!=null && !cachedCodeGroups.TryGetValue(code.Key, out codeGroup))
+                if (country != null && !cachedCodeGroups.TryGetValue(code.Key, out codeGroup))
                 {
                     importedCodeGroup.Add(new CodeGroup
                     {
-                        Code=code.Key,
+                        Code = code.Key,
                         CountryId = country.CountryId
                     });
+                    uploadCodeGroupLog.CountOfCodeGroupsAdded++;
                     RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Succeed");
                     colIndex = 0;
                     rowIndex++;
@@ -187,14 +188,15 @@ namespace TOne.WhS.BusinessEntity.Business
                 else
                 {
                     RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
-                  
+
                     colIndex++;
                     if (country == null && codeGroup != null)
-                      RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Country Not Exists and CodeGroup Exists");
+                        RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Country Not Exists and CodeGroup Exists");
                     else if (country == null && codeGroup == null)
                         RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Country Not Exists");
                     else if (country != null && codeGroup != null)
                         RateWorkSheet.Cells[rowIndex, colIndex].PutValue("CodeGroup Exists");
+                    uploadCodeGroupLog.CountOfCodeGroupsFailed++;
                     colIndex = 0;
                     rowIndex++;
                 }
@@ -206,9 +208,24 @@ namespace TOne.WhS.BusinessEntity.Business
             MemoryStream memoryStream = new MemoryStream();
             memoryStream = returnedExcel.SaveToStream();
 
-            return memoryStream;
-        }
+            VRFile saveFile = new VRFile()
+                {
+                    Content = memoryStream.ToArray(),
+                    Name = "CodeGroupLog",
+                    CreatedTime = DateTime.Now,
+                    Extension = ".xlsx"
+                };
+            VRFileManager manager = new VRFileManager();
+            uploadCodeGroupLog.fileID = manager.AddFile(saveFile);
 
+            return uploadCodeGroupLog;
+        }
+        public byte[] DownloadCodeGroupLog(long fileID)
+        {
+            VRFileManager fileManager = new VRFileManager();
+            VRFile file = fileManager.GetFile(fileID);
+            return file.Content;
+        }
         public byte[] DownloadCodeGroupListTemplate()
         {
             string physicalFilePath = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["DownloadCodeGroupTemplatePath"]);

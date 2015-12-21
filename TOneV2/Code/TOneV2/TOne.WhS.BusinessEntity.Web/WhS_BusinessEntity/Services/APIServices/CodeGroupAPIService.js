@@ -28,13 +28,16 @@
         function UploadCodeGroupList(fileId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CodeGroup", "UploadCodeGroupList"), {
                 fileId: fileId,
-            }, {
-                returnAllResponseParameters: true,
-                responseTypeAsBufferArray: true
             });
         }
         function DownloadCodeGroupListTemplate() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CodeGroup", "DownloadCodeGroupListTemplate"), {}, {
+                returnAllResponseParameters: true,
+                responseTypeAsBufferArray: true
+            });
+        }
+        function DownloadCodeGroupLog(fileID) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "CodeGroup", "DownloadCodeGroupLog"), { fileID: fileID }, {
                 returnAllResponseParameters: true,
                 responseTypeAsBufferArray: true
             });
@@ -47,7 +50,8 @@
             UpdateCodeGroup: UpdateCodeGroup,
             AddCodeGroup: AddCodeGroup,
             DownloadCodeGroupListTemplate: DownloadCodeGroupListTemplate,
-            UploadCodeGroupList: UploadCodeGroupList
+            UploadCodeGroupList: UploadCodeGroupList,
+            DownloadCodeGroupLog: DownloadCodeGroupLog
         });
     }
 
