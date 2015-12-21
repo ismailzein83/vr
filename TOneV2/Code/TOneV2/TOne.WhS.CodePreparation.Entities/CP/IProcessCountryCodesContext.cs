@@ -8,5 +8,8 @@ namespace TOne.WhS.CodePreparation.Entities.CP
 {
     public interface IProcessCountryCodesContext
     {
+        IEnumerable<ExistingCode> ExistingCodes { get; }
+
+        IEnumerable<ExistingZone> ExistingZones { get; }
     }
 }
