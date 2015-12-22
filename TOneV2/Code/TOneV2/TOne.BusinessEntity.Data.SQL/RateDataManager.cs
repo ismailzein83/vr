@@ -197,7 +197,46 @@ namespace TOne.BusinessEntity.Data.SQL
 
         public void SaveRates(List<Rate> rates)
         {
-            InsertBulkToTable(PrepareRatesDBApply(rates) as BaseBulkInsertInfo);
+            DataTable dtRates = BuildRatesDataTable(rates);
+            WriteDataTableToDB(dtRates, SqlBulkCopyOptions.KeepNulls);
+        }
+
+        DataTable BuildRatesDataTable(List<Rate> rates)
+        {
+            DataTable dtRates = new DataTable();
+            dtRates.Columns.Add("PriceListID", typeof(int));
+            dtRates.Columns.Add("ZoneID", typeof(int));
+            dtRates.Columns.Add("Rate", typeof(decimal));
+            dtRates.Columns.Add("OffPeakRate", typeof(decimal));
+            dtRates.Columns.Add("WeekendRate", typeof(decimal));
+            dtRates.Columns.Add("Change", typeof(short));
+            dtRates.Columns.Add("ServicesFlag", typeof(short));
+            dtRates.Columns.Add("BeginEffectiveDate", typeof(DateTime));
+            dtRates.Columns.Add("EndEffectiveDate", typeof(DateTime));
+            dtRates.Columns.Add("Notes", typeof(string));
+            dtRates.Columns.Add("UserID", typeof(int));
+            dtRates.TableName = "Rate";
+            dtRates.BeginLoadData();
+            foreach (var r in rates)
+            {
+                DataRow dr = dtRates.NewRow();
+                dr["PriceListID"] = r.PriceListId;
+                dr["ZoneID"] = r.ZoneId;
+                dr["Rate"] = r.NormalRate;
+                dr["OffPeakRate"] = r.OffPeakRate;
+                dr["WeekendRate"] = r.WeekendRate;
+                dr["Change"] = r.Change;
+                dr["ServicesFlag"] = r.ServicesFlag;
+                dr["BeginEffectiveDate"] = r.BeginEffectiveDate;
+                dr["EndEffectiveDate"] = r.EndEffectiveDate.HasValue ? (object)r.EndEffectiveDate.Value : DBNull.Value;
+                dr["UserID"] = 0;
+                dr["Notes"] = "Created From Mobile.";
+
+                dtRates.Rows.Add(dr);
+            }
+            dtRates.EndLoadData();
+            return dtRates;
+
         }
 
         private object PrepareRatesDBApply(List<Rate> rates)
