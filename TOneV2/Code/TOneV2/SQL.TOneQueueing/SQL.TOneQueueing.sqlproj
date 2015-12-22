@@ -107,6 +107,7 @@
     <Folder Include="Security\" />
     <Folder Include="queue\Functions\" />
     <Folder Include="queue\User Defined Types\" />
+    <Folder Include="queue\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="queue\Tables\QueueItemHeader.sql" />
@@ -122,8 +123,6 @@
       <QuotedIdentifier>Off</QuotedIdentifier>
     </Build>
     <Build Include="Security\queue.sql" />
-    <Build Include="queue\Tables\QueueActivation.sql" />
-    <Build Include="queue\Stored Procedures\sp_QueueActivation_GetUpdatedQueueIds.sql" />
     <Build Include="queue\Functions\ParseStringList.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
@@ -138,6 +137,14 @@
       <QuotedIdentifier>Off</QuotedIdentifier>
     </Build>
     <Build Include="queue\User Defined Types\ItemIds.sql" />
+    <Build Include="queue\Tables\LKUP_QueueItemStatus.sql">
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
+    <Build Include="queue\Views\vw_QueueItemHeader.sql">
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

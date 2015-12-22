@@ -102,7 +102,6 @@
     <Build Include="queue\Stored Procedures\sp_QueueInstance_UpdateName.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueInstance_UpdateStatus.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueItemType_InsertOrUpdate.sql" />
-    <Build Include="queue\Stored Procedures\sp_QueueInstance_GetByName.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueInstance_Insert.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueSubscription_GetAll.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinitionState_Update.sql" />
@@ -118,7 +117,6 @@
     <Build Include="Security\runtime.sql" />
     <Build Include="Security\queue.sql" />
     <Build Include="Security\bp.sql" />
-    <Build Include="queue\Stored Procedures\sp_QueueInstance_GetByIDs.sql" />
     <Build Include="queue\User Defined Types\IDIntType.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetByID.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_UpdateStatuses.sql" />
@@ -154,7 +152,6 @@
     <Build Include="queue\Stored Procedures\sp_ExecutionFlow_GetByID.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueInstance_Update.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueItemTypes_GetAll.sql" />
-    <Build Include="queue\Stored Procedures\sp_QueueInstance_GetByTypes.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_CreateTempForFiltered.sql" />
     <Build Include="queue\Stored Procedures\sp_ExecutionFlow_GetAll.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetRecent.sql" />
@@ -172,6 +169,7 @@
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_CreateTempByName.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSource_CreateTemp.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_UpdateInfo.sql" />
+    <Build Include="queue\Stored Procedures\sp_QueueInstance_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
