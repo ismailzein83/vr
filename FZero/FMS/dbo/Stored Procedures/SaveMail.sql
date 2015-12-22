@@ -10,7 +10,7 @@ CREATE PROCEDURE [dbo].[SaveMail]
 	@recipients varchar(250),
 	@subject nvarchar(250),
 	@body nvarchar(max), 
-	@copy_recipients nvarchar (250),
+	@copy_recipients nvarchar (250)='',
 	@EmailTemplateId int
 
 	

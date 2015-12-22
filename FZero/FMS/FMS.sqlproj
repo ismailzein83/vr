@@ -150,7 +150,6 @@
     <Build Include="dbo\Stored Procedures\prGetRepeatedCases.sql" />
     <Build Include="dbo\Stored Procedures\prGetFraudCases_LoadonDemand.sql" />
     <Build Include="dbo\Stored Procedures\prGetFraudCases.sql" />
-    <Build Include="dbo\Stored Procedures\prGetEmails.sql" />
     <Build Include="dbo\Stored Procedures\prGetAllCases_LoadonDemand.sql" />
     <Build Include="dbo\Stored Procedures\prGetAllCases.sql" />
     <Build Include="dbo\Stored Procedures\prDeleteEmail.sql" />
@@ -164,5 +163,6 @@
     <Build Include="dbo\Stored Procedures\prGetReportedCalls_1.sql" />
     <Build Include="dbo\Stored Procedures\prGetReportedCalls.sql" />
     <Build Include="dbo\Functions\Split.sql" />
+    <Build Include="dbo\Functions\SplitwithValue.sql" />
   </ItemGroup>
 </Project>
