@@ -46,6 +46,9 @@
     <Compile Include="BaseRule.cs" />
     <Compile Include="BaseRuleStructureBehavior.cs" />
     <Compile Include="BaseRuleTarget.cs" />
+    <Compile Include="DynamicRules\DynamicRule.cs" />
+    <Compile Include="DynamicRules\DynamicRuleCriteria.cs" />
+    <Compile Include="DynamicRules\DynamicRuleCriteriaFieldValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleManager.cs" />
     <Compile Include="RuleNode.cs" />
