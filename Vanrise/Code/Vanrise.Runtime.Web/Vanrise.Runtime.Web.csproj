@@ -102,10 +102,14 @@
     <Content Include="Runtime\Constants\TimeSchedulerTypeEnum.js" />
     <Content Include="Runtime\Directives\SchedulerTask\Templates\SchedulerTaskGridTemplate.html" />
     <Content Include="Runtime\Directives\SchedulerTask\vr-runtime-schedulertask-grid.js" />
+    <Content Include="Runtime\Directives\TaskAction\Templates\TaskActionGroup.html" />
+    <Content Include="Runtime\Directives\TaskAction\vr-runtime-taskaction-group.js" />
     <Content Include="Runtime\Services\APIServices\SchedulerTaskAPIService.js" />
     <Content Include="Runtime\Services\SchedulerTaskService.js" />
     <Content Include="Runtime\Views\ActionTemplates\WFActionTemplate.html" />
     <Content Include="Runtime\Views\ActionTemplates\WFActionTemplateController.js" />
+    <Content Include="Runtime\Views\NewSchedulerTaskEditor\NewSchedulerTaskEditor.html" />
+    <Content Include="Runtime\Views\NewSchedulerTaskEditor\NewSchedulerTaskEditorController.js" />
     <Content Include="Runtime\Views\SchedulerTaskEditor.html" />
     <Content Include="Runtime\Views\SchedulerTaskEditorController.js" />
     <Content Include="Runtime\Views\SchedulerTaskManagement.html" />
@@ -138,6 +142,9 @@
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Runtime\Directives\TaskTrigger\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

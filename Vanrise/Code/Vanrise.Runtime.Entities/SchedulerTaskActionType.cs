@@ -23,5 +23,7 @@ namespace Vanrise.Runtime.Entities
 
         public string FQTN { get; set; }
 
+        public string Editor { get; set; }
+
     }
 }

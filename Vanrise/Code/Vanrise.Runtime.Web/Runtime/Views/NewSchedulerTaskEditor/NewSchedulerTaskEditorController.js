@@ -1,0 +1,194 @@
+﻿newSchedulerTaskEditorController.$inject = ['$scope', 'SchedulerTaskAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+
+function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+
+    var editMode;
+    var taskId;
+    var actionTypeId;
+    var additionalParameter;
+    loadParameters();
+    defineScope();
+    load();
+
+    function loadParameters() {
+        var parameters = VRNavigationService.getParameters($scope);
+        taskId = undefined;
+        actionTypeId = undefined;
+        additionalParameter = undefined;
+
+        if (parameters != undefined && parameters != null)
+        {
+            taskId = parameters.taskId;
+            actionTypeId = parameters.actionTypeId;
+            additionalParameter = parameters.additionalParameter;
+        }
+        
+
+        if (taskId != undefined)
+            editMode = true;
+        else
+            editMode = false;
+    }
+
+    function defineScope() {
+        $scope.scopeModel = {};
+        $scope.SaveTask = function () {
+            if (editMode) {
+                return updateTask();
+            }
+            else {
+                return insertTask();
+            }
+        };
+
+        $scope.close = function () {
+            $scope.modalContext.closeModal()
+        };
+
+        $scope.triggerTypes = [];
+        $scope.schedulerTaskTrigger = {};
+
+        $scope.actionTypes = [];
+        $scope.schedulerTaskAction = {};
+
+        $scope.startEffDate = new Date();
+        $scope.endEffDate = undefined;
+    }
+
+    function load() {
+        
+        $scope.isGettingData = true;
+        UtilsService.waitMultipleAsyncOperations([loadTriggers, loadActions]).then(function () {
+            
+
+            if (editMode) {
+                getTask();
+            }
+            else {
+                $scope.title ="test"// UtilsService.buildTitleForAddEditor("Task");
+                $scope.selectedTriggerType = UtilsService.getItemByVal($scope.triggerTypes, 1, "TriggerTypeId");
+                if (actionTypeId != undefined) {
+                    $scope.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, actionTypeId, "ActionTypeId");
+                }
+                else {
+                    $scope.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, 1, "ActionTypeId");
+                }
+
+                if (additionalParameter != undefined) {
+                    $scope.schedulerTaskAction.additionalParameter = additionalParameter;
+                }
+
+
+                $scope.isGettingData = false;
+
+            }
+
+        }).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+            $scope.isGettingData = false;
+        });
+    }
+
+    function getTask() {
+        return SchedulerTaskAPIService.GetTask(taskId)
+           .then(function (response) {
+               fillScopeFromTaskObj(response);
+           })
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isGettingData = false;
+            });
+    }
+
+    function loadTriggers()
+    {
+        return SchedulerTaskAPIService.GetSchedulerTaskTriggerTypes().then(function (response) {
+            angular.forEach(response, function (item) {
+                $scope.triggerTypes.push(item);
+            });
+        });
+    }
+
+    function loadActions() {
+        return SchedulerTaskAPIService.GetSchedulerTaskActionTypes().then(function (response) {
+            angular.forEach(response, function (item) {
+                if (!item.Info.SystemType)
+                {
+                    $scope.actionTypes.push(item);
+                }
+            });
+        });
+    }
+
+    function buildTaskObjFromScope() {
+        var taskObject = {
+            TaskId: (taskId != null) ? taskId : 0,
+            Name: $scope.scopeModel.name,
+            IsEnabled: $scope.scopeModel.isEnabled,
+            TaskType: 1,
+            TriggerTypeId: $scope.scopeModel.selectedTriggerType.TriggerTypeId,
+            ActionTypeId: $scope.scopeModel.selectedActionType.ActionTypeId,
+            TaskSettings:
+                {
+                    TaskTriggerArgument: $scope.schedulerTaskTrigger.getData(),
+                    TaskActionArgument: $scope.schedulerTaskAction.getData(),
+                    StartEffDate:$scope.scopeModel.startEffDate,
+                    EndEffDate: $scope.scopeModel.endEffDate
+                }
+        };
+        return taskObject;
+    }
+
+    function fillScopeFromTaskObj(taskObject) {
+        $scope.title = UtilsService.buildTitleForUpdateEditor(taskObject.Name, "Task");
+        $scope.scopeModel.name = taskObject.Name;
+        $scope.scopeModel.isEnabled = taskObject.IsEnabled;
+
+        $scope.scopeModel.selectedTriggerType = UtilsService.getItemByVal($scope.triggerTypes, taskObject.TriggerTypeId, "TriggerTypeId");
+        $scope.scopeModel.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, taskObject.ActionTypeId, "ActionTypeId");
+
+        $scope.schedulerTaskTrigger.data = taskObject.TaskSettings.TaskTriggerArgument;
+        if ($scope.schedulerTaskTrigger.loadTemplateData != undefined)
+            $scope.schedulerTaskTrigger.loadTemplateData();
+
+        $scope.schedulerTaskAction.data = taskObject.TaskSettings.TaskActionArgument;
+        if ($scope.schedulerTaskAction.loadTemplateData != undefined)
+            $scope.schedulerTaskAction.loadTemplateData();
+
+        $scope.scopeModel.startEffDate = taskObject.TaskSettings.StartEffDate;
+        $scope.scopeModel.endEffDate = taskObject.TaskSettings.EndEffDate;
+    }
+
+    function insertTask() {
+        $scope.issaving = true;
+        var taskObject = buildTaskObjFromScope();
+        return SchedulerTaskAPIService.AddTask(taskObject)
+        .then(function (response) {
+            if (VRNotificationService.notifyOnItemAdded("Schedule Task", response)) {
+                if ($scope.onTaskAdded != undefined)
+                    $scope.onTaskAdded(response.InsertedObject);
+                $scope.modalContext.closeModal();
+            }
+        }).catch(function (error) {
+            VRNotificationService.notifyException(error, $scope);
+        });
+
+    }
+
+    function updateTask() {
+        var taskObject = buildTaskObjFromScope();
+        console.log(taskObject)
+        //SchedulerTaskAPIService.UpdateTask(taskObject)
+        //.then(function (response) {
+        //    if (VRNotificationService.notifyOnItemUpdated("Schedule Task", response)) {
+        //        if ($scope.onTaskUpdated != undefined)
+        //            $scope.onTaskUpdated(response.UpdatedObject);
+        //        $scope.modalContext.closeModal();
+        //    }
+        //}).catch(function (error) {
+        //    VRNotificationService.notifyException(error, $scope);
+        //});
+    }
+}
+appControllers.controller('Runtime_NewSchedulerTaskEditorController', newSchedulerTaskEditorController);
