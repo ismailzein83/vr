@@ -10,7 +10,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
 
     public class ZonePreview
     {
-        public string ZoneName { get; set; }
+        public string Name { get; set; }
 
         public ZoneChangeType ChangeType { get; set; }
 

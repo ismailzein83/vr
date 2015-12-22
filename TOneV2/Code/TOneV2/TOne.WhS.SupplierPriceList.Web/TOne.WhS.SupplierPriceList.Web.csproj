@@ -131,6 +131,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_SupplierPriceList\Constant\RateChangeTypeEnum.js" />
+    <Content Include="WhS_SupplierPriceList\Constant\CodeChangeTypeEnum.js" />
+    <Content Include="WhS_SupplierPriceList\Constant\ZoneChangeTypeEnum.js" />
     <Content Include="WhS_SupplierPriceList\Directives\RatePreview\Templates\SupplierPriceListRatePreviewGridTemplate.html" />
     <Content Include="WhS_SupplierPriceList\Directives\RatePreview\vr-spl-ratepreview-grid.js" />
     <Content Include="WhS_SupplierPriceList\Directives\ZonePreview\Templates\SupplierPriceListZonePreviewGridTemplate.html" />

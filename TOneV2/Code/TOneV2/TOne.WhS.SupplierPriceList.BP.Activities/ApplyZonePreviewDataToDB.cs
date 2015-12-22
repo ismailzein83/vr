@@ -35,7 +35,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 {
                     zonePreviewList.Add(new ZonePreview()
                     {
-                        ZoneName = item.Name,
+                        Name = item.Name,
                         ChangeType = ZoneChangeType.New,
                         BED = item.BED,
                         EED = item.EED
@@ -51,7 +51,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     {
                         zonePreviewList.Add(new ZonePreview()
                         {
-                            ZoneName = item.ZoneEntity.Name,
+                            Name = item.ZoneEntity.Name,
                             ChangeType = (item.BED == item.ChangedZone.EED) ? ZoneChangeType.Deleted : ZoneChangeType.Closed,
                             BED = item.BED,
                             EED = item.ChangedZone.EED

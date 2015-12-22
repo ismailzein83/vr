@@ -51,7 +51,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}",
                 priceListId,
-                record.ZoneName,
+                record.Name,
                 (int)record.ChangeType,
                 record.BED,
                 record.EED);
@@ -81,7 +81,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         {
             ZonePreview zonePreview = new ZonePreview
             {
-                ZoneName= reader["Name"] as string,
+                Name = reader["Name"] as string,
                 ChangeType = (ZoneChangeType)GetReaderValue<int>(reader, "ChangeType"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime>(reader, "EED")

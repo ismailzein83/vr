@@ -5,7 +5,7 @@ app.service('WhS_SupPL_SupplierPriceListService', ['VRModalService', 'VRNotifica
             previewSupplierPriceList: previewSupplierPriceList
         });
 
-        function previewSupplierPriceList() {
+        function previewSupplierPriceList(priceListId) {
            
             var settings = {
             };
@@ -14,7 +14,9 @@ app.service('WhS_SupPL_SupplierPriceListService', ['VRModalService', 'VRNotifica
                 modalScope.title = "Supplier PriceList Preview";
 
             };
-            var parameters;
+            var parameters = {
+                PriceListId: priceListId
+            };
 
             VRModalService.showModal('/Client/Modules/WhS_SupplierPriceList/Views/SupplierPriceListPreview.html', parameters, settings);
         }

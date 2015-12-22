@@ -39,7 +39,7 @@ function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIServi
             });
         }
         $scope.previewSupplierPriceList = function () {
-            WhS_SupPL_SupplierPriceListService.previewSupplierPriceList();
+            WhS_SupPL_SupplierPriceListService.previewSupplierPriceList(228);
         }
         
 

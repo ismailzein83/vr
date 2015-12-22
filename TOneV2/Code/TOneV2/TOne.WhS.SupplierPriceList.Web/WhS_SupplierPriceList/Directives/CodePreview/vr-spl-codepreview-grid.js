@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrSplCodepreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VRValidationService",
-function (WhS_SupPL_SupplierPriceListPreviewPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService) {
+app.directive("vrSplCodepreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "VRNotificationService","WhS_SupPL_CodeChangeTypeEnum",
+function (WhS_SupPL_SupplierPriceListPreviewPIService,   VRNotificationService , WhS_SupPL_CodeChangeTypeEnum) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -39,7 +39,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, UtilsService, VRUIUtilsSe
                     function getDirectiveAPI() {
 
                         var directiveAPI = {};
-                        directiveAPI.loadGrid = function (query) {
+                        directiveAPI.load = function (query) {
 
                             return gridAPI.retrieveData(query);
                         }
@@ -47,9 +47,31 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, UtilsService, VRUIUtilsSe
                         return directiveAPI;
                     }
                 };
+                function getValueType(enumname ,value) {
+                    switch (value) {
+                        case enumname.NotChanged.value:
+                            return enumname.NotChanged.description;
+                            break;
+                        case enumname.New.value:
+                            return enumname.New.description;
+                            break;
+                        case enumname.Deleted.value:
+                            return enumname.Deleted.description;
+                            break;
+                        case enumname.Moved.value:
+                            return enumname.Moved.description;
+                            break;
+                        default:
+                            return undefined;
+                    }
+                }
+
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return WhS_SupPL_SupplierPriceListPreviewPIService.GetFilteredCodePreview(dataRetrievalInput)
                         .then(function (response) {
+                            for (var i = 0 ; i < response.Data.length ; i++) {
+                                response.Data[i].ChangeTypeText = getValueType(WhS_SupPL_CodeChangeTypeEnum , response.Data[i].ChangeType)
+                            }
                             onResponseReady(response);
                         })
                         .catch(function (error) {
@@ -58,7 +80,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, UtilsService, VRUIUtilsSe
                 };
             }
         }
-
+       
         return directiveDefinitionObject;
         
 }]);

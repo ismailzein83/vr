@@ -79,7 +79,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         {
             RatePreview ratePreview = new RatePreview
             {
-                ZoneName = reader["Name"] as string,
+                ZoneName = reader["ZoneName"] as string,
                 ChangeType = (RateChangeType)GetReaderValue<int>(reader, "ChangeType"),
                 RecentRate = GetReaderValue<decimal>(reader, "RecentRate"),
                 NewRate = GetReaderValue<decimal>(reader, "NewRate"),
