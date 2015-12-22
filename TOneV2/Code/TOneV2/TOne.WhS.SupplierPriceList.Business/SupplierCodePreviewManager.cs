@@ -37,12 +37,12 @@ namespace TOne.WhS.SupplierPriceList.Business
             CodePreviewDetail codePreviewDetail = new CodePreviewDetail();
 
             codePreviewDetail.Entity = codePreview;
-            var changeEnum = Utilities.GetEnumAttribute<CodeChangeType, DescriptionAttribute>((CodeChangeType)codePreview.ChangeType);
+            var changeTypeAttribute = Utilities.GetEnumAttribute<CodeChangeType, DescriptionAttribute>(codePreview.ChangeType);
 
-            if (changeEnum.Description != null)
-                codePreviewDetail.ChangeTypeDecription = changeEnum.Description;
+            if (changeTypeAttribute!= null)
+                codePreviewDetail.ChangeTypeDecription = changeTypeAttribute.Description;
             else
-                codePreviewDetail.ChangeTypeDecription = changeEnum.ToString();
+                codePreviewDetail.ChangeTypeDecription = codePreview.ChangeType.ToString();
             return codePreviewDetail;
         }
     }

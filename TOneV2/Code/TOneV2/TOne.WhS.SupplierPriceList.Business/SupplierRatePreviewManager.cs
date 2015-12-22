@@ -38,12 +38,12 @@ namespace TOne.WhS.SupplierPriceList.Business
             RatePreviewDetail ratePreviewDetail = new RatePreviewDetail();
 
             ratePreviewDetail.Entity = ratePreview;
-            var changeEnum = Utilities.GetEnumAttribute<RateChangeType, DescriptionAttribute>((RateChangeType)ratePreview.ChangeType);
+            var changeTypeAttribute = Utilities.GetEnumAttribute<RateChangeType, DescriptionAttribute>(ratePreview.ChangeType);
 
-            if (changeEnum.Description != null)
-                ratePreviewDetail.ChangeTypeDecription = changeEnum.Description;
+            if (changeTypeAttribute != null)
+                ratePreviewDetail.ChangeTypeDecription = changeTypeAttribute.Description;
             else
-                ratePreviewDetail.ChangeTypeDecription = changeEnum.ToString();
+                ratePreviewDetail.ChangeTypeDecription = ratePreview.ChangeType.ToString();
             return ratePreviewDetail;
         }
     }
