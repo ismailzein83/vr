@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Enums.cs" />
-    <Compile Include="Classes\GeneratedCall.cs" />
+    <Compile Include="Classes\TOneGeneratedCall.cs" />
     <Compile Include="GeneratedCall.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

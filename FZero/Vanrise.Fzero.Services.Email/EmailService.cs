@@ -9,6 +9,7 @@ using System.Timers;
 using System.Web;
 using OpenPop.Mime;
 using OpenPop.Pop3;
+using Vanrise.Fzero.Bypass;
 
 
 namespace Vanrise.Fzero.Services.Email
@@ -38,7 +39,6 @@ namespace Vanrise.Fzero.Services.Email
         protected override void OnStart(string[] args)
         {
             base.RequestAdditionalTime(60000); // 10 minutes timeout for startup
-            // Debugger.Launch(); // launch and attach debugger
             aTimer = new System.Timers.Timer(300000);// 5 minutes
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             aTimer.Interval = 300000;// 5 minutes
@@ -49,11 +49,12 @@ namespace Vanrise.Fzero.Services.Email
 
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            ServiceReference1.FzeroServiceClient myService = new ServiceReference1.FzeroServiceClient();
-            ServiceReference1.RecievedEmail NewEmailRecieved = new ServiceReference1.RecievedEmail();
+            RecievedEmail NewEmailRecieved = new RecievedEmail();
+            FzeroService fzeroService = new FzeroService();
+
             try
             {
-                ServiceReference1.RecievedEmail LastEmailRecieved = null;
+                RecievedEmail LastEmailRecieved = null;
                 int SourceID = 0;
                 Pop3Client pop3Client;
                 pop3Client = new Pop3Client();
@@ -69,11 +70,11 @@ namespace Vanrise.Fzero.Services.Email
                         NewEmailRecieved.DateSent = message.Headers.DateSent;
                         NewEmailRecieved.MessageID = message.Headers.MessageId;
                         NewEmailRecieved.ReadDate = DateTime.Now;
-                        SourceID = myService.GetSourceIDByEmail(message.Headers.From.Address);
+                        SourceID = fzeroService.GetSourceIDByEmail(message.Headers.From.Address);
                         if (SourceID != 0)
                         {
                             DateTime? LastDateTime = null;
-                            LastEmailRecieved = myService.GetLastEmailRecieved(SourceID);
+                            LastEmailRecieved = fzeroService.GetLastEmailRecieved(SourceID);
                             if (LastEmailRecieved != null)
                             {
                                 LastDateTime = LastEmailRecieved.DateSent;
@@ -87,7 +88,7 @@ namespace Vanrise.Fzero.Services.Email
                                 {
                                     if (attachment.ContentType.Name.Contains(".xml") || attachment.ContentType.Name.Contains(".xls") || attachment.ContentType.Name.Contains(".xslx"))
                                     {
-                                        File.WriteAllBytes(ConfigurationManager.AppSettings["UploadPath"] + "\\" + myService.GetSourceNameByEmail(message.Headers.From.Address) + "\\" + message.Headers.MessageId + "_" + attachment.FileName, attachment.Body); //overwrites MessagePart.Body with attachment 
+                                        File.WriteAllBytes(ConfigurationManager.AppSettings["UploadPath"] + "\\" + fzeroService.GetSourceNameByEmail(message.Headers.From.Address) + "\\" + message.Headers.MessageId + "_" + attachment.FileName, attachment.Body); //overwrites MessagePart.Body with attachment 
                                     }
                                 }
                             }
@@ -98,7 +99,7 @@ namespace Vanrise.Fzero.Services.Email
                         }
 
                     }
-                    myService.SaveLastEmailRecieved(NewEmailRecieved);
+                    fzeroService.SaveLastEmailRecieved(NewEmailRecieved);
                     pop3Client.Disconnect();
                     pop3Client.Dispose();
                 }
@@ -109,7 +110,7 @@ namespace Vanrise.Fzero.Services.Email
                 ErrorLog("10.2: " + ex.InnerException);
                 ErrorLog("10.3: " + ex.Data);
                 ErrorLog("10.4: " + ex.ToString());
-                myService.SaveLastEmailRecieved(NewEmailRecieved);
+                fzeroService.SaveLastEmailRecieved(NewEmailRecieved);
             }
         }
 

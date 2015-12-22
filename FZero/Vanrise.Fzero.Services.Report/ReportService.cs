@@ -247,10 +247,10 @@ namespace Vanrise.Fzero.Services.Report
 
 
             if (ClientID == 3)
-                EmailManager.SendReporttoMobileSyrianOperator(filenameExcel + ";" + filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
 
             else
-                EmailManager.SendReporttoMobileOperator(filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
 
             MobileOperator mobileOperator = Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperatorID);
 

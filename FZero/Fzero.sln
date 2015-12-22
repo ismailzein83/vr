@@ -107,10 +107,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.Repe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.Report", "Vanrise.Fzero.Services.Report\Vanrise.Fzero.Services.Report.csproj", "{970A8CDF-2C4A-465A-8797-D58E708F7C66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.WCF", "Vanrise.Fzero.Services.WCF\Vanrise.Fzero.Services.WCF.csproj", "{BFF0D46A-6727-44FF-814E-1213E3F3CF26}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.WcfServiceLibrary", "Vanrise.Fzero.Services.WcfServiceLibrary\Vanrise.Fzero.Services.WcfServiceLibrary.csproj", "{15B3E0D2-6217-493A-A690-158C497F5318}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.WeeklyReport", "Vanrise.Fzero.Services.WeeklyReport\Vanrise.Fzero.Services.WeeklyReport.csproj", "{990E2C6C-70A1-47EE-AA39-6A6A875FA031}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{98EAF500-8DA4-44B9-897C-6F96B32C64AD}"
@@ -121,7 +117,7 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PSTNCDRAnalysis", "PSTNCDRA
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 22
+		SccNumberOfProjects = 20
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -164,38 +160,32 @@ Global
 		SccProjectUniqueName13 = Vanrise.Fzero.Services.Report\\Vanrise.Fzero.Services.Report.csproj
 		SccProjectName13 = Vanrise.Fzero.Services.Report
 		SccLocalPath13 = Vanrise.Fzero.Services.Report
-		SccProjectUniqueName14 = Vanrise.Fzero.Services.WCF\\Vanrise.Fzero.Services.WCF.csproj
-		SccProjectName14 = Vanrise.Fzero.Services.WCF
-		SccLocalPath14 = Vanrise.Fzero.Services.WCF
-		SccProjectUniqueName15 = Vanrise.Fzero.Services.WcfServiceLibrary\\Vanrise.Fzero.Services.WcfServiceLibrary.csproj
-		SccProjectName15 = Vanrise.Fzero.Services.WcfServiceLibrary
-		SccLocalPath15 = Vanrise.Fzero.Services.WcfServiceLibrary
-		SccProjectUniqueName16 = Vanrise.Fzero.Services.WeeklyReport\\Vanrise.Fzero.Services.WeeklyReport.csproj
-		SccProjectName16 = Vanrise.Fzero.Services.WeeklyReport
-		SccLocalPath16 = Vanrise.Fzero.Services.WeeklyReport
+		SccProjectUniqueName14 = Vanrise.Fzero.Services.WeeklyReport\\Vanrise.Fzero.Services.WeeklyReport.csproj
+		SccProjectName14 = Vanrise.Fzero.Services.WeeklyReport
+		SccLocalPath14 = Vanrise.Fzero.Services.WeeklyReport
+		SccWebProject15 = true
+		SccProjectUniqueName15 = http://localhost:2251
+		SccProjectName15 = Vanrise.Fzero.Bypass.ClientWebSite
+		SccLocalPath15 = Vanrise.Fzero.Bypass.ClientWebSite
+		SccProjectEnlistmentChoice15 = 2
+		SccWebProject16 = true
+		SccProjectUniqueName16 = http://localhost:2240
+		SccProjectName16 = Vanrise.Fzero.Bypass.WebSite
+		SccLocalPath16 = Vanrise.Fzero.Bypass.WebSite
+		SccProjectEnlistmentChoice16 = 2
 		SccWebProject17 = true
-		SccProjectUniqueName17 = http://localhost:2251
-		SccProjectName17 = Vanrise.Fzero.Bypass.ClientWebSite
-		SccLocalPath17 = Vanrise.Fzero.Bypass.ClientWebSite
+		SccProjectUniqueName17 = http://localhost:2244
+		SccProjectName17 = Vanrise.Fzero.CDRAnalysis.Website
+		SccLocalPath17 = Vanrise.Fzero.CDRAnalysis.Website
 		SccProjectEnlistmentChoice17 = 2
-		SccWebProject18 = true
-		SccProjectUniqueName18 = http://localhost:2240
-		SccProjectName18 = Vanrise.Fzero.Bypass.WebSite
-		SccLocalPath18 = Vanrise.Fzero.Bypass.WebSite
-		SccProjectEnlistmentChoice18 = 2
-		SccWebProject19 = true
-		SccProjectUniqueName19 = http://localhost:2244
-		SccProjectName19 = Vanrise.Fzero.CDRAnalysis.Website
-		SccLocalPath19 = Vanrise.Fzero.CDRAnalysis.Website
-		SccProjectEnlistmentChoice19 = 2
-		SccProjectUniqueName20 = FMS\\FMS.sqlproj
-		SccProjectTopLevelParentUniqueName20 = Fzero.sln
-		SccProjectName20 = FMS
-		SccLocalPath20 = FMS
-		SccProjectUniqueName21 = PSTNCDRAnalysis\\PSTNCDRAnalysis.sqlproj
-		SccProjectTopLevelParentUniqueName21 = Fzero.sln
-		SccProjectName21 = PSTNCDRAnalysis
-		SccLocalPath21 = PSTNCDRAnalysis
+		SccProjectUniqueName18 = FMS\\FMS.sqlproj
+		SccProjectTopLevelParentUniqueName18 = Fzero.sln
+		SccProjectName18 = FMS
+		SccLocalPath18 = FMS
+		SccProjectUniqueName19 = PSTNCDRAnalysis\\PSTNCDRAnalysis.sqlproj
+		SccProjectTopLevelParentUniqueName19 = Fzero.sln
+		SccProjectName19 = PSTNCDRAnalysis
+		SccLocalPath19 = PSTNCDRAnalysis
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -266,14 +256,6 @@ Global
 		{970A8CDF-2C4A-465A-8797-D58E708F7C66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{970A8CDF-2C4A-465A-8797-D58E708F7C66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{970A8CDF-2C4A-465A-8797-D58E708F7C66}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BFF0D46A-6727-44FF-814E-1213E3F3CF26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BFF0D46A-6727-44FF-814E-1213E3F3CF26}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BFF0D46A-6727-44FF-814E-1213E3F3CF26}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BFF0D46A-6727-44FF-814E-1213E3F3CF26}.Release|Any CPU.Build.0 = Release|Any CPU
-		{15B3E0D2-6217-493A-A690-158C497F5318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{15B3E0D2-6217-493A-A690-158C497F5318}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{15B3E0D2-6217-493A-A690-158C497F5318}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{15B3E0D2-6217-493A-A690-158C497F5318}.Release|Any CPU.Build.0 = Release|Any CPU
 		{990E2C6C-70A1-47EE-AA39-6A6A875FA031}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{990E2C6C-70A1-47EE-AA39-6A6A875FA031}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{990E2C6C-70A1-47EE-AA39-6A6A875FA031}.Release|Any CPU.ActiveCfg = Release|Any CPU

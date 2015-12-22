@@ -368,11 +368,11 @@ public partial class ToBeReportedCases : BasePage
                 {
                     if (ddlSearchClient.SelectedValue.ToInt() == 3)
                     {
-                        EmailManager.SendReporttoMobileSyrianOperator(filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
                     }
                     else
                     {
-                        EmailManager.SendReporttoMobileOperator(filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
 
                     }
 
@@ -381,11 +381,11 @@ public partial class ToBeReportedCases : BasePage
                 {
                     if (ddlSearchClient.SelectedValue.ToInt() == 3)
                     {
-                        EmailManager.SendReporttoMobileSyrianOperator(filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
                     }
                     else
                     {
-                        EmailManager.SendReporttoMobileOperator(filenameExcel, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        EmailManager.SendReporttoMobileOperator(ListIds.Count, filenameExcel, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
 
                     }
 

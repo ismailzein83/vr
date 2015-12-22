@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.Bypass.TOne
     using System;
     using System.Collections.Generic;
     
-    public partial class GeneratedCall
+    public partial class ToneGeneratedCall
     {
         public int ID { get; set; }
         public string CaseID { get; set; }

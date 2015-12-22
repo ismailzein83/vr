@@ -11,7 +11,7 @@ using Vanrise.CommonLibrary;
 
 namespace Vanrise.Fzero.Bypass.TOne
 {
-    public partial class GeneratedCall
+    public partial class ToneGeneratedCall
     {
         public static DataTable ConvertToDataTable<T>(IList<T> data)
         {
@@ -78,7 +78,7 @@ namespace Vanrise.Fzero.Bypass.TOne
                 bulkcopy.WriteToServer(dt);
             }
         }
-        public static bool SaveBulk(List<GeneratedCall> listGeneratedCalls)
+        public static bool SaveBulk(List<ToneGeneratedCall> listGeneratedCalls)
         {
             bool success = false;
             try
@@ -91,9 +91,9 @@ namespace Vanrise.Fzero.Bypass.TOne
             }
             return success;
         }
-        public static List<GeneratedCall> GetAnalyzed()
+        public static List<ToneGeneratedCall> GetAnalyzed()
         {
-            List<GeneratedCall> GeneratedCallsList = new List<GeneratedCall>();
+            List<ToneGeneratedCall> GeneratedCallsList = new List<ToneGeneratedCall>();
 
             try
             {

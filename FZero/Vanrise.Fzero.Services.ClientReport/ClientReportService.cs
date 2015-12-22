@@ -246,12 +246,12 @@ namespace Vanrise.Fzero.Services.ClientReport
             if (ClientID == 3)
             {
                 ExportReportToPDF(report.ReportID + ".pdf", rvToOperator);
-                EmailManager.SendReporttoMobileSyrianOperator(filenameExcel + ";" + filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Syria_Profile");
+                EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Syria_Profile");
 
             }
             else
             {
-                EmailManager.SendReporttoMobileOperator(filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Profile");
+                EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Profile");
 
             }
 

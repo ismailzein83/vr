@@ -28,7 +28,7 @@ namespace Vanrise.Fzero.Bypass.TOne
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<GeneratedCall> GeneratedCalls { get; set; }
+        public DbSet<ToneGeneratedCall> GeneratedCalls { get; set; }
     
         public virtual int FillReceivedCalls()
         {

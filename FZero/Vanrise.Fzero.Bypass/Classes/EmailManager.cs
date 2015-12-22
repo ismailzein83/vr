@@ -43,7 +43,7 @@ namespace Vanrise.Fzero.Bypass
         }
 
 
-        public static void SendReporttoMobileOperator(string AttachedPath, string toEmail, string OperatorLink, string CC, string ReportID, string profile_name)
+        public static void SendReporttoMobileOperator(int Total, string AttachedPath, string toEmail, string OperatorLink, string CC, string ReportID, string profile_name)
         {
             int ID = (int)Enums.EmailTemplates.ReporttoMobileOperator;
             EmailTemplate template = EmailTemplate.Load(ID);
@@ -53,12 +53,12 @@ namespace Vanrise.Fzero.Bypass
                 email.DestinationEmail = toEmail;
                 email.Subject = template.Subject.Replace("%ReportID%", ReportID);
                 email.CC = CC;
-                email.Body = template.MessageBody.Replace("%OperatorLink%", OperatorLink);
+                email.Body = template.MessageBody.Replace("%OperatorLink%", OperatorLink).Replace("%Total%", Total.ToString());
                 Email.SendMailWithAttachement(email, AttachedPath, profile_name);
             }
         }
 
-        public static void SendReporttoMobileSyrianOperator(string AttachedPath, string toEmail, string OperatorLink, string CC, string ReportID, string profile_name)
+        public static void SendReporttoMobileSyrianOperator(int Total, string AttachedPath, string toEmail, string OperatorLink, string CC, string ReportID, string profile_name)
         {
             int ID = (int)Enums.EmailTemplates.ReporttoMobileSyrianOperator;
             EmailTemplate template = EmailTemplate.Load(ID);
@@ -68,7 +68,7 @@ namespace Vanrise.Fzero.Bypass
                 email.DestinationEmail = toEmail;
                 email.Subject = template.Subject.Replace("%ReportID%", ReportID);
                 email.CC = CC;
-                email.Body = template.MessageBody.Replace("%OperatorLink%", OperatorLink);
+                email.Body = template.MessageBody.Replace("%OperatorLink%", OperatorLink).Replace("%Total%", Total.ToString());
                 Email.SendMailWithAttachement(email, AttachedPath, profile_name);
             }
         }

@@ -7,7 +7,7 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Timers;
 using System.Web;
-//using Vanrise.Fzero.Bypass;
+using Vanrise.Fzero.Bypass;
 using Vanrise.Fzero.Bypass.TOne;
 
 
@@ -58,11 +58,10 @@ namespace Vanrise.Fzero.Services.LevelTwoComparison
         {
             try
             {
-                ServiceReference1.FzeroServiceClient client = new ServiceReference1.FzeroServiceClient();
-                List<ServiceReference1.generatedCall> AnalyzedCallsList = new List<ServiceReference1.generatedCall>();
-                foreach (GeneratedCall VGC in GeneratedCall.GetAnalyzed())
+                List<GeneratedCall> AnalyzedCallsList = new List<GeneratedCall>();
+                foreach (ToneGeneratedCall VGC in ToneGeneratedCall.GetAnalyzed())
                 {
-                    ServiceReference1.generatedCall vGC = new ServiceReference1.generatedCall();
+                    GeneratedCall vGC = new GeneratedCall();
                     vGC.ID = VGC.ID;
                     vGC.SourceID = VGC.SourceID;
                     vGC.MobileOperatorID = VGC.MobileOperatorID;
@@ -91,17 +90,17 @@ namespace Vanrise.Fzero.Services.LevelTwoComparison
                     vGC.FeedbackNotes = VGC.FeedbackNotes;
                     AnalyzedCallsList.Add(vGC);
                 }
-                client.PerformLevelTwoComparison(AnalyzedCallsList.ToArray());
+                GeneratedCall.PerformLevelTwoComparison(AnalyzedCallsList);
 
 
-                GeneratedCall.TruncateGeneratedCalls();
+                ToneGeneratedCall.TruncateGeneratedCalls();
 
 
-                List<ServiceReference1.generatedCall> GeneratedCallsList = client.GetCallsDidNotPassLevelTwo(bool.Parse(System.Configuration.ConfigurationManager.AppSettings["LevelTwoComparisonIsObligatory"].ToString())).ToList();
-                List<GeneratedCall> listGC = new List<GeneratedCall>();
-                foreach (ServiceReference1.generatedCall VGC in GeneratedCallsList)
+                List<GeneratedCall> GeneratedCallsList = GeneratedCall.GetCallsDidNotPassLevelTwo(bool.Parse(System.Configuration.ConfigurationManager.AppSettings["LevelTwoComparisonIsObligatory"].ToString())).ToList();
+                List<ToneGeneratedCall> listGC = new List<ToneGeneratedCall>();
+                foreach (GeneratedCall VGC in GeneratedCallsList)
                 {
-                    GeneratedCall vGC = new GeneratedCall();
+                    ToneGeneratedCall vGC = new ToneGeneratedCall();
 
                     vGC.ID = VGC.ID;
                     vGC.SourceID = VGC.SourceID;
@@ -133,9 +132,9 @@ namespace Vanrise.Fzero.Services.LevelTwoComparison
                 }
 
 
-                    GeneratedCall.SaveBulk(listGC.ToList());
+                    ToneGeneratedCall.SaveBulk(listGC.ToList());
 
-                    GeneratedCall.FillReceivedCalls();
+                    ToneGeneratedCall.FillReceivedCalls();
                     
                     
 
