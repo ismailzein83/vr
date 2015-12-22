@@ -49,21 +49,28 @@ namespace Vanrise.Fzero.Services.Email
 
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
+            ErrorLog("1");
             RecievedEmail NewEmailRecieved = new RecievedEmail();
-          
+            ErrorLog("2");
             try
             {
                 RecievedEmail LastEmailRecieved = null;
                 int SourceID = 0;
                 Pop3Client pop3Client;
                 pop3Client = new Pop3Client();
+                ErrorLog("3");
                 pop3Client.Connect(ConfigurationManager.AppSettings["HostName"], int.Parse(ConfigurationManager.AppSettings["Port"]), bool.Parse(ConfigurationManager.AppSettings["EnableSSL"]));
+                ErrorLog("4");
                 pop3Client.Authenticate(ConfigurationManager.AppSettings["ListentoEmail"], ConfigurationManager.AppSettings["EmailPassword"], AuthenticationMethod.TryBoth);
+                ErrorLog("5");
                 if (pop3Client.Connected)
                 {
+                    ErrorLog("6");
                     int count = pop3Client.GetMessageCount();
+                    ErrorLog("7");
                     for (int i = 1; i <= count; i++)
                     {
+                        ErrorLog("8");
                         Message message = pop3Client.GetMessage(i);
 
                         NewEmailRecieved.DateSent = message.Headers.DateSent;
@@ -87,6 +94,7 @@ namespace Vanrise.Fzero.Services.Email
                                 {
                                     if (attachment.ContentType.Name.Contains(".xml") || attachment.ContentType.Name.Contains(".xls") || attachment.ContentType.Name.Contains(".xslx"))
                                     {
+                                        ErrorLog("9");
                                         File.WriteAllBytes(ConfigurationManager.AppSettings["UploadPath"] + "\\" + Source.GetByEmail(message.Headers.From.Address).Name + "\\" + message.Headers.MessageId + "_" + attachment.FileName, attachment.Body); //overwrites MessagePart.Body with attachment 
                                     }
                                 }
@@ -98,7 +106,9 @@ namespace Vanrise.Fzero.Services.Email
                         }
 
                     }
+                    ErrorLog("10");
                     RecievedEmail.Save(NewEmailRecieved);
+                    ErrorLog("11");
                     pop3Client.Disconnect();
                     pop3Client.Dispose();
                 }
