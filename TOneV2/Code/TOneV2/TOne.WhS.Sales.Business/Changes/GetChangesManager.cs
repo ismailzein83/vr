@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
@@ -11,7 +12,7 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class ChangesManager
+    public class GetChangesManager
     {
         SalePriceListOwnerType _ownerType;
         int _ownerId;
@@ -19,7 +20,7 @@ namespace TOne.WhS.Sales.Business
         DateTime _effectiveOn;
         Changes _changes;
 
-        public ChangesManager(SalePriceListOwnerType ownerType, int ownerId, int? sellingProductId, DateTime effectiveOn)
+        public GetChangesManager(SalePriceListOwnerType ownerType, int ownerId, int? sellingProductId, DateTime effectiveOn)
         {
             _ownerType = ownerType;
             _ownerId = ownerId;
@@ -81,6 +82,8 @@ namespace TOne.WhS.Sales.Business
             return summary;
         }
 
+        #region Get Filtered Zone Rate Changes
+
         public IEnumerable<ZoneRateChangesDetail> GetFilteredZoneRateChanges()
         {
             List<ZoneRateChangesDetail> details = null;
@@ -93,7 +96,7 @@ namespace TOne.WhS.Sales.Business
                 {
                     details = new List<ZoneRateChangesDetail>();
                     SaleZoneManager saleZoneManager = new SaleZoneManager();
-                    
+
                     var zoneIds = zoneChanges.MapRecords(itm => itm.ZoneId);
                     var currentZoneRates = GetCurrentRatesByZoneIds(zoneIds);
 
@@ -141,6 +144,34 @@ namespace TOne.WhS.Sales.Business
 
             return details;
         }
+
+        IEnumerable<SaleEntityZoneRate> GetCurrentRatesByZoneIds(IEnumerable<long> zoneIds)
+        {
+            List<SaleEntityZoneRate> rates = null;
+
+            if (zoneIds != null && _sellingProductId != null)
+            {
+                rates = new List<SaleEntityZoneRate>();
+                int sellingProductId = (int)_sellingProductId;
+
+                SaleEntityZoneRateLocator rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(_effectiveOn));
+
+                foreach (long zoneId in zoneIds)
+                {
+                    SaleEntityZoneRate rate = (_ownerType == SalePriceListOwnerType.SellingProduct) ?
+                        rateLocator.GetSellingProductZoneRate(sellingProductId, zoneId) : rateLocator.GetCustomerZoneRate(_ownerId, sellingProductId, zoneId);
+
+                    if (rate != null)
+                        rates.Add(rate);
+                }
+            }
+
+            return rates;
+        }
+        
+        #endregion
+
+        #region Get Filtered Zone Routing Product Changes
 
         public IEnumerable<ZoneRoutingProductChangesDetail> GetFilteredZoneRoutingProductChanges()
         {
@@ -192,32 +223,6 @@ namespace TOne.WhS.Sales.Business
 
             return details;
         }
-        
-        #region Private Methods
-
-        IEnumerable<SaleEntityZoneRate> GetCurrentRatesByZoneIds(IEnumerable<long> zoneIds)
-        {
-            List<SaleEntityZoneRate> rates = null;
-
-            if (zoneIds != null && _sellingProductId != null)
-            {
-                rates = new List<SaleEntityZoneRate>();
-                int sellingProductId = (int)_sellingProductId;
-
-                SaleEntityZoneRateLocator rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(_effectiveOn));
-
-                foreach (long zoneId in zoneIds)
-                {
-                    SaleEntityZoneRate rate = (_ownerType == SalePriceListOwnerType.SellingProduct) ?
-                        rateLocator.GetSellingProductZoneRate(sellingProductId, zoneId) : rateLocator.GetCustomerZoneRate(_ownerId, sellingProductId, zoneId);
-
-                    if (rate != null)
-                        rates.Add(rate);
-                }
-            }
-
-            return rates;
-        }
 
         IEnumerable<SaleEntityZoneRoutingProduct> GetCurrentRoutingProductsByZoneIds(IEnumerable<long> zoneIds)
         {
@@ -251,7 +256,7 @@ namespace TOne.WhS.Sales.Business
                 return true;
             return false;
         }
-
+        
         #endregion
     }
 }

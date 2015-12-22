@@ -53,16 +53,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChangesManager.cs" />
+    <Compile Include="Changes\GetChangesManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CostCalculationMethodContext.cs" />
     <Compile Include="PriceListRateManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatePlanManager.cs" />
     <Compile Include="RatePlanZoneManager.cs" />
-    <Compile Include="ZoneItemSetters\ZoneRateSetter.cs" />
-    <Compile Include="ZoneItemSetters\ZoneRouteOptionSetter.cs" />
-    <Compile Include="ZoneItemSetters\ZoneRoutingProductSetter.cs" />
+    <Compile Include="Changes\SaveChangesManager.cs" />
+    <Compile Include="ZoneItem\ZoneRateSetter.cs" />
+    <Compile Include="ZoneItem\ZoneRouteOptionSetter.cs" />
+    <Compile Include="ZoneItem\ZoneRoutingProductSetter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">

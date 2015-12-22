@@ -64,7 +64,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public bool InsertOrUpdateDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, NewDefaultRoutingProduct newDefaultRoutingProduct)
         {
             int affectedRows = ExecuteNonQuerySP("TOneWhS_BE.sp_SaleEntityRoutingProduct_InsertOrUpdateDefault", ownerType, ownerId, newDefaultRoutingProduct.DefaultRoutingProductId, newDefaultRoutingProduct.BED, newDefaultRoutingProduct.EED);
-
             return affectedRows > 0;
         }
 
@@ -74,6 +73,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return affectedRows > 0;
         }
 
+        #region Insert Zone Routing Products
+
         public bool InsertZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<NewZoneRoutingProduct> newZoneRoutingProducts)
         {
             DataTable newZoneRoutingProductsTable = BuildNewZoneRoutingProductsTable(newZoneRoutingProducts);
@@ -82,7 +83,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 cmd.Parameters.Add(new SqlParameter("@OwnerType", ownerType));
                 cmd.Parameters.Add(new SqlParameter("@OwnerID", ownerId));
-                
+
                 var tableParameter = new SqlParameter("@NewZoneRoutingProducts", SqlDbType.Structured);
                 tableParameter.Value = newZoneRoutingProductsTable;
                 cmd.Parameters.Add(tableParameter);
@@ -91,7 +92,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return affectedRows == newZoneRoutingProducts.Count();
         }
 
-        private DataTable BuildNewZoneRoutingProductsTable(IEnumerable<NewZoneRoutingProduct> newZoneRoutingProducts)
+        DataTable BuildNewZoneRoutingProductsTable(IEnumerable<NewZoneRoutingProduct> newZoneRoutingProducts)
         {
             DataTable table = new DataTable();
 
@@ -120,15 +121,20 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return table;
         }
+        
+        #endregion
+
+        #region Update Zone Routing Products
 
         public bool UpdateZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<ZoneRoutingProductChange> zoneRoutingProductChanges)
         {
             DataTable zoneRoutingProductChangesTable = BuildZoneRoutingProductChangesTable(zoneRoutingProductChanges);
 
-            int affectedRows = ExecuteNonQuerySPCmd("TOneWhS_BE.sp_SaleEntityRoutingProduct_UpdateZoneRoutingProducts", (cmd) => {
+            int affectedRows = ExecuteNonQuerySPCmd("TOneWhS_BE.sp_SaleEntityRoutingProduct_UpdateZoneRoutingProducts", (cmd) =>
+            {
                 cmd.Parameters.Add(new SqlParameter("@OwnerType", ownerType));
                 cmd.Parameters.Add(new SqlParameter("@OwnerID", ownerId));
-                
+
                 var tableParameter = new SqlParameter("@ZoneRoutingProductChanges", SqlDbType.Structured);
                 tableParameter.Value = zoneRoutingProductChangesTable;
                 cmd.Parameters.Add(tableParameter);
@@ -137,7 +143,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return affectedRows == zoneRoutingProductChanges.Count();
         }
 
-        private DataTable BuildZoneRoutingProductChangesTable(IEnumerable<ZoneRoutingProductChange> zoneRoutingProductChanges)
+        DataTable BuildZoneRoutingProductChangesTable(IEnumerable<ZoneRoutingProductChange> zoneRoutingProductChanges)
         {
             DataTable table = new DataTable();
 
@@ -153,7 +159,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
                 row["ZoneID"] = change.ZoneId;
                 row["RoutingProductID"] = change.ZoneRoutingProductId;
-                
+
                 if (change.EED != null)
                     row["EED"] = change.EED;
 
@@ -164,7 +170,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return table;
         }
-
+        
+        #endregion
+        
         public bool AreSaleEntityRoutingProductUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SaleEntityRoutingProduct", ref updateHandle);

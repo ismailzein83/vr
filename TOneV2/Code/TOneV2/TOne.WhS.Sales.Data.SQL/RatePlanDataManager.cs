@@ -15,8 +15,6 @@ namespace TOne.WhS.Sales.Data.SQL
     {
         public RatePlanDataManager() : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString")) { }
 
-        #region Save Price List
-
         public bool InsertPriceList(SalePriceList priceList, out int priceListId)
         {
             object insertedId;
@@ -34,14 +32,19 @@ namespace TOne.WhS.Sales.Data.SQL
             return affectedRows > 0;
         }
 
-        #endregion
-
-        #region Changes
+        #region Get Changes
 
         public Changes GetChanges(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status)
         {
             return GetItemSP("TOneWhS_Sales.sp_RatePlan_GetChanges", ChangesMapper, ownerType, ownerId, status);
         }
+
+        private Changes ChangesMapper(IDataReader reader)
+        {
+            return Vanrise.Common.Serializer.Deserialize<Changes>(reader["Changes"] as string);
+        }
+        
+        #endregion
 
         public bool InsertOrUpdateChanges(SalePriceListOwnerType ownerType, int ownerId, Changes changes, RatePlanStatus status)
         {
@@ -50,12 +53,5 @@ namespace TOne.WhS.Sales.Data.SQL
             int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_InsertOrUpdateChanges", ownerType, ownerId, serializedChanges, status);
             return affectedRows > 0;
         }
-
-        private Changes ChangesMapper(IDataReader reader)
-        {
-            return Vanrise.Common.Serializer.Deserialize<Changes>(reader["Changes"] as string);
-        }
-
-        #endregion
     }
 }

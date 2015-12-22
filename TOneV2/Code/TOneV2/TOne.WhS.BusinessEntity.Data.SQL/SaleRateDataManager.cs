@@ -35,10 +35,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return RetrieveData(input, createTempTableAction, SaleRateMapper);
 
         }
+        
         public List<SaleRate> GetEffectiveSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByOwnerAndEffective", SaleRateMapper, ownerType, ownerId, effectiveOn);
         }
+        
         public List<SaleRate> GetEffectiveSaleRateByCustomers(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             DataTable dtActiveCustomers = CarrierAccountDataManager.BuildRoutingCustomerInfoTable(customerInfos);
@@ -52,10 +54,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
             });
         }
+        
         public bool AreSaleRatesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SaleRate", ref updateHandle);
         }
+        
         public bool CloseRates(IEnumerable<RateChange> rateChanges)
         {
             DataTable rateChangesTable = BuildRateChangesTable(rateChanges);
@@ -69,6 +73,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return affectedRows > 0;
         }
+        
         DataTable BuildRateChangesTable(IEnumerable<RateChange> rateChanges)
         {
             DataTable table = new DataTable();
@@ -91,6 +96,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return table;
         }
+        
         public bool InsertRates(IEnumerable<NewRate> newRates, int priceListId)
         {
             DataTable newRatesTable = BuildNewRatesTable(newRates, priceListId);
@@ -104,6 +110,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return affectedRows > 0;
         }
+        
         DataTable BuildNewRatesTable(IEnumerable<NewRate> newRates, int priceListId)
         {
             DataTable table = new DataTable();
@@ -138,6 +145,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return table;
         }
+        
         public IEnumerable<SaleRate> GetExistingRatesByZoneIds(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> zoneIds, DateTime minEED)
         {
             string zoneIdsParameter = string.Join(",", zoneIds);

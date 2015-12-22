@@ -7,7 +7,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class ZoneRateChangesInput
+    public class ZoneRateChangesQuery
     {
         public SalePriceListOwnerType OwnerType { get; set; }
 

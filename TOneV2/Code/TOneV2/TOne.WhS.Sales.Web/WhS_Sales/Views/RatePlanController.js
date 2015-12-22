@@ -36,7 +36,6 @@
 
         var settings;
         var isSavingPriceList; // This flag var prevents the app from saving an empty state after the user saves a price list
-        var isLoadingRatePlan; // This flag var prevents the app from getting the zone items twice when clicking the search button
 
         defineScope();
         load();
@@ -143,7 +142,8 @@
             $scope.sellNewZones = function () {
                 var customerId = $scope.selectedCustomer.CarrierAccountId;
                 var onCustomerZonesSold = function (customerZones) {
-                    loadRatePlan();
+                    if (databaseSelectorAPI.getSelectedIds() != null && policySelectorAPI.getSelectedIds() != null)
+                        loadRatePlan();
                 };
 
                 WhS_Sales_RatePlanService.sellNewZones(customerId, onCustomerZonesSold);
@@ -152,9 +152,9 @@
                 WhS_Sales_RatePlanService.editSettings(settings, onSettingsUpdate);
             };
             $scope.validateRatePlan = function () {
-                if (!$scope.showZoneLetters || ($scope.zoneLetters && $scope.zoneLetters.length > 0))
+                if ($scope.zoneLetters && $scope.zoneLetters.length > 0)
                     return null;
-                return "Consider selling then owner some zones";
+                return "The owner doesn't have any zones";
             };
 
             defineSaveButtonMenuActions();
@@ -218,7 +218,6 @@
 
         function loadRatePlan() {
             var promises = [];
-            isLoadingRatePlan = true;
 
             var isLoadingZoneLetters = true;
             var zoneLettersGetPromise = getZoneLetters();
@@ -245,15 +244,17 @@
             promises.push(defaultItemGetPromise);
 
             defaultItemGetPromise.then(function (response) {
-                defaultItem = response;
-                defaultItem.OwnerType = $scope.selectedOwnerType.value;
-                defaultItem.OwnerId = getOwnerId();
+                if (response) {
+                    defaultItem = response;
+                    defaultItem.OwnerType = $scope.selectedOwnerType.value;
+                    defaultItem.OwnerId = getOwnerId();
 
-                for (var i = 0; i < $scope.defaultItemTabs.length; i++) {
-                    var item = $scope.defaultItemTabs[i];
+                    for (var i = 0; i < $scope.defaultItemTabs.length; i++) {
+                        var item = $scope.defaultItemTabs[i];
 
-                    if (item.directiveAPI)
-                        item.loadDirective(item.directiveAPI);
+                        if (item.directiveAPI)
+                            item.loadDirective(item.directiveAPI);
+                    }
                 }
             });
 
@@ -261,8 +262,6 @@
                 showRatePlan(true);
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                isLoadingRatePlan = false;
             });
 
             function getZoneLetters() {
@@ -411,9 +410,7 @@
 
                 return UtilsService.waitMultiplePromises(promises).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
-                }).finally(function () {
-                    isSavingPriceList = false;
-                });
+                }).finally(function () { isSavingPriceList = false; });
 
                 function onRatePlanChangesClose(save) {
                     if (save) {

@@ -56,7 +56,7 @@ namespace TOne.WhS.Sales.Business
                 _routingProductLocator.GetSellingProductDefaultRoutingProduct(_ownerId) :
                 _routingProductLocator.GetCustomerDefaultRoutingProduct(_ownerId, (int)_sellingProductId);
 
-            _currentSellingProductDefaultRoutingProduct = (ownerType == SalePriceListOwnerType.Customer && _currentDefaultRoutingProduct.Source == SaleEntityZoneRoutingProductSource.CustomerDefault) ?
+            _currentSellingProductDefaultRoutingProduct = (ownerType == SalePriceListOwnerType.Customer && _currentDefaultRoutingProduct != null && _currentDefaultRoutingProduct.Source == SaleEntityZoneRoutingProductSource.CustomerDefault) ?
                 _routingProductLocator.GetSellingProductDefaultRoutingProduct((int)sellingProductId) : _currentDefaultRoutingProduct;
         }
 

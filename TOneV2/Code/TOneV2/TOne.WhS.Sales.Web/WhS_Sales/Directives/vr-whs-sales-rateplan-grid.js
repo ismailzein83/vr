@@ -149,7 +149,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             function extendZoneItem(zoneItem) {
                 zoneItem.IsDirty = false;
-                var currentRateEED = zoneItem.CurrentRateEED ? new Date(zoneItem.CurrentRateEED) : null; // Maintains the original value of zoneItem.CurrentRateEED in case the user deletes the new rate
+                zoneItem.currentRateEED = zoneItem.CurrentRateEED ? new Date(zoneItem.CurrentRateEED) : null; // Maintains the original value of zoneItem.CurrentRateEED in case the user deletes the new rate
                 setRouteOptionProperties(zoneItem);
 
                 zoneItem.IsCurrentRateEditable = (zoneItem.IsCurrentRateEditable == null) ? false : zoneItem.IsCurrentRateEditable;
@@ -169,7 +169,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     if (zoneItem.NewRate) {
                         zoneItem.showNewRateBED = true;
                         zoneItem.showNewRateEED = true;
-                        zoneItem.CurrentRateEED = currentRateEED;
+                        zoneItem.CurrentRateEED = zoneItem.currentRateEED;
 
                         if (!zoneItem.AreNewDatesSet) {
                             zoneItem.NewRateBED = (zoneItem.CurrentRate == null || Number(zoneItem.NewRate) > zoneItem.CurrentRate) ? new Date(new Date().setDate(new Date().getDate() + 7)) : new Date();
@@ -186,7 +186,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     }
                 };
 
-                zoneItem.onNewRateEEDChange = function (zoneItem) {
+                zoneItem.onCurrentRateEEDChanged = function (zoneItem) {
                     zoneItem.IsDirty = true;
                 };
 
@@ -196,22 +196,26 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     var saveChangesPromise = saveZoneItemChanges();
                     promises.push(saveChangesPromise);
 
+                    var getZoneItemDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(getZoneItemDeferred.promise);
+
+                    var loadRouteOptionsDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadRouteOptionsDeferred.promise);
+
                     saveChangesPromise.then(function () {
-                        var zoneItemGetPromise = WhS_Sales_RatePlanAPIService.GetZoneItem(getZoneItemInput());
-                        promises.push(zoneItemGetPromise);
+                        var getZoneItemPromise = WhS_Sales_RatePlanAPIService.GetZoneItem(getZoneItemInput());
 
-                        var routeOptionsLoadDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(routeOptionsLoadDeferred.promise);
-
-                        zoneItemGetPromise.then(function (response) {
+                        getZoneItemPromise.then(function (response) {
                             if (response) {
+                                getZoneItemDeferred.resolve();
+
                                 var gridZoneItem = UtilsService.getItemByVal($scope.zoneItems, response.ZoneId, "ZoneId");
 
                                 if (gridZoneItem) {
                                     gridZoneItem.EffectiveRoutingProductId = response.EffectiveRoutingProductId;
                                     gridZoneItem.EffectiveRoutingProductName = response.EffectiveRoutingProductName;
 
-                                    routeOptionsLoadDeferred.promise.finally(function () {
+                                    loadRouteOptionsDeferred.promise.finally(function () {
                                         zoneItem.isLoadingRouteOptions = false;
                                     });
 
@@ -222,12 +226,14 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                     };
 
                                     zoneItem.isLoadingRouteOptions = true;
-                                    VRUIUtilsService.callDirectiveLoad(zoneItem.RouteOptionsAPI, payload, routeOptionsLoadDeferred);
+                                    VRUIUtilsService.callDirectiveLoad(zoneItem.RouteOptionsAPI, payload, loadRouteOptionsDeferred);
                                 }
                             }
-                            else
-                                routeOptionsLoadDeferred.reject();
-                        });
+                            else {
+                                getZoneItemDeferred.reject();
+                                loadRouteOptionsDeferred.reject();
+                            }
+                        }).catch(function (error) { getZoneItemDeferred.reject(); });
                     });
 
                     UtilsService.waitMultiplePromises(promises).catch(function (error) {
@@ -255,7 +261,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             OwnerId: gridQuery.OwnerId,
                             ZoneId: zoneItem.ZoneId,
                             RoutingDatabaseId: gridQuery.RoutingDatabaseId,
-                            PolicyConfigId: gridQuery.RPRoutePolicyConfigId,
+                            PolicyConfigId: gridQuery.PolicyConfigId,
                             NumberOfOptions: gridQuery.NumberOfOptions,
                             CostCalculationMethods: gridQuery.CostCalculationMethods
                         };
@@ -326,11 +332,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             function setRateChange(zoneChanges, zoneItem) {
                 zoneChanges.RateChange = null;
-                return; // To be removed
-                if (zoneItem.IsCurrentRateEditable && !compareDates(zoneItem.CurrentRateEED, zoneItem.NewRateEED)) {
+                
+                if (zoneItem.IsCurrentRateEditable && !compareDates(zoneItem.CurrentRateEED, zoneItem.currentRateEED)) {
                     zoneChanges.RateChange = {
                         RateId: zoneItem.CurrentRateId,
-                        EED: zoneItem.NewRateEED
+                        EED: zoneItem.CurrentRateEED
                     };
                 }
 
