@@ -26,26 +26,34 @@ namespace Vanrise.Fzero.Bypass
 
         public static void ImportCDRs(string filePath, string SourceName) // Import Calls
         {
-            DataTable dt = null;
-            if (filePath.Contains(".xls"))
+            try
             {
-                dt = GeneratedCall.GetDataFromExcel(filePath, SourceName);
-            }
+                DataTable dt = null;
+                if (filePath.Contains(".xls"))
+                {
+                    dt = GeneratedCall.GetDataFromExcel(filePath, SourceName);
+                }
 
-            else if (filePath.Contains(".xlsx"))
-            {
-                dt = GeneratedCall.GetDataFromExcel(filePath, SourceName);
-            }
+                else if (filePath.Contains(".xlsx"))
+                {
+                    dt = GeneratedCall.GetDataFromExcel(filePath, SourceName);
+                }
 
 
-            else if (filePath.Contains(".xml"))
-            {
-                dt = GeneratedCall.GetDataFromXml(filePath, SourceName);
+                else if (filePath.Contains(".xml"))
+                {
+                    dt = GeneratedCall.GetDataFromXml(filePath, SourceName);
+                }
+                if (dt != null)
+                {
+                    GeneratedCall.Confirm(SourceName, dt, null);
+                }
             }
-            if (dt != null)
+            catch (Exception err)
             {
-                GeneratedCall.Confirm(SourceName, dt, null);
+                throw err;
             }
+            
 
 
         }
