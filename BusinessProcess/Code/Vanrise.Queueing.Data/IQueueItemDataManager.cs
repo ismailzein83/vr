@@ -27,7 +27,7 @@ namespace Vanrise.Queueing.Data
 
         void UpdateHeader(long itemId, QueueItemStatus queueItemStatus, int retryCount, string errorMessage);
 
-        Dictionary<int, long> GetQueueIDsHavingNewItems(long afterQueueActivationId);
+        void UnlockItem(int queueId, long itemId, bool isSuspended);
 
         List<QueueItemHeader> GetHeaders(IEnumerable<int> queueIds, IEnumerable<QueueItemStatus> statuses, DateTime dateFrom, DateTime dateTo);
 

@@ -57,24 +57,9 @@ namespace Vanrise.Queueing.Data.SQL
             }
         }
 
-        public QueueInstance GetQueueInstance(string queueName)
+        public List<QueueInstance> GetAllQueueInstances()
         {
-            return GetItemSP("queue.sp_QueueInstance_GetByName", QueueInstanceMapper, queueName);
-        }
-
-        public List<QueueInstance> GetQueueInstances(IEnumerable<int> queueIds)
-        {
-            DataTable dtIds = new DataTable();
-            dtIds.Columns.Add("ID");
-            dtIds.BeginLoadData();
-            foreach (var id in queueIds)
-                dtIds.Rows.Add(id);
-            dtIds.EndLoadData();
-            return GetItemsSPCmd("queue.sp_QueueInstance_GetByIDs", QueueInstanceMapper, cmd =>
-                {
-                    var prmIds = new SqlParameter("@IDs", SqlDbType.Structured) {Value = dtIds};
-                    cmd.Parameters.Add(prmIds);
-                });
+            return GetItemsSP("queue.sp_QueueInstance_GetAll", QueueInstanceMapper);
         }
 
         public List<QueueSubscription> GetSubscriptions()
@@ -145,9 +130,10 @@ namespace Vanrise.Queueing.Data.SQL
 
         #endregion
 
-        public List<QueueInstance> GetQueueInstancesByTypes(IEnumerable<int> queueItemTypes)
+
+        public bool AreQueuesUpdated(ref object updateHandle)
         {
-            return GetItemsSP("queue.sp_QueueInstance_GetByTypes", QueueInstanceMapper, queueItemTypes == null ? null : string.Join(",", queueItemTypes.Select(n => n.ToString()).ToArray()));
+            return base.IsDataUpdated("queue.QueueInstance", ref updateHandle);
         }
     }
 }

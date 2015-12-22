@@ -35,11 +35,12 @@ namespace Vanrise.Queueing
 
         }
 
+        QueueingManager _queueingManager = new QueueingManager();
+
         #endregion
         public PersistentQueue<T> GetQueue<T>(string queueName) where T : PersistentQueueItem
         {
-            IQueueDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
-            QueueInstance queueInstance = dataManager.GetQueueInstance(queueName);
+            QueueInstance queueInstance = _queueingManager.GetQueueInstance(queueName);
             if (queueInstance == null || queueInstance.Status != QueueInstanceStatus.ReadyToUse)
                 return null;
 
@@ -52,8 +53,7 @@ namespace Vanrise.Queueing
 
         public IPersistentQueue GetQueue(string queueName)
         {
-            IQueueDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
-            QueueInstance queueInstance = dataManager.GetQueueInstance(queueName);
+            QueueInstance queueInstance = _queueingManager.GetQueueInstance(queueName);
             if (queueInstance == null || queueInstance.Status != QueueInstanceStatus.ReadyToUse)
                 return null;
 
@@ -65,8 +65,7 @@ namespace Vanrise.Queueing
 
         public bool QueueExists(string queueName)
         {
-            IQueueDataManager dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
-            QueueInstance queueInstance = dataManagerQueue.GetQueueInstance(queueName);
+            QueueInstance queueInstance = _queueingManager.GetQueueInstance(queueName);
             return queueInstance != null && queueInstance.Status == QueueInstanceStatus.ReadyToUse;
         }
 
@@ -86,7 +85,7 @@ namespace Vanrise.Queueing
             {
                 foreach (var sourceQueueName in sourceQueueNames)
                 {
-                    QueueInstance sourceQueue = dataManagerQueue.GetQueueInstance(sourceQueueName);
+                    QueueInstance sourceQueue = _queueingManager.GetQueueInstance(sourceQueueName);
                     if (sourceQueue == null)
                         throw new Exception(String.Format("Source Queue '{0}' not found", sourceQueueName));
 
@@ -108,6 +107,7 @@ namespace Vanrise.Queueing
                 dataManagerQueue.InsertSubscription(sourceQueueIds, queueId);
                 dataManagerQueueItem.CreateQueue(queueId);
                 dataManagerQueue.UpdateQueueInstanceStatus(queueName, QueueInstanceStatus.ReadyToUse);
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<Vanrise.Queueing.QueueingManager.QueueInstanceCacheManager>().SetCacheExpired();
             };
             //this logic is implemented to rename any previous failed Create Queue action to allow recreation. this is done instead of using Transaction against two databases
             try
@@ -159,6 +159,7 @@ namespace Vanrise.Queueing
             {
                 IQueueDataManager dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
                 dataManagerQueue.UpdateQueueInstance(queueName, stageName, queueTitle, queueSettings);
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<Vanrise.Queueing.QueueingManager.QueueInstanceCacheManager>().SetCacheExpired();
             }
         }
 

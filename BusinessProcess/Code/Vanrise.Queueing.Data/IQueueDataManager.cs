@@ -10,6 +10,7 @@ namespace Vanrise.Queueing.Data
     public interface IQueueDataManager : IDataManager
     {
         //void CreateQueue(string queueName, string title, string itemFQTN, QueueSettings settings, IEnumerable<int> sourceQueueIds);
+        List<QueueInstance> GetAllQueueInstances();
 
         int InsertOrUpdateQueueItemType(string itemFQTN, string title, QueueSettings defaultQueueSettings );
 
@@ -29,12 +30,8 @@ namespace Vanrise.Queueing.Data
 
         bool HaveSubscriptionsChanged(object timestampToCompare);
 
-        QueueInstance GetQueueInstance(string queueName);
-
-        List<QueueInstance> GetQueueInstances(IEnumerable<int> queueIds);
-
         List<QueueItemType> GetQueueItemTypes();
 
-        List<QueueInstance> GetQueueInstancesByTypes(IEnumerable<int> queueItemTypes);
+        bool AreQueuesUpdated(ref object _updateHandle);
     }
 }

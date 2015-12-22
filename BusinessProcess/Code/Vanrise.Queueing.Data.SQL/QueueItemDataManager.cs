@@ -16,94 +16,15 @@ namespace Vanrise.Queueing.Data.SQL
         static QueueItemDataManager()
         {
             s_query_EnqueueItemAndHeaderTemplate = String.Format(@"{0} 
-                                                                   {1} 
-                                                                   {2}", 
+                                                                   {1}", 
                                                                   query_EnqueueItemTemplate,
-                                                                  query_InsertQueueActivationIfNeededTemplate, 
                                                                   query_EnqueueItemHeaderTemplate);
         }
         public QueueItemDataManager()
             : base(GetConnectionStringName("QueueItemDBConnStringKey", "QueueItemDBConnString"))
         {
         }
-
-//        public void EnqueueItem(string queueName, byte[] item)
-//        {
-//            string serviceName = String.Format("{0}Service", queueName);
-//            ExecuteNonQuerySP("SendBrokerMessage", "RequestService", serviceName, "AsyncContract", "AsyncRequest", item);
-//        }
-
-//        public void DequeueItem(string queueName, TimeSpan waitTime, Action<byte[]> onItemReady)
-//        {
-//            queueName = String.Format("{0}Queue", queueName);
-//            ExecuteReaderText(String.Format(query_Dequeue, queueName),
-//                (reader) =>
-//                {
-//                    while (reader.Read())
-//                    {
-//                        Guid conversationHandle = (Guid)reader["conversation_handle"];
-//                        string messageType = reader["message_type_name"] as string;
-//                        if (messageType == "http://schemas.microsoft.com/SQL/ServiceBroker/EndDialog")
-//                        {
-//                            ExecuteNonQueryText(query_EndConversion, (cmd) =>
-//                            {
-//                                cmd.Parameters.Add(new SqlParameter("@ConversationHandle", conversationHandle));
-//                            });
-//                        }
-//                        else
-//                            onItemReady((byte[])reader["message_body"]);
-//                    }
-//                },
-//                (cmd) =>
-//                {
-//                     cmd.Parameters.Add(new SqlParameter("@count", 1));
-//                     cmd.Parameters.Add(new SqlParameter("@timeout", waitTime == TimeSpan.MaxValue ? -1 : (int)waitTime.TotalMilliseconds));
-//                     cmd.CommandTimeout = 0; //honor the RECEIVE timeout, whatever it is.
-//                });
-//        }
-
-//        const string query_Dequeue = @"
-//            waitfor( 
-//                RECEIVE top (@count) conversation_handle,service_name,message_type_name,message_body,message_sequence_number 
-//                FROM [{0}] 
-//                    ), timeout @timeout";
-
-//        const string query_EndConversion = "END CONVERSATION @ConversationHandle;";
-
-
-        ////public void EnqueueItem(string queueName, byte[] item)
-        ////{            
-        ////    ExecuteNonQueryText(String.Format(query_Enqueue, queueName),
-        ////        (cmd) =>
-        ////        {
-        ////            cmd.Parameters.Add(new SqlParameter("@Content", item));
-        ////        });
-        ////}
-
-        ////public void DequeueItem(string queueName, TimeSpan waitTime, Action<byte[]> onItemReady)
-        ////{
-        ////    using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, new TransactionOptions() { IsolationLevel = IsolationLevel.ReadCommitted }))
-        ////    {
-        ////        ExecuteReaderText(String.Format(query_Dequeue, queueName),
-        ////            (reader) =>
-        ////            {
-        ////                if (reader.Read())
-        ////                {
-        ////                    long id = (long)reader["ID"];
-        ////                    onItemReady((byte[])reader["Content"]);
-        ////                    reader.Close();
-        ////                    ExecuteNonQueryText(String.Format(query_DeleteFromQueue, queueName),
-        ////                        (cmd) =>
-        ////                        {
-        ////                            cmd.Parameters.Add(new SqlParameter("@ID", id));
-        ////                        });
-        ////                }
-        ////            },
-        ////            null);
-        ////        scope.Complete();
-        ////    }
-        ////}          
-
+  
         public void CreateQueue(int queueId)
         {
             ExecuteNonQueryText(String.Format(query_CreateQueueTable, queueId), null);
@@ -124,13 +45,11 @@ namespace Vanrise.Queueing.Data.SQL
             
             StringBuilder queryItemBuilder = new StringBuilder();
             StringBuilder queryItemHeaderBuilder = new StringBuilder();
-            StringBuilder queryInsertQueueActivationBuilder = new StringBuilder();
             foreach(var targetQueueItemId in targetQueuesItemsIds)
             {
                 int queueId = targetQueueItemId.Key;
                 long itemId = targetQueueItemId.Value;
                 queryItemBuilder.AppendLine(String.Format(query_EnqueueItemTemplate, queueId, itemId));
-                queryInsertQueueActivationBuilder.AppendLine(String.Format(query_InsertQueueActivationIfNeededTemplate, queueId));
                 queryItemHeaderBuilder.AppendLine(String.Format(query_EnqueueItemHeaderTemplate, 
                     queueId, 
                     itemId, 
@@ -138,10 +57,8 @@ namespace Vanrise.Queueing.Data.SQL
             }
 
             string query = String.Format(@" {0} 
-                                            {1} 
-                                            {2}", 
+                                            {1}", 
                                             queryItemBuilder, 
-                                            queryInsertQueueActivationBuilder,
                                             queryItemHeaderBuilder);
 
             ExecuteEnqueueItemQuery(query, item, executionFlowTriggerItemId, description, queueItemStatus);
@@ -222,18 +139,16 @@ namespace Vanrise.Queueing.Data.SQL
             ExecuteNonQuerySP("queue.sp_QueueItemHeader_Update", itemId, (int)queueItemStatus, retryCount, errorMessage);
         }
         
-        public Dictionary<int, long> GetQueueIDsHavingNewItems(long afterQueueActivationId)
+        public void UnlockItem(int queueId, long itemId, bool isSuspended)
         {
-            Dictionary<int, long> updatedQueues = new Dictionary<int, long>();
-            ExecuteReaderSP("queue.sp_QueueActivation_GetUpdatedQueueIds",
-                (reader) =>
+            ExecuteNonQueryText(String.Format(query_UnlockItem, queueId),
+                (cmd) =>
                 {
-                    while (reader.Read())
-                        updatedQueues.Add((int)reader["QueueID"], (long)reader["MaxID"]);
-                },
-                afterQueueActivationId);
-            return updatedQueues;
+                    cmd.Parameters.Add(new SqlParameter("@ItemID", itemId));
+                    cmd.Parameters.Add(new SqlParameter("@IsSuspended", isSuspended));
+                });
         }
+
 
         public List<ItemExecutionFlowInfo> GetItemExecutionFlowInfo(List<long> itemIds)
         {
@@ -335,6 +250,7 @@ namespace Vanrise.Queueing.Data.SQL
 									                                                [Content] [varbinary](max) NOT NULL,
                                                                                     [ExecutionFlowTriggerItemID] [bigint] NOT NULL,
 									                                                [LockedByProcessID] [int] NULL,
+                                                                                    [IsSuspended] [bit]
 									                                                 CONSTRAINT [PK_QueueItem_{0}] PRIMARY KEY CLUSTERED 
 									                                                (
 										                                                [ID] ASC
@@ -342,12 +258,7 @@ namespace Vanrise.Queueing.Data.SQL
 
         static string s_query_EnqueueItemAndHeaderTemplate;
 
-        const string query_EnqueueItemTemplate = @" DECLARE @IsEmptyInitialy_{0} Bit
-                                                    IF NOT EXISTS (SELECT TOP 1 null FROM queue.QueueItem_{0})
-                                                       SET @IsEmptyInitialy_{0} = 1
-                                                    ELSE
-                                                       SET @IsEmptyInitialy_{0} = 0
-
+        const string query_EnqueueItemTemplate = @" 
                                                      INSERT INTO queue.QueueItem_{0}
                                                            ([ID], [Content], [ExecutionFlowTriggerItemID])
                                                      VALUES
@@ -372,13 +283,9 @@ namespace Vanrise.Queueing.Data.SQL
                                                                    ,@Status
                                                                    ,GETDATE()
                                                                    ,GETDATE())";
+      
 
-        const string query_InsertQueueActivationIfNeededTemplate = @"IF @IsEmptyInitialy_{0} = 1
-                                                                        INSERT INTO [queue].[QueueActivation]
-                                                                           ([QueueID])
-		                                                                VALUES
-                                                                           ({0})";
-
+        const string query_UnlockItem = @"UPDATE queue.QueueItem_{0} SET LockedByProcessID = NULL, [IsSuspended] = @IsSuspended WHERE [ID] = @ItemID";
 
         const string query_Dequeue = @" 
                                         BEGIN TRAN
@@ -391,19 +298,23 @@ namespace Vanrise.Queueing.Data.SQL
                                             --Check if any item is currently locked by another reader
                                             UPDATE queue.QueueItem_{0} WITH (tablock)
                                             SET @LockedItemID = ID
-                                            WHERE @RunningProcessesIDs LIKE '%,' + CONVERT(VARCHAR, LockedByProcessID) + ',%'
+                                            WHERE ISNULL([IsSuspended], 0) = 0 AND @RunningProcessesIDs LIKE '%,' + CONVERT(VARCHAR, LockedByProcessID) + ',%'
 
                                             --if NO item locked by another reader, select the first item in the queue table
                                             IF @LockedItemID IS NULL
                                                 SELECT TOP (1) @ID = [ID] , @Content = [Content], @ExecutionFlowTriggerItemID = ExecutionFlowTriggerItemID 
                                                 FROM queue.QueueItem_{0}
+                                                WHERE ISNULL([IsSuspended], 0) = 0
                                                 ORDER BY ID
                                         END
                                         ELSE
                                         BEGIN
                                             SELECT TOP (1) @ID = [ID] , @Content = [Content], @ExecutionFlowTriggerItemID = [ExecutionFlowTriggerItemID]
                                             FROM queue.QueueItem_{0} WITH (updlock, readpast) 
-                                            WHERE LockedByProcessID IS NULL OR @RunningProcessesIDs NOT LIKE '%,' + CONVERT(VARCHAR, LockedByProcessID) + ',%'
+                                            WHERE
+                                            ISNULL([IsSuspended], 0) = 0
+                                            AND
+                                            LockedByProcessID IS NULL OR @RunningProcessesIDs NOT LIKE '%,' + CONVERT(VARCHAR, LockedByProcessID) + ',%'
                                             ORDER BY ID
                                         END
 

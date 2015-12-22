@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -24,6 +25,8 @@ namespace Vanrise.Queueing
         List<int> _subscribedQueueIds;
         T _emptyObject;
 
+        static int s_maxRetryDequeueTime;
+
         internal PersistentQueue(int queueId, QueueSettings settings)
         {
             _dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
@@ -32,6 +35,8 @@ namespace Vanrise.Queueing
             _emptyObject = Activator.CreateInstance<T>();
             _queueId = queueId;
             _queueSettings = settings;
+            if (!int.TryParse(ConfigurationManager.AppSettings["Queue_MaxRetryDequeueTime"], out s_maxRetryDequeueTime))
+                s_maxRetryDequeueTime = 5;
         }
 
         #endregion
@@ -162,10 +167,15 @@ namespace Vanrise.Queueing
                     _dataManagerQueueItem.DeleteItem(_queueId, queueItem.ItemId);
                     _dataManagerQueueItem.UpdateHeaderStatus(queueItem.ItemId, QueueItemStatus.Processed);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     QueueItemHeader itemHeader = _dataManagerQueueItem.GetHeader(queueItem.ItemId, _queueId);
-                    _dataManagerQueueItem.UpdateHeader(queueItem.ItemId, QueueItemStatus.Failed, itemHeader.RetryCount + 1, ex.ToString());
+                    QueueItemStatus failedStatus = QueueItemStatus.Failed;
+                    int retryCount = itemHeader.RetryCount + 1;
+                    if (retryCount >= s_maxRetryDequeueTime)
+                        failedStatus = QueueItemStatus.Suspended;
+                    _dataManagerQueueItem.UnlockItem(_queueId, queueItem.ItemId, (failedStatus == QueueItemStatus.Suspended));
+                    _dataManagerQueueItem.UpdateHeader(queueItem.ItemId, failedStatus, retryCount, ex.ToString());
                     if (rethrowOnError)
                         throw;
                     else

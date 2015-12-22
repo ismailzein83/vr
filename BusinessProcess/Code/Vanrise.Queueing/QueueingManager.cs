@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Queueing.Data;
 using Vanrise.Queueing.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.Queueing
 {
@@ -19,14 +20,22 @@ namespace Vanrise.Queueing
             _itemDataManager = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
         }
 
+        public QueueInstance GetQueueInstance(string queueName)
+        {
+            return GetCachedQueueInstancesByName().GetRecord(queueName);
+        }
+
         public List<QueueItemType> GetQueueItemTypes()
         {
             return _dataManager.GetQueueItemTypes();
         }
 
-        public List<QueueInstance> GetQueueInstances(IEnumerable<int> queueItemTypes)
+        public IEnumerable<QueueInstance> GetQueueInstances(IEnumerable<int> queueItemTypes)
         {
-            return _dataManager.GetQueueInstancesByTypes(queueItemTypes);
+            var readyQueueInstances = GetReadyQueueInstances();
+            if (readyQueueInstances == null)
+                return null;
+            return readyQueueInstances.Where(itm => queueItemTypes == null || queueItemTypes.Contains(itm.ItemTypeId));
         }
 
         public List<QueueItemHeader> GetHeaders(IEnumerable<int> queueIds, IEnumerable<QueueItemStatus> statuses, DateTime dateFrom, DateTime dateTo)
@@ -106,5 +115,57 @@ namespace Vanrise.Queueing
             return QueueItemStatus.Processed;
         }
 
+        public IEnumerable<QueueInstance> GetReadyQueueInstances()
+        {
+            var cachedQueues = GetCachedQueueInstances();
+            if (cachedQueues != null)
+                return cachedQueues.Values.FindAllRecords(itm => itm.Status == QueueInstanceStatus.ReadyToUse);
+            else
+                return null;
+        }
+
+        #region Private Classes
+
+        Dictionary<string, QueueInstance> GetCachedQueueInstancesByName()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().GetOrCreateObject("GetCachedQueueInstancesByName",
+              () =>
+              {
+                  IQueueDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
+                  IEnumerable<QueueInstance> queueInstances = dataManager.GetAllQueueInstances();
+                  return queueInstances.ToDictionary(kvp => kvp.Name, kvp => kvp);
+              });
+        }
+
+        Dictionary<int, QueueInstance> GetCachedQueueInstances()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().GetOrCreateObject("GetCachedQueueInstances",
+               () =>
+               {
+                   IQueueDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
+                   IEnumerable<QueueInstance> queueInstances = dataManager.GetAllQueueInstances();
+                   return queueInstances.ToDictionary(kvp => kvp.QueueInstanceId, kvp => kvp);
+               });
+        }
+
+        internal class QueueInstanceCacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IQueueDataManager _dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
+            object _updateHandle;
+
+            public override Caching.CacheObjectSize ApproximateObjectSize
+            {
+                get
+                {
+                    return Caching.CacheObjectSize.ExtraSmall;
+                }
+            }
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreQueuesUpdated(ref _updateHandle);
+            }
+        }
+
+        #endregion
     }
 }

@@ -47,7 +47,7 @@ namespace Vanrise.Queueing.Web.ModelMappers
             return models;
         }
 
-        public static List<QueueInstanceModel> MapQueueInstances(List<QueueInstance> instances)
+        public static IEnumerable<QueueInstanceModel> MapQueueInstances(IEnumerable<QueueInstance> instances)
         {
             List<QueueInstanceModel> models = new List<QueueInstanceModel>();
             if (instances != null)
