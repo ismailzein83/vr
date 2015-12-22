@@ -50,8 +50,7 @@ namespace Vanrise.Fzero.Services.Email
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
             RecievedEmail NewEmailRecieved = new RecievedEmail();
-            FzeroService fzeroService = new FzeroService();
-
+          
             try
             {
                 RecievedEmail LastEmailRecieved = null;
@@ -70,11 +69,11 @@ namespace Vanrise.Fzero.Services.Email
                         NewEmailRecieved.DateSent = message.Headers.DateSent;
                         NewEmailRecieved.MessageID = message.Headers.MessageId;
                         NewEmailRecieved.ReadDate = DateTime.Now;
-                        SourceID = fzeroService.GetSourceIDByEmail(message.Headers.From.Address);
+                        SourceID = Source.GetByEmail(message.Headers.From.Address).ID;
                         if (SourceID != 0)
                         {
                             DateTime? LastDateTime = null;
-                            LastEmailRecieved = fzeroService.GetLastEmailRecieved(SourceID);
+                            LastEmailRecieved = RecievedEmail.GetLast(SourceID);
                             if (LastEmailRecieved != null)
                             {
                                 LastDateTime = LastEmailRecieved.DateSent;
@@ -88,7 +87,7 @@ namespace Vanrise.Fzero.Services.Email
                                 {
                                     if (attachment.ContentType.Name.Contains(".xml") || attachment.ContentType.Name.Contains(".xls") || attachment.ContentType.Name.Contains(".xslx"))
                                     {
-                                        File.WriteAllBytes(ConfigurationManager.AppSettings["UploadPath"] + "\\" + fzeroService.GetSourceNameByEmail(message.Headers.From.Address) + "\\" + message.Headers.MessageId + "_" + attachment.FileName, attachment.Body); //overwrites MessagePart.Body with attachment 
+                                        File.WriteAllBytes(ConfigurationManager.AppSettings["UploadPath"] + "\\" + Source.GetByEmail(message.Headers.From.Address).Name + "\\" + message.Headers.MessageId + "_" + attachment.FileName, attachment.Body); //overwrites MessagePart.Body with attachment 
                                     }
                                 }
                             }
@@ -99,7 +98,7 @@ namespace Vanrise.Fzero.Services.Email
                         }
 
                     }
-                    fzeroService.SaveLastEmailRecieved(NewEmailRecieved);
+                    RecievedEmail.Save(NewEmailRecieved);
                     pop3Client.Disconnect();
                     pop3Client.Dispose();
                 }
@@ -110,7 +109,7 @@ namespace Vanrise.Fzero.Services.Email
                 ErrorLog("10.2: " + ex.InnerException);
                 ErrorLog("10.3: " + ex.Data);
                 ErrorLog("10.4: " + ex.ToString());
-                fzeroService.SaveLastEmailRecieved(NewEmailRecieved);
+                RecievedEmail.Save(NewEmailRecieved);
             }
         }
 

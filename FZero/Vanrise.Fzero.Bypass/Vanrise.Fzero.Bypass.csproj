@@ -73,7 +73,6 @@
     <Compile Include="Classes\CasesLog.cs" />
     <Compile Include="Classes\Client.cs" />
     <Compile Include="Classes\Carrier.cs" />
-    <Compile Include="Classes\FzeroService.cs" />
     <Compile Include="Classes\prVwGeneratedCall_Result.cs" />
     <Compile Include="Classes\prResultingCases_Result.cs" />
     <Compile Include="Classes\prGetToBeReported_Result.cs" />

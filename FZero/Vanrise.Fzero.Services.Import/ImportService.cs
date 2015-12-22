@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using System.Threading;
-using Vanrise.Fzero.Bypass;
 
 
 
@@ -25,7 +23,6 @@ namespace Vanrise.Fzero.Services.Import
         protected override void OnStart(string[] args)
         {
             base.RequestAdditionalTime(60000); // 10 minutes timeout for startup
-            //Debugger.Launch(); // launch and attach debugger
             watch();
         }
 
@@ -81,8 +78,8 @@ namespace Vanrise.Fzero.Services.Import
                 {
                     Thread.Sleep(10000);
                 }
-                FzeroService fzeroService = new FzeroService();
-                fzeroService.Import(e.FullPath, Path.GetDirectoryName(e.FullPath).Split('\\').ToList<String>().Last());
+
+                Vanrise.Fzero.Bypass.Import.ImportCDRs(e.FullPath, Path.GetDirectoryName(e.FullPath).Split('\\').ToList<String>().Last());
 
             }
             catch (Exception ex)

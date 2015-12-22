@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using Vanrise.CommonLibrary;
 
 namespace Vanrise.Fzero.Bypass
@@ -22,5 +23,32 @@ namespace Vanrise.Fzero.Bypass
             }
             return CurrentImport;
         }
+
+        public static void ImportCDRs(string filePath, string SourceName) // Import Calls
+        {
+            DataTable dt = null;
+            if (filePath.Contains(".xls"))
+            {
+                dt = GeneratedCall.GetDataFromExcel(filePath, SourceName);
+            }
+
+            else if (filePath.Contains(".xlsx"))
+            {
+                dt = GeneratedCall.GetDataFromExcel(filePath, SourceName);
+            }
+
+
+            else if (filePath.Contains(".xml"))
+            {
+                dt = GeneratedCall.GetDataFromXml(filePath, SourceName);
+            }
+            if (dt != null)
+            {
+                GeneratedCall.Confirm(SourceName, dt, null);
+            }
+
+
+        }
+
     }
 }
