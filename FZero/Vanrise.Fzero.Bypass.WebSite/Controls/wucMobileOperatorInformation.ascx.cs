@@ -80,6 +80,18 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         }
     }
 
+    public bool EnableAutoReport
+    {
+        get
+        {
+            return chkAutoReporting.Checked;
+        }
+        set
+        {
+            chkAutoReporting.Checked = value;
+        }
+    }
+
 
     public string Mobile
     {
@@ -230,6 +242,7 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         ddlGMT.Enabled = Enabled;
         txtAutoBlockEmail.ReadOnly = !Enabled;
         chkEnableAutoBlock.Enabled = Enabled;
+        chkAutoReporting.Enabled = Enabled;
     }
 
     public string IsValidData()
@@ -334,6 +347,7 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         ProfileName = MobileOperator.User.FullName.ToString().Trim();
         GMT = MobileOperator.User.GMT.ToString().Trim();
         EnableAutoBlock = MobileOperator.EnableAutoBlock;
+        EnableAutoReport = MobileOperator.AutoReport;
         AutoBlockEmail = MobileOperator.AutoBlockEmail;
 
         if (SysParameter.Global_DefaultMobileOperator != MobileOperator.User.FullName)
@@ -384,6 +398,7 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         MobileOperator.User.EmailAddress = Email;
         MobileOperator.User.GMT = GMT.ToInt();
         MobileOperator.EnableAutoBlock = EnableAutoBlock;
+        MobileOperator.AutoReport = EnableAutoReport;
         MobileOperator.AutoBlockEmail = AutoBlockEmail;
 
         if (!txtUserNameReadOnly)

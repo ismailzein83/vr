@@ -136,6 +136,14 @@
                                             </td>
                                         </tr>
 
+                                         <tr>
+                                            <td class="caption">Enable Auto-Reporting</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                <asp:CheckBox ID="chkAutoReporting" runat="server"></asp:CheckBox>
+                                            </td>
+                                        </tr>
+
 
                                         <tr>
                                             <td class="caption">Enable Auto-Block</td>
