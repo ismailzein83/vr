@@ -15,6 +15,7 @@ namespace QM.CLITester.Data
         List<TestCallDetail> GetBeforeId(GetBeforeIdInput input);
         List<TestCall> GetTestCalls(List<CallTestStatus> listCallTestStatus);
         List<TotalCallsChart> GetTotalCallsByUserId(int userId);
+        List<TestCall> GetAllbyBatchNumber(long batchNumber);
         bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus, int initiationRetryCount, string failureMessage);
         bool UpdateTestProgress(long testCallId, Object testProgress, CallTestStatus callTestStatus, CallTestResult? callTestResult, int getProgressRetryCount, string failureMessage);
         Vanrise.Entities.BigResult<Entities.TestCallDetail> GetTestCallFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.TestCallQuery> input);

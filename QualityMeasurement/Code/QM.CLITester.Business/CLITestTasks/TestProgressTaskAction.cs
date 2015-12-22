@@ -10,7 +10,7 @@ namespace QM.CLITester.Business
 {
     public class TestProgressTaskAction : SchedulerTaskAction
     {
-        public override void Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument,
+        public override SchedulerTaskExecuteOutput Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument,
             Dictionary<string, object> evaluatedExpressions)
         {
             TestProgressTaskActionArgument testProgressTaskActionArgument =
@@ -80,6 +80,12 @@ namespace QM.CLITester.Business
                 if (testProgressOutput.Result != GetTestProgressResult.ProgressNotChanged)
                     manager.UpdateTestProgress(testCall.ID, testProgressOutput.TestProgress, callTestStatus, testProgressOutput.CallTestResult, testCall.GetProgressRetryCount, testCall.FailureMessage);
             }
+
+            SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
+            {
+                Result = ExecuteOutputResult.Completed
+            };
+            return output;
         }
     }
 }

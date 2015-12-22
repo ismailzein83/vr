@@ -68,6 +68,7 @@
 
                                 var values = {};
                                 values['TotalCalls'] = response[i].TotalCalls;
+                                values['CreationDate'] = response[i].CreationDate;
                                 chartData.push(values);
                             }
 

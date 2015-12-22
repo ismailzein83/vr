@@ -9,12 +9,18 @@ namespace QM.BusinessEntity.Business
 {
     public class ZoneSyncTaskAction : SchedulerTaskAction
     {
-        public override void Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
+        public override SchedulerTaskExecuteOutput Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
         {
             ZoneSyncTaskActionArgument zoneSyncTaskActionArgument = taskActionArgument as ZoneSyncTaskActionArgument;
             SourceZoneSynchronizer sourceZoneSynchronizer = new SourceZoneSynchronizer(zoneSyncTaskActionArgument.SourceZoneReader,zoneSyncTaskActionArgument.SourceCountryReader);
             sourceZoneSynchronizer.Synchronize();
             Console.WriteLine("Zone SyncTaskAction Executed");
+
+            SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
+            {
+                Result = ExecuteOutputResult.Completed
+            };
+            return output;
         }
     }
 }

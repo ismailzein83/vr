@@ -12,7 +12,7 @@ namespace QM.CLITester.Business
 {
     public class InitiateTestTaskAction : SchedulerTaskAction
     {
-        public override void Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument,
+        public override SchedulerTaskExecuteOutput Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument,
             Dictionary<string, object> evaluatedExpressions)
         {
             InitiateTestTaskActionArgument initiateTestTaskActionArgument =
@@ -86,6 +86,12 @@ namespace QM.CLITester.Business
                 manager.UpdateInitiateTest(testCall.ID, initiateTestOutput.InitiateTestInformation, callTestStatus,
                     testCall.InitiationRetryCount, initiateTestOutput.FailureMessage);
             }
+
+            SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
+            {
+                Result = ExecuteOutputResult.Completed
+            };
+            return output;
         }
     }
 }

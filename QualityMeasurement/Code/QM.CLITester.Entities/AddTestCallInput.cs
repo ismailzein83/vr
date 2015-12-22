@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QM.CLITester.Entities
 {
-    public class TestCallQueryInput
+    public class AddTestCallInput
     {
         public List<int> SupplierID { get; set; }
         public int CountryID { get; set; }

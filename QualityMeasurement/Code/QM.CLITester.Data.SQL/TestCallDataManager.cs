@@ -44,6 +44,11 @@ namespace QM.CLITester.Data.SQL
             return GetItemsSP("QM_CLITester.sp_TestCall_GetRequestedTestCall", TestCallMapper, callTestStatusids);
         }
 
+        public List<TestCall> GetAllbyBatchNumber(long batchNumber)
+        {
+            return GetItemsSP("QM_CLITester.sp_TestCall_GetAllbyBatchNumber", TestCallMapper, batchNumber);
+        }
+
         public List<TestCallDetail> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int userId)
         {
             List<TestCallDetail> listTestCalls = new List<TestCallDetail>();
@@ -140,7 +145,8 @@ namespace QM.CLITester.Data.SQL
                 CallTestResult = GetReaderValue<CallTestResult>(reader, "CallTestResult"),
                 InitiationRetryCount = GetReaderValue<int>(reader, "InitiationRetryCount"),
                 GetProgressRetryCount = GetReaderValue<int>(reader, "GetProgressRetryCount"),
-                FailureMessage = reader["FailureMessage"] as string
+                FailureMessage = reader["FailureMessage"] as string,
+                BatchNumber = GetReaderValue<long>(reader, "BatchNumber")
             };
 
             string initiateTestInformationSerialized = reader["InitiateTestInformation"] as string;

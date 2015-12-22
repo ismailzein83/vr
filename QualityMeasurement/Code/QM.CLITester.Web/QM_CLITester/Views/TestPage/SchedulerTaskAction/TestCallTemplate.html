@@ -1,0 +1,35 @@
+﻿<div ng-controller="QM_CliTester_TestCallTemplateController">
+    <vr-section title="Test Call Action">
+        <vr-row>
+
+            <vr-columns width="1/4row">
+                <vr-qm-clitester-profile-selector on-ready="onProfileDirectiveReady" selectedvalues="selectedProfile" isrequired></vr-qm-clitester-profile-selector>
+            </vr-columns>
+
+            <vr-columns width="1/4row">
+                <vr-qm-be-supplier-selector on-ready="onSupplierDirectiveReady" selectedvalues="selectedSupplier" isrequired ismultipleselection></vr-qm-be-supplier-selector>
+            </vr-columns>
+
+            <vr-columns width="1/4row">
+                <vr-common-country-selector on-ready="onCountryDirectiveReady" selectedvalues="selectedCountry" isrequired onselectitem="onCountrySelectItem"></vr-common-country-selector>
+            </vr-columns>
+
+            <vr-columns width="1/4row" vr-loader="isLoading" ng-show="selectedCountry!=undefined">
+                <vr-qm-be-zone-selector on-ready="onZoneDirectiveReady" selectedvalues="selectedZone" isrequired></vr-qm-be-zone-selector>
+            </vr-columns>
+
+        </vr-row>
+        <vr-row>
+            <!--<vr-columns width="1/3row">
+                <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Connector" datasource="sourceTypeTemplates" text="None"
+                           selectedvalues="selectedSourceTypeTemplate" isrequired="true">
+                </vr-select>
+            </vr-columns>-->
+            <vr-columns width="fullrow" vr-loader="isLoadingSourceTypeDirective" ng-if="selectedSourceTypeTemplate.Editor">
+                <vr-section title="{{selectedSourceTypeTemplate.Name}}" level="2">
+                    <vr-directivewrapper directive="selectedSourceTypeTemplate.Editor" on-ready="onSourceTypeDirectiveReady"></vr-directivewrapper>
+                </vr-section>
+            </vr-columns>
+        </vr-row>
+    </vr-section>
+</div>

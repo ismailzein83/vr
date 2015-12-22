@@ -17,27 +17,28 @@ namespace QM.CLITester.Business
 {
     public class TestCallManager
     {
-        public Vanrise.Entities.InsertOperationOutput<TestCallQueryInput> AddNewTestCall(TestCallQueryInput testCallResult)
+        public AddTestCallOutput AddNewTestCall(AddTestCallInput testCallResult, int userId)
         {
-            Vanrise.Entities.InsertOperationOutput<TestCallQueryInput> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<TestCallQueryInput>();
-
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
+            AddTestCallOutput output = new AddTestCallOutput();
 
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            bool insertActionSucc = true;
 
             foreach (int supplierId in testCallResult.SupplierID)
             {
-                if (!dataManager.Insert(supplierId, testCallResult.CountryID, testCallResult.ZoneID, (int)CallTestStatus.New, (int)CallTestResult.NotCompleted, 0,0,
-                    Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId(),testCallResult.ProfileID))
-                    insertActionSucc = false;
+                dataManager.Insert(supplierId, testCallResult.CountryID, testCallResult.ZoneID, (int) CallTestStatus.New,
+                    (int) CallTestResult.NotCompleted, 0, 0,
+                    userId, testCallResult.ProfileID);
             }
             
-            if (insertActionSucc)
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+            long startingId;
+            IDManager.Instance.ReserveIDRange(this.GetType(), testCallResult.SupplierID.Count, out startingId);
+            output.BatchNumber = startingId;
+            return output;
+        }
 
-            return insertOperationOutput;
+        public AddTestCallOutput AddNewTestCall(AddTestCallInput testCallResult)
+        {
+            return AddNewTestCall(testCallResult, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId());
         }
 
         public bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus, int initiationRetryCount, string failureMessage)
@@ -79,6 +80,12 @@ namespace QM.CLITester.Business
         {
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
             return dataManager.GetTotalCallsByUserId(Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId());
+        }
+
+        public List<TestCall> GetAllbyBatchNumber(long batchNumber)
+        {
+            ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
+            return dataManager.GetAllbyBatchNumber(batchNumber);
         }
 
         public IDataRetrievalResult<TestCallDetail> GetFilteredTestCalls(DataRetrievalInput<TestCallQuery> input)
