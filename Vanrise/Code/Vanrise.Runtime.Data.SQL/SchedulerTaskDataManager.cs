@@ -114,7 +114,7 @@ namespace Vanrise.Runtime.Data.SQL
                 TriggerInfo = Common.Serializer.Deserialize<TriggerTypeInfo>(reader["TriggerTypeInfo"] as string),
                 ActionInfo = Common.Serializer.Deserialize<ActionTypeInfo>(reader["ActionTypeInfo"] as string),
                 TaskSettings = Common.Serializer.Deserialize<SchedulerTaskSettings>(reader["TaskSettings"] as string),
-                OwnerId = (int)reader["OwnerId"]
+                OwnerId = GetReaderValue<int>(reader, "OwnerId")
             };
             return task;
         }
