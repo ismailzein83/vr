@@ -4,16 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.SupplierPriceList.Entities;
-using TOne.WhS.SupplierPriceList.Entities.SPL;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    public class CodeGroupRule : BusinessRule
+    public class StopExecutionAction : BusinessRuleAction
     {
-        public override bool Validate(IRuleTarget target)
+
+        public override void Execute(IRuleTarget target)
         {
-            ImportedCode code = target as ImportedCode;
-            return code.CodeGroup != null;
+            
+        }
+
+        public override ActionSeverity GetSeverity()
+        {
+            return ActionSeverity.Error;
         }
     }
 }

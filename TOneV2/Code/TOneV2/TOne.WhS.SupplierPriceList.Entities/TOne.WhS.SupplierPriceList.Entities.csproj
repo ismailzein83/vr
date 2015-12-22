@@ -54,7 +54,21 @@
     <Compile Include="PreviewData\RatePreview.cs" />
     <Compile Include="PreviewData\SPLPreviewQuery.cs" />
     <Compile Include="PreviewData\ZonePreview.cs" />
+    <Compile Include="SPL\ChangedData\ChangedCode.cs" />
+    <Compile Include="SPL\ChangedData\ChangedRate.cs" />
+    <Compile Include="SPL\ChangedData\ChangedZone.cs" />
+    <Compile Include="SPL\CodeValidation.cs" />
+    <Compile Include="SPL\ImportedData\ImportedCode.cs" />
+    <Compile Include="SPL\ImportedData\ImportedCountry.cs" />
+    <Compile Include="SPL\ImportedData\ImportedRate.cs" />
+    <Compile Include="SPL\ImportedData\ImportedZone.cs" />
+    <Compile Include="SPL\IZone.cs" />
+    <Compile Include="SPL\NewData\NewCode.cs" />
+    <Compile Include="SPL\NewData\NewRate.cs" />
+    <Compile Include="SPL\NewData\NewZone.cs" />
     <Compile Include="Validation\BusinessRule.cs" />
+    <Compile Include="Validation\BusinessRuleAction.cs" />
+    <Compile Include="Validation\BusinessRuleCondition.cs" />
     <Compile Include="Validation\IRuleTarget.cs" />
     <Compile Include="SPL\IProcessCountryCodesContext.cs" />
     <Compile Include="PriceListByZone.cs" />
@@ -66,7 +80,6 @@
     <Compile Include="RatesByZone.cs" />
     <Compile Include="SPL\ExistingZone.cs" />
     <Compile Include="SPL\IProcessCountryRatesContext.cs" />
-    <Compile Include="SPL\ZoneItem.cs" />
     <Compile Include="SupplierPriceList.cs" />
     <Compile Include="Zone.cs" />
   </ItemGroup>
@@ -76,6 +89,7 @@
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

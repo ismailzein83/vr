@@ -41,27 +41,19 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             foreach (BusinessRule rule in rules)
             {
-                foreach (string targetFQTN in rule.TargetFQTNList)
+                foreach (IRuleTarget target in targets)
                 {
-                    Type targetType = Type.GetType(targetFQTN);
-                    foreach (IRuleTarget target in targets)
+                    if (rule.Condition.ShouldValidate(target))
                     {
-                        if (target.GetType() == targetType)
-                        {
-                            bool valid = rule.Validate(target);
+                        bool valid = rule.Condition.Validate(target);
 
-                            if (!valid)
-                            {
-                                switch (rule.ActionType)
-                                {
-                                    case RuleActionType.StopExecution:
-                                        this.StopExecution.Set(context, true);
-                                        return;
-                                    case RuleActionType.ExecludeItem:
-                                        target.SetExcluded();
-                                        break;
-                                }
-                            }
+                        if (!valid)
+                        {
+                            //TODO: This check should be removed when stop execution functionality is implemented correctly
+                            if (rule.Action is StopExecutionAction)
+                                this.StopExecution.Set(context, true);
+
+                            rule.Action.Execute(target);
                         }
                     }
                 }
@@ -70,24 +62,16 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         private IEnumerable<BusinessRule> GetRulesConfiguration()
         {
-            List<string> codeGroupRuleTargets = new List<string>();
-            codeGroupRuleTargets.Add("TOne.WhS.SupplierPriceList.Entities.SPL.ImportedCode, TOne.WhS.SupplierPriceList.Entities");
-
-            BusinessRule codeGroupNotFoundRule = new CodeGroupRule()
+            BusinessRule codeGroupNotFoundRule = new BusinessRule()
             {
-                CheckType = "Code Group Not Found",
-                ActionType = RuleActionType.StopExecution,
-                TargetFQTNList = codeGroupRuleTargets
+                Condition = new CodeGroupCondition(),
+                Action = new StopExecutionAction()
             };
 
-            List<string> multCountryRuleTargets = new List<string>();
-            multCountryRuleTargets.Add("TOne.WhS.SupplierPriceList.Entities.SPL.ImportedZone, TOne.WhS.SupplierPriceList.Entities");
-
-            BusinessRule multipleCountriesInSameZoneRule = new MultipleCountryRule()
+            BusinessRule multipleCountriesInSameZoneRule = new BusinessRule()
             {
-                CheckType = "Multiple Countries are found in Same Zone",
-                ActionType = RuleActionType.ExecludeItem,
-                TargetFQTNList = multCountryRuleTargets
+                Condition = new MultipleCountryCondition(),
+                Action = new ExcludeItemAction()
             };
 
             List<BusinessRule> rules = new List<BusinessRule>();

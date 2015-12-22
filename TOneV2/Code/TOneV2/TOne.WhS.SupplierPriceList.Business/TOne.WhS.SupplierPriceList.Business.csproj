@@ -55,6 +55,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessRules\Actions\ExcludeItemAction.cs" />
+    <Compile Include="BusinessRules\Actions\StopExecutionAction.cs" />
     <Compile Include="ChangedSupplierCodeManager.cs" />
     <Compile Include="ChangedSupplierRateManager.cs" />
     <Compile Include="ChangedSupplierZoneManager.cs" />
@@ -71,8 +73,8 @@
     <Compile Include="SupplierPriceListManager.cs" />
     <Compile Include="SupplierRatePreviewManager.cs" />
     <Compile Include="SupplierZonePreviewManager.cs" />
-    <Compile Include="ValidationRules\CodeGroupRule.cs" />
-    <Compile Include="ValidationRules\MultipleCountryRule.cs" />
+    <Compile Include="BusinessRules\Conditions\CodeGroupCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\MultipleCountryCondition.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">

@@ -9,11 +9,20 @@ using TOne.WhS.SupplierPriceList.Entities.SPL;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    public class MultipleCountryRule : BusinessRule
+    public class MultipleCountryCondition : BusinessRuleCondition
     {
+
+        public override bool ShouldValidate(IRuleTarget target)
+        {
+            return (target as ImportedZone != null);
+        }
+
         public override bool Validate(IRuleTarget target)
         {
             ImportedZone zone = target as ImportedZone;
+
+            if (zone == null)
+                return false;
 
             bool result = true;
 
@@ -30,5 +39,11 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             return result;
         }
+
+        public override string GetMessage(IRuleTarget target)
+        {
+            return string.Format("Zone {0} has multiple codes that belong to different countries", (target as ImportedZone).ZoneName);
+        }
+
     }
 }
