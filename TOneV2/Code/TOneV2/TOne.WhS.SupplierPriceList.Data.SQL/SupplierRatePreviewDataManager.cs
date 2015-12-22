@@ -13,11 +13,17 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
     public class SupplierRatePreviewDataManager : BaseSQLDataManager, ISupplierRatePreviewDataManager
     {
         readonly string[] _columns = { "PriceListId", "ZoneName", "ChangeType", "RecentRate", "NewRate", "BED", "EED" };
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+
 
         public SupplierRatePreviewDataManager()
             : base(GetConnectionStringName("TOneWhS_SPL_DBConnStringKey", "TOneWhS_SPL_DBConnString"))
         {
 
+        }
+        static SupplierRatePreviewDataManager()
+        {
+            _columnMapper.Add("ChangeTypeDecription", "ChangeType");
         }
 
         public void Insert(int priceListId, IEnumerable<RatePreview> ratePreviewList)
@@ -40,7 +46,10 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 ExecuteNonQuerySP("[TOneWhS_SPL].[sp_SupplierRate_Preview_CreateTempByFiltered]", tempTableName, input.Query.PriceListId);
             };
 
-            return RetrieveData(input, createTempTableAction, RatePreviewMapper);
+            if (input.SortByColumnName != null)
+                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
+
+            return RetrieveData(input, createTempTableAction, RatePreviewMapper, _columnMapper);
         }
 
         private object InitialiazeStreamForDBApply()
@@ -84,7 +93,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 RecentRate = GetReaderValue<decimal>(reader, "RecentRate"),
                 NewRate = GetReaderValue<decimal>(reader, "NewRate"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
-                EED = GetReaderValue<DateTime>(reader, "EED")
+                EED = GetReaderValue<DateTime?>(reader, "EED")
             };
             return ratePreview;
         }

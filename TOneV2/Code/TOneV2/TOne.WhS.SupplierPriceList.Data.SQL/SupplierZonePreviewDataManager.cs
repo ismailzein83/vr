@@ -12,6 +12,11 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
     public class SupplierZonePreviewDataManager : BaseSQLDataManager, ISupplierZonePreviewDataManager
     {
         readonly string[] _columns = { "PriceListId", "Name", "ChangeType", "BED", "EED" };
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+        static SupplierZonePreviewDataManager()
+        {
+            _columnMapper.Add("ChangeTypeDecription" ,"ChangeType");
+        }
 
         public SupplierZonePreviewDataManager()
             : base(GetConnectionStringName("TOneWhS_SPL_DBConnStringKey", "TOneWhS_SPL_DBConnString"))
@@ -38,8 +43,10 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 
                 ExecuteNonQuerySP("[TOneWhS_SPL].[sp_SupplierZone_Preview_CreateTempByFiltered]", tempTableName, input.Query.PriceListId);
             };
+            if (input.SortByColumnName != null)
+                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
 
-            return RetrieveData(input, createTempTableAction, ZonePreviewMapper);
+            return RetrieveData(input, createTempTableAction, ZonePreviewMapper, _columnMapper);
         }
         private object InitialiazeStreamForDBApply()
         {
@@ -84,7 +91,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 Name = reader["Name"] as string,
                 ChangeType = (ZoneChangeType)GetReaderValue<int>(reader, "ChangeType"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
-                EED = GetReaderValue<DateTime>(reader, "EED")
+                EED = GetReaderValue<DateTime?>(reader, "EED")
             };
             return zonePreview;
         }

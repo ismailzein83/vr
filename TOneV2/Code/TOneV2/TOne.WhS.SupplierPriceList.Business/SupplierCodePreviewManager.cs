@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.SupplierPriceList.Data;
 using TOne.WhS.SupplierPriceList.Entities;
+using TOne.WhS.SupplierPriceList.Entities.SPL;
+using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -15,10 +19,31 @@ namespace TOne.WhS.SupplierPriceList.Business
             ISupplierCodePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierCodePreviewDataManager>();
             dataManager.Insert(priceListId, codePreviewList);
         }
-        public Vanrise.Entities.IDataRetrievalResult<CodePreview> GetFilteredCodePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<CodePreviewDetail> GetFilteredCodePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
             ISupplierCodePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierCodePreviewDataManager>();
-            return dataManager.GetCodePreviewFilteredFromTemp(input);
+            BigResult<CodePreview> codesPreview = dataManager.GetCodePreviewFilteredFromTemp(input);
+            BigResult<CodePreviewDetail> codePreviewDetailResult = new BigResult<CodePreviewDetail>()
+            {
+                ResultKey = codesPreview.ResultKey,
+                TotalCount = codesPreview.TotalCount,
+                Data = codesPreview.Data.MapRecords(CodePreviewDetailMapper)
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, codePreviewDetailResult);
+        }
+
+        private CodePreviewDetail CodePreviewDetailMapper(CodePreview codePreview){
+            CodePreviewDetail codePreviewDetail = new CodePreviewDetail();
+
+            codePreviewDetail.Entity = codePreview;
+            var changeEnum = Utilities.GetEnumAttribute<CodeChangeType, DescriptionAttribute>((CodeChangeType)codePreview.ChangeType);
+
+            if (changeEnum.Description != null)
+                codePreviewDetail.ChangeTypeDecription = changeEnum.Description;
+            else
+                codePreviewDetail.ChangeTypeDecription = changeEnum.ToString();
+            return codePreviewDetail;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrSplRatepreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "VRNotificationService", "WhS_SupPL_RateChangeTypeEnum",
-function (WhS_SupPL_SupplierPriceListPreviewPIService, VRNotificationService, WhS_SupPL_RateChangeTypeEnum) {
+app.directive("vrSplRatepreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "VRNotificationService",
+function (WhS_SupPL_SupplierPriceListPreviewPIService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -47,30 +47,11 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, VRNotificationService, Wh
                         return directiveAPI;
                     }
                 };
-                function getValueType(enumname, value) {
-                    switch (value) {
-                        case enumname.NotChanged.value:
-                            return enumname.NotChanged.description;
-                            break;
-                        case enumname.New.value:
-                            return enumname.New.description;
-                            break;
-                        case enumname.Increase.value:
-                            return enumname.Increase.description;
-                            break;
-                        case enumname.Decrease.value:
-                            return enumname.Decrease.description;
-                            break;
-                        default:
-                            return undefined;
-                    }
-                }
+               
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return WhS_SupPL_SupplierPriceListPreviewPIService.GetFilteredRatePreview(dataRetrievalInput)
                         .then(function (response) {
-                            for (var i = 0 ; i < response.Data.length ; i++) {
-                                response.Data[i].ChangeTypeText = getValueType(WhS_SupPL_RateChangeTypeEnum, response.Data[i].ChangeType)
-                            }
+                           
                             onResponseReady(response);
                         })
                         .catch(function (error) {

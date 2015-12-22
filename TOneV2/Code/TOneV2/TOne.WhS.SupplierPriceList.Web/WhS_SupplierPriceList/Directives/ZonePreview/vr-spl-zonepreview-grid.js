@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrSplZonepreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "VRNotificationService", "WhS_SupPL_ZoneChangeTypeEnum",
-function (WhS_SupPL_SupplierPriceListPreviewPIService, VRNotificationService, WhS_SupPL_ZoneChangeTypeEnum) {
+app.directive("vrSplZonepreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "VRNotificationService",
+function (WhS_SupPL_SupplierPriceListPreviewPIService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -47,27 +47,10 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, VRNotificationService, Wh
                         return directiveAPI;
                     }
                 };
-                function getValueType(enumname, value) {
-                    switch (value) {                        
-                        case enumname.New.value:
-                            return enumname.New.description;
-                            break;
-                        case enumname.Closed.value:
-                            return enumname.Closed.description;
-                            break;
-                        case enumname.Deleted.value:
-                            return enumname.Deleted.description;
-                            break;
-                        default:
-                            return undefined;
-                    }
-                }
+               
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return WhS_SupPL_SupplierPriceListPreviewPIService.GetFilteredZonePreview(dataRetrievalInput)
                         .then(function (response) {
-                            for (var i = 0 ; i < response.Data.length ; i++) {
-                                response.Data[i].ChangeTypeText = getValueType(WhS_SupPL_ZoneChangeTypeEnum, response.Data[i].ChangeType)
-                            }
                             onResponseReady(response);
                         })
                         .catch(function (error) {

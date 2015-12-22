@@ -21,4 +21,11 @@ namespace TOne.WhS.SupplierPriceList.Entities
 
         public DateTime? EED { get; set; }
     }
+
+    public class CodePreviewDetail
+    {
+        public CodePreview Entity { get; set; }
+
+        public string ChangeTypeDecription { get; set; }
+    }
 }
