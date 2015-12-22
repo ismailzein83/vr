@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,7 +71,20 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
     }
    
-    public enum CodeChangeType { NotChanged = 0, New = 1, Deleted = 2, Moved = 3 }
+    public enum CodeChangeType {
+
+        [Description("Not Changed")]
+        NotChanged = 0,
+
+        [Description("New")]
+        New = 1,
+
+        [Description(" Deleted")]
+        Deleted = 2,
+
+        [Description("Moved")]
+        Moved = 3 
+    }
     
     public class ImportedCode : Vanrise.Entities.IDateEffectiveSettings, IRuleTarget
     {
@@ -239,7 +253,20 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         public DateTime? EED { get; set; }
     }
 
-    public enum RateChangeType { NotChanged = 0, New = 1, Increase = 2, Decrease = 3 }
+    public enum RateChangeType {
+
+        [Description("Not Changed")]
+        NotChanged = 0,
+
+        [Description("New")]
+        New = 1,
+
+        [Description("Increase")]
+        Increase = 2,
+
+        [Description("Increase")]
+        Decrease = 3
+    }
 
     public class NewRate : Vanrise.Entities.IDateEffectiveSettings
     {
