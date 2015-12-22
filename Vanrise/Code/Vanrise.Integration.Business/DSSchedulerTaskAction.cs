@@ -17,7 +17,7 @@ namespace Vanrise.Integration.Business
     {
         DataSourceLogger _logger = new DataSourceLogger();
 
-        public override void Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
+        public override SchedulerTaskExecuteOutput Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
         {
             DataSourceManager dataManager = new DataSourceManager();
             Vanrise.Integration.Entities.DataSource dataSource = dataManager.GetDataSourcebyTaskId(task.TaskId);
@@ -29,6 +29,11 @@ namespace Vanrise.Integration.Business
 
             QueuesByStages queuesByStages = null;
 
+            SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
+            {
+                Result = ExecuteOutputResult.Completed
+            };
+
             try
             {
                 Vanrise.Queueing.QueueExecutionFlowManager executionFlowManager = new Vanrise.Queueing.QueueExecutionFlowManager();
@@ -37,7 +42,8 @@ namespace Vanrise.Integration.Business
                 if (queuesByStages == null || queuesByStages.Count == 0)
                 {
                     _logger.WriteError("No stages ready for use");
-                    return;
+
+                    return output;
                 }
                 else
                 {
@@ -110,6 +116,8 @@ namespace Vanrise.Integration.Business
             });
 
             _logger.WriteInformation("Finished running Data Source with name '{0}' ", dataSource.Name);
+            
+            return output;
         }
 
         private MappingOutput ExecuteCustomCode(int dataSourceId, string customCode, IImportedData data, MappedBatchItemsToEnqueue outputItems)

@@ -32,19 +32,40 @@ namespace Vanrise.Runtime
                             SchedulerTaskTrigger taskTrigger = null;
                             try
                             {
-                                taskTrigger = (SchedulerTaskTrigger)Activator.CreateInstance(Type.GetType(item.TriggerInfo.FQTN));
-                                if (item.NextRunTime != null)
+                                if ( item.Status == SchedulerTaskStatus.WaitingEvent)
                                 {
-                                    Dictionary<string, object> evaluatedExpressions = taskTrigger.EvaluateExpressions(item);
-
-                                    item.Status = Entities.SchedulerTaskStatus.InProgress;
-                                    dataManager.UpdateTask(item);
-
                                     SchedulerTaskAction taskAction = (SchedulerTaskAction)Activator.CreateInstance(Type.GetType(item.ActionInfo.FQTN));
+                                    var checkProgressContext = new SchedulerTaskCheckProgressContext
+                                    {
+                                        ExecutionInfo = item.ExecutionInfo
+                                    };
+                                    SchedulerTaskCheckProgressOutput output =
+                                        taskAction.CheckProgress(checkProgressContext);
+                                    if (output.Result == ExecuteOutputResult.Completed)
+                                        item.Status = SchedulerTaskStatus.Completed;
+                                }
+                                else
+                                {
+                                    taskTrigger = (SchedulerTaskTrigger)Activator.CreateInstance(Type.GetType(item.TriggerInfo.FQTN));
+                                    if (item.NextRunTime != null)
+                                    {
+                                        Dictionary<string, object> evaluatedExpressions = taskTrigger.EvaluateExpressions(item);
 
-                                    taskAction.Execute(item, item.TaskSettings.TaskActionArgument, evaluatedExpressions);
-                                    item.Status = Entities.SchedulerTaskStatus.Completed;
-                                    item.LastRunTime = DateTime.Now;
+                                        item.Status = Entities.SchedulerTaskStatus.InProgress;
+                                        dataManager.UpdateTask(item);
+
+                                        SchedulerTaskAction taskAction = (SchedulerTaskAction)Activator.CreateInstance(Type.GetType(item.ActionInfo.FQTN));
+
+                                        SchedulerTaskExecuteOutput taskExecuteOutput = new SchedulerTaskExecuteOutput();
+                                        taskExecuteOutput = taskAction.Execute(item, item.TaskSettings.TaskActionArgument, evaluatedExpressions);
+                                        if (taskExecuteOutput != null)
+                                            item.ExecutionInfo = taskExecuteOutput.ExecutionInfo;
+                                        if(taskExecuteOutput == null || taskExecuteOutput.Result == ExecuteOutputResult.Completed)
+                                            item.Status = SchedulerTaskStatus.Completed;
+                                        else
+                                            item.Status = SchedulerTaskStatus.WaitingEvent;
+                                        item.LastRunTime = DateTime.Now;
+                                    }
                                 }
                             }
                             catch(Exception ex)

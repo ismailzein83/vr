@@ -50,6 +50,9 @@
     <Compile Include="SchedulerTask.cs" />
     <Compile Include="SchedulerTaskAction.cs" />
     <Compile Include="SchedulerTaskActionType.cs" />
+    <Compile Include="SchedulerTaskCheckProgressOutput.cs" />
+    <Compile Include="SchedulerTaskExecuteOutput.cs" />
+    <Compile Include="ISchedulerTaskCheckProgressContext.cs" />
     <Compile Include="SchedulerTaskTrigger.cs" />
     <Compile Include="SchedulerTaskTriggerType.cs" />
   </ItemGroup>

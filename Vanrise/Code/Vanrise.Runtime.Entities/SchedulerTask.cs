@@ -11,17 +11,14 @@ namespace Vanrise.Runtime.Entities
 
     public enum SchedulerTaskStatus
     {
-        [Description("Not Started")]
-        NotStarted = 0,
+        [Description("Not Started")] NotStarted = 0,
 
-        [Description("InProgress")]
-        InProgress = 1,
+        [Description("Running")] InProgress = 1,
 
-        [Description("Completed")]
-        Completed = 2,
+        [Description("Completed")] Completed = 2,
 
-        [Description("Failed")]
-        Failed = 3
+        [Description("Failed")] Failed = 3,
+        [Description("Running")] WaitingEvent = 4
     }
 
     public enum SchedulerTaskType
@@ -54,6 +51,7 @@ namespace Vanrise.Runtime.Entities
 
         public ActionTypeInfo ActionInfo { get; set; }
         public int OwnerId { get; set; }
+        public Object ExecutionInfo { get; set; }
 
         public SchedulerTaskSettings TaskSettings { get; set; }
 
