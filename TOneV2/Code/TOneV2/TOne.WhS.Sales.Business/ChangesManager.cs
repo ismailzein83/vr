@@ -171,7 +171,7 @@ namespace TOne.WhS.Sales.Business
                         if (currentRoutingProduct != null)
                         {
                             detail.CurrentRoutingProductName = routingProductManager.GetRoutingProductName(currentRoutingProduct.RoutingProductId);
-                            detail.IsCurrentRoutingProductInherited = !IsRoutingProductEditable(currentRoutingProduct.Source);
+                            detail.IsCurrentRoutingProductInherited = !IsZoneRoutingProductEditable(currentRoutingProduct.Source);
                         }
 
                         if (zoneItemChanges.NewRoutingProduct != null)
@@ -179,8 +179,11 @@ namespace TOne.WhS.Sales.Business
                             detail.NewRoutingProductName = routingProductManager.GetRoutingProductName(zoneItemChanges.NewRoutingProduct.ZoneRoutingProductId);
                             detail.EffectiveOn = zoneItemChanges.NewRoutingProduct.BED;
                         }
-                        else if (currentRoutingProduct != null && zoneItemChanges.RoutingProductChange != null)
+                        else if (zoneItemChanges.RoutingProductChange != null)
+                        {
+                            detail.NewRoutingProductName = "(Default)"; // This isn't expressive, but it's necessary
                             detail.EffectiveOn = zoneItemChanges.RoutingProductChange.EED;
+                        }
 
                         details.Add(detail);
                     }
@@ -240,7 +243,7 @@ namespace TOne.WhS.Sales.Business
             return currentRoutingProducts;
         }
 
-        bool IsRoutingProductEditable(SaleEntityZoneRoutingProductSource rpSource)
+        bool IsZoneRoutingProductEditable(SaleEntityZoneRoutingProductSource rpSource)
         {
             if (_ownerType == SalePriceListOwnerType.SellingProduct && rpSource == SaleEntityZoneRoutingProductSource.ProductZone)
                 return true;

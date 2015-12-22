@@ -18,8 +18,6 @@ namespace TOne.WhS.Sales.Entities
         
         public string NewRoutingProductName { get; set; }
         
-        public string ChangedToRoutingProductName { get; set; }
-        
         public DateTime EffectiveOn { get; set; }
     }
 }

@@ -49,9 +49,9 @@ namespace TOne.WhS.Sales.Business
                 zoneItem.CurrentRateBED = rate.Rate.BED;
                 zoneItem.CurrentRateEED = rate.Rate.EED;
                 zoneItem.IsCurrentRateEditable = (rate.Source == _ownerType);
-
-                SetZoneRateChanges(zoneItem);
             }
+            
+            SetZoneRateChanges(zoneItem);
         }
 
         void SetZoneRateChanges(ZoneItem zoneItem)

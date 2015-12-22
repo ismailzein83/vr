@@ -122,7 +122,6 @@
 
             function getDefaultItem() {
                 return WhS_Sales_RatePlanAPIService.GetDefaultItem(ownerType, ownerId).then(function (response) {
-                    console.log(response);
                     if (response && (response.NewRoutingProductId || (response.CurrentRoutingProductId && response.RoutingProductChangeEED))) {
                         $scope.defaultItem = {};
                         $scope.defaultItem.currentRoutingProductName = response.CurrentRoutingProductName ? response.CurrentRoutingProductName : "None";
@@ -131,7 +130,6 @@
                         $scope.defaultItem.changedToRoutingProductName = !response.NewRoutingProductName ? "(Default)" : null;
                         $scope.defaultItem.effectiveOn = new Date().toDateString();
                     }
-                    console.log($scope.defaultItem);
                 });
             }
         }
