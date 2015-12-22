@@ -58,8 +58,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChangedSaleCodeManager.cs" />
+    <Compile Include="ChangedSaleZoneManager.cs" />
     <Compile Include="CodePreparationManager.cs" />
+    <Compile Include="NewSaleCodeManager.cs" />
+    <Compile Include="NewSaleZoneManager.cs" />
     <Compile Include="PriceListCodeManager.cs" />
+    <Compile Include="ProcessCountryCodesContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

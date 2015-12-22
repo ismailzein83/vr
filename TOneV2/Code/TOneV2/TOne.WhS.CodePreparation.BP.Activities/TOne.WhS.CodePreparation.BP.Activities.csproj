@@ -44,6 +44,7 @@
     <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.DurableInstancing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Activities" />
@@ -52,6 +53,14 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -69,6 +78,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyDataForDB.cs" />
+    <Compile Include="CP\ApplyChangedCodesToDB.cs" />
+    <Compile Include="CP\ApplyChangedZonesToDB.cs" />
+    <Compile Include="CP\ApplyNewCodesToDB.cs" />
+    <Compile Include="CP\ApplyNewZonesToDB.cs" />
+    <Compile Include="CP\GetDataFromSource.cs" />
+    <Compile Include="CP\GetExistingCodes.cs" />
+    <Compile Include="CP\GetExistingZones.cs" />
+    <Compile Include="CP\PrepareExistingCodes.cs" />
+    <Compile Include="CP\PrepareExistingZones.cs" />
+    <Compile Include="CP\ProcessCountryCodes.cs" />
+    <Compile Include="CP\ReserveIdForCodePreparation.cs" />
+    <Compile Include="CP\ReserveIdsForNewEntities.cs" />
+    <Compile Include="CP\StructureDataByCountries.cs" />
+    <Compile Include="CP\StructureDataByZones.cs" />
+    <Compile Include="CP\SyncImportedDataWithDB.cs" />
     <Compile Include="GenerateSaleCodes.cs" />
     <Compile Include="GenerateSaleZones.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

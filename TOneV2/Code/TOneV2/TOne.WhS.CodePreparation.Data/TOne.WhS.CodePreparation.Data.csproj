@@ -44,11 +44,19 @@
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodePrepDataManagerFactory.cs" />
+    <Compile Include="IChangedSaleCodeDataManager.cs" />
+    <Compile Include="IChangedSaleZoneDataManager.cs" />
     <Compile Include="ICodePreparationDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="INewSaleCodeDataManager.cs" />
+    <Compile Include="INewSaleZoneDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

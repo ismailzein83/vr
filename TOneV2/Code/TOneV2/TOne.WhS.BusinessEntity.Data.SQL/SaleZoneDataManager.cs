@@ -81,5 +81,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             }, effectiveOn, isEffectiveInFuture);
             return saleZoneIds;
         }
+
+
+        public List<SaleZone> GetSaleZonesEffectiveAfter(int sellingNumberPlanId, DateTime minimumDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByDate", SaleZoneMapper, sellingNumberPlanId, minimumDate);
+        }
     }
 }

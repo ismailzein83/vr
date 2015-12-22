@@ -21,5 +21,6 @@ namespace TOne.WhS.BusinessEntity.Data
         IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture);
         List<SaleCode> GetSaleCodesByZoneName(int sellingNumberPlanId,string zoneName, DateTime effectiveDate);
         bool AreZonesUpdated(ref object updateHandle);
+        List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, DateTime minimumDate);
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -31,7 +32,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSaleCodesByZoneID(zoneID, effectiveDate);
         }
 
-
+        public long ReserveIDRange(int numberOfIDs)
+        {
+            long startingId;
+            IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIDs, out startingId);
+            return startingId;
+        }
         public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
@@ -55,6 +61,13 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
             return dataManager.GetSaleCodesByZoneName(sellingNumberPlanId, zoneName, effectiveDate);
         }
+
+        public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, DateTime minimumDate)
+        {
+            ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
+            return dataManager.GetSaleCodesEffectiveAfter(sellingNumberPlanId, minimumDate);
+        }
+
         #region private Methode
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
