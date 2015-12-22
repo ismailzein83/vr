@@ -12,9 +12,7 @@ namespace TOne.WhS.CodePreparation.Entities.CP
 
         public string ZoneName { get; set; }
 
-        public DateTime BED { get; set; }
-
-        public DateTime? EED { get; set; }
+        public DateTime CloseEffectiveDate { get; set; }
 
         public bool IsExcluded { get; set; }
     }

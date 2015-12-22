@@ -349,27 +349,18 @@ namespace TOne.WhS.CodePreparation.Business
             Changes existingChanges = dataManager.GetChanges(input.SellingNumberPlanId, CodePreparationStatus.Draft);
             if (existingChanges == null)
                 existingChanges = new Changes();
-            SaleCodeManager saleCodeManager = new SaleCodeManager();
-            List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesByZoneName(input.SellingNumberPlanId, input.CurrentZoneName, DateTime.Now);
             MoveCodeOutput output = new MoveCodeOutput();
-            var codeItems = GetCodeItems(saleCodes, existingChanges.NewCodes);
             foreach (var code in input.Codes)
             {
-                var codeItem = codeItems.FindRecord(c => c.Code == code);
 
-                if (codeItem != null)
+                DeletedCode deletedCode = new DeletedCode()
                 {
-                    DeletedCode deletedCode = new DeletedCode()
-                    {
-                        BED = codeItem.BED,
-                        Code = code,
-                        EED = input.BED,
-                        ZoneName = input.CurrentZoneName
-                    };
-                    existingChanges.DeletedCode.Add(deletedCode);
-                }
+                    CloseEffectiveDate = input.BED,
+                    Code = code,
+                    ZoneName = input.CurrentZoneName
+                };
+                existingChanges.DeletedCode.Add(deletedCode);
 
-                existingChanges.NewCodes.RemoveAll(c => c.Code == codeItem.Code);
                 NewCode newCode = new NewCode()
                 {
                     BED = input.BED,
