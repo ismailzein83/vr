@@ -31,8 +31,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             {
                 if(!zone.IsExcluded)
                 {
-                    //This should be validated when data is imported, that all codes has code groups and are linked to countries
-                    int countryId = zone.ImportedCodes.First().CodeGroup.CountryId;
+                    ImportedCode includedCodeOneMatch = zone.ImportedCodes.Find(x => !x.IsExcluded);
+                    if (includedCodeOneMatch == null)
+                        continue;
+
+                    int countryId = includedCodeOneMatch.CodeGroup.CountryId;
+
                     if(!importedCountriesByCountryId.TryGetValue(countryId, out importedCountry))
                     {
                         importedCountry = new ImportedCountry();
@@ -40,8 +44,13 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         importedCountry.ImportedRates = new List<ImportedRate>();
                     }
 
-                    importedCountry.ImportedCodes.AddRange(zone.ImportedCodes);
-                    importedCountry.ImportedRates.AddRange(zone.ImportedRates);
+                    IEnumerable<ImportedCode> includedCodes = zone.ImportedCodes.Where(x => !x.IsExcluded);
+                    foreach (ImportedCode code in includedCodes)
+                        importedCountry.ImportedCodes.Add(code);
+
+                    IEnumerable<ImportedRate> includedRates = zone.ImportedRates.Where(x => !x.IsExcluded);
+                    foreach (ImportedRate rate in includedRates)
+                        importedCountry.ImportedRates.Add(rate);
 
                     importedCountriesByCountryId.Add(countryId, importedCountry);
                 }
