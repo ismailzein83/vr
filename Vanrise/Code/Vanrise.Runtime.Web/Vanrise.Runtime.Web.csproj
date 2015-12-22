@@ -100,7 +100,10 @@
   <ItemGroup>
     <Content Include="Runtime\Constants\IntervalTimeTypeEnum.js" />
     <Content Include="Runtime\Constants\TimeSchedulerTypeEnum.js" />
+    <Content Include="Runtime\Directives\SchedulerTask\Templates\SchedulerTaskGridTemplate.html" />
+    <Content Include="Runtime\Directives\SchedulerTask\vr-runtime-schedulertask-grid.js" />
     <Content Include="Runtime\Services\APIServices\SchedulerTaskAPIService.js" />
+    <Content Include="Runtime\Services\SchedulerTaskService.js" />
     <Content Include="Runtime\Views\ActionTemplates\WFActionTemplate.html" />
     <Content Include="Runtime\Views\ActionTemplates\WFActionTemplateController.js" />
     <Content Include="Runtime\Views\SchedulerTaskEditor.html" />

@@ -1,8 +1,8 @@
-﻿SchedulerTaskManagementController.$inject = ['$scope', 'SchedulerTaskAPIService', 'VRModalService', 'VRNotificationService'];
+﻿SchedulerTaskManagementController.$inject = ['$scope', 'VR_Runtime_SchedulerTaskService'];
 
-function SchedulerTaskManagementController($scope, SchedulerTaskAPIService, VRModalService, VRNotificationService) {
+function SchedulerTaskManagementController($scope, VR_Runtime_SchedulerTaskService) {
 
-    var gridApi;
+    var gridAPI;
 
     defineScope();
     load();
@@ -13,22 +13,9 @@ function SchedulerTaskManagementController($scope, SchedulerTaskAPIService, VRMo
         $scope.schedulerTasks = [];
         $scope.gridMenuActions = [];
 
-        defineMenuActions();
-
-        $scope.gridReady = function (api) {
-            gridApi = api;
+        $scope.onGridReady = function (api) {
+            gridAPI = api;
             return retrieveData();
-        };
-
-        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-
-            return SchedulerTaskAPIService.GetFilteredTasks(dataRetrievalInput)
-                .then(function (response) {
-                    onResponseReady(response);
-                })
-                .catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
         };
 
         $scope.searchClicked = function () {
@@ -44,67 +31,17 @@ function SchedulerTaskManagementController($scope, SchedulerTaskAPIService, VRMo
     function retrieveData() {
         var name = ($scope.name != undefined && $scope.name != '') ? $scope.name : null;
 
-        return gridApi.retrieveData(name);
-    }
-
-    function defineMenuActions() {
-        $scope.gridMenuActions = [
-            {
-                name: "Edit",
-                clicked: editTask
-            },
-            {
-                name: "Delete",
-                clicked: deleteTask
-            }
-        ];
+        return gridAPI.loadGrid(name);
     }
 
     function addTask() {
-        var settings = {};
-
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Add Task";
-            modalScope.onTaskAdded = function (task) {
-                gridApi.itemAdded(task);
-            };
+        var onTaskAdded = function (addedItem) {
+            gridAPI.onTaskAdded(addedItem);
         };
-        VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', null, settings);
+
+        VR_Runtime_SchedulerTaskService.addTask(onTaskAdded);
     }
 
-    function editTask(taskObj) {
-        var modalSettings = {
-        };
-        var parameters = {
-            taskId: taskObj.TaskId
-        };
-
-        modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Task: " + taskObj.Name;
-            modalScope.onTaskUpdated = function (task) {
-                gridApi.itemUpdated(task);
-            };
-        };
-        VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', parameters, modalSettings);
-    }
-
-    function deleteTask(taskObj) {
-        VRNotificationService.showConfirmation()
-            .then(function (response) {
-                if (response == true) {
-
-                    return SchedulerTaskAPIService.DeleteTask(taskObj.TaskId)
-                        .then(function (deletionResponse) {
-                            VRNotificationService.notifyOnItemDeleted("Scheduler Task", deletionResponse);
-                            // to be removed
-                            return retrieveData();
-                        })
-                        .catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        });
-                }
-            });
-    }
 }
 
 appControllers.controller('Runtime_SchedulerTaskManagementController', SchedulerTaskManagementController);

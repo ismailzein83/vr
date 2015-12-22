@@ -21,18 +21,7 @@
     <div>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-datagrid datasource="schedulerTasks"
-                             dataretrievalfunction="dataRetrievalFunction"
-                             pagingtype="'PagingOnScroll'"
-                             on-ready="gridReady"
-                             menuactions="gridMenuActions"
-                             idfield="TaskId">
-
-                    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Enabled'" field="'IsEnabled'">
-                        <vr-icon icontype="dataItem.IsEnabled"></vr-icon>
-                    </vr-datagridcolumn>
-                </vr-datagrid>
+                <vr-runtime-schedulertask-grid on-ready="onGridReady"></vr-runtime-schedulertask-grid>
             </vr-columns>
         </vr-row>
     </div>
