@@ -12,7 +12,7 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction
 {
     public class WFSchedulerTaskAction : SchedulerTaskAction
     {
-        public override void Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
+        public override SchedulerTaskExecuteOutput Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
         {
             Console.WriteLine("WFSchedulerTaskAction started...");
 
@@ -28,6 +28,12 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction
             });
 
             Console.WriteLine("WFSchedulerTaskAction finished...");
+
+            SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
+            {
+                Result = ExecuteOutputResult.Completed
+            };
+            return output;
         }
     }
 }
