@@ -24,7 +24,7 @@ BEGIN
 			  ,AC.[ActionTypeInfo]
 			  ,SC.[TaskSettings]
 			  ,SC.[OwnerId]
-			
+			 ,SC.[ExecutionInfo]
 			INTO #RESULT
 			
 			from runtime.ScheduleTask SC
