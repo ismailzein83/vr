@@ -164,5 +164,6 @@
     <Build Include="dbo\Stored Procedures\prGetReportedCalls.sql" />
     <Build Include="dbo\Functions\Split.sql" />
     <Build Include="dbo\Functions\SplitwithValue.sql" />
+    <Build Include="dbo\Stored Procedures\prGetEmails.sql" />
   </ItemGroup>
 </Project>
