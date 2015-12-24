@@ -35,6 +35,7 @@
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
         var settings;
+        var pricingSettings;
         var isSavingPriceList; // This flag var prevents the app from saving an empty state after the user saves a price list
 
         defineScope();
@@ -149,7 +150,32 @@
                 WhS_Sales_RatePlanService.sellNewZones(customerId, onCustomerZonesSold);
             };
             $scope.editSettings = function () {
+                var onSettingsUpdate = function (updatedSettings) {
+                    if (updatedSettings) {
+                        settings = {};
+                        settings.CostCalculationMethods = [];
+
+                        if (updatedSettings.CostCalculationMethods) {
+                            for (var i = 0; i < updatedSettings.CostCalculationMethods.length; i++)
+                                settings.CostCalculationMethods.push(updatedSettings.CostCalculationMethods[i]);
+                        }
+                    }
+
+                    VRNotificationService.showSuccess("Settings saved");
+                    loadGrid();
+                };
                 WhS_Sales_RatePlanService.editSettings(settings, onSettingsUpdate);
+            };
+            $scope.editPricingSettings = function () {
+                var onPricingSettingsUpdated = function (updatedPricingSettings) {
+                    if (updatedPricingSettings) {
+                        pricingSettings = updatedPricingSettings;
+                    }
+
+                    VRNotificationService.showSuccess("Pricing settings saved");
+                    loadGrid();
+                };
+                WhS_Sales_RatePlanService.editPricingSettings(settings, pricingSettings, onPricingSettingsUpdated);
             };
             $scope.validateRatePlan = function () {
                 if ($scope.zoneLetters && $scope.zoneLetters.length > 0)
@@ -286,7 +312,6 @@
 
             gridReadyDeferred.promise.then(function () {
                 var gridQuery = getGridQuery();
-
                 VRUIUtilsService.callDirectiveLoad(gridAPI, gridQuery, gridLoadDeferred);
             });
 
@@ -304,24 +329,11 @@
                     RoutingDatabaseId: databaseSelectorAPI.getSelectedIds(),
                     PolicyConfigId: policySelectorAPI.getSelectedIds(),
                     NumberOfOptions: $scope.numberOfOptions,
-                    CostCalculationMethods: settings ? settings.CostCalculationMethods : null
+                    CostCalculationMethods: settings ? settings.CostCalculationMethods : null,
+                    CostCalculationMethodConfigId: pricingSettings ? pricingSettings.selectedCostColumn.ConfigId : null,
+                    RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null
                 };
             }
-        }
-
-        function onSettingsUpdate(updatedSettings) {
-            if (updatedSettings) {
-                settings = {};
-
-                settings.CostCalculationMethods = [];
-                if (updatedSettings.CostCalculationMethods) {
-                    for (var i = 0; i < updatedSettings.CostCalculationMethods.length; i++)
-                        settings.CostCalculationMethods.push(updatedSettings.CostCalculationMethods[i]);
-                }
-            }
-
-            VRNotificationService.showSuccess("Settings saved");
-            loadGrid();
         }
 
         function onDefaultItemChange() {

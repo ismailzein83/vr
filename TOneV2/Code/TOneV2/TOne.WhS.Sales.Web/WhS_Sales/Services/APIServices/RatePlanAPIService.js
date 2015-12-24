@@ -12,6 +12,7 @@
             GetZoneItems: GetZoneItems,
             GetZoneItem: GetZoneItem,
             GetCostCalculationMethodTemplates: GetCostCalculationMethodTemplates,
+            GetRateCalculationMethodTemplates: GetRateCalculationMethodTemplates,
             GetChangesSummary: GetChangesSummary,
             GetFilteredZoneRateChanges: GetFilteredZoneRateChanges,
             GetFilteredZoneRoutingProductChanges: GetFilteredZoneRoutingProductChanges,
@@ -43,6 +44,10 @@
 
         function GetCostCalculationMethodTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetCostCalculationMethodTemplates"));
+        }
+
+        function GetRateCalculationMethodTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetRateCalculationMethodTemplates"));
         }
 
         function GetChangesSummary(ownerType, ownerId) {

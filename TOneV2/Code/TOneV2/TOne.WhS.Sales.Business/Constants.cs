@@ -9,5 +9,7 @@ namespace TOne.WhS.Sales.Business
     public class Constants
     {
         public const string CostCalculationMethod = "WhS_Sales_CostCalculationMethod";
+
+        public const string RateCalculationMethod = "WhS_Sales_RateCalculationMethod";
     }
 }

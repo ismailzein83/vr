@@ -161,7 +161,7 @@ namespace TOne.WhS.Sales.Business
                 }
 
                 IEnumerable<RPZone> rpZones = zoneItems.MapRecords(itm => new RPZone() { RoutingProductId = itm.EffectiveRoutingProductId, SaleZoneId = itm.ZoneId });
-                ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.Filter.RoutingDatabaseId, input.Filter.PolicyConfigId, input.Filter.NumberOfOptions, rpZones, input.Filter.CostCalculationMethods);
+                ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.Filter.RoutingDatabaseId, input.Filter.PolicyConfigId, input.Filter.NumberOfOptions, rpZones, input.Filter.CostCalculationMethods, input.Filter.RateCalculationMethod);
                 routeOptionSetter.SetZoneRouteOptionsAndCosts(zoneItems);
             }
 
@@ -188,8 +188,8 @@ namespace TOne.WhS.Sales.Business
             routingProductSetter.SetZoneRoutingProduct(zoneItem);
 
             RPZone rpZone = new RPZone() { RoutingProductId = zoneItem.EffectiveRoutingProductId, SaleZoneId = zoneItem.ZoneId };
-            ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, new List<RPZone>() { rpZone }, input.CostCalculationMethods);
-            routeOptionSetter.SetZoneRouteOptionsAndCosts(new List<ZoneItem>() { zoneItem });
+            //ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, new List<RPZone>() { rpZone }, input.CostCalculationMethods);
+            //routeOptionSetter.SetZoneRouteOptionsAndCosts(new List<ZoneItem>() { zoneItem });
 
             return zoneItem;
         }
@@ -210,10 +210,16 @@ namespace TOne.WhS.Sales.Business
         
         #endregion
 
-        public List<TemplateConfig> GetCostCalculationMethodTemplates()
+        public IEnumerable<TemplateConfig> GetCostCalculationMethodTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.CostCalculationMethod);
+        }
+
+        public IEnumerable<TemplateConfig> GetRateCalculationMethodTemplates()
+        {
+            TemplateConfigManager templateConfigManager = new TemplateConfigManager();
+            return templateConfigManager.GetTemplateConfigurations(Constants.RateCalculationMethod);
         }
 
         public ChangesSummary GetChangesSummary(SalePriceListOwnerType ownerType, int ownerId)

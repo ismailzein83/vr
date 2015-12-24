@@ -88,6 +88,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         $scope.connector.costCalculationMethods.push(query.CostCalculationMethods[i]);
                 }
 
+                if (query.RateCalculationMethod) {
+                    $scope.rateCalculationMethod = query.RateCalculationMethod;
+                }
+
                 gridAPI.clearDataAndContinuePaging();
                 return loadZoneItems();
             };
@@ -109,8 +113,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
         function loadZoneItems() {
             var promises = [];
-
             $scope.isLoading = true;
+
             var zoneItemsGetPromise = WhS_Sales_RatePlanAPIService.GetZoneItems(getZoneItemsInput());
             promises.push(zoneItemsGetPromise);
 

@@ -53,9 +53,16 @@ namespace TOne.WhS.Sales.Web.Controllers
 
         [HttpGet]
         [Route("GetCostCalculationMethodTemplates")]
-        public List<TemplateConfig> GetCostCalculationMethodTemplates()
+        public IEnumerable<TemplateConfig> GetCostCalculationMethodTemplates()
         {
             return _manager.GetCostCalculationMethodTemplates();
+        }
+
+        [HttpGet]
+        [Route("GetRateCalculationMethodTemplates")]
+        public IEnumerable<TemplateConfig> GetRateCalculationMethodTemplates()
+        {
+            return _manager.GetRateCalculationMethodTemplates();
         }
 
         [HttpGet]

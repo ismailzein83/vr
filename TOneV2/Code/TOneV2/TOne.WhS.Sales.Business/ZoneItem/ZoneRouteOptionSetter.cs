@@ -13,13 +13,15 @@ namespace TOne.WhS.Sales.Business
     public class ZoneRouteOptionSetter
     {
         public IEnumerable<RPRouteDetail> _rpRoutes;
-        public IEnumerable<CostCalculationMethod> _methods;
+        public List<CostCalculationMethod> _costCalculationMethods;
+        public RateCalculationMethod _rateCalculationMethod;
 
-        public ZoneRouteOptionSetter(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, IEnumerable<CostCalculationMethod> methods)
+        public ZoneRouteOptionSetter(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, RateCalculationMethod rateCalculationMethod)
         {
             RPRouteManager rpRouteManager = new RPRouteManager();
             _rpRoutes = rpRouteManager.GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones);
-            _methods = methods;
+            _costCalculationMethods = costCalculationMethods;
+            _rateCalculationMethod = rateCalculationMethod;
         }
 
         public void SetZoneRouteOptionsAndCosts(IEnumerable<ZoneItem> zoneItems)
@@ -39,18 +41,37 @@ namespace TOne.WhS.Sales.Business
 
                 zoneItem.RouteOptions = rpRoute.RouteOptionsDetails;
 
-                if (_methods != null)
+                if (_costCalculationMethods != null)
                 {
                     zoneItem.Costs = new List<decimal>();
 
-                    foreach (CostCalculationMethod method in _methods)
+                    foreach (CostCalculationMethod method in _costCalculationMethods)
                     {
                         CostCalculationMethodContext context = new CostCalculationMethodContext() { Route = rpRoute };
                         method.CalculateCost(context);
                         zoneItem.Costs.Add(context.Cost);
                     }
+
+                    SetCalculatedRate(zoneItem);
                 }
             } // foreach
+        }
+
+        void SetCalculatedRate(ZoneItem zoneItem)
+        {
+            if (_rateCalculationMethod != null)
+            {
+                CostCalculationMethod costCalculationMethod = _costCalculationMethods.FindRecord(itm => itm.ConfigId == _rateCalculationMethod.ConfigId);
+
+                if (costCalculationMethod != null)
+                {
+                    int index = _costCalculationMethods.IndexOf(costCalculationMethod);
+                    RateCalculationMethodContext context = new RateCalculationMethodContext();
+                    context.Cost = zoneItem.Costs[index];
+                    _rateCalculationMethod.CalculateRate(context);
+                    zoneItem.CalculatedRate = context.Rate;
+                }
+            }
         }
     }
 }

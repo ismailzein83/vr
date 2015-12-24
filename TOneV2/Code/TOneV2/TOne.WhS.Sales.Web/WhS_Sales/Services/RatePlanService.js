@@ -3,6 +3,7 @@
     return ({
         sellNewZones: sellNewZones,
         editSettings: editSettings,
+        editPricingSettings: editPricingSettings,
         viewChanges: viewChanges
     });
 
@@ -32,6 +33,21 @@
         };
 
         VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanSettings.html", parameters, modalSettings);
+    }
+
+    function editPricingSettings(ratePlanSettings, pricingSettings, onPricingSettingsUpdated) {
+        var parameters = {
+            ratePlanSettings: ratePlanSettings,
+            pricingSettings: pricingSettings
+        };
+
+        var modalSettings = {};
+
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.onPricingSettingsUpdated = onPricingSettingsUpdated;
+        };
+
+        VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanPricingSettings.html", parameters, modalSettings);
     }
 
     function viewChanges(ownerType, ownerId, onRatePlanChangesClose) {

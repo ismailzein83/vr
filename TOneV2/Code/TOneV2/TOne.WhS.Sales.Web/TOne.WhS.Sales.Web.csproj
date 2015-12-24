@@ -149,6 +149,12 @@
     <Content Include="WhS_Sales\Constants\RateChangeTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\SalePriceListOwnerTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\RatePlanStatusEnum.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\Templates\FixedRateCalculationTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\Templates\MarginPercentageRateCalculationTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\Templates\MarginRateCalculationTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\vr-whs-sales-fixedratecalculation.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\vr-whs-sales-marginpercentageratecalculation.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\vr-whs-sales-marginratecalculation.js" />
     <Content Include="WhS_Sales\Directives\Templates\AvgCostCalculation.html" />
     <Content Include="WhS_Sales\Directives\Templates\CostColumnsTemplate.html" />
     <Content Include="WhS_Sales\Directives\Templates\DefaultRoutingProductTemplate.html" />
@@ -167,6 +173,8 @@
     <Content Include="WhS_Sales\Services\RatePlanService.js" />
     <Content Include="WhS_Sales\Views\RatePlanChanges.html" />
     <Content Include="WhS_Sales\Views\RatePlanChangesController.js" />
+    <Content Include="WhS_Sales\Views\RatePlanPricingSettings.html" />
+    <Content Include="WhS_Sales\Views\RatePlanPricingSettingsController.js" />
     <Content Include="WhS_Sales\Views\RatePlanSettings.html" />
     <Content Include="WhS_Sales\Views\RatePlanSettingsController.js" />
     <Content Include="WhS_Sales\Views\RPRouteOptionSupplier.html" />

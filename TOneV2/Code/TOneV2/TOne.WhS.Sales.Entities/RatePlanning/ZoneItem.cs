@@ -23,6 +23,7 @@ namespace TOne.WhS.Sales.Entities
         public DateTime? NewRateBED { get; set; }
         public DateTime? NewRateEED { get; set; }
         public DateTime? RateChangeEED { get; set; }
+        public decimal? CalculatedRate { get; set; }
 
         #endregion
 
