@@ -10,8 +10,6 @@ namespace Vanrise.BusinessProcess.Entities
     {
         object Key { get; }
 
-        string Message { get; }
-
         void SetExcluded();
 
     }

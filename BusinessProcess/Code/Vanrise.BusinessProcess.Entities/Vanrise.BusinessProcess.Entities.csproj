@@ -66,6 +66,7 @@
     <Compile Include="BusinessRules\BusinessRuleCondition.cs" />
     <Compile Include="BusinessRules\IBusinessRuleActionExecutionContext.cs" />
     <Compile Include="BusinessRules\IRuleTarget.cs" />
+    <Compile Include="BusinessRules\ValidationMessage.cs" />
     <Compile Include="TrackingQuery.cs" />
     <Compile Include="CreateProcessInput.cs" />
     <Compile Include="CreateProcessOutput.cs" />

@@ -16,7 +16,7 @@ namespace Vanrise.BusinessProcess.WFActivities
         [RequiredArgument]
         public InArgument<IEnumerable<BusinessRule>> BusinessRules { get; set; }
 
-        private List<BusinessRule> _violatedBusinessRules = new List<BusinessRule>();
+        private Dictionary<IRuleTarget, BusinessRule> _violatedBusinessRulesByTarget = new Dictionary<IRuleTarget, BusinessRule>();
         private bool _stopExecutionFlag;
 
         protected override void Execute(CodeActivityContext context)
@@ -24,14 +24,14 @@ namespace Vanrise.BusinessProcess.WFActivities
             IEnumerable<IRuleTarget> importedDataToValidate = this.ImportedDataToValidate.Get(context);
             IEnumerable<BusinessRule> rules = this.BusinessRules.Get(context);
             
-            this.ExecuteValidation(rules, context, importedDataToValidate);
-            this.AppendValidationMessages();
+            this.ExecuteValidation(rules, importedDataToValidate);
+            this.AppendValidationMessages(context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID);
 
             if (this._stopExecutionFlag)
                 throw new InvalidWorkflowException("One or more business rules were not satisfied and led to stop the execution of the worklfow");
         }
 
-        private void ExecuteValidation(IEnumerable<BusinessRule> rules, CodeActivityContext context, IEnumerable<IRuleTarget> targets)
+        private void ExecuteValidation(IEnumerable<BusinessRule> rules, IEnumerable<IRuleTarget> targets)
         {
             foreach (BusinessRule rule in rules)
             {
@@ -47,19 +47,32 @@ namespace Vanrise.BusinessProcess.WFActivities
                             rule.Action.Execute(actionContext);
                             if(actionContext.StopExecution)
                                 this._stopExecutionFlag = true;
-                            this._violatedBusinessRules.Add(rule);
+
+                            this._violatedBusinessRulesByTarget.Add(target, rule);
                         }
                     }
                 }
             }
         }
 
-        private void AppendValidationMessages()
+        private void AppendValidationMessages(long processIntanceId)
         {
-            foreach (BusinessRule rule in this._violatedBusinessRules)
+            List<ValidationMessage> messages = new List<ValidationMessage>();
+            foreach (KeyValuePair<IRuleTarget, BusinessRule> kvp in this._violatedBusinessRulesByTarget)
             {
+                ValidationMessage msg = new ValidationMessage()
+                {
+                    ProcessInstanceId = processIntanceId,
+                    TargetKey = kvp.Key.Key,
+                    Severity = kvp.Value.Action.GetSeverity(),
+                    Message = kvp.Value.Condition.GetMessage(kvp.Key)
+                };
 
+                messages.Add(msg);
             }
+
+            ValidationMessageManager manager = new ValidationMessageManager();
+            manager.Insert(messages);
         }
     }
 }

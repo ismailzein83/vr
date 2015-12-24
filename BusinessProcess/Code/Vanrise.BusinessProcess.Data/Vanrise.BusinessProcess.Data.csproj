@@ -59,6 +59,7 @@
     <Compile Include="IBPDataManager.cs" />
     <Compile Include="IBPTrackingDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IBPValidationMessageDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

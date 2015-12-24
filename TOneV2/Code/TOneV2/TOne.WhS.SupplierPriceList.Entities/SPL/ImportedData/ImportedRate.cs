@@ -53,8 +53,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         #region IRuleTarget Implementation
 
-        public string Message { get; set; }
-
         public void SetExcluded()
         {
             this.IsExcluded = true;

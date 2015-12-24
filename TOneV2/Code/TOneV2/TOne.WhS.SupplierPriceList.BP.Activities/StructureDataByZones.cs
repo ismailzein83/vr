@@ -34,6 +34,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     importedZone = new ImportedZone();
                     importedZone.ImportedCodes = new List<ImportedCode>();
                     importedZone.ImportedRates = new List<ImportedRate>();
+                    importedZone.ZoneName = code.ZoneName;
                     importedZonesByZoneName.Add(code.ZoneName, importedZone);
                 }
 
