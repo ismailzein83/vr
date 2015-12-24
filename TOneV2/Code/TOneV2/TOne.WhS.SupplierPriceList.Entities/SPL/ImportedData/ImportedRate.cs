@@ -64,6 +64,12 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         }
 
         #endregion
+
+
+        public string TargetType
+        {
+            get { return "Rate"; }
+        }
     }
 
     public class RateProcessInfo

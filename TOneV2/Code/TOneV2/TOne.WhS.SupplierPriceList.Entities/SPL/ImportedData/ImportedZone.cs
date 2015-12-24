@@ -41,6 +41,12 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         }
 
         #endregion
+
+
+        public string TargetType
+        {
+            get { return "Zone"; }
+        }
     }
 
 }
