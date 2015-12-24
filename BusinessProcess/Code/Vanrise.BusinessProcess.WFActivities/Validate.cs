@@ -25,7 +25,7 @@ namespace Vanrise.BusinessProcess.WFActivities
             IEnumerable<BusinessRule> rules = this.BusinessRules.Get(context);
             
             this.ExecuteValidation(rules, importedDataToValidate);
-            this.AppendValidationMessages(context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID);
+            this.AppendValidationMessages(context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID, context.GetSharedInstanceData().InstanceInfo.ParentProcessID);
 
             if (this._stopExecutionFlag)
                 throw new InvalidWorkflowException("One or more business rules were not satisfied and led to stop the execution of the worklfow");
@@ -55,7 +55,7 @@ namespace Vanrise.BusinessProcess.WFActivities
             }
         }
 
-        private void AppendValidationMessages(long processIntanceId)
+        private void AppendValidationMessages(long processIntanceId, long? parentProcessId)
         {
             List<ValidationMessage> messages = new List<ValidationMessage>();
             foreach (KeyValuePair<IRuleTarget, BusinessRule> kvp in this._violatedBusinessRulesByTarget)
@@ -63,7 +63,9 @@ namespace Vanrise.BusinessProcess.WFActivities
                 ValidationMessage msg = new ValidationMessage()
                 {
                     ProcessInstanceId = processIntanceId,
+                    ParentProcessId = parentProcessId,
                     TargetKey = kvp.Key.Key,
+                    TargetType = kvp.Key.TargetType,
                     Severity = kvp.Value.Action.GetSeverity(),
                     Message = kvp.Value.Condition.GetMessage(kvp.Key)
                 };
@@ -73,6 +75,7 @@ namespace Vanrise.BusinessProcess.WFActivities
 
             ValidationMessageManager manager = new ValidationMessageManager();
             manager.Insert(messages);
+            manager.InsertIntoTrackingTable(messages);
         }
     }
 }

@@ -11,6 +11,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
 {
     internal class BPTrackingDataManager : BaseSQLDataManager, IBPTrackingDataManager
     {
+        readonly string[] _columns = { "ProcessInstanceID", "ParentProcessID", "TrackingMessage", "Severity", "EventTime" };
+
         public BPTrackingDataManager()
             : base(GetConnectionStringName("BusinessProcessTrackingDBConnStringKey", "BusinessProcessTrackingDBConnString"))
         {
@@ -42,6 +44,19 @@ namespace Vanrise.BusinessProcess.Data.SQL
         public void Insert(BPTrackingMessage trackingMessage)
         {
             WriteTrackingMessagesToDB(new List<BPTrackingMessage> { trackingMessage });
+        }
+
+        public void InsertValidationMessages(IEnumerable<ValidationMessage> messages)
+        {
+            object dbApplyStream = InitialiazeStreamForDBApply();
+
+            foreach (ValidationMessage msg in messages)
+            {
+                WriteRecordToStream(msg, dbApplyStream);
+            }
+
+            object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
+            ApplyForDB(prepareToApplyInfo);
         }
 
         public void WriteTrackingMessagesToDB(List<BPTrackingMessage> lstTrackingMsgs)
@@ -100,6 +115,57 @@ namespace Vanrise.BusinessProcess.Data.SQL
             };
 
             return bpTrackingMessage;
+        }
+
+        private LogEntryType MapSeverity(ActionSeverity actionSeverity)
+        {
+            switch(actionSeverity)
+            {
+                case ActionSeverity.Information:
+                    return LogEntryType.Information;
+                case ActionSeverity.Warning:
+                    return LogEntryType.Warning;
+                case ActionSeverity.Error:
+                    return LogEntryType.Error;
+                default:
+                    return LogEntryType.Verbose;
+            }
+        }
+
+        private object InitialiazeStreamForDBApply()
+        {
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        private void WriteRecordToStream(ValidationMessage record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}",
+                       record.ProcessInstanceId,
+                       record.ParentProcessId,
+                       record.Message,
+                       (int)MapSeverity(record.Severity),
+                       DateTime.Now);
+        }
+
+        private object FinishDBApplyStream(object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.Close();
+            return new StreamBulkInsertInfo
+            {
+                ColumnNames = _columns,
+                TableName = "bp.BPTracking",
+                Stream = streamForBulkInsert,
+                TabLock = false,
+                KeepIdentity = false,
+                FieldSeparator = '^',
+            };
+        }
+
+        private void ApplyForDB(object preparedObject)
+        {
+            InsertBulkToTable(preparedObject as BaseBulkInsertInfo);
         }
 
         #endregion
