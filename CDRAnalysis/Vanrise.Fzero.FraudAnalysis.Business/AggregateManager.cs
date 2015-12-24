@@ -230,7 +230,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                  Aggregation = new SumAggregate(
                  (cdr) =>
                  {
-                     return (cdr.CallType == CallType.IncomingVoiceCall && cdr.DurationInSeconds.HasValue) ? cdr.DurationInSeconds.Value : 0;
+                     return (cdr.CallType == CallType.IncomingVoiceCall && cdr.DurationInSeconds.HasValue) ? cdr.DurationInSeconds.Value/60 : 0;
                  }
              )
              });
