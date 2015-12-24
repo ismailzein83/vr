@@ -22,7 +22,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<ImportedZone> importedZonesList = this.ImportedZones.Get(context);
-            IEnumerable<ImportedCountry> importedCountriesList = this.ImportedCountries.Get(context);
 
             Dictionary<int, ImportedCountry> importedCountriesByCountryId = new Dictionary<int, ImportedCountry>();
             ImportedCountry importedCountry;

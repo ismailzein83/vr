@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -55,8 +58,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessRules\Actions\ExcludeItemAction.cs" />
-    <Compile Include="BusinessRules\Actions\StopExecutionAction.cs" />
     <Compile Include="ChangedSupplierCodeManager.cs" />
     <Compile Include="ChangedSupplierRateManager.cs" />
     <Compile Include="ChangedSupplierZoneManager.cs" />
@@ -93,6 +94,9 @@
       <Project>{0940dc86-5421-4324-87cd-3f3ad458f4f6}</Project>
       <Name>TOne.WhS.SupplierPriceList.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BusinessRules\Actions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
