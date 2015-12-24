@@ -78,6 +78,7 @@
     <Compile Include="Base Classes\AsyncActivityHandle.cs" />
     <Compile Include="Base Classes\BaseAsyncActivity.cs" />
     <Compile Include="Base Classes\DependentAsyncActivity.cs" />
+    <Compile Include="BPTaskManager.cs" />
     <Compile Include="BusinessProcessService.cs" />
     <Compile Include="BusinessRuleActions\BusinessRuleActionExecutionContext.cs" />
     <Compile Include="BusinessRuleActions\ExcludeItemAction.cs" />

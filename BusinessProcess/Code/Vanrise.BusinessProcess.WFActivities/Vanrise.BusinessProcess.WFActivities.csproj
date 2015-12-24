@@ -62,6 +62,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssignTask.cs" />
     <Compile Include="CombineLists.cs" />
     <Compile Include="CreateCacheManager.cs" />
     <Compile Include="Designer\ParallelForEachDesigner.xaml.cs">

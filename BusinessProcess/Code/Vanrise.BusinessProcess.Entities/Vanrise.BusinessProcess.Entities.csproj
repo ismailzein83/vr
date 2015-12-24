@@ -60,6 +60,13 @@
     <Compile Include="BPInstance.cs" />
     <Compile Include="BPInstanceQuery.cs" />
     <Compile Include="BPInstanceStatus.cs" />
+    <Compile Include="Tasks\BPTask.cs" />
+    <Compile Include="Tasks\BPTaskAction.cs" />
+    <Compile Include="Tasks\BPTaskAssignee.cs" />
+    <Compile Include="Tasks\BPTaskComment.cs" />
+    <Compile Include="Tasks\BPTaskExecutionInformation.cs" />
+    <Compile Include="Tasks\BPTaskInformation.cs" />
+    <Compile Include="Tasks\BPTaskType.cs" />
     <Compile Include="BPTrackingMessage.cs" />
     <Compile Include="BusinessRules\BusinessRule.cs" />
     <Compile Include="BusinessRules\BusinessRuleAction.cs" />
@@ -67,6 +74,13 @@
     <Compile Include="BusinessRules\IBusinessRuleActionExecutionContext.cs" />
     <Compile Include="BusinessRules\IRuleTarget.cs" />
     <Compile Include="BusinessRules\ValidationMessage.cs" />
+    <Compile Include="Tasks\BPTaskTypeSettings.cs" />
+    <Compile Include="Tasks\CreateBPTaskInput.cs" />
+    <Compile Include="Tasks\CreateBPTaskOutput.cs" />
+    <Compile Include="Tasks\ExecuteBPTaskInput.cs" />
+    <Compile Include="Tasks\ExecuteBPTaskOutput.cs" />
+    <Compile Include="Tasks\IBPTaskActionContext.cs" />
+    <Compile Include="Tasks\IBPTaskAssigneeContext.cs" />
     <Compile Include="TrackingQuery.cs" />
     <Compile Include="CreateProcessInput.cs" />
     <Compile Include="CreateProcessOutput.cs" />

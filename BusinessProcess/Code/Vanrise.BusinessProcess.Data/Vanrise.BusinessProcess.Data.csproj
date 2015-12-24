@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="BPDataManagerFactory.cs" />
     <Compile Include="IBPDataManager.cs" />
+    <Compile Include="IBPTaskDataManager.cs" />
     <Compile Include="IBPTrackingDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IBPValidationMessageDataManager.cs" />
