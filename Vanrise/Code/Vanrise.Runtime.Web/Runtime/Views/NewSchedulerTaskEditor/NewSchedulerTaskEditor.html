@@ -36,9 +36,9 @@
                                 </vr-row>
                             </div>
                             <div>
-                                <vr-row>
-                                    <vr-columns width="fullrow">
-                                        <div ng-include="scopeModel.selectedTriggerType.Info.URL"></div>
+                                <vr-row>                                    
+                                    <vr-columns width="fullrow" ng-if="scopeModel.selectedTriggerType">
+                                        <vr-directivewrapper directive="scopeModel.selectedTriggerType.Info.Editor" on-ready="onTaskTriggerDirectiveReady"></vr-directivewrapper>
                                     </vr-columns>
                                 </vr-row>
                             </div>
@@ -56,9 +56,11 @@
                                     </vr-columns>
                                 </vr-row>
                             </div>
-                            <vr-columns width="fullrow" ng-if="scopeModel.selectedActionType">
-                                <vr-directivewrapper directive="scopeModel.selectedTriggerType.Info.Editor" on-ready="onTaskActionDirectiveReady"></vr-directivewrapper>
-                            </vr-columns>
+                            <vr-row>
+                                <vr-columns width="fullrow">
+                                    <div ng-include="scopeModel.selectedActionType.Info.URL"></div>
+                                </vr-columns>
+                            </vr-row>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrRuntimeTaskactionGroup", ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService,VRUIUtilsService) {
+app.directive("vrRuntimeTasktriggerTimerGroup", ['UtilsService', 'VRUIUtilsService','TimeSchedulerTypeEnum',
+function (UtilsService,VRUIUtilsService ,TimeSchedulerTypeEnum) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -29,7 +29,7 @@ app.directive("vrRuntimeTaskactionGroup", ['UtilsService', 'VRUIUtilsService',
     };
 
     function getDirectiveTemplateUrl() {
-        return "/Client/Modules/Runtime/Directives/TaskAction/Templates/TaskActionGroup.html";
+        return "/Client/Modules/Runtime/Directives/TimerTrigger/Templates/TaskTriggerTimerGroup.html";
     }
 
     function DirectiveConstructor($scope, ctrl) {
@@ -42,14 +42,24 @@ app.directive("vrRuntimeTaskactionGroup", ['UtilsService', 'VRUIUtilsService',
 
         function defineAPI() {
             var api = {};
-
+            $scope.schedulerTypes = UtilsService.getArrayEnum(TimeSchedulerTypeEnum);
             api.getData = function () {
                 
             };
 
 
             api.load = function (payload) {
-                
+
+                console.log(payload)
+                var data;
+                if (payload != undefined && payload.data != undefined) {
+                    data = payload.data;
+                    $scope.selectedType = UtilsService.getItemByVal($scope.schedulerTypes, data.TimerTriggerTypeFQTN, "FQTN");
+                    $scope.schedulerTypeTaskTrigger = {};
+                    $scope.schedulerTypeTaskTrigger.data = data;
+                    if ($scope.schedulerTypeTaskTrigger.loadTemplateData != undefined)
+                        $scope.schedulerTypeTaskTrigger.loadTemplateData();
+                }
             }
 
             if (ctrl.onReady != null)
