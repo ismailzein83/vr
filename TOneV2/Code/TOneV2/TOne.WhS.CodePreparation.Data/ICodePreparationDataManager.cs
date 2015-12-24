@@ -13,6 +13,8 @@ namespace TOne.WhS.CodePreparation.Data
         void InsertCodePreparationObject(Dictionary<string, Zone> saleZones, int sellingNumberPlanId);
         Changes GetChanges(int sellingNumberPlanId, CodePreparationStatus status);
         bool InsertOrUpdateChanges(int sellingNumberPlanId, Changes changes, CodePreparationStatus status);
-
+        #region New Method
+        bool AddPriceListAndSyncImportedDataWithDB(long processInstanceID, int sellingNumberPlanId);
+        #endregion
     }
 }

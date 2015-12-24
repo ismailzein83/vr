@@ -206,5 +206,13 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         {
             return Vanrise.Common.Serializer.Deserialize<Changes>(reader["Changes"] as string);
         }
+
+
+
+        public bool AddPriceListAndSyncImportedDataWithDB(long processInstanceID, int sellingNumberPlanId)
+        {
+            int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SalePriceList_SyncWithImportedData", processInstanceID, sellingNumberPlanId);
+            return (recordesEffected > 0);
+        }
     }
 }

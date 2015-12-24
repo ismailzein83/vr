@@ -29,7 +29,7 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
             BPClient bpClient = new BPClient();
             return bpClient.CreateNewProcess(new CreateProcessInput
              {
-                 InputArguments = new CodePreparationProcessInput
+                 InputArguments = new CodePreparationInput
                  {
                      EffectiveDate = effectiveDate,
                      FileId = fileId,

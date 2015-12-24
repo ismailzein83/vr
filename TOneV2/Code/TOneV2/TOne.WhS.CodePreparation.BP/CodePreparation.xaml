@@ -273,18 +273,60 @@
               </InArgument>
             </twcba1:ReserveIdsForNewEntities.NewZones>
           </twcba1:ReserveIdsForNewEntities>
-          <Parallel DisplayName="ApplyNewAndChangedDataToTempTables" sap2010:WorkflowViewState.IdRef="Parallel_2" />
+          <Parallel DisplayName="ApplyNewAndChangedDataToTempTables" sap2010:WorkflowViewState.IdRef="Parallel_2">
+            <twcba1:ApplyNewZonesToDB sap2010:WorkflowViewState.IdRef="ApplyNewZonesToDB_1">
+              <twcba1:ApplyNewZonesToDB.NewZones>
+                <InArgument x:TypeArguments="scg:IEnumerable(twcecp:AddedZone)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twcecp:AddedZone)">NewZones</mca:CSharpValue>
+                </InArgument>
+              </twcba1:ApplyNewZonesToDB.NewZones>
+              <twcba1:ApplyNewZonesToDB.SellingNumberPlanId>
+                <InArgument x:TypeArguments="x:Int32">
+                  <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
+                </InArgument>
+              </twcba1:ApplyNewZonesToDB.SellingNumberPlanId>
+            </twcba1:ApplyNewZonesToDB>
+            <twcba1:ApplyChangedZonesToDB sap2010:WorkflowViewState.IdRef="ApplyChangedZonesToDB_1">
+              <twcba1:ApplyChangedZonesToDB.ChangedZones>
+                <InArgument x:TypeArguments="scg:IEnumerable(twcecp:ChangedZone)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twcecp:ChangedZone)">ChangedZones</mca:CSharpValue>
+                </InArgument>
+              </twcba1:ApplyChangedZonesToDB.ChangedZones>
+            </twcba1:ApplyChangedZonesToDB>
+            <twcba1:ApplyNewCodesToDB sap2010:WorkflowViewState.IdRef="ApplyNewCodesToDB_1">
+              <twcba1:ApplyNewCodesToDB.NewCodes>
+                <InArgument x:TypeArguments="scg:IEnumerable(twcecp:AddedCode)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twcecp:AddedCode)">NewCodes</mca:CSharpValue>
+                </InArgument>
+              </twcba1:ApplyNewCodesToDB.NewCodes>
+            </twcba1:ApplyNewCodesToDB>
+            <twcba1:ApplyChangedCodesToDB sap2010:WorkflowViewState.IdRef="ApplyChangedCodesToDB_1">
+              <twcba1:ApplyChangedCodesToDB.ChangedCodes>
+                <InArgument x:TypeArguments="scg:IEnumerable(twcecp:ChangedCode)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twcecp:ChangedCode)">ChangedCodes</mca:CSharpValue>
+                </InArgument>
+              </twcba1:ApplyChangedCodesToDB.ChangedCodes>
+            </twcba1:ApplyChangedCodesToDB>
+          </Parallel>
         </Sequence>
       </ActivityAction>
     </ForEach>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb24ueGFtbDI2A5kCDgIBAUQFYyADAeADZAV5IwMBqwN6BYcBEAMBjwOIAQWXAg8CAQJMC0x4AwGiBEcLR3QDAZUEYAtgXgMBiARWC1ZeAwH7A1sLW1QDAe4DUQtRdgMB4QNsC2xwAwHTA3YLdnwDAcYDZwtnbAMBuQNxC3FuAwGsA3sHhgEpAwGQA4sBC4sBewMBggOSAQmVAhQCAQODAQ2DAXYDAZ4Dfg1+hQEDAZEDmAELuwEWAwGZArwBC8cBKQMB9gHIAQvYASkDAcIB2QELhwIoAgEoiAILkwItAgEFlAILlAJ1AgEEmQENqQEnAwHOAqoBDboBJwMBmgK/ARG/AXkDAYgCxAERxAGQAQMB9wHQARHQAYABAwHlAcsBEcsBeQMB1AHVARHVAYgBAwHDAfUBEfUBeAMBsQHrARHrAXYDAaAB/wER/wF4AwGPAeYBEeYBcgIBftwBEdwBfgIBbYQCEYQCeAIBXPoBEfoBiAECAUvwARHwAXQCATrhARHhAX4CASmLAhGLAnACAReQAhGQAnACAQacAROcAYMBAwHxAqYBE6YBaQMB4AKhAROhAV4DAc8CtwETtwFpAwG9Aq0BE60BgwEDAawCsgETsgFeAwGbAg==</sads:DebugSymbol.Symbol>
+    <twcba1:SyncImportedDataWithDB>
+      <twcba1:SyncImportedDataWithDB.SellingNumberPlanId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
+        </InArgument>
+      </twcba1:SyncImportedDataWithDB.SellingNumberPlanId>
+      <sap2010:WorkflowViewState.IdRef>SyncImportedDataWithDB_1</sap2010:WorkflowViewState.IdRef>
+    </twcba1:SyncImportedDataWithDB>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb24ueGFtbD02A8MCDgIBAUQFYyADAccEZAV5IwMBkgR6BYcBEAMB9gOIAQW5Ag8CARC6AgXBAiUCAQJMC0x4AwGJBUcLR3QDAfwEYAtgXgMB7wRWC1ZeAwHiBFsLW1QDAdUEUQtRdgMByARsC2xwAwG6BHYLdnwDAa0EZwtnbAMBoARxC3FuAwGTBHsHhgEpAwH3A4sBC4sBewMB6QOSAQm3AhQCARG9Agu9AmECAQODAQ2DAXYDAYUEfg1+hQEDAfgDmAELuwEWAwGAA7wBC8cBKQMB3QLIAQvYASkDAakC2QELhwIoAwGPAYgCC5MCLQIBbJQCC7YCFgIBEpkBDakBJwMBtQOqAQ26AScDAYEDvwERvwF5AwHvAsQBEcQBkAEDAd4C0AER0AGAAQMBzALLARHLAXkDAbsC1QER1QGIAQMBqgL1ARH1AXgDAZgC6wER6wF2AwGHAv8BEf8BeAMB9gHmARHmAXIDAeUB3AER3AF+AwHUAYQCEYQCeAMBwwH6ARH6AYgBAwGyAfABEfABdAMBoQHhARHhAX4DAZABiwIRiwJwAgF+kAIRkAJwAgFtlQINoAIoAgFJoQINpwIsAgE3qAINrgIoAgElrwINtQIsAgETnAETnAGDAQMB2AOmAROmAWkDAccDoQEToQFeAwG2A7cBE7cBaQMBpAOtAROtAYMBAwGTA7IBE7IBXgMBggOdAhOdAmkCAVuYAhOYAnICAUqkAhOkAngCATirAhOrAnICASayAhOyAngCARQ=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="GetDataFromSource_2" sap:VirtualizedContainerService.HintSize="606,22" />
-      <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="606,22" />
+      <sap2010:ViewStateData Id="GetDataFromSource_2" sap:VirtualizedContainerService.HintSize="1086,22" />
+      <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="1086,22" />
       <sap2010:ViewStateData Id="StructureDataByCountries_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="606,146">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1086,146">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -293,28 +335,33 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="GetExistingZones_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingCodes_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="PrepareExistingZones_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="PrepareExistingCodes_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="ProcessCountryCodes_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="ReserveIdsForNewEntities_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="554,101" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="576,599">
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
+      <sap2010:ViewStateData Id="PrepareExistingZones_1" sap:VirtualizedContainerService.HintSize="1034,22" />
+      <sap2010:ViewStateData Id="PrepareExistingCodes_1" sap:VirtualizedContainerService.HintSize="1034,22" />
+      <sap2010:ViewStateData Id="ProcessCountryCodes_1" sap:VirtualizedContainerService.HintSize="1034,22" />
+      <sap2010:ViewStateData Id="ReserveIdsForNewEntities_1" sap:VirtualizedContainerService.HintSize="1034,22" />
+      <sap2010:ViewStateData Id="ApplyNewZonesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedZonesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyNewCodesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedCodesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1034,86" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="1056,584">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_2" sap:VirtualizedContainerService.HintSize="606,749" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="628,1183">
+      <sap2010:ViewStateData Id="ForEach`1_2" sap:VirtualizedContainerService.HintSize="1086,734" />
+      <sap2010:ViewStateData Id="SyncImportedDataWithDB_1" sap:VirtualizedContainerService.HintSize="1086,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1108,1230">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.CodePreparation_1" sap:VirtualizedContainerService.HintSize="668,1263" />
+      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.CodePreparation_1" sap:VirtualizedContainerService.HintSize="1148,1310" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

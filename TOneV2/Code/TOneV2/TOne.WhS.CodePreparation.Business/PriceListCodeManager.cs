@@ -53,6 +53,17 @@ namespace TOne.WhS.CodePreparation.Business
                         CloseExistingCodes(codeToClose, matchExistingCodes);
                 }
             }
+
+            List<AddedCode> addedCodes=context.CodesToAdd.SelectMany(itm => itm.AddedCodes).ToList();
+            foreach (AddedCode obj in context.CodesToMove.SelectMany(itm => itm.AddedCodes).ToList())
+            {
+                addedCodes.Add(obj);
+            }
+            context.NewCodes = addedCodes;
+            context.NewZones = newAndExistingZones.SelectMany(itm => itm.Value.Where(izone => izone is AddedZone)).Select(itm => itm as AddedZone);
+
+            context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
+            context.ChangedCodes = context.ExistingCodes.Where(itm => itm.ChangedCode != null).Select(itm => itm.ChangedCode);
         }
 
         private ExistingZonesByName StructureExistingZonesByName(IEnumerable<ExistingZone> existingZones)

@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.CodePreparation.Business;
+using TOne.WhS.CodePreparation.Data;
 using TOne.WhS.CodePreparation.Entities.CP.Processing;
 using Vanrise.BusinessProcess;
-namespace TOne.WhS.CodePreparation.BP.Activities.CP
+namespace TOne.WhS.CodePreparation.BP.Activities
 {
     public sealed class ApplyNewZonesToDB : CodeActivity
     {
@@ -21,9 +22,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities.CP
             IEnumerable<AddedZone> zonesList = this.NewZones.Get(context);
             int sellingNumberPlanId = this.SellingNumberPlanId.Get(context);
             long processInstanceID = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-
-            NewSaleZoneManager manager = new NewSaleZoneManager();
-            manager.Insert(sellingNumberPlanId, processInstanceID, zonesList);
+            INewSaleZoneDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<INewSaleZoneDataManager>();
+            dataManager.Insert(sellingNumberPlanId, processInstanceID, zonesList);
+           
         }
     }
 }
