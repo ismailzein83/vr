@@ -56,6 +56,8 @@
     <Compile Include="CostCalculation\Extensions\PercentageCostCalculation.cs" />
     <Compile Include="CostCalculation\Extensions\RoutePercentageCostCalculation.cs" />
     <Compile Include="CostCalculation\ICostCalculationMethodContext.cs" />
+    <Compile Include="RateCalculation\IRateCalculationMethodContext.cs" />
+    <Compile Include="RateCalculation\RateCalculationMethod.cs" />
     <Compile Include="RateManagement\ImportedRate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatePlanning\DefaultChanges.cs" />
