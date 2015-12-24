@@ -110,6 +110,10 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         $scope.moveCodesClicked = function () {
             moveCodes();
         }
+
+        $scope.closeCodesClicked = function () {
+            closeCodes();
+        }
     }
 
     function loadParameters() {
@@ -153,6 +157,10 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         console.log(response);
     }
 
+    function onCodesClosed(response) {
+        console.log(response);
+    }
+
     function addNewZone() {
         var parameters = {
             CountryId: $scope.currentNode.nodeId,
@@ -187,13 +195,11 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
     function moveCodes() {
 
         var codes = codesGridAPI.getSelectedCodes();
-        console.log(codes);
         var parameters = {
             ZoneId: $scope.currentNode.nodeId,
             ZoneName: $scope.currentNode.nodeName,
             SellingNumberPlanId: filter.sellingNumberPlanId,
             CountryId: $scope.currentNode.countryId,
-            ZoneStatus: $scope.currentNode.status,
             ZoneDataSource: GetCurrentCountryNodeZones(),
             Codes: UtilsService.getPropValuesFromArray(codes, 'Code')
         };
@@ -203,6 +209,23 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         };
 
         VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/MoveCodeDialog.html", parameters, settings);
+    }
+
+    function closeCodes() {
+
+        var codes = codesGridAPI.getSelectedCodes();
+        var parameters = {
+            ZoneId: $scope.currentNode.nodeId,
+            ZoneName: $scope.currentNode.nodeName,
+            SellingNumberPlanId: filter.sellingNumberPlanId,
+            Codes: UtilsService.getPropValuesFromArray(codes, 'Code')
+        };
+        var settings = {};
+        settings.onScopeReady = function (modalScope) {
+            modalScope.onCodesClosed = onCodesClosed;
+        };
+
+        VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/CloseCodeDialog.html", parameters, settings);
     }
 
     function GetCurrentCountryNodeZones() {

@@ -49,6 +49,8 @@
   <ItemGroup>
     <Compile Include="Code.cs" />
     <Compile Include="CodePreparationImport.cs" />
+    <Compile Include="CP\SaleCode\CloseCodesOutput.cs" />
+    <Compile Include="CP\SaleCode\CloseCodesInput.cs" />
     <Compile Include="CP\CountryToProcess.cs" />
     <Compile Include="CP\ExistingCode.cs" />
     <Compile Include="CP\IProcessCountryCodesContext.cs" />

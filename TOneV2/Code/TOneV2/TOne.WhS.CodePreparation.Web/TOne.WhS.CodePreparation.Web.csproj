@@ -163,7 +163,9 @@
     <Content Include="WhS_CodePreparation\Views\CodePreparationController.js" />
     <Content Include="WhS_CodePreparation\Views\CodePreparationManagement.html" />
     <Content Include="WhS_CodePreparation\Views\CodePreparationManagementController.js" />
+    <Content Include="WhS_CodePreparation\Views\Dialogs\CloseCodeDialog.html" />
     <Content Include="WhS_CodePreparation\Views\Dialogs\MoveCodeDialog.html" />
+    <Content Include="WhS_CodePreparation\Views\Dialogs\CloseCodeDialogController.js" />
     <Content Include="WhS_CodePreparation\Views\Dialogs\NewCodeDialog.html" />
     <Content Include="WhS_CodePreparation\Views\Dialogs\MoveCodeDialogController.js" />
     <Content Include="WhS_CodePreparation\Views\Dialogs\NewZoneDialog.html" />

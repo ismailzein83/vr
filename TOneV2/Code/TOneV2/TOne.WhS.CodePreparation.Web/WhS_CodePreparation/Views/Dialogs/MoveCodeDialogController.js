@@ -7,11 +7,9 @@
     function moveCodeDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
         var countryId;
-        var codeEntity;
         var sellingNumberPlanId;
         var currentZoneName;
-        var zoneId;
-        
+        var zoneId;        
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 

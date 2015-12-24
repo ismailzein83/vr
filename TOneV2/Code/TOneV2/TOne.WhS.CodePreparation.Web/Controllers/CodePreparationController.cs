@@ -94,10 +94,18 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
 
         [HttpPost]
         [Route("MoveCodes")]
-        public MoveCodeOutput SaveNewCode(MoveCodeInput input)
+        public MoveCodeOutput MoveCodes(MoveCodeInput input)
         {
             CodePreparationManager manager = new CodePreparationManager();
             return manager.MoveCodes(input);
+        }
+
+        [HttpPost]
+        [Route("CloseCodes")]
+        public CloseCodesOutput CloseCodes(CloseCodesInput input)
+        {
+            CodePreparationManager manager = new CodePreparationManager();
+            return manager.CloseCodes(input);
         }
 
         [HttpGet]

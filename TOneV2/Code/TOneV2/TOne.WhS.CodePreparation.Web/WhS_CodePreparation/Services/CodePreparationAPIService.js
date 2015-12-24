@@ -36,6 +36,9 @@
         function MoveCodes(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "MoveCodes"), input);
         }
+        function CloseCodes(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "CloseCodes"), input);
+        }
         function SaveNewZone(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "SaveNewZone"), input);
         }
@@ -57,7 +60,8 @@
             SaveNewZone: SaveNewZone,
             GetZoneItems: GetZoneItems,
             GetCodeItems: GetCodeItems,
-            MoveCodes: MoveCodes
+            MoveCodes: MoveCodes,
+            CloseCodes: CloseCodes
         });
     }
 

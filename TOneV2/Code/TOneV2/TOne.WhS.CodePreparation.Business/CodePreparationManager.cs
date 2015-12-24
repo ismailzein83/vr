@@ -414,5 +414,27 @@ namespace TOne.WhS.CodePreparation.Business
         #endregion
 
         #endregion
+
+        public CloseCodesOutput CloseCodes(CloseCodesInput input)
+        {
+            ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
+            Changes existingChanges = dataManager.GetChanges(input.SellingNumberPlanId, CodePreparationStatus.Draft);
+            if (existingChanges == null)
+                existingChanges = new Changes();
+            CloseCodesOutput output = new CloseCodesOutput();
+            foreach (var code in input.Codes)
+            {
+                DeletedCode deletedCode = new DeletedCode()
+                {
+                    CloseEffectiveDate = input.CloseDate,
+                    Code = code,
+                    ZoneName = input.ZoneName
+                };
+                existingChanges.DeletedCode.Add(deletedCode);
+            }
+            dataManager.InsertOrUpdateChanges(input.SellingNumberPlanId, existingChanges, CodePreparationStatus.Draft);
+            output.Message = "Codes Closed Successfully";
+            return output;
+        }
     }
 }
