@@ -1,13 +1,14 @@
 ﻿
 CREATE PROCEDURE [QM_CLITester].[sp_TestCall_GetUpdated]
 	@TimestampAfter timestamp,
-	@NbOfRows INT
+	@NbOfRows INT,
+	@UserId INT
 AS
 BEGIN
 	
 	IF (@TimestampAfter IS NULL)--If First Time Query, get the Last Test Calls
 		SELECT @TimestampAfter = MIN([timestamp])
-		FROM (SELECT TOP (@NbOfRows) [timestamp] FROM [QM_CLITester].[TestCall] ORDER BY ID DESC) LastTestCalls
+		FROM (SELECT TOP (@NbOfRows) [timestamp] FROM [QM_CLITester].[TestCall] WHERE UserID = @UserId ORDER BY ID DESC) LastTestCalls
 	
 	SELECT   [ID]
 		  ,[UserID]
@@ -24,9 +25,11 @@ BEGIN
 		  ,[GetProgressRetryCount]
 		  ,[FailureMessage]
 		  ,[timestamp]
+      ,[BatchNumber]
 	INTO #Result
 	FROM [QM_CLITester].[TestCall] 
 	WHERE 
+	 UserID = @UserId AND
 	([timestamp] > @TimestampAfter) --ONLY Updated records
 	
 	

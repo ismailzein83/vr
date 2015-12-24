@@ -3,23 +3,18 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [QM_CLITester].[sp_TestCall_GetRequestedTestCall]
-	@CallTestStatusIDs varchar(max)
+CREATE PROCEDURE [QM_CLITester].[sp_TestCall_GetAllbyBatchNumber]
+	@BatchNumber BIGINT
 AS
 BEGIN
-DECLARE @CallTestStatusIDsTable TABLE (CallTestStatusID int)
-INSERT INTO @CallTestStatusIDsTable (CallTestStatusID)
-select Convert(int, ParsedString) from [QM_CLITester].[ParseStringList](@CallTestStatusIDs)
-
-
 	SET NOCOUNT ON;
-	SELECT    
-      [ID]
+	SELECT
+		[ID]
       ,[UserID]
+      ,[ProfileID]
       ,[SupplierID]
       ,[CountryID]
       ,[ZoneID]
-      ,[ProfileID]
       ,[CreationDate]
       ,[CallTestStatus]
       ,[CallTestResult]
@@ -30,8 +25,7 @@ select Convert(int, ParsedString) from [QM_CLITester].[ParseStringList](@CallTes
       ,[FailureMessage]
       ,[timestamp]
       ,[BatchNumber]
-      
-	FROM	[QM_CLITester].[TestCall] where
-	
-	(@CallTestStatusIDs  is null or [QM_CLITester].[TestCall].CallTestStatus in (select CallTestStatusID from @CallTestStatusIDsTable))
+	FROM	[QM_CLITester].[TestCall] 
+	WHERE 
+	BatchNumber = @BatchNumber
 END

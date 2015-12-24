@@ -50,34 +50,35 @@ BEGIN
 
 			
 			SELECT
-				[ID]
-			  ,[UserID]
-			  ,[SupplierID]
-			  ,[CountryID]
-			  ,[ZoneID]
-			  ,[ProfileID]
-			  ,[CreationDate]
-			  ,[CallTestStatus]
-			  ,[CallTestResult]
-			  ,[InitiateTestInformation]
-			  ,[TestProgress]
-			  ,[InitiationRetryCount]
-			  ,[GetProgressRetryCount]
-			  ,[FailureMessage]
-			  ,[timestamp]
+				tc.[ID]
+			  ,tc.[UserID]
+			  ,tc.[SupplierID]
+			  ,tc.[CountryID]
+			  ,tc.[ZoneID]
+			  ,tc.[ProfileID]
+			  ,tc.[CreationDate]
+			  ,tc.[CallTestStatus]
+			  ,tc.[CallTestResult]
+			  ,tc.[InitiateTestInformation]
+			  ,tc.[TestProgress]
+			  ,tc.[InitiationRetryCount]
+			  ,tc.[GetProgressRetryCount]
+			  ,tc.[FailureMessage]
+			  ,tc.[timestamp]
+      ,[BatchNumber]
 			INTO #RESULT
 			FROM 
-			[QM_CLITester].[TestCall]      
+			[QM_CLITester].[TestCall]  tc  
             WHERE 
-            (@UserIDs  IS NULL OR [QM_CLITester].[TestCall].UserID IN (select UserID from @UserIDsTable))
+            (@UserIDs  IS NULL OR tc.UserID IN (select UserID from @UserIDsTable))
             AND (CreationDate BETWEEN @FromDate AND @ToDate)
-            AND (@CallTestStatusIDs  IS NULL OR [QM_CLITester].[TestCall].CallTestStatus IN (select CallTestStatusID from @CallTestStatusIDsTable))
-            AND (@CallTestResultsIDs  IS NULL OR [QM_CLITester].[TestCall].CallTestResult IN (select CallTestResultID from @CallTestResultsIDsTable))
-			AND (@UserIDs  IS NULL OR [QM_CLITester].[TestCall].[UserID] IN (select UserID from @UserIDsTable))
-			AND (@SupplierIDs  IS NULL OR [QM_CLITester].[TestCall].[SupplierID] IN (select SupplierID from @SupplierIDsTable))
-			AND (@ProfileIDs  IS NULL OR [QM_CLITester].[TestCall].[ProfileID] IN (select ProfileID from @ProfileIDsTable))
-			AND (@CountryIDs  IS NULL OR [QM_CLITester].[TestCall].[CountryID] IN (select CountryID from @CountryIDsTable))
-			AND (@ZoneIDs  IS NULL OR [QM_CLITester].[TestCall].[ZoneID] IN (select ZoneID from @ZoneIDsTable))
+            AND (@CallTestStatusIDs  IS NULL OR tc.CallTestStatus IN (select CallTestStatusID from @CallTestStatusIDsTable))
+            AND (@CallTestResultsIDs  IS NULL OR tc.CallTestResult IN (select CallTestResultID from @CallTestResultsIDsTable))
+			AND (@UserIDs  IS NULL OR tc.[UserID] IN (select UserID from @UserIDsTable))
+			AND (@SupplierIDs  IS NULL OR tc.[SupplierID] IN (select SupplierID from @SupplierIDsTable))
+			AND (@ProfileIDs  IS NULL OR tc.[ProfileID] IN (select ProfileID from @ProfileIDsTable))
+			AND (@CountryIDs  IS NULL OR tc.[CountryID] IN (select CountryID from @CountryIDsTable))
+			AND (@ZoneIDs  IS NULL OR tc.[ZoneID] IN (select ZoneID from @ZoneIDsTable))
 			DECLARE @sql VARCHAR(1000)
 			SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
 			EXEC(@sql)

@@ -32,6 +32,7 @@ BEGIN
 		  ,[GetProgressRetryCount]
 		  ,[FailureMessage]
 		  ,[timestamp]
+      ,[BatchNumber]
 	INTO #Result
 	FROM [QM_CLITester].[TestCall] 
 	WHERE 

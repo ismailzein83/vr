@@ -1,7 +1,8 @@
 ﻿
 CREATE PROCEDURE [QM_CLITester].[sp_TestCall_GetBeforeID]
 	@LessThanID BIGINT,
-	@NbOfRows INT
+	@NbOfRows INT,
+	@UserId INT
 AS
 BEGIN	
 	
@@ -20,7 +21,8 @@ BEGIN
 		  ,[GetProgressRetryCount]
 		  ,[FailureMessage]
 		  ,[timestamp]
+      ,[BatchNumber]
 	FROM [QM_CLITester].[TestCall] 
-	WHERE ID < @LessThanID
+	WHERE ID < @LessThanID AND  UserID = @UserId
 	ORDER BY ID DESC
 END

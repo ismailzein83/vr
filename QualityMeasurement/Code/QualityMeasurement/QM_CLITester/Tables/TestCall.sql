@@ -14,8 +14,11 @@
     [GetProgressRetryCount]   INT            NULL,
     [FailureMessage]          NVARCHAR (MAX) NULL,
     [timestamp]               ROWVERSION     NULL,
+    [BatchNumber]             BIGINT         NULL,
     CONSTRAINT [PK_TestCall] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
