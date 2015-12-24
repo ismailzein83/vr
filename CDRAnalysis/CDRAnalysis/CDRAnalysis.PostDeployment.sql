@@ -94,7 +94,7 @@ set identity_insert [FraudAnalysis].[Period] off;
 --FraudAnalysis.Filter------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-;with cte_data([ID],[Abbreviation],[OperatorTypeAllowed],[Description],[Label],[ToolTip],[ExcludeHourly],[CompareOperator],[MinValue],[MaxValue],[DecimalPrecision],[timestamp])
+;with cte_data([ID],[Abbreviation],[OperatorTypeAllowed],[Description],[Label],[ToolTip],[ExcludeHourly],[CompareOperator],[MinValue],[MaxValue],[DecimalPrecision])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'_Filter_1',0,'Ratio Incoming Calls on Outgoing Calls','Ratio','MinValue = 0.01, MaxValue = 0.99, DecimalPrecision = 2',0,1,0.010,0.990,2),
@@ -118,16 +118,16 @@ as (select * from (values
 (19,'_Filter_19',2,'Different Destination Zones','Count','MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0',0,0,1.000,999999.000,0),
 (20,'_Filter_20',2,'Different Source Zones','Count','MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0',0,0,1.000,999999.000,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Abbreviation],[OperatorTypeAllowed],[Description],[Label],[ToolTip],[ExcludeHourly],[CompareOperator],[MinValue],[MaxValue],[DecimalPrecision],[timestamp]))
+)c([ID],[Abbreviation],[OperatorTypeAllowed],[Description],[Label],[ToolTip],[ExcludeHourly],[CompareOperator],[MinValue],[MaxValue],[DecimalPrecision]))
 merge	[FraudAnalysis].[Filter] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Abbreviation] = s.[Abbreviation],[OperatorTypeAllowed] = s.[OperatorTypeAllowed],[Description] = s.[Description],[Label] = s.[Label],[ToolTip] = s.[ToolTip],[ExcludeHourly] = s.[ExcludeHourly],[CompareOperator] = s.[CompareOperator],[MinValue] = s.[MinValue],[MaxValue] = s.[MaxValue],[DecimalPrecision] = s.[DecimalPrecision],[timestamp] = s.[timestamp]
+	[Abbreviation] = s.[Abbreviation],[OperatorTypeAllowed] = s.[OperatorTypeAllowed],[Description] = s.[Description],[Label] = s.[Label],[ToolTip] = s.[ToolTip],[ExcludeHourly] = s.[ExcludeHourly],[CompareOperator] = s.[CompareOperator],[MinValue] = s.[MinValue],[MaxValue] = s.[MaxValue],[DecimalPrecision] = s.[DecimalPrecision]
 when not matched by target then
-	insert([ID],[Abbreviation],[OperatorTypeAllowed],[Description],[Label],[ToolTip],[ExcludeHourly],[CompareOperator],[MinValue],[MaxValue],[DecimalPrecision],[timestamp])
-	values(s.[ID],s.[Abbreviation],s.[OperatorTypeAllowed],s.[Description],s.[Label],s.[ToolTip],s.[ExcludeHourly],s.[CompareOperator],s.[MinValue],s.[MaxValue],s.[DecimalPrecision],s.[timestamp])
+	insert([ID],[Abbreviation],[OperatorTypeAllowed],[Description],[Label],[ToolTip],[ExcludeHourly],[CompareOperator],[MinValue],[MaxValue],[DecimalPrecision])
+	values(s.[ID],s.[Abbreviation],s.[OperatorTypeAllowed],s.[Description],s.[Label],s.[ToolTip],s.[ExcludeHourly],s.[CompareOperator],s.[MinValue],s.[MaxValue],s.[DecimalPrecision])
 when not matched by source then
 	delete;
 
