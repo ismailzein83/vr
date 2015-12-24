@@ -14,6 +14,12 @@ namespace QM.CLITester.Data.SQL
 {
     public class TestCallDataManager : BaseSQLDataManager, ITestCallDataManager
     {
+        public TestCallDataManager() :
+            base(GetConnectionStringName("QM_CLITester_DBConnStringKey", "QM_CLITester_DBConnString"))
+        {
+
+        }
+
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
         static TestCallDataManager()
         {

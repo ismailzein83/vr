@@ -7,9 +7,10 @@ namespace QM.CLITester.Data.SQL
 {
     public class ProfileDataManager : BaseSQLDataManager, IProfileDataManager
     {
-        public ProfileDataManager()
-            : base("MainDBConnString")
+        public ProfileDataManager() :
+            base(GetConnectionStringName("QM_CLITester_DBConnStringKey", "QM_CLITester_DBConnString"))
         {
+
         }
 
         public Profile ProfileMapper(IDataReader reader)

@@ -11,9 +11,10 @@ namespace QM.BusinessEntity.Data.SQL
 {
     public class SupplierDataManager : BaseSQLDataManager, ISupplierDataManager
     {
-        public SupplierDataManager()
-            : base("MainDBConnString")
+        public SupplierDataManager() :
+            base(GetConnectionStringName("QM_BE_DBConnStringKey", "QM_BE_DBConnString"))
         {
+
         }
 
         public Supplier SupplierMapper(IDataReader reader)
