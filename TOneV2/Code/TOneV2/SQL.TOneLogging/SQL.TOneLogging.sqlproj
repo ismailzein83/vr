@@ -100,6 +100,7 @@
     <Build Include="integration\User Defined Types\MappingResultType.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceLog_CreateTempByFiltered.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceImportedBatch_CreateTempByFiltered.sql" />
+    <Build Include="bp\Tables\ValidationMessage.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
