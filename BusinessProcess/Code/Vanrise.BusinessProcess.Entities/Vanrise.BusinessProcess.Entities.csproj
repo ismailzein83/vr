@@ -61,6 +61,11 @@
     <Compile Include="BPInstanceQuery.cs" />
     <Compile Include="BPInstanceStatus.cs" />
     <Compile Include="BPTrackingMessage.cs" />
+    <Compile Include="BusinessRules\BusinessRule.cs" />
+    <Compile Include="BusinessRules\BusinessRuleAction.cs" />
+    <Compile Include="BusinessRules\BusinessRuleCondition.cs" />
+    <Compile Include="BusinessRules\IBusinessRuleActionExecutionContext.cs" />
+    <Compile Include="BusinessRules\IRuleTarget.cs" />
     <Compile Include="TrackingQuery.cs" />
     <Compile Include="CreateProcessInput.cs" />
     <Compile Include="CreateProcessOutput.cs" />
