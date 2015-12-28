@@ -189,7 +189,7 @@
             }
 
             function setNormalizationRuleSettingsDirective() {
-                normalizationRuleSettingsDirectiveAPI.setData(appendixDirectiveData.Settings);
+                normalizationRuleSettingsDirectiveAPI.load(appendixDirectiveData.Settings);
             }
         }
 

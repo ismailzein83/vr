@@ -50,7 +50,7 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
                 setAreaSettingsDirectiveAPI = api;
 
                 if (setAreaSettings != undefined) {
-                    setAreaSettingsDirectiveAPI.setData(setAreaSettings);
+                    setAreaSettingsDirectiveAPI.load(setAreaSettings);
                 }
             };
         }
@@ -58,9 +58,38 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
         function defineAPI() {
             var api = {};
 
-            api.load = function () {
-                return loadTemplates();
+            api.load = function (payload) {
+                $scope.loadingTemplates = true;
+
+                return NormalizationRuleAPIService.GetNormalizationRuleSetAreaSettingsTemplates()
+                    .then(function (response) {
+                        angular.forEach(response, function (item) {
+                            $scope.templates.push(item);
+                        });
+
+
+                        if (setAreaSettingsDirectiveAPI != undefined) {
+                            setAreaSettingsDirectiveAPI.load(setAreaSettings);
+                        }
+                        else {
+                            setAreaSettings = payload;
+                            $scope.selectedTemplate = UtilsService.getItemByVal($scope.templates, payload.ConfigId, "TemplateConfigID");
+                        }
+
+
+                    })
+                    .catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    })
+                    .finally(function () {
+                        $scope.loadingTemplates = false;
+                    });
             };
+
+
+
+
+          
 
             api.getData = function () {
                 var data = setAreaSettingsDirectiveAPI.getData();
@@ -69,15 +98,6 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
                 return data;
             };
 
-            api.setData = function (data) {
-                if (setAreaSettingsDirectiveAPI != undefined) {
-                    setAreaSettingsDirectiveAPI.setData(setAreaSettings);
-                }
-                else {
-                    setAreaSettings = data;
-                    $scope.selectedTemplate = UtilsService.getItemByVal($scope.templates, data.ConfigId, "TemplateConfigID");
-                }
-            };
 
             api.validateData = function () {
                 if (setAreaSettingsDirectiveAPI == undefined)
@@ -89,22 +109,6 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
 
-            function loadTemplates() {
-                $scope.loadingTemplates = true;
-
-                return NormalizationRuleAPIService.GetNormalizationRuleSetAreaSettingsTemplates()
-                    .then(function (response) {
-                        angular.forEach(response, function (item) {
-                            $scope.templates.push(item);
-                        });
-                    })
-                    .catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    })
-                    .finally(function () {
-                        $scope.loadingTemplates = false;
-                    });
-            }
         }
     }
 

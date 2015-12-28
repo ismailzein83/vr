@@ -52,10 +52,13 @@ app.directive("vrPstnBeSubstring", [function () {
                 };
             };
 
-            api.setData = function (substringActionSettings) {
-                $scope.startIndex = substringActionSettings.StartIndex;
-                $scope.length = substringActionSettings.Length;
-            };
+
+            api.load = function (payload) {
+                if (payload != undefined) {
+                    $scope.startIndex = payload.StartIndex;
+                    $scope.length = payload.Length;
+                }
+            }
 
             api.validateData = function () {
                 return true;

@@ -5,7 +5,8 @@ app.directive("vrPstnBeSetareaprefix", [function () {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
-            onloaded: "="
+            onloaded: "=",
+            onReady: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -50,9 +51,16 @@ app.directive("vrPstnBeSetareaprefix", [function () {
                 };
             };
 
-            api.setData = function (setAreaPrefixSettings) {
-                $scope.prefixLength = setAreaPrefixSettings.PrefixLength;
-            };
+            api.load = function (payload) {
+                if (payload != undefined) {
+                    $scope.prefixLength = payload.PrefixLength;
+                }
+            }
+
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
+
+
 
             api.validateData = function () {
                 return $scope.prefixLength != undefined && $scope.prefixLength != null;

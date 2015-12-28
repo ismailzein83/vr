@@ -43,6 +43,7 @@ app.directive("vrPstnBeAddprefix", [function () {
         function defineAPI() {
             var api = {};
 
+
             api.getData = function () {
                 return {
                     $type: "PSTN.BusinessEntity.MainExtensions.Normalization.AdjustNumber.AddPrefixActionSettings, PSTN.BusinessEntity.MainExtensions",
@@ -50,9 +51,15 @@ app.directive("vrPstnBeAddprefix", [function () {
                 };
             };
 
-            api.setData = function (addPrefixActionSettings) {
-                $scope.numberPrefix = addPrefixActionSettings.Prefix;
-            };
+
+            api.load = function (payload) {
+                if (payload != undefined) {
+                    $scope.numberPrefix = payload.Prefix;
+                }
+            }
+
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
 
             api.validateData = function () {
                 return true;

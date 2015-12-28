@@ -52,17 +52,23 @@ app.directive("vrPstnBeReplacestring", [function () {
                 };
             };
 
-            api.setData = function (replaceStringActionSettings) {
-                $scope.stringToReplace = replaceStringActionSettings.StringToReplace;
-                $scope.newString = replaceStringActionSettings.NewString;
-            };
+            api.load = function (payload) {
+                if (payload != undefined) {
+                    $scope.stringToReplace = payload.StringToReplace;
+                    $scope.newString = payload.NewString;
+                }
+            }
+
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
+
+
 
             api.validateData = function () {
                 return true;
             };
 
-            if (ctrl.onReady != null)
-                ctrl.onReady(api);
+           
         }
     }
 
