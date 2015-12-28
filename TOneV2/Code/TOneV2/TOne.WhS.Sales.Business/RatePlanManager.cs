@@ -161,8 +161,8 @@ namespace TOne.WhS.Sales.Business
                 }
 
                 IEnumerable<RPZone> rpZones = zoneItems.MapRecords(itm => new RPZone() { RoutingProductId = itm.EffectiveRoutingProductId, SaleZoneId = itm.ZoneId });
-                ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.Filter.RoutingDatabaseId, input.Filter.PolicyConfigId, input.Filter.NumberOfOptions, rpZones, input.Filter.CostCalculationMethods, input.Filter.RateCalculationMethod);
-                routeOptionSetter.SetZoneRouteOptionsAndCosts(zoneItems);
+                ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.Filter.RoutingDatabaseId, input.Filter.PolicyConfigId, input.Filter.NumberOfOptions, rpZones, input.Filter.CostCalculationMethods, input.Filter.CostCalculationMethodConfigId, input.Filter.RateCalculationMethod);
+                routeOptionSetter.SetZoneRouteOptionProperties(zoneItems);
             }
 
             return zoneItems;
@@ -188,24 +188,10 @@ namespace TOne.WhS.Sales.Business
             routingProductSetter.SetZoneRoutingProduct(zoneItem);
 
             RPZone rpZone = new RPZone() { RoutingProductId = zoneItem.EffectiveRoutingProductId, SaleZoneId = zoneItem.ZoneId };
-            //ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, new List<RPZone>() { rpZone }, input.CostCalculationMethods);
-            //routeOptionSetter.SetZoneRouteOptionsAndCosts(new List<ZoneItem>() { zoneItem });
+            ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, new List<RPZone>() { rpZone }, input.CostCalculationMethods, input.RateCalculationCostColumnConfigId, input.RateCalculationMethod);
+            routeOptionSetter.SetZoneRouteOptionProperties(new List<ZoneItem>() { zoneItem });
 
             return zoneItem;
-        }
-
-        int? GetSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            if (ownerType == SalePriceListOwnerType.SellingProduct)
-            {
-                SellingProductManager sellingProductManager = new SellingProductManager();
-                return sellingProductManager.GetSellingNumberPlanId(ownerId);
-            }
-            else
-            {
-                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                return carrierAccountManager.GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
-            }
         }
         
         #endregion
@@ -257,7 +243,99 @@ namespace TOne.WhS.Sales.Business
             changesManager.SaveChanges(input.NewChanges);
         }
 
+        public void ApplyCalculatedRates(CalculatedRateInput input)
+        {
+            if (input.RateCalculationCostColumnConfigId == null || input.RateCalculationMethod == null)
+                throw new ArgumentNullException();
+
+            CostCalculationMethod costCalculationMethod = input.CostCalculationMethods.FindRecord(itm => itm.ConfigId == (int)input.RateCalculationCostColumnConfigId);
+
+            if (costCalculationMethod == null)
+                throw new ArgumentNullException();
+
+            // Get the owner's zones
+            RatePlanZoneManager ratePlanZoneManager = new RatePlanZoneManager();
+            int? sellingNumberPlanId = GetSellingNumberPlanId(input.OwnerType, input.OwnerId);
+            IEnumerable<SaleZone> zones = ratePlanZoneManager.GetZones(input.OwnerType, input.OwnerId, sellingNumberPlanId, input.EffectiveOn);
+            
+            if (zones != null)
+            {
+                int? sellingProdcuctId = GetSellingProductId(input.OwnerType, input.OwnerId, input.EffectiveOn, false);
+                Changes changes = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
+
+                ZoneRoutingProductSetter routingProductSetter = new ZoneRoutingProductSetter(input.OwnerType, input.OwnerId, sellingProdcuctId, input.EffectiveOn, changes);
+                List<ZoneItem> zoneItems = new List<ZoneItem>();
+
+                // Set the effective routing product for each zone item
+                foreach (SaleZone zone in zones)
+                {
+                    ZoneItem zoneItem = new ZoneItem() { ZoneId = zone.SaleZoneId };
+                    routingProductSetter.SetZoneRoutingProduct(zoneItem);
+                    zoneItems.Add(zoneItem);
+                }
+
+                IEnumerable<RPZone> rpZones = zoneItems.MapRecords(itm => new RPZone() { RoutingProductId = itm.EffectiveRoutingProductId, SaleZoneId = itm.ZoneId });
+                ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, input.RateCalculationCostColumnConfigId, input.RateCalculationMethod);
+
+                // Set the calculated rate for zone items that have route options
+                routeOptionSetter.SetZoneRouteOptionProperties(zoneItems);
+                
+                // Get the zone items that have a calculated rate
+                zoneItems = zoneItems.FindAllRecords(itm => itm.CalculatedRate != null).ToList();
+
+                if (zoneItems != null)
+                {
+                    // Create a list of zone changes with new rates based on the zone items
+                    List<ZoneChanges> zoneChanges = new List<ZoneChanges>();
+
+                    foreach (ZoneItem zoneItem in zoneItems)
+                    {
+                        ZoneChanges zoneItemChanges = new ZoneChanges();
+                        
+                        zoneItemChanges.NewRate = new NewRate()
+                        {
+                            ZoneId = zoneItem.ZoneId,
+                            NormalRate = (decimal)zoneItem.CalculatedRate,
+                            BED = input.EffectiveOn
+                        };
+
+                        zoneChanges.Add(zoneItemChanges);
+                    }
+
+                    if (zoneChanges.Count > 0)
+                    {
+                        // Save the new changes
+                        SaveChangesInput saveChangesInput = new SaveChangesInput()
+                        {
+                            OwnerType = input.OwnerType,
+                            OwnerId = input.OwnerId,
+                            NewChanges = new Changes() { ZoneChanges = zoneChanges }
+                        };
+
+                        SaveChanges(saveChangesInput);
+
+                        // Save the price list i.e. apply the calculated rates
+                        SavePriceList(input.OwnerType, input.OwnerId);
+                    }
+                }
+            }
+        }
+
         #region Common Private Methods
+
+        int? GetSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
+            {
+                SellingProductManager sellingProductManager = new SellingProductManager();
+                return sellingProductManager.GetSellingNumberPlanId(ownerId);
+            }
+            else
+            {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                return carrierAccountManager.GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
+            }
+        }
 
         int? GetSellingProductId(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, bool isEffectiveInFuture)
         {

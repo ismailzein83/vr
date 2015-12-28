@@ -12,62 +12,69 @@ namespace TOne.WhS.Sales.Business
 {
     public class ZoneRouteOptionSetter
     {
-        public IEnumerable<RPRouteDetail> _rpRoutes;
+        public IEnumerable<RPRouteDetail> _routes;
         public List<CostCalculationMethod> _costCalculationMethods;
+        public int? _rateCalculationCostColumnConfigId;
         public RateCalculationMethod _rateCalculationMethod;
 
-        public ZoneRouteOptionSetter(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, RateCalculationMethod rateCalculationMethod)
+        public ZoneRouteOptionSetter(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, int? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod)
         {
             RPRouteManager rpRouteManager = new RPRouteManager();
-            _rpRoutes = rpRouteManager.GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones);
+            _routes = rpRouteManager.GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones);
             _costCalculationMethods = costCalculationMethods;
+            _rateCalculationCostColumnConfigId = rateCalculationCostColumnConfigId;
             _rateCalculationMethod = rateCalculationMethod;
         }
 
-        public void SetZoneRouteOptionsAndCosts(IEnumerable<ZoneItem> zoneItems)
+        // The route option properties of a zone item are: RouteOptions, Costs and CalculatedRate
+        public void SetZoneRouteOptionProperties(IEnumerable<ZoneItem> zoneItems)
         {
-            if (_rpRoutes == null)
+            if (zoneItems == null)
                 return;
 
-            foreach (RPRouteDetail rpRoute in _rpRoutes) // The continue statement is used for readability
+            foreach (ZoneItem zoneItem in zoneItems)
             {
-                if (rpRoute.RouteOptionsDetails == null)
-                    continue;
+                var route = _routes.FindRecord(itm => itm.SaleZoneId == zoneItem.ZoneId);
 
-                ZoneItem zoneItem = zoneItems.FindRecord(itm => itm.ZoneId == rpRoute.SaleZoneId);
-
-                if (zoneItem == null)
-                    continue;
-
-                zoneItem.RouteOptions = rpRoute.RouteOptionsDetails;
-
-                if (_costCalculationMethods != null)
+                if (route != null)
                 {
-                    zoneItem.Costs = new List<decimal>();
-
-                    foreach (CostCalculationMethod method in _costCalculationMethods)
-                    {
-                        CostCalculationMethodContext context = new CostCalculationMethodContext() { Route = rpRoute };
-                        method.CalculateCost(context);
-                        zoneItem.Costs.Add(context.Cost);
-                    }
-
-                    SetCalculatedRate(zoneItem);
+                    zoneItem.RouteOptions = route.RouteOptionsDetails;
+                    SetZoneCostsAndCalculatedRate(zoneItem, route);
                 }
-            } // foreach
+            }
+        }
+
+        void SetZoneCostsAndCalculatedRate(ZoneItem zoneItem, RPRouteDetail route)
+        {
+            if (_costCalculationMethods != null)
+            {
+                zoneItem.Costs = new List<decimal>();
+
+                foreach (CostCalculationMethod costCalculationMethod in _costCalculationMethods)
+                {
+                    CostCalculationMethodContext context = new CostCalculationMethodContext() { Route = route };
+                    costCalculationMethod.CalculateCost(context);
+                    zoneItem.Costs.Add(context.Cost);
+                }
+
+                SetCalculatedRate(zoneItem);
+            }
         }
 
         void SetCalculatedRate(ZoneItem zoneItem)
         {
-            if (_rateCalculationMethod != null)
+            if (_rateCalculationMethod != null && zoneItem.Costs.Count > 0)
             {
-                CostCalculationMethod costCalculationMethod = _costCalculationMethods.FindRecord(itm => itm.ConfigId == _rateCalculationMethod.ConfigId);
+                CostCalculationMethod costCalculationMethod = null;
+
+                if (_rateCalculationCostColumnConfigId != null)
+                    costCalculationMethod = _costCalculationMethods.FindRecord(itm => itm.ConfigId == (int)_rateCalculationCostColumnConfigId);
 
                 if (costCalculationMethod != null)
                 {
                     int index = _costCalculationMethods.IndexOf(costCalculationMethod);
-                    RateCalculationMethodContext context = new RateCalculationMethodContext();
-                    context.Cost = zoneItem.Costs[index];
+                    RateCalculationMethodContext context = new RateCalculationMethodContext() { Cost = zoneItem.Costs[index] };
+
                     _rateCalculationMethod.CalculateRate(context);
                     zoneItem.CalculatedRate = context.Rate;
                 }

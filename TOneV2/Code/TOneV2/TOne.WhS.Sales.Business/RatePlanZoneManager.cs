@@ -18,7 +18,8 @@ namespace TOne.WhS.Sales.Business
             return GetPagedZones(zones, fromRow, toRow);
         }
 
-        IEnumerable<SaleZone> GetZones(SalePriceListOwnerType ownerType, int ownerId, int? sellingNumberPlanId, DateTime effectiveOn)
+        // GetZones is public because it's invoked by ApplyCalculatedRates of RatePlanManager
+        public IEnumerable<SaleZone> GetZones(SalePriceListOwnerType ownerType, int ownerId, int? sellingNumberPlanId, DateTime effectiveOn)
         {
             if (ownerType == SalePriceListOwnerType.SellingProduct)
             {

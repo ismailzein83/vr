@@ -31,7 +31,9 @@ namespace TOne.WhS.Sales.Entities
         public int NumberOfOptions { get; set; }
         
         public List<CostCalculationMethod> CostCalculationMethods { get; set; }
-        
+
+        public int CostCalculationMethodConfigId { get; set; }
+
         public RateCalculationMethod RateCalculationMethod { get; set; }
     }
 }

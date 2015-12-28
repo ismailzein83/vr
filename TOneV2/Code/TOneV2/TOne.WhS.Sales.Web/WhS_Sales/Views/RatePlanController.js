@@ -177,6 +177,13 @@
                 };
                 WhS_Sales_RatePlanService.editPricingSettings(settings, pricingSettings, onPricingSettingsUpdated);
             };
+            //$scope.applyCalculatedRates = function () {
+            //    var input = {
+            //        CostCalculationMethods: settings ? settings.CostCalculationMethods : null,
+            //        RateCalculationCostColumnConfigId: (pricingSettings && pricingSettings.selectedCostColumn) ? pricingSettings.selectedCostColumn.ConfigId : null,
+            //        RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null
+            //    };
+            //};
             $scope.validateRatePlan = function () {
                 if ($scope.zoneLetters && $scope.zoneLetters.length > 0)
                     return null;
@@ -339,6 +346,8 @@
         function onDefaultItemChange() {
             if (!isSavingPriceList)
                 saveChanges(true);
+            else
+                isSavingPriceList = false;
         }
 
         function saveChanges(shouldLoadGrid) {
@@ -422,7 +431,7 @@
 
                 return UtilsService.waitMultiplePromises(promises).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
-                }).finally(function () { isSavingPriceList = false; });
+                });
 
                 function onRatePlanChangesClose(save) {
                     if (save) {

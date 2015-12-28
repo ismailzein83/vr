@@ -7,18 +7,18 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class ZoneItemInput
+    public class CalculatedRateInput
     {
         public SalePriceListOwnerType OwnerType { get; set; }
-        
+
         public int OwnerId { get; set; }
-        
-        public long ZoneId { get; set; }
-        
+
+        public DateTime EffectiveOn { get; set; }
+
         public int RoutingDatabaseId { get; set; }
-        
+
         public int PolicyConfigId { get; set; }
-        
+
         public int NumberOfOptions { get; set; }
 
         public List<CostCalculationMethod> CostCalculationMethods { get; set; }

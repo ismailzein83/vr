@@ -187,7 +187,7 @@ namespace TOne.WhS.Sales.Business
                     SaleZoneManager saleZoneManager = new SaleZoneManager();
                     RoutingProductManager routingProductManager = new RoutingProductManager();
 
-                    IEnumerable<SaleEntityZoneRoutingProduct> currentRoutingProducts = GetCurrentRoutingProductsByZoneIds(zoneChanges.MapRecords(itm => itm.ZoneId));
+                    Dictionary<long, SaleEntityZoneRoutingProduct> currentRoutingProducts = GetCurrentRoutingProductsByZoneIds(zoneChanges.MapRecords(itm => itm.ZoneId));
 
                     foreach (ZoneChanges zoneItemChanges in zoneChanges)
                     {
@@ -197,7 +197,8 @@ namespace TOne.WhS.Sales.Business
                             ZoneName = saleZoneManager.GetSaleZoneName(zoneItemChanges.ZoneId)
                         };
 
-                        SaleEntityZoneRoutingProduct currentRoutingProduct = currentRoutingProducts.FindRecord(itm => (zoneItemChanges.NewRoutingProduct != null && itm.RoutingProductId == zoneItemChanges.NewRoutingProduct.ZoneRoutingProductId) || (zoneItemChanges.RoutingProductChange != null && itm.RoutingProductId == zoneItemChanges.RoutingProductChange.ZoneRoutingProductId));
+                        // The lambda expression used is just a patch. ZoneId should be removed from RoutingProductChange. Think of something else
+                        SaleEntityZoneRoutingProduct currentRoutingProduct = currentRoutingProducts.MapRecord(itm => itm.Value, itm => (zoneItemChanges.NewRoutingProduct != null && zoneItemChanges.NewRoutingProduct.ZoneId == itm.Key) || (zoneItemChanges.RoutingProductChange != null && zoneItemChanges.RoutingProductChange.ZoneId == itm.Key));
 
                         if (currentRoutingProduct != null)
                         {
@@ -224,13 +225,13 @@ namespace TOne.WhS.Sales.Business
             return details;
         }
 
-        IEnumerable<SaleEntityZoneRoutingProduct> GetCurrentRoutingProductsByZoneIds(IEnumerable<long> zoneIds)
+        Dictionary<long, SaleEntityZoneRoutingProduct> GetCurrentRoutingProductsByZoneIds(IEnumerable<long> zoneIds)
         {
-            List<SaleEntityZoneRoutingProduct> currentRoutingProducts = null;
+            Dictionary<long, SaleEntityZoneRoutingProduct> currentRoutingProducts = null;
 
             if (zoneIds != null && _sellingProductId != null)
             {
-                currentRoutingProducts = new List<SaleEntityZoneRoutingProduct>();
+                currentRoutingProducts = new Dictionary<long, SaleEntityZoneRoutingProduct>();
                 int sellingProductId = (int)_sellingProductId;
 
                 SaleEntityZoneRoutingProductLocator routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(_effectiveOn));
@@ -241,7 +242,7 @@ namespace TOne.WhS.Sales.Business
                         routingProductLocator.GetSellingProductZoneRoutingProduct(sellingProductId, zoneId) : routingProductLocator.GetCustomerZoneRoutingProduct(_ownerId, sellingProductId, zoneId);
 
                     if (routingProduct != null)
-                        currentRoutingProducts.Add(routingProduct);
+                        currentRoutingProducts.Add(zoneId, routingProduct);
                 }
             }
 

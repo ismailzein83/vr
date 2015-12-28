@@ -88,9 +88,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         $scope.connector.costCalculationMethods.push(query.CostCalculationMethods[i]);
                 }
 
-                if (query.RateCalculationMethod) {
-                    $scope.rateCalculationMethod = query.RateCalculationMethod;
-                }
+                $scope.rateCalculationMethod = query.RateCalculationMethod;
 
                 gridAPI.clearDataAndContinuePaging();
                 return loadZoneItems();
@@ -345,8 +343,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 }
 
                 function compareDates(date1, date2) {
-                    if (date1 && date1.getTime && date2 && date2.getTime)
-                        return date1.getTime() == date2.getTime();
+                    if (date1 && date2) {
+                        return (date1.getDay() == date2.getDay() && date1.getMonth() == date2.getMonth() && date1.getYear() == date2.getYear());
+                    }
                     else if (!date1 && !date2)
                         return true;
                     else

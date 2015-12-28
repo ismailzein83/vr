@@ -55,7 +55,7 @@
                 pricingSettings.selectedCostColumn = $scope.selectedCostColumn;
                 pricingSettings.selectedRateCalculationMethod = $scope.selectedTemplate;
                 pricingSettings.selectedRateCalculationMethodData = directiveAPI.getData();
-                pricingSettings.selectedRateCalculationMethodData.ConfigId = $scope.selectedCostColumn.ConfigId;
+                pricingSettings.selectedRateCalculationMethodData.ConfigId = $scope.selectedTemplate.TemplateConfigID;
 
                 if ($scope.onPricingSettingsUpdated && typeof ($scope.onPricingSettingsUpdated) == "function")
                     $scope.onPricingSettingsUpdated(pricingSettings);
