@@ -29,7 +29,7 @@ function (UtilsService, VRUIUtilsService , TimeSchedulerTypeEnum) {
     };
 
     function getDirectiveTemplateUrl() {
-        return "/Client/Modules/Runtime/Directives/TimerTrigger/Templates/TaskTriggerDaily.html";
+        return "/Client/Modules/Runtime/Directives/TaskTrigger/Templates/TaskTriggerDaily.html";
     }
 
     function DirectiveConstructor($scope, ctrl) {
@@ -37,6 +37,8 @@ function (UtilsService, VRUIUtilsService , TimeSchedulerTypeEnum) {
 
 
         function initializeController() {
+
+            console.log("Daily")
             defineAPI();
         }
 

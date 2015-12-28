@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrRuntimeTasktriggerInterval", ['UtilsService', 'VRUIUtilsService', 'TimeSchedulerTypeEnum', 'IntervalTimeTypeEnum',
-function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, IntervalTimeTypeEnum) {
+app.directive("vrRuntimeTaskactionWorkflow", ['UtilsService', 'VRUIUtilsService',
+function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -29,7 +29,7 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, IntervalTimeTyp
     };
 
     function getDirectiveTemplateUrl() {
-        return "/Client/Modules/Runtime/Directives/TaskTrigger/Templates/TaskTriggerInterval.html";
+        return "/Client/Modules/Runtime/Directives/TaskAction/Templates/TaskActionWorkFlow.html";
     }
 
     function DirectiveConstructor($scope, ctrl) {
@@ -37,33 +37,18 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, IntervalTimeTyp
 
 
         function initializeController() {
-
-            console.log("Interval")
             defineAPI();
         }
 
         function defineAPI() {
             var api = {};
-            $scope.intervalTypes = UtilsService.getArrayEnum(IntervalTimeTypeEnum);
+           
             api.getData = function () {
-                return {
-                    $type: "Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments",
-                    TimerTriggerTypeFQTN: TimeSchedulerTypeEnum.Interval.FQTN,
-                    Interval: $scope.interval,
-                    IntervalType: $scope.selectedIntervalType.value
-                };
-
             };
 
 
             api.load = function (payload) {
-                if (payload != undefined && payload.data != undefined) {
-                    var data = payload.data;
-                    $scope.interval = data.Interval;
-                    $scope.selectedIntervalType = UtilsService.getItemByVal($scope.intervalTypes, data.IntervalType, "value");
-                }
                
-
             }
 
             if (ctrl.onReady != null)

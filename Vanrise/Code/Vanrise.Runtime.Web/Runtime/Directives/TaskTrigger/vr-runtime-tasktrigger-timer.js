@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrRuntimeTasktriggerTimer", ['UtilsService', 'VRUIUtilsService','TimeSchedulerTypeEnum',
-function (UtilsService ,VRUIUtilsService ,TimeSchedulerTypeEnum) {
+app.directive("vrRuntimeTasktriggerTimer", ['UtilsService', 'VRUIUtilsService', 'TimeSchedulerTypeEnum',
+function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -29,13 +29,13 @@ function (UtilsService ,VRUIUtilsService ,TimeSchedulerTypeEnum) {
     };
 
     function getDirectiveTemplateUrl() {
-        return "/Client/Modules/Runtime/Directives/TimerTrigger/Templates/TaskTriggerTimer.html";
+        return "/Client/Modules/Runtime/Directives/TaskTrigger/Templates/TaskTriggerTimer.html";
     }
 
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
 
-       
+
         function initializeController() {
             defineAPI();
         }
@@ -44,11 +44,14 @@ function (UtilsService ,VRUIUtilsService ,TimeSchedulerTypeEnum) {
             var api = {};
             $scope.schedulerTypes = UtilsService.getArrayEnum(TimeSchedulerTypeEnum);
             var timerTypeDirectiveAPI;
-            var timerTypeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var timerTypeDirectiveReadyPromiseDeferred;
 
             $scope.onTimerTypeDirectiveReady = function (api) {
                 timerTypeDirectiveAPI = api;
-                timerTypeDirectiveReadyPromiseDeferred.resolve();
+                var setLoader = function (value) {
+                        $scope.isLoadingTimerSection = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, timerTypeDirectiveAPI, undefined, setLoader, timerTypeDirectiveReadyPromiseDeferred);
             }
             api.getData = function () {
                 return timerTypeDirectiveAPI.getData();
@@ -62,16 +65,18 @@ function (UtilsService ,VRUIUtilsService ,TimeSchedulerTypeEnum) {
                     data = payload.data;
                     $scope.selectedType = UtilsService.getItemByVal($scope.schedulerTypes, data.TimerTriggerTypeFQTN, "FQTN");
                 }
+                if (data != undefined) {
+                    timerTypeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var loadTimerTypePromiseDeferred = UtilsService.createPromiseDeferred();
+                    timerTypeDirectiveReadyPromiseDeferred.promise.then(function () {
+                        var payload = {
+                            data: data
+                        };
+                        VRUIUtilsService.callDirectiveLoad(timerTypeDirectiveAPI, payload, loadTimerTypePromiseDeferred);
+                    });
+                    promises.push(loadTimerTypePromiseDeferred.promise);
+                }
 
-                var loadTimerTypePromiseDeferred = UtilsService.createPromiseDeferred();
-                timerTypeDirectiveReadyPromiseDeferred.promise.then(function () {
-                    var payload = {
-                        data:data
-                    };
-                    VRUIUtilsService.callDirectiveLoad(timerTypeDirectiveAPI, payload, loadTimerTypePromiseDeferred);
-                });
-
-                promises.push(loadTimerTypePromiseDeferred.promise);
 
                 return UtilsService.waitMultiplePromises(promises);
             }

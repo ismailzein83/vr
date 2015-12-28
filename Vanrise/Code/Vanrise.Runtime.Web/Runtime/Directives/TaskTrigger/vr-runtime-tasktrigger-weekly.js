@@ -29,7 +29,7 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, DaysOfWeekEnum)
     };
 
     function getDirectiveTemplateUrl() {
-        return "/Client/Modules/Runtime/Directives/TimerTrigger/Templates/TaskTriggerWeekly.html";
+        return "/Client/Modules/Runtime/Directives/TaskTrigger/Templates/TaskTriggerWeekly.html";
     }
 
     function DirectiveConstructor($scope, ctrl) {
@@ -37,6 +37,7 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, DaysOfWeekEnum)
 
 
         function initializeController() {
+            console.log("weekly")
             defineAPI();
         }
 

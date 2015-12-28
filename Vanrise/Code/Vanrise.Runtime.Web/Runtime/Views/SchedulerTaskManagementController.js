@@ -42,13 +42,6 @@ function SchedulerTaskManagementController($scope, VR_Runtime_SchedulerTaskServi
 
         VR_Runtime_SchedulerTaskService.addTask(onTaskAdded);
     }
-    function editNew() {
-        var onTaskAdded = function (addedItem) {
-            //gridAPI.onTaskAdded(addedItem);
-        };
-
-        VR_Runtime_SchedulerTaskService.editTaskNew(37,onTaskAdded);
-    }
 
 }
 

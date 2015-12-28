@@ -9,8 +9,8 @@
 </div>
 <div>
     <vr-row>
-        <vr-section title="Settings" level="2" ng-if="selectedType.editor">
-            <vr-columns width="fullrow">
+        <vr-section title="Settings" level="2" >
+            <vr-columns width="fullrow" vr-loader="isLoadingTimerSection">
                 <vr-directivewrapper directive="selectedType.editor" on-ready="onTimerTypeDirectiveReady"></vr-directivewrapper>
             </vr-columns>
         </vr-section>
