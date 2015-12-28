@@ -45,6 +45,9 @@ function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runti
 
                         return gridAPI.retrieveData(query);
                     };
+                    directiveAPI.onTaskAdded = function (taskObject) {
+                        gridAPI.itemAdded(taskObject);
+                    }
                     return directiveAPI;
                 }
 
