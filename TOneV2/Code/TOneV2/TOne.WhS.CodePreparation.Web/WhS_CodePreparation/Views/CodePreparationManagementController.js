@@ -30,10 +30,31 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         $scope.nodes = [];
         $scope.sellingNumberPlans = [];
         $scope.selectedSellingNumberPlan;
+        $scope.effectiveDate = new Date();
         $scope.zoneList;
         $scope.currentNode;
 
         $scope.selectedCodes = [];
+
+        $scope.applyCodePreparationForEntities = function()
+        {
+            return WhS_CodePrep_CodePrepAPIService.ApplyCodePreparationForEntities($scope.selectedSellingNumberPlan.SellingNumberPlanId, {}, {}, false).then(function (response) {
+                if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
+                    return BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
+            });
+        }
+
+        $scope.uploadCodePreparationEntities = function () {
+            return WhS_CodePrep_CodePrepAPIService.ApplyCodePreparationForEntities($scope.selectedSellingNumberPlan.SellingNumberPlanId, $scope.zoneList.fileId, $scope.effectiveDate, true).then(function (response) {
+                if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
+                    return BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
+            });
+        }
+        $scope.downloadTemplate = function () {
+            return WhS_CodePrep_CodePrepAPIService.DownloadImportCodePreparationTemplate().then(function (response) {
+                UtilsService.downloadFile(response.data, response.headers);
+            });
+        }
 
         $scope.onSellingNumberPlanSelectorReady = function (api) {
             sellingNumberPlanDirectiveAPI = api;

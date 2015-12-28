@@ -187,7 +187,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Pricing',
                     class: "glyphicon  glyphicon-edit"
                 }
-
+            case 'Apply':
+                return {
+                    text: 'Apply',
+                    class: "glyphicon glyphicon-ok-circle"
+                }
         } 
     }
 }]);

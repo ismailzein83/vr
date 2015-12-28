@@ -5,8 +5,8 @@
 
     function codePreparationAPIService(BaseAPIService, UtilsService, WhS_CodePrep_ModuleConfig) {
 
-        function UploadSaleZonesList(sellingNumberPlanId, fileId, effectiveDate,isFromExcel) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "UploadSaleZonesList"), {
+        function ApplyCodePreparationForEntities(sellingNumberPlanId, fileId, effectiveDate, isFromExcel) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "ApplyCodePreparationForEntities"), {
                 sellingNumberPlanId: sellingNumberPlanId,
                 fileId: fileId,
                 effectiveDate: effectiveDate,
@@ -54,7 +54,7 @@
         }
 
         return ({
-            UploadSaleZonesList: UploadSaleZonesList,
+            ApplyCodePreparationForEntities: ApplyCodePreparationForEntities,
             DownloadImportCodePreparationTemplate: DownloadImportCodePreparationTemplate,
             GetChanges: GetChanges,
             SaveChanges: SaveChanges,

@@ -22,8 +22,8 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
     public class CodePreparationController : BaseAPIController
     {
         [HttpGet]
-        [Route("UploadSaleZonesList")]
-        public CreateProcessOutput UploadSaleZonesList(int sellingNumberPlanId, int? fileId, DateTime? effectiveDate, bool isFromExcel)
+        [Route("ApplyCodePreparationForEntities")]
+        public CreateProcessOutput ApplyCodePreparationForEntities(int sellingNumberPlanId, int? fileId, DateTime? effectiveDate, bool isFromExcel)
         {
             CodePreparationManager manager = new CodePreparationManager();
             BPClient bpClient = new BPClient();

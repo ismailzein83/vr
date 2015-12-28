@@ -7,6 +7,15 @@
                         <vr-columns width="normal" vr-loader="isLoadingSellingNumberPlan">
                             <vr-whs-be-sellingnumberplan-selector isrequired on-ready="onSellingNumberPlanSelectorReady" onselectionchanged="" selectedvalues="selectedSellingNumberPlan"></vr-whs-be-sellingnumberplan-selector>
                         </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-label>Upload File</vr-label>
+                            <vr-fileupload extension="reports" value="zoneList" > </vr-fileupload>
+
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker type="dateTime" label="Effective Date" value="effectiveDate" isrequired></vr-datetimepicker>
+                        </vr-columns>
+
                     </vr-row>
                 </vr-columns>
             </vr-row>
@@ -18,6 +27,9 @@
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
             <div transclude-to="buttons">
                 <vr-button type="Search" formname="formFilter" validationcontext="filterGroupValid" data-onclick="searchClicked"></vr-button>
+                <vr-button type="Apply" validationcontext="filterGroupValid" data-onclick="applyCodePreparationForEntities"></vr-button>
+                <vr-button type="Upload" validationcontext="filterGroupValid" data-onclick="uploadCodePreparationEntities"></vr-button>
+                <vr-button type="Download" data-onclick="downloadTemplate"></vr-button>
                 <vr-button type="Add" text="New Zone" ng-show="currentNode != undefined && currentNode.type == 'Country'" formname="formFilter" validationcontext="filterGroupValid" data-onclick="newZoneClicked"></vr-button>
                 <vr-button type="Add" text="New Code" ng-show="currentNode != undefined && currentNode.type == 'Zone'" formname="formFilter" validationcontext="filterGroupValid" data-onclick="newCodeClicked"></vr-button>
                 <vr-button type="Move" text="Move Codes" formname="formFilter" validationcontext="filterGroupValid" data-onclick="moveCodesClicked" ng-show="selectedCodes.length > 0"></vr-button>
