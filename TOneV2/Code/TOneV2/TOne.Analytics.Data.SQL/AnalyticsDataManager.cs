@@ -86,15 +86,15 @@ namespace TOne.Analytics.Data.SQL
                     return new Entities.CarrierSummaryView
                     {
                         ProfileID = groupByProfile == 'Y' && reader["ProfileID"] != DBNull.Value ? (int?)Convert.ToInt32(reader["ProfileID"]) : null,
-                        CarrierID = (carrierType.ToLower() == "customer" ? reader["CustomerID"] as string : reader["SupplierID"] as string),
-                        CarrierName = string.Format("{0}{1}", reader["ProfileName"] as string, reader["NameSuffix"] != DBNull.Value && !string.IsNullOrEmpty(reader["NameSuffix"].ToString()) ? " (" + reader["NameSuffix"] as string + ")" : string.Empty),
+                        CarrierID = (carrierType.ToLower() == "customer" ? groupByProfile == 'Y' ? string.Empty : reader["CustomerID"] as string : groupByProfile == 'Y' ? string.Empty : reader["SupplierID"] as string),
+                        CarrierName = groupByProfile == 'Y' ? string.Empty : string.Format("{0}{1}", reader["ProfileName"] as string, reader["NameSuffix"] != DBNull.Value && !string.IsNullOrEmpty(reader["NameSuffix"].ToString()) ? " (" + reader["NameSuffix"] as string + ")" : string.Empty),
                         ProfileName = groupByProfile == 'Y' ? (reader["ProfileName"] != DBNull.Value ? reader["ProfileName"] as string : "") : string.Empty,
                         SuccessfulAttempts = Convert.ToInt32(reader["SuccessfulAttempts"]),
                         DurationsInMinutes = Convert.ToDecimal(reader["DurationsInMinutes"]),
                         ASR = Convert.ToDecimal(reader["ASR"]),
                         ACD = Convert.ToDecimal(reader["ACD"]),
                         DeliveredASR = Convert.ToDecimal(reader["DeliveredASR"]),
-                        AveragePDD = Convert.ToDecimal(reader["AveragePDD"]),
+                        AveragePDD = reader["AveragePDD"] != DBNull.Value ? Convert.ToDecimal(reader["AveragePDD"]) : 0,
                         NumberOfCalls = reader["NumberOfCalls"] != DBNull.Value ? (int?)Convert.ToInt32(reader["NumberOfCalls"]) : null,
                         PricedDuration = reader["PricedDuration"] != DBNull.Value ? (decimal?)Convert.ToDecimal(reader["PricedDuration"]) : null,
                         SaleNets = Convert.ToDecimal(reader["Sale_Nets"]),

@@ -58,10 +58,10 @@ namespace TOne.Analytics.Business
             IAnalyticsDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IAnalyticsDataManager>();
             string[] nameServices = serviceFlagSymbols.Split(',');
             FlaggedServiceManager flaggedServiceManager = new FlaggedServiceManager();
-            int serviceID = 0;
+            short serviceID = flaggedServiceManager.GetServiceFlags().Where(s => s.Symbol.Equals("WHS")).FirstOrDefault().FlaggedServiceID;
             foreach (string serviceName in nameServices)
             {
-                serviceID += flaggedServiceManager.GetServiceFlags().Where(s => s.Symbol.Equals(serviceName)).FirstOrDefault().FlaggedServiceID;
+                serviceID = (short)(serviceID | flaggedServiceManager.GetServiceFlags().Where(s => s.Symbol.Equals(serviceName)).FirstOrDefault().FlaggedServiceID);
             }
             bool updateActionSucc = dataManager.UpdateRateServiceFlag(rateID, serviceID);
 
