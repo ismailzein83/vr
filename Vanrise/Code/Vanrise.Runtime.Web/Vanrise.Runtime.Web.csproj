@@ -102,14 +102,14 @@
     <Content Include="Runtime\Constants\TimeSchedulerTypeEnum.js" />
     <Content Include="Runtime\Directives\SchedulerTask\Templates\SchedulerTaskGridTemplate.html" />
     <Content Include="Runtime\Directives\SchedulerTask\vr-runtime-schedulertask-grid.js" />
-    <Content Include="Runtime\Directives\TimerTrigger\Templates\TaskTriggerDaily.html" />
-    <Content Include="Runtime\Directives\TimerTrigger\Templates\TaskTriggerInterval.html" />
-    <Content Include="Runtime\Directives\TimerTrigger\Templates\TaskTriggerTimer.html" />
-    <Content Include="Runtime\Directives\TimerTrigger\Templates\TaskTriggerWeekly.html" />
-    <Content Include="Runtime\Directives\TimerTrigger\vr-runtime-tasktrigger-daily.js" />
-    <Content Include="Runtime\Directives\TimerTrigger\vr-runtime-tasktrigger-interval.js" />
-    <Content Include="Runtime\Directives\TimerTrigger\vr-runtime-tasktrigger-timer.js" />
-    <Content Include="Runtime\Directives\TimerTrigger\vr-runtime-tasktrigger-weekly.js" />
+    <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerDaily.html" />
+    <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerInterval.html" />
+    <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerTimer.html" />
+    <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerWeekly.html" />
+    <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-daily.js" />
+    <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-interval.js" />
+    <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-timer.js" />
+    <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-weekly.js" />
     <Content Include="Runtime\Services\APIServices\SchedulerTaskAPIService.js" />
     <Content Include="Runtime\Services\SchedulerTaskService.js" />
     <Content Include="Runtime\Views\ActionTemplates\WFActionTemplate.html" />
@@ -161,7 +161,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>46646</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

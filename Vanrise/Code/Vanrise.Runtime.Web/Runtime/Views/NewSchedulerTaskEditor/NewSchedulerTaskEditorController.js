@@ -133,9 +133,11 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
     function loadTaskTriggerDirective() {
         var loadTaskTriggerPromiseDeferred = UtilsService.createPromiseDeferred();
         taskTriggereDirectiveReadyPromiseDeferred.promise.then(function () {
-            var payload = {
-                data: taskObject.TaskSettings.TaskTriggerArgument
-            };
+            var payload
+            if(taskObject.TaskSettings)
+                payload = {
+                    data: taskObject.TaskSettings.TaskTriggerArgument
+                };
              VRUIUtilsService.callDirectiveLoad(taskTriggerDirectiveAPI, payload, loadTaskTriggerPromiseDeferred);
          });
              
@@ -165,13 +167,10 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
         $scope.title = UtilsService.buildTitleForUpdateEditor(taskObject.Name, "Task");
         $scope.scopeModel.name = taskObject.Name;
         $scope.scopeModel.isEnabled = taskObject.IsEnabled;
-
-       
         
-        console.log($scope.scopeModel.selectedActionType + " // " + $scope.actionTypes+" // "+taskObject.ActionTypeId)
         $scope.schedulerTaskTrigger.data = taskObject.TaskSettings.TaskTriggerArgument;
-        //if ($scope.schedulerTaskTrigger.loadTemplateData != undefined)
-        //    $scope.schedulerTaskTrigger.loadTemplateData();
+        if ($scope.schedulerTaskTrigger.loadTemplateData != undefined)
+            $scope.schedulerTaskTrigger.loadTemplateData();
 
         $scope.schedulerTaskAction.data = taskObject.TaskSettings.TaskActionArgument;
         if ($scope.schedulerTaskAction.loadTemplateData != undefined)
