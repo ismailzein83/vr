@@ -39,6 +39,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     zoneToProcess.CodesToAdd = new List<CodeToAdd>();
                     zoneToProcess.CodesToMove = new List<CodeToMove>();
                     zoneToProcess.CodesToClose = new List<CodeToClose>();
+                    zoneToProcess.ZoneName = code.ZoneName;
                     zoneToProcessByZoneName.Add(code.ZoneName, zoneToProcess);
                 }
 

@@ -44,6 +44,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -58,6 +61,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessRules\Conditions\CodeGroupCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\MultipleCountryCondition.cs" />
     <Compile Include="ChangedSaleCodeManager.cs" />
     <Compile Include="ChangedSaleZoneManager.cs" />
     <Compile Include="CodePreparationManager.cs" />
@@ -87,6 +92,9 @@
       <Project>{38ea7d60-7221-43ba-80a8-af46b874f819}</Project>
       <Name>TOne.WhS.CodePreparation.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BusinessRules\Actions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

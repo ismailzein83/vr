@@ -6,12 +6,15 @@
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:sc="clr-namespace:System.Collections;assembly=mscorlib"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:twbe="clr-namespace:TOne.WhS.BusinessEntity.Entities;assembly=TOne.WhS.BusinessEntity.Entities"
  xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Arguments;assembly=TOne.WhS.CodePreparation.BP.Arguments"
  xmlns:twcba1="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities"
  xmlns:twcecp="clr-namespace:TOne.WhS.CodePreparation.Entities.CP.Processing;assembly=TOne.WhS.CodePreparation.Entities"
+ xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(twcba:CodePreparationInput)" />
@@ -47,6 +50,7 @@
       <AssemblyReference>TOne.WhS.CodePreparation.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.BP</AssemblyReference>
     </sco:Collection>
@@ -64,6 +68,8 @@
       <Variable x:TypeArguments="scg:IEnumerable(twcecp:ExistingCode)" Name="ExistingCodes" />
       <Variable x:TypeArguments="scg:IEnumerable(twcecp:ChangedCode)" Name="ChangedCodes" />
       <Variable x:TypeArguments="scg:IEnumerable(twcecp:ChangedZone)" Name="ChangedZones" />
+      <Variable x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)" Name="ImportedDataValidationRules" />
+      <Variable x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)" Name="ImportedDataToValidate" />
     </Sequence.Variables>
     <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
@@ -157,6 +163,37 @@
         </OutArgument>
       </twcba1:StructureDataByZones.ZonesToProcess>
     </twcba1:StructureDataByZones>
+    <twcba1:GetImportedDataValidationRules sap2010:WorkflowViewState.IdRef="GetImportedDataValidationRules_1">
+      <twcba1:GetImportedDataValidationRules.ImportedDataValidationRules>
+        <OutArgument x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">ImportedDataValidationRules</mca:CSharpReference>
+        </OutArgument>
+      </twcba1:GetImportedDataValidationRules.ImportedDataValidationRules>
+    </twcba1:GetImportedDataValidationRules>
+    <vbw:CombineLists x:TypeArguments="vbe:IRuleTarget" sap2010:WorkflowViewState.IdRef="CombineLists`1_1">
+      <vbw:CombineLists.InputLists>
+        <InArgument x:TypeArguments="scg:List(sc:IEnumerable)">
+          <mca:CSharpValue x:TypeArguments="scg:List(sc:IEnumerable)">new List&lt;System.Collections.IEnumerable&gt; {CodesToAdd,CodesToMove, ZonesToProcess }</mca:CSharpValue>
+        </InArgument>
+      </vbw:CombineLists.InputLists>
+      <vbw:CombineLists.OutputList>
+        <OutArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpReference>
+        </OutArgument>
+      </vbw:CombineLists.OutputList>
+    </vbw:CombineLists>
+    <vbw:Validate sap2010:WorkflowViewState.IdRef="Validate_1">
+      <vbw:Validate.BusinessRules>
+        <InArgument x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">ImportedDataValidationRules</mca:CSharpValue>
+        </InArgument>
+      </vbw:Validate.BusinessRules>
+      <vbw:Validate.ImportedDataToValidate>
+        <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpValue>
+        </InArgument>
+      </vbw:Validate.ImportedDataToValidate>
+    </vbw:Validate>
     <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
       <twcba1:StructureDataByCountries sap2010:WorkflowViewState.IdRef="StructureDataByCountries_1">
         <twcba1:StructureDataByCountries.CountriesToProcess>
@@ -356,7 +393,7 @@
         </InArgument>
       </twcba1:SyncImportedDataWithDB.SellingNumberPlanId>
     </twcba1:SyncImportedDataWithDB>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb24ueGFtbEU2A+gCDgIBAUQFiQEKAwHHBIoBBZ8BIwMBkgSgAQWtARADAfYDrgEF3wIPAgEQ4AIF5gIlAgECRwtHWwMByARLCWokAwGXBW0JhwEiAwHVBJIBC5IBcAMBugScAQucAXwDAa0EjQELjQFsAwGgBJcBC5cBbgMBkwShAQesASkDAfcDsQELsQF7AwHpA7gBCd0CFAIBEeMCC+MCYQIBA1MPU3wDAdkFTg9OeAMBzAVnD2diAwG/BV0PXWwDAbIFYg9iXQMBpQVYD1h6AwGYBXUPdXwDAYoFcA9weAMB/QR/D39iAwHwBIQBD4QBZQMB4wR6D3p6AwHWBKkBDakBdgMBhQSkAQ2kAYUBAwH4A74BC+EBFgMBgAPiAQvtASkDAd0C7gEL/gEpAwGpAv8BC60CKAMBjwGuAgu5Ai0CAWy6AgvcAhYCARK/AQ3PAScDAbUD0AEN4AEnAwGBA+UBEeUBeQMB7wLqARHqAZABAwHeAvYBEfYBgAEDAcwC8QER8QF5AwG7AvsBEfsBiAEDAaoCmwIRmwJ4AwGYApECEZECdgMBhwKlAhGlAngDAfYBjAIRjAJyAwHlAYICEYICfgMB1AGqAhGqAngDAcMBoAIRoAKIAQMBsgGWAhGWAnQDAaEBhwIRhwJ+AwGQAbECEbECcAIBfrYCEbYCcAIBbbsCDcYCKAIBSccCDc0CLAIBN84CDdQCKAIBJdUCDdsCLAIBE8IBE8IBgwEDAdgDzAETzAFpAwHHA8cBE8cBXgMBtgPdARPdAWkDAaQD0wET0wGDAQMBkwPYARPYAV4DAYIDwwITwwJpAgFbvgITvgJyAgFKygITygJ4AgE40QIT0QJyAgEm2AIT2AJ4AgEU</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb24ueGFtbE06A40DDgIBAUoFjwEKAwHbBZABBaUBIwMBngWmAQWsAS0DAY4FrQEFuAEYAwHvBLkBBcQBFAMB0ATFAQXSARADAbAE0wEFhAMPAgEShQMFiwMlAgECTQtNWwMB3AVRCXAkAwG3BnMJjQEiAwHrBZgBC5gBcAMBzAWiAQuiAXwDAb0FkwELkwFsAwGuBZ0BC50BbgMBnwWpAQupAYUBAwGPBbABC7ABsQEDAf8EtQELtQF/AwHwBMEBC8EBdwMB4AS8AQu8AX0DAdEExgEH0QEpAwGxBNYBC9YBewMBoQTdAQmCAxQCAROIAwuIA2ECAQNZD1l8AwGDB1QPVHgDAfQGbQ9tYgMB5QZjD2NsAwHWBmgPaF0DAccGXg9eegMBuAZ7D3t8AwGoBnYPdngDAZkGhQEPhQFiAwGKBooBD4oBZQMB+wWAAQ+AAXoDAewFzgENzgF2AwHBBMkBDckBhQEDAbIE4wELhgIWAwGsA4cCC5ICKQMBhQOTAgujAikDAcsCpAIL0gIoAwGfAdMCC94CLQIBeN8CC4EDFgIBFOQBDfQBJwMB5wP1AQ2FAicDAa0DigIRigJ5AwGZA48CEY8CkAEDAYYDmwIRmwKAAQMB8gKWAhGWAnkDAd8CoAIRoAKIAQMBzALAAhHAAngDAbgCtgIRtgJ2AwGlAsoCEcoCeAMBkgKxAhGxAnIDAf8BpwIRpwJ+AwHsAc8CEc8CeAMB2QHFAhHFAogBAwHGAbsCEbsCdAMBswGsAhGsAn4DAaAB1gIR1gJwAwGMAdsCEdsCcAIBeeACDesCKAIBUewCDfICLAIBPfMCDfkCKAIBKfoCDYADLAIBFecBE+cBgwEDAY4E8QET8QFpAwH7A+wBE+wBXgMB6AOCAhOCAmkDAdQD+AET+AGDAQMBwQP9ARP9AV4DAa4D6AIT6AJpAgFl4wIT4wJyAgFS7wIT7wJ4AgE+9gIT9gJyAgEq/QIT/QJ4AgEW</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -364,6 +401,9 @@
       <sap2010:ViewStateData Id="GetDataFromView_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1086,210" />
       <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="1086,22" />
+      <sap2010:ViewStateData Id="GetImportedDataValidationRules_1" sap:VirtualizedContainerService.HintSize="1086,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="1086,22" />
+      <sap2010:ViewStateData Id="Validate_1" sap:VirtualizedContainerService.HintSize="1086,22" />
       <sap2010:ViewStateData Id="StructureDataByCountries_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1086,146">
         <sap:WorkflowViewStateService.ViewState>
@@ -393,14 +433,14 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ForEach`1_2" sap:VirtualizedContainerService.HintSize="1086,734" />
       <sap2010:ViewStateData Id="SyncImportedDataWithDB_1" sap:VirtualizedContainerService.HintSize="1086,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1108,1418">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1108,1604">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.CodePreparation_1" sap:VirtualizedContainerService.HintSize="1148,1498" />
+      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.CodePreparation_1" sap:VirtualizedContainerService.HintSize="1148,1684" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

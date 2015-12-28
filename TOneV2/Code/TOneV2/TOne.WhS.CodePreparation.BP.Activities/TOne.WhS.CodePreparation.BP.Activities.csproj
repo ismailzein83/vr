@@ -86,6 +86,7 @@
     <Compile Include="CP\GetDataFromView.cs" />
     <Compile Include="CP\GetExistingCodes.cs" />
     <Compile Include="CP\GetExistingZones.cs" />
+    <Compile Include="CP\GetImportedDataValidationRules.cs" />
     <Compile Include="CP\PrepareExistingCodes.cs" />
     <Compile Include="CP\PrepareExistingZones.cs" />
     <Compile Include="CP\ProcessCountryCodes.cs" />
