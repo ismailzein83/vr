@@ -33,6 +33,8 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         $scope.zoneList;
         $scope.currentNode;
 
+        $scope.selectedCodes = [];
+
         $scope.onSellingNumberPlanSelectorReady = function (api) {
             sellingNumberPlanDirectiveAPI = api;
             sellingNumberPlanReadyPromiseDeferred.resolve();

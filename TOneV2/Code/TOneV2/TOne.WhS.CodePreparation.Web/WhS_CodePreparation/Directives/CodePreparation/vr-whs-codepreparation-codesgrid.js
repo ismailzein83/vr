@@ -1,17 +1,17 @@
 ﻿"use strict";
 
-app.directive('vrWhsCodepreparationCodesgrid', ['VRNotificationService', 'VRUIUtilsService', 'WhS_CodePrep_CodePrepAPIService',
-function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIService) {
+app.directive('vrWhsCodepreparationCodesgrid', ['VRNotificationService', 'VRUIUtilsService', 'WhS_CodePrep_CodePrepAPIService', 'UtilsService',
+function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIService, UtilsService) {
 
     var directiveDefinitionObject = {
 
         restrict: "E",
         scope: {
             onReady: "=",
+            selectedcodes: '=',
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-
             var ctor = new saleCodesGrid($scope, ctrl, $attrs);
             ctor.initializeController();
         },
@@ -26,7 +26,6 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
 
     function saleCodesGrid($scope, ctrl, $attrs) {
         var gridAPI;
-
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -55,9 +54,23 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
                         });
                         return selectedCodes;
                     };
+
+
                     return directiveAPI;
                 }
             };
+
+            $scope.onCodeChecked = function (dataItem) {
+                if (ctrl.selectedcodes != undefined) {
+                    var index = UtilsService.getItemIndexByVal(ctrl.selectedcodes, dataItem.Code, 'Code');
+                    if (index >= 0 && !dataItem.IsSelected) {
+                        ctrl.selectedcodes.splice(index, 1);
+                    }
+                    else if (index <= 0 && dataItem.IsSelected) {
+                        ctrl.selectedcodes.push(dataItem);
+                    }
+                }
+            }
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_CodePrep_CodePrepAPIService.GetCodeItems(dataRetrievalInput)
@@ -68,21 +81,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
-
-
         }
-
-        function defineMenuActions() {
-            $scope.gridMenuActions = [{
-                name: "Move",
-                clicked: moveCode,
-            }
-            ];
-        }
-
-        function moveCode() { }
-
-
     }
 
     return directiveDefinitionObject;

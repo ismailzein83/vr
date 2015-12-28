@@ -20,8 +20,8 @@
                 <vr-button type="Search" formname="formFilter" validationcontext="filterGroupValid" data-onclick="searchClicked"></vr-button>
                 <vr-button type="Add" text="New Zone" ng-show="currentNode != undefined && currentNode.type == 'Country'" formname="formFilter" validationcontext="filterGroupValid" data-onclick="newZoneClicked"></vr-button>
                 <vr-button type="Add" text="New Code" ng-show="currentNode != undefined && currentNode.type == 'Zone'" formname="formFilter" validationcontext="filterGroupValid" data-onclick="newCodeClicked"></vr-button>
-                <vr-button type="Move" text="Move Codes" formname="formFilter" validationcontext="filterGroupValid" data-onclick="moveCodesClicked"></vr-button>
-                <vr-button type="Close" formname="formFilter" validationcontext="filterGroupValid" data-onclick="closeCodesClicked"></vr-button>
+                <vr-button type="Move" text="Move Codes" formname="formFilter" validationcontext="filterGroupValid" data-onclick="moveCodesClicked" ng-show="selectedCodes.length > 0"></vr-button>
+                <vr-button type="Close" formname="formFilter" validationcontext="filterGroupValid" data-onclick="closeCodesClicked" ng-show="selectedCodes.length > 0"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>
@@ -40,7 +40,7 @@
             </div>
         </vr-columns>
         <vr-columns width="3/4row">
-            <vr-whs-codepreparation-codesgrid on-ready="saleCodesGridReady" >
+            <vr-whs-codepreparation-codesgrid on-ready="saleCodesGridReady" selectedcodes="selectedCodes">
 
             </vr-whs-codepreparation-codesgrid>
         </vr-columns>
