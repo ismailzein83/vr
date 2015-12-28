@@ -11,7 +11,6 @@ function LinesDetectedController($scope, ReportingAPIService, UsersAPIService, $
 
     function defineScope() {
 
-        $scope.showGrid = false;
 
         $scope.gridMenuActions = [];
 
@@ -31,7 +30,6 @@ function LinesDetectedController($scope, ReportingAPIService, UsersAPIService, $
         };
 
         $scope.searchClicked = function () {
-            $scope.showGrid = true;
             return retrieveData();
         }
 

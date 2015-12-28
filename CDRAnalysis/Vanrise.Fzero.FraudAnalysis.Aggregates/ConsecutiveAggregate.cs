@@ -52,7 +52,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 
         public decimal GetResult(INumberProfileParameters strategy)
         {
-            return _strategiesInfo[strategy].Count;
+            return (_strategiesInfo[strategy].Count > 0 ? ++_strategiesInfo[strategy].Count : _strategiesInfo[strategy].Count);
         }
 
         private class ConsecutiveAggregateStrategyInfo

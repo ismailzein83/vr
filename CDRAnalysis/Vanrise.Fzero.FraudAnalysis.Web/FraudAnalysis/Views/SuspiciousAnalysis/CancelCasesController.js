@@ -92,26 +92,33 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
-
+                    $scope.isGettingData = true;
                     var accountCaseObject = buildAccountCaseObjectFromScope();
                     return CaseManagementAPIService.CancelAccountCases(accountCaseObject)
                                           .then(function (response) {
                                               if (VRNotificationService.notifyOnItemUpdated("Account Cases", response)) {
+                                                  $scope.isGettingData = false;
                                                   return retrieveData();
                                               }
 
                                           }).catch(function (error) {
+                                              $scope.isGettingData = false;
                                               VRNotificationService.notifyException(error, $scope);
                                           });
                 }
             });
     }
 
+
+
+
+
     function cancelSelectedCases() {
+
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
-
+                    $scope.isGettingData = true;
                     var selectedCaseIDs = [];
 
                     angular.forEach($scope.selectedCases, function (item) {
@@ -122,9 +129,11 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
                     return CaseManagementAPIService.CancelSelectedAccountCases(selectedCaseIDs)
                                           .then(function (response) {
                                               if (VRNotificationService.notifyOnItemUpdated("Account Cases", response)) {
+                                                  $scope.isGettingData = false;
                                                   return retrieveData();
                                               }
                                           }).catch(function (error) {
+                                              $scope.isGettingData = false;
                                               VRNotificationService.notifyException(error, $scope);
                                           });
                 }

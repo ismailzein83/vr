@@ -12,7 +12,6 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
     load();
 
     function defineScope() {
-        $scope.showGrid = false;
         $scope.gridMenuActions = [];
 
         var Yesterday = new Date();
@@ -31,7 +30,6 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
         };
 
         $scope.searchClicked = function () {
-            $scope.showGrid = true;
             return retrieveData();
         }
 
@@ -43,7 +41,6 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
         }
 
         $scope.onGroupDailyChanged = function () {
-            if ($scope.showGrid)
                 return retrieveData();
         }
 

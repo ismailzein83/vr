@@ -12,7 +12,6 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
 
     function defineScope() {
 
-        $scope.showGrid = false;
 
         var Now = new Date();
 
@@ -35,7 +34,6 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
         };
 
         $scope.searchClicked = function () {
-            $scope.showGrid = true;
             return retrieveData();
         }
 
@@ -47,8 +45,7 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
         }
 
         $scope.onGroupDailyChanged = function () {
-            if ($scope.showGrid)
-                return retrieveData();
+            return retrieveData();
         }
     }
 
