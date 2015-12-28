@@ -83,6 +83,7 @@
     <Compile Include="CP\ApplyNewCodesToDB.cs" />
     <Compile Include="CP\ApplyNewZonesToDB.cs" />
     <Compile Include="CP\GetDataFromSource.cs" />
+    <Compile Include="CP\GetDataFromView.cs" />
     <Compile Include="CP\GetExistingCodes.cs" />
     <Compile Include="CP\GetExistingZones.cs" />
     <Compile Include="CP\PrepareExistingCodes.cs" />

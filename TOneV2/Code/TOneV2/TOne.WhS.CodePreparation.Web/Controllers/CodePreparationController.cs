@@ -23,7 +23,7 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
     {
         [HttpGet]
         [Route("UploadSaleZonesList")]
-        public CreateProcessOutput UploadSaleZonesList(int sellingNumberPlanId, int fileId, DateTime effectiveDate)
+        public CreateProcessOutput UploadSaleZonesList(int sellingNumberPlanId, int? fileId, DateTime? effectiveDate, bool isFromExcel)
         {
             CodePreparationManager manager = new CodePreparationManager();
             BPClient bpClient = new BPClient();
@@ -34,10 +34,13 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
                      EffectiveDate = effectiveDate,
                      FileId = fileId,
                      SellingNumberPlanId = sellingNumberPlanId,
+                     IsFromExcel = isFromExcel
                  }
 
              });
         }
+
+
         [HttpGet]
         [Route("DownloadImportCodePreparationTemplate")]
         public HttpResponseMessage DownloadImportCodePreparationTemplate()

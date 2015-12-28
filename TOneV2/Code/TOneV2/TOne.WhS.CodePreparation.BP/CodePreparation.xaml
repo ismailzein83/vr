@@ -42,11 +42,11 @@
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.BP</AssemblyReference>
     </sco:Collection>
@@ -65,38 +65,76 @@
       <Variable x:TypeArguments="scg:IEnumerable(twcecp:ChangedCode)" Name="ChangedCodes" />
       <Variable x:TypeArguments="scg:IEnumerable(twcecp:ChangedZone)" Name="ChangedZones" />
     </Sequence.Variables>
-    <twcba1:GetDataFromSource sap2010:WorkflowViewState.IdRef="GetDataFromSource_2">
-      <twcba1:GetDataFromSource.CodesToAdd>
-        <OutArgument x:TypeArguments="scg:IEnumerable(twcecp:CodeToAdd)">
-          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcecp:CodeToAdd)">CodesToAdd</mca:CSharpReference>
-        </OutArgument>
-      </twcba1:GetDataFromSource.CodesToAdd>
-      <twcba1:GetDataFromSource.CodesToClose>
-        <OutArgument x:TypeArguments="scg:IEnumerable(twcecp:CodeToClose)">
-          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcecp:CodeToClose)">CodesToClose</mca:CSharpReference>
-        </OutArgument>
-      </twcba1:GetDataFromSource.CodesToClose>
-      <twcba1:GetDataFromSource.CodesToMove>
-        <OutArgument x:TypeArguments="scg:IEnumerable(twcecp:CodeToMove)">
-          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcecp:CodeToMove)">CodesToMove</mca:CSharpReference>
-        </OutArgument>
-      </twcba1:GetDataFromSource.CodesToMove>
-      <twcba1:GetDataFromSource.EffectiveDate>
-        <InArgument x:TypeArguments="s:DateTime">
-          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate</mca:CSharpValue>
+    <If sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFromExcel</mca:CSharpValue>
         </InArgument>
-      </twcba1:GetDataFromSource.EffectiveDate>
-      <twcba1:GetDataFromSource.FileId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.FileId</mca:CSharpValue>
-        </InArgument>
-      </twcba1:GetDataFromSource.FileId>
-      <twcba1:GetDataFromSource.MinimumDate>
-        <OutArgument x:TypeArguments="s:DateTime">
-          <mca:CSharpReference x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpReference>
-        </OutArgument>
-      </twcba1:GetDataFromSource.MinimumDate>
-    </twcba1:GetDataFromSource>
+      </If.Condition>
+      <If.Then>
+        <twcba1:GetDataFromSource sap2010:WorkflowViewState.IdRef="GetDataFromSource_2">
+          <twcba1:GetDataFromSource.CodesToAdd>
+            <OutArgument x:TypeArguments="scg:IEnumerable(twcecp:CodeToAdd)">
+              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcecp:CodeToAdd)">CodesToAdd</mca:CSharpReference>
+            </OutArgument>
+          </twcba1:GetDataFromSource.CodesToAdd>
+          <twcba1:GetDataFromSource.CodesToClose>
+            <OutArgument x:TypeArguments="scg:IEnumerable(twcecp:CodeToClose)">
+              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcecp:CodeToClose)">CodesToClose</mca:CSharpReference>
+            </OutArgument>
+          </twcba1:GetDataFromSource.CodesToClose>
+          <twcba1:GetDataFromSource.CodesToMove>
+            <OutArgument x:TypeArguments="scg:IEnumerable(twcecp:CodeToMove)">
+              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcecp:CodeToMove)">CodesToMove</mca:CSharpReference>
+            </OutArgument>
+          </twcba1:GetDataFromSource.CodesToMove>
+          <twcba1:GetDataFromSource.EffectiveDate>
+            <InArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpValue x:TypeArguments="s:DateTime">(DateTime)Input.EffectiveDate</mca:CSharpValue>
+            </InArgument>
+          </twcba1:GetDataFromSource.EffectiveDate>
+          <twcba1:GetDataFromSource.FileId>
+            <InArgument x:TypeArguments="x:Int32">
+              <mca:CSharpValue x:TypeArguments="x:Int32">(int)Input.FileId</mca:CSharpValue>
+            </InArgument>
+          </twcba1:GetDataFromSource.FileId>
+          <twcba1:GetDataFromSource.MinimumDate>
+            <OutArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpReference x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpReference>
+            </OutArgument>
+          </twcba1:GetDataFromSource.MinimumDate>
+        </twcba1:GetDataFromSource>
+      </If.Then>
+      <If.Else>
+        <twcba1:GetDataFromView sap2010:WorkflowViewState.IdRef="GetDataFromView_1">
+          <twcba1:GetDataFromView.CodesToAdd>
+            <OutArgument x:TypeArguments="scg:IEnumerable(twcecp:CodeToAdd)">
+              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcecp:CodeToAdd)">CodesToAdd</mca:CSharpReference>
+            </OutArgument>
+          </twcba1:GetDataFromView.CodesToAdd>
+          <twcba1:GetDataFromView.CodesToClose>
+            <OutArgument x:TypeArguments="scg:IEnumerable(twcecp:CodeToClose)">
+              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcecp:CodeToClose)">CodesToClose</mca:CSharpReference>
+            </OutArgument>
+          </twcba1:GetDataFromView.CodesToClose>
+          <twcba1:GetDataFromView.CodesToMove>
+            <OutArgument x:TypeArguments="scg:IEnumerable(twcecp:CodeToMove)">
+              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcecp:CodeToMove)">CodesToMove</mca:CSharpReference>
+            </OutArgument>
+          </twcba1:GetDataFromView.CodesToMove>
+          <twcba1:GetDataFromView.MinimumDate>
+            <OutArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpReference x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpReference>
+            </OutArgument>
+          </twcba1:GetDataFromView.MinimumDate>
+          <twcba1:GetDataFromView.SellingNumberPlanId>
+            <InArgument x:TypeArguments="x:Int32">
+              <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
+            </InArgument>
+          </twcba1:GetDataFromView.SellingNumberPlanId>
+        </twcba1:GetDataFromView>
+      </If.Else>
+    </If>
     <twcba1:StructureDataByZones sap2010:WorkflowViewState.IdRef="StructureDataByZones_1">
       <twcba1:StructureDataByZones.CodesToAdd>
         <InArgument x:TypeArguments="scg:IEnumerable(twcecp:CodeToAdd)">
@@ -311,19 +349,20 @@
         </Sequence>
       </ActivityAction>
     </ForEach>
-    <twcba1:SyncImportedDataWithDB>
+    <twcba1:SyncImportedDataWithDB sap2010:WorkflowViewState.IdRef="SyncImportedDataWithDB_1">
       <twcba1:SyncImportedDataWithDB.SellingNumberPlanId>
         <InArgument x:TypeArguments="x:Int32">
           <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
         </InArgument>
       </twcba1:SyncImportedDataWithDB.SellingNumberPlanId>
-      <sap2010:WorkflowViewState.IdRef>SyncImportedDataWithDB_1</sap2010:WorkflowViewState.IdRef>
     </twcba1:SyncImportedDataWithDB>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb24ueGFtbD02A8MCDgIBAUQFYyADAccEZAV5IwMBkgR6BYcBEAMB9gOIAQW5Ag8CARC6AgXBAiUCAQJMC0x4AwGJBUcLR3QDAfwEYAtgXgMB7wRWC1ZeAwHiBFsLW1QDAdUEUQtRdgMByARsC2xwAwG6BHYLdnwDAa0EZwtnbAMBoARxC3FuAwGTBHsHhgEpAwH3A4sBC4sBewMB6QOSAQm3AhQCARG9Agu9AmECAQODAQ2DAXYDAYUEfg1+hQEDAfgDmAELuwEWAwGAA7wBC8cBKQMB3QLIAQvYASkDAakC2QELhwIoAwGPAYgCC5MCLQIBbJQCC7YCFgIBEpkBDakBJwMBtQOqAQ26AScDAYEDvwERvwF5AwHvAsQBEcQBkAEDAd4C0AER0AGAAQMBzALLARHLAXkDAbsC1QER1QGIAQMBqgL1ARH1AXgDAZgC6wER6wF2AwGHAv8BEf8BeAMB9gHmARHmAXIDAeUB3AER3AF+AwHUAYQCEYQCeAMBwwH6ARH6AYgBAwGyAfABEfABdAMBoQHhARHhAX4DAZABiwIRiwJwAgF+kAIRkAJwAgFtlQINoAIoAgFJoQINpwIsAgE3qAINrgIoAgElrwINtQIsAgETnAETnAGDAQMB2AOmAROmAWkDAccDoQEToQFeAwG2A7cBE7cBaQMBpAOtAROtAYMBAwGTA7IBE7IBXgMBggOdAhOdAmkCAVuYAhOYAnICAUqkAhOkAngCATirAhOrAnICASayAhOyAngCARQ=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb24ueGFtbEU2A+gCDgIBAUQFiQEKAwHHBIoBBZ8BIwMBkgSgAQWtARADAfYDrgEF3wIPAgEQ4AIF5gIlAgECRwtHWwMByARLCWokAwGXBW0JhwEiAwHVBJIBC5IBcAMBugScAQucAXwDAa0EjQELjQFsAwGgBJcBC5cBbgMBkwShAQesASkDAfcDsQELsQF7AwHpA7gBCd0CFAIBEeMCC+MCYQIBA1MPU3wDAdkFTg9OeAMBzAVnD2diAwG/BV0PXWwDAbIFYg9iXQMBpQVYD1h6AwGYBXUPdXwDAYoFcA9weAMB/QR/D39iAwHwBIQBD4QBZQMB4wR6D3p6AwHWBKkBDakBdgMBhQSkAQ2kAYUBAwH4A74BC+EBFgMBgAPiAQvtASkDAd0C7gEL/gEpAwGpAv8BC60CKAMBjwGuAgu5Ai0CAWy6AgvcAhYCARK/AQ3PAScDAbUD0AEN4AEnAwGBA+UBEeUBeQMB7wLqARHqAZABAwHeAvYBEfYBgAEDAcwC8QER8QF5AwG7AvsBEfsBiAEDAaoCmwIRmwJ4AwGYApECEZECdgMBhwKlAhGlAngDAfYBjAIRjAJyAwHlAYICEYICfgMB1AGqAhGqAngDAcMBoAIRoAKIAQMBsgGWAhGWAnQDAaEBhwIRhwJ+AwGQAbECEbECcAIBfrYCEbYCcAIBbbsCDcYCKAIBSccCDc0CLAIBN84CDdQCKAIBJdUCDdsCLAIBE8IBE8IBgwEDAdgDzAETzAFpAwHHA8cBE8cBXgMBtgPdARPdAWkDAaQD0wET0wGDAQMBkwPYARPYAV4DAYIDwwITwwJpAgFbvgITvgJyAgFKygITygJ4AgE40QIT0QJyAgEm2AIT2AJ4AgEU</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="GetDataFromSource_2" sap:VirtualizedContainerService.HintSize="1086,22" />
+      <sap2010:ViewStateData Id="GetDataFromSource_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="GetDataFromView_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1086,210" />
       <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="1086,22" />
       <sap2010:ViewStateData Id="StructureDataByCountries_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1086,146">
@@ -354,14 +393,14 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ForEach`1_2" sap:VirtualizedContainerService.HintSize="1086,734" />
       <sap2010:ViewStateData Id="SyncImportedDataWithDB_1" sap:VirtualizedContainerService.HintSize="1086,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1108,1230">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1108,1418">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.CodePreparation_1" sap:VirtualizedContainerService.HintSize="1148,1310" />
+      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.CodePreparation_1" sap:VirtualizedContainerService.HintSize="1148,1498" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -23,7 +23,7 @@ function CodePreparationController($scope, WhS_CodePrep_CodePrepAPIService, WhS_
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, undefined, setLoader, sellingNumberPlanReadyPromiseDeferred);
         }
         $scope.upload = function () {
-            return WhS_CodePrep_CodePrepAPIService.UploadSaleZonesList($scope.selectedSellingNumberPlan.SellingNumberPlanId, $scope.zoneList.fileId, $scope.effectiveDate).then(function (response) {
+            return WhS_CodePrep_CodePrepAPIService.UploadSaleZonesList($scope.selectedSellingNumberPlan.SellingNumberPlanId, $scope.zoneList.fileId, $scope.effectiveDate,true).then(function (response) {
                 if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
                   return  BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
             });
