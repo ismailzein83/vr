@@ -125,13 +125,14 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
                     $scope.actionTypes.push(item);
                 }
             });
+            if(taskObject.ActionTypeId)
+               $scope.scopeModel.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, taskObject.ActionTypeId, "ActionTypeId");
         });
     }
 
     function loadTaskTriggerDirective() {
         var loadTaskTriggerPromiseDeferred = UtilsService.createPromiseDeferred();
         taskTriggereDirectiveReadyPromiseDeferred.promise.then(function () {
-            console.log(taskObject.TaskSettings.TaskTriggerArgument);
             var payload = {
                 data: taskObject.TaskSettings.TaskTriggerArgument
             };
@@ -151,7 +152,7 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
             ActionTypeId: $scope.scopeModel.selectedActionType.ActionTypeId,
             TaskSettings:
                 {
-                    TaskTriggerArgument: $scope.schedulerTaskTrigger.getData(),
+                    TaskTriggerArgument: taskTriggerDirectiveAPI.getData(),
                     TaskActionArgument: null,//$scope.schedulerTaskAction.getData(),
                     StartEffDate:$scope.scopeModel.startEffDate,
                     EndEffDate: $scope.scopeModel.endEffDate
@@ -166,11 +167,11 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
         $scope.scopeModel.isEnabled = taskObject.IsEnabled;
 
        
-        $scope.scopeModel.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, taskObject.ActionTypeId, "ActionTypeId");
-
+        
+        console.log($scope.scopeModel.selectedActionType + " // " + $scope.actionTypes+" // "+taskObject.ActionTypeId)
         $scope.schedulerTaskTrigger.data = taskObject.TaskSettings.TaskTriggerArgument;
-        if ($scope.schedulerTaskTrigger.loadTemplateData != undefined)
-            $scope.schedulerTaskTrigger.loadTemplateData();
+        //if ($scope.schedulerTaskTrigger.loadTemplateData != undefined)
+        //    $scope.schedulerTaskTrigger.loadTemplateData();
 
         $scope.schedulerTaskAction.data = taskObject.TaskSettings.TaskActionArgument;
         if ($scope.schedulerTaskAction.loadTemplateData != undefined)

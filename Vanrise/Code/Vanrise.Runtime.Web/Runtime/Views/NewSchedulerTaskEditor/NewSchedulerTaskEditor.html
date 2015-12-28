@@ -38,7 +38,9 @@
                             <div>
                                 <vr-row>                                    
                                     <vr-columns width="fullrow" ng-if="scopeModel.selectedTriggerType">
-                                        <vr-directivewrapper directive="scopeModel.selectedTriggerType.Info.Editor" on-ready="onTaskTriggerDirectiveReady"></vr-directivewrapper>
+                                        <vr-section title="{{scopeModel.selectedTriggerType.Name}} Trigger">
+                                            <vr-directivewrapper directive="scopeModel.selectedTriggerType.Info.Editor" on-ready="onTaskTriggerDirectiveReady"></vr-directivewrapper>
+                                        </vr-section>
                                     </vr-columns>
                                 </vr-row>
                             </div>

@@ -102,8 +102,14 @@
     <Content Include="Runtime\Constants\TimeSchedulerTypeEnum.js" />
     <Content Include="Runtime\Directives\SchedulerTask\Templates\SchedulerTaskGridTemplate.html" />
     <Content Include="Runtime\Directives\SchedulerTask\vr-runtime-schedulertask-grid.js" />
-    <Content Include="Runtime\Directives\TimerTrigger\Templates\TaskTriggerTimerGroup.html" />
-    <Content Include="Runtime\Directives\TimerTrigger\vr-runtime-tasktrigger-timer-group.js" />
+    <Content Include="Runtime\Directives\TimerTrigger\Templates\TaskTriggerDaily.html" />
+    <Content Include="Runtime\Directives\TimerTrigger\Templates\TaskTriggerInterval.html" />
+    <Content Include="Runtime\Directives\TimerTrigger\Templates\TaskTriggerTimer.html" />
+    <Content Include="Runtime\Directives\TimerTrigger\Templates\TaskTriggerWeekly.html" />
+    <Content Include="Runtime\Directives\TimerTrigger\vr-runtime-tasktrigger-daily.js" />
+    <Content Include="Runtime\Directives\TimerTrigger\vr-runtime-tasktrigger-interval.js" />
+    <Content Include="Runtime\Directives\TimerTrigger\vr-runtime-tasktrigger-timer.js" />
+    <Content Include="Runtime\Directives\TimerTrigger\vr-runtime-tasktrigger-weekly.js" />
     <Content Include="Runtime\Services\APIServices\SchedulerTaskAPIService.js" />
     <Content Include="Runtime\Services\SchedulerTaskService.js" />
     <Content Include="Runtime\Views\ActionTemplates\WFActionTemplate.html" />
@@ -143,9 +149,7 @@
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Runtime\Directives\TaskAction\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
