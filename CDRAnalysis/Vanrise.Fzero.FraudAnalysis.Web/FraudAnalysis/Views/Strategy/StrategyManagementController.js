@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-StrategyManagementController.$inject = ['$scope', 'StrategyAPIService', 'UsersAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum'];
+StrategyManagementController.$inject = ['$scope', 'StrategyAPIService', 'UsersAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum', 'VRValidationService'];
 
-function StrategyManagementController($scope, StrategyAPIService, UsersAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum) {
+function StrategyManagementController($scope, StrategyAPIService, UsersAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum, VRValidationService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
@@ -11,6 +11,10 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
     load();
 
     function defineScope() {
+
+        $scope.validateTimeRange = function () {
+            return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+        }
 
         $scope.gridMenuActions = [];
 
@@ -137,7 +141,7 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
         };
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = UtilsService.buildTitleForAddEditor("Strategy") ;
+            modalScope.title = UtilsService.buildTitleForAddEditor("Strategy");
             modalScope.onStrategyAdded = function (strategy) {
                 fillStrategy(strategy);
                 mainGridAPI.itemAdded(strategy);
@@ -152,7 +156,7 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
         };
 
         var settings = {
-            width:'95%'
+            width: '95%'
         };
 
         settings.onScopeReady = function (modalScope) {

@@ -51,11 +51,11 @@
             <div ng-show="normalCDRsSelected">
                 <vr-row>
                     <vr-columns width="normal">
-                        <vr-datetimepicker label="From" value="fromDate_NormalCDRs" type="dateTime" onblurdatetime="filterData" isrequired></vr-datetimepicker>
+                        <vr-datetimepicker label="From" value="fromDate_NormalCDRs" type="dateTime" onblurdatetime="filterData" isrequired customvalidate="validateTimeRangeNormalCDRs()"></vr-datetimepicker>
                     </vr-columns>
 
                     <vr-columns width="normal">
-                        <vr-datetimepicker label="To" value="toDate_NormalCDRs" type="dateTime" onblurdatetime="filterData" isrequired></vr-datetimepicker>
+                        <vr-datetimepicker label="To" value="toDate_NormalCDRs" type="dateTime" onblurdatetime="filterData" isrequired customvalidate="validateTimeRangeNormalCDRs()"></vr-datetimepicker>
                     </vr-columns>
                 </vr-row>
                 <vr-row>
@@ -105,7 +105,8 @@
                                            type="dateTime"
                                            onblurdatetime="filterData"
                                            isrequired
-                                           ng-show="showDate">
+                                           ng-show="showDate"
+                                           customvalidate="validateTimeRangeNumberProfiles()">
                         </vr-datetimepicker>
                     </vr-columns>
 
@@ -115,7 +116,8 @@
                                            type="dateTime"
                                            onblurdatetime="filterData"
                                            isrequired
-                                           ng-show="showDate">
+                                           ng-show="showDate"
+                                           customvalidate="validateTimeRangeNumberProfiles()">
                         </vr-datetimepicker>
                     </vr-columns>
                 </vr-row>

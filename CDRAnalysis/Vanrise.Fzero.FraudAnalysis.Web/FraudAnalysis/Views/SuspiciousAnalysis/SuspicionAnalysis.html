@@ -16,11 +16,11 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-datetimepicker label="From" value="fromDate" type="dateTime" isrequired></vr-datetimepicker>
+                    <vr-datetimepicker label="From" value="fromDate" type="dateTime" isrequired customvalidate="validateTimeRange()"></vr-datetimepicker>
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-datetimepicker label="To" value="toDate" type="dateTime" isrequired></vr-datetimepicker>
+                    <vr-datetimepicker label="To" value="toDate" type="dateTime" isrequired customvalidate="validateTimeRange()"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-select label="Strategy" ng-show="advancedSelected"

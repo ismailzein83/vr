@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-SuspicionAnalysisController.$inject = ["$scope", "CaseManagementAPIService", "StrategyAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService"];
+SuspicionAnalysisController.$inject = ["$scope", "CaseManagementAPIService", "StrategyAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService", "VRValidationService"];
 
-function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyAPIService, SuspicionLevelEnum, CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, VRModalService, VRNavigationService) {
+function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyAPIService, SuspicionLevelEnum, CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, VRModalService, VRNavigationService, VRValidationService) {
 
     var gridAPI = undefined;
 
@@ -19,6 +19,10 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
 
         $scope.fromDate = Yesterday;
         $scope.toDate = Now;
+
+        $scope.validateTimeRange = function () {
+            return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+        }
 
         $scope.strategies = [];
         $scope.selectedStrategies = [];
@@ -52,7 +56,7 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
                             var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
                             item.SuspicionLevelDescription = suspicionLevel.description;
                         }
-                        
+
                         var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", item.AccountStatusID);
                         item.AccountStatusDescription = accountStatus.description;
                     });
@@ -69,14 +73,14 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
         }
 
         $scope.getSuspicionLevelColor = function (dataItem) {
-            
+
             if (dataItem.SuspicionLevelID == SuspicionLevelEnum.Suspicious.value) return LabelColorsEnum.WarningLevel1.color;
             else if (dataItem.SuspicionLevelID == SuspicionLevelEnum.HighlySuspicious.value) return LabelColorsEnum.WarningLevel2.color;
             else if (dataItem.SuspicionLevelID == SuspicionLevelEnum.Fraud.value) return LabelColorsEnum.Error.color;
         }
 
         $scope.getCaseStatusColor = function (dataItem) {
-            
+
             if (dataItem.AccountStatusID == CaseStatusEnum.Open.value) return LabelColorsEnum.New.color;
             else if (dataItem.AccountStatusID == CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
             else if (dataItem.AccountStatusID == CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
@@ -99,7 +103,7 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
 
     function load() {
         $scope.isInitializing = true;
-                
+
         return StrategyAPIService.GetStrategies(0, "") // get all the enabled and disabled strategies (2nd arg) for all periods (1st arg)
             .then(function (response) {
                 angular.forEach(response, function (item) {
@@ -132,7 +136,7 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
 
             modalScope.onAccountCaseUpdated = function (accountSuspicionSummary) {
                 //if (accountSuspicionSummary.AccountNumber != null)
-                    gridAPI.itemUpdated(accountSuspicionSummary);
+                gridAPI.itemUpdated(accountSuspicionSummary);
             }
         };
 

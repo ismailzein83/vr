@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-CancelCasesController.$inject = ["$scope", "CaseManagementAPIService", "StrategyAPIService", "VRNotificationService", "LabelColorsEnum", "UtilsService", "CaseStatusEnum"];
+CancelCasesController.$inject = ["$scope", "CaseManagementAPIService", "StrategyAPIService", "VRNotificationService", "LabelColorsEnum", "UtilsService", "CaseStatusEnum", "VRValidationService"];
 
-function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIService, VRNotificationService, LabelColorsEnum, UtilsService, CaseStatusEnum) {
+function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIService, VRNotificationService, LabelColorsEnum, UtilsService, CaseStatusEnum, VRValidationService ) {
 
     var gridAPI;
 
@@ -16,6 +16,10 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
 
         $scope.from = yesterday;
         $scope.to = new Date();
+
+        $scope.validateTimeRange = function () {
+            return VRValidationService.validateTimeRange($scope.from, $scope.to);
+        }
 
         $scope.strategies = [];
         $scope.selectedStrategies = [];

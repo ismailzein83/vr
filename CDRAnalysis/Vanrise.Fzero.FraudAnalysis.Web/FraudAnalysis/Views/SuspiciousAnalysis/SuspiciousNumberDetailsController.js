@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-SuspiciousNumberDetailsController.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "UsersAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "CallTypeEnum", "LabelColorsEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService"];
+SuspiciousNumberDetailsController.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "UsersAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "CallTypeEnum", "LabelColorsEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService", "VRValidationService"];
 
-function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService, UsersAPIService, SuspicionLevelEnum, CaseStatusEnum, CallTypeEnum, LabelColorsEnum, UtilsService, VRNavigationService, VRNotificationService, VRModalService) {
+function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService, UsersAPIService, SuspicionLevelEnum, CaseStatusEnum, CallTypeEnum, LabelColorsEnum, UtilsService, VRNavigationService, VRNotificationService, VRModalService, VRValidationService) {
     var gridAPI_Occurances = undefined;
     var occurancesLoaded = false;
 
@@ -50,6 +50,13 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         // Normal CDRs
         $scope.fromDate_NormalCDRs = $scope.fromDate;
         $scope.toDate_NormalCDRs = $scope.toDate;
+
+        $scope.validateTimeRangeNormalCDRs = function () {
+            return VRValidationService.validateTimeRange($scope.fromDate_NormalCDRs, $scope.toDate_NormalCDRs);
+        }
+
+
+
         $scope.normalCDRs = [];
 
         // Number Profiles
@@ -62,13 +69,17 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.fromDate_NumberProfiles = $scope.fromDate;
         $scope.toDate_NumberProfiles = $scope.toDate;
 
+        $scope.validateTimeRangeNumberProfiles = function () {
+            return VRValidationService.validateTimeRange($scope.fromDate_NumberProfiles, $scope.toDate_NumberProfiles);
+        }
+
         $scope.aggregateDefinitions = []; // column names
         $scope.detailAggregateValues = [];
         $scope.numberProfile = [];
-        
+
         $scope.showProfileOptions = true;
         $scope.showDate = false;
-        
+
         // Case History
         $scope.cases = [];
 
@@ -126,14 +137,14 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             .then(function (response) {
 
                 occurancesLoaded = true;
-                
+
                 if (response.Data != undefined) { // else, the export button was clicked
 
                     if (response.Data.length > 0) {
-                        for (var i = 0; i < response.Data.length; i++)                        {
+                        for (var i = 0; i < response.Data.length; i++) {
                             $scope.detailAggregateValues.push(UtilsService.cloneObject(response.Data[i]));
                         }
-                        
+
                     }
                     else {
                         $scope.showOccurancesGrid = false;
@@ -209,13 +220,13 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.updateAccountCase = function () {
 
             return CaseManagementAPIService.UpdateAccountCase({
-                    accountNumber: $scope.accountNumber,
-                    caseStatus: $scope.selectedCaseStatus.value,
-                    validTill: $scope.validTill,
-                    FromDate: $scope.fromDate,
-                    ToDate: $scope.toDate,
-                    Reason: $scope.updateReason
-                })
+                accountNumber: $scope.accountNumber,
+                caseStatus: $scope.selectedCaseStatus.value,
+                validTill: $scope.validTill,
+                FromDate: $scope.fromDate,
+                ToDate: $scope.toDate,
+                Reason: $scope.updateReason
+            })
                 .then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("Account Case", response)) {
                         if ($scope.onAccountCaseUpdated != undefined) {
@@ -230,7 +241,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
                             $scope.onAccountCaseUpdated(response.UpdatedObject);
                         }
-                        
+
                         $scope.modalContext.closeModal();
                     }
 
@@ -247,10 +258,10 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         $scope.filterData = function () {
 
-            if ($scope.selectedTabIndex == 1)
+            if ($scope.selectedTabIndex == 1 && $scope.validateTimeRangeNormalCDRs() == null && $scope.fromDate_NormalCDRs != null && $scope.toDate_NormalCDRs != null)
                 normalCDRsLoaded = false; // re-load the normal cdrs
 
-            else if ($scope.selectedTabIndex == 2)
+            else if ($scope.selectedTabIndex == 2 && $scope.validateTimeRangeNumberProfiles() == null && $scope.fromDate_NumberProfiles != null && $scope.toDate_NumberProfiles != null)
                 numberProfilesLoaded = false; // re-load the number profiles
 
             return retrieveData();
@@ -262,8 +273,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         $scope.onProfileSourceChanged = function () {
 
-            if ($scope.selectedProfileSource != null)
-            {
+            if ($scope.selectedProfileSource != null) {
                 if ($scope.selectedProfileSource.value == 1) {
                     $scope.showDate = true;
                     retrieveData_NumberProfiles();
@@ -276,7 +286,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.toggleValidTill = function (selectedStatus) {
             $scope.whiteListSelected = (selectedStatus != undefined && selectedStatus.value == CaseStatusEnum.ClosedWhitelist.value);
         }
-        
+
         $scope.onReasonChanged = function () {
 
             if ($scope.selectedReason != undefined) {
@@ -322,7 +332,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
     function load() {
         $scope.isInitializing = true;
-        
+
         return UtilsService.waitMultipleAsyncOperations([loadAggregateDefinitions, loadUsers, loadAccountStatus])
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
@@ -338,15 +348,15 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         if (gridAPI_Occurances != undefined && $scope.selectedTabIndex == 0 && !occurancesLoaded)
             return retrieveData_Occurances();
 
-        else if (gridAPI_NormalCDRs != undefined && $scope.selectedTabIndex == 1 && !normalCDRsLoaded)
+        else if (gridAPI_NormalCDRs != undefined && $scope.selectedTabIndex == 1 && !normalCDRsLoaded && $scope.validateTimeRangeNormalCDRs() == null && $scope.fromDate_NormalCDRs != null && $scope.toDate_NormalCDRs != null)
             return retrieveData_NormalCDRs();
 
-        else if (gridAPI_NumberProfiles != undefined && $scope.selectedTabIndex == 2 && !numberProfilesLoaded)
+        else if (gridAPI_NumberProfiles != undefined && $scope.selectedTabIndex == 2 && !numberProfilesLoaded && $scope.validateTimeRangeNumberProfiles() == null && $scope.fromDate_NumberProfiles != null && $scope.toDate_NumberProfiles != null)
             return retrieveData_NumberProfiles();
 
         else if (gridAPI_CaseHistory != undefined && $scope.selectedTabIndex == 3 && !casesLoaded)
             return retrieveData_CaseHistory();
-        
+
     }
 
     function retrieveData_Occurances() {
@@ -421,7 +431,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             .then(function (response) {
 
                 angular.forEach(response, function (item) {
-                    $scope.aggregateDefinitions.push({ name: item.Name , numberPrecision: item.NumberPrecision });
+                    $scope.aggregateDefinitions.push({ name: item.Name, numberPrecision: item.NumberPrecision });
                 });
             })
     }

@@ -15,10 +15,10 @@
                     <vr-textbox value="name" label="Strategy Name"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="dateTime" value="fromDate" label="From"></vr-datetimepicker>
+                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" customvalidate="validateTimeRange()" ></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="dateTime" value="toDate" label="To"></vr-datetimepicker>
+                    <vr-datetimepicker type="dateTime" value="toDate" label="To" customvalidate="validateTimeRange()" ></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-textbox value="description" label="Description" ng-show="advancedSelected"></vr-textbox>
