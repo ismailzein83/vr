@@ -184,6 +184,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_BusinessEntity\Constant\CarrierAccountActivationStatusEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\EmailTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ModuleConfig.js" />
