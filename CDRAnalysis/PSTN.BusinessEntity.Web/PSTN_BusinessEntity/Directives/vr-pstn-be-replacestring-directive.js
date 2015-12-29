@@ -65,7 +65,7 @@ app.directive("vrPstnBeReplacestring", [function () {
 
 
             api.validateData = function () {
-                return true;
+                return $scope.stringToReplace != undefined && $scope.stringToReplace != null && $scope.newString != undefined && $scope.newString != null;
             };
 
            

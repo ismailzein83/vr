@@ -58,11 +58,11 @@ app.directive("vrPstnBeAddprefix", [function () {
                 }
             }
 
-            if (ctrl.onReady != null) 
+            if (ctrl.onReady != null)
                 ctrl.onReady(api);
 
             api.validateData = function () {
-                return true;
+                return $scope.numberPrefix != undefined && $scope.numberPrefix != null;
             };
 
 

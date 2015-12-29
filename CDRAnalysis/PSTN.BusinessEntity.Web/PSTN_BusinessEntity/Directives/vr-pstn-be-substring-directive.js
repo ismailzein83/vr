@@ -61,7 +61,7 @@ app.directive("vrPstnBeSubstring", [function () {
             }
 
             api.validateData = function () {
-                return true;
+                return $scope.startIndex != undefined && $scope.startIndex != null && $scope.length != undefined && $scope.length != null;
             };
 
             if (ctrl.onReady != null)
