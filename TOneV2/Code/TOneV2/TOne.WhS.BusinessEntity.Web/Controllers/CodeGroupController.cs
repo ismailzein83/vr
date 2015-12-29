@@ -73,7 +73,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             CodeGroupManager manager = new CodeGroupManager();
             byte[] bytes = manager.DownloadCodeGroupListTemplate();
-            return GetExcelResponse(bytes, "ImportPriceListTemplate.xls");  
+            return GetExcelResponse(bytes, "CodeGroupListTemplate.xls");  
         }
     
         [HttpGet]
