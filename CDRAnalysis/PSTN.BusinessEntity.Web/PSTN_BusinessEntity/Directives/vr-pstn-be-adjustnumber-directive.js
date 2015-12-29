@@ -117,18 +117,15 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
             };
 
             api.validateData = function () {
+
                 if ($scope.actions.length == 0)
                     return false;
 
                 for (var i = 0; i < $scope.actions.length; i++) {
                     var action = $scope.actions[i];
 
-                    if (action.ActionDirectiveAPI == undefined)
+                    if (action.ActionDirectiveAPI == undefined ||!action.ActionDirectiveAPI.validateData() )
                         return false;
-
-                    if (!action.ActionDirectiveAPI.validateData()) {
-                        return false;
-                    }
                 }
 
                 return true;
@@ -137,7 +134,6 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);
             }
-
 
 
             function getActions() {
@@ -154,7 +150,6 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
                 return actions;
             }
         }
-
 
 
         function getActionItem(dbAction) {

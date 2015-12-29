@@ -91,7 +91,6 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
 
 
             api.validateData = function () {
-                console.log('api.validateData')
                 if (setAreaSettingsDirectiveAPI == undefined)
                     return false;
 
