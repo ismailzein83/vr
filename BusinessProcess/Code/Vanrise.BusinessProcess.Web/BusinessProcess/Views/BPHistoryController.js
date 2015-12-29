@@ -1,10 +1,10 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    
-    bpHistoryController.$inject = ['$scope', 'UtilsService', 'BusinessProcessAPIService', 'DataRetrievalResultTypeEnum', 'BusinessProcessService'];
 
-    function bpHistoryController($scope, UtilsService, BusinessProcessAPIService, DataRetrievalResultTypeEnum, BusinessProcessService) {
+    bpHistoryController.$inject = ['$scope', 'UtilsService', 'BusinessProcessAPIService', 'DataRetrievalResultTypeEnum', 'BusinessProcessService', 'VRValidationService'];
+
+    function bpHistoryController($scope, UtilsService, BusinessProcessAPIService, DataRetrievalResultTypeEnum, BusinessProcessService, VRValidationService) {
 
         var mainGridApi;
 
@@ -45,17 +45,19 @@
 
         }
 
-        function getCurrentDate(days) {
-            var d = new Date();
-            var currDate = d.getDate() + days;
-            var currMonth = d.getMonth();
-            var currYear = d.getFullYear();
-            return new Date(currYear, currMonth, currDate);
-        }
 
         function defineScope() {
-            $scope.toDate = getCurrentDate(+1);
-            $scope.fromDate = getCurrentDate(-1);
+            var yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            $scope.fromDate = yesterday;
+            $scope.toDate = new Date();
+
+            $scope.validateTimeRange = function () {
+                return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+            }
+
+
             $scope.definitions = [];
             $scope.selectedDefinition = [];
             $scope.instanceStatus = [];
