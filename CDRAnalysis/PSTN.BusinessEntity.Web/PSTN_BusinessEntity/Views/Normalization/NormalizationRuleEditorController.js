@@ -1,5 +1,5 @@
 ﻿(function (appControllers) {
-    
+
     "use strict";
 
     NormalizationRuleEditorController.$inject = ["$scope", "NormalizationRuleAPIService", "SwitchAPIService", "TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "VRUIUtilsService", "VRNavigationService", "VRNotificationService"];
@@ -11,8 +11,10 @@
         var normalizationRuleId;
         var normalizationRuleType;
 
-        var appendixDirectiveData; // normalizationRule
         var normalizationRuleSettingsDirectiveAPI;
+        var normalizationRuleSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var normalizationRuleEntity;
+
 
         loadParameters();
         defineScope();
@@ -30,7 +32,12 @@
         }
 
         function defineScope() {
-             
+
+            $scope.onNormalizationRuleSettingsDirectiveReady = function (api) {
+                normalizationRuleSettingsDirectiveAPI = api;
+                normalizationRuleSettingsReadyPromiseDeferred.resolve();
+            }
+
             $scope.switches = [];
             $scope.selectedSwitches = [];
 
@@ -53,7 +60,7 @@
 
                 var selectedSwitchIds = UtilsService.getPropValuesFromArray($scope.selectedSwitches, "SwitchId");
 
-                var tempSelectedTrunks =   UtilsService.cloneObject(  $scope.selectedTrunks, true);
+                var tempSelectedTrunks = UtilsService.cloneObject($scope.selectedTrunks, true);
 
                 angular.forEach(tempSelectedTrunks, function (trunk) {
                     if (!UtilsService.contains(selectedSwitchIds, trunk.SwitchId)) {
@@ -77,17 +84,6 @@
                 return TrunkAPIService.GetTrunksBySwitchIds(trunkFilterObj);
             }
 
-            $scope.onNormalizationRuleSettingsDirectiveReady = function (api) {
-                normalizationRuleSettingsDirectiveAPI = api;
-
-                if (appendixDirectiveData != undefined) {
-                    tryLoadAppendixDirectives();
-                }
-                else {
-                    VRUIUtilsService.loadDirective($scope, normalizationRuleSettingsDirectiveAPI, $scope.loadingNormalizationRuleSettingsDirective);
-                }
-            };
-
             $scope.validateDirectiveData = function () {
                 if (normalizationRuleSettingsDirectiveAPI == undefined)
                     return false;
@@ -106,6 +102,9 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
+
+
+
         }
 
         function load() {
@@ -117,17 +116,20 @@
                     if (editMode) {
                         NormalizationRuleAPIService.GetRule(normalizationRuleId)
                             .then(function (response) {
-                                appendixDirectiveData = response;
-                                fillScopeFromNormalizationRuleObj(response);
-                                tryLoadAppendixDirectives();
+                                normalizationRuleEntity = response;
+                                fillScopeFromNormalizationRuleObj();
+                                loadNormalizationRuleSettings();
                             })
                             .catch(function (error) {
                                 $scope.isGettingData = false;
                                 VRNotificationService.notifyExceptionWithClose(error, $scope);
+                            }).finally(function () {
+                                $scope.isGettingData = false;
                             });
                     }
                     else {
                         setDefaultValues();
+                        loadNormalizationRuleSettings();
                         $scope.isGettingData = false;
                     }
                 })
@@ -155,42 +157,18 @@
                 });
         }
 
-        function tryLoadAppendixDirectives() {
 
-            var loadOperations = [];
-            var setOperations = [];
-
-            if (normalizationRuleSettingsDirectiveAPI == undefined)
-                return;
-
-            loadOperations.push(normalizationRuleSettingsDirectiveAPI.load);
-            setOperations.push(setNormalizationRuleSettingsDirective);
-
-            UtilsService.waitMultipleAsyncOperations(loadOperations)
+        function loadNormalizationRuleSettings() {
+            var normalizationRuleSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            normalizationRuleSettingsReadyPromiseDeferred.promise
                 .then(function () {
-                    setAppendixDirectives();
-                })
-                .catch(function (error) {
-                    $scope.isGettingData = false;
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    var directivePayload;
+                    if (normalizationRuleEntity != undefined)
+                        directivePayload = normalizationRuleEntity.Settings;
+
+                    VRUIUtilsService.callDirectiveLoad(normalizationRuleSettingsDirectiveAPI, directivePayload, normalizationRuleSettingsLoadPromiseDeferred);
                 });
-
-            function setAppendixDirectives() {
-                UtilsService.waitMultipleAsyncOperations(setOperations)
-                    .then(function () {
-                        appendixDirectiveData = undefined;
-                    })
-                    .catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    })
-                    .finally(function () {
-                        $scope.isGettingData = false;
-                    });
-            }
-
-            function setNormalizationRuleSettingsDirective() {
-                normalizationRuleSettingsDirectiveAPI.load(appendixDirectiveData.Settings);
-            }
+            return normalizationRuleSettingsLoadPromiseDeferred.promise;
         }
 
         function setDefaultValues() {
@@ -198,28 +176,28 @@
             $scope.normalizationRuleSettingsDirective = normalizationRuleType.directive;
         }
 
-        function fillScopeFromNormalizationRuleObj(rule) {
+        function fillScopeFromNormalizationRuleObj() {
 
-            $scope.description = rule.Description;
+            $scope.description = normalizationRuleEntity.Description;
 
-            $scope.selectedSwitches = (rule.Criteria.SwitchIds != null) ?
-                getItemsByPropValues($scope.switches, rule.Criteria.SwitchIds, "SwitchId") : [];
+            $scope.selectedSwitches = (normalizationRuleEntity.Criteria.SwitchIds != null) ?
+                getItemsByPropValues($scope.switches, normalizationRuleEntity.Criteria.SwitchIds, "SwitchId") : [];
 
-            $scope.selectedTrunks = (rule.Criteria.TrunkIds != null) ?
-                getItemsByPropValues($scope.trunks, rule.Criteria.TrunkIds, "TrunkId") : [];
+            $scope.selectedTrunks = (normalizationRuleEntity.Criteria.TrunkIds != null) ?
+                getItemsByPropValues($scope.trunks, normalizationRuleEntity.Criteria.TrunkIds, "TrunkId") : [];
 
-            $scope.selectedPhoneNumberType = (rule.Criteria.PhoneNumberType != null) ?
-                UtilsService.getItemByVal($scope.phoneNumberTypes, rule.Criteria.PhoneNumberType, "value") : undefined;
+            $scope.selectedPhoneNumberType = (normalizationRuleEntity.Criteria.PhoneNumberType != null) ?
+                UtilsService.getItemByVal($scope.phoneNumberTypes, normalizationRuleEntity.Criteria.PhoneNumberType, "value") : undefined;
 
-            $scope.phoneNumberLength = rule.Criteria.PhoneNumberLength;
-            $scope.phoneNumberPrefix = rule.Criteria.PhoneNumberPrefix;
+            $scope.phoneNumberLength = normalizationRuleEntity.Criteria.PhoneNumberLength;
+            $scope.phoneNumberPrefix = normalizationRuleEntity.Criteria.PhoneNumberPrefix;
 
-            normalizationRuleType = UtilsService.getEnum(PSTN_BE_NormalizationRuleTypeEnum, "value", rule.Settings.RuleType);
+            normalizationRuleType = UtilsService.getEnum(PSTN_BE_NormalizationRuleTypeEnum, "value", normalizationRuleEntity.Settings.RuleType);
             $scope.normalizationRuleSettingsDirective = normalizationRuleType.directive;
             $scope.title = UtilsService.buildTitleForUpdateEditor(normalizationRuleType.title + " Normalization Rule");
 
-            $scope.beginEffectiveTime = rule.BeginEffectiveTime;
-            $scope.endEffectiveTime = rule.EndEffectiveTime;
+            $scope.beginEffectiveTime = normalizationRuleEntity.BeginEffectiveTime;
+            $scope.endEffectiveTime = normalizationRuleEntity.EndEffectiveTime;
         }
 
         function getItemsByPropValues(array, values, propName) {

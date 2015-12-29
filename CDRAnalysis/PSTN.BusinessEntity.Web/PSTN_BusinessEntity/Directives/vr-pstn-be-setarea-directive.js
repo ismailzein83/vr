@@ -72,8 +72,10 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
                             setAreaSettingsDirectiveAPI.load(setAreaSettings);
                         }
                         else {
-                            setAreaSettings = payload;
-                            $scope.selectedTemplate = UtilsService.getItemByVal($scope.templates, payload.ConfigId, "TemplateConfigID");
+                            if (payload != undefined) {
+                                setAreaSettings = payload;
+                                $scope.selectedTemplate = UtilsService.getItemByVal($scope.templates, payload.ConfigId, "TemplateConfigID");
+                            }
                         }
 
 
@@ -89,7 +91,7 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
 
 
 
-          
+
 
             api.getData = function () {
                 var data = setAreaSettingsDirectiveAPI.getData();

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsService", "VRNotificationService", function (NormalizationRuleAPIService, UtilsService, VRNotificationService) {
+app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsService", "VRNotificationService", "VRUIUtilsService", function (NormalizationRuleAPIService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObj = {
         restrict: "E",
@@ -18,7 +18,6 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
         compile: function (element, attrs) {
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
-
                 }
             }
         },
@@ -78,14 +77,27 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
                             $scope.actionTemplates.push(item);
                         });
 
-
+                        var promises = [];
                         if (payload != undefined) {
                             angular.forEach(payload.Actions, function (item) {
                                 var action = getActionItem(item);
+                                action.DirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                                promises.push(action.DirectiveLoadPromiseDeferred.promise);
+                                action.ReadyPromiseDeferred.promise.then(function () {
+                                    VRUIUtilsService.callDirectiveLoad(action.ActionDirectiveAPI, action.Data, action.DirectiveLoadPromiseDeferred);
+                                });
+
                                 $scope.actions.push(action);
                             });
-                        }
 
+
+                            UtilsService.waitMultiplePromises(promises).then(function () {
+                                $scope.loadingActionTemplates = false;
+                            }).catch(function (error) {
+                                $scope.loadingActionTemplates = false;
+                                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                            });
+                        }
 
                     })
                     .catch(function (error) {
@@ -95,6 +107,7 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
                         $scope.loadingActionTemplates = false;
                     });
             };
+
 
             api.getData = function () {
                 return {
@@ -121,8 +134,10 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
                 return true;
             };
 
-            if (ctrl.onReady != null)
+            if (ctrl.onReady != null) {
                 ctrl.onReady(api);
+            }
+
 
 
             function getActions() {
@@ -140,6 +155,8 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
             }
         }
 
+
+
         function getActionItem(dbAction) {
 
             var actionItem = {
@@ -151,15 +168,18 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
                     UtilsService.getItemByVal($scope.actionTemplates, dbAction.ConfigId, "TemplateConfigID").Editor :
                     $scope.selectedActionTemplate.Editor,
 
-                Data: (dbAction != null) ? dbAction : {}
+                Data: (dbAction != null) ? dbAction : {},
+
+                ReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+
+                DirectiveLoadPromiseDeferred: null
             };
+
+
 
             actionItem.onActionDirectiveAPIReady = function (api) {
                 actionItem.ActionDirectiveAPI = api;
-                actionItem.ActionDirectiveAPI.load(actionItem.Data);
-
-                actionItem.Data = undefined;
-                actionItem.onActionDirectiveAPIReady = undefined;
+                actionItem.ReadyPromiseDeferred.resolve();
             }
 
             return actionItem;

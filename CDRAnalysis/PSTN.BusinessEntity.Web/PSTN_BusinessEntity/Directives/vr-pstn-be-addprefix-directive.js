@@ -35,7 +35,7 @@ app.directive("vrPstnBeAddprefix", [function () {
         this.initializeController = initializeController;
 
         $scope.numberPrefix = undefined;
-        
+
         function initializeController() {
             defineAPI();
         }
@@ -58,15 +58,14 @@ app.directive("vrPstnBeAddprefix", [function () {
                 }
             }
 
-            if (ctrl.onReady != null)
+            if (ctrl.onReady != null) 
                 ctrl.onReady(api);
 
             api.validateData = function () {
                 return true;
             };
 
-            if (ctrl.onReady != null)
-                ctrl.onReady(api);
+
         }
     }
 
