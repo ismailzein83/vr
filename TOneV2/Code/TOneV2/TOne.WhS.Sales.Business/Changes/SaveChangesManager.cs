@@ -5,10 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Routing.Entities;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
 using TOne.WhS.Sales.Entities.RateManagement;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
@@ -95,12 +98,28 @@ namespace TOne.WhS.Sales.Business
             SalePriceList priceList = new SalePriceList()
             {
                 OwnerType = _ownerType,
-                OwnerId = _ownerId
+                OwnerId = _ownerId,
+                CurrencyId = GetCurrencyId()
             };
 
             _ratePlanDataManager.InsertPriceList(priceList, out priceListId);
 
             return priceListId;
+        }
+
+        // This method should be moved to CurrencyManager. This is just a quick fix
+        int GetCurrencyId()
+        {
+            CurrencyManager currencyManager = new CurrencyManager();
+            IEnumerable<Currency> currencies = currencyManager.GetAllCurrencies();
+            string currencyName = System.Configuration.ConfigurationManager.AppSettings["Currency"];
+
+            Currency currency = currencies.FindRecord(itm => itm.Name == currencyName);
+            
+            if (currency != null)
+                return currency.CurrencyId;
+            else
+                throw new Exception("The system doesn't have a default currency");
         }
 
         void SaveRoutingProductChanges()
@@ -170,6 +189,85 @@ namespace TOne.WhS.Sales.Business
             return existingChanges != null ? existingChanges : newChanges;
         }
 
+        #endregion
+
+        #region Apply Calculated Rates
+
+        public void ApplyCalculatedRates(CalculatedRateInput input)
+        {
+            //if (input.RateCalculationCostColumnConfigId == null || input.RateCalculationMethod == null)
+            //    throw new ArgumentNullException("Cost column and/or rate calculation method were not found");
+
+            //CostCalculationMethod costCalculationMethod = input.CostCalculationMethods.FindRecord(itm => itm.ConfigId == (int)input.RateCalculationCostColumnConfigId);
+
+            //if (costCalculationMethod == null)
+            //    throw new ArgumentNullException("Cost calculation method was not found");
+
+            
+
+            //if (zones != null)
+            //{
+            //    Changes changes = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
+
+            //    ZoneRoutingProductSetter routingProductSetter = new ZoneRoutingProductSetter(input.OwnerType, input.OwnerId, input.SellingProductId, input.EffectiveOn, changes);
+            //    List<ZoneItem> zoneItems = new List<ZoneItem>();
+
+            //    // Set the effective routing product for each zone item
+            //    foreach (SaleZone zone in zones)
+            //    {
+            //        ZoneItem zoneItem = new ZoneItem() { ZoneId = zone.SaleZoneId };
+            //        routingProductSetter.SetZoneRoutingProduct(zoneItem);
+            //        zoneItems.Add(zoneItem);
+            //    }
+
+            //    IEnumerable<RPZone> rpZones = zoneItems.MapRecords(itm => new RPZone() { RoutingProductId = itm.EffectiveRoutingProductId, SaleZoneId = itm.ZoneId });
+            //    ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, input.RateCalculationCostColumnConfigId, input.RateCalculationMethod);
+
+            //    // Set the calculated rate for zone items that have route options
+            //    routeOptionSetter.SetZoneRouteOptionProperties(zoneItems);
+
+            //    // Get the zone items that have a calculated rate
+            //    zoneItems = zoneItems.FindAllRecords(itm => itm.CalculatedRate != null).ToList();
+
+            //    if (zoneItems != null)
+            //    {
+            //        // Create a list of zone changes with new rates based on the zone items
+            //        List<ZoneChanges> zoneChanges = new List<ZoneChanges>();
+
+            //        foreach (ZoneItem zoneItem in zoneItems)
+            //        {
+            //            ZoneChanges zoneItemChanges = new ZoneChanges();
+
+            //            zoneItemChanges.NewRate = new NewRate()
+            //            {
+            //                ZoneId = zoneItem.ZoneId,
+            //                NormalRate = (decimal)zoneItem.CalculatedRate,
+            //                BED = input.EffectiveOn
+            //            };
+
+            //            zoneChanges.Add(zoneItemChanges);
+            //        }
+
+            //        if (zoneChanges.Count > 0)
+            //        {
+            //            // Save the new changes
+            //            SaveChanges(new Changes() { ZoneChanges = zoneChanges });
+
+            //            // Save the price list i.e. apply the calculated rates
+            //            SavePriceList();
+            //        }
+            //    }
+            //}
+        }
+
+        IEnumerable<ZoneItem> GetZoneItems(int sellingNumberPlanId, DateTime effectiveOn)
+        {
+            // Get the owner's zones
+            //RatePlanZoneManager ratePlanZoneManager = new RatePlanZoneManager();
+            //IEnumerable<SaleZone> zones = ratePlanZoneManager.GetZones(_ownerType, _ownerId, inputsellingNumberPlanId, input.EffectiveOn);
+            return null;
+        }
+        
         #endregion
     }
 }

@@ -13,6 +13,10 @@ namespace TOne.WhS.Sales.Entities
 
         public int OwnerId { get; set; }
 
+        public int? SellingNumberPlanId { get; set; }
+
+        public int? SellingProductId { get; set; }
+
         public DateTime EffectiveOn { get; set; }
 
         public int RoutingDatabaseId { get; set; }
