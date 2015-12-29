@@ -243,9 +243,14 @@ namespace TOne.WhS.Sales.Business
             changesManager.SaveChanges(input.NewChanges);
         }
 
-        public void ApplyCalculatedRates(CalculatedRateInput input)
+        public void ApplyCalculatedRates(ApplyCalculatedRatesInput input)
         {
-            //SaveChangesManager saveChangesManager = new SaveChangesManager(input.OwnerType, input.OwnerId);
+            SaveChangesManager saveChangesManager = new SaveChangesManager(input.OwnerType, input.OwnerId);
+
+            int? sellingNumberPlanId = GetSellingNumberPlanId(input.OwnerType, input.OwnerId);
+            int? sellingProductId = GetSellingProductId(input.OwnerType, input.OwnerId, input.EffectiveOn, false);
+
+            saveChangesManager.ApplyCalculatedRates((int)sellingNumberPlanId, (int)sellingProductId, input.EffectiveOn, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods, input.SelectedCostCalculationMethodConfigId, input.RateCalculationMethod);
         }
 
         #region Common Private Methods

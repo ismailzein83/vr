@@ -107,21 +107,6 @@ namespace TOne.WhS.Sales.Business
             return priceListId;
         }
 
-        // This method should be moved to CurrencyManager. This is just a quick fix
-        int GetCurrencyId()
-        {
-            CurrencyManager currencyManager = new CurrencyManager();
-            IEnumerable<Currency> currencies = currencyManager.GetAllCurrencies();
-            string currencyName = System.Configuration.ConfigurationManager.AppSettings["Currency"];
-
-            Currency currency = currencies.FindRecord(itm => itm.Name == currencyName);
-            
-            if (currency != null)
-                return currency.CurrencyId;
-            else
-                throw new Exception("The system doesn't have a default currency");
-        }
-
         void SaveRoutingProductChanges()
         {
             if (_changes != null && _changes.ZoneChanges != null)
@@ -193,81 +178,93 @@ namespace TOne.WhS.Sales.Business
 
         #region Apply Calculated Rates
 
-        public void ApplyCalculatedRates(CalculatedRateInput input)
+        public void ApplyCalculatedRates(int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, int policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod)
         {
-            //if (input.RateCalculationCostColumnConfigId == null || input.RateCalculationMethod == null)
-            //    throw new ArgumentNullException("Cost column and/or rate calculation method were not found");
+            IEnumerable<ZoneItem> zoneItems = GetZoneItemsWithCalculatedRate(sellingNumberPlanId, sellingNumberPlanId, effectiveOn, routingDatabaseId, policyConfigId, numberOfOptions, costCalculationMethods, selectedCostCalculationMethodConfigId, rateCalculationMethod);
 
-            //CostCalculationMethod costCalculationMethod = input.CostCalculationMethods.FindRecord(itm => itm.ConfigId == (int)input.RateCalculationCostColumnConfigId);
+            if (zoneItems == null)
+                return;
 
-            //if (costCalculationMethod == null)
-            //    throw new ArgumentNullException("Cost calculation method was not found");
+            Changes newChanges = GetZoneChanges(zoneItems, effectiveOn);
 
-            
+            if (newChanges == null)
+                return;
 
-            //if (zones != null)
-            //{
-            //    Changes changes = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
-
-            //    ZoneRoutingProductSetter routingProductSetter = new ZoneRoutingProductSetter(input.OwnerType, input.OwnerId, input.SellingProductId, input.EffectiveOn, changes);
-            //    List<ZoneItem> zoneItems = new List<ZoneItem>();
-
-            //    // Set the effective routing product for each zone item
-            //    foreach (SaleZone zone in zones)
-            //    {
-            //        ZoneItem zoneItem = new ZoneItem() { ZoneId = zone.SaleZoneId };
-            //        routingProductSetter.SetZoneRoutingProduct(zoneItem);
-            //        zoneItems.Add(zoneItem);
-            //    }
-
-            //    IEnumerable<RPZone> rpZones = zoneItems.MapRecords(itm => new RPZone() { RoutingProductId = itm.EffectiveRoutingProductId, SaleZoneId = itm.ZoneId });
-            //    ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, input.RateCalculationCostColumnConfigId, input.RateCalculationMethod);
-
-            //    // Set the calculated rate for zone items that have route options
-            //    routeOptionSetter.SetZoneRouteOptionProperties(zoneItems);
-
-            //    // Get the zone items that have a calculated rate
-            //    zoneItems = zoneItems.FindAllRecords(itm => itm.CalculatedRate != null).ToList();
-
-            //    if (zoneItems != null)
-            //    {
-            //        // Create a list of zone changes with new rates based on the zone items
-            //        List<ZoneChanges> zoneChanges = new List<ZoneChanges>();
-
-            //        foreach (ZoneItem zoneItem in zoneItems)
-            //        {
-            //            ZoneChanges zoneItemChanges = new ZoneChanges();
-
-            //            zoneItemChanges.NewRate = new NewRate()
-            //            {
-            //                ZoneId = zoneItem.ZoneId,
-            //                NormalRate = (decimal)zoneItem.CalculatedRate,
-            //                BED = input.EffectiveOn
-            //            };
-
-            //            zoneChanges.Add(zoneItemChanges);
-            //        }
-
-            //        if (zoneChanges.Count > 0)
-            //        {
-            //            // Save the new changes
-            //            SaveChanges(new Changes() { ZoneChanges = zoneChanges });
-
-            //            // Save the price list i.e. apply the calculated rates
-            //            SavePriceList();
-            //        }
-            //    }
-            //}
+            SaveChanges(newChanges);
+            SavePriceList();
         }
 
-        IEnumerable<ZoneItem> GetZoneItems(int sellingNumberPlanId, DateTime effectiveOn)
+        IEnumerable<ZoneItem> GetZoneItemsWithCalculatedRate(int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, int policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod)
         {
-            // Get the owner's zones
-            //RatePlanZoneManager ratePlanZoneManager = new RatePlanZoneManager();
-            //IEnumerable<SaleZone> zones = ratePlanZoneManager.GetZones(_ownerType, _ownerId, inputsellingNumberPlanId, input.EffectiveOn);
-            return null;
+            // Get the sale zones of the owner
+            RatePlanZoneManager ratePlanZoneManager = new RatePlanZoneManager();
+            IEnumerable<SaleZone> zones = ratePlanZoneManager.GetZones(_ownerType, _ownerId, sellingNumberPlanId, effectiveOn);
+
+            if (zones == null)
+                return null;
+
+            // Create a list of zone items, and set the effective routing product for each
+            List<ZoneItem> zoneItems = new List<ZoneItem>();
+            ZoneRoutingProductSetter routingProductSetter = new ZoneRoutingProductSetter(_ownerType, _ownerId, sellingProductId, effectiveOn, _changes);
+
+            foreach (SaleZone zone in zones)
+            {
+                ZoneItem zoneItem = new ZoneItem()
+                {
+                    ZoneId = zone.SaleZoneId,
+                    ZoneName = zone.Name
+                };
+
+                routingProductSetter.SetZoneRoutingProduct(zoneItem);
+                zoneItems.Add(zoneItem);
+            }
+
+            // Set the route options, calculate the costs, and calculate the rate for all zone items
+            IEnumerable<RPZone> rpZones = zoneItems.MapRecords(itm => new RPZone() { RoutingProductId = itm.EffectiveRoutingProductId, SaleZoneId = itm.ZoneId });
+            ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, costCalculationMethods, selectedCostCalculationMethodConfigId, rateCalculationMethod);
+
+            routeOptionSetter.SetZoneRouteOptionProperties(zoneItems);
+            return zoneItems.FindAllRecords(itm => itm.CalculatedRate != null);
         }
-        
+
+        Changes GetZoneChanges(IEnumerable<ZoneItem> zoneItems, DateTime effectiveOn)
+        {
+            // Create a list of zone changes, each having a new rate, from the calculated rates
+            List<ZoneChanges> zoneChanges = new List<ZoneChanges>();
+            int currencyId = GetCurrencyId();
+
+            foreach (ZoneItem zoneItem in zoneItems)
+            {
+                NewRate newRate = new NewRate()
+                {
+                    ZoneId = zoneItem.ZoneId,
+                    NormalRate = (decimal)zoneItem.CalculatedRate,
+                    BED = effectiveOn,
+                    CurrencyId = currencyId
+                };
+
+                ZoneChanges zoneItemChanges = new ZoneChanges() { NewRate = newRate };
+                zoneChanges.Add(zoneItemChanges);
+            }
+
+            return new Changes() { ZoneChanges = zoneChanges };
+        }
+
         #endregion
+
+        // This method should be moved to CurrencyManager. This is just a quick fix
+        int GetCurrencyId()
+        {
+            CurrencyManager currencyManager = new CurrencyManager();
+            IEnumerable<Currency> currencies = currencyManager.GetAllCurrencies();
+            string currencyName = System.Configuration.ConfigurationManager.AppSettings["Currency"];
+
+            Currency currency = currencies.FindRecord(itm => itm.Name == currencyName);
+
+            if (currency != null)
+                return currency.CurrencyId;
+            else
+                throw new Exception("The system doesn't have a default currency");
+        }
     }
 }

@@ -99,5 +99,12 @@ namespace TOne.WhS.Sales.Web.Controllers
         {
             _manager.SaveChanges(input);
         }
+
+        [HttpPost]
+        [Route("ApplyCalculatedRates")]
+        public void ApplyCalculatedRates(ApplyCalculatedRatesInput input)
+        {
+            _manager.ApplyCalculatedRates(input);
+        }
     }
 }

@@ -177,13 +177,25 @@
                 };
                 WhS_Sales_RatePlanService.editPricingSettings(settings, pricingSettings, onPricingSettingsUpdated);
             };
-            //$scope.applyCalculatedRates = function () {
-            //    var input = {
-            //        CostCalculationMethods: settings ? settings.CostCalculationMethods : null,
-            //        RateCalculationCostColumnConfigId: (pricingSettings && pricingSettings.selectedCostColumn) ? pricingSettings.selectedCostColumn.ConfigId : null,
-            //        RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null
-            //    };
-            //};
+            $scope.applyCalculatedRates = function () {
+                var input = {
+                    OwnerType: $scope.selectedOwnerType.value,
+                    OwnerId: getOwnerId(),
+                    EffectiveOn: new Date(),
+                    RoutingDatabaseId: databaseSelectorAPI ? databaseSelectorAPI.getSelectedIds() : null,
+                    PolicyConfigId: policySelectorAPI ? policySelectorAPI.getSelectedIds() : null,
+                    NumberOfOptions: $scope.numberOfOptions,
+                    CostCalculationMethods: settings ? settings.CostCalculationMethods : null,
+                    SelectedCostCalculationMethodConfigId: pricingSettings ? pricingSettings.selectedCostColumn.TemplateConfigId : null,
+                    RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null
+                };
+
+                return WhS_Sales_RatePlanAPIService.ApplyCalculatedRates(input).then(function () {
+                    VRNotificationService.showSuccess("Rates applied");
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
+            };
             $scope.validateRatePlan = function () {
                 if ($scope.zoneLetters && $scope.zoneLetters.length > 0)
                     return null;

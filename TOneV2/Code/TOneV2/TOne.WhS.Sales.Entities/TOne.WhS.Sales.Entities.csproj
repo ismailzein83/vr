@@ -64,7 +64,7 @@
     <Compile Include="RatePlanning\BaseChanges.cs" />
     <Compile Include="RatePlanning\Changes.cs" />
     <Compile Include="RatePlanning\Enums.cs" />
-    <Compile Include="RatePlanning\Input\CalculatedRateInput.cs" />
+    <Compile Include="RatePlanning\Input\ApplyCalculatedRatesInput.cs" />
     <Compile Include="RatePlanning\Input\ZoneItemInput.cs" />
     <Compile Include="RatePlanning\Input\SaveChangesInput.cs" />
     <Compile Include="RatePlanning\Input\ZoneItemsInput.cs" />

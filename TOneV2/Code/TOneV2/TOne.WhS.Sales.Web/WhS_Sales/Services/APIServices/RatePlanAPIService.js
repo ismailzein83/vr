@@ -17,7 +17,8 @@
             GetFilteredZoneRateChanges: GetFilteredZoneRateChanges,
             GetFilteredZoneRoutingProductChanges: GetFilteredZoneRoutingProductChanges,
             SavePriceList: SavePriceList,
-            SaveChanges: SaveChanges
+            SaveChanges: SaveChanges,
+            ApplyCalculatedRates: ApplyCalculatedRates
         });
 
         function GetZoneLetters(ownerType, ownerId) {
@@ -74,6 +75,10 @@
 
         function SaveChanges(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "SaveChanges"), input);
+        }
+
+        function ApplyCalculatedRates(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "ApplyCalculatedRates"), input);
         }
     }
 
