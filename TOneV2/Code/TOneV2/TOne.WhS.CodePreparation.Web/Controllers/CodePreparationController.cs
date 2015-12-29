@@ -58,7 +58,7 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileName = String.Format("ImportPriceListTemplate.xls")
+                FileName = String.Format("CodePreparationTemplate.xls")
             };
             return response;
         }
