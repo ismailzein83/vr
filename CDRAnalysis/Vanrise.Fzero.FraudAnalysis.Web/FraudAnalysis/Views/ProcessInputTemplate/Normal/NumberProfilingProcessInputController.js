@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-NumberProfilingProcessInputController.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'HourEnum'];
+NumberProfilingProcessInputController.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'HourEnum', 'VRValidationService'];
 
-function NumberProfilingProcessInputController($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, HourEnum) {
+function NumberProfilingProcessInputController($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, HourEnum, VRValidationService) {
 
     defineScope();
 
@@ -16,7 +16,9 @@ function NumberProfilingProcessInputController($scope, $http, StrategyAPIService
         $scope.fromDate = yesterday;
         $scope.toDate = new Date();
 
-       
+        $scope.validateTimeRange = function () {
+            return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+        }
 
         $scope.createProcessInputObjects = [];
 

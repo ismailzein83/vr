@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-FindRelatedNumbersProcessInputController.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+FindRelatedNumbersProcessInputController.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRValidationService'];
 
-function FindRelatedNumbersProcessInputController($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+function FindRelatedNumbersProcessInputController($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, VRValidationService) {
 
     defineScope();
 
@@ -13,6 +13,10 @@ function FindRelatedNumbersProcessInputController($scope, $http, $routeParams, n
 
         $scope.fromDate = yesterday;
         $scope.toDate = new Date();
+
+        $scope.validateTimeRange = function () {
+            return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+        }
 
         $scope.createProcessInputObjects = [];
 

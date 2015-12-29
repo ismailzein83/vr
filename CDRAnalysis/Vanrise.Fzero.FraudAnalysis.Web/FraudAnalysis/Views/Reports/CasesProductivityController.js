@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-CasesProductivityController.$inject = ['$scope', 'ReportingAPIService', 'StrategyAPIService', 'UsersAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum'];
+CasesProductivityController.$inject = ['$scope', 'ReportingAPIService', 'StrategyAPIService', 'UsersAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum', 'VRValidationService'];
 
-function CasesProductivityController($scope, ReportingAPIService, StrategyAPIService, UsersAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum) {
+function CasesProductivityController($scope, ReportingAPIService, StrategyAPIService, UsersAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum, VRValidationService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
@@ -20,6 +20,10 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
 
         $scope.fromDate = Yesterday;
         $scope.toDate = Now;
+
+        $scope.validateTimeRange = function () {
+            return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+        }
 
         $scope.gridMenuActions = [];
 
@@ -79,6 +83,8 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
 
         return mainGridAPI.retrieveData(query);
     }
+
+   
 }
 
 appControllers.controller('FraudAnalysis_CasesProductivityController', CasesProductivityController);

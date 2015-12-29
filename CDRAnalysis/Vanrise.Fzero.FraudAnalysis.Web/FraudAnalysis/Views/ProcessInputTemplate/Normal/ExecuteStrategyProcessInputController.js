@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-ExecuteStrategyProcessInputController.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+ExecuteStrategyProcessInputController.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService','VRValidationService'];
 
-function ExecuteStrategyProcessInputController ($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+function ExecuteStrategyProcessInputController ($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService,VRValidationService) {
     var pageLoaded = false;
 
     defineScope();
@@ -15,6 +15,10 @@ function ExecuteStrategyProcessInputController ($scope, $http, StrategyAPIServic
 
         $scope.fromDate = yesterday;
         $scope.toDate = new Date();
+
+        $scope.validateTimeRange = function () {
+            return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+        }
 
         $scope.createProcessInputObjects = [];
 

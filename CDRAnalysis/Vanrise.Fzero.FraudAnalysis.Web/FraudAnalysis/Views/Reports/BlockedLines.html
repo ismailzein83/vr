@@ -4,10 +4,10 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired></vr-datetimepicker>
+                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired customvalidate="validateTimeRange()"   ></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired></vr-datetimepicker>
+                    <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired customvalidate="validateTimeRange()"> </vr-datetimepicker>
                 </vr-columns>
 
                 <vr-columns width="normal">

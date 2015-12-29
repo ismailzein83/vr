@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-LinesDetectedController.$inject = ['$scope', 'ReportingAPIService', 'UsersAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+LinesDetectedController.$inject = ['$scope', 'ReportingAPIService', 'UsersAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService'];
 
-function LinesDetectedController($scope, ReportingAPIService, UsersAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function LinesDetectedController($scope, ReportingAPIService, UsersAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
@@ -21,6 +21,10 @@ function LinesDetectedController($scope, ReportingAPIService, UsersAPIService, $
 
         $scope.fromDate = Yesterday;
         $scope.toDate = Now;
+
+        $scope.validateTimeRange = function () {
+            return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+        }
 
         $scope.detectedLines = [];
 
@@ -53,5 +57,7 @@ function LinesDetectedController($scope, ReportingAPIService, UsersAPIService, $
 
         return mainGridAPI.retrieveData(query);
     }
+
+   
 }
 appControllers.controller('FraudAnalysis_LinesDetectedController', LinesDetectedController);

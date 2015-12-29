@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-BlockedLinesController.$inject = ['$scope', 'ReportingAPIService', 'StrategyAPIService', 'UsersAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum'];
+BlockedLinesController.$inject = ['$scope', 'ReportingAPIService', 'StrategyAPIService', 'UsersAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum', 'VRValidationService'];
 
-function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService, UsersAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum) {
+function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService, UsersAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum, VRValidationService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
@@ -19,6 +19,10 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
 
         $scope.fromDate = Yesterday;
         $scope.toDate = new Date();
+
+        $scope.validateTimeRange = function () {
+            return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+        }
 
         $scope.strategies = [];
         $scope.selectedStrategies = [];
@@ -41,7 +45,7 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
         }
 
         $scope.onGroupDailyChanged = function () {
-                return retrieveData();
+            return retrieveData();
         }
 
         defineMenuActions();
@@ -104,6 +108,10 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
 
         return mainGridAPI.retrieveData(query);
     }
+
+   
+
+
 }
 
 appControllers.controller('FraudAnalysis_BlockedLinesController', BlockedLinesController);
