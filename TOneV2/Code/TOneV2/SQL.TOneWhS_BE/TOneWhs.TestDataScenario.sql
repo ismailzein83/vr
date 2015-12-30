@@ -91,29 +91,28 @@ when not matched by source then
 	delete;
 set identity_insert [TOneWhS_BE].[CodeGroup] off;
 
---TOneWhS_BE.CustomerSellingProduct-----------------------------------------------------------------
+--TOneWhS_BE.SellingNumberPlan----------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-set identity_insert [TOneWhS_BE].[CustomerSellingProduct] on;
-;with cte_data([ID],[CustomerID],[SellingProductID],[AllDestinations],[BED],[EED])
+set identity_insert [TOneWhS_BE].[SellingNumberPlan] on;
+;with cte_data([ID],[Name])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,1,1,null,'2015-12-28 14:28:00.000',null),
-(2,2,1,null,'2015-12-28 14:30:00.000',null)
+(1,'Default')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[CustomerID],[SellingProductID],[AllDestinations],[BED],[EED]))
-merge	[TOneWhS_BE].[CustomerSellingProduct] as t
+)c([ID],[Name]))
+merge	[TOneWhS_BE].[SellingNumberPlan] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[CustomerID] = s.[CustomerID],[SellingProductID] = s.[SellingProductID],[AllDestinations] = s.[AllDestinations],[BED] = s.[BED],[EED] = s.[EED]
+	[Name] = s.[Name]
 when not matched by target then
-	insert([ID],[CustomerID],[SellingProductID],[AllDestinations],[BED],[EED])
-	values(s.[ID],s.[CustomerID],s.[SellingProductID],s.[AllDestinations],s.[BED],s.[EED])
+	insert([ID],[Name])
+	values(s.[ID],s.[Name])
 when not matched by source then
 	delete;
-set identity_insert [TOneWhS_BE].[CustomerSellingProduct] off;
+set identity_insert [TOneWhS_BE].[SellingNumberPlan] off;
 
 --TOneWhS_BE.RoutingProduct-------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -138,29 +137,6 @@ when not matched by source then
 	delete;
 set identity_insert [TOneWhS_BE].[RoutingProduct] off;
 
---TOneWhS_BE.SellingNumberPlan----------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [TOneWhS_BE].[SellingNumberPlan] on;
-;with cte_data([ID],[Name])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Default')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name]))
-merge	[TOneWhS_BE].[SellingNumberPlan] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name]
-when not matched by target then
-	insert([ID],[Name])
-	values(s.[ID],s.[Name])
-when not matched by source then
-	delete;
-set identity_insert [TOneWhS_BE].[SellingNumberPlan] off;
-
 --TOneWhS_BE.SellingProduct-------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
@@ -183,6 +159,30 @@ when not matched by target then
 when not matched by source then
 	delete;
 set identity_insert [TOneWhS_BE].[SellingProduct] off;
+
+--TOneWhS_BE.CustomerSellingProduct-----------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [TOneWhS_BE].[CustomerSellingProduct] on;
+;with cte_data([ID],[CustomerID],[SellingProductID],[AllDestinations],[BED],[EED])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,1,1,null,'2015-12-28 14:28:00.000',null),
+(2,2,1,null,'2015-12-28 14:30:00.000',null)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[CustomerID],[SellingProductID],[AllDestinations],[BED],[EED]))
+merge	[TOneWhS_BE].[CustomerSellingProduct] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[CustomerID] = s.[CustomerID],[SellingProductID] = s.[SellingProductID],[AllDestinations] = s.[AllDestinations],[BED] = s.[BED],[EED] = s.[EED]
+when not matched by target then
+	insert([ID],[CustomerID],[SellingProductID],[AllDestinations],[BED],[EED])
+	values(s.[ID],s.[CustomerID],s.[SellingProductID],s.[AllDestinations],s.[BED],s.[EED])
+when not matched by source then
+	delete;
+set identity_insert [TOneWhS_BE].[CustomerSellingProduct] off;
 
 --TOneWhS_BE.Switch---------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
