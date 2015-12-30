@@ -69,8 +69,6 @@
     <Folder Include="Security\" />
     <Folder Include="TOneWhS_Sales\" />
     <Folder Include="TOneWhS_Sales\Tables\" />
-    <Folder Include="TOneWhS_CDR\" />
-    <Folder Include="TOneWhS_CDR\Tables\" />
     <Folder Include="TOneWhS_Sales\Stored Procedures\" />
     <Folder Include="TOneWhS_Sales\User Defined Types\" />
     <Folder Include="TOneWhS_Routing\" />
@@ -88,6 +86,7 @@
     <Folder Include="TOneWhs_CP\Stored Procedures\" />
     <Folder Include="TOneWhS_Analytic\Stored Procedures\" />
     <Folder Include="TOneWhS_Analytic\User Defined Types\" />
+    <Folder Include="TOneWhS_SPL\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_BE\Tables\CarrierAccount.sql" />
@@ -269,6 +268,17 @@
     <Build Include="Security\TOneWhs_CP.sql" />
     <Build Include="Security\TOneWhS_Analytic.sql" />
     <Build Include="Security\Common.sql" />
+    <Build Include="TOneWhS_BE\Tables\CP_SaleZone_New.sql" />
+    <Build Include="TOneWhS_BE\Tables\CP_SaleZone_Changed.sql" />
+    <Build Include="TOneWhS_BE\Tables\CP_SaleCode_New.sql" />
+    <Build Include="TOneWhS_BE\Tables\CP_SaleCode_Changed.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZone_Preview_CreateTempByFiltered.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierRate_Preview_CreateTempByFiltered.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierCode_Preview_CreateTempByFiltered.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZone_GetByDate.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceList_SyncWithImportedData.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByDate.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_ByZondName.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOneWhs.TestDataScenario.sql" />
