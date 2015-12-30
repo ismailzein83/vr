@@ -56,7 +56,7 @@
                     <vr-button type="Save" validationcontext="SaveGroup" menuactions="saveButtonMenuActions"></vr-button>
                     <vr-button type="Settings" validationcontext="SearchGroup" data-onclick="editSettings"></vr-button>
                     <vr-button type="Pricing" validationcontext="SearchGroup" data-onclick="editPricingSettings"></vr-button>
-                    <vr-button type="Apply" validationcontext="SaveGroup" data-onclick="applyCalculatedRates"></vr-button>
+                    <vr-button type="Apply" validationcontext="ApplyGroup" data-onclick="applyCalculatedRates"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
@@ -86,5 +86,8 @@
             </vr-validator>
         </vr-validation-group>
 
-    </vr-form>
+        <vr-validation-group validationcontext="ApplyGroup" ng-hide="true">
+            <vr-validator validate="canUserApplyCalculatedRates()"></vr-validator>
+        </vr-validation-group>
+</vr-form>
 </vr-panel>

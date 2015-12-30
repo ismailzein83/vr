@@ -162,6 +162,7 @@
                     }
 
                     VRNotificationService.showSuccess("Settings saved");
+                    pricingSettings = null;
                     loadGrid();
                 };
                 WhS_Sales_RatePlanService.editSettings(settings, onSettingsUpdate);
@@ -178,24 +179,30 @@
                 WhS_Sales_RatePlanService.editPricingSettings(settings, pricingSettings, onPricingSettingsUpdated);
             };
             $scope.applyCalculatedRates = function () {
-                var input = {
-                    OwnerType: $scope.selectedOwnerType.value,
-                    OwnerId: getOwnerId(),
-                    EffectiveOn: new Date(),
-                    RoutingDatabaseId: databaseSelectorAPI ? databaseSelectorAPI.getSelectedIds() : null,
-                    PolicyConfigId: policySelectorAPI ? policySelectorAPI.getSelectedIds() : null,
-                    NumberOfOptions: $scope.numberOfOptions,
-                    CostCalculationMethods: settings ? settings.CostCalculationMethods : null,
-                    SelectedCostCalculationMethodConfigId: pricingSettings ? pricingSettings.selectedCostColumn.ConfigId : null,
-                    RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null
-                };
+                var confirmPromise = VRNotificationService.showConfirmation("Are you sure you want to apply the calculated rates?");
 
-                console.log(input);
+                confirmPromise.then(function (confirmed) {
+                    if (confirmed) {
+                        var input = {
+                            OwnerType: $scope.selectedOwnerType.value,
+                            OwnerId: getOwnerId(),
+                            EffectiveOn: new Date(),
+                            RoutingDatabaseId: databaseSelectorAPI ? databaseSelectorAPI.getSelectedIds() : null,
+                            PolicyConfigId: policySelectorAPI ? policySelectorAPI.getSelectedIds() : null,
+                            NumberOfOptions: $scope.numberOfOptions,
+                            CostCalculationMethods: settings ? settings.CostCalculationMethods : null,
+                            SelectedCostCalculationMethodConfigId: pricingSettings ? pricingSettings.selectedCostColumn.ConfigId : null,
+                            RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null
+                        };
 
-                return WhS_Sales_RatePlanAPIService.ApplyCalculatedRates(input).then(function () {
-                    VRNotificationService.showSuccess("Rates applied");
-                    pricingSettings = null;
-                    loadGrid();
+                        return WhS_Sales_RatePlanAPIService.ApplyCalculatedRates(input).then(function () {
+                            VRNotificationService.showSuccess("Rates applied");
+                            pricingSettings = null;
+                            loadGrid();
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                    }
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
@@ -204,6 +211,11 @@
                 if ($scope.zoneLetters && $scope.zoneLetters.length > 0)
                     return null;
                 return "The owner doesn't have any zones";
+            };
+            $scope.canUserApplyCalculatedRates = function () {
+                if (pricingSettings)
+                    return null;
+                return "Evaluate the rates before you apply them";
             };
 
             defineSaveButtonMenuActions();
