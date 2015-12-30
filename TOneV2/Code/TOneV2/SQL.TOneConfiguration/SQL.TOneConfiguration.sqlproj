@@ -210,6 +210,7 @@
     <None Include="TOne.PostDeployment.sql" />
     <None Include="CDRAnalysis.PostDeployment.sql" />
     <None Include="CarrierPortal.PostDeployment.sql" />
+    <None Include="TOneWhs.TestDataScenario.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />

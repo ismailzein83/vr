@@ -176,5 +176,6 @@
     <None Include="CDRAnalysis.PostDeployment.sql" />
     <None Include="Common.PostDeployment.sql" />
     <None Include="QualityMeasurement.PostDeployment.sql" />
+    <None Include="TOneWhs.TestDataScenario.sql" />
   </ItemGroup>
 </Project>

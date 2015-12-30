@@ -270,4 +270,7 @@
     <Build Include="Security\TOneWhS_Analytic.sql" />
     <Build Include="Security\Common.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="TOneWhs.TestDataScenario.sql" />
+  </ItemGroup>
 </Project>
