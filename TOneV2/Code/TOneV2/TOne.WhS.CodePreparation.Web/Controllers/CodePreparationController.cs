@@ -43,24 +43,11 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
 
         [HttpGet]
         [Route("DownloadImportCodePreparationTemplate")]
-        public HttpResponseMessage DownloadImportCodePreparationTemplate()
+        public object DownloadImportCodePreparationTemplate()
         {
-            string obj = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["ImportCodePreparationTemplatePath"]);
-            Workbook workbook = new Workbook(obj);
-            Aspose.Cells.License license = new Aspose.Cells.License();
-            license.SetLicense("Aspose.Cells.lic");
-            MemoryStream memoryStream = new MemoryStream();
-            memoryStream = workbook.SaveToStream();
-            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
-            memoryStream.Position = 0;
-            response.Content = new StreamContent(memoryStream);
-
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-            {
-                FileName = String.Format("CodePreparationTemplate.xls")
-            };
-            return response;
+            CodePreparationManager manager = new CodePreparationManager();
+            byte[] bytes = manager.DownloadImportCodePreparationTemplate();
+            return GetExcelResponse(bytes, "Code Preparation Template.xls");  
         }
 
         [HttpGet]

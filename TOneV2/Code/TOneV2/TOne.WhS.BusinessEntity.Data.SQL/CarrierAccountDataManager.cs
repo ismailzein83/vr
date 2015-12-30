@@ -57,7 +57,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 CustomerSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountCustomerSettings>(reader["CustomerSettings"] as string),
                 SellingNumberPlanId = GetReaderValue<int?>(reader, "SellingNumberPlanID"),
                 CarrierProfileId = (int)reader["CarrierProfileId"],
-                CarrierAccountSettings = reader["CarrierAccountSettings"] as string != null ? Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSettings>(reader["CarrierAccountSettings"] as string) : null,
+                CarrierAccountSettings =  Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSettings>(reader["CarrierAccountSettings"] as string),
 
             };
             return carrierAccount;

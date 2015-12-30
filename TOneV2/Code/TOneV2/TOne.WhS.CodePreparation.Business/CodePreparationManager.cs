@@ -15,6 +15,7 @@ using Vanrise.Entities;
 using TOne.WhS.CodePreparation.Entities.CP;
 using Vanrise.Common.Business;
 using System.ComponentModel;
+using System.Web;
 
 namespace TOne.WhS.CodePreparation.Business
 {
@@ -435,6 +436,14 @@ namespace TOne.WhS.CodePreparation.Business
             dataManager.InsertOrUpdateChanges(input.SellingNumberPlanId, existingChanges, CodePreparationStatus.Draft);
             output.Message = "Codes Closed Successfully";
             return output;
+        }
+
+
+        public byte[] DownloadImportCodePreparationTemplate()
+        {
+            string physicalFilePath = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["ImportCodePreparationTemplatePath"]);
+            byte[] bytes = File.ReadAllBytes(physicalFilePath);
+            return bytes;  
         }
     }
 }

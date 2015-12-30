@@ -4,18 +4,23 @@
             <vr-row removeline>
                 <vr-columns width="fullrow">
                     <vr-row>
-                        <vr-columns width="normal" vr-loader="isLoadingSellingNumberPlan">
-                            <vr-whs-be-sellingnumberplan-selector isrequired on-ready="onSellingNumberPlanSelectorReady" onselectionchanged="" selectedvalues="selectedSellingNumberPlan"></vr-whs-be-sellingnumberplan-selector>
-                        </vr-columns>
-                        <vr-columns width="normal">
-                            <vr-label>Upload File</vr-label>
-                            <vr-fileupload extension="reports" value="zoneList" > </vr-fileupload>
+                        <vr-validation-group validationcontext="UploadGroup">
+                            <vr-validation-group validationcontext="SearchGroup">
+                                <vr-columns width="normal" vr-loader="isLoadingSellingNumberPlan">
+                                    <vr-whs-be-sellingnumberplan-selector isrequired="true" on-ready="onSellingNumberPlanSelectorReady" onselectionchanged="" selectedvalues="selectedSellingNumberPlan"></vr-whs-be-sellingnumberplan-selector>
+                                </vr-columns>
+                            </vr-validation-group> 
 
-                        </vr-columns>
-                        <vr-columns width="normal">
-                            <vr-datetimepicker type="dateTime" label="Effective Date" value="effectiveDate" isrequired></vr-datetimepicker>
-                        </vr-columns>
+                                <vr-columns width="normal">
+                                    <vr-label>Upload File</vr-label>
+                                    <vr-fileupload extension="reports" value="zoneList" isrequired> </vr-fileupload>
 
+                                </vr-columns>
+                                <vr-columns width="normal">
+                                    <vr-datetimepicker type="dateTime" label="Effective Date" value="effectiveDate" isrequired></vr-datetimepicker>
+                                </vr-columns>
+                        </vr-validation-group>
+                        
                     </vr-row>
                 </vr-columns>
             </vr-row>
@@ -26,14 +31,14 @@
     <vr-row>
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
             <div transclude-to="buttons">
-                <vr-button type="Search" formname="formFilter" validationcontext="filterGroupValid" data-onclick="searchClicked"></vr-button>
-                <vr-button type="Apply" validationcontext="filterGroupValid" data-onclick="applyCodePreparationForEntities"></vr-button>
-                <vr-button type="Upload" validationcontext="filterGroupValid" data-onclick="uploadCodePreparationEntities"></vr-button>
+                <vr-button type="Search" formname="formFilter"  validationcontext="SearchGroup" data-onclick="searchClicked"></vr-button>
+                <vr-button type="Apply" ng-show="zoneList==undefined" validationcontext="filterGroupValid" data-onclick="applyCodePreparationForEntities"></vr-button>
+                <vr-button type="Upload" ng-show="zoneList!=undefined"  validationcontext="UploadGroup" data-onclick="uploadCodePreparationEntities"></vr-button>
                 <vr-button type="Download" data-onclick="downloadTemplate"></vr-button>
-                <vr-button type="Add" text="New Zone" ng-show="currentNode != undefined && currentNode.type == 'Country'" formname="formFilter" validationcontext="filterGroupValid" data-onclick="newZoneClicked"></vr-button>
-                <vr-button type="Add" text="New Code" ng-show="currentNode != undefined && currentNode.type == 'Zone'" formname="formFilter" validationcontext="filterGroupValid" data-onclick="newCodeClicked"></vr-button>
-                <vr-button type="Move" text="Move Codes" formname="formFilter" validationcontext="filterGroupValid" data-onclick="moveCodesClicked" ng-show="selectedCodes.length > 0"></vr-button>
-                <vr-button type="Close" formname="formFilter" validationcontext="filterGroupValid" data-onclick="closeCodesClicked" ng-show="selectedCodes.length > 0"></vr-button>
+                <vr-button type="Add" text="New Zone" ng-show="currentNode != undefined && currentNode.type == 'Country'" formname="formFilter" validationcontext="SearchGroup" data-onclick="newZoneClicked"></vr-button>
+                <vr-button type="Add" text="New Code" ng-show="currentNode != undefined && currentNode.type == 'Zone'" formname="formFilter" validationcontext="SearchGroup" data-onclick="newCodeClicked"></vr-button>
+                <vr-button type="Move" text="Move Codes" formname="formFilter" validationcontext="SearchGroup" data-onclick="moveCodesClicked" ng-show="selectedCodes.length > 0"></vr-button>
+                <vr-button type="Close" formname="formFilter" validationcontext="SearchGroup" data-onclick="closeCodesClicked" ng-show="selectedCodes.length > 0"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>
@@ -51,7 +56,7 @@
                 </vr-treeview>
             </div>
         </vr-columns>
-        <vr-columns width="3/4row">
+        <vr-columns width="3/4row" ng-show="currentNode!=undefined">
             <vr-whs-codepreparation-codesgrid on-ready="saleCodesGridReady" selectedcodes="selectedCodes">
 
             </vr-whs-codepreparation-codesgrid>
