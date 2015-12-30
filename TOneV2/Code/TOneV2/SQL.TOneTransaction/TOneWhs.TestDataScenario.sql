@@ -12,6 +12,10 @@ Post-Deployment Script Template
 
 --queue.ExecutionFlowDefinition---------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
+
+
+
+
 set nocount on;
 set identity_insert [queue].[ExecutionFlowDefinition] on;
 ;with cte_data([ID],[Name],[Title],[ExecutionTree])
@@ -32,6 +36,12 @@ when not matched by target then
 when not matched by source then
 	delete;
 set identity_insert [queue].[ExecutionFlowDefinition] off;
+
+--DELETE ALL QUEUES USED-------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+DELETE FROM [queue].QueueInstance
+DELETE FROM [queue].QueueItemType
+DELETE FROM [queue].QueueSubscription
 
 --queue.ExecutionFlow-------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -102,5 +112,4 @@ when not matched by target then
 when not matched by source then
 	delete;
 set identity_insert [runtime].[ScheduleTask] off;
-
 

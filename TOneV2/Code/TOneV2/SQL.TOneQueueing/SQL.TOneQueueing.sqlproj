@@ -149,4 +149,7 @@
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="TOneWhs.TestDataScenario.sql" />
+  </ItemGroup>
 </Project>

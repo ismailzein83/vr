@@ -72,4 +72,7 @@
     <Build Include="TOneWhS_CDR\Tables\CDR.sql" />
     <Build Include="Security\TOneWhS_CDR.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="TOneWhs.TestDataScenario.sql" />
+  </ItemGroup>
 </Project>

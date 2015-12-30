@@ -9,32 +9,6 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---TOneWhS_BE.CarrierAccount-------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [TOneWhS_BE].[CarrierAccount] on;
-;with cte_data([ID],[Name],[CarrierProfileID],[AccountType],[SupplierSettings],[CustomerSettings],[CarrierAccountSettings],[SellingNumberPlanID])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Protel',1,1,'{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSupplierSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountCustomerSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSettings, TOne.WhS.BusinessEntity.Entities","ActivationStatus":0}',1),
-(2,'Spactron',2,3,'{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSupplierSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountCustomerSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSettings, TOne.WhS.BusinessEntity.Entities","ActivationStatus":0}',1),
-(3,'Sama',3,2,'{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSupplierSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountCustomerSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSettings, TOne.WhS.BusinessEntity.Entities","ActivationStatus":0}',null),
-(4,'MHD',4,2,'{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSupplierSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountCustomerSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSettings, TOne.WhS.BusinessEntity.Entities","ActivationStatus":0}',null),
-(5,'Nettalk',5,2,'{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSupplierSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountCustomerSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSettings, TOne.WhS.BusinessEntity.Entities","ActivationStatus":0}',null)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[CarrierProfileID],[AccountType],[SupplierSettings],[CustomerSettings],[CarrierAccountSettings],[SellingNumberPlanID]))
-merge	[TOneWhS_BE].[CarrierAccount] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[CarrierProfileID] = s.[CarrierProfileID],[AccountType] = s.[AccountType],[SupplierSettings] = s.[SupplierSettings],[CustomerSettings] = s.[CustomerSettings],[CarrierAccountSettings] = s.[CarrierAccountSettings],[SellingNumberPlanID] = s.[SellingNumberPlanID]
-when not matched by target then
-	insert([ID],[Name],[CarrierProfileID],[AccountType],[SupplierSettings],[CustomerSettings],[CarrierAccountSettings],[SellingNumberPlanID])
-	values(s.[ID],s.[Name],s.[CarrierProfileID],s.[AccountType],s.[SupplierSettings],s.[CustomerSettings],s.[CarrierAccountSettings],s.[SellingNumberPlanID])
-when not matched by source then
-	delete;
-set identity_insert [TOneWhS_BE].[CarrierAccount] off;
 
 --TOneWhS_BE.CarrierProfile-------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -62,6 +36,33 @@ when not matched by target then
 when not matched by source then
 	delete;
 set identity_insert [TOneWhS_BE].[CarrierProfile] off;
+--TOneWhS_BE.CarrierAccount-------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [TOneWhS_BE].[CarrierAccount] on;
+;with cte_data([ID],[Name],[CarrierProfileID],[AccountType],[SupplierSettings],[CustomerSettings],[CarrierAccountSettings],[SellingNumberPlanID])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'Protel',1,1,'{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSupplierSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountCustomerSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSettings, TOne.WhS.BusinessEntity.Entities","ActivationStatus":0}',1),
+(2,'Spactron',2,3,'{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSupplierSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountCustomerSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSettings, TOne.WhS.BusinessEntity.Entities","ActivationStatus":0}',1),
+(3,'Sama',3,2,'{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSupplierSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountCustomerSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSettings, TOne.WhS.BusinessEntity.Entities","ActivationStatus":0}',null),
+(4,'MHD',4,2,'{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSupplierSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountCustomerSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSettings, TOne.WhS.BusinessEntity.Entities","ActivationStatus":0}',null),
+(5,'Nettalk',5,2,'{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSupplierSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountCustomerSettings, TOne.WhS.BusinessEntity.Entities","RoutingStatus":0}','{"$type":"TOne.WhS.BusinessEntity.Entities.CarrierAccountSettings, TOne.WhS.BusinessEntity.Entities","ActivationStatus":0}',null)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[CarrierProfileID],[AccountType],[SupplierSettings],[CustomerSettings],[CarrierAccountSettings],[SellingNumberPlanID]))
+merge	[TOneWhS_BE].[CarrierAccount] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[CarrierProfileID] = s.[CarrierProfileID],[AccountType] = s.[AccountType],[SupplierSettings] = s.[SupplierSettings],[CustomerSettings] = s.[CustomerSettings],[CarrierAccountSettings] = s.[CarrierAccountSettings],[SellingNumberPlanID] = s.[SellingNumberPlanID]
+when not matched by target then
+	insert([ID],[Name],[CarrierProfileID],[AccountType],[SupplierSettings],[CustomerSettings],[CarrierAccountSettings],[SellingNumberPlanID])
+	values(s.[ID],s.[Name],s.[CarrierProfileID],s.[AccountType],s.[SupplierSettings],s.[CustomerSettings],s.[CarrierAccountSettings],s.[SellingNumberPlanID])
+when not matched by source then
+	delete;
+set identity_insert [TOneWhS_BE].[CarrierAccount] off;
+
 
 --TOneWhS_BE.CodeGroup------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -234,6 +235,10 @@ TRUNCATE TABLE TOneWhS_BE.SPL_SupplierRate_New
 TRUNCATE TABLE TOneWhS_BE.SPL_SupplierZone_Changed
 TRUNCATE TABLE TOneWhS_BE.SPL_SupplierZone_New
 
+TRUNCATE TABLE [TOneWhS_Analytic].[TrafficStats]
+TRUNCATE TABLE [TOneWhS_Analytic].BillingStats
+TRUNCATE TABLE [TOneWhS_Analytic].TrafficStatsByCode
+TRUNCATE TABLE [TOneWhS_Analytic].TrafficStatsDaily
 
  
 TRUNCATE TABLE TOneWhs_CP.CodePreparation

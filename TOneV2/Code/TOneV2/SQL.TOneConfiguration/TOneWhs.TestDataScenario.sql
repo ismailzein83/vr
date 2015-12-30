@@ -140,3 +140,5 @@ when not matched by source then
 	delete;
 set identity_insert [rules].[Rule] off;
 	
+
+TRUNCATE TABLE StatisticManagement.StatisticBatch
