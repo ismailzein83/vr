@@ -210,8 +210,7 @@ as (select * from (values
 (404,'Switch Identification Rule','Switch Identification Rule','#/view/WhS_CDRProcessing/Views/SwitchRule/SwitchIdentificationRuleManagement'	,24	,NULL,	NULL,	NULL,	0	,10),
 (406,'Supplier Pricelist','Supplier Pricelist','#/view/WhS_BusinessEntity/Views/SupplierPricelist/SupplierPricelist',	3,	NULL	,NULL,	NULL,	0	,11),
 (410,'Define CDR Fields','Define CDR Fields','#/view/WhS_CDRProcessing/Views/CDRFields/DefineCDRFieldsManagement'	,24,	NULL	,NULL,	NULL,	0,	NULL),
-(412,'Data Record Type','Data Record Type','#/view/Common/Views/GenericDataRecord/DataRecordTypeManagement',	5	,NULL,	NULL,	NULL,	0,	NULL),
-(414,'Code Preparation Management','Code Preparation Management','#/view/WhS_CodePreparation/Views/CodePreparation',	19	,NULL,	NULL,	NULL,	0,	NULL)
+(412,'Data Record Type','Data Record Type','#/view/Common/Views/GenericDataRecord/DataRecordTypeManagement',	5	,NULL,	NULL,	NULL,	0,	NULL)
 
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
