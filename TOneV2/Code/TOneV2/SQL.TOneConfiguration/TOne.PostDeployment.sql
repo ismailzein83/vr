@@ -165,7 +165,6 @@ as (select * from (values
 (265,'Customer TOD','Customer TOD','#/view/BusinessEntity/Views/SalesArea/CustomerTODManagement',19,null,null,null,0,12),
 (266,'Supplier Tariff','Supplier Tariff','#/view/BusinessEntity/Views/PurchaseArea/SupplierTariffManagement',18,null,null,null,0,10),
 (268,'Customer Pricelists','Customer Pricelists','#/view/BusinessEntity/Views/SalesArea/Customer Pricelists/CustomerPricelists',19,null,null,null,0,10),
-(274,'Supplier Pricelists','Supplier Pricelists','#/view/BusinessEntity/Views/PurchaseArea/Supplier Pricelists/SupplierPricelists',18,null,null,null,0,null),
 (278,'Customer Tariff','Customer Tariff','#/view/BusinessEntity/Views/SalesArea/CustomerTariffManagement',19,null,null,null,0,11),
 (279,'Rate Analysis','Rate Analysis','#/view/BusinessEntity/Views/Rate Analysis/RateAnalysis',3,null,null,null,0,null),
 (287,'Supplier TOD','Supplier TOD','#/view/BusinessEntity/Views/PurchaseArea/SupplierTODManagement',18,null,null,null,0,11),
