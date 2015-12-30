@@ -62,7 +62,8 @@ namespace TOne.WhS.Sales.Business
             {
                 ISaleRateDataManager saleRateDataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
                 IEnumerable<NewRate> newRates = _changes.ZoneChanges.MapRecords(itm => itm.NewRate, itm => itm.NewRate != null);
-                List<RateChange> rateChanges = _changes.ZoneChanges.MapRecords(itm => itm.RateChange, itm => itm.RateChange != null).ToList();
+                var zoneRateChanges = _changes.ZoneChanges.MapRecords(itm => itm.RateChange, itm => itm.RateChange != null);
+                List<RateChange> rateChanges = zoneRateChanges != null ? zoneRateChanges.ToList() : null;
 
                 if (newRates != null && newRates.Count() > 0)
                 {
@@ -74,9 +75,11 @@ namespace TOne.WhS.Sales.Business
                     DateTime minBED = newRates.MapRecords(itm => itm.BED).OrderBy(itm => itm).FirstOrDefault();
                     IEnumerable<long> zoneIds = newRates.MapRecords(itm => itm.ZoneId);
                     IEnumerable<SaleRate> existingRates = saleRateDataManager.GetExistingRatesByZoneIds(_ownerType, _ownerId, zoneIds, minBED);
+                    int currencyId = GetCurrencyId();
 
                     foreach (NewRate newRate in newRates)
                     {
+                        newRate.CurrencyId = currencyId;
                         IEnumerable<SaleRate> zoneExistingRates = existingRates.FindAllRecords(itm => itm.ZoneId == newRate.ZoneId && itm.IsOverlapedWith(newRate));
                         rateManager.ProcessNewRate(newRate, zoneExistingRates.MapRecords(itm => new ExistingRate() { RateEntity = itm }));
                         rateChanges.AddRange(newRate.ChangedExistingRates.MapRecords(itm => new RateChange() { RateId = itm.ChangedRate.RateId, EED = itm.ChangedRate.EED }));
@@ -191,6 +194,7 @@ namespace TOne.WhS.Sales.Business
                 return;
 
             SaveChanges(newChanges);
+            _changes = _ratePlanDataManager.GetChanges(_ownerType, _ownerId, RatePlanStatus.Draft); // Update the _changes field
             SavePriceList();
         }
 
@@ -231,7 +235,6 @@ namespace TOne.WhS.Sales.Business
         {
             // Create a list of zone changes, each having a new rate, from the calculated rates
             List<ZoneChanges> zoneChanges = new List<ZoneChanges>();
-            int currencyId = GetCurrencyId();
 
             foreach (ZoneItem zoneItem in zoneItems)
             {
@@ -240,10 +243,9 @@ namespace TOne.WhS.Sales.Business
                     ZoneId = zoneItem.ZoneId,
                     NormalRate = (decimal)zoneItem.CalculatedRate,
                     BED = effectiveOn,
-                    CurrencyId = currencyId
                 };
 
-                ZoneChanges zoneItemChanges = new ZoneChanges() { NewRate = newRate };
+                ZoneChanges zoneItemChanges = new ZoneChanges() { ZoneId = zoneItem.ZoneId, NewRate = newRate };
                 zoneChanges.Add(zoneItemChanges);
             }
 

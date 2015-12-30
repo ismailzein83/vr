@@ -186,12 +186,16 @@
                     PolicyConfigId: policySelectorAPI ? policySelectorAPI.getSelectedIds() : null,
                     NumberOfOptions: $scope.numberOfOptions,
                     CostCalculationMethods: settings ? settings.CostCalculationMethods : null,
-                    SelectedCostCalculationMethodConfigId: pricingSettings ? pricingSettings.selectedCostColumn.TemplateConfigId : null,
+                    SelectedCostCalculationMethodConfigId: pricingSettings ? pricingSettings.selectedCostColumn.ConfigId : null,
                     RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null
                 };
 
+                console.log(input);
+
                 return WhS_Sales_RatePlanAPIService.ApplyCalculatedRates(input).then(function () {
                     VRNotificationService.showSuccess("Rates applied");
+                    pricingSettings = null;
+                    loadGrid();
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
