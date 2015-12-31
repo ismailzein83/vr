@@ -37,7 +37,6 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, DaysOfWeekEnum)
 
 
         function initializeController() {
-            console.log("weekly")
             defineAPI();
         }
 

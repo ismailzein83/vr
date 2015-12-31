@@ -2,7 +2,7 @@
     <vr-modalbody width="'50%'" vr-loader="isGettingData">
         <vr-form name="formSchedulerTaskEditor">
             <vr-tabs>
-                <vr-tab header="'Task Definition'" >
+                <vr-tab header="'Task Definition'">
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-row>
@@ -36,7 +36,7 @@
                                 </vr-row>
                             </div>
                             <div>
-                                <vr-row>                                    
+                                <vr-row>
                                     <vr-columns width="fullrow" ng-if="scopeModel.selectedTriggerType">
                                         <vr-section title="{{scopeModel.selectedTriggerType.Name}} Trigger">
                                             <vr-directivewrapper directive="scopeModel.selectedTriggerType.Info.Editor" on-ready="onTaskTriggerDirectiveReady"></vr-directivewrapper>
@@ -54,22 +54,19 @@
                                 <vr-row>
                                     <vr-columns width="1/2row">
                                         <vr-select label="Type" datatextfield="Name" datavaluefield="ActionTypeId"
-                                                   datasource="actionTypes" selectedvalues="scopeModel.selectedActionType"></vr-select>
+                                                   datasource="actionTypes" selectedvalues="scopeModel.selectedActionType" onselectionchanged="onTaskActionSelctionChanged"></vr-select>
                                     </vr-columns>
                                 </vr-row>
                             </div>
                             <vr-row>
-                                <vr-columns width="fullrow">
-                                    <div ng-include="scopeModel.selectedActionType.Info.URL"></div>
-
-                                   
-                                    <!--<vr-section title="{{scopeModel.selectedActionType.Name}} Action">
-                                        <vr-directivewrapper directive="scopeModel.selectedActionType.Info.Editor" ></vr-directivewrapper>
-                                    </vr-section>-->
+                                <vr-columns width="fullrow" ng-if="scopeModel.selectedActionType">
+                                    <vr-section title="{{scopeModel.selectedActionType.Name}} Action">
+                                        <vr-directivewrapper directive="scopeModel.selectedActionType.Info.Editor" on-ready="onTaskActionDirectiveReady"></vr-directivewrapper>
+                                    </vr-section>
                             </vr-row>
                         </vr-columns>
-                            </vr-row>
-                        </vr-columns>
+                    </vr-row>
+                    </vr-columns>
                     </vr-row>
                 </vr-tab>
             </vr-tabs>

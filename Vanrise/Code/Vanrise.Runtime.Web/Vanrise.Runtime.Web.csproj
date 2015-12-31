@@ -102,7 +102,10 @@
     <Content Include="Runtime\Constants\TimeSchedulerTypeEnum.js" />
     <Content Include="Runtime\Directives\SchedulerTask\Templates\SchedulerTaskGridTemplate.html" />
     <Content Include="Runtime\Directives\SchedulerTask\vr-runtime-schedulertask-grid.js" />
+    <Content Include="Runtime\Directives\TaskAction\Templates\TaskActionScheduleDailyRepricing.html" />
     <Content Include="Runtime\Directives\TaskAction\Templates\TaskActionWorkFlow.html" />
+    <Content Include="Runtime\Directives\TaskAction\vr-runtime-taskaction-scheduledailyrepricing.js" />
+    <Content Include="Runtime\Directives\TaskAction\vr-runtime-bpdefinition-selector.js" />
     <Content Include="Runtime\Directives\TaskAction\vr-runtime-taskaction-workflow.js" />
     <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerDaily.html" />
     <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerInterval.html" />

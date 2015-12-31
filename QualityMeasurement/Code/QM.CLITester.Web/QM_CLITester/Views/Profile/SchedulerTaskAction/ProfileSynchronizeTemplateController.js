@@ -36,11 +36,11 @@ function ProfileSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSer
             return;
 
         var data = $scope.schedulerTaskAction.data;
-        if (data != null) {
+        if (data != null &&  data.SourceProfileReader !=undefined) {
             $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, data.SourceProfileReader.ConfigId, "TemplateConfigID");
         }
 
-        if (sourceTypeDirectiveAPI != undefined) {
+        if (data.SourceProfileReader && sourceTypeDirectiveAPI != undefined) {
             sourceTypeDirectiveAPI.load(data.SourceProfileReader)
             isFormLoaded = true;
         }

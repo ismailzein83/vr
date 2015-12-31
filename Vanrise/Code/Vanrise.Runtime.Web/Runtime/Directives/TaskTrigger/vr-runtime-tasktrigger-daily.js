@@ -38,7 +38,6 @@ function (UtilsService, VRUIUtilsService , TimeSchedulerTypeEnum) {
 
         function initializeController() {
 
-            console.log("Daily")
             defineAPI();
         }
 

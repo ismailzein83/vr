@@ -1,0 +1,16 @@
+﻿<vr-row >
+    <vr-columns width="1/2row">
+        <vr-select datatextfield="Name" datavaluefield="Value" label="Set Repricing Day to"
+                   datasource="dateOptions" selectedvalues="selectedDateOption" onselectionchanged="dateOptionSelected()"></vr-select>
+    </vr-columns>
+</vr-row>
+<vr-row ng-show="selectedDateOption.Value == 1">
+    <vr-columns width="1/2row">
+        <vr-datetimepicker type="date" value="repricingDay"></vr-datetimepicker>
+    </vr-columns>
+</vr-row>
+<vr-row removeline>
+    <vr-columns width="1/2row">
+        <vr-switch value="divideProcessIntoSubProcesses" label="Divide Process"></vr-switch>
+    </vr-columns>
+</vr-row>

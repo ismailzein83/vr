@@ -38,7 +38,6 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, IntervalTimeTyp
 
         function initializeController() {
 
-            console.log("Interval")
             defineAPI();
         }
 
