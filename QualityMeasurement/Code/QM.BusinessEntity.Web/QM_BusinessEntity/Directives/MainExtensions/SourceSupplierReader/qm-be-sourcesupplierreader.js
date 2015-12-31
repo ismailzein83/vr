@@ -37,7 +37,8 @@ app.directive("qmBeSourcesupplierreader", ['UtilsService', 'VRUIUtilsService', '
         this.initializeController = initializeController;
 
         $scope.connectionString = undefined;
-
+        var sourceTemplateDirectiveAPI ;
+        var sourceDirectiveReadyPromiseDeferred =  UtilsService.createPromiseDeferred();;
         function initializeController() {
             defineAPI();
         }
@@ -51,16 +52,25 @@ app.directive("qmBeSourcesupplierreader", ['UtilsService', 'VRUIUtilsService', '
             var api = {};
 
             api.getData = function () {
-                
-               
+                var schedulerTaskAction;
+                if ($scope.selectedSourceTypeTemplate != undefined) {
+                    if (sourceTemplateDirectiveAPI != undefined) {
+                        schedulerTaskAction = {};
+                        schedulerTaskAction.$type = "QM.BusinessEntity.Business.SupplierSyncTaskActionArgument, QM.BusinessEntity.Business",
+                        schedulerTaskAction.SourceSupplierReader = sourceTemplateDirectiveAPI.getData();
+                        schedulerTaskAction.SourceSupplierReader.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
+                    }
+                }
+                return schedulerTaskAction;
             };
 
 
             api.load = function (payload) {
                 var promises = [];
                 var loadSupplierSourcePromise = QM_BE_SupplierAPIService.GetSupplierSourceTemplates().then(function (response) {
-                    if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.SourceSupplierReader != undefined)
-                        sourceConfigId = $scope.schedulerTaskAction.data.SourceSupplierReader.ConfigId;
+                    var sourceConfigId;
+                    if (payload != undefined && payload.data != undefined && payload.data.SourceSupplierReader != undefined)
+                    sourceConfigId = payload.data.SourceSupplierReader.ConfigId;
                     angular.forEach(response, function (item) {
                         $scope.sourceTypeTemplates.push(item);
                     });
@@ -69,7 +79,20 @@ app.directive("qmBeSourcesupplierreader", ['UtilsService', 'VRUIUtilsService', '
                         $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
 
                 });
-                
+                promises.push(loadSupplierSourcePromise);
+
+                var loadSourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
+                sourceDirectiveReadyPromiseDeferred.promise.then(function () {
+                    var obj;
+                    if (payload != undefined && payload.data != undefined && payload.data.SourceSupplierReader != undefined)
+                        obj = {
+                            connectionString: payload.data.SourceSupplierReader.ConnectionString
+                        };
+                    VRUIUtilsService.callDirectiveLoad(sourceTemplateDirectiveAPI, obj, loadSourceTemplatePromiseDeferred);
+                });
+
+                promises.push(loadSourceTemplatePromiseDeferred.promise);
+                return UtilsService.waitMultiplePromises(promises);
             }
 
 
