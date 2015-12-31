@@ -210,7 +210,7 @@ as (select * from (values
 (406,'Supplier Pricelist','Supplier Pricelist','#/view/WhS_BusinessEntity/Views/SupplierPricelist/SupplierPricelist',	3,	NULL	,NULL,	NULL,	0	,11),
 (410,'Define CDR Fields','Define CDR Fields','#/view/WhS_CDRProcessing/Views/CDRFields/DefineCDRFieldsManagement'	,24,	NULL	,NULL,	NULL,	0,	NULL),
 (412,'Data Record Type','Data Record Type','#/view/Common/Views/GenericDataRecord/DataRecordTypeManagement',	5	,NULL,	NULL,	NULL,	0,	NULL),
-(337, 'Selling Product', 'Selling Product', '#/view/WhS_BusinessEntity/Views/SellingProduct/SellingProductManagement', 3, NULL, NULL, NULL, 0, 10)
+(413, 'Selling Product', 'Selling Product', '#/view/WhS_BusinessEntity/Views/SellingProduct/SellingProductManagement', 3, NULL, NULL, NULL, 0, 10)
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank]))
