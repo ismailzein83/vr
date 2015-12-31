@@ -175,7 +175,7 @@ as (select * from (values
 (313,'G Hourly Report','G Hourly Report','#/view/Analytics/Views/GHourlyReport',4,null,null,null,0,13),
 (323,'Routing Product','Routing Product','#/view/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductManagement',1,null,null,null,0,10),
 (325,'Supplier PriceList','Supplier PriceList','#/view/WhS_SupplierPriceList/Views/SupplierPriceList',18,null,null,null,0,null),
-(334,'Route Rule','Route Rule','#/view/WhS_BusinessEntity/Views/RouteRule/RouteRuleManagement',1,null,null,null,0,11),
+(334,'Route Rule','Route Rule','#/view/WhS_Routing/Views/RouteRule/RouteRuleManagement',1,null,null,null,0,11),
 (337,'Pricing Product','Pricing Product','#/view/WhS_BusinessEntity/Views/PricingProduct/PricingProductManagement',3,null,null,null,0,null),
 (338,'Customer Pricing Product','Customer Pricing Product','#/view/WhS_BusinessEntity/Views/PricingProduct/CustomerPricingProductManagement',3,null,null,null,0,null),
 (341,'Sale Pricing Rule','Sale Pricing Rule','#/view/WhS_BusinessEntity/Views/PricingRule/SalePricingRuleManagement',19,null,null,null,0,null),
@@ -209,8 +209,8 @@ as (select * from (values
 (404,'Switch Identification Rule','Switch Identification Rule','#/view/WhS_CDRProcessing/Views/SwitchRule/SwitchIdentificationRuleManagement'	,24	,NULL,	NULL,	NULL,	0	,10),
 (406,'Supplier Pricelist','Supplier Pricelist','#/view/WhS_BusinessEntity/Views/SupplierPricelist/SupplierPricelist',	3,	NULL	,NULL,	NULL,	0	,11),
 (410,'Define CDR Fields','Define CDR Fields','#/view/WhS_CDRProcessing/Views/CDRFields/DefineCDRFieldsManagement'	,24,	NULL	,NULL,	NULL,	0,	NULL),
-(412,'Data Record Type','Data Record Type','#/view/Common/Views/GenericDataRecord/DataRecordTypeManagement',	5	,NULL,	NULL,	NULL,	0,	NULL)
-
+(412,'Data Record Type','Data Record Type','#/view/Common/Views/GenericDataRecord/DataRecordTypeManagement',	5	,NULL,	NULL,	NULL,	0,	NULL),
+(337, 'Selling Product', 'Selling Product', '#/view/WhS_BusinessEntity/Views/SellingProduct/SellingProductManagement', 3, NULL, NULL, NULL, 0, 10)
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank]))
