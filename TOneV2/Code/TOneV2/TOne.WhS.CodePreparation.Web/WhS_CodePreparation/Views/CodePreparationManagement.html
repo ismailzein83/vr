@@ -32,7 +32,7 @@
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
             <div transclude-to="buttons">
                 <vr-button type="Search" formname="formFilter"  validationcontext="SearchGroup" data-onclick="searchClicked"></vr-button>
-                <vr-button type="Apply" ng-show="zoneList==undefined" validationcontext="filterGroupValid" data-onclick="applyCodePreparationForEntities"></vr-button>
+                <vr-button type="Apply" ng-show="zoneList==undefined" validationcontext="SearchGroup" data-onclick="applyCodePreparationForEntities"></vr-button>
                 <vr-button type="Upload" ng-show="zoneList!=undefined"  validationcontext="UploadGroup" data-onclick="uploadCodePreparationEntities"></vr-button>
                 <vr-button type="Download" data-onclick="downloadTemplate"></vr-button>
                 <vr-button type="Add" text="New Zone" ng-show="currentNode != undefined && currentNode.type == 'Country'" formname="formFilter" validationcontext="SearchGroup" data-onclick="newZoneClicked"></vr-button>
