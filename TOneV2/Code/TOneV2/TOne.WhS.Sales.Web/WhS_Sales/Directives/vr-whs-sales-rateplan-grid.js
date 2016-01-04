@@ -279,15 +279,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 };
 
                 function setRouteOptionProperties(zoneItem) {
-                    zoneItem.RouteOptionsReadyDeferred = UtilsService.createPromiseDeferred();
+                    zoneItem.RouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
 
                     zoneItem.onRouteOptionsReady = function (api) {
                         zoneItem.RouteOptionsAPI = api;
-                        zoneItem.RouteOptionsReadyDeferred.resolve();
-                    };
-
-                    zoneItem.RouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
-                    zoneItem.RouteOptionsReadyDeferred.promise.then(function () {
                         var payload = {
                             RoutingDatabaseId: gridQuery.RoutingDatabaseId,
                             RoutingProductId: zoneItem.EffectiveRoutingProductId,
@@ -295,7 +290,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             RouteOptions: zoneItem.RouteOptions
                         };
                         VRUIUtilsService.callDirectiveLoad(zoneItem.RouteOptionsAPI, payload, zoneItem.RouteOptionsLoadDeferred);
-                    });
+                    };
                 }
             }
         }
