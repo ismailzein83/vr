@@ -143,7 +143,9 @@
     <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceSupplierReader\Templates\SourceSupplierReader.html" />
     <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceZoneReader\qm-be-sourcezonereader-tonev1.js" />
     <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceZoneReader\qm-be-sourcezonereader-tonev2.js" />
+    <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceZoneReader\qm-be-sourcezonereader.js" />
     <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceZoneReader\Templates\SourceZoneReaderTOneV1.html" />
+    <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceZoneReader\Templates\SourceZoneReaderTemplate.html" />
     <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceZoneReader\Templates\SourceZoneReaderTOneV2.html" />
     <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceSupplierReader\qm-be-sourcesupplierreader-tonev1.js" />
     <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceSupplierReader\qm-be-sourcesupplierreader-tonev2.js" />

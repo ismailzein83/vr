@@ -80,7 +80,7 @@ function TestCallTemplateController($scope, UtilsService, VRUIUtilsService, Qm_C
     function load() {
         $scope.isLoading = true;
 
-        if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined) {
+        if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.selectedSupplier!=undefined) {
             $scope.SupplierID = UtilsService.getPropValuesFromArray($scope.schedulerTaskAction.data.selectedSupplier, "SupplierId");
             $scope.CountryID = $scope.schedulerTaskAction.data.CountryId;
             $scope.ZoneID = $scope.schedulerTaskAction.data.ZoneId;

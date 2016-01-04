@@ -1,0 +1,13 @@
+﻿<vr-section title="Zone Settings ">
+    <vr-row>
+        <vr-columns width="1/3row">
+            <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Source Type" datasource="sourceTypeTemplates" text="None"
+                       selectedvalues="selectedSourceTypeTemplate" isrequired="true">
+            </vr-select>
+        </vr-columns>
+        <vr-columns width="fullrow" vr-loader="isLoadingSourceTypeDirective" ng-if="selectedSourceTypeTemplate.Editor">
+            <vr-directivewrapper directive="selectedSourceTypeTemplate.Editor" on-ready="onSourceTypeDirectiveReady"></vr-directivewrapper>
+        </vr-columns>
+    </vr-row>
+</vr-section>
+<vr-common-country-sourcereader-selector on-ready="onSourceCountryDirectiveReady"></vr-common-country-sourcereader-selector>
