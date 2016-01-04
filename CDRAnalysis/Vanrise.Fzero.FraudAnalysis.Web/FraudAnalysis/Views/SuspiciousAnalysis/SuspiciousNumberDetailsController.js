@@ -331,14 +331,14 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     }
 
     function load() {
-        $scope.isInitializing = true;
+        $scope.isLoading = true;
 
         return UtilsService.waitMultipleAsyncOperations([loadAggregateDefinitions, loadUsers, loadAccountStatus])
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             })
             .finally(function () {
-                $scope.isInitializing = false;
+                $scope.isLoading = false;
             });
     }
 
@@ -346,59 +346,85 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     function retrieveData() {
 
         if (gridAPI_Occurances != undefined && $scope.selectedTabIndex == 0 && !occurancesLoaded)
-            return retrieveData_Occurances();
+            retrieveData_Occurances();
 
         else if (gridAPI_NormalCDRs != undefined && $scope.selectedTabIndex == 1 && !normalCDRsLoaded && $scope.validateTimeRangeNormalCDRs() == null && $scope.fromDate_NormalCDRs != null && $scope.toDate_NormalCDRs != null)
-            return retrieveData_NormalCDRs();
+            retrieveData_NormalCDRs();
 
         else if (gridAPI_NumberProfiles != undefined && $scope.selectedTabIndex == 2 && !numberProfilesLoaded && $scope.validateTimeRangeNumberProfiles() == null && $scope.fromDate_NumberProfiles != null && $scope.toDate_NumberProfiles != null)
-            return retrieveData_NumberProfiles();
+            retrieveData_NumberProfiles();
 
         else if (gridAPI_CaseHistory != undefined && $scope.selectedTabIndex == 3 && !casesLoaded)
-            return retrieveData_CaseHistory();
-
+            retrieveData_CaseHistory();
     }
 
     function retrieveData_Occurances() {
-
+        $scope.isLoading = true;
         var query = {
             AccountNumber: $scope.accountNumber,
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate
         };
 
-        return gridAPI_Occurances.retrieveData(query);
+        return gridAPI_Occurances.retrieveData(query)
+             .catch(function (error) {
+                 VRNotificationService.notifyException(error, $scope);
+             })
+             .finally(function () {
+                 $scope.isLoading = false;
+             });
+
     }
 
     function retrieveData_NormalCDRs() {
-
+        $scope.isLoading = true;
         var query = {
             MSISDN: $scope.accountNumber,
             FromDate: $scope.fromDate_NormalCDRs,
             ToDate: $scope.toDate_NormalCDRs,
         };
 
-        return gridAPI_NormalCDRs.retrieveData(query);
+        return gridAPI_NormalCDRs.retrieveData(query)
+                .catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoading = false;
+                });
+
     }
 
     function retrieveData_NumberProfiles() {
-
+        $scope.isLoading = true;
         var query = {
             AccountNumber: $scope.accountNumber,
             FromDate: $scope.fromDate_NumberProfiles,
             ToDate: $scope.toDate_NumberProfiles
         };
 
-        return gridAPI_NumberProfiles.retrieveData(query);
+        return gridAPI_NumberProfiles.retrieveData(query)
+              .catch(function (error) {
+                  VRNotificationService.notifyException(error, $scope);
+              })
+              .finally(function () {
+                  $scope.isLoading = false;
+              });
     }
 
     function retrieveData_CaseHistory() {
-
+        $scope.isLoading = true;
         var query = {
             AccountNumber: $scope.accountNumber
         };
 
-        return gridAPI_CaseHistory.retrieveData(query);
+        return gridAPI_CaseHistory.retrieveData(query)
+              .catch(function (error) {
+                  VRNotificationService.notifyException(error, $scope);
+              })
+              .finally(function () {
+                  $scope.isLoading = false;
+              });
+
     }
 
     function loadAccountStatus() {

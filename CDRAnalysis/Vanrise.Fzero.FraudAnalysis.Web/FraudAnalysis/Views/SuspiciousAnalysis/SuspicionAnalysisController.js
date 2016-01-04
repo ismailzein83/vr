@@ -132,7 +132,7 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Suspicious Number Details: " + accountNumber;
+            modalScope.title = "Suspicious Number Details";
 
             modalScope.onAccountCaseUpdated = function (accountSuspicionSummary) {
                 //if (accountSuspicionSummary.AccountNumber != null)
