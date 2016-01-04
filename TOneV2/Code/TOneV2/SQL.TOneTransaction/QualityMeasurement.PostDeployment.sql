@@ -11,11 +11,11 @@ Post-Deployment Script Template
 */
 MERGE INTO runtime.[SchedulerTaskActionType] AS Target 
 USING (VALUES 
-	(3, N'Supplier Synchronize', N'{"URL":"/Client/Modules/QM_BusinessEntity/Views/Supplier/SchedulerTaskAction/SupplierSynchronizeTemplate.html","SystemType":false,"FQTN":"QM.BusinessEntity.Business.SupplierSyncTaskAction, QM.BusinessEntity.Business"}'),
-	(4, N'Profile Synchronize', N'{"URL":"/Client/Modules/QM_CLITester/Views/Profile/SchedulerTaskAction/ProfileSynchronizeTemplate.html","SystemType":false,"FQTN":"QM.CLITester.Business.ProfileSyncTaskAction, QM.CLITester.Business"}'),
-	(5, N'Zone Synchronize', N'{"URL":"/Client/Modules/QM_BusinessEntity/Views/Zone/SchedulerTaskAction/ZoneSynchronizeTemplate.html","SystemType":false,"FQTN":"QM.BusinessEntity.Business.ZoneSyncTaskAction, QM.BusinessEntity.Business"}'),
-	(6, N'CLI Tester - Initiate Test', N'{"URL":"/Client/Modules/QM_CLITester/Views/TestPage/SchedulerTaskAction/InitiateTestTemplate.html","SystemType":false,"FQTN":"QM.CLITester.Business.InitiateTestTaskAction, QM.CLITester.Business"}'),
-	(7, N'CLI Tester - Download Test Result', N'{"URL":"/Client/Modules/QM_CLITester/Views/TestPage/SchedulerTaskAction/TestProgressTemplate.html","SystemType":false,"FQTN":"QM.CLITester.Business.TestProgressTaskAction, QM.CLITester.Business"}'),
+	(3, N'Supplier Synchronize', N'{"URL":"/Client/Modules/QM_BusinessEntity/Views/Supplier/SchedulerTaskAction/SupplierSynchronizeTemplate.html","SystemType":false,"Editor":"qm-be-sourcesupplierreader","FQTN":"QM.BusinessEntity.Business.SupplierSyncTaskAction, QM.BusinessEntity.Business"}'),
+	(4, N'Profile Synchronize', N'{"URL":"/Client/Modules/QM_CLITester/Views/Profile/SchedulerTaskAction/ProfileSynchronizeTemplate.html","SystemType":false,"Editor":"vr-qm-clitester-sourceprofilereader","FQTN":"QM.CLITester.Business.ProfileSyncTaskAction, QM.CLITester.Business"}'),
+	(5, N'Zone Synchronize', N'{"URL":"/Client/Modules/QM_BusinessEntity/Views/Zone/SchedulerTaskAction/ZoneSynchronizeTemplate.html","SystemType":false,"Editor":"qm-be-sourcezonereader","FQTN":"QM.BusinessEntity.Business.ZoneSyncTaskAction, QM.BusinessEntity.Business"}'),
+	(6, N'CLI Tester - Initiate Test', N'{"URL":"/Client/Modules/QM_CLITester/Views/TestPage/SchedulerTaskAction/InitiateTestTemplate.html","SystemType":false,"Editor":"qm-clitester-initiatetest","FQTN":"QM.CLITester.Business.InitiateTestTaskAction, QM.CLITester.Business"}'),
+	(7, N'CLI Tester - Download Test Result', N'{"URL":"/Client/Modules/QM_CLITester/Views/TestPage/SchedulerTaskAction/TestProgressTemplate.html","SystemType":false,"Editor":"qm-clitester-testprogress","FQTN":"QM.CLITester.Business.TestProgressTaskAction, QM.CLITester.Business"}'),
 	(8, N'CLI Tester - Create Test Call', N'{"URL":"/Client/Modules/QM_CLITester/Views/TestPage/SchedulerTaskAction/TestCallTemplate.html","SystemType":false,"FQTN":"QM.CLITester.Business.TestCallTaskAction, QM.CLITester.Business"}')
 
 
