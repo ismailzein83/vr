@@ -108,7 +108,7 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadTriggers, loadActions, loadTaskTriggerDirective, fillScopeFromTaskObj])
+        return UtilsService.waitMultipleAsyncOperations([loadTriggers, loadActions,fillScopeFromTaskObj])
            .catch(function (error) {
                VRNotificationService.notifyExceptionWithClose(error, $scope);
            })
@@ -131,14 +131,33 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
             });
     }
 
-    function loadTriggers(){
-        return SchedulerTaskAPIService.GetSchedulerTaskTriggerTypes().then(function (response) {
+    function loadTriggers() {
+        var promises = [];
+        var triggersPayload;
+        if (taskObject != undefined && taskObject.TaskSettings != null) {
+            triggersPayload = {
+                data: taskObject.TaskSettings.TaskTriggerArgument
+            };
+        }
+        var taskTriggerTypesLoad = SchedulerTaskAPIService.GetSchedulerTaskTriggerTypes().then(function (response) {
             angular.forEach(response, function (item) {
                 $scope.triggerTypes.push(item);
             });
             if (taskObject.TriggerTypeId)
               $scope.scopeModel.selectedTriggerType = UtilsService.getItemByVal($scope.triggerTypes, taskObject.TriggerTypeId, "TriggerTypeId");
         });
+        promises.push(taskTriggerTypesLoad);
+        if (triggersPayload != undefined) {
+            var loadTaskTriggerPromiseDeferred = UtilsService.createPromiseDeferred();
+            promises.push(loadTaskTriggerPromiseDeferred.promise);
+            taskTriggerDirectiveReadyPromiseDeferred.promise.then(function () {
+                taskTriggerDirectiveReadyPromiseDeferred = undefined;
+                VRUIUtilsService.callDirectiveLoad(taskTriggerDirectiveAPI, triggersPayload, loadTaskTriggerPromiseDeferred);
+            });
+
+        }
+       
+        return UtilsService.waitMultiplePromises(promises);
     }
 
     function loadActions() {
@@ -180,19 +199,7 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
         return UtilsService.waitMultiplePromises(promises);
     }
 
-    function loadTaskTriggerDirective() {
-        var loadTaskTriggerPromiseDeferred = UtilsService.createPromiseDeferred();
-        taskTriggerDirectiveReadyPromiseDeferred.promise.then(function () {
-            var payload;
-            if(taskObject.TaskSettings)
-                payload = {
-                    data: taskObject.TaskSettings.TaskTriggerArgument
-                };
-             VRUIUtilsService.callDirectiveLoad(taskTriggerDirectiveAPI, payload, loadTaskTriggerPromiseDeferred);
-         });
-             
-        return loadTaskTriggerPromiseDeferred.promise;
-    }
+   
 
     function buildTaskObjFromScope() {
         var taskObject = {
