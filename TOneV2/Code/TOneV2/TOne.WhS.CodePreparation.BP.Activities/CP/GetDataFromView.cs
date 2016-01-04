@@ -48,7 +48,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 if (minimumDate == DateTime.MinValue || code.BED < minimumDate)
                     minimumDate = code.BED;
                 CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code);
-                DeletedCode deletedCode=changes.DeletedCode.FirstOrDefault(x=>x.Code==code.Code);
+                DeletedCode deletedCode=changes.DeletedCodes.FirstOrDefault(x=>x.Code==code.Code);
                 if(deletedCode != null)
                 {
                      codesToMove.Add(new CodeToMove
@@ -76,7 +76,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             }
 
-            foreach(DeletedCode code in changes.DeletedCode)
+            foreach(DeletedCode code in changes.DeletedCodes)
             {
                   if (minimumDate == DateTime.MinValue || code.CloseEffectiveDate < minimumDate)
                       minimumDate = code.CloseEffectiveDate;

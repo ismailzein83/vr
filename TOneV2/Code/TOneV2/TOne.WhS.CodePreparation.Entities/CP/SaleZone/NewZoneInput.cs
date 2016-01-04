@@ -9,6 +9,6 @@ namespace TOne.WhS.CodePreparation.Entities.CP
     public class NewZoneInput
     {
         public int SellingNumberPlanId { get; set; }
-        public NewZone NewZone { get; set; }
+        public List<NewZone> NewZones { get; set; }
     }
 }

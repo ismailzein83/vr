@@ -20,6 +20,8 @@ namespace TOne.WhS.CodePreparation.Entities.CP
 
         public ZoneItemStatus Status { get; set; }
 
+        public string Message { get; set; }
+
         public int CountryId { get; set; }
     }
 }

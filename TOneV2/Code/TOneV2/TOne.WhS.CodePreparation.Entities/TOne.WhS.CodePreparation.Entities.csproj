@@ -68,6 +68,7 @@
     <Compile Include="CP\SaleCode\NewCode.cs" />
     <Compile Include="CP\SaleCode\NewCodeInput.cs" />
     <Compile Include="CP\SaleCode\NewCodeOutput.cs" />
+    <Compile Include="CP\SaleCode\MovedCode.cs" />
     <Compile Include="CP\SaleZone\NewZone.cs" />
     <Compile Include="CP\SaleZone\NewZoneInput.cs" />
     <Compile Include="CP\SaleZone\NewZoneOutput.cs" />

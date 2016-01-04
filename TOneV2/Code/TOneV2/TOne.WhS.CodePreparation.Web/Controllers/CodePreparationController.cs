@@ -58,13 +58,6 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
             return manager.GetChanges(sellingNumberPlanId);
         }
 
-        [HttpPost]
-        [Route("SaveChanges")]
-        public bool SaveChanges(SaveChangesInput input)
-        {
-            CodePreparationManager manager = new CodePreparationManager();
-            return manager.SaveChanges(input);
-        }
 
         [HttpPost]
         [Route("SaveNewZone")]

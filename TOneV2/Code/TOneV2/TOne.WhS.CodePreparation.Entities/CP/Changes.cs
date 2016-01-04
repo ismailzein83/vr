@@ -10,12 +10,13 @@ namespace TOne.WhS.CodePreparation.Entities.CP
     {
         public Changes()
         {
-            DeletedCode = new List<DeletedCode>();
+            DeletedCodes = new List<DeletedCode>();
             NewCodes = new List<NewCode>();
             NewZones = new List<NewZone>();
         }
-        public List<DeletedCode> DeletedCode { get; set; }
+        public List<DeletedCode> DeletedCodes { get; set; }
         public List<NewCode> NewCodes { get; set; }
         public List<NewZone> NewZones { get; set; }
+
     }
 }

@@ -8,8 +8,12 @@ namespace TOne.WhS.CodePreparation.Entities.CP
 {
     public class NewZoneOutput
     {
+        public NewZoneOutput()
+        {
+            ZoneItems = new List<ZoneItem>();
+        }
         public string Message { get; set; }
-        public ZoneItem ZoneItem { get; set; }
+        public List<ZoneItem> ZoneItems { get; set; }
         public NewZoneOutputResult Result { get; set; }
     }
 }

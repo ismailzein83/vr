@@ -35,16 +35,7 @@ namespace TOne.WhS.CodePreparation.Business
                 changes = new Changes();
             return changes;
         }
-        public bool SaveChanges(SaveChangesInput input)
-        {
-            ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
-            Changes existingChanges = dataManager.GetChanges(input.SellingNumberPlanId, CodePreparationStatus.Draft);
-            Changes allChanges = MergeChanges(existingChanges, input.NewChanges);
-
-            if (allChanges != null)
-                return dataManager.InsertOrUpdateChanges(input.SellingNumberPlanId, allChanges, CodePreparationStatus.Draft);
-            return true;
-        }
+       
         public Dictionary<string, Zone> GetSaleZonesWithCodes(int sellingNumberPlanId, DateTime effectiveDate)
         {
             SaleZoneManager saleZoneManager = new SaleZoneManager();
@@ -96,50 +87,6 @@ namespace TOne.WhS.CodePreparation.Business
         }
 
         #region Private Functions
-        List<NewZone> MergeZoneChanges(List<NewZone> existingZoneChanges, List<NewZone> newZoneChanges)
-        {
-            return Merge(existingZoneChanges, newZoneChanges,
-                () =>
-                {
-                    foreach (NewZone zoneItemChanges in existingZoneChanges)
-                    {
-                        if (!newZoneChanges.Any(item => item.Name == zoneItemChanges.Name))
-                            newZoneChanges.Add(zoneItemChanges);
-                    }
-                    return newZoneChanges;
-                });
-        }
-        List<NewCode> MergeCodeChanges(List<NewCode> existingCodeChanges, List<NewCode> newCodeChanges)
-        {
-            return Merge(existingCodeChanges, newCodeChanges,
-                () =>
-                {
-                    foreach (NewCode codeItemChanges in existingCodeChanges)
-                    {
-                        if (!newCodeChanges.Any(item => item.Code == codeItemChanges.Code))
-                            newCodeChanges.Add(codeItemChanges);
-                    }
-                    return newCodeChanges;
-                });
-        }
-        Changes MergeChanges(Changes existingChanges, Changes newChanges)
-        {
-            return Merge(existingChanges, newChanges,
-                () =>
-                {
-                    Changes allChanges = new Changes();
-                    //TODO: Merge Logic
-                    return newChanges;
-                });
-        }
-        T Merge<T>(T existingChanges, T newChanges, Func<T> mergeFunction) where T : class
-        {
-            if (existingChanges != null && newChanges != null)
-                return mergeFunction();
-
-            return existingChanges != null ? existingChanges : newChanges;
-        }
-
         #region Zone
 
         public NewZoneOutput SaveNewZone(NewZoneInput input)
@@ -158,10 +105,15 @@ namespace TOne.WhS.CodePreparation.Business
             allZoneItems.AddRange(MapZoneItemsFromChanges(existingChanges.NewZones));
 
             bool insertActionSucc = false;
-            NewZoneOutput insertOperationOutput = ValidateNewZone(allZoneItems, existingChanges.NewZones, input.NewZone);
-
-            insertActionSucc = dataManager.InsertOrUpdateChanges(input.SellingNumberPlanId, existingChanges, CodePreparationStatus.Draft);
-
+            NewZoneOutput insertOperationOutput = ValidateNewZone(allZoneItems, existingChanges.NewZones, input.NewZones);
+            if (insertOperationOutput.Result==NewZoneOutputResult.Failed)
+                 insertActionSucc = dataManager.InsertOrUpdateChanges(input.SellingNumberPlanId, existingChanges, CodePreparationStatus.Draft);
+             
+            if(insertActionSucc)  
+            {
+                   insertOperationOutput.Message = string.Format("Zones is Added Successfully.");
+                   insertOperationOutput.Result = NewZoneOutputResult.Inserted;
+            }
             return insertOperationOutput;
         }
         public List<ZoneItem> GetZoneItems(int sellingNumberPlanId, int countryId)
@@ -179,20 +131,31 @@ namespace TOne.WhS.CodePreparation.Business
             return allZoneItems;
         }
 
-        NewZoneOutput ValidateNewZone(List<ZoneItem> allZoneItems, List<NewZone> newZones, NewZone newZone)
+        NewZoneOutput ValidateNewZone(List<ZoneItem> allZoneItems, List<NewZone> newZones, List<NewZone> newAddedZones)
         {
             NewZoneOutput zoneOutput = new NewZoneOutput();
-            if (!allZoneItems.Any(item => item.Name == newZone.Name))
+            zoneOutput.Result = NewZoneOutputResult.Failed;
+            foreach(NewZone newZone in newAddedZones)
             {
-                newZones.Add(newZone);
-                zoneOutput.ZoneItem = new ZoneItem() { Status = ZoneItemStatus.New, Name = newZone.Name, CountryId = newZone.CountryId };
-                zoneOutput.Message = string.Format("Zone {0} is Added Successfully.", newZone.Name);
-                zoneOutput.Result = NewZoneOutputResult.Inserted;
+                if (!allZoneItems.Any(item => item.Name == newZone.Name))
+                {
+                    newZones.Add(newZone);
+                    zoneOutput.ZoneItems.Add(new ZoneItem { Status = ZoneItemStatus.New, Name = newZone.Name, CountryId = newZone.CountryId});
+                }
+                else
+               {
+                 zoneOutput.ZoneItems.Add(new ZoneItem { Status = ZoneItemStatus.New, Name = newZone.Name, CountryId = newZone.CountryId,Message = string.Format("Zone {0} Already Exists.", newZone.Name)});
+               }
             }
-            else
+            foreach (ZoneItem zoneItem in zoneOutput.ZoneItems)
             {
-                zoneOutput.Result = NewZoneOutputResult.Existing;
-                zoneOutput.Message = string.Format("Zone {0} Already Exists.", newZone.Name);
+                if(zoneItem.Message!=null)
+                {
+                    zoneOutput.Result = NewZoneOutputResult.Existing;
+                    zoneOutput.Message = string.Format("Zones Already Exists.");
+                    break;
+                }
+                   
             }
             return zoneOutput;
         }
@@ -274,6 +237,87 @@ namespace TOne.WhS.CodePreparation.Business
             }
             return codeItems;
         }
+        List<CodeItem> MergeCodeItems(IEnumerable<SaleCode> saleCodes, IEnumerable<NewCode> newCodes, IEnumerable<DeletedCode> deletedCodes)
+        {
+            List<CodeItem> codeItems = new List<CodeItem>();
+            CodeItemStatus codeItemStatus = CodeItemStatus.ExistingNotChanged;
+            string statusDescription = Utilities.GetEnumAttribute<CodeItemStatus, DescriptionAttribute>(codeItemStatus).Description;
+            foreach (var saleCode in saleCodes)
+            {
+                CodeItem codeItem = new CodeItem()
+                {
+                    BED = saleCode.BED,
+                    Code = saleCode.Code,
+                    EED = saleCode.EED,
+                    Status = codeItemStatus,
+                    StatusDescription = statusDescription == null ? codeItemStatus.ToString() : statusDescription,
+                    CodeId = saleCode.SaleCodeId
+                };
+                codeItems.Add(codeItem);
+            }
+            CodeItemStatus codeItemStatusNew = CodeItemStatus.New;
+            string statusNewDescription = Utilities.GetEnumAttribute<CodeItemStatus, DescriptionAttribute>(codeItemStatusNew).Description;
+
+            CodeItemStatus codeItemStatusExistingMoved = CodeItemStatus.ExistingMoved;
+            string statusExistingMovedDescription = Utilities.GetEnumAttribute<CodeItemStatus, DescriptionAttribute>(codeItemStatusExistingMoved).Description;
+
+         
+            foreach (var newCode in newCodes)
+            {
+                var deletedCode = deletedCodes.FirstOrDefault(x=>x.Code==newCode.Code);
+                if(deletedCode == null)
+                {
+                    CodeItem codeItem = new CodeItem()
+                    {
+                        BED = newCode.BED,
+                        Code = newCode.Code,
+                        EED = newCode.EED,
+                        Status = CodeItemStatus.New,
+                        StatusDescription = statusNewDescription == null ? codeItemStatusNew.ToString() : statusNewDescription
+
+                    };
+                    codeItems.Add(codeItem);
+
+                }
+                else
+                {
+                    CodeItem codeItem = new CodeItem()
+                    {
+                        BED = newCode.BED,
+                        Code = newCode.Code,
+                        EED = newCode.EED,
+                        Status = CodeItemStatus.ExistingMoved,
+                        StatusDescription = codeItemStatusExistingMoved == null ? codeItemStatusExistingMoved.ToString() : statusExistingMovedDescription,
+                        OtherCodeZoneName=deletedCode.ZoneName
+                    };
+                    codeItems.Add(codeItem);
+                }
+               
+            }
+            
+            CodeItemStatus codeItemStatusExistingClosed = CodeItemStatus.ExistingClosed;
+            string statusExistingClosedDescription = Utilities.GetEnumAttribute<CodeItemStatus, DescriptionAttribute>(codeItemStatusExistingClosed).Description;
+
+
+            foreach (var deletedCode in deletedCodes)
+            {
+                if (!newCodes.Any(x => x.Code == deletedCode.Code))
+                {
+                    CodeItem codeItem = new CodeItem()
+                    {
+                        
+                        Code = deletedCode.Code,
+                        EED = deletedCode.CloseEffectiveDate,
+                        Status = CodeItemStatus.ExistingClosed,
+                        StatusDescription = statusExistingClosedDescription == null ? codeItemStatusExistingClosed.ToString() : statusExistingClosedDescription
+
+                    };
+                    codeItems.Add(codeItem);
+                }
+            }
+            return codeItems;
+
+        }
         public Vanrise.Entities.IDataRetrievalResult<CodeItem> GetCodeItems(Vanrise.Entities.DataRetrievalInput<GetCodeItemInput> input)
         {
 
@@ -288,38 +332,50 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 saleCodes.AddRange(codeManager.GetSaleCodesByZoneID(input.Query.ZoneId.Value, DateTime.Now));
             }
-            allCodeItems.AddRange(MapCodeItemsFromSaleCodes(saleCodes));
-            allCodeItems.AddRange(MapCodeItemsFromChanges(existingChanges.NewCodes.FindAllRecords(c => c.ZoneName.ToLower().Equals(input.Query.ZoneName.ToLower()))));
+
+            allCodeItems = MergeCodeItems(saleCodes, existingChanges.NewCodes.FindAllRecords(c => c.ZoneName.ToLower().Equals(input.Query.ZoneName.ToLower())), existingChanges.DeletedCodes.FindAllRecords(c => c.ZoneName.ToLower().Equals(input.Query.ZoneName.ToLower())));
+            //allCodeItems.AddRange(MapCodeItemsFromSaleCodes(saleCodes));
+            //allCodeItems.AddRange(MapCodeItemsFromChanges(existingChanges.NewCodes.FindAllRecords(c => c.ZoneName.ToLower().Equals(input.Query.ZoneName.ToLower()))));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodeItems.ToBigResult(input, null));
         }
-        NewCodeOutput ValidateNewCode(List<CodeItem> allZoneItems, List<NewCode> newCodes, NewCode newCode, int countryId)
+
+        NewCodeOutput ValidateNewCode(List<CodeItem> allZoneItems, List<NewCode> newCodes, List<NewCode> newAddedCodes, int countryId)
         {
             NewCodeOutput codeOutput = new NewCodeOutput();
+            codeOutput.Result = NewCodeOutputResult.Failed;
             CodeGroupManager codeGroupManager = new CodeGroupManager();
             CountryManager countryManager = new CountryManager();
             Country country = countryManager.GetCountry(countryId);
-            CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(newCode.Code);
 
-            if (codeGroup.CountryId != countryId)
+            foreach(NewCode newCode in newAddedCodes)
             {
-                codeOutput.Result = NewCodeOutputResult.Existing;
-                codeOutput.Message = string.Format("Code should be added under Country {0}.", country.Name);
-                return codeOutput;
+                CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(newCode.Code);
+                if (codeGroup.CountryId != countryId)
+                {
+                    codeOutput.Result = NewCodeOutputResult.Existing;
+                    codeOutput.CodeItems.Add(new CodeItem { Status = CodeItemStatus.New, Code = newCode.Code, BED = newCode.BED, EED = newCode.EED, Message = string.Format("Code should be added under Country {0}.", country.Name) });
+                }
+                else if (!allZoneItems.Any(item => item.Code == newCode.Code))
+                {
+                    newCodes.Add(newCode);
+                    codeOutput.CodeItems.Add(new CodeItem { Status = CodeItemStatus.New, Code = newCode.Code, BED = newCode.BED, EED = newCode.EED });
+                }
+                else
+                {
+                    codeOutput.CodeItems.Add(new CodeItem { Status = CodeItemStatus.New, Code = newCode.Code, BED = newCode.BED, EED = newCode.EED, Message = string.Format("Code {0} Already Exists.", newCode.Code) });
+                }
+
             }
-            if (!allZoneItems.Any(item => item.Code == newCode.Code))
+
+            foreach(CodeItem codeItem in codeOutput.CodeItems)
             {
-                newCodes.Add(newCode);
-                codeOutput.CodeItem = new CodeItem() { Status = CodeItemStatus.New, Code = newCode.Code, BED = newCode.BED, EED = newCode.EED };
-                codeOutput.Message = string.Format("Code {0} is Added Successfully.", newCode.Code);
-                codeOutput.Result = NewCodeOutputResult.Inserted;
-                return codeOutput;
+                if(codeItem.Message!=null)
+                {
+                    codeOutput.Message = string.Format("Codes Already Exists.");
+                    codeOutput.Result = NewCodeOutputResult.Existing;
+                }
             }
-            else
-            {
-                codeOutput.Result = NewCodeOutputResult.Existing;
-                codeOutput.Message = string.Format("Code {0} Already Exists.", newCode.Code);
-                return codeOutput;
-            }
+            return codeOutput;
         }
         public NewCodeOutput SaveNewCode(NewCodeInput input)
         {
@@ -335,12 +391,21 @@ namespace TOne.WhS.CodePreparation.Business
                 List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesByZoneID(input.ZoneId.Value, DateTime.Now);
                 allCodeItems.AddRange(MapCodeItemsFromSaleCodes(saleCodes));
             }
-            allCodeItems.AddRange(MapCodeItemsFromChanges(existingChanges.NewCodes.FindAllRecords(c => c.ZoneName.ToLower().Equals(input.NewCode.ZoneName))));
+
+            foreach (NewCode newCode in input.NewCodes)
+            {
+                allCodeItems.AddRange(MapCodeItemsFromChanges(existingChanges.NewCodes.FindAllRecords(c => c.ZoneName.ToLower().Equals(newCode.ZoneName))));
+            }
 
             bool insertActionSucc = false;
-            NewCodeOutput insertOperationOutput = ValidateNewCode(allCodeItems, existingChanges.NewCodes, input.NewCode, input.CountryId);
-            insertActionSucc = dataManager.InsertOrUpdateChanges(input.SellingNumberPlanId, existingChanges, CodePreparationStatus.Draft);
-
+            NewCodeOutput insertOperationOutput = ValidateNewCode(allCodeItems, existingChanges.NewCodes, input.NewCodes, input.CountryId);
+            if (insertOperationOutput.Result == NewCodeOutputResult.Failed)
+                 insertActionSucc = dataManager.InsertOrUpdateChanges(input.SellingNumberPlanId, existingChanges, CodePreparationStatus.Draft);
+            if(insertActionSucc)
+            {
+                insertOperationOutput.Message = string.Format("Codes is Added Successfully.");
+                insertOperationOutput.Result = NewCodeOutputResult.Inserted;
+            }
             return insertOperationOutput;
         }
 
@@ -360,7 +425,7 @@ namespace TOne.WhS.CodePreparation.Business
                     Code = code,
                     ZoneName = input.CurrentZoneName
                 };
-                existingChanges.DeletedCode.Add(deletedCode);
+                existingChanges.DeletedCodes.Add(deletedCode);
 
                 NewCode newCode = new NewCode()
                 {
@@ -431,14 +496,12 @@ namespace TOne.WhS.CodePreparation.Business
                     Code = code,
                     ZoneName = input.ZoneName
                 };
-                existingChanges.DeletedCode.Add(deletedCode);
+                existingChanges.DeletedCodes.Add(deletedCode);
             }
             dataManager.InsertOrUpdateChanges(input.SellingNumberPlanId, existingChanges, CodePreparationStatus.Draft);
             output.Message = "Codes Closed Successfully";
             return output;
         }
-
-
         public byte[] DownloadImportCodePreparationTemplate()
         {
             string physicalFilePath = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["ImportCodePreparationTemplatePath"]);

@@ -22,12 +22,14 @@ namespace TOne.WhS.CodePreparation.Entities
     public enum NewZoneOutputResult
     {
         Existing = 0,
-        Inserted = 1
+        Inserted = 1,
+        Failed=2
     }
     public enum NewCodeOutputResult
     {
         Existing = 0,
-        Inserted = 1
+        Inserted = 1,
+        Failed = 2
     }
 
 }

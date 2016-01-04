@@ -12,7 +12,7 @@ namespace TOne.WhS.CodePreparation.Entities.CP
         public int CountryId { get; set; }
         public int? ZoneId { get; set; }
         public ZoneItemStatus Status { get; set; }
-        public NewCode NewCode { get; set; }
+        public List<NewCode> NewCodes { get; set; }
         public DeletedCode DeletedCode { get; set; }
     }
 }
