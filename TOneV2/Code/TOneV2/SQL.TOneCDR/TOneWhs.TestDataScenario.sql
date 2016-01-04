@@ -1,4 +1,4 @@
-﻿TRUNCATE TABLE [TOneWhS_CDR].CDR
-TRUNCATE TABLE [TOneWhS_CDR].CDRFailed 
-TRUNCATE TABLE [TOneWhS_CDR].CDRInvalid 
-TRUNCATE TABLE [TOneWhS_CDR].CDRMain
+﻿Delete from [TOneWhS_CDR].CDR
+Delete from [TOneWhS_CDR].CDRFailed 
+Delete from [TOneWhS_CDR].CDRInvalid 
+Delete from [TOneWhS_CDR].CDRMain
