@@ -195,6 +195,8 @@
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\ZoneReader\Templates\SourceZoneReaderItest.html" />
     <Content Include="QM_CLITester\Directives\MainExtensions\SourceProfileReader\qm-clitester-sourceprofilereader-itest.js" />
     <Content Include="QM_CLITester\Directives\MainExtensions\SourceProfileReader\Templates\SouceProfileReaderiTest.html" />
+    <Content Include="QM_CLITester\Directives\Profile\Templates\SourceProfileReaderDirectiveTemplate.html" />
+    <Content Include="QM_CLITester\Directives\Profile\vr-qm-clitester-sourceprofilereader.js" />
     <Content Include="QM_CLITester\Directives\Profile\Templates\ProfileSettngsDirectiveTemplate.html" />
     <Content Include="QM_CLITester\Directives\Profile\Templates\ProfileGridTemplate.html" />
     <Content Include="QM_CLITester\Directives\Profile\vr-qm-clitester-profile-grid.js" />

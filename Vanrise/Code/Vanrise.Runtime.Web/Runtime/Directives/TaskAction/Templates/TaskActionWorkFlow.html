@@ -1,13 +1,8 @@
 ﻿<vr-row>
     <vr-columns width="1/2row">
-        <!--<vr-select label="Workflow Name" datatextfield="Title" datavaluefield="BPDefinitionID"
-                    datasource="bpDefinitions" selectedvalues="selectedBPDefintion"></vr-select> -->
         <vr-runtime-bpdefinition-selector selectedvalues="selectedBPDefintion" on-ready="onBPDefinitionSelectorReady"></vr-runtime-bpdefinition-selector>
     </vr-columns>
 </vr-row>
-<!--<div style="max-height:200px;overflow:auto">
-    {{bpDefinitions}}
-</div>-->
 <vr-row>
     <vr-section title="{{selectedBPDefintion.Title}}" level="2" vr-loader="isLoadingBPSection">
         <vr-columns width="fullrow">
