@@ -274,27 +274,7 @@
                     if (!selectedSectionVisible()) return 'single-col-checklist';
                     return controller.selectedvalues.length === 0 ? 'single-col-checklist' : 'double-col-checklist';
                 }
-                var api = {}
-                api.clearDataSource = function () {
-                    if (controller.isRemoteLoad()) {
-                        controller.filtername = "";
-                        controller.data.length = 0;
-                    }
-                      
-                    else
-                        controller.datasource.length = 0;
-
-                    if (controller.selectedvalues != undefined)
-                    {
-                        if (controller.selectedvalues.length != undefined)
-                            controller.selectedvalues.length = 0;
-                        else
-                            controller.selectedvalues = undefined;
-                    }
-                }
-                if (controller.onReady != null ) {
-                    controller.onReady(api);
-                }
+                
                 //Exports
                 angular.extend(this, {
                     isDropDownOpened: isDropDownOpened,
@@ -321,6 +301,26 @@
                     onAddhandler: onAddhandler,
                     includeOnAddHandler: includeOnAddHandler
                 });
+                var api = {}
+                api.clearDataSource = function () {
+                    if (controller.isRemoteLoad()) {
+                        controller.filtername = "";
+                        controller.data.length = 0;
+                    }
+
+                    else
+                        controller.datasource.length = 0;
+
+                    if (controller.selectedvalues != undefined) {
+                        if (controller.selectedvalues.length != undefined)
+                            controller.selectedvalues.length = 0;
+                        else
+                            controller.selectedvalues = undefined;
+                    }
+                }
+                if (controller.onReady != null) {
+                    controller.onReady(api);
+                }
                 //Exports
                 setTimeout(function () {
                     $('div[name=' + $attrs.id + ']').on('show.bs.dropdown', function () {
