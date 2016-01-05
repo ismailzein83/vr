@@ -153,7 +153,6 @@
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_Delete.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_Switch_Delete.sql" />
     <Build Include="PSTN_BE\Tables\NormalizationRule.sql" />
-    <Build Include="dbo\Tables\PSTNSampleData2.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_DeleteByCaseIDs.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_CreateTempByFilters.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\bp_AccountStatus_GetNumbersByStatuses.sql" />
