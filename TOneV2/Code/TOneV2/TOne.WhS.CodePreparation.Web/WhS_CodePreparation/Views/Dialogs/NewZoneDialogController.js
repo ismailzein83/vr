@@ -2,9 +2,9 @@
 
     "use strict";
 
-    newZoneDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    newZoneDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService','WhS_CP_NewCPOutputResultEnum'];
 
-    function newZoneDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function newZoneDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_NewCPOutputResultEnum) {
 
         var zoneId;
         var countryId;
@@ -27,13 +27,18 @@
             editMode = (zoneId != undefined);
             load();
         }
-
+ 
         function defineScope() {
             $scope.bed;
             $scope.eed;
             $scope.countryName;
             $scope.zones = [];
 
+            $scope.validateZones = function () {
+                if ($scope.zones != undefined && $scope.zones.length == 0)
+                    return "Enter at least one zone.";
+                return null;
+            };
             $scope.saveZone = function () {
                 if (editMode) {
                     return updateZone();
@@ -49,10 +54,10 @@
 
             $scope.disabledZone = true;
             $scope.onZoneValueChange = function (value) {
-                $scope.disabledZone = (value == undefined) || UtilsService.contains($scope.zones, value);
+                $scope.disabledZone = (value == undefined) || UtilsService.getItemIndexByVal($scope.zones, value, "zone") != -1;
             }
             $scope.addZoneValue = function () {
-                $scope.zones.push($scope.zoneValue);
+                $scope.zones.push({ zone: $scope.zoneValue });
                 $scope.zoneValue = undefined;
                 $scope.disabledZone = true;
             };
@@ -92,7 +97,7 @@
             var result = [];
             for (var i = 0; i < $scope.zones.length; i++) {
                 result.push({
-                    Name: $scope.zones[i],
+                    Name: $scope.zones[i].zone,
                     CountryId: countryId
                 });
             }
@@ -117,12 +122,20 @@
             var input = getNewZoneFromZoneObj(zoneItem);
             return WhS_CodePrep_CodePrepAPIService.SaveNewZone(input)
             .then(function (response) {
-                if (response.Result == 0) {
+
+                if (response.Result ==  WhS_CP_NewCPOutputResultEnum.Existing.value) {
                     VRNotificationService.showWarning(response.Message);
+                    $scope.zones.length = 0;
+                    for (var i = 0; i < response.ZoneItems.length; i++) {
+                        $scope.zones.push({ zone: response.ZoneItems[i].Name, message: response.ZoneItems[i].Message });
+                    }
                 }
-                else if (response.Result == 1) {
+                else if (response.Result == WhS_CP_NewCPOutputResultEnum.Inserted.value) {
                     VRNotificationService.showSuccess(response.Message);
                     $scope.modalContext.closeModal();
+                }
+                else if (response.Result == WhS_CP_NewCPOutputResultEnum.Failed.value) {
+                    VRNotificationService.showError(response.Message);
                 }
                 if ($scope.onZoneAdded != undefined)
                     $scope.onZoneAdded(response.ZoneItem);

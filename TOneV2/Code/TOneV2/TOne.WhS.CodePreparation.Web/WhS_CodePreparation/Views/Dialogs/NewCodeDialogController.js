@@ -2,9 +2,9 @@
 
     "use strict";
 
-    newCodeDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    newCodeDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService','WhS_CP_NewCPOutputResultEnum'];
 
-    function newCodeDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function newCodeDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_NewCPOutputResultEnum) {
 
         var countryId;
         var editMode;
@@ -46,15 +46,15 @@
             };
             $scope.disabledCode = true;
             $scope.onCodeValueChange = function (value) {
-                $scope.disabledCode = (value == undefined) || UtilsService.contains($scope.codes, value);
+                $scope.disabledCode = (value == undefined) || UtilsService.getItemIndexByVal($scope.codes, value,"code")!=-1;
             }
             $scope.addCodeValue = function () {
-                $scope.codes.push($scope.codeValue);
+                $scope.codes.push({ code: $scope.codeValue});
                 $scope.codeValue = undefined;
                 $scope.disabledCode = true;
             };
 
-            $scope.ValidateCodes = function () {
+            $scope.validateCodes = function () {
                 if ($scope.codes != undefined && $scope.codes.length == 0)
                     return "Enter at least one code.";
                 return null;
@@ -96,10 +96,11 @@
             var result = [];
             for (var i = 0; i < $scope.codes.length ; i++) {
                 result.push({
-                    Code: $scope.codes[i],
+                    Code:  $scope.codes[i].code,
                     ZoneName: zoneName,
                     BED: $scope.bed,
-                    EED: $scope.eed
+                    EED: $scope.eed,
+                    CountryId: countryId
                 });
             }
             return result;
@@ -124,14 +125,23 @@
             var input = getNewCodeFromCodeObj(codeItems);
             return WhS_CodePrep_CodePrepAPIService.SaveNewCode(input)
             .then(function (response) {
-                if (response.Result == 0) {
+                if (response.Result == WhS_CP_NewCPOutputResultEnum.Existing.value) {
                     VRNotificationService.showWarning(response.Message);
+
+                    $scope.codes.length = 0;
+                    for (var i = 0; i < response.CodeItems.length;i++)
+                    {
+                        $scope.codes.push({ code: response.CodeItems[i].Code, message: response.CodeItems[i].Message});
+                    }
                 }
-                else if (response.Result == 1) {
+                else if (response.Result == WhS_CP_NewCPOutputResultEnum.Inserted.value) {
                     VRNotificationService.showSuccess(response.Message);
                     if ($scope.onCodeAdded != undefined)
                         $scope.onCodeAdded(response);
                     $scope.modalContext.closeModal();
+                }
+                else if (response.Result == WhS_CP_NewCPOutputResultEnum.Failed.value) {
+                    VRNotificationService.showError(response.Message);
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
@@ -150,5 +160,5 @@
 
     }
 
-    appControllers.controller('whs-codepreparation-newcodedialog', newCodeDialogController);
+    appControllers.controller('WhS_Codepreparation_NewcodedialogController', newCodeDialogController);
 })(appControllers);

@@ -19,17 +19,13 @@ namespace TOne.WhS.CodePreparation.Entities
         Completed = 1
     }
 
-    public enum NewZoneOutputResult
+    public enum NewCPOutputResult
     {
-        Existing = 0,
-        Inserted = 1,
-        Failed=2
-    }
-    public enum NewCodeOutputResult
-    {
-        Existing = 0,
-        Inserted = 1,
-        Failed = 2
+
+        Inserted = 0,
+        Failed = 1,
+        Existing = 2,
+       
     }
 
 }

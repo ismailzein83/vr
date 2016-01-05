@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="whs-codepreparation-newcodedialog" vr-loader="isGettingData">
+﻿<div vr-modalcontent ng-controller="WhS_Codepreparation_NewcodedialogController" vr-loader="isGettingData">
     <vr-modalbody>
         <vr-form name="formCodeDialog">
             <vr-row removeline>
@@ -26,9 +26,13 @@
 
             <vr-row removeline>
                 <vr-columns width="fullrow">
-                    <vr-datalist maxitemsperrow="6" datasource="codes" autoremoveitem="true">
-                        {{dataItem}}
-                    </vr-datalist>
+                    <vr-validator validate="validateCodes()">
+                        <vr-datalist maxitemsperrow="6" datasource="codes" autoremoveitem="true">
+                            <vr-validator validate="dataItem.message">
+                                {{dataItem.code}}
+                            </vr-validator>
+                        </vr-datalist>
+                    </vr-validator>
                 </vr-columns>
             </vr-row>
 

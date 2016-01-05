@@ -156,6 +156,7 @@
   <ItemGroup>
     <Content Include="WhS_CodePreparation\Constant\CodeItemStatusEnum.js" />
     <Content Include="WhS_CodePreparation\Constant\ModuleConfig.js" />
+    <Content Include="WhS_CodePreparation\Constant\NewCPOutputResultEnum.js" />
     <Content Include="WhS_CodePreparation\Directives\CodePreparation\Templates\CodePreparationSaleCodesGridTemplate.html" />
     <Content Include="WhS_CodePreparation\Directives\CodePreparation\vr-whs-codepreparation-codesgrid.js" />
     <Content Include="WhS_CodePreparation\Services\CodePreparationAPIService.js" />
