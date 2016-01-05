@@ -137,7 +137,7 @@ namespace TOne.WhS.CodePreparation.Business
             zoneOutput.Result = NewCPOutputResult.Failed;
             foreach (NewZone newZone in newAddedZones)
             {
-                if (!allZoneItems.Any(item => item.Name == newZone.Name))
+                if (!allZoneItems.Any(item => item.Name.ToLower() == newZone.Name.ToLower()))
                 {
                     newZones.Add(newZone);
                     zoneOutput.ZoneItems.Add(new ZoneItem { Status = ZoneItemStatus.New, Name = newZone.Name, CountryId = newZone.CountryId });
@@ -152,7 +152,7 @@ namespace TOne.WhS.CodePreparation.Business
                 if (zoneItem.Message != null)
                 {
                     zoneOutput.Result = NewCPOutputResult.Existing;
-                    zoneOutput.Message = string.Format("Zones Already Exists.");
+                    zoneOutput.Message = string.Format("Process Warning.");
                     break;
                 }
 
@@ -373,7 +373,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 if (codeItem.Message != null)
                 {
-                    codeOutput.Message = string.Format("Codes Already Exists.");
+                    codeOutput.Message = string.Format("Process Warning.");
                     codeOutput.Result = NewCPOutputResult.Existing;
                 }
             }

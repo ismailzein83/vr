@@ -137,7 +137,7 @@
                 else if (response.Result == WhS_CP_NewCPOutputResultEnum.Inserted.value) {
                     VRNotificationService.showSuccess(response.Message);
                     if ($scope.onCodeAdded != undefined)
-                        $scope.onCodeAdded(response);
+                        $scope.onCodeAdded(response.CodeItems);
                     $scope.modalContext.closeModal();
                 }
                 else if (response.Result == WhS_CP_NewCPOutputResultEnum.Failed.value) {

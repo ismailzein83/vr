@@ -50,6 +50,7 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
                     return BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
             });
         }
+
         $scope.downloadTemplate = function () {
             return WhS_CodePrep_CodePrepAPIService.DownloadImportCodePreparationTemplate().then(function (response) {
                 UtilsService.downloadFile(response.data, response.headers);
@@ -163,17 +164,31 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         return loadSNPPromiseDeferred.promise;
     }
 
-    function onZoneAdded(addedZone) {
-        if (addedZone != undefined) {
-            var node = mapZoneToNode(addedZone);
-            treeAPI.createNode(node);
+    function onZoneAdded(addedZones) {
+        if (addedZones != undefined) {
+            for (var i = 0; i < addedZones.length; i++)
+            {
+                var node = mapZoneToNode(addedZones[i]);
+                treeAPI.createNode(node);
+            }
+            
         }
     }
 
-    function onCodeAdded(addedCode) {
-        if (addedCode != undefined) {
-            codesGridAPI.onCodeAdded(addedCode);
+    function onCodeAdded(addedCodes) {
+
+        if (addedCodes != undefined) {
+            for (var i = 0; i < addedCodes.length;i++)
+                codesGridAPI.onCodeAdded(addedCodes[i]);
+
+            if ($scope.currentNode != undefined) {
+                if ($scope.currentNode.type == 'Zone') {
+                    setCodesFilterObject();
+                    return codesGridAPI.loadGrid(codesFilter);
+                }
+            }
         }
+
     }
 
     function onCodesMoved(response) {
@@ -304,6 +319,7 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
     }
 
     function mapZoneToNode(zoneInfo) {
+
         return {
             nodeId: zoneInfo.ZoneId,
             nodeName: zoneInfo.Name,

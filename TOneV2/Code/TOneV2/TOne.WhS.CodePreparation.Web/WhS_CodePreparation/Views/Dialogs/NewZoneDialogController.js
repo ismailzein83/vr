@@ -138,7 +138,7 @@
                     VRNotificationService.showError(response.Message);
                 }
                 if ($scope.onZoneAdded != undefined)
-                    $scope.onZoneAdded(response.ZoneItem);
+                    $scope.onZoneAdded(response.ZoneItems);
 
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
