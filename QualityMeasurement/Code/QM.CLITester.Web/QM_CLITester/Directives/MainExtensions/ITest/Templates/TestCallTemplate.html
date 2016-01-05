@@ -1,0 +1,17 @@
+﻿<vr-row>
+    <vr-columns width="1/4row">
+        <vr-qm-clitester-profile-selector on-ready="onProfileDirectiveReady" selectedvalues="selectedProfile" isrequired></vr-qm-clitester-profile-selector>
+    </vr-columns>
+
+    <vr-columns width="1/4row">
+        <vr-qm-be-supplier-selector on-ready="onSupplierDirectiveReady" selectedvalues="selectedSupplier" isrequired ismultipleselection></vr-qm-be-supplier-selector>
+    </vr-columns>
+
+    <vr-columns width="1/4row">
+        <vr-common-country-selector on-ready="onCountryDirectiveReady" selectedvalues="selectedCountry" isrequired onselectitem="onCountrySelectItem"></vr-common-country-selector>
+    </vr-columns>
+
+    <vr-columns width="1/4row" vr-loader="isLoading" ng-show="selectedCountry!=undefined">
+        <vr-qm-be-zone-selector on-ready="onZoneDirectiveReady" selectedvalues="selectedZone" isrequired></vr-qm-be-zone-selector>
+    </vr-columns>
+</vr-row>
