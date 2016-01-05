@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
@@ -123,6 +124,8 @@ namespace TOne.WhS.Sales.Business
 
                 if (routingProductChanges != null && routingProductChanges.Count() > 0)
                     saleEntityRoutingProductDataManager.UpdateZoneRoutingProducts(_ownerType, _ownerId, routingProductChanges);
+
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>().SetCacheExpired();
             }
         }
 
@@ -209,7 +212,12 @@ namespace TOne.WhS.Sales.Business
 
             // Create a list of zone items, and set the effective routing product for each
             List<ZoneItem> zoneItems = new List<ZoneItem>();
-            ZoneRoutingProductSetter routingProductSetter = new ZoneRoutingProductSetter(_ownerType, _ownerId, sellingProductId, effectiveOn, _changes);
+
+            int? customerId = null;
+            if (_ownerType == SalePriceListOwnerType.Customer)
+                customerId = _ownerId;
+
+            ZoneRoutingProductSetter routingProductSetter = new ZoneRoutingProductSetter(sellingProductId, customerId, effectiveOn, _changes);
 
             foreach (SaleZone zone in zones)
             {

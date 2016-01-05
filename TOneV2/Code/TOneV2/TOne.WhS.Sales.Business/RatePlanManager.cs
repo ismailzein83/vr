@@ -131,11 +131,10 @@ namespace TOne.WhS.Sales.Business
 
         public IEnumerable<ZoneItem> GetZoneItems(ZoneItemsInput input)
         {
-            int? sellingProductId = GetSellingProductId(input.Filter.OwnerType, input.Filter.OwnerId, DateTime.Now, false);
-            int? sellingNumberPlanId = GetSellingNumberPlanId(input.Filter.OwnerType, input.Filter.OwnerId);
-            RatePlanZoneManager manager = new RatePlanZoneManager();
-
             List<ZoneItem> zoneItems = null;
+            int? sellingNumberPlanId = GetSellingNumberPlanId(input.Filter.OwnerType, input.Filter.OwnerId);
+
+            RatePlanZoneManager manager = new RatePlanZoneManager();
             IEnumerable<SaleZone> zones = manager.GetRatePlanZones(input.Filter.OwnerType, input.Filter.OwnerId, sellingNumberPlanId, DateTime.Now, input.Filter.ZoneLetter, input.FromRow, input.ToRow);
 
             if (zones != null)
@@ -143,8 +142,18 @@ namespace TOne.WhS.Sales.Business
                 zoneItems = new List<ZoneItem>();
                 Changes changes = _dataManager.GetChanges(input.Filter.OwnerType, input.Filter.OwnerId, RatePlanStatus.Draft);
 
+                int? sellingProductId = input.Filter.OwnerType == SalePriceListOwnerType.Customer ?
+                    GetSellingProductId(input.Filter.OwnerType, input.Filter.OwnerId, DateTime.Now, false) : input.Filter.OwnerId;
+
+                if (sellingProductId == null)
+                    throw new Exception("Selling product does not exist");
+
+                int? customerId = null;
+                if (input.Filter.OwnerType == SalePriceListOwnerType.Customer)
+                    customerId = input.Filter.OwnerId;
+
                 ZoneRateSetter rateSetter = new ZoneRateSetter(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, DateTime.Now, changes);
-                ZoneRoutingProductSetter routingProductSetter = new ZoneRoutingProductSetter(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, DateTime.Now, changes);
+                ZoneRoutingProductSetter routingProductSetter = new ZoneRoutingProductSetter((int)sellingProductId, customerId, DateTime.Now, changes);
                 
                 foreach (SaleZone zone in zones)
                 {
@@ -184,7 +193,14 @@ namespace TOne.WhS.Sales.Business
             ZoneRateSetter rateSetter = new ZoneRateSetter(input.OwnerType, input.OwnerId, sellingProductId, DateTime.Now, changes);
             rateSetter.SetZoneRate(zoneItem);
 
-            ZoneRoutingProductSetter routingProductSetter = new ZoneRoutingProductSetter(input.OwnerType, input.OwnerId, sellingProductId, DateTime.Now, changes);
+            if (sellingProductId == null)
+                throw new Exception("Selling product does not exist");
+
+            int? customerId = null;
+            if (input.OwnerType == SalePriceListOwnerType.Customer)
+                customerId = input.OwnerId;
+
+            ZoneRoutingProductSetter routingProductSetter = new ZoneRoutingProductSetter((int)sellingProductId, customerId, DateTime.Now, changes);
             routingProductSetter.SetZoneRoutingProduct(zoneItem);
 
             RPZone rpZone = new RPZone() { RoutingProductId = zoneItem.EffectiveRoutingProductId, SaleZoneId = zoneItem.ZoneId };

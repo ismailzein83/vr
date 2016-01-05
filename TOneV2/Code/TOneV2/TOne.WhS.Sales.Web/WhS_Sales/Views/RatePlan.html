@@ -61,7 +61,8 @@
             </vr-actionbar>
         </vr-row>
 
-        <vr-validation-group validationcontext="SaveGroup">
+        <!-- Any variable of showZoneLetters, showDefaultItem or showGrid could be used to show the validation message because they're all set simultaneously -->
+        <vr-validation-group validationcontext="SaveGroup" ng-show="showZoneLetters">
             <vr-validator validate="validateRatePlan()">
 
                 <vr-row ng-if="showDefaultItem">

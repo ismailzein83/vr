@@ -287,14 +287,18 @@
             var loadGridDeferred = UtilsService.createPromiseDeferred();
             promises.push(loadGridDeferred.promise);
 
+            loadGridDeferred.promise;
+
             zoneLettersGetPromise.then(function () {
                 if ($scope.zoneLetters.length > 0) {
                     loadGrid().then(function () {
                         loadGridDeferred.resolve();
                     }).catch(function (error) { loadGridDeferred.reject(); });
                 }
-                else
+                else {
                     loadGridDeferred.resolve();
+                    VRNotificationService.showInformation("No zones were sold to this customer");
+                }
             });
 
             zoneLettersGetPromise.finally(function () {
@@ -327,7 +331,7 @@
 
             function getZoneLetters() {
                 return WhS_Sales_RatePlanAPIService.GetZoneLetters($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
-                    if (response != null) {
+                    if (response) {
                         $scope.zoneLetters = [];
 
                         for (var i = 0; i < response.length; i++) {
@@ -450,27 +454,32 @@
                 var saveChangesPromise = saveChanges(false);
                 promises.push(saveChangesPromise);
 
+                saveChangesPromise.then(function () {
+                    WhS_Sales_RatePlanService.viewChanges($scope.selectedOwnerType.value, getOwnerId(), onRatePlanChangesClose);
+                });
+
                 var savePriceListDeferred = UtilsService.createPromiseDeferred();
                 promises.push(savePriceListDeferred.promise);
 
-                saveChangesPromise.then(function () {
-                    WhS_Sales_RatePlanService.viewChanges($scope.selectedOwnerType.value, getOwnerId(), onRatePlanChangesClose);
+                savePriceListDeferred.promise.then(function (saveClicked) {
+                    if (saveClicked) {
+                        VRNotificationService.showSuccess("Price list saved");
+                        loadRatePlan();
+                    }
                 });
 
                 return UtilsService.waitMultiplePromises(promises).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
 
-                function onRatePlanChangesClose(save) {
-                    if (save) {
+                function onRatePlanChangesClose(saveClicked) {
+                    if (saveClicked) {
                         isSavingPriceList = true;
                         savePriceList().then(function () {
-                            savePriceListDeferred.resolve();
-                            VRNotificationService.showSuccess("Price list saved");
-                            loadRatePlan();
+                            savePriceListDeferred.resolve(saveClicked);
                         }).catch(function (error) { savePriceListDeferred.reject(); });
                     }
-                    else savePriceListDeferred.resolve();
+                    else savePriceListDeferred.resolve(saveClicked);
                 }
 
                 function savePriceList() {
