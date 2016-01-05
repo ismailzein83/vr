@@ -111,34 +111,5 @@ when not matched by target then
 when not matched by source then
 	delete;
 	
---[rules].[Rule]------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [rules].[Rule] on;
-;with cte_data([ID],[TypeID],[RuleDetails],[BED],[EED])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,10,'{"$type":"TOne.WhS.Routing.Entities.RouteRule, TOne.WhS.Routing.Entities","Criteria":{"$type":"TOne.WhS.Routing.Entities.RouteRuleCriteria, TOne.WhS.Routing.Entities","RoutingProductId":1,"ExcludedCodes":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":[]}},"Settings":{"$type":"TOne.WhS.Routing.Business.RegularRouteRule, TOne.WhS.Routing.Business","ConfigId":15},"RuleId":0,"BeginEffectiveTime":"2015-12-29T16:51:00Z"}','2015-12-29 16:51:00.000',null),
-(2,6,'{"$type":"TOne.WhS.CDRProcessing.Entities.CustomerIdentificationRule, TOne.WhS.CDRProcessing.Entities","Criteria":{"$type":"TOne.WhS.CDRProcessing.Entities.CustomerIdentificationRuleCriteria, TOne.WhS.CDRProcessing.Entities","InTrunks":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":[]},"InCarriers":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["1-0:9"]},"CDPNPrefixes":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":[]}},"Settings":{"$type":"TOne.WhS.CDRProcessing.Entities.CustomerIdentificationRuleSettings, TOne.WhS.CDRProcessing.Entities","CustomerId":1},"Description":"Protel","RuleId":0,"BeginEffectiveTime":"2014-12-29T00:00:00Z"}','2014-12-29 00:00:00.000',null),
-(3,6,'{"$type":"TOne.WhS.CDRProcessing.Entities.CustomerIdentificationRule, TOne.WhS.CDRProcessing.Entities","Criteria":{"$type":"TOne.WhS.CDRProcessing.Entities.CustomerIdentificationRuleCriteria, TOne.WhS.CDRProcessing.Entities","InTrunks":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":[]},"InCarriers":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["1-0:10"]},"CDPNPrefixes":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":[]}},"Settings":{"$type":"TOne.WhS.CDRProcessing.Entities.CustomerIdentificationRuleSettings, TOne.WhS.CDRProcessing.Entities","CustomerId":2},"Description":"Spactron","RuleId":0,"BeginEffectiveTime":"2014-12-29T00:00:00Z"}','2014-12-29 00:00:00.000',null),
-(4,7,'{"$type":"TOne.WhS.CDRProcessing.Entities.SupplierIdentificationRule, TOne.WhS.CDRProcessing.Entities","Criteria":{"$type":"TOne.WhS.CDRProcessing.Entities.SupplierIdentificationRuleCriteria, TOne.WhS.CDRProcessing.Entities","OutTrunks":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":[]},"OutCarriers":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["1-0:11"]},"CDPNPrefixes":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":[]}},"Settings":{"$type":"TOne.WhS.CDRProcessing.Entities.SupplierIdentificationRuleSettings, TOne.WhS.CDRProcessing.Entities","SupplierId":3},"Description":"Sama","RuleId":0,"BeginEffectiveTime":"2014-12-29T00:00:00Z"}','2014-12-29 00:00:00.000',null),
-(5,7,'{"$type":"TOne.WhS.CDRProcessing.Entities.SupplierIdentificationRule, TOne.WhS.CDRProcessing.Entities","Criteria":{"$type":"TOne.WhS.CDRProcessing.Entities.SupplierIdentificationRuleCriteria, TOne.WhS.CDRProcessing.Entities","OutTrunks":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":[]},"OutCarriers":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["1-0:12"]},"CDPNPrefixes":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":[]}},"Settings":{"$type":"TOne.WhS.CDRProcessing.Entities.SupplierIdentificationRuleSettings, TOne.WhS.CDRProcessing.Entities","SupplierId":4},"Description":"MHD","RuleId":0,"BeginEffectiveTime":"2014-12-29T00:00:00Z"}','2014-12-29 00:00:00.000',null),
-(6,7,'{"$type":"TOne.WhS.CDRProcessing.Entities.SupplierIdentificationRule, TOne.WhS.CDRProcessing.Entities","Criteria":{"$type":"TOne.WhS.CDRProcessing.Entities.SupplierIdentificationRuleCriteria, TOne.WhS.CDRProcessing.Entities","OutTrunks":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":[]},"OutCarriers":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["1-0:13"]},"CDPNPrefixes":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":[]}},"Settings":{"$type":"TOne.WhS.CDRProcessing.Entities.SupplierIdentificationRuleSettings, TOne.WhS.CDRProcessing.Entities","SupplierId":5},"Description":"NetTalk","RuleId":0,"BeginEffectiveTime":"2014-12-29T00:00:00Z"}','2014-12-29 00:00:00.000',null),
-(7,12,'{"$type":"TOne.WhS.CDRProcessing.Entities.SwitchIdentificationRule, TOne.WhS.CDRProcessing.Entities","Description":"Default Switch Identity","Criteria":{"$type":"TOne.WhS.CDRProcessing.Entities.SwitchIdentificationRuleCriteria, TOne.WhS.CDRProcessing.Entities","DataSources":{"$type":"System.Collections.Generic.List`1[[System.Int32, mscorlib]], mscorlib","$values":[1]}},"Settings":{"$type":"TOne.WhS.CDRProcessing.Entities.SwitchIdentificationRuleSettings, TOne.WhS.CDRProcessing.Entities","SwitchId":1},"RuleId":0,"BeginEffectiveTime":"2014-12-29T00:00:00Z"}','2014-12-29 00:00:00.000',null)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[TypeID],[RuleDetails],[BED],[EED]))
-merge	[rules].[Rule] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[TypeID] = s.[TypeID],[RuleDetails] = s.[RuleDetails],[BED] = s.[BED],[EED] = s.[EED]
-when not matched by target then
-	insert([ID],[TypeID],[RuleDetails],[BED],[EED])
-	values(s.[ID],s.[TypeID],s.[RuleDetails],s.[BED],s.[EED])
-when not matched by source then
-	delete;
-set identity_insert [rules].[Rule] off;
-	
 
 TRUNCATE TABLE StatisticManagement.StatisticBatch
