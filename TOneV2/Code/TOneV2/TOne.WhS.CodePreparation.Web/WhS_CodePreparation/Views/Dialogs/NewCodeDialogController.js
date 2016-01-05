@@ -30,7 +30,8 @@
             $scope.bed;
             $scope.eed;
             $scope.code;
-
+            $scope.codeValue;
+            $scope.codes = [];
             $scope.saveCode = function () {
                 if (editMode) {
                     return updateCode();
@@ -43,8 +44,21 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
+            $scope.disabledCode = true;
+            $scope.onCodeValueChange = function (value) {
+                $scope.disabledCode = (value == undefined) || UtilsService.contains($scope.codes, value);
+            }
+            $scope.addCodeValue = function () {
+                $scope.codes.push($scope.codeValue);
+                $scope.codeValue = undefined;
+                $scope.disabledCode = true;
+            };
 
-
+            $scope.ValidateCodes = function () {
+                if ($scope.codes != undefined && $scope.codes.length == 0)
+                    return "Enter at least one code.";
+                return null;
+            };
         }
 
         function load() {
@@ -78,22 +92,25 @@
 
         }
 
-        function buildCodeObjFromScope() {
-            var obj = {
-                Code: $scope.code,
-                ZoneName: zoneName,
-                BED: $scope.bed,
-                EED: $scope.eed
-            };
-            return obj;
+        function buildCodesObjFromScope() {
+            var result = [];
+            for (var i = 0; i < $scope.codes.length ; i++) {
+                result.push({
+                    Code: $scope.codes[i],
+                    ZoneName: zoneName,
+                    BED: $scope.bed,
+                    EED: $scope.eed
+                });
+            }
+            return result;
         }
 
-        function getNewCodeFromCodeObj(codeObj) {
+        function getNewCodeFromCodeObj(codeItems) {
             return {
                 SellingNumberPlanId: sellingNumberPlanId,
                 CountryId: countryId,
                 ZoneId: zoneId,
-                NewCode: codeObj
+                NewCodes: codeItems,
             }
         }
 
@@ -102,9 +119,9 @@
             $scope.title = UtilsService.buildTitleForUpdateEditor($scope.code, "Code for " + zoneName);
         }
         function insertCode() {
-            var codeItem = buildCodeObjFromScope();
+            var codeItems = buildCodesObjFromScope();
 
-            var input = getNewCodeFromCodeObj(codeItem);
+            var input = getNewCodeFromCodeObj(codeItems);
             return WhS_CodePrep_CodePrepAPIService.SaveNewCode(input)
             .then(function (response) {
                 if (response.Result == 0) {
@@ -113,7 +130,7 @@
                 else if (response.Result == 1) {
                     VRNotificationService.showSuccess(response.Message);
                     if ($scope.onCodeAdded != undefined)
-                        $scope.onCodeAdded(codeItem);
+                        $scope.onCodeAdded(response);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {

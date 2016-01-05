@@ -32,6 +32,7 @@
             $scope.bed;
             $scope.eed;
             $scope.countryName;
+            $scope.zones = [];
 
             $scope.saveZone = function () {
                 if (editMode) {
@@ -44,6 +45,16 @@
 
             $scope.close = function () {
                 $scope.modalContext.closeModal()
+            };
+
+            $scope.disabledZone = true;
+            $scope.onZoneValueChange = function (value) {
+                $scope.disabledZone = (value == undefined) || UtilsService.contains($scope.zones, value);
+            }
+            $scope.addZoneValue = function () {
+                $scope.zones.push($scope.zoneValue);
+                $scope.zoneValue = undefined;
+                $scope.disabledZone = true;
             };
         }
 
@@ -78,17 +89,21 @@
         }
 
         function buildZoneObjFromScope() {
-            var obj = {
-                Name: $scope.name,
-                CountryId: countryId
-            };
-            return obj;
+            var result = [];
+            for (var i = 0; i < $scope.zones.length; i++) {
+                result.push({
+                    Name: $scope.zones[i],
+                    CountryId: countryId
+                });
+            }
+
+            return result;
         }
 
         function getNewZoneFromZoneObj(zoneObj) {
             return {
                 SellingNumberPlanId: sellingNumberPlanId,
-                NewZone: zoneObj
+                NewZones: zoneObj
             }
         }
 

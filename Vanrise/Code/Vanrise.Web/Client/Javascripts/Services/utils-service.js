@@ -1,6 +1,6 @@
 ﻿
 
-app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','PeriodEnum', function ($q, LogEntryTypeEnum, LabelColorsEnum, PeriodEnum) {
+app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'PeriodEnum', function ($q, LogEntryTypeEnum, LabelColorsEnum, PeriodEnum) {
 
     "use strict";
 
@@ -111,8 +111,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         ]
     };
 
-    
-    function getEnum(enumObj,propertyFilter, valueFilter) {
+
+    function getEnum(enumObj, propertyFilter, valueFilter) {
         for (var item in enumObj) {
             if (enumObj.hasOwnProperty(item)) {
 
@@ -161,8 +161,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         return getEnumDescription(LogEntryTypeEnum, logEntryType);
     }
 
-    function getEnumDescription(dataEnum, value)
-    {
+    function getEnumDescription(dataEnum, value) {
         var enumObj = getEnum(dataEnum, 'value', value);
         if (enumObj) return enumObj.description;
         return undefined;
@@ -172,8 +171,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
 
         var color = undefined;
 
-        switch(logEntryType)
-        {
+        switch (logEntryType) {
             case LogEntryTypeEnum.Information.value:
                 color = LabelColorsEnum.Info.color;
                 break;
@@ -208,8 +206,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         angular.forEach(operations, function (operation) {
             var promise = operation();//the operation is expected to return a promise
 
-            if(promise != undefined)
-            {
+            if (promise != undefined) {
                 promise.then(function () {
                     if (isRejected)
                         return;
@@ -227,30 +224,30 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
 
                 if (pendingOperations == 0)
                     deferred.resolve();
-            }                
+            }
         });
         return deferred.promise;
     }
 
-    function waitMultiplePromises(promises)    {
+    function waitMultiplePromises(promises) {
         var deferred = createPromiseDeferred();
         var pendingPromises = promises.length;
         var isRejected = false;
         if (pendingPromises == 0)
             deferred.resolve();
-        angular.forEach(promises, function (promise) {           
+        angular.forEach(promises, function (promise) {
 
-                promise.then(function () {
-                    if (isRejected)
-                        return;
-                    pendingPromises--;
+            promise.then(function () {
+                if (isRejected)
+                    return;
+                pendingPromises--;
 
-                    if (pendingPromises == 0)
-                        deferred.resolve();
-                }).catch(function (error) {
-                    deferred.reject(error);
-                    isRejected = true;
-                });            
+                if (pendingPromises == 0)
+                    deferred.resolve();
+            }).catch(function (error) {
+                deferred.reject(error);
+                isRejected = true;
+            });
         });
         return deferred.promise;
     }
@@ -269,7 +266,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         this.resolve = deferred.resolve;
         this.reject = deferred.reject;
     }
-    
+
     function createPromiseDeferred() {
         return new PromiseClass();
     }
@@ -304,7 +301,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
 
     function contains(array, obj) {
         for (var i = 0; i < array.length; i++) {
-            if (array[i] === obj) {
+            if (array[i].toLowerCase() === obj.toLowerCase()) {
                 return true;
             }
         }
@@ -324,7 +321,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
 
     function getPropMaxValueFromArray(array, propName) {
         var max = undefined;
-        
+
         if (array.length > 0) {
 
             for (var i = 0, len = array.length; i < len; i++) {
@@ -334,7 +331,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
                     max = array[i][propName];
             }
         }
-        
+
         return max;
     }
 
@@ -353,9 +350,9 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
 
         return min;
     }
-    
+
     function downloadFile(data, headers) {
-    
+
         //data = new ArrayBuffer(data.length);
         //console.log(data);
         //return;
@@ -444,7 +441,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
             case PeriodEnum.CurrentYear.value: return PeriodEnum.CurrentYear.getInterval();
         }
     }
-    function getShortDate (date) {
+    function getShortDate(date) {
         var dateString = '';
         if (date) {
 
@@ -472,13 +469,13 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         else
             return null;
     }
-    
+
     function getServiceURL(moduleName, controllerName, actionName) {
         return '/api/' + moduleName + '/' + controllerName + '/' + actionName;
     }
 
-    function cloneObject(obj, withoutHashKey) {        
-        var newObj = internalClone(obj, withoutHashKey);      
+    function cloneObject(obj, withoutHashKey) {
+        var newObj = internalClone(obj, withoutHashKey);
         return newObj;
     }
 
@@ -520,7 +517,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
 
     function buildTitleForUpdateEditor(entityTitle, entityType) {
         var title = "Edit "
-        if (entityType!=undefined)
+        if (entityType != undefined)
             title += entityType + ": " + entityTitle;
         else
             title += entityTitle
@@ -531,8 +528,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum','Period
         return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
     }
 
-    function serializetoJson(obj)
-    {
+    function serializetoJson(obj) {
         return angular.toJson(obj);
     }
 
