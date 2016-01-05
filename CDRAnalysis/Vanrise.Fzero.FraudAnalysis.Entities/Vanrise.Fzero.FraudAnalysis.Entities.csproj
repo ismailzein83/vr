@@ -60,8 +60,10 @@
     <Compile Include="AccountInfo.cs" />
     <Compile Include="AccountNumbersByIMEI.cs" />
     <Compile Include="AccountStatus.cs" />
+    <Compile Include="Batches\DWCDRBatch.cs" />
     <Compile Include="Batches\StrategyExecutionDetailSummaryBatch.cs" />
     <Compile Include="AccountRelatedNumbers.cs" />
+    <Compile Include="DWCDR.cs" />
     <Compile Include="RelatedNumber.cs" />
     <Compile Include="Query\AccountCaseLogQuery.cs" />
     <Compile Include="Query\RelatedNumberQuery.cs" />

@@ -12,6 +12,7 @@
  xmlns:vfce="clr-namespace:Vanrise.Fzero.CDRImport.Entities;assembly=Vanrise.Fzero.CDRImport.Entities"
  xmlns:vffba="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Arguments;assembly=Vanrise.Fzero.FraudAnalysis.BP.Arguments"
  xmlns:vffba1="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Activities;assembly=Vanrise.Fzero.FraudAnalysis.BP.Activities"
+ xmlns:vffe="clr-namespace:Vanrise.Fzero.FraudAnalysis.Entities;assembly=Vanrise.Fzero.FraudAnalysis.Entities"
  xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
@@ -29,6 +30,7 @@
       <x:String>Vanrise.Queueing</x:String>
       <x:String>Vanrise.BusinessProcess</x:String>
       <x:String>Vanrise.Fzero.FraudAnalysis.BP.Arguments</x:String>
+      <x:String>System.Activities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -70,6 +72,11 @@
       <Parallel.Variables>
         <Variable x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)" Name="cdrQueue" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadCDRActivityStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(vffe:DWCDRBatch)" Name="dwCDRQueue" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="fillDimensionValuesActivityStatus" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareDWCDRsForDBApplyActivityStatus" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="applyDWCDRsToDBActivityStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedDWCDRQueue" />
       </Parallel.Variables>
       <vffba1:LoadCDRs sap2010:WorkflowViewState.IdRef="LoadCDRs_1">
         <vffba1:LoadCDRs.FromDate>
@@ -93,24 +100,83 @@
           </InArgument>
         </vffba1:LoadCDRs.ToDate>
       </vffba1:LoadCDRs>
+      <vffba1:FillDimensionValues sap2010:WorkflowViewState.IdRef="FillDimensionValues_1">
+        <vffba1:FillDimensionValues.InputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vffba1:FillDimensionValues.InputQueue>
+        <vffba1:FillDimensionValues.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:DWCDRBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:DWCDRBatch)">dwCDRQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vffba1:FillDimensionValues.OutputQueue>
+        <vffba1:FillDimensionValues.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadCDRActivityStatus</mca:CSharpValue>
+          </InArgument>
+        </vffba1:FillDimensionValues.PreviousActivityStatus>
+        <vffba1:FillDimensionValues.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">fillDimensionValuesActivityStatus</mca:CSharpReference>
+          </OutArgument>
+        </vffba1:FillDimensionValues.Status>
+      </vffba1:FillDimensionValues>
+      <vffba1:PrepareDWCDRsForDBApply sap2010:WorkflowViewState.IdRef="PrepareDWCDRsForDBApply_1">
+        <vffba1:PrepareDWCDRsForDBApply.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(vffe:DWCDRBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:DWCDRBatch)">dwCDRQueue</mca:CSharpValue>
+          </InArgument>
+        </vffba1:PrepareDWCDRsForDBApply.InputQueue>
+        <vffba1:PrepareDWCDRsForDBApply.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">preparedDWCDRQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vffba1:PrepareDWCDRsForDBApply.OutputQueue>
+        <vffba1:PrepareDWCDRsForDBApply.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">fillDimensionValuesActivityStatus</mca:CSharpValue>
+          </InArgument>
+        </vffba1:PrepareDWCDRsForDBApply.PreviousActivityStatus>
+        <vffba1:PrepareDWCDRsForDBApply.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareDWCDRsForDBApplyActivityStatus</mca:CSharpReference>
+          </OutArgument>
+        </vffba1:PrepareDWCDRsForDBApply.Status>
+      </vffba1:PrepareDWCDRsForDBApply>
+      <vffba1:ApplyDWCDRsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyDWCDRsToDB_1">
+        <vffba1:ApplyDWCDRsToDB.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedDWCDRQueue</mca:CSharpValue>
+          </InArgument>
+        </vffba1:ApplyDWCDRsToDB.InputQueue>
+        <vffba1:ApplyDWCDRsToDB.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareDWCDRsForDBApplyActivityStatus</mca:CSharpValue>
+          </InArgument>
+        </vffba1:ApplyDWCDRsToDB.PreviousActivityStatus>
+      </vffba1:ApplyDWCDRsToDB>
     </Parallel>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2" Text="Finished executing workflow: FillDataWarehouse ..." />
-    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sC0MDYw4CAQFEBUR5AgEWRQVgEAIBBGEFYXoCAQJEQ0R2AgEXSgdfGQIBBWFDYXcCAQNNDU1bAgESVw1XdgIBDlINUm4CAQpcDVxZAgEG</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sGEUDogEOAgEBRgVGeQMBhwFHBZ8BEAIBBKABBaABegIBAkZDRnYDAYgBUQdmGQIBYmcHfCQCAT19B5IBKAIBGJMBB54BIAIBBaABQ6ABdwIBA1QNVFsCAX5eDV52AgF1WQ1ZbgIBbGMNY1kCAWN0DXRuAgFZag1qbgIBUHkNeYIBAgFHbw1vcgIBPooBDYoBegIBNIABDYABagIBK48BDY8BhgECASKFAQ2FAXMCARmbAQ2bAX4CAQ+WAQ2WAWsCAQY=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="314,62" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1034,62" />
       <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="314,86" />
-      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="314,62" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,414">
+      <sap2010:ViewStateData Id="FillDimensionValues_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareDWCDRsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyDWCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
+      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1034,62" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056,414">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FillDataWarehouse_1" sap:VirtualizedContainerService.HintSize="273,509" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FillDataWarehouse_1" sap:VirtualizedContainerService.HintSize="1096,494" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

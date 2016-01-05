@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="AccountStatusDataManager.cs" />
     <Compile Include="AggregateDataManager.cs" />
+    <Compile Include="DWCDRDataManager.cs" />
     <Compile Include="RelatedNumberDataManager.cs" />
     <Compile Include="NumberProfileDataManager.cs" />
     <Compile Include="CallClassDataManager.cs" />

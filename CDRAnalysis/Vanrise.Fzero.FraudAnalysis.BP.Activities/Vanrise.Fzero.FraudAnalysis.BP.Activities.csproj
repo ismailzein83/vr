@@ -87,9 +87,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyDWCDRsToDB.cs" />
     <Compile Include="ApplyNumberProfilesToDB.cs" />
     <Compile Include="ApplyStrategyExecutionDetailsToDB.cs" />
     <Compile Include="AssignCases.cs" />
+    <Compile Include="FillDimensionValues.cs" />
     <Compile Include="FindRelatedNumbersthroughIMEIs.cs" />
     <Compile Include="GetStrategiesExecutionInfo.cs" />
     <Compile Include="GetStrategyExecutionDetails.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="LoadStrategyExecutionDetailSummaries.cs" />
     <Compile Include="LoadCDRs.cs" />
     <Compile Include="CreateNumberProfiles.cs" />
+    <Compile Include="PrepareDWCDRsForDBApply.cs" />
     <Compile Include="PrepareNumberProfilesForDBApply.cs" />
     <Compile Include="PrepareStrategyExecutionDetailsForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

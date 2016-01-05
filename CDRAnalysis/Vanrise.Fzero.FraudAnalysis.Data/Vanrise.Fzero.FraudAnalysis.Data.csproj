@@ -57,6 +57,7 @@
     <Compile Include="IDataManager.cs" />
     <Compile Include="IAccountStatusDataManager.cs" />
     <Compile Include="IAggregateDataManager.cs" />
+    <Compile Include="IDWCDRDataManager.cs" />
     <Compile Include="IRelatedNumberDataManager.cs" />
     <Compile Include="INumberProfileDataManager.cs" />
     <Compile Include="INormalCDRDataManager.cs" />
