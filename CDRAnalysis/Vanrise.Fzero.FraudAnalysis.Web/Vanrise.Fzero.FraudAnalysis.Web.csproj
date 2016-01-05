@@ -198,12 +198,16 @@
     <Content Include="FraudAnalysis\Services\APIServices\NormalCDRAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\ReportingAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\FillDataWarehouseProcessInput.html" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\FillDataWarehouseProcessInputController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\FindRelatedNumbersProcessInput.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\AssignStrategyCasesProcessInput.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\FindRelatedNumbersProcessInputController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\NumberProfilingProcessInput.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\AssignStrategyCasesProcessInputController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\NumberProfilingProcessInputController.js" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\FillDataWarehouseProcessInput_Scheduled.html" />
+    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\FillDataWarehouseProcessInput_ScheduledController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\FindRelatedNumbersProcessInput_Scheduled.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\AssignStrategyCasesProcessInput_Scheduled.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\FindRelatedNumbersProcessInput_ScheduledController.js" />

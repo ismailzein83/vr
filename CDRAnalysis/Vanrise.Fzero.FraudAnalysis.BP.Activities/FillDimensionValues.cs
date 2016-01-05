@@ -62,23 +62,24 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             }
                             cdrsCount += cdrs.Count;
 
-                            dwCDRBatch = SendDWCDRtoOutputQueue(inputArgument, handle, batchSize, dwCDRBatch);
+                            dwCDRBatch = SendDWCDRtoOutputQueue(inputArgument, handle, batchSize, dwCDRBatch, false);
 
                             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs filled dimensions", cdrsCount);
 
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);
+
             });
 
-            dwCDRBatch = SendDWCDRtoOutputQueue(inputArgument, handle, batchSize, dwCDRBatch);
+            dwCDRBatch = SendDWCDRtoOutputQueue(inputArgument, handle, batchSize, dwCDRBatch, true);
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
         }
 
-        private static List<DWCDR> SendDWCDRtoOutputQueue(FillDimensionValuesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<DWCDR> dwCDRBatch)
+        private static List<DWCDR> SendDWCDRtoOutputQueue(FillDimensionValuesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<DWCDR> dwCDRBatch, bool IsLastBatch)
         {
-            if (dwCDRBatch.Count >= batchSize)
+            if (dwCDRBatch.Count >= batchSize || IsLastBatch)
             {
                 handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Data warehouse CDRs Sent", dwCDRBatch);
                 inputArgument.OutputQueue.Enqueue(new DWCDRBatch()

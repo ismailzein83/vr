@@ -1,0 +1,16 @@
+﻿<div ng-controller="FraudAnalysis_FillDataWarehouseProcessInputController">
+    <vr-form name="formCreateProcessInput">
+        <vr-row removeline>
+
+            <vr-columns width="1/4row">
+                <vr-datetimepicker type="dateTime" value="fromDate" label="From" customvalidate="validateTimeRange()" isrequired></vr-datetimepicker>
+            </vr-columns>
+
+            <vr-columns width="1/4row">
+                <vr-datetimepicker type="dateTime" value="toDate" label="To" customvalidate="validateTimeRange()" isrequired></vr-datetimepicker>
+            </vr-columns>
+
+        </vr-row>
+
+    </vr-form>
+</div>

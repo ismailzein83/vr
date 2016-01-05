@@ -16,7 +16,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
         {
-
+            FromDate = ((DateTime)evaluatedExpressions["ScheduleTime"]).AddDays(-1);
+            ToDate = (DateTime)evaluatedExpressions["ScheduleTime"];
         }
 
     }
