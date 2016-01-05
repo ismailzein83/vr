@@ -180,7 +180,7 @@ as (select * from (values
 (338,'Customer Pricing Product','Customer Pricing Product','#/view/WhS_BusinessEntity/Views/PricingProduct/CustomerPricingProductManagement',3,null,null,null,0,null),
 (341,'Sale Pricing Rule','Sale Pricing Rule','#/view/WhS_BusinessEntity/Views/PricingRule/SalePricingRuleManagement',19,null,null,null,0,null),
 (342,'Purchase  Pricing Rule','Purchase Pricing Rule','#/view/WhS_BusinessEntity/Views/PricingRule/PurchasePricingRuleManagement',18,null,null,null,0,null),
-(351,'Rate Planning','Rate Planning','#/view/Whs_Sales/Views/RatePlan',19,null,null,null,0,16),
+(351,'Rate Plan','Rate Plan','#/view/Whs_Sales/Views/RatePlan',19,null,null,null,0,16),
 (352,'Customer Identification Rule','Customer Identification Rule','#/view/WhS_CDRProcessing/Views/CustomerRule/CustomerIdentificationRuleManagement',24,NULL,NULL,NULL,0,10),
 (353,'Supplier Identification Rule','Supplier Identification Rule','#/view/WhS_CDRProcessing/Views/SupplierRule/SupplierIdentificationRuleManagement',24,NULL,NULL,NULL,0,11),
 (354,'Code Group','Code Group','#/view/WhS_BusinessEntity/Views/CodeGroup/CodeGroupManagement',	3,	NULL,	NULL,	NULL,	0,	14),
