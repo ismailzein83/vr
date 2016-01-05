@@ -1,7 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesAvgcostcalculation", [function () {
-
+app.directive("vrWhsSalesRoutepercentagecostcalculation", [function () {
     return {
         restrict: "E",
         scope: {
@@ -9,40 +8,36 @@ app.directive("vrWhsSalesAvgcostcalculation", [function () {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var avgCostCalculation = new AvgCostCalculation(ctrl, $scope);
-            avgCostCalculation.initCtrl();
+            var routePercentageCostCalculation = new RoutePercentageCostCalculation($scope, ctrl);
+            routePercentageCostCalculation.initCtrl();
         },
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: "/Client/Modules/WhS_Sales/Directives/Templates/AvgCostCalculation.html"
+        templateUrl: "/Client/Modules/WhS_Sales/Directives/Extensions/CostCalculation/Templates/RoutePercentageCostCalculationTemplate.html"
     };
 
-    function AvgCostCalculation(ctrl, $scope) {
+    function RoutePercentageCostCalculation($scope, ctrl) {
         this.initCtrl = initCtrl;
 
         function initCtrl() {
             ctrl.title;
 
-            getAPI();
+            if (ctrl.onReady && typeof (ctrl.onReady) == "function")
+                ctrl.onReady(getAPI());
 
             function getAPI() {
                 var api = {};
-
                 api.load = function (payload) {
-                    if (payload) {
+                    if (payload)
                         ctrl.title = payload.Title;
-                    }
                 };
-
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Sales.Entities.CostCalculation.Extensions.AvgCostCalculation, TOne.WhS.Sales.Entities",
+                        $type: "TOne.WhS.Sales.Entities.CostCalculation.Extensions.RoutePercentageCostCalculation, TOne.WhS.Sales.Entities",
                         Title: ctrl.title
                     };
                 };
-
-                if (ctrl.onReady && typeof (ctrl.onReady) == "function")
-                    ctrl.onReady(api);
+                return api;
             }
         }
     }

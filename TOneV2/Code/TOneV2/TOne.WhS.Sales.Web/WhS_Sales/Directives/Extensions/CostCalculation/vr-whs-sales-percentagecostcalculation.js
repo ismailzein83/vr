@@ -14,7 +14,7 @@ app.directive("vrWhsSalesPercentagecostcalculation", ["WhS_Routing_RoutRuleSetti
         },
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: "/Client/Modules/WhS_Sales/Directives/Templates/PercentageCostCalculationTemplate.html"
+        templateUrl: "/Client/Modules/WhS_Sales/Directives/Extensions/CostCalculation/Templates/PercentageCostCalculationTemplate.html"
     };
 
     function PercentageCostCalculation(ctrl, $scope) {

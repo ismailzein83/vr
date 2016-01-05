@@ -15,7 +15,7 @@ function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
         },
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: "/Client/Modules/WhS_Sales/Directives/Templates/CostColumnsTemplate.html"
+        templateUrl: "/Client/Modules/WhS_Sales/Directives/Extensions/CostCalculation/Templates/CostColumnsTemplate.html"
     };
 
     function CostColumns(ctrl, $scope) {
