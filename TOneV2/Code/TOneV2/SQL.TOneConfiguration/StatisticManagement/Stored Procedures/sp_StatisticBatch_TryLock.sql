@@ -21,12 +21,15 @@ BEGIN
 		select Convert(int, ParsedString) from [StatisticManagement].[ParseStringList](@RunningProcessIDs)
 	END	
 
-    INSERT INTO StatisticManagement.StatisticBatch WITH (TABLOCK) 
-	(TypeID, BatchStart) 
-	SELECT @TypeID, @BatchStart 
-	WHERE NOT EXISTS (SELECT TOP 1 NULL FROM StatisticManagement.StatisticBatch WHERE TypeID = @TypeID AND BatchStart = @BatchStart)
+	IF NOT EXISTS (SELECT TOP 1 NULL FROM StatisticManagement.StatisticBatch WITH(NOLOCK) WHERE TypeID = @TypeID AND BatchStart = @BatchStart)
+	BEGIN
+		INSERT INTO StatisticManagement.StatisticBatch --WITH (TABLOCK) 
+		(TypeID, BatchStart) 
+		SELECT @TypeID, @BatchStart 
+		WHERE NOT EXISTS (SELECT TOP 1 NULL FROM StatisticManagement.StatisticBatch WHERE TypeID = @TypeID AND BatchStart = @BatchStart)
+	END
 	
-	DECLARE @IsLocked bit, @IsInfoCorrupted bit, @BatchInfo nvarchar(max)
+	DECLARE @IsLocked bit, @IsInfoCorrupted bit, @BatchInfo varbinary(max)
 	
 	UPDATE StatisticManagement.StatisticBatch
     SET	

@@ -9,11 +9,14 @@ CREATE PROCEDURE [common].[sp_IDManager_ReserveIDRange]
 AS
 BEGIN
 
-	INSERT INTO common.IDManager WITH (TABLOCK) 
-	(TypeID, [LastTakenID]) 
-	SELECT @TypeID, 0 
-	WHERE NOT EXISTS (SELECT TOP 1 NULL FROM common.IDManager WHERE TypeID = @TypeID)
-
+	IF NOT EXISTS (SELECT TOP 1 NULL FROM common.IDManager WITH(NOLOCK) WHERE TypeID = @TypeID)
+	BEGIN
+		INSERT INTO common.IDManager --WITH (TABLOCK) 
+		(TypeID, [LastTakenID]) 
+		SELECT @TypeID, 0 
+		WHERE NOT EXISTS (SELECT TOP 1 NULL FROM common.IDManager WHERE TypeID = @TypeID)
+	END
+	
 	DECLARE @StartingID bigint
 	
 	UPDATE common.IDManager

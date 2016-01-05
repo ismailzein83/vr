@@ -3,18 +3,16 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [StatisticManagement].[sp_StatisticBatch_UpdateBatchInfo]
+create PROCEDURE [common].[sp_DataRecordField_Insert]
 	@TypeID int,
-	@BatchStart datetime,
-	@BatchInfo varbinary(max)
+	@Details varchar(max),
+	@Id int out
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-		
-	UPDATE StatisticManagement.StatisticBatch
-    SET		BatchInfo = @BatchInfo
-	WHERE	TypeID = @TypeID 
-			AND BatchStart = @BatchStart
+	Insert into [common].DataRecordField ([TypeID],[Details])
+	values(@TypeID, @Details)	
+	SET @Id = @@IDENTITY
+
 END

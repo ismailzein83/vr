@@ -204,6 +204,16 @@
     <Build Include="common\Stored Procedures\sp_City_Update.sql" />
     <Build Include="common\Stored Procedures\sp_City_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_City_GetAll.sql" />
+    <Build Include="common\Tables\GenericConfiguration.sql" />
+    <Build Include="common\Tables\DataRecordType.sql" />
+    <Build Include="common\Tables\DataRecordField.sql" />
+    <Build Include="common\Stored Procedures\sp_GenericConfiguration_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_GenericConfiguration_GetAll.sql" />
+    <Build Include="common\Stored Procedures\sp_DataRecordType_GetAll.sql" />
+    <Build Include="common\Stored Procedures\sp_DataRecordField_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_DataRecordField_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_DataRecordField_GetAll.sql" />
+    <Build Include="common\Stored Procedures\sp_DataRecordField_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
