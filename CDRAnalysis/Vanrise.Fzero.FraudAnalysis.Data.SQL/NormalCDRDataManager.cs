@@ -77,6 +77,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     {
                         count += currentIndex;
                         currentIndex = 0;
+                        Console.WriteLine("Loaded {0} CDRs", count);
 
                     }
 

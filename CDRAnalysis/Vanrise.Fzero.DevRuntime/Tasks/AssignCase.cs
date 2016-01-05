@@ -8,11 +8,11 @@ using Vanrise.Runtime;
 
 namespace Vanrise.Fzero.DevRuntime.Tasks
 {
-    class WalidTaskExec : ITask
+    class AssignCase : ITask
     {
         public void Execute()
         {
-            Console.WriteLine("Walid Exec Strategy Task started");
+            Console.WriteLine("Walid Assign Case Task started");
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
 
             var runtimeServices = new List<RuntimeService>();
@@ -21,18 +21,13 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
-            List<int> StrategyIds = new List<int>();
-            StrategyIds.Add(18);
+
             BPClient bpClient = new BPClient();
             var input = new CreateProcessInput
             {
-                InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
+                InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.AssignStrategyCasesProcessInput
                 {
-                    FromDate = DateTime.Parse("2015-03-10"),
-                    ToDate = DateTime.Parse("2015-03-20"),
-                    OverridePrevious=false,
-                    IncludeWhiteList =false,
-                    StrategyIds = StrategyIds
+                  
                 }
             };
             bpClient.CreateNewProcess(input);

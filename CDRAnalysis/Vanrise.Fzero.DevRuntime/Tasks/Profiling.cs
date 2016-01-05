@@ -8,7 +8,7 @@ using Vanrise.Runtime;
 
 namespace Vanrise.Fzero.DevRuntime.Tasks
 {
-    class WalidTaskProfile : ITask
+    class Profiling : ITask
     {
         public void Execute()
         {

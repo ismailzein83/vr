@@ -264,12 +264,13 @@
     <Compile Include="Tasks\IsmailTask.cs" />
     <Compile Include="Tasks\MortadaTask.cs" />
     <Compile Include="Tasks\HaririTask.cs" />
-    <Compile Include="Tasks\WalidTaskMapper.cs" />
-    <Compile Include="Tasks\WalidTaskExec.cs" />
+    <Compile Include="Tasks\FillDataWarehouse.cs" />
+    <Compile Include="Tasks\Mapper.cs" />
+    <Compile Include="Tasks\ExecStrategy.cs" />
     <Compile Include="Tasks\StagingtoNormalCDR.cs" />
-    <Compile Include="Tasks\WalidTaskRelatedNumbers.cs" />
-    <Compile Include="Tasks\WalidTaskAssignCase.cs" />
-    <Compile Include="Tasks\WalidTaskProfile.cs" />
+    <Compile Include="Tasks\RelatedNumbers.cs" />
+    <Compile Include="Tasks\AssignCase.cs" />
+    <Compile Include="Tasks\Profiling.cs" />
     <Compile Include="Tasks\WalidTask.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
