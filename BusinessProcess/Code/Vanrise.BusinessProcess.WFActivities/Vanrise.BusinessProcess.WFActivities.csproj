@@ -68,6 +68,7 @@
     <Compile Include="Designer\ParallelForEachDesigner.xaml.cs">
       <DependentUpon>ParallelForEachDesigner.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EnqueueItem.cs" />
     <Compile Include="GetDefinitionObjectState.cs" />
     <Compile Include="ParallelForEach.cs" />
     <Compile Include="SaveDefinitionObjectState.cs" />
@@ -92,6 +93,10 @@
     <ProjectReference Include="..\Vanrise.BusinessProcess\Vanrise.BusinessProcess.csproj">
       <Project>{A5EE3349-B642-4CC7-B575-7C338821D63D}</Project>
       <Name>Vanrise.BusinessProcess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Queueing\Vanrise.Queueing.csproj">
+      <Project>{28eb3790-0e19-43ab-8ecb-6137eb0e588a}</Project>
+      <Name>Vanrise.Queueing</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
