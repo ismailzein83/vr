@@ -76,9 +76,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AggregateManager.cs" />
-    <Compile Include="DWTimeManager.cs" />
-    <Compile Include="DWDimensionManager.cs" />
+    <Compile Include="DataWarehouse\DWTimeManager.cs" />
+    <Compile Include="DataWarehouse\DWDimensionManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DataWarehouse\DWStrategyManager.cs" />
     <Compile Include="FilterManager.cs" />
     <Compile Include="FraudManager.cs" />
     <Compile Include="CallClassManager.cs" />

@@ -8,7 +8,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     public class DWTimeManager
     {
 
-        public List<Time> GetTimes(DateTime from, DateTime to)
+        public List<DWTime> GetTimes(DateTime from, DateTime to)
         {
             IDWTimeDataManager dataManager = FraudDataManagerFactory.GetDataManager<IDWTimeDataManager>();
 
