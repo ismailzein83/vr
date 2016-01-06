@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProtoBuf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,8 +15,10 @@ namespace Vanrise.Entities.StatisticManagement
         public StatisticBatchInfo BatchInfo { get; set; }
     }
 
+    [ProtoContract]
     public class StatisticBatchInfo
     {
+        [ProtoMember(1)]
         public Dictionary<string, long> ItemsIdsByKey { get; set; }
     }
 }

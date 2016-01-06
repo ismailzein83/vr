@@ -19,7 +19,7 @@ namespace Vanrise.Common.Data.SQL.StatisticManagement
         public bool TryLock(int typeId, DateTime batchStart, int currentRuntimeProcessId, IEnumerable<int> runningProcessIds, out StatisticBatchInfo batchInfo, out bool isInfoCorrupted)
         {
             bool isLocked = false;
-            string serializedBatchInfo = null;
+            byte[] serializedBatchInfo = null;
             bool isInfoCorrupted_Internal = false;
 
             ExecuteReaderSP("StatisticManagement.sp_StatisticBatch_TryLock", (reader) =>
@@ -27,12 +27,12 @@ namespace Vanrise.Common.Data.SQL.StatisticManagement
                         if (reader.Read())
                         {
                             isLocked = true;
-                            serializedBatchInfo = reader["BatchInfo"] as string;
+                            serializedBatchInfo = GetReaderValue<byte[]>(reader, "BatchInfo");
                             isInfoCorrupted_Internal = (bool)reader["IsInfoCorrupted"];
                         }             
                 }, typeId, batchStart, currentRuntimeProcessId, runningProcessIds != null ? String.Join(",", runningProcessIds) : null);
             if (serializedBatchInfo != null)
-                batchInfo = Serializer.Deserialize<StatisticBatchInfo>(serializedBatchInfo);
+                batchInfo = ProtoBufSerializer.Deserialize<StatisticBatchInfo>(Compressor.Decompress(serializedBatchInfo));
             else
                 batchInfo = null;
             isInfoCorrupted = isInfoCorrupted_Internal;
@@ -47,7 +47,7 @@ namespace Vanrise.Common.Data.SQL.StatisticManagement
 
         public void UpdateBatchInfo(int typeId, DateTime batchStart, StatisticBatchInfo batchInfo)
         {
-            ExecuteNonQuerySP("[StatisticManagement].[sp_StatisticBatch_UpdateBatchInfo]", typeId, batchStart, Serializer.Serialize(batchInfo));
+            ExecuteNonQuerySP("[StatisticManagement].[sp_StatisticBatch_UpdateBatchInfo]", typeId, batchStart, batchInfo != null ? Compressor.Compress(ProtoBufSerializer.Serialize<StatisticBatchInfo>(batchInfo)) : null);
         }
     }
 }
