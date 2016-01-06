@@ -41,6 +41,7 @@ namespace Vanrise.BusinessProcess
         private ConcurrentDictionary<long, BPRunningInstance> _runningInstances = new ConcurrentDictionary<long, BPRunningInstance>();
         ConcurrentQueue<BPInstance> _qPendingInstances = new ConcurrentQueue<BPInstance>();
         static bool s_AddConsoleTracking = ConfigurationManager.AppSettings["AddBusinessProcessConsoleTracking"] == "true";
+        static bool s_AddActivityEventsTracking = ConfigurationManager.AppSettings["BusinessProcess_ActivityEventsTracking"] == "true";
 
         public BPDefinitionInitiator(BusinessProcessRuntime runtime, BPDefinition definition)
         {
@@ -95,6 +96,11 @@ namespace Vanrise.BusinessProcess
             }
             else
                 return false;
+        }
+
+        internal BPRunningInstance GetBPInstance(Guid workflowInstanceId)
+        {
+            return _runningInstances.Values.FirstOrDefault(itm => itm.WFApplication != null && itm.WFApplication.Id == workflowInstanceId);
         }
 
         #endregion
@@ -157,6 +163,8 @@ namespace Vanrise.BusinessProcess
 
             if (s_AddConsoleTracking)
                 wfApp.Extensions.Add(ConsoleTracking.Instance);
+            if (s_AddActivityEventsTracking)
+                wfApp.Extensions.Add(new ActivityEventsTracking(bpInstance));
 
             wfApp.Completed = (e) =>
                 {

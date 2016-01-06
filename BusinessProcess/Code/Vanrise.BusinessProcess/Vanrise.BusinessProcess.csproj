@@ -82,6 +82,7 @@
     <Compile Include="BusinessProcessService.cs" />
     <Compile Include="BusinessRuleActions\BusinessRuleActionExecutionContext.cs" />
     <Compile Include="BusinessRuleActions\ExcludeItemAction.cs" />
+    <Compile Include="Internals\ActivityEventsTracking.cs" />
     <Compile Include="Internals\ConsoleTracking.cs" />
     <Compile Include="ContextExtensions.cs" />
     <Compile Include="Internals\BPService.cs" />
