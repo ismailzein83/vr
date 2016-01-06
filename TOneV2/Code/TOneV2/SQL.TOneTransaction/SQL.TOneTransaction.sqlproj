@@ -97,7 +97,6 @@
     <Build Include="runtime\Stored Procedures\sp_RunningProcess_DeleteOld.sql" />
     <Build Include="runtime\Stored Procedures\sp_RunningProcess_GetByHeartBeat.sql" />
     <Build Include="runtime\Stored Procedures\sp_RunningProcess_Insert.sql" />
-    <Build Include="queue\Stored Procedures\sp_QueueSubscription_GetMaxTimestamp.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueSubscription_Insert.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueInstance_UpdateName.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueInstance_UpdateStatus.sql" />
@@ -170,6 +169,9 @@
     <Build Include="integration\Stored Procedures\sp_DataSource_CreateTemp.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_UpdateInfo.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueInstance_GetAll.sql" />
+    <Build Include="bp\Tables\BPTaskType.sql" />
+    <Build Include="bp\Tables\BPTaskAssignedUser.sql" />
+    <Build Include="bp\Tables\BPTask.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />

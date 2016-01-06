@@ -161,22 +161,22 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
             dt.Columns.Add("CustomerId", typeof(int));
             dt.Columns.Add("SupplierId", typeof(int));
             dt.Columns.Add("Attempts", typeof(int));
-            dt.Columns.Add("TotalDurationInSeconds", typeof(int));
+            dt.Columns.Add("TotalDurationInSeconds", typeof(Decimal));
             dt.Columns.Add("FirstCDRAttempt", typeof(DateTime));
             dt.Columns.Add("LastCDRAttempt", typeof(DateTime));
             dt.Columns.Add("SaleZoneID", typeof(long));
             dt.Columns.Add("SupplierZoneID", typeof(long));
-            dt.Columns.Add("PDDInSeconds", typeof(int));
-            dt.Columns.Add("MaxDurationInSeconds", typeof(int));
+            dt.Columns.Add("PDDInSeconds", typeof(Decimal));
+            dt.Columns.Add("MaxDurationInSeconds", typeof(Decimal));
             dt.Columns.Add("NumberOfCalls", typeof(int));
             dt.Columns.Add("PortOut", typeof(string));
             dt.Columns.Add("PortIn", typeof(string));
             dt.Columns.Add("DeliveredAttempts", typeof(int));
             dt.Columns.Add("SuccessfulAttempts", typeof(int));
             dt.Columns.Add("DeliveredNumberOfCalls", typeof(int));
-            dt.Columns.Add("CeiledDuration", typeof(int));
-            dt.Columns.Add("SumOfPGAD", typeof(int));
-            dt.Columns.Add("UtilizationInSeconds", typeof(decimal));
+            dt.Columns.Add("CeiledDuration", typeof(long));
+            dt.Columns.Add("SumOfPGAD", typeof(Decimal));
+            dt.Columns.Add("UtilizationInSeconds", typeof(Decimal));
             return dt;
         }
 

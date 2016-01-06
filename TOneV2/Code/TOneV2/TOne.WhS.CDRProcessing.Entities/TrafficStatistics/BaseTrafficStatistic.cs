@@ -21,19 +21,19 @@ namespace TOne.WhS.CDRProcessing.Entities
         public int Attempts { get; set; }
         public long SaleZoneId { get; set; }
         public long SupplierZoneId   { get; set; }
-        public int PDDInSeconds { get; set; }
-        public int MaxDurationInSeconds { get; set; }
+        public decimal PDDInSeconds { get; set; }
+        public decimal MaxDurationInSeconds { get; set; }
         public int NumberOfCalls { get; set; }
         public string PortOut { get; set; }
         public string PortIn { get; set; }
         public int DeliveredAttempts { get; set; }
         public int SuccessfulAttempts { get; set; }
-        public long DurationInSeconds { get; set; }
+        public decimal DurationInSeconds { get; set; }
 
         public Decimal Utilization { get; set; }
         public int DeliveredNumberOfCalls { get; set; }
-        public int PGAD { get; set; }
-        public int CeiledDuration { get; set; }
+        public decimal PGAD { get; set; }
+        public long CeiledDuration { get; set; }
 
     }
 }
