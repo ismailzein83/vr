@@ -17,7 +17,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-        public List<Time> GetTimes(DateTime from, DateTime to)
+        public List<DWTime> GetTimes(DateTime from, DateTime to)
         {
             string query = string.Format("SELECT [DateInstance] ,[Year] ,[Month] ,[Week],[Day] ,[Hour] ,[MonthName] ,[DayName]FROM [dbo].[Dim_Time] where DateInstance between  @FromDate and @ToDate");
             return GetItemsText(query, TimeMapper, (cmd) =>
@@ -30,9 +30,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         #region Private Methods
 
-        private Time TimeMapper(IDataReader reader)
+        private DWTime TimeMapper(IDataReader reader)
         {
-            var time = new Time();
+            var time = new DWTime();
             DateTime date = ((DateTime)reader["DateInstance"]);
             time.DateInstance = new DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second, date.Kind);
             time.Year = GetReaderValue<int?>(reader,"Year");

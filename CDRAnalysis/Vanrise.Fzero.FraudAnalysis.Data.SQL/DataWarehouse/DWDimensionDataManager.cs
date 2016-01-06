@@ -16,7 +16,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-        public List<Dimension> GetDimensions(string tableName)
+        public List<DWDimension> GetDimensions(string tableName)
         {
             string query = string.Format("select * from {0}", tableName);
             return GetItemsText(query, DimensionMapper, (cmd) => { });
@@ -25,9 +25,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         #region Private Methods
 
-        private Dimension DimensionMapper(IDataReader reader)
+        private DWDimension DimensionMapper(IDataReader reader)
         {
-            var dimension = new Dimension();
+            var dimension = new DWDimension();
             dimension.Id = (int)reader[0];
             dimension.Description = reader[1] as string;
             return dimension;
