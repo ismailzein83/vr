@@ -92,6 +92,9 @@ namespace TOne.WhS.Sales.Business
 
                 if (rateChanges != null && rateChanges.Count > 0)
                     saleRateDataManager.CloseRates(rateChanges);
+
+                // Update the cached rates
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>().SetCacheExpired();
             }
         }
 
@@ -125,6 +128,7 @@ namespace TOne.WhS.Sales.Business
                 if (routingProductChanges != null && routingProductChanges.Count() > 0)
                     saleEntityRoutingProductDataManager.UpdateZoneRoutingProducts(_ownerType, _ownerId, routingProductChanges);
 
+                // Update the cached routing products
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>().SetCacheExpired();
             }
         }
