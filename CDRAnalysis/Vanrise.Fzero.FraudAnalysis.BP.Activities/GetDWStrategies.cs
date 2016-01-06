@@ -9,14 +9,14 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
     #region Arguments Classes
 
-    public class GetStrategyDimensionInput
+    public class GetDWStrategiesInput
     {
         public Dictionary<int, Strategy> Strategies { get; set; }
     }
 
     #endregion
 
-    public sealed class GetStrategyDimension : BaseAsyncActivity<GetStrategyDimensionInput>
+    public sealed class GetDWStrategies : BaseAsyncActivity<GetDWStrategiesInput>
     {
         #region Arguments
 
@@ -25,7 +25,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         #endregion
 
-        protected override void DoWork(GetStrategyDimensionInput inputArgument, AsyncActivityHandle handle)
+        protected override void DoWork(GetDWStrategiesInput inputArgument, AsyncActivityHandle handle)
         {
             StrategyManager strategyManager = new StrategyManager();
             IEnumerable<Strategy> listDWStrategies = strategyManager.GetAll();
@@ -33,9 +33,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         }
 
 
-        protected override GetStrategyDimensionInput GetInputArgument(AsyncCodeActivityContext context)
+        protected override GetDWStrategiesInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            return new GetStrategyDimensionInput
+            return new GetDWStrategiesInput
             {
                 Strategies = this.Strategies.Get(context),
             };
