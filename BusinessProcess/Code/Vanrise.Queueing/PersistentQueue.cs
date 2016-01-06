@@ -177,8 +177,8 @@ namespace Vanrise.Queueing
                     int retryCount = itemHeader.RetryCount + 1;
                     if (retryCount >= s_maxRetryDequeueTime)
                         failedStatus = QueueItemStatus.Suspended;
-                    _dataManagerQueueItem.UnlockItem(_queueId, queueItem.ItemId, (failedStatus == QueueItemStatus.Suspended));
                     _dataManagerQueueItem.UpdateHeader(queueItem.ItemId, failedStatus, retryCount, ex.ToString());
+                    _dataManagerQueueItem.UnlockItem(_queueId, queueItem.ItemId, (failedStatus == QueueItemStatus.Suspended));
                     if (rethrowOnError)
                         throw;
                     else
