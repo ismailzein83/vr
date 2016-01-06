@@ -6,6 +6,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface IDWTimeDataManager : IDataManager 
     {
-        List<Time> GetTimes(DateTime from, DateTime to);
+        List<DWTime> GetTimes(DateTime from, DateTime to);
     }
 }

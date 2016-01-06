@@ -5,6 +5,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface IDWDimensionDataManager : IDataManager 
     {
-        List<Dimension> GetDimensions(string tableName);
+        List<DWDimension> GetDimensions(string tableName);
     }
 }

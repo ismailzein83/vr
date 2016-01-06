@@ -53,13 +53,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataWarehouse\IDWStrategyDataManager.cs" />
     <Compile Include="FraudDataManagerFactory.cs" />
-    <Compile Include="IDWTimeDataManager.cs" />
-    <Compile Include="IDWDimensionDataManager.cs" />
+    <Compile Include="DataWarehouse\IDWTimeDataManager.cs" />
+    <Compile Include="DataWarehouse\IDWDimensionDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IAccountStatusDataManager.cs" />
     <Compile Include="IAggregateDataManager.cs" />
-    <Compile Include="IDWCDRDataManager.cs" />
+    <Compile Include="DataWarehouse\IDWCDRDataManager.cs" />
     <Compile Include="IRelatedNumberDataManager.cs" />
     <Compile Include="INumberProfileDataManager.cs" />
     <Compile Include="INormalCDRDataManager.cs" />
