@@ -48,7 +48,8 @@ namespace QualityMeasurement.DevRuntime
                             var getTestProgressContext = new GetTestProgressContext()
                             {
                                 InitiateTestInformation = testCall.InitiateTestInformation,
-                                RecentTestProgress = testCall.TestProgress
+                                RecentTestProgress = testCall.TestProgress,
+                                RecentMeasure = testCall.Measure
                             };
 
                             GetTestProgressOutput testProgressOutput = new GetTestProgressOutput();
@@ -88,7 +89,7 @@ namespace QualityMeasurement.DevRuntime
                                     break;
                             }
                             if (testProgressOutput.Result != GetTestProgressResult.ProgressNotChanged)
-                                manager.UpdateTestProgress(testCall.ID, testProgressOutput.TestProgress, callTestStatus, testProgressOutput.CallTestResult, testCall.GetProgressRetryCount, testCall.FailureMessage);
+                                manager.UpdateTestProgress(testCall.ID, testProgressOutput.TestProgress, testProgressOutput.Measure, callTestStatus, testProgressOutput.CallTestResult, testCall.GetProgressRetryCount, testCall.FailureMessage);
                         }
 
                         _locked = false;

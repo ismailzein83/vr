@@ -18,6 +18,7 @@ namespace QM.CLITester.Entities
         public DateTime CreationDate { get; set; }
         public Object InitiateTestInformation { get; set; }
         public Object TestProgress { get; set; }
+        public Measure Measure { get; set; }
         public CallTestStatus CallTestStatus { get; set; }
         public CallTestResult CallTestResult { get; set; }
         public int InitiationRetryCount { get; set; }

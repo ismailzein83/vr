@@ -38,7 +38,8 @@ namespace QM.CLITester.Business
                 var getTestProgressContext = new GetTestProgressContext()
                 {
                     InitiateTestInformation = testCall.InitiateTestInformation,
-                    RecentTestProgress = testCall.TestProgress
+                    RecentTestProgress = testCall.TestProgress,
+                    RecentMeasure = testCall.Measure
                 };
 
                 GetTestProgressOutput testProgressOutput = new GetTestProgressOutput();
@@ -78,7 +79,7 @@ namespace QM.CLITester.Business
                         break;
                 }
                 if (testProgressOutput.Result != GetTestProgressResult.ProgressNotChanged)
-                    manager.UpdateTestProgress(testCall.ID, testProgressOutput.TestProgress, callTestStatus, testProgressOutput.CallTestResult, testCall.GetProgressRetryCount, testCall.FailureMessage);
+                    manager.UpdateTestProgress(testCall.ID, testProgressOutput.TestProgress, testProgressOutput.Measure, callTestStatus, testProgressOutput.CallTestResult, testCall.GetProgressRetryCount, testCall.FailureMessage);
             }
 
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()

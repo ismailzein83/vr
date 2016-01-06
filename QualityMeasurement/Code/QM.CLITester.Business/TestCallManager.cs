@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -12,7 +13,10 @@ using QM.CLITester.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
-
+using QM.BusinessEntity.Business;
+using QM.BusinessEntity.Entities;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 namespace QM.CLITester.Business
 {
     public class TestCallManager
@@ -47,10 +51,10 @@ namespace QM.CLITester.Business
             return dataManager.UpdateInitiateTest(testCallId, initiateTestInformation, callTestStatus, initiationRetryCount, failureMessage);
         }
 
-        public bool UpdateTestProgress(long testCallId, Object testProgress, CallTestStatus callTestStatus, CallTestResult? callTestResult, int getProgressRetryCount, string failureMessage)
+        public bool UpdateTestProgress(long testCallId, Object testProgress, Measure measure, CallTestStatus callTestStatus, CallTestResult? callTestResult, int getProgressRetryCount, string failureMessage)
         {
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            return dataManager.UpdateTestProgress(testCallId, testProgress, callTestStatus, callTestResult, getProgressRetryCount, failureMessage);
+            return dataManager.UpdateTestProgress(testCallId, testProgress, measure, callTestStatus, callTestResult, getProgressRetryCount, failureMessage);
         }
 
         public LastCallUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows)
@@ -58,7 +62,15 @@ namespace QM.CLITester.Business
             LastCallUpdateOutput lastCallUpdateOutputs = new LastCallUpdateOutput();
 
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            lastCallUpdateOutputs.ListTestCallDetails = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId());
+
+            List<TestCall> listTestCalls = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId());
+            List<TestCallDetail> listTestCallDetails = new List<TestCallDetail>();
+            foreach (TestCall testCall in listTestCalls)
+            {
+                listTestCallDetails.Add(TestCallDetailMapper(testCall));
+            }
+
+            lastCallUpdateOutputs.ListTestCallDetails = listTestCallDetails;
             lastCallUpdateOutputs.MaxTimeStamp = maxTimeStamp;
             return lastCallUpdateOutputs;
         }
@@ -67,7 +79,14 @@ namespace QM.CLITester.Business
         {
             input.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            return  dataManager.GetBeforeId(input);
+
+            List<TestCall> listTestCalls = dataManager.GetBeforeId(input);
+            List<TestCallDetail> listTestCallDetails = new List<TestCallDetail>();
+            foreach (TestCall testCall in listTestCalls)
+            {
+                listTestCallDetails.Add(TestCallDetailMapper(testCall));
+            }
+            return listTestCallDetails;
         }
 
 
@@ -91,8 +110,20 @@ namespace QM.CLITester.Business
         public IDataRetrievalResult<TestCallDetail> GetFilteredTestCalls(DataRetrievalInput<TestCallQuery> input)
         {
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            Vanrise.Entities.BigResult<TestCallDetail> testCallDetails = dataManager.GetTestCallFilteredFromTemp(input);
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, testCallDetails);
+            
+            Vanrise.Entities.BigResult<TestCall> testCalls= dataManager.GetTestCallFilteredFromTemp(input);
+             Vanrise.Entities.BigResult<TestCallDetail> testBigResult = new BigResult<TestCallDetail>();
+
+            List<TestCallDetail> listTestCallDetails = new List<TestCallDetail>();
+
+            foreach (TestCall testCall in testCalls.Data)
+            {
+                listTestCallDetails.Add(TestCallDetailMapper(testCall));
+            }
+            testBigResult.Data = listTestCallDetails;
+            testBigResult.ResultKey = testCalls.ResultKey;
+            testBigResult.TotalCount = testCalls.TotalCount;
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, testBigResult);
         }
 
         public List<Vanrise.Entities.TemplateConfig> GetInitiateTestTemplates()
@@ -106,6 +137,34 @@ namespace QM.CLITester.Business
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.CliTesterConnectorTestProgress);
         }
+
+
+        TestCallDetail TestCallDetailMapper(TestCall testCall)
+        {
+            SupplierManager supplierManager = new SupplierManager();
+            Supplier supplier = supplierManager.GetSupplier(testCall.SupplierID);
+            
+            ZoneManager zoneManager = new ZoneManager();
+            Zone zone = zoneManager.GetZone(testCall.ZoneID);
+            
+            CountryManager countryManager = new CountryManager();
+            Country country = countryManager.GetCountry(testCall.CountryID);
+
+            UserManager userManager = new UserManager();
+            User user = userManager.GetUserbyId(testCall.UserID);
+
+            return new TestCallDetail()
+            {
+                Entity = testCall,
+                CallTestStatusDescription = Utilities.GetEnumAttribute<CallTestStatus, DescriptionAttribute>(testCall.CallTestStatus).Description,
+                CallTestResultDescription = Utilities.GetEnumAttribute<CallTestResult, DescriptionAttribute>(testCall.CallTestResult).Description,
+                SupplierName = supplier == null ? "" : supplier.Name,
+                UserName = user == null ? "" : user.Name,
+                CountryName = country == null ? "" : country.Name,
+                ZoneName = zone == null ? "" : zone.Name
+            };
+        }
+
     }
 
 }

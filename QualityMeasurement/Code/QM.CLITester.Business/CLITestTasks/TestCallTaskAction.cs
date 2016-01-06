@@ -20,11 +20,11 @@ namespace QM.CLITester.Business
                 throw new Exception(
                     String.Format("taskActionArgument '{0}' is not of type TestCallTaskActionArgument",
                         testCallTaskActionArgument));
-            if (testCallTaskActionArgument.TestCallQueryInput == null)
-                throw new ArgumentNullException("testCallTaskActionArgument.TestCallQueryInput");
+            if (testCallTaskActionArgument.AddTestCallInput == null)
+                throw new ArgumentNullException("testCallTaskActionArgument.AddTestCallInput");
 
             TestCallManager manager = new TestCallManager();
-            AddTestCallOutput exuctionInfo = manager.AddNewTestCall(testCallTaskActionArgument.TestCallQueryInput, task.OwnerId);
+            AddTestCallOutput exuctionInfo = manager.AddNewTestCall(testCallTaskActionArgument.AddTestCallInput, task.OwnerId);
 
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
             {

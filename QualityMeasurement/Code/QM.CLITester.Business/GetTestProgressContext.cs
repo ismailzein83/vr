@@ -20,5 +20,11 @@ namespace QM.CLITester.Business
             get;
             set;
         }
+
+        public Measure RecentMeasure
+        {
+            get;
+            set;
+        }
     }
 }

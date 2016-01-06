@@ -82,7 +82,7 @@ namespace QM.CLITester.iTestIntegration
             ServiceActions serviceActions = new ServiceActions();
             return ResponseTestProgress(
                 serviceActions.PostRequest("3011", String.Format("&jid={0}", ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID)),
-                ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID, context.RecentTestProgress);
+                ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID, context.RecentTestProgress, context.RecentMeasure);
         }
 
         #region Private Members
@@ -120,7 +120,7 @@ namespace QM.CLITester.iTestIntegration
             return testOutput;
         }
 
-        private GetTestProgressOutput ResponseTestProgress(string response, string testId, Object recentTestProgress)
+        private GetTestProgressOutput ResponseTestProgress(string response, string testId, Object recentTestProgress, Measure recentMeasure)
         {
             GetTestProgressOutput testProgressOutput = new GetTestProgressOutput();
 
@@ -138,6 +138,16 @@ namespace QM.CLITester.iTestIntegration
                 {
                     var node = xnList[0];
 
+                    Measure resultTestProgress = new Measure
+                    {
+                        Pdd = node["PDD"] != null ? Decimal.Parse(node["PDD"].InnerText) : 0,
+                        Mos = 0,
+                        Duration = null,
+                        ReleaseCode = null,
+                        ReceivedCli = null,
+                        RingDuration = null
+                    };
+
                     TestProgress testProgress = new TestProgress
                     {
                         Name = node["Name"] != null ? node["Name"].InnerText : "",
@@ -146,10 +156,10 @@ namespace QM.CLITester.iTestIntegration
                         CliSuccess = node["CLI_Success"] != null ? Int32.Parse(node["CLI_Success"].InnerText) : 0,
                         CliNoResult = node["CLI_No_Result"] != null ? Int32.Parse(node["CLI_No_Result"].InnerText) : 0,
                         CliFail = node["CLI_Fail"] != null ? Int32.Parse(node["CLI_Fail"].InnerText) : 0,
-                        Pdd = node["PDD"] != null ? Decimal.Parse(node["PDD"].InnerText) : 0,
                         ShareUrl = node["Share_URL"] != null ? node["Share_URL"].InnerText : ""
                     };
 
+                    testProgressOutput.Measure = resultTestProgress;
                     testProgressOutput.TestProgress = testProgress;
                     if (testProgress.TotalCalls == testProgress.CompletedCalls)
                     {
@@ -162,11 +172,11 @@ namespace QM.CLITester.iTestIntegration
                         return testProgressOutput;
                     }
 
-                    if(recentTestProgress != null)
-                        testProgressOutput.Result = CompareTestProgress((TestProgress)recentTestProgress, (TestProgress)testProgressOutput.TestProgress) ?
+                    if(recentTestProgress != null || recentMeasure != null)
+                        testProgressOutput.Result = CompareTestProgress((TestProgress)recentTestProgress, (TestProgress)testProgressOutput.TestProgress, recentMeasure, testProgressOutput.Measure) ?
                             GetTestProgressResult.ProgressNotChanged : GetTestProgressResult.ProgressChanged;
                     else
-                        testProgressOutput.Result =  testProgressOutput.TestProgress == null ? GetTestProgressResult.ProgressNotChanged :
+                        testProgressOutput.Result =  (testProgressOutput.TestProgress == null && testProgressOutput.Measure == null) ? GetTestProgressResult.ProgressNotChanged :
                         GetTestProgressResult.ProgressChanged;
 
                     return testProgressOutput;
@@ -177,16 +187,27 @@ namespace QM.CLITester.iTestIntegration
             return testProgressOutput;
         }
 
-        private bool CompareTestProgress(TestProgress recentTestProgress, TestProgress testProgress)
+        private bool CompareTestProgress(TestProgress recentTestProgress, TestProgress testProgress, Measure recentMeasure, Measure measure)
         {
-            return (
-                (recentTestProgress.CliFail == testProgress.CliFail) &&
-                (recentTestProgress.CliNoResult == testProgress.CliNoResult) &&
-                (recentTestProgress.CliSuccess == testProgress.CliSuccess) &&
-                (recentTestProgress.CompletedCalls == testProgress.CompletedCalls) &&
-                (recentTestProgress.Pdd == testProgress.Pdd) &&
-                (recentTestProgress.TotalCalls == testProgress.TotalCalls)
-                );
+            bool same = true;
+            if (recentTestProgress != null)
+            {
+                same = ((recentTestProgress.CliFail == testProgress.CliFail) && (recentTestProgress.CliNoResult == testProgress.CliNoResult) &&
+                    (recentTestProgress.CliSuccess == testProgress.CliSuccess) && (recentTestProgress.CompletedCalls == testProgress.CompletedCalls)
+                    && (recentTestProgress.TotalCalls == testProgress.TotalCalls)
+                    );
+            }
+
+            if (recentMeasure != null)
+            {
+                same = ((recentMeasure.Pdd == measure.Pdd) && (recentMeasure.Mos == measure.Mos) &&
+
+                    (recentMeasure.Duration == measure.Duration) && (recentMeasure.ReleaseCode == measure.ReleaseCode) &&
+                    (recentMeasure.ReceivedCli == measure.ReceivedCli) && (recentMeasure.RingDuration == measure.RingDuration)
+                    );
+            }
+
+            return same;
         }
         #endregion
     }

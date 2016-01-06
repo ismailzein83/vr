@@ -47,7 +47,7 @@ function () {
                         ctrl.cliSuccess = item.Entity.TestProgress.CliSuccess;
                         ctrl.cliNoResult = item.Entity.TestProgress.CliNoResult;
                         ctrl.fail = item.Entity.TestProgress.CliFail;
-                        ctrl.pdd = item.Entity.TestProgress.Pdd;
+                        //ctrl.pdd = item.Entity.Measure.Pdd;
                     }
                 }
 

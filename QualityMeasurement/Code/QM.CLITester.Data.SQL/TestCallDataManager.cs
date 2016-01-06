@@ -55,15 +55,15 @@ namespace QM.CLITester.Data.SQL
             return GetItemsSP("QM_CLITester.sp_TestCall_GetAllbyBatchNumber", TestCallMapper, batchNumber);
         }
 
-        public List<TestCallDetail> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int userId)
+        public List<TestCall> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int userId)
         {
-            List<TestCallDetail> listTestCalls = new List<TestCallDetail>();
+            List<TestCall> listTestCalls = new List<TestCall>();
             byte[] timestamp = null;
 
             ExecuteReaderSP("QM_CLITester.sp_TestCall_GetUpdated", (reader) =>
             {
                 while (reader.Read())
-                    listTestCalls.Add(TestCallDetailMapper(reader));
+                    listTestCalls.Add(TestCallMapper(reader));
                 if (reader.NextResult())
                     while (reader.Read())
                         timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
@@ -72,9 +72,9 @@ namespace QM.CLITester.Data.SQL
             maxTimeStamp = timestamp;
             return listTestCalls;
         }
-        public List<TestCallDetail> GetBeforeId(GetBeforeIdInput input)
+        public List<TestCall> GetBeforeId(GetBeforeIdInput input)
         {
-            return GetItemsSP("[QM_CLITester].[sp_TestCall_GetBeforeID]", TestCallDetailMapper, input.LessThanID, input.NbOfRows, input.UserId);
+            return GetItemsSP("[QM_CLITester].[sp_TestCall_GetBeforeID]", TestCallMapper, input.LessThanID, input.NbOfRows, input.UserId);
         }
 
         public List<TotalCallsChart> GetTotalCallsByUserId(int userId)
@@ -84,19 +84,20 @@ namespace QM.CLITester.Data.SQL
 
         public bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus, int initiationRetryCount, string failureMessage)
         {
-            int recordsEffected = ExecuteNonQuerySP("[QM_CLITester].[sp_TestCall_UpdateInitiateTest]", testCallId,
+            int recordsEffected = ExecuteNonQuerySP("QM_CLITester.sp_TestCall_UpdateInitiateTest", testCallId,
                 initiateTestInformation != null ? Serializer.Serialize(initiateTestInformation) : null, callTestStatus, initiationRetryCount, failureMessage);
             return (recordsEffected > 0);
         }
 
-        public bool UpdateTestProgress(long testCallId, Object testProgress, CallTestStatus callTestStatus, CallTestResult? callTestResult, int getProgressRetryCount, string failureMessage)
+        public bool UpdateTestProgress(long testCallId, Object testProgress, Measure measure, CallTestStatus callTestStatus, CallTestResult? callTestResult, int getProgressRetryCount, string failureMessage)
         {
-            int recordsEffected = ExecuteNonQuerySP("QM_CLITester.sp_TestCall_UpdateTestProgress", testCallId,
-                testProgress != null ? Serializer.Serialize(testProgress) : null, callTestStatus, callTestResult, getProgressRetryCount, failureMessage);
+            int recordsEffected = ExecuteNonQuerySP("QM_CLITester.sp_TestCall_UpdateTestProgress", testCallId, testProgress != null ? Serializer.Serialize(testProgress) : null,
+                callTestStatus, callTestResult, getProgressRetryCount, failureMessage, measure.Pdd, measure.Mos, measure.Duration, measure.ReleaseCode, measure.ReceivedCli,
+                measure.RingDuration);
             return (recordsEffected > 0);
         }
 
-        public Vanrise.Entities.BigResult<TestCallDetail> GetTestCallFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<TestCallQuery> input)
+        public Vanrise.Entities.BigResult<TestCall> GetTestCallFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<TestCallQuery> input)
         {
             string callTestStatusids = null;
             if (input.Query.CallTestStatus != null && input.Query.CallTestStatus.Any())
@@ -133,11 +134,21 @@ namespace QM.CLITester.Data.SQL
                     input.Query.FromTime, input.Query.ToTime == DateTime.MinValue ? DateTime.Now : input.Query.ToTime);
             };
 
-            return RetrieveData(input, createTempTableAction, TestCallDetailMapper, _columnMapper);
+            return RetrieveData(input, createTempTableAction, TestCallMapper, _columnMapper);
         }
 
         TestCall TestCallMapper(IDataReader reader)
         {
+            Measure measure = new Measure
+            {
+                Pdd = GetReaderValue<decimal>(reader, "PDD"),
+                Mos = GetReaderValue<decimal>(reader, "MOS"),
+                Duration = reader["Duration"] as string,
+                ReleaseCode = reader["ReleaseCode"] as string,
+                ReceivedCli = reader["ReceivedCLI"] as string,
+                RingDuration = reader["RingDuration"] as string,
+            };
+
             TestCall testCall = new TestCall
             {
                 ID = (long)reader["ID"],
@@ -151,6 +162,7 @@ namespace QM.CLITester.Data.SQL
                 CallTestResult = GetReaderValue<CallTestResult>(reader, "CallTestResult"),
                 InitiationRetryCount = GetReaderValue<int>(reader, "InitiationRetryCount"),
                 GetProgressRetryCount = GetReaderValue<int>(reader, "GetProgressRetryCount"),
+                Measure = measure,
                 FailureMessage = reader["FailureMessage"] as string,
                 BatchNumber = GetReaderValue<long>(reader, "BatchNumber")
             };
@@ -164,25 +176,6 @@ namespace QM.CLITester.Data.SQL
                 testCall.TestProgress = Serializer.Deserialize(testProgressSerialized);
 
             return testCall;
-        }
-
-        TestCallDetail TestCallDetailMapper(IDataReader reader)
-        {
-            SupplierManager supplierManager = new SupplierManager();
-            ZoneManager zoneManager = new ZoneManager();
-            CountryManager countryManager = new CountryManager();
-            UserManager userManager = new UserManager();
-
-            return new TestCallDetail()
-            {
-                Entity = TestCallMapper(reader),
-                CallTestStatusDescription = Utilities.GetEnumAttribute<CallTestStatus, DescriptionAttribute>((CallTestStatus)TestCallMapper(reader).CallTestStatus).Description,
-                CallTestResultDescription = Utilities.GetEnumAttribute<CallTestResult, DescriptionAttribute>((CallTestResult)TestCallMapper(reader).CallTestResult).Description,
-                SupplierName = supplierManager.GetSupplier(TestCallMapper(reader).SupplierID) == null ? "" : supplierManager.GetSupplier(TestCallMapper(reader).SupplierID).Name,
-                UserName = userManager.GetUserbyId(TestCallMapper(reader).UserID) == null ? "" : userManager.GetUserbyId(TestCallMapper(reader).UserID).Name,
-                CountryName = countryManager.GetCountry(TestCallMapper(reader).CountryID) == null ? "" : countryManager.GetCountry(TestCallMapper(reader).CountryID).Name,
-                ZoneName = zoneManager.GetZone(TestCallMapper(reader).ZoneID) == null ? "" : zoneManager.GetZone(TestCallMapper(reader).ZoneID).Name,
-            };
         }
 
         TotalCallsChart TotalCallsByUserIdMapper(IDataReader reader)

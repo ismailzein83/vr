@@ -189,6 +189,7 @@ namespace QM.BusinessEntity.Business
                             updatedCount++;
                         else
                             notInsertedCount++;
+
                     }
                     else
                         notInsertedCount++;
@@ -205,23 +206,33 @@ namespace QM.BusinessEntity.Business
             if (supplier.Settings == null)
             {
                 supplier.Settings = new SupplierSettings();
-                supplier.Settings.ExtendedSettings = new List<ExtendedSupplierSetting>();
+                if (supplier.Settings.ExtendedSettings == null)
+                    supplier.Settings.ExtendedSettings = new List<ExtendedSupplierSetting>();
+            } 
+            Dictionary<string, object> excelFields = new Dictionary<string, object>();
+            for (int j = 1; j < supplierDataTable.Columns.Count; j++)
+            {
+                excelFields.Add(extendedFields[j - 1], supplierDataTable.Rows[i][j].ToString());
+            }
 
-                foreach (Type type in implementations)
+            foreach (Type type in implementations)
+            {
+                ExtendedSupplierSetting baseClass =
+                    supplier.Settings.ExtendedSettings.FindRecord(itm => itm.GetType() == type);
+                if (baseClass == null)
                 {
-                    ExtendedSupplierSetting baseClass = Activator.CreateInstance(type) as ExtendedSupplierSetting;
+                    baseClass = Activator.CreateInstance(type) as ExtendedSupplierSetting;
                     if (baseClass == null)
-                        throw new Exception(String.Format("invalid logger type {0}", baseClass.GetType()));
-
-                    Dictionary<string, object> excelFields = new Dictionary<string, object>();
-
-                    for (int j = 1; j < supplierDataTable.Columns.Count; j++)
-                        excelFields.Add(extendedFields[j - 1], supplierDataTable.Rows[i][j].ToString());
-
-                    baseClass.ApplyExcelFields(supplier, excelFields);
-
+                        throw new Exception(String.Format("{0} is not of type ExtendedSupplierSetting", baseClass));
                     supplier.Settings.ExtendedSettings.Add(baseClass);
                 }
+
+                baseClass.ApplyExcelFields(supplier, excelFields);
+            }
+
+            foreach (var extendedSetting in supplier.Settings.ExtendedSettings)
+            {
+                extendedSetting.Apply(supplier);
             }
         }
 

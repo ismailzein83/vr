@@ -62,6 +62,7 @@ namespace QM.CLITester.Entities
         Object InitiateTestInformation { get; }
 
         Object RecentTestProgress { get; }
+        Measure RecentMeasure { get; }
     }
 
     public class GetTestProgressOutput
@@ -69,6 +70,7 @@ namespace QM.CLITester.Entities
         public GetTestProgressResult Result { get; set; }
 
         public Object TestProgress { get; set; }
+        public Measure Measure { get; set; }
 
         public CallTestResult CallTestResult { get; set; }
     }
@@ -86,7 +88,16 @@ namespace QM.CLITester.Entities
         public int CliSuccess { get; set; }
         public int CliNoResult { get; set; }
         public int CliFail { get; set; }
-        public decimal Pdd { get; set; }
         public string ShareUrl { get; set; }
+    }
+
+    public class Measure
+    {
+        public decimal Pdd { get; set; }
+        public decimal Mos { get; set; }
+        public string Duration { get; set; }
+        public string ReleaseCode { get; set; }
+        public string ReceivedCli { get; set; }
+        public string RingDuration { get; set; }
     }
 }
