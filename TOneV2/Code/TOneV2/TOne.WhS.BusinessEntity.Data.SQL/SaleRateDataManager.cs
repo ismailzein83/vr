@@ -13,10 +13,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SaleRateDataManager : BaseSQLDataManager, ISaleRateDataManager
     {
+        Dictionary<string, string> _mapper;
+
         public SaleRateDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
-
+            _mapper = new Dictionary<string, string>();
+            _mapper.Add("Entity.SaleRateId", "ID");
+            _mapper.Add("ZoneName", "ZoneID");
+            _mapper.Add("Entity.NormalRate", "Rate");
+            _mapper.Add("Entity.BED", "BED");
+            _mapper.Add("Entity.EED", "EED");
         }
 
         public Vanrise.Entities.BigResult<Entities.SaleRate> GetSaleRateFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SaleRateQuery> input)
@@ -27,13 +34,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 if (input.Query.ZonesIds!=null &&  input.Query.ZonesIds.Count() > 0)
                     zonesids = string.Join<int>(",", input.Query.ZonesIds);
 
-
-
                 ExecuteNonQuerySP("TOneWhS_BE.sp_SaleRate_CreateTempByFiltered", tempTableName, input.Query.EffectiveOn, input.Query.SellingNumberPlanId, zonesids, input.Query.OwnerType , input.Query.OwnerId);
             };
 
-            return RetrieveData(input, createTempTableAction, SaleRateMapper);
-
+            return RetrieveData(input, createTempTableAction, SaleRateMapper, _mapper);
         }
         
         public List<SaleRate> GetEffectiveSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
