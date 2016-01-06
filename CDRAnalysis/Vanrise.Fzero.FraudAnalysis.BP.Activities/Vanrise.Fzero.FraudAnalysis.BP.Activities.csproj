@@ -87,6 +87,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataWarehouse\ApplyDWStrategiesToDB.cs" />
     <Compile Include="DataWarehouse\ApplyDWCDRsToDB.cs" />
     <Compile Include="ApplyNumberProfilesToDB.cs" />
     <Compile Include="ApplyStrategyExecutionDetailsToDB.cs" />

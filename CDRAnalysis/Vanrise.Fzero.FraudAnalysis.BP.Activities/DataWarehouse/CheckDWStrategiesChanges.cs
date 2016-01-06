@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
     {
         public Dictionary<int, DWStrategy> DWStrategies { get; set; }
 
-        public Dictionary<int, DWStrategy> ToBeInsertedStrategies { get; set; }
+        public List<DWStrategy> ToBeInsertedStrategies { get; set; }
 
     }
 
@@ -37,7 +37,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
         [RequiredArgument]
-        public InOutArgument<Dictionary<int, DWStrategy>> ToBeInsertedStrategies { get; set; }
+        public InOutArgument<List<DWStrategy>> ToBeInsertedStrategies { get; set; }
 
         #endregion
 
@@ -56,7 +56,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     dwStrategy.Name = i.Name;
                     dwStrategy.Type = Vanrise.Common.Utilities.GetEnumDescription(((PeriodEnum)i.PeriodId));
 
-                    inputArgument.ToBeInsertedStrategies.Add(i.Id, dwStrategy);
+                    inputArgument.ToBeInsertedStrategies.Add(dwStrategy);
                 }
         }
 
