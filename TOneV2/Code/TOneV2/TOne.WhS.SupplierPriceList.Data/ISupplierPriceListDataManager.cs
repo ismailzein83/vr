@@ -10,6 +10,6 @@ namespace TOne.WhS.SupplierPriceList.Data
     {
         bool AddSupplierPriceList(int supplierAccountId, int? currencyId, out int supplierPriceListId);
 
-        bool AddPriceListAndSyncImportedDataWithDB(int priceListId, int supplierId, int currencyId);
+        bool AddPriceListAndSyncImportedDataWithDB(int priceListId, int supplierId, int currencyId, long fileId);
     }
 }

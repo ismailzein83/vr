@@ -21,9 +21,9 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "CodePreparation")]
     public class CodePreparationController : BaseAPIController
     {
-        [HttpGet]
+        [HttpPost]
         [Route("ApplyCodePreparationForEntities")]
-        public CreateProcessOutput ApplyCodePreparationForEntities(int sellingNumberPlanId, int? fileId, DateTime? effectiveDate, bool isFromExcel)
+        public CreateProcessOutput ApplyCodePreparationForEntities(CodePreparationUserInput input)
         {
             CodePreparationManager manager = new CodePreparationManager();
             BPClient bpClient = new BPClient();
@@ -31,10 +31,10 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
              {
                  InputArguments = new CodePreparationInput
                  {
-                     EffectiveDate = effectiveDate,
-                     FileId = fileId,
-                     SellingNumberPlanId = sellingNumberPlanId,
-                     IsFromExcel = isFromExcel
+                     EffectiveDate = input.EffectiveDate,
+                     FileId = input.FileId,
+                     SellingNumberPlanId = input.SellingNumberPlanId,
+                     IsFromExcel = input.IsFromExcel
                  }
 
              });
@@ -106,5 +106,16 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
             CodePreparationManager manager = new CodePreparationManager();
             return GetWebResponse(input, manager.GetCodeItems(input));
         }
+    }
+
+    public class CodePreparationUserInput
+    {
+        public int SellingNumberPlanId { get; set; }
+
+        public int FileId { get; set; }
+
+        public DateTime? EffectiveDate { get; set; }
+
+        public bool IsFromExcel { get; set; }
     }
 }

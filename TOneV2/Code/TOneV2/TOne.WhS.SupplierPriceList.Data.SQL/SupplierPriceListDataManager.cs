@@ -25,9 +25,9 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         }
 
 
-        public bool AddPriceListAndSyncImportedDataWithDB(int priceListId, int supplierId, int currencyId)
+        public bool AddPriceListAndSyncImportedDataWithDB(int priceListId, int supplierId, int currencyId, long fileId)
         {
-            int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierPriceList_SyncWithImportedData", priceListId, supplierId, currencyId);
+            int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierPriceList_SyncWithImportedData", priceListId, supplierId, currencyId, fileId);
             return (recordesEffected > 0);
         }
     }

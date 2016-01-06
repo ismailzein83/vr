@@ -114,6 +114,8 @@ when not matched by source then
 	delete;
 set identity_insert [TOneWhS_BE].[SellingNumberPlan] off;
 
+Delete from [TOneWhS_BE].SaleEntityRoutingProduct
+
 --TOneWhS_BE.RoutingProduct-------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;

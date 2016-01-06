@@ -93,8 +93,8 @@
         </InArgument>
       </twsba1:GetDataFromPriceList.EffectiveDate>
       <twsba1:GetDataFromPriceList.FileId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.FileId</mca:CSharpValue>
+        <InArgument x:TypeArguments="x:Int64">
+          <mca:CSharpValue x:TypeArguments="x:Int64">Input.FileId</mca:CSharpValue>
         </InArgument>
       </twsba1:GetDataFromPriceList.FileId>
       <twsba1:GetDataFromPriceList.ImportedCodes>
@@ -149,7 +149,7 @@
         </OutArgument>
       </vbw:CombineLists.OutputList>
     </vbw:CombineLists>
-    <vbw:Validate>
+    <vbw:Validate sap2010:WorkflowViewState.IdRef="Validate_1">
       <vbw:Validate.BusinessRules>
         <InArgument x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">ImportedDataValidationRules</mca:CSharpValue>
@@ -160,7 +160,6 @@
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpValue>
         </InArgument>
       </vbw:Validate.ImportedDataToValidate>
-      <sap2010:WorkflowViewState.IdRef>Validate_1</sap2010:WorkflowViewState.IdRef>
     </vbw:Validate>
     <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
       <twsba1:StructureDataByCountries sap2010:WorkflowViewState.IdRef="StructureDataByCountries_2">
@@ -519,6 +518,11 @@
             <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
           </InArgument>
         </twsba1:SyncImportedDataWithDB.CurrencyId>
+        <twsba1:SyncImportedDataWithDB.FileId>
+          <InArgument x:TypeArguments="x:Int64">
+            <mca:CSharpValue x:TypeArguments="x:Int64">Input.FileId</mca:CSharpValue>
+          </InArgument>
+        </twsba1:SyncImportedDataWithDB.FileId>
         <twsba1:SyncImportedDataWithDB.PriceListId>
           <InArgument x:TypeArguments="x:Int32">
             <mca:CSharpValue x:TypeArguments="x:Int32">PriceListId</mca:CSharpValue>
@@ -531,7 +535,7 @@
         </twsba1:SyncImportedDataWithDB.SupplierId>
       </twsba1:SyncImportedDataWithDB>
     </Sequence>
-    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWxtPAOXBA4CAQFUBXMjAwGiDXQFhAEjAwHcDIUBBYsBLQMBxAyMAQWXARgDAZUMmAEFpAEUAwHmC6UBBZUEEAIBAlcLV1gDAZYOcAtwXgMB/w1cC1xqAwHoDWsLa3kDAdENYQthVAMBug1mC2Z5AwGjDYEBC4EBeQMBiw18C3xxAwH0DHcLd3EDAd0MiAELiAGFAQMBxQyPAQuPAasBAwGtDJQBC5QBfwMBlgygAQugAXcDAf4LmwELmwF9AwHnC6YBB7EBKQMBtwuyAQe4ASYDAZ8LuQEHgwQRAgFJhAQHlAQnAgEDqQENqQGCAQMBzwuuAQ2uAXMDAbgLtQENtQFdAwGgC7wBDbwBegMBiAvDAQuBBBYCAUqMBA2MBFUCATKRBA2RBGECARuHBA2HBFoCAQTEAQ34ARgDAawJ+QENhAIrAwH7CIUCDagCGAMB6AepAg3XAioDAY8G2AIN9wIqAwH+BPgCDYgDLwMBtQSJAw2ABBgCAUvFAQ/VASkDAb8K1gEP5gEpAwH2CecBD/cBKQMBrQn8ARP8AX8DAZQJgQITgQKRAQMB/AiGAg+WAi0DAbIIlwIPpwItAwHpB7sCE7sCeQMB0AfPAhPPAncDAbgHtgITtgJpAwGgB6wCE6wCfwMBiAfUAhPUAncDAfAGwAITwAKJAQMB2AbKAhPKAnUDAcAGsQITsQJ/AwGoBsUCE8UCgQEDAZAG2wIT2wJ/AwH3BfQCE/QCdwMB3wXgAhPgAnkDAccF6gIT6gKBAQMBrwXlAhPlAokBAwGXBe8CE+8CbQMB/wT7AhP7Am8DAeYEgAMTgANvAwHOBIUDE4UDbwMBtgSKAw+aAyoDAewDmwMPpgMuAwG7A6cDD7IDKgMBigOzAw++Ay4DAdkCvwMPygMqAwGoAssDD9YDLgMB9wHXAw/nAzEDAa4B6AMP8wMxAgF99AMP/wMxAgFMyAEVyAGJAQMB8ArSARXSAWkDAdgKzQEVzQFgAwHACtkBFdkBiQEDAacK4wEV4wFpAwGPCt4BFd4BYAMB9wn0ARX0AWkDAd4J6gEV6gGJAQMBxgnvARXvAWADAa4JjgIVjgKDAQMB4wiJAhWJAoEBAwHLCJMCFZMCiwEDAbMImgIVmgKBAQMBmgifAhWfAoMBAwGCCKQCFaQCiwEDAeoHkgMVkgNdAwGdBJcDFZcDaQMBhQSNAxWNA3EDAe0DowMVowNdAwHUA54DFZ4DeQMBvAOvAxWvA10DAaMDqgMVqgNxAwGLA7sDFbsDXQMB8gK2AxW2A3kDAdoCxwMVxwNdAwHBAsIDFcIDcQMBqQLTAxXTA10DAZACzgMVzgN5AwH4AeQDFeQDXQMB3wHfAxXfA3EDAccB2gMV2gOLAQMBrwHwAxXwA10DAZYB6wMV6wN7AgF+/AMV/ANdAgFl9wMV9wN7AgFN</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWxuPAObBA4CAQFUBXMjAwG5DXQFhAEjAwHzDIUBBYsBLQMB2wyMAQWXARgDAawMmAEFowEUAwH9C6QBBZkEEAIBAlcLV1gDAa0OcAtwXgMBlg5cC1xqAwH/DWsLa3kDAegNYQthVAMB0Q1mC2Z5AwG6DYEBC4EBeQMBog18C3xxAwGLDXcLd3EDAfQMiAELiAGFAQMB3AyPAQuPAasBAwHEDJQBC5QBfwMBrQygAQugAXcDAZUMmwELmwF9AwH+C6UBB7ABKQMBzguxAQe3ASYDAbYLuAEHggQRAgFggwQHmAQnAgEDqAENqAGCAQMB5gutAQ2tAXMDAc8LtAENtAFdAwG3C7sBDbsBegMBnwvCAQuABBYCAWGQBA2QBFUCAUmVBA2VBGECATKGBA2GBFoCARuLBA2LBFYCAQTDAQ33ARgDAcMJ+AENgwIrAwGSCYQCDacCGAMB/weoAg3WAioDAaYG1wIN9gIqAwGVBfcCDYcDLwMBzASIAw3/AxgCAWLEAQ/UASkDAdYK1QEP5QEpAwGNCuYBD/YBKQMBxAn7ARP7AX8DAasJgAITgAKRAQMBkwmFAg+VAi0DAckIlgIPpgItAwGACLoCE7oCeQMB5wfOAhPOAncDAc8HtQITtQJpAwG3B6sCE6sCfwMBnwfTAhPTAncDAYcHvwITvwKJAQMB7wbJAhPJAnUDAdcGsAITsAJ/AwG/BsQCE8QCgQEDAacG2gIT2gJ/AwGOBvMCE/MCdwMB9gXfAhPfAnkDAd4F6QIT6QKBAQMBxgXkAhPkAokBAwGuBe4CE+4CbQMBlgX6AhP6Am8DAf0E/wIT/wJvAwHlBIQDE4QDbwMBzQSJAw+ZAyoDAYMEmgMPpQMuAwHSA6YDD7EDKgMBoQOyAw+9Ay4DAfACvgMPyQMqAwG/AsoDD9UDLgMBjgLWAw/mAzEDAcUB5wMP8gMxAwGUAfMDD/4DMQIBY8cBFccBiQEDAYcL0QEV0QFpAwHvCswBFcwBYAMB1wrYARXYAYkBAwG+CuIBFeIBaQMBpgrdARXdAWADAY4K8wEV8wFpAwH1CekBFekBiQEDAd0J7gEV7gFgAwHFCY0CFY0CgwEDAfoIiAIViAKBAQMB4giSAhWSAosBAwHKCJkCFZkCgQEDAbEIngIVngKDAQMBmQijAhWjAosBAwGBCJEDFZEDXQMBtASWAxWWA2kDAZwEjAMVjANxAwGEBKIDFaIDXQMB6wOdAxWdA3kDAdMDrgMVrgNdAwG6A6kDFakDcQMBogO6AxW6A10DAYkDtQMVtQN5AwHxAsYDFcYDXQMB2ALBAxXBA3EDAcAC0gMV0gNdAwGnAs0DFc0DeQMBjwLjAxXjA10DAfYB3gMV3gNxAwHeAdkDFdkDiwEDAcYB7wMV7wNdAwGtAeoDFeoDewMBlQH7AxX7A10CAXz2AxX2A3sCAWQ=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -570,23 +574,23 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_3" sap:VirtualizedContainerService.HintSize="2286,861" />
+      <sap2010:ViewStateData Id="ForEach`1_3" sap:VirtualizedContainerService.HintSize="2286,860" />
       <sap2010:ViewStateData Id="SyncImportedDataWithDB_2" sap:VirtualizedContainerService.HintSize="2286,22" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="2308,1171">
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="2308,1170">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2330,1605">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2330,1604">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="2370,1685" />
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="2370,1684" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -5,13 +5,8 @@
 
     function codePreparationAPIService(BaseAPIService, UtilsService, WhS_CodePrep_ModuleConfig) {
 
-        function ApplyCodePreparationForEntities(sellingNumberPlanId, fileId, effectiveDate, isFromExcel) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "ApplyCodePreparationForEntities"), {
-                sellingNumberPlanId: sellingNumberPlanId,
-                fileId: fileId,
-                effectiveDate: effectiveDate,
-                isFromExcel: isFromExcel
-            });
+        function ApplyCodePreparationForEntities(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "ApplyCodePreparationForEntities"), input);
         }
 
 

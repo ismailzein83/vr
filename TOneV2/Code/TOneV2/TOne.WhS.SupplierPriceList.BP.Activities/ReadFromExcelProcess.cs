@@ -15,7 +15,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
     public class ReadFromExcelProcess:CodeActivity
     {
-        public InArgument<int> FileId { get; set; }
+        public InArgument<long> FileId { get; set; }
         public InArgument<DateTime?> EffectiveDate { get; set; }
         public OutArgument<PriceListByZone> PriceListByZone { get; set; }
         public OutArgument<DateTime?> MinimumDate { get; set; }

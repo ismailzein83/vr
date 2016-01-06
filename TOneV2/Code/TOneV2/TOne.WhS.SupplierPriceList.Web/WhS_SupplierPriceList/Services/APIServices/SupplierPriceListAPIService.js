@@ -5,13 +5,8 @@
 
     function supplierZoneAPIService(BaseAPIService, UtilsService, WhS_SupPL_ModuleConfig) {
 
-        function UploadSupplierPriceList(supplierAccountId, currencyId, fileId, effectiveDate) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, "SupplierPriceList", "UploadSupplierPriceList"), {
-                supplierAccountId: supplierAccountId,
-                currencyId: currencyId,
-                fileId: fileId,
-                effectiveDate: effectiveDate
-            });
+        function UploadSupplierPriceList(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, "SupplierPriceList", "UploadSupplierPriceList"), input);
         }
         function DownloadSupplierPriceListTemplate() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, "SupplierPriceList", "DownloadSupplierPriceListTemplate"), {}, {

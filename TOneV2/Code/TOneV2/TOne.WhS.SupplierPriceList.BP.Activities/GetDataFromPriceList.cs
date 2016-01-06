@@ -18,7 +18,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     public class GetDataFromPriceList : CodeActivity
     {
         [RequiredArgument]
-        public InArgument<int> FileId { get; set; }
+        public InArgument<long> FileId { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime?> EffectiveDate { get; set; }

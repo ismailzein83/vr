@@ -43,6 +43,8 @@
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Arguments</AssemblyReference>
@@ -65,8 +67,8 @@
         </InArgument>
       </twsba1:ReadFromExcelProcess.EffectiveDate>
       <twsba1:ReadFromExcelProcess.FileId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.FileId</mca:CSharpValue>
+        <InArgument x:TypeArguments="x:Int64">
+          <mca:CSharpValue x:TypeArguments="x:Int64">Input.FileId</mca:CSharpValue>
         </InArgument>
       </twsba1:ReadFromExcelProcess.FileId>
       <twsba1:ReadFromExcelProcess.MinimumDate>
@@ -175,7 +177,7 @@
         </InArgument>
       </twsba1:ApplyDataToDB.Zones>
     </twsba1:ApplyDataToDB>
-    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0UHJvY2Vzcy54YW1sHDYDswEOAgEBPQVSIwIBbVMFbRsCAU5uBZsBEAIBG5wBBbEBHAIBAkoLSmoDAYABQAtAagIBekULRVQCAXRPC09sAgFuZQtlXwIBZ1sLW2ICAWFWC1ZqAgFbYAtgZAIBVWoLamECAU9vB4QBHQIBNYUBB5oBHQIBHJ8BC58BZAIBFakBC6kBXwIBD6QBC6QBWAIBCa4BC64BWQIBA3wNfGECAUhyDXJaAgFCdw13ZAIBPIEBDYEBYwIBNogBDYgBbgIBL5IBDZIBYQIBKY0BDY0BZAIBI5cBDZcBYwIBHQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0UHJvY2Vzcy54YW1sHDgDtQEOAgEBPwVUIwIBbVUFbxsCAU5wBZ0BEAIBG54BBbMBHAIBAkwLTGoDAYABQgtCagIBekcLR1QCAXRRC1FsAgFuZwtnXwIBZ10LXWICAWFYC1hqAgFbYgtiZAIBVWwLbGECAU9xB4YBHQIBNYcBB5wBHQIBHKEBC6EBZAIBFasBC6sBXwIBD6YBC6YBWAIBCbABC7ABWQIBA34NfmECAUh0DXRaAgFCeQ15ZAIBPIMBDYMBYwIBNooBDYoBbgIBL5QBDZQBYQIBKY8BDY8BZAIBI5kBDZkBYwIBHQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

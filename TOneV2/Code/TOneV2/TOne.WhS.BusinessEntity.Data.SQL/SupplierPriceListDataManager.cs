@@ -29,7 +29,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 SupplierId = (int)reader["SupplierID"],
                 CurrencyId = (int)reader["CurrencyID"],
                 PriceListId = (int)reader["ID"],
-                FileId = (int)reader["FileID"]
+                FileId = (long)reader["FileID"]
             };
             return supplierPriceList;
         }

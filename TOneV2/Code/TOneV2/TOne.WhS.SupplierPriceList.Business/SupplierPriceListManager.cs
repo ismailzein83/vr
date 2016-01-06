@@ -23,10 +23,10 @@ namespace TOne.WhS.SupplierPriceList.Business
             return startingId;
         }
 
-        public bool AddPriceListAndSyncImportedDataWithDB(int priceListId, int supplierId, int currencyId)
+        public bool AddPriceListAndSyncImportedDataWithDB(int priceListId, int supplierId, int currencyId, long fileId)
         {
             ISupplierPriceListDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
-            return dataManager.AddPriceListAndSyncImportedDataWithDB(priceListId, supplierId, currencyId);
+            return dataManager.AddPriceListAndSyncImportedDataWithDB(priceListId, supplierId, currencyId, fileId);
         }
     }
 }

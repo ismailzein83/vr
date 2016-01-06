@@ -38,14 +38,25 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
 
         $scope.applyCodePreparationForEntities = function()
         {
-            return WhS_CodePrep_CodePrepAPIService.ApplyCodePreparationForEntities($scope.selectedSellingNumberPlan.SellingNumberPlanId, {}, {}, false).then(function (response) {
+            var input = {
+                SellingNumberPlanId: $scope.selectedSellingNumberPlan.SellingNumberPlanId,
+                IsFromExcel: false
+            };
+
+            return WhS_CodePrep_CodePrepAPIService.ApplyCodePreparationForEntities(input).then(function (response) {
                 if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
                     return BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
             });
         }
 
         $scope.uploadCodePreparationEntities = function () {
-            return WhS_CodePrep_CodePrepAPIService.ApplyCodePreparationForEntities($scope.selectedSellingNumberPlan.SellingNumberPlanId, $scope.zoneList.fileId, $scope.effectiveDate, true).then(function (response) {
+            var input = {
+                SellingNumberPlanId: $scope.selectedSellingNumberPlan.SellingNumberPlanId,
+                FileId: $scope.zoneList.fileId,
+                EffectiveDate: $scope.effectiveDate,
+                IsFromExcel: true
+            };
+            return WhS_CodePrep_CodePrepAPIService.ApplyCodePreparationForEntities(input).then(function (response) {
                 if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
                     return BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
             });

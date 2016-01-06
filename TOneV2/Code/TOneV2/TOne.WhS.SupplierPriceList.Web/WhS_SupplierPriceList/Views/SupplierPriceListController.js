@@ -18,7 +18,14 @@ function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIServi
         $scope.effectiveDate = new Date();
         $scope.zoneList;
         $scope.upload = function () {
-            return WhS_SupPL_SupplierPriceListAPIService.UploadSupplierPriceList($scope.selectedSupplier.CarrierAccountId,$scope.selectedCurrency.CurrencyId, $scope.zoneList.fileId, $scope.effectiveDate == undefined ? {} : $scope.effectiveDate).then(function (response) {
+            var input = {
+                SupplierId: $scope.selectedSupplier.CarrierAccountId,
+                CurrencyId: $scope.selectedCurrency.CurrencyId,
+                FileId: $scope.zoneList.fileId,
+                EffectiveDate: $scope.effectiveDate
+            };
+
+            return WhS_SupPL_SupplierPriceListAPIService.UploadSupplierPriceList(input).then(function (response) {
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
                         return BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
                 });

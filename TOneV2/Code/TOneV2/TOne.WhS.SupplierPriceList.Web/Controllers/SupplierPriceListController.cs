@@ -16,41 +16,42 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.SupplierPriceList.Web.Controllers
 {
-   [RoutePrefix(Constants.ROUTE_PREFIX + "SupplierPriceList")]
-    public class WhS_SupplierPriceListController:BaseAPIController
+    [RoutePrefix(Constants.ROUTE_PREFIX + "SupplierPriceList")]
+    public class WhS_SupplierPriceListController : BaseAPIController
     {
-        [HttpGet]
+        [HttpPost]
         [Route("UploadSupplierPriceList")]
-        public CreateProcessOutput UploadSupplierPriceList(int supplierAccountId,int currencyId, int fileId, DateTime? effectiveDate)
+        public CreateProcessOutput UploadSupplierPriceList(SupplierPriceListUserInput input)
         {
             BPClient bpClient = new BPClient();
             return bpClient.CreateNewProcess(new CreateProcessInput
             {
                 InputArguments = new SupplierPriceListProcessInput
                 {
-                    EffectiveDate = effectiveDate,
-                    FileId = fileId,
-                    SupplierAccountId = supplierAccountId,
-                    CurrencyId = currencyId,
+                    EffectiveDate = input.EffectiveDate,
+                    FileId = input.FileId,
+                    SupplierAccountId = input.SupplierId,
+                    CurrencyId = input.CurrencyId,
                     DeletedCodesDate = DateTime.Now
                 }
 
             });
         }
+
         [HttpGet]
         [Route("DownloadSupplierPriceListTemplate")]
         public HttpResponseMessage DownloadSupplierPriceListTemplate()
         {
-           string obj = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["ImportPriceListTemplatePath"]);
+            string obj = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["ImportPriceListTemplatePath"]);
             Workbook workbook = new Workbook(obj);
             Aspose.Cells.License license = new Aspose.Cells.License();
             license.SetLicense("Aspose.Cells.lic");
             MemoryStream memoryStream = new MemoryStream();
-            memoryStream = workbook.SaveToStream();       
+            memoryStream = workbook.SaveToStream();
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
             memoryStream.Position = 0;
             response.Content = new StreamContent(memoryStream);
-           
+
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
@@ -58,5 +59,16 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
             };
             return response;
         }
+    }
+
+    public class SupplierPriceListUserInput
+    {
+        public int SupplierId { get; set; }
+
+        public int CurrencyId { get; set; }
+
+        public int FileId { get; set; }
+
+        public DateTime? EffectiveDate { get; set; }
     }
 }
