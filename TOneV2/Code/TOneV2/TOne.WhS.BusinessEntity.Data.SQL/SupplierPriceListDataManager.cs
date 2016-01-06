@@ -24,13 +24,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
         SupplierPriceList SupplierPriceListMapper(IDataReader reader)
         {
-            SupplierPriceList supplierRate = new SupplierPriceList
+            SupplierPriceList supplierPriceList = new SupplierPriceList
             {
                 SupplierId = (int)reader["SupplierID"],
                 CurrencyId = (int)reader["CurrencyID"],
                 PriceListId = (int)reader["ID"],
+                FileId = (int)reader["FileID"]
             };
-            return supplierRate;
+            return supplierPriceList;
         }
 
 
