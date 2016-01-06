@@ -4,7 +4,7 @@ using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class Time
+    public class DWTime
     {
         public DateTime DateInstance { get; set; }
         public int? Year { get; set; }
