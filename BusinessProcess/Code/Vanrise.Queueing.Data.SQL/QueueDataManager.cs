@@ -45,43 +45,12 @@ namespace Vanrise.Queueing.Data.SQL
         {
             return ExecuteNonQuerySP("queue.sp_QueueInstance_UpdateName", queueName, (int)status, newQueueName) > 0;
         }
-
-        public void InsertSubscription(IEnumerable<int> sourceQueueIds, int susbscribedQueueId)
-        {
-            if (sourceQueueIds != null)
-            {
-                foreach (var sourceQueueId in sourceQueueIds)
-                {
-                    ExecuteNonQuerySP("queue.sp_QueueSubscription_Insert", sourceQueueId, susbscribedQueueId);
-                }
-            }
-        }
-
+        
         public List<QueueInstance> GetAllQueueInstances()
         {
             return GetItemsSP("queue.sp_QueueInstance_GetAll", QueueInstanceMapper);
         }
-
-        public List<QueueSubscription> GetSubscriptions()
-        {
-            return GetItemsSP("queue.sp_QueueSubscription_GetAll", QueueSubscriptionMapper, (int)QueueInstanceStatus.ReadyToUse);
-        }
-
-        public object GetSubscriptionsMaxTimestamp()
-        {
-            return ExecuteScalarSP("queue.sp_QueueSubscription_GetMaxTimestamp");
-        }
-
-        public bool HaveSubscriptionsChanged(object timestampToCompare)
-        {
-            if (timestampToCompare == null)
-                return true;
-            return !StructuralComparisons.StructuralEqualityComparer.Equals(timestampToCompare, GetSubscriptionsMaxTimestamp());
-            //if (timestampToCompare == null)
-            //    timestampToCompare = DBNull.Value;
-            //return Convert.ToBoolean(ExecuteScalarSP("queue.sp_QueueSubscription_HasNewTimestamp", timestampToCompare));
-        }
-
+       
         public List<QueueItemType> GetQueueItemTypes()
         {
             return GetItemsSP("queue.sp_QueueItemTypes_GetAll", QueueItemTypeMapper);

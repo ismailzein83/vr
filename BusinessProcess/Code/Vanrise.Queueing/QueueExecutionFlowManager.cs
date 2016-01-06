@@ -11,40 +11,40 @@ namespace Vanrise.Queueing
 {
     public class QueueExecutionFlowManager
     {
-        public List<QueueExecutionFlow> GetExecutionFlows()
-        {
-            IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
-            return dataManager.GetExecutionFlows();
-        }
-
         public QueuesByStages GetQueuesByStages(int executionFlowId)
         {
-            IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
-            QueueExecutionFlow executionFlow = dataManager.GetExecutionFlow(executionFlowId);
-            List<QueueStageInfo> queueStages = executionFlow.Tree.GetQueueStageInfos();
-            if (queueStages == null || queueStages.Count == 0)
-                throw new Exception("QueueExecutionFlow doesnt return any QueueStageInfo");
-          
-            QueuesByStages queuesByStages = new QueuesByStages();
-            foreach (var stage in queueStages)
-            {
-                var queueName = GetQueueName(executionFlow, stage);
-                var queueTitle = GetQueueTitle(executionFlow, stage);
-                List<string> sourceQueueNames = null;
-                if (stage.SourceQueueStages != null && stage.SourceQueueStages.Count > 0)
-                {
-                   sourceQueueNames = new List<string>();
-                    foreach (var sourceStage in stage.SourceQueueStages)
-                    {
-                        sourceQueueNames.Add(GetQueueName(executionFlow, sourceStage));
-                    }
-                }
-                PersistentQueueFactory.Default.CreateQueueIfNotExists(executionFlowId, stage.StageName, stage.QueueTypeFQTN, queueName, queueTitle, sourceQueueNames, stage.QueueSettings);
-                if (queuesByStages.ContainsKey(stage.StageName))
-                    throw new Exception(String.Format("Duplicate Stage Names: {0}", stage.StageName));
-                queuesByStages.Add(stage.StageName, PersistentQueueFactory.Default.GetQueue(queueName));
-            }
-            return queuesByStages;
+            string cacheName = String.Format("QueueExecutionFlowManager_GetQueuesByStages_{0}", executionFlowId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().GetOrCreateObject(cacheName,
+               () =>
+               {
+                   IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
+                   QueueExecutionFlow executionFlow = dataManager.GetExecutionFlow(executionFlowId);
+                   List<QueueStageInfo> queueStages = executionFlow.Tree.GetQueueStageInfos();
+                   if (queueStages == null || queueStages.Count == 0)
+                       throw new Exception("QueueExecutionFlow doesnt return any QueueStageInfo");
+
+                   QueuesByStages queuesByStages = new QueuesByStages();
+                   foreach (var stage in queueStages)
+                   {
+                       var queueName = GetQueueName(executionFlow, stage);
+                       var queueTitle = GetQueueTitle(executionFlow, stage);
+                       List<string> sourceQueueNames = null;
+                       if (stage.SourceQueueStages != null && stage.SourceQueueStages.Count > 0)
+                       {
+                           sourceQueueNames = new List<string>();
+                           foreach (var sourceStage in stage.SourceQueueStages)
+                           {
+                               sourceQueueNames.Add(GetQueueName(executionFlow, sourceStage));
+                           }
+                       }
+                       PersistentQueueFactory.Default.CreateQueueIfNotExists(executionFlowId, stage.StageName, stage.QueueTypeFQTN, queueName, queueTitle, sourceQueueNames, stage.QueueSettings);
+                       if (queuesByStages.ContainsKey(stage.StageName))
+                           throw new Exception(String.Format("Duplicate Stage Names: {0}", stage.StageName));
+                       queuesByStages.Add(stage.StageName, PersistentQueueFactory.Default.GetQueue(queueName));
+                   }
+                   return queuesByStages;
+               });
+            
         }
 
         public Vanrise.Entities.InsertOperationOutput<QueueExecutionFlow> AddExecutionFlow(QueueExecutionFlow executionFlowObj)
@@ -80,6 +80,25 @@ namespace Vanrise.Queueing
         private string GetQueueTitle(QueueExecutionFlow executionFlow, QueueStageInfo queueStage)
         {
             return String.Format("{1} ({0})", executionFlow.Name, queueStage.QueueTitle);
+        }
+
+        public List<QueueExecutionFlow> GetExecutionFlows()
+        {
+            var cachedFlows = GetCachedQueueExecutionFlows();
+            if (cachedFlows != null)
+                return cachedFlows.Values.ToList();
+            else
+                return null;
+        }
+
+        Dictionary<int, QueueExecutionFlow> GetCachedQueueExecutionFlows()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().GetOrCreateObject("QueueExecutionFlowManager_GetCachedQueueExecutionFlows",
+               () =>
+               {
+                   IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
+                   return dataManager.GetExecutionFlows().ToDictionary(kvp => kvp.ExecutionFlowId, kvp => kvp);
+               });
         }
     }
 }

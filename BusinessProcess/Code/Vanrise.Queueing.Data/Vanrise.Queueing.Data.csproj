@@ -51,6 +51,7 @@
     <Compile Include="IQueueDataManager.cs" />
     <Compile Include="IQueueExecutionFlowDefinitionDataManager.cs" />
     <Compile Include="IQueueItemDataManager.cs" />
+    <Compile Include="IQueueSubscriptionDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QDataManagerFactory.cs" />
   </ItemGroup>

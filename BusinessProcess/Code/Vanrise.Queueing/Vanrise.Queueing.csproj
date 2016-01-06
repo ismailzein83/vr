@@ -72,6 +72,7 @@
     <Compile Include="QueueExecutionFlowDefinitionManager.cs" />
     <Compile Include="QueueExecutionFlowManager.cs" />
     <Compile Include="QueueingManager.cs" />
+    <Compile Include="QueueSubscriptionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Queueing.Data.SQL\Vanrise.Queueing.Data.SQL.csproj">

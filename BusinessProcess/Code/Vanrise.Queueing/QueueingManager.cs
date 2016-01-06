@@ -72,6 +72,7 @@ namespace Vanrise.Queueing
             int statusProcessedCount = 0;
             int statusItemFailedCount = 0;
             int statusItemProcessingCount = 0;
+            int statusItemSuspendedCount = 0;
 
             foreach (ItemExecutionFlowInfo item in list)
             {
@@ -86,6 +87,9 @@ namespace Vanrise.Queueing
                     case ItemExecutionFlowStatus.Failed:
                         statusItemFailedCount++;
                         break;
+                    case ItemExecutionFlowStatus.Suspended:
+                        statusItemSuspendedCount++;
+                        break;
                     default:
                         statusProcessedCount++;
                         break;
@@ -94,13 +98,14 @@ namespace Vanrise.Queueing
 
             if (statusNewCount == list.Count)
                 result = ItemExecutionFlowStatus.New;
-            else if (statusProcessedCount == list.Count)
-                result = ItemExecutionFlowStatus.Processed;
+            else if ((statusItemSuspendedCount + statusProcessedCount) == list.Count)
+            {
+                result = statusItemSuspendedCount > 0 ? ItemExecutionFlowStatus.Suspended : ItemExecutionFlowStatus.Processed;
+            }
             else if (statusItemFailedCount > 0)
                 result = ItemExecutionFlowStatus.Failed;
-            else if (statusItemProcessingCount > 0)
+            else
                 result = ItemExecutionFlowStatus.Processing;
-
 
             return result;
         }
@@ -148,24 +153,26 @@ namespace Vanrise.Queueing
                });
         }
 
-        internal class QueueInstanceCacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            IQueueDataManager _dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
-            object _updateHandle;
+        #endregion
+    }
 
-            public override Caching.CacheObjectSize ApproximateObjectSize
+    internal class QueueInstanceCacheManager : Vanrise.Caching.BaseCacheManager
+    {
+        IQueueDataManager _queueDataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
+        IQueueExecutionFlowDataManager _queueExecutionFlowDataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
+        object _queueUpdateHandle;
+        object _queueExecutionFlowUpdateHandle;
+
+        public override Caching.CacheObjectSize ApproximateObjectSize
+        {
+            get
             {
-                get
-                {
-                    return Caching.CacheObjectSize.ExtraSmall;
-                }
-            }
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.AreQueuesUpdated(ref _updateHandle);
+                return Caching.CacheObjectSize.ExtraSmall;
             }
         }
-
-        #endregion
+        protected override bool ShouldSetCacheExpired(object parameter)
+        {
+            return _queueDataManager.AreQueuesUpdated(ref _queueUpdateHandle) || _queueExecutionFlowDataManager.AreExecutionFlowsUpdated(ref _queueExecutionFlowUpdateHandle);
+        }
     }
 }

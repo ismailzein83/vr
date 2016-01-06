@@ -37,6 +37,11 @@ namespace Vanrise.Queueing.Data.SQL
             return (recordesEffected > 0);
         }
 
+        public bool AreExecutionFlowsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("queue.ExecutionFlow", ref updateHandle);
+        }
+
         #region Private Methods
 
         private QueueExecutionFlow ExecutionFlowMapper(IDataReader reader)

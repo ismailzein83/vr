@@ -21,15 +21,7 @@ namespace Vanrise.Queueing.Data
         void UpdateQueueInstanceStatus(string queueName, QueueInstanceStatus status);
 
         bool UpdateQueueName(string queueName, QueueInstanceStatus status, string newQueueName);
-
-        void InsertSubscription(IEnumerable<int> sourceQueueIds, int susbscribedQueueId);
-
-        List<QueueSubscription> GetSubscriptions();
-
-        object GetSubscriptionsMaxTimestamp();
-
-        bool HaveSubscriptionsChanged(object timestampToCompare);
-
+        
         List<QueueItemType> GetQueueItemTypes();
 
         bool AreQueuesUpdated(ref object _updateHandle);

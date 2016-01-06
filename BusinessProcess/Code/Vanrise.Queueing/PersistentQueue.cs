@@ -19,10 +19,11 @@ namespace Vanrise.Queueing
         IQueueDataManager _dataManagerQueue;
         IQueueItemDataManager _dataManagerQueueItem;
 
+        QueueSubscriptionManager queueSubscriptionManager;
+
         RunningProcessManager _runningProcessManager;
         int _queueId;
         QueueSettings _queueSettings;
-        List<int> _subscribedQueueIds;
         T _emptyObject;
 
         static int s_maxRetryDequeueTime;
@@ -31,6 +32,7 @@ namespace Vanrise.Queueing
         {
             _dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
             _dataManagerQueueItem = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
+            queueSubscriptionManager = new QueueSubscriptionManager();
             _runningProcessManager = new RunningProcessManager();
             _emptyObject = Activator.CreateInstance<T>();
             _queueId = queueId;
@@ -56,14 +58,15 @@ namespace Vanrise.Queueing
 
         long EnqueuePrivate(T item)
         {
-            UpdateSubscribedQueueIdsIfNeeded();
             string itemDescription = item.GenerateDescription();
             byte[] serialized = item.Serialize();
             byte[] compressed = Vanrise.Common.Compressor.Compress(serialized);
 
             long itemId = _dataManagerQueueItem.GenerateItemID();
             long executionFlowTriggerItemId = item.ExecutionFlowTriggerItemId > 0 ? item.ExecutionFlowTriggerItemId : itemId;//if first item in the flow, assign the item id to the ExecutionFlowTriggerItemId
-            if (_subscribedQueueIds == null || _subscribedQueueIds.Count == 0)
+
+            var subscribedQueueIds = queueSubscriptionManager.GetSubscribedQueueIds(_queueId);
+            if (subscribedQueueIds == null || subscribedQueueIds.Count == 0)
             {
                 _dataManagerQueueItem.EnqueueItem(_queueId, itemId, executionFlowTriggerItemId, compressed, itemDescription, QueueItemStatus.New);
             }
@@ -71,9 +74,9 @@ namespace Vanrise.Queueing
             {
                 Dictionary<int, long> targetQueuesItemsIds = new Dictionary<int, long>();
                 targetQueuesItemsIds.Add(_queueId, itemId);
-                if (_subscribedQueueIds != null)
+                if (subscribedQueueIds != null)
                 {
-                    foreach (int queueId in _subscribedQueueIds)
+                    foreach (int queueId in subscribedQueueIds)
                         targetQueuesItemsIds.Add(queueId, _dataManagerQueueItem.GenerateItemID());
                 }
                 _dataManagerQueueItem.EnqueueItem(targetQueuesItemsIds, _queueId, itemId, executionFlowTriggerItemId, compressed, itemDescription, QueueItemStatus.New);
@@ -186,46 +189,6 @@ namespace Vanrise.Queueing
             else
                 return false;
         }
-
-        DateTime _subscribedQueueIdsUpdatedTime;
-        object _subscriptionsMaxTimeStamp;
-
-        private void UpdateSubscribedQueueIdsIfNeeded()
-        {
-            if ((DateTime.Now - _subscribedQueueIdsUpdatedTime).TotalSeconds > 5)
-            {
-                lock (this)
-                {
-                    if ((DateTime.Now - _subscribedQueueIdsUpdatedTime).TotalSeconds > 5)
-                    {
-                        if (_dataManagerQueue.HaveSubscriptionsChanged(_subscriptionsMaxTimeStamp))
-                        {
-                            _subscribedQueueIds = new List<int>();
-                            var subscriptions = _dataManagerQueue.GetSubscriptions();
-                            if (subscriptions != null && subscriptions.Count > 0)
-                            {
-                                FillSubscribedQueueIdsFromSubscriptions(_queueId, subscriptions);
-                            }
-                            _subscriptionsMaxTimeStamp = _dataManagerQueue.GetSubscriptionsMaxTimestamp();
-                        }
-                        _subscribedQueueIdsUpdatedTime = DateTime.Now;
-                    }
-                }
-            }
-        }
-
-        void FillSubscribedQueueIdsFromSubscriptions(int sourceQueueId, List<QueueSubscription> allSubscriptions)
-        {
-            foreach (var subscription in allSubscriptions.Where(itm => itm.QueueID == sourceQueueId))
-            {
-                if (subscription.SubsribedQueueID != _queueId && !_subscribedQueueIds.Contains(subscription.SubsribedQueueID))
-                {
-                    _subscribedQueueIds.Add(subscription.SubsribedQueueID);
-                    FillSubscribedQueueIdsFromSubscriptions(subscription.SubsribedQueueID, allSubscriptions);
-                }
-            }
-        }
-
 
         #endregion
 

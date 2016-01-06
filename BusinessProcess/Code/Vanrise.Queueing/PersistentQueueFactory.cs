@@ -72,7 +72,8 @@ namespace Vanrise.Queueing
         public void CreateQueue(int executionFlowId, string stageName, string queueItemFQTN, string queueName, string queueTitle, IEnumerable<string> sourceQueueNames, QueueSettings queueSettings = null)
         {
             IQueueDataManager dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
-            IQueueItemDataManager dataManagerQueueItem = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();    
+            IQueueItemDataManager dataManagerQueueItem = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
+            QueueSubscriptionManager queueSubscriptionManager = new QueueSubscriptionManager();
             Type queueItemType = Type.GetType(queueItemFQTN);
             if(queueItemType == null)
                 throw new Exception(String.Format("type '{0}' is not available", queueItemFQTN));
@@ -104,10 +105,10 @@ namespace Vanrise.Queueing
             Action createQueueAction = () =>
             {
                 int queueId = dataManagerQueue.InsertQueueInstance(executionFlowId, stageName, queueName, queueTitle, QueueInstanceStatus.New, itemTypeId, queueSettings);
-                dataManagerQueue.InsertSubscription(sourceQueueIds, queueId);
+                queueSubscriptionManager.AddSubscriptions(sourceQueueIds, queueId);
                 dataManagerQueueItem.CreateQueue(queueId);
                 dataManagerQueue.UpdateQueueInstanceStatus(queueName, QueueInstanceStatus.ReadyToUse);
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<Vanrise.Queueing.QueueingManager.QueueInstanceCacheManager>().SetCacheExpired();
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<Vanrise.Queueing.QueueInstanceCacheManager>().SetCacheExpired();
             };
             //this logic is implemented to rename any previous failed Create Queue action to allow recreation. this is done instead of using Transaction against two databases
             try
@@ -159,7 +160,7 @@ namespace Vanrise.Queueing
             {
                 IQueueDataManager dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
                 dataManagerQueue.UpdateQueueInstance(queueName, stageName, queueTitle, queueSettings);
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<Vanrise.Queueing.QueueingManager.QueueInstanceCacheManager>().SetCacheExpired();
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<Vanrise.Queueing.QueueInstanceCacheManager>().SetCacheExpired();
             }
         }
 
