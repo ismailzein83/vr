@@ -135,6 +135,7 @@
     <Compile Include="SellingProduct\CustomerSellingProduct.cs" />
     <Compile Include="SellingProduct\CustomerSellingProductQuery.cs" />
     <Compile Include="SellingProduct\SellingProductInfo.cs" />
+    <Compile Include="SellingProduct\SellingProductInfoFilter.cs" />
     <Compile Include="SellingProduct\SellingProductQuery.cs" />
     <Compile Include="SellingProduct\SellingProduct.cs" />
     <Compile Include="SellingProduct\SellingProductSettings.cs" />

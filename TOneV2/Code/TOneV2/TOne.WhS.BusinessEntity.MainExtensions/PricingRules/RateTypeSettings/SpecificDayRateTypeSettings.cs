@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.PricingRules.RateTypeSettings
 
         public override bool Evaluate(IPricingRuleRateTypeItemContext context, PricingRuleRateTypeTarget target)
         {
-            return target.EffectiveOn.HasValue && target.EffectiveOn.Value == this.Date;
+            return target.EffectiveOn.HasValue && target.EffectiveOn.Value.Date == this.Date.Date;
         }
     }
 }

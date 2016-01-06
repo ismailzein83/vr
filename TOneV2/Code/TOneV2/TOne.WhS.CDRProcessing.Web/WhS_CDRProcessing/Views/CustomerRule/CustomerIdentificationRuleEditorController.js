@@ -29,6 +29,9 @@
             $scope.scopeModal.validateDateTime = function () {
                 return VRValidationService.validateTimeRange($scope.scopeModal.beginEffectiveDate, $scope.scopeModal.endEffectiveDate);
             }
+
+          
+
             $scope.scopeModal.SaveCustomerRule = function () {
                 if (isEditMode) {
                     return updateCustomerRule();
@@ -51,6 +54,12 @@
             $scope.scopeModal.disableInCarrierAddButton = true;
             $scope.scopeModal.disableAddCDPNPrefixButton = true;
             $scope.scopeModal.disableInTrunkAddButton = true;
+
+            $scope.scopeModal.validate = function () {
+                if($scope.scopeModal.inCarriers.length == 0 && $scope.scopeModal.inTrunks.length == 0 && $scope.scopeModal.CDPNPrefixes.length == 0)
+                    return "You should add at least one identification option.";
+                 return null;
+            }
 
             $scope.scopeModal.addTrunk = function () {
                 $scope.scopeModal.inTrunks.push($scope.scopeModal.inTrunk);

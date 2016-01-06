@@ -9,23 +9,28 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
+     [RoutePrefix(Constants.ROUTE_PREFIX + "SellingProduct")]
      [JSONWithTypeAttribute]
     public class SellingProductController : BaseAPIController
     {
          [HttpPost]
+         [Route("GetFilteredSellingProducts")]
          public object GetFilteredSellingProducts(Vanrise.Entities.DataRetrievalInput<SellingProductQuery> input)
          {
              SellingProductManager manager = new SellingProductManager();
              return GetWebResponse(input, manager.GetFilteredSellingProducts(input));
          }
-          [HttpGet]
-         public IEnumerable<SellingProductInfo> GetAllSellingProduct()
+         [HttpGet]
+         [Route("GetSellingProductsInfo")]
+         public IEnumerable<SellingProductInfo> GetSellingProductsInfo(string serializedFilter)
          {
+             SellingProductInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SellingProductInfoFilter>(serializedFilter) : null;
              SellingProductManager manager = new SellingProductManager();
-             return manager.GetAllSellingProduct();
+             return manager.GetSellingProductsInfo(filter);
          }
          
          [HttpGet]
+         [Route("GetSellingProduct")]
          public SellingProduct GetSellingProduct(int sellingProductId)
          {
              SellingProductManager manager = new SellingProductManager();
@@ -33,6 +38,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
          }
 
          [HttpPost]
+         [Route("AddSellingProduct")]
          public TOne.Entities.InsertOperationOutput<SellingProductDetail> AddSellingProduct(SellingProduct sellingProduct)
          {
              SellingProductManager manager = new SellingProductManager();
@@ -40,6 +46,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
          }
 
          [HttpPost]
+         [Route("UpdateSellingProduct")]
          public TOne.Entities.UpdateOperationOutput<SellingProductDetail> UpdateSellingProduct(SellingProduct sellingProduct)
          {
              SellingProductManager manager = new SellingProductManager();
@@ -47,6 +54,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
          }
 
          [HttpGet]
+         [Route("DeleteSellingProduct")]
          public TOne.Entities.DeleteOperationOutput<object> DeleteSellingProduct(int sellingProductId)
          {
              SellingProductManager manager = new SellingProductManager();

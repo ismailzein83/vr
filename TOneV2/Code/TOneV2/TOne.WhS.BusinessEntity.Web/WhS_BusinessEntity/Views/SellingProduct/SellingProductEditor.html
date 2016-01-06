@@ -1,36 +1,35 @@
-﻿<div vr-modalcontent ng-controller="WhS_BE_SellingProductEditorController" vr-loader="isLoading">
+﻿<div vr-modalcontent ng-controller="WhS_BE_SellingProductEditorController" vr-loader="scopeModal.isLoading">
     <vr-modalbody width="'50%'">
-        <vr-form name="formSellingProductEditor">
-            <vr-choices selectedindex="0">
-                <vr-choice isselected="criteriaSelected">Definition</vr-choice>
-                <vr-choice isselected="settingsSelected">Settings</vr-choice>
-            </vr-choices>
-            <div ng-show="criteriaSelected">
-                <vr-row>
-                    <vr-columns width="1/2row">
-                        <vr-textbox value="name" label="Name" isrequired></vr-textbox>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlansDirectiveReady" onselectionchanged="onselectionchanged" isrequired></vr-whs-be-sellingnumberplan-selector>
-                    </vr-columns>
+        <vr-form validationcontext="formSellingProductEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModal.name" label="Name" isrequired></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-whs-be-sellingnumberplan-selector on-ready="scopeModal.onSellingNumberPlansDirectiveReady" onselectionchanged="    scopeModal.onselectionchanged" isrequired></vr-whs-be-sellingnumberplan-selector>
+                        </vr-columns>
 
-                </vr-row>
-                <vr-row>
-                    <vr-columns width="fullrow">
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
 
-                    </vr-columns>
-                </vr-row>
-            </div>
-            <div ng-show="settingsSelected">
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Settings'">
 
-            </div>
+                </vr-tab>
+
+             </vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formSellingProductEditor" data-onclick="SaveSellingProduct"></vr-button>
-                <vr-button type="Close" data-onclick="close"></vr-button>
+                <vr-button type="Save" validationcontext="formSellingProductEditor" data-onclick="scopeModal.saveSellingProduct"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
             </div>
         </vr-actionbar>
 

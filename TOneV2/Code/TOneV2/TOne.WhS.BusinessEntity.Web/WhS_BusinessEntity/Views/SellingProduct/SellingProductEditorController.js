@@ -24,7 +24,8 @@
         }
 
         function defineScope() {
-            $scope.SaveSellingProduct = function () {
+            $scope.scopeModal = {}
+            $scope.scopeModal.saveSellingProduct = function () {
                 if (isEditMode) {
                     return updateSellingProduct();
                 }
@@ -33,18 +34,18 @@
                 }
             };
 
-            $scope.close = function () {
+            $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
             };
 
-            $scope.onSellingNumberPlansDirectiveReady = function (api) {
+            $scope.scopeModal.onSellingNumberPlansDirectiveReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
                 sellingNumberPlanReadyPromiseDeferred.resolve();
             }
         }
 
         function load() {
-            $scope.isLoading = true;
+            $scope.scopeModal.isLoading = true;
 
             if (isEditMode) {
                 getSellingProduct().then(function () {
@@ -54,7 +55,7 @@
                         });
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
+                    $scope.scopeModal.isLoading = false;
                 });
             }
             else {
@@ -68,7 +69,7 @@
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
-                  $scope.isLoading = false;
+                  $scope.scopeModal.isLoading = false;
               });
         }
         function loadSellingNumberPlans() {
@@ -94,7 +95,7 @@
         function buildSellingProductObjFromScope() {
             var sellingProduct = {
                 SellingProductId: (sellingProductId != null) ? sellingProductId : 0,
-                Name: $scope.name,
+                Name: $scope.scopeModal.name,
                 SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
             };
             return sellingProduct;
@@ -103,7 +104,7 @@
         function loadFilterBySection() {
             if(sellingProductEntity!=undefined)
             {
-                $scope.name = sellingProductEntity.Name;
+                $scope.scopeModal.name = sellingProductEntity.Name;
             }
         }
         function insertSellingProduct() {

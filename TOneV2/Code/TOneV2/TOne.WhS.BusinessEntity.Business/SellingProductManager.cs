@@ -23,6 +23,35 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSellingProducts.ToBigResult(input, filterExpression, SellingProductDetailMapper));
         }
+
+        public IEnumerable<SellingProductInfo> GetSellingProductsInfo(SellingProductInfoFilter filter)
+        {
+            IEnumerable<SellingProduct> sellingProducts = null;
+
+            if (filter != null && filter.AssignableToSellingProductId != null)
+            {
+                    sellingProducts = this.GetAssignableSellingProducts((int)filter.AssignableToSellingProductId);
+            }
+            else
+            {
+                var cachedSellingProducts = GetCachedSellingProducts();
+                if (cachedSellingProducts != null)
+                    sellingProducts = cachedSellingProducts.Values;
+            }
+
+            return sellingProducts.MapRecords(SellingProductInfoMapper);
+        }
+
+        public IEnumerable<SellingProduct> GetAssignableSellingProducts(int carrierAccountId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            CarrierAccount carrierAccount = carrierAccountManager.GetCarrierAccount(carrierAccountId);
+            var cachedSellingProducts = GetCachedSellingProducts();
+            return cachedSellingProducts.Values.FindAllRecords(x => x.SellingNumberPlanId == carrierAccount.SellingNumberPlanId);
+
+        }
+
+
         public IEnumerable<SellingProductInfo> GetAllSellingProduct()
         {
             var sellingProducts = GetCachedSellingProducts();

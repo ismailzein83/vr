@@ -76,10 +76,17 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
                 api.load = function (payload) {
 
                     var selectedIds;
+                    var filter;
                     if (payload != undefined) {
-                        selectedIds = payload;
+                        selectedIds = payload.selectedIds;
+                        filter = payload.filter;
                     }
-                    return WhS_BE_SellingProductAPIService.GetAllSellingProduct().then(function (response) {
+
+                    var serializedFilter = {};
+                    if (filter != undefined)
+                        serializedFilter = UtilsService.serializetoJson(filter);
+
+                    return WhS_BE_SellingProductAPIService.GetSellingProductsInfo(serializedFilter).then(function (response) {
                         angular.forEach(response, function (itm) {
                             ctrl.datasource.push(itm);
                         });

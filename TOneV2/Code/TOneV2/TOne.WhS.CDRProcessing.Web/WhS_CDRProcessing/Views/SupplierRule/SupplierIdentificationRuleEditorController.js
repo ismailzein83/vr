@@ -24,6 +24,7 @@
             isEditMode = (ruleId != undefined);
         }
         function defineScope() {
+           
             $scope.scopeModal = {};
             $scope.scopeModal.validateDateTime = function () {
                 return VRValidationService.validateTimeRange($scope.scopeModal.beginEffectiveDate, $scope.scopeModal.endEffectiveDate);
@@ -47,6 +48,11 @@
             $scope.scopeModal.outTrunks = [];
             $scope.scopeModal.outCarriers = [];
             $scope.scopeModal.CDPNPrefixes = [];
+            $scope.validate = function () {
+                if ($scope.scopeModal.outCarriers.length == 0 && $scope.scopeModal.outTrunks.length == 0 && $scope.scopeModal.CDPNPrefixes.length == 0)
+                    return "You should add at least one identification option.";
+                return null;
+            }
             $scope.scopeModal.disableOutCarrierAddButton = true;
             $scope.scopeModal.disableAddCDPNPrefixButton = true;
             $scope.scopeModal.disableOutTrunkAddButton = true;

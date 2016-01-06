@@ -76,7 +76,8 @@
 
                     if ($scope.onSellingNumberPlanAdded != undefined)
                         $scope.onSellingNumberPlanAdded(response.InsertedObject);
-                    $scope.modalConstext.closeModal();
+                   
+                    $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
