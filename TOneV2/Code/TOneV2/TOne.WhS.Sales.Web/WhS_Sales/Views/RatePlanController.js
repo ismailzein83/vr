@@ -79,7 +79,22 @@
                 carrierAccountSelectorReadyDeferred.resolve();
             };
             $scope.onCarrierAccountChanged = function () {
-                clearRatePlan();
+                if ($scope.selectedCustomer) {
+                    clearRatePlan();
+
+                    $scope.isLoadingFilterSection = true;
+
+                    WhS_Sales_RatePlanAPIService.ValidateCustomer(getOwnerId(), new Date()).then(function (isCustomerValid) {
+                        if (!isCustomerValid) {
+                            VRNotificationService.showInformation($scope.selectedCustomer.Name + " is not related to a selling product");
+                            $scope.selectedCustomer = undefined;
+                        }
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    }).finally(function () {
+                        $scope.isLoadingFilterSection = false;
+                    });
+                }
             };
 
             $scope.numberOfOptions = 3;
@@ -121,7 +136,8 @@
             }];
 
             $scope.zoneLetters = [];
-            $scope.selectedZoneLetterIndex = 0;
+            $scope.connector = {};
+            $scope.connector.selectedZoneLetterIndex = 0;
 
             $scope.onZoneLetterSelectionChanged = function () {
                 return saveChanges(true);
@@ -138,6 +154,7 @@
             };
 
             $scope.search = function () {
+               
                 return loadRatePlan();
             };
             $scope.sellNewZones = function () {
@@ -198,7 +215,7 @@
                         return WhS_Sales_RatePlanAPIService.ApplyCalculatedRates(input).then(function () {
                             VRNotificationService.showSuccess("Rates applied");
                             pricingSettings = null;
-                            loadGrid();
+                            loadRatePlan();
                         }).catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
                         });
@@ -207,15 +224,19 @@
                     VRNotificationService.notifyException(error, $scope);
                 });
             };
-            $scope.validateRatePlan = function () {
-                if ($scope.zoneLetters && $scope.zoneLetters.length > 0)
-                    return null;
-                return "The owner doesn't have any zones";
+            
+            // Validation functions
+            $scope.disableSaveButton = function () {
+                return !validateRatePlan();
             };
-            $scope.canUserApplyCalculatedRates = function () {
-                if (pricingSettings)
-                    return null;
-                return "Evaluate the rates before you apply them";
+            $scope.disableSettingsButton = function () {
+                return !validateRatePlan();
+            };
+            $scope.disablePricingButton = function () {
+                return !validateRatePlan();
+            };
+            $scope.disableApplyButton = function () {
+                return !pricingSettings;
             };
 
             defineSaveButtonMenuActions();
@@ -332,7 +353,7 @@
             function getZoneLetters() {
                 return WhS_Sales_RatePlanAPIService.GetZoneLetters($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
                     if (response) {
-                        $scope.zoneLetters = [];
+                        $scope.zoneLetters.length = 0;
 
                         for (var i = 0; i < response.length; i++) {
                             $scope.zoneLetters.push(response[i]);
@@ -364,7 +385,7 @@
                 return {
                     OwnerType: $scope.selectedOwnerType.value,
                     OwnerId: getOwnerId(),
-                    ZoneLetter: $scope.zoneLetters[$scope.selectedZoneLetterIndex],
+                    ZoneLetter: $scope.zoneLetters[$scope.connector.selectedZoneLetterIndex],
                     RoutingDatabaseId: databaseSelectorAPI.getSelectedIds(),
                     PolicyConfigId: policySelectorAPI.getSelectedIds(),
                     NumberOfOptions: $scope.numberOfOptions,
@@ -424,8 +445,8 @@
         }
 
         function clearRatePlan() {
-            $scope.zoneLetters = [];
-            $scope.selectedZoneLetterIndex = 0;
+            $scope.zoneLetters.length=0;
+            $scope.connector.selectedZoneLetterIndex = 0;
             showRatePlan(false);
         }
 
@@ -497,6 +518,10 @@
                 ownerId = $scope.selectedCustomer.CarrierAccountId;
 
             return ownerId;
+        }
+
+        function validateRatePlan() {
+            return ($scope.zoneLetters && $scope.zoneLetters.length > 0);
         }
     }
 

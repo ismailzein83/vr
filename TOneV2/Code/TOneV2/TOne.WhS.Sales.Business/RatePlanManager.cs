@@ -26,6 +26,14 @@ namespace TOne.WhS.Sales.Business
             _routingProductManager = new RoutingProductManager();
         }
 
+        public bool ValidateCustomer(int customerId, DateTime effectiveOn)
+        {
+            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
+            CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, false);
+            
+            return customerSellingProduct != null;
+        }
+
         // Remove the call to GetSellingProductId
         #region Get Default Item
 

@@ -24,6 +24,13 @@ namespace TOne.WhS.Sales.Web.Controllers
         }
 
         [HttpGet]
+        [Route("ValidateCustomer")]
+        public bool ValidateCustomer(int customerId, DateTime effectiveOn)
+        {
+            return _manager.ValidateCustomer(customerId, effectiveOn);
+        }
+
+        [HttpGet]
         [Route("GetZoneLetters")]
         public IEnumerable<char> GetZoneLetters(SalePriceListOwnerType ownerType, int ownerId)
         {

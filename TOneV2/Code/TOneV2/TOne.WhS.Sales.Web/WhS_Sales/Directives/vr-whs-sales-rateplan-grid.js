@@ -188,6 +188,15 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     }
                 };
 
+                zoneItem.validateNewRate = function (zoneItem) {
+                    if (zoneItem.CurrentRate) {
+                        if (Number(zoneItem.CurrentRate) === Number(zoneItem.NewRate)) {
+                            return "New rate must be higher or lower than the current rate";
+                        }
+                    }
+                    return null;
+                };
+
                 zoneItem.onCurrentRateEEDChanged = function (zoneItem) {
                     zoneItem.IsDirty = true;
                 };
@@ -208,6 +217,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         var getZoneItemPromise = WhS_Sales_RatePlanAPIService.GetZoneItem(getZoneItemInput());
 
                         getZoneItemPromise.then(function (response) {
+                            console.log(response);
                             if (response) {
                                 getZoneItemDeferred.resolve();
 
@@ -216,6 +226,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                 if (gridZoneItem) {
                                     gridZoneItem.EffectiveRoutingProductId = response.EffectiveRoutingProductId;
                                     gridZoneItem.EffectiveRoutingProductName = response.EffectiveRoutingProductName;
+                                    gridZoneItem.CalculatedRate = response.CalculatedRate;
+                                    console.log(gridZoneItem.CalculatedRate);
 
                                     loadRouteOptionsDeferred.promise.finally(function () {
                                         zoneItem.isLoadingRouteOptions = false;
@@ -229,7 +241,20 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                                     zoneItem.isLoadingRouteOptions = true;
                                     VRUIUtilsService.callDirectiveLoad(zoneItem.RouteOptionsAPI, payload, loadRouteOptionsDeferred);
+                                    
+                                    if (response.Costs) {
+                                        gridZoneItem.Costs = [];
+
+                                        for (var i = 0; i < response.Costs.length; i++) {
+                                            gridZoneItem.Costs[i] = response.Costs[i];
+                                        }
+                                    }
+                                    else {
+                                        gridZoneItem.Costs = null;
+                                    }
+                                    console.log(gridZoneItem.Costs);
                                 }
+                                console.log(gridZoneItem);
                             }
                             else {
                                 getZoneItemDeferred.reject();
@@ -265,7 +290,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             RoutingDatabaseId: gridQuery.RoutingDatabaseId,
                             PolicyConfigId: gridQuery.PolicyConfigId,
                             NumberOfOptions: gridQuery.NumberOfOptions,
-                            CostCalculationMethods: gridQuery.CostCalculationMethods
+                            CostCalculationMethods: gridQuery.CostCalculationMethods,
+                            RateCalculationCostColumnConfigId: gridQuery.CostCalculationMethodConfigId,
+                            RateCalculationMethod: gridQuery.RateCalculationMethod
                         };
                     }
                 };

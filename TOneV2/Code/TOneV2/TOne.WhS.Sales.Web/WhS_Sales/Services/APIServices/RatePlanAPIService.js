@@ -7,6 +7,7 @@
     function ratePlanAPIService(BaseAPIService, UtilsService, WhS_Sales_ModuleConfig) {
 
         return ({
+            ValidateCustomer: ValidateCustomer,
             GetZoneLetters: GetZoneLetters,
             GetDefaultItem: GetDefaultItem,
             GetZoneItems: GetZoneItems,
@@ -20,6 +21,13 @@
             SaveChanges: SaveChanges,
             ApplyCalculatedRates: ApplyCalculatedRates
         });
+
+        function ValidateCustomer(customerId, effectiveOn) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "ValidateCustomer"), {
+                customerId: customerId,
+                effectiveOn: effectiveOn
+            });
+        }
 
         function GetZoneLetters(ownerType, ownerId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "GetZoneLetters"), {
