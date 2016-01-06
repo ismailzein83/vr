@@ -23,6 +23,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return manager.GetStrategies(PeriodId, IsEnabled);
         }
 
+
+        public IEnumerable<Strategy> GetAll()
+        {
+            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+            return manager.GetAll();
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyQuery> input)
         {
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();

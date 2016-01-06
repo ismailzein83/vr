@@ -93,9 +93,12 @@
     <Compile Include="AssignCases.cs" />
     <Compile Include="FillDimensionValues.cs" />
     <Compile Include="FindRelatedNumbersthroughIMEIs.cs" />
+    <Compile Include="GetStrategyDimension.cs" />
+    <Compile Include="GetTimeDimensions.cs" />
     <Compile Include="GetStrategiesExecutionInfo.cs" />
     <Compile Include="GetStrategyExecutionDetails.cs" />
     <Compile Include="GetAccountNumbersByIMEI.cs" />
+    <Compile Include="GetDimensions.cs" />
     <Compile Include="LoadStrategyExecutionDetailSummaries.cs" />
     <Compile Include="LoadCDRs.cs" />
     <Compile Include="CreateNumberProfiles.cs" />

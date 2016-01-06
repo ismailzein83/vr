@@ -63,6 +63,8 @@
   <ItemGroup>
     <Compile Include="AccountStatusDataManager.cs" />
     <Compile Include="AggregateDataManager.cs" />
+    <Compile Include="DWTimeDataManager.cs" />
+    <Compile Include="DWDimensionDataManager.cs" />
     <Compile Include="DWCDRDataManager.cs" />
     <Compile Include="RelatedNumberDataManager.cs" />
     <Compile Include="NumberProfileDataManager.cs" />

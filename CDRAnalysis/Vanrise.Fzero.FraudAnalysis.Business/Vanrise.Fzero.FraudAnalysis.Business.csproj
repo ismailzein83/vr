@@ -76,6 +76,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AggregateManager.cs" />
+    <Compile Include="DWTimeManager.cs" />
+    <Compile Include="DWDimensionManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="FilterManager.cs" />
     <Compile Include="FraudManager.cs" />

@@ -35,6 +35,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetAllEnabledByPeriodID", StrategyMapper, PeriodId, IsEnabled);
         }
 
+        public List<Strategy> GetAll()
+        {
+            return GetItemsSP("FraudAnalysis.sp_Strategy_GetAll", StrategyMapper);
+        }
+
         public BigResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyQuery> input)
         {
             return RetrieveData(input, (tempTableName) =>
