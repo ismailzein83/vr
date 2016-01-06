@@ -48,6 +48,12 @@ namespace Vanrise.Common
             return default(Q);
         }
 
+        public  static string GetEnumDescription<T>(T enumItem) where T :struct
+        {
+            System.ComponentModel.DescriptionAttribute descriptionAttribute = GetEnumAttribute<T, System.ComponentModel.DescriptionAttribute>(enumItem);
+            return descriptionAttribute != null ? descriptionAttribute.Description : enumItem.ToString();
+        }
+
         public static IEnumerable<Type> GetAllImplementations(Type baseType)
         {
             List<Type> lst = new List<Type>();
