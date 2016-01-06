@@ -20,13 +20,13 @@ namespace Vanrise.Caching
 
         static CacheCleaner()
         {
-            if(!TimeSpan.TryParse(ConfigurationManager.AppSettings["CleanCacheInterval"], out s_cleanCacheInterval))
+            if(!TimeSpan.TryParse(ConfigurationManager.AppSettings["VanriseCache_CleanInterval"], out s_cleanCacheInterval))
                 s_cleanCacheInterval = new TimeSpan(0, 0, 2);
-            if (!long.TryParse(ConfigurationManager.AppSettings["CleanCacheMemoryThreshold"], out s_cleanCacheMemoryThreshold))
+            if (!long.TryParse(ConfigurationManager.AppSettings["VanriseCache_CleanMemoryThreshold"], out s_cleanCacheMemoryThreshold))
                 s_cleanCacheMemoryThreshold = 1000000000;
-            if (!int.TryParse(ConfigurationManager.AppSettings["CleanCacheSizePriorityFactor"], out s_cleanCacheSizePriorityFactor))
+            if (!int.TryParse(ConfigurationManager.AppSettings["VanriseCache_CleanSizePriorityFactor"], out s_cleanCacheSizePriorityFactor))
                 s_cleanCacheSizePriorityFactor = 10;
-            if (!int.TryParse(ConfigurationManager.AppSettings["CleanCacheAgePriorityFactor"], out s_cleanCacheAgePriorityFactor))
+            if (!int.TryParse(ConfigurationManager.AppSettings["VanriseCache_CleanAgePriorityFactor"], out s_cleanCacheAgePriorityFactor))
                 s_cleanCacheAgePriorityFactor = 1;
         }
 
