@@ -19,7 +19,6 @@ function TestCallTemplateController($scope, UtilsService, VRUIUtilsService, Qm_C
 
     defineScope();
     load();
-    var sourceConfigId;
 
     function defineScope() {
         $scope.countries = [];
@@ -59,10 +58,10 @@ function TestCallTemplateController($scope, UtilsService, VRUIUtilsService, Qm_C
                         CountryId: selectedItem.CountryId
                     }
                 }
-
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader);
             }
         }
+
         $scope.sourceTypeTemplates = [];
         $scope.onSourceTypeDirectiveReady = function (api) {
             sourceTypeDirectiveAPI = api;
@@ -72,7 +71,7 @@ function TestCallTemplateController($scope, UtilsService, VRUIUtilsService, Qm_C
         $scope.schedulerTaskAction.getData = function () {
             return {
                 $type: "QM.CLITester.Business.TestCallTaskActionArgument, QM.CLITester.Business",
-                TestCallQueryInput: buildTestCallObjFromScope()
+                AddTestCallInput: buildTestCallObjFromScope()
             };
         };
     }
@@ -80,17 +79,10 @@ function TestCallTemplateController($scope, UtilsService, VRUIUtilsService, Qm_C
     function load() {
         $scope.isLoading = true;
 
-        if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.selectedSupplier!=undefined) {
-            $scope.SupplierID = UtilsService.getPropValuesFromArray($scope.schedulerTaskAction.data.selectedSupplier, "SupplierId");
-            $scope.CountryID = $scope.schedulerTaskAction.data.CountryId;
-            $scope.ZoneID = $scope.schedulerTaskAction.data.ZoneId;
-            $scope.ProfileID = $scope.schedulerTaskAction.data.ProfileId;
-        }
-
         loadAllControls();
     }
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadCountries, loadSuppliers, loadProfiles])
+        return UtilsService.waitMultipleAsyncOperations([loadCountries, loadSuppliers, loadProfiles ,loadZones])
           .catch(function (error) {
               VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
@@ -103,9 +95,15 @@ function TestCallTemplateController($scope, UtilsService, VRUIUtilsService, Qm_C
     function loadProfiles() {
         var profileLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        supplierReadyPromiseDeferred.promise
+        profileReadyPromiseDeferred.promise
             .then(function () {
                 var directivePayload;
+                if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.AddTestCallInput != undefined) {
+
+                     directivePayload = {
+                         selectedIds: $scope.schedulerTaskAction.data.AddTestCallInput.ProfileID
+                    }
+                }
 
                 VRUIUtilsService.callDirectiveLoad(profileDirectiveAPI, directivePayload, profileLoadPromiseDeferred);
             });
@@ -118,6 +116,14 @@ function TestCallTemplateController($scope, UtilsService, VRUIUtilsService, Qm_C
         supplierReadyPromiseDeferred.promise
             .then(function () {
                 var directivePayload;
+                if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.AddTestCallInput != undefined
+                    && $scope.schedulerTaskAction.data.AddTestCallInput.SupplierID != undefined) {
+
+                    directivePayload = {
+                        selectedIds:$scope.schedulerTaskAction.data.AddTestCallInput.SupplierID
+                    }
+                }
+
 
                 VRUIUtilsService.callDirectiveLoad(supplierDirectiveAPI, directivePayload, supplierLoadPromiseDeferred);
             });
@@ -130,15 +136,39 @@ function TestCallTemplateController($scope, UtilsService, VRUIUtilsService, Qm_C
         countryReadyPromiseDeferred.promise
             .then(function () {
                 var directivePayload;
+                if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.AddTestCallInput != undefined) {
 
+                    directivePayload = {
+                        selectedIds: $scope.schedulerTaskAction.data.AddTestCallInput.CountryID
+                    }
+                }
                 VRUIUtilsService.callDirectiveLoad(countryDirectiveAPI, directivePayload, countryLoadPromiseDeferred);
             });
         return countryLoadPromiseDeferred.promise;
     }
 
+    function loadZones() {
+        var zoneLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+        zoneReadyPromiseDeferred.promise
+            .then(function () {
+                var directivePayload;
+                if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.AddTestCallInput != undefined) {
+                    directivePayload = {
+                        filter: {
+                            CountryId: $scope.schedulerTaskAction.data.AddTestCallInput.CountryID
+                        }
+                    }
+                    if ($scope.schedulerTaskAction.data.AddTestCallInput.ZoneID != undefined)
+                        directivePayload.selectedIds = $scope.schedulerTaskAction.data.AddTestCallInput.ZoneID;
+                }
+
+                VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, directivePayload, zoneLoadPromiseDeferred);
+            });
+        return zoneLoadPromiseDeferred.promise;
+    }
+   
     function buildTestCallObjFromScope() {
         var obj = {
-            //TestCallId: 0,
             SupplierID: UtilsService.getPropValuesFromArray($scope.selectedSupplier, "SupplierId"),
             CountryID: $scope.selectedCountry.CountryId,
             ZoneID: $scope.selectedZone.ZoneId,
@@ -146,21 +176,5 @@ function TestCallTemplateController($scope, UtilsService, VRUIUtilsService, Qm_C
         };
         return obj;
     }
-
-
-    function loadSourceType() {
-        return Qm_CliTester_TestCallAPIService.GetTestCallTemplates().then(function (response) {
-            console.log("1");
-            //if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined)
-            //    sourceConfigId = $scope.schedulerTaskAction.data.CLITestConnector.ConfigId;
-            angular.forEach(response, function (item) {
-                $scope.sourceTypeTemplates.push(item);
-            });
-
-            if (sourceConfigId != undefined)
-                $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
-        });
-    }
-
 }
 appControllers.controller('QM_CliTester_TestCallTemplateController', TestCallTemplateController);

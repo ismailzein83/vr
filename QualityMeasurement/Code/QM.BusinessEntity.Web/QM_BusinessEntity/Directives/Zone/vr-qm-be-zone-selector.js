@@ -45,24 +45,27 @@ function (QM_BE_ZoneAPIService, UtilsService, $compile, VRUIUtilsService) {
 
         var multipleselection = "";
         if (attrs.ismultipleselection != undefined)
-            multipleselection = "ismultipleselection"
+            multipleselection = "ismultipleselection";
         var required = "";
         if (attrs.isrequired != undefined)
             required = "isrequired";
-        var disabled = "";
+
         return '<div  vr-loader="isLoadingDirective">'
             + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="ZoneId" '
-        + required + ' label="Zones" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
+        + required + ' label="Zones" datasource="ctrl.datasource" on-ready="ctrl.onBaseSelectorReady" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
            + '</div>'
     }
 
     function zoneCtor(ctrl, $scope, $attrs) {
-
+        var baseApi;
         function initializeController() {
             defineAPI();
         }
 
         function defineAPI() {
+            ctrl.onBaseSelectorReady = function (api) {
+                baseApi = api;
+            }
             var api = {};
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('ZoneId', $attrs, ctrl);
@@ -82,17 +85,19 @@ function (QM_BE_ZoneAPIService, UtilsService, $compile, VRUIUtilsService) {
                     serializedFilter = UtilsService.serializetoJson(filter);
                 }
 
-                return getZonesInfo($attrs, ctrl, selectedIds, serializedFilter);
+                return getZonesInfo($attrs, ctrl, selectedIds, serializedFilter, baseApi);
 
             }
-
+            
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
         this.initializeController = initializeController;
     }
 
-    function getZonesInfo(attrs, ctrl, selectedIds, serializedFilter) {
+    function getZonesInfo(attrs, ctrl, selectedIds, serializedFilter, baseApi) {
+        if (baseApi != undefined)
+         baseApi.clearDataSource();
         return QM_BE_ZoneAPIService.GetZonesInfo(serializedFilter).then(function (response) {
             ctrl.datasource.length = 0;
             angular.forEach(response, function (itm) {

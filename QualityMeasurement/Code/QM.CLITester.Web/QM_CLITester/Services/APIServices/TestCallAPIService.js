@@ -37,10 +37,6 @@
             return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetTestProgressTemplates"));
         }
 
-        function GetTestCallTemplates() {
-            return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetTestCallTemplates"));
-        }
-
         return ({
             AddNewTestCall: AddNewTestCall,
             ReTestCall: ReTestCall,
@@ -48,7 +44,6 @@
             GetTotalCallsByUserId: GetTotalCallsByUserId,
             GetInitiateTestTemplates: GetInitiateTestTemplates,
             GetTestProgressTemplates: GetTestProgressTemplates,
-            GetTestCallTemplates: GetTestCallTemplates,
             GetUpdated: GetUpdated,
             GetBeforeId: GetBeforeId
         });
