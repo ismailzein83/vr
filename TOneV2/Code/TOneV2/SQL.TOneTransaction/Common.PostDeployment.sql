@@ -38,7 +38,7 @@ DELETE;
 
 MERGE INTO runtime.[SchedulerTaskTriggerType] AS Target 
 USING (VALUES 
-	(1, N'Timer', N'{"URL":"/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html", "FQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.TimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger"}')
+	(1, N'Timer', N'{"URL":"/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html","Editor":"vr-runtime-tasktrigger-timer","FQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.TimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger"}')
 ) 
 AS Source ([ID], [Name], [TriggerTypeInfo])
 ON Target.[ID] = Source.[ID] 
