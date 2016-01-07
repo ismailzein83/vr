@@ -5,8 +5,11 @@ AS
 BEGIN	
 	
 	--INSERT Rule Type if not exists
-	INSERT INTO common.[Type] WITH(TABLOCK) ([Type])
-	SELECT @Type WHERE NOT EXISTS (SELECT NULL FROM common.[Type] WHERE [Type] = @Type)
+	IF NOT EXISTS (SELECT NULL FROM common.[Type] WITH(NOLOCK) WHERE [Type] = @Type)
+	BEGIN
+		INSERT INTO common.[Type] ([Type])
+		SELECT @Type WHERE NOT EXISTS (SELECT NULL FROM common.[Type] WHERE [Type] = @Type)
+	END
 	
 	SELECT ID FROM common.[Type] WHERE [Type] = @Type
 END
