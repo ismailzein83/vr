@@ -69,14 +69,147 @@
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="Started executing workflow: FillDataWarehouse ..." />
-    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
+    <Parallel DisplayName="Dimensions" sap2010:WorkflowViewState.IdRef="Parallel_2">
       <Parallel.Variables>
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="getDWTimeActivityStatus" />
         <Variable x:TypeArguments="vffe:DWTimeDictionary" Name="times" />
-        <Variable x:TypeArguments="x:String" Name="variable2" />
       </Parallel.Variables>
-      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2" />
-      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3" />
+      <Sequence DisplayName="Common Dimensions" sap2010:WorkflowViewState.IdRef="Sequence_2">
+        <Sequence.Variables>
+          <Variable x:TypeArguments="vffe:DWDimensionDictionary" Name="callTypes" />
+          <Variable x:TypeArguments="vffe:DWDimensionDictionary" Name="periods" />
+          <Variable x:TypeArguments="vffe:DWDimensionDictionary" Name="strategyKinds" />
+          <Variable x:TypeArguments="vffe:DWDimensionDictionary" Name="caseStatuses" />
+          <Variable x:TypeArguments="vffe:DWDimensionDictionary" Name="filters" />
+          <Variable x:TypeArguments="vffe:DWDimensionDictionary" Name="networkTypes" />
+          <Variable x:TypeArguments="vffe:DWDimensionDictionary" Name="subscriberTypes" />
+          <Variable x:TypeArguments="vffe:DWDimensionDictionary" Name="suspicionLevels" />
+          <Variable x:TypeArguments="vffe:DWDimensionDictionary" Name="users" />
+          <Variable x:TypeArguments="vffe:DWStrategyDictionary" Name="strategies" />
+          <Variable x:TypeArguments="vffe:DWDimensionDictionary" Name="callClasses" />
+          <Variable x:TypeArguments="scg:List(vffe:DWDimension)" Name="toBeInsertedCallTypes" />
+          <Variable x:TypeArguments="scg:List(vffe:DWDimension)" Name="toBeInsertedCaseStatuses" />
+          <Variable x:TypeArguments="scg:List(vffe:DWDimension)" Name="toBeInsertedPeriods" />
+          <Variable x:TypeArguments="scg:List(vffe:DWDimension)" Name="toBeInsertedSubscriberTypes" />
+          <Variable x:TypeArguments="scg:List(vffe:DWDimension)" Name="toBeInsertedUsers" />
+          <Variable x:TypeArguments="scg:List(vffe:DWStrategy)" Name="toBeInsertedStrategies" />
+          <Variable x:TypeArguments="scg:List(vffe:DWTime)" Name="toBeInsertedTimes" />
+          <Variable x:TypeArguments="scg:List(vffe:DWDimension)" Name="toBeInsertedSuspicionLevels" />
+          <Variable x:TypeArguments="scg:List(vffe:DWDimension)" Name="toBeInsertedCallClasses" />
+          <Variable x:TypeArguments="scg:List(vffe:DWDimension)" Name="toBeInsertedFilters" />
+          <Variable x:TypeArguments="scg:List(vffe:DWDimension)" Name="toBeInsertedNetworkTypes" />
+          <Variable x:TypeArguments="scg:List(vffe:DWDimension)" Name="toBeInsertedStrategyKinds" />
+          <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="checkDWDimensionsChangesActivityStatus" />
+        </Sequence.Variables>
+        <vffba1:CheckDWDimensionsChanges PreviousActivityStatus="{x:Null}" sap2010:WorkflowViewState.IdRef="CheckDWDimensionsChanges_1">
+          <vffba1:CheckDWDimensionsChanges.CallClasses>
+            <InArgument x:TypeArguments="vffe:DWDimensionDictionary">
+              <mca:CSharpValue x:TypeArguments="vffe:DWDimensionDictionary">callClasses</mca:CSharpValue>
+            </InArgument>
+          </vffba1:CheckDWDimensionsChanges.CallClasses>
+          <vffba1:CheckDWDimensionsChanges.CallTypes>
+            <InArgument x:TypeArguments="vffe:DWDimensionDictionary">
+              <mca:CSharpValue x:TypeArguments="vffe:DWDimensionDictionary">callTypes</mca:CSharpValue>
+            </InArgument>
+          </vffba1:CheckDWDimensionsChanges.CallTypes>
+          <vffba1:CheckDWDimensionsChanges.CaseStatuses>
+            <InArgument x:TypeArguments="vffe:DWDimensionDictionary">
+              <mca:CSharpValue x:TypeArguments="vffe:DWDimensionDictionary">caseStatuses</mca:CSharpValue>
+            </InArgument>
+          </vffba1:CheckDWDimensionsChanges.CaseStatuses>
+          <vffba1:CheckDWDimensionsChanges.Filters>
+            <InArgument x:TypeArguments="vffe:DWDimensionDictionary">
+              <mca:CSharpValue x:TypeArguments="vffe:DWDimensionDictionary">filters</mca:CSharpValue>
+            </InArgument>
+          </vffba1:CheckDWDimensionsChanges.Filters>
+          <vffba1:CheckDWDimensionsChanges.NetworkTypes>
+            <InArgument x:TypeArguments="vffe:DWDimensionDictionary">
+              <mca:CSharpValue x:TypeArguments="vffe:DWDimensionDictionary">networkTypes</mca:CSharpValue>
+            </InArgument>
+          </vffba1:CheckDWDimensionsChanges.NetworkTypes>
+          <vffba1:CheckDWDimensionsChanges.Periods>
+            <InArgument x:TypeArguments="vffe:DWDimensionDictionary">
+              <mca:CSharpValue x:TypeArguments="vffe:DWDimensionDictionary">periods</mca:CSharpValue>
+            </InArgument>
+          </vffba1:CheckDWDimensionsChanges.Periods>
+          <vffba1:CheckDWDimensionsChanges.Status>
+            <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+              <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">checkDWDimensionsChangesActivityStatus</mca:CSharpReference>
+            </OutArgument>
+          </vffba1:CheckDWDimensionsChanges.Status>
+          <vffba1:CheckDWDimensionsChanges.StrategyKinds>
+            <InArgument x:TypeArguments="vffe:DWDimensionDictionary">
+              <mca:CSharpValue x:TypeArguments="vffe:DWDimensionDictionary">strategyKinds</mca:CSharpValue>
+            </InArgument>
+          </vffba1:CheckDWDimensionsChanges.StrategyKinds>
+          <vffba1:CheckDWDimensionsChanges.SubscriberTypes>
+            <InArgument x:TypeArguments="vffe:DWDimensionDictionary">
+              <mca:CSharpValue x:TypeArguments="vffe:DWDimensionDictionary">subscriberTypes</mca:CSharpValue>
+            </InArgument>
+          </vffba1:CheckDWDimensionsChanges.SubscriberTypes>
+          <vffba1:CheckDWDimensionsChanges.SuspicionLevels>
+            <InArgument x:TypeArguments="vffe:DWDimensionDictionary">
+              <mca:CSharpValue x:TypeArguments="vffe:DWDimensionDictionary">suspicionLevels</mca:CSharpValue>
+            </InArgument>
+          </vffba1:CheckDWDimensionsChanges.SuspicionLevels>
+          <vffba1:CheckDWDimensionsChanges.ToBeInsertedCallClasses>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedCallClasses</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:CheckDWDimensionsChanges.ToBeInsertedCallClasses>
+          <vffba1:CheckDWDimensionsChanges.ToBeInsertedCallTypes>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedCallTypes</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:CheckDWDimensionsChanges.ToBeInsertedCallTypes>
+          <vffba1:CheckDWDimensionsChanges.ToBeInsertedCaseStatuses>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedCaseStatuses</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:CheckDWDimensionsChanges.ToBeInsertedCaseStatuses>
+          <vffba1:CheckDWDimensionsChanges.ToBeInsertedFilters>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedFilters</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:CheckDWDimensionsChanges.ToBeInsertedFilters>
+          <vffba1:CheckDWDimensionsChanges.ToBeInsertedNetworkTypes>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedNetworkTypes</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:CheckDWDimensionsChanges.ToBeInsertedNetworkTypes>
+          <vffba1:CheckDWDimensionsChanges.ToBeInsertedPeriods>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedPeriods</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:CheckDWDimensionsChanges.ToBeInsertedPeriods>
+          <vffba1:CheckDWDimensionsChanges.ToBeInsertedStrategyKinds>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedStrategyKinds</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:CheckDWDimensionsChanges.ToBeInsertedStrategyKinds>
+          <vffba1:CheckDWDimensionsChanges.ToBeInsertedSubscriberTypes>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedSubscriberTypes</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:CheckDWDimensionsChanges.ToBeInsertedSubscriberTypes>
+          <vffba1:CheckDWDimensionsChanges.ToBeInsertedSuspicionLevels>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedSuspicionLevels</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:CheckDWDimensionsChanges.ToBeInsertedSuspicionLevels>
+          <vffba1:CheckDWDimensionsChanges.ToBeInsertedUsers>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedUsers</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:CheckDWDimensionsChanges.ToBeInsertedUsers>
+          <vffba1:CheckDWDimensionsChanges.Users>
+            <InArgument x:TypeArguments="vffe:DWDimensionDictionary">
+              <mca:CSharpValue x:TypeArguments="vffe:DWDimensionDictionary">users</mca:CSharpValue>
+            </InArgument>
+          </vffba1:CheckDWDimensionsChanges.Users>
+        </vffba1:CheckDWDimensionsChanges>
+      </Sequence>
+      <Sequence DisplayName="Strategy" sap2010:WorkflowViewState.IdRef="Sequence_3" />
       <vffba1:GetDWTime sap2010:WorkflowViewState.IdRef="GetDWTime_1">
         <vffba1:GetDWTime.FromDate>
           <InArgument x:TypeArguments="s:DateTime">
@@ -100,7 +233,7 @@
         </vffba1:GetDWTime.ToDate>
       </vffba1:GetDWTime>
     </Parallel>
-    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+    <Parallel DisplayName="Facts" sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
         <Variable x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)" Name="cdrQueue" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadCDRActivityStatus" />
@@ -190,41 +323,42 @@
       </vffba1:ApplyDWCDRsToDB>
     </Parallel>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2" Text="Finished executing workflow: FillDataWarehouse ..." />
-    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sIEYDwgEOAgEBRwVHeQMBnwFIBWYQAwGHAWcFvwEQAgEEwAEFwAF6AgECR0NHdgMBoAFOB05AAwGeAU8HT0ADAZ0BUAdlGgMBiAFxB4YBGQIBYocBB5wBJAIBPZ0BB7IBKAIBGLMBB74BIAIBBcABQ8ABdwIBA1MNU1sDAZgBXQ1dZQMBkwFYDVh4AwGOAWINYlkDAYkBdA10WwIBfn4NfnYCAXV5DXluAgFsgwENgwFZAgFjlAENlAFuAgFZigENigFuAgFQmQENmQGCAQIBR48BDY8BcgIBPqoBDaoBegIBNKABDaABagIBK68BDa8BhgECASKlAQ2lAXMCARm7AQ27AX4CAQ+2AQ22AWsCAQY=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sNkYDxwIOAgEBRwVHeQMB6AVIBesBEAMBhwHsAQXEAhACAQTFAgXFAnoCAQJHQ0d2AwHpBU0H0wESAwGaAdQBB9QBVwMBmQHVAQfqARoDAYgB9gEHiwIZAgFijAIHoQIkAgE9ogIHtwIoAgEYuAIHwwIgAgEFxQJDxQJ3AgEDaAnSASsDAZsB2AEN2AFbAwGVAeIBDeIBZQMBkQHdAQ3dAXgDAY0B5wEN5wFZAwGJAfkBDfkBWwIBfoMCDYMCdgIBdf4BDf4BbgIBbIgCDYgCWQIBY5kCDZkCbgIBWY8CDY8CbgIBUJ4CDZ4CggECAUeUAg2UAnICAT6vAg2vAnoCATSlAg2lAmoCASu0Ag20AoYBAgEiqgINqgJzAgEZwAINwAJ+AgEPuwINuwJrAgEGhAEPhAFmAwHMBacBD6cBfwMBsAW2AQ+2AXoDAZQFxQEPxQGCAQMB+ASTAQ+TAW4DAdwEnQEPnQF+AwHABLsBD7sBgAEDAaQEdQ91awMBiASiAQ+iAXwDAewDzwEPzwFkAwHQA6wBD6wBegMBtANwD3BoAwGYA4kBD4kBiQEDAfwCeg96ZgMB4AKYAQ+YAW4DAcQCwAEPwAGCAQMBqAKxAQ+xAX8DAYwCygEPygF4AwHwAWsPa2oDAdQBjgEPjgFsAwG4AX8Pf2sDAZwB</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1034,62" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="200,99">
+      <sap2010:ViewStateData Id="CheckDWDimensionsChanges_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,146">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="200,99">
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="200,146">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="GetDWTime_1" sap:VirtualizedContainerService.HintSize="200,99" />
-      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1034,145" />
+      <sap2010:ViewStateData Id="GetDWTime_1" sap:VirtualizedContainerService.HintSize="200,146" />
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1034,192" />
       <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="FillDimensionValues_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareDWCDRsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyDWCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
       <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1034,62" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056,599">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056,646">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FillDataWarehouse_1" sap:VirtualizedContainerService.HintSize="1096,679" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FillDataWarehouse_1" sap:VirtualizedContainerService.HintSize="1096,726" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
