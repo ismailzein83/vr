@@ -36,6 +36,12 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public DWDimensionDictionary Users { get; set; }
 
+
+
+    }
+    public class CheckDWDimensionsChangesOutput
+    {
+
         public List<DWDimension> ToBeInsertedCallClasses { get; set; }
 
         public List<DWDimension> ToBeInsertedCallTypes { get; set; }
@@ -60,7 +66,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     #endregion
 
-    public class CheckDWDimensionsChanges : DependentAsyncActivity<CheckDWDimensionsChangesInput>
+    public class CheckDWDimensionsChanges : DependentAsyncActivity<CheckDWDimensionsChangesInput, CheckDWDimensionsChangesOutput>
     {
 
         #region Arguments
@@ -128,132 +134,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         #endregion
 
-
-        protected override void DoWork(CheckDWDimensionsChangesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
-        {
-            if (inputArgument.CallClasses == null)
-            {
-                inputArgument.CallClasses = new DWDimensionDictionary();
-            }
-            if (inputArgument.CallTypes == null)
-            {
-                inputArgument.CallTypes = new DWDimensionDictionary();
-            }
-            if (inputArgument.CaseStatuses == null)
-            {
-                inputArgument.CaseStatuses = new DWDimensionDictionary();
-            }
-            if (inputArgument.Filters == null)
-            {
-                inputArgument.Filters = new DWDimensionDictionary();
-            }
-            if (inputArgument.NetworkTypes == null)
-            {
-                inputArgument.NetworkTypes = new DWDimensionDictionary();
-            }
-            if (inputArgument.Periods == null)
-            {
-                inputArgument.Periods = new DWDimensionDictionary();
-            }
-            if (inputArgument.StrategyKinds == null)
-            {
-                inputArgument.StrategyKinds = new DWDimensionDictionary();
-            }
-            if (inputArgument.SubscriberTypes == null)
-            {
-                inputArgument.SubscriberTypes = new DWDimensionDictionary();
-            }
-            if (inputArgument.SuspicionLevels == null)
-            {
-                inputArgument.SuspicionLevels = new DWDimensionDictionary();
-            }
-            if (inputArgument.Users == null)
-            {
-                inputArgument.Users = new DWDimensionDictionary();
-            }
-
-
-
-            inputArgument.ToBeInsertedCallClasses = new List<DWDimension>();
-            inputArgument.ToBeInsertedCallTypes = new List<DWDimension>();
-            inputArgument.ToBeInsertedCaseStatuses = new List<DWDimension>();
-            inputArgument.ToBeInsertedFilters = new List<DWDimension>();
-            inputArgument.ToBeInsertedNetworkTypes = new List<DWDimension>();
-            inputArgument.ToBeInsertedPeriods = new List<DWDimension>();
-            inputArgument.ToBeInsertedStrategyKinds = new List<DWDimension>();
-            inputArgument.ToBeInsertedSubscriberTypes = new List<DWDimension>();
-            inputArgument.ToBeInsertedSuspicionLevels = new List<DWDimension>();
-            inputArgument.ToBeInsertedUsers = new List<DWDimension>();
-
-
-            CallClassManager callClassManager = new CallClassManager();
-            IEnumerable<CallClass> listCallClasses = callClassManager.GetClasses();
-
-
-            foreach (var i in listCallClasses)
-            {
-                if (!inputArgument.CallClasses.ContainsKey(i.Id))
-                {
-                    var dwDimension = new DWDimension();
-                    dwDimension.Id = i.Id;
-                    dwDimension.Description = i.Description;
-                    inputArgument.ToBeInsertedCallClasses.Add(dwDimension);
-                    inputArgument.CallClasses.Add(dwDimension.Id, dwDimension);
-                }
-
-                if (!inputArgument.NetworkTypes.ContainsKey((int)i.NetType))
-                {
-                    var dwDimension = new DWDimension();
-                    dwDimension.Id = (int)i.NetType;
-                    dwDimension.Description = Vanrise.Common.Utilities.GetEnumDescription<NetType>(i.NetType);
-                    inputArgument.ToBeInsertedNetworkTypes.Add(dwDimension);
-                    inputArgument.NetworkTypes.Add(dwDimension.Id, dwDimension);
-                }
-            }
-
-
-            inputArgument.ToBeInsertedCallTypes = GetToBeInserted<CallType>(inputArgument.CallTypes);
-
-            inputArgument.ToBeInsertedCaseStatuses = GetToBeInserted<CaseStatus>(inputArgument.CaseStatuses);
-
-            inputArgument.ToBeInsertedPeriods = GetToBeInserted<PeriodEnum>(inputArgument.Periods);
-
-            inputArgument.ToBeInsertedStrategyKinds = GetToBeInserted<StrategyKindEnum>(inputArgument.StrategyKinds);
-
-            inputArgument.ToBeInsertedSubscriberTypes = GetToBeInserted<SubscriberType>(inputArgument.SubscriberTypes);
-
-            inputArgument.ToBeInsertedSuspicionLevels = GetToBeInserted<SuspicionLevel>(inputArgument.SuspicionLevels);
-
-
-
-
-
-            FilterManager filterManager = new FilterManager();
-            Dictionary<int, FilterDefinition> dictFilters = filterManager.GetCriteriaDefinitions();
-
-            inputArgument.ToBeInsertedFilters = GetToBeInserted(inputArgument.Filters, dictFilters);
-
-
-
-            UserManager userManager = new UserManager();
-            IEnumerable<UserInfo> listUsers = userManager.GetUsers();
-
-            foreach (var i in listUsers)
-            {
-                if (!inputArgument.Users.ContainsKey(i.UserId))
-                {
-                    var dwDimension = new DWDimension();
-                    dwDimension.Id = i.UserId;
-                    dwDimension.Description = i.Name;
-                    inputArgument.ToBeInsertedUsers.Add(dwDimension);
-                    inputArgument.Users.Add(dwDimension.Id, dwDimension);
-                }
-            }
-
-
-
-        }
-
         private static List<DWDimension> GetToBeInserted(DWDimensionDictionary dwDictionary, Dictionary<int, FilterDefinition> dbDictionary)
         {
             List<DWDimension> toBeInsertedList = new List<DWDimension>();
@@ -294,6 +174,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             return toBeInsertedList;
         }
 
+
         protected override CheckDWDimensionsChangesInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)
         {
             return new CheckDWDimensionsChangesInput
@@ -318,30 +199,146 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                 Users = this.Users.Get(context),
 
-
-
-                ToBeInsertedCallClasses = this.ToBeInsertedCallClasses.Get(context),
-
-                ToBeInsertedCallTypes = this.ToBeInsertedCallTypes.Get(context),
-
-                ToBeInsertedCaseStatuses = this.ToBeInsertedCaseStatuses.Get(context),
-
-                ToBeInsertedFilters = this.ToBeInsertedFilters.Get(context),
-
-                ToBeInsertedNetworkTypes = this.ToBeInsertedNetworkTypes.Get(context),
-
-                ToBeInsertedPeriods = this.ToBeInsertedPeriods.Get(context),
-
-                ToBeInsertedStrategyKinds = this.ToBeInsertedStrategyKinds.Get(context),
-
-                ToBeInsertedSubscriberTypes = this.ToBeInsertedSubscriberTypes.Get(context),
-
-                ToBeInsertedSuspicionLevels = this.ToBeInsertedSuspicionLevels.Get(context),
-
-                ToBeInsertedUsers = this.ToBeInsertedUsers.Get(context)
-
             };
         }
 
+        protected override CheckDWDimensionsChangesOutput DoWorkWithResult(CheckDWDimensionsChangesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        {
+
+            if (inputArgument.CallClasses == null)
+                inputArgument.CallClasses = new DWDimensionDictionary();
+
+            if (inputArgument.CallTypes == null)
+                inputArgument.CallTypes = new DWDimensionDictionary();
+
+            if (inputArgument.CaseStatuses == null)
+                inputArgument.CaseStatuses = new DWDimensionDictionary();
+
+            if (inputArgument.Filters == null)
+                inputArgument.Filters = new DWDimensionDictionary();
+
+            if (inputArgument.NetworkTypes == null)
+                inputArgument.NetworkTypes = new DWDimensionDictionary();
+
+            if (inputArgument.Periods == null)
+                inputArgument.Periods = new DWDimensionDictionary();
+
+            if (inputArgument.StrategyKinds == null)
+                inputArgument.StrategyKinds = new DWDimensionDictionary();
+
+            if (inputArgument.SubscriberTypes == null)
+                inputArgument.SubscriberTypes = new DWDimensionDictionary();
+
+            if (inputArgument.SuspicionLevels == null)
+                inputArgument.SuspicionLevels = new DWDimensionDictionary();
+
+            if (inputArgument.Users == null)
+                inputArgument.Users = new DWDimensionDictionary();
+
+
+
+            List<DWDimension> ToBeInsertedCallClasses = new List<DWDimension>();
+            List<DWDimension> ToBeInsertedCallTypes = new List<DWDimension>();
+            List<DWDimension> ToBeInsertedCaseStatuses = new List<DWDimension>();
+            List<DWDimension> ToBeInsertedFilters = new List<DWDimension>();
+            List<DWDimension> ToBeInsertedNetworkTypes = new List<DWDimension>();
+            List<DWDimension> ToBeInsertedPeriods = new List<DWDimension>();
+            List<DWDimension> ToBeInsertedStrategyKinds = new List<DWDimension>();
+            List<DWDimension> ToBeInsertedSubscriberTypes = new List<DWDimension>();
+            List<DWDimension> ToBeInsertedSuspicionLevels = new List<DWDimension>();
+            List<DWDimension> ToBeInsertedUsers = new List<DWDimension>();
+
+
+
+
+            CallClassManager callClassManager = new CallClassManager();
+            IEnumerable<CallClass> listCallClasses = callClassManager.GetClasses();
+
+
+            foreach (var i in listCallClasses)
+            {
+                if (!inputArgument.CallClasses.ContainsKey(i.Id))
+                {
+                    var dwDimension = new DWDimension();
+                    dwDimension.Id = i.Id;
+                    dwDimension.Description = i.Description;
+                    ToBeInsertedCallClasses.Add(dwDimension);
+                    inputArgument.CallClasses.Add(dwDimension.Id, dwDimension);
+                }
+
+                if (!inputArgument.NetworkTypes.ContainsKey((int)i.NetType))
+                {
+                    var dwDimension = new DWDimension();
+                    dwDimension.Id = (int)i.NetType;
+                    dwDimension.Description = Vanrise.Common.Utilities.GetEnumDescription<NetType>(i.NetType);
+                    ToBeInsertedNetworkTypes.Add(dwDimension);
+                    inputArgument.NetworkTypes.Add(dwDimension.Id, dwDimension);
+                }
+            }
+
+
+            ToBeInsertedCallTypes = GetToBeInserted<CallType>(inputArgument.CallTypes);
+
+            ToBeInsertedCaseStatuses = GetToBeInserted<CaseStatus>(inputArgument.CaseStatuses);
+
+            ToBeInsertedPeriods = GetToBeInserted<PeriodEnum>(inputArgument.Periods);
+
+            ToBeInsertedStrategyKinds = GetToBeInserted<StrategyKindEnum>(inputArgument.StrategyKinds);
+
+            ToBeInsertedSubscriberTypes = GetToBeInserted<SubscriberType>(inputArgument.SubscriberTypes);
+
+            ToBeInsertedSuspicionLevels = GetToBeInserted<SuspicionLevel>(inputArgument.SuspicionLevels);
+
+            FilterManager filterManager = new FilterManager();
+            Dictionary<int, FilterDefinition> dictFilters = filterManager.GetCriteriaDefinitions();
+
+            ToBeInsertedFilters = GetToBeInserted(inputArgument.Filters, dictFilters);
+
+
+
+            UserManager userManager = new UserManager();
+            IEnumerable<UserInfo> listUsers = userManager.GetUsers();
+
+            foreach (var i in listUsers)
+            {
+                if (!inputArgument.Users.ContainsKey(i.UserId))
+                {
+                    var dwDimension = new DWDimension();
+                    dwDimension.Id = i.UserId;
+                    dwDimension.Description = i.Name;
+                    ToBeInsertedUsers.Add(dwDimension);
+                    inputArgument.Users.Add(dwDimension.Id, dwDimension);
+                }
+            }
+
+            return new CheckDWDimensionsChangesOutput()
+            {
+                ToBeInsertedCallClasses = ToBeInsertedCallClasses,
+                ToBeInsertedCallTypes = ToBeInsertedCallTypes,
+                ToBeInsertedCaseStatuses = ToBeInsertedCaseStatuses,
+                ToBeInsertedFilters = ToBeInsertedFilters,
+                ToBeInsertedNetworkTypes = ToBeInsertedNetworkTypes,
+                ToBeInsertedPeriods = ToBeInsertedPeriods,
+                ToBeInsertedStrategyKinds = ToBeInsertedStrategyKinds,
+                ToBeInsertedSubscriberTypes = ToBeInsertedSubscriberTypes,
+                ToBeInsertedSuspicionLevels = ToBeInsertedSuspicionLevels,
+                ToBeInsertedUsers = ToBeInsertedUsers
+            };
+
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, CheckDWDimensionsChangesOutput result)
+        {
+            this.ToBeInsertedCallClasses.Set(context, result.ToBeInsertedCallClasses);
+            this.ToBeInsertedCallTypes.Set(context, result.ToBeInsertedCallTypes);
+            this.ToBeInsertedCaseStatuses.Set(context, result.ToBeInsertedCaseStatuses);
+            this.ToBeInsertedFilters.Set(context, result.ToBeInsertedFilters);
+            this.ToBeInsertedNetworkTypes.Set(context, result.ToBeInsertedNetworkTypes);
+            this.ToBeInsertedPeriods.Set(context, result.ToBeInsertedPeriods);
+            this.ToBeInsertedStrategyKinds.Set(context, result.ToBeInsertedStrategyKinds);
+            this.ToBeInsertedSubscriberTypes.Set(context, result.ToBeInsertedSubscriberTypes);
+            this.ToBeInsertedSuspicionLevels.Set(context, result.ToBeInsertedSuspicionLevels);
+            this.ToBeInsertedUsers.Set(context, result.ToBeInsertedUsers);
+        }
     }
 }
