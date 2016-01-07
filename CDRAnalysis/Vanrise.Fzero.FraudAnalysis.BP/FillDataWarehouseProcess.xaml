@@ -271,6 +271,63 @@
             </InArgument>
           </vffba1:CheckDWDimensionsChanges.Users>
         </vffba1:CheckDWDimensionsChanges>
+        <vffba1:ApplyDWDimensionsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyDWDimensionsToDB_1">
+          <vffba1:ApplyDWDimensionsToDB.PreviousActivityStatus>
+            <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+              <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">checkDWDimensionsChangesActivityStatus</mca:CSharpValue>
+            </InArgument>
+          </vffba1:ApplyDWDimensionsToDB.PreviousActivityStatus>
+          <vffba1:ApplyDWDimensionsToDB.ToBeInsertedCallClasses>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedCallClasses</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:ApplyDWDimensionsToDB.ToBeInsertedCallClasses>
+          <vffba1:ApplyDWDimensionsToDB.ToBeInsertedCallTypes>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedCallTypes</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:ApplyDWDimensionsToDB.ToBeInsertedCallTypes>
+          <vffba1:ApplyDWDimensionsToDB.ToBeInsertedCaseStatuses>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedCaseStatuses</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:ApplyDWDimensionsToDB.ToBeInsertedCaseStatuses>
+          <vffba1:ApplyDWDimensionsToDB.ToBeInsertedFilters>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedFilters</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:ApplyDWDimensionsToDB.ToBeInsertedFilters>
+          <vffba1:ApplyDWDimensionsToDB.ToBeInsertedNetworkTypes>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedNetworkTypes</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:ApplyDWDimensionsToDB.ToBeInsertedNetworkTypes>
+          <vffba1:ApplyDWDimensionsToDB.ToBeInsertedPeriods>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedPeriods</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:ApplyDWDimensionsToDB.ToBeInsertedPeriods>
+          <vffba1:ApplyDWDimensionsToDB.ToBeInsertedStrategyKinds>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedStrategyKinds</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:ApplyDWDimensionsToDB.ToBeInsertedStrategyKinds>
+          <vffba1:ApplyDWDimensionsToDB.ToBeInsertedSubscriberTypes>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedSubscriberTypes</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:ApplyDWDimensionsToDB.ToBeInsertedSubscriberTypes>
+          <vffba1:ApplyDWDimensionsToDB.ToBeInsertedSuspicionLevels>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedSuspicionLevels</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:ApplyDWDimensionsToDB.ToBeInsertedSuspicionLevels>
+          <vffba1:ApplyDWDimensionsToDB.ToBeInsertedUsers>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedUsers</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:ApplyDWDimensionsToDB.ToBeInsertedUsers>
+        </vffba1:ApplyDWDimensionsToDB>
       </Sequence>
       <Sequence DisplayName="Strategy" sap2010:WorkflowViewState.IdRef="Sequence_3" />
       <vffba1:GetDWTime sap2010:WorkflowViewState.IdRef="GetDWTime_1">
@@ -386,43 +443,44 @@
       </vffba1:ApplyDWCDRsToDB>
     </Parallel>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2" Text="Finished executing workflow: FillDataWarehouse ..." />
-    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sQ0YDhgMOAgEBRwVHeQMB2ghIBaoCEAMBhwGrAgWDAxACAQSEAwWEA3oCAQJHQ0d2AwHbCE0HkgISAwGaAZMCB5MCVwMBmQGUAgepAhoDAYgBtQIHygIZAgFiywIH4AIfAgE94QIH9gIoAgEY9wIHggMgAgEFhANDhAN3AgEDaQmhASIDAZoGogEJkQIrAwGbAZcCDZcCWwMBlQGhAg2hAmUDAZEBnAINnAJ4AwGNAaYCDaYCWQMBiQG4Ag24AlsCAX7CAg3CAnYCAXW9Ag29Am4CAWzHAg3HAlkCAWPYAg3YAm4CAVnOAg3OAm4CAVDdAg3dAn0CAUfTAg3TAnICAT7uAg3uAnUCATTkAg3kAmoCASvzAg3zAoYBAgEi6QIN6QJzAgEZ/wIN/wJ+AgEP+gIN+gJrAgEGhQEPhQFuAwG9CJQBD5QBdgMBoAh2D3ZzAwGDCJ4BD54BbAMB5gdxD3FwAwHJB4oBD4oBgAEDAawHew97bgMBjweZAQ+ZAXYDAfIGbA9scgMB1QaPAQ+PAXQDAbgGgAEPgAFzAwGbBr4BD74BZgMB/QXmAQ/mAX8DAeAF9QEP9QF6AwHDBYQCD4QCggEDAaYF0gEP0gFuAwGJBdwBD9wBfgMB7AT6AQ/6AYABAwHPBK8BD68BawMBsgTDAQ/DAXgDAZUE4QEP4QF8AwH4A44CD44CZAMB2wPrAQ/rAXoDAb4DqgEPqgFoAwGhA8gBD8gBiQEDAYQDtAEPtAFmAwHnAtcBD9cBbgMBygL/AQ//AYIBAwGtAvABD/ABfwMBkAKJAg+JAngDAfMBpQEPpQFqAwHWAc0BD80BbAMBuQG5AQ+5AWsDAZwB</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sT0YDvwMOAgEBRwVHeQMBmgtIBeMCEAMBhwHkAgW8AxACAQS9AwW9A3oCAQJHQ0d2AwGbC00HywISAwGaAcwCB8wCVwMBmQHNAgfiAhoDAYgB7gIHgwMZAgFihAMHmQMfAgE9mgMHrwMoAgEYsAMHuwMgAgEFvQNDvQN3AgEDaQmhASIDAdoIogEJkQIrAwHbA5ICCcoCKAMBmwHQAg3QAlsDAZUB2gIN2gJlAwGRAdUCDdUCeAMBjQHfAg3fAlkDAYkB8QIN8QJbAgF++wIN+wJ2AgF19gIN9gJuAgFsgAMNgANZAgFjkQMNkQNuAgFZhwMNhwNuAgFQlgMNlgN9AgFHjAMNjANyAgE+pwMNpwN1AgE0nQMNnQNqAgErrAMNrAOGAQIBIqIDDaIDcwIBGbgDDbgDfgIBD7MDDbMDawIBBoUBD4UBbgMB/QqUAQ+UAXYDAeAKdg92cwMBwwqeAQ+eAWwDAaYKcQ9xcAMBiQqKAQ+KAYABAwHsCXsPe24DAc8JmQEPmQF2AwGyCWwPbHIDAZUJjwEPjwF0AwH4CIABD4ABcwMB2wi+AQ++AWYDAb0I5gEP5gF/AwGgCPUBD/UBegMBgwiEAg+EAoIBAwHmB9IBD9IBbgMByQfcAQ/cAX4DAawH+gEP+gGAAQMBjwevAQ+vAWsDAfIGwwEPwwF4AwHVBuEBD+EBfAMBuAaOAg+OAmQDAZsG6wEP6wF6AwH+BaoBD6oBaAMB4QXIAQ/IAYkBAwHEBbQBD7QBZgMBpwXXAQ/XAW4DAYoF/wEP/wGCAQMB7QTwAQ/wAX8DAdAEiQIPiQJ4AwGzBKUBD6UBagMBlgTNAQ/NAWwDAfkDuQEPuQFrAwHcA6QCD6QCfwMBvgOzAg+zAnoDAaEDwgIPwgKCAQMBhAOaAg+aAn4DAecCuAIPuAKAAQMBygKVAg+VAoEBAwGtAp8CD58CfAMBkAKpAg+pAnoDAfMBvQIPvQKCAQMB1gGuAg+uAn8DAbkBxwIPxwJ4AwGcAQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1034,62" />
       <sap2010:ViewStateData Id="GetDWDimensions_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="CheckDWDimensionsChanges_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,208">
+      <sap2010:ViewStateData Id="ApplyDWDimensionsToDB_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,270">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="200,208">
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="200,270">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="GetDWTime_1" sap:VirtualizedContainerService.HintSize="200,208" />
-      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1034,254" />
+      <sap2010:ViewStateData Id="GetDWTime_1" sap:VirtualizedContainerService.HintSize="200,270" />
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1034,316" />
       <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="FillFactValues_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareDWCDRsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyDWCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
       <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1034,62" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056,708">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056,770">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FillDataWarehouse_1" sap:VirtualizedContainerService.HintSize="1096,726" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FillDataWarehouse_1" sap:VirtualizedContainerService.HintSize="1096,850" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
