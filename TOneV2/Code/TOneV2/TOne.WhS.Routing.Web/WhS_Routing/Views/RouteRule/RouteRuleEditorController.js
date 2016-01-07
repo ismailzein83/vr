@@ -140,8 +140,6 @@
         function load() {
             $scope.isLoading = true;
 
-            displaySectionsBasedOnParameters();
-
             if (isEditMode) {
                 $scope.title = "Edit Route Rule";
                 getRouteRule().then(function () {
@@ -167,7 +165,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([editScopeTitle, loadFilterBySection, loadSaleZoneGroupSection, loadCustomerGroupSection,
+            return UtilsService.waitMultipleAsyncOperations([displaySectionsBasedOnParameters, editScopeTitle, loadFilterBySection, loadSaleZoneGroupSection, loadCustomerGroupSection,
                 loadCodeCriteriaGroupSection, loadRouteRuleSettingsSection, loadStaticSection])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
