@@ -29,7 +29,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InOutArgument<DWTimeDictionary> Times { get; set; }
 
-       
+
         [RequiredArgument]
         public InArgument<DateTime> FromDate { get; set; }
 
@@ -42,9 +42,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(GetDWTimeInput inputArgument, AsyncActivityHandle handle)
         {
-            DWTimeManager timeManager = new DWTimeManager();
-            IEnumerable<DWTime> times = timeManager.GetTimes(inputArgument.FromDate, inputArgument.ToDate);
-            inputArgument.Times = (DWTimeDictionary)times.ToDictionary(dim => dim.DateInstance, dim => dim);
+            //DWTimeManager timeManager = new DWTimeManager();
+            //IEnumerable<DWTime> times = timeManager.GetTimes(inputArgument.FromDate, inputArgument.ToDate);
+            //if (times.Count() > 0)
+            //    inputArgument.Times = (DWTimeDictionary)times.ToDictionary(dim => dim.DateInstance, dim => dim);
         }
 
 

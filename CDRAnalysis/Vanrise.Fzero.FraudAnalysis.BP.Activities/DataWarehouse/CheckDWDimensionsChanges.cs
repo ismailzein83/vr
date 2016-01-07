@@ -131,8 +131,64 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(CheckDWDimensionsChangesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            if (inputArgument.CallClasses == null)
+            {
+                inputArgument.CallClasses = new DWDimensionDictionary();
+            }
+            if (inputArgument.CallTypes == null)
+            {
+                inputArgument.CallTypes = new DWDimensionDictionary();
+            }
+            if (inputArgument.CaseStatuses == null)
+            {
+                inputArgument.CaseStatuses = new DWDimensionDictionary();
+            }
+            if (inputArgument.Filters == null)
+            {
+                inputArgument.Filters = new DWDimensionDictionary();
+            }
+            if (inputArgument.NetworkTypes == null)
+            {
+                inputArgument.NetworkTypes = new DWDimensionDictionary();
+            }
+            if (inputArgument.Periods == null)
+            {
+                inputArgument.Periods = new DWDimensionDictionary();
+            }
+            if (inputArgument.StrategyKinds == null)
+            {
+                inputArgument.StrategyKinds = new DWDimensionDictionary();
+            }
+            if (inputArgument.SubscriberTypes == null)
+            {
+                inputArgument.SubscriberTypes = new DWDimensionDictionary();
+            }
+            if (inputArgument.SuspicionLevels == null)
+            {
+                inputArgument.SuspicionLevels = new DWDimensionDictionary();
+            }
+            if (inputArgument.Users == null)
+            {
+                inputArgument.Users = new DWDimensionDictionary();
+            }
+
+
+
+            inputArgument.ToBeInsertedCallClasses = new List<DWDimension>();
+            inputArgument.ToBeInsertedCallTypes = new List<DWDimension>();
+            inputArgument.ToBeInsertedCaseStatuses = new List<DWDimension>();
+            inputArgument.ToBeInsertedFilters = new List<DWDimension>();
+            inputArgument.ToBeInsertedNetworkTypes = new List<DWDimension>();
+            inputArgument.ToBeInsertedPeriods = new List<DWDimension>();
+            inputArgument.ToBeInsertedStrategyKinds = new List<DWDimension>();
+            inputArgument.ToBeInsertedSubscriberTypes = new List<DWDimension>();
+            inputArgument.ToBeInsertedSuspicionLevels = new List<DWDimension>();
+            inputArgument.ToBeInsertedUsers = new List<DWDimension>();
+
+
             CallClassManager callClassManager = new CallClassManager();
             IEnumerable<CallClass> listCallClasses = callClassManager.GetClasses();
+
 
             foreach (var i in listCallClasses)
             {
@@ -141,15 +197,17 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     var dwDimension = new DWDimension();
                     dwDimension.Id = i.Id;
                     dwDimension.Description = i.Description;
-                    inputArgument.ToBeInsertedCallTypes.Add(dwDimension);
+                    inputArgument.ToBeInsertedCallClasses.Add(dwDimension);
+                    inputArgument.CallClasses.Add(dwDimension.Id, dwDimension);
                 }
 
                 if (!inputArgument.NetworkTypes.ContainsKey((int)i.NetType))
                 {
                     var dwDimension = new DWDimension();
-                    dwDimension.Id = i.Id;
-                    dwDimension.Description = i.Description;
+                    dwDimension.Id = (int)i.NetType;
+                    dwDimension.Description = Vanrise.Common.Utilities.GetEnumDescription<NetType>(i.NetType);
                     inputArgument.ToBeInsertedNetworkTypes.Add(dwDimension);
+                    inputArgument.NetworkTypes.Add(dwDimension.Id, dwDimension);
                 }
             }
 
@@ -188,6 +246,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     dwDimension.Id = i.UserId;
                     dwDimension.Description = i.Name;
                     inputArgument.ToBeInsertedUsers.Add(dwDimension);
+                    inputArgument.Users.Add(dwDimension.Id, dwDimension);
                 }
             }
 
@@ -206,6 +265,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     dwDimension.Id = item.Key;
                     dwDimension.Description = item.Value.Description;
                     toBeInsertedList.Add(dwDimension);
+                    dwDictionary.Add(dwDimension.Id, dwDimension);
                 }
             }
 
@@ -228,6 +288,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     dwDimension.Id = (int)(object)i;
                     dwDimension.Description = Vanrise.Common.Utilities.GetEnumDescription(enumValue);
                     toBeInsertedList.Add(dwDimension);
+                    dwDictionary.Add(dwDimension.Id, dwDimension);
                 }
             }
             return toBeInsertedList;
