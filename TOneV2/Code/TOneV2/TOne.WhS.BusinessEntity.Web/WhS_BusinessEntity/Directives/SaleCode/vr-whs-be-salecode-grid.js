@@ -7,7 +7,8 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleCodeAPIService) {
 
         restrict: "E",
         scope: {
-            onReady: "="
+            onReady: "=",
+            hidesalezonecolumn:'@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -29,7 +30,10 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleCodeAPIService) {
         this.initializeController = initializeController;
 
         function initializeController() {
-           
+            $scope.hidesalezonecolumn = false;
+            if ($attrs.hidesalezonecolumn != undefined) {
+                $scope.hidesalezonecolumn = true;
+            }
             $scope.salecodes = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;

@@ -78,6 +78,7 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                     }
 
                     return WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlans().then(function (response) {
+                        ctrl.datasource.length = 0;
                         angular.forEach(response, function (itm) {
                             ctrl.datasource.push(itm);
                         });

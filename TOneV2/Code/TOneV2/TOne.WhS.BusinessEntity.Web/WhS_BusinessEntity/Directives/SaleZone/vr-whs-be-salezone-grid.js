@@ -50,12 +50,32 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_SaleZoneAPIService.GetFilteredSaleZones(dataRetrievalInput)
                     .then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                setDataItemExtension(response.Data[i]);
+                            }
+                        }
                          onResponseReady(response);
                     })
                     .catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
+        }
+
+        function setDataItemExtension(dataItem) {
+
+            var extensionObject = {};
+            var query = {
+                ZonesIds: [dataItem.Entity.SaleZoneId],
+            }
+            extensionObject.onGridReady = function (api) {
+                extensionObject.saleCodeGridAPI = api;
+                extensionObject.saleCodeGridAPI.loadGrid(query);
+                extensionObject.onGridReady = undefined;
+            };
+            dataItem.extensionObject = extensionObject;
+
         }
 
     }
