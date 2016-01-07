@@ -76,9 +76,9 @@ VALUES ([ID], [Name], [ActionTypeInfo])
 
 MERGE INTO integration.[AdapterType] AS Target 
 USING (VALUES 
-	(1, N'File Receive Adapter', N'{"AdapterTemplateURL": "/Client/Modules/Integration/Views/AdapterTemplates/FileReceiveAdapterTemplate.html", "FQTN": "Vanrise.Integration.Adapters.FileReceiveAdapter.FileReceiveAdapter, Vanrise.Integration.Adapters.FileReceiveAdapter"}'),
-	(2, N'FTP Receive Adapter', N'{"AdapterTemplateURL": "/Client/Modules/Integration/Views/AdapterTemplates/FTPReceiveAdapterTemplate.html","FQTN": "Vanrise.Integration.Adapters.FTPReceiveAdapter.FTPReceiveAdapter, Vanrise.Integration.Adapters.FTPReceiveAdapter"}'),
-	(3, N'SQL Receive Adapter', N'{"AdapterTemplateURL": "/Client/Modules/Integration/Views/AdapterTemplates/DBReceiveAdapterTemplate.html", "FQTN": "Vanrise.Integration.Adapters.SQLReceiveAdapter.SQLReceiveAdapter, Vanrise.Integration.Adapters.SQLReceiveAdapter"}')
+	(1, N'File Receive Adapter', N'{"AdapterTemplateURL":"/Client/Modules/Integration/Views/AdapterTemplates/FileReceiveAdapterTemplate.html","Editor":"vr-integration-adapter-file","FQTN":"Vanrise.Integration.Adapters.FileReceiveAdapter.FileReceiveAdapter, Vanrise.Integration.Adapters.FileReceiveAdapter"}'),
+	(2, N'FTP Receive Adapter', N'{"AdapterTemplateURL":"/Client/Modules/Integration/Views/AdapterTemplates/FTPReceiveAdapterTemplate.html","Editor":"vr-integration-adapter-ftp","FQTN":"Vanrise.Integration.Adapters.FTPReceiveAdapter.FTPReceiveAdapter, Vanrise.Integration.Adapters.FTPReceiveAdapter"}'),
+	(3, N'SQL Receive Adapter', N'{"AdapterTemplateURL":"/Client/Modules/Integration/Views/AdapterTemplates/DBReceiveAdapterTemplate.html","Editor":"vr-integration-adapter-db","FQTN":"Vanrise.Integration.Adapters.SQLReceiveAdapter.SQLReceiveAdapter, Vanrise.Integration.Adapters.SQLReceiveAdapter"}')
 ) 
 AS Source ([ID], [Name], [Info])
 ON Target.[ID] = Source.[ID] 
