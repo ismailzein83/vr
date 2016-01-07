@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{fef565a8-7254-4428-8bd4-a72b6f761496}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -61,5 +61,15 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="CP_SupPriceList\" />
+    <Folder Include="CP_SupPriceList\Tables\" />
+    <Folder Include="CP_SupPriceList\Stored Procedures\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="CP_SupPriceList\Tables\PriceList.sql" />
+    <Build Include="CP_SupPriceList\Stored Procedures\sp_PriceList_GetUpdated.sql" />
+    <Build Include="CP_SupPriceList\Stored Procedures\sp_PriceList_Insert.sql" />
+    <Build Include="Security\CP_SupPriceList.sql" />
   </ItemGroup>
 </Project>
