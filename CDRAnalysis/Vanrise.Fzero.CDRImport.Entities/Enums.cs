@@ -19,6 +19,15 @@ namespace Vanrise.Fzero.CDRImport.Entities
         International = 2
     };
 
-   
+
+    public enum SubscriberType
+    {
+        INROAMER = 0,
+        OUTROAMER = 1,
+        POSTPAID = 2,
+        PREPAID = 3,
+        PREROAMER = 4
+    };
+
 
 }

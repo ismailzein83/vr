@@ -85,6 +85,14 @@
     <Reference Include="Vanrise.Queueing.Entities">
       <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataWarehouse\ApplyDWStrategiesToDB.cs" />
@@ -92,6 +100,7 @@
     <Compile Include="ApplyNumberProfilesToDB.cs" />
     <Compile Include="ApplyStrategyExecutionDetailsToDB.cs" />
     <Compile Include="AssignCases.cs" />
+    <Compile Include="DataWarehouse\CheckDWDimensionsChanges.cs" />
     <Compile Include="DataWarehouse\FillDimensionValues.cs" />
     <Compile Include="DataWarehouse\CheckDWStrategiesChanges.cs" />
     <Compile Include="FindRelatedNumbersthroughIMEIs.cs" />
