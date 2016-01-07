@@ -1,0 +1,13 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-textbox value="connectionString" label="Connection String" isrequired />
+    </vr-columns>
+
+    <vr-columns width="fullrow">
+        <vr-textarea value="query" label="Query" hint="Ex: Select top 1000 from Table where ID > {LastImportedId}" isrequired />
+    </vr-columns>
+
+    <vr-columns width="fullrow">
+        <vr-textbox readonly value="lastImportedId" label="Last Imported Id" />
+    </vr-columns>
+</vr-row>

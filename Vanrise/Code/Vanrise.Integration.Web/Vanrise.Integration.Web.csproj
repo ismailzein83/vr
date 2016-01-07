@@ -107,6 +107,12 @@
   <ItemGroup>
     <Content Include="Integration\Constants\MappingResultEnum.js" />
     <Content Include="Integration\Constants\ExecutionStatusEnum.js" />
+    <Content Include="Integration\Directives\Adapter\Templates\AdapterDBTemplate.html" />
+    <Content Include="Integration\Directives\Adapter\Templates\AdapterFTPTemplate.html" />
+    <Content Include="Integration\Directives\Adapter\Templates\AdapterFileTemplate.html" />
+    <Content Include="Integration\Directives\Adapter\vr-integration-adapter-db.js" />
+    <Content Include="Integration\Directives\Adapter\vr-integration-adapter-ftp.js" />
+    <Content Include="Integration\Directives\Adapter\vr-integration-adapter-file.js" />
     <Content Include="Integration\Directives\DataSource\vr-integration-datasource-selector.js" />
     <Content Include="Integration\Services\APIServices\DataSourceAPIService.js" />
     <Content Include="Integration\Services\APIServices\DataSourceImportedBatchAPIService.js" />
@@ -128,6 +134,8 @@
     <Content Include="Integration\Views\DataSourceLogManagementController.js" />
     <Content Include="Integration\Views\DataSourceManagement.html" />
     <Content Include="Integration\Views\DataSourceManagementController.js" />
+    <Content Include="Integration\Views\NewDataSource\NewDataSourceEditor.html" />
+    <Content Include="Integration\Views\NewDataSource\NewDataSourceEditorController.js" />
     <Content Include="Integration\Views\QueueItemHeaderGrid.html" />
     <Content Include="Integration\Views\QueueItemHeaderGridController.js" />
   </ItemGroup>

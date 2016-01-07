@@ -65,6 +65,9 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
                     data = payload.data;
                     $scope.selectedType = UtilsService.getItemByVal($scope.schedulerTypes, data.TimerTriggerTypeFQTN, "FQTN");
                 }
+                else 
+                    $scope.selectedType = UtilsService.getItemByVal($scope.schedulerTypes, TimeSchedulerTypeEnum.Interval.FQTN, "FQTN");
+
                 if (data != undefined) {
                     timerTypeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                     var loadTimerTypePromiseDeferred = UtilsService.createPromiseDeferred();

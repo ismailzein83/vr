@@ -20,5 +20,7 @@ namespace Vanrise.Integration.Entities
         public string AdapterTemplateURL { get; set; }
 
         public string FQTN { get; set; }
+
+        public string Editor { get; set; }
     }
 }
