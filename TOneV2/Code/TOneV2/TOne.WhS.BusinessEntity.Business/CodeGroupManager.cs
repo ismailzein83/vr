@@ -271,12 +271,12 @@ namespace TOne.WhS.BusinessEntity.Business
         private CodeGroupDetail CodeGroupDetailMapper(CodeGroup codeGroup)
         {
             CodeGroupDetail codeGroupDetail = new CodeGroupDetail();
-
             codeGroupDetail.Entity = codeGroup;
 
             CountryManager manager = new CountryManager();
-            int countryId = codeGroup.CountryId;
-            codeGroupDetail.CountryName = manager.GetCountry(countryId).Name;
+            Country country = manager.GetCountry(codeGroup.CountryId);
+            codeGroupDetail.CountryName = country != null ? country.Name : null;
+
             return codeGroupDetail;
         }
         #endregion
