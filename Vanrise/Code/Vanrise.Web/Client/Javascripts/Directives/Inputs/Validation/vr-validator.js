@@ -14,7 +14,7 @@ app.directive('vrValidator', ['$compile', 'UtilsService', function ($compile, Ut
             validationMessage += '<div>{{' + tAttrs.validate + '}}</div></div>';
 
             var newElement = '<div style="min-height: 28px;"  ng-class="{\'required-inpute\' : ' + tAttrs.validate + ' != null }" ng-mouseenter="' + showTooltipVariableName + '=true;$root.onValidationMessageShown($event)" ng-mouseleave="' + showTooltipVariableName + '=false" >'
-                + '<div >' + tElement.context.innerHTML + '</div>'
+                + '<div style="min-height: 28px;" >' + tElement.context.innerHTML + '</div>'
             + validationMessage
             + '</div>';
             tElement.html(newElement);
