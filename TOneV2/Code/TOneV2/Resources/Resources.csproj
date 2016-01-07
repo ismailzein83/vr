@@ -46,6 +46,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DB Scripts\Clean Scripts\Clean TOne_Entities.sql" />
+    <Content Include="DB Scripts\Clean Scripts\Clean TOne_CDR.sql" />
     <Content Include="DLLs\antlr.runtime.dll" />
     <Content Include="DLLs\Aspose.Cells.dll" />
     <Content Include="DLLs\Castle.DynamicProxy.dll" />
@@ -90,6 +92,7 @@
     <Content Include="Notes\Web Virtual Directories.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DB Scripts\Clean Scripts\Clean TOneConfiguration.sql" />
     <None Include="DLLs\Aspose.Cells.lic" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -308,6 +308,7 @@ namespace TOne.WhS.BusinessEntity.Business
                                 List<int> routingProductsWithSpecificZones;
                                 if (!RoutingProductIdsWithSpecificZones.TryGetValue(saleZone.ZoneId, out routingProductsWithSpecificZones))
                                 {
+                                    routingProductsWithSpecificZones = new List<int>();
                                     RoutingProductIdsWithSpecificZones.Add(saleZone.ZoneId, routingProductsWithSpecificZones);
                                 }
                                 routingProductsWithSpecificZones.Add(routingProduct.RoutingProductId);
