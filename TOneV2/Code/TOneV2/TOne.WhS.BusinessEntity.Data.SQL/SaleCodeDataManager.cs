@@ -12,11 +12,19 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SaleCodeDataManager : BaseTOneDataManager, ISaleCodeDataManager
     {
+        Dictionary<string, string> _mapper;
+
         public SaleCodeDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
-
+            _mapper = new Dictionary<string, string>();
+            _mapper.Add("Entity.SaleCodeId", "ID");
+            _mapper.Add("ZoneName", "ZoneID");
+            _mapper.Add("Entity.Code", "Code");
+            _mapper.Add("Entity.BED", "BED");
+            _mapper.Add("Entity.EED", "EED");
         }
+
         public Vanrise.Entities.BigResult<Entities.SaleCode> GetSaleCodeFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SaleCodeQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
@@ -30,7 +38,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 ExecuteNonQuerySP("TOneWhS_BE.sp_SaleCode_CreateTempByFiltered", tempTableName, input.Query.EffectiveOn, input.Query.SellingNumberPlanId, zonesids);
             };
 
-            return RetrieveData(input, createTempTableAction, SaleCodeMapper);
+            return RetrieveData(input, createTempTableAction, SaleCodeMapper, _mapper);
         }
         public IEnumerable<SaleCode> GetAllSaleCodes()
         {
