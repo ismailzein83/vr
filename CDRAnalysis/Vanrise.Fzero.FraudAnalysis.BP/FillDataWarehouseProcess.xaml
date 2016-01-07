@@ -77,6 +77,28 @@
       </Parallel.Variables>
       <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2" />
       <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3" />
+      <vffba1:GetDWTime sap2010:WorkflowViewState.IdRef="GetDWTime_1">
+        <vffba1:GetDWTime.FromDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+          </InArgument>
+        </vffba1:GetDWTime.FromDate>
+        <vffba1:GetDWTime.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">getDWTimeActivityStatus</mca:CSharpReference>
+          </OutArgument>
+        </vffba1:GetDWTime.Status>
+        <vffba1:GetDWTime.Times>
+          <InOutArgument x:TypeArguments="vffe:DWTimeDictionary">
+            <mca:CSharpReference x:TypeArguments="vffe:DWTimeDictionary">times</mca:CSharpReference>
+          </InOutArgument>
+        </vffba1:GetDWTime.Times>
+        <vffba1:GetDWTime.ToDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+          </InArgument>
+        </vffba1:GetDWTime.ToDate>
+      </vffba1:GetDWTime>
     </Parallel>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
@@ -168,7 +190,7 @@
       </vffba1:ApplyDWCDRsToDB>
     </Parallel>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2" Text="Finished executing workflow: FillDataWarehouse ..." />
-    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sG0YDrAEOAgEBRwVHeQMBigFIBVAQAwGHAVEFqQEQAgEEqgEFqgF6AgECR0NHdgMBiwFOB05AAwGJAU8HT0ADAYgBWwdwGQIBYnEHhgEkAgE9hwEHnAEoAgEYnQEHqAEgAgEFqgFDqgF3AgEDXg1eWwIBfmgNaHYCAXVjDWNuAgFsbQ1tWQIBY34Nfm4CAVl0DXRuAgFQgwENgwGCAQIBR3kNeXICAT6UAQ2UAXoCATSKAQ2KAWoCASuZAQ2ZAYYBAgEijwENjwFzAgEZpQENpQF+AgEPoAENoAFrAgEG</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sIEYDwgEOAgEBRwVHeQMBnwFIBWYQAwGHAWcFvwEQAgEEwAEFwAF6AgECR0NHdgMBoAFOB05AAwGeAU8HT0ADAZ0BUAdlGgMBiAFxB4YBGQIBYocBB5wBJAIBPZ0BB7IBKAIBGLMBB74BIAIBBcABQ8ABdwIBA1MNU1sDAZgBXQ1dZQMBkwFYDVh4AwGOAWINYlkDAYkBdA10WwIBfn4NfnYCAXV5DXluAgFsgwENgwFZAgFjlAENlAFuAgFZigENigFuAgFQmQENmQGCAQIBR48BDY8BcgIBPqoBDaoBegIBNKABDaABagIBK68BDa8BhgECASKlAQ2lAXMCARm7AQ27AX4CAQ+2AQ22AWsCAQY=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -187,6 +209,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="GetDWTime_1" sap:VirtualizedContainerService.HintSize="200,99" />
       <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1034,145" />
       <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="FillDimensionValues_1" sap:VirtualizedContainerService.HintSize="200,40" />
