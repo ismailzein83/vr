@@ -91,7 +91,7 @@ function UserManagementController($scope, UsersAPIService, VRModalService, VRNot
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit User: " + userObj.Name;
+            modalScope.title = "Edit User: " + userObj.Entity.Name;
             modalScope.onUserUpdated = function (user) {
                 gridApi.itemUpdated(user);
             };
@@ -107,7 +107,7 @@ function UserManagementController($scope, UsersAPIService, VRModalService, VRNot
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Reset Password for User: " + userObj.Name;
+            modalScope.title = "Reset Password for User: " + userObj.Entity.Name;
             modalScope.onPasswordReset = function (user) {
                 // user is null
                 //gridApi.itemUpdated(user);
@@ -127,7 +127,7 @@ function UserManagementController($scope, UsersAPIService, VRModalService, VRNot
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Assign Permissions to User: " + userObj.Name;
+            modalScope.title = "Assign Permissions to User: " + userObj.Entity.Name;
         };
         VRModalService.showModal('/Client/Modules/Security/Views/PermissionEditor.html', parameters, modalSettings);
     }

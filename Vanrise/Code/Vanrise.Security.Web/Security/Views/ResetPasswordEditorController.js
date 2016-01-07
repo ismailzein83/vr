@@ -43,9 +43,9 @@ function ResetPasswordEditorController($scope, UsersAPIService, VRNavigationServ
             $scope.modalContext.closeModal();
         };
 
-        $scope.ConfirmPassword = function (text) {
-
-            if ($scope.txtPassword != text)
+        $scope.ConfirmPassword = function () {
+         
+            if ($scope.txtPassword != $scope.txtPasswordConfirmed)
                 return "Your Passwords do not match";
             else
                 return null;
