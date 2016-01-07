@@ -75,6 +75,10 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Queueing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyDataForDB.cs" />
@@ -97,8 +101,13 @@
     <Compile Include="CP\SyncImportedDataWithDB.cs" />
     <Compile Include="GenerateSaleCodes.cs" />
     <Compile Include="GenerateSaleZones.cs" />
+    <Compile Include="CP\PrepareChangedCodesForApply.cs" />
+    <Compile Include="CP\PrepareChangedZonesForApply.cs" />
+    <Compile Include="CP\PrepareNewCodesForApply.cs" />
+    <Compile Include="CP\PrepareNewZonesForApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadDataFromExcel.cs" />
+    <Compile Include="CP\UpdateCodePreparationStateStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">

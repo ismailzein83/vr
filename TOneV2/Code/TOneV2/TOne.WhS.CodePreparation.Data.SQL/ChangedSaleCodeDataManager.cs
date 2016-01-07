@@ -16,33 +16,42 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         {
 
         }
+        public long ProcessInstanceId
+        {
+            set
+            {
+                _processInstanceID = value;
+            }
+        }
+        long _processInstanceID;
         public void Insert(long processInstanceID, IEnumerable<ChangedCode> changedCodes)
         {
+
             object dbApplyStream = InitialiazeStreamForDBApply();
 
             foreach (ChangedCode code in changedCodes)
             {
-                WriteRecordToStream(processInstanceID, code, dbApplyStream);
+                WriteRecordToStream(code, dbApplyStream);
             }
 
             object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
-            ApplyForDB(prepareToApplyInfo);
+
         }
-        private object InitialiazeStreamForDBApply()
+        public object InitialiazeStreamForDBApply()
         {
             return base.InitializeStreamForBulkInsert();
         }
 
-        private void WriteRecordToStream(long processInstanceID, ChangedCode record, object dbApplyStream)
+        public void WriteRecordToStream(ChangedCode record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}",
                        record.CodeId,
-                       processInstanceID,
+                       _processInstanceID,
                        record.EED);
         }
 
-        private object FinishDBApplyStream(object dbApplyStream)
+        public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.Close();
@@ -55,9 +64,9 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                 FieldSeparator = '^',
             };
         }
-
-        private void ApplyForDB(object preparedObject)
+        public void ApplyChangedCodesToDB(object preparedObject, long processInstanceID)
         {
+            _processInstanceID = processInstanceID;
             InsertBulkToTable(preparedObject as BaseBulkInsertInfo);
         }
     }

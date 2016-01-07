@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.Data.SQL;
 using TOne.WhS.CodePreparation.Entities.CP.Processing;
+using Vanrise.Data;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.CodePreparation.Data.SQL
@@ -16,37 +17,30 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         {
 
         }
+
+        public long ProcessInstanceId
+        {
+            set
+            {
+                _processInstanceID = value;
+            }
+        }
+
+        long _processInstanceID;
         public void Insert(long processInstanceID, IEnumerable<AddedCode> codesList)
         {
+
             object dbApplyStream = InitialiazeStreamForDBApply();
 
             foreach (AddedCode code in codesList)
             {
-                WriteRecordToStream(processInstanceID, code, dbApplyStream);
+                WriteRecordToStream(code, dbApplyStream);
             }
 
             object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
-            ApplyForDB(prepareToApplyInfo);
-        }
-        private object InitialiazeStreamForDBApply()
-        {
-            return base.InitializeStreamForBulkInsert();
         }
 
-        private void WriteRecordToStream(long processInstanceID, AddedCode record, object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
-                       record.CodeId,
-                       processInstanceID,
-                       record.Code,
-                       record.Zone.ZoneId,
-                       record.CodeGroupId,
-                       record.BED,
-                       record.EED);
-        }
-
-        private object FinishDBApplyStream(object dbApplyStream)
+        public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.Close();
@@ -60,9 +54,31 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             };
         }
 
-        private void ApplyForDB(object preparedObject)
+
+
+        public object InitialiazeStreamForDBApply()
         {
-            InsertBulkToTable(preparedObject as BaseBulkInsertInfo);
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(AddedCode record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
+                       record.CodeId,
+                       _processInstanceID,
+                       record.Code,
+                       record.Zone.ZoneId,
+                       record.CodeGroupId,
+                       record.BED,
+                       record.EED);
+        }
+
+
+        public void ApplyNewCodesToDB(object preparedCodes, long processInstanceID)
+        {
+            _processInstanceID = processInstanceID;
+            InsertBulkToTable(preparedCodes as BaseBulkInsertInfo);
         }
     }
 }

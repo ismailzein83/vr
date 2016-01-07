@@ -27,13 +27,13 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             bool result = true;
 
-            if(zone.ImportedCodes != null)
+            if (zone.ImportedCodes != null)
             {
                 var firstCode = zone.ImportedCodes.FirstOrDefault();
                 if (firstCode != null)
                 {
                     int? firstCodeCountryId = firstCode.CodeGroup != null ? firstCode.CodeGroup.CountryId : (int?)null;
-                    Func<ImportedCode, bool> pred = new Func<ImportedCode, bool>((code) => code.CodeGroup != null && code.CodeGroup.CountryId != firstCodeCountryId.Value);
+                    Func<ImportedCode, bool> pred = new Func<ImportedCode, bool>((code) => code.CodeGroup != null && firstCodeCountryId.HasValue && code.CodeGroup.CountryId != firstCodeCountryId.Value);
                     result = !zone.ImportedCodes.Any(pred);
                 }
             }

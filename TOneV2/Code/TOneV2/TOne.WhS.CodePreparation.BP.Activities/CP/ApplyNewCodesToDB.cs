@@ -7,22 +7,42 @@ using System.Threading.Tasks;
 using TOne.WhS.CodePreparation.Data;
 using TOne.WhS.CodePreparation.Entities.CP.Processing;
 using Vanrise.BusinessProcess;
+using Vanrise.Queueing;
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
-
-    public class ApplyNewCodesToDB : CodeActivity
+    public class ApplyNewCodesToDBInput
+    {
+        public BaseQueue<Object> InputQueue { get; set; }
+    }
+    public class ApplyNewCodesToDB : Vanrise.BusinessProcess.DependentAsyncActivity<ApplyNewCodesToDBInput>
     {
 
         [RequiredArgument]
-        public InArgument<IEnumerable<AddedCode>> NewCodes { get; set; }
+        public InArgument<BaseQueue<Object>> InputQueue { get; set; }
 
-        protected override void Execute(CodeActivityContext context)
+        protected override void DoWork(ApplyNewCodesToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            IEnumerable<AddedCode> codesList = this.NewCodes.Get(context);
-
-            long processInstanceID = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+            long processInstanceID = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
             INewSaleCodeDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<INewSaleCodeDataManager>();
-            dataManager.Insert(processInstanceID, codesList);
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
+                {
+                    hasItem = inputArgument.InputQueue.TryDequeue((preparedCodes) =>
+                    {
+                        dataManager.ApplyNewCodesToDB(preparedCodes, processInstanceID);
+                    });
+                } while (!ShouldStop(handle) && hasItem);
+            });
+        }
+
+        protected override ApplyNewCodesToDBInput GetInputArgument2(AsyncCodeActivityContext context)
+        {
+            return new ApplyNewCodesToDBInput
+            {
+                InputQueue = this.InputQueue.Get(context)
+            };
         }
     }
 }

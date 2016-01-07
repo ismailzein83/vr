@@ -9,7 +9,13 @@ using TOne.WhS.CodePreparation.Entities.CP.Processing;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
-    public sealed class ReserveIdsForNewEntities : CodeActivity
+    public class ReserveIdsForNewEntitiesInput
+    {
+        public IEnumerable<AddedZone> NewZones { get; set; }
+
+        public IEnumerable<AddedCode> NewCodes { get; set; }
+    }
+    public sealed class ReserveIdsForNewEntities : Vanrise.BusinessProcess.BaseAsyncActivity<ReserveIdsForNewEntitiesInput>
     {
         [RequiredArgument]
         public InArgument<IEnumerable<AddedZone>> NewZones { get; set; }
@@ -17,10 +23,10 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<AddedCode>> NewCodes { get; set; }
 
-        protected override void Execute(CodeActivityContext context)
+        protected override void DoWork(ReserveIdsForNewEntitiesInput inputArgument, Vanrise.BusinessProcess.AsyncActivityHandle handle)
         {
-            IEnumerable<AddedZone> zoneList = NewZones.Get(context);
-            IEnumerable<AddedCode> codeList = NewCodes.Get(context);
+            IEnumerable<AddedZone> zoneList = inputArgument.NewZones;
+            IEnumerable<AddedCode> codeList = inputArgument.NewCodes;
 
             SaleZoneManager zoneManager = new SaleZoneManager();
             long zoneStartingId = zoneManager.ReserveIDRange(zoneList.Count());
@@ -39,5 +45,13 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             }
         }
 
+        protected override ReserveIdsForNewEntitiesInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new ReserveIdsForNewEntitiesInput()
+            {
+                NewCodes = this.NewCodes.Get(context),
+                NewZones = this.NewZones.Get(context)
+            };
+        }
     }
 }

@@ -16,33 +16,42 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         {
 
         }
+        public long ProcessInstanceId
+        {
+            set
+            {
+                _processInstanceID = value;
+            }
+        }
+        long _processInstanceID;
         public void Insert(long processInstanceID, IEnumerable<ChangedZone> changedZones)
         {
+            _processInstanceID = processInstanceID;
             object dbApplyStream = InitialiazeStreamForDBApply();
 
             foreach (ChangedZone zone in changedZones)
             {
-                WriteRecordToStream(processInstanceID, zone, dbApplyStream);
+                WriteRecordToStream(zone, dbApplyStream);
             }
 
             object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
-            ApplyForDB(prepareToApplyInfo);
+           
         }
-        private object InitialiazeStreamForDBApply()
+        public object InitialiazeStreamForDBApply()
         {
             return base.InitializeStreamForBulkInsert();
         }
 
-        private void WriteRecordToStream(long processInstanceID, ChangedZone record, object dbApplyStream)
+        public void WriteRecordToStream(ChangedZone record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}",
                        record.ZoneId,
-                       processInstanceID,
+                       _processInstanceID,
                        record.EED);
         }
 
-        private object FinishDBApplyStream(object dbApplyStream)
+        public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.Close();
@@ -56,9 +65,10 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             };
         }
 
-        private void ApplyForDB(object preparedObject)
+        public void ApplyChangedZonesToDB(object preparedZones, long processInstanceID)
         {
-            InsertBulkToTable(preparedObject as BaseBulkInsertInfo);
+            _processInstanceID = processInstanceID;
+            InsertBulkToTable(preparedZones as BaseBulkInsertInfo);
         }
     }
 }

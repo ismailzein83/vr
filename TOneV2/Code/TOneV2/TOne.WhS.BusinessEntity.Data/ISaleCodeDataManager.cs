@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Data
 
         Vanrise.Entities.BigResult<Entities.SaleCode> GetSaleCodeFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SaleCodeQuery> input);
         List<SaleCode> GetSaleCodesByZoneID(long zoneID, DateTime effectiveDate);
-       
+
         List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn);
 
         List<SaleCode> GetSaleCodesByCountry(int countryId, DateTime effectiveDate);
@@ -21,8 +21,8 @@ namespace TOne.WhS.BusinessEntity.Data
         List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes);
 
         IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture);
-        List<SaleCode> GetSaleCodesByZoneName(int sellingNumberPlanId,string zoneName, DateTime effectiveDate);
+        List<SaleCode> GetSaleCodesByZoneName(int sellingNumberPlanId, string zoneName, DateTime effectiveDate);
         bool AreZonesUpdated(ref object updateHandle);
-        List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, DateTime minimumDate);
+        List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate);
     }
 }

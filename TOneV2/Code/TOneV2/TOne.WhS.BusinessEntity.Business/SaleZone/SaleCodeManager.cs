@@ -65,13 +65,13 @@ namespace TOne.WhS.BusinessEntity.Business
         public List<SaleCode> GetSaleCodesByCountry(int countryId, DateTime effectiveDate)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            return dataManager.GetSaleCodesByCountry( countryId, effectiveDate);
+            return dataManager.GetSaleCodesByCountry(countryId, effectiveDate);
         }
 
-        public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, DateTime minimumDate)
+        public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            return dataManager.GetSaleCodesEffectiveAfter(sellingNumberPlanId, minimumDate);
+            return dataManager.GetSaleCodesEffectiveAfter(sellingNumberPlanId, countryId, minimumDate);
         }
 
         #region private Methode

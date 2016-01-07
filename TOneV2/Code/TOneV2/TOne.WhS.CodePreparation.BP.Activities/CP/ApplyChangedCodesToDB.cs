@@ -7,20 +7,43 @@ using System.Threading.Tasks;
 using TOne.WhS.CodePreparation.Data;
 using TOne.WhS.CodePreparation.Entities.CP.Processing;
 using Vanrise.BusinessProcess;
+using Vanrise.Queueing;
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
-    public class ApplyChangedCodesToDB : CodeActivity
+    public class ApplyChangedCodesToDBInput
+    {
+        public BaseQueue<Object> InputQueue { get; set; }
+    }
+    public class ApplyChangedCodesToDB : Vanrise.BusinessProcess.DependentAsyncActivity<ApplyChangedCodesToDBInput>
     {
         [RequiredArgument]
-        public InArgument<IEnumerable<ChangedCode>> ChangedCodes { get; set; }
+        public InArgument<BaseQueue<Object>> InputQueue { get; set; }
 
-        protected override void Execute(CodeActivityContext context)
+        protected override void DoWork(ApplyChangedCodesToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            IEnumerable<ChangedCode> codesList = this.ChangedCodes.Get(context);
 
-            long processInstanceID = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+            long processInstanceID = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
             IChangedSaleCodeDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<IChangedSaleCodeDataManager>();
-            dataManager.Insert(processInstanceID, codesList);
+
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
+                {
+                    hasItem = inputArgument.InputQueue.TryDequeue((preparedCodeMatch) =>
+                    {
+                        dataManager.ApplyChangedCodesToDB(preparedCodeMatch, processInstanceID);
+                    });
+                } while (!ShouldStop(handle) && hasItem);
+            });
+        }
+
+        protected override ApplyChangedCodesToDBInput GetInputArgument2(AsyncCodeActivityContext context)
+        {
+            return new ApplyChangedCodesToDBInput
+            {
+                InputQueue = this.InputQueue.Get(context)
+            };
         }
     }
 }

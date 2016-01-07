@@ -7,20 +7,44 @@ using System.Threading.Tasks;
 using TOne.WhS.CodePreparation.Data;
 using TOne.WhS.CodePreparation.Entities.CP.Processing;
 using Vanrise.BusinessProcess;
+using Vanrise.Queueing;
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
+    public class ApplyChangedZonesToDBInput
+    {
+        public BaseQueue<Object> InputQueue { get; set; }
+    }
 
-    public sealed class ApplyChangedZonesToDB : CodeActivity
+    public sealed class ApplyChangedZonesToDB : Vanrise.BusinessProcess.DependentAsyncActivity<ApplyChangedZonesToDBInput>
     {
         [RequiredArgument]
-        public InArgument<IEnumerable<ChangedZone>> ChangedZones { get; set; }
+        public InArgument<BaseQueue<Object>> InputQueue { get; set; }
 
-        protected override void Execute(CodeActivityContext context)
+        protected override void DoWork(ApplyChangedZonesToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            IEnumerable<ChangedZone> zonesList = this.ChangedZones.Get(context);
-            long processInstanceID = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+           
+            long processInstanceID = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
             IChangedSaleZoneDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<IChangedSaleZoneDataManager>();
-            dataManager.Insert(processInstanceID, zonesList);
+
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
+                {
+                    hasItem = inputArgument.InputQueue.TryDequeue((preparedZones) =>
+                    {
+                        dataManager.ApplyChangedZonesToDB(preparedZones, processInstanceID);
+                    });
+                } while (!ShouldStop(handle) && hasItem);
+            });
+        }
+
+        protected override ApplyChangedZonesToDBInput GetInputArgument2(AsyncCodeActivityContext context)
+        {
+            return new ApplyChangedZonesToDBInput
+            {
+                InputQueue = this.InputQueue.Get(context)
+            };
         }
     }
 }

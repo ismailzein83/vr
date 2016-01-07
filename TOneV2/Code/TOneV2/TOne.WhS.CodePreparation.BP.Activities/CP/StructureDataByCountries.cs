@@ -33,8 +33,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     int countryId = includedCodeOneMatch.CodeGroup.CountryId;
 
                     if (!countriesToProcessByCountryId.TryGetValue(countryId, out countryToProcess))
-                    {
+                    {                        
                         countryToProcess = new CountryToProcess();
+                        countryToProcess.CountryId = countryId;
                         countryToProcess.CodesToAdd = new List<CodeToAdd>();
                         countryToProcess.CodesToMove = new List<CodeToMove>();
                         countryToProcess.CodesToClose = new List<CodeToClose>();
@@ -53,7 +54,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     foreach (CodeToClose code in codesToClose)
                         countryToProcess.CodesToClose.Add(code);
 
-                
+
                 }
             }
 

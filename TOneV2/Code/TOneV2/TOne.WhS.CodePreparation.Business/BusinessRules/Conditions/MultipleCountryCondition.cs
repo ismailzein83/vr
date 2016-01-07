@@ -29,29 +29,29 @@ namespace TOne.WhS.CodePreparation.Business
             int? firstCodeToAddCountryId = null;
             bool resultOfCodeToMove = true;
             int? firstCodeToMoveCountryId = null;
-            if(zone != null)
+            if (zone != null)
             {
                 var firstCodeToAdd = zone.CodesToAdd.FirstOrDefault();
 
-                var firstCodeToMove= zone.CodesToMove.FirstOrDefault();
-                
+                var firstCodeToMove = zone.CodesToMove.FirstOrDefault();
+
                 if (firstCodeToAdd != null)
                 {
                     firstCodeToAddCountryId = firstCodeToAdd.CodeGroup != null ? firstCodeToAdd.CodeGroup.CountryId : (int?)null;
-                    Func<CodeToAdd, bool> pred = new Func<CodeToAdd, bool>((code) => code.CodeGroup != null && code.CodeGroup.CountryId != firstCodeToAddCountryId.Value);
+                    Func<CodeToAdd, bool> pred = new Func<CodeToAdd, bool>((code) => code.CodeGroup != null && firstCodeToAddCountryId.HasValue && code.CodeGroup.CountryId != firstCodeToAddCountryId.Value);
                     resultOfCodeToAdd = !zone.CodesToAdd.Any(pred);
                 }
-               
+
                 if (firstCodeToMove != null)
                 {
                     firstCodeToMoveCountryId = firstCodeToMove.CodeGroup != null ? firstCodeToMove.CodeGroup.CountryId : (int?)null;
-                    Func<CodeToMove, bool> pred = new Func<CodeToMove, bool>((code) => code.CodeGroup != null && code.CodeGroup.CountryId != firstCodeToMoveCountryId.Value);
+                    Func<CodeToMove, bool> pred = new Func<CodeToMove, bool>((code) => code.CodeGroup != null && firstCodeToAddCountryId.HasValue && code.CodeGroup.CountryId != firstCodeToMoveCountryId.Value);
                     resultOfCodeToMove = !zone.CodesToMove.Any(pred);
                 }
             }
             if (firstCodeToMoveCountryId != null && firstCodeToAddCountryId != null)
                 result = (firstCodeToMoveCountryId == firstCodeToAddCountryId);
-            result = (resultOfCodeToMove == true && resultOfCodeToAdd == true && result==true);
+            result = (resultOfCodeToMove == true && resultOfCodeToAdd == true && result == true);
             return result;
         }
 

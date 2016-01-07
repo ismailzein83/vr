@@ -214,5 +214,12 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SalePriceList_SyncWithImportedData", processInstanceID, sellingNumberPlanId);
             return (recordesEffected > 0);
         }
+
+
+        public bool UpdateCodePreparationStatus(int sellingNumberPlanId)
+        {
+            int recordesEffected = ExecuteNonQuerySP("[TOneWhS_CP].[sp_CodePreparation_UpdateCompletedStatus]", sellingNumberPlanId);
+            return (recordesEffected > 0);
+        }
     }
 }

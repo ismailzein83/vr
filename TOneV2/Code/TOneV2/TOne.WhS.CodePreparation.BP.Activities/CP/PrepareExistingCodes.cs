@@ -6,11 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.CodePreparation.Entities.CP.Processing;
+using Vanrise.BusinessProcess;
 using Vanrise.Common;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
-    public sealed class PrepareExistingCodes : CodeActivity
+    public class PrepareExistingCodesInput
+    {
+        public IEnumerable<SaleCode> ExistingCodeEntities { get; set; }
+        public Dictionary<long, ExistingZone> ExistingZonesByZoneId { get; set; }
+    }
+    public class PrepareExistingCodesOutput
+    {
+        public IEnumerable<ExistingCode> ExistingCodes { get; set; }
+    }
+    public sealed class PrepareExistingCodes : BaseAsyncActivity<PrepareExistingCodesInput, PrepareExistingCodesOutput>
     {
         [RequiredArgument]
         public InArgument<IEnumerable<SaleCode>> ExistingCodeEntities { get; set; }
@@ -19,15 +29,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<ExistingCode>> ExistingCodes { get; set; }
-        protected override void Execute(CodeActivityContext context)
-        {
-            IEnumerable<SaleCode> existingCodeEntities = this.ExistingCodeEntities.Get(context);
-            Dictionary<long, ExistingZone> existingZonesByZoneId = this.ExistingZonesByZoneId.Get(context);
+        public InOutArgument<IEnumerable<ExistingCode>> ExistingCodes { get; set; }
 
-            IEnumerable<ExistingCode> existingCodes = existingCodeEntities.MapRecords((codeEntity) => ExistingCodeMapper(codeEntity, existingZonesByZoneId));
-            ExistingCodes.Set(context, existingCodes);
-        }
         ExistingCode ExistingCodeMapper(SaleCode codeEntity, Dictionary<long, ExistingZone> existingZonesByZoneId)
         {
             ExistingZone existingZone;
@@ -43,6 +46,39 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             existingCode.ParentZone.ExistingCodes.Add(existingCode);
             return existingCode;
+        }
+
+        protected override PrepareExistingCodesInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new PrepareExistingCodesInput()
+            {
+                ExistingCodeEntities = this.ExistingCodeEntities.Get(context),
+                ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context)
+            };
+        }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.ExistingCodes.Get(context) == null)
+                this.ExistingCodes.Set(context, new List<ExistingCode>());
+            base.OnBeforeExecute(context, handle);
+        }
+
+        protected override PrepareExistingCodesOutput DoWorkWithResult(PrepareExistingCodesInput inputArgument, AsyncActivityHandle handle)
+        {
+            IEnumerable<SaleCode> existingCodeEntities = inputArgument.ExistingCodeEntities;
+            Dictionary<long, ExistingZone> existingZonesByZoneId = inputArgument.ExistingZonesByZoneId;
+
+            IEnumerable<ExistingCode> existingCodes = existingCodeEntities.MapRecords((codeEntity) => ExistingCodeMapper(codeEntity, existingZonesByZoneId));
+            return new PrepareExistingCodesOutput()
+            {
+                ExistingCodes = existingCodes
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, PrepareExistingCodesOutput result)
+        {
+            this.ExistingCodes.Set(context, result.ExistingCodes);
         }
     }
 }

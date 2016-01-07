@@ -85,15 +85,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
 
-        public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, DateTime minimumDate)
+        public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByDate", SaleCodeMapper, sellingNumberPlanId, minimumDate);
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByDate", SaleCodeMapper, sellingNumberPlanId, countryId, minimumDate);
         }
 
 
-        public List<SaleCode> GetSaleCodesByCountry( int countryId, DateTime effectiveDate)
+        public List<SaleCode> GetSaleCodesByCountry(int countryId, DateTime effectiveDate)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_ByCountry", SaleCodeMapper,  countryId, effectiveDate);
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_ByCountry", SaleCodeMapper, countryId, effectiveDate);
         }
     }
 }

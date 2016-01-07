@@ -151,10 +151,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return null;
         }
 
-        public List<SaleZone> GetSaleZonesEffectiveAfter(int sellingNumberPlanId, DateTime minimumDate)
+        public List<SaleZone> GetSaleZonesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
-            return dataManager.GetSaleZonesEffectiveAfter(sellingNumberPlanId, minimumDate);
+            return dataManager.GetSaleZonesEffectiveAfter(sellingNumberPlanId, countryId, minimumDate);
         }
 
 
