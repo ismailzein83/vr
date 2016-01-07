@@ -108,7 +108,7 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
             api.getData = function () {
                 return {
                     $type: "QM.CLITester.Business.TestCallTaskActionArgument, QM.CLITester.Business",
-                    TestCallQueryInput: buildTestCallObjFromScope()
+                    AddTestCallInput: buildTestCallObjFromScope()
                 };
                 
             };
@@ -128,9 +128,9 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                 profileReadyPromiseDeferred.promise
                     .then(function () {
                         var directivePayload;
-                        if (payload != undefined && payload.data != undefined && payload.data.TestCallQueryInput && payload.data.TestCallQueryInput.ProfileID != undefined)
+                        if (payload != undefined && payload.data != undefined && payload.data.AddTestCallInput && payload.data.AddTestCallInput.ProfileID != undefined)
                             directivePayload = {
-                                selectedIds: payload.data.TestCallQueryInput.ProfileID
+                                selectedIds: payload.data.AddTestCallInput.ProfileID
                             }
                         VRUIUtilsService.callDirectiveLoad(profileDirectiveAPI, directivePayload, profileLoadPromiseDeferred);
                     });
@@ -140,9 +140,9 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                 supplierReadyPromiseDeferred.promise
                     .then(function () {
                         var directivePayload;
-                        if (payload != undefined && payload.data != undefined && payload.data.TestCallQueryInput && payload.data.TestCallQueryInput.SupplierID != undefined)
+                        if (payload != undefined && payload.data != undefined && payload.data.AddTestCallInput && payload.data.AddTestCallInput.SupplierID != undefined)
                             directivePayload = {
-                                selectedIds: payload.data.TestCallQueryInput.SupplierID
+                                selectedIds: payload.data.AddTestCallInput.SupplierID
                             }
                         VRUIUtilsService.callDirectiveLoad(supplierDirectiveAPI, directivePayload, supplierLoadPromiseDeferred);
                     });
@@ -152,9 +152,9 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                 countryReadyPromiseDeferred.promise
                     .then(function () {
                         var directivePayload;
-                        if (payload != undefined && payload.data != undefined && payload.data.TestCallQueryInput && payload.data.TestCallQueryInput.CountryID != undefined)
+                        if (payload != undefined && payload.data != undefined && payload.data.AddTestCallInput && payload.data.AddTestCallInput.CountryID != undefined)
                             directivePayload = {
-                                selectedIds: payload.data.TestCallQueryInput.CountryID
+                                selectedIds: payload.data.AddTestCallInput.CountryID
                             }
                         VRUIUtilsService.callDirectiveLoad(countryDirectiveAPI, directivePayload, countryLoadPromiseDeferred);
                     });
@@ -165,14 +165,14 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                 zoneReadyPromiseDeferred.promise
                     .then(function () {
                         var directivePayload;
-                        if (payload != undefined && payload.data != undefined && payload.data.TestCallQueryInput && payload.data.TestCallQueryInput.CountryID != undefined) {
+                        if (payload != undefined && payload.data != undefined && payload.data.AddTestCallInput && payload.data.AddTestCallInput.CountryID != undefined) {
                             directivePayload = {
                                 filter: {
                                     CountryId: payload.data.CountryID
                                 }
                             }
-                            if (payload.data.TestCallQueryInput.ZoneID != undefined)
-                                directivePayload.selectedIds = payload.data.TestCallQueryInput.ZoneID;
+                            if (payload.data.AddTestCallInput.ZoneID != undefined)
+                                directivePayload.selectedIds = payload.data.AddTestCallInput.ZoneID;
                         }
                             
 
