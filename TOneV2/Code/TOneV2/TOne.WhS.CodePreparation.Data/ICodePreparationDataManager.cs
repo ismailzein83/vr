@@ -14,10 +14,12 @@ namespace TOne.WhS.CodePreparation.Data
         Changes GetChanges(int sellingNumberPlanId, CodePreparationStatus status);
         bool InsertOrUpdateChanges(int sellingNumberPlanId, Changes changes, CodePreparationStatus status);
 
-        bool UpdateCodePreparationStatus(int sellingNumberPlanId);
+        bool UpdateCodePreparationStatus(int sellingNumberPlanId, CodePreparationStatus status);
 
         #region New Method
         bool AddPriceListAndSyncImportedDataWithDB(long processInstanceID, int sellingNumberPlanId);
         #endregion
+
+        bool CheckCodePreparationState(int sellingNumberPlanId);
     }
 }

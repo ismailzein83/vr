@@ -99,6 +99,20 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
             return manager.GetZoneItems(sellingNumberPlanId, countryId);
         }
 
+        [HttpGet]
+        [Route("CheckCodePreparationState")]
+        public bool CheckCodePreparationState(int sellingNumberPlanId)
+        {
+            CodePreparationManager manager = new CodePreparationManager();
+            return manager.CheckCodePreparationState(sellingNumberPlanId);
+        }
+        [HttpGet]
+        [Route("CancelCodePreparationState")]
+        public bool CancelCodePreparationState(int sellingNumberPlanId)
+        {
+            CodePreparationManager manager = new CodePreparationManager();
+            return manager.CancelCodePreparationState(sellingNumberPlanId);
+        }
         [HttpPost]
         [Route("GetCodeItems")]
         public object GetCodeItems(Vanrise.Entities.DataRetrievalInput<GetCodeItemInput> input)
@@ -106,6 +120,8 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
             CodePreparationManager manager = new CodePreparationManager();
             return GetWebResponse(input, manager.GetCodeItems(input));
         }
+
+
     }
 
     public class CodePreparationUserInput

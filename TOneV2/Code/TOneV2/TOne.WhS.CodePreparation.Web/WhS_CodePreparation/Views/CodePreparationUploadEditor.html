@@ -1,0 +1,28 @@
+﻿<div vr-modalcontent ng-controller="WhS_CodePreparation_CodePrepartionUploadEditorController">
+    <vr-modalbody>
+        <vr-form validationcontext="uploadCodePreparation">
+            <div vr-loader="isInitializing">
+                <vr-row removeline>
+                    <vr-columns width="1/2row">
+                        <vr-label>Upload File</vr-label>
+                        <vr-fileupload extension="reports" value="zoneList" isrequired> </vr-fileupload>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-datetimepicker type="date" label="Effective Date" value="effectiveDate" isrequired></vr-datetimepicker>
+                    </vr-columns>
+                </vr-row>
+
+            </div>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Download" data-onclick="downloadTemplate"></vr-button>
+                <vr-button type="Upload" validationcontext="uploadCodePreparation" data-onclick="upload"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
+
+

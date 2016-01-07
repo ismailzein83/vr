@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -216,10 +217,18 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         }
 
 
-        public bool UpdateCodePreparationStatus(int sellingNumberPlanId)
+        public bool UpdateCodePreparationStatus(int sellingNumberPlanId, CodePreparationStatus status)
         {
-            int recordesEffected = ExecuteNonQuerySP("[TOneWhS_CP].[sp_CodePreparation_UpdateCompletedStatus]", sellingNumberPlanId);
+            int recordesEffected = ExecuteNonQuerySP("[TOneWhS_CP].[sp_CodePreparation_UpdateStatus]", sellingNumberPlanId, (int)status);
             return (recordesEffected > 0);
+        }
+
+
+        public bool CheckCodePreparationState(int sellingNumberPlanId)
+        {
+
+            int recordsCount = (int)ExecuteScalarSP("[TOneWhS_CP].[sp_CodePreparation_CheckCodePreparationState]", sellingNumberPlanId);
+            return (recordsCount > 0);
         }
     }
 }

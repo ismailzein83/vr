@@ -16,7 +16,8 @@ namespace TOne.WhS.CodePreparation.Entities
     public enum CodePreparationStatus
     {
         Draft = 0,
-        Completed = 1
+        Completed = 1,
+        Canceled = 2
     }
 
     public enum NewCPOutputResult
@@ -25,7 +26,7 @@ namespace TOne.WhS.CodePreparation.Entities
         Inserted = 0,
         Failed = 1,
         Existing = 2,
-       
+
     }
 
 }

@@ -508,5 +508,17 @@ namespace TOne.WhS.CodePreparation.Business
             byte[] bytes = File.ReadAllBytes(physicalFilePath);
             return bytes;
         }
+
+        public bool CheckCodePreparationState(int sellingNumberPlanId)
+        {
+            ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
+            return dataManager.CheckCodePreparationState(sellingNumberPlanId);
+        }
+
+        public bool CancelCodePreparationState(int sellingNumberPlanId)
+        {
+            ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
+            return dataManager.UpdateCodePreparationStatus(sellingNumberPlanId, CodePreparationStatus.Canceled);
+        }
     }
 }

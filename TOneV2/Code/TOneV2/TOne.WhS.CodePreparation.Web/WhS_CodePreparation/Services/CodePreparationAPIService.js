@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    codePreparationAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_CodePrep_ModuleConfig'];
+    codePreparationAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_CodePrep_ModuleConfig', 'VRModalService'];
 
-    function codePreparationAPIService(BaseAPIService, UtilsService, WhS_CodePrep_ModuleConfig) {
+    function codePreparationAPIService(BaseAPIService, UtilsService, WhS_CodePrep_ModuleConfig, VRModalService) {
 
         function ApplyCodePreparationForEntities(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "ApplyCodePreparationForEntities"), input);
@@ -16,7 +16,16 @@
                 countryId: countryId
             });
         }
-
+        function CheckCodePreparationState(sellingNumberPlanId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "CheckCodePreparationState"), {
+                sellingNumberPlanId: sellingNumberPlanId
+            });
+        }
+        function CancelCodePreparationState(sellingNumberPlanId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "CancelCodePreparationState"), {
+                sellingNumberPlanId: sellingNumberPlanId
+            });
+        }
         function GetCodeItems(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "GetCodeItems"), input);
         }
@@ -48,6 +57,20 @@
             });
         }
 
+        function UploadCodePreparationSheet(sellingNumberPlanId, onCodePreparationUpdated) {
+            var settings = {
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onCodePreparationUpdated = onCodePreparationUpdated;
+            };
+            var parameters = {
+                SellingNumberPlanId: sellingNumberPlanId
+            };
+
+            VRModalService.showModal('/Client/Modules/WhS_CodePreparation/Views/CodePreparationUploadEditor.html', parameters, settings);
+        }
+
         return ({
             ApplyCodePreparationForEntities: ApplyCodePreparationForEntities,
             DownloadImportCodePreparationTemplate: DownloadImportCodePreparationTemplate,
@@ -58,7 +81,10 @@
             GetZoneItems: GetZoneItems,
             GetCodeItems: GetCodeItems,
             MoveCodes: MoveCodes,
-            CloseCodes: CloseCodes
+            CloseCodes: CloseCodes,
+            CheckCodePreparationState: CheckCodePreparationState,
+            CancelCodePreparationState: CancelCodePreparationState,
+            UploadCodePreparationSheet: UploadCodePreparationSheet
         });
     }
 

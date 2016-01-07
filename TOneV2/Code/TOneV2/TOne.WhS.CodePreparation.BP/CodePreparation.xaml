@@ -13,6 +13,7 @@
  xmlns:twbe="clr-namespace:TOne.WhS.BusinessEntity.Entities;assembly=TOne.WhS.BusinessEntity.Entities"
  xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Arguments;assembly=TOne.WhS.CodePreparation.BP.Arguments"
  xmlns:twcba1="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities"
+ xmlns:twce="clr-namespace:TOne.WhS.CodePreparation.Entities;assembly=TOne.WhS.CodePreparation.Entities"
  xmlns:twcecp="clr-namespace:TOne.WhS.CodePreparation.Entities.CP.Processing;assembly=TOne.WhS.CodePreparation.Entities"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
@@ -221,20 +222,18 @@
         </InArgument>
       </vbw:Validate.ImportedDataToValidate>
     </vbw:Validate>
-    <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-      <twcba1:StructureDataByCountries sap2010:WorkflowViewState.IdRef="StructureDataByCountries_1">
-        <twcba1:StructureDataByCountries.CountriesToProcess>
-          <OutArgument x:TypeArguments="scg:IEnumerable(twcecp:CountryToProcess)">
-            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcecp:CountryToProcess)">CountriesToProcess</mca:CSharpReference>
-          </OutArgument>
-        </twcba1:StructureDataByCountries.CountriesToProcess>
-        <twcba1:StructureDataByCountries.ZonesToProcess>
-          <InArgument x:TypeArguments="scg:IEnumerable(twcecp:ZoneToProcess)">
-            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twcecp:ZoneToProcess)">ZonesToProcess</mca:CSharpValue>
-          </InArgument>
-        </twcba1:StructureDataByCountries.ZonesToProcess>
-      </twcba1:StructureDataByCountries>
-    </Sequence>
+    <twcba1:StructureDataByCountries sap2010:WorkflowViewState.IdRef="StructureDataByCountries_1">
+      <twcba1:StructureDataByCountries.CountriesToProcess>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twcecp:CountryToProcess)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcecp:CountryToProcess)">CountriesToProcess</mca:CSharpReference>
+        </OutArgument>
+      </twcba1:StructureDataByCountries.CountriesToProcess>
+      <twcba1:StructureDataByCountries.ZonesToProcess>
+        <InArgument x:TypeArguments="scg:IEnumerable(twcecp:ZoneToProcess)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twcecp:ZoneToProcess)">ZonesToProcess</mca:CSharpValue>
+        </InArgument>
+      </twcba1:StructureDataByCountries.ZonesToProcess>
+    </twcba1:StructureDataByCountries>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_4">
       <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
         <vbw:ParallelForEach x:TypeArguments="twcecp:CountryToProcess" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_2" InitialConcurrentInstances="10" MaxConcurrentInstances="10">
@@ -496,15 +495,19 @@
         </InArgument>
       </twcba1:SyncImportedDataWithDB.SellingNumberPlanId>
     </twcba1:SyncImportedDataWithDB>
-    <twcba1:UpdateCodePreparationStateStatus>
+    <twcba1:UpdateCodePreparationStateStatus sap2010:WorkflowViewState.IdRef="UpdateCodePreparationStateStatus_1">
       <twcba1:UpdateCodePreparationStateStatus.SellingNumberPlanId>
         <InArgument x:TypeArguments="x:Int32">
           <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
         </InArgument>
       </twcba1:UpdateCodePreparationStateStatus.SellingNumberPlanId>
-      <sap2010:WorkflowViewState.IdRef>UpdateCodePreparationStateStatus_1</sap2010:WorkflowViewState.IdRef>
+      <twcba1:UpdateCodePreparationStateStatus.Status>
+        <InArgument x:TypeArguments="twce:CodePreparationStatus">
+          <mca:CSharpValue x:TypeArguments="twce:CodePreparationStatus">Input.IsFromExcel ? Entities.CodePreparationStatus.Canceled : Entities.CodePreparationStatus.Completed</mca:CSharpValue>
+        </InArgument>
+      </twcba1:UpdateCodePreparationStateStatus.Status>
     </twcba1:UpdateCodePreparationStateStatus>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb24ueGFtbGdBA/wDDgIBAU0LTdUBAgE+UgtS1QECAS9XC1fZAQIBIFwLXNkBAgERYQthcAIBAmUFqgEKAwGlCasBBcABIwMB6AjBAQXHAS0DAdgIyAEF0wEYAwG5CNQBBd8BFAMBmgjgAQXtARADAfoH7gEF6wMQAgFt7AMF8gMlAgFd8wMF+gMvAgFNaAtoWwMBpglsCYsBJAMBgQqOAQmoASIDAbUJswELswFwAwGWCb0BC70BfAMBhwmuAQuuAWwDAfgIuAELuAFuAwHpCMQBC8QBhQEDAdkIywELywGxAQMByQjQAQvQAX8DAboI3AEL3AF3AwGqCNcBC9cBfQMBmwjhAQfsASkDAfsH7wEHygMSAwHJAcsDB+oDKAIBbu8DC+8DYQIBXvYDC/YDYQIBTnQPdHwDAc0Kbw9veAMBvgqIAQ+IAWIDAa8Kfg9+bAMBoAqDAQ+DAV0DAZEKeQ95egMBggqWAQ+WAXwDAfIJkQEPkQF4AwHjCaABD6ABYgMB1AmlAQ+lAWUDAcUJmwEPmwF6AwG2CekBDekBdgMBiwjkAQ3kAYUBAwH8B/ABCb8DHwMB2wHAAwnJAxIDAcoB4gMN4gN/AwG6Ac4DDc4DhQEDAasB5wMN5wNjAwGcAdgDDdgDcgMBjQHTAw3TA4UBAgF+3QMN3QN/AgFv8wEP8wF/AwHrB/ABtQHwAbkBAwHqB/ABmQHwAZ0BAwHpB/oBDb0DGAMB3AHHAzXHAzkDAdoBwwMPwwN6AwHLAYUCD7ICGgMBpgazAg++Ai0DAfUFvwIPzwItAwGsBdACD/4CLAMB0wP/Ag+KAzEDAaIDiwMPvAMaAwHdAYYCEZsCKwMBiAecAhGxAisDAacGtgIVtgJ9AwGOBrsCFbsClAEDAfYFxwIVxwKEAQMB3QXCAhXCAn0DAcUFzAIVzAKMAQMBrQXsAhXsAnwDAZQF4gIV4gKCAQMB/AT2AhX2AnwDAeQE3QIV3QJ+AwHMBNMCFdMCggEDAbQE+wIV+wJ8AwGcBPECFfECjAEDAYQE5wIV5wKAAQMB7APYAhXYAoIBAwHUA4IDFYIDdAMBuwOHAxWHA3QDAaMDjAMRlwMjAwHxApgDEaMDIwMBwAKkAxGvAyMDAY8CsAMRuwMjAwHeAY4CF44ChwEDAdEHmAIXmAJtAwG5B5MCF5MCYgMBoQeJAheJAmUDAYkHrgIXrgJtAwHwBqQCF6QChwEDAdgGqQIXqQJiAwHABp8CF58CZQMBqAaUAxeUA4kBAwGKA48DF48DdgMB8gKgAxegA4kBAwHZApsDF5sDdgMBwQKsAxesA48BAwGoAqcDF6cDfAMBkAK4Axe4A48BAwH3AbMDF7MDfAMB3wE=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb24ueGFtbGdCA/8DDgIBAU4LTtUBAgE+UwtT1QECAS9YC1jZAQIBIF0LXdkBAgERYgticAIBAmYFqwEKAwGzCawBBcEBIwMB9gjCAQXIAS0DAeYIyQEF1AEYAwHHCNUBBeABFAMBqAjhAQXsAScDAYkI7QEF6gMQAgF86wMF8QMlAgFs8gMF/QMvAgFNaQtpWwMBtAltCYwBJAMBjwqPAQmpASIDAcMJtAELtAFwAwGkCb4BC74BfAMBlQmvAQuvAWwDAYYJuQELuQFuAwH3CMUBC8UBhQEDAecIzAELzAGxAQMB1wjRAQvRAX8DAcgI3QEL3QF3AwG4CNgBC9gBfQMBqQjpAQvpAXQDAZkI5AEL5AGDAQMBigjuAQfJAxIDAdgBygMH6QMoAgF97gML7gNhAgFt9QML9QNhAgFd+gML+gPBAQIBTnUPdXwDAdsKcA9weAMBzAqJAQ+JAWIDAb0Kfw9/bAMBrgqEAQ+EAV0DAZ8Keg96egMBkAqXAQ+XAXwDAYAKkgEPkgF4AwHxCaEBD6EBYgMB4gmmAQ+mAWUDAdMJnAEPnAF6AwHECe8BCb4DHwMB6gG/AwnIAxIDAdkB4QMN4QN/AwHJAc0DDc0DhQEDAboB5gMN5gNjAwGrAdcDDdcDcgMBnAHSAw3SA4UBAwGNAdwDDdwDfwIBfvIBD/IBfwMB+gfvAbUB7wG5AQMB+QfvAZkB7wGdAQMB+Af5AQ28AxgDAesBxgM1xgM5AwHpAcIDD8IDegMB2gGEAg+xAhoDAbUGsgIPvQItAwGEBr4CD84CLQMBuwXPAg/9AiwDAeID/gIPiQMxAwGxA4oDD7sDGgMB7AGFAhGaAisDAZcHmwIRsAIrAwG2BrUCFbUCfQMBnQa6AhW6ApQBAwGFBsYCFcYChAEDAewFwQIVwQJ9AwHUBcsCFcsCjAEDAbwF6wIV6wJ8AwGjBeECFeECggEDAYsF9QIV9QJ8AwHzBNwCFdwCfgMB2wTSAhXSAoIBAwHDBPoCFfoCfAMBqwTwAhXwAowBAwGTBOYCFeYCgAEDAfsD1wIV1wKCAQMB4wOBAxWBA3QDAcoDhgMVhgN0AwGyA4sDEZYDIwMBgAOXAxGiAyMDAc8CowMRrgMjAwGeAq8DEboDIwMB7QGNAheNAocBAwHgB5cCF5cCbQMByAeSAheSAmIDAbAHiAIXiAJlAwGYB60CF60CbQMB/wajAhejAocBAwHnBqgCF6gCYgMBzwaeAheeAmUDAbcGkwMXkwOJAQMBmQOOAxeOA3YDAYEDnwMXnwOJAQMB6AKaAxeaA3YDAdACqwMXqwOPAQMBtwKmAxemA3wDAZ8CtwMXtwOPAQMBhgKyAxeyA3wDAe4B</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -515,14 +518,7 @@
       <sap2010:ViewStateData Id="GetImportedDataValidationRules_1" sap:VirtualizedContainerService.HintSize="663,22" />
       <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="663,22" />
       <sap2010:ViewStateData Id="Validate_1" sap:VirtualizedContainerService.HintSize="663,22" />
-      <sap2010:ViewStateData Id="StructureDataByCountries_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="663,146">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="StructureDataByCountries_1" sap:VirtualizedContainerService.HintSize="663,22" />
       <sap2010:ViewStateData Id="GetExistingZones_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingCodes_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
@@ -556,14 +552,14 @@
       <sap2010:ViewStateData Id="Parallel_4" sap:VirtualizedContainerService.HintSize="663,482" />
       <sap2010:ViewStateData Id="SyncImportedDataWithDB_1" sap:VirtualizedContainerService.HintSize="663,22" />
       <sap2010:ViewStateData Id="UpdateCodePreparationStateStatus_1" sap:VirtualizedContainerService.HintSize="663,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="685,1414">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="685,1290">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.CodePreparation_1" sap:VirtualizedContainerService.HintSize="725,1494" />
+      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.CodePreparation_1" sap:VirtualizedContainerService.HintSize="725,1370" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
