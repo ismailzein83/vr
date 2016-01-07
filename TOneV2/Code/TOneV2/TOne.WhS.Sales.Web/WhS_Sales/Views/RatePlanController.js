@@ -154,7 +154,6 @@
             };
 
             $scope.search = function () {
-               
                 return loadRatePlan();
             };
             $scope.sellNewZones = function () {
@@ -215,7 +214,7 @@
                         return WhS_Sales_RatePlanAPIService.ApplyCalculatedRates(input).then(function () {
                             VRNotificationService.showSuccess("Rates applied");
                             pricingSettings = null;
-                            loadRatePlan();
+                            loadGrid();
                         }).catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
                         });
@@ -314,6 +313,7 @@
                 if ($scope.zoneLetters.length > 0) {
                     loadGrid().then(function () {
                         loadGridDeferred.resolve();
+                        showRatePlan(true); // At this point, there's no guarantee that the default item has loaded. But that's okay since the tab directive displays a loader for the default item
                     }).catch(function (error) { loadGridDeferred.reject(); });
                 }
                 else {
@@ -344,9 +344,7 @@
                 }
             });
 
-            return UtilsService.waitMultiplePromises(promises).then(function () {
-                showRatePlan(true);
-            }).catch(function (error) {
+            return UtilsService.waitMultiplePromises(promises).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
 

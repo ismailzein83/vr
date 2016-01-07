@@ -80,6 +80,13 @@
                 });
             };
 
+            $scope.validateDefaultItem = function () {
+                if ($scope.defaultItem)
+                    return null;
+
+                return "Default routing product was not found";
+            };
+
             $scope.save = function () {
                 closeModal(true);
             };
@@ -122,13 +129,16 @@
 
             function getDefaultItem() {
                 return WhS_Sales_RatePlanAPIService.GetDefaultItem(ownerType, ownerId).then(function (response) {
-                    if (response && (response.NewRoutingProductId || (response.CurrentRoutingProductId && response.RoutingProductChangeEED))) {
+                    if (response) {
                         $scope.defaultItem = {};
-                        $scope.defaultItem.currentRoutingProductName = response.CurrentRoutingProductName ? response.CurrentRoutingProductName : "None";
-                        $scope.defaultItem.currentRoutingProductName = response.IsCurrentRoutingProductEditable === false ? $scope.defaultItem.currentRoutingProductName += " (Inherited)" : $scope.defaultItem.currentRoutingProductName;
-                        $scope.defaultItem.newRoutingProductName = response.NewRoutingProductName;
-                        $scope.defaultItem.changedToRoutingProductName = !response.NewRoutingProductName ? "(Default)" : null;
-                        $scope.defaultItem.effectiveOn = new Date().toDateString();
+                        
+                        if (response.NewRoutingProductId || (response.CurrentRoutingProductId && response.RoutingProductChangeEED)) {
+                            $scope.defaultItem.currentRoutingProductName = response.CurrentRoutingProductName ? response.CurrentRoutingProductName : "None";
+                            $scope.defaultItem.currentRoutingProductName = response.IsCurrentRoutingProductEditable === false ? $scope.defaultItem.currentRoutingProductName += " (Inherited)" : $scope.defaultItem.currentRoutingProductName;
+                            $scope.defaultItem.newRoutingProductName = response.NewRoutingProductName;
+                            $scope.defaultItem.changedToRoutingProductName = !response.NewRoutingProductName ? "(Default)" : null;
+                            $scope.defaultItem.effectiveOn = new Date().toDateString();
+                        }
                     }
                 });
             }

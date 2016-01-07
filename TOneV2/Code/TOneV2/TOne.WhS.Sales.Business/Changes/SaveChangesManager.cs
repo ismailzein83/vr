@@ -201,8 +201,6 @@ namespace TOne.WhS.Sales.Business
                 return;
 
             SaveChanges(newChanges);
-            _changes = _ratePlanDataManager.GetChanges(_ownerType, _ownerId, RatePlanStatus.Draft); // Update the _changes field
-            SavePriceList();
         }
 
         IEnumerable<ZoneItem> GetZoneItemsWithCalculatedRate(int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, int policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod)
