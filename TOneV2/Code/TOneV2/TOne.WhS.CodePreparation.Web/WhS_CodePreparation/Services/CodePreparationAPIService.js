@@ -39,8 +39,7 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "SaveChanges"), input);
         }
         function MoveCodes(input) {
-            return BaseAPISer
-            vice.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "MoveCodes"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "MoveCodes"), input);
         }
         function CloseCodes(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "CloseCodes"), input);
@@ -70,7 +69,19 @@
 
             VRModalService.showModal('/Client/Modules/WhS_CodePreparation/Views/CodePreparationUploadEditor.html', parameters, settings);
         }
+        function ApplyCodePreparationState(sellingNumberPlanId, onCodePreparationApplied) {
+            var settings = {
+            };
 
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onCodePreparationApplied = onCodePreparationApplied;
+            };
+            var parameters = {
+                SellingNumberPlanId: sellingNumberPlanId
+            };
+
+            VRModalService.showModal('/Client/Modules/WhS_CodePreparation/Views/CodePreparationApplyStateEditor.html', parameters, settings);
+        }
         return ({
             ApplyCodePreparationForEntities: ApplyCodePreparationForEntities,
             DownloadImportCodePreparationTemplate: DownloadImportCodePreparationTemplate,
@@ -84,7 +95,8 @@
             CloseCodes: CloseCodes,
             CheckCodePreparationState: CheckCodePreparationState,
             CancelCodePreparationState: CancelCodePreparationState,
-            UploadCodePreparationSheet: UploadCodePreparationSheet
+            UploadCodePreparationSheet: UploadCodePreparationSheet,
+            ApplyCodePreparationState: ApplyCodePreparationState
         });
     }
 

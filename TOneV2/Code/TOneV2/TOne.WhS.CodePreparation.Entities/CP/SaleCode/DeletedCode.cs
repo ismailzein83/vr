@@ -12,8 +12,6 @@ namespace TOne.WhS.CodePreparation.Entities.CP
 
         public string ZoneName { get; set; }
 
-        public DateTime CloseEffectiveDate { get; set; }
-
         public bool IsExcluded { get; set; }
     }
 }

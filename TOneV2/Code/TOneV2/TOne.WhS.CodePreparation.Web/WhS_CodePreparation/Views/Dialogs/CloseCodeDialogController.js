@@ -28,7 +28,6 @@
             load();
         }
         function defineScope() {
-            $scope.eed;
             $scope.codes = [];
             $scope.closeCodes = function () {
                 return closeCodes();
@@ -54,8 +53,7 @@
         function buildCodeCloseObjFromScope() {
             var obj = {
                 Codes: $scope.codes,
-                CurrentZoneName: currentZoneName,
-                EED: $scope.eed
+                CurrentZoneName: currentZoneName
             };
             return obj;
         }
@@ -64,8 +62,7 @@
             return {
                 SellingNumberPlanId: sellingNumberPlanId,
                 Codes: codeObj.Codes,
-                ZoneName: codeObj.CurrentZoneName,
-                CloseDate: codeObj.EED
+                ZoneName: codeObj.CurrentZoneName
             }
         }
 

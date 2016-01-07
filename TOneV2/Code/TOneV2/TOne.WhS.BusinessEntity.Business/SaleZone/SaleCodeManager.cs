@@ -62,10 +62,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSaleCodesByZoneName(sellingNumberPlanId, zoneName, effectiveDate);
         }
 
-        public List<SaleCode> GetSaleCodesByCountry(int countryId, DateTime effectiveDate)
+        public List<SaleCode> GetSaleCodesByCountry(int sellingNumberPlanId, int countryId, DateTime effectiveDate)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            return dataManager.GetSaleCodesByCountry(countryId, effectiveDate);
+            return dataManager.GetSaleCodesEffectiveAfter(sellingNumberPlanId, countryId, effectiveDate);
         }
 
         public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)

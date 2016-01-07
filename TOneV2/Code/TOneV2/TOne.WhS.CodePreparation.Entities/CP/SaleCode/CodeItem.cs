@@ -28,7 +28,7 @@ namespace TOne.WhS.CodePreparation.Entities.CP
         public string Message { get; set; }
         public string Code { get; set; }
 
-        public DateTime BED { get; set; }
+        public DateTime? BED { get; set; }
 
         public DateTime? EED { get; set; }
 

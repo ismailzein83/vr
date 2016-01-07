@@ -58,7 +58,6 @@
     <Compile Include="CP\ExistingCode.cs" />
     <Compile Include="CP\IProcessCountryCodesContext.cs" />
     <Compile Include="CP\SaleCode\MoveCodeOutput.cs" />
-    <Compile Include="CP\SaleCode\ChangedCode.cs" />
     <Compile Include="CP\Changes.cs" />
     <Compile Include="CP\ChangesDetail.cs" />
     <Compile Include="CP\SaleCode\CodeItem.cs" />
@@ -68,7 +67,6 @@
     <Compile Include="CP\SaleCode\NewCode.cs" />
     <Compile Include="CP\SaleCode\NewCodeInput.cs" />
     <Compile Include="CP\SaleCode\NewCodeOutput.cs" />
-    <Compile Include="CP\SaleCode\MovedCode.cs" />
     <Compile Include="CP\SaleZone\NewZone.cs" />
     <Compile Include="CP\SaleZone\NewZoneInput.cs" />
     <Compile Include="CP\SaleZone\NewZoneOutput.cs" />

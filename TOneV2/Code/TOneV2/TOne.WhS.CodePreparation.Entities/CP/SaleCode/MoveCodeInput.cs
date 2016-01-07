@@ -11,8 +11,6 @@ namespace TOne.WhS.CodePreparation.Entities.CP
         public int SellingNumberPlanId { get; set; }
         public string CurrentZoneName { get; set; }
         public string NewZoneName { get; set; }
-        public DateTime BED { get; set; }
-        public DateTime? EED { get; set; }
         public List<string> Codes { get; set; }
     }
 }

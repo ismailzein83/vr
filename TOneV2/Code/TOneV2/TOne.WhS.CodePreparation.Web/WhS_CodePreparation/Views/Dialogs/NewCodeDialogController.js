@@ -27,8 +27,6 @@
             load();
         }
         function defineScope() {
-            $scope.bed;
-            $scope.eed;
             $scope.code;
             $scope.codeValue;
             $scope.codes = [];
@@ -98,8 +96,6 @@
                 result.push({
                     Code:  $scope.codes[i].code,
                     ZoneName: zoneName,
-                    BED: $scope.bed,
-                    EED: $scope.eed,
                     CountryId: countryId
                 });
             }

@@ -31,22 +31,16 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         $scope.sellingNumberPlans = [];
         $scope.selectedSellingNumberPlan;
         $scope.effectiveDate = new Date();
-        $scope.zoneList;
         $scope.currentNode;
         $scope.hasState = false;
+        $scope.showGrid = false;
 
         $scope.selectedCodes = [];
 
-        $scope.applyCodePreparationForEntities = function () {
-            var input = {
-                SellingNumberPlanId: $scope.selectedSellingNumberPlan.SellingNumberPlanId,
-                IsFromExcel: false
+        $scope.applyCodePreparationState = function () {
+            var onCodePreparationStateApplied = function () {
             };
-
-            return WhS_CodePrep_CodePrepAPIService.ApplyCodePreparationForEntities(input).then(function (response) {
-                if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
-                    return BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
-            });
+            WhS_CodePrep_CodePrepAPIService.ApplyCodePreparationState(filter.sellingNumberPlanId, onCodePreparationStateApplied);
         }
 
         $scope.uploadCodePreparation = function () {
@@ -68,8 +62,10 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
             if ($scope.currentNode != undefined) {
                 if ($scope.currentNode.type == 'Zone') {
                     setCodesFilterObject();
+                    $scope.showGrid = true;
                     return codesGridAPI.loadGrid(codesFilter);
                 }
+                $scope.showGrid = false;
             }
         }
 
@@ -106,20 +102,6 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
                 });
             }
         }
-
-        $scope.searchClicked = function () {
-            filter = getFilter();
-            $scope.isLoading = true;
-
-            UtilsService.waitMultipleAsyncOperations([getCountries]).then(function () {
-                buildCountriesTree();
-                $scope.isLoading = false;
-            }).catch(function (error) {
-                $scope.isLoading = false;
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            });
-            treeAPI.refreshTree($scope.nodes);
-        };
 
         $scope.saleCodesGridReady = function (api) {
             codesGridAPI = api;
@@ -187,6 +169,7 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
     function onCodeAdded(addedCodes) {
 
         if (addedCodes != undefined) {
+            $scope.showGrid = true;
             $scope.hasState = true;
             for (var i = 0; i < addedCodes.length; i++)
                 codesGridAPI.onCodeAdded(addedCodes[i]);

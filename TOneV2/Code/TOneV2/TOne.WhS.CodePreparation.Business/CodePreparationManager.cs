@@ -226,9 +226,9 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 CodeItem codeItem = new CodeItem()
                 {
-                    BED = newCode.BED,
+                    BED = null,
                     Code = newCode.Code,
-                    EED = newCode.EED,
+                    EED = null,
                     Status = CodeItemStatus.New,
                     StatusDescription = statusDescription == null ? codeItemStatus.ToString() : statusDescription
 
@@ -269,9 +269,9 @@ namespace TOne.WhS.CodePreparation.Business
                 {
                     CodeItem codeItem = new CodeItem()
                     {
-                        BED = newCode.BED,
+                        BED = null,
                         Code = newCode.Code,
-                        EED = newCode.EED,
+                        EED = null,
                         Status = CodeItemStatus.New,
                         StatusDescription = statusNewDescription == null ? codeItemStatusNew.ToString() : statusNewDescription
 
@@ -283,9 +283,9 @@ namespace TOne.WhS.CodePreparation.Business
                 {
                     CodeItem codeItem = new CodeItem()
                     {
-                        BED = newCode.BED,
+                        BED = null,
                         Code = newCode.Code,
-                        EED = newCode.EED,
+                        EED = null,
                         Status = CodeItemStatus.ExistingMoved,
                         StatusDescription = codeItemStatusExistingMoved == null ? codeItemStatusExistingMoved.ToString() : statusExistingMovedDescription,
                         OtherCodeZoneName = deletedCode.ZoneName
@@ -307,7 +307,7 @@ namespace TOne.WhS.CodePreparation.Business
                     {
 
                         Code = deletedCode.Code,
-                        EED = deletedCode.CloseEffectiveDate,
+                        EED = null,
                         Status = CodeItemStatus.ExistingClosed,
                         StatusDescription = statusExistingClosedDescription == null ? codeItemStatusExistingClosed.ToString() : statusExistingClosedDescription
 
@@ -350,8 +350,8 @@ namespace TOne.WhS.CodePreparation.Business
             foreach (NewCode newCode in newAddedCodes)
             {
                 CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(newCode.Code);
-                CodeItem codeItem=new CodeItem{Status = CodeItemStatus.New, Code = newCode.Code, BED = newCode.BED, EED = newCode.EED};
-                if (codeGroup==null || codeGroup.CountryId != countryId)
+                CodeItem codeItem = new CodeItem { Status = CodeItemStatus.New, Code = newCode.Code, BED = null, EED = null };
+                if (codeGroup == null || codeGroup.CountryId != countryId)
                 {
                     codeItem.Message = string.Format("Code should be added under Country {0}.", country.Name);
                     codeOutput.CodeItems.Add(codeItem);
@@ -363,8 +363,8 @@ namespace TOne.WhS.CodePreparation.Business
                 }
                 else
                 {
-                     codeItem.Message = string.Format("Code {0} Already Exists.", newCode.Code);
-                     codeOutput.CodeItems.Add(codeItem);
+                    codeItem.Message = string.Format("Code {0} Already Exists.", newCode.Code);
+                    codeOutput.CodeItems.Add(codeItem);
                 }
 
             }
@@ -390,7 +390,7 @@ namespace TOne.WhS.CodePreparation.Business
             SaleCodeManager saleCodeManager = new SaleCodeManager();
             if (input.ZoneId.HasValue)
             {
-                List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesByCountry(input.CountryId, DateTime.Now);
+                List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesByCountry(input.SellingNumberPlanId, input.CountryId, DateTime.Now);
                 allCodeItems.AddRange(MapCodeItemsFromSaleCodes(saleCodes));
             }
 
@@ -421,7 +421,6 @@ namespace TOne.WhS.CodePreparation.Business
 
                 DeletedCode deletedCode = new DeletedCode()
                 {
-                    CloseEffectiveDate = input.BED,
                     Code = code,
                     ZoneName = input.CurrentZoneName
                 };
@@ -429,9 +428,7 @@ namespace TOne.WhS.CodePreparation.Business
 
                 NewCode newCode = new NewCode()
                 {
-                    BED = input.BED,
                     Code = code,
-                    EED = input.EED,
                     ZoneName = input.NewZoneName
                 };
                 existingChanges.NewCodes.Add(newCode);
@@ -466,9 +463,9 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 CodeItem codeItem = new CodeItem()
                 {
-                    BED = newCode.BED,
+                    BED = null,
                     Code = newCode.Code,
-                    EED = newCode.EED,
+                    EED = null,
                     Status = CodeItemStatus.New
 
                 };
@@ -492,7 +489,6 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 DeletedCode deletedCode = new DeletedCode()
                 {
-                    CloseEffectiveDate = input.CloseDate,
                     Code = code,
                     ZoneName = input.ZoneName
                 };

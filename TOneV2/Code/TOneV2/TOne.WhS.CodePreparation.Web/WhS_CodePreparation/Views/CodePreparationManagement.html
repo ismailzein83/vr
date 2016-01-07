@@ -25,8 +25,8 @@
     <vr-row>
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
             <div transclude-to="buttons">
-                <vr-button type="Search" formname="formFilter" validationcontext="SearchGroup" data-onclick="searchClicked"></vr-button>
-                <vr-button type="Apply" ng-show="hasState==true" validationcontext="SearchGroup" data-onclick="applyCodePreparationForEntities"></vr-button>
+
+                <vr-button type="Apply" ng-show="hasState==true" validationcontext="SearchGroup" data-onclick="applyCodePreparationState"></vr-button>
                 <vr-button type="Cancel" ng-show="hasState==true" validationcontext="SearchGroup" data-onclick="cancelState"></vr-button>
                 <vr-button type="Upload" ng-show="hasState==false" validationcontext="SearchGroup" data-onclick="uploadCodePreparation"></vr-button>
                 <vr-button type="Add" text="New Zone" ng-show="currentNode != undefined && currentNode.type == 'Country'" formname="formFilter" validationcontext="SearchGroup" data-onclick="newZoneClicked"></vr-button>
@@ -51,7 +51,7 @@
             </div>
         </vr-columns>
         <vr-columns width="3/4row" ng-show="currentNode!=undefined">
-            <vr-whs-codepreparation-codesgrid on-ready="saleCodesGridReady" selectedcodes="selectedCodes">
+            <vr-whs-codepreparation-codesgrid ng-show="showGrid" on-ready="saleCodesGridReady" selectedcodes="selectedCodes">
 
             </vr-whs-codepreparation-codesgrid>
         </vr-columns>

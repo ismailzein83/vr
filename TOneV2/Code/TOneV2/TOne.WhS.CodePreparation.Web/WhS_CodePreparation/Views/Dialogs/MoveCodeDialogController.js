@@ -30,8 +30,6 @@
             load();
         }
         function defineScope() {
-            $scope.bed;
-            $scope.eed;
             $scope.codes = [];
             $scope.saleZones;
             $scope.selectedZone;
@@ -76,9 +74,7 @@
             var obj = {
                 Codes: $scope.codes,
                 CurrentZoneName: currentZoneName,
-                NewZoneName: $scope.selectedZone.Name,
-                BED: $scope.bed,
-                EED: $scope.eed
+                NewZoneName: $scope.selectedZone.Name
             };
             return obj;
         }
@@ -89,9 +85,7 @@
                 CountryId: countryId,
                 Codes: codeObj.Codes,
                 CurrentZoneName: codeObj.CurrentZoneName,
-                NewZoneName: codeObj.NewZoneName,
-                BED: codeObj.BED,
-                EED: codeObj.EED
+                NewZoneName: codeObj.NewZoneName
             }
         }
 

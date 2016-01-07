@@ -11,6 +11,5 @@ namespace TOne.WhS.CodePreparation.Entities.CP
         public int SellingNumberPlanId { get; set; }
         public string ZoneName { get; set; }
         public List<string> Codes { get; set; }
-        public DateTime CloseDate { get; set; }
     }
 }
