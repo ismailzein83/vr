@@ -25,9 +25,15 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     }
 
+    public class CheckDWStrategiesChangesOutput
+    {
+        public List<DWStrategy> ToBeInsertedStrategies { get; set; }
+
+    }
+
     #endregion
 
-    public class CheckDWStrategiesChanges : DependentAsyncActivity<CheckDWStrategiesChangesInput>
+    public class CheckDWStrategiesChanges : DependentAsyncActivity<CheckDWStrategiesChangesInput, CheckDWStrategiesChangesOutput>
     {
 
         #region Arguments
@@ -41,9 +47,17 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         #endregion
 
-
-        protected override void DoWork(CheckDWStrategiesChangesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override CheckDWStrategiesChangesInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)
         {
+            return new CheckDWStrategiesChangesInput
+            {
+                DWStrategies = this.DWStrategies.Get(context)
+            };
+        }
+
+        protected override CheckDWStrategiesChangesOutput DoWorkWithResult(CheckDWStrategiesChangesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        {
+            List<DWStrategy> ToBeInsertedStrategies = new List<DWStrategy>();
             StrategyManager strategyManager = new StrategyManager();
             IEnumerable<Strategy> listStrategies = strategyManager.GetAll();
 
@@ -56,20 +70,20 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     dwStrategy.Name = i.Name;
                     dwStrategy.Type = Vanrise.Common.Utilities.GetEnumDescription(((PeriodEnum)i.PeriodId));
 
-                    inputArgument.ToBeInsertedStrategies.Add(dwStrategy);
+                    ToBeInsertedStrategies.Add(dwStrategy);
                 }
-        }
 
 
-
-        protected override CheckDWStrategiesChangesInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)
-        {
-            return new CheckDWStrategiesChangesInput
+            return new CheckDWStrategiesChangesOutput()
             {
-                DWStrategies = this.DWStrategies.Get(context),
-                ToBeInsertedStrategies = this.ToBeInsertedStrategies.Get(context)
+                ToBeInsertedStrategies = ToBeInsertedStrategies
             };
+
         }
 
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, CheckDWStrategiesChangesOutput result)
+        {
+            this.ToBeInsertedStrategies.Set(context, result.ToBeInsertedStrategies);
+        }
     }
 }

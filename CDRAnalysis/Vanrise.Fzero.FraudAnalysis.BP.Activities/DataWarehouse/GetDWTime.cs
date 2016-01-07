@@ -42,10 +42,12 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(GetDWTimeInput inputArgument, AsyncActivityHandle handle)
         {
-            //DWTimeManager timeManager = new DWTimeManager();
-            //IEnumerable<DWTime> times = timeManager.GetTimes(inputArgument.FromDate, inputArgument.ToDate);
-            //if (times.Count() > 0)
-            //    inputArgument.Times = (DWTimeDictionary)times.ToDictionary(dim => dim.DateInstance, dim => dim);
+            DWTimeManager timeManager = new DWTimeManager();
+            IEnumerable<DWTime> times = timeManager.GetTimes(inputArgument.FromDate, inputArgument.ToDate);
+            inputArgument.Times = new DWTimeDictionary();
+            if (times.Count() > 0)
+                foreach (var i in times)
+                    inputArgument.Times.Add(i.DateInstance, i);
         }
 
 

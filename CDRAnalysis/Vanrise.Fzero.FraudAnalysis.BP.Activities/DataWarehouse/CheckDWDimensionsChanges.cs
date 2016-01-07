@@ -174,7 +174,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             return toBeInsertedList;
         }
 
-
         protected override CheckDWDimensionsChangesInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)
         {
             return new CheckDWDimensionsChangesInput
@@ -204,39 +203,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override CheckDWDimensionsChangesOutput DoWorkWithResult(CheckDWDimensionsChangesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-
-            if (inputArgument.CallClasses == null)
-                inputArgument.CallClasses = new DWDimensionDictionary();
-
-            if (inputArgument.CallTypes == null)
-                inputArgument.CallTypes = new DWDimensionDictionary();
-
-            if (inputArgument.CaseStatuses == null)
-                inputArgument.CaseStatuses = new DWDimensionDictionary();
-
-            if (inputArgument.Filters == null)
-                inputArgument.Filters = new DWDimensionDictionary();
-
-            if (inputArgument.NetworkTypes == null)
-                inputArgument.NetworkTypes = new DWDimensionDictionary();
-
-            if (inputArgument.Periods == null)
-                inputArgument.Periods = new DWDimensionDictionary();
-
-            if (inputArgument.StrategyKinds == null)
-                inputArgument.StrategyKinds = new DWDimensionDictionary();
-
-            if (inputArgument.SubscriberTypes == null)
-                inputArgument.SubscriberTypes = new DWDimensionDictionary();
-
-            if (inputArgument.SuspicionLevels == null)
-                inputArgument.SuspicionLevels = new DWDimensionDictionary();
-
-            if (inputArgument.Users == null)
-                inputArgument.Users = new DWDimensionDictionary();
-
-
-
             List<DWDimension> ToBeInsertedCallClasses = new List<DWDimension>();
             List<DWDimension> ToBeInsertedCallTypes = new List<DWDimension>();
             List<DWDimension> ToBeInsertedCaseStatuses = new List<DWDimension>();
@@ -247,8 +213,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             List<DWDimension> ToBeInsertedSubscriberTypes = new List<DWDimension>();
             List<DWDimension> ToBeInsertedSuspicionLevels = new List<DWDimension>();
             List<DWDimension> ToBeInsertedUsers = new List<DWDimension>();
-
-
 
 
             CallClassManager callClassManager = new CallClassManager();

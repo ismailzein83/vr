@@ -79,57 +79,27 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(GetDWDimensionsInput inputArgument, AsyncActivityHandle handle)
         {
+            inputArgument.CallClasses = GetandSet(inputArgument.CallClasses, "[dbo].[Dim_CallClass]");
+            inputArgument.CallTypes = GetandSet(inputArgument.CallTypes, "[dbo].[Dim_CallType]");
+            inputArgument.CaseStatuses = GetandSet(inputArgument.CaseStatuses, "[dbo].[Dim_CaseStatus]");
+            inputArgument.Filters = GetandSet(inputArgument.Filters, "[dbo].[Dim_Filters]");
+            inputArgument.NetworkTypes = GetandSet(inputArgument.NetworkTypes, "[dbo].[Dim_NetworkType]");
+            inputArgument.Periods = GetandSet(inputArgument.Periods, "[dbo].[Dim_Period]");
+            inputArgument.StrategyKinds = GetandSet(inputArgument.StrategyKinds, "[dbo].[Dim_StrategyKind]");
+            inputArgument.SubscriberTypes = GetandSet(inputArgument.SubscriberTypes, "[dbo].[Dim_SubscriberType]");
+            inputArgument.SuspicionLevels = GetandSet(inputArgument.SuspicionLevels, "[dbo].[Dim_SuspicionLevel]");
+            inputArgument.Users = GetandSet(inputArgument.Users, "[dbo].[Dim_Users]");
+        }
 
+        private static DWDimensionDictionary GetandSet(DWDimensionDictionary dwDimensionDictionary, string tableName)
+        {
             DWDimensionManager dwDimensionManager = new DWDimensionManager();
-
-            IEnumerable<DWDimension> CallClasses = dwDimensionManager.GetDimensions("[dbo].[Dim_CallClass]");
-            if (CallClasses.Count() > 0)
-                inputArgument.CallClasses = (DWDimensionDictionary)CallClasses.ToDictionary(dim => dim.Id, dim => dim);
-
-
-            IEnumerable<DWDimension> CallTypes = dwDimensionManager.GetDimensions("[dbo].[Dim_CallType]");
-            if (CallTypes.Count() > 0)
-                inputArgument.CallTypes = (DWDimensionDictionary)CallTypes.ToDictionary(dim => dim.Id, dim => dim);
-
-
-            IEnumerable<DWDimension> CaseStatuses = dwDimensionManager.GetDimensions("[dbo].[Dim_CaseStatus]");
-            if (CaseStatuses.Count() > 0)
-                inputArgument.CaseStatuses = (DWDimensionDictionary)CaseStatuses.ToDictionary(dim => dim.Id, dim => dim);
-
-
-            IEnumerable<DWDimension> Filters = dwDimensionManager.GetDimensions("[dbo].[Dim_Filters]");
-            if (Filters.Count() > 0)
-                inputArgument.Filters = (DWDimensionDictionary)Filters.ToDictionary(dim => dim.Id, dim => dim);
-
-
-            IEnumerable<DWDimension> NetworkTypes = dwDimensionManager.GetDimensions("[dbo].[Dim_NetworkType]");
-            if (NetworkTypes.Count() > 0)
-                inputArgument.NetworkTypes = (DWDimensionDictionary)NetworkTypes.ToDictionary(dim => dim.Id, dim => dim);
-
-
-            IEnumerable<DWDimension> Periods = dwDimensionManager.GetDimensions("[dbo].[Dim_Period]");
-            if (Periods.Count() > 0)
-                inputArgument.Periods = (DWDimensionDictionary)Periods.ToDictionary(dim => dim.Id, dim => dim);
-
-
-            IEnumerable<DWDimension> StrategyKinds = dwDimensionManager.GetDimensions("[dbo].[Dim_StrategyKind]");
-            if (StrategyKinds.Count() > 0)
-                inputArgument.StrategyKinds = (DWDimensionDictionary)StrategyKinds.ToDictionary(dim => dim.Id, dim => dim);
-
-            IEnumerable<DWDimension> SubscriberTypes = dwDimensionManager.GetDimensions("[dbo].[Dim_SubscriberType]");
-            if (SubscriberTypes.Count() > 0)
-                inputArgument.SubscriberTypes = (DWDimensionDictionary)SubscriberTypes.ToDictionary(dim => dim.Id, dim => dim);
-
-
-            IEnumerable<DWDimension> SuspicionLevels = dwDimensionManager.GetDimensions("[dbo].[Dim_SuspicionLevel]");
-            if (SuspicionLevels.Count() > 0)
-                inputArgument.SuspicionLevels = (DWDimensionDictionary)SuspicionLevels.ToDictionary(dim => dim.Id, dim => dim);
-
-
-            IEnumerable<DWDimension> Users = dwDimensionManager.GetDimensions("[dbo].[Dim_Users]");
-            if (Users.Count() > 0)
-                inputArgument.Users = (DWDimensionDictionary)Users.ToDictionary(dim => dim.Id, dim => dim);
-
+            IEnumerable<DWDimension> list = dwDimensionManager.GetDimensions(tableName);
+            dwDimensionDictionary = new DWDimensionDictionary();
+            if (list.Count() > 0)
+                foreach (var i in list)
+                    dwDimensionDictionary.Add(i.Id, i);
+            return dwDimensionDictionary;
         }
 
 

@@ -95,6 +95,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             dataManager.TableName = "[dbo].[Dim_SuspicionLevel]"; 
             dataManager.SaveDWDimensionsToDB(inputArgument.ToBeInsertedSuspicionLevels);
 
+            dataManager.TableName = "[dbo].[Dim_User]";
+            dataManager.SaveDWDimensionsToDB(inputArgument.ToBeInsertedUsers);
+
         }
 
         protected override ApplyDWDimensionsToDBInput GetInputArgument2(AsyncCodeActivityContext context)

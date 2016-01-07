@@ -29,8 +29,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             DWStrategyManager dwStrategyManager = new DWStrategyManager();
             IEnumerable<DWStrategy> listDWStrategies = dwStrategyManager.GetStrategies();
+            inputArgument.DWStrategies = new DWStrategyDictionary();
             if (listDWStrategies.Count() > 0)
-                inputArgument.DWStrategies = (DWStrategyDictionary)listDWStrategies.ToDictionary(dim => dim.Id, dim => dim);
+                foreach (var i in listDWStrategies)
+                    inputArgument.DWStrategies.Add(i.Id, i);
         }
 
 
