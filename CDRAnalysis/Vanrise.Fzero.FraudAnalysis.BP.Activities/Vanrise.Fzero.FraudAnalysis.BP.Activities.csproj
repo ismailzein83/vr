@@ -102,7 +102,7 @@
     <Compile Include="ApplyStrategyExecutionDetailsToDB.cs" />
     <Compile Include="AssignCases.cs" />
     <Compile Include="DataWarehouse\CheckDWDimensionsChanges.cs" />
-    <Compile Include="DataWarehouse\FillDimensionValues.cs" />
+    <Compile Include="DataWarehouse\FillFactValues.cs" />
     <Compile Include="DataWarehouse\CheckDWStrategiesChanges.cs" />
     <Compile Include="FindRelatedNumbersthroughIMEIs.cs" />
     <Compile Include="DataWarehouse\GetDWTime.cs" />

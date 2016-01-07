@@ -9,7 +9,7 @@ using Vanrise.Queueing;
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
     #region Argument Classes
-    public class FillDimensionValuesInput
+    public class FillFactValuesInput
     {
         public BaseQueue<CDRBatch> InputQueue { get; set; }
 
@@ -18,7 +18,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
     # endregion
 
 
-    public class FillDimensionValues : DependentAsyncActivity<FillDimensionValuesInput>
+    public class FillFactValues : DependentAsyncActivity<FillFactValuesInput>
     {
         #region Arguments
 
@@ -38,7 +38,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             base.OnBeforeExecute(context, handle);
         }
 
-        protected override void DoWork(FillDimensionValuesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(FillFactValuesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["DWCDRBatchSize"]);
             List<DWCDR> dwCDRBatch = new List<DWCDR>();
@@ -77,7 +77,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
         }
 
-        private static List<DWCDR> SendDWCDRtoOutputQueue(FillDimensionValuesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<DWCDR> dwCDRBatch, bool IsLastBatch)
+        private static List<DWCDR> SendDWCDRtoOutputQueue(FillFactValuesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<DWCDR> dwCDRBatch, bool IsLastBatch)
         {
             if (dwCDRBatch.Count >= batchSize || IsLastBatch)
             {
@@ -91,9 +91,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             return dwCDRBatch;
         }
 
-        protected override FillDimensionValuesInput GetInputArgument2(AsyncCodeActivityContext context)
+        protected override FillFactValuesInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            return new FillDimensionValuesInput
+            return new FillFactValuesInput
             {
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
