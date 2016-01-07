@@ -13,13 +13,61 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public DWDimensionDataManager()
             : base("DWSDBConnString")
         {
-
+            
         }
 
-        public List<DWDimension> GetDimensions(string tableName)
+        public List<DWDimension> GetDimensions()
         {
-            string query = string.Format("select * from {0}", tableName);
+            string query = string.Format("select * from {0}", this._tableName);
             return GetItemsText(query, DimensionMapper, (cmd) => { });
+        }
+
+
+
+        public void SaveDWDimensionsToDB(List<DWDimension> dwDimensions)
+        {
+            object dbApplyStream = InitialiazeStreamForDBApply();
+
+            foreach (DWDimension dim in dwDimensions)
+            {
+                WriteRecordToStream(dim, dbApplyStream);
+            }
+
+            ApplyDWDimensionsToDB(FinishDBApplyStream(dbApplyStream));
+        }
+
+        public void ApplyDWDimensionsToDB(object preparedDWDimensions)
+        {
+            InsertBulkToTable(preparedDWDimensions as BaseBulkInsertInfo);
+        }
+
+        public object FinishDBApplyStream(object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.Close();
+            return new StreamBulkInsertInfo
+            {
+                TableName = this._tableName,
+                Stream = streamForBulkInsert,
+                TabLock = false,
+                KeepIdentity = false,
+                FieldSeparator = '^'
+            };
+        }
+
+        public object InitialiazeStreamForDBApply()
+        {
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(DWDimension record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}",
+                                     record.Id
+                                   , record.Description
+                                    );
+
         }
 
 
@@ -35,7 +83,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         #endregion
 
+        string _tableName;
 
-
+        public string TableName
+        {
+            set { _tableName = value; }
+        }
     }
 }

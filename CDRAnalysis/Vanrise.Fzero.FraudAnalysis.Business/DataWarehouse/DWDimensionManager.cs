@@ -10,8 +10,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public List<DWDimension> GetDimensions(string tableName)
         {
             IDWDimensionDataManager dataManager = FraudDataManagerFactory.GetDataManager<IDWDimensionDataManager>();
-
-            return dataManager.GetDimensions(tableName);
+            dataManager.TableName = tableName;
+            return dataManager.GetDimensions();
         }
 
     }

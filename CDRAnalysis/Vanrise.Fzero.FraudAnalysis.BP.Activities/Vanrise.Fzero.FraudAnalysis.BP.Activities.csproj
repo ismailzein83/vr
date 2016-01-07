@@ -95,6 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataWarehouse\ApplyDWDimensionsToDB.cs" />
     <Compile Include="DataWarehouse\ApplyDWStrategiesToDB.cs" />
     <Compile Include="DataWarehouse\ApplyDWCDRsToDB.cs" />
     <Compile Include="ApplyNumberProfilesToDB.cs" />
