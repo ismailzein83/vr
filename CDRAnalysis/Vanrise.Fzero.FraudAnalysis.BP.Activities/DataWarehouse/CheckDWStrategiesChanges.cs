@@ -19,7 +19,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class CheckDWStrategiesChangesInput
     {
-        public Dictionary<int, DWStrategy> DWStrategies { get; set; }
+        public DWStrategyDictionary DWStrategies { get; set; }
 
         public List<DWStrategy> ToBeInsertedStrategies { get; set; }
 
@@ -33,7 +33,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InArgument<Dictionary<int, DWStrategy>> DWStrategies { get; set; }
+        public InArgument<DWStrategyDictionary> DWStrategies { get; set; }
 
 
         [RequiredArgument]

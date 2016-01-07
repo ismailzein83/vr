@@ -12,25 +12,25 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class GetDWDimensionsInput
     {
-        public Dictionary<int, DWDimension> CallClasses { get; set; }
+        public DWDimensionDictionary CallClasses { get; set; }
 
-        public Dictionary<int, DWDimension> CallTypes { get; set; }
+        public DWDimensionDictionary CallTypes { get; set; }
 
-        public Dictionary<int, DWDimension> CaseStatuses { get; set; }
+        public DWDimensionDictionary CaseStatuses { get; set; }
 
-        public Dictionary<int, DWDimension> Filters { get; set; }
+        public DWDimensionDictionary Filters { get; set; }
 
-        public Dictionary<int, DWDimension> NetworkTypes { get; set; }
+        public DWDimensionDictionary NetworkTypes { get; set; }
 
-        public Dictionary<int, DWDimension> Periods { get; set; }
+        public DWDimensionDictionary Periods { get; set; }
 
-        public Dictionary<int, DWDimension> StrategyKinds { get; set; }
+        public DWDimensionDictionary StrategyKinds { get; set; }
 
-        public Dictionary<int, DWDimension> SubscriberTypes { get; set; }
+        public DWDimensionDictionary SubscriberTypes { get; set; }
 
-        public Dictionary<int, DWDimension> SuspicionLevels { get; set; }
+        public DWDimensionDictionary SuspicionLevels { get; set; }
 
-        public Dictionary<int, DWDimension> Users { get; set; }
+        public DWDimensionDictionary Users { get; set; }
 
         public DateTime FromDate { get; set; }
 
@@ -45,34 +45,34 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InOutArgument<Dictionary<int, DWDimension>> CallClasses { get; set; }
+        public InOutArgument<DWDimensionDictionary> CallClasses { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<Dictionary<int, DWDimension>> CallTypes { get; set; }
+        public InOutArgument<DWDimensionDictionary> CallTypes { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<Dictionary<int, DWDimension>> CaseStatuses { get; set; }
+        public InOutArgument<DWDimensionDictionary> CaseStatuses { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<Dictionary<int, DWDimension>> Filters { get; set; }
+        public InOutArgument<DWDimensionDictionary> Filters { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<Dictionary<int, DWDimension>> NetworkTypes { get; set; }
+        public InOutArgument<DWDimensionDictionary> NetworkTypes { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<Dictionary<int, DWDimension>> Periods { get; set; }
+        public InOutArgument<DWDimensionDictionary> Periods { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<Dictionary<int, DWDimension>> StrategyKinds { get; set; }
+        public InOutArgument<DWDimensionDictionary> StrategyKinds { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<Dictionary<int, DWDimension>> SubscriberTypes { get; set; }
+        public InOutArgument<DWDimensionDictionary> SubscriberTypes { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<Dictionary<int, DWDimension>> SuspicionLevels { get; set; }
+        public InOutArgument<DWDimensionDictionary> SuspicionLevels { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<Dictionary<int, DWDimension>> Users { get; set; }
+        public InOutArgument<DWDimensionDictionary> Users { get; set; }
 
 
         #endregion
@@ -83,42 +83,42 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             DWDimensionManager dwDimensionManager = new DWDimensionManager();
 
             IEnumerable<DWDimension> CallClasses = dwDimensionManager.GetDimensions("[dbo].[Dim_CallClass]");
-            inputArgument.CallClasses = CallClasses.ToDictionary(dim => dim.Id, dim => dim);
+            inputArgument.CallClasses = (DWDimensionDictionary)CallClasses.ToDictionary(dim => dim.Id, dim => dim);
 
 
             IEnumerable<DWDimension> CallTypes = dwDimensionManager.GetDimensions("[dbo].[Dim_CallType]");
-            inputArgument.CallTypes = CallTypes.ToDictionary(dim => dim.Id, dim => dim);
+            inputArgument.CallTypes = (DWDimensionDictionary)CallTypes.ToDictionary(dim => dim.Id, dim => dim);
 
 
             IEnumerable<DWDimension> CaseStatuses = dwDimensionManager.GetDimensions("[dbo].[Dim_CaseStatus]");
-            inputArgument.CaseStatuses = CaseStatuses.ToDictionary(dim => dim.Id, dim => dim);
+            inputArgument.CaseStatuses = (DWDimensionDictionary)CaseStatuses.ToDictionary(dim => dim.Id, dim => dim);
 
 
             IEnumerable<DWDimension> Filters = dwDimensionManager.GetDimensions("[dbo].[Dim_Filters]");
-            inputArgument.Filters = Filters.ToDictionary(dim => dim.Id, dim => dim);
+            inputArgument.Filters = (DWDimensionDictionary)Filters.ToDictionary(dim => dim.Id, dim => dim);
 
 
             IEnumerable<DWDimension> NetworkTypes = dwDimensionManager.GetDimensions("[dbo].[Dim_NetworkType]");
-            inputArgument.NetworkTypes = NetworkTypes.ToDictionary(dim => dim.Id, dim => dim);
+            inputArgument.NetworkTypes = (DWDimensionDictionary)NetworkTypes.ToDictionary(dim => dim.Id, dim => dim);
 
 
             IEnumerable<DWDimension> Periods = dwDimensionManager.GetDimensions("[dbo].[Dim_Period]");
-            inputArgument.Periods = Periods.ToDictionary(dim => dim.Id, dim => dim);
+            inputArgument.Periods = (DWDimensionDictionary)Periods.ToDictionary(dim => dim.Id, dim => dim);
 
 
             IEnumerable<DWDimension> StrategyKinds = dwDimensionManager.GetDimensions("[dbo].[Dim_StrategyKind]");
-            inputArgument.StrategyKinds = StrategyKinds.ToDictionary(dim => dim.Id, dim => dim);
+            inputArgument.StrategyKinds = (DWDimensionDictionary)StrategyKinds.ToDictionary(dim => dim.Id, dim => dim);
 
             IEnumerable<DWDimension> SubscriberTypes = dwDimensionManager.GetDimensions("[dbo].[Dim_SubscriberType]");
-            inputArgument.SubscriberTypes = SubscriberTypes.ToDictionary(dim => dim.Id, dim => dim);
+            inputArgument.SubscriberTypes = (DWDimensionDictionary)SubscriberTypes.ToDictionary(dim => dim.Id, dim => dim);
 
 
             IEnumerable<DWDimension> SuspicionLevels = dwDimensionManager.GetDimensions("[dbo].[Dim_SuspicionLevel]");
-            inputArgument.SuspicionLevels = SuspicionLevels.ToDictionary(dim => dim.Id, dim => dim);
+            inputArgument.SuspicionLevels = (DWDimensionDictionary)SuspicionLevels.ToDictionary(dim => dim.Id, dim => dim);
 
 
             IEnumerable<DWDimension> Users = dwDimensionManager.GetDimensions("[dbo].[Dim_Users]");
-            inputArgument.Users = Users.ToDictionary(dim => dim.Id, dim => dim);
+            inputArgument.Users = (DWDimensionDictionary)Users.ToDictionary(dim => dim.Id, dim => dim);
 
         }
 

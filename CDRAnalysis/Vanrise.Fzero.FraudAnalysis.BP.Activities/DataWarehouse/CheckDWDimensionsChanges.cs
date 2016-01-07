@@ -16,25 +16,25 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class CheckDWDimensionsChangesInput
     {
-        public Dictionary<int, DWDimension> CallClasses { get; set; }
+        public DWDimensionDictionary CallClasses { get; set; }
 
-        public Dictionary<int, DWDimension> CallTypes { get; set; }
+        public DWDimensionDictionary CallTypes { get; set; }
 
-        public Dictionary<int, DWDimension> CaseStatuses { get; set; }
+        public DWDimensionDictionary CaseStatuses { get; set; }
 
-        public Dictionary<int, DWDimension> Filters { get; set; }
+        public DWDimensionDictionary Filters { get; set; }
 
-        public Dictionary<int, DWDimension> NetworkTypes { get; set; }
+        public DWDimensionDictionary NetworkTypes { get; set; }
 
-        public Dictionary<int, DWDimension> Periods { get; set; }
+        public DWDimensionDictionary Periods { get; set; }
 
-        public Dictionary<int, DWDimension> StrategyKinds { get; set; }
+        public DWDimensionDictionary StrategyKinds { get; set; }
 
-        public Dictionary<int, DWDimension> SubscriberTypes { get; set; }
+        public DWDimensionDictionary SubscriberTypes { get; set; }
 
-        public Dictionary<int, DWDimension> SuspicionLevels { get; set; }
+        public DWDimensionDictionary SuspicionLevels { get; set; }
 
-        public Dictionary<int, DWDimension> Users { get; set; }
+        public DWDimensionDictionary Users { get; set; }
 
         public List<DWDimension> ToBeInsertedCallClasses { get; set; }
 
@@ -66,34 +66,34 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InArgument<Dictionary<int, DWDimension>> CallClasses { get; set; }
+        public InArgument<DWDimensionDictionary> CallClasses { get; set; }
 
         [RequiredArgument]
-        public InArgument<Dictionary<int, DWDimension>> CallTypes { get; set; }
+        public InArgument<DWDimensionDictionary> CallTypes { get; set; }
 
         [RequiredArgument]
-        public InArgument<Dictionary<int, DWDimension>> CaseStatuses { get; set; }
+        public InArgument<DWDimensionDictionary> CaseStatuses { get; set; }
 
         [RequiredArgument]
-        public InArgument<Dictionary<int, DWDimension>> Filters { get; set; }
+        public InArgument<DWDimensionDictionary> Filters { get; set; }
 
         [RequiredArgument]
-        public InArgument<Dictionary<int, DWDimension>> NetworkTypes { get; set; }
+        public InArgument<DWDimensionDictionary> NetworkTypes { get; set; }
 
         [RequiredArgument]
-        public InArgument<Dictionary<int, DWDimension>> Periods { get; set; }
+        public InArgument<DWDimensionDictionary> Periods { get; set; }
 
         [RequiredArgument]
-        public InArgument<Dictionary<int, DWDimension>> StrategyKinds { get; set; }
+        public InArgument<DWDimensionDictionary> StrategyKinds { get; set; }
 
         [RequiredArgument]
-        public InArgument<Dictionary<int, DWDimension>> SubscriberTypes { get; set; }
+        public InArgument<DWDimensionDictionary> SubscriberTypes { get; set; }
 
         [RequiredArgument]
-        public InArgument<Dictionary<int, DWDimension>> SuspicionLevels { get; set; }
+        public InArgument<DWDimensionDictionary> SuspicionLevels { get; set; }
 
         [RequiredArgument]
-        public InArgument<Dictionary<int, DWDimension>> Users { get; set; }
+        public InArgument<DWDimensionDictionary> Users { get; set; }
 
         [RequiredArgument]
         public InOutArgument<List<DWDimension>> ToBeInsertedCallClasses { get; set; }
@@ -195,7 +195,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         }
 
-        private static List<DWDimension> GetToBeInserted(Dictionary<int, DWDimension> dwDictionary, Dictionary<int, FilterDefinition> dbDictionary)
+        private static List<DWDimension> GetToBeInserted(DWDimensionDictionary dwDictionary, Dictionary<int, FilterDefinition> dbDictionary)
         {
             List<DWDimension> toBeInsertedList = new List<DWDimension>();
             foreach (var item in dbDictionary)
@@ -212,7 +212,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             return toBeInsertedList;
         }
 
-        private static List<DWDimension> GetToBeInserted<T>(Dictionary<int, DWDimension> dwDictionary) where T : struct
+        private static List<DWDimension> GetToBeInserted<T>(DWDimensionDictionary dwDictionary) where T : struct
         {
             List<DWDimension> toBeInsertedList = new List<DWDimension>();
 

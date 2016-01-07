@@ -31,6 +31,7 @@
       <x:String>Vanrise.BusinessProcess</x:String>
       <x:String>Vanrise.Fzero.FraudAnalysis.BP.Arguments</x:String>
       <x:String>System.Activities</x:String>
+      <x:String>Vanrise.Fzero.FraudAnalysis.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -68,6 +69,15 @@
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="Started executing workflow: FillDataWarehouse ..." />
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="getDWTimeActivityStatus" />
+        <Variable x:TypeArguments="vffe:DWTimeDictionary" Name="times" />
+        <Variable x:TypeArguments="x:String" Name="variable2" />
+      </Parallel.Variables>
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2" />
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3" />
+    </Parallel>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
         <Variable x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)" Name="cdrQueue" />
@@ -158,25 +168,40 @@
       </vffba1:ApplyDWCDRsToDB>
     </Parallel>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2" Text="Finished executing workflow: FillDataWarehouse ..." />
-    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sGEUDogEOAgEBRgVGeQMBhwFHBZ8BEAIBBKABBaABegIBAkZDRnYDAYgBUQdmGQIBYmcHfCQCAT19B5IBKAIBGJMBB54BIAIBBaABQ6ABdwIBA1QNVFsCAX5eDV52AgF1WQ1ZbgIBbGMNY1kCAWN0DXRuAgFZag1qbgIBUHkNeYIBAgFHbw1vcgIBPooBDYoBegIBNIABDYABagIBK48BDY8BhgECASKFAQ2FAXMCARmbAQ2bAX4CAQ+WAQ2WAWsCAQY=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sG0YDrAEOAgEBRwVHeQMBigFIBVAQAwGHAVEFqQEQAgEEqgEFqgF6AgECR0NHdgMBiwFOB05AAwGJAU8HT0ADAYgBWwdwGQIBYnEHhgEkAgE9hwEHnAEoAgEYnQEHqAEgAgEFqgFDqgF3AgEDXg1eWwIBfmgNaHYCAXVjDWNuAgFsbQ1tWQIBY34Nfm4CAVl0DXRuAgFQgwENgwGCAQIBR3kNeXICAT6UAQ2UAXoCATSKAQ2KAWoCASuZAQ2ZAYYBAgEijwENjwFzAgEZpQENpQF+AgEPoAENoAFrAgEG</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1034,62" />
-      <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="FillDimensionValues_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="PrepareDWCDRsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ApplyDWCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
-      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1034,62" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056,414">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="200,99">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FillDataWarehouse_1" sap:VirtualizedContainerService.HintSize="1096,494" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="200,99">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1034,145" />
+      <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="FillDimensionValues_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareDWCDRsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyDWCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
+      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1034,62" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056,599">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FillDataWarehouse_1" sap:VirtualizedContainerService.HintSize="1096,679" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

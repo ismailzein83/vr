@@ -11,7 +11,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class GetDWStrategiesInput
     {
-        public Dictionary<int, DWStrategy> DWStrategies { get; set; }
+        public DWStrategyDictionary DWStrategies { get; set; }
     }
 
     #endregion
@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InOutArgument<Dictionary<int, DWStrategy>> DWStrategies { get; set; }
+        public InOutArgument<DWStrategyDictionary> DWStrategies { get; set; }
 
         #endregion
 
@@ -29,7 +29,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             DWStrategyManager dwStrategyManager = new DWStrategyManager();
             IEnumerable<DWStrategy> listDWStrategies = dwStrategyManager.GetStrategies();
-            inputArgument.DWStrategies = listDWStrategies.ToDictionary(dim => dim.Id, dim => dim);
+            inputArgument.DWStrategies = (DWStrategyDictionary)listDWStrategies.ToDictionary(dim => dim.Id, dim => dim);
         }
 
 

@@ -58,6 +58,9 @@
   <ItemGroup>
     <Compile Include="AccountCaseLog.cs" />
     <Compile Include="AccountInfo.cs" />
+    <Compile Include="DataWarehouse\DWTimeDictionary.cs" />
+    <Compile Include="DataWarehouse\DWStrategyDictionary.cs" />
+    <Compile Include="DataWarehouse\DWDimensionDictionary.cs" />
     <Compile Include="AccountNumbersByIMEI.cs" />
     <Compile Include="AccountStatus.cs" />
     <Compile Include="Batches\DWCDRBatch.cs" />

@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class GetDWTimeInput
     {
-        public Dictionary<DateTime, DWTime> Times { get; set; }
+        public DWTimeDictionary Times { get; set; }
 
         public DateTime FromDate { get; set; }
 
@@ -27,7 +27,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InOutArgument<Dictionary<DateTime, DWTime>> Times { get; set; }
+        public InOutArgument<DWTimeDictionary> Times { get; set; }
 
        
         [RequiredArgument]
@@ -44,7 +44,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             DWTimeManager timeManager = new DWTimeManager();
             IEnumerable<DWTime> times = timeManager.GetTimes(inputArgument.FromDate, inputArgument.ToDate);
-            inputArgument.Times = times.ToDictionary(dim => dim.DateInstance, dim => dim);
+            inputArgument.Times = (DWTimeDictionary)times.ToDictionary(dim => dim.DateInstance, dim => dim);
         }
 
 
