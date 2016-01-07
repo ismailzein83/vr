@@ -78,7 +78,7 @@ function DataSourceLogManagementController($scope, DataSourceLogsAPIService, Dat
         if (gridApi == undefined || filtersAreNotReady) return;
 
         var query = {
-            DataSourceId: ($scope.selectedDataSource != undefined) ? $scope.selectedDataSource.DataSourceId : null,
+            DataSourceId: ($scope.selectedDataSource != undefined) ? $scope.selectedDataSource.DataSourceID : null,
             Severities: getMappedSelectedSeverities(),
             From: ($scope.selectedFromDateTime != undefined) ? $scope.selectedFromDateTime : null,
             To: ($scope.selectedToDateTime != undefined) ? $scope.selectedToDateTime : null
