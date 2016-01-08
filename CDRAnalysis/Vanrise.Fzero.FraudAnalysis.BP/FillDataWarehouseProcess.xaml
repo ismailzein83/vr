@@ -341,7 +341,60 @@
           </vffba1:ApplyDWDimensionsToDB.ToBeInsertedUsers>
         </vffba1:ApplyDWDimensionsToDB>
       </Sequence>
-      <Sequence DisplayName="Strategy" sap2010:WorkflowViewState.IdRef="Sequence_3" />
+      <Sequence DisplayName="Strategy" sap2010:WorkflowViewState.IdRef="Sequence_3">
+        <Sequence.Variables>
+          <Variable x:TypeArguments="vffe:DWStrategyDictionary" Name="dwStrategies" />
+          <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="getDWStrategiesActivityStatus" />
+          <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="checkDWStrategiesChangesActivityStatus" />
+          <Variable x:TypeArguments="scg:List(vffe:DWStrategy)" Name="toBeInsertedStrategies" />
+        </Sequence.Variables>
+        <vffba1:GetDWStrategies sap2010:WorkflowViewState.IdRef="GetDWStrategies_1">
+          <vffba1:GetDWStrategies.DWStrategies>
+            <InOutArgument x:TypeArguments="vffe:DWStrategyDictionary">
+              <mca:CSharpReference x:TypeArguments="vffe:DWStrategyDictionary">dwStrategies</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:GetDWStrategies.DWStrategies>
+          <vffba1:GetDWStrategies.Status>
+            <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+              <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">getDWStrategiesActivityStatus</mca:CSharpReference>
+            </OutArgument>
+          </vffba1:GetDWStrategies.Status>
+        </vffba1:GetDWStrategies>
+        <vffba1:CheckDWStrategiesChanges sap2010:WorkflowViewState.IdRef="CheckDWStrategiesChanges_1">
+          <vffba1:CheckDWStrategiesChanges.DWStrategies>
+            <InArgument x:TypeArguments="vffe:DWStrategyDictionary">
+              <mca:CSharpValue x:TypeArguments="vffe:DWStrategyDictionary">dwStrategies</mca:CSharpValue>
+            </InArgument>
+          </vffba1:CheckDWStrategiesChanges.DWStrategies>
+          <vffba1:CheckDWStrategiesChanges.PreviousActivityStatus>
+            <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+              <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">getDWStrategiesActivityStatus</mca:CSharpValue>
+            </InArgument>
+          </vffba1:CheckDWStrategiesChanges.PreviousActivityStatus>
+          <vffba1:CheckDWStrategiesChanges.Status>
+            <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+              <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">checkDWStrategiesChangesActivityStatus</mca:CSharpReference>
+            </OutArgument>
+          </vffba1:CheckDWStrategiesChanges.Status>
+          <vffba1:CheckDWStrategiesChanges.ToBeInsertedStrategies>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWStrategy)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWStrategy)">toBeInsertedStrategies</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:CheckDWStrategiesChanges.ToBeInsertedStrategies>
+        </vffba1:CheckDWStrategiesChanges>
+        <vffba1:ApplyDWStrategiesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyDWStrategiesToDB_1">
+          <vffba1:ApplyDWStrategiesToDB.PreviousActivityStatus>
+            <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+              <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">checkDWStrategiesChangesActivityStatus</mca:CSharpValue>
+            </InArgument>
+          </vffba1:ApplyDWStrategiesToDB.PreviousActivityStatus>
+          <vffba1:ApplyDWStrategiesToDB.ToBeInsertedStrategies>
+            <InOutArgument x:TypeArguments="scg:List(vffe:DWStrategy)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWStrategy)">toBeInsertedStrategies</mca:CSharpReference>
+            </InOutArgument>
+          </vffba1:ApplyDWStrategiesToDB.ToBeInsertedStrategies>
+        </vffba1:ApplyDWStrategiesToDB>
+      </Sequence>
       <vffba1:GetDWTime sap2010:WorkflowViewState.IdRef="GetDWTime_1">
         <vffba1:GetDWTime.FromDate>
           <InArgument x:TypeArguments="s:DateTime">
@@ -455,7 +508,7 @@
       </vffba1:ApplyDWCDRsToDB>
     </Parallel>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2" Text="Finished executing workflow: FillDataWarehouse ..." />
-    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sUUgDywMOAgEBSQVJeQMB1AtKBe8CEAMBhwHwAgXIAxACAQTJAwXJA3oCAQJJQ0l2AwHVC08H1wISAwGaAdgCB9gCVwMBmQHZAgfuAhoDAYgB+gIHjwMZAgFikAMHpQMfAgE9pgMHuwMoAgEYvAMHxwMgAgEFyQNDyQN3AgEDawmtASIDAdoIrgEJnQIrAwHbA54CCdYCKAMBmwHcAg3cAlsDAZUB5gIN5gJlAwGRAeECDeECeAMBjQHrAg3rAlkDAYkB/QIN/QJbAgF+hwMNhwN2AgF1ggMNggNuAgFsjAMNjANZAgFjnQMNnQNuAgFZkwMNkwNuAgFQogMNogN9AgFHmAMNmANyAgE+swMNswN1AgE0qQMNqQNqAgEruAMNuAOGAQIBIq4DDa4DcwIBGcQDDcQDfgIBD78DDb8DawIBBowBD4wBbgMBtwubAQ+bAXYDAZoLeA94cwMB/QqCAQ+CAV0DAeAKqgEPqgFsAwHDCnMPc3ADAaYKkQEPkQGAAQMBiQp9D31uAwHsCaABD6ABdgMBzwluD25yAwGyCZYBD5YBdAMBlQmlAQ+lAVsDAfgIhwEPhwFzAwHbCMoBD8oBZgMBvQjyAQ/yAX8DAaAIgQIPgQJ6AwGDCJACD5ACggEDAeYH3gEP3gFuAwHJB+gBD+gBfgMBrAeGAg+GAoABAwGPB7sBD7sBawMB8gbPAQ/PAXgDAdUG7QEP7QF8AwG4BpoCD5oCZAMBmwb3AQ/3AXoDAf4FtgEPtgFoAwHhBdQBD9QBiQEDAcQFwAEPwAFmAwGnBeMBD+MBbgMBigWLAg+LAoIBAwHtBPwBD/wBfwMB0ASVAg+VAngDAbMEsQEPsQFqAwGWBNkBD9kBbAMB+QPFAQ/FAWsDAdwDsAIPsAJ/AwG+A78CD78CegMBoQPOAg/OAoIBAwGEA6YCD6YCfgMB5wLEAg/EAoABAwHKAqECD6ECgQEDAa0CqwIPqwJ8AwGQArUCD7UCegMB8wHJAg/JAoIBAwHWAboCD7oCfwMBuQHTAg/TAngDAZwB</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sXEgDgAQOAgEBSQVJeQMBlwxKBaQDEAMBhwGlAwX9AxACAQT+AwX+A3oCAQJJQ0l2AwGYDE8H1wISAwHdAdgCB40DEgMBmQGOAwejAxoDAYgBrwMHxAMZAgFixQMH2gMfAgE92wMH8AMoAgEY8QMH/AMgAgEF/gND/gN3AgEDawmtASIDAZ0JrgEJnQIrAwGeBJ4CCdYCKAMB3gHfAgnqAiIDAcwB6wIJgAMrAwGrAYEDCYwDKAMBmgGRAw2RA1sDAZUBmwMNmwNlAwGRAZYDDZYDeAMBjQGgAw2gA1kDAYkBsgMNsgNbAgF+vAMNvAN2AgF1twMNtwNuAgFswQMNwQNZAgFj0gMN0gNuAgFZyAMNyANuAgFQ1wMN1wN9AgFHzQMNzQNyAgE+6AMN6AN1AgE03gMN3gNqAgEr7QMN7QOGAQIBIuMDDeMDcwIBGfkDDfkDfgIBD/QDDfQDawIBBowBD4wBbgMB+gubAQ+bAXYDAd0LeA94cwMBwAuCAQ+CAV0DAaMLqgEPqgFsAwGGC3MPc3ADAekKkQEPkQGAAQMBzAp9D31uAwGvCqABD6ABdgMBkgpuD25yAwH1CZYBD5YBdAMB2AmlAQ+lAVsDAbsJhwEPhwFzAwGeCcoBD8oBZgMBgAnyAQ/yAX8DAeMIgQIPgQJ6AwHGCJACD5ACggEDAakI3gEP3gFuAwGMCOgBD+gBfgMB7weGAg+GAoABAwHSB7sBD7sBawMBtQfPAQ/PAXgDAZgH7QEP7QF8AwH7BpoCD5oCZAMB3gb3AQ/3AXoDAcEGtgEPtgFoAwGkBtQBD9QBiQEDAYcGwAEPwAFmAwHqBeMBD+MBbgMBzQWLAg+LAoIBAwGwBfwBD/wBfwMBkwWVAg+VAngDAfYEsQEPsQFqAwHZBNkBD9kBbAMBvATFAQ/FAWsDAZ8EsAIPsAJ/AwGBBL8CD78CegMB5APOAg/OAoIBAwHHA6YCD6YCfgMBqgPEAg/EAoABAwGNA6ECD6ECgQEDAfACqwIPqwJ8AwHTArUCD7UCegMBtgLJAg/JAoIBAwGZAroCD7oCfwMB/AHTAg/TAngDAd8B4gIP4gJyAwHVAecCD+cCgAEDAc0B8wIP8wJ4AwHEAe4CD+4CagMBvAH4Ag/4AokBAwG0Af0CD/0CfAMBrAGEAw+EA4EBAwGjAYkDD4kDfAMBmwE=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -470,7 +523,10 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="200,270">
+      <sap2010:ViewStateData Id="GetDWStrategies_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="CheckDWStrategiesChanges_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ApplyDWStrategiesToDB_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,270">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>

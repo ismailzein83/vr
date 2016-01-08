@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataWarehouse\IDWAccountCaseManager.cs" />
     <Compile Include="DataWarehouse\IDWStrategyDataManager.cs" />
     <Compile Include="FraudDataManagerFactory.cs" />
     <Compile Include="DataWarehouse\IDWTimeDataManager.cs" />

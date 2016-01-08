@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AggregateManager.cs" />
+    <Compile Include="DataWarehouse\DWAccountCaseManager.cs" />
     <Compile Include="DataWarehouse\DWTimeManager.cs" />
     <Compile Include="DataWarehouse\DWDimensionManager.cs" />
     <Compile Include="Constants.cs" />

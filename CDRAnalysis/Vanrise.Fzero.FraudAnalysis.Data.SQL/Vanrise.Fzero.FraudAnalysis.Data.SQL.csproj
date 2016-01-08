@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="AccountStatusDataManager.cs" />
     <Compile Include="AggregateDataManager.cs" />
+    <Compile Include="DataWarehouse\DWAccountCaseManager.cs" />
     <Compile Include="DataWarehouse\DWStrategyDataManager.cs" />
     <Compile Include="DataWarehouse\DWTimeDataManager.cs" />
     <Compile Include="DataWarehouse\DWDimensionDataManager.cs" />
