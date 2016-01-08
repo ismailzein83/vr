@@ -190,7 +190,7 @@ namespace TOne.WhS.Sales.Business
 
         public void ApplyCalculatedRates(int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, int policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod)
         {
-            IEnumerable<ZoneItem> zoneItems = GetZoneItemsWithCalculatedRate(sellingNumberPlanId, sellingNumberPlanId, effectiveOn, routingDatabaseId, policyConfigId, numberOfOptions, costCalculationMethods, selectedCostCalculationMethodConfigId, rateCalculationMethod);
+            IEnumerable<ZoneItem> zoneItems = GetZoneItemsWithCalculatedRate(sellingNumberPlanId, sellingProductId, effectiveOn, routingDatabaseId, policyConfigId, numberOfOptions, costCalculationMethods, selectedCostCalculationMethodConfigId, rateCalculationMethod);
 
             if (zoneItems == null)
                 return;
