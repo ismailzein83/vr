@@ -16,38 +16,22 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 
         }
 
-        public void Insert(int priceListId, IEnumerable<Entities.SPL.NewCode> codesList)
+        public long ProcessInstanceId
         {
-            object dbApplyStream = InitialiazeStreamForDBApply();
-
-            foreach (NewCode code in codesList)
+            set
             {
-                WriteRecordToStream(priceListId, code, dbApplyStream);
+                _processInstanceID = value;
             }
-
-            object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
-            ApplyForDB(prepareToApplyInfo);
         }
 
-        private object InitialiazeStreamForDBApply()
+        long _processInstanceID;
+
+        public void ApplyNewCodesToDB(object preparedCodes)
         {
-            return base.InitializeStreamForBulkInsert();
+            InsertBulkToTable(preparedCodes as BaseBulkInsertInfo);
         }
 
-        private void WriteRecordToStream(int priceListId, NewCode record, object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
-                       record.CodeId,
-                       priceListId,
-                       record.Code,
-                       record.Zone.ZoneId,
-                       record.CodeGroupId,
-                       record.BED,
-                       record.EED);
-        }
-
-        private object FinishDBApplyStream(object dbApplyStream)
+        object Vanrise.Data.IBulkApplyDataManager<NewCode>.FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.Close();
@@ -61,9 +45,22 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             };
         }
 
-        private void ApplyForDB(object preparedObject)
+        object Vanrise.Data.IBulkApplyDataManager<NewCode>.InitialiazeStreamForDBApply()
         {
-            InsertBulkToTable(preparedObject as BaseBulkInsertInfo);
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(NewCode record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
+                       record.CodeId,
+                       _processInstanceID,
+                       record.Code,
+                       record.Zone.ZoneId,
+                       record.CodeGroupId,
+                       record.BED,
+                       record.EED);
         }
     }
 }

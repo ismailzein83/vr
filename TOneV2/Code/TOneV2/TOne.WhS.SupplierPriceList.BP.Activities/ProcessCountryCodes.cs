@@ -5,11 +5,38 @@ using System.Text;
 using System.Activities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using TOne.WhS.SupplierPriceList.Business;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
 
-    public sealed class ProcessCountryCodes : CodeActivity
+    public class ProcessCountryCodesInput
+    {
+        public IEnumerable<ImportedCode> ImportedCodes { get; set; }
+
+        public IEnumerable<ExistingCode> ExistingCodes { get; set; }
+
+        public Dictionary<long, ExistingZone> ExistingZonesByZoneId { get; set; }
+
+        public DateTime DeletedCodesDate { get; set; }
+
+    }
+
+    public class ProcessCountryCodesOutput
+    {
+        public ZonesByName NewAndExistingZones { get; set; }
+
+        public IEnumerable<NewZone> NewZones { get; set; }
+
+        public IEnumerable<ChangedZone> ChangedZones { get; set; }
+
+        public IEnumerable<NewCode> NewCodes { get; set; }
+
+        public IEnumerable<ChangedCode> ChangedCodes { get; set; }
+
+    }
+
+    public sealed class ProcessCountryCodes : BaseAsyncActivity<ProcessCountryCodesInput, ProcessCountryCodesOutput>
     {
         [RequiredArgument]
         public InArgument<IEnumerable<ImportedCode>> ImportedCodes { get; set; }
@@ -38,30 +65,52 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public OutArgument<IEnumerable<ChangedCode>> ChangedCodes { get; set; }
 
-        protected override void Execute(CodeActivityContext context)
+        protected override ProcessCountryCodesOutput DoWorkWithResult(ProcessCountryCodesInput inputArgument, AsyncActivityHandle handle)
         {
-            Dictionary<long, ExistingZone> existingZonesByZoneId = this.ExistingZonesByZoneId.Get(context);
             IEnumerable<ExistingZone> existingZones = null;
 
-            if (existingZonesByZoneId != null)
-                existingZones = existingZonesByZoneId.Select(item => item.Value);
+            if (inputArgument.ExistingZonesByZoneId != null)
+                existingZones = inputArgument.ExistingZonesByZoneId.Select(item => item.Value);
 
             ProcessCountryCodesContext processCountryCodesContext = new ProcessCountryCodesContext()
             {
-                ImportedCodes = this.ImportedCodes.Get(context),
-                ExistingCodes = this.ExistingCodes.Get(context),
+                ImportedCodes = inputArgument.ImportedCodes,
+                ExistingCodes = inputArgument.ExistingCodes,
                 ExistingZones = existingZones,
-                DeletedCodesDate = this.DeletedCodesDate.Get(context)
+                DeletedCodesDate = inputArgument.DeletedCodesDate
             };
 
             PriceListCodeManager plCodeManager = new PriceListCodeManager();
             plCodeManager.ProcessCountryCodes(processCountryCodesContext);
 
-            NewAndExistingZones.Set(context, processCountryCodesContext.NewAndExistingZones);
-            NewZones.Set(context, processCountryCodesContext.NewZones);
-            ChangedZones.Set(context, processCountryCodesContext.ChangedZones);
-            NewCodes.Set(context, processCountryCodesContext.NewCodes);
-            ChangedCodes.Set(context, processCountryCodesContext.ChangedCodes);
+            return new ProcessCountryCodesOutput()
+            {
+                ChangedCodes = processCountryCodesContext.ChangedCodes,
+                ChangedZones = processCountryCodesContext.ChangedZones,
+                NewAndExistingZones = processCountryCodesContext.NewAndExistingZones,
+                NewCodes = processCountryCodesContext.NewCodes,
+                NewZones = processCountryCodesContext.NewZones
+            };
+        }
+
+        protected override ProcessCountryCodesInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new ProcessCountryCodesInput()
+            {
+                DeletedCodesDate = this.DeletedCodesDate.Get(context),
+                ExistingCodes = this.ExistingCodes.Get(context),
+                ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context),
+                ImportedCodes = this.ImportedCodes.Get(context)
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ProcessCountryCodesOutput result)
+        {
+            this.NewAndExistingZones.Set(context, result.NewAndExistingZones);
+            this.NewZones.Set(context, result.NewZones);
+            this.ChangedZones.Set(context, result.ChangedZones);
+            this.NewCodes.Set(context, result.NewCodes);
+            this.ChangedCodes.Set(context, result.ChangedCodes);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Activities;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -28,8 +29,10 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             int currencyId = this.CurrencyId.Get(context);
             long fileId = this.FileId.Get(context);
 
+            long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+
             TOne.WhS.SupplierPriceList.Business.SupplierPriceListManager manager = new Business.SupplierPriceListManager();
-            manager.AddPriceListAndSyncImportedDataWithDB(priceListId, supplierId, currencyId, fileId);
+            manager.AddPriceListAndSyncImportedDataWithDB(priceListId, processInstanceId, supplierId, currencyId, fileId);
         }
     }
 }

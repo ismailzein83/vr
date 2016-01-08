@@ -16,34 +16,23 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 
         }
 
-        public void Insert(int priceListId, IEnumerable<Entities.SPL.ChangedZone> changedZones)
+        public long ProcessInstanceId
         {
-            object dbApplyStream = InitialiazeStreamForDBApply();
-
-            foreach (ChangedZone zone in changedZones)
+            set
             {
-                WriteRecordToStream(priceListId, zone, dbApplyStream);
+                _processInstanceID = value;
             }
-
-            object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
-            ApplyForDB(prepareToApplyInfo);
         }
 
-        private object InitialiazeStreamForDBApply()
+        long _processInstanceID;
+
+
+        public void ApplyChangedZonesToDB(object preparedZones)
         {
-            return base.InitializeStreamForBulkInsert();
+            InsertBulkToTable(preparedZones as BaseBulkInsertInfo);
         }
 
-        private void WriteRecordToStream(int priceListId, ChangedZone record, object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}",
-                       record.ZoneId,
-                       priceListId,
-                       record.EED);
-        }
-
-        private object FinishDBApplyStream(object dbApplyStream)
+        object Vanrise.Data.IBulkApplyDataManager<ChangedZone>.FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.Close();
@@ -57,9 +46,18 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             };
         }
 
-        private void ApplyForDB(object preparedObject)
+        object Vanrise.Data.IBulkApplyDataManager<ChangedZone>.InitialiazeStreamForDBApply()
         {
-            InsertBulkToTable(preparedObject as BaseBulkInsertInfo);
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(ChangedZone record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}",
+                       record.ZoneId,
+                       _processInstanceID,
+                       record.EED);
         }
     }
 }

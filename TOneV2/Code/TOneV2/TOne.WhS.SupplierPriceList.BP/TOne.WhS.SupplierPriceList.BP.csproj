@@ -61,6 +61,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Queueing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -91,6 +95,12 @@
   </ItemGroup>
   <ItemGroup>
     <XamlAppDef Include="ImportSupplierPriceList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="SubProcess\ApplyEntitiesToDBProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>

@@ -11,7 +11,20 @@ using Vanrise.Common;
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
 
-    public sealed class GetExistingRates : CodeActivity
+    public class GetExistingRatesInput
+    {
+        public int SupplierId { get; set; }
+
+        public DateTime MinimumDate { get; set; }
+    }
+
+    public class GetExistingRatesOutput
+    {
+        public IEnumerable<SupplierRate> ExistingRatesEntities { get; set; }
+    }
+
+
+    public sealed class GetExistingRates : Vanrise.BusinessProcess.BaseAsyncActivity<GetExistingRatesInput, GetExistingRatesOutput>
     {
         [RequiredArgument]
         public InArgument<int> SupplierId { get; set; }
@@ -22,15 +35,29 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public OutArgument<IEnumerable<SupplierRate>> ExistingRateEntities { get; set; }
 
-        protected override void Execute(CodeActivityContext context)
+        protected override GetExistingRatesOutput DoWorkWithResult(GetExistingRatesInput inputArgument, Vanrise.BusinessProcess.AsyncActivityHandle handle)
         {
-            int supplierId = context.GetValue(this.SupplierId);
-            DateTime minDate = context.GetValue(this.MinimumDate);
-
             SupplierRateManager supplierRateManager = new SupplierRateManager();
-            List<SupplierRate> suppRates = supplierRateManager.GetSupplierRatesEffectiveAfter(supplierId, minDate);
+            List<SupplierRate> suppRates = supplierRateManager.GetSupplierRatesEffectiveAfter(inputArgument.SupplierId, inputArgument.MinimumDate);
 
-            ExistingRateEntities.Set(context, suppRates);
+            return new GetExistingRatesOutput()
+            {
+                ExistingRatesEntities = suppRates
+            };
+        }
+
+        protected override GetExistingRatesInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new GetExistingRatesInput()
+            {
+                MinimumDate = this.MinimumDate.Get(context),
+                SupplierId = this.SupplierId.Get(context)
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetExistingRatesOutput result)
+        {
+            this.ExistingRateEntities.Set(context, result.ExistingRatesEntities);
         }
     }
 }

@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
+using Vanrise.Data;
 
 namespace TOne.WhS.SupplierPriceList.Data
 {
-    public interface IChangedSupplierRateDataManager : IDataManager
+    public interface IChangedSupplierRateDataManager : IDataManager, IBulkApplyDataManager<ChangedRate>
     {
-        void Insert(int priceListId, IEnumerable<ChangedRate> changedRates);
+        long ProcessInstanceId { set; }
+
+        void ApplyChangedRatesToDB(object preparedRates);
     }
 }

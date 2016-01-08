@@ -1,0 +1,308 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.SupplierPriceList.BP.SubProcess.ApplyEntitiesToDBProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twsba="clr-namespace:TOne.WhS.SupplierPriceList.BP.Activities;assembly=TOne.WhS.SupplierPriceList.BP.Activities"
+ xmlns:twses="clr-namespace:TOne.WhS.SupplierPriceList.Entities.SPL;assembly=TOne.WhS.SupplierPriceList.Entities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="NewZonesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twses:NewZone)))" />
+    <x:Property Name="NewCodesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twses:NewCode)))" />
+    <x:Property Name="NewRatesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twses:NewRate)))" />
+    <x:Property Name="ChangedZonesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twses:ChangedZone)))" />
+    <x:Property Name="ChangedCodesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twses:ChangedCode)))" />
+    <x:Property Name="ChangedRatesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twses:ChangedRate)))" />
+    <x:Property Name="SupplierId" Type="InArgument(x:Int32)" />
+    <x:Property Name="ImportSupplierPriceListMainProcessStatus" Type="InArgument(vb:AsyncActivityStatus)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.WhS.SupplierPriceList.BP.SubProcess.ApplyEntitiesToDBProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.SupplierPriceList.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.SupplierPriceList.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Parallel DisplayName="ApplyNewAndChangedDataToTempTables" sap2010:WorkflowViewState.IdRef="Parallel_1">
+    <Parallel.Variables>
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedNewZonesQueue" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedNewCodesQueue" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedNewRatesQueue" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedChangedZonesQueue" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedChangedCodesQueue" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedChangedRatesQueue" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedNewZonesStatus" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedNewCodesStatus" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedNewRatesStatus" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedChangedZonesStatus" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedChangedCodesStatus" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedChangedRatesStatus" />
+    </Parallel.Variables>
+    <twsba:PrepareNewZonesForDBApply sap2010:WorkflowViewState.IdRef="PrepareNewZonesForDBApply_1">
+      <twsba:PrepareNewZonesForDBApply.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZone))">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZone))">NewZonesQueue</mca:CSharpValue>
+        </InArgument>
+      </twsba:PrepareNewZonesForDBApply.InputQueue>
+      <twsba:PrepareNewZonesForDBApply.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">PreparedNewZonesQueue</mca:CSharpReference>
+        </InOutArgument>
+      </twsba:PrepareNewZonesForDBApply.OutputQueue>
+      <twsba:PrepareNewZonesForDBApply.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">ImportSupplierPriceListMainProcessStatus</mca:CSharpValue>
+        </InArgument>
+      </twsba:PrepareNewZonesForDBApply.PreviousActivityStatus>
+      <twsba:PrepareNewZonesForDBApply.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PreparedNewZonesStatus</mca:CSharpReference>
+        </OutArgument>
+      </twsba:PrepareNewZonesForDBApply.Status>
+      <twsba:PrepareNewZonesForDBApply.SupplierId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">SupplierId</mca:CSharpValue>
+        </InArgument>
+      </twsba:PrepareNewZonesForDBApply.SupplierId>
+    </twsba:PrepareNewZonesForDBApply>
+    <twsba:ApplyNewZonesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewZonesToDB_1">
+      <twsba:ApplyNewZonesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedNewZonesQueue</mca:CSharpValue>
+        </InArgument>
+      </twsba:ApplyNewZonesToDB.InputQueue>
+      <twsba:ApplyNewZonesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PreparedNewZonesStatus</mca:CSharpValue>
+        </InArgument>
+      </twsba:ApplyNewZonesToDB.PreviousActivityStatus>
+    </twsba:ApplyNewZonesToDB>
+    <twsba:PrepareNewCodesForDBApply sap2010:WorkflowViewState.IdRef="PrepareNewCodesForDBApply_1">
+      <twsba:PrepareNewCodesForDBApply.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewCode))">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewCode))">NewCodesQueue</mca:CSharpValue>
+        </InArgument>
+      </twsba:PrepareNewCodesForDBApply.InputQueue>
+      <twsba:PrepareNewCodesForDBApply.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">PreparedNewCodesQueue</mca:CSharpReference>
+        </InOutArgument>
+      </twsba:PrepareNewCodesForDBApply.OutputQueue>
+      <twsba:PrepareNewCodesForDBApply.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">ImportSupplierPriceListMainProcessStatus</mca:CSharpValue>
+        </InArgument>
+      </twsba:PrepareNewCodesForDBApply.PreviousActivityStatus>
+      <twsba:PrepareNewCodesForDBApply.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PreparedNewCodesStatus</mca:CSharpReference>
+        </OutArgument>
+      </twsba:PrepareNewCodesForDBApply.Status>
+    </twsba:PrepareNewCodesForDBApply>
+    <twsba:ApplyNewCodesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewCodesToDB_1">
+      <twsba:ApplyNewCodesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedNewCodesQueue</mca:CSharpValue>
+        </InArgument>
+      </twsba:ApplyNewCodesToDB.InputQueue>
+      <twsba:ApplyNewCodesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PreparedNewCodesStatus</mca:CSharpValue>
+        </InArgument>
+      </twsba:ApplyNewCodesToDB.PreviousActivityStatus>
+    </twsba:ApplyNewCodesToDB>
+    <twsba:PrepareNewRatesForDBApply sap2010:WorkflowViewState.IdRef="PrepareNewRatesForDBApply_1">
+      <twsba:PrepareNewRatesForDBApply.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewRate))">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewRate))">NewRatesQueue</mca:CSharpValue>
+        </InArgument>
+      </twsba:PrepareNewRatesForDBApply.InputQueue>
+      <twsba:PrepareNewRatesForDBApply.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">PreparedNewRatesQueue</mca:CSharpReference>
+        </InOutArgument>
+      </twsba:PrepareNewRatesForDBApply.OutputQueue>
+      <twsba:PrepareNewRatesForDBApply.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">ImportSupplierPriceListMainProcessStatus</mca:CSharpValue>
+        </InArgument>
+      </twsba:PrepareNewRatesForDBApply.PreviousActivityStatus>
+      <twsba:PrepareNewRatesForDBApply.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PreparedNewRatesStatus</mca:CSharpReference>
+        </OutArgument>
+      </twsba:PrepareNewRatesForDBApply.Status>
+    </twsba:PrepareNewRatesForDBApply>
+    <twsba:ApplyNewRatesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewRatesToDB_1">
+      <twsba:ApplyNewRatesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedNewRatesQueue</mca:CSharpValue>
+        </InArgument>
+      </twsba:ApplyNewRatesToDB.InputQueue>
+      <twsba:ApplyNewRatesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PreparedNewRatesStatus</mca:CSharpValue>
+        </InArgument>
+      </twsba:ApplyNewRatesToDB.PreviousActivityStatus>
+    </twsba:ApplyNewRatesToDB>
+    <twsba:PrepareChangedZonesToDB sap2010:WorkflowViewState.IdRef="PrepareChangedZonesToDB_1">
+      <twsba:PrepareChangedZonesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZone))">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZone))">ChangedZonesQueue</mca:CSharpValue>
+        </InArgument>
+      </twsba:PrepareChangedZonesToDB.InputQueue>
+      <twsba:PrepareChangedZonesToDB.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">PreparedChangedZonesQueue</mca:CSharpReference>
+        </InOutArgument>
+      </twsba:PrepareChangedZonesToDB.OutputQueue>
+      <twsba:PrepareChangedZonesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">ImportSupplierPriceListMainProcessStatus</mca:CSharpValue>
+        </InArgument>
+      </twsba:PrepareChangedZonesToDB.PreviousActivityStatus>
+      <twsba:PrepareChangedZonesToDB.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PreparedChangedZonesStatus</mca:CSharpReference>
+        </OutArgument>
+      </twsba:PrepareChangedZonesToDB.Status>
+    </twsba:PrepareChangedZonesToDB>
+    <twsba:ApplyChangedZonesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedZonesToDB_1">
+      <twsba:ApplyChangedZonesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedChangedZonesQueue</mca:CSharpValue>
+        </InArgument>
+      </twsba:ApplyChangedZonesToDB.InputQueue>
+      <twsba:ApplyChangedZonesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PreparedChangedZonesStatus</mca:CSharpValue>
+        </InArgument>
+      </twsba:ApplyChangedZonesToDB.PreviousActivityStatus>
+    </twsba:ApplyChangedZonesToDB>
+    <twsba:PrepareChangedCodesToDB sap2010:WorkflowViewState.IdRef="PrepareChangedCodesToDB_1">
+      <twsba:PrepareChangedCodesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedCode))">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedCode))">ChangedCodesQueue</mca:CSharpValue>
+        </InArgument>
+      </twsba:PrepareChangedCodesToDB.InputQueue>
+      <twsba:PrepareChangedCodesToDB.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">PreparedChangedCodesQueue</mca:CSharpReference>
+        </InOutArgument>
+      </twsba:PrepareChangedCodesToDB.OutputQueue>
+      <twsba:PrepareChangedCodesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">ImportSupplierPriceListMainProcessStatus</mca:CSharpValue>
+        </InArgument>
+      </twsba:PrepareChangedCodesToDB.PreviousActivityStatus>
+      <twsba:PrepareChangedCodesToDB.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PreparedChangedCodesStatus</mca:CSharpReference>
+        </OutArgument>
+      </twsba:PrepareChangedCodesToDB.Status>
+    </twsba:PrepareChangedCodesToDB>
+    <twsba:ApplyChangedCodesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedCodesToDB_1">
+      <twsba:ApplyChangedCodesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedChangedCodesQueue</mca:CSharpValue>
+        </InArgument>
+      </twsba:ApplyChangedCodesToDB.InputQueue>
+      <twsba:ApplyChangedCodesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PreparedChangedCodesStatus</mca:CSharpValue>
+        </InArgument>
+      </twsba:ApplyChangedCodesToDB.PreviousActivityStatus>
+    </twsba:ApplyChangedCodesToDB>
+    <twsba:PrepareChangedRatesToDB sap2010:WorkflowViewState.IdRef="PrepareChangedRatesToDB_1">
+      <twsba:PrepareChangedRatesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedRate))">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedRate))">ChangedRatesQueue</mca:CSharpValue>
+        </InArgument>
+      </twsba:PrepareChangedRatesToDB.InputQueue>
+      <twsba:PrepareChangedRatesToDB.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">PreparedChangedRatesQueue</mca:CSharpReference>
+        </InOutArgument>
+      </twsba:PrepareChangedRatesToDB.OutputQueue>
+      <twsba:PrepareChangedRatesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">ImportSupplierPriceListMainProcessStatus</mca:CSharpValue>
+        </InArgument>
+      </twsba:PrepareChangedRatesToDB.PreviousActivityStatus>
+      <twsba:PrepareChangedRatesToDB.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PreparedChangedRatesStatus</mca:CSharpReference>
+        </OutArgument>
+      </twsba:PrepareChangedRatesToDB.Status>
+    </twsba:PrepareChangedRatesToDB>
+    <twsba:ApplyChangedRatesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedRatesToDB_1">
+      <twsba:ApplyChangedRatesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedChangedRatesQueue</mca:CSharpValue>
+        </InArgument>
+      </twsba:ApplyChangedRatesToDB.InputQueue>
+      <twsba:ApplyChangedRatesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PreparedChangedRatesStatus</mca:CSharpValue>
+        </InArgument>
+      </twsba:ApplyChangedRatesToDB.PreviousActivityStatus>
+    </twsba:ApplyChangedRatesToDB>
+    <sads:DebugSymbol.Symbol>d2BDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXFN1YlByb2Nlc3NcQXBwbHlFbnRpdGllc1RvREJQcm9jZXNzLnhhbWwyQAOhAg4CAQFPBWknAwGtBWoFdR8DAYIFdgWLAScDAa0EjAEFlwEfAwGCBJgBBa0BJwMBrQOuAQW5AR8DAYIDugEFzwElAwGtAtABBdsBIwMBggLcAQXxASUDAa0B8gEF/QEjAwGCAf4BBZMCJQIBLZQCBZ8CIwIBAmYLZlIDAYIGXAtcfwMB7QVSC1J6AwHYBWELYXUDAcMFVwtXdAMBrgVyC3JtAwGYBW0LbWwDAYMFgwELgwF/AwHtBHkLeXoDAdgEiAELiAF1AwHDBH4LfnQDAa4ElAELlAFtAwGYBI8BC48BbAMBgwSlAQulAX8DAe0DmwELmwF6AwHYA6oBC6oBdQMBwwOgAQugAXQDAa4DtgELtgFtAwGYA7EBC7EBbAMBgwPHAQvHAX8DAe0CvQELvQGCAQMB2ALMAQvMAXkDAcMCwgELwgF4AwGuAtgBC9gBcQMBmALTAQvTAXADAYMC6QEL6QF/AwHtAd8BC98BggEDAdgB7gEL7gF5AwHDAeQBC+QBeAMBrgH6AQv6AXEDAZgB9QEL9QFwAwGDAYsCC4sCfwIBbYECC4ECggECAViQAguQAnkCAUOGAguGAngCAS6cAgucAnECARiXAguXAnACAQM=</sads:DebugSymbol.Symbol>
+  </Parallel>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="PrepareNewZonesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyNewZonesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareNewCodesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyNewCodesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareNewRatesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyNewRatesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareChangedZonesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedZonesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareChangedCodesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedCodesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareChangedRatesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedRatesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="2954,86" />
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.SubProcess.ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="2994,166" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

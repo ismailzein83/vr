@@ -5,11 +5,32 @@ using System.Text;
 using System.Activities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using TOne.WhS.SupplierPriceList.Business;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
 
-    public sealed class ProcessCountryRates : CodeActivity
+    public class ProcessCountryRatesInput
+    {
+        public IEnumerable<ImportedRate> ImportedRates { get; set; }
+
+        public IEnumerable<ExistingRate> ExistingRates { get; set; }
+
+        public Dictionary<long, ExistingZone> ExistingZonesByZoneId { get; set; }
+
+        public ZonesByName NewAndExistingZones { get; set; }
+
+    }
+
+    public class ProcessCountryRatesOutput
+    {
+        public IEnumerable<NewRate> NewRates { get; set; }
+
+        public IEnumerable<ChangedRate> ChangedRates { get; set; }
+
+    }
+
+    public sealed class ProcessCountryRates : BaseAsyncActivity<ProcessCountryRatesInput, ProcessCountryRatesOutput>
     {
         [RequiredArgument]
         public InArgument<IEnumerable<ImportedRate>> ImportedRates { get; set; }
@@ -29,27 +50,47 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public OutArgument<IEnumerable<ChangedRate>> ChangedRates { get; set; }
 
-        protected override void Execute(CodeActivityContext context)
+
+        protected override ProcessCountryRatesOutput DoWorkWithResult(ProcessCountryRatesInput inputArgument, AsyncActivityHandle handle)
         {
-            Dictionary<long, ExistingZone> existingZonesByZoneId = this.ExistingZonesByZoneId.Get(context);
             IEnumerable<ExistingZone> existingZones = null;
 
-            if (existingZonesByZoneId != null)
-                existingZones = existingZonesByZoneId.Select(item => item.Value);
+            if (inputArgument.ExistingZonesByZoneId != null)
+                existingZones = inputArgument.ExistingZonesByZoneId.Select(item => item.Value);
 
             ProcessCountryRatesContext processCountryRateContext = new ProcessCountryRatesContext()
             {
-                ImportedRates = this.ImportedRates.Get(context),
-                ExistingRates = this.ExistingRates.Get(context),
+                ImportedRates = inputArgument.ImportedRates,
+                ExistingRates = inputArgument.ExistingRates,
                 ExistingZones = existingZones,
-                NewAndExistingZones = this.NewAndExistingZones.Get(context)
+                NewAndExistingZones = inputArgument.NewAndExistingZones
             };
 
             PriceListRateManager manager = new PriceListRateManager();
             manager.ProcessCountryRates(processCountryRateContext);
 
-            NewRates.Set(context, processCountryRateContext.NewRates);
-            ChangedRates.Set(context, processCountryRateContext.ChangedRates);
+            return new ProcessCountryRatesOutput()
+            {
+                ChangedRates = processCountryRateContext.ChangedRates,
+                NewRates = processCountryRateContext.NewRates
+            };
+        }
+
+        protected override ProcessCountryRatesInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new ProcessCountryRatesInput()
+            {
+                ExistingRates = this.ExistingRates.Get(context),
+                ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context),
+                ImportedRates = this.ImportedRates.Get(context),
+                NewAndExistingZones = this.NewAndExistingZones.Get(context)
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ProcessCountryRatesOutput result)
+        {
+            NewRates.Set(context, result.NewRates);
+            ChangedRates.Set(context, result.ChangedRates);
         }
     }
 }

@@ -17,38 +17,32 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 
         }
 
-        public void Insert(int supplierId, int priceListId, IEnumerable<Entities.SPL.NewZone> zonesList)
+        public long ProcessInstanceId
         {
-            object dbApplyStream = InitialiazeStreamForDBApply();
-            
-            foreach (NewZone zone in zonesList)
+            set
             {
-                WriteRecordToStream(supplierId, priceListId, zone, dbApplyStream);
+                _processInstanceID = value;
             }
-
-            object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
-            ApplyForDB(prepareToApplyInfo);
         }
 
-        private object InitialiazeStreamForDBApply()
+        long _processInstanceID;
+
+        public int SupplierId
         {
-            return base.InitializeStreamForBulkInsert();
+            set
+            {
+                _supplierId = value;
+            }
         }
 
-        private void WriteRecordToStream(int supplierId, int priceListId, NewZone record, object dbApplyStream)
+        int _supplierId;
+
+        public void ApplyNewZonesToDB(object preparedZones)
         {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
-                       record.ZoneId,
-                       priceListId,
-                       record.CountryId,
-                       record.Name,
-                       supplierId,
-                       record.BED,
-                       record.EED);
+            InsertBulkToTable(preparedZones as BaseBulkInsertInfo);
         }
 
-        private object FinishDBApplyStream(object dbApplyStream)
+        object Vanrise.Data.IBulkApplyDataManager<NewZone>.FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.Close();
@@ -62,9 +56,22 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             };
         }
 
-        private void ApplyForDB(object preparedObject)
+        object Vanrise.Data.IBulkApplyDataManager<NewZone>.InitialiazeStreamForDBApply()
         {
-            InsertBulkToTable(preparedObject as BaseBulkInsertInfo);
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(NewZone record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
+                       record.ZoneId,
+                       _processInstanceID,
+                       record.CountryId,
+                       record.Name,
+                       _supplierId,
+                       record.BED,
+                       record.EED);
         }
     }
 }

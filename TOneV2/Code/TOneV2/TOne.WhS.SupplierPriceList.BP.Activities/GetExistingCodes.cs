@@ -10,7 +10,19 @@ using TOne.WhS.BusinessEntity.Entities;
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
 
-    public sealed class GetExistingCodes : CodeActivity
+    public class GetExistingCodesInput
+    {
+        public int SupplierId { get; set; }
+
+        public DateTime MinimumDate { get; set; }
+    }
+
+    public class GetExistingCodesOutput
+    {
+        public IEnumerable<SupplierCode> ExistingCodeEntities { get; set; }
+    }
+
+    public sealed class GetExistingCodes : Vanrise.BusinessProcess.BaseAsyncActivity<GetExistingCodesInput, GetExistingCodesOutput>
     {
         [RequiredArgument]
         public InArgument<int> SupplierId { get; set; }
@@ -21,15 +33,29 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public OutArgument<IEnumerable<SupplierCode>> ExistingCodeEntities { get; set; }
 
-        protected override void Execute(CodeActivityContext context)
+        protected override GetExistingCodesOutput DoWorkWithResult(GetExistingCodesInput inputArgument, Vanrise.BusinessProcess.AsyncActivityHandle handle)
         {
-            int supplierId = context.GetValue(this.SupplierId);
-            DateTime minDate = context.GetValue(this.MinimumDate);
-
             SupplierCodeManager codeManager = new SupplierCodeManager();
-            List<SupplierCode> suppCodes = codeManager.GetSupplierCodesEffectiveAfter(supplierId, minDate);
+            List<SupplierCode> suppCodes = codeManager.GetSupplierCodesEffectiveAfter(inputArgument.SupplierId, inputArgument.MinimumDate);
 
-            ExistingCodeEntities.Set(context, suppCodes);
+            return new GetExistingCodesOutput()
+            {
+                ExistingCodeEntities = suppCodes
+            };
+        }
+
+        protected override GetExistingCodesInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new GetExistingCodesInput()
+            {
+                MinimumDate = this.MinimumDate.Get(context),
+                SupplierId = this.SupplierId.Get(context)
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetExistingCodesOutput result)
+        {
+            this.ExistingCodeEntities.Set(context, result.ExistingCodeEntities);
         }
     }
 }

@@ -27,7 +27,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             IEnumerable<SupplierRate> existingRateEntities = this.ExistingRateEntities.Get(context);
             Dictionary<long, ExistingZone> existingZonesByZoneId = this.ExistingZonesByZoneId.Get(context);
 
-            IEnumerable<ExistingRate> existingRates = existingRateEntities.MapRecords((rateEntity) => ExistingRateMapper(rateEntity, existingZonesByZoneId));
+            IEnumerable<ExistingRate> existingRates = existingRateEntities.Where(x => existingZonesByZoneId.ContainsKey(x.ZoneId)).MapRecords(
+                (rateEntity) => ExistingRateMapper(rateEntity, existingZonesByZoneId));
+
             ExistingRates.Set(context, existingRates);
         }
 

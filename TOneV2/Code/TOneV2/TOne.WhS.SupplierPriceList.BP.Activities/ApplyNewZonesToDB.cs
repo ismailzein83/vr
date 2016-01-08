@@ -5,30 +5,45 @@ using System.Text;
 using System.Activities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using TOne.WhS.SupplierPriceList.Business;
+using Vanrise.BusinessProcess;
+using Vanrise.Queueing;
+using TOne.WhS.SupplierPriceList.Data;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
 
-    public sealed class ApplyNewZonesToDB : CodeActivity
+    public class ApplyNewZonesToDBInput
+    {
+        public BaseQueue<Object> InputQueue { get; set; }
+    }
+
+    public sealed class ApplyNewZonesToDB : DependentAsyncActivity<ApplyNewZonesToDBInput>
     {
         [RequiredArgument]
-        public InArgument<int> SupplierId { get; set; }
+        public InArgument<BaseQueue<Object>> InputQueue { get; set; }
 
-        [RequiredArgument]
-        public InArgument<int> PriceListId { get; set; }
-
-        [RequiredArgument]
-        public InArgument<IEnumerable<NewZone>> NewZones { get; set; }
-              
-
-        protected override void Execute(CodeActivityContext context)
+        protected override void DoWork(ApplyNewZonesToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            IEnumerable<NewZone> zonesList = this.NewZones.Get(context);
-            int supplierId = this.SupplierId.Get(context);
-            int priceListId = this.PriceListId.Get(context);
+            INewSupplierZoneDataManager dataManager = SupPLDataManagerFactory.GetDataManager<INewSupplierZoneDataManager>();
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
+                {
+                    hasItem = inputArgument.InputQueue.TryDequeue((preparedZones) =>
+                    {
+                        dataManager.ApplyNewZonesToDB(preparedZones);
+                    });
+                } while (!ShouldStop(handle) && hasItem);
+            });
+        }
 
-            NewSupplierZoneManager manager = new NewSupplierZoneManager();
-            manager.Insert(supplierId, priceListId, zonesList);
+        protected override ApplyNewZonesToDBInput GetInputArgument2(AsyncCodeActivityContext context)
+        {
+            return new ApplyNewZonesToDBInput()
+            {
+                InputQueue = this.InputQueue.Get(context)
+            };
         }
     }
 }

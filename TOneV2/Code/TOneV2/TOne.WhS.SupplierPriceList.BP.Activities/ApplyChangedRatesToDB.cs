@@ -5,25 +5,45 @@ using System.Text;
 using System.Activities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using TOne.WhS.SupplierPriceList.Business;
+using Vanrise.Queueing;
+using Vanrise.BusinessProcess;
+using TOne.WhS.SupplierPriceList.Data;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
+    public class ApplyChangeRatesToDBInput
+    {
+        public BaseQueue<Object> InputQueue { get; set; }
+    }
 
-    public sealed class ApplyChangedRatesToDB : CodeActivity
+    public sealed class ApplyChangedRatesToDB : DependentAsyncActivity<ApplyChangeRatesToDBInput>
     {
         [RequiredArgument]
-        public InArgument<int> PriceListId { get; set; }
+        public InArgument<BaseQueue<Object>> InputQueue { get; set; }
 
-        [RequiredArgument]
-        public InArgument<IEnumerable<ChangedRate>> ChangedRates { get; set; }
 
-        protected override void Execute(CodeActivityContext context)
+        protected override void DoWork(ApplyChangeRatesToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            IEnumerable<ChangedRate> ratesList = this.ChangedRates.Get(context);
-            int priceListId = this.PriceListId.Get(context);
+            IChangedSupplierRateDataManager dataManager = SupPLDataManagerFactory.GetDataManager<IChangedSupplierRateDataManager>();
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
+                {
+                    hasItem = inputArgument.InputQueue.TryDequeue((preparedRates) =>
+                    {
+                        dataManager.ApplyChangedRatesToDB(preparedRates);
+                    });
+                } while (!ShouldStop(handle) && hasItem);
+            });
+        }
 
-            ChangedSupplierRateManager manager = new ChangedSupplierRateManager();
-            manager.Insert(priceListId, ratesList);
+        protected override ApplyChangeRatesToDBInput GetInputArgument2(AsyncCodeActivityContext context)
+        {
+            return new ApplyChangeRatesToDBInput()
+            {
+                InputQueue = this.InputQueue.Get(context)
+            };
         }
     }
 }

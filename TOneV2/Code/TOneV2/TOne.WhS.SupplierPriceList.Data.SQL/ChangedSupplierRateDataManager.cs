@@ -16,34 +16,22 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 
         }
 
-        public void Insert(int priceListId, IEnumerable<Entities.SPL.ChangedRate> changedRates)
+        public long ProcessInstanceId
         {
-            object dbApplyStream = InitialiazeStreamForDBApply();
-
-            foreach (ChangedRate rate in changedRates)
+            set
             {
-                WriteRecordToStream(priceListId, rate, dbApplyStream);
+                _processInstanceID = value;
             }
-
-            object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
-            ApplyForDB(prepareToApplyInfo);
         }
 
-        private object InitialiazeStreamForDBApply()
+        long _processInstanceID;
+
+        public void ApplyChangedRatesToDB(object preparedRates)
         {
-            return base.InitializeStreamForBulkInsert();
+            InsertBulkToTable(preparedRates as BaseBulkInsertInfo);
         }
 
-        private void WriteRecordToStream(int priceListId, ChangedRate record, object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}",
-                       record.RateId,
-                       priceListId,
-                       record.EED);
-        }
-
-        private object FinishDBApplyStream(object dbApplyStream)
+        object Vanrise.Data.IBulkApplyDataManager<ChangedRate>.FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.Close();
@@ -57,9 +45,18 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             };
         }
 
-        private void ApplyForDB(object preparedObject)
+        object Vanrise.Data.IBulkApplyDataManager<ChangedRate>.InitialiazeStreamForDBApply()
         {
-            InsertBulkToTable(preparedObject as BaseBulkInsertInfo);
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(ChangedRate record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}",
+                       record.RateId,
+                       _processInstanceID,
+                       record.EED);
         }
     }
 }

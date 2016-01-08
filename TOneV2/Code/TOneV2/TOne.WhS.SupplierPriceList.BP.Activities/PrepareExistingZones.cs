@@ -16,13 +16,17 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<IEnumerable<SupplierZone>> ExistingZoneEntities { get; set; }
 
         [RequiredArgument]
+        public InArgument<int> CountryId { get; set; }
+
+        [RequiredArgument]
         public OutArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<SupplierZone> existingZones = context.GetValue(this.ExistingZoneEntities);
+            int countryId = context.GetValue(this.CountryId);
 
-            Dictionary<long, ExistingZone> existingZoneDic = existingZones.ToDictionary<BusinessEntity.Entities.SupplierZone, long, ExistingZone>((zoneEntity) => 
+            Dictionary<long, ExistingZone> existingZoneDic = existingZones.Where(x => x.CountryId == countryId).ToDictionary<BusinessEntity.Entities.SupplierZone, long, ExistingZone>((zoneEntity) => 
                 zoneEntity.SupplierZoneId, (zoneEntity) => new ExistingZone { ZoneEntity = zoneEntity });
 
             ExistingZonesByZoneId.Set(context, existingZoneDic);
