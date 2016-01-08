@@ -9,8 +9,13 @@ namespace TOne.WhS.Sales.Data
     public interface IRatePlanDataManager : IDataManager
     {
         bool InsertPriceList(SalePriceList priceList, out int priceListId);
+
         Changes GetChanges(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status);
+
         bool InsertOrUpdateChanges(SalePriceListOwnerType ownerType, int ownerId, Changes changes, RatePlanStatus status);
+
         bool SetRatePlanStatusIfExists(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status);
+
+        bool CancelRatePlanChanges(SalePriceListOwnerType ownerType, int ownerId);
     }
 }

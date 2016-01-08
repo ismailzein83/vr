@@ -277,6 +277,17 @@ namespace TOne.WhS.Sales.Business
             saveChangesManager.ApplyCalculatedRates((int)sellingNumberPlanId, (int)sellingProductId, input.EffectiveOn, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods, input.SelectedCostCalculationMethodConfigId, input.RateCalculationMethod);
         }
 
+        public bool CheckIfDraftExists(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            Changes changes = _dataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
+            return changes != null;
+        }
+
+        public bool DeleteDraft(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            return _dataManager.CancelRatePlanChanges(ownerType, ownerId);
+        }
+
         #region Common Private Methods
 
         int? GetSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)

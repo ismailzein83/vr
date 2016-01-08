@@ -19,7 +19,9 @@
             GetFilteredZoneRoutingProductChanges: GetFilteredZoneRoutingProductChanges,
             SavePriceList: SavePriceList,
             SaveChanges: SaveChanges,
-            ApplyCalculatedRates: ApplyCalculatedRates
+            ApplyCalculatedRates: ApplyCalculatedRates,
+            CheckIfDraftExists: CheckIfDraftExists,
+            DeleteDraft: DeleteDraft
         });
 
         function ValidateCustomer(customerId, effectiveOn) {
@@ -87,6 +89,20 @@
 
         function ApplyCalculatedRates(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "ApplyCalculatedRates"), input);
+        }
+
+        function CheckIfDraftExists(ownerType, ownerId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "CheckIfDraftExists"), {
+                ownerType: ownerType,
+                ownerId: ownerId
+            });
+        }
+
+        function DeleteDraft(ownerType, ownerId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, "RatePlan", "DeleteDraft"), {
+                ownerType: ownerType,
+                ownerId: ownerId
+            });
         }
     }
 

@@ -113,5 +113,19 @@ namespace TOne.WhS.Sales.Web.Controllers
         {
             _manager.ApplyCalculatedRates(input);
         }
+
+        [HttpGet]
+        [Route("CheckIfDraftExists")]
+        public bool CheckIfDraftExists(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            return _manager.CheckIfDraftExists(ownerType, ownerId);
+        }
+
+        [HttpGet]
+        [Route("DeleteDraft")]
+        public bool DeleteDraft(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            return _manager.DeleteDraft(ownerType, ownerId);
+        }
     }
 }

@@ -53,5 +53,11 @@ namespace TOne.WhS.Sales.Data.SQL
             int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_InsertOrUpdateChanges", ownerType, ownerId, serializedChanges, status);
             return affectedRows > 0;
         }
+
+        public bool CancelRatePlanChanges(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_CancelChanges", ownerType, ownerId);
+            return affectedRows > 0;
+        }
     }
 }

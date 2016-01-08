@@ -202,6 +202,7 @@
                 confirmPromise.then(function (confirmed) {
                     if (confirmed) {
                         $scope.showApplyButton = false;
+                        
 
                         var input = {
                             OwnerType: $scope.selectedOwnerType.value,
@@ -218,10 +219,22 @@
                         return WhS_Sales_RatePlanAPIService.ApplyCalculatedRates(input).then(function () {
                             VRNotificationService.showSuccess("Rates applied");
                             pricingSettings = null;
+                            $scope.showRemoveButton = true;
                             loadGrid();
                         }).catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
                         });
+                    }
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
+            };
+            $scope.deleteDraft = function () {
+                return WhS_Sales_RatePlanAPIService.DeleteDraft($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
+                    if (response) {
+                        VRNotificationService.showSuccess("Draft deleted");
+                        $scope.showRemoveButton = false;
+                        loadRatePlan();
                     }
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
@@ -310,6 +323,9 @@
 
             loadGridDeferred.promise;
 
+            var checkIfDraftExistsPromise = checkIfDraftExists();
+            promises.push(checkIfDraftExistsPromise);
+
             zoneLettersGetPromise.then(function () {
                 if ($scope.zoneLetters.length > 0) {
                     loadGrid().then(function () {
@@ -348,6 +364,16 @@
             return UtilsService.waitMultiplePromises(promises).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
+
+            function checkIfDraftExists() {
+                return WhS_Sales_RatePlanAPIService.CheckIfDraftExists($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
+                    if (response) {
+                        $scope.showRemoveButton = true;
+                    }
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope); // The user can perform other tasks if CheckIfDraftExists fails
+                });
+            }
 
             function getZoneLetters() {
                 return WhS_Sales_RatePlanAPIService.GetZoneLetters($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
