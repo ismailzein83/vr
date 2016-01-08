@@ -12,17 +12,20 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class GetDWTimeInput
     {
-        public DWTimeDictionary Times { get; set; }
-
         public DateTime FromDate { get; set; }
 
         public DateTime ToDate { get; set; }
+    }
 
+
+    public class GetDWTimeOutput
+    {
+        public DWTimeDictionary Times { get; set; }
     }
 
     #endregion
 
-    public sealed class GetDWTime : BaseAsyncActivity<GetDWTimeInput>
+    public sealed class GetDWTime : BaseAsyncActivity<GetDWTimeInput, GetDWTimeOutput>
     {
         #region Arguments
 
@@ -40,15 +43,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         #endregion
 
-        protected override void DoWork(GetDWTimeInput inputArgument, AsyncActivityHandle handle)
-        {
-            DWTimeManager timeManager = new DWTimeManager();
-            IEnumerable<DWTime> times = timeManager.GetTimes(inputArgument.FromDate, inputArgument.ToDate);
-            inputArgument.Times = new DWTimeDictionary();
-            if (times.Count() > 0)
-                foreach (var i in times)
-                    inputArgument.Times.Add(i.DateInstance, i);
-        }
 
 
         protected override GetDWTimeInput GetInputArgument(AsyncCodeActivityContext context)
@@ -57,8 +51,27 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             {
                 FromDate = this.FromDate.Get(context),
                 ToDate = this.ToDate.Get(context),
-                Times = this.Times.Get(context)
             };
+        }
+
+        protected override GetDWTimeOutput DoWorkWithResult(GetDWTimeInput inputArgument, AsyncActivityHandle handle)
+        {
+            DWTimeManager timeManager = new DWTimeManager();
+            IEnumerable<DWTime> times = timeManager.GetTimes(inputArgument.FromDate, inputArgument.ToDate);
+            DWTimeDictionary Times = new DWTimeDictionary();
+            if (times.Count() > 0)
+                foreach (var i in times)
+                    Times.Add(i.DateInstance, i);
+
+            return new GetDWTimeOutput
+            {
+                Times = Times
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetDWTimeOutput result)
+        {
+            this.Times.Set(context, result.Times);
         }
     }
 }

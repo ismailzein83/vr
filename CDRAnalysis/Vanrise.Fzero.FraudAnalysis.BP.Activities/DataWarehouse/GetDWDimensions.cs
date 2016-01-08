@@ -12,6 +12,14 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class GetDWDimensionsInput
     {
+        public DateTime FromDate { get; set; }
+
+        public DateTime ToDate { get; set; }
+
+    }
+
+    public class GetDWDimensionsOutput
+    {
         public DWDimensionDictionary CallClasses { get; set; }
 
         public DWDimensionDictionary CallTypes { get; set; }
@@ -32,17 +40,19 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public DWDimensionDictionary Users { get; set; }
 
-        public DateTime FromDate { get; set; }
-
-        public DateTime ToDate { get; set; }
-
     }
 
     #endregion
 
-    public sealed class GetDWDimensions : BaseAsyncActivity<GetDWDimensionsInput>
+    public sealed class GetDWDimensions : BaseAsyncActivity<GetDWDimensionsInput, GetDWDimensionsOutput>
     {
         #region Arguments
+
+        [RequiredArgument]
+        public InArgument<DateTime> FromDate { get; set; }
+
+        [RequiredArgument]
+        public InArgument<DateTime> ToDate { get; set; }
 
         [RequiredArgument]
         public InOutArgument<DWDimensionDictionary> CallClasses { get; set; }
@@ -74,22 +84,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InOutArgument<DWDimensionDictionary> Users { get; set; }
 
-
         #endregion
-
-        protected override void DoWork(GetDWDimensionsInput inputArgument, AsyncActivityHandle handle)
-        {
-            inputArgument.CallClasses = GetandSet(inputArgument.CallClasses, "[dbo].[Dim_CallClass]");
-            inputArgument.CallTypes = GetandSet(inputArgument.CallTypes, "[dbo].[Dim_CallType]");
-            inputArgument.CaseStatuses = GetandSet(inputArgument.CaseStatuses, "[dbo].[Dim_CaseStatus]");
-            inputArgument.Filters = GetandSet(inputArgument.Filters, "[dbo].[Dim_Filters]");
-            inputArgument.NetworkTypes = GetandSet(inputArgument.NetworkTypes, "[dbo].[Dim_NetworkType]");
-            inputArgument.Periods = GetandSet(inputArgument.Periods, "[dbo].[Dim_Period]");
-            inputArgument.StrategyKinds = GetandSet(inputArgument.StrategyKinds, "[dbo].[Dim_StrategyKind]");
-            inputArgument.SubscriberTypes = GetandSet(inputArgument.SubscriberTypes, "[dbo].[Dim_SubscriberType]");
-            inputArgument.SuspicionLevels = GetandSet(inputArgument.SuspicionLevels, "[dbo].[Dim_SuspicionLevel]");
-            inputArgument.Users = GetandSet(inputArgument.Users, "[dbo].[Dim_Users]");
-        }
 
         private static DWDimensionDictionary GetandSet(DWDimensionDictionary dwDimensionDictionary, string tableName)
         {
@@ -102,22 +97,75 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             return dwDimensionDictionary;
         }
 
+        protected override GetDWDimensionsOutput DoWorkWithResult(GetDWDimensionsInput inputArgument, AsyncActivityHandle handle)
+        {
+            DWDimensionDictionary CallClasses = new DWDimensionDictionary();
+            CallClasses = GetandSet(CallClasses, "[dbo].[Dim_CallClass]");
+
+            DWDimensionDictionary CallTypes = new DWDimensionDictionary(); 
+            CallTypes = GetandSet(CallTypes, "[dbo].[Dim_CallType]");
+
+            DWDimensionDictionary CaseStatuses = new DWDimensionDictionary();
+            CaseStatuses = GetandSet(CaseStatuses, "[dbo].[Dim_CaseStatus]");
+
+            DWDimensionDictionary Filters = new DWDimensionDictionary();
+            Filters = GetandSet(Filters, "[dbo].[Dim_Filters]");
+
+            DWDimensionDictionary NetworkTypes = new DWDimensionDictionary();
+            NetworkTypes = GetandSet(NetworkTypes, "[dbo].[Dim_NetworkType]");
+
+            DWDimensionDictionary Periods = new DWDimensionDictionary(); 
+            Periods = GetandSet(Periods, "[dbo].[Dim_Period]");
+
+            DWDimensionDictionary StrategyKinds = new DWDimensionDictionary(); 
+            StrategyKinds = GetandSet(StrategyKinds, "[dbo].[Dim_StrategyKind]");
+
+            DWDimensionDictionary SubscriberTypes = new DWDimensionDictionary();
+            SubscriberTypes = GetandSet(SubscriberTypes, "[dbo].[Dim_SubscriberType]");
+
+            DWDimensionDictionary SuspicionLevels = new DWDimensionDictionary(); 
+            SuspicionLevels = GetandSet(SuspicionLevels, "[dbo].[Dim_SuspicionLevel]");
+
+            DWDimensionDictionary Users = new DWDimensionDictionary(); 
+            Users = GetandSet(Users, "[dbo].[Dim_User]");
+
+
+            return new GetDWDimensionsOutput()
+            {
+                CallClasses = CallClasses,
+                CallTypes = CallTypes,
+                CaseStatuses = CaseStatuses,
+                Filters = Filters,
+                NetworkTypes = NetworkTypes,
+                Periods = Periods,
+                StrategyKinds = StrategyKinds,
+                SubscriberTypes = SubscriberTypes,
+                SuspicionLevels = SuspicionLevels,
+                Users = Users
+            };
+
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetDWDimensionsOutput result)
+        {
+            this.CallClasses.Set(context, result.CallClasses);
+            this.CallTypes.Set(context, result.CallTypes);
+            this.CaseStatuses.Set(context, result.CaseStatuses);
+            this.Filters.Set(context, result.Filters);
+            this.NetworkTypes.Set(context, result.NetworkTypes);
+            this.Periods.Set(context, result.Periods);
+            this.StrategyKinds.Set(context, result.StrategyKinds);
+            this.SubscriberTypes.Set(context, result.SubscriberTypes);
+            this.SuspicionLevels.Set(context, result.SuspicionLevels);
+            this.Users.Set(context, result.Users);
+        }
 
         protected override GetDWDimensionsInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new GetDWDimensionsInput
             {
-
-                CallClasses = this.CallClasses.Get(context),
-                CallTypes = this.CallTypes.Get(context),
-                CaseStatuses = this.CaseStatuses.Get(context),
-                Filters = this.Filters.Get(context),
-                NetworkTypes = this.NetworkTypes.Get(context),
-                Periods = this.Periods.Get(context),
-                StrategyKinds = this.StrategyKinds.Get(context),
-                SubscriberTypes = this.SubscriberTypes.Get(context),
-                SuspicionLevels = this.SuspicionLevels.Get(context),
-                Users = this.Users.Get(context),
+                FromDate = this.FromDate.Get(context),
+                ToDate = this.ToDate.Get(context),
             };
         }
     }

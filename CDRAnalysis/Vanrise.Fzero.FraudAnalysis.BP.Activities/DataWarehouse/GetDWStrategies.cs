@@ -11,12 +11,17 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class GetDWStrategiesInput
     {
+
+    }
+
+    public class GetDWStrategiesOutput
+    {
         public DWStrategyDictionary DWStrategies { get; set; }
     }
 
     #endregion
 
-    public sealed class GetDWStrategies : BaseAsyncActivity<GetDWStrategiesInput>
+    public sealed class GetDWStrategies : BaseAsyncActivity<GetDWStrategiesInput, GetDWStrategiesOutput>
     {
         #region Arguments
 
@@ -25,23 +30,32 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         #endregion
 
-        protected override void DoWork(GetDWStrategiesInput inputArgument, AsyncActivityHandle handle)
-        {
-            DWStrategyManager dwStrategyManager = new DWStrategyManager();
-            IEnumerable<DWStrategy> listDWStrategies = dwStrategyManager.GetStrategies();
-            inputArgument.DWStrategies = new DWStrategyDictionary();
-            if (listDWStrategies.Count() > 0)
-                foreach (var i in listDWStrategies)
-                    inputArgument.DWStrategies.Add(i.Id, i);
-        }
-
 
         protected override GetDWStrategiesInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new GetDWStrategiesInput
             {
-                DWStrategies = this.DWStrategies.Get(context),
+                
             };
+        }
+
+        protected override GetDWStrategiesOutput DoWorkWithResult(GetDWStrategiesInput inputArgument, AsyncActivityHandle handle)
+        {
+            DWStrategyManager dwStrategyManager = new DWStrategyManager();
+            IEnumerable<DWStrategy> listDWStrategies = dwStrategyManager.GetStrategies();
+            DWStrategyDictionary DWStrategies = new DWStrategyDictionary();
+            if (listDWStrategies.Count() > 0)
+                foreach (var i in listDWStrategies)
+                    DWStrategies.Add(i.Id, i);
+
+            return new GetDWStrategiesOutput{
+                DWStrategies = DWStrategies
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetDWStrategiesOutput result)
+        {
+            this.DWStrategies.Set(context, result.DWStrategies);
         }
     }
 }

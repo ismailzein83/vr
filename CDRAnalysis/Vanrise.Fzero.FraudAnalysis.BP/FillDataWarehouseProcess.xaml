@@ -63,6 +63,8 @@
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Security.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Security.Data</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP</AssemblyReference>
     </sco:Collection>
@@ -123,6 +125,11 @@
               <mca:CSharpReference x:TypeArguments="vffe:DWDimensionDictionary">filters</mca:CSharpReference>
             </InOutArgument>
           </vffba1:GetDWDimensions.Filters>
+          <vffba1:GetDWDimensions.FromDate>
+            <InArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+            </InArgument>
+          </vffba1:GetDWDimensions.FromDate>
           <vffba1:GetDWDimensions.NetworkTypes>
             <InOutArgument x:TypeArguments="vffe:DWDimensionDictionary">
               <mca:CSharpReference x:TypeArguments="vffe:DWDimensionDictionary">networkTypes</mca:CSharpReference>
@@ -153,6 +160,11 @@
               <mca:CSharpReference x:TypeArguments="vffe:DWDimensionDictionary">suspicionLevels</mca:CSharpReference>
             </InOutArgument>
           </vffba1:GetDWDimensions.SuspicionLevels>
+          <vffba1:GetDWDimensions.ToDate>
+            <InArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+            </InArgument>
+          </vffba1:GetDWDimensions.ToDate>
           <vffba1:GetDWDimensions.Users>
             <InOutArgument x:TypeArguments="vffe:DWDimensionDictionary">
               <mca:CSharpReference x:TypeArguments="vffe:DWDimensionDictionary">users</mca:CSharpReference>
@@ -443,7 +455,7 @@
       </vffba1:ApplyDWCDRsToDB>
     </Parallel>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2" Text="Finished executing workflow: FillDataWarehouse ..." />
-    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sT0YDvwMOAgEBRwVHeQMBmgtIBeMCEAMBhwHkAgW8AxACAQS9AwW9A3oCAQJHQ0d2AwGbC00HywISAwGaAcwCB8wCVwMBmQHNAgfiAhoDAYgB7gIHgwMZAgFihAMHmQMfAgE9mgMHrwMoAgEYsAMHuwMgAgEFvQNDvQN3AgEDaQmhASIDAdoIogEJkQIrAwHbA5ICCcoCKAMBmwHQAg3QAlsDAZUB2gIN2gJlAwGRAdUCDdUCeAMBjQHfAg3fAlkDAYkB8QIN8QJbAgF++wIN+wJ2AgF19gIN9gJuAgFsgAMNgANZAgFjkQMNkQNuAgFZhwMNhwNuAgFQlgMNlgN9AgFHjAMNjANyAgE+pwMNpwN1AgE0nQMNnQNqAgErrAMNrAOGAQIBIqIDDaIDcwIBGbgDDbgDfgIBD7MDDbMDawIBBoUBD4UBbgMB/QqUAQ+UAXYDAeAKdg92cwMBwwqeAQ+eAWwDAaYKcQ9xcAMBiQqKAQ+KAYABAwHsCXsPe24DAc8JmQEPmQF2AwGyCWwPbHIDAZUJjwEPjwF0AwH4CIABD4ABcwMB2wi+AQ++AWYDAb0I5gEP5gF/AwGgCPUBD/UBegMBgwiEAg+EAoIBAwHmB9IBD9IBbgMByQfcAQ/cAX4DAawH+gEP+gGAAQMBjwevAQ+vAWsDAfIGwwEPwwF4AwHVBuEBD+EBfAMBuAaOAg+OAmQDAZsG6wEP6wF6AwH+BaoBD6oBaAMB4QXIAQ/IAYkBAwHEBbQBD7QBZgMBpwXXAQ/XAW4DAYoF/wEP/wGCAQMB7QTwAQ/wAX8DAdAEiQIPiQJ4AwGzBKUBD6UBagMBlgTNAQ/NAWwDAfkDuQEPuQFrAwHcA6QCD6QCfwMBvgOzAg+zAnoDAaEDwgIPwgKCAQMBhAOaAg+aAn4DAecCuAIPuAKAAQMBygKVAg+VAoEBAwGtAp8CD58CfAMBkAKpAg+pAnoDAfMBvQIPvQKCAQMB1gGuAg+uAn8DAbkBxwIPxwJ4AwGcAQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sUUgDywMOAgEBSQVJeQMB1AtKBe8CEAMBhwHwAgXIAxACAQTJAwXJA3oCAQJJQ0l2AwHVC08H1wISAwGaAdgCB9gCVwMBmQHZAgfuAhoDAYgB+gIHjwMZAgFikAMHpQMfAgE9pgMHuwMoAgEYvAMHxwMgAgEFyQNDyQN3AgEDawmtASIDAdoIrgEJnQIrAwHbA54CCdYCKAMBmwHcAg3cAlsDAZUB5gIN5gJlAwGRAeECDeECeAMBjQHrAg3rAlkDAYkB/QIN/QJbAgF+hwMNhwN2AgF1ggMNggNuAgFsjAMNjANZAgFjnQMNnQNuAgFZkwMNkwNuAgFQogMNogN9AgFHmAMNmANyAgE+swMNswN1AgE0qQMNqQNqAgEruAMNuAOGAQIBIq4DDa4DcwIBGcQDDcQDfgIBD78DDb8DawIBBowBD4wBbgMBtwubAQ+bAXYDAZoLeA94cwMB/QqCAQ+CAV0DAeAKqgEPqgFsAwHDCnMPc3ADAaYKkQEPkQGAAQMBiQp9D31uAwHsCaABD6ABdgMBzwluD25yAwGyCZYBD5YBdAMBlQmlAQ+lAVsDAfgIhwEPhwFzAwHbCMoBD8oBZgMBvQjyAQ/yAX8DAaAIgQIPgQJ6AwGDCJACD5ACggEDAeYH3gEP3gFuAwHJB+gBD+gBfgMBrAeGAg+GAoABAwGPB7sBD7sBawMB8gbPAQ/PAXgDAdUG7QEP7QF8AwG4BpoCD5oCZAMBmwb3AQ/3AXoDAf4FtgEPtgFoAwHhBdQBD9QBiQEDAcQFwAEPwAFmAwGnBeMBD+MBbgMBigWLAg+LAoIBAwHtBPwBD/wBfwMB0ASVAg+VAngDAbMEsQEPsQFqAwGWBNkBD9kBbAMB+QPFAQ/FAWsDAdwDsAIPsAJ/AwG+A78CD78CegMBoQPOAg/OAoIBAwGEA6YCD6YCfgMB5wLEAg/EAoABAwHKAqECD6ECgQEDAa0CqwIPqwJ8AwGQArUCD7UCegMB8wHJAg/JAoIBAwHWAboCD7oCfwMBuQHTAg/TAngDAZwB</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
