@@ -59,6 +59,7 @@
     <Compile Include="AccountCaseLog.cs" />
     <Compile Include="AccountInfo.cs" />
     <Compile Include="DataWarehouse\DWAccountCase.cs" />
+    <Compile Include="DataWarehouse\DWAccountCaseDictionary .cs" />
     <Compile Include="DataWarehouse\DWTimeDictionary.cs" />
     <Compile Include="DataWarehouse\DWStrategyDictionary.cs" />
     <Compile Include="DataWarehouse\DWDimensionDictionary.cs" />

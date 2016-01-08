@@ -106,8 +106,10 @@
     <Compile Include="DataWarehouse\CheckDWDimensionsChanges.cs" />
     <Compile Include="DataWarehouse\FillFactValues.cs" />
     <Compile Include="DataWarehouse\CheckDWStrategiesChanges.cs" />
+    <Compile Include="DataWarehouse\GetDWBTSs.cs" />
+    <Compile Include="DataWarehouse\GetDWAccountCases.cs" />
     <Compile Include="FindRelatedNumbersthroughIMEIs.cs" />
-    <Compile Include="DataWarehouse\GetDWTime.cs" />
+    <Compile Include="DataWarehouse\GetDWTimes.cs" />
     <Compile Include="DataWarehouse\GetDWStrategies.cs" />
     <Compile Include="GetStrategiesExecutionInfo.cs" />
     <Compile Include="GetStrategyExecutionDetails.cs" />
