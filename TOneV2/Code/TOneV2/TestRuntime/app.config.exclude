@@ -188,7 +188,7 @@
     <add key="BusinessProcessDisabledNamedPipeService" value="true"/>
     <add key="RepricingParallelThreads" value="1"/>
     <add key="RoutingCodePrefixLength" value="2"/>
-    <add key="BCPDonotDeleteFiles" value="true"/>
+    <add key="BCPDonotDeleteFiles" value="false"/>    <!--this should be always false at production. could be only set to true for troubleshooting-->
     <add key="RebuildZoneRates" value="true"/>
     <add key="BCPTempFilesDirectory" value="C:\BCPFiles" />
     <add key="TOneWhS_BE_DBConnStringKey" value="TOneV2DBConnString"/>
