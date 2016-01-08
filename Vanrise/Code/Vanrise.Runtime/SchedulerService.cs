@@ -40,7 +40,7 @@ namespace Vanrise.Runtime
                                         ExecutionInfo = item.ExecutionInfo
                                     };
                                     SchedulerTaskCheckProgressOutput output =
-                                        taskAction.CheckProgress(checkProgressContext);
+                                        taskAction.CheckProgress(checkProgressContext, item.OwnerId);
                                     if (output.Result == ExecuteOutputResult.Completed)
                                         item.Status = SchedulerTaskStatus.Completed;
                                 }
@@ -55,7 +55,7 @@ namespace Vanrise.Runtime
                                         dataManager.UpdateTask(item);
 
                                         SchedulerTaskAction taskAction = (SchedulerTaskAction)Activator.CreateInstance(Type.GetType(item.ActionInfo.FQTN));
-
+                                        
                                         SchedulerTaskExecuteOutput taskExecuteOutput = new SchedulerTaskExecuteOutput();
                                         taskExecuteOutput = taskAction.Execute(item, item.TaskSettings.TaskActionArgument, evaluatedExpressions);
                                         if (taskExecuteOutput != null)

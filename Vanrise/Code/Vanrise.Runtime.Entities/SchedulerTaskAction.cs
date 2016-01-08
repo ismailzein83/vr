@@ -10,7 +10,7 @@ namespace Vanrise.Runtime.Entities
     {
         public abstract SchedulerTaskExecuteOutput Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions);
 
-        public virtual SchedulerTaskCheckProgressOutput CheckProgress(ISchedulerTaskCheckProgressContext context)
+        public virtual SchedulerTaskCheckProgressOutput CheckProgress(ISchedulerTaskCheckProgressContext context, int ownerId)
         {
             return new SchedulerTaskCheckProgressOutput() {Result = ExecuteOutputResult.Completed};
         }

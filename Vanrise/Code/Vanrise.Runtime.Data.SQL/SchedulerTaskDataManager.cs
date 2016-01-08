@@ -63,7 +63,7 @@ namespace Vanrise.Runtime.Data.SQL
         {
             int recordesEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_Update", taskObject.TaskId, taskObject.Name,
                 taskObject.IsEnabled, taskObject.Status, taskObject.LastRunTime, taskObject.NextRunTime, taskObject.TriggerTypeId, taskObject.ActionTypeId,
-                Common.Serializer.Serialize(taskObject.TaskSettings), taskObject.ExecutionInfo);
+                Common.Serializer.Serialize(taskObject.TaskSettings), Common.Serializer.Serialize(taskObject.ExecutionInfo));
             return (recordesEffected > 0);
         }
 
@@ -115,7 +115,7 @@ namespace Vanrise.Runtime.Data.SQL
                 ActionInfo = Common.Serializer.Deserialize<ActionTypeInfo>(reader["ActionTypeInfo"] as string),
                 TaskSettings = Common.Serializer.Deserialize<SchedulerTaskSettings>(reader["TaskSettings"] as string),
                 OwnerId = GetReaderValue<int>(reader, "OwnerId"),
-                ExecutionInfo = GetReaderValue<string>(reader, "ExecutionInfo")
+                ExecutionInfo = reader["ExecutionInfo"] == DBNull.Value ? null : Common.Serializer.Deserialize<Object>(reader["ExecutionInfo"] as string)
             };
             return task;
         }
