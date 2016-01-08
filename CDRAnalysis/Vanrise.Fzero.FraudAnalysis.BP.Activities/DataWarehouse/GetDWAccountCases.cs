@@ -61,7 +61,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             DWAccountCaseDictionary AccountCases = new DWAccountCaseDictionary();
             if (accountCases.Count() > 0)
                 foreach (var i in accountCases)
-                    AccountCases.Add(i.AccountNumber, i);
+                    AccountCases.Add(i.CaseID, i);
 
             return new GetDWAccountCasesOutput
             {

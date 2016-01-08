@@ -21,15 +21,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private DWAccountCase DWAccountCaseMapper(IDataReader reader)
         {
             DWAccountCase dwAccountCase = new DWAccountCase();
-            dwAccountCase.AccountNumber = (int)reader["AccountNumber"];
+            dwAccountCase.AccountNumber = reader["AccountNumber"] as string;
             dwAccountCase.CaseGenerationTime = (DateTime)reader["CaseGenerationTime"];
             dwAccountCase.CaseID = (int)reader["CaseID"];
-            dwAccountCase.CaseStatus = reader["CaseStatus"] as string;
+            dwAccountCase.CaseStatus = (int)reader["CaseStatus"];
             dwAccountCase.CaseUser = GetReaderValue<int?>(reader, "CaseUser");
             dwAccountCase.IsDefault = (bool)reader["IsDefault"];
             dwAccountCase.NetType = (int)reader["NetType"];
             dwAccountCase.PeriodID = (int)reader["PeriodID"];
-            dwAccountCase.StrategyName = reader["StrategyName"] as string;
+            dwAccountCase.StrategyID = (int)reader["StrategyName"];
             dwAccountCase.StrategyUser = (int)reader["StrategyUser"];
             dwAccountCase.SuspicionLevelID = (int)reader["SuspicionLevelID"];
             return dwAccountCase;

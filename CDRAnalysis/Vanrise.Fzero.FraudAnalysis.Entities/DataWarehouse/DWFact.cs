@@ -27,5 +27,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public int? StrategyUser { get; set; }
         public int? CaseUser { get; set; }
         public int? BTS { get; set; }
+
     }
 }
