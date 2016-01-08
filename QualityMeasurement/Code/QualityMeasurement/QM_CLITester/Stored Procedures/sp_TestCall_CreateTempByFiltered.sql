@@ -65,7 +65,14 @@ BEGIN
 			  ,tc.[GetProgressRetryCount]
 			  ,tc.[FailureMessage]
 			  ,tc.[timestamp]
-      ,[BatchNumber]
+			  ,tc.[BatchNumber]
+			  ,tc.[PDD]
+			  ,tc.[MOS]
+			  ,tc.[Duration]
+			  ,tc.[ReleaseCode]
+			  ,tc.[ReceivedCLI]
+			  ,tc.[RingDuration]
+			  
 			INTO #RESULT
 			FROM 
 			[QM_CLITester].[TestCall]  tc  

@@ -21,7 +21,13 @@ BEGIN
 		  ,[GetProgressRetryCount]
 		  ,[FailureMessage]
 		  ,[timestamp]
-      ,[BatchNumber]
+          ,[BatchNumber]
+          ,[PDD]
+		  ,[MOS]
+		  ,[Duration]
+		  ,[ReleaseCode]
+		  ,[ReceivedCLI]
+		  ,[RingDuration]
 	FROM [QM_CLITester].[TestCall] 
 	WHERE ID < @LessThanID AND  UserID = @UserId
 	ORDER BY ID DESC
