@@ -107,19 +107,19 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
                                      record.LastCallTime.ToShortTimeString(),
                                      record.MinDuration,
                                      record.MaxDuration,
-                                     record.AvgDuration,
-                                     record.CostNets,
-                                     record.CostExtraCharges,
-                                     record.SaleNets,
-                                     record.SaleExtraCharges,
-                                     record.SaleRate,
-                                     record.CostRate,
-                                     record.SaleDuration,
-                                     record.CostDuration,
+                                     GetDecimalForBCP(record.AvgDuration),
+                                     GetDecimalForBCP(record.CostNets),
+                                     GetDecimalForBCP(record.CostExtraCharges),
+                                     GetDecimalForBCP(record.SaleNets),
+                                     GetDecimalForBCP(record.SaleExtraCharges),
+                                     GetDecimalForBCP(record.SaleRate),
+                                     GetDecimalForBCP(record.CostRate),
+                                     GetDecimalForBCP(record.SaleDuration),
+                                     GetDecimalForBCP(record.CostDuration),
                                      record.SaleRateType,
                                      record.CostRateType);
-
         }
+
         private void ApplyBillingStatsToDB(Object billingStatsBatch)
         {
             InsertBulkToTable(billingStatsBatch as StreamBulkInsertInfo);
@@ -186,8 +186,8 @@ namespace TOne.WhS.CDRProcessing.Data.SQL
             dt.Columns.Add("SaleExtraCharges", typeof(decimal));
             dt.Columns.Add("SaleRate", typeof(decimal));
             dt.Columns.Add("CostRate", typeof(decimal));
-            dt.Columns.Add("SaleDuration", typeof(int));
-            dt.Columns.Add("CostDuration", typeof(int));
+            dt.Columns.Add("SaleDuration", typeof(decimal));
+            dt.Columns.Add("CostDuration", typeof(decimal));
             return dt;
         }
 

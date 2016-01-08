@@ -43,8 +43,8 @@ namespace TOne.WhS.CDRProcessing.Entities
         public decimal SaleExtraCharges { get; set; }
         public decimal SaleRate { get; set; }
         public decimal CostRate { get; set; }
-        public int SaleDuration { get; set; }
-        public int CostDuration { get; set; }
+        public decimal SaleDuration { get; set; }
+        public decimal CostDuration { get; set; }
         public int SaleRateType { get; set; }
         public int CostRateType { get; set; }
     }
