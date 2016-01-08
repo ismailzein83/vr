@@ -9,7 +9,6 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
             scope: {
                 onReady: "=",
                 sellingproductid: '=',
-                hidesellingproductcolumn: '@',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -32,10 +31,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
             function initializeController() {
                 $scope.customerSellingProducts = [];
                 $scope.hideCustomerColumn = false;
-
                 $scope.hideSellingProductColumn = false;
-                if ($attrs.hidesellingproductcolumn != undefined)
-                    $scope.hideSellingProductColumn = true;
 
                 $scope.onGridReady = function (api) {  
                     gridAPI = api;
@@ -48,6 +44,11 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
                             var query = payload;
                             if (payload.hideCustomerColumn) {
                                 $scope.hideCustomerColumn = true;
+                                query = payload.query;
+                            }
+                            else if (payload.hideSellingProductColumn)
+                            {
+                                $scope.hideSellingProductColumn = true;
                                 query = payload.query;
                             }
                             return gridAPI.retrieveData(query);

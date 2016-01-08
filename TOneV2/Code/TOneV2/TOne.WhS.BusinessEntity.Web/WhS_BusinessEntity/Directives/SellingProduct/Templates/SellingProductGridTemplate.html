@@ -11,7 +11,7 @@
                 <vr-datagridcolumn headertext="'Selling Number Plan'" field="'SellingNumberPlanName'"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Routing Product'" field="'DefaultRoutingProductName'"></vr-datagridcolumn>
                 <vr-datagridexpandablerow>
-                    <vr-whs-be-customersellingproduct-grid on-ready="dataItem.extensionObject.onGridReady" sellingproductid="dataItem.Entity.SellingProductId" hidesellingproductcolumn></vr-whs-be-customersellingproduct-grid>
+                    <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
                 </vr-datagridexpandablerow>
             </vr-datagrid>
 

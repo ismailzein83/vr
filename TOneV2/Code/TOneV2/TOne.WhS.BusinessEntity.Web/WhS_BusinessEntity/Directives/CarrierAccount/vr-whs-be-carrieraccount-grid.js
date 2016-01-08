@@ -28,9 +28,9 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
 
         var gridAPI;
         this.initializeController = initializeController;
-
+        var gridDrillDownTabsObj;
         function initializeController() {
-            var gridDrillDownTabsObj;
+           
             $scope.hideProfileColumn = false;
 
             $scope.isExpandable = function (dataItem) {
@@ -149,9 +149,9 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
 
             gridAPI.expandRow(dataItem);
             var onCustomerSellingProductAdded = function (customerSellingProductObj) {
-                if (dataItem.extensionObject.custormerSellingProductGridAPI != undefined) {
+                if (dataItem.custormerSellingProductGridAPI != undefined) {
                     for (var i = 0; i < customerSellingProductObj.length; i++) {
-                        dataItem.extensionObject.custormerSellingProductGridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
+                        dataItem.custormerSellingProductGridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
                     }
                 }
             };

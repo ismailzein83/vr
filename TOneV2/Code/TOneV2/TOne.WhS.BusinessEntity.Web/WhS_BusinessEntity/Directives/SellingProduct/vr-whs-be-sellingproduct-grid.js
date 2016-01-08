@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSellingproductGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SellingProductAPIService","WhS_BE_SellingProductService" ,"WhS_BE_CustomerSellingProductService",
-function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService,  WhS_BE_SellingProductService , WhS_BE_CustomerSellingProductService) {
+app.directive("vrWhsBeSellingproductGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SellingProductAPIService","WhS_BE_SellingProductService" ,"WhS_BE_CustomerSellingProductService","VRUIUtilsService",
+function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, WhS_BE_SellingProductService, WhS_BE_CustomerSellingProductService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -28,11 +28,34 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
 
         var gridAPI;
         this.initializeController = initializeController;
-
+        var gridDrillDownTabsObj;
         function initializeController() {
             $scope.sellingProducts = [];
+
+            defineMenuActions();
+
             $scope.gridReady = function (api) {
                 gridAPI = api;
+
+                var drillDownDefinitions = [];
+                var drillDownDefinition = {};
+
+                drillDownDefinition.title = "Customer Selling Product";
+                drillDownDefinition.directive = "vr-whs-be-customersellingproduct-grid";
+
+                drillDownDefinition.loadDirective = function (directiveAPI, dataItem) {
+                    dataItem.custormerSellingProductGridAPI = directiveAPI;
+                    var payload = {
+                        query: {
+                            SellingProductsIds: [dataItem.Entity.SellingProductId]
+                        },
+                        hideSellingProductColumn: true
+                    };
+                    return dataItem.custormerSellingProductGridAPI.loadGrid(payload);
+                };
+                drillDownDefinitions.push(drillDownDefinition);
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
@@ -41,7 +64,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onSellingProductAdded = function (sellingProductObject) {
-                        setDataItemExtension(sellingProductObject);
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(sellingProductObject);
                         gridAPI.itemAdded(sellingProductObject);
                     }
                     return directiveAPI;
@@ -52,7 +75,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
                     .then(function (response) {
                         if (response.Data != undefined) {
                             for (var i = 0; i < response.Data.length; i++) {
-                                setDataItemExtension(response.Data[i]);
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                             }
                         }
                         onResponseReady(response);
@@ -61,20 +84,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
-            defineMenuActions();
-        }
-
-        function setDataItemExtension(dataItem) {
-            var extensionObject = {};
-            var query = {
-                SellingProductsIds: [dataItem.Entity.SellingProductId]
-            }
-            extensionObject.onGridReady = function (api) {
-                extensionObject.custormerSellingProductGridAPI = api;
-                extensionObject.custormerSellingProductGridAPI.loadGrid(query);
-                extensionObject.onGridReady = undefined;
-            };
-            dataItem.extensionObject = extensionObject;
+           
         }
 
         function defineMenuActions() {
@@ -107,10 +117,10 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
             }
 
             var onCustomerSellingProductAdded = function (customerSellingProductObj) {
-                if (dataItem.extensionObject.custormerSellingProductGridAPI != undefined)
+                if (dataItem.custormerSellingProductGridAPI != undefined)
                 {
                     for (var i = 0; i < customerSellingProductObj.length; i++) {
-                            dataItem.extensionObject.custormerSellingProductGridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
+                            dataItem.custormerSellingProductGridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
 
                     }
                 }
