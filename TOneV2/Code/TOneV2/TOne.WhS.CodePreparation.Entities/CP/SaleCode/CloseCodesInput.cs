@@ -9,6 +9,7 @@ namespace TOne.WhS.CodePreparation.Entities.CP
     public class CloseCodesInput
     {
         public int SellingNumberPlanId { get; set; }
+        public int CountryId { get; set; }
         public string ZoneName { get; set; }
         public List<string> Codes { get; set; }
     }

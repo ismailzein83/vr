@@ -30,7 +30,6 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         $scope.nodes = [];
         $scope.sellingNumberPlans = [];
         $scope.selectedSellingNumberPlan;
-        $scope.effectiveDate = new Date();
         $scope.currentNode;
         $scope.hasState = false;
         $scope.showGrid = false;
@@ -104,7 +103,9 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         }
 
         $scope.saleCodesGridReady = function (api) {
+          
             codesGridAPI = api;
+            $scope.selectedCodes = codesGridAPI.getSelectedCodes();
         }
 
         $scope.newZoneClicked = function () {
@@ -184,12 +185,40 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
 
     }
 
-    function onCodesMoved(response) {
-        console.log(response);
+    function onCodesMoved(movedCodes) {
+
+        if (movedCodes != undefined) {
+            $scope.selectedCodes.length = 0;
+            $scope.showGrid = true;
+            $scope.hasState = true;
+            for (var i = 0; i < movedCodes.length; i++)
+                codesGridAPI.onCodeAdded(movedCodes[i]);
+
+            if ($scope.currentNode != undefined) {
+                if ($scope.currentNode.type == 'Zone') {
+                    setCodesFilterObject();
+                    return codesGridAPI.loadGrid(codesFilter);
+                }
+            }
+        }
+
     }
 
-    function onCodesClosed(response) {
-        console.log(response);
+    function onCodesClosed(closedCodes) {
+        if (closedCodes != undefined) {
+            $scope.selectedCodes.length = 0;
+            $scope.showGrid = true;
+            $scope.hasState = true;
+            for (var i = 0; i < closedCodes.length; i++)
+                codesGridAPI.onCodeAdded(closedCodes[i]);
+
+            if ($scope.currentNode != undefined) {
+                if ($scope.currentNode.type == 'Zone') {
+                    setCodesFilterObject();
+                    return codesGridAPI.loadGrid(codesFilter);
+                }
+            }
+        }
     }
 
     function addNewZone() {
@@ -300,7 +329,7 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
 
 
     function buildCountriesTree() {
-        $scope.nodes = [];
+        $scope.nodes.length=0;
 
         for (var i = 0; i < countries.length; i++) {
             var node = mapCountryToNode(countries[i]);
@@ -351,6 +380,7 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
             sellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds()
         };
     }
+
 
     //#endregion
 

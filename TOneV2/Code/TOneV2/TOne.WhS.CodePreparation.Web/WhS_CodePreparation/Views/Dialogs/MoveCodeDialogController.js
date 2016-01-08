@@ -2,9 +2,9 @@
 
     "use strict";
 
-    moveCodeDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    moveCodeDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_CP_NewCPOutputResultEnum'];
 
-    function moveCodeDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function moveCodeDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_CPOutputResultEnum) {
 
         var countryId;
         var sellingNumberPlanId;
@@ -12,10 +12,9 @@
         var zoneId;        
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        defineScope();
         loadParameters();
-
+        defineScope();
+        load();
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
@@ -25,26 +24,23 @@
                 currentZoneName = parameters.ZoneName;
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
                 $scope.saleZones = parameters.ZoneDataSource;
+
+                var index = UtilsService.getItemIndexByVal($scope.saleZones, zoneId, "SaleZoneId");
+                if(index !=-1)
+                  $scope.saleZones.splice(index, 1);
             }
 
-            load();
+            
         }
         function defineScope() {
-            $scope.codes = [];
-            $scope.saleZones;
             $scope.selectedZone;
-            $scope.moveCodes = function () {
+            $scope.saveMoveCodes = function () {
                 return moveCodes();
             };
 
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
-
-            $scope.onSaleZoneDirectiveReady = function (api) {
-                saleZoneDirectiveAPI = api;
-                saleZoneReadyPromiseDeferred.resolve();
-            }
 
         }
 
@@ -59,17 +55,7 @@
             $scope.isGettingData = false;
         }
 
-
-        function loadSaleZones() {
-            var loadSaleZonesPromiseDeferred = UtilsService.createPromiseDeferred();
-            sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
-                var payload = {};
-                VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, payload, loadSaleZonesPromiseDeferred);
-            });
-
-            return loadSaleZonesPromiseDeferred.promise;
-        }
-
+     
         function buildCodeMoveObjFromScope() {
             var obj = {
                 Codes: $scope.codes,
@@ -94,14 +80,17 @@
             var input = getMoveCodeInput(moveItem);
             return WhS_CodePrep_CodePrepAPIService.MoveCodes(input)
             .then(function (response) {
-                if (response.Result == 0) {
+                if (response.Result == WhS_CP_CPOutputResultEnum.Existing.value) {
                     VRNotificationService.showWarning(response.Message);
                 }
-                else if (response.Result == 1) {
+                else if (response.Result == WhS_CP_CPOutputResultEnum.Inserted.value) {
                     VRNotificationService.showSuccess(response.Message);
                     if ($scope.onCodesMoved != undefined)
-                        $scope.onCodesMoved(response);
+                        $scope.onCodesMoved(response.NewCodes);
                     $scope.modalContext.closeModal();
+                }
+                else if (response.Result == WhS_CP_CPOutputResultEnum.Failed.value) {
+                    VRNotificationService.showError(response.Message);
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);

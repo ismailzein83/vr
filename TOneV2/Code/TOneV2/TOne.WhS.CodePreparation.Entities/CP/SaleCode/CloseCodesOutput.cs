@@ -9,5 +9,8 @@ namespace TOne.WhS.CodePreparation.Entities.CP
     public class CloseCodesOutput
     {
         public string Message { get; set; }
+        public List<CodeItem> NewCodes { get; set; }
+
+        public CodePreparationOutputResult Result { get; set; }
     }
 }

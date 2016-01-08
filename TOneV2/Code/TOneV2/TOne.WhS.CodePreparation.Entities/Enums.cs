@@ -20,7 +20,7 @@ namespace TOne.WhS.CodePreparation.Entities
         Canceled = 2
     }
 
-    public enum NewCPOutputResult
+    public enum CodePreparationOutputResult
     {
 
         Inserted = 0,

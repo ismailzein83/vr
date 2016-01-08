@@ -2,9 +2,9 @@
 
     "use strict";
 
-    closeCodeDialogController.$inject = ['$scope', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    closeCodeDialogController.$inject = ['$scope', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService','WhS_CP_NewCPOutputResultEnum'];
 
-    function closeCodeDialogController($scope, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function closeCodeDialogController($scope, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_CPOutputResultEnum) {
 
         var countryId;
         var sellingNumberPlanId;
@@ -71,14 +71,17 @@
             var input = getCloseCodeInput(closeItem);
             return WhS_CodePrep_CodePrepAPIService.CloseCodes(input)
             .then(function (response) {
-                if (response.Result == 0) {
+                if (response.Result ==  WhS_CP_CPOutputResultEnum.Existing.value) {
                     VRNotificationService.showWarning(response.Message);
                 }
-                else if (response.Result == 1) {
+                else if (response.Result == WhS_CP_CPOutputResultEnum.Inserted.value) {
                     VRNotificationService.showSuccess(response.Message);
                     if ($scope.onCodesClosed != undefined)
-                        $scope.onCodesClosed(response);
+                        $scope.onCodesClosed(response.NewCodes);
                     $scope.modalContext.closeModal();
+                }
+                else if (response.Result == WhS_CP_CPOutputResultEnum.Failed.value) {
+                    VRNotificationService.showError(response.Message);
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
