@@ -139,8 +139,8 @@
                             <img ng-src="{{item.Icon}}" />
                         </div>
                         <ul class="dropdown-menu dropdown-menu-custom-serf" role="menu" aria-labelledby="dropdownMenuCu-{{$index}}">
-                            <li role="presentation">
-                                <label class="titel-groupe"> {{::item.Name}}</label>
+                            <li class="title-groupe" role="presentation">
+                                <label class="title-label"> {{::item.Name}}</label>
                             </li>
                             <li ng-if="c.Childs == undefined" role="presentation" class="innerlist" ng-repeat="c in item.Childs" ng-class="c.isSelected?'selected-node':''">
                                 <a ng-href="{{::c.Location}}" ng-class="c.isSelected?'selected-url':''">{{::c.Name}}</a>

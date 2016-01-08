@@ -838,7 +838,8 @@ input.ui-grid-filter-input[type="text"] {
 }
 .dll-menu {
     background-color: #dddddd !important;
-    color: #666 !important;
+    color: #666 !important;    
+    border-bottom: 1px solid #CCC;
 }
 .dll-menu:hover {
     background-color: #f0f0f0 !important;
@@ -847,6 +848,7 @@ input.ui-grid-filter-input[type="text"] {
 .dll-parent-menu {
     background-color: #dddddd !important;
     color: #666 !important;
+    border-bottom: 1px solid #CCC;
 }
 .dll-parent-menu div:hover {
     background-color: #f0f0f0 !important;
@@ -1002,27 +1004,42 @@ input.ui-grid-filter-input[type="text"] {
 .inner-list-item{
     margin-left: -25px;
     padding-left: 25px;
+    border-bottom:1px solid #CCC;
+   
 }
 .inner-list-item:hover{
     background-color:#f0f0f0 !important;
     color: #666 !important;
 }
-.menulink:hover{
+/*.menulink:hover{
     color: #666;
     text-decoration:none;   
-}
+}*/
 .menulink:hover {
   text-decoration: none;
-  background-color:initial !important;
+  background-color:#CCC !important;
   border-color:initial;
 }
 .menulink:active{
     color:#000 ;
     text-decoration:none;
 }
-..menulink:visited{
+.menulink:visited{
     color:#000 ;
     text-decoration:none;
+}
+.innerlist {
+    border-bottom: 1px solid #CCC !important;   
+}
+.innerlist a{
+     background-color: #E3DEDE !important;
+}
+.innerlist div {
+      background-color: #E3DEDE !important;
+ }   
+.innerlist div:hover{   
+      background-color:#f0f0f0 !important;
+
 }
 .innerlist a:before { 
     content: "";
@@ -1136,7 +1153,11 @@ input.ui-grid-filter-input[type="text"] {
     border-bottom: 4px solid transparent;
     border-left: 4px solid transparent;
 }
-.titel-groupe{
+.title-groupe{
+  background-color: #E3DEDE !important;
+  border-bottom:2px solid #CCC ;
+}
+.title-label{
     font-size:15px;
     font:bold ;
     display:inline-block ;
