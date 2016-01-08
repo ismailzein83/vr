@@ -390,7 +390,7 @@ namespace TOne.WhS.CodePreparation.Business
             SaleCodeManager saleCodeManager = new SaleCodeManager();
             if (input.ZoneId.HasValue)
             {
-                List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesByCountry(input.SellingNumberPlanId, input.CountryId, DateTime.Now);
+                List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesEffectiveAfter(input.SellingNumberPlanId, input.CountryId, DateTime.Now);
                 allCodeItems.AddRange(MapCodeItemsFromSaleCodes(saleCodes));
             }
 

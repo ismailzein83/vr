@@ -18,7 +18,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         [RequiredArgument]
         public InArgument<int> SellingNumberPlanId { get; set; }
 
-        //[RequiredArgument]
+        [RequiredArgument]
         public InArgument<DateTime> EffectiveDate { get; set; }
         [RequiredArgument]
         public OutArgument<IEnumerable<CodeToAdd>> CodesToAdd { get; set; }
@@ -85,6 +85,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     codesToClose.Add(new CodeToClose
                            {
                                Code = code.Code,
+                               
                                CloseEffectiveDate = minimumDate,
                                ZoneName = code.ZoneName,
                            });
