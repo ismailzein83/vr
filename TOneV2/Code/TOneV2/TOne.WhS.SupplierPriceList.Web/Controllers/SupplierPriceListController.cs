@@ -32,7 +32,7 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
                     FileId = input.FileId,
                     SupplierAccountId = input.SupplierId,
                     CurrencyId = input.CurrencyId,
-                    DeletedCodesDate = DateTime.Now
+                    DeletedCodesDate = DateTime.Today.AddDays(7)
                 }
 
             });

@@ -92,10 +92,6 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
                 clicked: editRoutingProduct,
             },
             {
-                name: "Delete",
-                clicked: deleteRoutingProduct,
-            },
-            {
                 name: "Add Route Rule",
                 clicked: addRouteRule,
             }

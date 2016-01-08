@@ -59,6 +59,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             while (count < worksheet.Cells.Rows.Count)
             {
+                if(string.IsNullOrWhiteSpace(worksheet.Cells[count, 0].StringValue) || string.IsNullOrWhiteSpace(worksheet.Cells[count, 1].StringValue) ||
+                    string.IsNullOrWhiteSpace(worksheet.Cells[count, 2].StringValue) || string.IsNullOrWhiteSpace(worksheet.Cells[count, 3].StringValue))
+                {
+                    context.WriteTrackingMessage(LogEntryType.Warning, "Process has skipped Row {0} due to missing data", count);
+                    count++;
+                    continue;
+                }
+
                 DateTime? bEDDateFromExcel = null;
                 if (worksheet.Cells[count, 3].Value != null)
                     bEDDateFromExcel = Convert.ToDateTime(worksheet.Cells[count, 3].StringValue);

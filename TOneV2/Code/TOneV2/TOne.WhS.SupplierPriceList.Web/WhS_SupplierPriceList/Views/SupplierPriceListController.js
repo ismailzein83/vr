@@ -15,14 +15,12 @@ function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIServi
     function defineScope() {
         $scope.selectedSupplier;
         $scope.selectedCurrency;
-        $scope.effectiveDate = new Date();
         $scope.zoneList;
         $scope.upload = function () {
             var input = {
                 SupplierId: $scope.selectedSupplier.CarrierAccountId,
                 CurrencyId: $scope.selectedCurrency.CurrencyId,
-                FileId: $scope.zoneList.fileId,
-                EffectiveDate: $scope.effectiveDate
+                FileId: $scope.zoneList.fileId
             };
 
             return WhS_SupPL_SupplierPriceListAPIService.UploadSupplierPriceList(input).then(function (response) {
@@ -47,10 +45,7 @@ function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIServi
         }
         $scope.previewSupplierPriceList = function () {
             WhS_SupPL_SupplierPriceListService.previewSupplierPriceList(228);
-        }
-
-        $scope.effectiveDate = '';
-        
+        }       
 
     }
     function load() {
