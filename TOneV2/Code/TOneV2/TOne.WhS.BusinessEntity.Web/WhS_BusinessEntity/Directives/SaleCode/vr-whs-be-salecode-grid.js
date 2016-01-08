@@ -8,7 +8,6 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleCodeAPIService) {
         restrict: "E",
         scope: {
             onReady: "=",
-            hidesalezonecolumn:'@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -30,20 +29,23 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleCodeAPIService) {
         this.initializeController = initializeController;
 
         function initializeController() {
-            $scope.hidesalezonecolumn = false;
-            if ($attrs.hidesalezonecolumn != undefined) {
-                $scope.hidesalezonecolumn = true;
-            }
+         
             $scope.salecodes = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                
+                $scope.hidesalezonecolumn = false;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
                    
                     var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
+                    directiveAPI.loadGrid = function (payload) {
+                        var query = payload;
+                        if (payload.hidesalezonecolumn)
+                        {
+                            $scope.hidesalezonecolumn = true;
+                            query = payload.query;
+                        }
                        
                         return gridAPI.retrieveData(query);
                     }

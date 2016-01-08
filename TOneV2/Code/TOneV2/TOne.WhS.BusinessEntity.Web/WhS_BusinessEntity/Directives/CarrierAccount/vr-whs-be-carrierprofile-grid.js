@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCarrierprofileGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierProfileAPIService", "WhS_BE_CarrierAccountService", "WhS_BE_CarrierProfileService",
-function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, WhS_BE_CarrierAccountService, WhS_BE_CarrierProfileService) {
+app.directive("vrWhsBeCarrierprofileGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierProfileAPIService", "WhS_BE_CarrierAccountService", "WhS_BE_CarrierProfileService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, WhS_BE_CarrierAccountService, WhS_BE_CarrierProfileService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -27,14 +27,38 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
     function CarrierProfileGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var gridDrillDownTabsObj;
         this.initializeController = initializeController;
 
         function initializeController() {
+
             $scope.carrierProfiles = [];
+            defineMenuActions();
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+
+                var drillDownDefinitions = [];
+                var drillDownDefinition = {};
+
+                drillDownDefinition.title = "Carrier Account";
+                drillDownDefinition.directive = "vr-whs-be-carrieraccount-grid";
+
+                drillDownDefinition.loadDirective = function (directiveAPI, carrierProfileItem) {
+                    carrierProfileItem.carrierAccountGridAPI = directiveAPI;
+                    var payload = {
+                        query: {
+                            CarrierProfilesIds: [carrierProfileItem.Entity.CarrierProfileId]
+                        },
+                        hideProfileColumn: true
+                    };
+                    return carrierProfileItem.carrierAccountGridAPI.loadGrid(payload);
+                };
+                drillDownDefinitions.push(drillDownDefinition);
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
+
                 function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
@@ -51,7 +75,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                     .then(function (response) {
                         if (response.Data != undefined) {
                             for (var i = 0; i < response.Data.length; i++) {
-                                setDataItemExtension(response.Data[i]);
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                             }
                         }
                         onResponseReady(response);
@@ -60,20 +84,6 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
-            defineMenuActions();
-        }
-
-        function setDataItemExtension(dataItem) {
-            var extensionObject = {};
-            var query = {
-                CarrierProfilesIds: [dataItem.Entity.CarrierProfileId],
-            }
-            extensionObject.onGridReady = function (api) {
-                extensionObject.carrierAccountGridAPI = api;
-                extensionObject.carrierAccountGridAPI.loadGrid(query);
-                extensionObject.onGridReady = undefined;
-            };
-            dataItem.extensionObject = extensionObject;
 
         }
 
@@ -82,35 +92,35 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                 name: "Edit",
                 clicked: editCarrierProfile,
             },
-           {
-               name: "New Carrier Account",
-               clicked: addCarrierAccount
-           }
+                {
+                    name: "New Carrier Account",
+                    clicked: addCarrierAccount
+                }
             ];
         }
 
         function editCarrierProfile(carrierProfileObj) {
             var onCarrierProfileUpdated = function (carrierProfile) {
-              
-                gridAPI.itemUpdated(carrierProfile);
-                
-            }
 
+                gridAPI.itemUpdated(carrierProfile);
+
+            }
             WhS_BE_CarrierProfileService.editCarrierProfile(carrierProfileObj, onCarrierProfileUpdated);
         }
+
         function addCarrierAccount(dataItem) {
             gridAPI.expandRow(dataItem);
             var query = {
                 CarrierProfilesIds: [dataItem.CarrierProfileId],
             }
-            if (dataItem.extensionObject.carrierAccountGridAPI != undefined)
-                dataItem.extensionObject.carrierAccountGridAPI.loadGrid(query);
+
             var onCarrierAccountAdded = function (carrierAccountObj) {
-                if (dataItem.extensionObject.carrierAccountGridAPI != undefined)
-                    dataItem.extensionObject.carrierAccountGridAPI.onCarrierAccountAdded(carrierAccountObj);
+                if (dataItem.carrierAccountGridAPI != undefined)
+                    dataItem.carrierAccountGridAPI.onCarrierAccountAdded(carrierAccountObj);
             };
-            WhS_BE_CarrierAccountService.addCarrierAccount(onCarrierAccountAdded, dataItem);
+            WhS_BE_CarrierAccountService.addCarrierAccount(onCarrierAccountAdded, dataItem.Entity);
         }
+
         function deleteCarrierProfile(carrierProfileObj) {
             var onCarrierProfileDeleted = function () {
                 //TODO: This is to refresh the Grid after delete, should be removed when centralized

@@ -9,7 +9,6 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
             scope: {
                 onReady: "=",
                 sellingproductid: '=',
-                hidecustomercolumn: '@',
                 hidesellingproductcolumn: '@',
             },
             controller: function ($scope, $element, $attrs) {
@@ -33,8 +32,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
             function initializeController() {
                 $scope.customerSellingProducts = [];
                 $scope.hideCustomerColumn = false;
-                if ($attrs.hidecustomercolumn != undefined)
-                    $scope.hideCustomerColumn = true;
+
                 $scope.hideSellingProductColumn = false;
                 if ($attrs.hidesellingproductcolumn != undefined)
                     $scope.hideSellingProductColumn = true;
@@ -45,7 +43,13 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
                         ctrl.onReady(getDirectiveAPI());
                     function getDirectiveAPI() {
                         var directiveAPI = {};
-                        directiveAPI.loadGrid = function (query) {
+                        directiveAPI.loadGrid = function (payload) {
+
+                            var query = payload;
+                            if (payload.hideCustomerColumn) {
+                                $scope.hideCustomerColumn = true;
+                                query = payload.query;
+                            }
                             return gridAPI.retrieveData(query);
                         }
 

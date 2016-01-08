@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSalezoneGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SaleZoneAPIService",
-function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE_MainService) {
+app.directive("vrWhsBeSalezoneGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SaleZoneAPIService", "WhS_BE_SaleZoneService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE_SaleZoneService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -29,11 +29,30 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE
         this.initializeController = initializeController;
 
         function initializeController() {
-           
+            var gridDrillDownTabsObj;
             $scope.salezones = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                
+
+
+                var drillDownDefinitions = [];
+                var drillDownDefinition = {};
+
+                drillDownDefinition.title = "Sale Codes";
+                drillDownDefinition.directive = "vr-whs-be-salecode-grid";
+
+                drillDownDefinition.loadDirective = function (directiveAPI, saleZoneItem) {
+                    saleZoneItem.saleCodeGridAPI = directiveAPI;
+                    var payload = {
+                        query: { ZonesIds: [saleZoneItem.Entity.SaleZoneId] },
+                        hidesalezonecolumn:true
+                    };
+                    return saleZoneItem.saleCodeGridAPI.loadGrid(payload);
+                };
+                drillDownDefinitions.push(drillDownDefinition);
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
@@ -52,7 +71,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE
                     .then(function (response) {
                         if (response.Data != undefined) {
                             for (var i = 0; i < response.Data.length; i++) {
-                                setDataItemExtension(response.Data[i]);
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                             }
                         }
                          onResponseReady(response);
@@ -63,20 +82,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE
             };
         }
 
-        function setDataItemExtension(dataItem) {
-
-            var extensionObject = {};
-            var query = {
-                ZonesIds: [dataItem.Entity.SaleZoneId],
-            }
-            extensionObject.onGridReady = function (api) {
-                extensionObject.saleCodeGridAPI = api;
-                extensionObject.saleCodeGridAPI.loadGrid(query);
-                extensionObject.onGridReady = undefined;
-            };
-            dataItem.extensionObject = extensionObject;
-
-        }
+       
 
     }
 

@@ -11,6 +11,6 @@
     <vr-datagridcolumn headertext="'Begin Effective Date'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'End Effective Date'" field="'Entity.EED'" type="'Date'"></vr-datagridcolumn>
     <vr-datagridexpandablerow>
-        <vr-whs-be-salecode-grid on-ready="dataItem.extensionObject.onGridReady" hidesalezonecolumn></vr-whs-be-salecode-grid>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>
 </vr-datagrid>

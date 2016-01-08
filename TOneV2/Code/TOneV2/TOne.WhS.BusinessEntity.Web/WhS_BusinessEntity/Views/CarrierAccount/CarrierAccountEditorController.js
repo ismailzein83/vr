@@ -16,9 +16,8 @@
         var carrierProfileId;
         var carrierAccountEntity;
         $scope.scopeModal = {};
-
-        defineScope();
         loadParameters();
+        defineScope();
         load();
 
         function loadParameters() {
@@ -28,8 +27,8 @@
                 carrierProfileId = parameters.CarrierProfileId
             }
             $scope.scopeModal.isEditMode = (carrierAccountId != undefined);
-            $scope.scopeModal.disableCarrierProfile = ((carrierProfileId != undefined) && !$scope.scopeModal.isEditMode);
-
+            $scope.scopeModal.disableCarrierProfile = ((carrierProfileId != undefined));
+            console.log($scope.scopeModal.disableCarrierProfile);
         }
 
         function defineScope() {
@@ -131,7 +130,7 @@
             carrierProfileReadyPromiseDeferred.promise
                 .then(function () {
                     var directivePayload = {
-                        selectedIds: carrierProfileId != undefined ? carrierProfileId : undefined
+                        selectedIds:( carrierAccountEntity != undefined ? carrierAccountEntity.CarrierProfileId : (carrierProfileId != undefined?carrierProfileId:undefined))
                     }
                     VRUIUtilsService.callDirectiveLoad(carrierProfileDirectiveAPI, directivePayload, loadCarrierProfilePromiseDeferred);
                 });

@@ -11,7 +11,7 @@
             <vr-datagridcolumn headertext="'Company'" field="'Entity.Settings.Company'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Country'" field="'CountryName'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridexpandablerow>
-                <vr-whs-be-carrieraccount-grid on-ready="dataItem.extensionObject.onGridReady" hideprofilecolumn></vr-whs-be-carrieraccount-grid>
+                <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
             </vr-datagridexpandablerow>
         </vr-datagrid>
     </vr-columns>

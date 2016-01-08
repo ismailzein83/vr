@@ -22,8 +22,8 @@
             var modalSettings = {
             };
             var parameters = {
-                CarrierAccountId: carrierAccountObj.CarrierAccountId,
-                CarrierProfileId: carrierAccountObj.CarrierProfileId,
+                CarrierAccountId: carrierAccountObj.CarrierAccountId != undefined?carrierAccountObj.CarrierAccountId:carrierAccountObj,
+                CarrierProfileId: carrierAccountObj.CarrierProfileId != undefined? carrierAccountObj.CarrierProfileId:undefined,
             };
 
             modalSettings.onScopeReady = function (modalScope) {
