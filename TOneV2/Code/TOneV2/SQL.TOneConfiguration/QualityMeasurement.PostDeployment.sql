@@ -17,7 +17,7 @@ set identity_insert [sec].[Module] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'Administration','Administration','Administration',null,'/images/menu-icons/Administration.png',10,0),
-(2,'CLI Tester','CLI Tester','CLI Tester',null,'/images/menu-icons/CLITester.png',12,0),
+(2,'Quality Test','Quality Test','Quality Test',null,'/images/menu-icons/CLITester.png',12,0),
 (3,'Business Entities','Business Entities','Business Entities',null,'/images/menu-icons/Business Entities.png',11,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
