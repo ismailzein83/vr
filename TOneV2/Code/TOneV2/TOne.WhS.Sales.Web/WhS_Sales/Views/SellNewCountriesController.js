@@ -2,9 +2,9 @@
 
     "use strict";
 
-    SellNewZonesController.$inject = ["$scope", "WhS_BE_CustomerZoneAPIService", "UtilsService", "VRNavigationService", "VRNotificationService"];
+    SellNewCountriesController.$inject = ["$scope", "WhS_BE_CustomerZoneAPIService", "UtilsService", "VRNavigationService", "VRNotificationService"];
 
-    function SellNewZonesController($scope, WhS_BE_CustomerZoneAPIService, UtilsService, VRNavigationService, VRNotificationService) {
+    function SellNewCountriesController($scope, WhS_BE_CustomerZoneAPIService, UtilsService, VRNavigationService, VRNotificationService) {
 
         var customerId;
         var countryGridAPI;
@@ -23,7 +23,7 @@
         }
 
         function defineScope() {
-            $scope.title = "Sell New Zones";
+            $scope.title = "Sell New Countries";
 
             $scope.countries = [];
             $scope.disableSaveButton = true;
@@ -31,10 +31,16 @@
             $scope.onCountryGridReady = function (api) {
                 countryGridAPI = api;
 
+                $scope.isLoading = true;
+
                 WhS_BE_CustomerZoneAPIService.GetCountriesToSell(customerId).then(function (response) {
                     for (var i = 0; i < response.length; i++) {
                         $scope.countries.push(response[i]);
                     }
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    $scope.isLoading = false;
                 });
             };
 
@@ -43,13 +49,23 @@
                 $scope.disableSaveButton = (country == undefined); // disable the add button if no country is selected
             };
 
-            $scope.sellNewZones = function () {
+            $scope.onSwitchValueChanged = function () {
+                if ($scope.selectAll != undefined && $scope.selectAll != null) {
+                    $scope.disableSaveButton = $scope.selectAll == false;
+
+                    for (var i = 0; i < $scope.countries.length; i++) {
+                        $scope.countries[i].isSelected = $scope.selectAll;
+                    }
+                }
+            };
+
+            $scope.sellNewCountries = function () {
                 var customerZonesObj = buildCutomerZonesObjFromScope();
 
                 WhS_BE_CustomerZoneAPIService.AddCustomerZones(customerZonesObj).then(function (response) {
-                    if (VRNotificationService.notifyOnItemAdded("Customer Zones", response)) {
-                        if ($scope.onCustomerZonesSold != undefined) {
-                            $scope.onCustomerZonesSold(response);
+                    if (VRNotificationService.notifyOnItemAdded("Countries", response)) {
+                        if ($scope.onCountriesSold != undefined) {
+                            $scope.onCountriesSold(response);
                         }
 
                         $scope.modalContext.closeModal();
@@ -96,6 +112,6 @@
         }
     }
 
-    appControllers.controller("WhS_Sales_SellNewZonesController", SellNewZonesController);
+    appControllers.controller("WhS_Sales_SellNewCountriesController", SellNewCountriesController);
 
 })(appControllers);

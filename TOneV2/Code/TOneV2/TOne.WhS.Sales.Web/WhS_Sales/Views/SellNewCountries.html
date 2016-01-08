@@ -1,11 +1,17 @@
-﻿<div vr-modalcontent ng-controller="WhS_Sales_SellNewZonesController" vr-loader="isGettingData">
+﻿<div vr-modalcontent ng-controller="WhS_Sales_SellNewCountriesController" vr-loader="isLoading">
     <vr-modalbody>
         <vr-form name="formSellNewZones">
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-switch label="Select All" value="selectAll" onvaluechanged="onSwitchValueChanged()"></vr-switch>
+                </vr-columns>
+            </vr-row>
             <vr-row>
                 <vr-columns width="fullrow">
                     <vr-datagrid on-ready="onCountryGridReady"
                                  datasource="countries"
                                  idfield="CountryId"
+                                 maxheight="500px"
                                  hidegridmenu>
 
                         <vr-datagridcolumn headertext="'Select'" field="'CountryId'" widthfactor="3" disablesorting>
@@ -22,7 +28,7 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <span vr-disabled="disableSaveButton">
-                    <vr-button type="Save" formname="formSellNewZones" data-onclick="sellNewZones"></vr-button>
+                    <vr-button type="Save" formname="formSellNewZones" data-onclick="sellNewCountries"></vr-button>
                 </span>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>

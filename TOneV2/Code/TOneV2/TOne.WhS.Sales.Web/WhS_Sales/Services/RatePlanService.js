@@ -1,13 +1,13 @@
 ﻿app.service("WhS_Sales_RatePlanService", ["VRModalService", function (VRModalService) {
 
     return ({
-        sellNewZones: sellNewZones,
+        sellNewCountries: sellNewCountries,
         editSettings: editSettings,
         editPricingSettings: editPricingSettings,
         viewChanges: viewChanges
     });
 
-    function sellNewZones(customerId, onCustomerZonesSold) {
+    function sellNewCountries(customerId, onCountriesSold) {
         var parameters = {
             CustomerId: customerId
         };
@@ -15,10 +15,10 @@
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.onCustomerZonesSold = onCustomerZonesSold;
+            modalScope.onCountriesSold = onCountriesSold;
         };
 
-        VRModalService.showModal("/Client/Modules/WhS_Sales/Views/SellNewZones.html", parameters, settings);
+        VRModalService.showModal("/Client/Modules/WhS_Sales/Views/SellNewCountries.html", parameters, settings);
     }
 
     function editSettings(settings, onSettingsUpdate) {

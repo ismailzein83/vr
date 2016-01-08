@@ -156,14 +156,16 @@
             $scope.search = function () {
                 return loadRatePlan();
             };
-            $scope.sellNewZones = function () {
+            $scope.sellNewCountries = function () {
                 var customerId = $scope.selectedCustomer.CarrierAccountId;
-                var onCustomerZonesSold = function (customerZones) {
+                var onCountriesSold = function (customerZones) {
+                    $scope.connector.selectedZoneLetterIndex = 0;
+
                     if (databaseSelectorAPI.getSelectedIds() != null && policySelectorAPI.getSelectedIds() != null)
                         loadRatePlan();
                 };
 
-                WhS_Sales_RatePlanService.sellNewZones(customerId, onCustomerZonesSold);
+                WhS_Sales_RatePlanService.sellNewCountries(customerId, onCountriesSold);
             };
             $scope.editSettings = function () {
                 var onSettingsUpdate = function (updatedSettings) {
@@ -318,7 +320,7 @@
                 }
                 else {
                     loadGridDeferred.resolve();
-                    VRNotificationService.showInformation("No zones were sold to this customer");
+                    VRNotificationService.showInformation("No countries were sold to this customer");
                 }
             });
 
