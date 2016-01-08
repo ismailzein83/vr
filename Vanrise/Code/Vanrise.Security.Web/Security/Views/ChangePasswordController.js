@@ -33,9 +33,9 @@ function ChangePasswordController($scope, SecurityAPIService, VRNotificationServ
             $scope.modalContext.closeModal();
         };
 
-        $scope.ConfirmPassword = function (text) {
+        $scope.ConfirmPassword = function () {
 
-            if ($scope.txtPasswordNew != text )
+            if ($scope.txtPasswordNew != $scope.txtPasswordConfirmed)
                 return "Your Passwords do not match";
             else
                 return null;
