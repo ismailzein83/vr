@@ -21,7 +21,7 @@ namespace QM.CLITester.Business
 {
     public class TestCallManager
     {
-        public AddTestCallOutput AddNewTestCall(AddTestCallInput testCallResult, int userId)
+        public AddTestCallOutput AddNewTestCall(AddTestCallInput testCallResult, int userId, long? batchNumber)
         {
             AddTestCallOutput output = new AddTestCallOutput();
 
@@ -31,18 +31,16 @@ namespace QM.CLITester.Business
             {
                 dataManager.Insert(supplierId, testCallResult.CountryID, testCallResult.ZoneID, (int) CallTestStatus.New,
                     (int) CallTestResult.NotCompleted, 0, 0,
-                    userId, testCallResult.ProfileID);
+                    userId, testCallResult.ProfileID, batchNumber);
             }
-            
-            long startingId;
-            IDManager.Instance.ReserveIDRange(this.GetType(), testCallResult.SupplierID.Count, out startingId);
-            output.BatchNumber = startingId;
+
+            output.BatchNumber = batchNumber;
             return output;
         }
 
         public AddTestCallOutput AddNewTestCall(AddTestCallInput testCallResult)
         {
-            return AddNewTestCall(testCallResult, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId());
+            return AddNewTestCall(testCallResult, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId(), null);
         }
 
         public bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus, int initiationRetryCount, string failureMessage)
@@ -101,10 +99,17 @@ namespace QM.CLITester.Business
             return dataManager.GetTotalCallsByUserId(Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId());
         }
 
-        public List<TestCall> GetAllbyBatchNumber(long batchNumber)
+        public List<TestCallDetail> GetAllbyBatchNumber(long batchNumber)
         {
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            return dataManager.GetAllbyBatchNumber(batchNumber);
+
+            List<TestCall> listTestCalls = dataManager.GetAllbyBatchNumber(batchNumber);
+            List<TestCallDetail> listTestCallDetails = new List<TestCallDetail>();
+            foreach (TestCall testCall in listTestCalls)
+            {
+                listTestCallDetails.Add(TestCallDetailMapper(testCall));
+            }
+            return listTestCallDetails;
         }
 
         public IDataRetrievalResult<TestCallDetail> GetFilteredTestCalls(DataRetrievalInput<TestCallQuery> input)

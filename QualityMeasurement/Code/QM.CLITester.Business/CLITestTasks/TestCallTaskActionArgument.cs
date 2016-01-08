@@ -10,5 +10,7 @@ namespace QM.CLITester.Business
     public class TestCallTaskActionArgument : Vanrise.Runtime.Entities.BaseTaskActionArgument
     {
         public AddTestCallInput AddTestCallInput { get; set; }
+
+        public AddTestCallOutput AddTestCallOutput { get; set; }
     }
 }

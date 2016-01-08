@@ -33,12 +33,13 @@ namespace QM.CLITester.Data.SQL
             _columnMapper.Add("Entity.CreationDate", "CreationDate");
         }
 
-        public bool Insert(int supplierId, int countryId, int zoneId, int callTestStatus, int callTestResult, int initiationRetryCount, int getProgressRetryCount, int userId, int profileId)
+        public bool Insert(int supplierId, int countryId, int zoneId, int callTestStatus, int callTestResult, int initiationRetryCount, int getProgressRetryCount, 
+            int userId, int profileId, long? batchNumber)
         {
             object testCallId;
 
             int recordsEffected = ExecuteNonQuerySP("QM_CLITester.sp_TestCall_Insert", out testCallId, supplierId, countryId, zoneId,
-                    callTestStatus, callTestResult, initiationRetryCount, getProgressRetryCount, userId, profileId);
+                    callTestStatus, callTestResult, initiationRetryCount, getProgressRetryCount, userId, profileId, batchNumber);
             return (recordsEffected > 0);
         }
 

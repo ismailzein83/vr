@@ -138,10 +138,10 @@
             
             return Qm_CliTester_TestCallAPIService.AddNewTestCall(testCallObject)
             .then(function (response) {
-                $scope.selectedSupplier = [];
-                $scope.selectedCountry = undefined;
-                $scope.selectedProfile = undefined;
-                $scope.selectedZone = undefined;
+                //$scope.selectedSupplier = [];
+                //$scope.selectedCountry = undefined;
+                //$scope.selectedProfile = undefined;
+                //$scope.selectedZone = undefined;
                 if (VRNotificationService.notifyOnItemAdded("Test Call", response, "Name")) {
                     if ($scope.onTestCallAdded != undefined)
                         $scope.onTestCallAdded(response.InsertedObject);
