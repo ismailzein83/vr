@@ -56,7 +56,7 @@
                     <vr-button type="Save" menuactions="saveButtonMenuActions" vr-disabled="disableSaveButton()"></vr-button>
                     <vr-button type="Settings" data-onclick="editSettings" vr-disabled="disableSettingsButton()"></vr-button>
                     <vr-button type="Pricing" data-onclick="editPricingSettings" vr-disabled="disablePricingButton()"></vr-button>
-                    <vr-button type="Apply" data-onclick="applyCalculatedRates" vr-disabled="disableApplyButton()"></vr-button>
+                    <vr-button type="Apply" data-onclick="applyCalculatedRates" ng-show="showApplyButton"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

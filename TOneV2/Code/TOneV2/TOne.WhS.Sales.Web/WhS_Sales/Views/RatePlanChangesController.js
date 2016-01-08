@@ -6,9 +6,11 @@
 
     function RatePlanChangesController($scope, WhS_Sales_RatePlanAPIService, WhS_Sales_RateChangeTypeEnum, UtilsService, VRNavigationService, VRNotificationService) {
 
-        var ownerType;
+        var ownerType; // This is the value property of the enum
         var ownerId;
         var changes;
+
+        var isDefaultRoutingProductDefined;
 
         var rateGridAPI;
         var rateGridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -81,10 +83,10 @@
             };
 
             $scope.validateDefaultItem = function () {
-                if ($scope.defaultItem)
+                if (isDefaultRoutingProductDefined === true)
                     return null;
 
-                return "Default routing product was not found";
+                return "A default routing product is required";
             };
 
             $scope.save = function () {
@@ -129,10 +131,16 @@
 
             function getDefaultItem() {
                 return WhS_Sales_RatePlanAPIService.GetDefaultItem(ownerType, ownerId).then(function (response) {
+                    console.log(response);
+
                     if (response) {
-                        $scope.defaultItem = {};
-                        
+                        if (response.CurrentRoutingProductId || response.NewRoutingProductId) {
+                            isDefaultRoutingProductDefined = true;
+                        }
+
                         if (response.NewRoutingProductId || (response.CurrentRoutingProductId && response.RoutingProductChangeEED)) {
+                            $scope.defaultItem = {};
+                        
                             $scope.defaultItem.currentRoutingProductName = response.CurrentRoutingProductName ? response.CurrentRoutingProductName : "None";
                             $scope.defaultItem.currentRoutingProductName = response.IsCurrentRoutingProductEditable === false ? $scope.defaultItem.currentRoutingProductName += " (Inherited)" : $scope.defaultItem.currentRoutingProductName;
                             $scope.defaultItem.newRoutingProductName = response.NewRoutingProductName;

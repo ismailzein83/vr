@@ -179,6 +179,7 @@
                         }
                     }
 
+                    $scope.showApplyButton = false;
                     VRNotificationService.showSuccess("Settings saved");
                     pricingSettings = null;
                     loadGrid();
@@ -187,10 +188,9 @@
             };
             $scope.editPricingSettings = function () {
                 var onPricingSettingsUpdated = function (updatedPricingSettings) {
-                    if (updatedPricingSettings) {
-                        pricingSettings = updatedPricingSettings;
-                    }
+                    pricingSettings = updatedPricingSettings;
 
+                    $scope.showApplyButton = true;
                     VRNotificationService.showSuccess("Pricing settings saved");
                     loadGrid();
                 };
@@ -201,6 +201,8 @@
 
                 confirmPromise.then(function (confirmed) {
                     if (confirmed) {
+                        $scope.showApplyButton = false;
+
                         var input = {
                             OwnerType: $scope.selectedOwnerType.value,
                             OwnerId: getOwnerId(),
@@ -236,10 +238,7 @@
             $scope.disablePricingButton = function () {
                 return !validateRatePlan();
             };
-            $scope.disableApplyButton = function () {
-                return !pricingSettings;
-            };
-
+            
             defineSaveButtonMenuActions();
         }
 
