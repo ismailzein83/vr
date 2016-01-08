@@ -227,8 +227,8 @@ namespace TOne.WhS.BusinessEntity.Business
         public string GetRoutingProductName(int routingProductId)
         {
             RoutingProduct routingProduct = GetRoutingProduct(routingProductId);
-            
-            if (routingProductId != null)
+
+            if (routingProduct != null)
                 return routingProduct.Name;
             
             return null;
