@@ -74,13 +74,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             StrategyManager strategyManager = new StrategyManager();
             IEnumerable<Strategy> strategies = strategyManager.GetAll();
 
-
-            DWDimensionManager BTSManager = new DWDimensionManager();
-            List<DWDimension> BTSs = BTSManager.GetDimensions("Dim_BTS");
-            int LastBTSId = BTSs.Count;
-
-            List<DWDimension> ToBeInsertedBTSs = new List<DWDimension>();
-
+            int LastBTSId = inputArgument.BTSs.Count;
 
             int cdrsCount = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -118,11 +112,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                                 dwFact.BTS = cdr.BTSId;
                                 if (cdr.BTSId != null)
-                                    if (!BTSs.Exists(x => x.Id == cdr.BTSId.Value))
+                                    if (!inputArgument.BTSs.ContainsKey(cdr.BTSId.Value))
                                     {
                                         DWDimension dwDimension = new DWDimension() { Id = ++LastBTSId, Description = cdr.BTSId.Value.ToString() };
-                                        ToBeInsertedBTSs.Add(dwDimension);
-                                        BTSs.Add(dwDimension);
+                                        inputArgument.BTSs.Add(dwDimension.Id, dwDimension);
                                     }
 
 
@@ -160,11 +153,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 while (!ShouldStop(handle) && hasItem);
 
             });
-
-            IDWDimensionDataManager dataManager = FraudDataManagerFactory.GetDataManager<IDWDimensionDataManager>();
-
-            dataManager.TableName = "[dbo].[Dim_BTS]";
-            dataManager.SaveDWDimensionsToDB(ToBeInsertedBTSs);
 
 
             dwFactBatch = SendDWFacttoOutputQueue(inputArgument, handle, batchSize, dwFactBatch, true);
