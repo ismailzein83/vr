@@ -70,12 +70,14 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="vffe:DWDimensionDictionary" Name="btss" />
+    </Sequence.Variables>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="Started executing workflow: FillDataWarehouse ..." />
     <Parallel DisplayName="Dimensions" sap2010:WorkflowViewState.IdRef="Parallel_2">
       <Parallel.Variables>
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="getDWTimeActivityStatus" />
         <Variable x:TypeArguments="vffe:DWTimeDictionary" Name="times" />
-        <Variable x:TypeArguments="vffe:DWDimensionDictionary" Name="btss" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="getDWBTSsActivityStatus" />
         <Variable x:TypeArguments="vffe:DWAccountCaseDictionary" Name="accountCases" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="getDWAccountCaseActivityStatus" />
@@ -488,11 +490,16 @@
           </InArgument>
         </vffba1:LoadCDRs.ToDate>
       </vffba1:LoadCDRs>
-      <vffba1:FillFactValues sap2010:WorkflowViewState.IdRef="FillFactValues_1">
+      <vffba1:FillFactValues sap2010:WorkflowViewState.IdRef="FillFactValues_2">
+        <vffba1:FillFactValues.BTSs>
+          <InArgument x:TypeArguments="vffe:DWDimensionDictionary">
+            <mca:CSharpValue x:TypeArguments="vffe:DWDimensionDictionary">btss</mca:CSharpValue>
+          </InArgument>
+        </vffba1:FillFactValues.BTSs>
         <vffba1:FillFactValues.InputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
-          </InOutArgument>
+          <InArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpValue>
+          </InArgument>
         </vffba1:FillFactValues.InputQueue>
         <vffba1:FillFactValues.OutputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:DWFactBatch)">
@@ -546,7 +553,7 @@
       </vffba1:ApplyDWFactsToDB>
     </Parallel>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2" Text="Finished executing workflow: FillDataWarehouse ..." />
-    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sZEgDpgQOAgEBSQVJeQMBsQ5KBcoDEAMBhwHLAwWjBBACAQSkBAWkBHoCAQJJQ0l2AwGyDlMH2wISAwG/AtwCB5EDEgMB2wGSAwenAxsDAboBqAMHswMaAwGpAbQDB8kDIgMBiAHVAwfqAxkCAWLrAweABB8CAT2BBAeWBCkCARiXBAeiBCECAQWkBEOkBHcCAQNvCbEBIgMBgwuyAQmhAisDAawFogIJ2gIoAwHAAuMCCe4CIgMBpgLvAgmEAysDAfUBhQMJkAMoAwHcAZUDDZUDWwMB0wGfAw2fA2UDAcsBmgMNmgN4AwHDAaQDDaQDWQMBuwGwAw2wA3gDAbIBqwMNqwNpAwGqAbcDDbcDcwMBoQG8Aw28A1sDAZkBwQMNwQN/AwGRAcYDDcYDWQMBiQHYAw3YA1sCAX7iAw3iA3YCAXXdAw3dA24CAWznAw3nA1kCAWP4Aw34A24CAVnuAw3uA24CAVD9Aw39A30CAUfzAw3zA3QCAT6OBA2OBHUCATSEBA2EBGwCASuTBA2TBIcBAgEiiQQNiQR0AgEZnwQNnwR/AgEPmgQNmgRsAgEGkAEPkAFuAwGQDp8BD58BdgMB7w18D3xzAwHODYYBD4YBXQMBrQ2uAQ+uAWwDAYwNdw93cAMB6wyVAQ+VAYABAwHKDIEBD4EBbgMBqQykAQ+kAXYDAYgMcg9ycgMB5wuaAQ+aAXQDAcYLqQEPqQFbAwGlC4sBD4sBcwMBhAvOAQ/OAWYDAeIK9gEP9gF/AwHBCoUCD4UCegMBoAqUAg+UAoIBAwH/CeIBD+IBbgMB3gnsAQ/sAX4DAb0JigIPigKAAQMBnAm/AQ+/AWsDAfsI0wEP0wF4AwHaCPEBD/EBfAMBuQieAg+eAmQDAZgI+wEP+wF6AwH3B7oBD7oBaAMB1gfYAQ/YAYkBAwG1B8QBD8QBZgMBlAfnAQ/nAW4DAfMGjwIPjwKCAQMB0gaAAg+AAn8DAbEGmQIPmQJ4AwGQBrUBD7UBagMB7wXdAQ/dAWwDAc4FyQEPyQFrAwGtBbQCD7QCfwMBiwXDAg/DAnoDAeoE0gIP0gKCAQMByQSqAg+qAn4DAagEyAIPyAKAAQMBhwSlAg+lAoEBAwHmA68CD68CfAMBxQO5Ag+5AnoDAaQDzQIPzQKCAQMBgwO+Ag++An8DAeIC1wIP1wJ4AwHBAuYCD+YCcgMBswLrAg/rAoABAwGnAvcCD/cCeAMBmgLyAg/yAmoDAY4C/AIP/AKJAQMBggKBAw+BA3wDAfYBiAMPiAOBAQMB6QGNAw+NA3wDAd0B</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sZUgDrQQOAgEBTAVMeQMByQ5NBcwDEAMBnwHNAwWqBBACAQSrBAWrBHoCAQJMQ0x2AwHKDlUH3QISAwHXAt4CB5MDEgMB8wGUAwepAxsDAdIBqgMHtQMaAwHBAbYDB8sDIgMBoAHXAwfsAxkCAXbtAweHBB8CAUOIBAedBCkCARqeBAepBCECAQWrBEOrBHcCAQNxCbMBIgMBmwu0AQmjAisDAcQFpAIJ3AIoAwHYAuUCCfACIgMBvgLxAgmGAysDAY0ChwMJkgMoAwH0AZcDDZcDWwMB6wGhAw2hA2UDAeMBnAMNnAN4AwHbAaYDDaYDWQMB0wGyAw2yA3gDAcoBrQMNrQNpAwHCAbkDDbkDcwMBuQG+Aw2+A1sDAbEBwwMNwwN/AwGpAcgDDcgDWQMBoQHaAw3aA1sDAZUB5AMN5AN2AwGLAd8DDd8DbgMBgQHpAw3pA1kCAXf/Aw3/A24CAWz1Aw31A2YCAWKEBA2EBH0CAVj6Aw36A3QCAU7wAw3wA2ECAUSVBA2VBHUCATmLBA2LBGwCAS+aBA2aBIcBAgElkAQNkAR0AgEbpgQNpgR/AgEQoQQNoQRsAgEGkgEPkgFuAwGoDqEBD6EBdgMBhw5+D35zAwHmDYgBD4gBXQMBxQ2wAQ+wAWwDAaQNeQ95cAMBgw2XAQ+XAYABAwHiDIMBD4MBbgMBwQymAQ+mAXYDAaAMdA90cgMB/wucAQ+cAXQDAd4LqwEPqwFbAwG9C40BD40BcwMBnAvQAQ/QAWYDAfoK+AEP+AF/AwHZCocCD4cCegMBuAqWAg+WAoIBAwGXCuQBD+QBbgMB9gnuAQ/uAX4DAdUJjAIPjAKAAQMBtAnBAQ/BAWsDAZMJ1QEP1QF4AwHyCPMBD/MBfAMB0QigAg+gAmQDAbAI/QEP/QF6AwGPCLwBD7wBaAMB7gfaAQ/aAYkBAwHNB8YBD8YBZgMBrAfpAQ/pAW4DAYsHkQIPkQKCAQMB6gaCAg+CAn8DAckGmwIPmwJ4AwGoBrcBD7cBagMBhwbfAQ/fAWwDAeYFywEPywFrAwHFBbYCD7YCfwMBowXFAg/FAnoDAYIF1AIP1AKCAQMB4QSsAg+sAn4DAcAEygIPygKAAQMBnwSnAg+nAoEBAwH+A7ECD7ECfAMB3QO7Ag+7AnoDAbwDzwIPzwKCAQMBmwPAAg/AAn8DAfoC2QIP2QJ4AwHZAugCD+gCcgMBywLtAg/tAoABAwG/AvkCD/kCeAMBsgL0Ag/0AmoDAaYC/gIP/gKJAQMBmgKDAw+DA3wDAY4CigMPigOBAQMBgQKPAw+PA3wDAfUB</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -576,7 +583,7 @@
       <sap2010:ViewStateData Id="GetDWAccountCases_1" sap:VirtualizedContainerService.HintSize="200,270" />
       <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1318,316" />
       <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="FillFactValues_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="FillFactValues_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareDWFactsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyDWFactsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1318,86" />

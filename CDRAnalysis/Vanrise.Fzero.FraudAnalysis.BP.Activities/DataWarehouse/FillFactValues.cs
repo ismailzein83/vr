@@ -14,6 +14,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public BaseQueue<CDRBatch> InputQueue { get; set; }
 
         public BaseQueue<DWFactBatch> OutputQueue { get; set; }
+
+        public DWDimensionDictionary BTSs { get; set; }
     }
     # endregion
 
@@ -23,10 +25,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InOutArgument<BaseQueue<CDRBatch>> InputQueue { get; set; }
+        public InArgument<BaseQueue<CDRBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<DWFactBatch>> OutputQueue { get; set; }
+
+        [RequiredArgument]
+        public InArgument<DWDimensionDictionary> BTSs { get; set; }
 
         # endregion
 
