@@ -217,7 +217,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         var getZoneItemPromise = WhS_Sales_RatePlanAPIService.GetZoneItem(getZoneItemInput());
 
                         getZoneItemPromise.then(function (response) {
-                            console.log(response);
                             if (response) {
                                 getZoneItemDeferred.resolve();
 
@@ -227,7 +226,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                     gridZoneItem.EffectiveRoutingProductId = response.EffectiveRoutingProductId;
                                     gridZoneItem.EffectiveRoutingProductName = response.EffectiveRoutingProductName;
                                     gridZoneItem.CalculatedRate = response.CalculatedRate;
-                                    console.log(gridZoneItem.CalculatedRate);
 
                                     loadRouteOptionsDeferred.promise.finally(function () {
                                         zoneItem.isLoadingRouteOptions = false;
@@ -252,9 +250,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                     else {
                                         gridZoneItem.Costs = null;
                                     }
-                                    console.log(gridZoneItem.Costs);
                                 }
-                                console.log(gridZoneItem);
                             }
                             else {
                                 getZoneItemDeferred.reject();

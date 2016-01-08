@@ -280,7 +280,22 @@ namespace TOne.WhS.Sales.Business
         public bool CheckIfDraftExists(SalePriceListOwnerType ownerType, int ownerId)
         {
             Changes changes = _dataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
-            return changes != null;
+
+            if (changes == null)
+                return false;
+
+            if (changes.ZoneChanges != null)
+                return true;
+
+            if (changes.DefaultChanges != null)
+            {
+                if (changes.DefaultChanges.NewDefaultRoutingProduct != null || changes.DefaultChanges.DefaultRoutingProductChange != null)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public bool DeleteDraft(SalePriceListOwnerType ownerType, int ownerId)

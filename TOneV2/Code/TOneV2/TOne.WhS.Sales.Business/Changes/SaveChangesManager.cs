@@ -35,8 +35,12 @@ namespace TOne.WhS.Sales.Business
 
         #region Save Price List
 
+        int? _priceListId;
+
         public void SavePriceList()
         {
+            _priceListId = null;
+
             SaveDefaultChanges();
             SaveRateChanges();
             SaveRoutingProductChanges();
@@ -47,13 +51,19 @@ namespace TOne.WhS.Sales.Business
         {
             if (_changes != null && _changes.DefaultChanges != null)
             {
+                
                 ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
 
                 if (_changes.DefaultChanges.NewDefaultRoutingProduct != null)
+                {
+                    AddPriceList();
                     saleEntityRoutingProductDataManager.InsertOrUpdateDefaultRoutingProduct(_ownerType, _ownerId, _changes.DefaultChanges.NewDefaultRoutingProduct);
-
+                }
                 else if (_changes.DefaultChanges.DefaultRoutingProductChange != null)
+                {
+                    AddPriceList();
                     saleEntityRoutingProductDataManager.UpdateDefaultRoutingProduct(_ownerType, _ownerId, _changes.DefaultChanges.DefaultRoutingProductChange);
+                }
             }
         }
 
@@ -86,32 +96,19 @@ namespace TOne.WhS.Sales.Business
                         rateChanges.AddRange(newRate.ChangedExistingRates.MapRecords(itm => new RateChange() { RateId = itm.ChangedRate.RateId, EED = itm.ChangedRate.EED }));
                     }
 
-                    int priceListId = AddPriceList();
-                    saleRateDataManager.InsertRates(newRates, priceListId);
+                    if (_priceListId == null) { AddPriceList(); }
+                    saleRateDataManager.InsertRates(newRates, (int)_priceListId);
                 }
 
                 if (rateChanges != null && rateChanges.Count > 0)
+                {
+                    if (_priceListId == null) { AddPriceList(); }
                     saleRateDataManager.CloseRates(rateChanges);
+                }
 
                 // Update the cached rates
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>().SetCacheExpired();
             }
-        }
-
-        int AddPriceList()
-        {
-            int priceListId;
-
-            SalePriceList priceList = new SalePriceList()
-            {
-                OwnerType = _ownerType,
-                OwnerId = _ownerId,
-                CurrencyId = GetCurrencyId()
-            };
-
-            _ratePlanDataManager.InsertPriceList(priceList, out priceListId);
-
-            return priceListId;
         }
 
         void SaveRoutingProductChanges()
@@ -123,14 +120,35 @@ namespace TOne.WhS.Sales.Business
                 var routingProductChanges = _changes.ZoneChanges.MapRecords(itm => itm.RoutingProductChange, itm => itm.RoutingProductChange != null);
 
                 if (newRoutingProducts != null && newRoutingProducts.Count() > 0)
+                {
+                    if (_priceListId == null) { AddPriceList(); }
                     saleEntityRoutingProductDataManager.InsertZoneRoutingProducts(_ownerType, _ownerId, newRoutingProducts);
+                }
 
                 if (routingProductChanges != null && routingProductChanges.Count() > 0)
+                {
+                    if (_priceListId == null) { AddPriceList(); }
                     saleEntityRoutingProductDataManager.UpdateZoneRoutingProducts(_ownerType, _ownerId, routingProductChanges);
+                }
 
                 // Update the cached routing products
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>().SetCacheExpired();
             }
+        }
+
+        void AddPriceList()
+        {
+            SalePriceList priceList = new SalePriceList()
+            {
+                OwnerType = _ownerType,
+                OwnerId = _ownerId,
+                CurrencyId = GetCurrencyId()
+            };
+
+            int priceListId;
+            _ratePlanDataManager.InsertPriceList(priceList, out priceListId);
+
+            _priceListId = priceListId;
         }
 
         #endregion

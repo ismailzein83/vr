@@ -510,6 +510,7 @@
                 savePriceListDeferred.promise.then(function (saveClicked) {
                     if (saveClicked) {
                         VRNotificationService.showSuccess("Price list saved");
+                        $scope.showRemoveButton = false;
                         loadRatePlan();
                     }
                 });
