@@ -27,6 +27,11 @@ namespace Vanrise.Data
                 _connectionString = connectionString;
         }
 
+        protected object GetDecimalForBCP(Decimal value)
+        {
+            return Math.Round(value, 6);
+        }
+
         public BaseDataManager()
             : this("MainDBConnString")
         {

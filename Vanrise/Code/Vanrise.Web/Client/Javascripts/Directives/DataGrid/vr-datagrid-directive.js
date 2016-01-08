@@ -290,9 +290,11 @@
             else {
                 template = UtilsService.replaceAll(template, "#PERCENTAGE#", "");
                 template = template.replace("#TEXTALIGN#", "left");
-                if (col.type == "Datetime")
+                if (col.type == "LongDatetime")
+                    template = UtilsService.replaceAll(template, "#CELLFILTER#", "| date:'yyyy-MM-dd HH:mm:ss'");
+                else if (col.type == "Datetime")
                     template = UtilsService.replaceAll(template, "#CELLFILTER#", "| date:'yyyy-MM-dd HH:mm'");
-                if (col.type == "Date")
+                else if (col.type == "Date")
                     template = UtilsService.replaceAll(template, "#CELLFILTER#", "| date:'yyyy-MM-dd'");
                 else
                     template = UtilsService.replaceAll(template, "#CELLFILTER#", "");
