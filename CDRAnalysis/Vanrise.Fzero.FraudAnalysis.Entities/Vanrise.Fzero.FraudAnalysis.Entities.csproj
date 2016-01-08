@@ -65,13 +65,13 @@
     <Compile Include="DataWarehouse\DWDimensionDictionary.cs" />
     <Compile Include="AccountNumbersByIMEI.cs" />
     <Compile Include="AccountStatus.cs" />
-    <Compile Include="Batches\DWCDRBatch.cs" />
+    <Compile Include="Batches\DWFactBatch.cs" />
     <Compile Include="Batches\StrategyExecutionDetailSummaryBatch.cs" />
     <Compile Include="AccountRelatedNumbers.cs" />
     <Compile Include="DataWarehouse\DWStrategy.cs" />
     <Compile Include="DataWarehouse\DWTime.cs" />
     <Compile Include="DataWarehouse\DWDimension.cs" />
-    <Compile Include="DataWarehouse\DWCDR.cs" />
+    <Compile Include="DataWarehouse\DWFact.cs" />
     <Compile Include="RelatedNumber.cs" />
     <Compile Include="Query\AccountCaseLogQuery.cs" />
     <Compile Include="Query\RelatedNumberQuery.cs" />

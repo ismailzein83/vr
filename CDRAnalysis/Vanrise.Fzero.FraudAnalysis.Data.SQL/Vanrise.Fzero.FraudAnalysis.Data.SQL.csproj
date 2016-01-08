@@ -67,7 +67,7 @@
     <Compile Include="DataWarehouse\DWStrategyDataManager.cs" />
     <Compile Include="DataWarehouse\DWTimeDataManager.cs" />
     <Compile Include="DataWarehouse\DWDimensionDataManager.cs" />
-    <Compile Include="DataWarehouse\DWCDRDataManager.cs" />
+    <Compile Include="DataWarehouse\DWFactDataManager.cs" />
     <Compile Include="RelatedNumberDataManager.cs" />
     <Compile Include="NumberProfileDataManager.cs" />
     <Compile Include="CallClassDataManager.cs" />

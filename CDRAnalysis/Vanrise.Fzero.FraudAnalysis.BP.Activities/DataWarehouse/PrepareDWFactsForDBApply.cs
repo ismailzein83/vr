@@ -8,31 +8,31 @@ using Vanrise.Queueing;
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
     #region Argument Classes
-    public class PrepareDWCDRsForDBApplyInput
+    public class PrepareDWFactsForDBApplyInput
     {
-        public BaseQueue<DWCDRBatch> InputQueue { get; set; }
+        public BaseQueue<DWFactBatch> InputQueue { get; set; }
 
         public BaseQueue<Object> OutputQueue { get; set; }
     }
 
     #endregion
-    public sealed class PrepareDWCDRsForDBApply : DependentAsyncActivity<PrepareDWCDRsForDBApplyInput>
+    public sealed class PrepareDWFactsForDBApply : DependentAsyncActivity<PrepareDWFactsForDBApplyInput>
     {
         [RequiredArgument]
-        public InArgument<BaseQueue<DWCDRBatch>> InputQueue { get; set; }
+        public InArgument<BaseQueue<DWFactBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
 
-        protected override void DoWork(PrepareDWCDRsForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(PrepareDWFactsForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            IDWCDRDataManager dataManager = FraudDataManagerFactory.GetDataManager<IDWCDRDataManager>();
-            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, dwCDRsBatch => dwCDRsBatch.DWCDRs);
+            IDWFactDataManager dataManager = FraudDataManagerFactory.GetDataManager<IDWFactDataManager>();
+            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, dwFactsBatch => dwFactsBatch.DWFacts);
         }
 
-        protected override PrepareDWCDRsForDBApplyInput GetInputArgument2(AsyncCodeActivityContext context)
+        protected override PrepareDWFactsForDBApplyInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            return new PrepareDWCDRsForDBApplyInput
+            return new PrepareDWFactsForDBApplyInput
             {
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class DWCDRBatch
+    public class DWFactBatch
     {
-        public List<DWCDR> DWCDRs { get; set; }
+        public List<DWFact> DWFacts { get; set; }
     }
 }

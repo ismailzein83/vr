@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class DWCDR
+    public class DWFact
     {
         public int? CDRId { get; set; }
         public string IMEI { get; set; }
@@ -23,6 +23,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public string SubscriberType { get; set; }
         public int? SuspicionLevel { get; set; }
         public DateTime? ConnectTime { get; set; }
+        public DateTime? CaseGenerationTime { get; set; }
         public int? StrategyUser { get; set; }
         public int? CaseUser { get; set; }
         public int? BTS { get; set; }

@@ -99,7 +99,7 @@
   <ItemGroup>
     <Compile Include="DataWarehouse\ApplyDWDimensionsToDB.cs" />
     <Compile Include="DataWarehouse\ApplyDWStrategiesToDB.cs" />
-    <Compile Include="DataWarehouse\ApplyDWCDRsToDB.cs" />
+    <Compile Include="DataWarehouse\ApplyDWFactsToDB.cs" />
     <Compile Include="ApplyNumberProfilesToDB.cs" />
     <Compile Include="ApplyStrategyExecutionDetailsToDB.cs" />
     <Compile Include="AssignCases.cs" />
@@ -118,7 +118,7 @@
     <Compile Include="LoadStrategyExecutionDetailSummaries.cs" />
     <Compile Include="LoadCDRs.cs" />
     <Compile Include="CreateNumberProfiles.cs" />
-    <Compile Include="DataWarehouse\PrepareDWCDRsForDBApply.cs" />
+    <Compile Include="DataWarehouse\PrepareDWFactsForDBApply.cs" />
     <Compile Include="PrepareNumberProfilesForDBApply.cs" />
     <Compile Include="PrepareStrategyExecutionDetailsForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

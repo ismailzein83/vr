@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
     {
         public BaseQueue<CDRBatch> InputQueue { get; set; }
 
-        public BaseQueue<DWCDRBatch> OutputQueue { get; set; }
+        public BaseQueue<DWFactBatch> OutputQueue { get; set; }
     }
     # endregion
 
@@ -26,22 +26,22 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public InOutArgument<BaseQueue<CDRBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<BaseQueue<DWCDRBatch>> OutputQueue { get; set; }
+        public InOutArgument<BaseQueue<DWFactBatch>> OutputQueue { get; set; }
 
         # endregion
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new MemoryQueue<DWCDRBatch>());
+                this.OutputQueue.Set(context, new MemoryQueue<DWFactBatch>());
 
             base.OnBeforeExecute(context, handle);
         }
 
         protected override void DoWork(FillFactValuesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["DWCDRBatchSize"]);
-            List<DWCDR> dwCDRBatch = new List<DWCDR>();
+            int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["DWFactBatchSize"]);
+            List<DWFact> dwFactBatch = new List<DWFact>();
             int cdrsCount = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -56,13 +56,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             var cdrs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
                             foreach (var cdr in cdrs)
                             {
-                                DWCDR tempDWCDR = new DWCDR();
-                                tempDWCDR.CDRId = cdr.Id;
-                                dwCDRBatch.Add(tempDWCDR);
+                                DWFact tempDWFact = new DWFact();
+                                tempDWFact.CDRId = cdr.Id;
+                                dwFactBatch.Add(tempDWFact);
                             }
                             cdrsCount += cdrs.Count;
 
-                            dwCDRBatch = SendDWCDRtoOutputQueue(inputArgument, handle, batchSize, dwCDRBatch, false);
+                            dwFactBatch = SendDWFacttoOutputQueue(inputArgument, handle, batchSize, dwFactBatch, false);
 
                             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs filled dimensions", cdrsCount);
 
@@ -72,23 +72,23 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
             });
 
-            dwCDRBatch = SendDWCDRtoOutputQueue(inputArgument, handle, batchSize, dwCDRBatch, true);
+            dwFactBatch = SendDWFacttoOutputQueue(inputArgument, handle, batchSize, dwFactBatch, true);
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
         }
 
-        private static List<DWCDR> SendDWCDRtoOutputQueue(FillFactValuesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<DWCDR> dwCDRBatch, bool IsLastBatch)
+        private static List<DWFact> SendDWFacttoOutputQueue(FillFactValuesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<DWFact> dwFactBatch, bool IsLastBatch)
         {
-            if (dwCDRBatch.Count >= batchSize || IsLastBatch)
+            if (dwFactBatch.Count >= batchSize || IsLastBatch)
             {
-                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Data warehouse CDRs Sent", dwCDRBatch);
-                inputArgument.OutputQueue.Enqueue(new DWCDRBatch()
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Data warehouse CDRs Sent", dwFactBatch);
+                inputArgument.OutputQueue.Enqueue(new DWFactBatch()
                 {
-                    DWCDRs = dwCDRBatch
+                    DWFacts = dwFactBatch
                 });
-                dwCDRBatch = new List<DWCDR>();
+                dwFactBatch = new List<DWFact>();
             }
-            return dwCDRBatch;
+            return dwFactBatch;
         }
 
         protected override FillFactValuesInput GetInputArgument2(AsyncCodeActivityContext context)

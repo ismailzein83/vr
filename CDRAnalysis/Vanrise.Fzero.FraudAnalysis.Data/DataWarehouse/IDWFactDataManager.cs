@@ -4,8 +4,8 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data
 {
-    public interface IDWCDRDataManager : IDataManager, IBulkApplyDataManager<DWCDR>
+    public interface IDWFactDataManager : IDataManager, IBulkApplyDataManager<DWFact>
     {
-        void ApplyDWCDRsToDB(object preparedDWCDRs);
+        void ApplyDWFactsToDB(object preparedDWFacts);
     }
 }
