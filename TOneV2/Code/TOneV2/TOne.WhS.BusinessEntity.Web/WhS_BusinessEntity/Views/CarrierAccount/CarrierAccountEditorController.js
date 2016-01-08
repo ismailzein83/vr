@@ -176,7 +176,7 @@
             var carrierAccountObject = buildCarrierAccountObjFromScope();
             return WhS_BE_CarrierAccountAPIService.AddCarrierAccount(carrierAccountObject)
                 .then(function (response) {
-                    if (VRNotificationService.notifyOnItemAdded("Carrier Account", response)) {
+                    if (VRNotificationService.notifyOnItemAdded("Carrier Account", response, "Name")) {
                         if ($scope.onCarrierAccountAdded != undefined)
                             $scope.onCarrierAccountAdded(response.InsertedObject);
                         $scope.modalContext.closeModal();
@@ -207,7 +207,7 @@
             var carrierAccountObject = buildCarrierAccountObjFromScope();
             WhS_BE_CarrierAccountAPIService.UpdateCarrierAccount(carrierAccountObject)
                 .then(function (response) {
-                    if (VRNotificationService.notifyOnItemUpdated("Carrier Account", response)) {
+                    if (VRNotificationService.notifyOnItemUpdated("Carrier Account", response, "Name")) {
                         if ($scope.onCarrierAccountUpdated != undefined)
                             $scope.onCarrierAccountUpdated(response.UpdatedObject);
                         $scope.modalContext.closeModal();
