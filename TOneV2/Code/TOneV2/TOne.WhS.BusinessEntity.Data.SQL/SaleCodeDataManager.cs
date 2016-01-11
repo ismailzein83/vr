@@ -47,7 +47,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public List<SaleCode> GetSaleCodesByZoneID(long zoneID, DateTime effectiveDate)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByZondId", SaleCodeMapper, zoneID, effectiveDate);
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByZoneId", SaleCodeMapper, zoneID, effectiveDate);
         }
         SaleCode SaleCodeMapper(IDataReader reader)
         {
@@ -89,7 +89,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public List<SaleCode> GetSaleCodesByZoneName(int sellingNumberPlanId, string zoneName, DateTime effectiveDate)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByZondName", SaleCodeMapper, sellingNumberPlanId, zoneName, effectiveDate);
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByZoneName", SaleCodeMapper, sellingNumberPlanId, zoneName, effectiveDate);
         }
 
 
