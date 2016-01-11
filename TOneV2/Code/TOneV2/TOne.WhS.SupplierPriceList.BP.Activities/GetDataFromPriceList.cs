@@ -44,8 +44,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             VRFile file = fileManager.GetFile(FileId.Get(context));
             byte[] bytes = file.Content;
             MemoryStream memStreamRate = new MemoryStream(bytes);
-            
-            Workbook objExcel = new Workbook(memStreamRate);
+
+            LoadOptions loadOptions = new LoadOptions();
+
+           // loadOptions.LoadDataOnly = true;
+
+            loadOptions.ConvertNumericData = false;
+
+            Workbook objExcel = new Workbook(memStreamRate, loadOptions);
             Worksheet worksheet = objExcel.Worksheets[0];
             
             int count = 1;
