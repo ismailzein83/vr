@@ -26,7 +26,7 @@ namespace TOne.WhS.Routing.Business.RouteRules.Percentages
                 else
                     optionPercentage = Math.Min(this.Percentages[i], 100 - totalTakenPercentage);
                 optionsList[i].Percentage = optionPercentage;
-                totalTakenPercentage -= optionPercentage;
+                totalTakenPercentage += optionPercentage;
 
                 if (totalTakenPercentage == 100)
                     break;
