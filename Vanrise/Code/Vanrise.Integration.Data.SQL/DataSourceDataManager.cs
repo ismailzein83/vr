@@ -88,7 +88,7 @@ namespace Vanrise.Integration.Data.SQL
         public bool UpdateDataSource(Entities.DataSource dataSourceObject)
         {
             int recordesEffected = ExecuteNonQuerySP("integration.sp_DataSource_Update", dataSourceObject.DataSourceId, dataSourceObject.Name, dataSourceObject.AdapterTypeId,
-                Common.Serializer.Serialize(dataSourceObject.AdapterState), Common.Serializer.Serialize(dataSourceObject.Settings));
+                Common.Serializer.Serialize(dataSourceObject.Settings));
             return (recordesEffected > 0);
         }
 
