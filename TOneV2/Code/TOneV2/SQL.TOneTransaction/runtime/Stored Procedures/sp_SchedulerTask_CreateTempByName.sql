@@ -5,7 +5,8 @@
 -- =============================================
 CREATE PROCEDURE [runtime].[sp_SchedulerTask_CreateTempByName]
 	@TempTableName VARCHAR(200),
-	@Name Nvarchar(255)
+	@Name Nvarchar(255),
+	@OwnerId int
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -30,7 +31,7 @@ BEGIN
 			from runtime.ScheduleTask SC
 			JOIN runtime.SchedulerTaskTriggerType TR on SC.TriggerTypeId = TR.ID
 			JOIN runtime.SchedulerTaskActionType AC on SC.ActionTypeId = AC.ID
-			WHERE (@Name IS NULL OR SC.[Name] LIKE '%' + @Name + '%' ) AND SC.[TaskType] != 0
+			WHERE (@Name IS NULL OR SC.[Name] LIKE '%' + @Name + '%' ) AND SC.[TaskType] != 0 AND SC.OwnerId = @OwnerId
 			
 			DECLARE @sql VARCHAR(1000)
 			SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
