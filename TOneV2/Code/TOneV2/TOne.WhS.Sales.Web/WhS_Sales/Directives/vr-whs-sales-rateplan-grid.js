@@ -232,6 +232,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                     });
 
                                     var payload = {
+                                        RoutingDatabaseId: gridQuery.RoutingDatabaseId,
                                         SaleZoneId: response.ZoneId,
                                         RoutingProductId: response.EffectiveRoutingProductId,
                                         RouteOptions: response.RouteOptions

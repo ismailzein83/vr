@@ -6,8 +6,8 @@
                      idfield="ZoneId"
                      norowhighlightonclick="'true'"
                      hidegridmenu>
-            <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" disablesorting widthfactor="20"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Effective Routing Product'" field="'EffectiveRoutingProductName'" type="'Text'" isfielddynamic="true" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" widthfactor="20" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Effective Routing Product'" field="'EffectiveRoutingProductName'" type="'Text'" isfielddynamic="true" widthfactor="15" disablesorting></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Route Options'" widthfactor="50" disablesorting>
                 <div vr-loader="dataItem.isLoadingRouteOptions">
                     <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>

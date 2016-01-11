@@ -74,7 +74,7 @@ app.directive("vrWhsSalesPercentagecostcalculation", ["WhS_Routing_RoutRuleSetti
                         $type: "TOne.WhS.Sales.MainExtensions.CostCalculation.PercentageCostCalculation, TOne.WhS.Sales.MainExtensions",
                         Title: $scope.title,
                         SelectedTemplate: $scope.selectedTemplate,
-                        PercentageSettings: directiveAPI.getData()
+                        PercentageSettings: directiveAPI ? directiveAPI.getData() : null
                     };
                 };
 

@@ -26,6 +26,7 @@
 
         function defineScope() {
             $scope.title = "Sell New Countries";
+            $scope.showInfo = false;
 
             $scope.countries = [];
             $scope.disableSaveButton = true;
@@ -37,8 +38,13 @@
                 
                 WhS_BE_CustomerZoneAPIService.GetCountriesToSell(customerId).then(function (response) {
                     if (response) {
-                        for (var i = 0; i < response.length; i++) {
-                            $scope.countries.push(response[i]);
+                        if (response.length && response.length > 0) {
+                            for (var i = 0; i < response.length; i++) {
+                                $scope.countries.push(response[i]);
+                            }
+                        }
+                        else {
+                            $scope.showInfo = true;
                         }
                     }
                 }).catch(function (error) {
