@@ -61,8 +61,10 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
 
             if ($scope.currentNode != undefined) {
                 if ($scope.currentNode.type == 'Zone') {
+                    codesGridAPI.clearUpdatedItems();
                     setCodesFilterObject();
                     $scope.showGrid = true;
+                   // codesGridAPI.clearUpdatedItems();
                     return codesGridAPI.loadGrid(codesFilter);
                 }
                 $scope.showGrid = false;

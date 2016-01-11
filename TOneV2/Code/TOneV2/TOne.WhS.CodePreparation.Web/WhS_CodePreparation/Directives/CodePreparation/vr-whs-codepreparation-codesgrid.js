@@ -40,6 +40,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
 
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
+                     
                         $scope.ZoneName = query.ZoneName;
                         return gridAPI.retrieveData(query);
                     }
@@ -47,6 +48,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
                     directiveAPI.onCodeAdded = function (codeItemObject) {
                         gridAPI.itemAdded(codeItemObject);
                     }
+                    directiveAPI.clearUpdatedItems = gridAPI.clearUpdatedItems;
                     directiveAPI.getSelectedCodes = function () {
                         var selectedCodes = [];
                         angular.forEach($scope.salecodes, function (itm) {
