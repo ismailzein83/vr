@@ -55,6 +55,7 @@
 
             $scope.selectAllCountries = function () {
                 allCountriesSelected = !allCountriesSelected;
+                $scope.disableSaveButton = !allCountriesSelected;
 
                 for (var i = 0; i < $scope.countries.length; i++) {
                     $scope.countries[i].isSelected = allCountriesSelected;
