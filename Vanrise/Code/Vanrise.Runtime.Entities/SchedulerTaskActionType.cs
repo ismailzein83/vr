@@ -25,5 +25,7 @@ namespace Vanrise.Runtime.Entities
 
         public string Editor { get; set; }
 
+        public string RequiredPermissions { get; set; }
+
     }
 }

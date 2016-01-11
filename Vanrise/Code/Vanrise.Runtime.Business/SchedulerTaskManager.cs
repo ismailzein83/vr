@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Runtime.Data;
 using Vanrise.Runtime.Entities;
+using Vanrise.Security.Business;
 
 namespace Vanrise.Runtime.Business
 {
@@ -14,7 +15,9 @@ namespace Vanrise.Runtime.Business
         public Vanrise.Entities.IDataRetrievalResult<Vanrise.Runtime.Entities.SchedulerTask> GetFilteredTasks(Vanrise.Entities.DataRetrievalInput<string> input)
         {
             ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredTasks(input));
+            int ownerId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredTasks(input, ownerId));
         }
 
         public Vanrise.Runtime.Entities.SchedulerTask GetTask(int taskId)
@@ -38,7 +41,17 @@ namespace Vanrise.Runtime.Business
         public List<SchedulerTaskActionType> GetSchedulerTaskActionTypes()
         {
             ISchedulerTaskActionTypeDataManager datamanager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskActionTypeDataManager>();
-            return datamanager.GetAll();
+            List<SchedulerTaskActionType> lstSchedulerTaskActionTypes = datamanager.GetAll();
+            List<SchedulerTaskActionType> lsSchedulerTaskActionTypesOutput = new List<SchedulerTaskActionType>();
+            foreach (SchedulerTaskActionType actionType in lstSchedulerTaskActionTypes)
+            {
+                if (actionType.Info.RequiredPermissions != null)
+                {
+                    if (SecurityContext.Current.IsAllowed(actionType.Info.RequiredPermissions))
+                        lsSchedulerTaskActionTypesOutput.Add(actionType);   
+                }   
+            }
+            return lsSchedulerTaskActionTypesOutput;
         }
 
         public Vanrise.Entities.InsertOperationOutput<SchedulerTask> AddTask(SchedulerTask taskObject)
