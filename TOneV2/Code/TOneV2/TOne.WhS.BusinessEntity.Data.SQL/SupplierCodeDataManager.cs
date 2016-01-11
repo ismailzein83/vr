@@ -68,6 +68,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
                 cmd.Parameters.Add(new SqlParameter("@CodePrefix", codePrefix));
                 cmd.Parameters.Add(new SqlParameter("@EffectiveOn", effectiveOn));
+                cmd.Parameters.Add(new SqlParameter("@IsFuture", isFuture));
                 cmd.Parameters.Add(new SqlParameter("@GetChildCodes", getChildCodes));
                 cmd.Parameters.Add(new SqlParameter("@GetParentCodes", getParentCodes));
             });
