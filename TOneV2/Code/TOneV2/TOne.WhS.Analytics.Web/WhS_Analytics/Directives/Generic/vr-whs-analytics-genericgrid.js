@@ -68,35 +68,17 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                     }
                 }];
 
+                ctrl.gridLeftMenuActions = [
+                {
+                    name: "Settings",
+                    onClicked: editSettings
+                }];
                 ctrl.getColor = function (dataItem, coldef) {
                     if (ctrl.parameters != undefined)
                         return WhS_Analytics_GenericAnalyticService.getMeasureColor(dataItem, coldef, ctrl.parameters);
                 }
 
-                ctrl.editSettings = function () {
-                    var settings = {
-                    };
-
-                    settings.onScopeReady = function (modalScope) {
-                        modalScope.title = UtilsService.buildTitleForUpdateEditor("Measure Threshold");
-                        modalScope.onSaveSettings = function (parameters) {
-                            ctrl.parameters = parameters
-                        };
-                    };
-                    var measureThreshold = [];
-                    for (var i = 0; i < ctrl.selectedMeasures.length; i++) {
-                        switch (ctrl.selectedMeasures[i].value) {
-                            case WhS_Analytics_GenericAnalyticMeasureEnum.ASR.value: measureThreshold.push(WhS_Analytics_GenericAnalyticMeasureEnum.ASR.value); break;
-                            case WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value: measureThreshold.push(WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value); break;
-                            case WhS_Analytics_GenericAnalyticMeasureEnum.Attempts.value: measureThreshold.push(WhS_Analytics_GenericAnalyticMeasureEnum.Attempts.value); break;
-                        }
-                    }
-                    var parameters = {
-                        measureThresholds: measureThreshold
-                    };
-
-                    VRModalService.showModal('/Client/Modules/WhS_Analytics/Directives/Generic/Templates/GenericAnalyticGridSettings.html', parameters, settings);
-                }
+             
 
                 ctrl.gridReady = function (api) {
                     gridApi = api;
@@ -359,6 +341,32 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                             if (selectedDimensions[i].value == dimensions[j].value)
                                 dimensions.splice(j, 1);
                     }
+                }
+
+
+                function  editSettings () {
+                    var settings = {
+                    };
+
+                    settings.onScopeReady = function (modalScope) {
+                        modalScope.title = UtilsService.buildTitleForUpdateEditor("Measure Threshold");
+                        modalScope.onSaveSettings = function (parameters) {
+                            ctrl.parameters = parameters
+                        };
+                    };
+                    var measureThreshold = [];
+                    for (var i = 0; i < ctrl.selectedMeasures.length; i++) {
+                        switch (ctrl.selectedMeasures[i].value) {
+                            case WhS_Analytics_GenericAnalyticMeasureEnum.ASR.value: measureThreshold.push(WhS_Analytics_GenericAnalyticMeasureEnum.ASR.value); break;
+                            case WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value: measureThreshold.push(WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value); break;
+                            case WhS_Analytics_GenericAnalyticMeasureEnum.Attempts.value: measureThreshold.push(WhS_Analytics_GenericAnalyticMeasureEnum.Attempts.value); break;
+                        }
+                    }
+                    var parameters = {
+                        measureThresholds: measureThreshold
+                    };
+
+                    VRModalService.showModal('/Client/Modules/WhS_Analytics/Directives/Generic/Templates/GenericAnalyticGridSettings.html', parameters, settings);
                 }
             }
 
