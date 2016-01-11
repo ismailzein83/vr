@@ -100,7 +100,6 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
             while (reader.Read())
             {
                 Vanrise.Fzero.CDRImport.Entities.CDR cdr = new Vanrise.Fzero.CDRImport.Entities.CDR();
-                cdr.Id = (int)reader["Id"];
                 cdr.CallType = Utils.GetReaderValue<Vanrise.Fzero.CDRImport.Entities.CallType>(reader, "Call_Type");
                 cdr.BTSId = Utils.GetReaderValue<int?>(reader, "BTS_Id");
                 cdr.IMSI = reader["IMSI"] as string;
@@ -124,7 +123,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                 cdr.Destination = reader["Destination"] as string;
                 cdr.MSISDN = reader["MSISDN"] as string;
 
-                index = cdr.Id.ToString();
+                index = ((int)reader["Id"]).ToString();
 
                 batch.CDRs.Add(cdr);
             }

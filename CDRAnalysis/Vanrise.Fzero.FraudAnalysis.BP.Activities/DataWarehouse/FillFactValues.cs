@@ -90,14 +90,34 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             if (!dwTimeDictionary.ContainsKey(givenTime.Value))
             {
                 DateTime connectDateTime = givenTime.Value;
-                var culture = CultureInfo.GetCultureInfo("en-US");
-                var dateTimeInfo = DateTimeFormatInfo.GetInstance(culture);
-                int weekNumber = culture.Calendar.GetWeekOfYear(connectDateTime, dateTimeInfo.CalendarWeekRule, dateTimeInfo.FirstDayOfWeek);
-                DWTime dwTime = new DWTime() { DateInstance = new DateTime(connectDateTime.Year, connectDateTime.Month, connectDateTime.Day, connectDateTime.Hour, connectDateTime.Minute, connectDateTime.Second, connectDateTime.Kind), Day = connectDateTime.Day, Hour = connectDateTime.Hour, Month = connectDateTime.Month, Week = weekNumber, Year = connectDateTime.Year, MonthName = connectDateTime.Month.ToString("MMMM"), DayName = connectDateTime.Day.ToString("dddd") };
+                DWTime dwTime = new DWTime()
+                {
+                    DateInstance = new DateTime(connectDateTime.Year, connectDateTime.Month, connectDateTime.Day, connectDateTime.Hour, connectDateTime.Minute, connectDateTime.Second, connectDateTime.Kind),
+                    Day = connectDateTime.Day,
+                    Hour = connectDateTime.Hour,
+                    Month = connectDateTime.Month,
+                    Week = GetWeekOfMonth(connectDateTime),
+                    Year = connectDateTime.Year,
+                    MonthName = connectDateTime.ToString("MMMM"),
+                    DayName = connectDateTime.ToString("dddd")
+                };
                 dwTimeDictionary.Add(dwTime.DateInstance, dwTime);
                 ToBeInsertedTimes.Add(dwTime);
             }
         }
+
+
+
+        public static int GetWeekOfMonth(DateTime date)
+        {
+            DateTime beginningOfMonth = new DateTime(date.Year, date.Month, 1);
+
+            while (date.Date.AddDays(1).DayOfWeek != CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek)
+                date = date.AddDays(1);
+
+            return (int)Math.Truncate((double)date.Subtract(beginningOfMonth).TotalDays / 7f) + 1;
+        }
+
 
         private static List<DWFact> SendDWFacttoOutputQueue(FillFactValuesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<DWFact> dwFactBatch, bool IsLastBatch)
         {
@@ -140,6 +160,12 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             List<DWDimension> ToBeInsertedBTSs = new List<DWDimension>();
             List<DWTime> ToBeInsertedTimes = new List<DWTime>();
 
+            //if (inputArgument.BTSs == null)
+            //    inputArgument.BTSs = new DWDimensionDictionary();
+
+            //if (inputArgument.Times == null)
+            //    inputArgument.Times = new DWTimeDictionary();
+
             int cdrsCount = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -155,11 +181,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             foreach (var cdr in cdrs)
                             {
                                 DWFact dwFact = new DWFact();
-
-
                                 dwFact.CallType = (int)cdr.CallType;
-                                dwFact.CDRId = cdr.Id;
-
                                 dwFact.Duration = cdr.DurationInSeconds;
                                 dwFact.IMEI = cdr.IMEI;
                                 dwFact.MSISDN = cdr.MSISDN;
@@ -167,19 +189,16 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
                                 CallClass callClass = callClasses.Where(x => x.Description == cdr.CallClass).FirstOrDefault();
-                                if (callClass == null)
+                                if (callClass != null)
                                 {
                                     dwFact.CallClass = callClass.Id;
                                     dwFact.NetworkType = (int)callClass.NetType;
                                 }
 
 
-
-
-
                                 dwFact.BTS = cdr.BTSId;
                                 if (cdr.BTSId != null)
-                                    if (!inputArgument.BTSs.ContainsKey(cdr.BTSId.Value))
+                                    if (inputArgument.BTSs.Where(x => x.Value.Description == cdr.BTSId.Value.ToString()).Count() == 0)
                                     {
                                         DWDimension dwDimension = new DWDimension() { Id = ++LastBTSId, Description = cdr.BTSId.Value.ToString() };
                                         inputArgument.BTSs.Add(dwDimension.Id, dwDimension);
@@ -190,16 +209,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                                 CheckIfTimeAddedorAdd(inputArgument.Times, ToBeInsertedTimes, cdr.ConnectDateTime);
 
-
-
                                 KeyValuePair<int, DWAccountCase> accountCase = inputArgument.AccountCases.Where(x => x.Value.AccountNumber == cdr.MSISDN).OrderByDescending(x => x.Value.CaseID).FirstOrDefault();
                                 if (accountCase.Key != 0)
                                 {
                                     dwFact.SuspicionLevel = accountCase.Value.SuspicionLevelID;
                                     dwFact.Period = accountCase.Value.PeriodID;
-
-
-
 
                                     Strategy strategy = new Strategy();
                                     strategy = strategies.Where(x => x.Id == accountCase.Value.StrategyID).First();
@@ -229,6 +243,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 while (!ShouldStop(handle) && hasItem);
 
             });
+
+
 
 
             dwFactBatch = SendDWFacttoOutputQueue(inputArgument, handle, batchSize, dwFactBatch, true);

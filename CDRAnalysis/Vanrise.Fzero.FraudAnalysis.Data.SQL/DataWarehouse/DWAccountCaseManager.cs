@@ -11,6 +11,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public class DWAccountCaseManager : BaseSQLDataManager, IDWAccountCaseManager
     {
+        public DWAccountCaseManager()
+            : base("CDRDBConnectionString")
+        {
+
+        }
+
         public List<DWAccountCase> GetDWAccountCases(DateTime from, DateTime to)
         {
             return GetItemsSP("[FraudAnalysis].[sp_DataWarehouse_GetAccountCases]", DWAccountCaseMapper, from, to);

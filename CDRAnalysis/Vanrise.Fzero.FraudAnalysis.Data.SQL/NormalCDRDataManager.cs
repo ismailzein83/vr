@@ -46,7 +46,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     normalCDR.CallType = GetReaderValue<CallType>(reader, "Call_Type");
                     normalCDR.BTSId = GetReaderValue<int?>(reader, "BTS_Id");
                     normalCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
-                    normalCDR.Id = (int)reader["Id"];
                     normalCDR.IMSI = reader["IMSI"] as string;
                     normalCDR.DurationInSeconds = GetReaderValue<Decimal?>(reader, "DurationInSeconds");
                     normalCDR.DisconnectDateTime = GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
