@@ -129,12 +129,18 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         }
 
         $scope.cancelState = function () {
-            countries.length = 0;
-            return WhS_CodePrep_CodePrepAPIService.CancelCodePreparationState(filter.sellingNumberPlanId).then(function (response) {
-                $scope.hasState = !response;
-                treeAPI.refreshTree($scope.nodes);
-                $scope.currentNode = undefined;
+           return VRNotificationService.showConfirmation().then(function (result) {
+               if(result)
+               {
+                   countries.length = 0;
+                   return WhS_CodePrep_CodePrepAPIService.CancelCodePreparationState(filter.sellingNumberPlanId).then(function (response) {
+                       $scope.hasState = !response;
+                       treeAPI.refreshTree($scope.nodes);
+                       $scope.currentNode = undefined;
+                   });
+               }
             });
+         
         }
     }
 
