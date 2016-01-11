@@ -10,6 +10,8 @@
         var countryGridAPI;
         var selectedSaleZones;
 
+        var allCountriesSelected = false;
+
         loadParameters();
         defineScope();
         load();
@@ -32,10 +34,14 @@
                 countryGridAPI = api;
 
                 $scope.isLoading = true;
-
+                console.log(customerId);
                 WhS_BE_CustomerZoneAPIService.GetCountriesToSell(customerId).then(function (response) {
-                    for (var i = 0; i < response.length; i++) {
-                        $scope.countries.push(response[i]);
+                    console.log(response);
+
+                    if (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            $scope.countries.push(response[i]);
+                        }
                     }
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -49,13 +55,11 @@
                 $scope.disableSaveButton = (country == undefined); // disable the add button if no country is selected
             };
 
-            $scope.onSwitchValueChanged = function () {
-                if ($scope.selectAll != undefined && $scope.selectAll != null) {
-                    $scope.disableSaveButton = $scope.selectAll == false;
+            $scope.selectAllCountries = function () {
+                allCountriesSelected = !allCountriesSelected;
 
-                    for (var i = 0; i < $scope.countries.length; i++) {
-                        $scope.countries[i].isSelected = $scope.selectAll;
-                    }
+                for (var i = 0; i < $scope.countries.length; i++) {
+                    $scope.countries[i].isSelected = allCountriesSelected;
                 }
             };
 
