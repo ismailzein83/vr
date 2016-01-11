@@ -210,7 +210,7 @@ namespace TOne.WhS.CodePreparation.Entities.CP.Processing
     public class CodeToClose : IRuleTarget
     {
         public string Code { get; set; }
-
+        public TOne.WhS.BusinessEntity.Entities.CodeGroup CodeGroup { get; set; }
         public string ZoneName { get; set; }
 
         public DateTime CloseEffectiveDate { get; set; }

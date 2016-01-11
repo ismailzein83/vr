@@ -29,25 +29,29 @@ namespace TOne.WhS.CodePreparation.Business
             int? firstCodeToAddCountryId = null;
             bool resultOfCodeToMove = true;
             int? firstCodeToMoveCountryId = null;
+
+
             if (zone != null)
             {
-                var firstCodeToAdd = zone.CodesToAdd.FirstOrDefault();
+                var firstCodeToAdd  = zone.CodesToAdd.FirstOrDefault();
 
                 var firstCodeToMove = zone.CodesToMove.FirstOrDefault();
 
                 if (firstCodeToAdd != null)
                 {
-                    firstCodeToAddCountryId = firstCodeToAdd.CodeGroup != null ? firstCodeToAdd.CodeGroup.CountryId : (int?)null;
+                    firstCodeToAddCountryId =  firstCodeToAdd.CodeGroup.CountryId;
                     Func<CodeToAdd, bool> pred = new Func<CodeToAdd, bool>((code) => code.CodeGroup != null && firstCodeToAddCountryId.HasValue && code.CodeGroup.CountryId != firstCodeToAddCountryId.Value);
                     resultOfCodeToAdd = !zone.CodesToAdd.Any(pred);
                 }
 
                 if (firstCodeToMove != null)
                 {
-                    firstCodeToMoveCountryId = firstCodeToMove.CodeGroup != null ? firstCodeToMove.CodeGroup.CountryId : (int?)null;
+                    firstCodeToMoveCountryId =  firstCodeToMove.CodeGroup.CountryId;
                     Func<CodeToMove, bool> pred = new Func<CodeToMove, bool>((code) => code.CodeGroup != null && firstCodeToAddCountryId.HasValue && code.CodeGroup.CountryId != firstCodeToMoveCountryId.Value);
                     resultOfCodeToMove = !zone.CodesToMove.Any(pred);
                 }
+
+
             }
             if (firstCodeToMoveCountryId != null && firstCodeToAddCountryId != null)
                 result = (firstCodeToMoveCountryId == firstCodeToAddCountryId);

@@ -240,7 +240,7 @@ namespace TOne.WhS.CodePreparation.Business
             }
             return codeItems;
         }
-        List<CodeItem> MergeCodeItems(IEnumerable<SaleCode> saleCodes, IEnumerable<NewCode> newCodes, IEnumerable<DeletedCode> deletedCodes)
+        List<CodeItem> MergeCodeItems(IEnumerable<SaleCode> saleCodes, IEnumerable<NewCode> newCodes, IEnumerable<DeletedCode> deletedCodes, int? zoneId=null,string zoneName=null)
         {
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             List<CodeItem> codeItems = new List<CodeItem>();
@@ -250,12 +250,11 @@ namespace TOne.WhS.CodePreparation.Business
             CodeItemStatus codeItemStatusExistingMoved = CodeItemStatus.ExistingMoved;
             string statusExistingMovedDescription = Utilities.GetEnumAttribute<CodeItemStatus, DescriptionAttribute>(codeItemStatusExistingMoved).Description;
 
-            CodeItemStatus codeItemStatusExistingClosed = CodeItemStatus.ExistingClosed;
-            string statusExistingClosedDescription = Utilities.GetEnumAttribute<CodeItemStatus, DescriptionAttribute>(codeItemStatusExistingClosed).Description;
+            
 
             foreach (var saleCode in saleCodes)
             {
-                var newCode = newCodes.FirstOrDefault(x => x.Code == saleCode.Code);
+                var newCode = newCodes.FirstOrDefault(x => x.Code == saleCode.Code && x.ZoneName != zoneName);
                 var deletedCode = deletedCodes.FirstOrDefault(x => x.Code == saleCode.Code);
                 if (newCode != null)
                 {
@@ -275,7 +274,7 @@ namespace TOne.WhS.CodePreparation.Business
                 {
                     continue;
                 }
-                else
+                else if (saleCode.ZoneId == zoneId)
                 {
                     CodeItem codeItem = new CodeItem()
                     {
@@ -293,43 +292,48 @@ namespace TOne.WhS.CodePreparation.Business
             CodeItemStatus codeItemStatusNew = CodeItemStatus.New;
             string statusNewDescription = Utilities.GetEnumAttribute<CodeItemStatus, DescriptionAttribute>(codeItemStatusNew).Description;
 
-
+            CodeItemStatus codeItemStatusNewMoved = CodeItemStatus.NewMoved;
+            string statusNewMovedDescription = Utilities.GetEnumAttribute<CodeItemStatus, DescriptionAttribute>(codeItemStatusNewMoved).Description;
 
 
             foreach (var newCode in newCodes)
             {
-                if (!deletedCodes.Any(x => x.Code == newCode.Code))
+                if (newCode.OldZoneName != null && newCode.ZoneName == zoneName)
                 {
-                    var saleCode = saleCodes.FirstOrDefault(c => c.Code == newCode.Code);
-                    SaleZone saleZone = null;
-                    if (saleCode == null)
-                        codeItemStatusNew = CodeItemStatus.New;
-                    else
+                    CodeItem codeItem = new CodeItem()
                     {
-                        codeItemStatusNew = CodeItemStatus.NewMoved;
-                        saleZone = saleZoneManager.GetSaleZone(saleCode.ZoneId);
-                    }
+                        BED = null,
+                        Code = newCode.Code,
+                        EED = null,
+                        Status = codeItemStatusNewMoved,
+                        StatusDescription = statusNewMovedDescription == null ? codeItemStatusNewMoved.ToString() : statusNewMovedDescription,
+                        OtherCodeZoneName = newCode.OldZoneName
 
+                    };
+                    codeItems.Add(codeItem);
+                }
+                else  if (newCode.OldZoneName == null )
+                {
                     CodeItem codeItem = new CodeItem()
                     {
                         BED = null,
                         Code = newCode.Code,
                         EED = null,
                         Status = codeItemStatusNew,
-                        StatusDescription = codeItemStatusNew.ToString(),
-                        OtherCodeZoneName = saleZone == null ? "" : saleZone.Name
+                        StatusDescription = statusNewDescription == null ? codeItemStatusNew.ToString() : statusNewDescription,
+                        OtherCodeZoneName = null
 
                     };
                     codeItems.Add(codeItem);
                 }
+                 
             }
 
-
+            CodeItemStatus codeItemStatusExistingClosed = CodeItemStatus.ExistingClosed;
+            string statusExistingClosedDescription = Utilities.GetEnumAttribute<CodeItemStatus, DescriptionAttribute>(codeItemStatusExistingClosed).Description;
 
             foreach (var deletedCode in deletedCodes)
             {
-                if (!newCodes.Any(x => x.Code == deletedCode.Code))
-                {
                     CodeItem codeItem = new CodeItem()
                     {
 
@@ -340,7 +344,6 @@ namespace TOne.WhS.CodePreparation.Business
 
                     };
                     codeItems.Add(codeItem);
-                }
             }
             return codeItems;
 
@@ -357,13 +360,11 @@ namespace TOne.WhS.CodePreparation.Business
                 existingChanges = new Changes();
             if (input.Query.ZoneId.HasValue)
             {
-                saleCodes.AddRange(codeManager.GetSaleCodesByZoneID(input.Query.ZoneId.Value, DateTime.Now));
+                saleCodes = codeManager.GetSaleCodesEffectiveAfter(input.Query.SellingNumberPlanId, input.Query.CountryId, DateTime.Now);
             }
-            //List<SaleCode> countrySaleCodes = codeManager.GetSaleCodesEffectiveAfter(input.Query.SellingNumberPlanId, input.Query.CountryId, DateTime.Now);
 
-            allCodeItems = MergeCodeItems(saleCodes, existingChanges.NewCodes.FindAllRecords(c => c.ZoneName.ToLower().Equals(input.Query.ZoneName.ToLower()) || c.OldZoneName.ToLower().Equals(input.Query.ZoneName.ToLower())), existingChanges.DeletedCodes.FindAllRecords(c => c.ZoneName.ToLower().Equals(input.Query.ZoneName.ToLower())));
-            //allCodeItems.AddRange(MapCodeItemsFromSaleCodes(saleCodes));
-            //allCodeItems.AddRange(MapCodeItemsFromChanges(existingChanges.NewCodes.FindAllRecords(c => c.ZoneName.ToLower().Equals(input.Query.ZoneName.ToLower()))));
+            allCodeItems = MergeCodeItems(saleCodes, existingChanges.NewCodes.FindAllRecords(c => c.ZoneName.ToLower().Equals(input.Query.ZoneName.ToLower()) || (c.OldZoneName !=null && c.OldZoneName.ToLower().Equals(input.Query.ZoneName.ToLower()))), existingChanges.DeletedCodes.FindAllRecords(c => c.ZoneName.ToLower().Equals(input.Query.ZoneName.ToLower())),input.Query.ZoneId,input.Query.ZoneName);
+
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodeItems.ToBigResult(input, null));
         }
 
@@ -415,22 +416,14 @@ namespace TOne.WhS.CodePreparation.Business
             if (existingChanges == null)
                 existingChanges = new Changes();
 
-            SaleCodeManager saleCodeManager = new SaleCodeManager();
-            if (input.ZoneId.HasValue)
-            {
-                List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesEffectiveAfter(input.SellingNumberPlanId, input.CountryId, DateTime.Now);
-                allCodeItems.AddRange(MapCodeItemsFromSaleCodes(saleCodes));
-            }
-
-
-            allCodeItems.AddRange(MapCodeItemsFromChanges(existingChanges.NewCodes.FindAllRecords(c => c.CountryId == input.CountryId)));
-
             bool insertActionSucc = false;
             NewCodeOutput insertOperationOutput = ValidateNewCode(allCodeItems, existingChanges.NewCodes, input.NewCodes, input.CountryId);
+            allCodeItems.AddRange(MergeCodeItems(new List<SaleCode>(), existingChanges.NewCodes.FindAllRecords(c => input.NewCodes.Any(x => x.Code == c.Code)), new List<DeletedCode>()));
             if (insertOperationOutput.Result == CodePreparationOutputResult.Failed)
                 insertActionSucc = dataManager.InsertOrUpdateChanges(input.SellingNumberPlanId, existingChanges, CodePreparationStatus.Draft);
             if (insertActionSucc)
             {
+                insertOperationOutput.CodeItems = allCodeItems;
                 insertOperationOutput.Message = string.Format("Codes is Added Successfully.");
                 insertOperationOutput.Result = CodePreparationOutputResult.Inserted;
             }
@@ -445,18 +438,8 @@ namespace TOne.WhS.CodePreparation.Business
                 existingChanges = new Changes();
             MoveCodeOutput output = new MoveCodeOutput();
 
-
             foreach (var code in input.Codes)
             {
-
-                DeletedCode deletedCode = new DeletedCode()
-                {
-                    Code = code,
-                    ZoneName = input.CurrentZoneName,
-
-                };
-                existingChanges.DeletedCodes.Add(deletedCode);
-
                 NewCode newCode = new NewCode()
                 {
                     Code = code,
@@ -466,22 +449,21 @@ namespace TOne.WhS.CodePreparation.Business
                 };
                 existingChanges.NewCodes.Add(newCode);
             }
-
             List<CodeItem> allCodeItems = new List<CodeItem>();
 
-            SaleCodeManager saleCodeManager = new SaleCodeManager();
+            SaleCodeManager codeManager = new SaleCodeManager();
+            List<SaleCode> saleCodes = new List<SaleCode>();
+            saleCodes = codeManager.GetSaleCodesEffectiveAfter(input.SellingNumberPlanId, input.CountryId, DateTime.Now);
+            allCodeItems.AddRange(MergeCodeItems(saleCodes.FindAllRecords(c => input.Codes.Any(x => x == c.Code)), existingChanges.NewCodes.FindAllRecords(c => input.Codes.Any(x => x == c.Code)), new List<DeletedCode>(),null,input.CurrentZoneName));
 
-            List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesEffectiveAfter(input.SellingNumberPlanId, input.CountryId, DateTime.Now);
-
-            // allCodeItems.AddRange(MergeCodeItems(saleCodes, existingChanges.NewCodes.FindAllRecords(c => c.CountryId == input.CountryId), existingChanges.DeletedCodes));
-
-            output.NewCodes = MapCodeItemsFromChanges(existingChanges.NewCodes.FindAllRecords(x => input.Codes.Any(k => k == x.Code)));
+            
 
             bool moveActionSucc = false;
             output.Result = CodePreparationOutputResult.Failed;
             moveActionSucc = dataManager.InsertOrUpdateChanges(input.SellingNumberPlanId, existingChanges, CodePreparationStatus.Draft);
             if (moveActionSucc)
             {
+                output.NewCodes = allCodeItems;
                 output.Message = string.Format("Codes Moved Successfully.");
                 output.Result = CodePreparationOutputResult.Inserted;
             }

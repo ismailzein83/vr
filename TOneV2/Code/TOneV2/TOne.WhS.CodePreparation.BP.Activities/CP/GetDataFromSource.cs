@@ -136,13 +136,15 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             }
             foreach(DeletedCode code in importedData.DeletedCodes)
             {
+
                 if(!codesToMove.Any(x=>x.Code==code.Code))
-                {
+                {    TOne.WhS.BusinessEntity.Entities.CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code.Trim());
                      codesToClose.Add(new CodeToClose
                             {
                                 Code = code.Code,
                                 CloseEffectiveDate = code.BED,
                                 ZoneName = code.Zone,
+                                CodeGroup = codeGroup
                             });
                 }
             }

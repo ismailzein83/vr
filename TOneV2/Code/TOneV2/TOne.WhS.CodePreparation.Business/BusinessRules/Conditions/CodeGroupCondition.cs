@@ -12,17 +12,37 @@ namespace TOne.WhS.CodePreparation.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as CodeToAdd != null);
+            if (target as CodeToAdd != null)
+                return true;
+            else if (target as CodeToClose != null)
+                return true;
+            else
+                return false;
+
         }
 
         public override bool Validate(IRuleTarget target)
         {
-            CodeToAdd code = target as CodeToAdd;
+            var returnedResult = false;
+            if (target as CodeToAdd != null)
+            {
+                CodeToAdd code = target as CodeToAdd;
 
-            if (code == null)
-                return false;
+                if (code == null)
+                    return false;
 
-            return code.CodeGroup != null;
+                returnedResult = code.CodeGroup != null;
+            }
+            else if (target as CodeToClose != null)
+            {
+                CodeToClose code = target as CodeToClose;
+
+                if (code == null)
+                    return false;
+
+                returnedResult = code.CodeGroup != null;
+            }
+            return returnedResult;
         }
 
         public override string GetMessage(IRuleTarget target)

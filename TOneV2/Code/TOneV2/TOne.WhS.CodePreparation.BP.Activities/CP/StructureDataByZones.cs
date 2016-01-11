@@ -50,6 +50,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             {
                 if (!zoneToProcessByZoneName.TryGetValue(code.ZoneName, out zoneToProcess))
                 {
+                    if (zoneToProcess==null)
+                        zoneToProcess = new ZoneToProcess();
+                    zoneToProcess.ZoneName = code.ZoneName;
                     zoneToProcess.CodesToMove = new List<CodeToMove>();
                     zoneToProcess.CodesToClose = new List<CodeToClose>();
                     zoneToProcessByZoneName.Add(code.ZoneName, zoneToProcess);
@@ -60,8 +63,12 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             foreach (CodeToClose code in codesToClose)
             {
+
                 if (!zoneToProcessByZoneName.TryGetValue(code.ZoneName, out zoneToProcess))
                 {
+                    if (zoneToProcess == null)
+                        zoneToProcess = new ZoneToProcess();
+                    zoneToProcess.ZoneName = code.ZoneName;
                     zoneToProcess.CodesToClose = new List<CodeToClose>();
                     zoneToProcessByZoneName.Add(code.ZoneName, zoneToProcess);
                 }

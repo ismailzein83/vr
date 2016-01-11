@@ -47,10 +47,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             DateTime minimumDate = EffectiveDate.Get(context);
             foreach (NewCode code in changes.NewCodes)
             {
-
                 CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code);
-                DeletedCode deletedCode = changes.DeletedCodes.FirstOrDefault(x => x.Code == code.Code);
-                if (deletedCode != null)
+                
+                if (code.OldZoneName != null)
                 {
                     codesToMove.Add(new CodeToMove
                            {
@@ -59,7 +58,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                                BED = minimumDate,
                                EED = null,
                                ZoneName = code.ZoneName,
-                               OldZoneName = deletedCode.ZoneName,
+                               OldZoneName = code.OldZoneName,
                                IsExcluded = code.IsExcluded
                            });
                 }
@@ -79,9 +78,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             foreach (DeletedCode code in changes.DeletedCodes)
             {
-
-                if (!codesToMove.Any(x => x.Code == code.Code))
-                {
                     codesToClose.Add(new CodeToClose
                            {
                                Code = code.Code,
@@ -89,7 +85,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                                CloseEffectiveDate = minimumDate,
                                ZoneName = code.ZoneName,
                            });
-                }
             }
 
             TimeSpan spent = DateTime.Now.Subtract(startReading);

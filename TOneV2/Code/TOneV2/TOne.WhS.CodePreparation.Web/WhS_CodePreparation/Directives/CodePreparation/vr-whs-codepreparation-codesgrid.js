@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive('vrWhsCodepreparationCodesgrid', ['VRNotificationService', 'VRUIUtilsService', 'WhS_CodePrep_CodePrepAPIService', 'UtilsService',
-function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIService, UtilsService) {
+app.directive('vrWhsCodepreparationCodesgrid', ['VRNotificationService', 'VRUIUtilsService', 'WhS_CodePrep_CodePrepAPIService', 'UtilsService','WhS_CP_CodeItemStatusEnum',
+function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIService, UtilsService, WhS_CP_CodeItemStatusEnum) {
 
     var directiveDefinitionObject = {
 
@@ -31,6 +31,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
         function initializeController() {
             $scope.salecodes = [];
             $scope.ZoneName;
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -75,12 +76,30 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_CodePrep_CodePrepAPIService.GetCodeItems(dataRetrievalInput)
                     .then(function (response) {
+                        for (var i = 0 ; i < response.Data.length; i++)
+                        {
+                            mapDataNeeded(response.Data[i]);
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
+            function mapDataNeeded(dataItem)
+            {
+                if (dataItem.Status == WhS_CP_CodeItemStatusEnum.ExistingMoved.value)
+                {
+                    dataItem.MovedTo = dataItem.OtherCodeZoneName;
+                    dataItem.MovedFrom = "";
+                } 
+                else if (dataItem.Status == WhS_CP_CodeItemStatusEnum.NewMoved.value)
+                {
+                    dataItem.MovedFrom = dataItem.OtherCodeZoneName;
+                    dataItem.MovedTo = "";
+                }
+                    
+            }
         }
     }
 

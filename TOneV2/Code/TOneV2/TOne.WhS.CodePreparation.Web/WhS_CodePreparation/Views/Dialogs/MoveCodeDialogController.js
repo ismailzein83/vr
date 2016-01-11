@@ -25,7 +25,7 @@
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
                 $scope.saleZones = parameters.ZoneDataSource;
 
-                var index = UtilsService.getItemIndexByVal($scope.saleZones, zoneId, "SaleZoneId");
+                var index = UtilsService.getItemIndexByVal($scope.saleZones, currentZoneName, "Name");
                 if(index !=-1)
                   $scope.saleZones.splice(index, 1);
             }
