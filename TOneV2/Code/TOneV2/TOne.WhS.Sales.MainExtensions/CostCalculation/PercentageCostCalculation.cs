@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Common;
+using TOne.WhS.Sales.Entities;
 
-namespace TOne.WhS.Sales.Entities.CostCalculation.Extensions
+namespace TOne.WhS.Sales.MainExtensions.CostCalculation
 {
     public class PercentageCostCalculation : CostCalculationMethod
     {

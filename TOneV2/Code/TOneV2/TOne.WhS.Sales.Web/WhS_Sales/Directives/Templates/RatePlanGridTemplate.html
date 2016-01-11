@@ -8,12 +8,12 @@
                      hidegridmenu>
             <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" disablesorting widthfactor="20"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Effective Routing Product'" field="'EffectiveRoutingProductName'" type="'Text'" isfielddynamic="true" disablesorting></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Route Options'" disablesorting widthfactor="50">
+            <vr-datagridcolumn headertext="'Route Options'" widthfactor="50" disablesorting>
                 <div vr-loader="dataItem.isLoadingRouteOptions">
                     <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
                 </div>
             </vr-datagridcolumn>
-            <vr-datagridcolumn ng-repeat="method in connector.costCalculationMethods" headertext="method.Title" field="'Costs[' + $index + ']'" type="'Number'" isfielddynamic="true" columnindex="3 + $index" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn ng-repeat="method in connector.costCalculationMethods" headertext="method.Title" field="'Costs[' + $index + ']'" type="'Number'" numberprecision="'LongPrecision'" isfielddynamic="true" columnindex="3 + $index" disablesorting></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Current Rate'" field="'CurrentRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Calculated Rate'" field="'CalculatedRate'" type="'Number'" numberprecision="'LongPrecision'" ng-show="rateCalculationMethod" isfielddynamic="true" disablesorting></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'New Rate'" disablesorting>

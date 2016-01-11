@@ -33,7 +33,7 @@ app.directive("vrWhsSalesRoutepercentagecostcalculation", [function () {
                 };
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Sales.Entities.CostCalculation.Extensions.RoutePercentageCostCalculation, TOne.WhS.Sales.Entities",
+                        $type: "TOne.WhS.Sales.MainExtensions.CostCalculation.RoutePercentageCostCalculation, TOne.WhS.Sales.MainExtensions",
                         Title: ctrl.title
                     };
                 };

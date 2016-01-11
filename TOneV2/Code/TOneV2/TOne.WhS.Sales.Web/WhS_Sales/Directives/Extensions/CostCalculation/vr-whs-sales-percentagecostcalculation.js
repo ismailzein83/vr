@@ -71,7 +71,7 @@ app.directive("vrWhsSalesPercentagecostcalculation", ["WhS_Routing_RoutRuleSetti
                 };
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Sales.Entities.CostCalculation.Extensions.PercentageCostCalculation, TOne.WhS.Sales.Entities",
+                        $type: "TOne.WhS.Sales.MainExtensions.CostCalculation.PercentageCostCalculation, TOne.WhS.Sales.MainExtensions",
                         Title: $scope.title,
                         SelectedTemplate: $scope.selectedTemplate,
                         PercentageSettings: directiveAPI.getData()

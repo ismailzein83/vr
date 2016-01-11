@@ -36,7 +36,7 @@ app.directive("vrWhsSalesAvgcostcalculation", [function () {
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Sales.Entities.CostCalculation.Extensions.AvgCostCalculation, TOne.WhS.Sales.Entities",
+                        $type: "TOne.WhS.Sales.MainExtensions.CostCalculation.AvgCostCalculation, TOne.WhS.Sales.MainExtensions",
                         Title: ctrl.title
                     };
                 };

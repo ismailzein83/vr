@@ -52,9 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CostCalculation\CostCalculationMethod.cs" />
-    <Compile Include="CostCalculation\Extensions\AvgCostCalculation.cs" />
-    <Compile Include="CostCalculation\Extensions\PercentageCostCalculation.cs" />
-    <Compile Include="CostCalculation\Extensions\RoutePercentageCostCalculation.cs" />
     <Compile Include="CostCalculation\ICostCalculationMethodContext.cs" />
     <Compile Include="RateCalculation\IRateCalculationMethodContext.cs" />
     <Compile Include="RateCalculation\RateCalculationMethod.cs" />
