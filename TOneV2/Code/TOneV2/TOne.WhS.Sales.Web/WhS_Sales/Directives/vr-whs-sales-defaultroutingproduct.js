@@ -39,8 +39,9 @@ function (WhS_Sales_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) 
                 if ((!defaultItem.NewRoutingProductId && counter > 1) || (defaultItem.NewRoutingProductId && counter > 2)) {
                     defaultItem.IsDirty = true;
 
-                    if (defaultItem.onChange && typeof (defaultItem.onChange) == "function")
+                    if (defaultItem.onChange && typeof (defaultItem.onChange) == "function") {
                         defaultItem.onChange();
+                    }
                 }
             };
 
@@ -53,6 +54,8 @@ function (WhS_Sales_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) 
             var api = {};
 
             api.load = function (payload) {
+                counter = 0;
+
                 if (payload) {
                     defaultItem = payload;
                     ctrl.CurrentName = defaultItem.IsCurrentRoutingProductEditable === false ? defaultItem.CurrentRoutingProductName + " (Inherited)" : defaultItem.CurrentRoutingProductName;
@@ -73,13 +76,7 @@ function (WhS_Sales_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) 
                         [{ RoutingProductId: -1, Name: "(Reset To Default)" }] : null
                 };
                 
-                $scope.isLoading = true;
-
                 VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);
-
-                selectorLoadDeferred.promise.finally(function () {
-                    $scope.isLoading = false;
-                });
 
                 return selectorLoadDeferred.promise;
             };

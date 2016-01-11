@@ -36,7 +36,6 @@
 
         var settings;
         var pricingSettings;
-        var isSavingPriceList; // This flag var prevents the app from saving an empty state after the user saves a price list
 
         defineScope();
         load();
@@ -457,10 +456,7 @@
         }
 
         function onDefaultItemChange() {
-            if (!isSavingPriceList)
-                saveChanges(true);
-            else
-                isSavingPriceList = false;
+            saveChanges(true);
         }
 
         function saveChanges(shouldLoadGrid) {
@@ -564,7 +560,6 @@
 
                 function onRatePlanChangesClose(saveClicked) {
                     if (saveClicked) {
-                        isSavingPriceList = true;
                         savePriceList().then(function () {
                             savePriceListDeferred.resolve();
                             VRNotificationService.showSuccess("Price list saved");
