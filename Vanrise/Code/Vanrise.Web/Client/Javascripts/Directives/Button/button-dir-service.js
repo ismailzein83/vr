@@ -192,6 +192,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Apply',
                     class: "glyphicon glyphicon-ok-circle"
                 }
+            case 'SelectAll':
+                return {
+                    text: 'Select All',
+                    class: "glyphicon glyphicon-check"
+                }
         } 
     }
 }]);
