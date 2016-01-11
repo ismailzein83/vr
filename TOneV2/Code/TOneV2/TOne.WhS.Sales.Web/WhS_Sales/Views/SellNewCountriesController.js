@@ -34,10 +34,8 @@
                 countryGridAPI = api;
 
                 $scope.isLoading = true;
-                console.log(customerId);
+                
                 WhS_BE_CustomerZoneAPIService.GetCountriesToSell(customerId).then(function (response) {
-                    console.log(response);
-
                     if (response) {
                         for (var i = 0; i < response.length; i++) {
                             $scope.countries.push(response[i]);
