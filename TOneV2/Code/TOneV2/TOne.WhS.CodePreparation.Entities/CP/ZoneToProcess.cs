@@ -10,6 +10,12 @@ namespace TOne.WhS.CodePreparation.Entities.CP.Processing
 {
     public class ZoneToProcess : IRuleTarget
     {
+        public ZoneToProcess()
+        {
+            CodesToAdd = new List<CodeToAdd>();
+            CodesToMove = new List<CodeToMove>();
+            CodesToClose = new List<CodeToClose>();
+        }
         public string ZoneName { get; set; }
 
         public List<CodeToAdd> CodesToAdd { get; set; }

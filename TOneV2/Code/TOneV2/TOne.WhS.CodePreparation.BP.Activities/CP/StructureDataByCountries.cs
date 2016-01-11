@@ -26,11 +26,29 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             {
                 if (!zone.IsExcluded)
                 {
-                    CodeToAdd includedCodeOneMatch = zone.CodesToAdd.Find(x => !x.IsExcluded);
-                    if (includedCodeOneMatch == null)
+                    CodeToAdd includedCodeOneMatchToAdd = zone.CodesToAdd.Find(x => !x.IsExcluded);
+                    CodeToMove includedCodeOneMatchToMove = zone.CodesToMove.Find(x => !x.IsExcluded);
+                    CodeToClose includedCodeOneMatchToClose = zone.CodesToClose.Find(x => !x.IsExcluded);
+                    int countryId;
+                    if(includedCodeOneMatchToAdd !=null )
+                    {
+                        countryId = includedCodeOneMatchToAdd.CodeGroup.CountryId;
+                        
+                    }
+                    else if (includedCodeOneMatchToMove != null)
+                    {
+                        countryId = includedCodeOneMatchToMove.CodeGroup.CountryId;
+                    }
+                    else if (includedCodeOneMatchToClose != null)
+                    {
+                        countryId = includedCodeOneMatchToClose.CodeGroup.CountryId;
+                    }
+                    else
+                    {
                         continue;
+                    }
 
-                    int countryId = includedCodeOneMatch.CodeGroup.CountryId;
+                       
 
                     if (!countriesToProcessByCountryId.TryGetValue(countryId, out countryToProcess))
                     {                        

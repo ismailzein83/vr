@@ -33,9 +33,13 @@ namespace TOne.WhS.CodePreparation.Business
 
             if (zone != null)
             {
-                var firstCodeToAdd  = zone.CodesToAdd.FirstOrDefault();
+                CodeToAdd firstCodeToAdd=null;
+                if(zone.CodesToAdd != null)
+                    firstCodeToAdd = zone.CodesToAdd.FirstOrDefault();
 
-                var firstCodeToMove = zone.CodesToMove.FirstOrDefault();
+                CodeToMove firstCodeToMove = null;
+                if (zone.CodesToMove !=null )
+                   firstCodeToMove  = zone.CodesToMove.FirstOrDefault();
 
                 if (firstCodeToAdd != null)
                 {
