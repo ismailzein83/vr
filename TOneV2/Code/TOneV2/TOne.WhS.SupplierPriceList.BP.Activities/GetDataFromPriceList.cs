@@ -61,7 +61,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             BusinessEntity.Business.CodeGroupManager codeGroupManager = new BusinessEntity.Business.CodeGroupManager();
             List<ImportedCode> importedCodesList = new List<ImportedCode>();
-            List<ImportedRate> importedRatesList = new List<ImportedRate>();
+            Dictionary<string, List<ImportedRate>> dicImportedRates = new Dictionary<string, List<ImportedRate>>();
 
             while (count < worksheet.Cells.Rows.Count)
             {
@@ -103,14 +103,27 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     });
                 }
 
-                importedRatesList.Add(new ImportedRate()
+                List<ImportedRate> zoneRates;
+
+                if(!dicImportedRates.TryGetValue(zoneName, out zoneRates))
                 {
-                    ZoneName = zoneName,
-                    NormalRate = (decimal)worksheet.Cells[count, 2].FloatValue,
-                    CurrencyId = currencyId,
-                    BED = bEDDateFromExcel.Value,
-                    EED = eEDDateFromExcel,
-                });
+                    zoneRates = new List<ImportedRate>();
+                    dicImportedRates.Add(zoneName, zoneRates);
+                }
+
+                decimal normalRate = (decimal)worksheet.Cells[count, 2].FloatValue;
+
+                if(zoneRates.Count == 0 || (zoneRates.Any(x => x.NormalRate != normalRate) && zoneRates.Find(x => x.NormalRate == normalRate) == null))
+                {
+                    zoneRates.Add(new ImportedRate()
+                    {
+                        ZoneName = zoneName,
+                        NormalRate = normalRate,
+                        CurrencyId = currencyId,
+                        BED = bEDDateFromExcel.Value,
+                        EED = eEDDateFromExcel,
+                    });
+                }
 
                 count++;
             }
@@ -119,7 +132,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             context.WriteTrackingMessage(LogEntryType.Information, "Reading Excel File Having {0} Records done and Takes: {1}", worksheet.Cells.Rows.Count, spent);
             
             ImportedCodes.Set(context, importedCodesList);
-            ImportedRates.Set(context, importedRatesList);
+            ImportedRates.Set(context, dicImportedRates.SelectMany(itm => itm.Value).ToList());
             MinimumDate.Set(context, minimumDate);
         }
     }
