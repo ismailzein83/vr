@@ -88,7 +88,7 @@
         </InArgument>
       </twrba1:DropOldRoutingDatabases.ProcessType>
     </twrba1:DropOldRoutingDatabases>
-    <twrba1:CreateRoutingDatabase>
+    <twrba1:CreateRoutingDatabase sap2010:WorkflowViewState.IdRef="CreateRoutingDatabase_2">
       <twrba1:CreateRoutingDatabase.DatabaseId>
         <OutArgument x:TypeArguments="x:Int32">
           <mca:CSharpReference x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpReference>
@@ -114,7 +114,6 @@
           <mca:CSharpValue x:TypeArguments="twre:RoutingDatabaseType">Input.RoutingDatabaseType</mca:CSharpValue>
         </InArgument>
       </twrba1:CreateRoutingDatabase.Type>
-      <sap2010:WorkflowViewState.IdRef>CreateRoutingDatabase_2</sap2010:WorkflowViewState.IdRef>
     </twrba1:CreateRoutingDatabase>
     <Parallel DisplayName="Parallel_PrepareEntities" sap2010:WorkflowViewState.IdRef="Parallel_1">
       <twrba1:GetActiveSupplierInfos sap2010:WorkflowViewState.IdRef="GetActiveSupplierInfos_1">
@@ -153,6 +152,11 @@
           <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveOn</mca:CSharpValue>
         </InArgument>
       </local:GenerateSupplierZoneDetails.EffectiveOn>
+      <local:GenerateSupplierZoneDetails.IsFuture>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+        </InArgument>
+      </local:GenerateSupplierZoneDetails.IsFuture>
       <local:GenerateSupplierZoneDetails.RoutingDatabaseId>
         <InArgument x:TypeArguments="x:Int32">
           <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
@@ -313,7 +317,7 @@
         </InArgument>
       </twrba1:SetRoutingDatabaseReady.RoutingDatabaseId>
     </twrba1:SetRoutingDatabaseReady>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sNkYDvQIOAgEBUAtQrQECAQJUBVomAwHBAlsFdiQDAZMCdwWVARADAeMBlgEFsAEpAwHHAbEBBeMBFwMBjAHkAQX0ASUCAXD1AQWFAh8CAVSGAgW0AhcCARW1AgW7AiYCAQtXC1dwAwHCAm0LbXADAbgCYwtjaAMBrwJeC15hAwGmAnILcnIDAZ0CaAtojgEDAZQCeAd+JwMBiQJ/B5QBJAMB5AGZAQuZAWgDAdoBngELngFZAwHRAaMBC6MBdgMByAG0AQu0AWYDAb4BuwEJ4QEUAwGNAewBC+wBWAMBgwHnAQvnAWgCAXrxAQvxAWUCAXH4AQv4AVsCAWf9AQv9AXICAV6CAguCAl0CAVWJAguJAngCAUuQAgmyAhQCARa4Agu4AlkCAQx7DXuAAQMBigKHAQ2HAXADAYACjAENjAFqAwH3AYIBDYIBYAMB7gGRAQ2RAVoDAeUBvwEL0AEcAwGmAdEBC+ABEAMBjgGVAguhAhwCATGiAguxAhACARfCARHIASADAbMBzQERzQGEAQMBqAG/AXy/AYIBAwGnAdQBEdQBkQEDAY8B2AEP3gEjAwGaAZgCEZkCowECAT+eAhGeAosBAgEzlQJ8lQKCAQIBMqUCEaUCmQECARipAg+vAiMCASTbARXbAckBAwGbAawCFawCgAICASU=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sN0YDwQIOAgEBUAtQrQECAQJUBVomAwHKAlsFdSQDAZwCdgWUARADAewBlQEFtAEpAwHHAbUBBecBFwMBjAHoAQX4ASUCAXD5AQWJAh8CAVSKAgW4AhcCARW5AgW/AiYCAQtXC1dwAwHLAm0LbXADAcECYwtjaAMBuAJeC15hAwGvAnILcnIDAaYCaAtojgEDAZ0Cdwd9JwMBkgJ+B5MBJAMB7QGYAQuYAWgDAeMBogELogFZAwHaAacBC6cBdgMB0QGdAQudAVgDAcgBuAELuAFmAwG+Ab8BCeUBFAMBjQHwAQvwAVgDAYMB6wEL6wFoAgF69QEL9QFlAgFx/AEL/AFbAgFngQILgQJyAgFehgILhgJdAgFVjQILjQJ4AgFLlAIJtgIUAgEWvAILvAJZAgEMeg16gAEDAZMChgENhgFwAwGJAosBDYsBagMBgAKBAQ2BAWADAfcBkAENkAFaAwHuAcMBC9QBHAMBpgHVAQvkARADAY4BmQILpQIcAgExpgILtQIQAgEXxgERzAEgAwGzAdEBEdEBhAEDAagBwwF8wwGCAQMBpwHYARHYAZEBAwGPAdwBD+IBIwMBmgGcAhGdAqMBAgE/ogIRogKLAQIBM5kCfJkCggECATKpAhGpApkBAgEYrQIPswIjAgEk3wEV3wHJAQMBmwGwAhWwAoACAgEl</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

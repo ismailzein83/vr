@@ -77,11 +77,6 @@
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)">new List&lt;BusinessEntity.Entities.RoutingSupplierInfo&gt;()</mca:CSharpValue>
         </Variable.Default>
       </Variable>
-      <Variable x:TypeArguments="x:Boolean" Name="isFuture">
-        <Variable.Default>
-          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.RoutingDatabaseType == Entities.RoutingDatabaseType.Future</mca:CSharpValue>
-        </Variable.Default>
-      </Variable>
       <Variable x:TypeArguments="scg:IEnumerable(x:String)" Name="DistinctCodePrefixes" />
       <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="subProcessEventPayload" />
     </Sequence.Variables>
@@ -97,7 +92,7 @@
         </InArgument>
       </twrba1:DropOldRoutingDatabases.ProcessType>
     </twrba1:DropOldRoutingDatabases>
-    <twrba1:CreateRoutingDatabase>
+    <twrba1:CreateRoutingDatabase sap2010:WorkflowViewState.IdRef="CreateRoutingDatabase_3">
       <twrba1:CreateRoutingDatabase.DatabaseId>
         <OutArgument x:TypeArguments="x:Int32">
           <mca:CSharpReference x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpReference>
@@ -123,7 +118,6 @@
           <mca:CSharpValue x:TypeArguments="twre:RoutingDatabaseType">Input.RoutingDatabaseType</mca:CSharpValue>
         </InArgument>
       </twrba1:CreateRoutingDatabase.Type>
-      <sap2010:WorkflowViewState.IdRef>CreateRoutingDatabase_3</sap2010:WorkflowViewState.IdRef>
     </twrba1:CreateRoutingDatabase>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
       <twrba1:GetActiveCustomerInfos sap2010:WorkflowViewState.IdRef="GetActiveCustomerInfos_1">
@@ -158,7 +152,7 @@
         </twrba1:PrepareCodePrefixes.EffectiveOn>
         <twrba1:PrepareCodePrefixes.IsFuture>
           <InArgument x:TypeArguments="x:Boolean">
-            <mca:CSharpValue x:TypeArguments="x:Boolean">isFuture</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
           </InArgument>
         </twrba1:PrepareCodePrefixes.IsFuture>
       </twrba1:PrepareCodePrefixes>
@@ -175,6 +169,11 @@
             <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveTime</mca:CSharpValue>
           </InArgument>
         </local:GenerateCustomerZoneDetails.EffectiveOn>
+        <local:GenerateCustomerZoneDetails.IsFuture>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+          </InArgument>
+        </local:GenerateCustomerZoneDetails.IsFuture>
         <local:GenerateCustomerZoneDetails.RoutingDatabaseId>
           <InArgument x:TypeArguments="x:Int32">
             <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
@@ -197,6 +196,11 @@
             <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveTime</mca:CSharpValue>
           </InArgument>
         </local:GenerateSupplierZoneDetails.EffectiveOn>
+        <local:GenerateSupplierZoneDetails.IsFuture>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+          </InArgument>
+        </local:GenerateSupplierZoneDetails.IsFuture>
         <local:GenerateSupplierZoneDetails.RoutingDatabaseId>
           <InArgument x:TypeArguments="x:Int32">
             <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
@@ -233,7 +237,7 @@
           <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
             <vbw:RunProcess.Input>
               <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
-                <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument">new TOne.WhS.Routing.BP.Arguments.BuildRoutesByCodePrefixInput() { CodePrefixLength = Input.CodePrefixLength, RoutingDatabaseId = routingDatabaseId, CodePrefix = codePrefix, EffectiveOn = Input.EffectiveTime, IsFuture = isFuture }</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument">new TOne.WhS.Routing.BP.Arguments.BuildRoutesByCodePrefixInput() { CodePrefixLength = Input.CodePrefixLength, RoutingDatabaseId = routingDatabaseId, CodePrefix = codePrefix, EffectiveOn = Input.EffectiveTime, IsFuture = Input.IsFuture }</mca:CSharpValue>
               </InArgument>
             </vbw:RunProcess.Input>
             <vbw:RunProcess.ProcessCompletedEventPayload>
@@ -268,7 +272,7 @@
         </InArgument>
       </twrba1:SetRoutingDatabaseReady.RoutingDatabaseId>
     </twrba1:SetRoutingDatabaseReady>
-    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ1Byb2Nlc3MueGFtbC5DA5ACDgIBAUgLSKcBAgESTQtNpwECAQpSC1KKAQIBAlgFXBEDAe4BXQVjJgMB5QFkBX8kAwG8AYABBaUBEAMBiAGmAQXdARACAVXeAQWHAhcCASOIAgWOAiYCARpaCVp7AwHvAWALYHADAeYBdgt2cAMB3QFsC2xqAwHVAWcLZ2EDAc0Bewt7cgMBxQFxC3FwAwG9AYEBB4cBJwMBswGIAQeOAScDAaoBjwEHpAEkAwGJAacBB8EBKwIBb8IBB9wBKwIBVuEBC+EBbgIBTegBCYUCFAIBJIsCC4sCWQIBG4QBDYQBiAEDAbQBiwENiwGHAQMBqwGXAQ2XAXgDAaIBnAENnAFsAwGaAZIBDZIBYAMBkgGhAQ2hAVQDAYoBrwENrwFsAwGAAbQBDbQBWwIBeKoBDaoBgAECAXDFAQ3FAWwCAWfKAQ3KAVsCAV/PAQ3PAX8CAVfpAQv0ARwCATn1AQuEAhACASXsARHsAckCAgFE8QER8QGEAQIBO+kBfOkBggECATr4ARH4AbMBAgEm/AEPggIjAgEv/wEV/wHJAQIBMA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ1Byb2Nlc3MueGFtbC9DA5QCDgIBAUgLSKcBAgEJTQtNpwECAQJTBVcRAwHaAVgFXiYDAdIBXwV5JAMBrgF6BZ8BEAMBgAGgAQXhARACAUXiAQWLAhcCARiMAgWSAiYCARBVCVV7AwHbAVsLW3ADAdMBcQtxcAMBywFnC2dqAwHEAWILYmEDAb0Bdgt2cgMBtgFsC2xwAwGvAXsHgQEnAwGmAYIBB4gBJwMBngGJAQeeASQDAYEBoQEHwAErAgFjwQEH4AErAgFG5QEL5QFuAgE+7AEJiQIUAgEZjwILjwJZAgERfg1+iAEDAacBhQENhQGHAQMBnwGRAQ2RAXgDAZcBlgENlgFsAwGQAYwBDYwBYAMBiQGbAQ2bAVoDAYIBqQENqQFsAgF5swENswFbAgFypAENpAGAAQIBa64BDa4BWgIBZMQBDcQBbAIBXM4BDc4BWwIBVdMBDdMBfwIBTskBDckBWgIBR+0BC/gBHAIBLPkBC4gCEAIBGvABEfABzwICATb1ARH1AYQBAgEu7QF87QGCAQIBLfwBEfwBswECARuAAg+GAiMCASODAhWDAskBAgEk</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

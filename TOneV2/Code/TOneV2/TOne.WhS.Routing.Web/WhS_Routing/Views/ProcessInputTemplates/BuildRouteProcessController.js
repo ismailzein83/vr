@@ -17,6 +17,7 @@ function BuildRouteProcessController($scope, UtilsService, WhS_Routing_RoutingDa
                 InputArguments: {
                     $type: "TOne.WhS.Routing.BP.Arguments.RoutingProcessInput, TOne.WhS.Routing.BP.Arguments",
                     EffectiveTime: !$scope.isFuture ? $scope.effectiveOn : null,
+                    IsFuture: $scope.isFuture,
                     RoutingDatabaseType: $scope.selectedRoutingDatabaseType.value,
                     RoutingProcessType: WhS_Routing_RoutingProcessTypeEnum.CustomerRoute.value,
                     CodePrefixLength: $scope.codePrefixLength

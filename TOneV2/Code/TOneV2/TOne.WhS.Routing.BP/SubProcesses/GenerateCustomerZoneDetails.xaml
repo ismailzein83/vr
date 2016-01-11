@@ -18,6 +18,7 @@
     <x:Property Name="RoutingDatabaseId" Type="InArgument(x:Int32)" />
     <x:Property Name="EffectiveOn" Type="InArgument(s:Nullable(s:DateTime))" />
     <x:Property Name="CustomerInfos" Type="InArgument(scg:IEnumerable(twbe:RoutingCustomerInfo))" />
+    <x:Property Name="IsFuture" Type="InArgument(x:Boolean)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.GenerateCustomerZoneDetails_1</sap2010:WorkflowViewState.IdRef>
@@ -48,11 +49,14 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
-      <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
@@ -81,7 +85,7 @@
         </twrba:GenerateCustomerZoneDetails.EffectiveOn>
         <twrba:GenerateCustomerZoneDetails.IsEffectiveInFuture>
           <InArgument x:TypeArguments="x:Boolean">
-            <mca:CSharpValue x:TypeArguments="x:Boolean">EffectiveOn.HasValue ? false : true</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="x:Boolean">IsFuture</mca:CSharpValue>
           </InArgument>
         </twrba:GenerateCustomerZoneDetails.IsEffectiveInFuture>
         <twrba:GenerateCustomerZoneDetails.OutputQueue>
@@ -117,7 +121,7 @@
           </OutArgument>
         </twrba:PrepareCustomerZoneDetailForDBApply.Status>
       </twrba:PrepareCustomerZoneDetailForDBApply>
-      <twrba:ApplyCustomerZoneDetailsToDB Status="{x:Null}">
+      <twrba:ApplyCustomerZoneDetailsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyCustomerZoneDetailsToDB_1">
         <twrba:ApplyCustomerZoneDetailsToDB.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedCustomerZoneDetails</mca:CSharpValue>
@@ -133,10 +137,9 @@
             <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabaseId</mca:CSharpValue>
           </InArgument>
         </twrba:ApplyCustomerZoneDetailsToDB.RoutingDatabaseId>
-        <sap2010:WorkflowViewState.IdRef>ApplyCustomerZoneDetailsToDB_1</sap2010:WorkflowViewState.IdRef>
       </twrba:ApplyCustomerZoneDetailsToDB>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEdlbmVyYXRlQ3VzdG9tZXJab25lRGV0YWlscy54YW1sET8DjAEOAgEBRgWKARACAQJHB2ErAgE9Ygd3MwIBHHgHiQEsAgEDVA1UbwIBXk8NT2QCAVZKDUp5AgFOXg1egQECAUZZDVmRAQIBPm8Nb3kCATVlDWWJAQIBLXQNdIABAgElag1qgQECAR2AAQ2AAXgCARR7DXt5AgEMhQENhQFbAgEE</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEdlbmVyYXRlQ3VzdG9tZXJab25lRGV0YWlscy54YW1sEUMDjwEOAgEBSgWNARACAQJLB2UrAgFEZgd7MwIBH3wHjAEsAgEDWA1YVAIBaVMNU2QCAWBODU55AgFXYg1igQECAU5dDV2RAQIBRXMNc3kCATtpDWmJAQIBMngNeIABAgEpbg1ugQECASCEAQ2EAXgCARZ/DX95AgENiQENiQFbAgEE</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

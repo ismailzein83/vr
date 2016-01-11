@@ -22,6 +22,7 @@ function RPBuildProductRoutesProcessController($scope, WhS_Routing_RPRouteAPISer
                 InputArguments: {
                     $type: "TOne.WhS.Routing.BP.Arguments.RPRoutingProcessInput, TOne.WhS.Routing.BP.Arguments",
                     EffectiveOn: !$scope.isFuture ? $scope.effectiveOn : null,
+                    IsFuture: $scope.isFuture,
                     RoutingDatabaseType: $scope.selectedRoutingDatabaseType.value,
                     RoutingProcessType: WhS_Routing_RoutingProcessTypeEnum.RoutingProductRoute.value,
                     CodePrefixLength: $scope.codePrefixLength,
