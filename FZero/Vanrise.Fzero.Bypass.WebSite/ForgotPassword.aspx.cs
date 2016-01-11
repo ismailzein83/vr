@@ -22,20 +22,20 @@ public partial class ForgotPassword : BasePage
         }
     }
 
-    public  void ShowError(string error)
+    public void ShowError(string error)
     {
         ShowError(error);
     }
 
     public void ClearError()
     {
-        
+
     }
 
     private void SetCaptions()
     {
         ((MasterPage)Master).PageHeaderTitle = Resources.Resources.ForgotPassword;
-        
+
     }
 
 }

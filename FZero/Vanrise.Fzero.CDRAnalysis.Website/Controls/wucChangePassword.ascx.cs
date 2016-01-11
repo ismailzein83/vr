@@ -50,6 +50,7 @@ public partial class Controls_wucChangePassword : System.Web.UI.UserControl
             }
         }
     }
+
     public void Load(int Id)
     {
         this.UserID = Id;
@@ -66,7 +67,7 @@ public partial class Controls_wucChangePassword : System.Web.UI.UserControl
 
     protected void btnResetPassword_Click(object sender, EventArgs e)
     {
-        if (Reset()) 
+        if (Reset())
         {
             Success();
         }
@@ -94,7 +95,7 @@ public partial class Controls_wucChangePassword : System.Web.UI.UserControl
     {
         string error = Manager.IsValidPassword(txtRPPassword.Text, txtRPRetypePassword.Text);
 
-        if(string.IsNullOrWhiteSpace(error))
+        if (string.IsNullOrWhiteSpace(error))
         {
             if (User.TruePassword(Manager.GetInteger(hfId.Value), EncryptionHelper.Encrypt(txtOldPassword.Text)) || txtOldPassword.Visible == false)
             {
@@ -102,18 +103,19 @@ public partial class Controls_wucChangePassword : System.Web.UI.UserControl
                 ShowError("Password has been changed");
                 return true;
             }
-            else{
-                 if (ShowError != null)
+            else
+            {
+                if (ShowError != null)
                     ShowError("The Old Password is wrong");
-                 return false;
+                return false;
             }
-              
+
         }
         else
         {
             if (ShowError != null)
                 ShowError(error);
-            return  false;
+            return false;
         }
 
     }

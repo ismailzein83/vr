@@ -259,7 +259,7 @@ public partial class testingpost : BasePage
 
             }
         }
-        catch (Exception ex)
+        catch
         {
            
         }

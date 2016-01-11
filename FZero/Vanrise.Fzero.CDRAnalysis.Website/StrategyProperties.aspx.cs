@@ -169,22 +169,17 @@ public partial class StrategyProperties : BasePage
 
             bool flag = true;
 
-            if (maxValue != null)
-            {
-                CurrentThreshold.MaxValue = maxValue;
-                if (!StrategyThreshold.Save(CurrentThreshold))
-                {
-                    flag = false;
 
-                }
+            CurrentThreshold.MaxValue = maxValue;
+            if (!StrategyThreshold.Save(CurrentThreshold))
+            {
+                flag = false;
+
             }
-            if (periodValue != 0 || periodId != null)
+            if (periodValue != 0)
             {
-                if (periodValue != 0)
-                    CurrentPeriod.Value = periodValue;
-
-                if (periodId != null)
-                    CurrentPeriod.PeriodId = periodId;
+                CurrentPeriod.Value = periodValue;
+                CurrentPeriod.PeriodId = periodId;
                 CurrentPeriod.Period = null;// Period.Load(periodId);
 
                 if (!StrategyPeriod.Save(CurrentPeriod))
@@ -195,7 +190,7 @@ public partial class StrategyProperties : BasePage
             }
             if (flag == false)
             {
-                ShowError( "An error occured when trying to save data, kindly try to save later.");
+                ShowError("An error occured when trying to save data, kindly try to save later.");
             }
 
 
