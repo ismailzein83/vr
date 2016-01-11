@@ -49,7 +49,8 @@ as (select * from (values
 (6,'Supplier','Supplier','#/view/QM_BusinessEntity/Views/Supplier/SupplierManagement',3,null,null,null,0,10),
 (7,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',1,null,null,null,0,13),
 (8,'History','Calls History','#/view/QM_CLITester/Views/HistoryTestCall/HistoryTestCallManagement',2,null,null,null,0,12),
-(9,'Profile','Profile','#/view/QM_CLITester/Views/Profile/ProfileManagement',2,null,null,null,0,10)
+(9,'Profile','Profile','#/view/QM_CLITester/Views/Profile/ProfileManagement',2,null,null,null,0,10),
+(17,'Schedule Test Calls','Schedule Test Calls','#/view/QM_CLITester/Views/ScheduleTestCall/ScheduleTestCallManagement',2,null,null,null,0,16)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank]))
 merge	[sec].[View] as t
