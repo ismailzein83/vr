@@ -232,6 +232,8 @@
     <Content Include="QM_CLITester\Views\Profile\ProfileManagementController.js" />
     <Content Include="QM_CLITester\Views\Profile\SchedulerTaskAction\ProfileSynchronizeTemplate.html" />
     <Content Include="QM_CLITester\Views\Profile\SchedulerTaskAction\ProfileSynchronizeTemplateController.js" />
+    <Content Include="QM_CLITester\Views\ScheduleTestCall\ScheduleTestCallManagement.html" />
+    <Content Include="QM_CLITester\Views\ScheduleTestCall\ScheduleTestCallManagementController.js" />
     <Content Include="QM_CLITester\Views\TestPage\SchedulerTaskAction\InitiateTestTemplate.html" />
     <Content Include="QM_CLITester\Views\TestPage\SchedulerTaskAction\InitiateTestTemplateController.js" />
     <Content Include="QM_CLITester\Views\TestPage\SchedulerTaskAction\TestCallTemplate.html" />

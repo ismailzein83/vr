@@ -45,7 +45,7 @@ function (QM_CLITester_ProfileAPIService, UtilsService, $compile, VRUIUtilsServi
 
         var multipleselection = "";
         if (attrs.ismultipleselection != undefined)
-            multipleselection = "ismultipleselection"
+            multipleselection = "ismultipleselection";
         var required = "";
         if (attrs.isrequired != undefined)
             required = "isrequired";
@@ -78,6 +78,11 @@ function (QM_CLITester_ProfileAPIService, UtilsService, $compile, VRUIUtilsServi
                         ctrl.datasource.push(item);
 
                     });
+
+                    if ($attrs.ismultipleselection == undefined) {
+                        ctrl.selectedvalues = response[0];
+                    }
+
                     if (selectedIds != undefined)
                         VRUIUtilsService.setSelectedValues(selectedIds, 'ProfileId', $attrs, ctrl);
 
