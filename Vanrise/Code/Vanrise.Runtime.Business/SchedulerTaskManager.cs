@@ -48,8 +48,11 @@ namespace Vanrise.Runtime.Business
                 if (actionType.Info.RequiredPermissions != null)
                 {
                     if (SecurityContext.Current.IsAllowed(actionType.Info.RequiredPermissions))
-                        lsSchedulerTaskActionTypesOutput.Add(actionType);   
-                }   
+                        lsSchedulerTaskActionTypesOutput.Add(actionType);
+                }
+                else
+                    lsSchedulerTaskActionTypesOutput.Add(actionType);
+                
             }
             return lsSchedulerTaskActionTypesOutput;
         }
