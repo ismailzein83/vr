@@ -97,6 +97,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataWarehouse\ApplyDWTimeToDB.cs" />
+    <Compile Include="DataWarehouse\ApplyDWBTSToDB.cs" />
     <Compile Include="DataWarehouse\ApplyDWDimensionsToDB.cs" />
     <Compile Include="DataWarehouse\ApplyDWStrategiesToDB.cs" />
     <Compile Include="DataWarehouse\ApplyDWFactsToDB.cs" />

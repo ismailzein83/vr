@@ -9,6 +9,7 @@ using Vanrise.Queueing;
 using System.Linq;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using System;
+using System.Globalization;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
@@ -28,10 +29,20 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
     }
+
+    public class FillFactValuesOutput
+    {
+        public List<DWDimension> ToBeInsertedBTSs { get; set; }
+
+        public List<DWTime> ToBeInsertedTimes { get; set; }
+
+    }
+
+
     # endregion
 
 
-    public class FillFactValues : DependentAsyncActivity<FillFactValuesInput>
+    public class FillFactValues : DependentAsyncActivity<FillFactValuesInput, FillFactValuesOutput>
     {
         #region Arguments
 
@@ -53,6 +64,17 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InArgument<DWTimeDictionary> Times { get; set; }
 
+
+        [RequiredArgument]
+        public InOutArgument<List<DWDimension>> ToBeInsertedBTSs { get; set; }
+
+
+        [RequiredArgument]
+        public InOutArgument<List<DWTime>> ToBeInsertedTimes { get; set; }
+
+
+
+
         # endregion
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
@@ -63,106 +85,19 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             base.OnBeforeExecute(context, handle);
         }
 
-        protected override void DoWork(FillFactValuesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        private static void CheckIfTimeAddedorAdd(DWTimeDictionary dwTimeDictionary, List<DWTime> ToBeInsertedTimes, DateTime? givenTime)
         {
-            int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["DWFactBatchSize"]);
-            List<DWFact> dwFactBatch = new List<DWFact>();
-
-            CallClassManager callClassManager = new CallClassManager();
-            IEnumerable<CallClass> callClasses = callClassManager.GetClasses();
-
-            StrategyManager strategyManager = new StrategyManager();
-            IEnumerable<Strategy> strategies = strategyManager.GetAll();
-
-            int LastBTSId = inputArgument.BTSs.Count;
-
-            int cdrsCount = 0;
-            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            if (!dwTimeDictionary.ContainsKey(givenTime.Value))
             {
-                bool hasItem = false;
-                do
-                {
-                    hasItem = inputArgument.InputQueue.TryDequeue(
-                        (cdrBatch) =>
-                        {
-                            var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
-                            System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
-                            var cdrs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
-                            foreach (var cdr in cdrs)
-                            {
-                                DWFact dwFact = new DWFact();
-
-
-                                dwFact.CallType = (int)cdr.CallType;
-                                dwFact.CDRId = cdr.Id;
-                                dwFact.ConnectTime = cdr.ConnectDateTime;
-                                dwFact.Duration = cdr.DurationInSeconds;
-                                dwFact.IMEI = cdr.IMEI;
-                                dwFact.MSISDN = cdr.MSISDN;
-                                dwFact.SubscriberType = cdr.SubType;
-
-
-                                CallClass callClass = callClasses.Where(x => x.Description == cdr.CallClass).FirstOrDefault();
-                                if (callClass == null)
-                                {
-                                    dwFact.CallClass = callClass.Id;
-                                    dwFact.NetworkType = (int)callClass.NetType;
-                                }
-
-
-                                dwFact.BTS = cdr.BTSId;
-                                if (cdr.BTSId != null)
-                                    if (!inputArgument.BTSs.ContainsKey(cdr.BTSId.Value))
-                                    {
-                                        DWDimension dwDimension = new DWDimension() { Id = ++LastBTSId, Description = cdr.BTSId.Value.ToString() };
-                                        inputArgument.BTSs.Add(dwDimension.Id, dwDimension);
-                                    }
-
-
-                                KeyValuePair<int, DWAccountCase> accountCase = inputArgument.AccountCases.Where(x => x.Value.AccountNumber == cdr.MSISDN).OrderByDescending(x => x.Value.CaseID).FirstOrDefault();
-                                if (accountCase.Key != 0)
-                                {
-                                    dwFact.SuspicionLevel = accountCase.Value.SuspicionLevelID;
-                                    dwFact.Period = accountCase.Value.PeriodID;
-
-
-
-
-                                    Strategy strategy = new Strategy();
-                                    strategy = strategies.Where(x => x.Id == accountCase.Value.StrategyID).First();
-
-                                    dwFact.Strategy = accountCase.Value.StrategyID;
-                                    dwFact.StrategyKind = (strategy.IsDefault ? 0 : 1);
-                                    dwFact.StrategyUser = strategy.UserId;
-                                    dwFact.CaseId = accountCase.Key;
-                                    dwFact.CaseStatus = accountCase.Value.CaseStatus;
-                                    dwFact.CaseUser = accountCase.Value.CaseUser;
-                                    dwFact.CaseGenerationTime = accountCase.Value.CaseGenerationTime;
-                                }
-
-                                dwFactBatch.Add(dwFact);
-                            }
-                            cdrsCount += cdrs.Count;
-
-                            dwFactBatch = SendDWFacttoOutputQueue(inputArgument, handle, batchSize, dwFactBatch, false);
-
-                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs filled dimensions", cdrsCount);
-
-                        });
-                }
-                while (!ShouldStop(handle) && hasItem);
-
-            });
-
-
-            dwFactBatch = SendDWFacttoOutputQueue(inputArgument, handle, batchSize, dwFactBatch, true);
-
-            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
+                DateTime connectDateTime = givenTime.Value;
+                var culture = CultureInfo.GetCultureInfo("en-US");
+                var dateTimeInfo = DateTimeFormatInfo.GetInstance(culture);
+                int weekNumber = culture.Calendar.GetWeekOfYear(connectDateTime, dateTimeInfo.CalendarWeekRule, dateTimeInfo.FirstDayOfWeek);
+                DWTime dwTime = new DWTime() { DateInstance = new DateTime(connectDateTime.Year, connectDateTime.Month, connectDateTime.Day, connectDateTime.Hour, connectDateTime.Minute, connectDateTime.Second, connectDateTime.Kind), Day = connectDateTime.Day, Hour = connectDateTime.Hour, Month = connectDateTime.Month, Week = weekNumber, Year = connectDateTime.Year, MonthName = connectDateTime.Month.ToString("MMMM"), DayName = connectDateTime.Day.ToString("dddd") };
+                dwTimeDictionary.Add(dwTime.DateInstance, dwTime);
+                ToBeInsertedTimes.Add(dwTime);
+            }
         }
-
-
-
-
 
         private static List<DWFact> SendDWFacttoOutputQueue(FillFactValuesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<DWFact> dwFactBatch, bool IsLastBatch)
         {
@@ -188,6 +123,132 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 BTSs = this.BTSs.Get(context),
                 Times = this.Times.Get(context)
             };
+        }
+
+        protected override FillFactValuesOutput DoWorkWithResult(FillFactValuesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        {
+            int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["DWFactBatchSize"]);
+            List<DWFact> dwFactBatch = new List<DWFact>();
+
+            CallClassManager callClassManager = new CallClassManager();
+            IEnumerable<CallClass> callClasses = callClassManager.GetClasses();
+
+            StrategyManager strategyManager = new StrategyManager();
+            IEnumerable<Strategy> strategies = strategyManager.GetAll();
+
+            int LastBTSId = inputArgument.BTSs.Count;
+            List<DWDimension> ToBeInsertedBTSs = new List<DWDimension>();
+            List<DWTime> ToBeInsertedTimes = new List<DWTime>();
+
+            int cdrsCount = 0;
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
+                {
+                    hasItem = inputArgument.InputQueue.TryDequeue(
+                        (cdrBatch) =>
+                        {
+                            var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
+                            System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
+                            var cdrs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
+                            foreach (var cdr in cdrs)
+                            {
+                                DWFact dwFact = new DWFact();
+
+
+                                dwFact.CallType = (int)cdr.CallType;
+                                dwFact.CDRId = cdr.Id;
+
+                                dwFact.Duration = cdr.DurationInSeconds;
+                                dwFact.IMEI = cdr.IMEI;
+                                dwFact.MSISDN = cdr.MSISDN;
+                                dwFact.SubscriberType = cdr.SubType;
+
+
+                                CallClass callClass = callClasses.Where(x => x.Description == cdr.CallClass).FirstOrDefault();
+                                if (callClass == null)
+                                {
+                                    dwFact.CallClass = callClass.Id;
+                                    dwFact.NetworkType = (int)callClass.NetType;
+                                }
+
+
+
+
+
+                                dwFact.BTS = cdr.BTSId;
+                                if (cdr.BTSId != null)
+                                    if (!inputArgument.BTSs.ContainsKey(cdr.BTSId.Value))
+                                    {
+                                        DWDimension dwDimension = new DWDimension() { Id = ++LastBTSId, Description = cdr.BTSId.Value.ToString() };
+                                        inputArgument.BTSs.Add(dwDimension.Id, dwDimension);
+                                        ToBeInsertedBTSs.Add(dwDimension);
+                                    }
+
+                                dwFact.ConnectTime = cdr.ConnectDateTime;
+
+                                CheckIfTimeAddedorAdd(inputArgument.Times, ToBeInsertedTimes, cdr.ConnectDateTime);
+
+
+
+                                KeyValuePair<int, DWAccountCase> accountCase = inputArgument.AccountCases.Where(x => x.Value.AccountNumber == cdr.MSISDN).OrderByDescending(x => x.Value.CaseID).FirstOrDefault();
+                                if (accountCase.Key != 0)
+                                {
+                                    dwFact.SuspicionLevel = accountCase.Value.SuspicionLevelID;
+                                    dwFact.Period = accountCase.Value.PeriodID;
+
+
+
+
+                                    Strategy strategy = new Strategy();
+                                    strategy = strategies.Where(x => x.Id == accountCase.Value.StrategyID).First();
+
+                                    dwFact.Strategy = accountCase.Value.StrategyID;
+                                    dwFact.StrategyKind = (strategy.IsDefault ? 0 : 1);
+                                    dwFact.StrategyUser = strategy.UserId;
+                                    dwFact.CaseId = accountCase.Key;
+                                    dwFact.CaseStatus = accountCase.Value.CaseStatus;
+                                    dwFact.CaseUser = accountCase.Value.CaseUser;
+                                    dwFact.CaseGenerationTime = accountCase.Value.CaseGenerationTime;
+
+                                    CheckIfTimeAddedorAdd(inputArgument.Times, ToBeInsertedTimes, accountCase.Value.CaseGenerationTime);
+
+                                }
+
+                                dwFactBatch.Add(dwFact);
+                            }
+                            cdrsCount += cdrs.Count;
+
+                            dwFactBatch = SendDWFacttoOutputQueue(inputArgument, handle, batchSize, dwFactBatch, false);
+
+                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs filled dimensions", cdrsCount);
+
+                        });
+                }
+                while (!ShouldStop(handle) && hasItem);
+
+            });
+
+
+            dwFactBatch = SendDWFacttoOutputQueue(inputArgument, handle, batchSize, dwFactBatch, true);
+
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
+
+            return new FillFactValuesOutput
+            {
+
+                ToBeInsertedBTSs = ToBeInsertedBTSs,
+                ToBeInsertedTimes = ToBeInsertedTimes
+            };
+
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, FillFactValuesOutput result)
+        {
+            this.ToBeInsertedBTSs.Set(context, result.ToBeInsertedBTSs);
+
+            this.ToBeInsertedTimes.Set(context, result.ToBeInsertedTimes);
         }
     }
 }

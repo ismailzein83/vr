@@ -1,11 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Vanrise.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
-using System;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data
 {
-    public interface IDWTimeDataManager : IDataManager 
+    public interface IDWTimeDataManager : IDataManager, IBulkApplyDataManager<DWTime>
     {
         List<DWTime> GetTimes(DateTime from, DateTime to);
+
+        void ApplyDWTimesToDB(object preparedDWTimes);
+
+        void SaveDWTimesToDB(List<DWTime> dwTimes);
+
     }
 }

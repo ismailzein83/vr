@@ -57,14 +57,14 @@
       <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Security.Data</AssemblyReference>
+      <AssemblyReference>Vanrise.Security.Entities</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.CDRImport.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Security.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Security.Data</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP</AssemblyReference>
     </sco:Collection>
@@ -467,6 +467,8 @@
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareDWFactsForDBApplyActivityStatus" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="applyDWFactsToDBActivityStatus" />
         <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedDWFactQueue" />
+        <Variable x:TypeArguments="scg:List(vffe:DWTime)" Name="toBeInsertedTimes" />
+        <Variable x:TypeArguments="scg:List(vffe:DWDimension)" Name="toBeInsertedBTSs" />
       </Parallel.Variables>
       <vffba1:LoadCDRs sap2010:WorkflowViewState.IdRef="LoadCDRs_1">
         <vffba1:LoadCDRs.FromDate>
@@ -526,6 +528,16 @@
             <mca:CSharpValue x:TypeArguments="vffe:DWTimeDictionary">times</mca:CSharpValue>
           </InArgument>
         </vffba1:FillFactValues.Times>
+        <vffba1:FillFactValues.ToBeInsertedBTSs>
+          <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
+            <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedBTSs</mca:CSharpReference>
+          </InOutArgument>
+        </vffba1:FillFactValues.ToBeInsertedBTSs>
+        <vffba1:FillFactValues.ToBeInsertedTimes>
+          <InOutArgument x:TypeArguments="scg:List(vffe:DWTime)">
+            <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWTime)">toBeInsertedTimes</mca:CSharpReference>
+          </InOutArgument>
+        </vffba1:FillFactValues.ToBeInsertedTimes>
       </vffba1:FillFactValues>
       <vffba1:PrepareDWFactsForDBApply sap2010:WorkflowViewState.IdRef="PrepareDWFactsForDBApply_1">
         <vffba1:PrepareDWFactsForDBApply.InputQueue>
@@ -563,7 +575,7 @@
       </vffba1:ApplyDWFactsToDB>
     </Parallel>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2" Text="Finished executing workflow: FillDataWarehouse ..." />
-    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sZ0gDtwQOAgEBTgVOeQMB/w5PBcwDEAMB1QHNAwW0BBACAQS1BAW1BHoCAQJOQ052AwGAD1UH3QISAwGNA94CB5MDEgMBqQKUAwepAxsDAYgCqgMHtQMaAwH3AbYDB8sDIgMB1gHXAwfsAxkDAaQB7QMHkQQfAgFPkgQHpwQpAgEeqAQHswQhAgEFtQRDtQR3AgEDcQmzASIDAdELtAEJowIrAwH6BaQCCdwCKAMBjgPlAgnwAiIDAfQC8QIJhgMrAwHDAocDCZIDKAMBqgKXAw2XA1sDAaECoQMNoQNlAwGZApwDDZwDeAMBkQKmAw2mA1kDAYkCsgMNsgN4AwGAAq0DDa0DaQMB+AG5Aw25A3MDAe8BvgMNvgNbAwHnAcMDDcMDfwMB3wHIAw3IA1kDAdcB2gMN2gNbAwHJAeQDDeQDdgMBvQHfAw3fA24DAbEB6QMN6QNZAwGlAYQEDYQEbgMBmAH6Aw36A2YDAYwB8AMN8ANrAwGAAY4EDY4EXQIBdIkEDYkEfQIBaP8DDf8DdAIBXPUDDfUDYQIBUJ8EDZ8EdQIBQ5UEDZUEbAIBN6QEDaQEhwECASuaBA2aBHQCAR+wBA2wBH8CARKrBA2rBGwCAQaSAQ+SAW4DAd4OoQEPoQF2AwG9Dn4PfnMDAZwOiAEPiAFdAwH7DbABD7ABbAMB2g15D3lwAwG5DZcBD5cBgAEDAZgNgwEPgwFuAwH3DKYBD6YBdgMB1gx0D3RyAwG1DJwBD5wBdAMBlAyrAQ+rAVsDAfMLjQEPjQFzAwHSC9ABD9ABZgMBsAv4AQ/4AX8DAY8LhwIPhwJ6AwHuCpYCD5YCggEDAc0K5AEP5AFuAwGsCu4BD+4BfgMBiwqMAg+MAoABAwHqCcEBD8EBawMByQnVAQ/VAXgDAagJ8wEP8wF8AwGHCaACD6ACZAMB5gj9AQ/9AXoDAcUIvAEPvAFoAwGkCNoBD9oBiQEDAYMIxgEPxgFmAwHiB+kBD+kBbgMBwQeRAg+RAoIBAwGgB4ICD4ICfwMB/wabAg+bAngDAd4GtwEPtwFqAwG9Bt8BD98BbAMBnAbLAQ/LAWsDAfsFtgIPtgJ/AwHZBcUCD8UCegMBuAXUAg/UAoIBAwGXBawCD6wCfgMB9gTKAg/KAoABAwHVBKcCD6cCgQEDAbQEsQIPsQJ8AwGTBLsCD7sCegMB8gPPAg/PAoIBAwHRA8ACD8ACfwMBsAPZAg/ZAngDAY8D6AIP6AJyAwGBA+0CD+0CgAEDAfUC+QIP+QJ4AwHoAvQCD/QCagMB3AL+Ag/+AokBAwHQAoMDD4MDfAMBxAKKAw+KA4EBAwG3Ao8DD48DfAMBqwI=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1saUgDwwQOAgEBTgVOeQMBvQ9PBcwDEAMBkwLNAwXABBACAQTBBAXBBHoCAQJOQ052AwG+D1UH3QISAwHLA94CB5MDEgMB5wKUAwepAxsDAcYCqgMHtQMaAwG1ArYDB8sDIgMBlALZAwfuAxkDAdoB7wMHnQQfAgFbngQHswQpAgEitAQHvwQhAgEFwQRDwQR3AgEDcQmzASIDAY8MtAEJowIrAwG4BqQCCdwCKAMBzAPlAgnwAiIDAbID8QIJhgMrAwGBA4cDCZIDKAMB6AKXAw2XA1sDAd8CoQMNoQNlAwHXApwDDZwDeAMBzwKmAw2mA1kDAccCsgMNsgN4AwG+Aq0DDa0DaQMBtgK5Aw25A3MDAa0CvgMNvgNbAwGlAsMDDcMDfwMBnQLIAw3IA1kDAZUC3AMN3ANbAwGFAuYDDeYDdgMB9wHhAw3hA24DAekB6wMN6wNZAwHbAYYEDYYEbgMBzAH8Aw38A2YDAb4B8gMN8gNrAwGwAZAEDZAEXQMBogGLBA2LBH0DAZQBgQQNgQR0AwGGAZoEDZoEcQIBePcDDfcDYQIBapUEDZUEdQIBXKsEDasEdQIBTaEEDaEEbAIBP7AEDbAEhwECATGmBA2mBHQCASO8BA28BH8CARS3BA23BGwCAQaSAQ+SAW4DAZwPoQEPoQF2AwH7Dn4PfnMDAdoOiAEPiAFdAwG5DrABD7ABbAMBmA55D3lwAwH3DZcBD5cBgAEDAdYNgwEPgwFuAwG1DaYBD6YBdgMBlA10D3RyAwHzDJwBD5wBdAMB0gyrAQ+rAVsDAbEMjQEPjQFzAwGQDNABD9ABZgMB7gv4AQ/4AX8DAc0LhwIPhwJ6AwGsC5YCD5YCggEDAYsL5AEP5AFuAwHqCu4BD+4BfgMByQqMAg+MAoABAwGoCsEBD8EBawMBhwrVAQ/VAXgDAeYJ8wEP8wF8AwHFCaACD6ACZAMBpAn9AQ/9AXoDAYMJvAEPvAFoAwHiCNoBD9oBiQEDAcEIxgEPxgFmAwGgCOkBD+kBbgMB/weRAg+RAoIBAwHeB4ICD4ICfwMBvQebAg+bAngDAZwHtwEPtwFqAwH7Bt8BD98BbAMB2gbLAQ/LAWsDAbkGtgIPtgJ/AwGXBsUCD8UCegMB9gXUAg/UAoIBAwHVBawCD6wCfgMBtAXKAg/KAoABAwGTBacCD6cCgQEDAfIEsQIPsQJ8AwHRBLsCD7sCegMBsATPAg/PAoIBAwGPBMACD8ACfwMB7gPZAg/ZAngDAc0D6AIP6AJyAwG/A+0CD+0CgAEDAbMD+QIP+QJ4AwGmA/QCD/QCagMBmgP+Ag/+AokBAwGOA4MDD4MDfAMBggOKAw+KA4EBAwH1Ao8DD48DfAMB6QI=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

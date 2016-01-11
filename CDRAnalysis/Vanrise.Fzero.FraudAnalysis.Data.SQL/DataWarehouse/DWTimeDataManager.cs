@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using Vanrise.Data;
 using Vanrise.Data.SQL;
-using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
@@ -17,6 +17,27 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
+
+        #region Private Methods
+
+        private DWTime TimeMapper(IDataReader reader)
+        {
+            var time = new DWTime();
+            time.DateInstance = ((DateTime)reader["DateInstance"]);
+            time.Year = GetReaderValue<int?>(reader, "Year");
+            time.Month = GetReaderValue<int?>(reader, "Month");
+            time.Week = GetReaderValue<int?>(reader, "Week");
+            time.Day = GetReaderValue<int?>(reader, "Day");
+            time.Hour = GetReaderValue<int?>(reader, "Hour");
+            time.MonthName = reader["MonthName"] as string;
+            time.DayName = reader["DayName"] as string;
+            return time;
+        }
+
+        #endregion
+
+
+
         public List<DWTime> GetTimes(DateTime from, DateTime to)
         {
             string query = string.Format("SELECT [DateInstance] ,[Year] ,[Month] ,[Week],[Day] ,[Hour] ,[MonthName] ,[DayName]FROM [dbo].[Dim_Time] where DateInstance between  @FromDate and @ToDate");
@@ -27,27 +48,46 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             });
         }
 
-
-        #region Private Methods
-
-        private DWTime TimeMapper(IDataReader reader)
+        public void ApplyDWTimesToDB(object preparedDWTimes)
         {
-            var time = new DWTime();
-            DateTime date = ((DateTime)reader["DateInstance"]);
-            time.DateInstance = new DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second, date.Kind);
-            time.Year = GetReaderValue<int?>(reader,"Year");
-            time.Month = GetReaderValue<int?>(reader,"Month");
-            time.Week= GetReaderValue<int?>(reader,"Week");
-            time.Day = GetReaderValue<int?>(reader,"Day");
-            time.Hour = GetReaderValue<int?>(reader,"Hour");
-            time.MonthName= reader["MonthName"] as string;
-            time.DayName= reader["DayName"] as string;
-            return time;
+            InsertBulkToTable(preparedDWTimes as BaseBulkInsertInfo);
         }
 
-        #endregion
+        public void SaveDWTimesToDB(List<DWTime> dwTimes)
+        {
+            object dbApplyStream = InitialiazeStreamForDBApply();
 
+            foreach (DWTime dim in dwTimes)
+            {
+                WriteRecordToStream(dim, dbApplyStream);
+            }
 
+            ApplyDWTimesToDB(FinishDBApplyStream(dbApplyStream));
+        }
 
+        public object FinishDBApplyStream(object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.Close();
+            return new StreamBulkInsertInfo
+            {
+                TableName = "Dim_Time",
+                Stream = streamForBulkInsert,
+                TabLock = false,
+                KeepIdentity = false,
+                FieldSeparator = '^'
+            };
+        }
+
+        public object InitialiazeStreamForDBApply()
+        {
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(DWTime record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", record.DateInstance, record.Year, record.Month, record.Week, record.Day, record.Hour, record.MonthName, record.DayName);
+        }
     }
 }
