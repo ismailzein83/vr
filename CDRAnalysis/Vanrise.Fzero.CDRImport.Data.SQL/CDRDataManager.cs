@@ -6,6 +6,35 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 {
     public class CDRDataManager : BaseSQLDataManager, ICDRDataManager
     {
+        static string[] s_cdrColumns = new string[] {
+            "MSISDN"
+          ,"IMSI"
+          ,"ConnectDateTime"
+          ,"Destination"
+          ,"DurationInSeconds"
+          ,"DisconnectDateTime"
+          ,"Call_Class"
+          ,"IsOnNet"
+          ,"Call_Type"
+          ,"Sub_Type"
+          ,"IMEI"
+          ,"BTS_ID"
+          ,"Cell_ID"
+          ,"SwitchID"
+          ,"Up_Volume"
+          ,"Down_Volume"
+          ,"Cell_Latitude"
+          ,"Cell_Longitude"
+          ,"In_Trunk"
+          ,"Out_Trunk"
+          ,"Service_Type"
+          ,"Service_VAS_Name"
+          ,"InTrunkID"
+          ,"OutTrunkID"
+          ,"ReleaseCode"
+          ,"MSISDNAreaCode"
+          ,"DestinationAreaCode"
+        };
         public CDRDataManager()
             : base("CDRDBConnectionString")
         {
@@ -35,6 +64,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             return new StreamBulkInsertInfo
             {
                 TableName = "[FraudAnalysis].[NormalCDR]",
+                ColumnNames = s_cdrColumns,
                 Stream = streamForBulkInsert,
                 TabLock = false,
                 KeepIdentity = false,
@@ -50,7 +80,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         public void WriteRecordToStream(CDR record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}^{23}^{24}^{25}^{26}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}^{23}^{24}^{25}^{26}",
                                      record.MSISDN
                                    , record.IMSI
                                    , record.ConnectDateTime
