@@ -13,7 +13,8 @@
             idfield: '@',
             onexport: '=',
             showexpand: '=',
-            norowhighlightonclick: '='
+            norowhighlightonclick: '=',
+            gridmenuactions: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -478,6 +479,20 @@
                 }
             };
 
+            ctrl.getGridMenuActions = function () {
+                return ctrl.gridmenuactions != undefined ? ctrl.gridmenuactions : [];
+            }
+
+            ctrl.executeGridAction = function (menuAction) {
+                if (menuAction.onClicked != undefined) {
+                    menuAction.isExecuting = true;
+                    UtilsService.convertToPromiseIfUndefined(menuAction.onClicked())
+                        .finally(function () {
+                            menuAction.isExecuting = false;
+                        });
+                }
+            };
+
             scope.$watchCollection('ctrl.datasource', onDataSourceChanged);
             scope.$watchCollection('ctrl.updateItems', onDataSourceChanged);
 
@@ -714,7 +729,14 @@
 
             gridApi.collapseRow = function (dataItem) {
                 ctrl.collapseRow(dataItem);
-            };            
+            };
+
+            gridApi.clearUpdatedItems = function () {
+                if (ctrl.updateItems != undefined) {
+                    ctrl.isMainItemsShown = true;
+                    ctrl.updateItems.length = 0;
+                }
+            };
         }
 
         function filldataItemColumnValues(dataItem, colDef) {
