@@ -86,13 +86,13 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
 
         $scope.onSellingNumberPlanSelectorChanged = function (selectedPlan) {
 
-            if (selectedPlan != undefined) {
+            if (selectedPlan != undefined && !$scope.isLoading) {
                 countries.length = 0;
 
                 filter = getFilter();
                 $scope.isLoading = true;
 
-                UtilsService.waitMultipleAsyncOperations([getCountries, checkState]).then(function () {
+                UtilsService.waitMultipleAsyncOperations([getCountries], [checkState]).then(function () {
                     buildCountriesTree();
                     $scope.isLoading = false;
                 }).catch(function (error) {
@@ -103,7 +103,7 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
         }
 
         $scope.saleCodesGridReady = function (api) {
-          
+
             codesGridAPI = api;
             $scope.selectedCodes = codesGridAPI.getSelectedCodes();
         }
@@ -329,7 +329,7 @@ function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPISer
 
 
     function buildCountriesTree() {
-        $scope.nodes.length=0;
+        $scope.nodes.length = 0;
 
         for (var i = 0; i < countries.length; i++) {
             var node = mapCountryToNode(countries[i]);

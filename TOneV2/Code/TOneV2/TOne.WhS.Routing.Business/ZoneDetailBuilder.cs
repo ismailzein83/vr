@@ -52,9 +52,9 @@ namespace TOne.WhS.Routing.Business
                             IsEffectiveInFuture = isEffectiveInFuture
                         };
                         //TODO: Check with Samer (Null Reference)
-                        //var pricingRulesResult = salePricingRuleManager.ApplyPricingRules(salePricingRulesInput);
+                        var pricingRulesResult = salePricingRuleManager.ApplyPricingRules(salePricingRulesInput);
 
-                        var rateValue = customerZoneRate.Rate.NormalRate; //pricingRulesResult != null ? pricingRulesResult.Rate : customerZoneRate.Rate.NormalRate;
+                        var rateValue = pricingRulesResult != null ? pricingRulesResult.Rate : customerZoneRate.Rate.NormalRate;
                         rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now);
                         var customerZoneRoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerInfo.CustomerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
                         CustomerZoneDetail customerZoneDetail = new CustomerZoneDetail
