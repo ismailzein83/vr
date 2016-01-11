@@ -39,12 +39,10 @@ namespace TOne.WhS.Sales.Business
 
         public void SavePriceList()
         {
-            _priceListId = null;
-
             SaveDefaultChanges();
             SaveRateChanges();
             SaveRoutingProductChanges();
-            _ratePlanDataManager.SetRatePlanStatusIfExists(_ownerType, _ownerId, RatePlanStatus.Completed);
+            _ratePlanDataManager.UpdateRatePlanStatus(_ownerType, _ownerId, RatePlanStatus.Draft, RatePlanStatus.Completed);
         }
 
         void SaveDefaultChanges()
@@ -57,7 +55,7 @@ namespace TOne.WhS.Sales.Business
                 if (_changes.DefaultChanges.NewDefaultRoutingProduct != null)
                 {
                     AddPriceList();
-                    saleEntityRoutingProductDataManager.InsertOrUpdateDefaultRoutingProduct(_ownerType, _ownerId, _changes.DefaultChanges.NewDefaultRoutingProduct);
+                    saleEntityRoutingProductDataManager.InsertDefaultRoutingProduct(_ownerType, _ownerId, _changes.DefaultChanges.NewDefaultRoutingProduct);
                 }
                 else if (_changes.DefaultChanges.DefaultRoutingProductChange != null)
                 {

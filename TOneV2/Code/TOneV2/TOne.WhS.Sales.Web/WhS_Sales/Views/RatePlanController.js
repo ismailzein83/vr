@@ -49,6 +49,7 @@
 
             $scope.onOwnerTypeChanged = function () {
                 clearRatePlan();
+                $scope.showCancelButton = false;
 
                 if ($scope.selectedOwnerType != undefined) {
                     if ($scope.selectedOwnerType.value == WhS_Sales_SalePriceListOwnerTypeEnum.SellingProduct.value) {
@@ -71,6 +72,7 @@
             };
             $scope.onSellingProductChanged = function () {
                 clearRatePlan();
+                $scope.showCancelButton = false;
             };
 
             $scope.selectedCustomer = undefined;
@@ -79,9 +81,10 @@
                 carrierAccountSelectorReadyDeferred.resolve();
             };
             $scope.onCarrierAccountChanged = function () {
-                if ($scope.selectedCustomer) {
-                    clearRatePlan();
+                clearRatePlan();
+                $scope.showCancelButton = false;
 
+                if ($scope.selectedCustomer) {
                     $scope.isLoadingFilterSection = true;
 
                     WhS_Sales_RatePlanAPIService.ValidateCustomer(getOwnerId(), new Date()).then(function (isCustomerValid) {
@@ -197,12 +200,17 @@
                 WhS_Sales_RatePlanService.editPricingSettings(settings, pricingSettings, onPricingSettingsUpdated);
             };
             $scope.applyCalculatedRates = function () {
+                var promises = [];
+
                 var confirmPromise = VRNotificationService.showConfirmation("Are you sure you want to apply the calculated rates?");
+                promises.push(confirmPromise);
+
+                var applyDeferred = UtilsService.createPromiseDeferred();
+                promises.push(applyDeferred.promise);
 
                 confirmPromise.then(function (confirmed) {
                     if (confirmed) {
                         $scope.showApplyButton = false;
-                        
 
                         var input = {
                             OwnerType: $scope.selectedOwnerType.value,
@@ -217,28 +225,57 @@
                         };
 
                         return WhS_Sales_RatePlanAPIService.ApplyCalculatedRates(input).then(function () {
+                            applyDeferred.resolve();
                             VRNotificationService.showSuccess("Rates applied");
                             pricingSettings = null;
-                            $scope.showRemoveButton = true;
+                            $scope.showCancelButton = true;
                             loadGrid();
                         }).catch(function (error) {
+                            applyDeferred.reject();
                             VRNotificationService.notifyException(error, $scope);
                         });
                     }
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                });
-            };
-            $scope.deleteDraft = function () {
-                return WhS_Sales_RatePlanAPIService.DeleteDraft($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
-                    if (response) {
-                        VRNotificationService.showSuccess("Draft deleted");
-                        $scope.showRemoveButton = false;
-                        loadRatePlan();
+                    else {
+                        applyDeferred.resolve();
                     }
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
+
+                return UtilsService.waitMultiplePromises(promises);
+            };
+            $scope.deleteDraft = function () {
+                var promises = [];
+
+                var confirmPromise = VRNotificationService.showConfirmation("Are you sure you want to cancel all of your changes?");
+                promises.push(confirmPromise);
+
+                var deleteDeferred = UtilsService.createPromiseDeferred();
+                promises.push(deleteDeferred.promise);
+
+                confirmPromise.then(function (confirmed) {
+                    if (confirmed) {
+                        return WhS_Sales_RatePlanAPIService.DeleteDraft($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
+                            if (response) {
+                                deleteDeferred.resolve();
+                                VRNotificationService.showSuccess("Draft deleted");
+                                $scope.showCancelButton = false;
+                                loadRatePlan();
+                            }
+                            else {
+                                deleteDeferred.reject();
+                            }
+                        }).catch(function (error) {
+                            deleteDeferred.reject();
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                    }
+                    else {
+                        deleteDeferred.resolve();
+                    }
+                });
+
+                return UtilsService.waitMultiplePromises(promises);
             };
             
             // Validation functions
@@ -367,9 +404,7 @@
 
             function checkIfDraftExists() {
                 return WhS_Sales_RatePlanAPIService.CheckIfDraftExists($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
-                    if (response) {
-                        $scope.showRemoveButton = true;
-                    }
+                    $scope.showCancelButton = response === true;
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope); // The user can perform other tasks if CheckIfDraftExists fails
                 });
@@ -429,14 +464,30 @@
         }
 
         function saveChanges(shouldLoadGrid) {
+            var saveChangesDeferred = UtilsService.createPromiseDeferred();
+
             var input = getSaveChangesInput();
 
-            return WhS_Sales_RatePlanAPIService.SaveChanges(input).then(function (response) {
+            if (input.NewChanges) {
+                WhS_Sales_RatePlanAPIService.SaveChanges(input).then(function () {
+                    saveChangesDeferred.resolve();
+                    $scope.showCancelButton = true;
+
+                    if (shouldLoadGrid)
+                        loadGrid();
+                }).catch(function (error) {
+                    saveChangesDeferred.reject();
+                    VRNotificationService.notifyException(error, $scope);
+                });
+            }
+            else {
+                saveChangesDeferred.resolve();
+
                 if (shouldLoadGrid)
                     loadGrid();
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            });
+            }
+
+            return saveChangesDeferred.promise;
 
             function getSaveChangesInput() {
                 var changes = null;
@@ -507,14 +558,6 @@
                 var savePriceListDeferred = UtilsService.createPromiseDeferred();
                 promises.push(savePriceListDeferred.promise);
 
-                savePriceListDeferred.promise.then(function (saveClicked) {
-                    if (saveClicked) {
-                        VRNotificationService.showSuccess("Price list saved");
-                        $scope.showRemoveButton = false;
-                        loadRatePlan();
-                    }
-                });
-
                 return UtilsService.waitMultiplePromises(promises).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
@@ -523,7 +566,9 @@
                     if (saveClicked) {
                         isSavingPriceList = true;
                         savePriceList().then(function () {
-                            savePriceListDeferred.resolve(saveClicked);
+                            savePriceListDeferred.resolve();
+                            VRNotificationService.showSuccess("Price list saved");
+                            loadRatePlan();
                         }).catch(function (error) { savePriceListDeferred.reject(); });
                     }
                     else savePriceListDeferred.resolve(saveClicked);

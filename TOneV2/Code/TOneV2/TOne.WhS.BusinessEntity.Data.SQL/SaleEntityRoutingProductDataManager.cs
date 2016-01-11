@@ -61,7 +61,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetEffectiveZoneRoutingProducts", SaleZoneRoutingProductMapper, ownerType, ownerId, effectiveOn);
         }
 
-        public bool InsertOrUpdateDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, NewDefaultRoutingProduct newDefaultRoutingProduct)
+        public bool InsertDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, NewDefaultRoutingProduct newDefaultRoutingProduct)
         {
             int affectedRows = ExecuteNonQuerySP("TOneWhS_BE.sp_SaleEntityRoutingProduct_InsertOrUpdateDefault", ownerType, ownerId, newDefaultRoutingProduct.DefaultRoutingProductId, newDefaultRoutingProduct.BED, newDefaultRoutingProduct.EED);
             return affectedRows > 0;

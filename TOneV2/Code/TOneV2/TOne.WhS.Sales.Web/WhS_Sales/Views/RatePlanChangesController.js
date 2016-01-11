@@ -131,8 +131,6 @@
 
             function getDefaultItem() {
                 return WhS_Sales_RatePlanAPIService.GetDefaultItem(ownerType, ownerId).then(function (response) {
-                    console.log(response);
-
                     if (response) {
                         if (response.CurrentRoutingProductId || response.NewRoutingProductId) {
                             isDefaultRoutingProductDefined = true;

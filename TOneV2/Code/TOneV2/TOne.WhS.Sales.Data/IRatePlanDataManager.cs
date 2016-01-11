@@ -14,7 +14,7 @@ namespace TOne.WhS.Sales.Data
 
         bool InsertOrUpdateChanges(SalePriceListOwnerType ownerType, int ownerId, Changes changes, RatePlanStatus status);
 
-        bool SetRatePlanStatusIfExists(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status);
+        bool UpdateRatePlanStatus(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus existingStatus, RatePlanStatus newStatus);
 
         bool CancelRatePlanChanges(SalePriceListOwnerType ownerType, int ownerId);
     }
