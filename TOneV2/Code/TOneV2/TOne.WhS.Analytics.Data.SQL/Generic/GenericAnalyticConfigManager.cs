@@ -436,7 +436,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                     MappedSQLColumn = MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias,
                     GetMeasureValue = (reader, record) =>
                     {
-                        var durationInseconds = (GetReaderValue<int>(reader, MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias));
+                        var durationInseconds = (GetReaderValue<Decimal>(reader, MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias));
                         return  durationInseconds/ 60;
                     }
                 });
@@ -495,7 +495,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                     GetMeasureValue = (reader, record) =>
                     {
                         var successfulAttempts = GetReaderValue<int>(reader, MeasureValueExpression.SuccessfulAttempts_Expression.ColumnAlias);
-                        var durationInSeconds= GetReaderValue<int>(reader, MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias);
+                        var durationInSeconds= GetReaderValue<decimal>(reader, MeasureValueExpression.DurationsInSeconds_Expression.ColumnAlias);
                         return successfulAttempts > 0 ? (durationInSeconds / (60 * successfulAttempts)) : 0;
                     }
                 });
