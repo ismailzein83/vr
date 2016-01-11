@@ -39,6 +39,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     if(!importedCountriesByCountryId.TryGetValue(countryId, out importedCountry))
                     {
                         importedCountry = new ImportedCountry();
+                        importedCountry.CountryId = countryId;
                         importedCountry.ImportedCodes = new List<ImportedCode>();
                         importedCountry.ImportedRates = new List<ImportedRate>();
                         importedCountriesByCountryId.Add(countryId, importedCountry);
