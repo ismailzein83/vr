@@ -189,6 +189,10 @@ namespace TOne.WhS.BusinessEntity.Business
             else
                 return customer.SellingNumberPlanId;
         }
+        public static string GetCarrierAccountName(string profileName, string nameSuffix)
+        {
+            return string.Format("{0}{1}", profileName, string.IsNullOrEmpty(nameSuffix) ? string.Empty : " (" + nameSuffix + ")");
+        }
         #endregion
 
         #region Private Methods
@@ -235,7 +239,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return new CarrierAccountInfo()
             {
                 CarrierAccountId = carrierAccount.CarrierAccountId,
-                Name = carrierAccount.Name,
+                Name = GetCarrierAccountName(_carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId), carrierAccount.Name),
             };
         }
         private IEnumerable<CarrierAccount> GetCarrierAccountsByIds(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
@@ -275,17 +279,19 @@ namespace TOne.WhS.BusinessEntity.Business
         private CarrierAccountDetail CarrierAccountDetailMapper(CarrierAccount carrierAccount)
         {
             CarrierAccountDetail carrierAccountDetail = new CarrierAccountDetail();
-
             carrierAccountDetail.Entity = carrierAccount;
-
 
             var carrierProfiles = _carrierProfileManager.GetCachedCarrierProfiles();
             var carrierProfile = carrierProfiles.FindRecord(itm => itm.Value.CarrierProfileId == carrierAccount.CarrierProfileId);
+            
             if (carrierProfile.Value != null)
             {
                 carrierAccountDetail.CarrierProfileName = carrierProfile.Value.Name;
+                carrierAccountDetail.CarrierAccountName = GetCarrierAccountName(carrierProfile.Value.Name, carrierAccountDetail.Entity.Name);
             }
+            
             carrierAccountDetail.AccountTypeDescription = carrierAccount.AccountType.ToString();
+            
             if(carrierAccount.SellingNumberPlanId!=null)
             {
                 var sellingNumberPlan = _sellingNumberPlanManager.GetSellingNumberPlan((int)carrierAccount.SellingNumberPlanId);

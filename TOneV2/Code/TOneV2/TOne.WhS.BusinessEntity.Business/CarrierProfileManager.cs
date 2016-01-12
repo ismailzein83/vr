@@ -39,6 +39,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierProfiles.GetRecord(carrierProfileId);
         }
 
+        public string GetCarrierProfileName(int carrierProfileId)
+        {
+            CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
+            return carrierProfile != null ? carrierProfile.Name : null;
+        }
+
         public IEnumerable<CarrierProfileInfo> GetCarrierProfilesInfo()
         {
             var carrierProfiles = GetCachedCarrierProfiles();
