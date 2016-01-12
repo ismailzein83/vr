@@ -65,7 +65,7 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
                 getTask();
             }
             else {
-                
+                $scope.title = UtilsService.buildTitleForAddEditor("Task");
                 $scope.selectedTriggerType = UtilsService.getItemByVal($scope.triggerTypes, 1, "TriggerTypeId");
                 if (actionTypeId != undefined) {
                     $scope.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, actionTypeId, "ActionTypeId");
@@ -142,6 +142,7 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
 
     function fillScopeFromTaskObj(taskObject) {
         $scope.name = taskObject.Name;
+        $scope.title = UtilsService.buildTitleForUpdateEditor(taskObject.Name, "Task");
         $scope.isEnabled = taskObject.IsEnabled;
 
         $scope.selectedTriggerType = UtilsService.getItemByVal($scope.triggerTypes, taskObject.TriggerTypeId, "TriggerTypeId");
