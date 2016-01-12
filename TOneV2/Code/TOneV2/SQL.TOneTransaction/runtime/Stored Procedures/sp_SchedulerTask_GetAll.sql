@@ -4,6 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [runtime].[sp_SchedulerTask_GetAll]
+	@OwnerId int
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -27,4 +28,5 @@ BEGIN
       from runtime.ScheduleTask SC
       JOIN runtime.SchedulerTaskTriggerType TR on SC.TriggerTypeId = TR.ID
       JOIN runtime.SchedulerTaskActionType AC on SC.ActionTypeId = AC.ID
+      where SC.OwnerId = @OwnerId
 END
