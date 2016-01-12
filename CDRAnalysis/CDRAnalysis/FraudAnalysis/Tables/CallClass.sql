@@ -1,9 +1,12 @@
 ﻿CREATE TABLE [FraudAnalysis].[CallClass] (
-    [Id]          INT           IDENTITY (1, 1) NOT NULL,
-    [Description] VARCHAR (255) NULL,
-    [NetType]     INT           NULL,
-    CONSTRAINT [PK_CallClass] PRIMARY KEY CLUSTERED ([Id] ASC)
+    [ID]          INT           IDENTITY (1, 1) NOT NULL,
+    [Description] VARCHAR (255) NOT NULL,
+    [NetType]     INT           NOT NULL,
+    [timestamp]   ROWVERSION    NOT NULL,
+    CONSTRAINT [PK_CallClass] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

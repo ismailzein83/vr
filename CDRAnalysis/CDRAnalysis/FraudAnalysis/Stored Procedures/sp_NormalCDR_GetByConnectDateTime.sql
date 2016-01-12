@@ -1,7 +1,4 @@
 ﻿
-
-
-
 CREATE PROCEDURE [FraudAnalysis].[sp_NormalCDR_GetByConnectDateTime] 
 (
 	@From datetime ,
@@ -10,15 +7,16 @@ CREATE PROCEDURE [FraudAnalysis].[sp_NormalCDR_GetByConnectDateTime]
 AS
 BEGIN
 
-SELECT  cdrs.[Id] ,cdrs.[MSISDN] ,cdrs.[IMSI] ,cdrs.[ConnectDateTime] ,cdrs.[Destination] ,
-		cdrs.[DurationInSeconds] ,cdrs.[DisconnectDateTime] ,cdrs.[Call_Class]  ,cdrs.[IsOnNet] ,
-		cdrs.[Call_Type] ,cdrs.[Sub_Type] ,cdrs.[IMEI]
-		,cdrs.[BTS_Id]  ,cdrs.[Cell_Id]  ,cdrs.[SwitchId]  ,cdrs.[Up_Volume]  ,cdrs.[Down_Volume] ,
-		cdrs.[Cell_Latitude]  ,cdrs.[Cell_Longitude]  ,cdrs.[In_Trunk]  ,cdrs.[Out_Trunk]  ,cdrs.[Service_Type]  ,cdrs.[Service_VAS_Name] 
-		,cdrs.[InTrunkID], cdrs.[OutTrunkID], cdrs.[ReleaseCode], cdrs.MSISDNAreaCode, cdrs.DestinationAreaCode
+SELECT  cdrs.[MSISDN] ,cdrs.[IMSI] ,cdrs.[ConnectDateTime] ,cdrs.[Destination] ,
+		cdrs.[DurationInSeconds] ,cdrs.[DisconnectDateTime] ,cdrs.[CallClassID]  ,cdrs.[IsOnNet] ,
+		cdrs.[CallTypeID] ,cdrs.[SubscriberTypeID] ,cdrs.[IMEI]
+		,cdrs.[BTS]  ,cdrs.[Cell]  ,cdrs.[SwitchId]  ,cdrs.[UpVolume]  ,cdrs.[DownVolume] ,
+		cdrs.[CellLatitude]  ,cdrs.[CellLongitude]  ,cdrs.[InTrunkID]  ,cdrs.[OutTrunkID]  ,cdrs.[ServiceTypeID]  ,cdrs.[ServiceVASName] 
+		, cdrs.[ReleaseCode], cdrs.MSISDNAreaCode, cdrs.DestinationAreaCode
                                                 
-FROM	NormalCDR cdrs with(nolock,index=IX_NormalCDR_MSISDN)
-		--LEFT JOIN [FraudAnalysis].AccountCase WhiteNbs with(nolock) ON WhiteNbs.AccountNumber = cdrs.MSISDN AND StatusId=4 and ValidTill >= getdate()
-WHERE	cdrs.connectDateTime between @From and @To --and WhiteNbs.AccountNumber IS NULL
+FROM	FraudAnalysis.NormalCDR cdrs
+
+ with(nolock)
+WHERE	cdrs.connectDateTime between @From and @To 
 ORDER BY cdrs.MSISDN, cdrs.connectdatetime
 END

@@ -13,30 +13,22 @@ BEGIN
 	
 	IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
     BEGIN
-		SELECT IMSI,
-			ConnectDateTime,
-			Destination,
-			DurationInSeconds,
-			Call_Class,
-			Call_Type,
-			Sub_Type,
-			IMEI,
-			Cell_Id,
-			Up_Volume,
-			Down_Volume,
-			Service_Type,
-			Service_VAS_Name,
-			ReleaseCode,
-			MSISDNAreaCode,
-			DestinationAreaCode
+		SELECT  cdrs.[MSISDN] ,cdrs.[IMSI] ,cdrs.[ConnectDateTime] ,cdrs.[Destination] ,
+		cdrs.[DurationInSeconds] ,cdrs.[DisconnectDateTime] ,cdrs.[CallClassID]  ,cdrs.[IsOnNet] ,
+		cdrs.[CallTypeID] ,cdrs.[SubscriberTypeID] ,cdrs.[IMEI]
+		,cdrs.[BTS]  ,cdrs.[Cell]  ,cdrs.[SwitchId]  ,cdrs.[UpVolume]  ,cdrs.[DownVolume] ,
+		cdrs.[CellLatitude]  ,cdrs.[CellLongitude]  ,cdrs.[InTrunkID]  ,cdrs.[OutTrunkID]  ,cdrs.[ServiceTypeID]  ,cdrs.[ServiceVASName] 
+		, cdrs.[ReleaseCode], cdrs.MSISDNAreaCode, cdrs.DestinationAreaCode
+                                                
+
 			
 		INTO #RESULT
 		
-		FROM FraudAnalysis.NormalCDR AS cdr with(nolock,index=IX_NormalCDR_MSISDN)
+		FROM	FraudAnalysis.NormalCDR cdrs with(nolock,index=IX_NormalCDR_MSISDN)
 		
-		WHERE MSISDN = @MSISDN
-		AND ConnectDateTime >= @FromDate
-		AND ConnectDateTime <= @ToDate
+		WHERE cdrs.MSISDN = @MSISDN
+		AND cdrs.ConnectDateTime >= @FromDate
+		AND cdrs.ConnectDateTime <= @ToDate
 		
 		ORDER BY ConnectDateTime DESC
 		

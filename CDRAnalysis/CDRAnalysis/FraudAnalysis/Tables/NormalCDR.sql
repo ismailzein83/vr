@@ -1,27 +1,24 @@
-﻿CREATE TABLE [FraudAnalysis].[NormalCDR] (
-    [ID]                  INT             IDENTITY (1, 1) NOT NULL,
-    [MSISDN]              VARCHAR (30)    NULL,
+CREATE TABLE [FraudAnalysis].[NormalCDR] (
+    [MSISDN]              VARCHAR (30)    NOT NULL,
     [IMSI]                VARCHAR (20)    NULL,
-    [ConnectDateTime]     DATETIME        NULL,
+    [ConnectDateTime]     DATETIME        NOT NULL,
     [Destination]         VARCHAR (40)    NULL,
-    [DurationInSeconds]   NUMERIC (13, 4) NULL,
+    [DurationInSeconds]   NUMERIC (13, 4) NOT NULL,
     [DisconnectDateTime]  DATETIME        NULL,
-    [Call_Class]          VARCHAR (50)    NULL,
-    [IsOnNet]             TINYINT         NULL,
-    [Call_Type]           INT             NULL,
-    [Sub_Type]            VARCHAR (20)    NULL,
+    [CallClassID]         INT             NULL,
+    [IsOnNet]             BIT             NULL,
+    [CallTypeID]          INT             NOT NULL,
+    [SubscriberTypeID]    INT             NULL,
     [IMEI]                VARCHAR (20)    NULL,
-    [BTS_Id]              INT             NULL,
-    [Cell_Id]             VARCHAR (20)    NULL,
-    [SwitchId]            INT             NULL,
-    [Up_Volume]           DECIMAL (18, 2) NULL,
-    [Down_Volume]         DECIMAL (18, 2) NULL,
-    [Cell_Latitude]       DECIMAL (18, 8) NULL,
-    [Cell_Longitude]      DECIMAL (18, 8) NULL,
-    [In_Trunk]            VARCHAR (20)    NULL,
-    [Out_Trunk]           VARCHAR (20)    NULL,
-    [Service_Type]        INT             NULL,
-    [Service_VAS_Name]    VARCHAR (50)    NULL,
+    [BTS]                 VARCHAR (50)    NULL,
+    [Cell]                VARCHAR (50)    NULL,
+    [SwitchID]            INT             NULL,
+    [UpVolume]            DECIMAL (18, 2) NULL,
+    [DownVolume]          DECIMAL (18, 2) NULL,
+    [CellLatitude]        DECIMAL (18, 8) NULL,
+    [CellLongitude]       DECIMAL (18, 8) NULL,
+    [ServiceTypeID]       INT             NULL,
+    [ServiceVASName]      VARCHAR (50)    NULL,
     [InTrunkID]           INT             NULL,
     [OutTrunkID]          INT             NULL,
     [ReleaseCode]         VARCHAR (50)    NULL,
@@ -40,11 +37,14 @@
 
 
 
+
+
 GO
 CREATE CLUSTERED INDEX [IX_NormalCDR_MSISDN]
     ON [FraudAnalysis].[NormalCDR]([MSISDN] ASC, [ConnectDateTime] ASC);
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'ID for Normal CDR', @level0type = N'SCHEMA', @level0name = N'FraudAnalysis', @level1type = N'TABLE', @level1name = N'NormalCDR', @level2type = N'COLUMN', @level2name = N'ID';
+CREATE NONCLUSTERED INDEX [IX_NormalCDR_ConnectDateTime]
+    ON [FraudAnalysis].[NormalCDR]([ConnectDateTime] ASC);
 

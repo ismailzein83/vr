@@ -1,5 +1,4 @@
 ﻿CREATE TABLE [dbo].[Facts] (
-    [MS_CDRId]              INT             NULL,
     [MS_IMEI]               VARCHAR (20)    NULL,
     [MS_MSISDN]             VARCHAR (30)    NULL,
     [MS_CaseId]             INT             NULL,
@@ -11,12 +10,27 @@
     [FK_Period]             INT             NULL,
     [FK_Strategy]           INT             NULL,
     [FK_StrategyKind]       INT             NULL,
-    [FK_SubscriberType]     VARCHAR (20)    NULL,
+    [FK_SubscriberType]     INT             NULL,
     [FK_SuspicionLevel]     INT             NULL,
     [FK_ConnectTime]        DATETIME        NULL,
     [FK_CaseGenerationTime] DATETIME        NULL,
     [FK_StrategyUser]       INT             NULL,
     [FK_CaseUser]           INT             NULL,
-    [FK_BTS]                INT             NULL
+    [FK_BTS]                INT             NULL,
+    CONSTRAINT [FK_Facts_Dim_BTS] FOREIGN KEY ([FK_BTS]) REFERENCES [dbo].[Dim_BTS] ([Pk_BTSId]),
+    CONSTRAINT [FK_Facts_Dim_CallClass] FOREIGN KEY ([FK_CallClass]) REFERENCES [dbo].[Dim_CallClass] ([Pk_CallClassId]),
+    CONSTRAINT [FK_Facts_Dim_CallType] FOREIGN KEY ([FK_CallType]) REFERENCES [dbo].[Dim_CallType] ([Pk_CallTypeId]),
+    CONSTRAINT [FK_Facts_Dim_CaseStatus] FOREIGN KEY ([FK_CaseStatus]) REFERENCES [dbo].[Dim_CaseStatus] ([Pk_CaseStatusId]),
+    CONSTRAINT [FK_Facts_Dim_NetworkType] FOREIGN KEY ([FK_NetworkType]) REFERENCES [dbo].[Dim_NetworkType] ([Pk_NetTypeId]),
+    CONSTRAINT [FK_Facts_Dim_Period] FOREIGN KEY ([FK_Period]) REFERENCES [dbo].[Dim_Period] ([Pk_PeriodId]),
+    CONSTRAINT [FK_Facts_Dim_Strategy] FOREIGN KEY ([FK_Strategy]) REFERENCES [dbo].[Dim_Strategy] ([Pk_StrategyId]),
+    CONSTRAINT [FK_Facts_Dim_StrategyKind] FOREIGN KEY ([FK_StrategyKind]) REFERENCES [dbo].[Dim_StrategyKind] ([PK_KindId]),
+    CONSTRAINT [FK_Facts_Dim_SubscriberType] FOREIGN KEY ([FK_SubscriberType]) REFERENCES [dbo].[Dim_SubscriberType] ([Pk_SubscriberTypeId]),
+    CONSTRAINT [FK_Facts_Dim_SuspicionLevel] FOREIGN KEY ([FK_SuspicionLevel]) REFERENCES [dbo].[Dim_SuspicionLevel] ([Pk_SuspicionLevelId]),
+    CONSTRAINT [FK_Facts_Dim_Time] FOREIGN KEY ([FK_ConnectTime]) REFERENCES [dbo].[Dim_Time] ([DateInstance]),
+    CONSTRAINT [FK_Facts_Dim_User] FOREIGN KEY ([FK_CaseUser]) REFERENCES [dbo].[Dim_User] ([Pk_UserId]),
+    CONSTRAINT [FK_Facts_Dim_User1] FOREIGN KEY ([FK_StrategyUser]) REFERENCES [dbo].[Dim_User] ([Pk_UserId])
 );
+
+
 

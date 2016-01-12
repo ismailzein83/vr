@@ -28,7 +28,7 @@ BEGIN
 
 		
 		WHERE ac.[Status] = 3
-		AND cdr.Call_Type = 1
+		AND cdr.CallTypeID = 1
 		AND ac.CreatedTime BETWEEN @FromDate
 		AND @ToDate
 

@@ -166,5 +166,12 @@
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchBrand_Insert.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Filter_GetAll.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Aggregate_GetAll.sql" />
+    <Build Include="FraudAnalysis\Tables\CDRDatabase.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetAll.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_DataWarehouse_GetAccountCases.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_CDRDatabase_TryLockIfDBNotReady.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_CDRDatabase_SetReadyAndUnlock.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_CDRDatabase_GetIsReady.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_CDRDatabase_GetAllReady.sql" />
   </ItemGroup>
 </Project>
