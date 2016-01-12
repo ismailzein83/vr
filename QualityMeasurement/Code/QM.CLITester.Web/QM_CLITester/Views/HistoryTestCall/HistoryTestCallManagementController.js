@@ -13,6 +13,9 @@
         var profileDirectiveAPI;
         var profileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var scheduleDirectiveAPI;
+        var scheduleReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var supplierDirectiveAPI;
         var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -33,12 +36,14 @@
             $scope.zones = [];
             $scope.suppliers = [];
             $scope.profiles = [];
+            $scope.schedules = [];
             $scope.testStatus = [];
             $scope.testResult = [];
             $scope.users = [];
 
             $scope.selectedSuppliers = [];
             $scope.selectedProfiles = [];
+            $scope.selectedSchedules = [];
             $scope.selectedZones = [];
             $scope.selectedCountries = [];
             $scope.selectedtestResults = [];
@@ -76,6 +81,11 @@
                 profileReadyPromiseDeferred.resolve();
             }
 
+            $scope.onScheduleDirectiveReady = function (api) {
+                scheduleDirectiveAPI = api;
+                scheduleReadyPromiseDeferred.resolve();
+            }
+
             $scope.onSupplierDirectiveReady = function (api) {
                 supplierDirectiveAPI = api;
                 supplierReadyPromiseDeferred.resolve();
@@ -110,7 +120,7 @@
             $scope.isGettingData = true;
             loadUsers();
 
-            UtilsService.waitMultipleAsyncOperations([getCountriesInfo, getSuppliersInfo, getProfilesInfo]).then(function () {
+            UtilsService.waitMultipleAsyncOperations([getCountriesInfo, getSuppliersInfo, getProfilesInfo, getSchedulesInfo]).then(function () {
             }).finally(function () {
                 $scope.isGettingData = false;
             });
@@ -155,6 +165,18 @@
             return profileLoadPromiseDeferred.promise;
         }
 
+        function getSchedulesInfo() {
+            var scheduleLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            scheduleReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload;
+
+                    VRUIUtilsService.callDirectiveLoad(scheduleDirectiveAPI, directivePayload, scheduleLoadPromiseDeferred);
+                });
+            return scheduleLoadPromiseDeferred.promise;
+        }
+
         function loadUsers() {
             return UsersAPIService.GetUsers().then(function (response) {
                 $scope.users = response;
@@ -196,6 +218,11 @@
                 filter.ProfileIDs = UtilsService.getPropValuesFromArray($scope.selectedProfiles, "ProfileId");
             }
 
+            if ($scope.selectedScheduleTasks.length == 0)
+                filter.ScheduleIDs = null;
+            else {
+                filter.ScheduleIDs = UtilsService.getPropValuesFromArray($scope.selectedScheduleTasks, "TaskId");
+            }
 
             if ($scope.fromDate == undefined)
                 filter.FromTime = null;

@@ -33,13 +33,13 @@ namespace QM.CLITester.Data.SQL
             _columnMapper.Add("Entity.CreationDate", "CreationDate");
         }
 
-        public bool Insert(int supplierId, int countryId, int zoneId, int callTestStatus, int callTestResult, int initiationRetryCount, int getProgressRetryCount, 
-            int userId, int profileId, long? batchNumber)
+        public bool Insert(int supplierId, int countryId, int zoneId, int callTestStatus, int callTestResult, int initiationRetryCount, int getProgressRetryCount,
+            int userId, int profileId, long? batchNumber, int? scheduleId)
         {
             object testCallId;
 
             int recordsEffected = ExecuteNonQuerySP("QM_CLITester.sp_TestCall_Insert", out testCallId, supplierId, countryId, zoneId,
-                    callTestStatus, callTestResult, initiationRetryCount, getProgressRetryCount, userId, profileId, batchNumber);
+                    callTestStatus, callTestResult, initiationRetryCount, getProgressRetryCount, userId, profileId, batchNumber, scheduleId);
             return (recordsEffected > 0);
         }
 
@@ -121,6 +121,10 @@ namespace QM.CLITester.Data.SQL
             if (input.Query.ProfileIds != null && input.Query.ProfileIds.Any())
                 profileids = string.Join(",", input.Query.ProfileIds);
 
+            string scheduleids = null;
+            if (input.Query.ScheduleIds != null && input.Query.ScheduleIds.Any())
+                scheduleids = string.Join(",", input.Query.ScheduleIds);
+
             string countryids = null;
             if (input.Query.CountryIds != null && input.Query.CountryIds.Any())
                 countryids = string.Join(",", input.Query.CountryIds);
@@ -131,7 +135,7 @@ namespace QM.CLITester.Data.SQL
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("QM_CLITester.sp_TestCall_CreateTempByFiltered", tempTableName, callTestStatusids, callTestResultsids, userids, supplierids, profileids, countryids, zoneids,
+                ExecuteNonQuerySP("QM_CLITester.sp_TestCall_CreateTempByFiltered", tempTableName, callTestStatusids, callTestResultsids, userids, supplierids, profileids, scheduleids, countryids, zoneids,
                     input.Query.FromTime, input.Query.ToTime == DateTime.MinValue ? DateTime.Now : input.Query.ToTime);
             };
 
@@ -165,7 +169,8 @@ namespace QM.CLITester.Data.SQL
                 GetProgressRetryCount = GetReaderValue<int>(reader, "GetProgressRetryCount"),
                 Measure = measure,
                 FailureMessage = reader["FailureMessage"] as string,
-                BatchNumber = GetReaderValue<long>(reader, "BatchNumber")
+                BatchNumber = GetReaderValue<long>(reader, "BatchNumber"),
+                ScheduleId = GetReaderValue<int>(reader, "ScheduleID")
             };
 
             string initiateTestInformationSerialized = reader["InitiateTestInformation"] as string;

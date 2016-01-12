@@ -15,5 +15,6 @@ namespace QM.CLITester.Entities
         public string ZoneName { get; set; }
         public string CallTestStatusDescription { get; set; }
         public string CallTestResultDescription { get; set; }
+        public string ScheduleName { get; set; }
     }
 }

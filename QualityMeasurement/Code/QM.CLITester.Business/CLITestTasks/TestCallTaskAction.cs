@@ -37,7 +37,7 @@ namespace QM.CLITester.Business
             long startingId;
             IDManager.Instance.ReserveIDRange(this.GetType(), testCallTaskActionArgument.AddTestCallInput.SupplierID.Count, out startingId);
 
-            AddTestCallOutput exuctionInfo = manager.AddNewTestCall(testCallTaskActionArgument.AddTestCallInput, task.OwnerId, startingId);
+            AddTestCallOutput exuctionInfo = manager.AddNewTestCall(testCallTaskActionArgument.AddTestCallInput, task.OwnerId, startingId, task.TaskId);
 
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
             {

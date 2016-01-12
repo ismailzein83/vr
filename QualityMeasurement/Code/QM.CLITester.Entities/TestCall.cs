@@ -25,6 +25,7 @@ namespace QM.CLITester.Entities
         public int GetProgressRetryCount { get; set; }
         public string FailureMessage { get; set; }
         public long BatchNumber { get; set; }
+        public int ScheduleId { get; set; }
 
         long IItem.ItemId
         {

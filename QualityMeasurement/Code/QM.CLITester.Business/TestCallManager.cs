@@ -17,11 +17,14 @@ using QM.BusinessEntity.Business;
 using QM.BusinessEntity.Entities;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
+using Vanrise.Runtime.Business;
+using Vanrise.Runtime.Entities;
+
 namespace QM.CLITester.Business
 {
     public class TestCallManager
     {
-        public AddTestCallOutput AddNewTestCall(AddTestCallInput testCallResult, int userId, long? batchNumber)
+        public AddTestCallOutput AddNewTestCall(AddTestCallInput testCallResult, int userId, long? batchNumber, int? scheduleId)
         {
             AddTestCallOutput output = new AddTestCallOutput();
 
@@ -31,7 +34,7 @@ namespace QM.CLITester.Business
             {
                 dataManager.Insert(supplierId, testCallResult.CountryID, testCallResult.ZoneID, (int) CallTestStatus.New,
                     (int) CallTestResult.NotCompleted, 0, 0,
-                    userId, testCallResult.ProfileID, batchNumber);
+                    userId, testCallResult.ProfileID, batchNumber, scheduleId);
             }
 
             output.BatchNumber = batchNumber;
@@ -40,7 +43,7 @@ namespace QM.CLITester.Business
 
         public AddTestCallOutput AddNewTestCall(AddTestCallInput testCallResult)
         {
-            return AddNewTestCall(testCallResult, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId(), null);
+            return AddNewTestCall(testCallResult, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId(), null, null);
         }
 
         public bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus, int initiationRetryCount, string failureMessage)
@@ -158,6 +161,9 @@ namespace QM.CLITester.Business
             UserManager userManager = new UserManager();
             User user = userManager.GetUserbyId(testCall.UserID);
 
+            SchedulerTaskManager schedulerTaskManager = new SchedulerTaskManager();
+            SchedulerTask schedulerTask = schedulerTaskManager.GetTask(testCall.ScheduleId); 
+
             return new TestCallDetail()
             {
                 Entity = testCall,
@@ -166,7 +172,8 @@ namespace QM.CLITester.Business
                 SupplierName = supplier == null ? "" : supplier.Name,
                 UserName = user == null ? "" : user.Name,
                 CountryName = country == null ? "" : country.Name,
-                ZoneName = zone == null ? "" : zone.Name
+                ZoneName = zone == null ? "" : zone.Name,
+                ScheduleName = schedulerTask == null ? "" : schedulerTask.Name
             };
         }
 
