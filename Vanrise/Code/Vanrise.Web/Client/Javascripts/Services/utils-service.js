@@ -536,6 +536,19 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         return 'dyn_' + replaceAll(guid(), '-', '');
     }
 
+    function safeApply(scope,callBack)
+    {
+        //if (!scope.$$phase)
+        //    scope.$apply(callBack);
+        var phase = scope.$$phase;
+        if (phase == '$apply' || phase == '$digest') {
+            if (callBack && (typeof (callBack) === 'function')) {
+                callBack();
+            }
+        } else {
+            scope.$apply(callBack);
+        }
+    }
     return ({
         replaceAll: replaceAll,
         waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -570,7 +583,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         convertToPromiseIfUndefined: convertToPromiseIfUndefined,
         serializetoJson: serializetoJson,
         generateJSVariableName: generateJSVariableName,
-        buildTitleForUploadEditor: buildTitleForUploadEditor
+        buildTitleForUploadEditor: buildTitleForUploadEditor,
+        safeApply: safeApply
     });
 
 }]);
