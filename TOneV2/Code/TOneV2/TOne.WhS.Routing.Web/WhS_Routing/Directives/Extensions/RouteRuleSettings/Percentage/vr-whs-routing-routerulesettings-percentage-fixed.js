@@ -62,6 +62,25 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
                     var index = UtilsService.getItemIndexByVal(ctrl.percentages, dataItem.id, 'id');
                     ctrl.percentages.splice(index, 1);
                 };
+
+                ctrl.validatePercentages = function () {
+                    if (ctrl.percentages.length == 0) {
+                        return "No percentage is defined";
+                    }
+
+                    var total = 0;
+
+                    for (var i = 0; i < ctrl.percentages.length; i++) {
+                        total += ctrl.percentages[i].percentage;
+                    }
+
+                    if (total < 100) {
+                        return "Percentages must add up to a 100";
+                    }
+
+                    return null;
+                };
+
                 defineAPI();
             }
 

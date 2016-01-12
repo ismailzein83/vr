@@ -7,16 +7,17 @@
     </vr-columns>
     <vr-columns width="1/2row">
         <div>
-            
-            <vr-datagrid datasource="ctrl.percentages"
-                         on-ready="ctrl.onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu>
-                <vr-datagridcolumn headertext="'Percentage'" field="'name'">
-                    <div style="display: inline-block; max-width: 200px;">option ({{$index + 1}})</div>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn>
-                    {{dataItem.percentage}}%
-                </vr-datagridcolumn>
-            </vr-datagrid>
+            <vr-validator validate="ctrl.validatePercentages()">
+                <vr-datagrid datasource="ctrl.percentages"
+                             on-ready="ctrl.onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu>
+                    <vr-datagridcolumn headertext="'Percentage'" field="'name'">
+                        <div style="display: inline-block; max-width: 200px;">Option ({{$index + 1}})</div>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn>
+                        {{dataItem.percentage}}%
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-validator>
         </div>
     </vr-columns>
 </vr-row>
