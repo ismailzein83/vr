@@ -20,12 +20,19 @@ namespace Vanrise.Runtime.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredTasks(input, ownerId));
         }
 
+        public List<SchedulerTask> GetSchedulesInfo()
+        {
+            ISchedulerTaskDataManager datamanager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
+            int ownerId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            return datamanager.GetAllTasks(ownerId);
+        }
+
         public Vanrise.Runtime.Entities.SchedulerTask GetTask(int taskId)
         {
             ISchedulerTaskDataManager datamanager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
             return datamanager.GetTask(taskId);
-        }
 
+        }
         public List<SchedulerTask> GetTasksbyActionType(int actionType)
         {
             ISchedulerTaskDataManager datamanager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();

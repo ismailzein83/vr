@@ -26,6 +26,15 @@ namespace Vanrise.Runtime.Web.Controllers
             return manager.GetTask(taskId);
         }
 
+
+
+        [HttpGet]
+        public List<SchedulerTask> GetSchedulesInfo()
+        {
+            SchedulerTaskManager manager = new SchedulerTaskManager();
+            return manager.GetSchedulesInfo();
+        }
+        
         [HttpGet]
         public List<SchedulerTaskTriggerType> GetSchedulerTaskTriggerTypes()
         {

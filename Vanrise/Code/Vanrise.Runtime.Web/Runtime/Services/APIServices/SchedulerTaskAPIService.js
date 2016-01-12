@@ -7,7 +7,8 @@
         GetSchedulerTaskActionTypes: GetSchedulerTaskActionTypes,
         AddTask: AddTask,
         UpdateTask: UpdateTask,
-        DeleteTask: DeleteTask
+        DeleteTask: DeleteTask,
+        GetSchedulesInfo: GetSchedulesInfo
     });
 
     function GetFilteredTasks(input) {
@@ -42,5 +43,9 @@
         return BaseAPIService.get("/api/SchedulerTask/DeleteTask", {
             taskId: taskId
         });
+    }
+
+    function GetSchedulesInfo() {
+        return BaseAPIService.get("/api/SchedulerTask/GetSchedulesInfo");
     }
 });

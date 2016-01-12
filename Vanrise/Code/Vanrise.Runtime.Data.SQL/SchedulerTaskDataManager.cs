@@ -27,7 +27,6 @@ namespace Vanrise.Runtime.Data.SQL
 
             return RetrieveData(input, createTempTableAction, TaskMapper);
         }
-
         public Entities.SchedulerTask GetTask(int taskId)
         {
             return GetItemSP("runtime.sp_SchedulerTask_Get", TaskMapper, taskId);
@@ -38,9 +37,9 @@ namespace Vanrise.Runtime.Data.SQL
             return GetItemsSP("runtime.sp_SchedulerTask_GetByActionTypeId", TaskMapper, actionTypeId);
         }
 
-        public List<Entities.SchedulerTask> GetAllTasks()
+        public List<Entities.SchedulerTask> GetAllTasks(int ownerId)
         {
-            return GetItemsSP("runtime.sp_SchedulerTask_GetAll", TaskMapper);
+            return GetItemsSP("runtime.sp_SchedulerTask_GetAll", TaskMapper, ownerId);
         }
 
         public List<Entities.SchedulerTask> GetDueTasks()

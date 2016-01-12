@@ -13,9 +13,10 @@ namespace Vanrise.Runtime.Data
 
         Entities.SchedulerTask GetTask(int taskId);
 
+
         List<SchedulerTask> GetTasksbyActionType(int actionTypeId);
 
-        List<Entities.SchedulerTask> GetAllTasks();
+        List<Entities.SchedulerTask> GetAllTasks(int ownerId);
 
         List<Entities.SchedulerTask> GetDueTasks();
 
