@@ -17,6 +17,20 @@ namespace TOne.WhS.Analytics.Data.SQL
         static RawCDRDataManager()
         {
             _columnMapper.Add("Entity.ID", "ID");
+            _columnMapper.Add("SwitchName", "SwitchID");
+            _columnMapper.Add("Entity.Attempt", "Attempt");
+            _columnMapper.Add("Entity.Alert", "Alert");
+            _columnMapper.Add("Entity.Connect", "Connect");
+            _columnMapper.Add("Entity.Disconnect", "Disconnect");
+            _columnMapper.Add("Entity.DurationInSeconds", "DurationInSeconds");
+            _columnMapper.Add("Entity.InTrunk", "InTrunk");
+            _columnMapper.Add("Entity.InCarrier", "InCarrier");
+            _columnMapper.Add("Entity.PortIn", "PortIn");
+            _columnMapper.Add("Entity.OutTrunk", "OutTrunk");
+            _columnMapper.Add("Entity.OutCarrier", "OutCarrier");
+            _columnMapper.Add("Entity.PortOut", "PortOut");
+            _columnMapper.Add("Entity.CGPN", "CGPN");
+            _columnMapper.Add("Entity.CDPN", "CDPN");
         }
         public RawCDRDataManager() : base(GetConnectionStringName("TOneWhS_CDR_DBConnStringKey", "TOneWhS_CDR_DBConnString"))
         {}
