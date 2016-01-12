@@ -28,7 +28,7 @@
             }
             $scope.scopeModal.isEditMode = (carrierAccountId != undefined);
             $scope.scopeModal.disableCarrierProfile = ((carrierProfileId != undefined));
-            console.log($scope.scopeModal.disableCarrierProfile);
+
         }
 
         function defineScope() {
