@@ -538,16 +538,14 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
 
     function safeApply(scope,callBack)
     {
-        //if (!scope.$$phase)
-        //    scope.$apply(callBack);
-        var phase = scope.$$phase;
-        if (phase == '$apply' || phase == '$digest') {
-            if (callBack && (typeof (callBack) === 'function')) {
-                callBack();
-            }
-        } else {
+        //var phase = scope.$$phase;
+        //if (phase == '$apply' || phase == '$digest') {
+        //    if (callBack && (typeof (callBack) === 'function')) {
+        //        callBack();
+        //    }
+        //} else {
             scope.$apply(callBack);
-        }
+        //}
     }
     return ({
         replaceAll: replaceAll,
