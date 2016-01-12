@@ -31,6 +31,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
         var policies;
         var defaultPolicyId;
         function initializeController() {
+            $scope.showGrid = false;
             $scope.rpRoutes = [];
 
             var drillDownDefinitions = initDrillDownDefinitions();
@@ -68,7 +69,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
                                promises.push(setRouteOptionDetailsDirectiveonEachItem(rpRouteDetail));
                            }
                        }
-
+                       $scope.showGrid = true;
                        onResponseReady(response);
 
                        UtilsService.waitMultiplePromises(promises).then(function () {

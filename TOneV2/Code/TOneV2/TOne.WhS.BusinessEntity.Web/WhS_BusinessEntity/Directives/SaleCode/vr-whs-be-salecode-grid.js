@@ -29,7 +29,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleCodeAPIService) {
         this.initializeController = initializeController;
 
         function initializeController() {
-         
+            $scope.showGrid = false;
             $scope.salecodes = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -54,8 +54,10 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleCodeAPIService) {
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+               
                 return WhS_BE_SaleCodeAPIService.GetFilteredSaleCodes(dataRetrievalInput)
                     .then(function (response) {
+                        $scope.showGrid = true;
                          onResponseReady(response);
                     })
                     .catch(function (error) {

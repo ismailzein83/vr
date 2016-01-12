@@ -29,7 +29,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleRateAPIService) {
         this.initializeController = initializeController;
 
         function initializeController() {
-           
+            $scope.showGrid = false;
             $scope.salerates = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -50,6 +50,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleRateAPIService) {
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_SaleRateAPIService.GetFilteredSaleRate(dataRetrievalInput)
                     .then(function (response) {
+                        $scope.showGrid = true;
                          onResponseReady(response);
                     })
                     .catch(function (error) {

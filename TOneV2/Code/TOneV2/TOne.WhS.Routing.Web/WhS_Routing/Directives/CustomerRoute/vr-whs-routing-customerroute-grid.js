@@ -29,6 +29,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_Routing_CustomerRouteAPIS
         var gridDrillDownTabsObj;
 
         function initializeController() {
+            $scope.showGrid = false;
             $scope.customerRoutes = [];
 
             $scope.onGridReady = function (api) {
@@ -59,7 +60,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_Routing_CustomerRouteAPIS
                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                            }
                        }
-
+                       $scope.showGrid = true;
                        onResponseReady(response);
                    })
                    .catch(function (error) {

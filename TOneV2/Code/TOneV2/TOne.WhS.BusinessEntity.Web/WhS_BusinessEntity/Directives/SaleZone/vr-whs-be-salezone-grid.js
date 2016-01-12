@@ -29,6 +29,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE
         this.initializeController = initializeController;
 
         function initializeController() {
+            $scope.showGrid = false;
             var gridDrillDownTabsObj;
             $scope.salezones = [];
             $scope.onGridReady = function (api) {
@@ -69,11 +70,14 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_SaleZoneAPIService.GetFilteredSaleZones(dataRetrievalInput)
                     .then(function (response) {
+
                         if (response.Data != undefined) {
+
                             for (var i = 0; i < response.Data.length; i++) {
                                 gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                             }
                         }
+                        $scope.showGrid = true;
                          onResponseReady(response);
                     })
                     .catch(function (error) {

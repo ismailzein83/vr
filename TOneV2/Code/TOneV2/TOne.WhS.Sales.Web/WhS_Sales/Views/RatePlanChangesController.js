@@ -49,7 +49,7 @@
             };
             $scope.rateDataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_Sales_RatePlanAPIService.GetFilteredZoneRateChanges(dataRetrievalInput).then(function (response) {
-                    if (response && response.Data) {
+                    if (response.Data != undefined) {
                         for (var i = 0; i < response.Data.length; i++) {
                             if (response.Data[i].IsCurrentRateInherited)
                                 response.Data[i].CurrentRate += " (Inherited)";
@@ -57,8 +57,9 @@
                             var changeType = UtilsService.getEnum(WhS_Sales_RateChangeTypeEnum, "value", response.Data[i].ChangeType);
                             response.Data[i].ChangeType = changeType ? changeType.description : null;
                         }
-                        onResponseReady(response);
                     }
+                    onResponseReady(response);
+                    
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
@@ -70,13 +71,13 @@
             };
             $scope.routingProductDataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_Sales_RatePlanAPIService.GetFilteredZoneRoutingProductChanges(dataRetrievalInput).then(function (response) {
-                    if (response && response.Data) {
+                    if (response.Data != undefined) {
                         for (var i = 0; i < response.Data.length; i++) {
                             if (response.Data[i].IsCurrentRoutingProductInherited)
                                 response.Data[i].CurrentRoutingProductName += " (Inherited)";
                         }
-                        onResponseReady(response);
                     }
+                    onResponseReady(response);
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });

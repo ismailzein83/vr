@@ -78,10 +78,13 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_CodePrep_CodePrepAPIService.GetCodeItems(dataRetrievalInput)
                     .then(function (response) {
-                        for (var i = 0 ; i < response.Data.length; i++)
+                        if (response.Data != undefined)
                         {
-                            mapDataNeeded(response.Data[i]);
+                            for (var i = 0 ; i < response.Data.length; i++) {
+                                mapDataNeeded(response.Data[i]);
+                            }
                         }
+                       
                         onResponseReady(response);
                     })
                     .catch(function (error) {
