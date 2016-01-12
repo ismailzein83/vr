@@ -68,6 +68,8 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                     stagingCDR.DurationInSeconds = GetReaderValue<decimal>(reader, "DurationInSeconds");
                     stagingCDR.DisconnectDateTime = GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
                     stagingCDR.SwitchId = GetReaderValue<int>(reader, "SwitchID");
+                    stagingCDR.InTrunkId = GetReaderValue<int?>(reader, "InTrunkId");
+                    stagingCDR.OutTrunkId = GetReaderValue<int?>(reader, "OutTrunkId");
 
                     currentIndex++;
                     if (currentIndex == 100000)
