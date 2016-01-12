@@ -20,7 +20,7 @@ namespace TOne.WhS.Analytics.Business
 
         public Vanrise.Entities.IDataRetrievalResult<AnalyticRecord> GetFiltered(Vanrise.Entities.DataRetrievalInput<GenericAnalyticQuery> input)
         {
-            return _gdatamanager.GetAnalyticRecords(input);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _gdatamanager.GetAnalyticRecords(input));
         }
     }
 }

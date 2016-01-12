@@ -173,9 +173,10 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                                 for (var i = 0; i < response.Data.length; i++) {
                                     gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                                 }
+                                if (isSummary)
+                                    gridApi.setSummary(response.Summary);
                             }
-                            if (isSummary)
-                                gridApi.setSummary(response.Summary);
+                           
 
                             onResponseReady(response);
                         });
