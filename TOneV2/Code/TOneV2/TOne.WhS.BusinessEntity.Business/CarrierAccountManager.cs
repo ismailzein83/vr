@@ -176,7 +176,7 @@ namespace TOne.WhS.BusinessEntity.Business
             SellingProduct sellingProduct = sellingProductManager.GetSellingProduct(sellingProductId);
             var cachedCarrierAccounts = GetCarrierAccountsByType(true, false, null, null);
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
-            IEnumerable<CustomerSellingProduct> customerSellingProducts = customerSellingProductManager.GetEffectiveCustomerSellingProduct();
+            IEnumerable<CustomerSellingProduct> customerSellingProducts = customerSellingProductManager.GetEffectiveInFutureCustomerSellingProduct();
             return cachedCarrierAccounts.Where(x => x.SellingNumberPlanId == sellingProduct.SellingNumberPlanId
                 && (!customerSellingProducts.Any(y => y.CustomerId == x.CarrierAccountId)));
 
