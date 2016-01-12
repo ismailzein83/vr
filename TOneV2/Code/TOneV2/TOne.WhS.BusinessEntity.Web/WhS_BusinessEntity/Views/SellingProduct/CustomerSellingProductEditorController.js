@@ -19,6 +19,7 @@
         defineScope();
         loadParameters();
         load();
+
         function loadParameters(){
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {

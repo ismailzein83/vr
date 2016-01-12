@@ -149,9 +149,9 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
 
             gridAPI.expandRow(dataItem);
             var onCustomerSellingProductAdded = function (customerSellingProductObj) {
-                if (dataItem.custormerSellingProductGridAPI != undefined) {
+                if (dataItem.customersellingproductGridAPI != undefined) {
                     for (var i = 0; i < customerSellingProductObj.length; i++) {
-                        dataItem.custormerSellingProductGridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
+                        dataItem.customersellingproductGridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
                     }
                 }
             };
