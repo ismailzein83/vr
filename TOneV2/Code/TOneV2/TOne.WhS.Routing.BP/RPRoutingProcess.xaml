@@ -188,13 +188,12 @@
         </sap2010:ViewStateManager>
       </sap2010:WorkflowViewState.ViewStateManager>
     </local:GenerateSupplierZoneDetails>
-    <vbw:WriteTrackingMessage Message="Prepared supplier zone details. Ready to start building code matches.">
+    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4" Message="Prepared supplier zone details. Ready to start building code matches.">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
           <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Common.LogEntryType.Information</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
-      <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_4</sap2010:WorkflowViewState.IdRef>
     </vbw:WriteTrackingMessage>
     <ParallelForEach x:TypeArguments="x:String" DisplayName="ParallelForEach_BuildCodeMatches" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_2">
       <ParallelForEach.Values>
@@ -309,13 +308,12 @@
         </InArgument>
       </vbw:SplitListIntoGroups.List>
     </vbw:SplitListIntoGroups>
-    <vbw:WriteTrackingMessage Message="Finished building code matches. Ready to start building routes.">
+    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5" Message="Finished building code matches. Ready to start building routes.">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
           <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Common.LogEntryType.Information</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
-      <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_5</sap2010:WorkflowViewState.IdRef>
     </vbw:WriteTrackingMessage>
     <ParallelForEach x:TypeArguments="scg:IEnumerable(x:Int64)" DisplayName="ParallelForEach_RPBuildRoutes" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_3">
       <ParallelForEach.Values>
@@ -380,7 +378,7 @@
                 <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2">
                   <vbw:WriteTrackingMessage.Message>
                     <InArgument x:TypeArguments="x:String">
-                      <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processed '{0}' zones. {1} zone ranges remaining.", saleZoneRange.Count(), (saleZoneRanges.Count() - subProcessByZoneRangesCompleted))</mca:CSharpValue>
+                      <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing zone range with number '{0}' is completed. {1} zone ranges are remaining.", subProcessByZoneRangesCompleted, (saleZoneRanges.Count() - subProcessByZoneRangesCompleted))</mca:CSharpValue>
                     </InArgument>
                   </vbw:WriteTrackingMessage.Message>
                   <vbw:WriteTrackingMessage.Severity>
@@ -395,13 +393,12 @@
         </Sequence>
       </ActivityAction>
     </ParallelForEach>
-    <vbw:WriteTrackingMessage Message="Finished building all product routes">
+    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_6" Message="Finished building all product routes">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
           <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Common.LogEntryType.Information</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
-      <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_6</sap2010:WorkflowViewState.IdRef>
     </vbw:WriteTrackingMessage>
     <twrba1:SetRoutingDatabaseReady sap2010:WorkflowViewState.IdRef="SetRoutingDatabaseReady_1">
       <twrba1:SetRoutingDatabaseReady.RoutingDatabaseId>
@@ -410,7 +407,7 @@
         </InArgument>
       </twrba1:SetRoutingDatabaseReady.RoutingDatabaseId>
     </twrba1:SetRoutingDatabaseReady>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sUUgDngMOAgEBUgtSrQECAQJXBV0mAwGIBF4FeCQDAdUDeQV/IAMByQOAAQWeARADAZQDnwEFvgEpAwHrAr8BBcYBIAMB3wLHAQWVAhcDAewBlgIFpgIlAwHNAacCBbcCHwMBrgG4AgW/AiADAaIBwAIFjQMXAgEjjgMFlQMgAgEXlgMFnAMmAgEMWgtacAMBiQRwC3BwAwH+A2YLZmgDAfQDYQthYQMB6gN1C3VyAwHgA2sLa44BAwHWA3wLfIMBAwHLA3lgeXQDAcoDgQEHhwEnAwG+A4gBB50BJAMBlQOiAQuiAWgDAYoDrAELrAFZAwGAA7EBC7EBdgMB9gKnAQunAVgDAewCwgELwgGDAQMB4QK/ASe/AW4DAeACygELygFmAwHVAtEBCZMCFAMB7QGeAgueAlgDAeIBmQILmQJoAwHYAaMCC6MCZQMBzgGqAguqAlsDAcMBrwILrwJyAwG5AbQCC7QCXQMBrwG7Agu7AoMBAwGkAbgCJ7gCaAMBowHDAgvDAngDAZgBygIJiwMUAgEkkQMLkQODAQIBGY4DJ44DTQIBGJkDC5kDWQIBDYQBDYQBgAEDAb8DkAENkAFwAwG0A5UBDZUBagMBqgOLAQ2LAWADAaADmgENmgFaAwGWA9UBC+YBHAMBuwLnAQuSAhADAe4BzwIL2wIcAgF83AILigMQAgEl2AER3gEgAwHJAuMBEeMBhAEDAb0C1QF81QGCAQMBvALqARHqAZEBAwHvAe4BD/QBIwMBrgL3AQ+QAhoDAfsB0gIR0wKjAQMBiwHYAhHYAosBAgF+zwJ8zwKCAQIBfd8CEd8CmQECASbjAg/pAiMCAW7sAg+IAxoCATPxARXxAckBAwGvAvgBEYMCGgMBlQKEAhGPAiwDAfwB5gIV5gKAAgIBb/ACEfsCGgIBUfwCEYcDLAIBNIACF4ACcwMBogL7ARf7AXcDAZYCjAIXjAKPAQMBiQKHAheHAuoBAwH9AfgCF/gCdwIBYPMCF/MCewIBUoQDF4QDjwECAUP/Ahf/AuoBAgE1</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sUUgDmwMOAgEBUgtSrQECAQJXBV0mAwGIBF4FeCQDAdUDeQV/IAMByQOAAQWeARADAZQDnwEFvgEpAwHrAr8BBcUBIAMB3wLGAQWUAhcDAewBlQIFpQIlAwHNAaYCBbYCHwMBrgG3AgW9AiADAaIBvgIFiwMXAgEjjAMFkgMgAgEXkwMFmQMmAgEMWgtacAMBiQRwC3BwAwH+A2YLZmgDAfQDYQthYQMB6gN1C3VyAwHgA2sLa44BAwHWA3wLfIMBAwHLA3lgeXQDAcoDgQEHhwEnAwG+A4gBB50BJAMBlQOiAQuiAWgDAYoDrAELrAFZAwGAA7EBC7EBdgMB9gKnAQunAVgDAewCwgELwgGDAQMB4QK/AWC/AacBAwHgAskBC8kBZgMB1QLQAQmSAhQDAe0BnQILnQJYAwHiAZgCC5gCaAMB2AGiAguiAmUDAc4BqQILqQJbAwHDAa4CC64CcgMBuQGzAguzAl0DAa8BugILugKDAQMBpAG3AmC3AqEBAwGjAcECC8ECeAMBmAHIAgmJAxQCASSPAwuPA4MBAgEZjANgjAOGAQIBGJYDC5YDWQIBDYQBDYQBgAEDAb8DkAENkAFwAwG0A5UBDZUBagMBqgOLAQ2LAWADAaADmgENmgFaAwGWA9QBC+UBHAMBuwLmAQuRAhADAe4BzQIL2QIcAgF82gILiAMQAgEl1wER3QEgAwHJAuIBEeIBhAEDAb0C1AF81AGCAQMBvALpARHpAZEBAwHvAe0BD/MBIwMBrgL2AQ+PAhoDAfsB0AIR0QKjAQMBiwHWAhHWAosBAgF+zQJ8zQKCAQIBfd0CEd0CmQECASbhAg/nAiMCAW7qAg+GAxoCATPwARXwAckBAwGvAvcBEYICGgMBlQKDAhGOAiwDAfwB5AIV5AKAAgIBb+4CEfkCGgIBUfoCEYUDLAIBNP8BF/8BcwMBogL6ARf6AXcDAZYCiwIXiwKPAQMBiQKGAheGAuoBAwH9AfYCF/YCdwIBYPECF/ECewIBUoIDF4IDjwECAUP9Ahf9ApcCAgE1</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -461,10 +458,10 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="554,52">
+      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="554,737">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
@@ -492,24 +489,24 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_3" sap:VirtualizedContainerService.HintSize="554,52">
+      <sap2010:ViewStateData Id="ParallelForEach`1_3" sap:VirtualizedContainerService.HintSize="554,737">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_6" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="SetRoutingDatabaseReady_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,1014">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,2384">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RPRoutingProcess_1" sap:VirtualizedContainerService.HintSize="616,1094" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RPRoutingProcess_1" sap:VirtualizedContainerService.HintSize="616,2464" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
