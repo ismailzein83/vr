@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<CustomerSellingProductDetail> GetFilteredCustomerSellingProducts(Vanrise.Entities.DataRetrievalInput<CustomerSellingProductQuery> input)
         {
 
-            var allCustomerSellingProducts = GetCachedOrderedCustomerSellingProducts();
+            var allCustomerSellingProducts = GetCachedCustomerSellingProducts();
 
             Func<CustomerSellingProduct, bool> filterExpression = (prod) =>
                  (input.Query.EffectiveDate == null || (prod.BED<input.Query.EffectiveDate))
@@ -27,7 +27,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public CustomerSellingProduct GetCustomerSellingProduct(int customerSellingProductId)
         {
-            var customerSellingProducts = GetCachedOrderedCustomerSellingProducts();
+            var customerSellingProducts = GetCachedCustomerSellingProducts();
             return customerSellingProducts.GetRecord(customerSellingProductId);
         }
 
@@ -37,9 +37,9 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
               () =>
               {
-                  var orderedCustomerSellingProducts = GetCachedOrderedCustomerSellingProducts();
+                  var orderedCustomerSellingProducts = GetCachedCustomerSellingProducts().Values.OrderByDescending(x=>x.BED);
                  
-                  CustomerSellingProduct customerSellingProduct = orderedCustomerSellingProducts.FirstOrDefault(itm => itm.Value.CustomerId == customerId && ((effectiveOn.HasValue && effectiveOn.Value >= itm.Value.BED) || isEffectiveInFuture)).Value;
+                  CustomerSellingProduct customerSellingProduct = orderedCustomerSellingProducts.FirstOrDefault(itm => itm.CustomerId == customerId && ((effectiveOn.HasValue && effectiveOn.Value >= itm.BED) || isEffectiveInFuture));
                   if (customerSellingProduct != null)
                   {
                       return new CustomerSellingProduct
@@ -63,12 +63,14 @@ namespace TOne.WhS.BusinessEntity.Business
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
 
-            var cashedCustomerSellingProducts = GetCachedOrderedCustomerSellingProducts();
-
-            List<CustomerSellingProduct> customerSellingProductList = cashedCustomerSellingProducts.Values.Where(x => customerSellingProducts.Any(y => y.CustomerId == x.CustomerId && ( y.SellingProductId==x.SellingProductId || x.BED > DateTime.Now))).ToList();
-            if (customerSellingProductList != null && customerSellingProductList.Count() > 0)
+            foreach(var obj in customerSellingProducts)
             {
-                return insertOperationOutput;
+                var effectiveCustomerSellingProduct = GetEffectiveSellingProduct(obj.CustomerId, DateTime.Now, false);
+
+                if (effectiveCustomerSellingProduct != null && (obj.BED <= effectiveCustomerSellingProduct.BED || obj.SellingProductId == effectiveCustomerSellingProduct.SellingProductId))
+                {
+                    return insertOperationOutput;
+                }
             }
 
             ICustomerSellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerSellingProductDataManager>();
@@ -113,7 +115,10 @@ namespace TOne.WhS.BusinessEntity.Business
             TOne.Entities.UpdateOperationOutput<CustomerSellingProductDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CustomerSellingProductDetail>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-            if (customerSellingProduct.BED < DateTime.Now)
+ 
+            var effectiveCustomerSellingProduct = GetEffectiveSellingProduct(customerSellingProduct.CustomerId, DateTime.Now, false);
+
+            if (customerSellingProduct.BED < DateTime.Now || (effectiveCustomerSellingProduct != null &&  customerSellingProduct.BED < effectiveCustomerSellingProduct.BED))
             {
                 return updateOperationOutput;
             }    
@@ -130,15 +135,16 @@ namespace TOne.WhS.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public IEnumerable<CustomerSellingProduct> GetEffectiveCustomerSellingProduct()
+        public IEnumerable<CustomerSellingProduct> GetEffectiveInFutureCustomerSellingProduct()
         {
-            var customerSellingProducts = GetCachedOrderedCustomerSellingProducts();
-            return customerSellingProducts.Values.FindAllRecords(x => x.BED>DateTime.Now);
+            var customerSellingProducts = GetCachedCustomerSellingProducts();
+           
+            return customerSellingProducts.Values.FindAllRecords(x => x.BED > DateTime.Now);
         }
 
         public bool IsAssignableCustomerToSellingProduct(int customerId)
         {
-            var customerSellingProducts = GetCachedOrderedCustomerSellingProducts();
+            var customerSellingProducts = GetCachedCustomerSellingProducts();
             return customerSellingProducts.Values.Any(x => x.BED > DateTime.Now && x.CustomerId == customerId);
 
 
@@ -157,7 +163,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Members
 
-        Dictionary<int,CustomerSellingProduct> GetCachedOrderedCustomerSellingProducts()
+        Dictionary<int,CustomerSellingProduct> GetCachedCustomerSellingProducts()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedOrderedCustomerSellingProducts",
                () =>
