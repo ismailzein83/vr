@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Integration.Entities;
@@ -16,10 +18,10 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
     {
 
         static StreamReaderImportedData data = new StreamReaderImportedData();
-        
+
         public static void FillData()
         {
-            data.StreamReader = new StreamReader("E:\\CDR\\1.DAT");
+            data.StreamReader = new StreamReader("E:\\CDR1\\1.DAT");
         }
 
         private static void LogVerbose(string Message)
@@ -54,6 +56,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
             batch.CDRs = new List<Vanrise.Fzero.CDRImport.Entities.CDR>();
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
 
+            PSTN.BusinessEntity.Business.TrunkManager trunkManager = new PSTN.BusinessEntity.Business.TrunkManager();
+
             System.IO.StreamReader sr = ImportedData.StreamReader;
             while (!sr.EndOfStream)
             {
@@ -63,19 +67,50 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                 cdr.MSISDN = i.Substring(145, 20).Trim();
                 cdr.IMSI = i.Substring(125, 20).Trim();
                 cdr.Destination = i.Substring(198, 20).Trim();
-                cdr.CallClass = i.Substring(434, 10).Trim();
-                cdr.SubType = i.Substring(165, 10).Trim();
                 cdr.IMEI = i.Substring(105, 20).Trim();
-                cdr.CellId = i.Substring(252, 22).Trim();
-                cdr.InTrunkSymbol = i.Substring(414, 20).Trim();
-                cdr.OutTrunkSymbol = i.Substring(394, 20).Trim();
+                cdr.Cell = i.Substring(252, 22).Trim();
                 cdr.ReleaseCode = i.Substring(274, 50).Trim();
 
+                Vanrise.Fzero.FraudAnalysis.Entities.CallClass callClass = Vanrise.Fzero.FraudAnalysis.Business.CallClassManager.GetCallClassByDesc(i.Substring(434, 10).Trim());
+                if (callClass != null)
+                    cdr.CallClassId = callClass.Id;
+
+                switch (i.Substring(165, 10).Trim())
+                {
+                    case "INROAMER":
+                        cdr.SubscriberType = Vanrise.Fzero.CDRImport.Entities.SubscriberType.INROAMER;
+                        break;
+
+                    case "OUTROAMER":
+                        cdr.SubscriberType = Vanrise.Fzero.CDRImport.Entities.SubscriberType.OUTROAMER;
+                        break;
+
+                    case "POSTPAID":
+                        cdr.SubscriberType = Vanrise.Fzero.CDRImport.Entities.SubscriberType.POSTPAID;
+                        break;
+
+                    case "PREPAID":
+                        cdr.SubscriberType = Vanrise.Fzero.CDRImport.Entities.SubscriberType.PREPAID;
+                        break;
+
+                    case "PREROAMER":
+                        cdr.SubscriberType = Vanrise.Fzero.CDRImport.Entities.SubscriberType.PREROAMER;
+                        break;
+                }
+
+                PSTN.BusinessEntity.Entities.Trunk inTrunk = trunkManager.GetTrunkBySymbol(i.Substring(414, 20).Trim());
+                if (inTrunk != null)
+                    cdr.InTrunkId = inTrunk.TrunkId;
+
+
+                PSTN.BusinessEntity.Entities.Trunk outTrunk = trunkManager.GetTrunkBySymbol(i.Substring(394, 20).Trim());
+                if (outTrunk != null)
+                    cdr.OutTrunkId = outTrunk.TrunkId;
 
                 DateTime ConnectDateTime;
                 if (DateTime.TryParseExact(i.Substring(221, 14).Trim(), "yyyyMddHHmmss", System.Globalization.CultureInfo.InvariantCulture,
                                            System.Globalization.DateTimeStyles.None, out ConnectDateTime))
-                    cdr.ConnectDateTime = ConnectDateTime; 
+                    cdr.ConnectDateTime = ConnectDateTime;
 
 
                 int callType = 0;

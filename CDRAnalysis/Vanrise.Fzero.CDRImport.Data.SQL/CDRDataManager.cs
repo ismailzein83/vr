@@ -13,22 +13,20 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
           ,"Destination"
           ,"DurationInSeconds"
           ,"DisconnectDateTime"
-          ,"Call_Class"
+          ,"CallClassID"
           ,"IsOnNet"
-          ,"Call_Type"
-          ,"Sub_Type"
+          ,"CallTypeID"
+          ,"SubscriberTypeID"
           ,"IMEI"
-          ,"BTS_ID"
-          ,"Cell_ID"
+          ,"BTS"
+          ,"Cell"
           ,"SwitchID"
-          ,"Up_Volume"
-          ,"Down_Volume"
-          ,"Cell_Latitude"
-          ,"Cell_Longitude"
-          ,"In_Trunk"
-          ,"Out_Trunk"
-          ,"Service_Type"
-          ,"Service_VAS_Name"
+          ,"UpVolume"
+          ,"DownVolume"
+          ,"CellLatitude"
+          ,"CellLongitude"
+          ,"ServiceTypeID"
+          ,"ServiceVASName"
           ,"InTrunkID"
           ,"OutTrunkID"
           ,"ReleaseCode"
@@ -80,28 +78,26 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         public void WriteRecordToStream(CDR record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}^{23}^{24}^{25}^{26}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}^{23}^{24}",
                                      record.MSISDN
                                    , record.IMSI
                                    , record.ConnectDateTime
                                    , record.Destination
                                    , record.DurationInSeconds
                                    , record.DisconnectDateTime
-                                   , record.CallClass
-                                   , null
+                                   , record.CallClassId
+                                   , record.IsOnNet
                                    , (int) record.CallType
-                                   , record.SubType
+                                   , (int?) record.SubscriberType
                                    , record.IMEI
-                                   , record.BTSId
-                                   , record.CellId
+                                   , record.BTS
+                                   , record.Cell
                                    , record.SwitchId
                                    , record.UpVolume
                                    , record.DownVolume
                                    , record.CellLatitude
                                    , record.CellLongitude
-                                   , record.InTrunkSymbol
-                                   , record.OutTrunkSymbol
-                                   , record.ServiceType
+                                   , record.ServiceTypeId
                                    , record.ServiceVASName
                                    , record.InTrunkId
                                    , record.OutTrunkId

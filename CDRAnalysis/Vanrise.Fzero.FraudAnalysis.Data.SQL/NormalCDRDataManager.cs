@@ -14,14 +14,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         static NormalCDRDataManager()
         {
-            _columnMapper.Add("CallClass", "Call_Class");
-            _columnMapper.Add("CallTypeDescription", "Call_Type");
-            _columnMapper.Add("SubType", "Sub_Type");
-            _columnMapper.Add("CellId", "Cell_Id");
-            _columnMapper.Add("UpVolume", "Up_Volume");
-            _columnMapper.Add("DownVolume", "Down_Volume");
-            _columnMapper.Add("ServiceType", "Service_Type");
-            _columnMapper.Add("ServiceVASName", "Service_VAS_Name");
+            _columnMapper.Add("CallClass", "CallClassID");
+            _columnMapper.Add("CallTypeDescription", "CallTypeID");
+            _columnMapper.Add("SubType", "SubscriberTypeID");
+            _columnMapper.Add("CellId", "Cell");
+            _columnMapper.Add("UpVolume", "UpVolume");
+            _columnMapper.Add("DownVolume", "DownVolume");
+            _columnMapper.Add("ServiceType", "ServiceTypeID");
+            _columnMapper.Add("ServiceVASName", "ServiceVASName");
 
         }
 
@@ -35,41 +35,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             ExecuteReaderSP("FraudAnalysis.sp_NormalCDR_GetByConnectDateTime", (reader) =>
             {
-
-
                 int count = 0;
                 int currentIndex = 0;
 
                 while (reader.Read())
                 {
                     CDR normalCDR = new CDR();
-                    normalCDR.CallType = GetReaderValue<CallType>(reader, "Call_Type");
-                    normalCDR.BTSId = GetReaderValue<int?>(reader, "BTS_Id");
-                    normalCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
-                    normalCDR.IMSI = reader["IMSI"] as string;
-                    normalCDR.DurationInSeconds = GetReaderValue<Decimal?>(reader, "DurationInSeconds");
-                    normalCDR.DisconnectDateTime = GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
-                    normalCDR.CallClass = reader["Call_Class"] as string;
-                    normalCDR.IsOnNet = GetReaderValue<short?>(reader, "IsOnNet");
-                    normalCDR.SubType = reader["Sub_Type"] as string;
-                    normalCDR.IMEI = reader["IMEI"] as string;
-                    normalCDR.CellId = reader["Cell_Id"] as string;
-                    normalCDR.UpVolume = GetReaderValue<Decimal?>(reader, "Up_Volume");
-                    normalCDR.DownVolume = GetReaderValue<Decimal?>(reader, "Down_Volume");
-                    normalCDR.CellLatitude = GetReaderValue<Decimal?>(reader, "Cell_Latitude");
-                    normalCDR.CellLongitude = GetReaderValue<Decimal?>(reader, "Cell_Longitude");
-                    normalCDR.InTrunkSymbol = reader["In_Trunk"] as string;
-                    normalCDR.OutTrunkSymbol = reader["Out_Trunk"] as string;
-                    normalCDR.InTrunkId = GetReaderValue<int?>(reader, "InTrunkID");
-                    normalCDR.OutTrunkId = GetReaderValue<int?>(reader, "OutTrunkID");
-                    normalCDR.ServiceType = GetReaderValue<int?>(reader, "Service_Type");
-                    normalCDR.ServiceVASName = reader["Service_VAS_Name"] as string;
-                    normalCDR.ReleaseCode = reader["ReleaseCode"] as string;
-                    normalCDR.MSISDNAreaCode = reader["MSISDNAreaCode"] as string;
-                    normalCDR.DestinationAreaCode = reader["DestinationAreaCode"] as string;
-                    normalCDR.Destination = reader["Destination"] as string;
-                    normalCDR.MSISDN = reader["MSISDN"] as string;
-
+                    normalCDR = NormalCDRMapper(reader);
 
                     currentIndex++;
                     if (currentIndex == 100000)
@@ -77,12 +49,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                         count += currentIndex;
                         currentIndex = 0;
                         Console.WriteLine("Loaded {0} CDRs", count);
-
                     }
 
                     onBatchReady(normalCDR);
                 }
-
 
 
             }, from, to
@@ -103,22 +73,30 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private CDR NormalCDRMapper(IDataReader reader)
         {
             var normalCDR = new CDR();
-            normalCDR.CallType = (CallType)reader["Call_Type"];
-            normalCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
+            normalCDR.CallType = GetReaderValue<CallType>(reader, "CallTypeID");
+            normalCDR.BTS = reader["BTS"] as string;
+            normalCDR.ConnectDateTime = GetReaderValue<DateTime>(reader, "ConnectDateTime");
             normalCDR.IMSI = reader["IMSI"] as string;
-            normalCDR.DurationInSeconds = GetReaderValue<Decimal?>(reader, "DurationInSeconds");
-            normalCDR.CallClass = reader["Call_Class"] as string;
-            normalCDR.SubType = reader["Sub_Type"] as string;
+            normalCDR.DurationInSeconds = GetReaderValue<decimal>(reader, "DurationInSeconds");
+            normalCDR.DisconnectDateTime = GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
+            normalCDR.CallClassId = GetReaderValue<int?>(reader, "CallClassID");
+            normalCDR.IsOnNet = GetReaderValue<bool?>(reader, "IsOnNet");
+            normalCDR.SubscriberType = GetReaderValue<SubscriberType?>(reader, "SubscriberTypeID");
             normalCDR.IMEI = reader["IMEI"] as string;
-            normalCDR.CellId = reader["Cell_Id"] as string;
-            normalCDR.UpVolume = GetReaderValue<Decimal?>(reader, "Up_Volume");
-            normalCDR.DownVolume = GetReaderValue<Decimal?>(reader, "Down_Volume");
-            normalCDR.ServiceType = GetReaderValue<int?>(reader, "Service_Type");
-            normalCDR.ServiceVASName = reader["Service_VAS_Name"] as string;
-            normalCDR.Destination = reader["Destination"] as string;
+            normalCDR.Cell = reader["Cell"] as string;
+            normalCDR.UpVolume = GetReaderValue<Decimal?>(reader, "UpVolume");
+            normalCDR.DownVolume = GetReaderValue<Decimal?>(reader, "DownVolume");
+            normalCDR.CellLatitude = GetReaderValue<Decimal?>(reader, "CellLatitude");
+            normalCDR.CellLongitude = GetReaderValue<Decimal?>(reader, "CellLongitude");
+            normalCDR.InTrunkId = GetReaderValue<int?>(reader, "InTrunkID");
+            normalCDR.OutTrunkId = GetReaderValue<int?>(reader, "OutTrunkID");
+            normalCDR.ServiceTypeId = GetReaderValue<int?>(reader, "ServiceTypeID");
+            normalCDR.ServiceVASName = reader["ServiceVASName"] as string;
             normalCDR.ReleaseCode = reader["ReleaseCode"] as string;
             normalCDR.MSISDNAreaCode = reader["MSISDNAreaCode"] as string;
             normalCDR.DestinationAreaCode = reader["DestinationAreaCode"] as string;
+            normalCDR.Destination = reader["Destination"] as string;
+            normalCDR.MSISDN = reader["MSISDN"] as string;
             return normalCDR;
         }
 

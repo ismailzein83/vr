@@ -21,6 +21,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemsSP("FraudAnalysis.sp_CallClass_GetAll", CallClassMapper);
         }
 
+        public bool AreCallClassesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("FraudAnalysis.CallClass", ref updateHandle);
+        }
+
         #region Private Methods
 
         private CallClass CallClassMapper(IDataReader reader)

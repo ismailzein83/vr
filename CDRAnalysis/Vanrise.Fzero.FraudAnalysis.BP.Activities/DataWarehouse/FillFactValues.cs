@@ -160,11 +160,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             List<DWDimension> ToBeInsertedBTSs = new List<DWDimension>();
             List<DWTime> ToBeInsertedTimes = new List<DWTime>();
 
-            //if (inputArgument.BTSs == null)
-            //    inputArgument.BTSs = new DWDimensionDictionary();
-
-            //if (inputArgument.Times == null)
-            //    inputArgument.Times = new DWTimeDictionary();
 
             int cdrsCount = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -181,49 +176,64 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             foreach (var cdr in cdrs)
                             {
                                 DWFact dwFact = new DWFact();
-                                dwFact.CallType = (int)cdr.CallType;
-                                dwFact.Duration = cdr.DurationInSeconds;
+                                dwFact.CallType = cdr.CallType;
+                                dwFact.DurationInSeconds = cdr.DurationInSeconds;
                                 dwFact.IMEI = cdr.IMEI;
                                 dwFact.MSISDN = cdr.MSISDN;
-                                dwFact.SubscriberType = cdr.SubType;
+                                dwFact.SubscriberType = cdr.SubscriberType;
 
-
-                                CallClass callClass = callClasses.Where(x => x.Description == cdr.CallClass).FirstOrDefault();
-                                if (callClass != null)
+                                if (cdr.CallClassId.HasValue)
                                 {
-                                    dwFact.CallClass = callClass.Id;
-                                    dwFact.NetworkType = (int)callClass.NetType;
+                                    CallClass callClass = CallClassManager.GetCallClassById(cdr.CallClassId.Value);
+                                    if (callClass != null)
+                                    {
+                                        dwFact.CallClassId = callClass.Id;
+                                        dwFact.NetworkType = callClass.NetType;
+                                    }
                                 }
 
 
-                                dwFact.BTS = cdr.BTSId;
-                                if (cdr.BTSId != null)
-                                    if (inputArgument.BTSs.Where(x => x.Value.Description == cdr.BTSId.Value.ToString()).Count() == 0)
-                                    {
-                                        DWDimension dwDimension = new DWDimension() { Id = ++LastBTSId, Description = cdr.BTSId.Value.ToString() };
-                                        inputArgument.BTSs.Add(dwDimension.Id, dwDimension);
-                                        ToBeInsertedBTSs.Add(dwDimension);
-                                    }
+                                if (!string.IsNullOrEmpty(cdr.BTS))
+                                {
+                                    DWDimension bts;
 
-                                dwFact.ConnectTime = cdr.ConnectDateTime;
+                                    if (inputArgument.BTSs.Where(x => x.Value.Description == cdr.BTS).Count() > 0)
+                                    {
+                                        bts = inputArgument.BTSs.Where(x => x.Value.Description == cdr.BTS).First().Value;
+                                    }
+                                    else
+                                    {
+                                        bts = new DWDimension() { Id = ++LastBTSId, Description = cdr.BTS };
+                                        inputArgument.BTSs.Add(bts.Id, bts);
+                                        ToBeInsertedBTSs.Add(bts);
+                                    }
+                                    dwFact.BTSId = bts.Id;
+                                }
+
+
+                                dwFact.ConnectDateTime = cdr.ConnectDateTime;
 
                                 CheckIfTimeAddedorAdd(inputArgument.Times, ToBeInsertedTimes, cdr.ConnectDateTime);
 
                                 KeyValuePair<int, DWAccountCase> accountCase = inputArgument.AccountCases.Where(x => x.Value.AccountNumber == cdr.MSISDN).OrderByDescending(x => x.Value.CaseID).FirstOrDefault();
                                 if (accountCase.Key != 0)
                                 {
-                                    dwFact.SuspicionLevel = accountCase.Value.SuspicionLevelID;
+                                    dwFact.SuspicionLevel = accountCase.Value.SuspicionLevel;
                                     dwFact.Period = accountCase.Value.PeriodID;
 
                                     Strategy strategy = new Strategy();
                                     strategy = strategies.Where(x => x.Id == accountCase.Value.StrategyID).First();
 
-                                    dwFact.Strategy = accountCase.Value.StrategyID;
-                                    dwFact.StrategyKind = (strategy.IsDefault ? 0 : 1);
-                                    dwFact.StrategyUser = strategy.UserId;
+                                    dwFact.StrategyId = accountCase.Value.StrategyID;
+
+
+
+
+                                    dwFact.StrategyKind = (strategy.IsDefault ? StrategyKindEnum.SystemBuiltIn : StrategyKindEnum.UserDefined);
+                                    dwFact.StrategyUserId = strategy.UserId;
                                     dwFact.CaseId = accountCase.Key;
                                     dwFact.CaseStatus = accountCase.Value.CaseStatus;
-                                    dwFact.CaseUser = accountCase.Value.CaseUser;
+                                    dwFact.CaseUserId = accountCase.Value.CaseUser;
                                     dwFact.CaseGenerationTime = accountCase.Value.CaseGenerationTime;
 
                                     CheckIfTimeAddedorAdd(inputArgument.Times, ToBeInsertedTimes, accountCase.Value.CaseGenerationTime);

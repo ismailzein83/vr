@@ -85,7 +85,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             }
 
             IAccountStatusDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
-             List<CaseStatus> caseStatuses = new List<CaseStatus>();
+            List<CaseStatus> caseStatuses = new List<CaseStatus>();
             caseStatuses.Add(CaseStatus.ClosedWhiteList);
 
             int nbOfRecords = 10000;
@@ -155,7 +155,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             {
                                 if (currentAccountNumber != cdr.MSISDN)
                                 {
-                                    if (currentAccountNumber != null && (!isCurrentAccountNumberInWhiteList )   )
+                                    if (currentAccountNumber != null && (!isCurrentAccountNumberInWhiteList))
                                     {
                                         FinishNumberProfileProcessing(currentAccountNumber, ref numberProfileBatch, ref numberProfilesCount, inputArgument, handle, batchSize, aggregateDefinitions, IMEIs);
                                     }
@@ -163,18 +163,18 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                                     currentAccountNumber = cdr.MSISDN;
 
-                                    if ((String.Compare(maxWhiteListNumber, currentAccountNumber) < 0 && hasMoreWhiteListNumbers) )
+                                    if ((String.Compare(maxWhiteListNumber, currentAccountNumber) < 0 && hasMoreWhiteListNumbers))
                                     {
                                         hasMoreWhiteListNumbers = GetWhiteNumbers(currentAccountNumber, out whiteListNumbers, out maxWhiteListNumber, inputArgument.IncludeWhiteList);
                                     }
 
-                                    if ((whiteListNumbers != null && whiteListNumbers.Contains(currentAccountNumber) ))
+                                    if ((whiteListNumbers != null && whiteListNumbers.Contains(currentAccountNumber)))
                                         isCurrentAccountNumberInWhiteList = true;
                                     else
                                         isCurrentAccountNumberInWhiteList = false;
 
 
-                                    if (!isCurrentAccountNumberInWhiteList )
+                                    if (!isCurrentAccountNumberInWhiteList)
                                     {
                                         foreach (var aggregateDef in aggregateDefinitions)
                                         {
@@ -185,7 +185,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 }
                                 else
                                 {
-                                    if (!isCurrentAccountNumberInWhiteList )
+                                    if (!isCurrentAccountNumberInWhiteList)
                                     {
                                         IMEIs.Add(cdr.IMEI);
                                         foreach (var aggregateDef in aggregateDefinitions)

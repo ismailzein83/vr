@@ -39,11 +39,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
             {
                 if (this._condition == null || this._condition(cdr, strategyCountEntry.Key))
                 {
-                    if ((strategyCountEntry.Value.PreviousDateTime != DateTime.MinValue) && cdr.ConnectDateTime.Value.Subtract(strategyCountEntry.Value.PreviousDateTime).TotalSeconds <= strategyCountEntry.Key.GapBetweenFailedConsecutiveCalls)
+                    if ((strategyCountEntry.Value.PreviousDateTime != DateTime.MinValue) && cdr.ConnectDateTime.Subtract(strategyCountEntry.Value.PreviousDateTime).TotalSeconds <= strategyCountEntry.Key.GapBetweenFailedConsecutiveCalls)
                     {
                         strategyCountEntry.Value.Count++;
                     }
-                    strategyCountEntry.Value.PreviousDateTime = cdr.ConnectDateTime.Value;
+                    strategyCountEntry.Value.PreviousDateTime = cdr.ConnectDateTime;
                 }
             }
         }

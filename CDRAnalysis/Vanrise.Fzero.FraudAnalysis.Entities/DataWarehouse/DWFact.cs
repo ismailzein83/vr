@@ -3,30 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
     public class DWFact
     {
-        public int? CDRId { get; set; }
         public string IMEI { get; set; }
         public string MSISDN { get; set; }
         public int? CaseId { get; set; }
-        public decimal? Duration { get; set; }
-        public int? CallClass { get; set; }
-        public int? CallType { get; set; }
-        public int? CaseStatus { get; set; }
-        public int? NetworkType { get; set; }
-        public int? Period { get; set; }
-        public int? Strategy { get; set; }
-        public int? StrategyKind { get; set; }
-        public string SubscriberType { get; set; }
-        public int? SuspicionLevel { get; set; }
-        public DateTime? ConnectTime { get; set; }
+        public decimal? DurationInSeconds { get; set; }
+        public int? CallClassId { get; set; }
+        public CallType CallType { get; set; }
+        public CaseStatus? CaseStatus { get; set; }
+        public NetType? NetworkType { get; set; }
+        public PeriodEnum? Period { get; set; }
+        public int? StrategyId { get; set; }
+        public StrategyKindEnum? StrategyKind { get; set; }
+        public SubscriberType? SubscriberType { get; set; }
+        public SuspicionLevel? SuspicionLevel { get; set; }
+        public DateTime ConnectDateTime { get; set; }
         public DateTime? CaseGenerationTime { get; set; }
-        public int? StrategyUser { get; set; }
-        public int? CaseUser { get; set; }
-        public int? BTS { get; set; }
+        public int? StrategyUserId { get; set; }
+        public int? CaseUserId { get; set; }
+        public int? BTSId { get; set; }
 
     }
 }

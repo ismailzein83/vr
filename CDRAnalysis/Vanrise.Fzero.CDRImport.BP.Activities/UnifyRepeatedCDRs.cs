@@ -76,13 +76,11 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
         public class RelatedCDR
         {
             public int? SwitchID { get; set; }
-            public string InTrunkSymbol { get; set; }
-            public string OutTrunkSymbol { get; set; }
             public int? InTrunkId { get; set; }
             public int? OutTrunkId { get; set; }
-            public decimal? DurationInSeconds { get; set; }
+            public decimal DurationInSeconds { get; set; }
             public DateTime? DisconnectDateTime { get; set; }
-            public DateTime? ConnectDateTime { get; set; }
+            public DateTime ConnectDateTime { get; set; }
             public string CGPNAreaCode { get; set; }
             public string CDPNAreaCode { get; set; }
         }
@@ -119,7 +117,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
                                     if (unifiedCDRs.TryGetValue(callPartie, out relatedCDRs))
                                     {
-                                        if (ToPositive(stagingCDR.ConnectDateTime.Value.Subtract(currentConnectDateTime.Value).TotalSeconds) > minimumGapBetweenRepeatedCDRs)
+                                        if (ToPositive(stagingCDR.ConnectDateTime.Subtract(currentConnectDateTime.Value).TotalSeconds) > minimumGapBetweenRepeatedCDRs)
                                         {
                                             relatedCDRs.Add(relatedCDR);
                                             unifiedCDRs[callPartie] = relatedCDRs;
@@ -135,7 +133,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                                 }
                                 else
                                 {
-                                    currentConnectDateTime = stagingCDR.ConnectDateTime.Value;
+                                    currentConnectDateTime = stagingCDR.ConnectDateTime;
                                     PrepareUnifiedCDR(stagingCDR, out relatedCDRs, out callPartie, out relatedCDR);
                                     relatedCDRs.Add(relatedCDR);
                                     unifiedCDRs.Add(callPartie, relatedCDRs);
@@ -168,7 +166,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                 int CountItems = 0;
                 foreach (var subunifiedCDR in unifiedCDR.Value)
                 {
-                    if ((CountItems == 0) || (CountItems > 0 && ToPositive(subunifiedCDR.ConnectDateTime.Value.Subtract(maximumConnectDateTime).TotalSeconds) >= minimumGapBetweenRepeatedCDRs))
+                    if ((CountItems == 0) || (CountItems > 0 && ToPositive(subunifiedCDR.ConnectDateTime.Subtract(maximumConnectDateTime).TotalSeconds) >= minimumGapBetweenRepeatedCDRs))
                     {
                         cdrBatch.Add(new CDR()
                         {
@@ -178,8 +176,6 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                             MSISDN = unifiedCDR.Key.CGPN,
                             DisconnectDateTime = subunifiedCDR.DisconnectDateTime,
                             DurationInSeconds = subunifiedCDR.DurationInSeconds,
-                            InTrunkSymbol = subunifiedCDR.InTrunkSymbol,
-                            OutTrunkSymbol = subunifiedCDR.OutTrunkSymbol,
                             InTrunkId = subunifiedCDR.InTrunkId,
                             OutTrunkId = subunifiedCDR.OutTrunkId,
                             SwitchId = subunifiedCDR.SwitchID,
@@ -198,8 +194,6 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                             MSISDN = unifiedCDR.Key.CDPN,
                             DisconnectDateTime = subunifiedCDR.DisconnectDateTime,
                             DurationInSeconds = subunifiedCDR.DurationInSeconds,
-                            InTrunkSymbol = subunifiedCDR.InTrunkSymbol,
-                            OutTrunkSymbol = subunifiedCDR.OutTrunkSymbol,
                             InTrunkId = subunifiedCDR.InTrunkId,
                             OutTrunkId = subunifiedCDR.OutTrunkId,
                             SwitchId = subunifiedCDR.SwitchID,
@@ -245,8 +239,6 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                 ConnectDateTime = stagingCDR.ConnectDateTime,
                 DisconnectDateTime = stagingCDR.DisconnectDateTime,
                 DurationInSeconds = stagingCDR.DurationInSeconds,
-                InTrunkSymbol = stagingCDR.InTrunkSymbol,
-                OutTrunkSymbol = stagingCDR.OutTrunkSymbol,
                 InTrunkId = stagingCDR.InTrunkId,
                 OutTrunkId = stagingCDR.OutTrunkId,
                 SwitchID = stagingCDR.SwitchId,

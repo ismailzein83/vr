@@ -19,12 +19,10 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
             foreach (StagingCDR cdr in cdrs)
             {
-                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}",
+                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}",
                                  cdr.CGPN
                                   , cdr.CDPN
                                   , cdr.SwitchId
-                                  , cdr.InTrunkSymbol
-                                  , cdr.OutTrunkSymbol
                                   , cdr.ConnectDateTime
                                   , cdr.DurationInSeconds
                                   , cdr.DisconnectDateTime
@@ -64,12 +62,10 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                     StagingCDR stagingCDR = new StagingCDR();
                     stagingCDR.CDPN = reader["CDPN"] as string;
                     stagingCDR.CGPN = reader["CGPN"] as string;
-                    stagingCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
-                    stagingCDR.InTrunkSymbol = reader["InTrunkSymbol"] as string;
-                    stagingCDR.OutTrunkSymbol = reader["OutTrunkSymbol"] as string;
+                    stagingCDR.ConnectDateTime = GetReaderValue<DateTime>(reader, "ConnectDateTime");
                     stagingCDR.CGPNAreaCode = reader["CGPNAreaCode"] as string;
                     stagingCDR.CDPNAreaCode = reader["CDPNAreaCode"] as string;
-                    stagingCDR.DurationInSeconds = GetReaderValue<Decimal?>(reader, "DurationInSeconds");
+                    stagingCDR.DurationInSeconds = GetReaderValue<decimal>(reader, "DurationInSeconds");
                     stagingCDR.DisconnectDateTime = GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
                     stagingCDR.SwitchId = GetReaderValue<int>(reader, "SwitchID");
 

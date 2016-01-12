@@ -41,13 +41,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
                 {
                     int value;
 
-                    if (!strategyCountEntry.Value.HoursvsCalls.TryGetValue(cdr.ConnectDateTime.Value.Hour, out value))
+                    if (!strategyCountEntry.Value.HoursvsCalls.TryGetValue(cdr.ConnectDateTime.Hour, out value))
                     {
-                        strategyCountEntry.Value.HoursvsCalls.Add(cdr.ConnectDateTime.Value.Hour, 1);
+                        strategyCountEntry.Value.HoursvsCalls.Add(cdr.ConnectDateTime.Hour, 1);
                     }
                     else
                     {
-                        strategyCountEntry.Value.HoursvsCalls[cdr.ConnectDateTime.Value.Hour] = value + 1;
+                        strategyCountEntry.Value.HoursvsCalls[cdr.ConnectDateTime.Hour] = value + 1;
                     }
                 }
             }

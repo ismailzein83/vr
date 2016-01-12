@@ -6,5 +6,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
     public interface IClassDataManager : IDataManager 
     {
         List<CallClass> GetCallClasses();
+
+        bool AreCallClassesUpdated(ref object updateHandle);
     }
 }
