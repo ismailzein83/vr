@@ -129,7 +129,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             }
             
             TimeSpan spent = DateTime.Now.Subtract(startReading);
-            context.WriteTrackingMessage(LogEntryType.Information, "Reading Excel File Having {0} Records done and Takes: {1}", worksheet.Cells.Rows.Count, spent);
+            context.WriteTrackingMessage(LogEntryType.Information, "Finished reading {0} records from the excel file. It took: {1}.", worksheet.Cells.Rows.Count, spent);
             
             ImportedCodes.Set(context, importedCodesList);
             ImportedRates.Set(context, dicImportedRates.SelectMany(itm => itm.Value).ToList());
