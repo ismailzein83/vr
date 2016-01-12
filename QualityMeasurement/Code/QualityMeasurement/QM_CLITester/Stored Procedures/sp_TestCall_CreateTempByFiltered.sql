@@ -6,6 +6,7 @@
 	@UserIDs varchar(max) ,
 	@SupplierIDs varchar(max) ,
 	@ProfileIDs varchar(max) ,
+	@ScheduleIDs varchar(max) ,
 	@CountryIDs varchar(max) ,
 	@ZoneIDs varchar(max) ,
 	
@@ -40,6 +41,10 @@ BEGIN
 			INSERT INTO @ProfileIDsTable (ProfileID)
 			select Convert(int, ParsedString) from [QM_CLITester].[ParseStringList](@ProfileIDs)
 
+			DECLARE @ScheduleIDsTable TABLE (ScheduleID int)
+			INSERT INTO @ScheduleIDsTable (ScheduleID)
+			select Convert(int, ParsedString) from [QM_CLITester].[ParseStringList](@ScheduleIDs)
+			
 			DECLARE @CountryIDsTable TABLE (CountryID int)
 			INSERT INTO @CountryIDsTable (CountryID)
 			select Convert(int, ParsedString) from [QM_CLITester].[ParseStringList](@CountryIDs)
@@ -66,6 +71,7 @@ BEGIN
 			  ,tc.[FailureMessage]
 			  ,tc.[timestamp]
 			  ,tc.[BatchNumber]
+			  ,tc.[ScheduleID]
 			  ,tc.[PDD]
 			  ,tc.[MOS]
 			  ,tc.[Duration]
@@ -84,6 +90,7 @@ BEGIN
 			AND (@UserIDs  IS NULL OR tc.[UserID] IN (select UserID from @UserIDsTable))
 			AND (@SupplierIDs  IS NULL OR tc.[SupplierID] IN (select SupplierID from @SupplierIDsTable))
 			AND (@ProfileIDs  IS NULL OR tc.[ProfileID] IN (select ProfileID from @ProfileIDsTable))
+			AND (@ScheduleIDs  IS NULL OR tc.[ScheduleID] IN (select ScheduleID from @ScheduleIDsTable))
 			AND (@CountryIDs  IS NULL OR tc.[CountryID] IN (select CountryID from @CountryIDsTable))
 			AND (@ZoneIDs  IS NULL OR tc.[ZoneID] IN (select ZoneID from @ZoneIDsTable))
 			DECLARE @sql VARCHAR(1000)

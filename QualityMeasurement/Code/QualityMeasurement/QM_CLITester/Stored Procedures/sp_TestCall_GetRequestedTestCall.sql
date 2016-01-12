@@ -30,6 +30,7 @@ select Convert(int, ParsedString) from [QM_CLITester].[ParseStringList](@CallTes
       ,[FailureMessage]
       ,[timestamp]
       ,[BatchNumber]
+      ,[ScheduleID]
 	  ,[PDD]
       ,[MOS]
       ,[Duration]

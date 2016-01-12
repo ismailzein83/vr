@@ -26,6 +26,7 @@ BEGIN
 		  ,[FailureMessage]
 		  ,[timestamp]
 		  ,[BatchNumber]
+		  ,[ScheduleID]
           ,[PDD]
 		  ,[MOS]
 		  ,[Duration]

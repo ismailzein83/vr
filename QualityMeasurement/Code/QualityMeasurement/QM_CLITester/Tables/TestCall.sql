@@ -15,6 +15,7 @@
     [FailureMessage]          NVARCHAR (MAX)  NULL,
     [timestamp]               ROWVERSION      NULL,
     [BatchNumber]             BIGINT          NULL,
+    [ScheduleID]              INT             NULL,
     [PDD]                     DECIMAL (18, 6) NULL,
     [MOS]                     DECIMAL (18, 6) NULL,
     [Duration]                VARCHAR (20)    NULL,
@@ -23,6 +24,8 @@
     [RingDuration]            VARCHAR (20)    NULL,
     CONSTRAINT [PK_TestCall] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
