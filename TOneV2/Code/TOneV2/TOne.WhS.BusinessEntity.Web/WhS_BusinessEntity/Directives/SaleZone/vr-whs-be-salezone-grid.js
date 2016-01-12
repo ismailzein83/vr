@@ -71,7 +71,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE
                 return WhS_BE_SaleZoneAPIService.GetFilteredSaleZones(dataRetrievalInput)
                     .then(function (response) {
 
-                        if (response.Data != undefined) {
+                        if (response && response.Data) {
 
                             for (var i = 0; i < response.Data.length; i++) {
                                 gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);

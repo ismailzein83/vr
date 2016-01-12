@@ -87,7 +87,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                 return WhS_BE_CarrierAccountAPIService.GetFilteredCarrierAccounts(dataRetrievalInput)
                     .then(function (response) {
 
-                        if (response.Data != undefined) {
+                        if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 if (response.Data[i].Entity.AccountType != WhS_Be_CarrierAccountTypeEnum.Supplier.value) {
                                     gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
@@ -132,6 +132,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
 
         function editCarrierAccount(carrierAccountObj) {
             var onCarrierAccountUpdated = function (carrierAccount) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(carrierAccount);
                 gridAPI.itemUpdated(carrierAccount);
             }
             var carrierAccountItem;

@@ -169,7 +169,7 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
 
                     return WhS_Analytics_GenericAnalyticAPIService.GetFiltered(dataRetrievalInput)
                         .then(function (response) {
-                            if (response.Data != undefined) {
+                            if (response && response.Data) {
                                 for (var i = 0; i < response.Data.length; i++) {
                                     gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                                 }

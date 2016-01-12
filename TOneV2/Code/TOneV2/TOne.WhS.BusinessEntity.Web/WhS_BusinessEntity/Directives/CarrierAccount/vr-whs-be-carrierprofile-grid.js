@@ -65,6 +65,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onCarrierProfileAdded = function (carrierProfileObject) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(carrierProfileObject);
                         gridAPI.itemAdded(carrierProfileObject);
                     }
                     return directiveAPI;
@@ -73,7 +74,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_CarrierProfileAPIService.GetFilteredCarrierProfiles(dataRetrievalInput)
                     .then(function (response) {
-                        if (response.Data != undefined) {
+                        if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                             }
@@ -101,7 +102,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
 
         function editCarrierProfile(carrierProfileObj) {
             var onCarrierProfileUpdated = function (carrierProfile) {
-
+                gridDrillDownTabsObj.setDrillDownExtensionObject(carrierProfile);
                 gridAPI.itemUpdated(carrierProfile);
 
             }
@@ -115,6 +116,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
             }
 
             var onCarrierAccountAdded = function (carrierAccountObj) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(carrierAccountObj);
                 if (dataItem.carrierAccountGridAPI != undefined)
                     dataItem.carrierAccountGridAPI.onCarrierAccountAdded(carrierAccountObj);
             };

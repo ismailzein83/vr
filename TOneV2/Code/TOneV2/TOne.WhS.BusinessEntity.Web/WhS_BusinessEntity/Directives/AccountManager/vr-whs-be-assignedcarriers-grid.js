@@ -48,7 +48,10 @@ function (VRNotificationService, WhS_BE_AccountManagerAPIService) {
             ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_AccountManagerAPIService.GetFilteredAssignedCarriers(dataRetrievalInput)
                 .then(function (response) {
-                    response.Data = getMappedAssignedCarriers(response.Data);
+                    if (response && response.Data)
+                    {
+                        response.Data = getMappedAssignedCarriers(response.Data);
+                    }
                     onResponseReady(response);
                 })
                 .catch(function (error) {

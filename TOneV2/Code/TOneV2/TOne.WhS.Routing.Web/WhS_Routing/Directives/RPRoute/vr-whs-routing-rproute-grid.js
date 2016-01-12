@@ -62,7 +62,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
                 WhS_Routing_RPRouteAPIService.GetFilteredRPRoutes(dataRetrievalInput)
                    .then(function (response) {
                        var promises = [];
-                       if (response.Data != undefined) {
+                       if (response && response.Data) {
                            for (var i = 0; i < response.Data.length; i++) {
                                var rpRouteDetail = response.Data[i];
                                gridDrillDownTabsObj.setDrillDownExtensionObject(rpRouteDetail);

@@ -49,7 +49,7 @@
             };
             $scope.rateDataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_Sales_RatePlanAPIService.GetFilteredZoneRateChanges(dataRetrievalInput).then(function (response) {
-                    if (response.Data != undefined) {
+                    if (response &&  response.Data) {
                         for (var i = 0; i < response.Data.length; i++) {
                             if (response.Data[i].IsCurrentRateInherited)
                                 response.Data[i].CurrentRate += " (Inherited)";
@@ -71,7 +71,7 @@
             };
             $scope.routingProductDataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_Sales_RatePlanAPIService.GetFilteredZoneRoutingProductChanges(dataRetrievalInput).then(function (response) {
-                    if (response.Data != undefined) {
+                    if (response && response.Data) {
                         for (var i = 0; i < response.Data.length; i++) {
                             if (response.Data[i].IsCurrentRoutingProductInherited)
                                 response.Data[i].CurrentRoutingProductName += " (Inherited)";

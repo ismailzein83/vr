@@ -57,7 +57,7 @@ function (UtilsService, VRNotificationService, WhS_BE_RateTypeAPIService, WhS_BE
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_RateTypeAPIService.GetFilteredRateTypes(dataRetrievalInput)
                     .then(function (response) {
-                        if (response.Data != undefined) {
+                        if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 setDataItemExtension(response.Data[i]);
                             }

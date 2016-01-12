@@ -55,8 +55,12 @@ app.directive("vrWhsCdrprocessingNormalizationruleGrid", ["WhS_CDRProcessing_Mai
 
                 return WhS_CDRProcessing_NormalizationRuleAPIService.GetFilteredNormalizationRules(dataRetrievalInput)
                     .then(function (responseArray) {
-                        for (var i = 0; i < responseArray.Data.length;i++)
-                            AddPhoneTypeDescriptionName(responseArray.Data[i]);
+                        if (responseArray && responseArray.Data)
+                        {
+                            for (var i = 0; i < responseArray.Data.length; i++)
+                                AddPhoneTypeDescriptionName(responseArray.Data[i]);
+                        }
+                        
                         onResponseReady(responseArray);
                     })
                     .catch(function (error) {

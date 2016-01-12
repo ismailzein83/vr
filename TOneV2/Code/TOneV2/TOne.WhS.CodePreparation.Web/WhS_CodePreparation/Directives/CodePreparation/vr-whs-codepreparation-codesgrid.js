@@ -78,7 +78,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_CodePrep_CodePrepAPIService.GetCodeItems(dataRetrievalInput)
                     .then(function (response) {
-                        if (response.Data != undefined)
+                        if (response && response.Data)
                         {
                             for (var i = 0 ; i < response.Data.length; i++) {
                                 mapDataNeeded(response.Data[i]);

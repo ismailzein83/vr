@@ -53,7 +53,7 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_ZoneServiceConfigAPIService.GetFilteredZoneServiceConfigs(dataRetrievalInput)
                     .then(function (response) {
-                        if (response.Data != undefined) {
+                        if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 setDataItemExtension(response.Data[i]);
                             }

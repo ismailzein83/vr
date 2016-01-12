@@ -55,7 +55,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_Routing_CustomerRouteAPIS
                 return WhS_Routing_CustomerRouteAPIService.GetFilteredCustomerRoutes(dataRetrievalInput)
                    .then(function (response) {
 
-                       if (response.Data != undefined) {
+                       if (response && response.Data) {
                            for (var i = 0; i < response.Data.length; i++) {
                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                            }

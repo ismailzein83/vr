@@ -57,7 +57,7 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_RoutingProductAPIService.GetFilteredRoutingProducts(dataRetrievalInput)
                    .then(function (response) {
-                       if (response.Data != undefined) {
+                       if (response && response.Data) {
                            for (var i = 0; i < response.Data.length; i++) {
                                 setDataItemExtension(response.Data[i]);
                            }
