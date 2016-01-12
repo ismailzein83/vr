@@ -50,15 +50,17 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
-      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Common.Business</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.BP</AssemblyReference>
     </sco:Collection>
@@ -174,6 +176,14 @@
         </twcba1:GetDataFromView>
       </If.Else>
     </If>
+    <vbw:WriteTrackingMessage Severity="{x:Null}">
+      <vbw:WriteTrackingMessage.Message>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">String.Format("Reading data from {0}", Input.IsFromExcel ? "Excel" : "Code Preparation Page")</mca:CSharpValue>
+        </InArgument>
+      </vbw:WriteTrackingMessage.Message>
+      <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_2</sap2010:WorkflowViewState.IdRef>
+    </vbw:WriteTrackingMessage>
     <twcba1:StructureDataByZones sap2010:WorkflowViewState.IdRef="StructureDataByZones_1">
       <twcba1:StructureDataByZones.CodesToAdd>
         <InArgument x:TypeArguments="scg:IEnumerable(twcecp:CodeToAdd)">
@@ -227,6 +237,7 @@
         </InArgument>
       </vbw:Validate.ImportedDataToValidate>
     </vbw:Validate>
+    <vbw:WriteTrackingMessage Severity="{x:Null}" Message="Imported data is validated." sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3" />
     <twcba1:StructureDataByCountries sap2010:WorkflowViewState.IdRef="StructureDataByCountries_1">
       <twcba1:StructureDataByCountries.CountriesToProcess>
         <OutArgument x:TypeArguments="scg:IEnumerable(twcecp:CountryToProcess)">
@@ -239,8 +250,15 @@
         </InArgument>
       </twcba1:StructureDataByCountries.ZonesToProcess>
     </twcba1:StructureDataByCountries>
+    <vbw:WriteTrackingMessage Severity="{x:Null}" Message="Ready to start processing imported data" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4" />
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_4">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="x:Int32" Name="ProcessingCountryCompleted" />
+      </Parallel.Variables>
       <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+        <Sequence.Variables>
+          <Variable x:TypeArguments="x:String" Name="variable1" />
+        </Sequence.Variables>
         <vbw:ParallelForEach x:TypeArguments="twcecp:CountryToProcess" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_2" InitialConcurrentInstances="10" MaxConcurrentInstances="10">
           <vbw:ParallelForEach.Values>
             <InArgument x:TypeArguments="scg:IEnumerable(twcecp:CountryToProcess)">
@@ -446,6 +464,25 @@
                   </vbw:EnqueueItem.Queue>
                 </vbw:EnqueueItem>
               </Parallel>
+              <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:Int32">
+                    <mca:CSharpReference x:TypeArguments="x:Int32">ProcessingCountryCompleted</mca:CSharpReference>
+                  </OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:Int32">
+                    <mca:CSharpValue x:TypeArguments="x:Int32">ProcessingCountryCompleted + 1</mca:CSharpValue>
+                  </InArgument>
+                </Assign.Value>
+              </Assign>
+              <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
+                <vbw:WriteTrackingMessage.Message>
+                  <InArgument x:TypeArguments="x:String">
+                    <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing '{0}' country is completed. {1} countries are remaining.", new Vanrise.Common.Business.CountryManager().GetCountry(Country.CountryId).Name, (CountriesToProcess.Count() - ProcessingCountryCompleted))</mca:CSharpValue>
+                  </InArgument>
+                </vbw:WriteTrackingMessage.Message>
+              </vbw:WriteTrackingMessage>
             </Sequence>
           </ActivityAction>
         </vbw:ParallelForEach>
@@ -493,6 +530,7 @@
         </local:ApplyEntitiesToDBProcess.SellingNumberPlanId>
       </local:ApplyEntitiesToDBProcess>
     </Parallel>
+    <vbw:WriteTrackingMessage Severity="{x:Null}" Message="Finished processing imported data. Ready to start synchronization with existing entities." sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5" />
     <twcba1:SyncImportedDataWithDB sap2010:WorkflowViewState.IdRef="SyncImportedDataWithDB_1">
       <twcba1:SyncImportedDataWithDB.SellingNumberPlanId>
         <InArgument x:TypeArguments="x:Int32">
@@ -500,6 +538,7 @@
         </InArgument>
       </twcba1:SyncImportedDataWithDB.SellingNumberPlanId>
     </twcba1:SyncImportedDataWithDB>
+    <vbw:WriteTrackingMessage Severity="{x:Null}" Message="Finished synchronizing with existing entities." sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_6" />
     <twcba1:UpdateCodePreparationStateStatus sap2010:WorkflowViewState.IdRef="UpdateCodePreparationStateStatus_1">
       <twcba1:UpdateCodePreparationStateStatus.SellingNumberPlanId>
         <InArgument x:TypeArguments="x:Int32">
@@ -512,18 +551,21 @@
         </InArgument>
       </twcba1:UpdateCodePreparationStateStatus.Status>
     </twcba1:UpdateCodePreparationStateStatus>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb24ueGFtbGhCA4QEDgIBAU4LTtUBAgE+UwtT1QECAS9YC1jZAQIBIF0LXdkBAgERYgticAIBAmYFsAEKAwGzCbEBBcYBIwMB9gjHAQXNAS0DAeYIzgEF2QEYAwHHCNoBBeUBFAMBqAjmAQXxAScDAYkI8gEF7wMQAgF88AMF9gMlAgFs9wMFggQvAgFNaQtpWwMBtAltCYwBJAMBngqPAQmuASIDAcMJuQELuQFwAwGkCcMBC8MBfAMBlQm0AQu0AWwDAYYJvgELvgFuAwH3CMoBC8oBhQEDAecI0QEL0QGxAQMB1wjWAQvWAX8DAcgI4gEL4gF3AwG4CN0BC90BfQMBqQjuAQvuAXQDAZkI6QEL6QGDAQMBigjzAQfOAxIDAdgBzwMH7gMoAgF98wML8wNhAgFt+gML+gNhAgFd/wML/wPBAQIBTnUPdXwDAeoKcA9weAMB2wqJAQ+JAWIDAcwKfw9/bAMBvQqEAQ+EAV0DAa4Keg96egMBnwqXAQ+XAXwDAY8KkgEPkgF4AwGACqYBD6YBYgMB8QmrAQ+rAWUDAeIJoQEPoQFoAwHTCZwBD5wBegMBxAn0AQnDAx8DAeoBxAMJzQMSAwHZAeYDDeYDfwMByQHSAw3SA4UBAwG6AesDDesDYwMBqwHcAw3cA3IDAZwB1wMN1wOFAQMBjQHhAw3hA38CAX73AQ/3AX8DAfoH9AG1AfQBuQEDAfkH9AGZAfQBnQEDAfgH/gENwQMYAwHrAcsDNcsDOQMB6QHHAw/HA3oDAdoBiQIPtgIaAwG1BrcCD8ICLQMBhAbDAg/TAi0DAbsF1AIPggMsAwHiA4MDD44DMQMBsQOPAw/AAxoDAewBigIRnwIrAwGXB6ACEbUCKwMBtga6AhW6An0DAZ0GvwIVvwKUAQMBhQbLAhXLAoQBAwHsBcYCFcYCfQMB1AXQAhXQAowBAwG8BfACFfACfAMBowXmAhXmAoIBAwGLBfoCFfoCfAMB8wThAhXhAn4DAdsE1wIV1wKCAQMBwwT/AhX/AnwDAasE9QIV9QKMAQMBkwTrAhXrAoABAwH7A9wCFdwCggEDAeMDhgMVhgN0AwHKA4sDFYsDdAMBsgOQAxGbAyMDAYADnAMRpwMjAwHPAqgDEbMDIwMBngK0AxG/AyMDAe0BkgIXkgKHAQMB4AecAhecAm0DAcgHlwIXlwJiAwGwB40CF40CZQMBmAeyAheyAm0DAf8GqAIXqAKHAQMB5watAhetAmIDAc8GowIXowJlAwG3BpgDF5gDiQEDAZkDkwMXkwN2AwGBA6QDF6QDiQEDAegCnwMXnwN2AwHQArADF7ADjwEDAbcCqwMXqwN8AwGfArwDF7wDjwEDAYYCtwMXtwN8AwHuAQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb24ueGFtbHdEA6sEDgIBAVALUNUBAgE+VQtV1QECAS9aC1rZAQIBIF8LX9kBAgERZAtkcAIBAmgFsgEKAwHlCrMBBboBIAMB1Qq7AQXQASMDAZgK0QEF1wEtAwGICtgBBeMBGAMB6QnkAQXvARQDAcoJ8AEF8AGUAQMByAnxAQX8AScDAakJ/QEF/QGgAQMBpwn+AQWUBBADAYABlQQFlQTSAQIBfpYEBZwEJQIBbp0EBZ0EpwECAWyeBAWpBC8CAU1rC2tbAwHmCm8JjgEkAwHQC5EBCbABIgMB9Qq2AQu2AaYBAwHWCsMBC8MBcAMBxgrNAQvNAXwDAbcKvgELvgFsAwGoCsgBC8gBbgMBmQrUAQvUAYUBAwGJCtsBC9sBsQEDAfkJ4AEL4AF/AwHqCewBC+wBdwMB2gnnAQvnAX0DAcsJ8AE78AFYAwHJCfkBC/kBdAMBuQn0AQv0AYMBAwGqCf0BO/0BZAMBqAmCAgfzAxIDAeIB9AMHkwQoAwGBAZUEO5UElgECAX+ZBAuZBGECAW+dBDudBGsCAW2hBAuhBGECAV2mBAumBMEBAgFOdw93fAMBnAxyD3J4AwGNDIsBD4sBYgMB/guBAQ+BAWwDAe8LhgEPhgFdAwHgC3wPfHoDAdELmQEPmQF8AwHBC5QBD5QBeAMBsguoAQ+oAWIDAaMLrQEPrQFlAwGUC6MBD6MBaAMBhQueAQ+eAXoDAfYKhgIJ6AMfAwH2AekDCfIDEgMB4wGLBA2LBH8DAdIB9wMN9wOFAQMBwgGQBA2QBGMDAbIBgQQNgQRyAwGiAfwDDfwDhQEDAZIBhgQNhgR/AwGCAYkCD4kCfwMBlgmGArUBhgK5AQMBlQmGApkBhgKdAQMBlAmQAg3mAxgDAfcB8AM18AM5AwH1AewDD+wDegMB5AGbAg/IAhoDAcEHyQIP1AItAwGMB9UCD+UCLQMBvQbmAg+UAywDAdIElQMPoAMxAwGdBKEDD9IDGgMByALTAw/eAxgDAZMC3wMP5QMqAwH4AZwCEbECKwMBqwiyAhHHAisDAcIHzAIVzAJ9AwGnB9ECFdEClAEDAY0H3QIV3QKEAQMB8gbYAhXYAn0DAdgG4gIV4gKMAQMBvgaCAxWCA3wDAaMG+AIV+AKCAQMBiQaMAxWMA3wDAe8F8wIV8wJ+AwHVBekCFekCggEDAbsFkQMVkQN8AwGhBYcDFYcDjAEDAYcF/QIV/QKAAQMB7QTuAhXuAoIBAwHTBJgDFZgDdAMBuASdAxWdA3QDAZ4EogMRrQMjAwHoA64DEbkDIwMBswO6AxHFAyMDAf4CxgMR0QMjAwHJAtsDFdsDcAMBrgLWAxXWA3QDAZQC4gMV4gOzAgMB+QGkAhekAocBAwH6CK4CF64CbQMB4AipAhepAmIDAcYInwIXnwJlAwGsCMQCF8QCbQMBkQi6Ahe6AocBAwH3B78CF78CYgMB3Qe1Ahe1AmUDAcMHqgMXqgOJAQMBgwSlAxelA3YDAekDtgMXtgOJAQMBzgOxAxexA3YDAbQDwgMXwgOPAQMBmQO9Axe9A3wDAf8CzgMXzgOPAQMB5ALJAxfJA3wDAcoC</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="GetDataFromSource_2" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="GetDataFromView_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="663,210" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="663,212" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="663,22" />
       <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="663,22" />
       <sap2010:ViewStateData Id="GetImportedDataValidationRules_1" sap:VirtualizedContainerService.HintSize="663,22" />
       <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="663,22" />
       <sap2010:ViewStateData Id="Validate_1" sap:VirtualizedContainerService.HintSize="663,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="663,22" />
       <sap2010:ViewStateData Id="StructureDataByCountries_1" sap:VirtualizedContainerService.HintSize="663,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="663,22" />
       <sap2010:ViewStateData Id="GetExistingZones_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingCodes_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
@@ -536,7 +578,9 @@
       <sap2010:ViewStateData Id="EnqueueItem`1_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="EnqueueItem`1_4" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="1034,86" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="200,51">
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="1034,62" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="1034,22" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="200,52">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -544,27 +588,29 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="287,210" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="287,211" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="287,62" />
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="309,436">
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="309,437">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="200,436" />
-      <sap2010:ViewStateData Id="Parallel_4" sap:VirtualizedContainerService.HintSize="663,482" />
+      <sap2010:ViewStateData Id="ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="200,437" />
+      <sap2010:ViewStateData Id="Parallel_4" sap:VirtualizedContainerService.HintSize="663,483" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="663,22" />
       <sap2010:ViewStateData Id="SyncImportedDataWithDB_1" sap:VirtualizedContainerService.HintSize="663,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_6" sap:VirtualizedContainerService.HintSize="663,22" />
       <sap2010:ViewStateData Id="UpdateCodePreparationStateStatus_1" sap:VirtualizedContainerService.HintSize="663,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="685,1290">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="685,1603">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.CodePreparation_1" sap:VirtualizedContainerService.HintSize="725,1370" />
+      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.CodePreparation_1" sap:VirtualizedContainerService.HintSize="725,1683" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
