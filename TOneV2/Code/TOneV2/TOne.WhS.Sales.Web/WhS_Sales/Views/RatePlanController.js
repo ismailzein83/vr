@@ -48,6 +48,7 @@
 
             $scope.onOwnerTypeChanged = function () {
                 clearRatePlan();
+                $scope.showSaveButton = false;
                 $scope.showCancelButton = false;
 
                 if ($scope.selectedOwnerType != undefined) {
@@ -71,6 +72,8 @@
             };
             $scope.onSellingProductChanged = function () {
                 clearRatePlan();
+                $scope.showSaveButton = false;
+                $scope.showSettingsButton = false;
                 $scope.showCancelButton = false;
             };
 
@@ -81,6 +84,8 @@
             };
             $scope.onCarrierAccountChanged = function () {
                 clearRatePlan();
+                $scope.showSaveButton = false;
+                $scope.showSettingsButton = false;
                 $scope.showCancelButton = false;
 
                 if ($scope.selectedCustomer) {
@@ -107,7 +112,6 @@
             };
 
             $scope.onRoutingDatabaseSelectorChange = function (item) {
-
                 var payload;
 
                 if (item != undefined && item.Information != undefined)
@@ -120,6 +124,7 @@
                         filteredIds: []
                     };
                 }
+
                 policySelectorAPI.load(payload);
             }
 
@@ -175,9 +180,15 @@
                         settings = {};
                         settings.CostCalculationMethods = [];
 
-                        if (updatedSettings.CostCalculationMethods) {
-                            for (var i = 0; i < updatedSettings.CostCalculationMethods.length; i++)
+                        if (updatedSettings.CostCalculationMethods && updatedSettings.CostCalculationMethods.length > 0) {
+                            for (var i = 0; i < updatedSettings.CostCalculationMethods.length; i++) {
                                 settings.CostCalculationMethods.push(updatedSettings.CostCalculationMethods[i]);
+                            }
+
+                            $scope.showPricingButton = true;
+                        }
+                        else {
+                            $scope.showPricingButton = false;
                         }
                     }
 
@@ -275,17 +286,6 @@
                 });
 
                 return UtilsService.waitMultiplePromises(promises);
-            };
-            
-            // Validation functions
-            $scope.disableSaveButton = function () {
-                return !validateRatePlan();
-            };
-            $scope.disableSettingsButton = function () {
-                return !validateRatePlan();
-            };
-            $scope.disablePricingButton = function () {
-                return !validateRatePlan();
             };
             
             defineSaveButtonMenuActions();
@@ -397,7 +397,10 @@
                 }
             });
 
-            return UtilsService.waitMultiplePromises(promises).catch(function (error) {
+            return UtilsService.waitMultiplePromises(promises).then(function () {
+                $scope.showSaveButton = true;
+                $scope.showSettingsButton = true;
+            }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
 
@@ -584,10 +587,6 @@
                 ownerId = $scope.selectedCustomer.CarrierAccountId;
 
             return ownerId;
-        }
-
-        function validateRatePlan() {
-            return ($scope.zoneLetters && $scope.zoneLetters.length > 0);
         }
     }
 
