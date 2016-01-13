@@ -118,7 +118,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 supplierZoneDetail.CountryName = country.Name;
             
             int supplierId = supplierZone.SupplierId;
-            supplierZoneDetail.SupplierName = caManager.GetCarrierAccount(supplierId).NameSuffix;
+            supplierZoneDetail.SupplierName = caManager.GetCarrierAccountName(supplierId);
             return supplierZoneDetail;
         }
 
