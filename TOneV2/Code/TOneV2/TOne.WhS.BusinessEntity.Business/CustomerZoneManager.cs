@@ -13,6 +13,11 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class CustomerZoneManager
     {
+     
+        #region ctor/Local Variables
+        #endregion
+
+        #region Public Methods
         public CustomerZones GetCustomerZones(int customerId, DateTime? effectiveOn, bool futureEntities)
         {
             CustomerZones customerZones = null;
@@ -32,7 +37,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return customerZones;
         }
-
         public IEnumerable<Vanrise.Entities.Country> GetCountriesToSell(int customerId)
         {
             IEnumerable<Vanrise.Entities.Country> countriesToSell = null;
@@ -53,7 +57,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return countriesToSell;
         }
-
         public IEnumerable<char> GetCustomerZoneLetters(int customerId)
         {
             IEnumerable<char> letters = null;
@@ -64,7 +67,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return letters;
         }
-
         public IEnumerable<SaleZone> GetCustomerSaleZones(int customerId, DateTime effectiveOn, bool futureEntities)
         {
             IEnumerable<SaleZone> saleZones = null;
@@ -80,7 +82,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return saleZones;
         }
-
         public TOne.Entities.InsertOperationOutput<CustomerZones> AddCustomerZones(CustomerZones customerZones)
         {
             CustomerZones currentCustomerZones = this.GetCustomerZones(customerZones.CustomerId, DateTime.Now, false);
@@ -89,7 +90,8 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 foreach (CustomerCountry country in currentCustomerZones.Countries)
                 {
-                    customerZones.Countries.Add(new CustomerCountry() {
+                    customerZones.Countries.Add(new CustomerCountry()
+                    {
                         CountryId = country.CountryId
                     });
                 }
@@ -113,6 +115,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
+        #endregion
 
         #region Private Members
 
@@ -126,7 +129,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 return _dataManager.AreAllCustomerZonesUpdated(ref _updateHandle);
             }
         }
-
         private Dictionary<int, CustomerZones> GetAllCachedCustomerZones()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllCustomerZones",
@@ -138,6 +140,9 @@ namespace TOne.WhS.BusinessEntity.Business
                });
         }
 
+        #endregion
+    
+        #region  Mappers
         #endregion
     }
 }

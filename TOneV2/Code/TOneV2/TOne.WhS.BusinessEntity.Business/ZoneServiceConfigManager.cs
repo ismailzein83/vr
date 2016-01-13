@@ -13,14 +13,17 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class ZoneServiceConfigManager
     {
+       
+        #region ctor/Local Variables
+        #endregion
+
+        #region Public Methods
         public IDataRetrievalResult<ZoneServiceConfig> GetFilteredZoneServiceConfigs(DataRetrievalInput<ZoneServiceConfigQuery> input)
         {
             var allZoneServiceConfigs = GetCachedZoneServiceConfigs();
             Func<ZoneServiceConfig, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allZoneServiceConfigs.ToBigResult(input, filterExpression));
-
         }
-
         public Dictionary<Int16, ZoneServiceConfig> GetCachedZoneServiceConfigs()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetZoneServiceConfigs",
@@ -31,20 +34,6 @@ namespace TOne.WhS.BusinessEntity.Business
                    return rateTypes.ToDictionary(x => x.ServiceFlag, x => x);
                });
         }
-
-        private class CacheManager : BaseCacheManager
-        {
-            IZoneServiceConfigDataManager dataManager = BEDataManagerFactory.GetDataManager<IZoneServiceConfigDataManager>();
-
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return dataManager.AreZoneServiceConfigsUpdated(ref _updateHandle);
-            }
-        }
-
-
         public IEnumerable<ZoneServiceConfig> GetAllZoneServiceConfigs()
         {
             var allZoneServiceConfigs = GetCachedZoneServiceConfigs();
@@ -52,13 +41,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
             return allZoneServiceConfigs.Values;
         }
-
         public ZoneServiceConfig GetZoneServiceConfig(Int16 serviceFlag)
         {
             var allZoneServiceConfigs = GetCachedZoneServiceConfigs();
             return allZoneServiceConfigs.GetRecord(serviceFlag);
         }
-
         public TOne.Entities.InsertOperationOutput<ZoneServiceConfig> AddZoneServiceConfig(ZoneServiceConfig zoneServiceConfig)
         {
             TOne.Entities.InsertOperationOutput<ZoneServiceConfig> insertOperationOutput = new TOne.Entities.InsertOperationOutput<ZoneServiceConfig>();
@@ -104,6 +91,25 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return updateOperationOutput;
         }
+        #endregion
+
+        #region Private Methods
+        private class CacheManager : BaseCacheManager
+        {
+            IZoneServiceConfigDataManager dataManager = BEDataManagerFactory.GetDataManager<IZoneServiceConfigDataManager>();
+
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return dataManager.AreZoneServiceConfigsUpdated(ref _updateHandle);
+            }
+        }
+
+        #endregion
+
+        #region  Mappers
+        #endregion
 
     }
 }

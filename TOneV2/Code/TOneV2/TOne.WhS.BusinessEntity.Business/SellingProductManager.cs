@@ -10,6 +10,10 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SellingProductManager
     {
+        #region ctor/Local Variables
+        #endregion
+
+        #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<SellingProductDetail> GetFilteredSellingProducts(Vanrise.Entities.DataRetrievalInput<SellingProductQuery> input)
         {
             var allSellingProducts = GetCachedSellingProducts();
@@ -23,14 +27,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSellingProducts.ToBigResult(input, filterExpression, SellingProductDetailMapper));
         }
-
         public IEnumerable<SellingProductInfo> GetSellingProductsInfo(SellingProductInfoFilter filter)
         {
             IEnumerable<SellingProduct> sellingProducts = null;
 
             if (filter != null && filter.AssignableToSellingProductId != null)
             {
-                    sellingProducts = this.GetAssignableSellingProducts((int)filter.AssignableToSellingProductId);
+                sellingProducts = this.GetAssignableSellingProducts((int)filter.AssignableToSellingProductId);
             }
             else
             {
@@ -41,7 +44,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return sellingProducts.MapRecords(SellingProductInfoMapper);
         }
-
         public IEnumerable<SellingProduct> GetAssignableSellingProducts(int carrierAccountId)
         {
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
@@ -50,8 +52,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return cachedSellingProducts.Values.FindAllRecords(x => x.SellingNumberPlanId == carrierAccount.SellingNumberPlanId);
 
         }
-
-
         public IEnumerable<SellingProductInfo> GetAllSellingProduct()
         {
             var sellingProducts = GetCachedSellingProducts();
@@ -62,7 +62,6 @@ namespace TOne.WhS.BusinessEntity.Business
             var sellingProducts = GetCachedSellingProducts();
             return sellingProducts.GetRecord(sellingProductId);
         }
-
         public int? GetSellingNumberPlanId(int sellingProductId)
         {
             var sellingProduct = GetSellingProduct(sellingProductId);
@@ -71,8 +70,6 @@ namespace TOne.WhS.BusinessEntity.Business
             else
                 return sellingProduct.SellingNumberPlanId;
         }
-
-
         public TOne.Entities.InsertOperationOutput<SellingProductDetail> AddSellingProduct(SellingProduct sellingProduct)
         {
             TOne.Entities.InsertOperationOutput<SellingProductDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<SellingProductDetail>();
@@ -96,7 +93,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-
         public TOne.Entities.UpdateOperationOutput<SellingProductDetail> UpdateSellingProduct(SellingProduct sellingProduct)
         {
             ISellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();
@@ -116,7 +112,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return updateOperationOutput;
         }
-
         public TOne.Entities.DeleteOperationOutput<object> DeleteSellingProduct(int sellingProductId)
         {
             ISellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();
@@ -135,6 +130,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return deleteOperationOutput;
         }
 
+        #endregion
 
         #region Private Members
         Dictionary<int, SellingProduct> GetCachedSellingProducts()
@@ -157,6 +153,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 return _dataManager.AreSellingProductsUpdated(ref _updateHandle);
             }
         }
+     
+        #endregion
+     
+        #region  Mappers
         private SellingProductDetail SellingProductDetailMapper(SellingProduct sellingProduct)
         {
             SellingProductDetail sellingProductDetail = new SellingProductDetail();
@@ -179,7 +179,6 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return sellingProductDetail;
         }
-
         private SellingProductInfo SellingProductInfoMapper(SellingProduct sellingProduct)
         {
             return new SellingProductInfo()
@@ -188,7 +187,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 Name = sellingProduct.Name,
             };
         }
-
-        #endregion
+        #endregion      
     }
 }

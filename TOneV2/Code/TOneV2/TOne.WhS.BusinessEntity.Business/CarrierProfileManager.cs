@@ -12,7 +12,11 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class CarrierProfileManager
     {
+      
+        #region ctor/Local Variables
+        #endregion
 
+        #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<CarrierProfileDetail> GetFilteredCarrierProfiles(Vanrise.Entities.DataRetrievalInput<CarrierProfileQuery> input)
         {
             var allCarrierProfiles = GetCachedCarrierProfiles();
@@ -31,26 +35,21 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierProfiles.ToBigResult(input, filterExpression, CarrierProfileDetailMapper));
         }
-
-
         public CarrierProfile GetCarrierProfile(int carrierProfileId)
         {
             var carrierProfiles = GetCachedCarrierProfiles();
             return carrierProfiles.GetRecord(carrierProfileId);
         }
-
         public string GetCarrierProfileName(int carrierProfileId)
         {
             CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
             return carrierProfile != null ? carrierProfile.Name : null;
         }
-
         public IEnumerable<CarrierProfileInfo> GetCarrierProfilesInfo()
         {
             var carrierProfiles = GetCachedCarrierProfiles();
             return carrierProfiles.MapRecords(CarrierProfileInfoMapper);
         }
-
         public TOne.Entities.InsertOperationOutput<CarrierProfileDetail> AddCarrierProfile(CarrierProfile carrierProfile)
         {
             TOne.Entities.InsertOperationOutput<CarrierProfileDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CarrierProfileDetail>();
@@ -74,7 +73,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-
         public TOne.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfile carrierProfile)
         {
             ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
@@ -95,11 +93,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
-
+        #endregion
 
         #region Private Members
-
-        public Dictionary<int, CarrierProfile> GetCachedCarrierProfiles()
+        private Dictionary<int, CarrierProfile> GetCachedCarrierProfiles()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierProfiles",
                () =>
@@ -109,9 +106,6 @@ namespace TOne.WhS.BusinessEntity.Business
                    return carrierProfiles.ToDictionary(cn => cn.CarrierProfileId, cn => cn);
                });
         }
-
-
-
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ICarrierProfileDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
@@ -123,6 +117,9 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
+        #endregion
+     
+        #region  Mappers
         private CarrierProfileInfo CarrierProfileInfoMapper(CarrierProfile carrierProfile)
         {
             return new CarrierProfileInfo()
@@ -131,7 +128,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 Name = carrierProfile.Name,
             };
         }
-
         private CarrierProfileDetail CarrierProfileDetailMapper(CarrierProfile carrierProfile)
         {
             CarrierProfileDetail carrierProfileDetail = new CarrierProfileDetail();
@@ -146,7 +142,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return carrierProfileDetail;
         }
-
         #endregion
     }
 

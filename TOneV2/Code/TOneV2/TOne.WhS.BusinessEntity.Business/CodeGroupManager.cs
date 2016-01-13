@@ -20,7 +20,11 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class CodeGroupManager
     {
+        
+        #region ctor/Local Variables
+        #endregion
 
+        #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<CodeGroupDetail> GetFilteredCodeGroups(Vanrise.Entities.DataRetrievalInput<CodeGroupQuery> input)
         {
             var allCodeGroups = GetCachedCodeGroups();
@@ -28,23 +32,15 @@ namespace TOne.WhS.BusinessEntity.Business
             Func<CodeGroup, bool> filterExpression = (prod) =>
                  (input.Query.Code == null || prod.Code.ToLower().Contains(input.Query.Code.ToLower()))
                   &&
-                 (input.Query.CountriesIds == null || input.Query.CountriesIds.Count() == 0 || input.Query.CountriesIds.Contains(prod.CountryId)); 
+                 (input.Query.CountriesIds == null || input.Query.CountriesIds.Count() == 0 || input.Query.CountriesIds.Contains(prod.CountryId));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodeGroups.ToBigResult(input, filterExpression, CodeGroupDetailMapper));     
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodeGroups.ToBigResult(input, filterExpression, CodeGroupDetailMapper));
         }
-
         public CodeGroup GetMatchCodeGroup(string code)
         {
             CodeIterator<CodeGroup> codeIterator = GetCodeIterator();
             return codeIterator.GetLongestMatch(code);
         }
-
-        private CodeIterator<CodeGroup> GetCodeIterator()
-        {
-            var cachedCodeGroups = GetCachedCodeGroups();
-            return new CodeIterator<CodeGroup>(cachedCodeGroups.Values);
-        }
-
         public IEnumerable<CodeGroup> GetAllCodeGroups()
         {
             var allCodeGroups = GetCachedCodeGroups();
@@ -86,7 +82,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             ICodeGroupDataManager dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
 
-            bool updateActionSucc =  dataManager.Update(codeGroup);
+            bool updateActionSucc = dataManager.Update(codeGroup);
             TOne.Entities.UpdateOperationOutput<CodeGroupDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CodeGroupDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -96,7 +92,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject =  CodeGroupDetailMapper(codeGroup);
+                updateOperationOutput.UpdatedObject = CodeGroupDetailMapper(codeGroup);
             }
             else
             {
@@ -104,7 +100,6 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return updateOperationOutput;
         }
-
         public UploadCodeGroupLog UploadCodeGroupList(int fileId)
         {
             UploadCodeGroupLog uploadCodeGroupLog = new UploadCodeGroupLog();
@@ -209,12 +204,12 @@ namespace TOne.WhS.BusinessEntity.Business
             memoryStream = returnedExcel.SaveToStream();
 
             VRFile saveFile = new VRFile()
-                {
-                    Content = memoryStream.ToArray(),
-                    Name = "CodeGroupLog",
-                    CreatedTime = DateTime.Now,
-                    Extension = ".xlsx"
-                };
+            {
+                Content = memoryStream.ToArray(),
+                Name = "CodeGroupLog",
+                CreatedTime = DateTime.Now,
+                Extension = ".xlsx"
+            };
             VRFileManager manager = new VRFileManager();
             uploadCodeGroupLog.fileID = manager.AddFile(saveFile);
 
@@ -229,14 +224,15 @@ namespace TOne.WhS.BusinessEntity.Business
         public byte[] DownloadCodeGroupListTemplate()
         {
             string physicalFilePath = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["DownloadCodeGroupTemplatePath"]);
-           
+
             byte[] bytes = File.ReadAllBytes(physicalFilePath);
 
-            return bytes;  
+            return bytes;
         }
+        #endregion
+     
         #region Private Members
-
-        public Dictionary<int, CodeGroup> GetCachedCodeGroups()
+        private Dictionary<int, CodeGroup> GetCachedCodeGroups()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCodeGroups",
                () =>
@@ -246,7 +242,7 @@ namespace TOne.WhS.BusinessEntity.Business
                    return codegroups.ToDictionary(cg => cg.CodeGroupId, cg => cg);
                });
         }
-        public Dictionary<string, CodeGroup> GetCachedCodeGroupsByCode()
+        private Dictionary<string, CodeGroup> GetCachedCodeGroupsByCode()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCodeGroupsByCode",
                () =>
@@ -256,7 +252,6 @@ namespace TOne.WhS.BusinessEntity.Business
                    return codegroups.ToDictionary(cg => cg.Code, cg => cg);
                });
         }
-
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ICodeGroupDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
@@ -267,7 +262,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 return _dataManager.AreCodeGroupUpdated(ref _updateHandle);
             }
         }
-
+        private CodeIterator<CodeGroup> GetCodeIterator()
+        {
+            var cachedCodeGroups = GetCachedCodeGroups();
+            return new CodeIterator<CodeGroup>(cachedCodeGroups.Values);
+        }
+        #endregion
+      
+        #region  Mappers
         private CodeGroupDetail CodeGroupDetailMapper(CodeGroup codeGroup)
         {
             CodeGroupDetail codeGroupDetail = new CodeGroupDetail();

@@ -12,14 +12,17 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class CarrierAccountManager
     {
+     
+        #region ctor/Local Variables
         CarrierProfileManager _carrierProfileManager;
         SellingNumberPlanManager _sellingNumberPlanManager;
-
         public CarrierAccountManager()
         {
             _carrierProfileManager = new CarrierProfileManager();
             _sellingNumberPlanManager = new SellingNumberPlanManager();
         }
+        
+        #endregion
         
         #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<CarrierAccountDetail> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
@@ -248,15 +251,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 return _dataManager.AreCarrierAccountsUpdated(ref _updateHandle);
             }
-        }
-        private CarrierAccountInfo CarrierAccountInfoMapper(CarrierAccount carrierAccount)
-        {
-            return new CarrierAccountInfo()
-            {
-                CarrierAccountId = carrierAccount.CarrierAccountId,
-                Name = GetCarrierAccountName(_carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId), carrierAccount.NameSuffix),
-            };
-        }
+        }  
         private IEnumerable<CarrierAccount> GetCarrierAccountsByIds(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
             var carrierAccounts = this.GetCarrierAccountsByType(getCustomers, getSuppliers, null, null);
@@ -290,35 +285,22 @@ namespace TOne.WhS.BusinessEntity.Business
                 return true;
             };
             return carrierAccounts.FindAllRecords(filterExpression);
-        }
-        private CarrierAccountDetail CarrierAccountDetailMapper(CarrierAccount carrierAccount)
-        {
-            CarrierAccountDetail carrierAccountDetail = new CarrierAccountDetail();
-            carrierAccountDetail.Entity = carrierAccount;
-
-            var carrierProfiles = _carrierProfileManager.GetCachedCarrierProfiles();
-            var carrierProfile = carrierProfiles.FindRecord(itm => itm.Value.CarrierProfileId == carrierAccount.CarrierProfileId);
-            
-            if (carrierProfile.Value != null)
-            {
-                carrierAccountDetail.CarrierProfileName = carrierProfile.Value.Name;
-                carrierAccountDetail.CarrierAccountName = GetCarrierAccountName(carrierProfile.Value.Name, carrierAccountDetail.Entity.NameSuffix);
-            }
-            
-            carrierAccountDetail.AccountTypeDescription = carrierAccount.AccountType.ToString();
-            
-            if(carrierAccount.SellingNumberPlanId!=null)
-            {
-                var sellingNumberPlan = _sellingNumberPlanManager.GetSellingNumberPlan((int)carrierAccount.SellingNumberPlanId);
-                if (sellingNumberPlan != null)
-                    carrierAccountDetail.SellingNumberPlanName = sellingNumberPlan.Name;
-            }
-            
-            return carrierAccountDetail;
-        }
+        }   
         private static string GetCarrierAccountName(string profileName, string nameSuffix)
         {
             return string.Format("{0}{1}", profileName, string.IsNullOrEmpty(nameSuffix) ? string.Empty : " (" + nameSuffix + ")");
+        }
+
+        #endregion
+  
+        #region  Mappers
+        private CarrierAccountInfo CarrierAccountInfoMapper(CarrierAccount carrierAccount)
+        {
+            return new CarrierAccountInfo()
+            {
+                CarrierAccountId = carrierAccount.CarrierAccountId,
+                Name = GetCarrierAccountName(_carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId), carrierAccount.NameSuffix),
+            };
         }
         private RoutingCustomerInfo RoutingCustomerInfoMapper(CarrierAccount carrierAccount)
         {
@@ -348,7 +330,32 @@ namespace TOne.WhS.BusinessEntity.Business
                 IsSupplierAvailable = (carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange) && (assignedCarrierAccount == null || assignedCarrierAccount.RelationType != CarrierAccountType.Supplier),
             };
         }
+        private CarrierAccountDetail CarrierAccountDetailMapper(CarrierAccount carrierAccount)
+        {
+            CarrierAccountDetail carrierAccountDetail = new CarrierAccountDetail();
+            carrierAccountDetail.Entity = carrierAccount;
 
+            var carrierProfile = _carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
+
+            if (carrierProfile != null)
+            {
+                carrierAccountDetail.CarrierProfileName = carrierProfile.Name;
+                carrierAccountDetail.CarrierAccountName = GetCarrierAccountName(carrierProfile.Name, carrierAccountDetail.Entity.NameSuffix);
+            }
+
+            carrierAccountDetail.AccountTypeDescription = carrierAccount.AccountType.ToString();
+
+            if (carrierAccount.SellingNumberPlanId != null)
+            {
+                var sellingNumberPlan = _sellingNumberPlanManager.GetSellingNumberPlan((int)carrierAccount.SellingNumberPlanId);
+                if (sellingNumberPlan != null)
+                    carrierAccountDetail.SellingNumberPlanName = sellingNumberPlan.Name;
+            }
+
+            return carrierAccountDetail;
+        }
         #endregion
+
+
     }
 }

@@ -9,14 +9,19 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class CodeIterator<T> where T : ICode
     {
-        Dictionary<string, T> _codesByValue = new Dictionary<string,T>();
+      
+        #region ctor/Local Variables
+        Dictionary<string, T> _codesByValue = new Dictionary<string, T>();
         int _minLength = int.MaxValue;
         int _maxLength = 0;
+        #endregion
+
+        #region Public Methods
         public CodeIterator(IEnumerable<T> saleCodes)
         {
-            foreach(var code in saleCodes)
+            foreach (var code in saleCodes)
             {
-                if(!_codesByValue.ContainsKey(code.Code))
+                if (!_codesByValue.ContainsKey(code.Code))
                 {
                     int codeLength = code.Code.Length;
                     if (codeLength < _minLength)
@@ -27,12 +32,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
             }
         }
-
         public T GetLongestMatch(string phoneNumber)
         {
             if (phoneNumber == null)
                 return default(T);
-            
+
             string prefix = phoneNumber.Substring(0, Math.Min(_maxLength, phoneNumber.Length));
             while (prefix.Length >= _minLength)
             {
@@ -43,7 +47,6 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return default(T);
         }
-
         public T GetExactMatch(string phoneNumber)
         {
             if (phoneNumber == null)
@@ -53,5 +56,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 return matchCode;
             return default(T);
         }
+        #endregion
+
+        #region Private Methods
+        #endregion
+
+        #region  Mappers
+        #endregion
+     
+
     }
 }

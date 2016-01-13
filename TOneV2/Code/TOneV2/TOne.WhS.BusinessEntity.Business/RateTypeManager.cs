@@ -13,6 +13,11 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class RateTypeManager
     {
+   
+        #region ctor/Local Variables
+        #endregion
+
+        #region Public Methods
         public IDataRetrievalResult<RateType> GetFilteredRateTypes(DataRetrievalInput<RateTypeQuery> input)
         {
             var allRateTypes = GetCachedRateTypes();
@@ -20,7 +25,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRateTypes.ToBigResult(input, filterExpression));
 
         }
-
         public Dictionary<int, RateType> GetCachedRateTypes()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRateTypes",
@@ -31,20 +35,6 @@ namespace TOne.WhS.BusinessEntity.Business
                    return rateTypes.ToDictionary(x => x.RateTypeId, x => x);
                });
         }
-
-        private class CacheManager : BaseCacheManager
-        {
-            IRateTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IRateTypeDataManager>();
-
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return dataManager.AreRateTypesUpdated(ref _updateHandle);
-            }
-        }
-
-
         public IEnumerable<RateType> GetAllRateTypes()
         {
             var allRateTypes = GetCachedRateTypes();
@@ -52,13 +42,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
             return allRateTypes.Values;
         }
-
         public RateType GetRateType(int rateTypeId)
         {
             var allRateTypes = GetCachedRateTypes();
             return allRateTypes.GetRecord(rateTypeId);
         }
-
         public TOne.Entities.InsertOperationOutput<RateType> AddRateType(RateType rateType)
         {
             TOne.Entities.InsertOperationOutput<RateType> insertOperationOutput = new TOne.Entities.InsertOperationOutput<RateType>();
@@ -107,10 +95,26 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return updateOperationOutput;
         }
+    
+        #endregion
 
+        #region Private Methods
+        private class CacheManager : BaseCacheManager
+        {
+            IRateTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IRateTypeDataManager>();
 
+            object _updateHandle;
 
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return dataManager.AreRateTypesUpdated(ref _updateHandle);
+            }
+        }
 
+        #endregion
 
+        #region  Mappers
+        #endregion
+        
     }
 }
