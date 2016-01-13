@@ -11,17 +11,24 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class CustomerZoneDataManager : BaseTOneDataManager, ICustomerZoneDataManager
     {
+        #region ctor/Local Variables
         public CustomerZoneDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
 
+        #endregion
+
+        #region Public Methods
         public List<CustomerZones> GetAllCustomerZones()
         {
             return GetItemsSP("TOneWhS_BE.sp_CustomerZone_GetAll", CustomerZonesMapper);
         }
-
+        public bool AreAllCustomerZonesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("[TOneWhS_BE].[CustomerZone]", ref updateHandle);
+        }
         public bool AddCustomerZones(CustomerZones customerZones, out int insertedId)
         {
             object customerZonesId;
@@ -34,11 +41,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return (recordsAffected > 0);
         }
-
-        public bool AreAllCustomerZonesUpdated(ref object updateHandle)
-        {
-            return base.IsDataUpdated("[TOneWhS_BE].[CustomerZone]", ref updateHandle);
-        }
+        #endregion  
+      
+        #region Private Methods
+        #endregion
 
         #region Mappers
 

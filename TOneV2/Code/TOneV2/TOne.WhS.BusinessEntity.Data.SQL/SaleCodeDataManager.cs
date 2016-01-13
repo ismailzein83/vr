@@ -12,19 +12,27 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SaleCodeDataManager : BaseTOneDataManager, ISaleCodeDataManager
     {
-        Dictionary<string, string> _mapper;
+   
+        #region ctor/Local Variables
 
-        public SaleCodeDataManager()
-            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+        private static Dictionary<string, string> _mapper = new Dictionary<string, string>();
+        static SaleCodeDataManager()
         {
-            _mapper = new Dictionary<string, string>();
+             _mapper = new Dictionary<string, string>();
             _mapper.Add("Entity.SaleCodeId", "ID");
             _mapper.Add("ZoneName", "ZoneID");
             _mapper.Add("Entity.Code", "Code");
             _mapper.Add("Entity.BED", "BED");
             _mapper.Add("Entity.EED", "EED");
         }
+        public SaleCodeDataManager()
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+        {
+         
+        }
+        #endregion
 
+        #region Public Methods
         public Vanrise.Entities.BigResult<Entities.SaleCode> GetSaleCodeFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SaleCodeQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
@@ -44,11 +52,45 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetAll", SaleCodeMapper);
         }
-
         public List<SaleCode> GetSaleCodesByZoneID(long zoneID, DateTime effectiveDate)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByZoneId", SaleCodeMapper, zoneID, effectiveDate);
         }
+        public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetBySellingNumberPlan", SaleCodeMapper, sellingNumberPlanId, effectiveOn);
+        }
+        public List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByCodePrefix", SaleCodeMapper, codePrefix, effectiveOn, isFuture, getChildCodes, getParentCodes);
+        }
+        public IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetDistinctCodePrefixes", CodePrefixMapper, prefixLength, effectiveOn, isFuture);
+        }
+        public bool AreZonesUpdated(ref object lastReceivedDataInfo)
+        {
+            return IsDataUpdated("TOneWhS_BE.SaleCode", ref lastReceivedDataInfo);
+        }
+        public List<SaleCode> GetSaleCodesByZoneName(int sellingNumberPlanId, string zoneName, DateTime effectiveDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByZoneName", SaleCodeMapper, sellingNumberPlanId, zoneName, effectiveDate);
+        }
+        public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByDate", SaleCodeMapper, sellingNumberPlanId, countryId, minimumDate);
+        }
+        public List<SaleCode> GetSaleCodesByCountry(int countryId, DateTime effectiveDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByCountry", SaleCodeMapper, countryId, effectiveDate);
+        }
+        #endregion
+
+        #region Private Methods
+
+        #endregion
+
+        #region Mappers
         SaleCode SaleCodeMapper(IDataReader reader)
         {
             SaleCode saleCode = new SaleCode
@@ -61,47 +103,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             };
             return saleCode;
         }
-
         string CodePrefixMapper(IDataReader reader)
         {
             return reader["CodePrefix"].ToString();
         }
-
-        public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn)
-        {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetBySellingNumberPlan", SaleCodeMapper, sellingNumberPlanId, effectiveOn);
-        }
-
-        public List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes)
-        {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByCodePrefix", SaleCodeMapper, codePrefix, effectiveOn, isFuture, getChildCodes, getParentCodes);
-        }
-
-        public IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
-        {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetDistinctCodePrefixes", CodePrefixMapper, prefixLength, effectiveOn, isFuture);
-        }
-        public bool AreZonesUpdated(ref object lastReceivedDataInfo)
-        {
-            return IsDataUpdated("TOneWhS_BE.SaleCode", ref lastReceivedDataInfo);
-        }
-
-
-        public List<SaleCode> GetSaleCodesByZoneName(int sellingNumberPlanId, string zoneName, DateTime effectiveDate)
-        {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByZoneName", SaleCodeMapper, sellingNumberPlanId, zoneName, effectiveDate);
-        }
-
-
-        public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)
-        {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByDate", SaleCodeMapper, sellingNumberPlanId, countryId, minimumDate);
-        }
-
-
-        public List<SaleCode> GetSaleCodesByCountry(int countryId, DateTime effectiveDate)
-        {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByCountry", SaleCodeMapper, countryId, effectiveDate);
-        }
+        #endregion
+           
     }
 }

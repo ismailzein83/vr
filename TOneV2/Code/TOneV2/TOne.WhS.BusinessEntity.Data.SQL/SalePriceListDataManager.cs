@@ -11,12 +11,32 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SalePriceListDataManager : BaseSQLDataManager, ISalePriceListDataManager
     {
+
+        #region ctor/Local Variables
         public SalePriceListDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
-       SalePriceList SalePriceListMapper(IDataReader reader)
+        #endregion
+
+        #region Public Methods
+        public List<Entities.SalePriceList> GetPriceLists()
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SalePriceList_GetAll", SalePriceListMapper);
+        }
+
+        public bool ArGetSalePriceListsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.SalePriceList", ref updateHandle);
+        }
+        #endregion
+
+        #region Private Methods
+        #endregion
+  
+        #region Mappers
+        SalePriceList SalePriceListMapper(IDataReader reader)
         {
             SalePriceList salePriceList = new SalePriceList
             {
@@ -28,15 +48,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return salePriceList;
         }
 
-
-        public List<Entities.SalePriceList> GetPriceLists()
-        {
-            return GetItemsSP("TOneWhS_BE.sp_SalePriceList_GetAll", SalePriceListMapper);
-        }
-
-        public bool ArGetSalePriceListsUpdated(ref object updateHandle)
-        {
-            return base.IsDataUpdated("TOneWhS_BE.SalePriceList", ref updateHandle);
-        }
+        #endregion
+  
     }
 }

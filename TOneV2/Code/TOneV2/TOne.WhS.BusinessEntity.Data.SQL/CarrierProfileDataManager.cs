@@ -11,21 +11,16 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class CarrierProfileDataManager : BaseSQLDataManager, ICarrierProfileDataManager
     {
+   
+        #region ctor/Local Variables
         public CarrierProfileDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
-        private CarrierProfile CarrierProfileMapper(IDataReader reader)
-        {
-            CarrierProfile carrierProfile = new CarrierProfile
-            {
-                CarrierProfileId = (int)reader["ID"],
-                Name = reader["Name"] as string,
-                Settings = Vanrise.Common.Serializer.Deserialize<CarrierProfileSettings>(reader["Settings"] as string)
-            };
-            return carrierProfile;
-        }
+        #endregion
+
+        #region Public Methods
         public bool Insert(CarrierProfile carrierProfile, out int insertedId)
         {
             object carrierProfileId;
@@ -43,16 +38,33 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierProfile_Update", carrierProfile.CarrierProfileId, carrierProfile.Name, Vanrise.Common.Serializer.Serialize(carrierProfile.Settings));
             return (recordsEffected > 0);
         }
-
         public bool AreCarrierProfilesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.CarrierProfile", ref updateHandle);
         }
-
-
         public List<CarrierProfile> GetCarrierProfiles()
         {
             return GetItemsSP("TOneWhS_BE.sp_CarrierProfile_GetAll", CarrierProfileMapper);
         }
+        #endregion
+
+        #region Private Methods
+
+        #endregion
+
+        #region  Mappers
+        private CarrierProfile CarrierProfileMapper(IDataReader reader)
+        {
+            CarrierProfile carrierProfile = new CarrierProfile
+            {
+                CarrierProfileId = (int)reader["ID"],
+                Name = reader["Name"] as string,
+                Settings = Vanrise.Common.Serializer.Deserialize<CarrierProfileSettings>(reader["Settings"] as string)
+            };
+            return carrierProfile;
+        }
+
+        #endregion
+      
     }
 }

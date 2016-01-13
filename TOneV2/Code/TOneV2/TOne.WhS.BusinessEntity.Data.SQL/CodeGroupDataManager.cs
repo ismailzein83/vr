@@ -53,18 +53,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
        
         #region Private Methods
-        private CodeGroup CodeGroupMapper(IDataReader reader)
-        {
-            CodeGroup codeGroup = new CodeGroup
-            {
-                CodeGroupId = (int)reader["ID"],
-                Code = reader["Code"] as string,
-                CountryId = (int)reader["CountryID"]
-
-            };
-
-            return codeGroup;
-        }
+      
         private object InitialiazeStreamForDBApply()
         {
             return base.InitializeStreamForBulkInsert();
@@ -96,6 +85,20 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             };
         }
         #endregion
+     
+        #region  Mappers
+        private CodeGroup CodeGroupMapper(IDataReader reader)
+        {
+            CodeGroup codeGroup = new CodeGroup
+            {
+                CodeGroupId = (int)reader["ID"],
+                Code = reader["Code"] as string,
+                CountryId = (int)reader["CountryID"]
 
+            };
+
+            return codeGroup;
+        }
+        #endregion
     }
 }

@@ -12,20 +12,20 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class CustomerSellingProductDataManager : BaseSQLDataManager, ICustomerSellingProductDataManager
     {
-
+    
+        #region ctor/Local Variables
         public CustomerSellingProductDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
+        #endregion
 
-
-
+        #region Public Methods
         public CustomerSellingProduct GetCustomerSellingProduct(int customerSellingProductId)
         {
             return GetItemSP("TOneWhS_BE.sp_CustomerSellingProduct_Get", CustomerSellingProductDetailMapper, customerSellingProductId);
         }
-
         public bool Insert(List<CustomerSellingProduct> customerSellingProduct, out List<CustomerSellingProduct> insertedObjects)
         {
             DataTable table = BuildUpdatedCarriersTable(customerSellingProduct);
@@ -39,6 +39,22 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             });
             return true;
         }
+        public bool AreCustomerSellingProductsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.CustomerSellingProduct", ref updateHandle);
+        }
+        public bool Update(CustomerSellingProduct customerSellingProduct)
+        {
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerSellingProduct_Update", customerSellingProduct.CustomerSellingProductId, customerSellingProduct.SellingProductId, customerSellingProduct.BED);
+            return (recordsEffected > 0);
+        }
+        public List<CustomerSellingProduct> GetCustomerSellingProducts()
+        {
+            return GetItemsSP("TOneWhS_BE.sp_CustomerSellingProduct_GetAll", CustomerSellingProductDetailMapper);
+        }
+        #endregion
+
+        #region Private Methods
         private DataTable BuildUpdatedCarriersTable(List<CustomerSellingProduct> customerSellingProducts)
         {
             DataTable table = new DataTable();
@@ -64,11 +80,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return table;
         }
-        //public bool Delete(int customerSellingProductId)
-        //{
-        //    int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerSellingProduct_Delete", customerSellingProductId,DateTime.Now);
-        //    return (recordesEffected > 0);
-        //}
+
+        #endregion
+
+        #region  Mappers
         CustomerSellingProduct CustomerSellingProductDetailMapper(IDataReader reader)
         {
             CustomerSellingProduct customerSellingProductDetail = new CustomerSellingProduct
@@ -82,22 +97,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return customerSellingProductDetail;
         }
 
-        public bool AreCustomerSellingProductsUpdated(ref object updateHandle)
-        {
-            return base.IsDataUpdated("TOneWhS_BE.CustomerSellingProduct", ref updateHandle);
-        }
+        #endregion
 
-        public List<CustomerSellingProduct> GetCustomerSellingProducts()
-        {
-            return GetItemsSP("TOneWhS_BE.sp_CustomerSellingProduct_GetAll", CustomerSellingProductDetailMapper);
-        }
-
-
-
-        public bool Update(CustomerSellingProduct customerSellingProduct)
-        {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerSellingProduct_Update", customerSellingProduct.CustomerSellingProductId,customerSellingProduct.SellingProductId, customerSellingProduct.BED);
-            return (recordsEffected > 0);
-        }
     }
 }

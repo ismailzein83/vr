@@ -11,10 +11,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class RateTypeDataManager : BaseSQLDataManager, IRateTypeDataManager
     {
+    
+        #region ctor/Local Variables
         public RateTypeDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         { }
 
+        #endregion
+
+        #region Public Methods
         public List<Entities.RateType> GetRateTypes()
         {
             return GetItemsSP("[TOneWhS_BE].[sp_RateType_GetAll]", RateTypeMapper);
@@ -38,6 +43,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return base.IsDataUpdated("TOneWhS_BE.RateType", ref updateHandle);
         }
+        #endregion
+
+        #region Private Methods
+        #endregion
 
         # region Mappers
 
@@ -50,8 +59,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
         #endregion
-
-
 
     }
 }

@@ -12,33 +12,53 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SaleZoneDataManager : BaseTOneDataManager, ISaleZoneDataManager
     {
+
+        #region ctor/Local Variables
         public SaleZoneDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
+        #endregion
 
+        #region Public Methods
         public IEnumerable<SaleZone> GetAllSaleZones()
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetAll", SaleZoneMapper);
         }
-
         public List<SaleZone> GetSaleZones(int sellingNumberPlanId)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByNumberPlan", SaleZoneMapper, sellingNumberPlanId);
         }
-
-
-
         public List<SaleZoneInfo> GetSaleZonesInfo(int sellingNumberPlanId, string filter)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleZoneInfo_GetFiltered", SaleZoneInfoMapper, sellingNumberPlanId, filter);
         }
-
         public bool AreZonesUpdated(ref object lastReceivedDataInfo)
         {
             return IsDataUpdated("TOneWhS_BE.SaleZone", ref lastReceivedDataInfo);
         }
+        public IEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            List<long> saleZoneIds = new List<long>();
+            ExecuteReaderSP("[TOneWhS_BE].[sp_SaleZone_GetIds]", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    long saleZoneId = GetReaderValue<Int64>(reader, "Id");
+                    saleZoneIds.Add(saleZoneId);
+                }
+            }, effectiveOn, isEffectiveInFuture);
+            return saleZoneIds;
+        }
+        public List<SaleZone> GetSaleZonesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByDate", SaleZoneMapper, sellingNumberPlanId, countryId, minimumDate);
+        }
+        #endregion
+
+        #region Private Methods
+        #endregion
 
         #region Mappers
 
@@ -66,26 +86,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return saleZoneInfo;
         }
         #endregion
-
-
-        public IEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
-        {
-            List<long> saleZoneIds = new List<long>();
-            ExecuteReaderSP("[TOneWhS_BE].[sp_SaleZone_GetIds]", (reader) =>
-            {
-                while (reader.Read())
-                {
-                    long saleZoneId = GetReaderValue<Int64>(reader, "Id");
-                    saleZoneIds.Add(saleZoneId);
-                }
-            }, effectiveOn, isEffectiveInFuture);
-            return saleZoneIds;
-        }
-
-
-        public List<SaleZone> GetSaleZonesEffectiveAfter(int sellingNumberPlanId,int countryId, DateTime minimumDate)
-        {
-            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByDate", SaleZoneMapper, sellingNumberPlanId,countryId, minimumDate);
-        }
+  
     }
 }

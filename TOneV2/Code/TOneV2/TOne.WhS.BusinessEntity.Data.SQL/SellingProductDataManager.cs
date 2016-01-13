@@ -11,13 +11,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SellingProductDataManager : BaseSQLDataManager, ISellingProductDataManager
     {
-     
+
+        #region ctor/Local Variables
         public SellingProductDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
 
+        #endregion
+
+        #region Public Methods
         public bool Insert(SellingProduct sellingProduct, out int insertedId)
         {
             object sellingProductId;
@@ -28,20 +32,31 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             insertedId = (int)sellingProductId;
             return (recordsEffected > 0);
         }
-
         public bool Update(SellingProduct sellingProduct)
         {
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Update", sellingProduct.SellingProductId, sellingProduct.Name, sellingProduct.DefaultRoutingProductId, sellingProduct.SellingNumberPlanId,
                 Vanrise.Common.Serializer.Serialize(sellingProduct.Settings));
             return (recordsEffected > 0);
         }
-
         public bool Delete(int sellingProductId)
         {
             int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Delete", sellingProductId);
             return (recordesEffected > 0);
         }
+        public bool AreSellingProductsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.SellingProduct", ref updateHandle);
+        }
+        public List<SellingProduct> GetSellingProducts()
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SellingProduct_GetAll", SellingProductMapper);
+        }
+        #endregion
 
+        #region Private Methods
+        #endregion
+
+        #region Mappers
         SellingProduct SellingProductMapper(IDataReader reader)
         {
             SellingProduct sellingProductDetail = new SellingProduct
@@ -54,18 +69,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             };
             return sellingProductDetail;
         }
-
-
-        public bool AreSellingProductsUpdated(ref object updateHandle)
-        {
-            return base.IsDataUpdated("TOneWhS_BE.SellingProduct", ref updateHandle);
-        }
-
-
-        public List<SellingProduct> GetSellingProducts()
-        {
-            return GetItemsSP("TOneWhS_BE.sp_SellingProduct_GetAll", SellingProductMapper);
-        }
-
+        #endregion
+       
     }
 }

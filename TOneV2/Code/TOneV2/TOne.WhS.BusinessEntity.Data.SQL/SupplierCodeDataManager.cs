@@ -14,49 +14,31 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SupplierCodeDataManager : BaseTOneDataManager, ISupplierCodeDataManager
     {
-
+    
+        #region ctor/Local Variables
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
 
         public SupplierCodeDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
-          
-        }
 
+        }
         static SupplierCodeDataManager()
         {
             _columnMapper.Add("SupplierCodeId", "ID");
             _columnMapper.Add("SupplierZoneName", "ZoneID");
         }
+        #endregion
 
+        #region Public Methods
         public List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetByDate", SupplierCodeMapper, supplierId,minimumDate);
+            return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetByDate", SupplierCodeMapper, supplierId, minimumDate);
         }
-        SupplierCode SupplierCodeMapper(IDataReader reader)
-        {
-            SupplierCode supplierCode = new SupplierCode
-            {
-                Code = GetReaderValue<string>(reader, "Code"),
-                SupplierCodeId = GetReaderValue<long>(reader, "ID"),
-                ZoneId = (long)reader["ZoneID"],
-                BED = GetReaderValue<DateTime>(reader, "BED"),
-                EED = GetReaderValue<DateTime?>(reader, "EED"),
-                
-            };
-            return supplierCode;
-        }
-
-        string CodePrefixMapper(IDataReader reader)
-        {
-            return reader["CodePrefix"].ToString();
-        }
-
         public List<SupplierCode> GetSupplierCodes(int supplierId, DateTime effectiveOn)
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetBySupplier", SupplierCodeMapper, supplierId, effectiveOn);
         }
-
         public List<SupplierCode> GetActiveSupplierCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes, IEnumerable<RoutingSupplierInfo> supplierInfo)
         {
             DataTable dtActiveSuppliers = CarrierAccountDataManager.BuildRoutingSupplierInfoTable(supplierInfo);
@@ -73,12 +55,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@GetParentCodes", getParentCodes));
             });
         }
-
         public IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetDistinctCodePrefixes", CodePrefixMapper, prefixLength, effectiveOn, isFuture);
         }
-
         public Vanrise.Entities.BigResult<SupplierCode> GetFilteredSupplierCodes(Vanrise.Entities.DataRetrievalInput<SupplierCodeQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
@@ -95,8 +75,31 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return RetrieveData(input, createTempTableAction, SupplierCodeMapper, _columnMapper);
         }
+        #endregion
 
+        #region Private Methods
+        #endregion
 
+        #region Mappers
+        SupplierCode SupplierCodeMapper(IDataReader reader)
+        {
+            SupplierCode supplierCode = new SupplierCode
+            {
+                Code = GetReaderValue<string>(reader, "Code"),
+                SupplierCodeId = GetReaderValue<long>(reader, "ID"),
+                ZoneId = (long)reader["ZoneID"],
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+
+            };
+            return supplierCode;
+        }
+        string CodePrefixMapper(IDataReader reader)
+        {
+            return reader["CodePrefix"].ToString();
+        }
+
+        #endregion
 
     }
 }

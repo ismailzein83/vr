@@ -13,12 +13,16 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SaleEntityRoutingProductDataManager : BaseTOneDataManager, ISaleEntityRoutingProductDataManager
     {
+
+        #region ctor/Local Variables
         public SaleEntityRoutingProductDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
+        #endregion
 
+        #region Public Methods
         public IEnumerable<DefaultRoutingProduct> GetDefaultRoutingProducts(IEnumerable<Entities.RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             DataTable dtActiveCustomers = CarrierAccountDataManager.BuildRoutingCustomerInfoTable(customerInfos);
@@ -33,12 +37,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@IsDefault", true));
             });
         }
-
         public IEnumerable<DefaultRoutingProduct> GetEffectiveDefaultRoutingProducts(DateTime effectiveOn)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetEffectiveDefaults", DefaultRoutingProductMapper, effectiveOn);
         }
-
         public IEnumerable<SaleZoneRoutingProduct> GetSaleZoneRoutingProducts(IEnumerable<Entities.RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             DataTable dtActiveCustomers = CarrierAccountDataManager.BuildRoutingCustomerInfoTable(customerInfos);
@@ -55,18 +57,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             });
         }
-
         public IEnumerable<SaleZoneRoutingProduct> GetEffectiveZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetEffectiveZoneRoutingProducts", SaleZoneRoutingProductMapper, ownerType, ownerId, effectiveOn);
         }
-
         public bool InsertDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, NewDefaultRoutingProduct newDefaultRoutingProduct)
         {
             int affectedRows = ExecuteNonQuerySP("TOneWhS_BE.sp_SaleEntityRoutingProduct_InsertOrUpdateDefault", ownerType, ownerId, newDefaultRoutingProduct.DefaultRoutingProductId, newDefaultRoutingProduct.BED, newDefaultRoutingProduct.EED);
             return affectedRows > 0;
         }
-
         public bool UpdateDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, DefaultRoutingProductChange defaultRoutingProductChange)
         {
             int affectedRows = ExecuteNonQuerySP("TOneWhS_BE.sp_SaleEntityRoutingProduct_UpdateDefault", ownerType, ownerId, defaultRoutingProductChange.EED);
@@ -121,7 +120,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return table;
         }
-        
+
         #endregion
 
         #region Update Zone Routing Products
@@ -170,14 +169,19 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return table;
         }
-        
+
         #endregion
-        
+
         public bool AreSaleEntityRoutingProductUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SaleEntityRoutingProduct", ref updateHandle);
         }
 
+        #endregion
+
+        #region Private Methods
+        #endregion
+     
         #region Mappers
 
         private DefaultRoutingProduct DefaultRoutingProductMapper(IDataReader reader)

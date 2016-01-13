@@ -11,18 +11,22 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SellingNumberPlanDataManager : BaseTOneDataManager, ISellingNumberPlanDataManager
     {
+       
+        #region ctor/Local Variables
         public SellingNumberPlanDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
 
+        #endregion
+
+        #region Public Methods
         public bool Update(Entities.SellingNumberPlan sellingNumberPlan)
         {
             int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SellingNumberPlan_Update]", sellingNumberPlan.SellingNumberPlanId, sellingNumberPlan.Name);
             return (recordsEffected > 0);
         }
-
         public bool Insert(Entities.SellingNumberPlan sellingNumberPlan, out int insertedId)
         {
             object sellingNumberPlanId;
@@ -30,13 +34,22 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             insertedId = (int)sellingNumberPlanId;
             return (recordsEffected > 0);
         }
-
         public List<SellingNumberPlan> GetSellingNumberPlans()
         {
             return GetItemsSP("TOneWhS_BE.sp_SellingNumberPlan_GetAll", SellingNumberPlanMapper);
-           
-        }
 
+        }
+        public bool AreSellingNumberPlansUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.SellingNumberPlan", ref updateHandle);
+        }
+        #endregion
+
+        #region Private Methods
+
+        #endregion
+
+        #region Mappers
         SellingNumberPlan SellingNumberPlanMapper(IDataReader reader)
         {
             SellingNumberPlan sellingNumberPlan = new SellingNumberPlan
@@ -46,11 +59,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             };
             return sellingNumberPlan;
         }
-
-
-        public bool AreSellingNumberPlansUpdated(ref object updateHandle)
-        {
-            return base.IsDataUpdated("TOneWhS_BE.SellingNumberPlan", ref updateHandle);
-        }
+        #endregion
+     
     }
 }

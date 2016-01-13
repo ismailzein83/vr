@@ -13,7 +13,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SupplierRateDataManager : BaseSQLDataManager, ISupplierRateDataManager
     {
-
+     
+        #region ctor/Local Variables
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
         public SupplierRateDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
@@ -27,7 +28,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             _columnMapper.Add("SupplierZoneName", "ZoneID");
             _columnMapper.Add("SupplierRateId", "ID");
         }
+        #endregion
 
+        #region Public Methods
         public List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate)
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetByDate", SupplierRateMapper, supplierId, minimumDate);
@@ -58,25 +61,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetAll", SupplierRateMapper, effectiveOn, isEffectiveInFuture);
         }
-        SupplierRate SupplierRateMapper(IDataReader reader)
-        {
-            SupplierRate supplierRate = new SupplierRate
-            {
-                NormalRate = GetReaderValue<decimal>(reader, "NormalRate"),
-                OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null,
-                SupplierRateId = (long)reader["ID"],
-                ZoneId = (long)reader["ZoneID"],
-                PriceListId = GetReaderValue<int>(reader, "PriceListID"),
-                BED = GetReaderValue<DateTime>(reader, "BED"),
-                EED = GetReaderValue<DateTime?>(reader, "EED"),
-                CurrencyId = GetReaderValue<int?>(reader, "CurrencyId")
-            };
-            return supplierRate;
-        }
-
-       
-
-
         public BigResult<SupplierRate> GetFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
@@ -94,9 +78,29 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return RetrieveData(input, createTempTableAction, SupplierRateMapper, _columnMapper);
         }
+        #endregion
 
-        
+        #region Private Methods
+        #endregion
 
+        #region Mappers
+        SupplierRate SupplierRateMapper(IDataReader reader)
+        {
+            SupplierRate supplierRate = new SupplierRate
+            {
+                NormalRate = GetReaderValue<decimal>(reader, "NormalRate"),
+                OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null,
+                SupplierRateId = (long)reader["ID"],
+                ZoneId = (long)reader["ZoneID"],
+                PriceListId = GetReaderValue<int>(reader, "PriceListID"),
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+                CurrencyId = GetReaderValue<int?>(reader, "CurrencyId")
+            };
+            return supplierRate;
+        }
 
+        #endregion
+    
     }
 }
