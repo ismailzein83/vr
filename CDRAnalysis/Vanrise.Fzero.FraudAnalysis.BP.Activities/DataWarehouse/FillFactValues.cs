@@ -85,23 +85,25 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             base.OnBeforeExecute(context, handle);
         }
 
-        private static void CheckIfTimeAddedorAdd(DWTimeDictionary dwTimeDictionary, List<DWTime> ToBeInsertedTimes, DateTime? givenTime)
+        private static void CheckIfTimeAddedorAdd(DWTimeDictionary dwTimeDictionary, List<DWTime> ToBeInsertedTimes, DateTime givenTime)
         {
-            if (!dwTimeDictionary.ContainsKey(givenTime.Value))
+            DWTime dwTime ;
+            DateTime dateInstance = new DateTime(givenTime.Year, givenTime.Month, givenTime.Day, givenTime.Hour, givenTime.Minute,0);
+
+            if (!dwTimeDictionary.TryGetValue(dateInstance, out dwTime))
             {
-                DateTime connectDateTime = givenTime.Value;
-                DWTime dwTime = new DWTime()
+                dwTime = new DWTime()
                 {
-                    DateInstance = new DateTime(connectDateTime.Year, connectDateTime.Month, connectDateTime.Day, connectDateTime.Hour, connectDateTime.Minute, connectDateTime.Second, connectDateTime.Kind),
-                    Day = connectDateTime.Day,
-                    Hour = connectDateTime.Hour,
-                    Month = connectDateTime.Month,
-                    Week = GetWeekOfMonth(connectDateTime),
-                    Year = connectDateTime.Year,
-                    MonthName = connectDateTime.ToString("MMMM"),
-                    DayName = connectDateTime.ToString("dddd")
+                    DateInstance = dateInstance,
+                    Day = givenTime.Day,
+                    Hour = givenTime.Hour,
+                    Month = givenTime.Month,
+                    Week = GetWeekOfMonth(givenTime),
+                    Year = givenTime.Year,
+                    MonthName = givenTime.ToString("MMMM"),
+                    DayName = givenTime.ToString("dddd")
                 };
-                dwTimeDictionary.Add(dwTime.DateInstance, dwTime);
+                dwTimeDictionary.Add(dateInstance, dwTime);
                 ToBeInsertedTimes.Add(dwTime);
             }
         }
@@ -123,7 +125,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             if (dwFactBatch.Count >= batchSize || IsLastBatch)
             {
-                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Data warehouse CDRs Sent", dwFactBatch);
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Data warehouse CDRs Sent", dwFactBatch.Count());
                 inputArgument.OutputQueue.Enqueue(new DWFactBatch()
                 {
                     DWFacts = dwFactBatch
@@ -156,7 +158,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             StrategyManager strategyManager = new StrategyManager();
             IEnumerable<Strategy> strategies = strategyManager.GetAll();
 
-            int LastBTSId = inputArgument.BTSs.Count;
+            int LastBTSId = 0;
+            if (inputArgument.BTSs.Count() > 0)
+                LastBTSId = inputArgument.BTSs.Last().Key;
+
+
             List<DWDimension> ToBeInsertedBTSs = new List<DWDimension>();
             List<DWTime> ToBeInsertedTimes = new List<DWTime>();
 

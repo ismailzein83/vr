@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
             List<int> StrategyIds = new List<int>();
-            StrategyIds.Add(18);
+            StrategyIds.Add(3);
             BPClient bpClient = new BPClient();
             var input = new CreateProcessInput
             {
