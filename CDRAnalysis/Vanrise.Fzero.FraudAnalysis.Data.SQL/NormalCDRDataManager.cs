@@ -80,8 +80,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             normalCDR.DurationInSeconds = GetReaderValue<decimal>(reader, "DurationInSeconds");
             normalCDR.DisconnectDateTime = GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
             normalCDR.CallClassId = GetReaderValue<int?>(reader, "CallClassID");
-            normalCDR.IsOnNet = GetReaderValue<bool?>(reader, "IsOnNet");
-            normalCDR.SubscriberType = GetReaderValue<SubscriberType?>(reader, "SubscriberTypeID");
+            normalCDR.IsOnNet = GetReaderValue<bool>(reader, "IsOnNet");
+            normalCDR.SubscriberType = (SubscriberType)GetReaderValue<int?>(reader, "SubscriberTypeID");
             normalCDR.IMEI = reader["IMEI"] as string;
             normalCDR.Cell = reader["Cell"] as string;
             normalCDR.UpVolume = GetReaderValue<Decimal?>(reader, "UpVolume");
