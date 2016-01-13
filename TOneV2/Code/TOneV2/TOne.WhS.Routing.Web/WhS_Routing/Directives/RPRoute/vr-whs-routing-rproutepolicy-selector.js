@@ -88,6 +88,7 @@ app.directive('vrWhsRoutingRproutepolicySelector', ['WhS_Routing_RPRouteAPIServi
                             fillPolicies(payload);
                         });
                     }
+                   
                 }
 
                 api.getSelectedIds = function () {
@@ -113,6 +114,7 @@ app.directive('vrWhsRoutingRproutepolicySelector', ['WhS_Routing_RPRouteAPIServi
             }
 
             function fillPolicies(payload) {
+             
                 if (payload != undefined) {
                     angular.forEach(payload.filteredIds, function (filteredId) {
                         var policy = UtilsService.getItemByVal(policies, filteredId, 'TemplateConfigID');
@@ -123,8 +125,10 @@ app.directive('vrWhsRoutingRproutepolicySelector', ['WhS_Routing_RPRouteAPIServi
                             ctrl.datasource.push(policy);
                         }
                     });
+
                     if (payload.selectedId != undefined)
                         VRUIUtilsService.setSelectedValues(payload.selectedId, 'TemplateConfigID', $attrs, ctrl);
+
                 }
                 else {
                     angular.forEach(policies, function (itm) {

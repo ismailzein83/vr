@@ -8,18 +8,18 @@
                 </vr-columns>
             </vr-row>
 
-            <vr-row >
+            <vr-row>
 
                 <vr-columns width="fullrow" vr-loader="isloadingselector">
-                        <vr-validator validate="isValid()">
-                            <vr-datagrid datasource="carriers"
-                                         on-ready="onGridReady"  hidegridmenu>
-                                <vr-datagridcolumn headertext="'Name'" field="'CarrierName'" widthfactor="5"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Is Customer'" widthfactor="5"><vr-switch value="dataItem.newCustomerSwitchValue" vr-disabled="dataItem.IsCustomerInDirect" ng-show="dataItem.IsCustomerAvailable" class="green"></vr-switch></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Is Supplier'" widthfactor="5"><vr-switch value="dataItem.newSupplierSwitchValue" vr-disabled="dataItem.IsSupplierInDirect" ng-show="dataItem.IsSupplierAvailable" class="green"></vr-switch></vr-datagridcolumn>
-                            </vr-datagrid>
-                        </vr-validator>
-</vr-columns>
+                    <vr-validator validate="isValid()">
+                        <vr-datagrid datasource="carriers"
+                                     on-ready="onGridReady" hidegridmenu>
+                            <vr-datagridcolumn headertext="'Name'" field="'CarrierName'" widthfactor="5" disablesorting></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Is Customer'" widthfactor="5" disablesorting><vr-switch value="dataItem.newCustomerSwitchValue" vr-disabled="dataItem.IsCustomerInDirect" ng-show="dataItem.IsCustomerAvailable" class="green"></vr-switch></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Is Supplier'" widthfactor="5" disablesorting><vr-switch value="dataItem.newSupplierSwitchValue" vr-disabled="dataItem.IsSupplierInDirect" ng-show="dataItem.IsSupplierAvailable" class="green"></vr-switch></vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
+                </vr-columns>
 
             </vr-row>
         </vr-form>
@@ -28,7 +28,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save"  data-onclick="assignCarriers" validationcontext="assignCarriersValidation"></vr-button>
+                <vr-button type="Save" data-onclick="assignCarriers" validationcontext="assignCarriersValidation"></vr-button>
                 <vr-button type="Close" data-onclick="closeModal"></vr-button>
             </div>
         </vr-actionbar>

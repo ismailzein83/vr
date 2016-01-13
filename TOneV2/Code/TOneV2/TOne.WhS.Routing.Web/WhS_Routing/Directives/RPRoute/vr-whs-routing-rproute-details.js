@@ -31,6 +31,7 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
 
         function rpRouteDetailsCtor(ctrl, $scope) {
             var gridAPI;
+            var gridReadyDeferred = UtilsService.createPromiseDeferred();
             var rpRouteDetail;
             var routingDatabaseId;
             var policies;
@@ -39,6 +40,7 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
             var rpRoutePolicyReadyPromiseDeffered = UtilsService.createPromiseDeferred();
 
             function initializeController() {
+                $scope.selectedPolicy;
                 ctrl.rpRouteOptions = [];
 
                 $scope.onRPRoutePolicySelectorReady = function (api) {
@@ -48,6 +50,7 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
+                    gridReadyDeferred.resolve();
                 };
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
@@ -59,6 +62,7 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                 };
 
                 $scope.onPolicySelectItem = function (selectedItem) {
+                    console.log($scope.selectedPolicy);
                     if (rpRouteDetail == undefined)
                         return;
 
@@ -77,13 +81,17 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                     WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, rpRouteDetail.RoutingProductId, rpRouteDetail.SaleZoneId, dataItem.Entity.SupplierId, dataItem.SupplierName);
                 }
 
-                defineAPI();
+                UtilsService.waitMultiplePromises([rpRoutePolicyReadyPromiseDeffered.promise, gridReadyDeferred.promise]).then(function () {
+                    defineAPI();
+                });
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
+
                     if (payload != undefined) {
                         rpRouteDetail = payload.rpRouteDetail;
                         routingDatabaseId = payload.routingDatabaseId;
@@ -91,17 +99,52 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                         defaultPolicyId = payload.defaultPolicyId
                     }
 
-                    var loadRPRoutePolicyPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var loadPolicySelectorPromise = loadPolicySelector();
+                    promises.push(loadPolicySelectorPromise);
 
-                    rpRoutePolicyReadyPromiseDeffered.promise.then(function () {
-                        var payload = {
+                    var loadGridDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadGridDeferred.promise);
+
+                    loadPolicySelectorPromise.then(function () {
+                       UtilsService.safeApply($scope);
+                       loadGrid().then(function () {
+                                loadGridDeferred.resolve();
+                            }).catch(function () {
+                                loadGridDeferred.reject();
+                            });
+                    });
+                    function loadPolicySelector() {
+                        var loadPolicySelectorDeferred = UtilsService.createPromiseDeferred();
+
+                        var policySelectorPayload = {
                             filteredIds: policies,
                             selectedId: defaultPolicyId
                         };
-                        VRUIUtilsService.callDirectiveLoad(rpRoutePolicyAPI, payload, loadRPRoutePolicyPromiseDeferred);
-                    });
 
-                    return loadRPRoutePolicyPromiseDeferred.promise;
+                        VRUIUtilsService.callDirectiveLoad(rpRoutePolicyAPI, policySelectorPayload, loadPolicySelectorDeferred);
+                        return loadPolicySelectorDeferred.promise;
+                    }
+
+                    function loadGrid() {
+                        var query = null;
+                       
+                        if (rpRouteDetail) {
+                            query = {
+                                RoutingDatabaseId: routingDatabaseId,
+                                PolicyOptionConfigId: $scope.selectedPolicy.TemplateConfigID, // $scope.selectedPolicy is != undefined at this point
+                                RoutingProductId: rpRouteDetail.RoutingProductId,
+                                SaleZoneId: rpRouteDetail.SaleZoneId
+                            };
+                        }
+
+                        return gridAPI.retrieveData(query);
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
+
+                   
+
+                   
                 }
 
                 if (ctrl.onReady != null)

@@ -82,7 +82,7 @@ namespace TOne.WhS.Routing.Business
                 return null;
 
             IEnumerable<RPRouteOption> routeOptionsByPolicy = allOptions[input.Query.PolicyOptionConfigId];
-            return routeOptionsByPolicy.ToBigResult(input, null, RPRouteOptionMapper);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult<RPRouteOptionDetail>(input, routeOptionsByPolicy.ToBigResult(input, null, RPRouteOptionMapper));
         }
 
         public IEnumerable<Vanrise.Entities.TemplateConfig> GetPoliciesOptionTemplates()
