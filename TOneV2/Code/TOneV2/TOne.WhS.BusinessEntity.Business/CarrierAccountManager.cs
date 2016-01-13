@@ -14,11 +14,13 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         CarrierProfileManager _carrierProfileManager;
         SellingNumberPlanManager _sellingNumberPlanManager;
+
         public CarrierAccountManager()
         {
             _carrierProfileManager = new CarrierProfileManager();
             _sellingNumberPlanManager = new SellingNumberPlanManager();
         }
+        
         #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<CarrierAccountDetail> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
         {
@@ -340,7 +342,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return new AccountManagerCarrier()
             {
                 CarrierAccountId = carrierAccount.CarrierAccountId,
-                Name = carrierAccount.NameSuffix,
+                Name = GetCarrierAccountName(carrierAccount.CarrierAccountId),
                 CarrierType = carrierAccount.AccountType,
                 IsCustomerAvailable = (carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange) && (assignedCarrierAccount == null || assignedCarrierAccount.RelationType != CarrierAccountType.Customer),
                 IsSupplierAvailable = (carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange) && (assignedCarrierAccount == null || assignedCarrierAccount.RelationType != CarrierAccountType.Supplier),

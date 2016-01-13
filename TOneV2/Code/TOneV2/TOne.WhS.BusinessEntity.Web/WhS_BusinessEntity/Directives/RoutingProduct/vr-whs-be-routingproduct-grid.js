@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive('vrWhsBeRoutingproductGrid', ['VRNotificationService', 'WhS_BE_RoutingProductAPIService', 'WhS_Routing_RouteRuleService', 'WhS_BE_RoutingProductService',
-function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_RouteRuleService, WhS_BE_RoutingProductService) {
+app.directive('vrWhsBeRoutingproductGrid', ['VRNotificationService', 'WhS_BE_RoutingProductAPIService', 'WhS_Routing_RouteRuleService', 'WhS_BE_RoutingProductService', "VRUIUtilsService",
+function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_RouteRuleService, WhS_BE_RoutingProductService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -26,12 +26,15 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
 
     function routingProductGrid($scope, ctrl, $attrs) {
         var gridAPI;
+        var drillDownManager;
         
         function initializeController() {
             $scope.routingProducts = [];
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(getDirectiveTabs(), gridAPI, $scope.gridMenuActions);
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
@@ -42,16 +45,12 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
                     }
 
                     directiveAPI.onRoutingProductAdded = function (routingProductObject) {
+                        drillDownManager.setDrillDownExtensionObject(routingProductObject);
                         gridAPI.itemAdded(routingProductObject);
-                    }
-
-                    directiveAPI.onRoutingProductUpdated = function (routingProductObject) {
-                        gridAPI.itemUpdated(routingProductObject);
                     }
 
                     return directiveAPI;
                 }
-
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
@@ -59,7 +58,7 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
                    .then(function (response) {
                        if (response && response.Data) {
                            for (var i = 0; i < response.Data.length; i++) {
-                                setDataItemExtension(response.Data[i]);
+                               drillDownManager.setDrillDownExtensionObject(response.Data[i]);
                            }
                        }
                        onResponseReady(response);
@@ -72,21 +71,27 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
             defineMenuActions();
         }
 
-        function setDataItemExtension(dataItem) {
-            var extensionObject = {};
+        function getDirectiveTabs() {
+            var directiveTabs = [];
 
-            var payload = {
-                loadedFromRoutingProduct:true,
-                query: { RoutingProductId: dataItem.RoutingProductId }
+            var directiveTab = {
+                title: "Route Rules",
+                directive: "vr-whs-routing-routerule-grid",
+                loadDirective: function (directiveAPI, routingProductDataItem) {
+                    routingProductDataItem.routeRuleGridAPI = directiveAPI;
+
+                    var routeRuleGridPayload = {
+                        loadedFromRoutingProduct: true,
+                        query: { RoutingProductId: routingProductDataItem.RoutingProductId }
+                    };
+
+                    return routingProductDataItem.routeRuleGridAPI.loadGrid(routeRuleGridPayload);
                 }
-           
-            extensionObject.onGridReady = function (api) {
-                extensionObject.routeRuleGridAPI = api;
-                extensionObject.routeRuleGridAPI.loadGrid(payload);
-                extensionObject.onGridReady = undefined;
             };
-            dataItem.extensionObject = extensionObject;
 
+            directiveTabs.push(directiveTab);
+
+            return directiveTabs;
         }
 
         function defineMenuActions() {
@@ -102,14 +107,10 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
         }
 
         function addRouteRule(dataItem) {
-
             gridAPI.expandRow(dataItem);
 
-            if (dataItem.extensionObject == undefined)
-                setDataItemExtension(dataItem);
-
             var onRouteRuleAdded = function (addedItem) {
-                dataItem.extensionObject.routeRuleGridAPI.onRouteRuleAdded(addedItem);
+                dataItem.routeRuleGridAPI.onRouteRuleAdded(addedItem);
             };
 
             WhS_Routing_RouteRuleService.addRouteRule(onRouteRuleAdded, dataItem.RoutingProductId, dataItem.SellingNumberPlanId);
@@ -117,6 +118,7 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
 
         function editRoutingProduct(routingProduct) {
             var onRoutingProductUpdated = function (updatedItem) {
+                drillDownManager.setDrillDownExtensionObject(updatedItem);
                 gridAPI.itemUpdated(updatedItem);
             };
 

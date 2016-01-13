@@ -1,13 +1,16 @@
-﻿<vr-datagrid datasource="routingProducts"
-             dataretrievalfunction="dataRetrievalFunction"
-             pagingtype="'PagingOnScroll'"
-             on-ready="onGridReady"
-             menuactions="gridMenuActions"
-             idfield="RoutingProductId">
-
-    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Selling Number Plan Id'" field="'SellingNumberPlanId'"></vr-datagridcolumn>
-    <vr-datagridexpandablerow>
-        <vr-whs-routing-routerule-grid on-ready="dataItem.extensionObject.onGridReady"></vr-whs-routing-routerule-grid>
-    </vr-datagridexpandablerow>
-</vr-datagrid>
+﻿<vr-row removeline>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="routingProducts"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     on-ready="onGridReady"
+                     menuactions="gridMenuActions"
+                     idfield="RoutingProductId">
+            <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Selling Number Plan Id'" field="'SellingNumberPlanId'"></vr-datagridcolumn>
+            <vr-datagridexpandablerow>
+                <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+            </vr-datagridexpandablerow>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>
