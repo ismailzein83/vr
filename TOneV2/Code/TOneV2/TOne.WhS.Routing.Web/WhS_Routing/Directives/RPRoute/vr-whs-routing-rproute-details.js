@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRouteAPIService', 'WhS_Routing_RPRouteService', 'VRUIUtilsService',
-    function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteService, VRUIUtilsService) {
+app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRouteAPIService', 'WhS_Routing_RPRouteService', 'VRUIUtilsService', 'VRNotificationService',
+function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteService, VRUIUtilsService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
