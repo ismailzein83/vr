@@ -15,6 +15,17 @@ namespace TOne.WhS.Routing.Business
 {
     public class RPRouteManager
     {
+        CarrierAccountManager _carrierAccountManager;
+        RoutingProductManager _routingProductManager;
+        SaleZoneManager _saleZoneManager;
+
+        public RPRouteManager()
+        {
+            _carrierAccountManager = new CarrierAccountManager();
+            _routingProductManager = new RoutingProductManager();
+            _saleZoneManager = new SaleZoneManager();
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<RPRouteDetail> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<RPRouteQuery> input)
         {
             IRPRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
@@ -88,8 +99,8 @@ namespace TOne.WhS.Routing.Business
             {
                 RoutingProductId = rpRoute.RoutingProductId,
                 SaleZoneId = rpRoute.SaleZoneId,
-                RoutingProductName = this.GetRoutingProductName(rpRoute.RoutingProductId),
-                SaleZoneName = this.GetSaleZoneName(rpRoute.SaleZoneId),
+                RoutingProductName = _routingProductManager.GetRoutingProductName(rpRoute.RoutingProductId),
+                SaleZoneName = _saleZoneManager.GetSaleZoneName(rpRoute.SaleZoneId),
                 IsBlocked = rpRoute.IsBlocked,
                 RouteOptionsDetails = this.GetRouteOptionDetails(rpRoute.RPOptionsByPolicy, policyConfigId, numberOfOptions)
             };
@@ -103,7 +114,7 @@ namespace TOne.WhS.Routing.Business
             return new RPRouteOptionDetail()
             {
                 Entity = routeOption,
-                SupplierName = GetSupplierName(routeOption.SupplierId)
+                SupplierName = _carrierAccountManager.GetCarrierAccountName(routeOption.SupplierId)
             };
         }
 
@@ -119,41 +130,6 @@ namespace TOne.WhS.Routing.Business
             };
         }
 
-        
-
-        private string GetRoutingProductName(int routingProductId)
-        {
-            RoutingProductManager manager = new RoutingProductManager();
-            RoutingProduct routingProduct = manager.GetRoutingProduct(routingProductId);
-
-            if (routingProduct != null)
-                return routingProduct.Name;
-
-            return null;
-        }
-
-        private string GetSaleZoneName(long saleZoneId)
-        {
-            SaleZoneManager manager = new SaleZoneManager();
-            SaleZone saleZone = manager.GetSaleZone(saleZoneId);
-
-            if (saleZone != null)
-                return saleZone.Name;
-
-            return null;
-        }
-
-        private string GetSupplierName(int supplierId)
-        {
-            CarrierAccountManager manager = new CarrierAccountManager();
-            CarrierAccount supplier = manager.GetCarrierAccount(supplierId);
-
-            if (supplier != null)
-                return supplier.NameSuffix;
-
-            return null;
-        }
-
         private IEnumerable<RPRouteOptionDetail> GetRouteOptionDetails(Dictionary<int, IEnumerable<RPRouteOption>> dicRouteOptions, int policyConfigId, int numberOfOptions)
         {
             if (dicRouteOptions == null || !dicRouteOptions.ContainsKey(policyConfigId))
@@ -162,7 +138,6 @@ namespace TOne.WhS.Routing.Business
             IEnumerable<RPRouteOption> routeOptionDetails = dicRouteOptions[policyConfigId].Take(numberOfOptions);
             return routeOptionDetails.MapRecords(RPRouteOptionMapper);
         }
-        
 
         #endregion
     }

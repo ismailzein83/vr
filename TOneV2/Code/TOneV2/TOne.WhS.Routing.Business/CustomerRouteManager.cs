@@ -16,11 +16,13 @@ namespace TOne.WhS.Routing.Business
     {
         CarrierAccountManager _carrierAccountManager;
         SaleZoneManager _saleZoneManager;
+        SupplierZoneManager _supplierZoneManager;
 
         public CustomerRouteManager()
         {
             _carrierAccountManager = new CarrierAccountManager();
             _saleZoneManager = new SaleZoneManager();
+            _supplierZoneManager = new SupplierZoneManager();
         }
 
         public Vanrise.Entities.IDataRetrievalResult<CustomerRouteDetail> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<CustomerRouteQuery> input)
@@ -59,24 +61,18 @@ namespace TOne.WhS.Routing.Business
             if (customerRoute.Options == null)
                 return null;
 
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
-
             List<CustomerRouteOptionDetail> optionDetails = new List<CustomerRouteOptionDetail>();
 
             foreach (RouteOption item in customerRoute.Options)
             {
-                CarrierAccount supplier = carrierAccountManager.GetCarrierAccount(item.SupplierId);
-                SupplierZone supplierZone = supplierZoneManager.GetSupplierZone(item.SupplierZoneId);
-
                 optionDetails.Add(new CustomerRouteOptionDetail()
                 {
                     IsBlocked = item.IsBlocked,
                     Percentage = item.Percentage,
                     SupplierCode = item.SupplierCode,
-                    SupplierName = supplier != null ? supplier.NameSuffix : "Supplier Not Found",
+                    SupplierName = _carrierAccountManager.GetCarrierAccountName(item.SupplierId),
                     SupplierRate = item.SupplierRate,
-                    SupplierZoneName = supplierZone != null ? supplierZone.Name : "Supplier Zone Not Found"
+                    SupplierZoneName = _supplierZoneManager.GetSupplierZoneName(item.SupplierZoneId)
                 });
             }
 

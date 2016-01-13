@@ -47,11 +47,19 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
             return dataManager.GetSupplierZones(supplierId, effectiveDate);
         }
+        
         public SupplierZone GetSupplierZone(long zoneId)
         {
             List<SupplierZone> supplierZones = GetCachedSupplierZones();
             return supplierZones.FindRecord(x => x.SupplierZoneId == zoneId);
         }
+
+        public string GetSupplierZoneName(long zoneId)
+        {
+            SupplierZone supplierZone = GetSupplierZone(zoneId);
+            return supplierZone != null ? supplierZone.Name : null;
+        }
+
         public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfoByIds(List<long> selectedIds)
         {
             List<SupplierZone> allSupplierZones = GetCachedSupplierZones();
@@ -131,6 +139,5 @@ namespace TOne.WhS.BusinessEntity.Business
             return supplierZones.FindAllRecords(filterExpression);
         }
         #endregion
-
     }
 }

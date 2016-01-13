@@ -12,6 +12,13 @@ namespace TOne.WhS.CDRProcessing.Business
 {
     public class CustomerIdentificationRuleManager : Vanrise.Rules.RuleManager<CustomerIdentificationRule, CustomerIdentificationRuleDetail>
     {
+        CarrierAccountManager _carrierAccountManager;
+
+        public CustomerIdentificationRuleManager()
+        {
+            _carrierAccountManager = new CarrierAccountManager();
+        }
+
         public CustomerIdentificationRule GetMatchRule(CustomerIdentificationRuleTarget target)
         {
             var ruleTree = GetRuleTree();
@@ -51,15 +58,13 @@ namespace TOne.WhS.CDRProcessing.Business
 
         protected override CustomerIdentificationRuleDetail MapToDetails(CustomerIdentificationRule rule)
         {
-            CarrierAccountManager CarrierAccountManager = new CarrierAccountManager();
-            CarrierAccount carrierAccount = CarrierAccountManager.GetCarrierAccount(rule.Settings.CustomerId);
             return new CustomerIdentificationRuleDetail
             {
                 Entity = rule,
                 CDPNPrefixes = GetDescription(rule.Criteria.CDPNPrefixes),
                 InTrunks=GetDescription(rule.Criteria.InTrunks),
                 InCarriers = GetDescription(rule.Criteria.InCarriers),
-                CustomerName = carrierAccount.NameSuffix
+                CustomerName = _carrierAccountManager.GetCarrierAccountName(rule.Settings.CustomerId)
             };
         }
         private string GetDescription(IEnumerable<string> list)

@@ -12,6 +12,13 @@ namespace TOne.WhS.CDRProcessing.Business
 {
     public class SupplierIdentificationRuleManager : Vanrise.Rules.RuleManager<SupplierIdentificationRule, SupplierIdentificationRuleDetail>
     {
+        CarrierAccountManager _carrierAccountManager;
+
+        public SupplierIdentificationRuleManager()
+        {
+            _carrierAccountManager = new CarrierAccountManager();
+        }
+
         public SupplierIdentificationRule GetMatchRule(SupplierIdentificationRuleTarget target)
         {
             var ruleTree = GetRuleTree();
@@ -51,14 +58,12 @@ namespace TOne.WhS.CDRProcessing.Business
 
         protected override SupplierIdentificationRuleDetail MapToDetails(SupplierIdentificationRule rule)
         {
-            CarrierAccountManager CarrierAccountManager = new CarrierAccountManager();
-            CarrierAccount carrierAccount = CarrierAccountManager.GetCarrierAccount(rule.Settings.SupplierId);
             return new SupplierIdentificationRuleDetail{
                 Entity=rule,
                 CDPNPrefixes = GetDescription(rule.Criteria.CDPNPrefixes),
                 OutTrunks = GetDescription(rule.Criteria.OutTrunks),
                 OutCarriers = GetDescription(rule.Criteria.OutCarriers),
-                SupplierName = carrierAccount.NameSuffix
+                SupplierName = _carrierAccountManager.GetCarrierAccountName(rule.Settings.SupplierId)
             };
 
         }
