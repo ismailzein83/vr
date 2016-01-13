@@ -18,7 +18,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-        #region Get Filtered Cases Productivity
+        #region Cases Productivity
 
         public BigResult<CaseProductivity> GetFilteredCasesProductivity(DataRetrievalInput<CaseProductivityQuery> input)
         {
@@ -108,7 +108,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         #endregion
 
-        #region Get Filtered Blocked Lines
+        #region Blocked Lines
 
         public BigResult<BlockedLines> GetFilteredBlockedLines(DataRetrievalInput<BlockedLinesQuery> input)
         {
