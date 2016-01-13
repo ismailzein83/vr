@@ -4,7 +4,7 @@
 -- =============================================
 CREATE PROCEDURE [TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetFilteredByOwner]
 	@CustomerOwnerType int,
-	@EffectiveTime DateTime,
+	@EffectiveTime DATETIME = NULL,
 	@IsFuture bit,
 	@IsDefault bit,
 	@ActiveCustomersInfo TOneWhS_BE.RoutingCustomerInfo READONLY

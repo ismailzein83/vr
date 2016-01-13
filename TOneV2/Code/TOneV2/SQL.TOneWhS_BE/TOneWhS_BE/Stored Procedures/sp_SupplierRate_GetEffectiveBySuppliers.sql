@@ -1,7 +1,7 @@
 ﻿
 
 CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierRate_GetEffectiveBySuppliers]
-	@EffectiveTime DateTime,
+	@EffectiveTime DATETIME = NULL,
 	@IsFuture bit,
 	@ActiveSuppliersInfo TOneWhS_BE.RoutingSupplierInfo READONLY
 	

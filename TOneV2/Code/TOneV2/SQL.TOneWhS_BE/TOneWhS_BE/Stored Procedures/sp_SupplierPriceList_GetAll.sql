@@ -14,6 +14,7 @@ BEGIN
     SELECT [ID]
       ,[SupplierID]
       ,[CurrencyID]
+      ,[FileID]
       from TOneWhS_BE.SupplierPriceList
 
 END

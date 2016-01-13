@@ -139,7 +139,6 @@
     <Build Include="sec\Stored Procedures\sp_Group_GetUserGroups_2.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_GetAll_2.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_AssignMembers_2.sql" />
-    <Build Include="Security\BEntity_2.sql" />
     <Build Include="sec\Stored Procedures\sp_View_UpdateRank.sql" />
     <Build Include="common\Tables\File.sql" />
     <Build Include="sec\Stored Procedures\sp_Module_UpdateRank.sql" />

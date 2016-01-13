@@ -5,10 +5,10 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetEffectiveByCustomers]
+CREATE PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetEffectiveByCustomers]
 	-- Add the parameters for the stored procedure here
 	@CustomerOwnerType int,
-	@EffectiveTime DateTime,
+	@EffectiveTime DATETIME = NULL,
 	@IsFuture bit,
 	@ActiveCustomersInfo TOneWhS_BE.RoutingCustomerInfo READONLY
 AS

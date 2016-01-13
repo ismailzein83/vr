@@ -10,15 +10,18 @@
     [NumberOfCalls]    INT             NULL,
     [FirstCallTime]    VARCHAR (8)     NULL,
     [LastCallTime]     VARCHAR (8)     NULL,
-    [MinDuration]      INT             NULL,
-    [MaxDuration]      INT             NULL,
-    [AvgDuration]      NUMERIC (13, 4) NULL,
-    [CostNets]         NUMERIC (13, 8) NULL,
-    [CostExtraCharges] NUMERIC (13, 8) NULL,
-    [SaleNets]         NUMERIC (13, 8) NULL,
-    [SaleExtraCharges] NUMERIC (13, 8) NULL,
-    [SaleRate]         NUMERIC (13, 8) NULL,
-    [CostRate]         NUMERIC (13, 8) NULL,
+    [MinDuration]      NUMERIC (20, 6) NULL,
+    [MaxDuration]      NUMERIC (20, 6) NULL,
+    [AvgDuration]      NUMERIC (20, 6) NULL,
+    [CostNets]         NUMERIC (20, 6) NULL,
+    [CostExtraCharges] NUMERIC (20, 6) NULL,
+    [SaleNets]         NUMERIC (20, 6) NULL,
+    [SaleExtraCharges] NUMERIC (20, 6) NULL,
+    [SaleRate]         NUMERIC (20, 6) NULL,
+    [CostRate]         NUMERIC (20, 6) NULL,
     [SaleDuration]     INT             NULL,
-    [CostDuration]     INT             NULL);
+    [CostDuration]     INT             NULL,
+    PRIMARY KEY CLUSTERED ([ID] ASC));
+
+
 

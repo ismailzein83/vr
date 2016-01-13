@@ -15,16 +15,18 @@
     [SupplierZoneID]    BIGINT          NULL,
     [CDPN]              NVARCHAR (50)   NULL,
     [CGPN]              NVARCHAR (50)   NULL,
-    [CostRateValue]     DECIMAL (13, 4) NULL,
-    [CostTotalNet]      DECIMAL (13, 4) NULL,
+    [CostRateValue]     NUMERIC (20, 6) NULL,
+    [CostTotalNet]      NUMERIC (20, 6) NULL,
     [CostCurrencyID]    INT             NULL,
-    [SaleRateValue]     DECIMAL (13, 4) NULL,
-    [SaleTotalNet]      DECIMAL (13, 4) NULL,
+    [SaleRateValue]     NUMERIC (20, 6) NULL,
+    [SaleTotalNet]      NUMERIC (20, 6) NULL,
     [SaleCurrencyID]    INT             NULL,
     [ReleaseCode]       NVARCHAR (50)   NULL,
     [ReleaseSource]     NVARCHAR (50)   NULL,
     [SwitchID]          INT             NULL
 );
+
+
 
 
 GO

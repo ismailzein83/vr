@@ -3,7 +3,7 @@
     [Title]         NVARCHAR (255) NOT NULL,
     [Type]          TINYINT        NOT NULL,
     [ProcessType]   TINYINT        NOT NULL,
-    [EffectiveTime] DATETIME       NOT NULL,
+    [EffectiveTime] DATETIME       NULL,
     [IsReady]       BIT            NULL,
     [IsDeleted]     BIT            NULL,
     [CreatedTime]   DATETIME       CONSTRAINT [DF_RoutingDatabase_CreatedTime] DEFAULT (getdate()) NULL,
@@ -13,6 +13,8 @@
     [Information]   NVARCHAR (MAX) NULL,
     CONSTRAINT [PK_RoutingDatabase] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

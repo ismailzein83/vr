@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [TOneWhS_BE].[sp_SaleCode_ByZondName]
+Create PROCEDURE [TOneWhS_BE].[sp_SaleCode_GetByZoneName]
 	-- Add the parameters for the stored procedure here
 	@SellingNumberPlanID int,
 	@ZoneName nvarchar(255),

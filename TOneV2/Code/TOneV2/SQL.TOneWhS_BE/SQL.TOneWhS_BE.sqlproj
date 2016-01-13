@@ -81,9 +81,6 @@
     <Folder Include="TOneWhs_CP\Tables\" />
     <Folder Include="TOneWhS_Analytic\" />
     <Folder Include="TOneWhS_Analytic\Tables\" />
-    <Folder Include="Common\" />
-    <Folder Include="Common\Tables\" />
-    <Folder Include="Common\Functions\" />
     <Folder Include="TOneWhs_CP\Stored Procedures\" />
     <Folder Include="TOneWhS_Analytic\Stored Procedures\" />
     <Folder Include="TOneWhS_Analytic\User Defined Types\" />
@@ -102,7 +99,6 @@
     <Build Include="TOneWhS_BE\Tables\RoutingProduct.sql" />
     <Build Include="TOneWhS_BE\Tables\ZoneServiceConfig.sql" />
     <Build Include="TOneWhS_BE\Tables\CustomerZone.sql" />
-    <Build Include="TOneWhS_BE\Tables\SupplierZoneIDManager.sql" />
     <Build Include="TOneWhS_BE\Tables\SalePriceList.sql" />
     <Build Include="TOneWhS_BE\Tables\SupplierPriceList.sql" />
     <Build Include="TOneWhS_BE\Tables\SupplierRate.sql" />
@@ -122,7 +118,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZone_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_GetByDate.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_ByZondId.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_CarrierProfile_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_CarrierAccount_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_CarrierProfile_Insert.sql" />
@@ -149,7 +144,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SellingNumberPlan_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZone_GetByNumberPlan.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZone_GetAll.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_BySellingNumberPlan.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_CustomerZone_Insert.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_CustomerZone_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_CustomerSellingProduct_Insert.sql" />
@@ -185,11 +179,6 @@
     <Build Include="TOneWhS_Analytic\Tables\BillingStats.sql" />
     <Build Include="TOneWhS_Analytic\Tables\TrafficStatsDaily.sql" />
     <Build Include="TOneWhS_Analytic\Tables\TrafficStats.sql" />
-    <Build Include="Common\Tables\CurrencyExchangeRate.sql" />
-    <Build Include="Common\Tables\Currency.sql" />
-    <Build Include="Common\Tables\Country.sql" />
-    <Build Include="Common\Functions\getExchangeRatesConvertedToCurrency.sql" />
-    <Build Include="Common\Functions\getExchangeRates.sql" />
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_RatePlan_SetStatusIfExists.sql" />
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_RatePlan_InsertOrUpdateChanges.sql" />
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_RatePlan_GetChanges.sql" />
@@ -268,7 +257,6 @@
     <Build Include="Security\TOneWhS_SPL.sql" />
     <Build Include="Security\TOneWhs_CP.sql" />
     <Build Include="Security\TOneWhS_Analytic.sql" />
-    <Build Include="Security\Common.sql" />
     <Build Include="TOneWhS_BE\Tables\CP_SaleZone_New.sql" />
     <Build Include="TOneWhS_BE\Tables\CP_SaleZone_Changed.sql" />
     <Build Include="TOneWhS_BE\Tables\CP_SaleCode_New.sql" />
@@ -279,7 +267,14 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZone_GetByDate.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceList_SyncWithImportedData.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByDate.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_ByZondName.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_RatePlan_UpdateStatus_1.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_RatePlan_CancelChanges_1.sql" />
+    <Build Include="TOneWhs_CP\Stored Procedures\sp_CodePreparation_UpdateStatus_1.sql" />
+    <Build Include="TOneWhs_CP\Stored Procedures\sp_CodePreparation_CheckCodePreparationState_1.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByZoneName_1.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByZoneId_1.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetBySellingNumberPlan_1.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByCountry_1.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOneWhs.TestDataScenario.sql" />

@@ -3,9 +3,9 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [TOneWhS_BE].[sp_SaleCode_BySellingNumberPlan]
+CREATE PROCEDURE [TOneWhS_BE].[sp_SaleCode_GetByCountry]
 	-- Add the parameters for the stored procedure here
-	@SellingNumberPlanId bigint,
+	@CountryId int,
 	@When DateTime
 AS
 BEGIN
@@ -19,8 +19,8 @@ BEGIN
 			sc.[BED],
 			sc.[EED]
 	FROM	[TOneWhS_BE].[SaleCode] sc
-	JOIN	[TOneWhS_BE].[SaleZone] sz ON sc.ZoneID=sz.ID
-	WHERE  sz.[SellingNumberPlanID]=@SellingNumberPlanId
+	join [TOneWhS_BE].[SaleZone] sz on sz.Id = sc.[ZoneID]
+	WHERE sz.CountryID = @CountryId 
 	   and ((sc.BED <= @when ) and (sc.EED is null or sc.EED > @when))
         
 END

@@ -9,6 +9,8 @@ using System.Configuration;
 using System.Collections.Concurrent;
 using TOne.LCR.Entities;
 using Vanrise.BusinessProcess.Client;
+using Vanrise.Queueing;
+using Vanrise.Runtime;
 
 namespace TestRuntime
 {
@@ -16,111 +18,30 @@ namespace TestRuntime
     {
         static void Main(string[] args)
         {
-            //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-            MainForm f = new MainForm();
-            f.ShowDialog();
-            Console.ReadKey();
-            return;
-            
-
-            var config = new BPConfiguration { MaxConcurrentWorkflows = 20 };
-            var ser = Vanrise.Common.Serializer.Serialize(config);
-           
-          
-            Console.WriteLine("Host Started");
-            BusinessProcessRuntime.Current.TerminatePendingProcesses();
-
-            Timer timer = new Timer(1000);
-            timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
-            timer.Start();
-
-            //////System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(() =>
-            //////    {
-            //////        for (DateTime d = DateTime.Parse(ConfigurationManager.AppSettings["RepricingFrom"]); d <= DateTime.Parse(ConfigurationManager.AppSettings["RepricingTo"]); d = d.AddDays(1))
-            //////        {
-            //////            TriggerProcess(d);
-            //////            System.Threading.Thread.Sleep(30000);
-            //////        }
-            //////    });
-            //////t.Start();
-
-            //ProcessManager processManager = new ProcessManager();
-            //processManager.CreateNewProcess(new CreateProcessInput
-            //{
-            //    ProcessName = "UpdateCodeZoneMatchProcess",
-            //    InputArguments = new TOne.LCRProcess.Arguments.UpdateCodeZoneMatchProcessInput
-            //    {
-            //        IsFuture = false,
-            //        CodeEffectiveOn = DateTime.Today
-            //    }
-            //});
-            //////////BusinessProcessRuntime.Current.CreateNewProcess<TOne.LCRProcess.UpdateCodeZoneMatchProcess>(new CreateProcessInput { InputArguments = new TOne.LCRProcess.UpdateCodeZoneMatchProcessInput { IsFuture = true } });
-
-            //processManager.CreateNewProcess(new CreateProcessInput
-            //{
-            //    ProcessName = "UpdateZoneRateProcess"
-            //});
-
-            //TriggerProcess(DateTime.Parse("10/15/2013"));
-            //TriggerProcess(DateTime.Parse("09/16/2014"));
-            //TriggerProcess(DateTime.Parse("07/07/2014"));
-            //System.Threading.Thread.Sleep(5000);
-            //TriggerProcess(DateTime.Parse("07/29/2014"));
-            //System.Threading.Thread.Sleep(5000);
-            //TriggerProcess(DateTime.Parse("07/28/2014"));
-
-            //CDRManager cdrManager = new CDRManager();
-            //cdrManager.LoadCDRRange(DateTime.Parse("8/1/2014"), DateTime.Parse("1/1/2015"), 2000, (cdrs) =>
-            //    {
-            //        RepricingProcess process = new RepricingProcess { CDRs = cdrs };
-            //        BusinessProcessRuntime.Current.CreateNewProcess(process);
-            //    });
-
-
-
-            Console.ReadKey();
-        }
-        
-        private static void TriggerProcess(DateTime date)
-        {
-            TOne.CDRProcess.Arguments.DailyRepricingProcessInput inputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput { RepricingDay = date };
-            CreateProcessInput input = new CreateProcessInput
+            if (ConfigurationManager.AppSettings["IsRuntimeService"] == "true")
             {
-                InputArguments = inputArguments
-            };
-            BPClient processManager = new BPClient();
-            processManager.CreateNewProcess(input);
-        }
+                BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+                QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+                SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 5) };
 
-        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            System.Windows.Forms.MessageBox.Show(e.ExceptionObject.ToString());
+                var runtimeServices = new List<RuntimeService>();
 
-        }
+                runtimeServices.Add(queueActivationService);
 
-        static bool _isRunning;
-        static object _lockObj = new object();
-        static void timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            lock (_lockObj)
-            {
-                if (_isRunning)
-                    return;
-                _isRunning = true;
+                runtimeServices.Add(bpService);
+
+                runtimeServices.Add(schedulerService);
+
+                RuntimeHost host = new RuntimeHost(runtimeServices);
+                host.Start();
+                Console.ReadKey();
             }
-            try
+            else
             {
-                //BusinessProcessRuntime.Current.LoadAndExecutePendings();
-
-                BusinessProcessRuntime.Current.ExecutePendings();
-                BusinessProcessRuntime.Current.TriggerPendingEvents();
-            }
-            finally
-            {
-                lock (_lockObj)
-                {
-                    _isRunning = false;
-                }
+                MainForm f = new MainForm();
+                f.ShowDialog();
+                Console.ReadKey();
+                return;
             }
         }
     }

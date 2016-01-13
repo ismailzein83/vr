@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE TOneWhS_BE.sp_SupplierPriceList_Get
+CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierPriceList_Get]
 	@PriceListID int
 AS
 BEGIN
@@ -14,6 +14,7 @@ BEGIN
     SELECT [ID]
       ,[SupplierID]
       ,[CurrencyID]
+      ,[FileID]
       from TOneWhS_BE.SupplierPriceList
       where ID = @PriceListID 
 END
