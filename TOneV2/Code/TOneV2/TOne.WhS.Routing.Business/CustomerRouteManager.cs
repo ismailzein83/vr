@@ -14,6 +14,15 @@ namespace TOne.WhS.Routing.Business
 {
     public class CustomerRouteManager
     {
+        CarrierAccountManager _carrierAccountManager;
+        SaleZoneManager _saleZoneManager;
+
+        public CustomerRouteManager()
+        {
+            _carrierAccountManager = new CarrierAccountManager();
+            _saleZoneManager = new SaleZoneManager();
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<CustomerRouteDetail> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<CustomerRouteQuery> input)
         {
             ICustomerRouteDataManager manager =  RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
@@ -38,33 +47,11 @@ namespace TOne.WhS.Routing.Business
             return new CustomerRouteDetail()
             {
                 Entity = customerRoute,
-                CustomerName = this.GetCustomerName(customerRoute.CustomerId),
-                ZoneName = this.GetZoneName(customerRoute.SaleZoneId),
+                CustomerName = _carrierAccountManager.GetCarrierAccountName(customerRoute.CustomerId),
+                ZoneName = _saleZoneManager.GetSaleZoneName(customerRoute.SaleZoneId),
                 RouteOptionsDescription = GetRouteOptionsDescription(optionDetails),
                 RouteOptionDetails = optionDetails
             };
-        }
-
-        private string GetCustomerName(int customerId)
-        {
-            CarrierAccountManager manager = new CarrierAccountManager();
-            CarrierAccount customer = manager.GetCarrierAccount(customerId);
-
-            if (customer != null)
-                return customer.NameSuffix;
-
-            return null;
-        }
-
-        private string GetZoneName(long zoneId)
-        {
-            SaleZoneManager manager = new SaleZoneManager();
-            SaleZone saleZone = manager.GetSaleZone(zoneId);
-
-            if (saleZone != null)
-                return saleZone.Name;
-
-            return null;
         }
 
         private List<CustomerRouteOptionDetail> GetRouteOptionDetails(CustomerRoute customerRoute)
