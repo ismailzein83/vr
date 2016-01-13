@@ -9,14 +9,8 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SalePricingRuleManager : BasePricingRuleManager<SalePricingRule, SalePricingRuleDetail, SalePricingRulesInput>
     {
-        protected override IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetBehaviors()
-        {
-            List<Vanrise.Rules.BaseRuleStructureBehavior> behaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
-            behaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorByCustomer());
-            behaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorBySaleZone());
-
-            return behaviors;
-        }
+       
+        #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<SalePricingRuleDetail> GetFilteredSalePricingRules(Vanrise.Entities.DataRetrievalInput<SalePricingRuleQuery> input)
         {
             Func<SalePricingRule, bool> filterExpression = (prod) =>
@@ -28,6 +22,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, base.GetFilteredRules(filterExpression).ToBigResult(input, filterExpression, MapToDetails));
         }
+        #endregion
+
+        #region Private Methods
         private bool CheckIfSaleZoneSettingsContains(SalePricingRule salePricingRule, IEnumerable<long> saleZoneIds)
         {
             if (salePricingRule.Criteria.SaleZoneGroupSettings != null)
@@ -50,17 +47,26 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return false;
         }
+        #endregion
 
+        #region Protected Methods
+        protected override IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetBehaviors()
+        {
+            List<Vanrise.Rules.BaseRuleStructureBehavior> behaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
+            behaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorByCustomer());
+            behaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorBySaleZone());
+
+            return behaviors;
+        }
         protected override SalePricingRuleDetail MapToDetails(SalePricingRule rule)
         {
             return new SalePricingRuleDetail
             {
                 Entity = rule,
-                RuleTypeName=rule.Settings.RuleType.ToString(),
+                RuleTypeName = rule.Settings.RuleType.ToString(),
 
             };
         }
-
         protected override PricingRuleTariffTarget CreateTariffTarget(SalePricingRulesInput input)
         {
             return new SalePricingRuleTariffTarget
@@ -69,7 +75,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 SaleZoneId = input.SaleZoneId
             };
         }
-
         protected override PricingRuleExtraChargeTarget CreateExtraChargeTarget(SalePricingRulesInput input)
         {
             return new SalePricingRuleExtraChargeTarget
@@ -78,7 +83,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 SaleZoneId = input.SaleZoneId
             };
         }
-
         protected override PricingRuleRateTypeTarget CreateRateTypeTarget(SalePricingRulesInput input)
         {
             return new SalePricingRuleRateTypeTarget
@@ -87,5 +91,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 SaleZoneId = input.SaleZoneId
             };
         }
+        #endregion
+     
     }
 }

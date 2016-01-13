@@ -9,15 +9,8 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class PurchasePricingRuleManager : BasePricingRuleManager<PurchasePricingRule, PurchasePricingRuleDetail, PurchasePricingRulesInput>
     {
-        protected override IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetBehaviors()
-        {
-            List<Vanrise.Rules.BaseRuleStructureBehavior> behaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
-            behaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorBySupplier());
-            behaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorBySupplierZone());
-
-            return behaviors;
-        }
-
+ 
+        #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<PurchasePricingRuleDetail> GetFilteredPurchasePricingRules(Vanrise.Entities.DataRetrievalInput<PurchasePricingRuleQuery> input)
         {
             Func<PurchasePricingRule, bool> filterExpression = (prod) =>
@@ -29,6 +22,53 @@ namespace TOne.WhS.BusinessEntity.Business
                   && (input.Query.EffectiveDate == null || (prod.BeginEffectiveTime <= input.Query.EffectiveDate && (prod.EndEffectiveTime == null || prod.EndEffectiveTime >= input.Query.EffectiveDate)));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, base.GetFilteredRules(filterExpression).ToBigResult(input, filterExpression, MapToDetails));
         }
+        #endregion
+
+        #region Protected Methods
+        protected override IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetBehaviors()
+        {
+            List<Vanrise.Rules.BaseRuleStructureBehavior> behaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
+            behaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorBySupplier());
+            behaviors.Add(new Rules.StructureRuleBehaviors.RuleBehaviorBySupplierZone());
+
+            return behaviors;
+        }
+        protected override PurchasePricingRuleDetail MapToDetails(PurchasePricingRule rule)
+        {
+            return new PurchasePricingRuleDetail
+            {
+                Entity = rule,
+                RuleTypeName = rule.Settings.RuleType.ToString(),
+
+            };
+        }
+        protected override PricingRuleTariffTarget CreateTariffTarget(PurchasePricingRulesInput input)
+        {
+            return new PurchasePricingRuleTariffTarget
+            {
+                SupplierId = input.SupplierId,
+                SupplierZoneId = input.SupplierZoneId,
+            };
+        }
+        protected override PricingRuleExtraChargeTarget CreateExtraChargeTarget(PurchasePricingRulesInput input)
+        {
+            return new PurchasePricingRuleExtraChargeTarget
+            {
+                SupplierId = input.SupplierId,
+                SupplierZoneId = input.SupplierZoneId
+            };
+        }
+        protected override PricingRuleRateTypeTarget CreateRateTypeTarget(PurchasePricingRulesInput input)
+        {
+            return new PurchasePricingRuleRateTypeTarget
+            {
+                SupplierId = input.SupplierId,
+                SupplierZoneId = input.SupplierZoneId
+            };
+        }
+        #endregion
+
+        #region Private Methods
         private bool CheckIfSupplierWithZonesSettingsContains(PurchasePricingRule purchasePricingRule, IEnumerable<int> supplierIds)
         {
             if (purchasePricingRule.Criteria.SuppliersWithZonesGroupSettings != null)
@@ -40,41 +80,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return false;
         }
-        protected override PurchasePricingRuleDetail MapToDetails(PurchasePricingRule rule)
-        {
-            return new PurchasePricingRuleDetail
-            {
-                Entity = rule,
-                RuleTypeName = rule.Settings.RuleType.ToString(),
-
-            };
-        }
-
-        protected override PricingRuleTariffTarget CreateTariffTarget(PurchasePricingRulesInput input)
-        {
-            return new PurchasePricingRuleTariffTarget
-            {
-                SupplierId = input.SupplierId,
-                SupplierZoneId = input.SupplierZoneId,
-            };
-        }
-
-        protected override PricingRuleExtraChargeTarget CreateExtraChargeTarget(PurchasePricingRulesInput input)
-        {
-            return new PurchasePricingRuleExtraChargeTarget
-            {
-                SupplierId = input.SupplierId,
-                SupplierZoneId = input.SupplierZoneId
-            };
-        }
-
-        protected override PricingRuleRateTypeTarget CreateRateTypeTarget(PurchasePricingRulesInput input)
-        {
-            return new PurchasePricingRuleRateTypeTarget
-            {
-                SupplierId = input.SupplierId,
-                SupplierZoneId = input.SupplierZoneId
-            };
-        }
+        #endregion
+       
     }
 }

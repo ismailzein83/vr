@@ -12,32 +12,8 @@ namespace TOne.WhS.BusinessEntity.Business
         where Q : class
         where R : PricingRulesInput
     {
-       
-        protected T GetMatchRule(PricingRuleTarget target)
-        {
-            var ruleTree = GetRuleTree(target.RuleType);
-            if (ruleTree == null)
-                return null;
-            else
-                return ruleTree.GetMatchRule(target) as T;
-        }
-
-        Vanrise.Rules.RuleTree GetRuleTree(PricingRuleType ruleType)
-        {
-            return GetCachedOrCreate(String.Format("GetRuleTree_{0}", ruleType),
-                () =>
-                {
-                    var rules = GetFilteredRules(rule => rule.Settings.RuleType == ruleType);
-                    return new Vanrise.Rules.RuleTree(rules, GetBehaviors());
-                });
-        }
-
-        protected abstract IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetBehaviors();
-
-        protected abstract PricingRuleRateTypeTarget CreateRateTypeTarget(R input);
-        protected abstract PricingRuleTariffTarget CreateTariffTarget(R input);
-        protected abstract PricingRuleExtraChargeTarget CreateExtraChargeTarget(R input);
-
+    
+        #region Public Methods
         public PricingRulesResult ApplyPricingRules(R input)
         {
             PricingRulesResult result = new PricingRulesResult();
@@ -50,7 +26,33 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return result;
         }
+        #endregion
 
+        #region Protected Methods
+        protected T GetMatchRule(PricingRuleTarget target)
+        {
+            var ruleTree = GetRuleTree(target.RuleType);
+            if (ruleTree == null)
+                return null;
+            else
+                return ruleTree.GetMatchRule(target) as T;
+        }
+        protected abstract IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetBehaviors();
+        protected abstract PricingRuleRateTypeTarget CreateRateTypeTarget(R input);
+        protected abstract PricingRuleTariffTarget CreateTariffTarget(R input);
+        protected abstract PricingRuleExtraChargeTarget CreateExtraChargeTarget(R input);
+        #endregion
+
+        #region Private Methods
+        Vanrise.Rules.RuleTree GetRuleTree(PricingRuleType ruleType)
+        {
+            return GetCachedOrCreate(String.Format("GetRuleTree_{0}", ruleType),
+                () =>
+                {
+                    var rules = GetFilteredRules(rule => rule.Settings.RuleType == ruleType);
+                    return new Vanrise.Rules.RuleTree(rules, GetBehaviors());
+                });
+        }
         private void ApplyRateTypeRule(R input, PricingRulesResult result)
         {
             if (input.Rate.OtherRates != null && input.Rate.OtherRates.Count > 0)
@@ -85,7 +87,6 @@ namespace TOne.WhS.BusinessEntity.Business
             else
                 result.Rate = input.Rate.NormalRate;
         }
-
         private void ApplyExtraChargeRule(R input, PricingRulesResult result)
         {
             PricingRuleExtraChargeTarget extraChargeTarget = CreateExtraChargeTarget(input);
@@ -105,7 +106,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 result.Rate = extraChargeTarget.Rate;
             }
         }
-
         private void ApplyTariffRule(R input, PricingRulesResult result)
         {
             PricingRuleTariffTarget tariffTarget = CreateTariffTarget(input);
@@ -128,8 +128,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 result.EffectiveDurationInSeconds = input.DurationInSeconds;
                 result.TotalAmount = result.Rate * Math.Ceiling((Decimal)(input.DurationInSeconds) / 60);
             }
-               
-        }
 
+        }
+        #endregion
+       
     }
 }
