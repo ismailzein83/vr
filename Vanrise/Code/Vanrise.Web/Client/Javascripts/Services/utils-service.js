@@ -544,7 +544,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         //        callBack();
         //    }
         //} else {
-            scope.$apply(callBack);
+          return  scope.$apply(callBack);
         //}
     }
     return ({
