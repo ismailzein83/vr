@@ -74,12 +74,15 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
 
         function setDataItemExtension(dataItem) {
             var extensionObject = {};
-            var query = {
-                RoutingProductId: dataItem.RoutingProductId
-            }
+
+            var payload = {
+                loadedFromRoutingProduct:true,
+                query: { RoutingProductId: dataItem.RoutingProductId }
+                }
+           
             extensionObject.onGridReady = function (api) {
                 extensionObject.routeRuleGridAPI = api;
-                extensionObject.routeRuleGridAPI.loadGrid(query);
+                extensionObject.routeRuleGridAPI.loadGrid(payload);
                 extensionObject.onGridReady = undefined;
             };
             dataItem.extensionObject = extensionObject;

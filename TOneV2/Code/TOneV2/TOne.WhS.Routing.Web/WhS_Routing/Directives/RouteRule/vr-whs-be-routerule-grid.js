@@ -29,7 +29,8 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
 
         function initializeController() {
             $scope.routeRules = [];
-
+            $scope.hideCustomerColumn = true;
+            $scope.hideIncludedCodesColumn = true;
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -37,7 +38,14 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
 
                 function getDirectiveAPI() {
                     var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
+                    directiveAPI.loadGrid = function (payload) {
+                        var query = payload;
+                        if (query.loadedFromRoutingProduct)
+                        {
+                            $scope.hideCustomerColumn = false;
+                            $scope.hideIncludedCodesColumn = false;
+                            query = payload.query;
+                        }
                         return gridAPI.retrieveData(query);
                     }
 

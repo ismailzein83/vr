@@ -53,11 +53,10 @@ namespace TOne.WhS.Routing.Business
 
 
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            CarrierAccount supplier = carrierAccountManager.GetCarrierAccount(supplierId);
 
             return new RPRouteOptionSupplierDetail()
             {
-                SupplierName = (supplier != null) ? supplier.NameSuffix : null,
+                SupplierName = carrierAccountManager.GetCarrierAccountName(supplierId),
                 SupplierZones = dicRouteOptionSuppliers[supplierId].SupplierZones.MapRecords(RPRouteOptionSupplierZoneDetailMapper)
             };
         }
