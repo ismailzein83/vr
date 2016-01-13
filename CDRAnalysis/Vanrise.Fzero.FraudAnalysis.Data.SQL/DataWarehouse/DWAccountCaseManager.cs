@@ -36,7 +36,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             dwAccountCase.IsDefault = (bool)reader["IsDefault"];
             dwAccountCase.NetType = (NetType)reader["NetType"];
             dwAccountCase.PeriodID = (PeriodEnum)reader["PeriodID"];
-            dwAccountCase.StrategyID = (int)reader["StrategyName"];
+            dwAccountCase.StrategyID = (int)reader["StrategyID"];
             dwAccountCase.StrategyUser = (int)reader["StrategyUser"];
             dwAccountCase.SuspicionLevel = (SuspicionLevel)reader["SuspicionLevelID"];
             return dwAccountCase;
