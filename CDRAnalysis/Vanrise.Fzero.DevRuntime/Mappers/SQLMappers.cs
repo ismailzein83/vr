@@ -101,7 +101,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
             {
                 Vanrise.Fzero.CDRImport.Entities.CDR cdr = new Vanrise.Fzero.CDRImport.Entities.CDR();
                 cdr.CallType = Utils.GetReaderValue<Vanrise.Fzero.CDRImport.Entities.CallType>(reader, "CallTypeID");
-                cdr.BTS = reader["BTS"] as string;
+                cdr.BTS = reader["BTS"].ToString();
                 cdr.IMSI = reader["IMSI"] as string;
                 cdr.IMEI = reader["IMEI"] as string;
                 cdr.Cell = reader["Cell"] as string;
