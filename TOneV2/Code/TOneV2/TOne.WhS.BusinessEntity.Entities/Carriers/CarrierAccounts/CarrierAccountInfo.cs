@@ -9,6 +9,6 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class CarrierAccountInfo
     {
         public int CarrierAccountId { get; set; }
-        public string Name { get; set; }
+        public string NameSuffix { get; set; }
     }
 }

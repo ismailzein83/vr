@@ -24,14 +24,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             object carrierAccountId;
 
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Insert", out carrierAccountId, carrierAccount.Name, carrierAccount.CarrierProfileId, carrierAccount.AccountType, carrierAccount.SellingNumberPlanId, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Insert", out carrierAccountId, carrierAccount.NameSuffix, carrierAccount.CarrierProfileId, carrierAccount.AccountType, carrierAccount.SellingNumberPlanId, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
                 Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
             insertedId = (int)carrierAccountId;
             return (recordsEffected > 0);
         }
         public bool Update(CarrierAccount carrierAccount)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Update", carrierAccount.CarrierAccountId, carrierAccount.Name, carrierAccount.CarrierProfileId, carrierAccount.AccountType, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Update", carrierAccount.CarrierAccountId, carrierAccount.NameSuffix, carrierAccount.CarrierProfileId, carrierAccount.AccountType, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
                  Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
             return (recordsEffected > 0);
         }
@@ -51,7 +51,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             CarrierAccount carrierAccount = new CarrierAccount
             {
                 CarrierAccountId = (int)reader["ID"],
-                Name = reader["Name"] as string,
+                NameSuffix = reader["NameSuffix"] as string,
                 AccountType = (CarrierAccountType)GetReaderValue<int>(reader, "AccountType"),
                 SupplierSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSupplierSettings>(reader["SupplierSettings"] as string),
                 CustomerSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountCustomerSettings>(reader["CustomerSettings"] as string),

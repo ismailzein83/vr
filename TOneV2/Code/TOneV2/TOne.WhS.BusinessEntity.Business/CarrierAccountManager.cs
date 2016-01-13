@@ -25,7 +25,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var allCarrierAccounts = GetCachedCarrierAccounts();
 
             Func<CarrierAccount, bool> filterExpression = (item) =>
-                 (input.Query.Name == null || item.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                 (input.Query.Name == null || item.NameSuffix.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
                  (input.Query.CarrierProfilesIds == null || input.Query.CarrierProfilesIds.Contains(item.CarrierProfileId))
                   &&
@@ -50,7 +50,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var carrierAccounts = this.GetCarrierAccountsByIds(carrierAccountsIds, true, false);
             if (carrierAccounts != null)
-                return string.Join(", ", carrierAccounts.Select(x => x.Name));
+                return string.Join(", ", carrierAccounts.Select(x => x.NameSuffix));
 
             return string.Empty;
         }
@@ -189,10 +189,15 @@ namespace TOne.WhS.BusinessEntity.Business
             else
                 return customer.SellingNumberPlanId;
         }
-        public static string GetCarrierAccountName(string profileName, string nameSuffix)
+        public string GetCarrierAccountName(int carrierAccountId)
         {
-            return string.Format("{0}{1}", profileName, string.IsNullOrEmpty(nameSuffix) ? string.Empty : " (" + nameSuffix + ")");
+            CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
+            if (carrierAccount == null)
+                return null;
+            string profileName = _carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId);
+            return GetCarrierAccountName(profileName, carrierAccount.NameSuffix);
         }
+     
         #endregion
 
         #region Private Methods
@@ -239,7 +244,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return new CarrierAccountInfo()
             {
                 CarrierAccountId = carrierAccount.CarrierAccountId,
-                Name = GetCarrierAccountName(_carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId), carrierAccount.Name),
+                NameSuffix = GetCarrierAccountName(_carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId), carrierAccount.NameSuffix),
             };
         }
         private IEnumerable<CarrierAccount> GetCarrierAccountsByIds(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
@@ -287,7 +292,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (carrierProfile.Value != null)
             {
                 carrierAccountDetail.CarrierProfileName = carrierProfile.Value.Name;
-                carrierAccountDetail.CarrierAccountName = GetCarrierAccountName(carrierProfile.Value.Name, carrierAccountDetail.Entity.Name);
+                carrierAccountDetail.CarrierAccountName = GetCarrierAccountName(carrierProfile.Value.Name, carrierAccountDetail.Entity.NameSuffix);
             }
             
             carrierAccountDetail.AccountTypeDescription = carrierAccount.AccountType.ToString();
@@ -300,6 +305,10 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             
             return carrierAccountDetail;
+        }
+        private static string GetCarrierAccountName(string profileName, string nameSuffix)
+        {
+            return string.Format("{0}{1}", profileName, string.IsNullOrEmpty(nameSuffix) ? string.Empty : " (" + nameSuffix + ")");
         }
         private RoutingCustomerInfo RoutingCustomerInfoMapper(CarrierAccount carrierAccount)
         {
@@ -323,7 +332,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return new AccountManagerCarrier()
             {
                 CarrierAccountId = carrierAccount.CarrierAccountId,
-                Name = carrierAccount.Name,
+                NameSuffix = carrierAccount.NameSuffix,
                 CarrierType = carrierAccount.AccountType,
                 IsCustomerAvailable = (carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange) && (assignedCarrierAccount == null || assignedCarrierAccount.RelationType != CarrierAccountType.Customer),
                 IsSupplierAvailable = (carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange) && (assignedCarrierAccount == null || assignedCarrierAccount.RelationType != CarrierAccountType.Supplier),

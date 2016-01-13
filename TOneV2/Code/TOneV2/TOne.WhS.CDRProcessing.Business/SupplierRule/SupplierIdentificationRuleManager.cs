@@ -58,7 +58,7 @@ namespace TOne.WhS.CDRProcessing.Business
                 CDPNPrefixes = GetDescription(rule.Criteria.CDPNPrefixes),
                 OutTrunks = GetDescription(rule.Criteria.OutTrunks),
                 OutCarriers = GetDescription(rule.Criteria.OutCarriers),
-                SupplierName=carrierAccount.Name
+                SupplierName = carrierAccount.NameSuffix
             };
 
         }

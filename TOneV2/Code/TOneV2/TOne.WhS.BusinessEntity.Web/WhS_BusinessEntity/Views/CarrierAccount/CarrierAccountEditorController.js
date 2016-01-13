@@ -148,7 +148,7 @@
         function buildCarrierAccountObjFromScope() {
             var obj = {
                 CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
-                Name: $scope.scopeModal.name,
+                NameSuffix: $scope.scopeModal.name,
                 AccountType: $scope.scopeModal.selectedCarrierAccountType.value,
                 CarrierProfileId: carrierProfileDirectiveAPI.getSelectedIds(),
                 SellingNumberPlanId:sellingNumberPlanDirectiveAPI.getSelectedIds(),

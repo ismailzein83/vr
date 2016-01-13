@@ -57,7 +57,7 @@ namespace TOne.WhS.Routing.Business
 
             return new RPRouteOptionSupplierDetail()
             {
-                SupplierName = (supplier != null) ? supplier.Name : null,
+                SupplierName = (supplier != null) ? supplier.NameSuffix : null,
                 SupplierZones = dicRouteOptionSuppliers[supplierId].SupplierZones.MapRecords(RPRouteOptionSupplierZoneDetailMapper)
             };
         }
@@ -150,7 +150,7 @@ namespace TOne.WhS.Routing.Business
             CarrierAccount supplier = manager.GetCarrierAccount(supplierId);
 
             if (supplier != null)
-                return supplier.Name;
+                return supplier.NameSuffix;
 
             return null;
         }

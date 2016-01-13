@@ -53,8 +53,8 @@ namespace TOne.WhS.Analytics.Business
             CDRLogDetail cdrLogDetail = new CDRLogDetail
             {
                 Entity = cdrLog,
-                CustomerName = customer!=null?customer.Name:"N/A",
-                SupplierName = supplier!=null?supplier.Name:"N/A",
+                CustomerName = customer != null ? customer.NameSuffix : "N/A",
+                SupplierName = supplier != null ? supplier.NameSuffix : "N/A",
                 SaleZoneName = salezone != null ? salezone.Name : "N/A",
                 SupplierZoneName = supplierzone != null ? supplierzone.Name : "N/A",
                 SwitchName = switchEntity != null ? switchEntity.Name : "N/A",

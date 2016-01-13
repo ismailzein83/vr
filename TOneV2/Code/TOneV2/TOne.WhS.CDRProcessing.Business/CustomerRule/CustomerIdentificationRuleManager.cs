@@ -59,7 +59,7 @@ namespace TOne.WhS.CDRProcessing.Business
                 CDPNPrefixes = GetDescription(rule.Criteria.CDPNPrefixes),
                 InTrunks=GetDescription(rule.Criteria.InTrunks),
                 InCarriers = GetDescription(rule.Criteria.InCarriers),
-                CustomerName=carrierAccount.Name
+                CustomerName = carrierAccount.NameSuffix
             };
         }
         private string GetDescription(IEnumerable<string> list)

@@ -51,7 +51,7 @@ namespace TOne.WhS.Routing.Business
             CarrierAccount customer = manager.GetCarrierAccount(customerId);
 
             if (customer != null)
-                return customer.Name;
+                return customer.NameSuffix;
 
             return null;
         }
@@ -87,7 +87,7 @@ namespace TOne.WhS.Routing.Business
                     IsBlocked = item.IsBlocked,
                     Percentage = item.Percentage,
                     SupplierCode = item.SupplierCode,
-                    SupplierName = supplier != null ? supplier.Name : "Supplier Not Found",
+                    SupplierName = supplier != null ? supplier.NameSuffix : "Supplier Not Found",
                     SupplierRate = item.SupplierRate,
                     SupplierZoneName = supplierZone != null ? supplierZone.Name : "Supplier Zone Not Found"
                 });
