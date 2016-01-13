@@ -182,9 +182,7 @@ namespace TOne.WhS.BusinessEntity.Business
             SellingProductManager sellingProductManager = new SellingProductManager();
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             SellingProduct sellingProduct = sellingProductManager.GetSellingProduct(customerSellingProduct.SellingProductId);
-                CarrierAccount carrierAccount=carrierAccountManager.GetCarrierAccount(customerSellingProduct.CustomerId);
-            if(carrierAccount!=null)
-                customerSellingProductDetail.CustomerName = carrierAccount.NameSuffix;
+            customerSellingProductDetail.CustomerName = carrierAccountManager.GetCarrierAccountName(customerSellingProduct.CustomerId);
             if (sellingProduct != null)
             {
                 customerSellingProductDetail.SellingProductName = sellingProduct.Name;

@@ -31,7 +31,7 @@
         </vr-actionbar>
     </vr-row>
     <vr-row removeline>
-        <vr-columns width="1/4row">
+        <vr-columns width="1/4row" ng-show="selectedSellingNumberPlan!=undefined">
             <div style="max-height:700px;overflow-y:auto">
                 <vr-treeview on-ready="countriesTreeReady"
                              datachildrenfield="effectiveZones"

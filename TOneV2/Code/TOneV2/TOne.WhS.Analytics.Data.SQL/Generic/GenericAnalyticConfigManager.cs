@@ -80,10 +80,10 @@ namespace TOne.WhS.Analytics.Data.SQL
              new AnalyticDimensionConfig
              {
                  IdColumn = "ISNULL(ts.CustomerID,0)",
-                 NameColumn = "ISNULL(case when cust.Name != '' THEN  custProf.Name + ' (' + cust.Name + ')' else custProf.Name end,'N/A')",
+                 NameColumn = "ISNULL(case when cust.NameSuffix != '' THEN  custProf.Name + ' (' + cust.NameSuffix + ')' else custProf.Name end,'N/A')",
                  JoinStatements = new List<string>() { @"LEFT JOIN TOneWhS_BE.CarrierAccount cust WITH (NOLOCK) ON cust.ID = ts.CustomerID 
                                                             LEFT JOIN TOneWhS_BE.CarrierProfile custProf on cust.CarrierProfileID = custProf.ID " },
-                 GroupByStatements = new List<string>() { " ts.CustomerID, cust.Name, custProf.Name " },
+                 GroupByStatements = new List<string>() { " ts.CustomerID, cust.NameSuffix, custProf.Name " },
                  ExpressionSummary = AnalyticSummary.Sum.ToString("G")
              });
             #endregion
@@ -93,10 +93,10 @@ namespace TOne.WhS.Analytics.Data.SQL
                new AnalyticDimensionConfig
                {
                    IdColumn = "ISNULL(ts.SupplierID,0)",
-                   NameColumn = "ISNULL(case when supp.Name != '' THEN  suppProf.Name + ' (' + supp.Name + ')' else suppProf.Name end,'N/A')",
+                   NameColumn = "ISNULL(case when supp.NameSuffix != '' THEN  suppProf.Name + ' (' + supp.NameSuffix + ')' else suppProf.Name end,'N/A')",
                    JoinStatements = new List<string>() { @"LEFT JOIN TOneWhS_BE.CarrierAccount supp WITH (NOLOCK) ON supp.ID = ts.SupplierID 
                                                            LEFT JOIN TOneWhS_BE.CarrierProfile suppProf on supp.CarrierProfileID = suppProf.ID " },
-                   GroupByStatements = new List<string>() { " ts.SupplierID, supp.Name, suppProf.Name " },
+                   GroupByStatements = new List<string>() { " ts.SupplierID, supp.NameSuffix, suppProf.Name " },
                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                });
             #endregion

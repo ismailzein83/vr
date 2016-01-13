@@ -160,9 +160,7 @@ namespace TOne.WhS.BusinessEntity.Business
             AssignedCarrierDetail assignedCarrierDetail = new AssignedCarrierDetail();
             CarrierAccountManager carrierAccountManager=new CarrierAccountManager();
             assignedCarrierDetail.Entity = assignedCarrier;
-               CarrierAccount carrierAccount= carrierAccountManager.GetCarrierAccount(assignedCarrier.CarrierAccountId);
-                if(carrierAccount!=null)
-                    assignedCarrierDetail.CarrierName = carrierAccount.NameSuffix;
+            assignedCarrierDetail.CarrierName = carrierAccountManager.GetCarrierAccountName(assignedCarrier.CarrierAccountId);
             return assignedCarrierDetail;
 
         }
