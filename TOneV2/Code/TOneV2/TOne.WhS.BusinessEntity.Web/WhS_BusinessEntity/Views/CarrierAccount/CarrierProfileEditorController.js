@@ -202,7 +202,7 @@
                     $scope.scopeModal.postalCode = carrierProfileEntity.Settings.PostalCode;
                     $scope.scopeModal.town = carrierProfileEntity.Settings.Town;
 
-                    if ($scope.scopeModal.companyLogo > 0)
+                    if (carrierProfileEntity.Settings.CompanyLogo > 0)
                         $scope.scopeModal.companyLogo = {
                             fileId: carrierProfileEntity.Settings.CompanyLogo
                         };

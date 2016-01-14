@@ -1,11 +1,10 @@
 ﻿
-app.service('VR_Runtime_SchedulerTaskService', ['VRModalService',
-    function (VRModalService) {
+app.service('VR_Runtime_SchedulerTaskService', ['VRModalService', 'UtilsService',
+    function (VRModalService, UtilsService) {
 
         return ({
             addTask: addTask,
-            editTask: editTask,
-            editTaskNew: editTaskNew
+            editTask: editTask
         });
 
         function addTask(onTaskAdded) {
@@ -15,11 +14,14 @@ app.service('VR_Runtime_SchedulerTaskService', ['VRModalService',
             var parameters = {
             };
 
-            settings.onScopeReady = function (modalScope) {
+            settings.onScopeReady = function (modalScope) {               
                 modalScope.onTaskAdded = onTaskAdded;
             };
+            var editor = '/Client/Modules/Runtime/Views/SchedulerTaskEditor.html';
+            VRModalService.showModal(editor, parameters, settings);
 
-            VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', parameters, settings);
+            // '/Client/Modules/Runtime/Views/NewSchedulerTaskEditor/NewSchedulerTaskEditor.html' new 
+            // /Client/Modules/Runtime/Views/SchedulerTaskEditor.html old
         }
 
         function editTask(taskId, onTaskUpdated) {
@@ -28,23 +30,12 @@ app.service('VR_Runtime_SchedulerTaskService', ['VRModalService',
             var parameters = {
                 taskId: taskId
             };
+            var editor = '/Client/Modules/Runtime/Views/SchedulerTaskEditor.html';
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onTaskUpdated = onTaskUpdated;
             };
-            VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', parameters, modalSettings);
+            VRModalService.showModal(editor, parameters, modalSettings);
         }
-        function editTaskNew(taskId, onTaskUpdated) {
-            var modalSettings = {
-            };
-            var parameters = {
-                taskId: taskId
-            };
-
-            modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onTaskUpdated = onTaskUpdated;
-            };
-            VRModalService.showModal('/Client/Modules/Runtime/Views/NewSchedulerTaskEditor/NewSchedulerTaskEditor.html', parameters, modalSettings);
-        }
-
+        
     }]);

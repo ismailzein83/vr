@@ -51,7 +51,9 @@ app.service('DataSourceService', ['UtilsService', 'VRModalService', 'Integration
                 modalScope.title = "Edit Data Source";
                 modalScope.onDataSourceUpdated = onDataSourceUpdated;
             };
-            VRModalService.showModal('/Client/Modules/Integration/Views/DataSourceEditor.html', parameters, modalSettings);
+            //Client/Modules/Integration/Views/DataSourceEditor.html
+            //Client/Modules/Integration/Views/NewDataSource/NewDataSourceEditor.html
+            VRModalService.showModal('Client/Modules/Integration/Views/DataSourceEditor.html', parameters, modalSettings);
         }
 
         function addDataSource(onDataSourceAdded) {
@@ -63,6 +65,7 @@ app.service('DataSourceService', ['UtilsService', 'VRModalService', 'Integration
                 modalScope.onDataSourceAdded = onDataSourceAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Integration/Views/DataSourceEditor.html', null, modalSettings);
+            VRModalService.showModal('Client/Modules/Integration/Views/DataSourceEditor.html', null, modalSettings);
         }
+
 }]);

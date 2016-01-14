@@ -4,7 +4,6 @@ app.service('VRCommon_CurrencyExchangeRateService', ['UtilsService', 'VRModalSer
 
         function addExchangeRate(onCurrencyExchangeRateAdded , currency) {
             var settings = {
-                useModalTemplate: true
 
             };
 

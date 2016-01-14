@@ -82,7 +82,6 @@ function BPDefinitionManagementController($scope, BusinessProcessService, Busine
             }
         });
     }
-
     function showBPTrackingModal(processInstanceId) {
 
         BusinessProcessService.openProcessTracking(processInstanceId);

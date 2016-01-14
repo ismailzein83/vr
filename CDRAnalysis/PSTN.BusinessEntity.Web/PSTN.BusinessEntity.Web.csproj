@@ -186,6 +186,9 @@
     <Content Include="PSTN_BusinessEntity\Constants\PSTN_BE_ModuleConfig.js" />
     <Content Include="PSTN_BusinessEntity\Constants\TrunkDirectionEnum.js" />
     <Content Include="PSTN_BusinessEntity\Constants\TrunkTypeEnum.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\MainExtensions\ProcessInput\Normal\Templates\StagingToNormalCDRManualTemplate.html" />
+    <Content Include="PSTN_BusinessEntity\Directives\MainExtensions\ProcessInput\Normal\vr-cdr-pstnbe-stagingtonormalcdr-manual.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-pstnbe-stagingtonormalcdr.js" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\ReplaceStringDirectiveTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\SetAreaPrefixDirectiveTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\SetAreaDirectiveTemplate.html" />

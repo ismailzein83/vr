@@ -4,7 +4,6 @@ app.service('VRCommon_CurrencyService', ['UtilsService','VRModalService', 'VRNot
 
         function addCurrency(onCurrencyAdded) {
             var settings = {
-                useModalTemplate: true
 
             };
 
@@ -19,7 +18,6 @@ app.service('VRCommon_CurrencyService', ['UtilsService','VRModalService', 'VRNot
 
         function editCurrency(obj, onCurrencyUpdated) {
             var settings = {
-                useModalTemplate: true
 
             };
 

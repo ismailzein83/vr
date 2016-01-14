@@ -25,6 +25,7 @@ namespace Vanrise.BusinessProcess.Entities
 
         public string ScheduleTemplateURL { get; set; }
 
-        public string Editor { get; set; }
+        public string ManualExecEditor { get; set; }
+        public string ScheduledExecEditor { get; set; }
     }
 }

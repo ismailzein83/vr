@@ -1,0 +1,37 @@
+﻿<vr-row removeline>
+    <vr-columns width="1/2row">
+        <vr-select datatextfield="description" datavaluefield="value" label="Routing Database Type" datasource="routingDatabaseTypes"
+                    selectedvalues="selectedRoutingDatabaseType" onselectionchanged="onRoutingProductDatabaseTypeSelectionChanged" hideremoveicon />
+    </vr-columns>
+    <vr-columns width="1/2row" ng-show="!isFuture">
+        <vr-datetimepicker type="date" value="effectiveOn" label="Effective On" isrequired="!isFuture"></vr-datetimepicker>
+    </vr-columns>
+
+</vr-row>
+<vr-row removeline>
+    <vr-columns width="1/2row">
+        <vr-select label="Code Prefix Length" datasource="codePrefixOptions" selectedvalues="selectedCodePrefixOption" isrequired></vr-select>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-select label="Sale Zone Range" datasource="saleZoneRangeOptions" selectedvalues="selectedSaleZoneRange" isrequired></vr-select>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-validator validate="ValidatePolicies()">
+            <vr-datagrid datasource="supplierZoneRPOptionPolicies">
+                <vr-datagridcolumn headertext="'Policy'" field="'Name'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Settings'">
+                    <vr-directivewrapper directive="dataItem.Editor" on-ready="dataItem.onDirectiveReady"></vr-directivewrapper>
+                </vr-datagridcolumn>
+
+                <vr-datagridcolumn headertext="'Selected'" widthfactor="3" disablesorting>
+                    <vr-check value="dataItem.isSelected" onvaluechanged="viewScope.onSelectCheckChanged(dataItem)"></vr-check>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Default'" widthfactor="3" disablesorting>
+                    <vr-check value="dataItem.IsDefault" onvaluechanged="viewScope.onDefaultCheckChanged(dataItem)"></vr-check>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
+    </vr-columns>
+</vr-row>

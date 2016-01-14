@@ -43,6 +43,8 @@ function DataSourceManagementController($scope, DataSourceAPIService, DataSource
         }
 
         $scope.AddNewDataSource = addNewDataSource;
+
+
     }
 
     function load() {
@@ -86,27 +88,20 @@ function DataSourceManagementController($scope, DataSourceAPIService, DataSource
     }
 
     function addNewDataSource() {
-        var settings = {};
-
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Add Data Source";
-            modalScope.onDataSourceAdded = function (dataSource) {
-                gridApi.itemAdded(dataSource);
-            };
+        var onDataSourceAdded = function (dataSource) {
+            gridApi.itemAdded(dataSource);
         };
-        VRModalService.showModal('/Client/Modules/Integration/Views/DataSourceEditor.html', null, settings);
+        DataSourceService.addDataSource(onDataSourceAdded);
     }
 
     function editDataSource(dataSourceObj) {
         
         var onDataSourceUpdated = function (dataSource) {
-            console.log(dataSource);
             gridApi.itemUpdated(dataSource);
         }
 
         DataSourceService.editDataSource(dataSourceObj, onDataSourceUpdated);
     }
-
     function deleteDataSource(dataSourceObj) {
         VRNotificationService.showConfirmation()
             .then(function (response) {

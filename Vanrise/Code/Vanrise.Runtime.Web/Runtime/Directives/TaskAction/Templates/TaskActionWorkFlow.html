@@ -1,12 +1,12 @@
 ﻿<vr-row>
     <vr-columns width="1/2row">
-        <vr-runtime-bpdefinition-selector selectedvalues="selectedBPDefintion" on-ready="onBPDefinitionSelectorReady"></vr-runtime-bpdefinition-selector>
+        <vr-runtime-bpdefinition-selector selectedvalues="selectedBPDefintion" on-ready="onBPDefinitionSelectorReady" onselectionchanged="onBPDefenitionSelctionChanged"></vr-runtime-bpdefinition-selector>
     </vr-columns>
 </vr-row>
 <vr-row>
-    <vr-section title="{{selectedBPDefintion.Title}}" level="2" vr-loader="isLoadingBPSection">
+    <vr-section title="{{selectedBPDefintion.Title}}" level="2" vr-loader="isLoadingBPSection" ng-if="selectedBPDefintion.Configuration.ScheduledExecEditor">
         <vr-columns width="fullrow">
-            <vr-directivewrapper directive="selectedBPDefintion.Configuration.Editor" on-ready="onBPDefinitionDirectiveReady"></vr-directivewrapper>
+            <vr-directivewrapper directive="selectedBPDefintion.Configuration.ScheduledExecEditor" on-ready="onBPDefinitionDirectiveReady"></vr-directivewrapper>
         </vr-columns>
     </vr-section>
 </vr-row>

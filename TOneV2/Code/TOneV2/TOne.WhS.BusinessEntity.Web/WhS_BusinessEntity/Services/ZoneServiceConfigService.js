@@ -3,7 +3,7 @@
 
         function editZoneServiceConfig(obj, onZoneServiceConfigUpdated) {
             var settings = {
-                useModalTemplate: true
+                //useModalTemplate: true
 
             };
             settings.onScopeReady = function (modalScope) {
@@ -18,7 +18,7 @@
         }
         function addZoneServiceConfig(onZoneServiceConfigAdded) {
             var settings = {
-                useModalTemplate: true
+               // useModalTemplate: true
 
             };
 

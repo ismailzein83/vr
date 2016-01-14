@@ -3,7 +3,7 @@
 
         function editRateType(obj, onRateTypeUpdated) {
             var settings = {
-                useModalTemplate: true
+                //useModalTemplate: true
 
             };
 
@@ -20,7 +20,7 @@
 
         function addRateType(onRateTypeAdded) {
             var settings = {
-                useModalTemplate: true
+                //useModalTemplate: true
 
             };
 

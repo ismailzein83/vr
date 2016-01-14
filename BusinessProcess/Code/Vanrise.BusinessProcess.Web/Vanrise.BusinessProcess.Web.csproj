@@ -165,6 +165,8 @@
     <Content Include="BusinessProcess\Views\BPTrackingModalController.js" />
     <Content Include="BusinessProcess\Views\InstanceEditor.html" />
     <Content Include="BusinessProcess\Views\InstanceEditorController.js" />
+    <Content Include="BusinessProcess\Views\NewInstanceEditor\NewInstanceEditor.html" />
+    <Content Include="BusinessProcess\Views\NewInstanceEditor\NewInstanceEditorController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

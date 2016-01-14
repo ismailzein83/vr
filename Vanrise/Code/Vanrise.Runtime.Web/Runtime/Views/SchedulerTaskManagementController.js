@@ -23,7 +23,6 @@ function SchedulerTaskManagementController($scope, VR_Runtime_SchedulerTaskServi
         };
 
         $scope.AddNewTask = addTask;
-       
     }
 
     function load() {
@@ -42,8 +41,6 @@ function SchedulerTaskManagementController($scope, VR_Runtime_SchedulerTaskServi
 
         VR_Runtime_SchedulerTaskService.addTask(onTaskAdded);
     }
-   
-
 }
 
 appControllers.controller('Runtime_SchedulerTaskManagementController', SchedulerTaskManagementController);

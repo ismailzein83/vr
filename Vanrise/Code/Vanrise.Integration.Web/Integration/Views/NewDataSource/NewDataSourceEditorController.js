@@ -99,6 +99,7 @@ function newDataSourceEditorController($scope, DataSourceAPIService, SchedulerTa
         else {
             $scope.title = UtilsService.buildTitleForAddEditor("Data Source");
             loadAllControls();
+          
         }
     }
    
@@ -108,9 +109,7 @@ function newDataSourceEditorController($scope, DataSourceAPIService, SchedulerTa
         return DataSourceAPIService.GetDataSource(dataSourceId).then(function (dataSourceResponse) {
 
             getDataSourceTask(dataSourceResponse).then(function () {
-                loadAllControls()
-                    .finally(function () {
-                    });
+                loadAllControls()                    
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.isGettingData = false;
@@ -146,7 +145,9 @@ function newDataSourceEditorController($scope, DataSourceAPIService, SchedulerTa
                });
     }
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadAdapterType, loadExecutionFlows, loadTaskTrigger])
+        return UtilsService.waitMultipleAsyncOperations([loadAdapterType, loadExecutionFlows, loadTaskTrigger]).then(function () {
+            $scope.isGettingData = false;
+        })
            .catch(function (error) {
                VRNotificationService.notifyExceptionWithClose(error, $scope);
            })

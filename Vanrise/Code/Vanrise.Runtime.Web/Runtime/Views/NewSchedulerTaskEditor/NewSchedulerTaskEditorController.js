@@ -158,7 +158,6 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
             var loadTaskTriggerPromiseDeferred = UtilsService.createPromiseDeferred();
             promises.push(loadTaskTriggerPromiseDeferred.promise);
             taskTriggerDirectiveReadyPromiseDeferred.promise.then(function () {
-                taskTriggerDirectiveReadyPromiseDeferred = undefined;
                 VRUIUtilsService.callDirectiveLoad(taskTriggerDirectiveAPI, triggersPayload, loadTaskTriggerPromiseDeferred);
             });
 

@@ -32,8 +32,12 @@
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Mapper'">
-                    <label style="margin-top:15px; font-weight: bold; font-size: 12px;">Custom Code</label>
-                    <textarea ng-model="scopeModel.customCode" rows="15" cols="64" style="margin-top: 15px;"></textarea>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-label>Custom Code</vr-label>
+                            <vr-textarea value="scopeModel.customCode" rows="15" cols="64"></vr-textarea>
+                        </vr-columns>
+                    </vr-row>
                 </vr-tab>
                 <vr-tab header="'Scheduler'">
                     <vr-row>
