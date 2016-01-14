@@ -10,6 +10,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public class DWFactDataManager : BaseSQLDataManager, IDWFactDataManager
     {
+        static string[] s_Columns = new string[] {
+            "MS_IMEI", "MS_MSISDN" ,"MS_CaseId" ,"MS_Duration" ,"FK_CallClass"     ,"FK_CallType"    ,"FK_CaseStatus" ,"FK_NetworkType" ,"FK_Period"   ,"FK_Strategy"     ,"FK_StrategyKind" , "FK_SubscriberType"    ,"FK_SuspicionLevel"     ,"FK_ConnectTime"     ,"FK_CaseGenerationTime"    ,"FK_StrategyUser","FK_CaseUser"   ,"FK_BTS"    };
+
         public DWFactDataManager()
             : base("DWSDBConnString")
         {
@@ -28,6 +31,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return new StreamBulkInsertInfo
             {
                 TableName = "[dbo].[Facts]",
+                ColumnNames = s_Columns,
                 Stream = streamForBulkInsert,
                 TabLock = false,
                 KeepIdentity = false,

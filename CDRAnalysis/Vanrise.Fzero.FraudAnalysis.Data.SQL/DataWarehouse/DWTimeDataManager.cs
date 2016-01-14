@@ -18,6 +18,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
+        static string[] s_Columns = new string[] {
+            "DateInstance",
+            "Year",
+            "Month",
+            "Week",
+            "Day",
+            "Hour",
+            "MonthName",
+            "DayName"
+        };
+
+
         #region Private Methods
 
         private DWTime TimeMapper(IDataReader reader)
@@ -73,6 +85,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             {
                 TableName = "Dim_Time",
                 Stream = streamForBulkInsert,
+                ColumnNames=s_Columns,
                 TabLock = false,
                 KeepIdentity = false,
                 FieldSeparator = '^'

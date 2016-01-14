@@ -9,11 +9,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public class DWDimensionDataManager : BaseSQLDataManager, IDWDimensionDataManager
     {
+             
 
         public DWDimensionDataManager()
             : base("DWSDBConnString")
         {
-            
+
         }
 
         public List<DWDimension> GetDimensions()

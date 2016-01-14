@@ -166,8 +166,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             List<DWDimension> ToBeInsertedBTSs = new List<DWDimension>();
             List<DWTime> ToBeInsertedTimes = new List<DWTime>();
 
-            var accountCases = inputArgument.AccountCases.Values;
-
+         
             int cdrsCount = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -223,9 +222,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 CheckIfTimeAddedorAdd(inputArgument.Times, ToBeInsertedTimes, cdr.ConnectDateTime);
 
 
-                                if (accountCases.Count() > 0)
+                                if (inputArgument.AccountCases.Values.Count() > 0)
                                 {
-                                    var accountCase = accountCases.FirstOrDefault(x => x.AccountNumber == cdr.MSISDN && cdr.ConnectDateTime >=x.FromDate && cdr.ConnectDateTime<=x.ToDate);
+                                    var accountCase = inputArgument.AccountCases.Values.FirstOrDefault(x => x.AccountNumber == cdr.MSISDN && cdr.ConnectDateTime >= x.FromDate && cdr.ConnectDateTime <= x.ToDate);
                                     if (accountCase != null)
                                     {
                                         dwFact.SuspicionLevel = accountCase.SuspicionLevel;
@@ -241,7 +240,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                         dwFact.CaseStatus = accountCase.CaseStatus;
                                         dwFact.CaseUserId = accountCase.CaseUser;
                                         dwFact.CaseGenerationTime = accountCase.CaseGenerationTime;
-
+                                        inputArgument.AccountCases.Remove(accountCase.CaseID);
                                         CheckIfTimeAddedorAdd(inputArgument.Times, ToBeInsertedTimes, accountCase.CaseGenerationTime);
 
                                     }

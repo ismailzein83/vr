@@ -11,6 +11,22 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
     public class StrategyExecutionDataManager : BaseSQLDataManager, IStrategyExecutionDataManager
     {
 
+
+        static string[] s_Columns = new string[] {
+            "ID"
+            ,"StrategyExecutionID"  
+            ,"AccountNumber"
+            ,"SuspicionLevelID"
+            ,"FilterValues"
+            ,"AggregateValues" 
+            ,"CaseID" 
+            ,"SuspicionOccuranceStatus"  
+            ,"IMEIs"  
+        };
+
+
+
+
         public StrategyExecutionDataManager()
             : base("CDRDBConnectionString")
         {
@@ -50,6 +66,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return new StreamBulkInsertInfo
             {
                 TableName = "[FraudAnalysis].[StrategyExecutionDetails]",
+                ColumnNames=s_Columns,
                 Stream = streamForBulkInsert,
                 TabLock = false,
                 KeepIdentity = false,
@@ -125,8 +142,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             string StrategiesCommaSeperatedList = null;
 
-            if(strategyIDs !=null)
-                StrategiesCommaSeperatedList=string.Join(",", strategyIDs);
+            if (strategyIDs != null)
+                StrategiesCommaSeperatedList = string.Join(",", strategyIDs);
 
             return GetItemsSP("FraudAnalysis.sp_StrategyExecutionDetails_GetCaseIDs", CaseMapper, accountNumber, fromDate, toDate, StrategiesCommaSeperatedList);
         }
@@ -157,10 +174,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         private int CaseMapper(IDataReader reader)
         {
-            return  (int)  reader["CaseID"] ;
+            return (int)reader["CaseID"];
         }
 
-        #endregion 
+        #endregion
 
 
     }

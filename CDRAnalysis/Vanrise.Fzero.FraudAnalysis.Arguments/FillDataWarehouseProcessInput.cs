@@ -11,7 +11,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 
         public override string GetTitle()
         {
-            return String.Format("Fill Data Warehouse: ({0:dd-MMM-yy HH:mm})", DateTime.Now);
+            return String.Format("Fill Data Warehouse: ({0:dd-MMM-yy HH:mm} to {1:dd-MMM-yy HH:mm})", FromDate, ToDate);
         }
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)

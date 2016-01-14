@@ -23,6 +23,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             });
         }
 
+        static string[] s_Columns = new string[] {
+            "Pk_StrategyId","Name","Type","Kind"
+        };
 
         public void SaveDWStrategiesToDB(List<DWStrategy> dwStrategies)
         {
@@ -50,6 +53,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 TableName = "[dbo].[Dim_Strategy]",
                 Stream = streamForBulkInsert,
                 TabLock = false,
+                ColumnNames = s_Columns,
                 KeepIdentity = false,
                 FieldSeparator = '^'
             };

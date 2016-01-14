@@ -16,6 +16,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
+        static string[] s_Columns = new string[] {
+            "ID"
+            ,"AccountNumber"
+            ,"FromDate"
+            ,"ToDate"
+            ,"AggregateValues"
+            ,"IMEIs"
+        };
+
+
         public void ApplyNumberProfilesToDB(object preparedNumberProfiles)
         {
             InsertBulkToTable(preparedNumberProfiles as BaseBulkInsertInfo);
@@ -29,6 +39,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             {
                 TableName = "[FraudAnalysis].[NumberProfile]",
                 Stream = streamForBulkInsert,
+                ColumnNames=s_Columns,
                 TabLock = false,
                 KeepIdentity = false,
                 FieldSeparator = '^'
@@ -48,7 +59,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                                     record.FromDate,
                                     record.ToDate,
                                     Vanrise.Common.Serializer.Serialize(record.AggregateValues, true),
-                                    string.Join<string>(",", record.IMEIs)    
+                                    string.Join<string>(",", record.IMEIs)
                                     );
         }
 
