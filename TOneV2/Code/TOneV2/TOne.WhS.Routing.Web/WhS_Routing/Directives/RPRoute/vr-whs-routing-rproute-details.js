@@ -48,6 +48,10 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                     rpRoutePolicyReadyPromiseDeffered.resolve();
                 };
 
+                $scope.onPolicySelectItem = function (selectedItem) {
+                    loadGrid();
+                };
+
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                     gridReadyDeferred.resolve();
@@ -59,22 +63,6 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
-                };
-
-                $scope.onPolicySelectItem = function (selectedItem) {
-                    console.log($scope.selectedPolicy);
-                    if (rpRouteDetail == undefined)
-                        return;
-
-                    var query = {
-                        RoutingDatabaseId: routingDatabaseId,
-                        PolicyOptionConfigId: selectedItem.TemplateConfigID,
-                        RoutingProductId: rpRouteDetail.RoutingProductId,
-                        SaleZoneId: rpRouteDetail.SaleZoneId
-                    };
-
-                    if (gridAPI != undefined)
-                        return gridAPI.retrieveData(query);
                 };
 
                 $scope.openRouteOptionSupplier = function (dataItem) {
@@ -90,14 +78,9 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
+                    setGlobalVairables(payload);
 
-                    if (payload != undefined) {
-                        rpRouteDetail = payload.rpRouteDetail;
-                        routingDatabaseId = payload.routingDatabaseId;
-                        policies = payload.filteredPolicies;
-                        defaultPolicyId = payload.defaultPolicyId
-                    }
+                    var promises = [];
 
                     var loadPolicySelectorPromise = loadPolicySelector();
                     promises.push(loadPolicySelectorPromise);
@@ -106,13 +89,26 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                     promises.push(loadGridDeferred.promise);
 
                     loadPolicySelectorPromise.then(function () {
-                       UtilsService.safeApply($scope);
-                       loadGrid().then(function () {
-                                loadGridDeferred.resolve();
-                            }).catch(function () {
-                                loadGridDeferred.reject();
-                            });
+                        UtilsService.safeApply($scope);
+
+                        loadGrid().then(function () {
+                            loadGridDeferred.resolve();
+                        }).catch(function () {
+                            loadGridDeferred.reject();
+                        });
                     });
+
+                    return UtilsService.waitMultiplePromises(promises);
+
+                    function setGlobalVairables(payload) {
+                        if (payload) {
+                            rpRouteDetail = payload.rpRouteDetail;
+                            routingDatabaseId = payload.routingDatabaseId;
+                            policies = payload.filteredPolicies;
+                            defaultPolicyId = payload.defaultPolicyId
+                        }
+                    }
+
                     function loadPolicySelector() {
                         var loadPolicySelectorDeferred = UtilsService.createPromiseDeferred();
 
@@ -124,31 +120,25 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                         VRUIUtilsService.callDirectiveLoad(rpRoutePolicyAPI, policySelectorPayload, loadPolicySelectorDeferred);
                         return loadPolicySelectorDeferred.promise;
                     }
-
-                    function loadGrid() {
-                        var query = null;
-                       
-                        if (rpRouteDetail) {
-                            query = {
-                                RoutingDatabaseId: routingDatabaseId,
-                                PolicyOptionConfigId: $scope.selectedPolicy.TemplateConfigID, // $scope.selectedPolicy is != undefined at this point
-                                RoutingProductId: rpRouteDetail.RoutingProductId,
-                                SaleZoneId: rpRouteDetail.SaleZoneId
-                            };
-                        }
-
-                        return gridAPI.retrieveData(query);
-                    }
-
-                    return UtilsService.waitMultiplePromises(promises);
-
-                   
-
-                   
                 }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function loadGrid() {
+                var query = null;
+
+                if (rpRouteDetail) {
+                    query = {
+                        RoutingDatabaseId: routingDatabaseId,
+                        PolicyOptionConfigId: $scope.selectedPolicy.TemplateConfigID, // $scope.selectedPolicy is != undefined since the policy selector is loaded before the grid
+                        RoutingProductId: rpRouteDetail.RoutingProductId,
+                        SaleZoneId: rpRouteDetail.SaleZoneId
+                    };
+                }
+
+                return gridAPI.retrieveData(query);
             }
 
             this.initializeController = initializeController;

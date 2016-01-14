@@ -52,16 +52,21 @@
                 saleZoneSelectorAPI = api;
             }
 
-            $scope.onSelectSellingNumberPlan = function (selectedItem) {
-                $scope.showSaleZoneSelector = true;
+            $scope.onSellingNumberPlanChanged = function (selectedItem) {
+                if (selectedItem) {
+                    $scope.showSaleZoneSelector = true;
 
-                var payload = {
-                    sellingNumberPlanId: selectedItem.SellingNumberPlanId
+                    var payload = {
+                        sellingNumberPlanId: selectedItem.SellingNumberPlanId
+                    };
+
+                    var setLoader = function (value) { $scope.isLoadingSaleZoneSection = value };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneSelectorAPI, payload, setLoader);
                 }
-
-                var setLoader = function (value) { $scope.isLoadingSaleZoneSection = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneSelectorAPI, payload, setLoader);
-            }
+                else {
+                    $scope.showSaleZoneSelector = false;
+                }
+            };
 
             $scope.onRoutingDatabaseSelectorChange = function (item) {
 
