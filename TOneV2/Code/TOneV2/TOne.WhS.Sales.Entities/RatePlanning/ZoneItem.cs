@@ -46,7 +46,7 @@ namespace TOne.WhS.Sales.Entities
         #region Route Option Properties
 
         public IEnumerable<RPRouteOptionDetail> RouteOptions { get; set; }
-        public List<decimal> Costs { get; set; }
+        public List<decimal?> Costs { get; set; }
 
         #endregion
     }

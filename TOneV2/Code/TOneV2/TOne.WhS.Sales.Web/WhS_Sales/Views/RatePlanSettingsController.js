@@ -31,10 +31,10 @@
 
             $scope.saveSettings = function () {
                 var settings = {};
-                settings.CostCalculationMethods = $scope.tabItems[0].directiveAPI ? $scope.tabItems[0].directiveAPI.getData() : null;
+                settings.costCalculationMethods = $scope.tabItems[0].directiveAPI ? $scope.tabItems[0].directiveAPI.getData() : null;
 
-                if ($scope.onSettingsUpdate && typeof ($scope.onSettingsUpdate) == "function")
-                    $scope.onSettingsUpdate(settings);
+                if ($scope.onSettingsUpdated && typeof $scope.onSettingsUpdated == "function")
+                    $scope.onSettingsUpdated(settings);
 
                 $scope.modalContext.closeModal();
             };

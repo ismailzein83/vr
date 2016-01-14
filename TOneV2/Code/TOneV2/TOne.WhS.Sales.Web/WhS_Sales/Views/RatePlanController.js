@@ -175,29 +175,28 @@
                 WhS_Sales_RatePlanService.sellNewCountries(customerId, onCountriesSold);
             };
             $scope.editSettings = function () {
-                var onSettingsUpdate = function (updatedSettings) {
+                var onSettingsUpdated = function (updatedSettings) {
                     if (updatedSettings) {
                         settings = {};
-                        settings.CostCalculationMethods = [];
 
-                        if (updatedSettings.CostCalculationMethods && updatedSettings.CostCalculationMethods.length > 0) {
-                            for (var i = 0; i < updatedSettings.CostCalculationMethods.length; i++) {
-                                settings.CostCalculationMethods.push(updatedSettings.CostCalculationMethods[i]);
+                        if (updatedSettings.costCalculationMethods) {
+                            settings.costCalculationMethods = [];
+
+                            for (var i = 0; i < updatedSettings.costCalculationMethods.length; i++) {
+                                settings.costCalculationMethods.push(updatedSettings.costCalculationMethods[i]);
                             }
+                        }
 
-                            $scope.showPricingButton = true;
-                        }
-                        else {
-                            $scope.showPricingButton = false;
-                        }
+                        $scope.showPricingButton = settings.costCalculationMethods ? true : false;
                     }
 
                     $scope.showApplyButton = false;
-                    VRNotificationService.showSuccess("Settings saved");
                     pricingSettings = null;
+
+                    VRNotificationService.showSuccess("Settings saved");
                     loadGrid();
                 };
-                WhS_Sales_RatePlanService.editSettings(settings, onSettingsUpdate);
+                WhS_Sales_RatePlanService.editSettings(settings, onSettingsUpdated);
             };
             $scope.editPricingSettings = function () {
                 var onPricingSettingsUpdated = function (updatedPricingSettings) {
@@ -229,7 +228,7 @@
                             RoutingDatabaseId: databaseSelectorAPI ? databaseSelectorAPI.getSelectedIds() : null,
                             PolicyConfigId: policySelectorAPI ? policySelectorAPI.getSelectedIds() : null,
                             NumberOfOptions: $scope.numberOfOptions,
-                            CostCalculationMethods: settings ? settings.CostCalculationMethods : null,
+                            CostCalculationMethods: settings ? settings.costCalculationMethods : null,
                             SelectedCostCalculationMethodConfigId: pricingSettings ? pricingSettings.selectedCostColumn.ConfigId : null,
                             RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null
                         };
@@ -451,7 +450,7 @@
                     RoutingDatabaseId: databaseSelectorAPI.getSelectedIds(),
                     PolicyConfigId: policySelectorAPI.getSelectedIds(),
                     NumberOfOptions: $scope.numberOfOptions,
-                    CostCalculationMethods: settings ? settings.CostCalculationMethods : null,
+                    CostCalculationMethods: settings ? settings.costCalculationMethods : null,
                     CostCalculationMethodConfigId: pricingSettings ? pricingSettings.selectedCostColumn.ConfigId : null,
                     RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null
                 };

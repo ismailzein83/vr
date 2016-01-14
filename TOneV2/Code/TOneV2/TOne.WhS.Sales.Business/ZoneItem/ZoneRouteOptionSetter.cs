@@ -41,6 +41,15 @@ namespace TOne.WhS.Sales.Business
                     zoneItem.RouteOptions = route.RouteOptionsDetails;
                     SetZoneCostsAndCalculatedRate(zoneItem, route);
                 }
+                else if (_costCalculationMethods != null)
+                {
+                    zoneItem.Costs = new List<decimal?>();
+
+                    foreach (CostCalculationMethod costCalculationMethod in _costCalculationMethods)
+                    {
+                        zoneItem.Costs.Add(null);
+                    }
+                }
             }
         }
 
@@ -48,7 +57,7 @@ namespace TOne.WhS.Sales.Business
         {
             if (_costCalculationMethods != null)
             {
-                zoneItem.Costs = new List<decimal>();
+                zoneItem.Costs = new List<decimal?>();
 
                 foreach (CostCalculationMethod costCalculationMethod in _costCalculationMethods)
                 {

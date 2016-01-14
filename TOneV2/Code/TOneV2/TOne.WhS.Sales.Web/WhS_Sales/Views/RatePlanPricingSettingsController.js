@@ -78,9 +78,9 @@
             });
 
             function loadCostColumns() {
-                if (ratePlanSettings && ratePlanSettings.CostCalculationMethods) {
-                    for (var i = 0; i < ratePlanSettings.CostCalculationMethods.length; i++) {
-                        $scope.costColumns.push(ratePlanSettings.CostCalculationMethods[i]);
+                if (ratePlanSettings) {
+                    for (var i = 0; i < ratePlanSettings.costCalculationMethods.length; i++) {
+                        $scope.costColumns.push(ratePlanSettings.costCalculationMethods[i]);
                     }
 
                     if (pricingSettings)

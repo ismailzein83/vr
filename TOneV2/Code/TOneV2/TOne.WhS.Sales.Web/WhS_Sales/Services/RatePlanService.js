@@ -21,7 +21,7 @@
         VRModalService.showModal("/Client/Modules/WhS_Sales/Views/SellNewCountries.html", parameters, settings);
     }
 
-    function editSettings(settings, onSettingsUpdate) {
+    function editSettings(settings, onSettingsUpdated) {
         var parameters = {
             settings: settings
         };
@@ -29,7 +29,7 @@
         var modalSettings = {};
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.onSettingsUpdate = onSettingsUpdate;
+            modalScope.onSettingsUpdated = onSettingsUpdated;
         };
 
         VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanSettings.html", parameters, modalSettings);

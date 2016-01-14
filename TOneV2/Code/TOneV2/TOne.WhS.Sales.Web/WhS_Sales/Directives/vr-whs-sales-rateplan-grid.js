@@ -80,8 +80,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             api.load = function (query) {
                 gridQuery = query;
-                
-                if (query.CostCalculationMethods) {
+
+                if (query && query.CostCalculationMethods) {
                     $scope.connector.costCalculationMethods = [];
 
                     for (var i = 0; i < query.CostCalculationMethods.length; i++)
