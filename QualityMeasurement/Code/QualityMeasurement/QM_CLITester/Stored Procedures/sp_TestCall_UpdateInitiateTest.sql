@@ -14,7 +14,8 @@ SELECT 1 FROM QM_CLITester.TestCall WHERE ID = @Id
 			InitiateTestInformation = @InitiateTestInformation,
 			CallTestStatus = @CallTestStatus,
 			InitiationRetryCount = @InitiationRetryCount,
-			FailureMessage = @FailureMessage
+			FailureMessage = @FailureMessage,
+			UpdateStatusTime = GETDATE()
 	Where ID = @ID
 	END	
 END

@@ -28,7 +28,8 @@ SELECT 1 FROM QM_CLITester.TestCall WHERE ID = @Id
 			Duration = @Duration,
 			ReleaseCode = @ReleaseCode,
 			ReceivedCLI = @ReceivedCLI,
-			RingDuration = @RingDuration
+			RingDuration = @RingDuration,
+			UpdateStatusTime = GETDATE()
 	Where ID = @ID
 	END	
 END

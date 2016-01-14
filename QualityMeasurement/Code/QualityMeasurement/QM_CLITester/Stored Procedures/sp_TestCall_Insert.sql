@@ -20,8 +20,8 @@ AS
 BEGIN
 
 	Insert into QM_CLITester.TestCall([SupplierID], [CountryID], [ZoneID], [CreationDate],
-	[CallTestStatus],[CallTestResult],[UserID], [ProfileID], [InitiationRetryCount], [GetProgressRetryCount], [BatchNumber], [scheduleID])
-	Values(@SupplierID, @CountryID, @ZoneID, GETDATE(),@CallTestStatus, @CallTestResult, @UserID, @ProfileID, @InitiationRetryCount, @GetProgressRetryCount, @BatchNumber, @scheduleID)
+	[CallTestStatus],[CallTestResult],[UserID], [ProfileID], [InitiationRetryCount], [GetProgressRetryCount], [BatchNumber], [scheduleID], [UpdateStatusTime])
+	Values(@SupplierID, @CountryID, @ZoneID, GETDATE(),@CallTestStatus, @CallTestResult, @UserID, @ProfileID, @InitiationRetryCount, @GetProgressRetryCount, @BatchNumber, @scheduleID, GETDATE())
 	
 	Set @ID = @@IDENTITY
 END

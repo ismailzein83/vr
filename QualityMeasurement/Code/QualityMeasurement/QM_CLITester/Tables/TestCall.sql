@@ -22,8 +22,11 @@
     [ReleaseCode]             VARCHAR (10)    NULL,
     [ReceivedCLI]             VARCHAR (50)    NULL,
     [RingDuration]            VARCHAR (20)    NULL,
+    [UpdateStatusTime]        DATETIME        NULL,
     CONSTRAINT [PK_TestCall] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
