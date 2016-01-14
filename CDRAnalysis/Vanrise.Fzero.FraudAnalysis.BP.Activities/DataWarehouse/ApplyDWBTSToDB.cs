@@ -2,6 +2,7 @@
 using System.Activities;
 using System.Collections.Generic;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Queueing;
@@ -23,8 +24,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             IDWDimensionDataManager dataManager = FraudDataManagerFactory.GetDataManager<IDWDimensionDataManager>();
 
-            dataManager.TableName= "[dbo].[Dim_BTS]";
+            dataManager.TableName = "[dbo].[Dim_BTS]";
             dataManager.SaveDWDimensionsToDB(inputArgument.ToBeInsertedCallBTSs);
+            if (inputArgument.ToBeInsertedCallBTSs.Count > 0)
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "added {0} BTS(s) ", inputArgument.ToBeInsertedCallBTSs.Count);
         }
 
         protected override ApplyDWBTSsToDBInput GetInputArgument2(AsyncCodeActivityContext context)

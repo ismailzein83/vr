@@ -3,6 +3,7 @@ using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
@@ -99,6 +100,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override GetDWDimensionsOutput DoWorkWithResult(GetDWDimensionsInput inputArgument, AsyncActivityHandle handle)
         {
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing dimensions");
+
             DWDimensionDictionary CallClasses = new DWDimensionDictionary();
             CallClasses = GetandSet(CallClasses, "[dbo].[Dim_CallClass]");
 
@@ -128,6 +131,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
             DWDimensionDictionary Users = new DWDimensionDictionary(); 
             Users = GetandSet(Users, "[dbo].[Dim_User]");
+
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing dimensions");
 
 
             return new GetDWDimensionsOutput()

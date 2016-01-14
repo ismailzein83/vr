@@ -39,6 +39,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             dwAccountCase.StrategyID = (int)reader["StrategyID"];
             dwAccountCase.StrategyUser = (int)reader["StrategyUser"];
             dwAccountCase.SuspicionLevel = (SuspicionLevel)reader["SuspicionLevelID"];
+            dwAccountCase.FromDate = GetReaderValue<DateTime?>(reader, "FromDate");
+            dwAccountCase.ToDate = GetReaderValue<DateTime?>(reader, "ToDate");
             return dwAccountCase;
         }
         #endregion

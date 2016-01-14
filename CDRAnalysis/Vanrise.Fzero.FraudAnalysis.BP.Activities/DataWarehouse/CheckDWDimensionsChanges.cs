@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
@@ -219,6 +220,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             IEnumerable<CallClass> listCallClasses = callClassManager.GetClasses();
 
 
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing call classes  and network types");
             foreach (var i in listCallClasses)
             {
                 if (!inputArgument.CallClasses.ContainsKey(i.Id))
@@ -239,27 +241,42 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     inputArgument.NetworkTypes.Add(dwDimension.Id, dwDimension);
                 }
             }
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing call classes  and network types");
 
 
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing call types");
             ToBeInsertedCallTypes = GetToBeInserted<CallType>(inputArgument.CallTypes);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing call types");
 
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing case statuses");
             ToBeInsertedCaseStatuses = GetToBeInserted<CaseStatus>(inputArgument.CaseStatuses);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing case statuses");
 
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing periods");
             ToBeInsertedPeriods = GetToBeInserted<PeriodEnum>(inputArgument.Periods);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing periods");
 
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing strategy kinds");
             ToBeInsertedStrategyKinds = GetToBeInserted<StrategyKindEnum>(inputArgument.StrategyKinds);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing strategy kinds");
 
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing subscriber types");
             ToBeInsertedSubscriberTypes = GetToBeInserted<SubscriberType>(inputArgument.SubscriberTypes);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing subscriber types");
 
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing suspicion levels");
             ToBeInsertedSuspicionLevels = GetToBeInserted<SuspicionLevel>(inputArgument.SuspicionLevels);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing suspicion levels");
 
+
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing filters");
             FilterManager filterManager = new FilterManager();
             Dictionary<int, FilterDefinition> dictFilters = filterManager.GetCriteriaDefinitions();
-
             ToBeInsertedFilters = GetToBeInserted(inputArgument.Filters, dictFilters);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing filters");
 
 
-
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing users");
             UserManager userManager = new UserManager();
             IEnumerable<UserInfo> listUsers = userManager.GetUsers();
 
@@ -274,6 +291,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     inputArgument.Users.Add(dwDimension.Id, dwDimension);
                 }
             }
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing users");
 
             return new CheckDWDimensionsChangesOutput()
             {

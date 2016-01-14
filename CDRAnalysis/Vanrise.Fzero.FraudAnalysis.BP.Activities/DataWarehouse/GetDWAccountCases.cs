@@ -3,6 +3,7 @@ using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
@@ -56,12 +57,14 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override GetDWAccountCasesOutput DoWorkWithResult(GetDWAccountCasesInput inputArgument, AsyncActivityHandle handle)
         {
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing account cases");
             DWAccountCaseManager accountCaseManager = new DWAccountCaseManager();
             IEnumerable<DWAccountCase> accountCases = accountCaseManager.GetDWAccountCases(inputArgument.FromDate, inputArgument.ToDate);
             DWAccountCaseDictionary AccountCases = new DWAccountCaseDictionary();
             if (accountCases.Count() > 0)
                 foreach (var i in accountCases)
                     AccountCases.Add(i.CaseID, i);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing {0} account cases", accountCases.Count());
 
             return new GetDWAccountCasesOutput
             {

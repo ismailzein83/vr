@@ -2,6 +2,7 @@
 using System.Activities;
 using System.Collections.Generic;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Queueing;
@@ -70,33 +71,53 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
             dataManager.TableName= "[dbo].[Dim_CallClass]";
             dataManager.SaveDWDimensionsToDB(inputArgument.ToBeInsertedCallClasses);
+            if (inputArgument.ToBeInsertedCallClasses.Count > 0)
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished adding {0} call classe(s) ", inputArgument.ToBeInsertedCallClasses.Count);
 
             dataManager.TableName = "[dbo].[Dim_CallType]";
             dataManager.SaveDWDimensionsToDB(inputArgument.ToBeInsertedCallTypes);
+            if (inputArgument.ToBeInsertedCallTypes.Count > 0)
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished adding {0} call type(s) ", inputArgument.ToBeInsertedCallTypes.Count);
 
             dataManager.TableName = "[dbo].[Dim_CaseStatus]";
             dataManager.SaveDWDimensionsToDB(inputArgument.ToBeInsertedCaseStatuses);
+            if (inputArgument.ToBeInsertedCaseStatuses.Count > 0)
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished adding {0} case statuse(s) ", inputArgument.ToBeInsertedCaseStatuses.Count);
 
             dataManager.TableName = "[dbo].[Dim_Filters]"; 
             dataManager.SaveDWDimensionsToDB(inputArgument.ToBeInsertedFilters);
+            if (inputArgument.ToBeInsertedFilters.Count > 0)
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished adding {0} filter(s) ", inputArgument.ToBeInsertedFilters.Count);
 
             dataManager.TableName = "[dbo].[Dim_NetworkType]"; 
             dataManager.SaveDWDimensionsToDB(inputArgument.ToBeInsertedNetworkTypes);
+            if (inputArgument.ToBeInsertedNetworkTypes.Count > 0)
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished adding {0} network type(s) ", inputArgument.ToBeInsertedNetworkTypes.Count);
 
             dataManager.TableName = "[dbo].[Dim_Period]"; 
             dataManager.SaveDWDimensionsToDB(inputArgument.ToBeInsertedPeriods);
+            if (inputArgument.ToBeInsertedPeriods.Count > 0)
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished adding {0} period(s) ", inputArgument.ToBeInsertedPeriods.Count);
 
             dataManager.TableName = "[dbo].[Dim_StrategyKind]"; 
             dataManager.SaveDWDimensionsToDB(inputArgument.ToBeInsertedStrategyKinds);
+            if (inputArgument.ToBeInsertedStrategyKinds.Count > 0)
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished adding {0} strategy kind(s) ", inputArgument.ToBeInsertedStrategyKinds.Count);
 
             dataManager.TableName = "[dbo].[Dim_SubscriberType]"; 
             dataManager.SaveDWDimensionsToDB(inputArgument.ToBeInsertedSubscriberTypes);
+            if (inputArgument.ToBeInsertedSubscriberTypes.Count > 0)
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished adding {0} subscriber type(s) ", inputArgument.ToBeInsertedSubscriberTypes.Count);
 
             dataManager.TableName = "[dbo].[Dim_SuspicionLevel]"; 
             dataManager.SaveDWDimensionsToDB(inputArgument.ToBeInsertedSuspicionLevels);
+            if (inputArgument.ToBeInsertedSuspicionLevels.Count > 0)
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished adding {0} suspicion level(s) ", inputArgument.ToBeInsertedSuspicionLevels.Count);
 
             dataManager.TableName = "[dbo].[Dim_User]";
             dataManager.SaveDWDimensionsToDB(inputArgument.ToBeInsertedUsers);
+            if (inputArgument.ToBeInsertedUsers.Count > 0)
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished adding {0} user(s) ", inputArgument.ToBeInsertedUsers.Count);
 
         }
 

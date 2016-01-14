@@ -3,6 +3,7 @@ using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
@@ -42,13 +43,14 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override GetDWBTSsOutput DoWorkWithResult(GetDWBTSsInput inputArgument, AsyncActivityHandle handle)
         {
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing BTSs");
             DWDimensionManager BTSManager = new DWDimensionManager();
             IEnumerable<DWDimension> listBTSs = BTSManager.GetDimensions("Dim_BTS");
             DWDimensionDictionary BTSs = new DWDimensionDictionary();
             if (listBTSs.Count() > 0)
                 foreach (var i in listBTSs)
                     BTSs.Add(i.Id, i);
-
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing BTSs");
             return new GetDWBTSsOutput
             {
                 BTSs = BTSs

@@ -57,6 +57,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override CheckDWStrategiesChangesOutput DoWorkWithResult(CheckDWStrategiesChangesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing strategies");
             List<DWStrategy> ToBeInsertedStrategies = new List<DWStrategy>();
             StrategyManager strategyManager = new StrategyManager();
             IEnumerable<Strategy> listStrategies = strategyManager.GetAll();
@@ -72,7 +73,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                     ToBeInsertedStrategies.Add(dwStrategy);
                 }
-
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing strategies");
 
             return new CheckDWStrategiesChangesOutput()
             {

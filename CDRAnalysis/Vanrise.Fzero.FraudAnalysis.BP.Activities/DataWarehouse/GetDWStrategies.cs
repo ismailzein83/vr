@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
@@ -41,12 +42,14 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override GetDWStrategiesOutput DoWorkWithResult(GetDWStrategiesInput inputArgument, AsyncActivityHandle handle)
         {
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing strategies");
             DWStrategyManager dwStrategyManager = new DWStrategyManager();
             IEnumerable<DWStrategy> listDWStrategies = dwStrategyManager.GetStrategies();
             DWStrategyDictionary DWStrategies = new DWStrategyDictionary();
             if (listDWStrategies.Count() > 0)
                 foreach (var i in listDWStrategies)
                     DWStrategies.Add(i.Id, i);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing {0} strategies", listDWStrategies.Count());
 
             return new GetDWStrategiesOutput{
                 DWStrategies = DWStrategies

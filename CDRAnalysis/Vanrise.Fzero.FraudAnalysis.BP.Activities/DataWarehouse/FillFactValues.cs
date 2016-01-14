@@ -87,8 +87,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         private static void CheckIfTimeAddedorAdd(DWTimeDictionary dwTimeDictionary, List<DWTime> ToBeInsertedTimes, DateTime givenTime)
         {
-            DWTime dwTime ;
-            DateTime dateInstance = new DateTime(givenTime.Year, givenTime.Month, givenTime.Day, givenTime.Hour, givenTime.Minute,0);
+            DWTime dwTime;
+            DateTime dateInstance = new DateTime(givenTime.Year, givenTime.Month, givenTime.Day, givenTime.Hour, givenTime.Minute, 0);
 
             if (!dwTimeDictionary.TryGetValue(dateInstance, out dwTime))
             {
@@ -166,6 +166,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             List<DWDimension> ToBeInsertedBTSs = new List<DWDimension>();
             List<DWTime> ToBeInsertedTimes = new List<DWTime>();
 
+            var accountCases = inputArgument.AccountCases.Values;
 
             int cdrsCount = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -221,34 +222,37 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                                 CheckIfTimeAddedorAdd(inputArgument.Times, ToBeInsertedTimes, cdr.ConnectDateTime);
 
-                                KeyValuePair<int, DWAccountCase> accountCase = inputArgument.AccountCases.Where(x => x.Value.AccountNumber == cdr.MSISDN).OrderByDescending(x => x.Value.CaseID).FirstOrDefault();
-                                if (accountCase.Key != 0)
+
+                                if (accountCases.Count() > 0)
                                 {
-                                    dwFact.SuspicionLevel = accountCase.Value.SuspicionLevel;
-                                    dwFact.Period = accountCase.Value.PeriodID;
+                                    var accountCase = accountCases.FirstOrDefault(x => x.AccountNumber == cdr.MSISDN && cdr.ConnectDateTime >=x.FromDate && cdr.ConnectDateTime<=x.ToDate);
+                                    if (accountCase != null)
+                                    {
+                                        dwFact.SuspicionLevel = accountCase.SuspicionLevel;
+                                        dwFact.Period = accountCase.PeriodID;
 
-                                    Strategy strategy = new Strategy();
-                                    strategy = strategies.Where(x => x.Id == accountCase.Value.StrategyID).First();
+                                        Strategy strategy = new Strategy();
+                                        strategy = strategies.Where(x => x.Id == accountCase.StrategyID).First();
 
-                                    dwFact.StrategyId = accountCase.Value.StrategyID;
-                                    dwFact.StrategyKind = (strategy.IsDefault ? StrategyKindEnum.SystemBuiltIn : StrategyKindEnum.UserDefined);
-                                    dwFact.StrategyUserId = strategy.UserId;
-                                    dwFact.CaseId = accountCase.Key;
-                                    dwFact.CaseStatus = accountCase.Value.CaseStatus;
-                                    dwFact.CaseUserId = accountCase.Value.CaseUser;
-                                    dwFact.CaseGenerationTime = accountCase.Value.CaseGenerationTime;
+                                        dwFact.StrategyId = accountCase.StrategyID;
+                                        dwFact.StrategyKind = (strategy.IsDefault ? StrategyKindEnum.SystemBuiltIn : StrategyKindEnum.UserDefined);
+                                        dwFact.StrategyUserId = strategy.UserId;
+                                        dwFact.CaseId = accountCase.CaseID;
+                                        dwFact.CaseStatus = accountCase.CaseStatus;
+                                        dwFact.CaseUserId = accountCase.CaseUser;
+                                        dwFact.CaseGenerationTime = accountCase.CaseGenerationTime;
 
-                                    CheckIfTimeAddedorAdd(inputArgument.Times, ToBeInsertedTimes, accountCase.Value.CaseGenerationTime);
+                                        CheckIfTimeAddedorAdd(inputArgument.Times, ToBeInsertedTimes, accountCase.CaseGenerationTime);
 
+                                    }
                                 }
-
                                 dwFactBatch.Add(dwFact);
                             }
                             cdrsCount += cdrs.Count;
 
                             dwFactBatch = SendDWFacttoOutputQueue(inputArgument, handle, batchSize, dwFactBatch, false);
 
-                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs filled dimensions", cdrsCount);
+                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "facts filled for {0} cdrs", cdrsCount);
 
                         });
                 }
