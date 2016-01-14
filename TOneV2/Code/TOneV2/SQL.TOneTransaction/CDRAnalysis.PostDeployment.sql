@@ -12,31 +12,35 @@ Post-Deployment Script Template
 
 --[bp].[BPDefinition]-------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [bp].[BPDefinition] on;
-;with cte_data([ID],[Name],[Title],[FQTN],[Config],[CreatedTime])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(7,'Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput','Execute Strategy Process','Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess, Vanrise.Fzero.FraudAnalysis.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false,"Url":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Normal/ExecuteStrategyProcessInput.html", "ScheduleTemplateURL":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Scheduled/ExecuteStrategyProcessInput_Scheduled.html"}','2015-06-25 13:00:22.830'),
-(9,'Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput','Number Profiling Process','Vanrise.Fzero.FraudAnalysis.BP.NumberProfilingProcess, Vanrise.Fzero.FraudAnalysis.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false,"Url":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Normal/NumberProfilingProcessInput.html", "ScheduleTemplateURL":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Scheduled/NumberProfilingProcessInput_Scheduled.html"}','2015-06-25 13:00:22.830'),
-(10,'Vanrise.Fzero.FraudAnalysis.BP.Arguments.AssignStrategyCasesProcessInput','Assign Strategy Cases Process','Vanrise.Fzero.FraudAnalysis.BP.AssignStrategyCasesProcess, Vanrise.Fzero.FraudAnalysis.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false,"Url":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Normal/AssignStrategyCasesProcessInput.html", "ScheduleTemplateURL":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Scheduled/AssignStrategyCasesProcessInput_Scheduled.html"}','2015-06-25 13:00:22.830'),
-(12,'Vanrise.Fzero.FraudAnalysis.BP.Arguments.FindRelatedNumbersProcessInput','Find Related Numbers Process','Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersProcess, Vanrise.Fzero.FraudAnalysis.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false,"Url":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Normal/FindRelatedNumbersProcessInput.html", "ScheduleTemplateURL":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Scheduled/FindRelatedNumbersProcessInput_Scheduled.html"}','2015-06-25 13:00:22.830'),
-(13,'Vanrise.Fzero.CDRImport.BP.Arguments.StagingtoNormalCDRProcessInput','Staging to Normal CDR Process','Vanrise.Fzero.CDRImport.BP.StagingtoNormalCDRProcess, Vanrise.Fzero.CDRImport.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false,"Url":"/Client/Modules/PSTN_BusinessEntity/Views/ProcessInputTemplate/Normal/StagingtoNormalCDRProcessInput.html", "ScheduleTemplateURL":"/Client/Modules/PSTN_BusinessEntity/Views/ProcessInputTemplate/Scheduled/StagingtoNormalCDRProcessInput_Scheduled.html"}','2015-06-25 13:00:22.830'),
-(27,	'Vanrise.Fzero.FraudAnalysis.BP.Arguments.FillDataWarehouseProcessInput','Fill Data Warehouse Process','Vanrise.Fzero.FraudAnalysis.BP.FillDataWarehouseProcess, Vanrise.Fzero.FraudAnalysis.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false,"Url":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Normal/FillDataWarehouseProcessInput.html", "ScheduleTemplateURL":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Scheduled/FillDataWarehouseProcessInput_Scheduled.html"}','2015-06-25 13:00:22.830')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[FQTN],[Config],[CreatedTime]))
-merge	[bp].[BPDefinition] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[FQTN] = s.[FQTN],[Config] = s.[Config],[CreatedTime] = s.[CreatedTime]
-when not matched by target then
-	insert([ID],[Name],[Title],[FQTN],[Config],[CreatedTime])
-	values(s.[ID],s.[Name],s.[Title],s.[FQTN],s.[Config],s.[CreatedTime])
-when not matched by source then
-	delete;
-set identity_insert [bp].[BPDefinition] off;
+
+
+MERGE INTO bp.[BPDefinition] AS Target 
+USING (VALUES 
+	('Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput','Execute Strategy Process','Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess, Vanrise.Fzero.FraudAnalysis.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false,"Url":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Normal/ExecuteStrategyProcessInput.html", "ScheduleTemplateURL":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Scheduled/ExecuteStrategyProcessInput_Scheduled.html"}'),
+('Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyForNumberRangeProcessInput','Execute Strategy Process for Number Range','Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyForNumberRangeProcess, Vanrise.Fzero.FraudAnalysis.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false}'),
+('Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput','Number Profiling Process','Vanrise.Fzero.FraudAnalysis.BP.NumberProfilingProcess, Vanrise.Fzero.FraudAnalysis.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false,"Url":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Normal/NumberProfilingProcessInput.html", "ScheduleTemplateURL":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Scheduled/NumberProfilingProcessInput_Scheduled.html"}'),
+('Vanrise.Fzero.FraudAnalysis.BP.Arguments.AssignStrategyCasesProcessInput','Assign Strategy Cases Process','Vanrise.Fzero.FraudAnalysis.BP.AssignStrategyCasesProcess, Vanrise.Fzero.FraudAnalysis.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false,"Url":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Normal/AssignStrategyCasesProcessInput.html", "ScheduleTemplateURL":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Scheduled/AssignStrategyCasesProcessInput_Scheduled.html"}'),
+('Vanrise.Fzero.FraudAnalysis.BP.Arguments.FindRelatedNumbersProcessInput','Find Related Numbers Process','Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersProcess, Vanrise.Fzero.FraudAnalysis.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false,"Url":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Normal/FindRelatedNumbersProcessInput.html", "ScheduleTemplateURL":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Scheduled/FindRelatedNumbersProcessInput_Scheduled.html"}'),
+('Vanrise.Fzero.CDRImport.BP.Arguments.StagingtoNormalCDRProcessInput','Staging to Normal CDR Process','Vanrise.Fzero.CDRImport.BP.StagingtoNormalCDRProcess, Vanrise.Fzero.CDRImport.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false,"Url":"/Client/Modules/PSTN_BusinessEntity/Views/ProcessInputTemplate/Normal/StagingtoNormalCDRProcessInput.html", "ScheduleTemplateURL":"/Client/Modules/PSTN_BusinessEntity/Views/ProcessInputTemplate/Scheduled/StagingtoNormalCDRProcessInput_Scheduled.html"}'),
+('Vanrise.Fzero.FraudAnalysis.BP.Arguments.FillDataWarehouseProcessInput','Fill Data Warehouse Process','Vanrise.Fzero.FraudAnalysis.BP.FillDataWarehouseProcess, Vanrise.Fzero.FraudAnalysis.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false,"Url":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Normal/FillDataWarehouseProcessInput.html", "ScheduleTemplateURL":"/Client/Modules/FraudAnalysis/Views/ProcessInputTemplate/Scheduled/FillDataWarehouseProcessInput_Scheduled.html"}')
+
+) 
+AS Source ([Name], [Title], [FQTN], [Config])
+ON Target.[Name] = Source.[Name] 
+-- update matched rows 
+WHEN MATCHED THEN 
+UPDATE SET	[Title] = Source.[Title],
+			[FQTN] = Source.[FQTN],
+			[Config]  = Source.[Config]
+-- insert new rows 
+WHEN NOT MATCHED BY TARGET THEN 
+INSERT ([Name], [Title], [FQTN], [Config])
+VALUES ([Name], [Title], [FQTN], [Config])
+---- delete rows that are in the target but not the source 
+WHEN NOT MATCHED BY SOURCE THEN 
+DELETE
+;
+
 
 --[queue].[ExecutionFlowDefinition]-----------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
