@@ -32,6 +32,7 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
                 var isHour = false;
 
                 api.loadChart = function (payload) {
+                    ctrl.showlaoder = true;
                     var dimensions = [];
                     ctrl.measures.length = 0;
                     if (payload != undefined) {
@@ -71,6 +72,7 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
 
                         for (var i = 0; i < ctrl.measures.length; i++)
                         {
+                            ctrl.measures[i].isGettingEntityStatistics = true;
                             setChartApi(ctrl.measures[i]);
                         }
                         var query = {
@@ -98,7 +100,7 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
                         return WhS_Analytics_GenericAnalyticAPIService.GetFiltered(dataRetrievalInput)
                             .then(function (response) {
                                 renderCharts(response);
-                                ctrl.showCharts = true;
+                                ctrl.showlaoder = false;
                             });
                     }
 
@@ -188,7 +190,11 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
                             for (var i = 0; i < ctrl.measures.length; i++)
                             {
                                 if (ctrl.measures[i].API != undefined)
+                                {
                                     ctrl.measures[i].API.renderChart(arrayOfAllChartsData[i], chartDefinition[i], seriesDefinitions, xAxisDefinition);
+                                    ctrl.measures[i].isGettingEntityStatistics = false;
+                                }
+                                  
                             }
 
                         }
@@ -243,6 +249,7 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
                                 if (ctrl.measures[i].API != undefined)
                                 {
                                     ctrl.measures[i].API.renderSingleDimensionChart(arrayOfAllChartsData[i], chartDefinition[i], seriesDefinitions[i]);
+                                    ctrl.measures[i].isGettingEntityStatistics = false;
                                 }
                             }
                         }

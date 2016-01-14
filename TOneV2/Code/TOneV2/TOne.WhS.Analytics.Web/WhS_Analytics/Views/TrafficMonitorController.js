@@ -18,6 +18,7 @@
 
 
         function defineScope() {
+            $scope.showCharts = false;
             $scope.onReadyGenericChart = function (api) {
                 chartApi = api;
             }
@@ -32,6 +33,7 @@
             }
 
             $scope.searchClicked = function () {
+                $scope.showCharts = true;
                 return UtilsService.waitMultipleAsyncOperations([loadGrid, loadCharts]).finally(function () {
 
                 }).catch(function (error) {
