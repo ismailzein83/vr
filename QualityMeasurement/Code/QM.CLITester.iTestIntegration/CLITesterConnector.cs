@@ -156,7 +156,8 @@ namespace QM.CLITester.iTestIntegration
                         CliSuccess = node["CLI_Success"] != null ? Int32.Parse(node["CLI_Success"].InnerText) : 0,
                         CliNoResult = node["CLI_No_Result"] != null ? Int32.Parse(node["CLI_No_Result"].InnerText) : 0,
                         CliFail = node["CLI_Fail"] != null ? Int32.Parse(node["CLI_Fail"].InnerText) : 0,
-                        ShareUrl = node["Share_URL"] != null ? node["Share_URL"].InnerText : ""
+                        ShareUrl = node["Share_URL"] != null ? node["Share_URL"].InnerText : "",
+                        XmlResponse = response
                     };
 
                     testProgressOutput.Measure = resultTestProgress;

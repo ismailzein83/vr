@@ -139,6 +139,21 @@
     <Reference Include="TOne.CDRProcess.Arguments">
       <HintPath>..\..\..\TOneV2\Code\TOneV2\TOne.CDRProcess\bin\Debug\TOne.CDRProcess.Arguments.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BI.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BI.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BI.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BI.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BI.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BI.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BI.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BI.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BI.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BI.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>

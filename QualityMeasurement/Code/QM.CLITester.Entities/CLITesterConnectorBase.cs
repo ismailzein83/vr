@@ -89,6 +89,7 @@ namespace QM.CLITester.Entities
         public int CliNoResult { get; set; }
         public int CliFail { get; set; }
         public string ShareUrl { get; set; }
+        public string XmlResponse { get; set; }
     }
 
     public class Measure
