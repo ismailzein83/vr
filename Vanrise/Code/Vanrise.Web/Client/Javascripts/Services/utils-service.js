@@ -300,11 +300,24 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
     }
 
     function contains(array, obj) {
-        for (var i = 0; i < array.length; i++) {
-            if (array[i].toLowerCase() === obj.toLowerCase()) {
-                return true;
+
+        if (obj instanceof Object)
+        {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i] === obj) {
+                    return true;
+                }
             }
         }
+        else
+        {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i].toLowerCase() === obj.toLowerCase()) {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
