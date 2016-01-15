@@ -132,7 +132,9 @@
     <Content Include="Security\Services\APIServices\ViewAPIService.js" />
     <Content Include="Security\Services\APIServices\WidgetAPIService.js" />
     <Content Include="Security\Services\SecurityService.js" />
+    <Content Include="Security\Services\GroupService .js" />
     <Content Include="Security\Services\ViewService.js" />
+    <Content Include="Security\Services\UserService.js" />
     <Content Include="Security\Services\WidgetService.js" />
     <Content Include="Security\Views\BusinessEntityEditor.html" />
     <Content Include="Security\Views\BusinessEntityEditorController.js" />
