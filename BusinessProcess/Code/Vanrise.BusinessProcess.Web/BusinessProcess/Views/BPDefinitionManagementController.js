@@ -178,7 +178,7 @@ function BPDefinitionManagementController($scope, BusinessProcessService, Busine
         var settings = {
         };
         var parameters = {
-            additionalParameter: { bpDefinitionID: BPDefinitionObj.bpDefinitionID }
+            additionalParameter: { bpDefinitionID: BPDefinitionObj.BPDefinitionID }
         };
 
         settings.onScopeReady = function (modalScope) {
