@@ -19,30 +19,40 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
             $scope.issaving = true;
             var createProcessInputs = buildInstanceObjFromScope();
 
-            if (angular.isArray(createProcessInputs))
-            {
-                angular.forEach(createProcessInputs, function (itm) {
-                    BusinessProcessAPIService.CreateNewProcess(itm).then().catch(function (error) {
-                        VRNotificationService.notifyException(error);
-                    });
-                });
+            var confirmationMessage;
+            if (createProcessInputs.length == 1)
+                confirmationMessage = '(1) bussiness process will be started, are you sure you want to continue?';
+            else
+                confirmationMessage = '(' + createProcessInputs.length + ') bussiness processes will be started, are you sure you want to continue?';
 
-                if ($scope.onProcessInputsCreated != undefined)
-                    $scope.onProcessInputsCreated();
+            VRNotificationService.showConfirmation(confirmationMessage)
+              .then(function (response) {
+                  if (response == true) {
+                      if (angular.isArray(createProcessInputs)) {
+                          angular.forEach(createProcessInputs, function (itm) {
+                              BusinessProcessAPIService.CreateNewProcess(itm).then().catch(function (error) {
+                                  VRNotificationService.notifyException(error);
+                              });
+                          });
 
-                $scope.modalContext.closeModal();
-            }
-            else {
-                BusinessProcessAPIService.CreateNewProcess(createProcessInputs).then(function (response) {
-                    if (VRNotificationService.notifyOnItemAdded("Bussiness Instance", response)) {
-                        if ($scope.onProcessInputCreated != undefined)
-                            $scope.onProcessInputCreated(response.ProcessInstanceId);
-                        $scope.modalContext.closeModal();
-                    }
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error);
-                });
-            }
+                          if ($scope.onProcessInputsCreated != undefined)
+                              $scope.onProcessInputsCreated();
+
+                          $scope.modalContext.closeModal();
+                      }
+                      else {
+                          BusinessProcessAPIService.CreateNewProcess(createProcessInputs).then(function (response) {
+                              if (VRNotificationService.notifyOnItemAdded("Bussiness Instance", response)) {
+                                  if ($scope.onProcessInputCreated != undefined)
+                                      $scope.onProcessInputCreated(response.ProcessInstanceId);
+                                  $scope.modalContext.closeModal();
+                              }
+                          }).catch(function (error) {
+                              VRNotificationService.notifyException(error);
+                          });
+                      }
+                  }
+              });
         };
     }
 
@@ -63,8 +73,7 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
             $scope.BPDefinitionID = parameters.BPDefinitionID;
     }
 
-    function load()
-    {
+    function load() {
         getBPDefinition().finally(function () {
             $scope.isGettingData = false;
         });
