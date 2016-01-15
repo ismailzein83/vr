@@ -1,0 +1,35 @@
+﻿General:
+	- Enums should be used where needed
+	- All common dropdowns should be selectors
+	- The good use of filters in selectors
+	- All business directives should be clean of technical code and events
+
+Editors:
+	- Using tabs
+	- Validations
+	- Loaders
+
+Grids:
+	- Grids should be directives
+	- Needed menu actions should be called from the service
+	- Make sure call backs are called correctly
+	- Make sure of columns sorting
+	- Make sure of header texts and columns types
+	- The use of Drill downs using tabs
+	- Loaders on filters
+
+Controllers:
+	- Should have the name in the correct format
+	- Should have the title set in the define scope section
+
+Api Services:
+	- Should apply the new convention
+	- Should use the Module Config
+	- Should have its name in the correct format
+	- Use of Get and Post correctly
+
+Module JS Service:
+	- Every object in the module should have a separate service
+	- Delete should have a confirmation message that shows the correct message
+	- Always pass id and not objects to service methods
+	- For delete pass the object from outside
