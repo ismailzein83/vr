@@ -26,6 +26,7 @@ Info, Details, Query and Filters
 General
 	- Make sure to check on nulls where needed
 	- Entities should not have business logic
+	- Using managers, make them private fileds and initialize in ctr
 
 
 

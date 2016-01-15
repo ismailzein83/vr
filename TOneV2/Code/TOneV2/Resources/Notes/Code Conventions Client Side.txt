@@ -16,11 +16,11 @@ Grids:
 	- Make sure of columns sorting
 	- Make sure of header texts and columns types
 	- The use of Drill downs using tabs
-	- Loaders on filters
+	- Loaders on filter section
 
 Controllers:
-	- Should have the name in the correct format
-	- Should have the title set in the define scope section
+	- Should have the name in the correct format (FWK user VR_ModuleName_XX)
+	- Should have the title set in the Editor
 
 Api Services:
 	- Should apply the new convention
@@ -30,6 +30,5 @@ Api Services:
 
 Module JS Service:
 	- Every object in the module should have a separate service
-	- Delete should have a confirmation message that shows the correct message
+	- Delete should have a confirmation message that shows the correct message (not custom messages)
 	- Always pass id and not objects to service methods
-	- For delete pass the object from outside
