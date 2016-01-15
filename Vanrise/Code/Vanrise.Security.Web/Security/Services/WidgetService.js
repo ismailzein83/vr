@@ -21,15 +21,16 @@
 
         }
 
-        function updateWidget(dataItem, onWidgetUpdated) {
+        function updateWidget(widgetId, onWidgetUpdated) {
             var modalSettings = {};
             modalSettings.onScopeReady = function (modalScope) {
-
-                modalScope.title = UtilsService.buildTitleForUpdateEditor(dataItem.Name, "Widget");
                 modalScope.onWidgetUpdated = onWidgetUpdated;
             };
-
-            VRModalService.showModal('/Client/Modules/Security/Views/WidgetsPages/WidgetEditor.html', dataItem, modalSettings);
+            var parameters = {
+                Id: widgetId
+            };
+            
+            VRModalService.showModal('/Client/Modules/Security/Views/WidgetsPages/WidgetEditor.html', parameters, modalSettings);
         }
 
         function addWidget(onWidgetAdded) {

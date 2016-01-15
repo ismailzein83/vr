@@ -50,6 +50,13 @@ namespace Vanrise.Security.Web.Controllers
              WidgetsManager manager = new WidgetsManager();
              return manager.DeleteWidget(widgetId);
          }
+         [HttpGet]
+         [Route("GetWidgetById")]
+         public Widget GetWidgetById(int widgetId)
+         {
+             WidgetsManager manager = new WidgetsManager();
+             return manager.GetWidgetById(widgetId);
+         }
 
     }
 }

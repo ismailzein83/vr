@@ -123,8 +123,10 @@
     <Content Include="Security\Directives\User\Templates\UsersGrid.html" />
     <Content Include="Security\Directives\User\vr-sec-user-selctor.js" />
     <Content Include="Security\Directives\User\vr-sec-user-grid.js" />
+    <Content Include="Security\Directives\Widget\Templates\WidgetPreview.html" />
     <Content Include="Security\Directives\Widget\Templates\WidgetsGrid.html" />
     <Content Include="Security\Directives\Widget\vr-sec-widget-grid.js" />
+    <Content Include="Security\Directives\Widget\vr-sec-widgetpreview.js" />
     <Content Include="Security\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="Security\Services\APIServices\OrgChartAPIService.js" />
     <Content Include="Security\Services\APIServices\SecurityApiService.js" />

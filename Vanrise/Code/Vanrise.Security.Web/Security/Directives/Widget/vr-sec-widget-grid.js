@@ -54,7 +54,9 @@ function (VRNotificationService, WidgetAPIService, VR_WidgetService) {
                 return WidgetAPIService.GetFilteredWidgets(dataRetrievalInput)
                     .then(function (response) {
                          onResponseReady(response);
-                });
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });;
             };
 
         }
@@ -76,7 +78,7 @@ function (VRNotificationService, WidgetAPIService, VR_WidgetService) {
             var onWidgetUpdated = function (updatedItem) {
                 gridAPI.itemUpdated(updatedItem);
             };
-            VR_WidgetService.updateWidget(dataItem.Entity.WidgetId, onWidgetUpdated);
+            VR_WidgetService.updateWidget(dataItem.Entity.Id, onWidgetUpdated);
         }
 
         function deleteWidget(dataItem) {

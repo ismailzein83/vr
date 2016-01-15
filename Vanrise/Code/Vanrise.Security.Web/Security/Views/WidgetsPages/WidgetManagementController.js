@@ -1,46 +1,33 @@
 ﻿'use strict'
-WidgetManagementController.$inject = ['$scope', 'UtilsService', 'WidgetDefinitionAPIService', 'VRModalService', 'VRNotificationService', 'DeleteOperationResultEnum', 'VR_WidgetService'];
-function WidgetManagementController($scope, UtilsService, WidgetDefinitionAPIService, VRModalService, VRNotificationService, DeleteOperationResultEnum, VR_WidgetService) {
+WidgetManagementController.$inject = ['$scope', 'UtilsService', 'WidgetDefinitionAPIService', 'VRNotificationService', 'VR_WidgetService'];
+function WidgetManagementController($scope, UtilsService, WidgetDefinitionAPIService, VRNotificationService, VR_WidgetService) {
     var mainGridAPI;
     defineScope();
     load();
 
     function defineScope() {
         $scope.widgetsTypes = [];
-        $scope.selectedWidgetsType;
+        $scope.selectedWidgetsTypes = [];
         $scope.onGridReady = function (api) {
             mainGridAPI = api;
             var filter = {};
             api.loadGrid(filter);
         };
-        
 
-        $scope.mainGridPagerSettings = {
-            currentPage: 1,
-            totalDataCount: 0,
-            pageChanged: function () {
-                return getData();
-            }
-        };
+        $scope.Add = addNewWidget;
 
-        $scope.Add = function () {
-            addNewWidget();
-        };
         $scope.searchClicked = function () {
             if (mainGridAPI != undefined)
                 return mainGridAPI.loadGrid(getFilterObject());
         }
 
     }
+
     function getFilterObject() {
-            var widgetType;
-            if ($scope.selectedWidgetsType != undefined)
-                widgetType = $scope.selectedWidgetsType.ID;
-            else
-                widgetType = 0;
+
             var query = {
                 WidgetName: $scope.widgetName,
-                WidgetType: widgetType
+                WidgetTypes: UtilsService.getPropValuesFromArray($scope.selectedWidgetsTypes, "ID")
             }
             return query;
     }

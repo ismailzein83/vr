@@ -1,36 +1,34 @@
 ﻿<div vr-modalcontent ng-controller="Security_WidgetEditorController" width="'50%'">
-    <vr-modalbody vr-loader="isGettingData" maxheight="'700px'">
+    <vr-modalbody vr-loader="isLoading" maxheight="'700px'">
         <vr-form name="formDynamicPagesEditor">
-            <vr-choices selectedindex="selectedGroupKeyIndex" onselectionchanged="previewSelectionChanged();">
-                <vr-choice isselected="settingSelected" >Setting</vr-choice>
-                <vr-choice isselected="previewSelected">Preview</vr-choice>
-            </vr-choices>
-            <div ng-show="settingSelected">
-                <vr-form name="formDesigningSelectionModel">
-                    <vr-row>
-                        <vr-columns width="large">
-                            <vr-textbox value="widgetName" label="Widget Name" isrequired></vr-textbox>
-                        </vr-columns>
-                        <vr-columns width="large">
-                            <vr-select label="Widget Type" datatextfield="Name" datavaluefield="ID"
-                                       datasource="widgets" selectedvalues="selectedWidget" onselectionchanged="onselectionTemplateChanged" isrequired></vr-select>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-section title="Widget Setting" ng-if="selectedWidget!=null" vr-loader="isLoadingTemplateDirective">
-                                <vr-directivewrapper directive="selectedWidget.Setting.DirectiveTemplateURL" on-ready="onTemplateDirectiveReady"></vr-directivewrapper>
-                                <!--   <div ng-include="selectedWidget.Setting.DirectiveTemplateURL"></div>-->
-                            </vr-section>
-                        </vr-columns>
-                    </vr-row>
-                </vr-form>
-            </div>
-            <div ng-if="previewSelected && widget">
-                <div ng-include="'Client/Modules/Security/Views/WidgetsPages/WidgetPreview.html'"></div>
-            </div>
-
-        </vr-form>
+            <vr-tabs>
+                <vr-tab header="'Setting'">
+                    <vr-form name="formDesigningSelectionModel">
+                        <vr-row>
+                            <vr-columns width="large">
+                                <vr-textbox value="widgetName" label="Widget Name" isrequired></vr-textbox>
+                            </vr-columns>
+                            <vr-columns width="large">
+                                <vr-select label="Widget Type" datatextfield="Name" datavaluefield="ID"
+                                           datasource="widgets" selectedvalues="selectedWidget" onselectionchanged="onselectionTemplateChanged" isrequired></vr-select>
+                            </vr-columns>
+                        </vr-row>
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <vr-section title="Widget Setting" ng-if="selectedWidget!=null" vr-loader="isLoadingTemplateDirective">
+                                    <vr-directivewrapper directive="selectedWidget.Setting.DirectiveTemplateURL" on-ready="onTemplateDirectiveReady"></vr-directivewrapper>
+                                    <!--   <div ng-include="selectedWidget.Setting.DirectiveTemplateURL"></div>-->
+                                </vr-section>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-form>
+                </vr-tab>
+                <vr-tab header="'Preview'" tabobject="tabObject" >
+                    <vr-sec-widgetpreview on-ready="onPreviewAPIReady" ng-if="tabObject.isSelected"></vr-sec-widgetpreview>
+                    <!-- <div ng-include="'Client/Modules/Security/Views/WidgetsPages/WidgetPreview.html'"></div>-->
+                </vr-tab>
+            </vr-tabs>
+</vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">

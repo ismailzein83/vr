@@ -19,13 +19,13 @@ namespace Vanrise.Security.Business
 
         public Vanrise.Entities.IDataRetrievalResult<WidgetDetails> GetFilteredWidgets(Vanrise.Entities.DataRetrievalInput<WidgetFilter> input)
         {
-            var allWidgets = GetCachedWidgets();
+            var allWidgets = GetCachedWidgets().Values;
 
             Func<Widget, bool> filterExpression = (prod) =>
                  (input.Query.WidgetName == null || prod.Name.ToLower().Contains(input.Query.WidgetName.ToLower()))
                  &&
 
-                 (input.Query.WidgetTypes == null || input.Query.WidgetTypes.Count()>0 || input.Query.WidgetTypes.Contains(prod.WidgetDefinitionId));
+                 (input.Query.WidgetTypes == null  || input.Query.WidgetTypes.Contains(prod.WidgetDefinitionId));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allWidgets.ToBigResult(input, filterExpression, WidgetDetailMapper));
         }
@@ -139,7 +139,7 @@ namespace Vanrise.Security.Business
             return allWidgets.MapRecords(WidgetDetailMapper).ToList();
         }
 
-        public Widget GetWidgetByIds(int widgetId)
+        public Widget GetWidgetById(int widgetId)
         {
             var allWidgets = GetCachedWidgets();
 

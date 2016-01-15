@@ -1,41 +1,49 @@
 ﻿WidgetEditorController.$inject = ['$scope', 'WidgetAPIService', 'MenuAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService','VRUIUtilsService','WidgetDefinitionAPIService'];
 
 function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService, VRUIUtilsService, WidgetDefinitionAPIService) {
+    var widgetId;
+    var widgetEntity;
+    var templateDirectiveAPI;
+    var previewDirectiveAPI;
+    var isEditMode;
     loadParameters();
     defineScope();
     load();
-    var widgetEntity;
-    var widgetSettings;
-    var templateDirectiveAPI;
+
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
-        if (parameters != null) {
-            $scope.filter = {
-                WidgetID: parameters.Id,
-                WidgetName: parameters.Name,
-                selectedWidget: parameters.WidgetDefinitionId,
-                Setting: parameters.Setting
-            }
-          
-            $scope.isEditMode = true;
+        if (parameters != undefined && parameters != null) {
+            widgetId = parameters.Id;
         }
-        else
-            $scope.isEditMode = false;
+        isEditMode = (widgetId != undefined);
     }
 
     function defineScope() {
 
+        $scope.tabObject;
         $scope.onTemplateDirectiveReady= function(api)
         {
             templateDirectiveAPI = api;
             var payload;
-            if (widgetSettings != undefined)
-                payload = widgetSettings
+            if (widgetEntity != undefined && widgetEntity.Setting != undefined)
+                payload = widgetEntity.Setting.Settings
             var setLoader = function (value) { $scope.isLoadingTemplateDirective = value; };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, templateDirectiveAPI, payload, setLoader);
         }
        
+        $scope.onPreviewAPIReady = function(api)
+        {
+            previewDirectiveAPI = api;
+            if (buildWidgetObjFromScope())
+            {
+                var payload = $scope.widget;
+                var setLoader = function (value) { $scope.isLoadingPreviewDirective = value; };
+
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, previewDirectiveAPI, payload, setLoader);
+            }
+           
+        }
         $scope.widgets = [];
         $scope.selectedWidget;
         $scope.widgetName;
@@ -115,39 +123,56 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsS
         }
 
     function load() {
-
-
-        $scope.isGettingData = true;
-        $scope.isInitializing = true;
-        UtilsService.waitMultipleAsyncOperations([loadWidgets]).then(function () {
-            if ($scope.isEditMode == true) {
-
-                loadEditModeData();
-            }
-        }).finally(function () {
-               
-                $scope.isInitializing = false;
-                $scope.isGettingData = false;
+        $scope.isLoading = true;
+        if (isEditMode) {
+            getWidget().then(function () {
+                loadAllControls()
+                    .finally(function () {
+                    });
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.isLoading = false;
             });
+        }
+        else {
+            $scope.title = UtilsService.buildTitleForAddEditor("Widget");
+            loadAllControls();
+        }
 
+    }
+
+    function getWidget()
+    {
+        return WidgetAPIService.GetWidgetById(widgetId).then(function (widget) {
+            widgetEntity = widget;
+            $scope.title = UtilsService.buildTitleForUpdateEditor(widgetEntity.Name, "Widget");
+        });
+    }
+
+    function loadAllControls() {
+        return loadWidgetsDefinition().then(function () {
+            loadEditModeData();
+        }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+           }).finally(function () {
+              $scope.isLoading = false;
+          });
     }
 
     function loadEditModeData() {
-       
-        $scope.widgetName = $scope.filter.WidgetName;
-       
+        if (isEditMode)
+        {
+            $scope.widgetName = widgetEntity.Name;
             for (var i = 0; i < $scope.widgets.length; i++) {
                 var widget = $scope.widgets[i];
-                if (widget.ID == $scope.filter.selectedWidget) {
-                    widgetSettings = $scope.filter.Setting.Settings;
+                if (widget.ID == widgetEntity.WidgetDefinitionId) {
                     $scope.selectedWidget = widget;
                 }
             }
+        }
     }
 
-    function loadWidgets() {
+    function loadWidgetsDefinition() {
         return WidgetDefinitionAPIService.GetWidgetsDefinition().then(function (response) {
                 angular.forEach(response, function (itm) {
                     $scope.widgets.push(itm);

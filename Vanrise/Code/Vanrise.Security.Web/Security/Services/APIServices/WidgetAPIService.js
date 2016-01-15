@@ -5,6 +5,12 @@
 
     function widgetAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig) {
 
+        function GetWidgetById(widgetId)
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Widget", "GetWidgetById"), {
+                widgetId: widgetId
+            });
+        }
         function AddWidget(widget) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Widget", "AddWidget"), widget);
         }
@@ -27,7 +33,8 @@
             GetAllWidgets: GetAllWidgets,
             UpdateWidget: UpdateWidget,
             GetFilteredWidgets: GetFilteredWidgets,
-            DeleteWidget: DeleteWidget
+            DeleteWidget: DeleteWidget,
+            GetWidgetById: GetWidgetById
         });
     }
 
