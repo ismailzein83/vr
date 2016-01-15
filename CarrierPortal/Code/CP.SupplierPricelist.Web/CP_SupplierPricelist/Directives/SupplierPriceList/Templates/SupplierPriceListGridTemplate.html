@@ -1,0 +1,15 @@
+﻿<vr-datagrid datasource="pricelist"
+             on-ready="onGridReady"
+             pagingtype="'PagingOnScroll'"
+             menuactions="[]"
+             idfield="Id" loadmoredata="loadMoreData">
+
+    <vr-datagridcolumn headertext="'PriceList ID'" field="'PriceListId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'User ID'" field="'UserId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'PriceList Type'" field="'PriceListType'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Creation Date'" field="'CreatedTime'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Effective On Date'" field="'EffectiveOnDate'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'PriceList Status'" field="'Status'" type="'Text'" getcolor="getColorStatus"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'PriceList Result'" field="'Result'" type="'Text'" getcolor="getColorResult"></vr-datagridcolumn>
+
+</vr-datagrid>
