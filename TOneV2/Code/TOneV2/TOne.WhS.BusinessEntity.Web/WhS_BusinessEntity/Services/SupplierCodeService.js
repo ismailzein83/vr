@@ -14,10 +14,10 @@ app.service('WhS_BE_SupplierCodeService', ['VRModalService', 'VRNotificationServ
 
             drillDownDefinition.loadDirective = function (directiveAPI, supplierZoneItem) {
                 supplierZoneItem.supplierCodeGridAPI = directiveAPI;
-              
-
+                
                 var query = {
-                    ZoneIds: [supplierZoneItem.Entity.SupplierZoneId],
+                    SupplierId: supplierZoneItem.Entity.SupplierId,
+                    ZoneIds: [supplierZoneItem.Entity.SupplierZoneId]
                 };
                
                 return supplierZoneItem.supplierCodeGridAPI.loadGrid(query);
