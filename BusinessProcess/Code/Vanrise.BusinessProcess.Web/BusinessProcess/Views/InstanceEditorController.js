@@ -56,14 +56,10 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
         };
     }
 
-
-
     function buildInstanceObjFromScope() {
         var createProcessInputs = $scope.createProcessInput.getData();
         return createProcessInputs;
     }
-
-
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
@@ -78,8 +74,6 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
             $scope.isGettingData = false;
         });
     }
-
-
 
     function getBPDefinition() {
 
@@ -98,8 +92,5 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
         $scope.bpDefinitionObj.configuration.url = bpDefinitionObject.Configuration.Url;
 
     }
-
-
-
 }
 appControllers.controller('FraudAnalysis_InstanceEditorController', InstanceEditorController);
