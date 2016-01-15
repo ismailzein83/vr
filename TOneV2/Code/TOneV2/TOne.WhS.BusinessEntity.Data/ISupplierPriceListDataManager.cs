@@ -7,10 +7,11 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data
 {
-    public interface ISupplierPriceListDataManager:IDataManager
+    public interface ISupplierPriceListDataManager : IDataManager
     {
         SupplierPriceList GetPriceList(int priceListId);
         List<SupplierPriceList> GetPriceLists();
         bool ArGetPriceListsUpdated(ref object updateHandle);
+        bool SavePriceList(int priceListStatus, DateTime effectiveOnDateTime, string supplierId, string priceListType, string activeSupplierEmail, byte[] contentBytes, string fileName ,string messageUid, out int insertdId);
     }
 }

@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SupplierPriceListDataManager : BaseTOneDataManager, ISupplierPriceListDataManager
     {
-       
+
         #region ctor/Local Variables
         public SupplierPriceListDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
@@ -33,12 +33,22 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return base.IsDataUpdated("TOneWhS_BE.SupplierPriceList", ref updateHandle);
         }
+
+        public bool SavePriceList(int priceListStatus, DateTime effectiveOnDateTime, string supplierId, string priceListType, string activeSupplierEmail, byte[] contentBytes, string fileName, string messageUid, out int insertedId)
+        {
+            object id;
+            int recordesEffected = ExecuteNonQuerySP("[sp_SupplierPriceList_Insert]", out id, priceListStatus, effectiveOnDateTime, supplierId, priceListType, activeSupplierEmail, contentBytes, fileName, messageUid);
+            insertedId = (int)id;
+            return (recordesEffected > 0);
+        }
         #endregion
 
         #region Private Methods
         #endregion
 
         #region Mappers
+
+
         SupplierPriceList SupplierPriceListMapper(IDataReader reader)
         {
             SupplierPriceList supplierPriceList = new SupplierPriceList
@@ -52,6 +62,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
         #endregion
-      
+
+
+
     }
 }
