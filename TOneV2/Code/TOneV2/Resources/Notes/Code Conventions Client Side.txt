@@ -16,7 +16,7 @@ Grids:
 	- Make sure call backs are called correctly
 	- Make sure of columns sorting
 	- Make sure of header texts and columns types
-	- The use of Drill downs using tabs
+	- The use of grids drill downs using tabs (check in Common > Country - City, Code Groups betweek FWK and TOne)
 	- Loaders on filter section
 
 Controllers:
