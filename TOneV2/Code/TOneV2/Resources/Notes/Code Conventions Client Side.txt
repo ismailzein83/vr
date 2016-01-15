@@ -1,8 +1,9 @@
 ﻿General:
 	- Enums should be used where needed
-	- All common dropdowns should be selectors
-	- The good use of filters in selectors
-	- All business directives should be clean of technical code and events
+	- All common dropdowns should be selectors (vr-whs-be-routingproduct-selector in business entities)
+	- The good use of filters in selectors (vr-whs-be-routingproduct-selector in business entities)
+	- All business directives should be clean of technical code and events (vr-whs-be-routingproduct-selector in business entities)
+	- Same exits messages should be clear and right parameters are passed (take an example the SellingNumberPlanEditorController in Business Entities, Insert and Update methods)
 
 Editors:
 	- Using tabs
@@ -22,8 +23,8 @@ Controllers:
 	- Should have the name in the correct format (FWK user VR_ModuleName_XX)
 	- Should have the title set in the Editor
 
-Api Services:
-	- Should apply the new convention
+Api Services (Any example in Business Entities of TOne):
+	- Should apply the new convention )
 	- Should use the Module Config
 	- Should have its name in the correct format
 	- Use of Get and Post correctly
