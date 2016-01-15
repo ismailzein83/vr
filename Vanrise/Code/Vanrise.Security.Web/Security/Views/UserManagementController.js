@@ -133,4 +133,4 @@ function UserManagementController($scope, UsersAPIService, VRModalService, VRNot
     }
 }
 
-appControllers.controller('Security_UserManagementController', UserManagementController);
+appControllers.controller('VRSec_UserManagementController', UserManagementController);
