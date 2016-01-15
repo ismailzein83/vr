@@ -1,5 +1,5 @@
-﻿Caching:
-	- Should be applied where needed
+﻿Caching (TOne.WhS.BusinessEntity.Business.RoutingProductManager):
+	- Should be applied where needed 
 	- Get Cached Entities method should return dictionary (key is the obj identifier)
 	- Should not expose the dictionary to public
 	- Always have a Get Single Entity method that uses the extension method GetRecord
@@ -7,17 +7,17 @@
 	- Make sure mappers return single object and not a list
 
 Paging and Sorting:
-	- When caching is applied, make sure sorting and filtering are implemented server side
+	- When caching is applied, make sure sorting and filtering are implemented server side (TOne.WhS.BusinessEntity.Business.RoutingProductManager)
 	- Make sure filtering is applied only on original entity and not on Details
 	- When caching is not applied, make sure they are implemented in the database
-	- When caching is not used, make sure column mapping is defined and once (static)
+	- When caching is not used, make sure column mapping is defined and once (static) an example in TOne.WhS.BusinessEntity.Data.SQL.SupplierRateDataManager
 
 Controllers:
 	- Should not have business code, only UI
 	- Pass the filter here as a string and only deserialize it then pass it to Business Layer
 	- Try to return IEnumerable where List is not needed
 
-Info, Details, Query and Filters
+Info, Details, Query and Filters (check for all of the below points this class TOne.WhS.BusinessEntity.Business.RoutingProductManager)
 	- Info used for dropdowns (id and name)
 	- Details used for Grids, the class should get the data from other cach objects and not queries to DB
 	- Queries from Grids
@@ -27,6 +27,4 @@ General
 	- Make sure to check on nulls where needed
 	- Entities should not have business logic
 	- Using managers, make them private fileds and initialize in ctr
-
-
-
+	- make sure to divide sections in the same class with regions as it is the case with (TOne.WhS.BusinessEntity.Business.CodeManager)
