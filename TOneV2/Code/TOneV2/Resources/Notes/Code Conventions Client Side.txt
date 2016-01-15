@@ -6,7 +6,7 @@
 	- Same exits messages should be clear and right parameters are passed (take an example the SellingNumberPlanEditorController in Business Entities, Insert and Update methods)
 
 Editors:
-	- Using tabs
+	- Using tabs (Routing Product Editor)
 	- Validations
 	- Loaders
 

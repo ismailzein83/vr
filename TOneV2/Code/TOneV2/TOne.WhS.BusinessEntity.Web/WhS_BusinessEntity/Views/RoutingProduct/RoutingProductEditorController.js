@@ -56,7 +56,10 @@
                 var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
                 if (selectedSellingNumberPlanId != undefined) {
 
-                    var setLoader = function (value) { $scope.scopeModal.isLoadingSaleZonesSelector = value; UtilsService.safeApply($scope); };
+                    var setLoader = function (value) {
+                        $scope.scopeModal.isLoadingSaleZonesSelector = value;
+                        UtilsService.safeApply($scope);
+                    };
                     var payload = {
                         sellingNumberPlanId: selectedSellingNumberPlanId,
                     }
