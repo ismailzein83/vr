@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Vanrise.Common.Business;
-using Vanrise.Entities;
 
 namespace CarrierPortal.DevRuntime
 {
@@ -35,7 +34,7 @@ namespace CarrierPortal.DevRuntime
                     ImportPriceListManager manager = new ImportPriceListManager();
                     List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>()
                     {
-                        PriceListStatus.New
+                        PriceListStatus.Recieved
                     };
                     _locked = true;
                     lock (SyncRoot)
@@ -47,7 +46,8 @@ namespace CarrierPortal.DevRuntime
                             {
                                 UserId = pricelist.UserId,
                                 PriceListType = pricelist.PriceListType.ToString(),
-                                File = fileManager.GetFile(pricelist.FileId)
+                                File = fileManager.GetFile(pricelist.FileId),
+                                EffectiveOnDateTime = pricelist.EffectiveOnDate
                             };
                             InitiatePriceListOutput initiatePriceListOutput = new InitiatePriceListOutput();
                             try
@@ -64,10 +64,7 @@ namespace CarrierPortal.DevRuntime
                             switch (initiatePriceListOutput.Result)
                             {
                                 case InitiateSupplierResult.Uploaded:
-                                    priceListstatus = PriceListStatus.Initiated;
-                                    break;
-                                case InitiateSupplierResult.Failed:
-                                    priceListstatus = PriceListStatus.Failed;
+                                    priceListstatus = PriceListStatus.New;
                                     break;
                             }
                             manager.UpdateInitiatePriceList(pricelist.PriceListId, (int)pricelist.Status, (int)pricelist.Result);

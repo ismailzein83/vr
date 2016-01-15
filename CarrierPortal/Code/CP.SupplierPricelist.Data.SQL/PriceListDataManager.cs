@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Data.SQL;
 using CP.SupplierPricelist.Entities;
 using System.Data;
-using Vanrise.Common;
 
 namespace CP.SupplierPricelist.Data.SQL
 {
@@ -20,8 +17,8 @@ namespace CP.SupplierPricelist.Data.SQL
 
         public bool Insert(PriceList priceList)
         {
-            int recordEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_Insert]", 1, priceList.FileId, priceList.PriceListType, 1, priceList.EffectiveOnDate);
-            return true;
+            int recordEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_Insert]", 1, priceList.FileId, priceList.PriceListType, 0, priceList.EffectiveOnDate);
+            return (recordEffected > 0);
         }
 
 
@@ -50,7 +47,7 @@ namespace CP.SupplierPricelist.Data.SQL
             {
                 PriceListId = (long)reader["ID"],
                 FileId = (long)reader["FileID"],
-                PriceListType = (int)reader["PriceListType"],
+                PriceListType = GetReaderValue<PriceListType>(reader, "PriceListType"),
                 Status = GetReaderValue<PriceListStatus>(reader, "Status"),
                 UserId = (int)reader["UserID"],
                 Result = GetReaderValue<PriceListResult>(reader, "Result"),

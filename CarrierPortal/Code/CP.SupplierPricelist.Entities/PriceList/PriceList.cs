@@ -11,7 +11,7 @@ namespace CP.SupplierPricelist.Entities
         public long PriceListId { get; set; }
         public int UserId { get; set; }
         public long FileId { get; set; }
-        public int PriceListType { get; set; }
+        public PriceListType PriceListType { get; set; }
         public PriceListStatus Status { get; set; }
         public PriceListResult Result { get; set; }
         public string UploadedInformation { get; set; }

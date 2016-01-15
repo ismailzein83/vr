@@ -1,8 +1,6 @@
 ﻿using CP.SupplierPricelist.Data;
 using CP.SupplierPricelist.Entities;
 using System.Collections.Generic;
-using Vanrise.Common.Business;
-using Vanrise.Entities;
 
 namespace CP.SupplierPricelist.Business
 {
