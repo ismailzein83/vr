@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using TOne.WhS.BusinessEntity.Business;
 using Vanrise.Entities;
 
 namespace TOne.Web.Online.Controllers
@@ -13,9 +14,9 @@ namespace TOne.Web.Online.Controllers
         [HttpPost]
         public bool UploadPriceList(SupplierPriceListUserInput userInput)
         {
-            bool success = true;
-
-            return success;
+            //return true;
+            SupplierPriceListManager manager = new SupplierPriceListManager();
+            return manager.SavePriceList(0, userInput.EffectiveOnDateTime, "C159", userInput.PriceListType, "portal@vanrise.com", userInput.ContentFile, userInput.FileName);
         }
 
         [HttpGet]
