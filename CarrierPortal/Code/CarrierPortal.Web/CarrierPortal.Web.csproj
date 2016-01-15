@@ -238,6 +238,7 @@
     <Content Include="Images\login.png" />
     <Content Include="Images\logoonheader.png" />
     <Content Include="Images\menu-icons\Administration.png" />
+    <Content Include="Images\menu-icons\Purchase Area.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
