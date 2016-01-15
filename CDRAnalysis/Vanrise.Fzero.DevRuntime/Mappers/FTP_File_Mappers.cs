@@ -18,7 +18,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
     {
 
         static StreamReaderImportedData data = new StreamReaderImportedData();
-
+        static int dataSourceId = 24;
         public static void FillData()
         {
             data.StreamReader = new StreamReader("E:\\CDR1\\1.DAT");
@@ -55,7 +55,6 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
             Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch batch = new Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch();
             batch.CDRs = new List<Vanrise.Fzero.CDRImport.Entities.CDR>();
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
-
             PSTN.BusinessEntity.Business.TrunkManager trunkManager = new PSTN.BusinessEntity.Business.TrunkManager();
 
             System.IO.StreamReader sr = ImportedData.StreamReader;
@@ -98,14 +97,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                         break;
                 }
 
-                PSTN.BusinessEntity.Entities.Trunk inTrunk = trunkManager.GetTrunkBySymbol(i.Substring(414, 20).Trim());
-                if (inTrunk != null)
-                    cdr.InTrunkId = inTrunk.TrunkId;
-
-
-                PSTN.BusinessEntity.Entities.Trunk outTrunk = trunkManager.GetTrunkBySymbol(i.Substring(394, 20).Trim());
-                if (outTrunk != null)
-                    cdr.OutTrunkId = outTrunk.TrunkId;
+                cdr.InTrunkId = trunkManager.GetTrunkIdBySymbol(i.Substring(414, 20).Trim());
+                cdr.OutTrunkId = trunkManager.GetTrunkIdBySymbol(i.Substring(394, 20).Trim());
 
                 DateTime ConnectDateTime;
                 if (DateTime.TryParseExact(i.Substring(221, 14).Trim(), "yyyyMddHHmmss", System.Globalization.CultureInfo.InvariantCulture,
@@ -141,9 +134,10 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                 if (decimal.TryParse(i.Substring(598, 10).Trim(), out downVolume))
                     cdr.DownVolume = downVolume;
 
+
                 batch.CDRs.Add(cdr);
             }
-
+            batch.Datasource = dataSourceId;
             mappedBatches.Add("Normalize CDRs", batch); // Normalize then Save
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();

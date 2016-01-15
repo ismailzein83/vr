@@ -82,7 +82,7 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.title = UtilsService.buildTitleForAddEditor("Switch Brand");;
-                
+
 
                 modalScope.onBrandAdded = function (brandObj) {
                     $scope.brands.push(brandObj);
@@ -102,27 +102,25 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
 
         UtilsService.waitMultipleAsyncOperations([loadBrands, loadDataSources])
             .then(function () {
-
                 if (editMode) {
                     return SwitchAPIService.GetSwitchById(switchId)
                         .then(function (response) {
-
                             fillScopeFromSwitchObj(response);
-
-                            loadSwitchAssignedDataSources();
                         })
                         .catch(function (error) {
-                            $scope.isGettingData = false;
                             VRNotificationService.notifyExceptionWithClose(error, $scope);
-                        });
-                }
-                else {
-                    loadSwitchAssignedDataSources();
+                        })
+
+                    .finally(function (error) {
+                        $scope.isGettingData = false;
+                    });
                 }
             })
             .catch(function (error) {
-                $scope.isGettingData = false;
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function (error) {
+                loadSwitchAssignedDataSources();
+                $scope.isGettingData = false;
             });
     }
 
@@ -149,13 +147,11 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
 
         return SwitchAPIService.GetSwitchAssignedDataSources()
             .then(function (response) {
-
                 var selectedDataSourceIndex = ($scope.selectedDataSource != undefined) ?
-                    UtilsService.getItemIndexByVal($scope.dataSources, $scope.selectedDataSource.DataSourceId, "DataSourceId") : -1;
+                    UtilsService.getItemIndexByVal($scope.dataSources, $scope.selectedDataSource.DataSourceID, "DataSourceID") : -1;
 
                 angular.forEach(response, function (item) {
-                    var index = UtilsService.getItemIndexByVal($scope.dataSources, item, "DataSourceId");
-
+                    var index = UtilsService.getItemIndexByVal($scope.dataSources, item, "DataSourceID");
                     if (index > -1 && index != selectedDataSourceIndex) {
                         $scope.dataSources.splice(index, 1);
                     }
@@ -174,14 +170,11 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
         $scope.selectedBrand = UtilsService.getItemByVal($scope.brands, switchObj.BrandId, "BrandId");
         $scope.areaCode = switchObj.AreaCode;
         $scope.timeOffset = switchObj.TimeOffset;
-
-        var dataSourceIndex = UtilsService.getItemIndexByVal($scope.dataSources, switchObj.DataSourceId, "DataSourceId");
-        $scope.selectedDataSource = (dataSourceIndex > 0) ? $scope.dataSources[dataSourceIndex] : undefined;
+        $scope.selectedDataSource = UtilsService.getItemByVal($scope.dataSources, switchObj.DataSourceId, "DataSourceID");
     }
 
     function updateSwitch() {
         var switchObj = buildSwitchObjFromScope();
-
         return SwitchAPIService.UpdateSwitch(switchObj)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Switch", response, "Name")) {
@@ -221,7 +214,7 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
             BrandId: ($scope.selectedBrand != undefined) ? $scope.selectedBrand.BrandId : null,
             AreaCode: $scope.areaCode,
             TimeOffset: $scope.timeOffset,
-            DataSourceId: ($scope.selectedDataSource != undefined) ? $scope.selectedDataSource.DataSourceId : null
+            DataSourceId: ($scope.selectedDataSource != undefined) ? $scope.selectedDataSource.DataSourceID : null
         };
     }
 
@@ -246,16 +239,6 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
             return true;
 
         return false;
-
-        /*
-        for (var i = 0; i < value.length; i++) {
-
-            if ((i == 2 || i == 5) && value.charAt(i) != ":")
-                return "Format: DD.HH:MM:SS";
-            else if (value.charAt(i) != ":" && isNaN(parseInt(value.charAt(i))))
-                return "Format: DD.HH:MM:SS";
-        }
-        */
     }
 }
 

@@ -14,7 +14,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
         public void Execute()
         {
             Mappers.SQLMappers.FillData();
-            Vanrise.Integration.Entities.MappingOutput output = Mappers.SQLMappers.ImportingCDR_SQL(); 
+            Vanrise.Integration.Entities.MappingOutput output = Mappers.SQLMappers.StaggingCDRs_SQL(); 
         }
     }
 }
