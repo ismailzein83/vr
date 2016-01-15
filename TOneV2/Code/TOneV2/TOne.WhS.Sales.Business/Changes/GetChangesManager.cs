@@ -86,7 +86,7 @@ namespace TOne.WhS.Sales.Business
 
         public IEnumerable<ZoneRateChangesDetail> GetFilteredZoneRateChanges()
         {
-            List<ZoneRateChangesDetail> details = null;
+            List<ZoneRateChangesDetail> details = new List<ZoneRateChangesDetail>();
 
             if (_changes != null && _changes.ZoneChanges != null)
             {
@@ -94,7 +94,6 @@ namespace TOne.WhS.Sales.Business
 
                 if (zoneChanges != null)
                 {
-                    details = new List<ZoneRateChangesDetail>();
                     SaleZoneManager saleZoneManager = new SaleZoneManager();
 
                     var zoneIds = zoneChanges.MapRecords(itm => itm.ZoneId);
@@ -175,7 +174,7 @@ namespace TOne.WhS.Sales.Business
 
         public IEnumerable<ZoneRoutingProductChangesDetail> GetFilteredZoneRoutingProductChanges()
         {
-            List<ZoneRoutingProductChangesDetail> details = null;
+            List<ZoneRoutingProductChangesDetail> details = new List<ZoneRoutingProductChangesDetail>();
 
             if (_changes != null && _changes.ZoneChanges != null)
             {
@@ -183,7 +182,6 @@ namespace TOne.WhS.Sales.Business
 
                 if (zoneChanges != null)
                 {
-                    details = new List<ZoneRoutingProductChangesDetail>();
                     SaleZoneManager saleZoneManager = new SaleZoneManager();
                     RoutingProductManager routingProductManager = new RoutingProductManager();
 

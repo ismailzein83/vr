@@ -49,7 +49,7 @@
             };
             $scope.rateDataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_Sales_RatePlanAPIService.GetFilteredZoneRateChanges(dataRetrievalInput).then(function (response) {
-                    if (response &&  response.Data) {
+                    if (response && response.Data) {
                         for (var i = 0; i < response.Data.length; i++) {
                             if (response.Data[i].IsCurrentRateInherited)
                                 response.Data[i].CurrentRate += " (Inherited)";
@@ -58,8 +58,8 @@
                             response.Data[i].ChangeType = changeType ? changeType.description : null;
                         }
                     }
+
                     onResponseReady(response);
-                    
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
@@ -77,6 +77,7 @@
                                 response.Data[i].CurrentRoutingProductName += " (Inherited)";
                         }
                     }
+
                     onResponseReady(response);
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
