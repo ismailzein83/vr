@@ -13,16 +13,20 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Sale Zones'" >
+                <vr-tab header="'Sale Zones'">
                     <vr-row vr-loader="isLoadingSaleZonesSelector">
                         <vr-columns width="1/2row">
                             <vr-select datatextfield="description" datavaluefield="value" label="Sale Zones" datasource="scopeModal.saleZoneRelationType"
                                        selectedvalues="scopeModal.selectedSaleZoneRelationType" onselectionchanged="scopeModal.onSaleZoneRelationTypeSelectionChanged" hideremoveicon />
                         </vr-columns>
                         <vr-columns width="1/2row" ng-show="scopeModal.showSaleZoneSelector">
-                            <vr-whs-be-salezone-selector ismultipleselection on-ready="scopeModal.onSaleZoneSelectorReady" isdisabled="!scopeModal.selectedSellingNumberPlan"
-                                                         selectedvalues="scopeModal.selectedSaleZones" />
-                        </vr-columns> 
+                            <vr-whs-be-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady"
+                                                         isdisabled="!scopeModal.selectedSellingNumberPlan"
+                                                         selectedvalues="scopeModal.selectedSaleZones"
+                                                         isrequired="scopeModal.showSaleZoneSelector"
+                                                         ismultipleselection>
+                            </vr-whs-be-salezone-selector>
+                        </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Suppliers'">
@@ -32,7 +36,12 @@
                                        selectedvalues="scopeModal.selectedSupplierRelationType" onselectionchanged="scopeModal.onSupplierRelationTypeSelectionChanged" hideremoveicon />
                         </vr-columns>
                         <vr-columns width="1/2row" ng-show="scopeModal.showSupplierSelector">
-                            <vr-whs-be-carrieraccount-selector on-ready="scopeModal.onCarrierAccountSelectorReady" selectedvalues="scopeModal.selectedSuppliers" getsuppliers ismultipleselection />
+                            <vr-whs-be-carrieraccount-selector on-ready="scopeModal.onCarrierAccountSelectorReady"
+                                                               selectedvalues="scopeModal.selectedSuppliers"
+                                                               isrequired="scopeModal.showSupplierSelector"
+                                                               getsuppliers
+                                                               ismultipleselection>
+                            </vr-whs-be-carrieraccount-selector>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

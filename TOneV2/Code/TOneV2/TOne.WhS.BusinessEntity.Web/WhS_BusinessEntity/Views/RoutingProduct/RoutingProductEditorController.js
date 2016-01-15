@@ -174,6 +174,7 @@
                         };
                     }
 
+                    UtilsService.safeApply($scope);
                     VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, saleZonePayload, saleZoneLoadPromiseDeferred);
                 });
 
