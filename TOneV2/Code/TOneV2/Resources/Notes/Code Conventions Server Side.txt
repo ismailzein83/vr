@@ -1,0 +1,31 @@
+﻿Caching:
+	- Should be applied where needed
+	- Get Cached Entities method should return dictionary (key is the obj identifier)
+	- Should not expose the dictionary to public
+	- Always have a Get Single Entity method that uses the extension method GetRecord
+	- Try to always use the Extension methods, FindAllRecords - GetRecord - MapRecords - ToBigResult ...
+	- Make sure mappers return single object and not a list
+
+Paging and Sorting:
+	- When caching is applied, make sure sorting and filtering are implemented server side
+	- Make sure filtering is applied only on original entity and not on Details
+	- When caching is not applied, make sure they are implemented in the database
+	- When caching is not used, make sure column mapping is defined and once (static)
+
+Controllers:
+	- Should not have business code, only UI
+	- Pass the filter here as a string and only deserialize it then pass it to Business Layer
+	- Try to return IEnumerable where List is not needed
+
+Info, Details, Query and Filters
+	- Info used for dropdowns (id and name)
+	- Details used for Grids, the class should get the data from other cach objects and not queries to DB
+	- Queries from Grids
+	- Filters from selectors
+
+General
+	- Make sure to check on nulls where needed
+	- Entities should not have business logic
+
+
+

@@ -89,7 +89,8 @@
     <Content Include="DLLs\Telerik.Reporting.dll" />
     <Content Include="DLLs\Vanrise.Components.Security.dll" />
     <Content Include="DLLs\WebHelperLibrary.dll" />
-    <Content Include="Notes\Code Conventions Notes.txt" />
+    <Content Include="Notes\Code Conventions Client Side.txt" />
+    <Content Include="Notes\Code Conventions Server Side.txt" />
     <Content Include="Notes\Web Virtual Directories.txt" />
   </ItemGroup>
   <ItemGroup>
