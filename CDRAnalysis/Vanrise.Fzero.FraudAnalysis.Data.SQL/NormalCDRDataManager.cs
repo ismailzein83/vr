@@ -65,6 +65,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             {
                 ExecuteNonQuerySP("FraudAnalysis.sp_NormalCDR_CreateTempByMSISDN", tempTableName, input.Query.MSISDN, input.Query.FromDate, input.Query.ToDate);
             };
+
+            if (input.SortByColumnName != null)
+                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
+
             return RetrieveData(input, createTempTableAction, NormalCDRMapper, _columnMapper);
         }
 
@@ -99,6 +103,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             normalCDR.MSISDN = reader["MSISDN"] as string;
             return normalCDR;
         }
+
+       
 
         #endregion
     }

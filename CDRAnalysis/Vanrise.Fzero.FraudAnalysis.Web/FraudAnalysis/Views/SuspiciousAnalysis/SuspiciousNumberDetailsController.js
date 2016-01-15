@@ -171,12 +171,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             return NormalCDRAPIService.GetNormalCDRs(dataRetrievalInput)
             .then(function (response) {
                 normalCDRsLoaded = true;
-
-                angular.forEach(response.Data, function (item) {
-                    var callType = UtilsService.getEnum(CallTypeEnum, "value", item.CallType);
-                    item.CallTypeDescription = callType.description;
-                });
-
+                console.log(response)
                 onResponseReady(response);
             })
             .catch(function (error) {
