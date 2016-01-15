@@ -10,8 +10,8 @@ using Vanrise.Web.Base;
 namespace Vanrise.Security.Web.Controllers
 {
     [JSONWithTypeAttribute]
-    [RoutePrefix(Constants.ROUTE_PREFIX + "Widgets")]
-    public class WidgetsController:Vanrise.Web.Base.BaseAPIController
+    [RoutePrefix(Constants.ROUTE_PREFIX + "Widget")]
+    public class WidgetController:Vanrise.Web.Base.BaseAPIController
     {
 
         [HttpPost]

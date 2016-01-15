@@ -1,6 +1,6 @@
-﻿WidgetEditorController.$inject = ['$scope', 'WidgetAPIService', 'MenuAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService','VRUIUtilsService'];
+﻿WidgetEditorController.$inject = ['$scope', 'WidgetAPIService', 'MenuAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService','VRUIUtilsService','WidgetDefinitionAPIService'];
 
-function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService, VRUIUtilsService, WidgetDefinitionAPIService) {
     loadParameters();
     defineScope();
     load();
@@ -148,7 +148,7 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsS
     }
 
     function loadWidgets() {
-        return WidgetAPIService.GetWidgetsDefinition().then(function (response) {
+        return WidgetDefinitionAPIService.GetWidgetsDefinition().then(function (response) {
                 angular.forEach(response, function (itm) {
                     $scope.widgets.push(itm);
                 });

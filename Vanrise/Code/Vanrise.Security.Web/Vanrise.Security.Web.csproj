@@ -188,7 +188,7 @@
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\WidgetDefinitionController.cs" />
-    <Compile Include="Controllers\WidgetsController.cs" />
+    <Compile Include="Controllers\WidgetController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
