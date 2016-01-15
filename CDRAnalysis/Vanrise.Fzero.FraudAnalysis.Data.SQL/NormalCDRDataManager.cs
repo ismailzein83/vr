@@ -14,9 +14,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         static NormalCDRDataManager()
         {
-            _columnMapper.Add("CallClass", "CallClassID");
-            _columnMapper.Add("CallTypeDescription", "CallTypeID");
-            _columnMapper.Add("SubType", "SubscriberTypeID");
+            _columnMapper.Add("CallClassName", "CallClassID");
+            _columnMapper.Add("CallTypeName", "CallTypeID");
+            _columnMapper.Add("SubscriberTypeName", "SubscriberTypeID");
             _columnMapper.Add("CellId", "Cell");
             _columnMapper.Add("UpVolume", "UpVolume");
             _columnMapper.Add("DownVolume", "DownVolume");
