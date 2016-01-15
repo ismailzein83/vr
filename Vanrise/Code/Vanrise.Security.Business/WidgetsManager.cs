@@ -11,11 +11,12 @@ namespace Vanrise.Security.Business
 {
     public class WidgetsManager
     {
-        public List<WidgetDefinition> GetWidgetsDefinition()
+        private WidgetDefinitionManager _widgetDefinitionManager;
+        public WidgetsManager()
         {
-            IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
-            return dataManager.GetWidgetsDefinition();
+            _widgetDefinitionManager = new WidgetDefinitionManager();
         }
+
         public Vanrise.Entities.IDataRetrievalResult<WidgetDetails> GetFilteredWidgets(Vanrise.Entities.DataRetrievalInput<WidgetFilter> input)
         {
             var allWidgets = GetCachedWidgets();
@@ -159,7 +160,7 @@ namespace Vanrise.Security.Business
         }
         private Dictionary<int, Widget> GetCachedWidgets()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllWidgets",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetWidgets",
                () =>
                {
                    IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
@@ -167,7 +168,6 @@ namespace Vanrise.Security.Business
                    return customerZones.ToDictionary(kvp => kvp.Id, kvp => kvp);
                });
         }
-
       
         #endregion
 
@@ -175,9 +175,14 @@ namespace Vanrise.Security.Business
         private WidgetDetails WidgetDetailMapper(Widget widget)
         {
             WidgetDetails widgetDetails = new WidgetDetails();
-
+            WidgetDefinition widgetDefinition = _widgetDefinitionManager.GetWidgetDefinitionById(widget.WidgetDefinitionId);
             widgetDetails.Entity = widget;
-
+            if(widgetDefinition != null)
+            {
+                 widgetDetails.WidgetDefinitionName = widgetDefinition.Name;
+                 widgetDetails.DirectiveName = widgetDefinition.DirectiveName;
+                 widgetDetails.WidgetDefinitionSetting = widgetDefinition.Setting;
+            }
             return widgetDetails;
         }
 

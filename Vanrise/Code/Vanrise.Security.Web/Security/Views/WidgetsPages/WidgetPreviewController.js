@@ -7,9 +7,11 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
     var date;
     function defineScope() {
         $scope.scopeModal = {};
+
         $scope.scopeModal.validateDateTime = function () {
             return VRValidationService.validateTimeRange($scope.scopeModal.fromDate, $scope.scopeModal.toDate);
         }
+
         $scope.scopeModal.selectedPeriod = PeriodEnum.CurrentMonth;
         date = $scope.scopeModal.selectedPeriod.getInterval();
         $scope.scopeModal.fromDate = date.from;

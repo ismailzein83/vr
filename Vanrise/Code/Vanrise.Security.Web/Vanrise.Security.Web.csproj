@@ -134,6 +134,7 @@
     <Content Include="Security\Services\APIServices\UsersAPIService.js" />
     <Content Include="Security\Services\APIServices\ViewAPIService.js" />
     <Content Include="Security\Services\APIServices\WidgetAPIService.js" />
+    <Content Include="Security\Services\APIServices\WidgetDefinitionAPIService.js" />
     <Content Include="Security\Services\SecurityService.js" />
     <Content Include="Security\Services\GroupService .js" />
     <Content Include="Security\Services\ViewService.js" />
@@ -177,6 +178,7 @@
     <Content Include="Security\Views\UserManagementController.js" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BusinessEntitiesController.cs" />
     <Compile Include="Controllers\OrgChartController.cs" />
     <Compile Include="Controllers\ViewController.cs" />
@@ -185,6 +187,7 @@
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\WidgetDefinitionController.cs" />
     <Compile Include="Controllers\WidgetsController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

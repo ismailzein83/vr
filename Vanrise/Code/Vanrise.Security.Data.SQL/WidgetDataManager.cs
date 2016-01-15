@@ -11,36 +11,11 @@ namespace Vanrise.Security.Data.SQL
 {
     public class WidgetDataManager : BaseSQLDataManager, IWidgetsDataManager
     {
-        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
-
-        static WidgetDataManager()
-        {
-            _columnMapper.Add("Name", "WidgetName");
-        }
-
         public WidgetDataManager()
             : base(GetConnectionStringName("SecurityDBConnStringKey", "SecurityDBConnString"))
         {
 
-        }
-
-       public List<WidgetDefinition> GetWidgetsDefinition()
-        {
-
-            return GetItemsSP("sec.sp_WidgetDefinition_Get", WidgetDefinitionMapper);
-        }
-        private WidgetDefinition WidgetDefinitionMapper(IDataReader reader)
-        {
-            WidgetDefinition instance = new WidgetDefinition
-            {
-                ID = (int)reader["ID"],
-                Name = reader["Name"] as string,
-
-                DirectiveName = reader["DirectiveName"] as string,
-                Setting = Vanrise.Common.Serializer.Deserialize<WidgetDefinitionSetting>(reader["Setting"] as string)
-            };
-            return instance;
-        }
+        }      
         public bool AddWidget(Widget widget, out int insertedId)
         {
             string serialziedSetting = null;
@@ -49,9 +24,7 @@ namespace Vanrise.Security.Data.SQL
             object widgetId;
             int recordesEffected = ExecuteNonQuerySP("sec.sp_Widget_Insert", out widgetId,widget.WidgetDefinitionId, widget.Name,widget.Title, serialziedSetting);
             insertedId = (recordesEffected > 0) ? (int)widgetId : -1;
-
             return (recordesEffected > 0);
-            //  return false;
         }
         public bool UpdateWidget(Widget widget)
         {
@@ -92,9 +65,6 @@ namespace Vanrise.Security.Data.SQL
 
              return (int)ExecuteScalarSP("sec.sp_Widget_CheckSetting", serialziedSetting, ToDBNullIfDefault(widget.Id));
         }
-
-
-
         public bool AreAllWidgetsUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("sec.Widget", ref updateHandle);

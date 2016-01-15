@@ -1,13 +1,11 @@
-﻿<vr-row removeline>
-    <vr-columns colnum="fullrow" simplecol>
-        <vr-datagrid datasource="ctrl.widgets"
-                     dataretrievalfunction="ctrl.dataRetrievalFunction"
-                     menuactions="ctrl.menuActions"
-                     on-ready="ctrl.onMainGridReady"
-                     pagingtype="'PagingOnScroll'"
-                     idfield="Entity.Id">
-            <vr-datagridcolumn headertext="'Widget Name'" field="'Entity.Name'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Widget Type'" field="'WidgetDefinitionName'"></vr-datagridcolumn>
-        </vr-datagrid>
-    </vr-columns>
-</vr-row>
+﻿
+<vr-datagrid datasource="ctrl.widgets"
+                dataretrievalfunction="ctrl.dataRetrievalFunction"
+                menuactions="ctrl.menuActions"
+                on-ready="ctrl.onMainGridReady"
+                pagingtype="'PagingOnScroll'"
+                idfield="Entity.Id">
+    <vr-datagridcolumn headertext="'Widget Name'" field="'Entity.Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Widget Type'" field="'WidgetDefinitionName'"></vr-datagridcolumn>
+</vr-datagrid>
+
