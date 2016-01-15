@@ -13,12 +13,10 @@ namespace Vanrise.Security.Data
             List<WidgetDefinition> GetWidgetsDefinition();
             bool AddWidget(Widget widget, out int insertedId);
             bool UpdateWidget(Widget widget);
-            List<WidgetDetails> GetAllWidgets();
-            WidgetDetails GetWidgetById(int widgetId);
-
-            Vanrise.Entities.BigResult<WidgetDetails> GetFilteredWidgets(Vanrise.Entities.DataRetrievalInput<WidgetFilter> filter);
+             List<Widget> GetAllWidgets();
              int CheckWidgetSetting(Widget widget);
              bool DeleteWidget(int widgetId);
+             bool AreAllWidgetsUpdated(ref object updateHandle);
         }
     
 }

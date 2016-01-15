@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="Security_WidgetManagementController">
+﻿<vr-panel ng-controller="Security_WidgetManagementController" vr-loader="isLoading">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
@@ -21,14 +21,11 @@
         </vr-row>
     </vr-form>
 
-    <div vr-loader="isGettingData">
+    <div>
 
         <vr-row>
             <vr-columns colnum="12">
-                <vr-datagrid datasource="widgets" dataretrievalfunction="dataRetrievalFunction" menuactions="menuActions" on-ready="onMainGridReady" pagingtype="'PagingOnScroll'" idfield="Id">
-                    <vr-datagridcolumn headertext="'Widget Name'" field="'Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Widget Type'" field="'WidgetDefinitionName'"></vr-datagridcolumn>
-                </vr-datagrid>
+                <vr-sec-widget-grid on-ready="onGridReady"></vr-sec-widget-grid>
             </vr-columns>
         </vr-row>
     </div>

@@ -9,6 +9,6 @@ namespace Vanrise.Security.Entities
     public class WidgetFilter
     {
         public string WidgetName { get; set; }
-        public   int WidgetType { get; set; }
+        public   List<int> WidgetTypes { get; set; }
     }
 }

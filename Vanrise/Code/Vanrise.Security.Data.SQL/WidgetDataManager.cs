@@ -66,39 +66,24 @@ namespace Vanrise.Security.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("sec.sp_Widget_Delete", widgetId);
             return (recordesEffected > 0);
         }
-        public List<WidgetDetails> GetAllWidgets()
+        public List<Widget> GetAllWidgets()
         {
 
             return GetItemsSP("sec.sp_Widget_GetAll", WidgetMapper);
         }
-        private WidgetDetails WidgetMapper(IDataReader reader)
+        private Widget WidgetMapper(IDataReader reader)
         {
-            WidgetDetails instance = new WidgetDetails
+            Widget instance = new Widget
             {
                 Id = (int)reader["Id"],
                 Name = reader["WidgetName"] as string,
                 Title = reader["Title"] as string,
                 WidgetDefinitionId = GetReaderValue<int>(reader, "WidgetDefinitionId"),
-                WidgetDefinitionName = reader["WidgetDefinitionName"] as string,
-                DirectiveName = reader["DirectiveName"] as string,
-                WidgetDefinitionSetting = Vanrise.Common.Serializer.Deserialize<WidgetDefinitionSetting>(reader["WidgetDefinitionSetting"] as string),
                 Setting = Vanrise.Common.Serializer.Deserialize<WidgetSetting>(reader["Setting"] as string)
             };
             return instance;
         }
-        public WidgetDetails GetWidgetById(int widgetId)
-        {
-            return GetItemSP("sec.sp_Widget_GetById", WidgetMapper, widgetId);
-        }
 
-        public Vanrise.Entities.BigResult<WidgetDetails> GetFilteredWidgets(Vanrise.Entities.DataRetrievalInput<WidgetFilter> filter)
-        {         
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("sec.sp_Widget_CreateTempByFiltered", tempTableName, filter.Query.WidgetName, ToDBNullIfDefault(filter.Query.WidgetType));
-            };
-            return RetrieveData(filter, createTempTableAction, WidgetMapper, _columnMapper);
-        }
         public int CheckWidgetSetting(Widget widget)
         {
              string serialziedSetting = null;
@@ -107,6 +92,12 @@ namespace Vanrise.Security.Data.SQL
 
              return (int)ExecuteScalarSP("sec.sp_Widget_CheckSetting", serialziedSetting, ToDBNullIfDefault(widget.Id));
         }
-      
+
+
+
+        public bool AreAllWidgetsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("sec.Widget", ref updateHandle);
+        }
     }
 }

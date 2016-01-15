@@ -1,6 +1,6 @@
 ﻿'use strict'
-WidgetManagementController.$inject = ['$scope', 'UtilsService', 'WidgetAPIService', 'VRModalService', 'VRNotificationService','DeleteOperationResultEnum'];
-function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRModalService, VRNotificationService, DeleteOperationResultEnum) {
+WidgetManagementController.$inject = ['$scope', 'UtilsService', 'WidgetAPIService', 'VRModalService', 'VRNotificationService','DeleteOperationResultEnum','VR_WidgetService'];
+function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRModalService, VRNotificationService, DeleteOperationResultEnum, VR_WidgetService) {
     var mainGridAPI;
     defineScope();
     load();
@@ -8,32 +8,12 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
     function defineScope() {
         $scope.widgetsTypes = [];
         $scope.selectedWidgetsType;
-        $scope.widgetName;
-        $scope.widgets = [];
-        $scope.onMainGridReady = function (api) {
+        $scope.onGridReady = function (api) {
             mainGridAPI = api;
-            if(api!=undefined)
-            retrieveData();
+            var filter = {};
+            api.loadGrid(filter);
         };
-        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return WidgetAPIService.GetFilteredWidgets(dataRetrievalInput)
-            .then(function (response) {
-                onResponseReady(response);
-            });
-        };
-        $scope.menuActions = [{
-            name: "Edit",
-            permissions: "Root/Administration Module/Dynamic Pages:Edit",
-                clicked: function (dataItem) {
-                 updateWidget(dataItem);
-                }
-        }, {
-            name: "Delete",
-            permissions: "Root/Administration Module/Dynamic Pages:Delete",
-            clicked: function (dataItem) {
-                deleteWidget(dataItem);
-            }
-        }];
+        
 
         $scope.mainGridPagerSettings = {
             currentPage: 1,
@@ -47,74 +27,48 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
             addNewWidget();
         };
         $scope.searchClicked = function () {
-                retrieveData();
+            if (mainGridAPI != undefined)
+                return mainGridAPI.loadGrid(getFilterObject());
         }
 
     }
-    function retrieveData() {
-        var widgetType;
-        if ($scope.selectedWidgetsType != undefined)
-            widgetType = $scope.selectedWidgetsType.ID;
-        else
-            widgetType = 0;
-        var query = {
-            WidgetName: $scope.widgetName,
-            WidgetType: widgetType
-        }
-        
-        return mainGridAPI.retrieveData(query);
-
-
-    }
-    function deleteWidget(dataItem) {
-        VRNotificationService.showConfirmation().then(function (response) {
-            if (response == true) {
-                return WidgetAPIService.DeleteWidget(dataItem.Id).then(function (responseObject) {
-                    if (responseObject.Result == DeleteOperationResultEnum.Succeeded.value)
-                        mainGridAPI.itemDeleted(dataItem);
-                    VRNotificationService.notifyOnItemDeleted("Widget", responseObject, "dynamic pages");
-                    $scope.isGettingData = false;
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                }).finally(function () {
-                    
-                   
-                });
+    function getFilterObject() {
+            var widgetType;
+            if ($scope.selectedWidgetsType != undefined)
+                widgetType = $scope.selectedWidgetsType.ID;
+            else
+                widgetType = 0;
+            var query = {
+                WidgetName: $scope.widgetName,
+                WidgetType: widgetType
             }
-
-        });
-
-
+            return query;
     }
+   
     function addNewWidget() {
-        var settings = {};
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = UtilsService.buildTitleForAddEditor("Widget");
-            modalScope.onWidgetAdded = function (widget) {
-                mainGridAPI.itemAdded(widget);
-            };
+        var onWidgetAdded = function (widgetObj) {
+            if (mainGridAPI != undefined)
+                mainGridAPI.onWidgetAdded(widgetObj);
         };
-        VRModalService.showModal('/Client/Modules/Security/Views/WidgetsPages/WidgetEditor.html', null, settings);
-
-    }
-
-    function updateWidget(dataItem) {
-        var settings = {};
-        settings.onScopeReady = function (modalScope) {
-           
-            modalScope.title = UtilsService.buildTitleForUpdateEditor(dataItem.Name, "Widget");
-            modalScope.onWidgetUpdated = function (widget) {
-                mainGridAPI.itemUpdated(widget);
-            };
-        };
-
-        VRModalService.showModal('/Client/Modules/Security/Views/WidgetsPages/WidgetEditor.html', dataItem, settings);
+        VR_WidgetService.addWidget(onWidgetAdded);
     }
 
     function load() {
-        loadWidgets();
+        $scope.isLoading = true;
+        loadAllControls();
     }
 
+    function loadAllControls() {
+
+        return loadWidgets()
+           .catch(function (error) {
+               VRNotificationService.notifyExceptionWithClose(error, $scope);
+               $scope.isLoading = false;
+           })
+          .finally(function () {
+              $scope.isLoading = false;
+          });
+    }
 
     function loadWidgets() {
         return WidgetAPIService.GetWidgetsDefinition().then(function (response) {

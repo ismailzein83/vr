@@ -126,9 +126,18 @@
     <Content Include="BI\Constants\BIEntityTypeEnum.js" />
     <Content Include="BI\Constants\BIMeasureTypeEnum.js" />
     <Content Include="BI\Directives\bi-visualelement-service.js" />
+    <Content Include="BI\Directives\Chart\Templates\BIChartTemplate.html" />
+    <Content Include="BI\Directives\Chart\vr-bi-chart-template.js" />
+    <Content Include="BI\Directives\Chart\vr-bi-chart.js" />
+    <Content Include="BI\Directives\Grid\Templates\BIDataGridTemplate.html" />
+    <Content Include="BI\Directives\Grid\vr-bi-datagrid-template.js" />
+    <Content Include="BI\Directives\Grid\vr-bi-datagrid.js" />
     <Content Include="BI\Directives\Images\bichartpermission.png" />
     <Content Include="BI\Directives\Images\chartpermission.png" />
     <Content Include="BI\Directives\Images\gridpermission.png" />
+    <Content Include="BI\Directives\Summary\Templates\BISummaryTemplate.html" />
+    <Content Include="BI\Directives\Summary\vr-bi-summary-template.js" />
+    <Content Include="BI\Directives\Summary\vr-bi-summary.js" />
     <Content Include="BI\Directives\Templates\vr-bi-chart-directive-template.html" />
     <Content Include="BI\Directives\Templates\vr-bi-chart-directive-template.js" />
     <Content Include="BI\Directives\Templates\vr-bi-datagrid-directive-template.html" />
@@ -170,6 +179,7 @@
       <Name>Vanrise.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

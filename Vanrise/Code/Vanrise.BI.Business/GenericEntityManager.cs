@@ -373,9 +373,9 @@ namespace Vanrise.BI.Business
               {
                  foreach (int widgetId in userMeasuresValidatorInput.Query.Widgets)
                    {
-                       if (widget.Id == widgetId)
+                       if (widget.Entity.Id == widgetId)
                        {
-                           List<string> measures = ((BIWidgetSetting)widget.Setting.Settings).GetMeasures();
+                           List<string> measures = ((BIWidgetSetting)widget.Entity.Setting.Settings).GetMeasures();
                            foreach (string measure in measures)
                            {
                                if (!distinctMeasures.Contains(measure))

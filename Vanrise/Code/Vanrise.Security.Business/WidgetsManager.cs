@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
-
+using Vanrise.Common;
 namespace Vanrise.Security.Business
 {
     public class WidgetsManager
@@ -16,6 +16,20 @@ namespace Vanrise.Security.Business
             IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
             return dataManager.GetWidgetsDefinition();
         }
+        public Vanrise.Entities.IDataRetrievalResult<WidgetDetails> GetFilteredWidgets(Vanrise.Entities.DataRetrievalInput<WidgetFilter> input)
+        {
+            var allWidgets = GetCachedWidgets();
+
+            Func<Widget, bool> filterExpression = (prod) =>
+                 (input.Query.WidgetName == null || prod.Name.ToLower().Contains(input.Query.WidgetName.ToLower()))
+                 &&
+
+                 (input.Query.WidgetTypes == null || input.Query.WidgetTypes.Count()>0 || input.Query.WidgetTypes.Contains(prod.WidgetDefinitionId));
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allWidgets.ToBigResult(input, filterExpression, WidgetDetailMapper));
+        }
+
+
         public Vanrise.Entities.InsertOperationOutput<WidgetDetails> AddWidget(Widget widget)
         {
             InsertOperationOutput<WidgetDetails> insertOperationOutput = new InsertOperationOutput<WidgetDetails>();
@@ -38,7 +52,7 @@ namespace Vanrise.Security.Business
 
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 widget.Id = widgetId;
-                WidgetDetails widgetDetail = dataManager.GetWidgetById(widgetId);
+                WidgetDetails widgetDetail = WidgetDetailMapper(widget);
                 insertOperationOutput.InsertedObject = widgetDetail;
             }
             else
@@ -66,7 +80,7 @@ namespace Vanrise.Security.Business
             if (updateActionSucc)
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                WidgetDetails widgetDetail = dataManager.GetWidgetById(widget.Id);
+                WidgetDetails widgetDetail = WidgetDetailMapper(widget);
                 updateOperationOutput.UpdatedObject = widgetDetail;
             }
             else
@@ -119,15 +133,54 @@ namespace Vanrise.Security.Business
         }
         public List<WidgetDetails> GetAllWidgets()
         {
-            IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
-            return dataManager.GetAllWidgets();
+            var allWidgets = GetCachedWidgets().Values;
+
+            return allWidgets.MapRecords(WidgetDetailMapper).ToList();
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<WidgetDetails> GetFilteredWidgets(Vanrise.Entities.DataRetrievalInput<WidgetFilter> filter) 
+        public Widget GetWidgetByIds(int widgetId)
         {
-            IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(filter, dataManager.GetFilteredWidgets(filter));
+            var allWidgets = GetCachedWidgets();
+
+            return allWidgets.GetRecord(widgetId);
+        }    
+
+        #region Private Members
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IWidgetsDataManager _dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreAllWidgetsUpdated(ref _updateHandle);
+            }
         }
+        private Dictionary<int, Widget> GetCachedWidgets()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllWidgets",
+               () =>
+               {
+                   IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
+                   IEnumerable<Widget> customerZones = dataManager.GetAllWidgets();
+                   return customerZones.ToDictionary(kvp => kvp.Id, kvp => kvp);
+               });
+        }
+
       
+        #endregion
+
+        #region  Mappers
+        private WidgetDetails WidgetDetailMapper(Widget widget)
+        {
+            WidgetDetails widgetDetails = new WidgetDetails();
+
+            widgetDetails.Entity = widget;
+
+            return widgetDetails;
+        }
+
+        #endregion
     }
 }
