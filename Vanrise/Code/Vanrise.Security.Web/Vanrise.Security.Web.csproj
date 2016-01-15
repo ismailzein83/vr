@@ -218,6 +218,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Security\Directives\DynamicPage\Templates\" />
+    <Folder Include="Security\Directives\Permission\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
