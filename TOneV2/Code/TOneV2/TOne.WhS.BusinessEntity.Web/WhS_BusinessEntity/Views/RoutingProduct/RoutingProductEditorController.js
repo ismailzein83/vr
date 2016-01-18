@@ -279,6 +279,7 @@
         }
 
         function insertRoutingProduct() {
+            $scope.scopeModal.isLoading = true;
             var routingProductObject = buildRoutingProductObjFromScope();
             return WhS_BE_RoutingProductAPIService.AddRoutingProduct(routingProductObject)
             .then(function (response) {
@@ -289,11 +290,14 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModal.isLoading = false;
             });
 
         }
 
         function updateRoutingProduct() {
+            $scope.scopeModal.isLoading = true;
             var routingProductObject = buildRoutingProductObjFromScope();
             WhS_BE_RoutingProductAPIService.UpdateRoutingProduct(routingProductObject)
             .then(function (response) {
@@ -304,6 +308,8 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModal.isLoading = false;
             });
         }
     }
