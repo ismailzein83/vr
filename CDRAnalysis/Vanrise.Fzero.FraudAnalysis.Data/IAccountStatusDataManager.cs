@@ -8,8 +8,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface IAccountStatusDataManager : IDataManager 
     {
-
         void LoadAccountStatus(Action<AccountStatus> onBatchReady, List<CaseStatus> caseStatuses);
         List<string> GetAccountNumberByStatus(List<CaseStatus> caseStatuses, string fromAccountNumber, int nbOfRecords);
+
+        List<string> GetAccountNumbersByNumberPrefixAndStatuses(List<CaseStatus> caseStatuses, IEnumerable<string> numberPrefixes);
     }
 }
