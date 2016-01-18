@@ -24,33 +24,29 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            IAccountStatusDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
+            IAccountInfoDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountInfoDataManager>();
             AccountNumbersByIMEI accountNumbersByIMEI = new AccountNumbersByIMEI();
-            List<CaseStatus> caseStatuses = new List<CaseStatus>();
-            caseStatuses.Add(CaseStatus.Open);
-            caseStatuses.Add(CaseStatus.Pending);
-            caseStatuses.Add(CaseStatus.ClosedFraud);
 
-            dataManager.LoadAccountStatus(((accountStatus) =>
+            dataManager.LoadAccountInfo(((accountInfo) =>
                 {
-                    foreach ( var imei in accountStatus.AccountInfo.IMEIs)
+                    foreach ( var imei in accountInfo.InfoDetail.IMEIs)
                     {
 	                        // This code does two hash lookups.
 	                        HashSet<String> accountNumbers;
 	                        if (accountNumbersByIMEI.TryGetValue(imei, out accountNumbers))
 	                        {
-                                accountNumbers.Add(accountStatus.AccountNumber);
+                                accountNumbers.Add(accountInfo.AccountNumber);
 	                            accountNumbersByIMEI[imei] = accountNumbers;
 	                        }
                             else
                             {
                                 accountNumbers = new HashSet<string>();
-                                accountNumbers.Add(accountStatus.AccountNumber);
+                                accountNumbers.Add(accountInfo.AccountNumber);
                                 accountNumbersByIMEI.Add(imei, accountNumbers);
                             }
                     }
 
-                }), caseStatuses);
+                }));
 
 
             context.SetValue(AccountNumbersByIMEI, accountNumbersByIMEI);

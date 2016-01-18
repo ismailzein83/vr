@@ -5,6 +5,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
     public class AccountInfo
     {
-        public HashSet<String> IMEIs { get; set; }
+        public string AccountNumber { get; set; }
+
+        public InfoDetail InfoDetail { get; set; }
+
     }
 }

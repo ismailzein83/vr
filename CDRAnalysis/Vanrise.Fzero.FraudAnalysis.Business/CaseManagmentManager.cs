@@ -156,7 +156,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             {
                 dataManager.InsertAccountCase(out caseID, accountNumber, null, CaseStatus.Open, null, null);
                 dataManager.InsertAccountCaseHistory(caseID, null, CaseStatus.Open, null);
-                dataManager.InsertOrUpdateAccountStatus(accountNumber, CaseStatus.Open, new AccountInfo() { IMEIs = imeis });
+                dataManager.InsertOrUpdateAccountInfo(accountNumber, new InfoDetail() { IMEIs = imeis });
             }
             else
             {

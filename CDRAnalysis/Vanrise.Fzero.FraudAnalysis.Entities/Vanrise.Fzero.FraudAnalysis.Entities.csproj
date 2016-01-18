@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountCaseLog.cs" />
+    <Compile Include="InfoDetail.cs" />
     <Compile Include="AccountInfo.cs" />
     <Compile Include="CDRDetail.cs" />
     <Compile Include="DataWarehouse\DWAccountCase.cs" />

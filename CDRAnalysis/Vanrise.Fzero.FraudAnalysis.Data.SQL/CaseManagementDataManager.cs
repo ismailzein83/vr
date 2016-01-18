@@ -53,23 +53,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
                 BEGIN
                 
-                SELECT
-			        accStatus.AccountNumber,
-			        MAX(sed.SuspicionLevelID) AS SuspicionLevelID,
-			        CASE WHEN accStatus.[Status] IN (1, 2) THEN SUM (CASE WHEN sed.SuspicionOccuranceStatus = 1 THEN 1 ELSE 0 END) ELSE COUNT(*) END AS NumberOfOccurances,
-			        MAX(se.ExecutionDate) AS LastOccurance,
-			        accStatus.[Status] AS AccountStatusID
-		
-		        INTO #TEMP_TABLE_NAME#
-		
-		        FROM FraudAnalysis.AccountStatus accStatus
-		        LEFT JOIN FraudAnalysis.StrategyExecutionDetails sed ON accStatus.AccountNumber = sed.AccountNumber
-		        LEFT JOIN FraudAnalysis.StrategyExecution se ON se.ID = sed.StrategyExecutionID
-		
-                #WHERE_CLAUSE#
-		
-		        GROUP BY accStatus.AccountNumber, accStatus.[Status]
 
+                SELECT        MAX(sed.SuspicionLevelID) AS SuspicionLevelID, CASE WHEN accStatus.[Status] IN (1, 2) 
+                         THEN SUM(CASE WHEN sed.SuspicionOccuranceStatus = 1 THEN 1 ELSE 0 END) ELSE COUNT(*) END AS NumberOfOccurances, MAX(se.ExecutionDate) 
+                         AS LastOccurance, { fn IFNULL(accStatus.Status, 1) } AS AccountStatusID, sed.AccountNumber
+                INTO #TEMP_TABLE_NAME#                
+                FROM            FraudAnalysis.StrategyExecution AS se INNER JOIN
+                         FraudAnalysis.StrategyExecutionDetails AS sed ON se.ID = sed.StrategyExecutionID LEFT OUTER JOIN
+                         FraudAnalysis.AccountStatus AS accStatus ON sed.AccountNumber = accStatus.AccountNumber
+                #WHERE_CLAUSE#                
+                GROUP BY accStatus.Status, sed.AccountNumber
                 END
             ");
 
@@ -86,13 +79,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             whereClause.Append("WHERE (se.ExecutionDate IS NULL OR (se.ExecutionDate >= @FromDate AND se.ExecutionDate <= @ToDate))");
 
             if (accountNumber != null)
-                whereClause.Append(" AND accStatus.AccountNumber = '" + accountNumber + "'");
+                whereClause.Append(" AND sed.AccountNumber = '" + accountNumber + "'");
 
             if (strategyIDs != null)
                 whereClause.Append(" AND se.StrategyID IN (" + string.Join(",", strategyIDs) + ")");
 
             if (accountStatusIDs != null)
-                whereClause.Append(" AND accStatus.[Status] IN (" + string.Join(",", GetCaseStatusListAsIntList(accountStatusIDs)) + ")");
+                whereClause.Append(" AND (accStatus.[Status] is NULL  or accStatus.[Status] IN (" + string.Join(",", GetCaseStatusListAsIntList(accountStatusIDs)) + "))");
 
             if (suspicionLevelIDs != null)
                 whereClause.Append(" AND sed.SuspicionLevelID IN (" + string.Join(",", GetSuspicionLevelListAsIntList(suspicionLevelIDs)) + ")");
@@ -253,13 +246,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus, DateTime? validTill)
         {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdateStatus", accountNumber, caseStatus, validTill);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate", accountNumber, caseStatus, validTill);
             return (recordsAffected > 0);
         }
 
-        public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus, AccountInfo accountInfo)
+
+        public bool InsertOrUpdateAccountInfo(string accountNumber, InfoDetail infoDetail)
         {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate", accountNumber, caseStatus, Vanrise.Common.Serializer.Serialize(accountInfo));
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountInfo_InsertOrUpdate", accountNumber, Vanrise.Common.Serializer.Serialize(infoDetail));
             return (recordsAffected > 0);
         }
 

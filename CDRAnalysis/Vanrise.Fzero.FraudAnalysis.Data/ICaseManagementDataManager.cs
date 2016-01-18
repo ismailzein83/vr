@@ -6,7 +6,7 @@ using Vanrise.Fzero.FraudAnalysis.Entities.ResultQuery;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data
 {
-    public interface ICaseManagementDataManager : IDataManager 
+    public interface ICaseManagementDataManager : IDataManager
     {
 
         AccountCase GetLastAccountCaseByAccountNumber(string accountNumber);
@@ -19,7 +19,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus, DateTime? validTill);
 
-        bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus, AccountInfo accountInfo);
+        bool InsertOrUpdateAccountInfo(string accountNumber, InfoDetail infoDetail);
 
         bool LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus);
 
