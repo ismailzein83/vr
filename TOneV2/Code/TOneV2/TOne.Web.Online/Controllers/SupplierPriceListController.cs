@@ -15,8 +15,9 @@ namespace TOne.Web.Online.Controllers
         public bool UploadPriceList(SupplierPriceListUserInput userInput)
         {
             //return true;
+            int insertedId = 0;
             SupplierPriceListManager manager = new SupplierPriceListManager();
-            return manager.SavePriceList(0, userInput.EffectiveOnDateTime, "C159", userInput.PriceListType, "portal@vanrise.com", userInput.ContentFile, userInput.FileName);
+            return manager.SavePriceList(0, userInput.EffectiveOnDateTime, "C159", userInput.PriceListType, "portal@vanrise.com", userInput.ContentFile, userInput.FileName, out insertedId);
         }
 
         [HttpGet]

@@ -27,6 +27,12 @@ namespace TOne.WhS.BusinessEntity.Business
                });
         }
 
+        //To save priceList from portal into Queue
+        public bool SavePriceList(int priceListStatus, DateTime effectiveOnDateTime, string supplierId, string priceListType, string activeSupplierEmail, byte[] contentBytes, string fileName, out int insertdId)
+        {
+            ISupplierPriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
+            return dataManager.SavePriceList(priceListStatus, effectiveOnDateTime, supplierId, priceListType, activeSupplierEmail, contentBytes, fileName, "Portal", out  insertdId);
+        }
         public IEnumerable<SupplierPriceList> GetFilteredSupplierPriceLists(SupplierPricelistFilter filter)
         {
             List<SupplierPriceList> priceLists = GetCachedPriceLists();
