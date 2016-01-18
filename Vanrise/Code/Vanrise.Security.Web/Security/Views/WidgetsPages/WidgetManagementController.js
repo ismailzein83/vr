@@ -1,6 +1,6 @@
 ﻿'use strict'
-WidgetManagementController.$inject = ['$scope', 'UtilsService', 'WidgetDefinitionAPIService', 'VRNotificationService', 'VR_WidgetService'];
-function WidgetManagementController($scope, UtilsService, WidgetDefinitionAPIService, VRNotificationService, VR_WidgetService) {
+widgetManagementController.$inject = ['$scope', 'UtilsService', 'WidgetDefinitionAPIService', 'VRNotificationService', 'VR_WidgetService'];
+function widgetManagementController($scope, UtilsService, WidgetDefinitionAPIService, VRNotificationService, VR_WidgetService) {
     var mainGridAPI;
     defineScope();
     load();
@@ -68,4 +68,4 @@ function WidgetManagementController($scope, UtilsService, WidgetDefinitionAPISer
     
 };
 
-appControllers.controller('Security_WidgetManagementController', WidgetManagementController);
+appControllers.controller('VR_Sec_WidgetManagementController', widgetManagementController);

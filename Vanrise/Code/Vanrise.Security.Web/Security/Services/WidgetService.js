@@ -1,5 +1,9 @@
-﻿app.service('VR_WidgetService', ['VRModalService', 'VRNotificationService', 'UtilsService','WidgetAPIService','DeleteOperationResultEnum',
-    function (VRModalService, VRNotificationService, UtilsService, WidgetAPIService, DeleteOperationResultEnum) {
+﻿(function (appControllers) {
+
+    "use strict";
+    widgetService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService','WidgetAPIService','DeleteOperationResultEnum'];
+
+    function widgetService(VRModalService, VRNotificationService, UtilsService, WidgetAPIService, DeleteOperationResultEnum) {
 
         function deleteWidget($scope, dataItem, onWidgetDeleted) {
             VRNotificationService.showConfirmation().then(function (response) {
@@ -29,7 +33,7 @@
             var parameters = {
                 Id: widgetId
             };
-            
+
             VRModalService.showModal('/Client/Modules/Security/Views/WidgetsPages/WidgetEditor.html', parameters, modalSettings);
         }
 
@@ -42,11 +46,12 @@
             VRModalService.showModal('/Client/Modules/Security/Views/WidgetsPages/WidgetEditor.html', null, settings);
         }
 
-
         return ({
             updateWidget: updateWidget,
             deleteWidget: deleteWidget,
             addWidget: addWidget
         });
+    }
 
-    }]);
+    appControllers.service('VR_WidgetService', widgetService);
+})(appControllers);

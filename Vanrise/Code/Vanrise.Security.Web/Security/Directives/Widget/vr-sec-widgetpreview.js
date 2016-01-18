@@ -39,62 +39,60 @@ app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'V
         var widgetAPI;
        
         function initializeController() {
-            $scope.scopeModal = {};
-            $scope.scopeModal.validateDateTime = function () {
-                return VRValidationService.validateTimeRange($scope.scopeModal.fromDate, $scope.scopeModal.toDate);
+            $scope.validateDateTime = function () {
+                return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
             }
 
-            $scope.scopeModal.selectedPeriod = PeriodEnum.CurrentMonth;
-            date = $scope.scopeModal.selectedPeriod.getInterval();
-            $scope.scopeModal.fromDate = date.from;
-            $scope.scopeModal.toDate = date.to;
+            $scope.selectedPeriod = PeriodEnum.CurrentMonth;
+            date = $scope.selectedPeriod.getInterval();
+            $scope.fromDate = date.from;
+            $scope.toDate = date.to;
 
             defineTimeDimensionTypes();
-            $scope.scopeModal.filter = {
-                timeDimensionType: $scope.scopeModal.selectedTimeDimensionType,
-                fromDate: $scope.scopeModal.fromDate,
-                toDate: $scope.scopeModal.toDate
+            $scope.filter = {
+                timeDimensionType: $scope.selectedTimeDimensionType,
+                fromDate: $scope.fromDate,
+                toDate: $scope.toDate
             }
-            $scope.scopeModal.periods = UtilsService.getArrayEnum(PeriodEnum);
+            $scope.periods = UtilsService.getArrayEnum(PeriodEnum);
 
             var customize = {
                 value: -1,
                 description: "Customize"
             }
-            $scope.scopeModal.onBlurChanged = function () {
-                var from = UtilsService.getShortDate($scope.scopeModal.fromDate);
+            $scope.onBlurChanged = function () {
+                var from = UtilsService.getShortDate($scope.fromDate);
                 var oldFrom = UtilsService.getShortDate(date.from);
-                var to = UtilsService.getShortDate($scope.scopeModal.toDate);
+                var to = UtilsService.getShortDate($scope.toDate);
                 var oldTo = UtilsService.getShortDate(date.to);
                 if (from != oldFrom || to != oldTo)
-                    $scope.scopeModal.selectedPeriod = customize;
+                    $scope.selectedPeriod = customize;
 
             }
 
 
 
 
-            $scope.scopeModal.onElementReady = function (api) {
+            $scope.onElementReady = function (api) {
                 widgetAPI = api;
-                console.log(api);
-                return widgetAPI.retrieveData($scope.scopeModal.filter);
+                return widgetAPI.retrieveData($scope.filter);
             };
 
-            $scope.scopeModal.Search = function () {
-                $scope.scopeModal.filter = {
-                    timeDimensionType: $scope.scopeModal.selectedTimeDimensionType,
-                    fromDate: $scope.scopeModal.fromDate,
-                    toDate: $scope.scopeModal.toDate
+            $scope.Search = function () {
+                $scope.filter = {
+                    timeDimensionType: $scope.selectedTimeDimensionType,
+                    fromDate: $scope.fromDate,
+                    toDate: $scope.toDate
                 }
                 return refreshWidget();
             };
-            $scope.scopeModal.periodSelectionChanged = function () {
+            $scope.periodSelectionChanged = function () {
 
-                if ($scope.scopeModal.selectedPeriod.value != -1) {
+                if ($scope.selectedPeriod.value != -1) {
 
-                    date = $scope.scopeModal.selectedPeriod.getInterval();
-                    $scope.scopeModal.fromDate = date.from;
-                    $scope.scopeModal.toDate = date.to;
+                    date = $scope.selectedPeriod.getInterval();
+                    $scope.fromDate = date.from;
+                    $scope.toDate = date.to;
                 }
 
             }
@@ -105,14 +103,13 @@ app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'V
         function defineAPI() {
             var api = {};
             api.load = function (payload) {
-                console.log(payload);
                 if (payload !=undefined)
-                    $scope.scopeModal.widget = payload;
-                if ($scope.scopeModal.widget != null) {
-                    $scope.scopeModal.widget.SectionTitle = $scope.scopeModal.widget.Name;
+                    $scope.widget = payload;
+                if ($scope.widget != null) {
+                    $scope.widget.SectionTitle = $scope.widget.Name;
                 }
                 if (widgetAPI !=undefined)
-                    return widgetAPI.retrieveData($scope.scopeModal.filter);
+                    return widgetAPI.retrieveData($scope.filter);
             }
             
             if (ctrl.onReady != null)
@@ -121,14 +118,13 @@ app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'V
 
         function refreshWidget() {
            
-            return widgetAPI.retrieveData($scope.scopeModal.filter);
+            return widgetAPI.retrieveData($scope.filter);
         }
         function defineTimeDimensionTypes() {
-            $scope.scopeModal.timeDimensionTypes = [];
+            $scope.timeDimensionTypes = [];
             for (var td in TimeDimensionTypeEnum)
-                $scope.scopeModal.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
-            $scope.scopeModal.selectedTimeDimensionType = TimeDimensionTypeEnum.Daily;
-            console.log($scope.scopeModal.timeDimensionTypes);
+                $scope.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
+            $scope.selectedTimeDimensionType = TimeDimensionTypeEnum.Daily;
         }
 
 

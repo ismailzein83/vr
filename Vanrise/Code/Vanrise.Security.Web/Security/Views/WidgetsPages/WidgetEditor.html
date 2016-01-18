@@ -1,40 +1,38 @@
-﻿<div vr-modalcontent ng-controller="Security_WidgetEditorController" width="'50%'">
-    <vr-modalbody vr-loader="isLoading" maxheight="'700px'">
+﻿<div vr-modalcontent ng-controller="VR_Sec_WidgetEditorController" width="'50%'">
+    <vr-modalbody vr-loader="scopeModal.isLoading" maxheight="'700px'">
         <vr-form name="formDynamicPagesEditor">
             <vr-tabs>
                 <vr-tab header="'Setting'">
                     <vr-form name="formDesigningSelectionModel">
                         <vr-row>
                             <vr-columns width="large">
-                                <vr-textbox value="widgetName" label="Widget Name" isrequired></vr-textbox>
+                                <vr-textbox value="scopeModal.widgetName" label="Widget Name" isrequired></vr-textbox>
                             </vr-columns>
                             <vr-columns width="large">
                                 <vr-select label="Widget Type" datatextfield="Name" datavaluefield="ID"
-                                           datasource="widgets" selectedvalues="selectedWidget" onselectionchanged="onselectionTemplateChanged" isrequired></vr-select>
+                                           datasource="scopeModal.widgets" selectedvalues="scopeModal.selectedWidget" onselectionchanged="scopeModal.onselectionTemplateChanged" isrequired></vr-select>
                             </vr-columns>
                         </vr-row>
                         <vr-row>
                             <vr-columns width="fullrow">
-                                <vr-section title="Widget Setting" ng-if="selectedWidget!=null" vr-loader="isLoadingTemplateDirective">
-                                    <vr-directivewrapper directive="selectedWidget.Setting.DirectiveTemplateURL" on-ready="onTemplateDirectiveReady"></vr-directivewrapper>
-                                    <!--   <div ng-include="selectedWidget.Setting.DirectiveTemplateURL"></div>-->
+                                <vr-section title="Widget Setting" ng-if="scopeModal.selectedWidget!=null" vr-loader="scopeModal.isLoadingTemplateDirective">
+                                    <vr-directivewrapper directive="scopeModal.selectedWidget.Setting.DirectiveTemplateURL" on-ready="scopeModal.onTemplateDirectiveReady"></vr-directivewrapper>
                                 </vr-section>
                             </vr-columns>
                         </vr-row>
                     </vr-form>
                 </vr-tab>
-                <vr-tab header="'Preview'" tabobject="tabObject" >
-                    <vr-sec-widgetpreview on-ready="onPreviewAPIReady" ng-if="tabObject.isSelected"></vr-sec-widgetpreview>
-                    <!-- <div ng-include="'Client/Modules/Security/Views/WidgetsPages/WidgetPreview.html'"></div>-->
+                <vr-tab header="'Preview'" tabobject="scopeModal.tabObject">
+                    <vr-sec-widgetpreview on-ready="scopeModal.onPreviewAPIReady" ng-if="scopeModal.tabObject.isSelected"></vr-sec-widgetpreview>
                 </vr-tab>
             </vr-tabs>
-</vr-form>
+        </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formDynamicPagesEditor" data-onclick="save"></vr-button>
-                <vr-button type="Close" data-onclick="close"></vr-button>
+                <vr-button type="Save" formname="formDynamicPagesEditor" data-onclick="scopeModal.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
             </div>
         </vr-actionbar>
     </div>

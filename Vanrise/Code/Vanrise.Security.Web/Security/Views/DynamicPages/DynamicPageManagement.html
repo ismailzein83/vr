@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="Security_DynamicPageManagementController">
+﻿<vr-panel ng-controller="VR_Sec_DynamicPageManagementController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
@@ -6,29 +6,22 @@
                     <vr-textbox value="filterValue" label="Page Name"></vr-textbox>
                 </vr-columns>
             </vr-row>
-        </div> 
+        </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Add" formname="formFilter" permissions= "Root/Administration Module/Dynamic Pages:Add"  data-onclick="Add" isasynchronous=" true"></vr-button>
+                    <vr-button type="Add" formname="formFilter" permissions="Root/Administration Module/Dynamic Pages:Add" data-onclick="Add" isasynchronous=" true"></vr-button>
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous=" true"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
     </vr-form>
-    <div vr-loader="isGettingData">
+    <div>
         <vr-row>
             <vr-columns colnum="12">
-                <vr-datagrid datasource="dynamicViews" dataretrievalfunction="dataRetrievalFunction" menuactions="menuActions" on-ready="onMainGridReady" pagingtype="'PagingOnScroll'" idfield="ViewId">
-                    <vr-datagridcolumn headertext="'Page Name'" field="'Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Menu Location'" field="'ModuleName'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Audiences/Users'" field="'Audience.UsersName'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Audiences/Group Users'" field="'Audience.GroupsName'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Default Period'" field="'ViewContent.DefaultPeriodDescription'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Default Grouping'" field="'ViewContent.DefaultGroupingDescription'"></vr-datagridcolumn>
-                </vr-datagrid>
+                <vr-sec-dynamicpage-grid on-ready="onGridReady"></vr-sec-dynamicpage-grid>
             </vr-columns>
-        </vr-row> 
+        </vr-row>
     </div>
 
 </vr-panel>
