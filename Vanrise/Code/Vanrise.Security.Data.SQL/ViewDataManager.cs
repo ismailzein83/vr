@@ -22,28 +22,6 @@ namespace Vanrise.Security.Data.SQL
             return GetItemsSP("sec.sp_View_GetAll", ViewMapper);
         }
 
-     
-
-        public List<View> GetDynamicPages()
-        {
-
-            return GetItemsSP("sec.sp_View_GetByType", ViewMapper, ViewType.Dynamic);
-            
-        }
-        public Vanrise.Entities.BigResult<View> GetFilteredDynamicViews(Vanrise.Entities.DataRetrievalInput<string> filter)
-        {
-
-            Dictionary<string,string> mapper=new Dictionary<string,string>();
-           
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("sec.sp_View_CreateTempByFiltered", tempTableName, filter.Query, ViewType.Dynamic);
-            };
-            return RetrieveData(filter, createTempTableAction, ViewMapper, mapper);
-
-        }
-
-
         public bool AddView(View view, out int insertedId)
         {
             string serialziedContent = null;
@@ -79,11 +57,6 @@ namespace Vanrise.Security.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Delete", viewId);
             return (recordesEffected > 0);
         }
-
-        public View GetView(int viewId)
-        {
-            return GetItemSP("sec.sp_View_GetById ", ViewMapper, viewId);
-        }
         private View ViewMapper(IDataReader reader)
         {
 
@@ -111,9 +84,10 @@ namespace Vanrise.Security.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("sec.sp_View_UpdateRank", viewId, rank);
             return (recordesEffected > 0);
         }
-       
-
-
+        public bool AreViewsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("[sec].[View]", ref updateHandle);
+        }
     }
 
 

@@ -1,36 +1,52 @@
-﻿app.service('ViewAPIService', function (BaseAPIService) {
+﻿(function (appControllers) {
 
-    return ({
-        UpdateView:UpdateView,
-        AddView: AddView,
-        DeleteView:DeleteView,
-        GetView: GetView,
-        GetFilteredDynamicPages: GetFilteredDynamicPages,
-        UpdateViewsRank :UpdateViewsRank 
-    });
+    "use strict";
+    viewAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig'];
 
-    function AddView(view) {
-        return BaseAPIService.post("/api/View/AddView", view);
-    }
-    function UpdateView(view) {
-        return BaseAPIService.post("/api/View/UpdateView", view);
-    }
-    function DeleteView(viewId) {
-        return BaseAPIService.get("/api/View/DeleteView", {
-            viewId: viewId
+    function viewAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig) {
+
+        function AddView(view) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "View", "AddView"), view);
+        }
+
+        function UpdateView(view) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "View", "UpdateView"), view);
+        }
+
+        function DeleteView(viewId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "View", "DeleteView"), {
+                viewId: viewId
             });
-    }
-    function GetView(ViewId) {
-        return BaseAPIService.get("/api/View/GetView",
-            {
-                ViewId: ViewId
-            });
+        }
+
+        function GetView(ViewId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "View", "GetView"),
+                {
+                    ViewId: ViewId
+                });
+
+        }
+
+        function GetFilteredDynamicPages(filter) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "View", "GetFilteredDynamicViews"), filter);
+        }
+
+        function UpdateViewsRank(updatedIds) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "View", "UpdateViewsRank"), updatedIds);
+        }
+
+
        
+        return ({
+            UpdateView: UpdateView,
+            AddView: AddView,
+            DeleteView: DeleteView,
+            GetView: GetView,
+            GetFilteredDynamicPages: GetFilteredDynamicPages,
+            UpdateViewsRank: UpdateViewsRank
+        });
     }
-    function GetFilteredDynamicPages(filter) {
-        return BaseAPIService.post("/api/View/GetFilteredDynamicViews", filter);
-    }
-    function UpdateViewsRank(updatedIds) {
-        return BaseAPIService.post("/api/View/UpdateViewsRank", updatedIds);
-    }
-});
+
+    appControllers.service('VR_Sec_ViewAPIService', viewAPIService);
+
+})(appControllers);

@@ -17,7 +17,7 @@ namespace Vanrise.Security.Business
             _widgetDefinitionManager = new WidgetDefinitionManager();
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<WidgetDetails> GetFilteredWidgets(Vanrise.Entities.DataRetrievalInput<WidgetFilter> input)
+        public Vanrise.Entities.IDataRetrievalResult<WidgetDetail> GetFilteredWidgets(Vanrise.Entities.DataRetrievalInput<WidgetFilter> input)
         {
             var allWidgets = GetCachedWidgets().Values;
 
@@ -31,9 +31,9 @@ namespace Vanrise.Security.Business
         }
 
 
-        public Vanrise.Entities.InsertOperationOutput<WidgetDetails> AddWidget(Widget widget)
+        public Vanrise.Entities.InsertOperationOutput<WidgetDetail> AddWidget(Widget widget)
         {
-            InsertOperationOutput<WidgetDetails> insertOperationOutput = new InsertOperationOutput<WidgetDetails>();
+            InsertOperationOutput<WidgetDetail> insertOperationOutput = new InsertOperationOutput<WidgetDetail>();
 
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -53,7 +53,7 @@ namespace Vanrise.Security.Business
 
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 widget.Id = widgetId;
-                WidgetDetails widgetDetail = WidgetDetailMapper(widget);
+                WidgetDetail widgetDetail = WidgetDetailMapper(widget);
                 insertOperationOutput.InsertedObject = widgetDetail;
             }
             else
@@ -63,9 +63,9 @@ namespace Vanrise.Security.Business
             return insertOperationOutput;
 
         }
-        public Vanrise.Entities.UpdateOperationOutput<WidgetDetails> UpdateWidget(Widget widget)
+        public Vanrise.Entities.UpdateOperationOutput<WidgetDetail> UpdateWidget(Widget widget)
         {
-            UpdateOperationOutput<WidgetDetails> updateOperationOutput = new UpdateOperationOutput<WidgetDetails>();
+            UpdateOperationOutput<WidgetDetail> updateOperationOutput = new UpdateOperationOutput<WidgetDetail>();
 
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -81,7 +81,7 @@ namespace Vanrise.Security.Business
             if (updateActionSucc)
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                WidgetDetails widgetDetail = WidgetDetailMapper(widget);
+                WidgetDetail widgetDetail = WidgetDetailMapper(widget);
                 updateOperationOutput.UpdatedObject = widgetDetail;
             }
             else
@@ -93,14 +93,14 @@ namespace Vanrise.Security.Business
 
         }
 
-        public Vanrise.Entities.DeleteOperationOutput<WidgetDetails> DeleteWidget(int widgetId)
+        public Vanrise.Entities.DeleteOperationOutput<WidgetDetail> DeleteWidget(int widgetId)
         {
-            DeleteOperationOutput<WidgetDetails> deleteOperationOutput = new DeleteOperationOutput<WidgetDetails>();
+            DeleteOperationOutput<WidgetDetail> deleteOperationOutput = new DeleteOperationOutput<WidgetDetail>();
 
             deleteOperationOutput.Result = DeleteOperationResult.Failed;
-            IViewDataManager viewdataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
+            ViewManager viewManager = new ViewManager();
 
-            List<View>  dynamicViews = viewdataManager.GetDynamicPages();
+            IEnumerable<View> dynamicViews = viewManager.GetDynamicViews();
             foreach (View dynamicView in dynamicViews)
             {
                 foreach (ViewContentItem bodyContent in dynamicView.ViewContent.BodyContents)
@@ -132,11 +132,12 @@ namespace Vanrise.Security.Business
             return deleteOperationOutput;
 
         }
-        public List<WidgetDetails> GetAllWidgets()
+
+        public IEnumerable<WidgetDetail> GetAllWidgets()
         {
             var allWidgets = GetCachedWidgets().Values;
 
-            return allWidgets.MapRecords(WidgetDetailMapper).ToList();
+            return allWidgets.MapRecords(WidgetDetailMapper);
         }
 
         public Widget GetWidgetById(int widgetId)
@@ -164,17 +165,17 @@ namespace Vanrise.Security.Business
                () =>
                {
                    IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
-                   IEnumerable<Widget> customerZones = dataManager.GetAllWidgets();
-                   return customerZones.ToDictionary(kvp => kvp.Id, kvp => kvp);
+                   IEnumerable<Widget> widgets = dataManager.GetAllWidgets();
+                   return widgets.ToDictionary(kvp => kvp.Id, kvp => kvp);
                });
         }
       
         #endregion
 
         #region  Mappers
-        private WidgetDetails WidgetDetailMapper(Widget widget)
+        private WidgetDetail WidgetDetailMapper(Widget widget)
         {
-            WidgetDetails widgetDetails = new WidgetDetails();
+            WidgetDetail widgetDetails = new WidgetDetail();
             WidgetDefinition widgetDefinition = _widgetDefinitionManager.GetWidgetDefinitionById(widget.WidgetDefinitionId);
             widgetDetails.Entity = widget;
             if(widgetDefinition != null)

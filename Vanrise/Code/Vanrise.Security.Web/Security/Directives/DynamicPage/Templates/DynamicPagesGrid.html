@@ -3,11 +3,11 @@
              menuactions="ctrl.menuActions"
              on-ready="ctrl.onMainGridReady"
              pagingtype="'PagingOnScroll'"
-             idfield="ViewId">
-    <vr-datagridcolumn headertext="'Page Name'" field="'Name'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Menu Location'" field="'ModuleName'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Audiences/Users'" field="'Audience.UsersName'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Audiences/Group Users'" field="'Audience.GroupsName'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Default Period'" field="'ViewContent.DefaultPeriodDescription'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Default Grouping'" field="'ViewContent.DefaultGroupingDescription'"></vr-datagridcolumn>
+             idfield="Entity.ViewId">
+    <vr-datagridcolumn headertext="'Page Name'" field="'Entity.Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Menu Location'" field="'Entity.ModuleName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Audiences/Users'" field="'Entity.Audience.UsersName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Audiences/Group Users'" field="'Entity.Audience.GroupsName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Default Period'" field="'Entity.ViewContent.DefaultPeriodDescription'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Default Grouping'" field="'Entity.ViewContent.DefaultGroupingDescription'"></vr-datagridcolumn>
 </vr-datagrid>

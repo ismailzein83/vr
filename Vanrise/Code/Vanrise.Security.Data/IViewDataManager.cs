@@ -10,12 +10,11 @@ namespace Vanrise.Security.Data
     public interface IViewDataManager : IDataManager
     {
         List<View> GetViews();
-        List<View> GetDynamicPages();
         bool AddView(View view, out int insertedId);
         bool UpdateView(View view);
         bool DeleteView(int viewId);
-        View GetView(int viewId);
-        Vanrise.Entities.BigResult<View> GetFilteredDynamicViews(Vanrise.Entities.DataRetrievalInput<string> filter);
         bool UpdateViewRank(int viewId,int rank);
+
+        bool AreViewsUpdated(ref object updateHandle);
     }
 }

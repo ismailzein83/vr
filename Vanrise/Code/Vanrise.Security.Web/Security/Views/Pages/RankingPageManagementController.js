@@ -1,6 +1,6 @@
 ﻿'use strict'
-RankingPageManagementController.$inject = ['$scope', 'ViewAPIService', 'VRModalService', 'VRNotificationService', 'DeleteOperationResultEnum', 'PeriodEnum', 'UtilsService', 'TimeDimensionTypeEnum', 'UsersAPIService', 'GroupAPIService', 'DataRetrievalResultTypeEnum','MenuAPIService'];
-function RankingPageManagementController($scope, ViewAPIService, VRModalService, VRNotificationService, DeleteOperationResultEnum, PeriodEnum, UtilsService, TimeDimensionTypeEnum, UsersAPIService, GroupAPIService, DataRetrievalResultTypeEnum, MenuAPIService) {
+RankingPageManagementController.$inject = ['$scope', 'VR_Sec_ViewAPIService', 'VRModalService', 'VRNotificationService', 'DeleteOperationResultEnum', 'PeriodEnum', 'UtilsService', 'TimeDimensionTypeEnum', 'UsersAPIService', 'GroupAPIService', 'DataRetrievalResultTypeEnum', 'MenuAPIService'];
+function RankingPageManagementController($scope, VR_Sec_ViewAPIService, VRModalService, VRNotificationService, DeleteOperationResultEnum, PeriodEnum, UtilsService, TimeDimensionTypeEnum, UsersAPIService, GroupAPIService, DataRetrievalResultTypeEnum, MenuAPIService) {
     var treeAPI;
     defineScope();
     load();
@@ -46,7 +46,7 @@ function RankingPageManagementController($scope, ViewAPIService, VRModalService,
                 var menu = treeAPI.getTree();
                 console.log(menu);
                 console.log(menu[0].Childs);
-                return ViewAPIService.UpdateViewsRank(menu[0].Childs).then(function (response) {
+                return VR_Sec_ViewAPIService.UpdateViewsRank(menu[0].Childs).then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("MenuItems", response)) {
                         if ($scope.onPageUpdated != undefined)
                             $scope.onPageUpdated(response.UpdatedObject);

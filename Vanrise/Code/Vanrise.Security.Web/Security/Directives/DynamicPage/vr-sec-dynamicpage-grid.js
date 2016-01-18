@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrSecDynamicpageGrid", ["VRNotificationService", "ViewAPIService", "VR_ViewService","UsersAPIService","GroupAPIService","TimeDimensionTypeEnum","PeriodEnum","UtilsService",
-function (VRNotificationService, ViewAPIService, VR_ViewService, UsersAPIService, GroupAPIService, TimeDimensionTypeEnum, PeriodEnum, UtilsService) {
+app.directive("vrSecDynamicpageGrid", ["VRNotificationService", "VR_Sec_ViewAPIService", "VR_ViewService", "UsersAPIService", "GroupAPIService", "TimeDimensionTypeEnum", "PeriodEnum", "UtilsService","VRModalService",
+function (VRNotificationService, VR_Sec_ViewAPIService, VR_ViewService, UsersAPIService, GroupAPIService, TimeDimensionTypeEnum, PeriodEnum, UtilsService, VRModalService) {
 
     var directiveDefinitionObject = {
 
@@ -53,7 +53,7 @@ function (VRNotificationService, ViewAPIService, VR_ViewService, UsersAPIService
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
                     }
-                    directiveAPI.onDaynamicPageAdded = function (dynamicPageObject) {
+                    directiveAPI.onDynamicPageAdded = function (dynamicPageObject) {
                         fillNeededData(dynamicPageObject);
                         gridAPI.itemAdded(dynamicPageObject);
                     }
@@ -63,7 +63,7 @@ function (VRNotificationService, ViewAPIService, VR_ViewService, UsersAPIService
             };
 
             ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return ViewAPIService.GetFilteredDynamicPages(dataRetrievalInput)
+                return VR_Sec_ViewAPIService.GetFilteredDynamicPages(dataRetrievalInput)
                     .then(function (response) {
                         if (response && response.Data) {
                             angular.forEach(response.Data, function (itm) {
@@ -81,23 +81,17 @@ function (VRNotificationService, ViewAPIService, VR_ViewService, UsersAPIService
                 {
                     name: "Edit",
                     permissions: "Root/Administration Module/Dynamic Pages:Edit",
-                    clicked: function (dataItem) {
-                        editDynamicPage(dataItem);
-                    }
+                    clicked: editDynamicPage
                 },
                 {
                     name: "Delete",
                     permissions: "Root/Administration Module/Dynamic Pages:Delete",
-                    clicked: function (dataItem) {
-                        deleteDynamicPage(dataItem);
-                    }
+                    clicked:deleteDynamicPage
                 },
                 {
                     name: "Validate",
                     permissions: "Root/Administration Module/Dynamic Pages:Validate",
-                    clicked: function (dataItem) {
-                        validate(dataItem);
-                    }
+                    clicked: validate
                 }];
 
         }
@@ -106,48 +100,49 @@ function (VRNotificationService, ViewAPIService, VR_ViewService, UsersAPIService
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Validate Dynamic Page: " + dataItem.Name;
+                modalScope.title = "Validate Dynamic Page: " + dataItem.Entity.Name;
             };
-            VRModalService.showModal('/Client/Modules/BI/Views/DynamicPageValidator.html', dataItem, settings);
+            VRModalService.showModal('/Client/Modules/BI/Views/DynamicPageValidator.html', dataItem.Entity, settings);
 
         }
 
         function fillNeededData(itm) {
-            if (itm.ViewContent.DefaultPeriod != null)
-                itm.ViewContent.DefaultPeriodDescription = UtilsService.getItemByVal(ctrl.periods, itm.ViewContent.DefaultPeriod, 'value')
+            console.log(itm);
+            if ( itm.Entity.ViewContent.DefaultPeriod != null)
+                itm.Entity.ViewContent.DefaultPeriodDescription = UtilsService.getItemByVal(ctrl.periods, itm.Entity.ViewContent.DefaultPeriod, 'value')
                 .description;
-            if (itm.ViewContent.DefaultGrouping != null)
-                itm.ViewContent.DefaultGroupingDescription = UtilsService.getItemByVal(ctrl.timeDimensionTypes, itm.ViewContent.DefaultGrouping, 'value')
+            if (itm.Entity.ViewContent.DefaultGrouping != null)
+                itm.Entity.ViewContent.DefaultGroupingDescription = UtilsService.getItemByVal(ctrl.timeDimensionTypes, itm.Entity.ViewContent.DefaultGrouping, 'value')
                 .description;
-            if (itm.Audience != null && itm.Audience.Users != undefined) {
-                itm.Audience.UsersName = [];
+            if (itm.Entity.Audience != null && itm.Entity.Audience.Users != undefined) {
+                itm.Entity.Audience.UsersName = [];
                 var usersArray = [];
                 var value;
-                for (var i = 0; i < itm.Audience.Users.length; i++) {
+                for (var i = 0; i < itm.Entity.Audience.Users.length; i++) {
 
-                    value = UtilsService.getItemByVal(ctrl.users, itm.Audience.Users[i], 'UserId');
+                    value = UtilsService.getItemByVal(ctrl.users, itm.Entity.Audience.Users[i], 'UserId');
                     if (value != null)
                         usersArray.push(value.Name);
 
                 }
-                itm.Audience.UsersName = usersArray.toString();
+                itm.Entity.Audience.UsersName = usersArray.toString();
             }
-            if (itm.Audience != null && itm.Audience.Groups != undefined) {
+            if (itm.Entity.Audience != null && itm.Entity.Audience.Groups != undefined) {
 
-                itm.Audience.GroupsName = "";
+                itm.Entity.Audience.GroupsName = "";
                 var groupsArray = [];
-                for (var j = 0; j < itm.Audience.Groups.length; j++) {
-                    if (itm.Audience.GroupsName != "")
-                        itm.Audience.GroupsName += ",";
-                    value = UtilsService.getItemByVal(ctrl.groups, itm.Audience.Groups[j], 'GroupId');
+                for (var j = 0; j < itm.Entity.Audience.Groups.length; j++) {
+                    if (itm.Entity.Audience.GroupsName != "")
+                        itm.Entity.Audience.GroupsName += ",";
+                    value = UtilsService.getItemByVal(ctrl.groups, itm.Entity.Audience.Groups[j], 'GroupId');
                     if (value != null)
                         groupsArray.push(value.Name);
 
                 }
-                itm.Audience.GroupsName = groupsArray.toString();
+                itm.Entity.Audience.GroupsName = groupsArray.toString();
 
             } else {
-                itm.Audience = {
+                itm.Entity.Audience = {
                     UsersName: '',
                     GroupsName: '',
                 }
@@ -191,7 +186,7 @@ function (VRNotificationService, ViewAPIService, VR_ViewService, UsersAPIService
                 fillNeededData(updatedItem);
                 gridAPI.itemUpdated(updatedItem);
             };
-            VR_ViewService.updateWidget(dataItem.Entity.Id, onDynamicPageUpdated);
+            VR_ViewService.updateDynamicPage(dataItem.Entity.ViewId, onDynamicPageUpdated);
         }
 
         function deleteDynamicPage(dataItem) {
@@ -200,7 +195,7 @@ function (VRNotificationService, ViewAPIService, VR_ViewService, UsersAPIService
                 gridAPI.itemDeleted(deletedItem);
             }
 
-            VR_ViewService.deleteWidget($scope, dataItem, onDynamicPageDeleted);
+            VR_ViewService.deleteDynamicPage($scope, dataItem, onDynamicPageDeleted);
         }
 
     }

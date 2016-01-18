@@ -1,6 +1,6 @@
-﻿RankPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'GroupAPIService', 'UsersAPIService', 'ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum', 'VRModalService'];
+﻿RankPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'GroupAPIService', 'UsersAPIService', 'VR_Sec_ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum', 'VRModalService'];
 
-function RankPageEditorController($scope, MenuAPIService, WidgetAPIService, GroupAPIService, UsersAPIService, ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService) {
+function RankPageEditorController($scope, MenuAPIService, WidgetAPIService, GroupAPIService, UsersAPIService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService) {
     loadParameters();
     var treeAPI;
     defineScope();
@@ -27,7 +27,7 @@ function RankPageEditorController($scope, MenuAPIService, WidgetAPIService, Grou
             }
         }
         $scope.save = function () {
-            return ViewAPIService.UpdateViewsRank($scope.menu.Childs).then(function (response) {
+            return VR_Sec_ViewAPIService.UpdateViewsRank($scope.menu.Childs).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("MenuItems", response)) {
                     if ($scope.onPageUpdated != undefined)
                         $scope.onPageUpdated(response.UpdatedObject);

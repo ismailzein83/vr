@@ -6,15 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Security.Entities
 {
-    public class Widget
-    {
-        public int Id { get; set;}
-        public int WidgetDefinitionId { get; set; }
-        public string Name { get; set; }
-        public string Title { get; set; }
-        public WidgetSetting Setting { get; set; }
-    }
-    public class WidgetDetails
+    public class WidgetDetail
     {
         public Widget Entity { get; set; }
         public string WidgetDefinitionName { get; set; }

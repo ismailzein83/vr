@@ -368,8 +368,8 @@ namespace Vanrise.BI.Business
               List<UserMeasuresValidator> userMeasuresValidator = new List<UserMeasuresValidator>();
               List<string> distinctMeasures = new List<string>();
               WidgetsManager widgetsManager = new WidgetsManager();
-              List<WidgetDetails> widgets = widgetsManager.GetAllWidgets();
-              foreach(WidgetDetails widget in widgets)
+              IEnumerable<WidgetDetail> widgets = widgetsManager.GetAllWidgets();
+              foreach (WidgetDetail widget in widgets)
               {
                  foreach (int widgetId in userMeasuresValidatorInput.Query.Widgets)
                    {

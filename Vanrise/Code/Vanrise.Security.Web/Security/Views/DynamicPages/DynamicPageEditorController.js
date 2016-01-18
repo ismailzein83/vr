@@ -1,185 +1,206 @@
-﻿DynamicPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'GroupAPIService', 'UsersAPIService', 'ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum','VRModalService'];
+﻿DynamicPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'GroupAPIService', 'UsersAPIService', 'VR_Sec_ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum', 'VRModalService','VRUIUtilsService'];
 
-function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, GroupAPIService, UsersAPIService, ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService) {
+function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, GroupAPIService, UsersAPIService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService, VRUIUtilsService) {
+    $scope.scopeModal = {};
+    var viewId;
+    var viewEntity;
+    var isEditMode;
+    var previewDirectiveAPI;
     loadParameters();
     defineScope();
     load();
     var treeAPI;
+
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
-        if (parameters != null) {
-            $scope.filter = {
-                Name: parameters.Name,
-                ModuleId: parameters.ModuleId,
-                Audience: parameters.Audience,
-                ViewId: parameters.ViewId,
-                BodyContents: parameters.ViewContent.BodyContents,
-                SummaryContents: parameters.ViewContent.SummaryContents,
-                DefaultPeriod: parameters.ViewContent.DefaultPeriod,
-                DefaultGrouping: parameters.ViewContent.DefaultGrouping
-            } 
-            $scope.isEditMode = true;
-        }
-        else
-            $scope.isEditMode = false;
+        if (parameters !=undefined && parameters !=null)
+            viewId = parameters.ViewId;
+        isEditMode=(viewId != undefined);
+      
     }
 
     function defineScope() {
-        $scope.widgets = [];
-        $scope.selectedWidget;
-        $scope.users = [];
-        $scope.menuList = [];
-        $scope.selectedUsers = [];
-        $scope.groups = [];
-        $scope.pageName;
-        $scope.sectionTitle;
-        $scope.selectedMenuNode;
-        $scope.selectedGroups = [];
-        $scope.subViewConnector = {};
-        $scope.moduleId;
-        $scope.selectedViewTimeDimensionType;
-        $scope.selectedViewPeriod;
-        $scope.selectedWidgetPeriod;
-        $scope.selectedWidgetTimeDimensionType;
-        $scope.summaryContents = [];
-        $scope.bodyContents = [];
-        $scope.addedwidgets = [];
-        $scope.summaryWidgets = [];
-        $scope.bodyWidgets = [];
-        $scope.validate = function () {
+
+
+        $scope.scopeModal.onPreviewAPIReady = function (api) {
+                previewDirectiveAPI = api;
+                buildContentsFromScope();
+                var payload = buildPreviewObjFromScope();
+                var setLoader = function (value) { $scope.scopeModal.isLoadingPreviewDirective = value; };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, previewDirectiveAPI, payload, setLoader);
+        }
+
+        $scope.scopeModal.tabObject;
+        $scope.scopeModal.widgets = [];
+        $scope.scopeModal.selectedWidget;
+        $scope.scopeModal.users = [];
+        $scope.scopeModal.menuList = [];
+        $scope.scopeModal.selectedUsers = [];
+        $scope.scopeModal.groups = [];
+        $scope.scopeModal.pageName;
+        $scope.scopeModal.sectionTitle;
+        $scope.scopeModal.selectedMenuNode;
+        $scope.scopeModal.selectedGroups = [];
+        $scope.scopeModal.subViewConnector = {};
+        $scope.scopeModal.moduleId;
+        $scope.scopeModal.selectedViewTimeDimensionType;
+        $scope.scopeModal.selectedViewPeriod;
+        $scope.scopeModal.selectedWidgetPeriod;
+        $scope.scopeModal.selectedWidgetTimeDimensionType;
+        $scope.scopeModal.summaryContents = [];
+        $scope.scopeModal.bodyContents = [];
+        $scope.scopeModal.addedwidgets = [];
+        $scope.scopeModal.summaryWidgets = [];
+        $scope.scopeModal.bodyWidgets = [];
+        $scope.scopeModal.validate = function () {
             validate();
         }
-
-        $scope.selectedColumnWidth;
-        $scope.addedSummaryWidgets = [];
-        $scope.menuReady = function (api) {
+        $scope.scopeModal.selectedColumnWidth;
+        $scope.scopeModal.addedSummaryWidgets = [];
+        $scope.scopeModal.menuReady = function (api) {
             treeAPI = api;
-            if ($scope.menuList.length > 0) {
-                treeAPI.refreshTree($scope.menuList);
+            if ($scope.scopeModal.menuList.length > 0) {
+                treeAPI.refreshTree($scope.scopeModal.menuList);
             } 
         }
-        $scope.nonSearchable=false;
-        $scope.nonSearchableSelectionChanged = function () {
-            $scope.nonSearchable = true;
+        $scope.scopeModal.nonSearchable = false;
+        $scope.scopeModal.nonSearchableSelectionChanged = function () {
+            $scope.scopeModal.nonSearchable = true;
 
         }
-        $scope.addedBodyWidgets = [];
-        $scope.onSelectionChanged = function () {
+        $scope.scopeModal.addedBodyWidgets = [];
+        $scope.scopeModal.onSelectionChanged = function () {
             buildContentsFromScope();
         }
-        $scope.periodSelectionChanged = function () {
-            if ($scope.selectedWidget != undefined) {
+        $scope.scopeModal.periodSelectionChanged = function () {
+            if ($scope.scopeModal.selectedWidget != undefined) {
                 {
                     var defaultPeriod;
-                    if (!$scope.nonSearchable)
+                    if (!$scope.scopeModal.nonSearchable)
                         defaultPeriod = $scope.selectedViewPeriod.description;
                     else
-                        defaultPeriod = $scope.selectedWidgetPeriod.description;
-                    var title = defaultPeriod + "-" + $scope.selectedWidget.Name;
-                    $scope.sectionTitle = title;
+                        defaultPeriod = $scope.scopeModal.selectedWidgetPeriod.description;
+                    var title = defaultPeriod + "-" + $scope.scopeModal.selectedWidget.Name;
+                    $scope.scopeModal.sectionTitle = title;
                 }
 
             }
         }
-        $scope.onWidgetSelectionChanged = function () {
-            if ($scope.selectedWidget != undefined) {
+        $scope.scopeModal.onWidgetSelectionChanged = function () {
+            if ($scope.scopeModal.selectedWidget != undefined) {
                 {
                     var defaultPeriod;
-                    if (!$scope.nonSearchable)
-                        defaultPeriod = $scope.selectedViewPeriod.description;
+                    if (!$scope.scopeModal.nonSearchable)
+                        defaultPeriod = $scope.scopeModal.selectedViewPeriod.description;
                     else
-                        defaultPeriod = $scope.selectedWidgetPeriod.description;
-                    var title = defaultPeriod+"-"+$scope.selectedWidget.Name;
-                    $scope.sectionTitle = title;
+                        defaultPeriod = $scope.scopeModal.selectedWidgetPeriod.description;
+                    var title = defaultPeriod + "-" + $scope.scopeModal.selectedWidget.Name;
+                    $scope.scopeModal.sectionTitle = title;
                 }
                
             }
         }
-        $scope.validateWidgetError = function (addedWidget) {
+        $scope.scopeModal.validateWidgetError = function (addedWidget) {
             return validateWidgetError(addedWidget);
         }
-        $scope.save = function () {
+        $scope.scopeModal.save = function () {
             if (!checkWidgetValidator()) {
                 return; 
             }
-            if ($scope.selectedMenuNode == undefined)
+            if ($scope.scopeModal.selectedMenuNode == undefined)
                 return VRNotificationService.showWarning("You Should Select Menu Location Before Saving!!");
             buildContentsFromScope();
             buildViewObjFromScope(); 
-            if ($scope.summaryContents.length == 0 && $scope.bodyContents.length == 0)
+            if ($scope.scopeModal.summaryContents.length == 0 && $scope.scopeModal.bodyContents.length == 0)
                 return VRNotificationService.showWarning("You Should Add Widgets Before Saving!!");
           
-            if ($scope.isEditMode)  
+            if (isEditMode)
                 return updateView(); 
             else  
                 return addView();
               
         };
-        $scope.close = function () {
+        $scope.scopeModal.close = function () {
             $scope.modalContext.closeModal()
         };
-        $scope.onSectionChanged = function () {
-
-            switch ($scope.selectedSection.value) {
-                case WidgetSectionEnum.Summary.value: $scope.widgets = $scope.summaryWidgets; $scope.columnWidth = $scope.summaryColumnWidth; $scope.selectedColumnWidth = $scope.columnWidth[0]; break;
-                case WidgetSectionEnum.Body.value: $scope.widgets = $scope.bodyWidgets; $scope.columnWidth = $scope.bodyColumnWidth; $scope.selectedColumnWidth = $scope.columnWidth[0]; break;
+        $scope.scopeModal.onSectionChanged = function () {
+            if ($scope.scopeModal.selectedSection != undefined)
+            {
+                switch ($scope.scopeModal.selectedSection.value) {
+                    case WidgetSectionEnum.Summary.value: $scope.scopeModal.widgets = $scope.scopeModal.summaryWidgets; $scope.scopeModal.columnWidth = $scope.scopeModal.summaryColumnWidth; $scope.scopeModal.selectedColumnWidth = $scope.scopeModal.columnWidth[0]; break;
+                    case WidgetSectionEnum.Body.value: $scope.scopeModal.widgets = $scope.scopeModal.bodyWidgets; $scope.scopeModal.columnWidth = $scope.scopeModal.bodyColumnWidth; $scope.scopeModal.selectedColumnWidth = $scope.scopeModal.columnWidth[0]; break;
+                }
+                $scope.scopeModal.selectedWidget = null;
             }
-            $scope.selectedWidget = null;
+            
         }
-        $scope.addViewContent = function () {
+        $scope.scopeModal.addViewContent = function () {
 
             var viewWidget = {
-                Widget: $scope.selectedWidget,
-                NumberOfColumns: $scope.selectedColumnWidth,
-                SectionTitle:$scope.sectionTitle
+                Widget: $scope.scopeModal.selectedWidget,
+                NumberOfColumns: $scope.scopeModal.selectedColumnWidth,
+                SectionTitle: $scope.scopeModal.sectionTitle
             }
-            if ($scope.nonSearchable) {
-                viewWidget.DefaultPeriod = $scope.selectedWidgetPeriod.value
-                viewWidget.DefaultGrouping = $scope.selectedWidgetTimeDimensionType.value
+            if ($scope.scopeModal.nonSearchable) {
+                viewWidget.DefaultPeriod = $scope.scopeModal.selectedWidgetPeriod.value
+                viewWidget.DefaultGrouping = $scope.scopeModal.selectedWidgetTimeDimensionType.value
             }
-            switch($scope.selectedSection.value)
+            switch ($scope.scopeModal.selectedSection.value)
             {
-                case WidgetSectionEnum.Summary.value: $scope.addedSummaryWidgets.push(viewWidget); $scope.widgets.splice($scope.widgets.indexOf($scope.selectedWidget), 1); break;
-                case WidgetSectionEnum.Body.value: $scope.addedBodyWidgets.push(viewWidget);  $scope.widgets.splice($scope.widgets.indexOf($scope.selectedWidget), 1); break;
+                case WidgetSectionEnum.Summary.value: $scope.scopeModal.addedSummaryWidgets.push(viewWidget); $scope.scopeModal.widgets.splice($scope.scopeModal.widgets.indexOf($scope.scopeModal.selectedWidget), 1); break;
+                case WidgetSectionEnum.Body.value: $scope.scopeModal.addedBodyWidgets.push(viewWidget); $scope.scopeModal.widgets.splice($scope.scopeModal.widgets.indexOf($scope.scopeModal.selectedWidget), 1); break;
             }
-            $scope.selectedWidget = null;
+            $scope.scopeModal.selectedWidget = null;
             
         };
-        $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
-        $scope.removeViewContent = function (viewContent) {
+        $scope.scopeModal.itemsSortable = { handle: '.handeldrag', animation: 150 };
+        $scope.scopeModal.removeViewContent = function (viewContent) {
             var sections=viewContent.Widget.WidgetDefinitionSetting.Sections;
             for (var i = 0; i < sections.length; i++) {
                 switch (sections[i]) {
-                    case WidgetSectionEnum.Summary.value: $scope.addedSummaryWidgets.splice($scope.addedSummaryWidgets.indexOf(viewContent), 1); 
-                        $scope.summaryWidgets.push(viewContent.Widget); break;
-                    case WidgetSectionEnum.Body.value: $scope.addedBodyWidgets.splice($scope.addedBodyWidgets.indexOf(viewContent), 1);
-                        $scope.bodyWidgets.push(viewContent.Widget); break;
+                    case WidgetSectionEnum.Summary.value: $scope.scopeModal.addedSummaryWidgets.splice($scope.scopeModal.addedSummaryWidgets.indexOf(viewContent), 1);
+                        $scope.scopeModal.summaryWidgets.push(viewContent.Widget); break;
+                    case WidgetSectionEnum.Body.value: $scope.scopeModal.addedBodyWidgets.splice($scope.scopeModal.addedBodyWidgets.indexOf(viewContent), 1);
+                        $scope.scopeModal.bodyWidgets.push(viewContent.Widget); break;
                 }
             }
 
         };
     }
+
+    function buildPreviewObjFromScope()
+    {
+        var payload=
+            {
+                selectedViewPeriod:$scope.scopeModal.selectedViewPeriod,
+                selectedViewTimeDimensionType: $scope.scopeModal.selectedViewTimeDimensionType,
+                bodyContents: $scope.scopeModal.bodyContents,
+                summaryContents: $scope.scopeModal.summaryContents,
+            }
+        return payload;
+    }
+
     function validate() {
         var settings = {};
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Validate Dynamic Page: " + $scope.pageName;
+            modalScope.title = "Validate Dynamic Page: " + $scope.scopeModal.pageName;
         };
             
         var selectedUsersIDs = [];
-        for (var i = 0; i < $scope.selectedUsers.length; i++)
-            selectedUsersIDs.push($scope.selectedUsers[i].UserId);
+        for (var i = 0; i < $scope.scopeModal.selectedUsers.length; i++)
+            selectedUsersIDs.push($scope.scopeModal.selectedUsers[i].UserId);
         var selectedGroupsIDs = [];
-        for (var i = 0; i < $scope.selectedGroups.length; i++)
-            selectedGroupsIDs.push($scope.selectedGroups[i].GroupId);
+        for (var i = 0; i < $scope.scopeModal.selectedGroups.length; i++)
+            selectedGroupsIDs.push($scope.scopeModal.selectedGroups[i].GroupId);
         var Audiences = {
             Users: selectedUsersIDs,
             Groups: selectedGroupsIDs
         };
         buildContentsFromScope();
         var ViewContent = {
-            BodyContents: $scope.bodyContents,
-            SummaryContents: $scope.summaryContents
+            BodyContents: $scope.scopeModal.bodyContents,
+            SummaryContents: $scope.scopeModal.summaryContents
         }
         var parameter = {
             Audience: Audiences,
@@ -189,7 +210,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
 
     }
     function validateWidgetError(addedWidget) {
-        if ($scope.nonSearchable) {
+        if ($scope.scopeModal.nonSearchable) {
             if (addedWidget.DefaultGrouping == undefined || addedWidget.DefaultPeriod == undefined) {
                   
                 return "ng-valid ng-valid-requiredvalue required-inpute";
@@ -199,21 +220,21 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
     }
 
     function checkWidgetValidator() {
-        if ($scope.nonSearchable) {
-            for (var i = 0; i < $scope.addedBodyWidgets.length; i++) {
-                var widget = $scope.addedBodyWidgets[i];
+        if ($scope.scopeModal.nonSearchable) {
+            for (var i = 0; i < $scope.scopeModal.addedBodyWidgets.length; i++) {
+                var widget = $scope.scopeModal.addedBodyWidgets[i];
                 if (widget.DefaultGrouping == undefined || widget.DefaultPeriod == undefined) {
                     VRNotificationService.showWarning("You should select period and grouping for all body widgets.");
-                    $scope.addedBodyWidgets[i].isValid = false;
+                    $scope.scopeModal.addedBodyWidgets[i].isValid = false;
                     return false;
                 }
 
             }
-            for (var i = 0; i < $scope.addedSummaryWidgets.length; i++) {
-                var widget = $scope.addedSummaryWidgets[i];
+            for (var i = 0; i < $scope.scopeModal.addedSummaryWidgets.length; i++) {
+                var widget = $scope.scopeModal.addedSummaryWidgets[i];
                 if (widget.DefaultGrouping == undefined || widget.DefaultPeriod == undefined) {
                     VRNotificationService.showWarning("You should select period and grouping for all summary widgets.");
-                    $scope.addedSummaryWidgets[i].isValid = false;
+                    $scope.scopeModal.addedSummaryWidgets[i].isValid = false;
                     return false;
                 }
 
@@ -223,24 +244,24 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
     }
 
     function definePeriods() {
-        $scope.periods = [];
+        $scope.scopeModal.periods = [];
         for (var p in PeriodEnum)
-            $scope.periods.push(PeriodEnum[p]);
-        $scope.selectedViewPeriod = PeriodEnum.CurrentMonth;
-        $scope.selectedWidgetPeriod = PeriodEnum.CurrentMonth;
+            $scope.scopeModal.periods.push(PeriodEnum[p]);
+        $scope.scopeModal.selectedViewPeriod = PeriodEnum.CurrentMonth;
+        $scope.scopeModal.selectedWidgetPeriod = PeriodEnum.CurrentMonth;
 
     }
 
     function defineTimeDimensionTypes() {
-        $scope.timeDimensionTypes = [];
+        $scope.scopeModal.timeDimensionTypes = [];
         for (var td in TimeDimensionTypeEnum)
-            $scope.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
-        $scope.selectedViewTimeDimensionType = TimeDimensionTypeEnum.Daily;
-        $scope.selectedWidgetTimeDimensionType = TimeDimensionTypeEnum.Daily;
+            $scope.scopeModal.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
+        $scope.scopeModal.selectedViewTimeDimensionType = TimeDimensionTypeEnum.Daily;
+        $scope.scopeModal.selectedWidgetTimeDimensionType = TimeDimensionTypeEnum.Daily;
     }
     function addView() {
        
-        return ViewAPIService.AddView($scope.View).then(function (response) {
+        return VR_Sec_ViewAPIService.AddView($scope.scopeModal.View).then(function (response) {
             if (VRNotificationService.notifyOnItemAdded("View", response, "Name")) {
                 if ($scope.onPageAdded != undefined)
                     $scope.onPageAdded(response.InsertedObject);
@@ -253,7 +274,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
 
     function updateView() {
        
-        return ViewAPIService.UpdateView($scope.View).then(function (response) {
+        return VR_Sec_ViewAPIService.UpdateView($scope.scopeModal.View).then(function (response) {
             if (VRNotificationService.notifyOnItemUpdated("View", response, "Name")) {
 
                 if ($scope.onPageUpdated != undefined)
@@ -265,10 +286,10 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         });
     }
     function buildContentsFromScope() {
-        $scope.summaryContents = [];
-        $scope.bodyContents = [];
-        for (var i = 0; i < $scope.addedSummaryWidgets.length; i++) {
-            var Widget = $scope.addedSummaryWidgets[i];
+        $scope.scopeModal.summaryContents = [];
+        $scope.scopeModal.bodyContents = [];
+        for (var i = 0; i < $scope.scopeModal.addedSummaryWidgets.length; i++) {
+            var Widget = $scope.scopeModal.addedSummaryWidgets[i];
             var viewSummaryContent = {
                 WidgetId: Widget.Widget.Id,
                 NumberOfColumns: Widget.NumberOfColumns.value,
@@ -278,10 +299,10 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
                 viewSummaryContent.DefaultPeriod = Widget.DefaultPeriod
                 viewSummaryContent.DefaultGrouping = Widget.DefaultGrouping
             }
-            $scope.summaryContents.push(viewSummaryContent);
+            $scope.scopeModal.summaryContents.push(viewSummaryContent);
         }
-        for (var i = 0; i < $scope.addedBodyWidgets.length; i++) {
-            var Widget = $scope.addedBodyWidgets[i];
+        for (var i = 0; i < $scope.scopeModal.addedBodyWidgets.length; i++) {
+            var Widget = $scope.scopeModal.addedBodyWidgets[i];
             var viewBodyContent = {
                 WidgetId: Widget.Widget.Id,
                 NumberOfColumns: Widget.NumberOfColumns.value,
@@ -291,166 +312,193 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
                 viewBodyContent.DefaultPeriod = Widget.DefaultPeriod
                 viewBodyContent.DefaultGrouping = Widget.DefaultGrouping
             }
-            $scope.bodyContents.push(viewBodyContent);
+            $scope.scopeModal.bodyContents.push(viewBodyContent);
         }
 
     }
     function buildViewObjFromScope() {
         
         var selectedUsersIDs = [];
-        for (var i = 0; i < $scope.selectedUsers.length; i++)
-            selectedUsersIDs.push($scope.selectedUsers[i].UserId);
+        for (var i = 0; i < $scope.scopeModal.selectedUsers.length; i++)
+            selectedUsersIDs.push($scope.scopeModal.selectedUsers[i].UserId);
         var selectedGroupsIDs = [];
-        for (var i = 0; i < $scope.selectedGroups.length; i++)
-            selectedGroupsIDs.push($scope.selectedGroups[i].GroupId);
+        for (var i = 0; i < $scope.scopeModal.selectedGroups.length; i++)
+            selectedGroupsIDs.push($scope.scopeModal.selectedGroups[i].GroupId);
         var Audiences = {
             Users: selectedUsersIDs,
             Groups: selectedGroupsIDs
         };
        
         var ViewContent = {
-            SummaryContents: $scope.summaryContents,
-            BodyContents: $scope.bodyContents,
+            SummaryContents: $scope.scopeModal.summaryContents,
+            BodyContents: $scope.scopeModal.bodyContents,
         }
-        if (!$scope.nonSearchable) {
-            ViewContent.DefaultPeriod = $scope.selectedViewPeriod.value;
-            ViewContent.DefaultGrouping = $scope.selectedViewTimeDimensionType.value;
+        if (!$scope.scopeModal.nonSearchable) {
+            ViewContent.DefaultPeriod = $scope.scopeModal.selectedViewPeriod.value;
+            ViewContent.DefaultGrouping = $scope.scopeModal.selectedViewTimeDimensionType.value;
         }
-        $scope.View = {
-            Name: $scope.pageName,
-            ModuleId: $scope.selectedMenuNode.Id,
+        $scope.scopeModal.View = {
+            Name: $scope.scopeModal.pageName,
+            ModuleId: $scope.scopeModal.selectedMenuNode.Id,
             Audience: Audiences,
             ViewContent: ViewContent
         };
-        if($scope.isEditMode )
-            $scope.View.ViewId = $scope.filter.ViewId;
+        if (isEditMode)
+            $scope.scopeModal.View.ViewId = viewId;
     }
 
     function load() {
-        definePeriods();
-        defineTimeDimensionTypes();
-        defineColumnWidth();
-        defineWidgetSections();
-        $scope.isGettingData = true;
-        UtilsService.waitMultipleAsyncOperations([loadWidgets, loadUsers, loadGroups, loadTree]).then(function(){
-            if (treeAPI != undefined && !$scope.isEditMode) {
-                treeAPI.refreshTree($scope.menuList);
-            }
-            if ($scope.isEditMode) {
-                fillEditModeData();
-            }
+        $scope.scopeModal.isLoading = true;
+        if (isEditMode) {
+            getView().then(function () {
+                loadAllControls()
+                    .finally(function () {
+                    });
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.scopeModal.isLoading = false;
+            });
+        }
+        else {
+            $scope.title = UtilsService.buildTitleForAddEditor("View");
+            loadAllControls();
+        }  
+    }
 
-        }).finally(function () {
-               $scope.isGettingData = false;
-        }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
+    function getView() {
+        return VR_Sec_ViewAPIService.GetView(viewId).then(function (view) {
+            viewEntity = view;
+            $scope.title = UtilsService.buildTitleForUpdateEditor(viewEntity.Name, "View");
         });
+    }
+
+    function loadAllControls() {
+
+        return UtilsService.waitMultipleAsyncOperations([loadTree, loadWidgets, loadUsers, loadGroups, defineWidgetSections, defineColumnWidth, defineTimeDimensionTypes, definePeriods]).then(function ()
         
+        {
+            if (treeAPI != undefined && !isEditMode) {
+                treeAPI.refreshTree($scope.scopeModal.menuList);
+            }
+            fillEditModeData();
+        })
+              .catch(function (error) {
+                  VRNotificationService.notifyExceptionWithClose(error, $scope);
+              })
+              .finally(function () {
+                  $scope.scopeModal.isLoading = false;
+              });
     }
 
     function fillEditModeData() {
-        $scope.pageName = $scope.filter.Name;
-        if ($scope.filter.Audience.Users != undefined || $scope.filter.Audience.Groups != undefined ) {
-            for (var i = 0; i < $scope.filter.Audience.Users.length; i++) {
-                var value = UtilsService.getItemByVal($scope.users, $scope.filter.Audience.Users[i], 'UserId');
-                if (value != null)
-                    $scope.selectedUsers.push(value);
-            }
-
-            for (var i = 0; i < $scope.filter.Audience.Groups.length; i++) {
-                var value = UtilsService.getItemByVal($scope.groups, $scope.filter.Audience.Groups[i], 'GroupId');
-                if (value != null)
-                    $scope.selectedGroups.push(value);
-            }
-        }
-        for (var i = 0; i < $scope.filter.BodyContents.length; i++)
+        if (viewEntity != undefined)
         {
-            var bodyContent = $scope.filter.BodyContents[i];
-            var value = UtilsService.getItemByVal($scope.bodyWidgets, bodyContent.WidgetId, 'Id');
-            var numberOfColumns;
-            for (var j = 0; j < $scope.columnWidth.length; j++)
-                if (bodyContent.NumberOfColumns == $scope.columnWidth[j].value)
-                    numberOfColumns = $scope.columnWidth[j];
+            $scope.scopeModal.pageName = viewEntity.Name;
+            if (viewEntity.Audience !=null && (viewEntity.Audience.Users != undefined || viewEntity.Audience.Groups != undefined)) {
+                for (var i = 0; i < viewEntity.Audience.Users.length; i++) {
+                    var value = UtilsService.getItemByVal($scope.scopeModal.users, viewEntity.Audience.Users[i], 'UserId');
+                    if (value != null)
+                        $scope.scopeModal.selectedUsers.push(value);
+                }
 
-            if (value != null)
-            {
-                var viewWidget = {
-                    Widget: value,
-                    NumberOfColumns: numberOfColumns,
-                    SectionTitle: bodyContent.SectionTitle
+                for (var i = 0; i < viewEntity.Audience.Groups.length; i++) {
+                    var value = UtilsService.getItemByVal($scope.scopeModal.groups, viewEntity.Audience.Groups[i], 'GroupId');
+                    if (value != null)
+                        $scope.scopeModal.selectedGroups.push(value);
                 }
-                if (bodyContent.DefaultPeriod != undefined && bodyContent.DefaultGrouping != undefined) {
-                    viewWidget.DefaultPeriod = bodyContent.DefaultPeriod
-                    viewWidget.DefaultGrouping = bodyContent.DefaultGrouping
-                }
-                $scope.addedBodyWidgets.push(viewWidget);
-                $scope.bodyWidgets.splice($scope.bodyWidgets.indexOf(value), 1);
             }
-                
-        }
-        
-        for (var i = 0; i < $scope.filter.SummaryContents.length; i++) {
-            var summaryContent = $scope.filter.SummaryContents[i];
-            var value = UtilsService.getItemByVal($scope.summaryWidgets, summaryContent.WidgetId, 'Id');
-            var numberOfColumns;
-            for (var j = 0; j < $scope.columnWidth.length; j++)
-                if (summaryContent.NumberOfColumns == $scope.columnWidth[j].value)
-                    numberOfColumns = $scope.columnWidth[j];
+            for (var i = 0; i < viewEntity.ViewContent.BodyContents.length; i++) {
+                var bodyContent = viewEntity.ViewContent.BodyContents[i];
+                var value = UtilsService.getItemByVal($scope.scopeModal.bodyWidgets, bodyContent.WidgetId, 'Id');
+                var numberOfColumns;
+                for (var j = 0; j < $scope.scopeModal.columnWidth.length; j++)
+                    if (bodyContent.NumberOfColumns == $scope.scopeModal.columnWidth[j].value)
+                        numberOfColumns = $scope.scopeModal.columnWidth[j];
 
-            if (value != null) {
-                var viewWidget = {
-                    Widget: value,
-                    NumberOfColumns: numberOfColumns,
-                    SectionTitle: summaryContent.SectionTitle
+                if (value != null) {
+                    var viewWidget = {
+                        Widget: value,
+                        NumberOfColumns: numberOfColumns,
+                        SectionTitle: bodyContent.SectionTitle
+                    }
+                    if (bodyContent.DefaultPeriod != undefined && bodyContent.DefaultGrouping != undefined) {
+                        viewWidget.DefaultPeriod = bodyContent.DefaultPeriod
+                        viewWidget.DefaultGrouping = bodyContent.DefaultGrouping
+                    }
+                    $scope.scopeModal.addedBodyWidgets.push(viewWidget);
+                    $scope.scopeModal.bodyWidgets.splice($scope.scopeModal.bodyWidgets.indexOf(value), 1);
                 }
-                if (summaryContent.DefaultPeriod != undefined && summaryContent.DefaultGrouping != undefined) {
-                    viewWidget.DefaultPeriod = summaryContent.DefaultPeriod
-                    viewWidget.DefaultGrouping = summaryContent.DefaultGrouping
-                }
-                $scope.addedSummaryWidgets.push(viewWidget);
-                $scope.summaryWidgets.splice($scope.summaryWidgets.indexOf(value), 1);
+
             }
-          
 
+            for (var i = 0; i < viewEntity.ViewContent.SummaryContents.length; i++) {
+                var summaryContent = viewEntity.ViewContent.SummaryContents[i];
+                var value = UtilsService.getItemByVal($scope.scopeModal.summaryWidgets, summaryContent.WidgetId, 'Id');
+                var numberOfColumns;
+                for (var j = 0; j < $scope.scopeModal.columnWidth.length; j++)
+                    if (summaryContent.NumberOfColumns == $scope.scopeModal.columnWidth[j].value)
+                        numberOfColumns = $scope.scopeModal.columnWidth[j];
+
+                if (value != null) {
+                    var viewWidget = {
+                        Widget: value,
+                        NumberOfColumns: numberOfColumns,
+                        SectionTitle: summaryContent.SectionTitle
+                    }
+                    if (summaryContent.DefaultPeriod != undefined && summaryContent.DefaultGrouping != undefined) {
+                        viewWidget.DefaultPeriod = summaryContent.DefaultPeriod
+                        viewWidget.DefaultGrouping = summaryContent.DefaultGrouping
+                    }
+                    $scope.scopeModal.addedSummaryWidgets.push(viewWidget);
+                    $scope.scopeModal.summaryWidgets.splice($scope.scopeModal.summaryWidgets.indexOf(value), 1);
+                }
+
+
+            }
+            //$scope.selectedMenuNode = UtilsService.getItemByVal($scope.menuList, $scope.filter.ModuleId, 'Id');
+            // addIsSelected($scope.menuList, $scope.filter.ModuleId);
+
+            if ($scope.scopeModal.menuList.length > 0) {
+                $scope.scopeModal.selectedMenuNode = treeAPI.setSelectedNode($scope.scopeModal.menuList, viewEntity.ModuleId, "Id", "Childs");
+                // console.log($scope.selectedMenuNode);
+                treeAPI.refreshTree($scope.scopeModal.menuList);
+            }
+
+            if (viewEntity.ViewContent.DefaultPeriod != undefined && viewEntity.ViewContent.DefaultGrouping != undefined) {
+                $scope.scopeModal.nonSearchable = false;
+                $scope.scopeModal.selectedViewPeriod = getPeriod(viewEntity.ViewContent.DefaultPeriod);
+                $scope.scopeModal.selectedViewTimeDimensionType = getTimeDimentionType(viewEntity.ViewContent.DefaultGrouping);
+            }
+            else {
+                $scope.scopeModal.nonSearchable = true;
+            }
         }
-        //$scope.selectedMenuNode = UtilsService.getItemByVal($scope.menuList, $scope.filter.ModuleId, 'Id');
-       // addIsSelected($scope.menuList, $scope.filter.ModuleId);
-        
-        if ($scope.menuList.length > 0) {
-            $scope.selectedMenuNode = treeAPI.setSelectedNode($scope.menuList, $scope.filter.ModuleId, "Id","Childs");
-           // console.log($scope.selectedMenuNode);
-            treeAPI.refreshTree($scope.menuList);
-        }
-            
-        if ($scope.filter.DefaultPeriod != undefined && $scope.filter.DefaultGrouping != undefined) {
-            $scope.nonSearchable = false;
-            $scope.selectedViewPeriod = getPeriod($scope.filter.DefaultPeriod);
-            $scope.selectedViewTimeDimensionType = getTimeDimentionType($scope.filter.DefaultGrouping);
-        }
-        else {
-            $scope.nonSearchable = true;
-        }
+
+     
 
     }
+
     function getTimeDimentionType(defaultGrouping) {
-        return UtilsService.getItemByVal($scope.timeDimensionTypes, defaultGrouping, 'value');
+        return UtilsService.getItemByVal($scope.scopeModal.timeDimensionTypes, defaultGrouping, 'value');
     }
+
     function getPeriod(defaultPeriod) {
-       return UtilsService.getItemByVal($scope.periods, defaultPeriod, 'value');
+        return UtilsService.getItemByVal($scope.scopeModal.periods, defaultPeriod, 'value');
     }
 
     function loadTree() {
         return MenuAPIService.GetAllMenuItems()
            .then(function (response) {
                checkAllowDynamic(response);
-               $scope.menuList = response;
+               $scope.scopeModal.menuList = response;
               
            });
     }
+
     function addIsSelected(menuList, Id) {
         for (var i = 0; i < menuList.length; i++) {
             if (menuList[i].Id == Id) {
-                $scope.selectedMenuNode = menuList[i];
+                $scope.scopeModal.selectedMenuNode = menuList[i];
                 menuList[i].isSelected = true;
                 return;
             }
@@ -459,7 +507,8 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         }
 
     }
-    function checkAllowDynamic(response){
+
+    function checkAllowDynamic(response) {
         for (var i = 0; i < response.length; i++) {
             response[i].isOpened = true;
             if(response[i].Childs!=undefined)
@@ -469,17 +518,18 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         }
            
     }
+
     function loadWidgets() {
         return WidgetAPIService.GetAllWidgets().then(function (response) {
-           
+            console.log(response);
             angular.forEach(response, function (itm) {
                 for(var i=0;i<itm.WidgetDefinitionSetting.Sections.length;i++)
                 {
                     var value=itm.WidgetDefinitionSetting.Sections[i];
                     if(value==WidgetSectionEnum.Summary.value)
-                        $scope.summaryWidgets.push(itm);
+                        $scope.scopeModal.summaryWidgets.push(itm.Entity);
                     else if(value==WidgetSectionEnum.Body.value)
-                        $scope.bodyWidgets.push(itm);
+                        $scope.scopeModal.bodyWidgets.push(itm.Entity);
                 }
             });
         });
@@ -487,23 +537,23 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
     }
 
     function defineColumnWidth() {
-        $scope.columnWidth = [];
+        $scope.scopeModal.columnWidth = [];
         for (var td in ColumnWidthEnum)
-            $scope.columnWidth.push(ColumnWidthEnum[td]);
+            $scope.scopeModal.columnWidth.push(ColumnWidthEnum[td]);
 
-        $scope.summaryColumnWidth = $scope.columnWidth;
-        $scope.bodyColumnWidth = [];
-        for (var i = 0; i < $scope.columnWidth.length; i++) {
-            if ($scope.columnWidth[i].value != ColumnWidthEnum.QuarterRow.value)
-             $scope.bodyColumnWidth.push($scope.columnWidth[i])
+        $scope.scopeModal.summaryColumnWidth = $scope.scopeModal.columnWidth;
+        $scope.scopeModal.bodyColumnWidth = [];
+        for (var i = 0; i < $scope.scopeModal.columnWidth.length; i++) {
+            if ($scope.scopeModal.columnWidth[i].value != ColumnWidthEnum.QuarterRow.value)
+                $scope.scopeModal.bodyColumnWidth.push($scope.scopeModal.columnWidth[i])
         }
-        $scope.selectedColumnWidth = $scope.columnWidth[0];
+        $scope.scopeModal.selectedColumnWidth = $scope.scopeModal.columnWidth[0];
     }
 
     function loadUsers() {
         UsersAPIService.GetUsers().then(function (response) {
             angular.forEach(response, function (users) {
-                $scope.users.push(users);
+                $scope.scopeModal.users.push(users);
                 }) 
             });
       
@@ -512,19 +562,19 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
     function loadGroups() {
         GroupAPIService.GetGroups().then(function (response) {
             angular.forEach(response, function (group) {
-                $scope.groups.push(group);
+                $scope.scopeModal.groups.push(group);
                 }
 )});
     }
 
 
     function defineWidgetSections() {
-        $scope.sections = [];
+        $scope.scopeModal.sections = [];
         for (var m in WidgetSectionEnum) {
-            $scope.sections.push(WidgetSectionEnum[m]);
+            $scope.scopeModal.sections.push(WidgetSectionEnum[m]);
         }
 
-        $scope.selectedSection = $scope.sections[0];
+        $scope.scopeModal.selectedSection = $scope.scopeModal.sections[0];
     }
 
 }

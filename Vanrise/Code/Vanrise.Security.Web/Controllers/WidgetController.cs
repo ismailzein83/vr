@@ -16,21 +16,21 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpPost]
         [Route("AddWidget")]
-        public Vanrise.Entities.InsertOperationOutput<WidgetDetails> AddWidget(Widget widget)
+        public Vanrise.Entities.InsertOperationOutput<WidgetDetail> AddWidget(Widget widget)
         {
             WidgetsManager manager = new WidgetsManager();
             return manager.AddWidget(widget);
         }
         [HttpPost]
         [Route("UpdateWidget")]
-        public Vanrise.Entities.UpdateOperationOutput<WidgetDetails> UpdateWidget(Widget widget)
+        public Vanrise.Entities.UpdateOperationOutput<WidgetDetail> UpdateWidget(Widget widget)
         {
             WidgetsManager manager = new WidgetsManager();
             return manager.UpdateWidget(widget);
         }
          [HttpGet]
          [Route("GetAllWidgets")]
-        public List<WidgetDetails> GetAllWidgets()
+        public IEnumerable<WidgetDetail> GetAllWidgets()
         {
             WidgetsManager manager = new WidgetsManager();
             return manager.GetAllWidgets();
@@ -45,7 +45,7 @@ namespace Vanrise.Security.Web.Controllers
          }
          [HttpGet]
          [Route("DeleteWidget")]
-         public Vanrise.Entities.DeleteOperationOutput<WidgetDetails> DeleteWidget(int widgetId)
+         public Vanrise.Entities.DeleteOperationOutput<WidgetDetail> DeleteWidget(int widgetId)
          {
              WidgetsManager manager = new WidgetsManager();
              return manager.DeleteWidget(widgetId);

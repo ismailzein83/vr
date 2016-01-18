@@ -1,16 +1,16 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    viewService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService', 'ViewAPIService', 'DeleteOperationResultEnum'];
+    viewService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService', 'VR_Sec_ViewAPIService', 'DeleteOperationResultEnum'];
 
-    function viewService(VRModalService, VRNotificationService, UtilsService, ViewAPIService, DeleteOperationResultEnum) {
+    function viewService(VRModalService, VRNotificationService, UtilsService, VR_Sec_ViewAPIService, DeleteOperationResultEnum) {
 
         function deleteDynamicPage($scope, dataItem, onDynamicPageDeleted) {
 
             VRNotificationService.showConfirmation().then(function (response) {
 
                 if (response == true) {
-                    return ViewAPIService.DeleteView(dataItem.ViewId).then(function (responseObject) {
+                    return VR_Sec_ViewAPIService.DeleteView(dataItem.ViewId).then(function (responseObject) {
                         if (responseObject.Result == DeleteOperationResultEnum.Succeeded.value)
                             onDynamicPageDeleted(dataItem);
 
@@ -25,15 +25,18 @@
             });
         }
  
-        function updateDynamicPage(pageId, onDynamicPageUpdated) {
+        function updateDynamicPage(viewId, onDynamicPageUpdated) {
             var settings = {
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForUpdateEditor(dataItem.Name, "Dynamic Page");
                 modalScope.onPageUpdated = onDynamicPageUpdated
             };
-            VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPageEditor.html', dataItem, settings);
+            var parameters = {
+                ViewId: viewId
+            }
+
+            VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPageEditor.html', parameters, settings);
 
         }
   

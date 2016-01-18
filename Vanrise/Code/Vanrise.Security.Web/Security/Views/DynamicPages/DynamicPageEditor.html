@@ -1,145 +1,145 @@
 ﻿<div vr-modalcontent ng-controller="Security_DynamicPageEditorController" width="'80%'">
-    <vr-modalbody vr-loader="isGettingData" maxheight="'700px'">
+    <vr-modalbody vr-loader="scopeModal.isLoading" maxheight="'700px'">
         <vr-form name="formDynamicPagesEditor">
-            <vr-choices selectedindex="selectedGroupKeyIndex" onselectionchanged="onSelectionChanged()">
-                <vr-choice isselected="settingSelected">Setting</vr-choice>
-                <vr-choice isselected="designSelected">Design</vr-choice>
-                <vr-choice isselected="previewSelected">Preview</vr-choice>
-            </vr-choices>
-            <div ng-show="settingSelected">
-                <vr-row>
-                    <vr-columns width="1/3row">
-                        <vr-section title="Page Setting">
-                            <vr-row removeline>
-                                <vr-textbox value="pageName" label="Page Name" isrequired></vr-textbox>
-                            </vr-row>
-                            <vr-row>
-                                <vr-switch value="nonSearchable" label="Non Searchable" onvaluechanged="nonSearchableValueChanged()" "></vr-switch>
-                            </vr-row>
-                            <vr-row ng-show="!nonSearchable">
-                                <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Default Period"
-                                           selectedvalues="selectedViewPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
-
-                            </vr-row>
-                            <vr-row ng-show="!nonSearchable">
-                                <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Default Grouping"
-                                           selectedvalues="selectedViewTimeDimensionType" isrequired hidefilterbox></vr-select>
-
-                            </vr-row>
-                        </vr-section>
-                    </vr-columns>
-
-                    <vr-columns width="1/3row">
-                        <vr-section title="Menu Location">
-
-
-                            <vr-treeview datatextfield="Name"
-                                         datavaluefield="Id"
-                                         datachildrenfield="Childs"
-                                         on-ready="menuReady"
-                                         selecteditem="selectedMenuNode"
-                                         wholerow>
-                            </vr-treeview>
-                        </vr-section>
-                    </vr-columns>
-                    <vr-columns width="1/3row">
-                        <vr-section title="Audiences">
-                            <vr-row removeline>
-                                <vr-select ismultipleselection label="Users" datasource="users" selectedvalues="selectedUsers" datatextfield="Name" datavaluefield="UserId"
-                                           entityname="Users">
-                                </vr-select>
-                            </vr-row>
-                            <vr-row width="fullrow">
-                                <vr-select ismultipleselection label="Groups" datasource="groups" selectedvalues="selectedGroups" datatextfield="Name" datavaluefield="GroupId"
-                                           entityname="Groups">
-                                </vr-select>
-                            </vr-row>
-                        </vr-section>
-                    </vr-columns>
-                    </vr-columns>
-            </div>
-            <div ng-show="designSelected">
-                <vr-form name="formDesigningSelectionModel">
-                    <vr-row removeline>
-                        <vr-columns width="normal">
-                            <vr-select label="Section" datatextfield="description" datavaluefield="value" label="Section" onselectionchanged="onSectionChanged"
-                                       datasource="sections" selectedvalues="selectedSection" isrequired></vr-select>
-                        </vr-columns>
-                        <vr-columns width="normal">
-                            <vr-select label="Widget" datatextfield="Name" datavaluefield="ID"
-                                       datasource="widgets" selectedvalues="selectedWidget" onselectionchanged="onWidgetSelectionChanged"></vr-select>
-                        </vr-columns>
-                        <vr-columns width="normal" ng-show="selectedWidget">
-                            <vr-textbox value="sectionTitle" label="Section Title"></vr-textbox>
-                        </vr-columns>
-                        <vr-columns width="normal">
-                            <vr-select datasource="columnWidth" datatextfield="description" datavaluefield="value" label="Row Space" selectedvalues="selectedColumnWidth" isrequired hidefilterbox></vr-select>
-                        </vr-columns>
-                        <vr-columns width="normal" ng-show="nonSearchable">
-                            <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Default Period"
-                                       selectedvalues="selectedWidgetPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
-                        </vr-columns>
-                        <vr-columns width="normal" ng-show="nonSearchable">
-                            <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Default Grouping"
-                                       selectedvalues="selectedWidgetTimeDimensionType" isrequired hidefilterbox></vr-select>
-                        </vr-columns>
-                        <vr-columns width="small" vr-disabled="selectedWidget==undefined">
-                            <vr-label></vr-label>
-                            <vr-button type="Add" formname="formDesigningSelectionModel" data-onclick="addViewContent" standalone></vr-button>
-                        </vr-columns>
-
-                    </vr-row>
-
-
+            <vr-tabs>
+                <vr-tab header="'Setting'">
                     <vr-row>
-                        <div ng-include="selectedWidget.Setting.DirectiveTemplateURL"></div>
-                    </vr-row>
-                </vr-form>
-                <div>
-                    <vr-row ng-if="addedSummaryWidgets.length>0">
-                        <vr-section title="Summary">
+                        <vr-columns width="1/3row">
+                            <vr-section title="Page Setting">
+                                <vr-row removeline>
+                                    <vr-textbox value="scopeModal.pageName" label="Page Name" isrequired></vr-textbox>
+                                </vr-row>
+                                <vr-row>
+                                    <vr-switch value="scopeModal.nonSearchable" label="Non Searchable" onvaluechanged="scopeModal.nonSearchableValueChanged()" "></vr-switch>
+                                </vr-row>
+                                <vr-row ng-show="!nonSearchable">
+                                    <vr-select datasource="scopeModal.periods" datatextfield="description" datavaluefield="value" label="Default Period"
+                                               selectedvalues="scopeModal.selectedViewPeriod" isrequired hidefilterbox onselectionchanged="scopeModal.periodSelectionChanged"></vr-select>
 
+                                </vr-row>
+                                <vr-row ng-show="!nonSearchable">
+                                    <vr-select datasource="scopeModal.timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Default Grouping"
+                                               selectedvalues="scopeModal.selectedViewTimeDimensionType" isrequired hidefilterbox></vr-select>
+
+                                </vr-row>
+                            </vr-section>
+                        </vr-columns>
+
+                        <vr-columns width="1/3row">
+                            <vr-section title="Menu Location">
+
+
+                                <vr-treeview datatextfield="Name"
+                                             datavaluefield="Id"
+                                             datachildrenfield="Childs"
+                                             on-ready="scopeModal.menuReady"
+                                             selecteditem="scopeModal.selectedMenuNode"
+                                             wholerow>
+                                </vr-treeview>
+                            </vr-section>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-section title="Audiences">
+                                <vr-row removeline>
+                                    <vr-select ismultipleselection label="Users" datasource="scopeModal.users" selectedvalues="scopeModal.selectedUsers" datatextfield="Name" datavaluefield="UserId"
+                                               entityname="Users">
+                                    </vr-select>
+                                </vr-row>
+                                <vr-row width="fullrow">
+                                    <vr-select ismultipleselection label="Groups" datasource="scopeModal.groups" selectedvalues="scopeModal.selectedGroups" datatextfield="Name" datavaluefield="GroupId"
+                                               entityname="Groups">
+                                    </vr-select>
+                                </vr-row>
+                            </vr-section>
+                        </vr-columns>
+
+                    </vr-row>
+                </vr-tab>
+
+                <vr-tab header="'Design'">
+                    <vr-form name="formDesigningSelectionModel">
+                        <vr-row removeline>
+                            <vr-columns width="normal">
+                                <vr-select label="Section" datatextfield="description" datavaluefield="value" label="Section" onselectionchanged="scopeModal.onSectionChanged"
+                                           datasource="scopeModal.sections" selectedvalues="scopeModal.selectedSection" isrequired></vr-select>
+                            </vr-columns>
+                            <vr-columns width="normal">
+                                <vr-select label="Widget" datatextfield="Name" datavaluefield="ID"
+                                           datasource="scopeModal.widgets" selectedvalues="scopeModal.selectedWidget" onselectionchanged="scopeModal.onWidgetSelectionChanged"></vr-select>
+                            </vr-columns>
+                            <vr-columns width="normal" ng-show="scopeModal.selectedWidget">
+                                <vr-textbox value="scopeModal.sectionTitle" label="Section Title"></vr-textbox>
+                            </vr-columns>
+                            <vr-columns width="normal">
+                                <vr-select datasource="scopeModal.columnWidth" datatextfield="description" datavaluefield="value" label="Row Space" selectedvalues="scopeModal.selectedColumnWidth" isrequired hidefilterbox></vr-select>
+                            </vr-columns>
+                            <vr-columns width="normal" ng-show="scopeModal.nonSearchable">
+                                <vr-select datasource="scopeModal.periods" datatextfield="description" datavaluefield="value" label="Default Period"
+                                           selectedvalues="scopeModal.selectedWidgetPeriod" isrequired hidefilterbox onselectionchanged="scopeModal.periodSelectionChanged"></vr-select>
+                            </vr-columns>
+                            <vr-columns width="normal" ng-show="scopeModal.nonSearchable">
+                                <vr-select datasource="scopeModal.timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Default Grouping"
+                                           selectedvalues="scopeModal.selectedWidgetTimeDimensionType" isrequired hidefilterbox></vr-select>
+                            </vr-columns>
+                            <vr-columns width="small" vr-disabled="scopeModal.selectedWidget==undefined">
+                                <vr-label></vr-label>
+                                <vr-button type="Add" formname="formDesigningSelectionModel" data-onclick="scopeModal.addViewContent" standalone></vr-button>
+                            </vr-columns>
+
+                        </vr-row>
+
+
+                        <vr-row>
+
+                            <div ng-include="scopeModal.selectedWidget.Setting.DirectiveTemplateURL"></div>
+                        </vr-row>
+                    </vr-form>
+                    <div>
+                        <vr-row ng-if="scopeModal.addedSummaryWidgets.length>0">
+                            <vr-section title="Summary">
+
+                                <div class="list-group dragbelzone" ng-sortable="itemsSortable">
+                                    <vr-columns ng-repeat="addedSummaryWidget in scopeModal.addedSummaryWidgets" colnum="{{addedSummaryWidget.NumberOfColumns.numberOfColumns}}">
+                                        <div ng-class="scopeModal.validateWidgetError(addedSummaryWidget)">
+                                            <i class="glyphicon glyphicon-th-list handeldrag"></i>
+                                            <i class="glyphicon glyphicon-remove hand-cursor" ng-click="scopeModal.removeViewContent(addedSummaryWidget)"></i>
+                                            <vr-directivewrapper directive="addedSummaryWidget.Widget.Setting.Directive" on-ready="addedSummaryWidget.Widget.onElementReady" settings="addedSummaryWidget.Widget.Setting.Settings"
+                                                                 title="addedSummaryWidget.SectionTitle" previewmode="true"></vr-directivewrapper>
+                                        </div>
+                                    </vr-columns>
+                                </div>
+                            </vr-section>
+                        </vr-row>
+                        <vr-row ng-if="scopeModal.addedBodyWidgets.length>0">
                             <div class="list-group dragbelzone" ng-sortable="itemsSortable">
-                                <vr-columns ng-repeat="addedSummaryWidget in addedSummaryWidgets" colnum="{{addedSummaryWidget.NumberOfColumns.numberOfColumns}}">
-                                    <div ng-class="validateWidgetError(addedSummaryWidget)">
+                                <vr-columns ng-repeat="addedBodyWidget in scopeModal.addedBodyWidgets" colnum="{{addedBodyWidget.NumberOfColumns.numberOfColumns}}">
+                                    <div ng-class="validateWidgetError(addedBodyWidget)" style="border-radius: 4px; height: auto; padding: 0px; ">
+
+
+
                                         <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                                        <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeViewContent(addedSummaryWidget)"></i>
-                                        <vr-directivewrapper directive="addedSummaryWidget.Widget.Setting.Directive" on-ready="addedSummaryWidget.Widget.onElementReady" settings="addedSummaryWidget.Widget.Setting.Settings"
-                                                             title="addedSummaryWidget.SectionTitle" previewmode="true"></vr-directivewrapper>
+                                        <i class="glyphicon glyphicon-remove hand-cursor" ng-click="scopeModal.removeViewContent(addedBodyWidget)"></i>
+                                        <vr-directivewrapper directive="addedBodyWidget.Widget.Setting.Directive" on-ready="addedBodyWidget.Widget.onElementReady" settings="addedBodyWidget.Widget.Setting.Settings"
+                                                             title="addedBodyWidget.SectionTitle" previewmode="true"></vr-directivewrapper>
                                     </div>
                                 </vr-columns>
                             </div>
-                        </vr-section>
-                    </vr-row>
-                    <vr-row ng-if="addedBodyWidgets.length>0">
-                        <div class="list-group dragbelzone" ng-sortable="itemsSortable">
-                            <vr-columns ng-repeat="addedBodyWidget in addedBodyWidgets" colnum="{{addedBodyWidget.NumberOfColumns.numberOfColumns}}">
-                                <div ng-class="validateWidgetError(addedBodyWidget)" style="border-radius: 4px; height: auto; padding: 0px; ">
+                        </vr-row>
+                    </div>
+                </vr-tab>
+                <vr-tab header="'Preview'" tabobject="scopeModal.tabObject">
+                    <vr-sec-dynamicpageviewer on-ready="scopeModal.onPreviewAPIReady" ng-if="scopeModal.tabObject.isSelected && (scopeModal.addedSummaryWidgets.length>0 ||scopeModal.addedBodyWidgets.length>0)"></vr-sec-dynamicpageviewer>
+                </vr-tab>
+            </vr-tabs>
 
-
-
-                                    <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                                    <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeViewContent(addedBodyWidget)"></i>
-                                    <vr-directivewrapper directive="addedBodyWidget.Widget.Setting.Directive" on-ready="addedBodyWidget.Widget.onElementReady" settings="addedBodyWidget.Widget.Setting.Settings"
-                                                         title="addedBodyWidget.SectionTitle" previewmode="true"></vr-directivewrapper>
-                                </div>
-                            </vr-columns>
-                        </div>
-                    </vr-row>
-                </div>
-
-            </div>
-            <div ng-if="previewSelected && (addedSummaryWidgets.length>0 ||addedBodyWidgets.length>0)">
-                <div ng-include="'Client/Modules/Security/Views/DynamicPages/DynamicPagePreview.html'"></div>
-            </div>
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Validate" formname="formDynamicPagesEditor" data-onclick="validate"></vr-button>
-                <vr-button type="Save" formname="formDynamicPagesEditor" data-onclick="save"></vr-button>
-                <vr-button type="Close" data-onclick="close"></vr-button>
+                <vr-button type="Validate" formname="formDynamicPagesEditor" data-onclick="scopeModal.validate"></vr-button>
+                <vr-button type="Save" formname="formDynamicPagesEditor" data-onclick="scopeModal.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
             </div>
         </vr-actionbar>
     </div>
