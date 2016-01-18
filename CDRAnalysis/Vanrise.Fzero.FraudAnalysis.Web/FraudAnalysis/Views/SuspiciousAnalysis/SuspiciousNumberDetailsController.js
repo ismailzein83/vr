@@ -148,7 +148,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                     }
                     else {
                         $scope.showOccurancesGrid = false;
-                        $scope.message = "No open occurances were found for the current account number";
+                        $scope.message = "No open occurences were found for the current account number";
                         $scope.showProfileOptions = false;
                         $scope.showDate = true;
                     }
