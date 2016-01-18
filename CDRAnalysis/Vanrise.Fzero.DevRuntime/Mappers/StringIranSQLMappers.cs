@@ -61,15 +61,15 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
             Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch batch = new Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch();
             batch.CDRs = new List<Vanrise.Fzero.CDRImport.Entities.CDR>();
             Vanrise.Integration.Entities.DBReaderImportedData ImportedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
-            PSTN.BusinessEntity.Business.TrunkManager trunkManager = new PSTN.BusinessEntity.Business.TrunkManager();
             IDataReader reader = ImportedData.Reader;
-            string index = ImportedData.LastImportedId;
+            long lastImportedId = 0;
+              long.TryParse(  ImportedData.LastImportedId,out lastImportedId);
 
             while (reader.Read())
             {
                 Vanrise.Fzero.CDRImport.Entities.CDR cdr = new Vanrise.Fzero.CDRImport.Entities.CDR();
 
-                index = ((int)reader["ID"]).ToString();
+                lastImportedId = (long)reader["ID"];
                 cdr.MSISDN = reader["SubscriberMSISDN"] as string;
                 cdr.Destination = reader["CallPartner"] as string;
 
@@ -98,9 +98,17 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                 }
 
                 cdr.IMEI = reader["IMEI"] as string;
+
+
+                // Assumed this is Cell ...
                 cdr.Cell = reader["MSLocation"] as string;
-                if (!string.IsNullOrEmpty(cdr.Cell))
+                ////////////////////////////////////////////////
+
+
+                //In this piece of code we assume that first 5 charachters are BTS 
+                if (!string.IsNullOrEmpty(cdr.Cell) && cdr.Cell.Length > 5)
                     cdr.BTS = cdr.Cell.Substring(0, 5);
+                ////////////////////////////////////////////////
 
 
                 switch (Utils.GetReaderValue<string>(reader, "CallRecordType"))
@@ -123,7 +131,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                         cdr.CallType = Vanrise.Fzero.CDRImport.Entities.CallType.IncomingSms;
                         break;
 
-                    case "9":
+                    case "9":// In CDR Analysis no Call type Data ... so I changed it to not defined
                         cdr.CallType = Vanrise.Fzero.CDRImport.Entities.CallType.NotDefined;
                         break;
                 }
@@ -132,7 +140,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                 batch.CDRs.Add(cdr);
             }
 
-            ImportedData.LastImportedId = index;
+            ImportedData.LastImportedId = lastImportedId.ToString();
             batch.Datasource = dataSourceId;
             mappedBatches.Add("Normalize CDRs", batch);
 
