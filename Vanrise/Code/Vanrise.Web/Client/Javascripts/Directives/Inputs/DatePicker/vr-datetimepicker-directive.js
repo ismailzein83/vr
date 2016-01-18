@@ -124,11 +124,15 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                     else if($attrs.type == "date")
                     {
                         selectedDate.setUTCHours(0, 0, 0, 0);
-                        $scope.ctrl.value = selectedDate;
+                        var date = moment.utc(selectedDate).format("L LT");
+                        $scope.ctrl.value = date ;
                     }
-                    else
-                        $scope.ctrl.value = selectedDate;
-                            //new Date(selectedDate.toISOString('yyyy-MM-dd hh:mm:ss').replace('Z', ''));
+                    else {                        
+                        selectedDate.setUTCHours(selectedDate.getUTCHours(), selectedDate.getUTCMinutes(), 0, 0);
+                        var date = moment.utc(selectedDate).format("L LT"); 
+                        $scope.ctrl.value = date ;
+
+                    }
                 }
 
             });
