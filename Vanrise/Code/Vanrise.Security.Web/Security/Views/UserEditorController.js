@@ -1,6 +1,6 @@
-﻿UserEditorController.$inject = ['$scope', 'UsersAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿UserEditorController.$inject = ['$scope', 'VR_Sec_UserAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-function UserEditorController($scope, UsersAPIService, VRModalService, VRNotificationService, VRNavigationService) {
+function UserEditorController($scope, UsersAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
 
     var editMode;
     loadParameters();
@@ -41,6 +41,9 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
                 $scope.isGettingData = false;
             })
         }
+        else {
+            $scope.title = UtilsService.buildTitleForAddEditor("User");
+        }
     }
 
     function getUser() {
@@ -65,6 +68,7 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
     }
 
     function fillScopeFromUserObj(userObject) {
+        $scope.title = UtilsService.buildTitleForUpdateEditor(userObject.Name, "User");
         $scope.name = userObject.Name;
         $scope.email = userObject.Email;
         $scope.description = userObject.Description;
