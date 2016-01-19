@@ -8,8 +8,8 @@
         GetFilteredCasesByAccountNumber: GetFilteredCasesByAccountNumber,
         GetFilteredDetailsByCaseID: GetFilteredDetailsByCaseID,
         GetRelatedNumbersByAccountNumber: GetRelatedNumbersByAccountNumber,
-        GetAccountStatus: GetAccountStatus,
-        GetFilteredAccountCaseLogsByCaseID: GetFilteredAccountCaseLogsByCaseID,
+        GetAccountCase: GetAccountCase,
+        GetFilteredAccountCaseHistoryByCaseID: GetFilteredAccountCaseHistoryByCaseID,
         UpdateAccountCase: UpdateAccountCase,
         CancelAccountCases: CancelAccountCases,
         GetFilteredCasesByFilters: GetFilteredCasesByFilters,
@@ -61,14 +61,14 @@
         });
     }
 
-    function GetAccountStatus(accountNumber) {
-        return BaseAPIService.get("/api/CaseManagement/GetAccountStatus", {
-            accountNumber: accountNumber
+    function GetAccountCase(caseID) {
+        return BaseAPIService.get("/api/CaseManagement/GetAccountCase", {
+            caseID: caseID
         });
     }
 
-    function GetFilteredAccountCaseLogsByCaseID(input) {
-        return BaseAPIService.post("/api/CaseManagement/GetFilteredAccountCaseLogsByCaseID", input);
+    function GetFilteredAccountCaseHistoryByCaseID(input) {
+        return BaseAPIService.post("/api/CaseManagement/GetFilteredAccountCaseHistoryByCaseID", input);
     }
 
     function UpdateAccountCase(input) {

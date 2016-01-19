@@ -29,7 +29,7 @@ function CaseOccuranceGridController($scope, CaseManagementAPIService, Suspicion
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-
+            
             return CaseManagementAPIService.GetFilteredDetailsByCaseID(dataRetrievalInput)
                 .then(function (response) {
 
@@ -48,7 +48,7 @@ function CaseOccuranceGridController($scope, CaseManagementAPIService, Suspicion
 
         $scope.dataRetrievalFunction_Logs = function (dataRetrievalInput, onResponseReady) {
 
-            return CaseManagementAPIService.GetFilteredAccountCaseLogsByCaseID(dataRetrievalInput)
+            return CaseManagementAPIService.GetFilteredAccountCaseHistoryByCaseID(dataRetrievalInput)
                 .then(function (response) {
 
                     angular.forEach(response.Data, function (item) {
@@ -96,7 +96,6 @@ function CaseOccuranceGridController($scope, CaseManagementAPIService, Suspicion
     function retrieveData() {
 
         var query = {
-            AccountNumber: $scope.dataItem.AccountNumber,
             CaseID: $scope.dataItem.CaseID
         };
 

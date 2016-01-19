@@ -59,17 +59,17 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
         [HttpGet]
-        public CaseStatus? GetAccountStatus(string accountNumber)
+        public AccountCase GetAccountCase(int caseID)
         {
             CaseManagmentManager manager = new CaseManagmentManager();
-            return manager.GetAccountStatus(accountNumber);
+            return manager.GetAccountCase(caseID);
         }
 
         [HttpPost]
-        public object GetFilteredAccountCaseLogsByCaseID(DataRetrievalInput<AccountCaseLogQuery> input)
+        public object GetFilteredAccountCaseHistoryByCaseID(DataRetrievalInput<AccountCaseLogQuery> input)
         {
             CaseManagmentManager manager = new CaseManagmentManager();
-            return GetWebResponse(input, manager.GetFilteredAccountCaseLogsByCaseID(input));
+            return GetWebResponse(input, manager.GetFilteredAccountCaseHistoryByCaseID(input));
         }
 
         [HttpPost]

@@ -24,7 +24,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         static CaseManagementDataManager()
         {
             _columnMapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
-            _columnMapper.Add("AccountStatusDescription", "AccountStatusID");
+            _columnMapper.Add("AccountStatusDescription", "Status");
             _columnMapper.Add("UserName", "UserID");
             _columnMapper.Add("CaseStatusDescription", "StatusID");
             _columnMapper.Add("SuspicionOccuranceStatusDescription", "SuspicionOccuranceStatus");
@@ -37,7 +37,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.AccountNumber, input.Query.StrategyIDs, input.Query.AccountStatusIDs, input.Query.SuspicionLevelIDs), (cmd) =>
+                ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.AccountNumber, input.Query.StrategyIDs, input.Query.Statuses, input.Query.SuspicionLevelIDs), (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromDate));
                     cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.ToDate));
@@ -53,16 +53,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
                 BEGIN
                 
-
-                SELECT        MAX(sed.SuspicionLevelID) AS SuspicionLevelID, CASE WHEN accStatus.[Status] IN (1, 2) 
+                SELECT        MAX(sed.SuspicionLevelID) AS SuspicionLevelID, CASE WHEN ac.Status IN (1, 2) 
                          THEN SUM(CASE WHEN sed.SuspicionOccuranceStatus = 1 THEN 1 ELSE 0 END) ELSE COUNT(*) END AS NumberOfOccurances, MAX(se.ExecutionDate) 
-                         AS LastOccurance, { fn IFNULL(accStatus.Status, 1) } AS AccountStatusID, sed.AccountNumber
+                         AS LastOccurance, ac.AccountNumber, ac.Status, ac.ID AS CaseID
                 INTO #TEMP_TABLE_NAME#                
                 FROM            FraudAnalysis.StrategyExecution AS se INNER JOIN
-                         FraudAnalysis.StrategyExecutionDetails AS sed ON se.ID = sed.StrategyExecutionID LEFT OUTER JOIN
-                         FraudAnalysis.AccountStatus AS accStatus ON sed.AccountNumber = accStatus.AccountNumber
+                                         FraudAnalysis.StrategyExecutionDetails AS sed ON se.ID = sed.StrategyExecutionID INNER JOIN
+                                         FraudAnalysis.AccountCase ac ON sed.CaseID = ac.ID
                 #WHERE_CLAUSE#                
-                GROUP BY accStatus.Status, sed.AccountNumber
+                GROUP BY ac.AccountNumber, ac.Status, ac.ID
+              
                 END
             ");
 
@@ -79,20 +79,19 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             whereClause.Append("WHERE (se.ExecutionDate IS NULL OR (se.ExecutionDate >= @FromDate AND se.ExecutionDate <= @ToDate))");
 
             if (accountNumber != null)
-                whereClause.Append(" AND sed.AccountNumber = '" + accountNumber + "'");
+                whereClause.Append(" AND ac.AccountNumber = '" + accountNumber + "'");
 
             if (strategyIDs != null)
                 whereClause.Append(" AND se.StrategyID IN (" + string.Join(",", strategyIDs) + ")");
 
             if (accountStatusIDs != null)
-                whereClause.Append(" AND (accStatus.[Status] is NULL  or accStatus.[Status] IN (" + string.Join(",", GetCaseStatusListAsIntList(accountStatusIDs)) + "))");
+                whereClause.Append(" AND ac.[Status] IN (" + string.Join(",", GetCaseStatusListAsIntList(accountStatusIDs)) + ")");
 
             if (suspicionLevelIDs != null)
                 whereClause.Append(" AND sed.SuspicionLevelID IN (" + string.Join(",", GetSuspicionLevelListAsIntList(suspicionLevelIDs)) + ")");
 
             return whereClause.ToString();
         }
-
 
         private List<int> GetCaseStatusListAsIntList(List<CaseStatus> items)
         {
@@ -103,7 +102,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             return list;
         }
-
 
         private List<int> GetSuspicionLevelListAsIntList(List<SuspicionLevel> items)
         {
@@ -122,7 +120,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByAccountNumber", tempTableName, input.Query.AccountNumber, input.Query.FromDate, input.Query.ToDate);
+                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByAccountNumber", tempTableName, input.Query.CaseID, input.Query.FromDate, input.Query.ToDate);
             };
 
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, _columnMapper);
@@ -165,15 +163,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByCaseID", tempTableName, input.Query.AccountNumber, input.Query.CaseID);
+                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByCaseID", tempTableName, input.Query.CaseID);
             };
 
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, _columnMapper);
         }
 
-        public AccountSuspicionSummary GetAccountSuspicionSummaryByAccountNumber(string accountNumber, DateTime from, DateTime to)
+        public AccountSuspicionSummary GetAccountSuspicionSummaryByCaseId(int caseID, DateTime from, DateTime to)
         {
-            return GetItemSP("FraudAnalysis.sp_AccountStatus_GetSummaryByAccountNumber", AccountSuspicionSummaryMapper, accountNumber, from, to);
+            return GetItemSP("FraudAnalysis.sp_AccountStatus_GetSummaryByCaseID", AccountSuspicionSummaryMapper, caseID, from, to);
         }
 
         public List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber)
@@ -196,13 +194,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-        public CaseStatus? GetAccountStatus(string accountNumber)
+        public AccountCase GetAccountCase(int caseID)
         {
-            int? result = (int?)ExecuteScalarSP("FraudAnalysis.sp_AccountStatus_GetStatusByAccountNumber", accountNumber);
-            return (CaseStatus?)result;
+            return GetItemSP("FraudAnalysis.sp_AccountCase_GetByCaseID", AccountCaseMapper, caseID);
         }
-
-        public BigResult<AccountCaseLog> GetFilteredAccountCaseLogsByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseLogQuery> input)
+        
+        public BigResult<AccountCaseLog> GetFilteredAccountCaseHistoryByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseLogQuery> input)
         {
 
 
@@ -213,7 +210,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             return RetrieveData(input, createTempTableAction, AccountCaseLogMapper, _columnMapper);
         }
-
+        
         #region Methods that update an account case
 
         public AccountCase GetLastAccountCaseByAccountNumber(string accountNumber)
@@ -287,8 +284,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             summary.SuspicionLevelID = GetReaderValue<SuspicionLevel>(reader, "SuspicionLevelID");
             summary.NumberOfOccurances = (int)reader["NumberOfOccurances"];
             summary.LastOccurance = GetReaderValue<DateTime?>(reader, "LastOccurance");
-            summary.AccountStatusID = GetReaderValue<CaseStatus>(reader, "AccountStatusID");
-
+            summary.Status = GetReaderValue<CaseStatus>(reader, "Status");
+            summary.CaseID = GetReaderValue<int>(reader, "CaseID");
             return summary;
         }
 

@@ -67,7 +67,8 @@
                              dataretrievalfunction="dataRetrievalFunction"
                              menuactions="gridMenuActions"
                              pagingtype="'PagingOnScroll'"
-                             idfield="AccountNumber">
+                             idfield="CaseID">
+                    <vr-datagridcolumn headertext="'Case ID'" field="'CaseID'" type="'Text'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Status'" field="'AccountStatusDescription'" type="'Text'" getcolor="getCaseStatusColor"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Suspicious Number'" field="'AccountNumber'" type="'Text'" isclickable="true" onclicked="summaryClicked"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelDescription'" type="'Text'" getcolor="getSuspicionLevelColor"></vr-datagridcolumn>

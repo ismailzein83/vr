@@ -57,7 +57,7 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
                             item.SuspicionLevelDescription = suspicionLevel.description;
                         }
 
-                        var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", item.AccountStatusID);
+                        var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", item.Status);
                         item.AccountStatusDescription = accountStatus.description;
                     });
 
@@ -69,7 +69,7 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
         }
 
         $scope.summaryClicked = function (dataItem) {
-            openSummaryDetails(dataItem.AccountNumber);
+            openSummaryDetails(dataItem.AccountNumber, dataItem.CaseID);
         }
 
         $scope.getSuspicionLevelColor = function (dataItem) {
@@ -81,10 +81,10 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
 
         $scope.getCaseStatusColor = function (dataItem) {
 
-            if (dataItem.AccountStatusID == CaseStatusEnum.Open.value) return LabelColorsEnum.New.color;
-            else if (dataItem.AccountStatusID == CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
-            else if (dataItem.AccountStatusID == CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
-            else if (dataItem.AccountStatusID == CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
+            if (dataItem.Status == CaseStatusEnum.Open.value) return LabelColorsEnum.New.color;
+            else if (dataItem.Status == CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
+            else if (dataItem.Status == CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
+            else if (dataItem.Status == CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
         }
     }
 
@@ -94,7 +94,7 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate,
             StrategyIDs: UtilsService.getPropValuesFromArray($scope.selectedStrategies, "value"),
-            AccountStatusIDs: UtilsService.getPropValuesFromArray($scope.selectedAccountStatuses, "value"),
+            Statuses: UtilsService.getPropValuesFromArray($scope.selectedAccountStatuses, "value"),
             SuspicionLevelIDs: UtilsService.getPropValuesFromArray($scope.selectedSuspicionLevels, "value")
         };
 
@@ -121,13 +121,14 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
             });
     }
 
-    function openSummaryDetails(accountNumber) {
+    function openSummaryDetails(accountNumber, caseID) {
         var modalSettings = {};
 
         var parameters = {
             AccountNumber: accountNumber,
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate,
+            CaseID:caseID,
             ModalLevel: 1
         };
 
@@ -135,7 +136,6 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
             modalScope.title = "Suspicious Number Details";
 
             modalScope.onAccountCaseUpdated = function (accountSuspicionSummary) {
-                //if (accountSuspicionSummary.AccountNumber != null)
                 gridAPI.itemUpdated(accountSuspicionSummary);
             }
         };

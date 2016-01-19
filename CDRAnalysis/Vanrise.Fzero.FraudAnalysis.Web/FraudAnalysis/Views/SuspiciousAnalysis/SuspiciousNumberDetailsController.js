@@ -32,6 +32,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             $scope.accountNumber = parameters.AccountNumber;
             $scope.fromDate = parameters.FromDate;
             $scope.toDate = parameters.ToDate;
+            $scope.caseID = parameters.CaseID;
 
             modalLevel = parameters.ModalLevel;
             $scope.showRelatedNumbers = (modalLevel == 1);
@@ -231,7 +232,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                                 response.UpdatedObject.SuspicionLevelDescription = suspicionLevel.description;
                             }
 
-                            var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response.UpdatedObject.AccountStatusID);
+                            var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response.UpdatedObject.Status);
                             response.UpdatedObject.AccountStatusDescription = accountStatus.description;
 
                             $scope.onAccountCaseUpdated(response.UpdatedObject);
@@ -328,7 +329,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     function load() {
         $scope.isLoading = true;
 
-        return UtilsService.waitMultipleAsyncOperations([loadAggregateDefinitions, loadUsers, loadAccountStatus])
+        return UtilsService.waitMultipleAsyncOperations([loadAggregateDefinitions, loadUsers, loadAccountCase])
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             })
@@ -356,7 +357,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     function retrieveData_Occurances() {
         $scope.isLoading = true;
         var query = {
-            AccountNumber: $scope.accountNumber,
+            CaseID: $scope.caseID,
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate
         };
@@ -422,26 +423,24 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
     }
 
-    function loadAccountStatus() {
-        return CaseManagementAPIService.GetAccountStatus($scope.accountNumber)
+    function loadAccountCase() {
+        return CaseManagementAPIService.GetAccountCase($scope.caseID)
             .then(function (response) {
-
                 if (response != null) {
-                    // open, pending, fraud, whitelist
-
+                    
                     $scope.caseStatuses.splice(0, 1); // remove the open option
 
-                    if (response == CaseStatusEnum.Pending.value)
+                    if (response.StatusID == CaseStatusEnum.Pending.value)
                         $scope.caseStatuses.splice(0, 1); // remove the pending option
 
-                    else if (response == CaseStatusEnum.ClosedFraud.value)
+                    else if (response.StatusID == CaseStatusEnum.ClosedFraud.value)
                         $scope.caseStatuses.splice(1, 1); // remove the closed: fruad option
 
-                    else if (response == CaseStatusEnum.ClosedWhitelist.value)
+                    else if (response.StatusID == CaseStatusEnum.ClosedWhitelist.value)
                         $scope.caseStatuses.splice(2, 1); // remove the closed: white list option
 
-                    var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response);
-                    $scope.accountStatusID = response;
+                    var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response.StatusID);
+                    $scope.status = response.StatusID;
                     $scope.accountStatusDescription = accountStatus.description;
                 }
             });

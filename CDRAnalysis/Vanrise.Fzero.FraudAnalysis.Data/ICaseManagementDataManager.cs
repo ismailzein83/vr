@@ -25,7 +25,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         BigResult<AccountSuspicionSummary> GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input);
 
-        AccountSuspicionSummary GetAccountSuspicionSummaryByAccountNumber(string accountNumber, DateTime from, DateTime to);
+        AccountSuspicionSummary GetAccountSuspicionSummaryByCaseId(int caseID, DateTime from, DateTime to);
 
         BigResult<AccountSuspicionDetail> GetFilteredAccountSuspicionDetails(Vanrise.Entities.DataRetrievalInput<AccountSuspicionDetailQuery> input);
 
@@ -33,9 +33,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber);
 
-        CaseStatus? GetAccountStatus(string accountNumber);
+        AccountCase GetAccountCase(int caseID);
 
-        BigResult<AccountCaseLog> GetFilteredAccountCaseLogsByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseLogQuery> input);
+        BigResult<AccountCaseLog> GetFilteredAccountCaseHistoryByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseLogQuery> input);
 
         BigResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseQuery> input);
 
