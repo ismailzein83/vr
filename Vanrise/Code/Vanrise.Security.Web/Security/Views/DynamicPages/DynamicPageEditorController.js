@@ -172,7 +172,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
     {
         var payload=
             {
-                selectedViewPeriod:$scope.scopeModal.selectedViewPeriod,
+                selectedViewPeriod:$scope.scopeModal.selectedViewPeriod.value,
                 selectedViewTimeDimensionType: $scope.scopeModal.selectedViewTimeDimensionType,
                 bodyContents: $scope.scopeModal.bodyContents,
                 summaryContents: $scope.scopeModal.summaryContents,
@@ -460,7 +460,6 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
 
             if ($scope.scopeModal.menuList.length > 0) {
                 $scope.scopeModal.selectedMenuNode = treeAPI.setSelectedNode($scope.scopeModal.menuList, viewEntity.ModuleId, "Id", "Childs");
-                // console.log($scope.selectedMenuNode);
                 treeAPI.refreshTree($scope.scopeModal.menuList);
             }
 
@@ -521,7 +520,6 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
 
     function loadWidgets() {
         return WidgetAPIService.GetAllWidgets().then(function (response) {
-            console.log(response);
             angular.forEach(response, function (itm) {
                 for(var i=0;i<itm.WidgetDefinitionSetting.Sections.length;i++)
                 {

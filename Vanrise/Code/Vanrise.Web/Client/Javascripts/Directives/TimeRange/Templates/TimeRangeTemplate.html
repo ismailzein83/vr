@@ -1,0 +1,11 @@
+﻿<vr-columns width="1/3row">
+    <vr-period-selector on-ready="onPeriodDirectiveReady" selectedvalues="selectedPeriod" onselectionchanged="    periodSelectionChanged"></vr-period-selector>
+</vr-columns>
+
+<vr-columns width="1/3row">
+    <vr-datetimepicker type="dateTime" value="fromDate" label="From" customvalidate="validateDateTime()" isrequired onblurdatetime="onBlurChanged"></vr-datetimepicker>
+</vr-columns>
+
+<vr-columns width="1/3row">
+    <vr-datetimepicker type="dateTime" value="toDate" label="To" customvalidate="validateDateTime()" isrequired onblurdatetime="onBlurChanged"></vr-datetimepicker>
+</vr-columns>

@@ -284,6 +284,10 @@
     <Content Include="Client\Javascripts\Directives\Tabs\vr-tab-directive.js" />
     <Content Include="Client\Javascripts\Directives\Tabs\vr-tabs-directive.js" />
     <Content Include="Client\Javascripts\Directives\Tabs\vr-tabs-header-directive.js" />
+    <Content Include="Client\Javascripts\Directives\TimeRange\Templates\TimeRangeTemplate.html" />
+    <Content Include="Client\Javascripts\Directives\TimeRange\vr-group-selector.js" />
+    <Content Include="Client\Javascripts\Directives\TimeRange\vr-period-selector.js" />
+    <Content Include="Client\Javascripts\Directives\TimeRange\vr-timerange-directive.js" />
     <Content Include="Client\Javascripts\Directives\TreeView\vr-treeview-directive.js" />
     <Content Include="Client\Javascripts\Modules\appControllers.js" />
     <Content Include="Client\Javascripts\Modules\appRouting.js" />

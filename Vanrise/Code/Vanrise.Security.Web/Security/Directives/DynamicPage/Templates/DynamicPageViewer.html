@@ -1,26 +1,11 @@
 ﻿<vr-form validationcontext="dynamicPagePreviewGroup" ng-show="!nonSearchable">
     <div ng-hide="filterSectionCollapsed">
         <vr-row removeline>
-            <vr-columns width="1/4row">
-                <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Period"
-                           selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
-            </vr-columns>
-
-
             <vr-columns width="1/2row">
-
-                <vr-validator validate="validateDateTime()">
-                    <vr-columns width="1/2row">
-                        <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired onblurdatetime="onBlurChanged"></vr-datetimepicker>
-                    </vr-columns>
-
-                    <vr-columns width="1/2row">
-                        <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired onblurdatetime="onBlurChanged"></vr-datetimepicker>
-                    </vr-columns>
-                </vr-validator>
+                <vr-timerange on-ready="onTimeRangeDirectiveReady" ></vr-timerange>
             </vr-columns>
 
-            <vr-columns width="1/4row">
+            <vr-columns width="normal">
                 <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"
                            selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
             </vr-columns>

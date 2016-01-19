@@ -107,7 +107,6 @@ function (VRNotificationService, VR_Sec_ViewAPIService, VR_ViewService, UsersAPI
         }
 
         function fillNeededData(itm) {
-            console.log(itm);
             if ( itm.Entity.ViewContent.DefaultPeriod != null)
                 itm.Entity.ViewContent.DefaultPeriodDescription = UtilsService.getItemByVal(ctrl.periods, itm.Entity.ViewContent.DefaultPeriod, 'value')
                 .description;
