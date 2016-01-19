@@ -98,7 +98,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                                     fromDate: obj.fromDate,
                                     toDate: obj.toDate
                                 }
-                                $scope.nonSearchable = false;
+                                $scope.nonSearchable = payload.nonSearchable;
                                 return UtilsService.waitMultipleAsyncOperations([loadAllWidgets])
                                   .finally(function () {
                                       loadViewWidgets($scope.allWidgets, payload.bodyContents, payload.summaryContents);

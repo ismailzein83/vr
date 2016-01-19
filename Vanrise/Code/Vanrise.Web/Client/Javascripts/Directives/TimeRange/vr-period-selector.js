@@ -11,7 +11,8 @@ function (UtilsService, VRUIUtilsService, PeriodEnum) {
             onselectionchanged: '=',
             isrequired: "=",
             selectedvalues: '=',
-            hideremoveicon: "@"
+            hideremoveicon: "@",
+            label:'@'
         },
         controller: function ($scope, $element, $attrs) {
 
@@ -53,7 +54,8 @@ function (UtilsService, VRUIUtilsService, PeriodEnum) {
         else if (attrs.hideremoveicon != undefined) {
             hideremoveicon = "hideremoveicon";
         }
-
+        if (attrs.label != undefined)
+            label = "{{ctrl.label}}";
 
         return '<div  vr-loader="isLoadingDirective">'
             + '<vr-select  isrequired="ctrl.isrequired" ' + multipleselection + ' ' + hideremoveicon + ' datatextfield="description" datavaluefield="value" '

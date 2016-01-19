@@ -12,14 +12,12 @@
                                 <vr-row>
                                     <vr-switch value="scopeModal.nonSearchable" label="Non Searchable" onvaluechanged="scopeModal.nonSearchableValueChanged()" "></vr-switch>
                                 </vr-row>
-                                <vr-row ng-show="!nonSearchable">
-                                    <vr-select datasource="scopeModal.periods" datatextfield="description" datavaluefield="value" label="Default Period"
-                                               selectedvalues="scopeModal.selectedViewPeriod" isrequired hidefilterbox onselectionchanged="scopeModal.periodSelectionChanged"></vr-select>
-
+                                <vr-row ng-if="!scopeModal.nonSearchable">
+                                    <vr-period-selector on-ready="scopeModal.onPeriodDirectiveReady" label="Default Period" selectedvalues="scopeModal.selectedViewPeriod" onselectionchanged="scopeModal.periodSelectionChanged"></vr-period-selector>
                                 </vr-row>
-                                <vr-row ng-show="!nonSearchable">
-                                    <vr-select datasource="scopeModal.timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Default Grouping"
-                                               selectedvalues="scopeModal.selectedViewTimeDimensionType" isrequired hidefilterbox></vr-select>
+                                <vr-row ng-if="!scopeModal.nonSearchable">
+                                    <vr-timedimension-selector on-ready="scopeModal.onTimeDimentionDirectiveReady" label="Default Grouping" selectedvalues="scopeModal.selectedViewTimeDimensionType"></vr-timedimension-selector>
+
 
                                 </vr-row>
                             </vr-section>
@@ -27,8 +25,6 @@
 
                         <vr-columns width="1/3row">
                             <vr-section title="Menu Location">
-
-
                                 <vr-treeview datatextfield="Name"
                                              datavaluefield="Id"
                                              datachildrenfield="Childs"
@@ -73,13 +69,11 @@
                             <vr-columns width="normal">
                                 <vr-select datasource="scopeModal.columnWidth" datatextfield="description" datavaluefield="value" label="Row Space" selectedvalues="scopeModal.selectedColumnWidth" isrequired hidefilterbox></vr-select>
                             </vr-columns>
-                            <vr-columns width="normal" ng-show="scopeModal.nonSearchable">
-                                <vr-select datasource="scopeModal.periods" datatextfield="description" datavaluefield="value" label="Default Period"
-                                           selectedvalues="scopeModal.selectedWidgetPeriod" isrequired hidefilterbox onselectionchanged="scopeModal.periodSelectionChanged"></vr-select>
+                            <vr-columns width="normal" ng-if="scopeModal.nonSearchable">
+                                <vr-period-selector on-ready="scopeModal.onPeriodDirectiveReady" label="Default Period" selectedvalues="scopeModal.selectedWidgetPeriod" onselectionchanged="scopeModal.periodSelectionChanged"></vr-period-selector>
                             </vr-columns>
-                            <vr-columns width="normal" ng-show="scopeModal.nonSearchable">
-                                <vr-select datasource="scopeModal.timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Default Grouping"
-                                           selectedvalues="scopeModal.selectedWidgetTimeDimensionType" isrequired hidefilterbox></vr-select>
+                            <vr-columns width="normal" ng-if="scopeModal.nonSearchable">
+                                <vr-timedimension-selector on-ready="scopeModal.onTimeDimentionDirectiveReady" label="Default Grouping" selectedvalues="scopeModal.selectedWidgetTimeDimensionType"></vr-timedimension-selector>
                             </vr-columns>
                             <vr-columns width="small" vr-disabled="scopeModal.selectedWidget==undefined">
                                 <vr-label></vr-label>
@@ -97,7 +91,6 @@
                     <div>
                         <vr-row ng-if="scopeModal.addedSummaryWidgets.length>0">
                             <vr-section title="Summary">
-
                                 <div class="list-group dragbelzone" ng-sortable="itemsSortable">
                                     <vr-columns ng-repeat="addedSummaryWidget in scopeModal.addedSummaryWidgets" colnum="{{addedSummaryWidget.NumberOfColumns.numberOfColumns}}">
                                         <div ng-class="scopeModal.validateWidgetError(addedSummaryWidget)">

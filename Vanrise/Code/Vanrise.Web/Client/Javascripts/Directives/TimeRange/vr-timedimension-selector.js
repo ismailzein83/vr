@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrTimeDimensionSelector', ['UtilsService', 'VRUIUtilsService','TimeDimensionTypeEnum',
+app.directive('vrTimedimensionSelector', ['UtilsService', 'VRUIUtilsService','TimeDimensionTypeEnum',
 function (UtilsService, VRUIUtilsService, TimeDimensionTypeEnum) {
 
     var directiveDefinitionObject = {
@@ -56,10 +56,10 @@ function (UtilsService, VRUIUtilsService, TimeDimensionTypeEnum) {
         }
 
         if (attrs.label != undefined)
-            label = "ctrl.label";
+            label = "{{ctrl.label}}";
 
         return '<div  vr-loader="isLoadingDirective">'
-            + '<vr-select  isrequired="ctrl.isrequired" ' + multipleselection + ' ' + hideremoveicon + ' datatextfield="description" datavaluefield="value" '
+            + '<vr-select  isrequired="ctrl.isrequired" ' + multipleselection + ' ' + hideremoveicon + ' datatextfield="description" datavaluefield="value" on-ready="ctrl.onSelectorReady"' 
         + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged"  vr-disabled="ctrl.isdisabled"></vr-select>'
             + '</div>';
     }
@@ -67,8 +67,11 @@ function (UtilsService, VRUIUtilsService, TimeDimensionTypeEnum) {
     function periodCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
-
-            defineAPI();
+            ctrl.onSelectorReady= function(api)
+            {
+                defineAPI();
+            }
+           
         }
 
         function defineAPI() {
@@ -77,7 +80,6 @@ function (UtilsService, VRUIUtilsService, TimeDimensionTypeEnum) {
                 return VRUIUtilsService.getIdSelectedIds('value', $attrs, ctrl);
             }
             api.load = function (payload) {
-
                 var selectedIds;
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
