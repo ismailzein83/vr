@@ -1,213 +1,87 @@
-﻿BusinessEntityManagementController.$inject = ['$scope', 'BusinessEntitiesAPIService', 'PermissionAPIService', 'PermissionFlagEnum', 'HolderTypeEnum', 'VRModalService', 'VRNotificationService'];
+﻿(function (appControllers) {
 
-function BusinessEntityManagementController($scope, BusinessEntityAPIService, PermissionAPIService, PermissionFlagEnum, HolderTypeEnum, VRModalService, VRNotificationService) {
+    'use strict';
 
-    var treeAPI;
-    var mainGridAPI;
-    var arrMenuAction = [];
+    BusinessEntityManagementController.$inject = ['$scope', 'BusinessEntitiesAPIService', 'VR_Sec_PermissionService', 'PermissionFlagEnum', 'HolderTypeEnum', 'UtilsService', 'VRModalService', 'VRNotificationService'];
 
-    defineScope();
-    load();
+    function BusinessEntityManagementController($scope, BusinessEntityAPIService, VR_Sec_PermissionService, PermissionFlagEnum, HolderTypeEnum, UtilsService, VRModalService, VRNotificationService) {
 
-    function defineScope() {
+        var treeAPI;
+        var gridAPI;
+        var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
-        $scope.beList = [];
+        defineScope();
+        load();
 
-        $scope.gridMenuActions = [];
+        function defineScope() {
+            $scope.beList = [];
 
-        $scope.permissions = [];
+            $scope.onPermissionGridReady = function (api) {
+                gridAPI = api;
+                gridReadyDeferred.resolve();
+            };
 
-        defineMenuActions();
+            $scope.addPermission = function () {
+                var onPermissionAdded = function (addedPermission) {
+                    gridAPI.onPermissionAdded(addedPermission);
+                };
+                VR_Sec_PermissionService.addPermission($scope.currentNode.EntType, $scope.currentNode.EntityId, $scope.currentNode.PermissionOptions, $scope.permissions, onPermissionAdded);
+            };
 
-        $scope.onMainGridReady = function (api) {
-            mainGridAPI = api;
-            //getData();
-        };
+            $scope.ToggleInheritance = toggleInheritance;
+            $scope.showBreakInheritance = true;
 
-        $scope.loadMoreData = function () {
-            return getData();
-        }
+            $scope.treeReady = function (api) {
+                treeAPI = api;
+            }
 
-        $scope.AddNewPermission = addPermission;
-        $scope.ToggleInheritance = toggleInheritance;
-        $scope.showBreakInheritance = true;
+            $scope.treeValueChanged = function () {
+                if (angular.isObject($scope.currentNode)) {
+                    $scope.showBreakInheritance = !$scope.currentNode.BreakInheritance;
 
-        $scope.treeReady = function (api) {
-            treeAPI = api;
-        }
+                    var query = {
+                        EntityId: $scope.currentNode.EntityId,
+                        EntityType: $scope.currentNode.EntType,
+                        BusinessEntityNode: $scope.currentNode
+                    };
 
-        $scope.treeValueChanged = function () {
-            if (angular.isObject($scope.currentNode)) {
-                $scope.showBreakInheritance = !$scope.currentNode.BreakInheritance;
-                refreshGrid();
+                    gridAPI.loadGrid(query);
+                }
             }
         }
-    }
 
-    function load() {
-        $scope.isGettingData = true;
+        function load() {
+            $scope.isGettingData = true;
 
-        loadTree().finally(function () {
-            $scope.isGettingData = false;
-            treeAPI.refreshTree($scope.beList);
-        });
-    }
-
-    function loadTree() {
-        return BusinessEntityAPIService.GetEntityNodes()
-           .then(function (response) {
-               $scope.beList = response;
-           }).catch(function (error) {
-               VRNotificationService.notifyExceptionWithClose(error, $scope);
-           });
-    }
-
-    function getData() {
-        var pageInfo = mainGridAPI.getPageInfo();
-        
-        return PermissionAPIService.GetPermissionsByEntity($scope.currentNode.EntType, $scope.currentNode.EntityId).then(function (response) {
-            angular.forEach(response, function (item) {
-                item.HolderTypeEnum = (item.HolderType == HolderTypeEnum.User.value) ? HolderTypeEnum.User.description : HolderTypeEnum.Group.description;
-                item.PermissionFlagsDescription = buildPermissionFlagDescription(item.PermissionFlags);
-                item.isInherited = !(item.EntityType == $scope.currentNode.EntType && item.EntityId == $scope.currentNode.EntityId);
-                item.PermissionType = item.isInherited ? 'Inherited (' + item.PermissionPath + ')' : 'Direct';
-                $scope.permissions.push(item);
+            UtilsService.waitMultiplePromises([loadTree(), gridReadyDeferred.promise]).finally(function () {
+                $scope.isGettingData = false;
+                treeAPI.refreshTree($scope.beList);
             });
-        }).catch(function (error) {
-            VRNotificationService.notifyException(error, $scope);
-        });
-    }
-
-    function buildPermissionFlagDescription(permissionFlags)
-    {
-        var allowFlags = ""
-        var denyFlags = "";
-
-        angular.forEach(permissionFlags, function (item) {
-            if(item.Value == PermissionFlagEnum.Allow.value)
-                allowFlags = allowFlags + item.Name + ", ";
-            else
-                denyFlags = denyFlags + item.Name + ", ";
-        });
-
-        var result = "";
-        if (allowFlags.length > 0)
-        {
-            allowFlags = allowFlags.substring(0, allowFlags.length - 2);
-            result = "Allow (" + allowFlags + ")";
         }
 
-        if (denyFlags.length > 0) {
-            denyFlags = denyFlags.substring(0, denyFlags.length - 2);
-            if (allowFlags.length > 0)
-                result = result + ' | ';
-            result = result + "Deny (" + denyFlags + ")";
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations();
         }
 
-        return result;
-    }
-
-    function defineMenuActions() {
-        var menuActions = [{
-            name: "Edit",
-            clicked: editPermission,
-            permissions: "Root/Administration Module/System Entities:Assign Permissions"
-        },
-        {
-            name: "Delete",
-            clicked: deletePermission,
-            permissions: "Root/Administration Module/System Entities:Assign Permissions"
+        function loadTree() {
+            return BusinessEntityAPIService.GetEntityNodes()
+               .then(function (response) {
+                   $scope.beList = response;
+               }).catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               });
         }
-        ];
 
-        $scope.gridMenuActions = function (dataItem) {
-            if (dataItem.isInherited)
-                return null;
-            else
-                return menuActions;
-        };
+        function toggleInheritance() {
+            return BusinessEntityAPIService.ToggleBreakInheritance($scope.currentNode.EntType, $scope.currentNode.EntityId)
+               .then(function (response) {
+                   $scope.currentNode.BreakInheritance = !$scope.currentNode.BreakInheritance;
+                   $scope.showBreakInheritance = !$scope.currentNode.BreakInheritance;
+                   refreshGrid();
+               });
+        }
     }
 
-    function addPermission() {
+    appControllers.controller('VR_Sec_BusinessEntityManagementController', BusinessEntityManagementController);
 
-        if ($scope.currentNode == null)
-            return;
-
-        var modalSettings = {
-        };
-        var parameters = {
-            entityType: $scope.currentNode.EntType,
-            entityId: $scope.currentNode.EntityId,
-            permissionOptions: $scope.currentNode.PermissionOptions,
-            permissions: $scope.permissions,
-            notificationResponseText: "Permissions"
-        };
-
-        modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "New Permissions for Entity '" + $scope.currentNode.Name + "'";
-            modalScope.onPermissionsAdded = function () {
-                refreshGrid();
-            };
-        };
-        
-        VRModalService.showModal('/Client/Modules/Security/Views/BusinessEntityEditor.html', parameters, modalSettings);
-
-    }
-
-    function editPermission(permissionObj) {
-        var modalSettings = {
-        };
-        var parameters = {
-            holderType: permissionObj.HolderType,
-            holderId: permissionObj.HolderId,
-            entityType: permissionObj.EntityType,
-            entityId: permissionObj.EntityId,
-            permissionFlags: permissionObj.PermissionFlags,
-            permissionOptions: $scope.currentNode.PermissionOptions,
-            notificationResponseText: "Permissions"
-        };
-
-        modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Permissions of Entity '" + $scope.currentNode.Name + "'";
-            modalScope.onPermissionsUpdated = function () {
-                refreshGrid();
-            };
-        };
-        VRModalService.showModal('/Client/Modules/Security/Views/BusinessEntityEditor.html', parameters, modalSettings);
-    }
-
-    function deletePermission(permissionObj) {
-        VRNotificationService.showConfirmation()
-            .then(function (response) {
-                if (response == true) {
-                    $scope.isLoadingGrid = true;
-                    return PermissionAPIService.DeletePermission(permissionObj.HolderType, permissionObj.HolderId, permissionObj.EntityType, permissionObj.EntityId)
-                        .then(function (response) {
-                            refreshGrid();
-                        }).catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                            $scope.isLoadingGrid = false;
-                        });
-                }
-            });
-    }
-
-    function refreshGrid() {
-        $scope.isLoadingGrid = true;
-        mainGridAPI.clearDataAndContinuePaging();
-        getData().finally(function () {
-            $scope.isLoadingGrid = false;
-        });
-    }
-
-    function toggleInheritance()
-    {
-        return BusinessEntityAPIService.ToggleBreakInheritance($scope.currentNode.EntType, $scope.currentNode.EntityId)
-           .then(function (response) {
-               $scope.currentNode.BreakInheritance = !$scope.currentNode.BreakInheritance;
-               $scope.showBreakInheritance = !$scope.currentNode.BreakInheritance;
-               refreshGrid();
-           });
-    }
-}
-appControllers.controller('Security_BusinessEntityManagementController', BusinessEntityManagementController);
+})(appControllers);

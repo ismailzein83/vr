@@ -1,9 +1,9 @@
-﻿<div vr-modalcontent ng-controller="Security_PermissionEditorController" width="'50%'" vr-loader="isGettingData">
+﻿<div vr-modalcontent ng-controller="VR_Sec_PermissionEditorController" width="'50%'" vr-loader="isGettingData">
     <vr-modalbody>
         <vr-form name="formPermissionEditor">
             <vr-row>
                 <vr-columns colnum="6">
-                    <vr-treeview on-ready="treeReady"
+                    <vr-treeview on-ready="onTreeReady"
                                  datachildrenfield="Children"
                                  datatextfield="Name"
                                  selecteditem="currentNode"
@@ -32,7 +32,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formPermissionEditor" data-onclick="SavePermissions"></vr-button>
+                <vr-button type="Save" formname="formPermissionEditor" data-onclick="save"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

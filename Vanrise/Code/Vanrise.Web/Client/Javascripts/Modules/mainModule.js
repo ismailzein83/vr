@@ -2,7 +2,7 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, SecurityService, PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService) {
+.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, SecurityService, VR_Sec_PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService) {
         
     $rootScope.onValidationMessageShown = function (e) {
         var self = angular.element(e.currentTarget);
@@ -23,7 +23,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     }
 
     $('#dt1').datetimepicker();
-    PermissionAPIService.GetEffectivePermissions().then(function (response) {
+    VR_Sec_PermissionAPIService.GetEffectivePermissions().then(function (response) {
         $rootScope.effectivePermissionsWrapper = response;
     }
     );

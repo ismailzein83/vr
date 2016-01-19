@@ -1,37 +1,26 @@
-﻿<vr-panel ng-controller="Security_BusinessEntityManagementController">
-
+﻿<vr-panel ng-controller="VR_Sec_BusinessEntityManagementController">
     <vr-form name="formBusinessEntity" vr-loader="isGettingData">
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true">
                 <div transclude-to="buttons">
                     <vr-button type="BreakInheritance" formname="formBusinessEntity" ng-show="currentNode != undefined && showBreakInheritance" permissions="Root/Administration Module/System Entities:Assign Permissions" data-onclick="ToggleInheritance" isasynchronous=" true"></vr-button>
                     <vr-button type="AllowInheritance" formname="formBusinessEntity" ng-show="currentNode != undefined &&!showBreakInheritance" permissions="Root/Administration Module/System Entities:Assign Permissions" data-onclick="ToggleInheritance" isasynchronous=" true"></vr-button>
-                    <vr-button type="Add" formname="formBusinessEntity" permissions="Root/Administration Module/System Entities:Assign Permissions" ng-show="currentNode != undefined" data-onclick="AddNewPermission" isasynchronous=" true"></vr-button>
+                    <vr-button type="Add" formname="formBusinessEntity" permissions="Root/Administration Module/System Entities:Assign Permissions" ng-show="currentNode != undefined" data-onclick="addPermission" isasynchronous=" true"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
         <vr-row>
-            <vr-columns colnum="4">
+            <vr-columns width="1/3row">
                 <vr-treeview on-ready="treeReady"
                              datachildrenfield="Children"
                              datatextfield="Name"
                              selecteditem="currentNode"
                              onvaluechanged="treeValueChanged">
                 </vr-treeview>
-
             </vr-columns>
-            <vr-columns vr-loader="isLoadingGrid" colnum="6" ng-show="currentNode != undefined">
-                <vr-datagrid datasource="permissions" menuactions="gridMenuActions" loadmoredata="loadMoreData" on-ready="onMainGridReady">
-                    <vr-datagridcolumn headertext="'Holder Name'" field="'HolderName'" widthfactor="5"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Holder Type'" field="'HolderTypeEnum'" widthfactor="5"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Permission Type'" field="'PermissionType'" widthfactor="10"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Permissions'" field="'PermissionFlagsDescription'" widthfactor="10"></vr-datagridcolumn>
-                </vr-datagrid>
+            <vr-columns width="2/3row" ng-show="currentNode">
+                <vr-sec-permission-grid on-ready="onPermissionGridReady"></vr-sec-permission-grid>
             </vr-columns>
-
+        </vr-row>
     </vr-form>
-
-
-
-
 </vr-panel>

@@ -9,8 +9,10 @@ namespace Vanrise.Security.Data
 {
     public interface IBusinessEntityDataManager : IDataManager
     {
-        List<Vanrise.Security.Entities.BusinessEntity> GetEntities();
+        IEnumerable<Vanrise.Security.Entities.BusinessEntity> GetEntities();
 
         bool ToggleBreakInheritance(string entityId);
+
+        bool AreBusinessEntitiesUpdated(ref object updateHandle);
     }
 }

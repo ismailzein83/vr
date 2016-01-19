@@ -16,7 +16,7 @@ namespace Vanrise.Security.Data.SQL
 
         }
 
-        public List<Entities.BusinessEntityModule> GetModules()
+        public IEnumerable<Entities.BusinessEntityModule> GetModules()
         {
             return GetItemsSP("sec.sp_BusinessEntityModule_GetAll", ModuleMapper);
         }
@@ -26,6 +26,13 @@ namespace Vanrise.Security.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntityModule_ToggleBreakInheritance", entityId);
             return (recordesEffected > 0);
         }
+
+        public bool AreBusinessEntityModulesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("sec.BusinessEntityModule", ref updateHandle);
+        }
+
+        #region Mappers
 
         Entities.BusinessEntityModule ModuleMapper(IDataReader reader)
         {
@@ -39,5 +46,7 @@ namespace Vanrise.Security.Data.SQL
             };
             return module;
         }
+        
+        #endregion
     }
 }

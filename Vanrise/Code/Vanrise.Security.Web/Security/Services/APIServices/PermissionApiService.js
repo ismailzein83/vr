@@ -1,45 +1,48 @@
-﻿app.service('PermissionAPIService', function (BaseAPIService) {
+﻿(function (appControllers) {
 
-    return ({
-        GetPermissionsByHolder: GetPermissionsByHolder,
-        GetPermissionsByEntity: GetPermissionsByEntity,
-        UpdatePermissions: UpdatePermissions,
-        DeletePermission: DeletePermission,
-        GetEffectivePermissions: GetEffectivePermissions
-    });
+    'use strict';
 
-    function GetPermissionsByHolder(holderType, holderId) {
-        return BaseAPIService.get("/api/Permission/GetPermissionsByHolder",
-            {
-                holderType : holderType,
-                holderId : holderId
+    PermissionAPIService.$inject = ['BaseAPIService', 'VR_Sec_ModuleConfig', 'UtilsService'];
+
+    function PermissionAPIService(BaseAPIService, VR_Sec_ModuleConfig, UtilsService) {
+
+        return ({
+            GetFilteredEntityPermissions: GetFilteredEntityPermissions,
+            GetHolderPermissions: GetHolderPermissions,
+            GetEffectivePermissions: GetEffectivePermissions,
+            UpdatePermissions: UpdatePermissions,
+            DeletePermissions: DeletePermissions,
+        });
+
+        function GetFilteredEntityPermissions(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Permission', 'GetFilteredEntityPermissions'), input);
+        }
+
+        function GetHolderPermissions(holderType, holderId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Permission', 'GetHolderPermissions'), {
+                holderType: holderType,
+                holderId: holderId
             });
-    }
+        }
 
-    function GetPermissionsByEntity(entityType, entityId) {
-        return BaseAPIService.get("/api/Permission/GetPermissionsByEntity",
-            {
+        function GetEffectivePermissions() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Permission', 'GetEffectivePermissions'));
+        }
+
+        function UpdatePermissions(permissionsArray) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Permission', 'UpdatePermissions'), permissionsArray);
+        }
+
+        function DeletePermissions(holderType, holderId, entityType, entityId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Permission', 'DeletePermissions'), {
+                holderType: holderType,
+                holderId: holderId,
                 entityType: entityType,
                 entityId: entityId
             });
+        }
     }
 
-    function GetEffectivePermissions() {
-        return BaseAPIService.get("/api/Permission/GetEffectivePermissions");
-    }
+    appControllers.service('VR_Sec_PermissionAPIService', PermissionAPIService);
 
-    function DeletePermission(holderType, holderId, entityType, entityId) {
-        return BaseAPIService.get("/api/Permission/DeletePermission",
-            {
-                holderType : holderType,
-                holderId : holderId,
-                entityType: entityType,
-                entityId: entityId
-            });
-    }
-
-    function UpdatePermissions(permissionsArray) {
-        return BaseAPIService.post("/api/Permission/UpdatePermissions",
-             permissionsArray);
-    }
-});
+})(appControllers);

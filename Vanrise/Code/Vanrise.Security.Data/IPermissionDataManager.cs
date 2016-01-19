@@ -9,14 +9,16 @@ namespace Vanrise.Security.Data
 {
     public interface IPermissionDataManager : IDataManager
     {
-        List<Permission> GetPermissions();
+        IEnumerable<Permission> GetPermissions();
 
-        List<Permission> GetPermissionsByHolder(HolderType holderType, string holderId);
+        IEnumerable<Permission> GetHolderPermissions(HolderType holderType, string holderId);
 
         bool UpdatePermission(Permission permission);
 
         bool DeletePermission(Permission permission);
 
         bool DeletePermission(HolderType holderType, string holderId, EntityType entityType, string entityId);
+
+        bool ArePermissionsUpdated(ref object updateHandle);
     }
 }

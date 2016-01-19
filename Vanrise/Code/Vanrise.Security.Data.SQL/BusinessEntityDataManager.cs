@@ -9,13 +9,14 @@ using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Data.SQL
 {
-    public class BusinessEntityManager : BaseSQLDataManager, IBusinessEntityDataManager
+    public class BusinessEntityDataManager : BaseSQLDataManager, IBusinessEntityDataManager
     {
-        public BusinessEntityManager() : base(GetConnectionStringName("SecurityDBConnStringKey", "SecurityDBConnString"))
+        public BusinessEntityDataManager() : base(GetConnectionStringName("SecurityDBConnStringKey", "SecurityDBConnString"))
         {
 
         }
-        public List<Entities.BusinessEntity> GetEntities()
+        
+        public IEnumerable<BusinessEntity> GetEntities()
         {
             return GetItemsSP("sec.sp_BusinessEntity_GetAll", EntityMapper);
         }
@@ -26,17 +27,26 @@ namespace Vanrise.Security.Data.SQL
             return (recordesEffected > 0);
         }
 
+        public bool AreBusinessEntitiesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("sec.BusinessEntity", ref updateHandle);
+        }
+
+        #region Mappers
+
         Entities.BusinessEntity EntityMapper(IDataReader reader)
         {
             Entities.BusinessEntity module = new Entities.BusinessEntity
             {
                 EntityId = (int)reader["Id"],
                 Name = reader["Name"] as string,
-                ModuleId = (int) reader["ModuleId"],
-                BreakInheritance = (bool) reader["BreakInheritance"],
+                ModuleId = (int)reader["ModuleId"],
+                BreakInheritance = (bool)reader["BreakInheritance"],
                 PermissionOptions = Common.Serializer.Deserialize<List<string>>(reader["PermissionOptions"] as string)
             };
             return module;
         }
+        
+        #endregion
     }
 }

@@ -1,5 +1,10 @@
-﻿<vr-row removeline>
-    <vr-columns width="fullrow">
-
-    </vr-columns>
-</vr-row>
+﻿<vr-datagrid datasource="ctrl.permissions"
+             dataretrievalfunction="ctrl.dataRetrievalFunction"
+             menuactions="ctrl.menuActions"
+             on-ready="ctrl.onGridReady"
+             pagingtype="'PagingOnScroll'">
+    <vr-datagridcolumn headertext="'Holder Name'" field="'HolderName'" widthfactor="5"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Holder Type'" field="'Entity.HolderType'" widthfactor="5"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Permission Type'" field="'PermissionType'" widthfactor="10" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Permissions'" field="'PermissionFlagsDescription'" widthfactor="10" disablesorting></vr-datagridcolumn>
+</vr-datagrid>

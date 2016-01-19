@@ -5,26 +5,32 @@ using System.Web;
 using System.Web.Http;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
+using Vanrise.Web.Base;
 
 namespace Vanrise.Security.Web.Controllers
 {
+    [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "Permission")]
     public class PermissionController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
-        public IEnumerable<Permission> GetPermissionsByHolder(HolderType holderType, string holderId)
+        [Route("GetHolderPermissions")]
+        public IEnumerable<PermissionDetail> GetHolderPermissions(HolderType holderType, string holderId)
         {
             PermissionManager manager = new PermissionManager();
-            return manager.GetPermissionsByHolder(holderType, holderId);
+            return manager.GetHolderPermissions(holderType, holderId);
+        }
+
+        [HttpPost]
+        [Route("GetFilteredEntityPermissions")]
+        public object GetFilteredEntityPermissions(Vanrise.Entities.DataRetrievalInput<PermissionQuery> input)
+        {
+            PermissionManager manager = new PermissionManager();
+            return GetWebResponse(input, manager.GetFilteredEntityPermissions(input));
         }
 
         [HttpGet]
-        public IEnumerable<Permission> GetPermissionsByEntity(EntityType entityType, string entityId)
-        {
-            PermissionManager manager = new PermissionManager();
-            return manager.GetPermissionsByEntity(entityType, entityId);
-        }
-
-        [HttpGet]
+        [Route("GetEffectivePermissions")]
         public PermissionResultWrapper GetEffectivePermissions()
         {
             PermissionManager manager = new PermissionManager();
@@ -52,19 +58,21 @@ namespace Vanrise.Security.Web.Controllers
             return wrapperResult;
         }
 
-        [HttpGet]
-        public Vanrise.Entities.UpdateOperationOutput<object> DeletePermission(HolderType holderType, string holderId, EntityType entityType, string entityId)
-        {
-            PermissionManager manager = new PermissionManager();
-            return manager.DeletePermission(holderType, holderId, entityType, entityId);
-        }
-
         [HttpPost]
-        public Vanrise.Entities.UpdateOperationOutput<object> UpdatePermissions(Permission [] permissionObject)
+        [Route("UpdatePermissions")]
+        public Vanrise.Entities.UpdateOperationOutput<object> UpdatePermissions(Permission[] permissionObject)
         {
             PermissionManager manager = new PermissionManager();
             return manager.UpdatePermissions(permissionObject);
         } 
+
+        [HttpGet]
+        [Route("DeletePermissions")]
+        public Vanrise.Entities.UpdateOperationOutput<object> DeletePermissions(HolderType holderType, string holderId, EntityType entityType, string entityId)
+        {
+            PermissionManager manager = new PermissionManager();
+            return manager.DeletePermissions(holderType, holderId, entityType, entityId);
+        }
        
         public class PermissionResult
         {
@@ -86,6 +94,5 @@ namespace Vanrise.Security.Web.Controllers
 
             public HashSet<string> BreakInheritanceEntities { get; set; }
         }
-
     }
 }

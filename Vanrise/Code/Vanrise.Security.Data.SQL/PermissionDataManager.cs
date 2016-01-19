@@ -17,12 +17,12 @@ namespace Vanrise.Security.Data.SQL
 
         }
 
-        public List<Entities.Permission> GetPermissions()
+        public IEnumerable<Permission> GetPermissions()
         {
             return GetItemsSP("sec.sp_Permission_GetAll", PermissionMapper);
         }
 
-        public List<Entities.Permission> GetPermissionsByHolder(Entities.HolderType holderType, string holderId)
+        public IEnumerable<Entities.Permission> GetHolderPermissions(Entities.HolderType holderType, string holderId)
         {
             return GetItemsSP("sec.sp_Permission_GetByHolder", PermissionMapper, holderType, holderId);
         }
@@ -51,6 +51,13 @@ namespace Vanrise.Security.Data.SQL
             return (recordsEffected > 0);
         }
 
+        public bool ArePermissionsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("sec.Permission", ref updateHandle);
+        }
+
+        #region Mappers
+
         Permission PermissionMapper(IDataReader reader)
         {
             Permission permission = new Permission
@@ -59,10 +66,11 @@ namespace Vanrise.Security.Data.SQL
                 HolderId = reader["HolderId"] as string,
                 EntityType = (EntityType)reader["EntityType"],
                 EntityId = reader["EntityId"] as string,
-                PermissionFlags = Common.Serializer.Deserialize<List<PermissionFlag>>(reader["PermissionFlags"] as string),
-                HolderName = reader["HolderName"] as string
+                PermissionFlags = Vanrise.Common.Serializer.Deserialize<List<PermissionFlag>>(reader["PermissionFlags"] as string),
             };
             return permission;
         }
+        
+        #endregion
     }
 }
