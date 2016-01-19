@@ -11,11 +11,17 @@ namespace Vanrise.Security.Data.SQL
 {
     public class UserDataManager : BaseSQLDataManager, IUserDataManager
     {
+        #region ctor
         public UserDataManager()
             : base(GetConnectionStringName("SecurityDBConnStringKey", "SecurityDBConnString"))
         {
 
         }
+
+        #endregion
+
+        #region Public Methods
+
 
         public List<User> GetUsers()
         {
@@ -45,8 +51,6 @@ namespace Vanrise.Security.Data.SQL
         }
         public bool ResetPassword(int userId, string password)
         {
-            //TODO: implement an encryption module
-            //string encPassword = manager.EncodePassword(password);
             return ExecuteNonQuerySP("sec.sp_User_UpdatePassword", userId, password) > 0;
         }
         public bool ChangePassword(int userId, string newPassword)
@@ -71,7 +75,10 @@ namespace Vanrise.Security.Data.SQL
             return GetItemsSP("sec.sp_User_GetMembers", UserMapper, groupId);
         }
 
-        # region Mappers
+        #endregion
+
+        #region Mappers
+
         private User UserMapper(IDataReader reader)
         {
             return new Entities.User
@@ -85,7 +92,8 @@ namespace Vanrise.Security.Data.SQL
                 Description = reader["Description"] as string
             };
         }
-        # endregion
+        
+        #endregion
 
     }
 }

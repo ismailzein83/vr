@@ -13,17 +13,7 @@ namespace Vanrise.Security.Business
 {
     public class UserManager
     {
-
-        private Dictionary<int, User> GetCachedUsers()
-        {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetUsers",
-               () =>
-               {
-                   IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                   IEnumerable<User> users = dataManager.GetUsers();
-                   return users.ToDictionary(kvp => kvp.UserId, kvp => kvp);
-               });
-        }
+        #region Public Methods
 
         public IDataRetrievalResult<UserDetail> GetFilteredUsers(DataRetrievalInput<UserQuery> input)
         {
@@ -37,34 +27,6 @@ namespace Vanrise.Security.Business
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, UserDetailMapper));
         }
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            IUserDataManager _dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.AreUsersUpdated(ref _updateHandle);
-            }
-        }
-
-
-        private UserDetail UserDetailMapper(User userObject)
-        {
-            UserDetail userDetail = new UserDetail();
-            userDetail.Entity = userObject;
-            return userDetail;
-        }
-
-
-        private UserInfo UserInfoMapper(User userObject)
-        {
-            UserInfo userInfo = new UserInfo();
-            userInfo.Name = userObject.Name;
-            userInfo.Status = userObject.Status;
-            userInfo.UserId = userObject.UserId;
-            return userInfo;
-        }
 
         public IEnumerable<UserInfo> GetUsers()
         {
@@ -78,11 +40,10 @@ namespace Vanrise.Security.Business
             return users.GetRecord(userId);
         }
 
-
         public User GetUserbyEmail(string email)
         {
             var users = GetCachedUsers();
-            return users.FindRecord(x=>x.Email ==  email);
+            return users.FindRecord(x => x.Email == email);
         }
 
         public Vanrise.Entities.InsertOperationOutput<UserDetail> AddUser(User userObject)
@@ -179,7 +140,6 @@ namespace Vanrise.Security.Business
             return users.FindAllRecords(x => x.Name == name).Count() > 0;
         }
 
-
         public List<User> GetMembers(int groupId)
         {
             IUserDataManager datamanager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
@@ -191,5 +151,59 @@ namespace Vanrise.Security.Business
             User user = GetUserbyId(userId);
             return user != null ? user.Name : null;
         }
+
+        #endregion
+
+        #region Private Methods
+        
+        private Dictionary<int, User> GetCachedUsers()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetUsers",
+               () =>
+               {
+                   IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+                   IEnumerable<User> users = dataManager.GetUsers();
+                   return users.ToDictionary(kvp => kvp.UserId, kvp => kvp);
+               });
+        }
+
+        #endregion
+
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IUserDataManager _dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreUsersUpdated(ref _updateHandle);
+            }
+        }
+
+
+        #endregion
+
+        #region Mappers
+
+        private UserDetail UserDetailMapper(User userObject)
+        {
+            UserDetail userDetail = new UserDetail();
+            userDetail.Entity = userObject;
+            return userDetail;
+        }
+
+
+        private UserInfo UserInfoMapper(User userObject)
+        {
+            UserInfo userInfo = new UserInfo();
+            userInfo.Name = userObject.Name;
+            userInfo.Status = userObject.Status;
+            userInfo.UserId = userObject.UserId;
+            return userInfo;
+        }
+
+        #endregion
     }
 }

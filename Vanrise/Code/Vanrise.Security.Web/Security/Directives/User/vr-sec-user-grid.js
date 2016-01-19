@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrSecUserGrid", ["UtilsService", "VRNotificationService", "VR_Sec_UserAPIService", "VR_Sec_UserService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, VRSec_UserAPIService, VRSec_UserService, VRUIUtilsService) {
+app.directive("vrSecUserGrid", ["VRNotificationService", "VR_Sec_UserAPIService", "VR_Sec_UserService",
+function (VRNotificationService, VR_Sec_UserAPIService, VR_Sec_UserService) {
 
     var directiveDefinitionObject = {
 
@@ -31,31 +31,38 @@ function (UtilsService, VRNotificationService, VRSec_UserAPIService, VRSec_UserS
         function initializeController() {
 
             $scope.users = [];
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
+
                 function getDirectiveAPI() {
 
                     var directiveAPI = {};
+
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
                     }
+
                     directiveAPI.onUserAdded = function (userObject) {
                         gridAPI.itemAdded(userObject);
                     }
+
                     return directiveAPI;
                 }
             };
+
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return VRSec_UserAPIService.GetFilteredUsers(dataRetrievalInput)
+                return VR_Sec_UserAPIService.GetFilteredUsers(dataRetrievalInput)
                     .then(function (response) {
                         onResponseReady(response);
                     })
                     .catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
             };
+
             defineMenuActions();
         }
 
@@ -83,20 +90,16 @@ function (UtilsService, VRNotificationService, VRSec_UserAPIService, VRSec_UserS
                 gridAPI.itemUpdated(userObj);
             }
 
-            VRSec_UserService.editUser(userObj.Entity.UserId, onUserUpdated);
+            VR_Sec_UserService.editUser(userObj.Entity.UserId, onUserUpdated);
         }
 
         function resetPassword(userObj) {
-          
-            VRSec_UserService.resetPassword(userObj.Entity.UserId);
-
-          
+            VR_Sec_UserService.resetPassword(userObj.Entity.UserId);
         }
 
         function assignPermissions(userObj) {
-            VRSec_UserService.assignPermissions(userObj.Entity.UserId);
+            VR_Sec_UserService.assignPermissions(userObj.Entity.UserId);
         }
-
     }
 
     return directiveDefinitionObject;

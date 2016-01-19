@@ -13,23 +13,28 @@ namespace Vanrise.Security.Web.Controllers
     
     [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "Users")]
-    public class VR_Sec_UsersController : Vanrise.Web.Base.BaseAPIController
+    public class UsersController : Vanrise.Web.Base.BaseAPIController
     {
+        private UserManager _manager = new UserManager();
+
+        public UsersController()
+        {
+            this._manager = new UserManager();
+        }
+
         [HttpPost]      
         [Route("GetFilteredUsers")]
         [Authorization(Permissions = "Root/Administration Module/Users:View")]
         public object GetFilteredUsers(Vanrise.Entities.DataRetrievalInput<UserQuery> input)
         {
-            UserManager manager = new UserManager();
-            return GetWebResponse(input, manager.GetFilteredUsers(input));
+            return GetWebResponse(input, _manager.GetFilteredUsers(input));
         }
 
         [HttpGet]
         [Route("GetUsers")]
         public IEnumerable<UserInfo> GetUsers()
         {
-            UserManager manager = new UserManager();
-            return manager.GetUsers();
+            return _manager.GetUsers();
         }
 
         [HttpGet]
@@ -37,8 +42,7 @@ namespace Vanrise.Security.Web.Controllers
         [Route("GetMembers")]
         public List<User> GetMembers(int groupId)
         {
-            UserManager manager = new UserManager();
-            return manager.GetMembers(groupId);
+            return _manager.GetMembers(groupId);
         }
 
         [HttpGet]
@@ -46,8 +50,7 @@ namespace Vanrise.Security.Web.Controllers
         [Route("GetUserbyId")]
         public User GetUserbyId(int userId)
         {
-            UserManager manager = new UserManager();
-            return manager.GetUserbyId(userId);
+            return _manager.GetUserbyId(userId);
         }
 
         [HttpPost]
@@ -55,8 +58,7 @@ namespace Vanrise.Security.Web.Controllers
         [Route("UpdateUser")]
         public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUser(User userObject)
         {
-            UserManager manager = new UserManager();
-            return manager.UpdateUser(userObject);
+            return _manager.UpdateUser(userObject);
         }
 
         [HttpPost]
@@ -64,16 +66,14 @@ namespace Vanrise.Security.Web.Controllers
         [Route("AddUser")]
         public Vanrise.Entities.InsertOperationOutput<UserDetail> AddUser(User userObject)
         {
-            UserManager manager = new UserManager();
-            return manager.AddUser(userObject);
+            return _manager.AddUser(userObject);
         }
 
         [HttpGet]
         [Route("CheckUserName")]
         public bool CheckUserName(string name)
         {
-            UserManager manager = new UserManager();
-            return manager.CheckUserName(name);
+            return _manager.CheckUserName(name);
         }
 
         [HttpPost]
@@ -81,24 +81,21 @@ namespace Vanrise.Security.Web.Controllers
         [Route("ResetPassword")]
         public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(ResetPasswordInput user)
         {
-            UserManager manager = new UserManager();
-            return manager.ResetPassword(user.UserId, user.Password);
+            return _manager.ResetPassword(user.UserId, user.Password);
         }
 
         [HttpGet]
         [Route("LoadLoggedInUserProfile")]
         public UserProfile LoadLoggedInUserProfile()
-        { 
-         UserManager manager = new UserManager();
-         return manager.LoadLoggedInUserProfile();
+        {
+            return _manager.LoadLoggedInUserProfile();
         }
 
         [HttpPost]
         [Route("EditUserProfile")]
         public Vanrise.Entities.UpdateOperationOutput<UserProfile> EditUserProfile(UserProfile userProfileObject)
         {
-            UserManager manager = new UserManager();
-            return manager.EditUserProfile(userProfileObject);
+            return _manager.EditUserProfile(userProfileObject);
         
         }
     }

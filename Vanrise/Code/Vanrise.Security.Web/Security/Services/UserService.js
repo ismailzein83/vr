@@ -1,17 +1,15 @@
 ﻿app.service('VR_Sec_UserService', ['VRModalService', 'VRNotificationService', 'UtilsService',
     function (VRModalService, VRNotificationService, UtilsService) {
 
-        function addUser() {
+        function addUser(onUserAdded) {
 
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onUserAdded = function (user) {
-                    gridApi.itemAdded(user);
-                };
+                modalScope.onUserAdded = onUserAdded;
             };
-            VRModalService.showModal('/Client/Modules/Security/Views/UserEditor.html', null, settings);
 
+            VRModalService.showModal('/Client/Modules/Security/Views/UserEditor.html', null, settings);
         }
 
         function editUser(userId, onUserUpdated) {
@@ -36,9 +34,7 @@
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.title = "Reset Password for User: " //+ userObj.Entity.Name;
-                modalScope.onPasswordReset = function (user) {
-                    
-                };
+                
             };
 
             VRModalService.showModal('/Client/Modules/Security/Views/ResetPasswordEditor.html', parameters, modalSettings);
@@ -58,7 +54,6 @@
             };
             VRModalService.showModal('/Client/Modules/Security/Views/PermissionEditor.html', parameters, modalSettings);
         }
-
 
         return ({
             addUser: addUser,
