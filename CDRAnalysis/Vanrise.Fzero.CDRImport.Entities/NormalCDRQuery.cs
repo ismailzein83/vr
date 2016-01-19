@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.CDRImport.Entities
 {
-    public class CDRBatch
+    public class NormalCDRQuery
     {
-        //public string CDRBatchFilePath { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public string MSISDN { get; set; }
 
-        public List<CDR> CDRs { get; set; }
     }
 }

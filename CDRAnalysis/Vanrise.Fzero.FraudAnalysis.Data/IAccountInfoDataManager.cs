@@ -8,6 +8,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface IAccountInfoDataManager : IDataManager 
     {
-        void LoadAccountInfo(Action<AccountInfo> onBatchReady);
+        void LoadAccountInfo(IEnumerable<CaseStatus> caseStatuses, Action<AccountInfo> onBatchReady);
     }
 }

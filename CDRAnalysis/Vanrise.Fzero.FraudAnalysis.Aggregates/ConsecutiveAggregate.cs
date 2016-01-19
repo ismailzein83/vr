@@ -12,54 +12,47 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 
         Func<CDR, INumberProfileParameters, bool> _condition;
 
-        Dictionary<INumberProfileParameters, ConsecutiveAggregateStrategyInfo> _strategiesInfo;
-        IEnumerable<INumberProfileParameters> _parameters;
+        Dictionary<INumberProfileParameters, ConsecutiveAggregateStrategyInfo> _parameterSetsExecutionInfo;
 
-        public ConsecutiveAggregate(Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> parameters)
+        Func<INumberProfileParameters, int> _getGapDistance;
+
+        public ConsecutiveAggregate(Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> parameterSets, Func<INumberProfileParameters, int> getGapDistance)
         {
+            this._getGapDistance = getGapDistance;
             this._condition = condition;
-            _strategiesInfo = new Dictionary<INumberProfileParameters, ConsecutiveAggregateStrategyInfo>();
-            _parameters = parameters;
-            foreach (var strategy in _parameters)
-                _strategiesInfo.Add(strategy, new ConsecutiveAggregateStrategyInfo());
-        }
+            _parameterSetsExecutionInfo = new Dictionary<INumberProfileParameters, ConsecutiveAggregateStrategyInfo>();
 
-        public void Reset()
-        {
-            foreach (var strategyCountEntry in _strategiesInfo)
-            {
-                strategyCountEntry.Value.Count = 0;
-                strategyCountEntry.Value.PreviousDateTime = default(DateTime);
-            }
+            foreach (var strategy in parameterSets)
+                _parameterSetsExecutionInfo.Add(strategy, new ConsecutiveAggregateStrategyInfo { CDRTimes = new List<DateTime>() });
         }
 
         public void EvaluateCDR(CDR cdr)
         {
-            foreach (var strategyCountEntry in _strategiesInfo)
+            foreach (var strategyCountEntry in _parameterSetsExecutionInfo)
             {
                 if (this._condition == null || this._condition(cdr, strategyCountEntry.Key))
-                {
-                    if ((strategyCountEntry.Value.PreviousDateTime != DateTime.MinValue) && cdr.ConnectDateTime.Subtract(strategyCountEntry.Value.PreviousDateTime).TotalSeconds <= strategyCountEntry.Key.GapBetweenConsecutiveCalls)
-                    {
-                        strategyCountEntry.Value.Count++;
-                    }
-                    strategyCountEntry.Value.PreviousDateTime = cdr.ConnectDateTime;
+                {                    
+                    strategyCountEntry.Value.CDRTimes.Add(cdr.ConnectDateTime);
                 }
             }
         }
 
-
-
-        public decimal GetResult(INumberProfileParameters strategy)
+        public decimal GetResult(INumberProfileParameters parameterSet)
         {
-            return (_strategiesInfo[strategy].Count > 0 ? ++_strategiesInfo[strategy].Count : _strategiesInfo[strategy].Count);
+            Decimal count = 0;
+            DateTime previousCDRTime = default(DateTime);
+            foreach (var cdrTime in _parameterSetsExecutionInfo[parameterSet].CDRTimes.OrderBy(itm => itm))
+            {
+                if (previousCDRTime != default(DateTime) && cdrTime.Subtract(previousCDRTime).TotalSeconds <= this._getGapDistance(parameterSet))
+                    count++;
+                previousCDRTime = cdrTime;
+            }
+            return count > 0 ? (count + 1) : count;
         }
 
         private class ConsecutiveAggregateStrategyInfo
         {
-            public int Count { get; set; }
-
-            public DateTime PreviousDateTime { get; set; }
+            public List<DateTime> CDRTimes { get; set; }
         }
     }
     

@@ -30,19 +30,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
                 _strategiesInfo.Add(strategy, new SumAggregateStrategyInfo ());
         }
 
-        public void Reset()
-        {
-            if (_strategiesInfo != null)
-            {
-                foreach (var strategyCountEntry in _strategiesInfo)
-                {
-                    strategyCountEntry.Value.Sum = 0;
-                }
-            }
-            else
-                _sum = 0;
-        }
-
         public void EvaluateCDR(CDR cdr)
         {
             if (_strategiesInfo != null)

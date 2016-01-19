@@ -25,14 +25,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
                 _strategiesInfo.Add(strategy, new GroupCountAggregateStrategyInfo());
         }
 
-        public void Reset()
-        {
-            foreach (var strategyCountEntry in _strategiesInfo)
-            {
-                strategyCountEntry.Value.HoursvsCalls.Clear();
-            }
-        }
-
         public void EvaluateCDR(CDR cdr)
         {
             foreach (var strategyCountEntry in _strategiesInfo)

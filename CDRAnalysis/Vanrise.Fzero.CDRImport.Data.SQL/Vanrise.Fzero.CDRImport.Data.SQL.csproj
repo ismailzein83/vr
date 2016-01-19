@@ -35,12 +35,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
@@ -55,11 +60,21 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Entities">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Business">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PartitionedCDRDataManager.cs" />
+    <Compile Include="CDRDatabaseDataManager.cs" />
+    <Compile Include="PartitionedCDRDataManagerFactory.cs" />
+    <Compile Include="PartitionedNormalCDRDataManager.cs" />
     <Compile Include="StagingCDRDataManager.cs" />
     <Compile Include="CDRDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

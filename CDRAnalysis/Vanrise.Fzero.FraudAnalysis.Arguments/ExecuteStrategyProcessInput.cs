@@ -8,6 +8,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 {
     public class ExecuteStrategyProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
+        public IEnumerable<string> FixedPrefixes { get; set; }
+
+        public int PrefixLength { get; set; }
+
         public List<int> StrategyIds { get; set; }
 
         public DateTime FromDate { get; set; }

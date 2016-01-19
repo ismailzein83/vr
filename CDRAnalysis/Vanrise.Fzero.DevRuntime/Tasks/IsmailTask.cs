@@ -15,35 +15,83 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
     {
         public void Execute()
         {
+            //TestLoadCDRs();
+            //return;
+            //Console.ReadKey();
             Console.WriteLine("Ismail Task started");
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            //QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 5) };
 
             var runtimeServices = new List<RuntimeService>();
-            //runtimeServices.Add(queueActivationService);
+
+            runtimeServices.Add(queueActivationService);
 
             runtimeServices.Add(bpService);
+
+            runtimeServices.Add(schedulerService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
-            BPClient bpClient = new BPClient();
-            int strategyId = int.Parse(Console.ReadLine());
-            Console.WriteLine("Strategy: {0}", strategyId);
-            Console.WriteLine("Press any key to start...");
-            Console.ReadKey();
-            bpClient.CreateNewProcess(new CreateProcessInput
-            {
-                InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
-                {
-                    FromDate = DateTime.Parse("2014-01-01"),
-                    ToDate = DateTime.Parse("2014-01-02"),
-                    StrategyIds = new List<int> { strategyId},//22, 23, 26 },//, 27, 28, 29 },//3, 13, 14, 15, 16 },//hourly
-                    //StrategyIds = new List<int> { 2, 4, 5, 6, 7, 8, 9, 10, 11, 12 },//daily
-                }
-            });
+            //BPClient bpClient = new BPClient();
+            //int strategyId = int.Parse(Console.ReadLine());
+            //Console.WriteLine("Strategy: {0}", strategyId);
+            //Console.WriteLine("Press any key to start...");
+            //Console.ReadKey();
+            //bpClient.CreateNewProcess(new CreateProcessInput
+            //{
+            //    InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
+            //    {
+            //        FromDate = DateTime.Parse("2014-01-01"),
+            //        ToDate = DateTime.Parse("2014-01-02"),
+            //        StrategyIds = new List<int> { strategyId},//22, 23, 26 },//, 27, 28, 29 },//3, 13, 14, 15, 16 },//hourly
+            //        //StrategyIds = new List<int> { 2, 4, 5, 6, 7, 8, 9, 10, 11, 12 },//daily
+            //    }
+            //});
 
             //Console.ReadKey();
+        }
+
+        private static void TestLoadCDRs()
+        {
+            while (true)
+            {
+                DateTime current = DateTime.Now;
+                //List<Vanrise.Fzero.CDRImport.Entities.CDR> cdrs = new List<CDRImport.Entities.CDR>();
+                //for (int i = 0; i < 10000; i++)
+                //{
+                //    cdrs.Add(new Vanrise.Fzero.CDRImport.Entities.CDR
+                //    {
+                //        ConnectDateTime = current,
+                //        MSISDN = i.ToString()
+                //    });
+                //    current = current.AddSeconds(-1);
+                //}
+                DateTime start = DateTime.Now;
+                Vanrise.Fzero.CDRImport.Data.ICDRDataManager dataManager = Vanrise.Fzero.CDRImport.Data.CDRDataManagerFactory.GetDataManager<Vanrise.Fzero.CDRImport.Data.ICDRDataManager>();
+                int count = 0;
+                int index = 0;
+                dataManager.LoadCDR(DateTime.Today.AddDays(-10), DateTime.Today.AddDays(1), null, (cdr) =>
+                {
+                    count++;
+                    index++;
+                    if (index == 1000)
+                    {
+                        Console.WriteLine("{0} loaded", count);
+                        index = 0;
+                    }
+                });
+                //dataManager.SaveCDRsToDB(cdrs);
+                Console.WriteLine("DONE in {0}", (DateTime.Now - start));
+                System.Threading.Thread.Sleep(2000);
+            }
+            Console.ReadKey();
+            return;
+            //    Vanrise.Fzero.CDRImport.Data.SQL.PartitionedCDRDataManagerFactory.GetCDRDataManager<Vanrise.Fzero.CDRImport.Data.SQL.PartitionedCDRDataManager>(DateTime.Now);
+            //Vanrise.Fzero.CDRImport.Data.SQL.PartitionedCDRDataManagerFactory.GetCDRDataManager<Vanrise.Fzero.CDRImport.Data.SQL.PartitionedCDRDataManager>(DateTime.Now.AddDays(2));
+
+            //Vanrise.Fzero.CDRImport.Data.SQL.PartitionedCDRDataManagerFactory.GetCDRDataManager<Vanrise.Fzero.CDRImport.Data.SQL.PartitionedCDRDataManager>(DateTime.Now.AddDays(3));
         }
     }
 }

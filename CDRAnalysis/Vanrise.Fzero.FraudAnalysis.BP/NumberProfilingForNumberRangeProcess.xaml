@@ -1,0 +1,231 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Fzero.FraudAnalysis.BP.NumberProfilingForNumberRangeProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vfcba="clr-namespace:Vanrise.Fzero.CDRImport.BP.Activities;assembly=Vanrise.Fzero.CDRImport.BP.Activities"
+ xmlns:vfce="clr-namespace:Vanrise.Fzero.CDRImport.Entities;assembly=Vanrise.Fzero.CDRImport.Entities"
+ xmlns:vffba="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Arguments;assembly=Vanrise.Fzero.FraudAnalysis.BP.Arguments"
+ xmlns:vffba1="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Activities;assembly=Vanrise.Fzero.FraudAnalysis.BP.Activities"
+ xmlns:vffe="clr-namespace:Vanrise.Fzero.FraudAnalysis.Entities;assembly=Vanrise.Fzero.FraudAnalysis.Entities"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(vffba:NumberProfilingForNumberRangeProcessInput)" />
+    <x:Property Name="Output" Type="OutArgument(vffba:NumberProfilingForNumberRangeProcessOutput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Vanrise.Fzero.FraudAnalysis.BP.NumberProfilingForNumberRangeProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>Vanrise.Fzero.FraudAnalysis.BP.Arguments</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Security.Data</AssemblyReference>
+      <AssemblyReference>Vanrise.Security.Entities</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.CDRImport.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.CDRImport.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:Int64" Name="processedCDRs" />
+    </Sequence.Variables>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="numberProfileQueue" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="createNumberProfilesStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="numberProfileToStoreQueue" />
+        <Variable x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)" Name="cdrQueue" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadCDRsStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedNumberProfilesQueue" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareNumberProfilesStatus" />
+      </Parallel.Variables>
+      <vfcba:LoadCDRs sap2010:WorkflowViewState.IdRef="LoadCDRs_1">
+        <vfcba:LoadCDRs.FromDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+          </InArgument>
+        </vfcba:LoadCDRs.FromDate>
+        <vfcba:LoadCDRs.NumberOfCDRs>
+          <OutArgument x:TypeArguments="x:Int64">
+            <mca:CSharpReference x:TypeArguments="x:Int64">processedCDRs</mca:CSharpReference>
+          </OutArgument>
+        </vfcba:LoadCDRs.NumberOfCDRs>
+        <vfcba:LoadCDRs.NumberRange>
+          <InArgument x:TypeArguments="vfce:NumberRangeDefinition">
+            <mca:CSharpValue x:TypeArguments="vfce:NumberRangeDefinition">Input.NumberRange</mca:CSharpValue>
+          </InArgument>
+        </vfcba:LoadCDRs.NumberRange>
+        <vfcba:LoadCDRs.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vfcba:LoadCDRs.OutputQueue>
+        <vfcba:LoadCDRs.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpReference>
+          </OutArgument>
+        </vfcba:LoadCDRs.Status>
+        <vfcba:LoadCDRs.ToDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+          </InArgument>
+        </vfcba:LoadCDRs.ToDate>
+      </vfcba:LoadCDRs>
+      <vffba1:CreateNumberProfiles StrategiesExecutionInfo="{x:Null}" sap2010:WorkflowViewState.IdRef="CreateNumberProfiles_1">
+        <vffba1:CreateNumberProfiles.FromDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+          </InArgument>
+        </vffba1:CreateNumberProfiles.FromDate>
+        <vffba1:CreateNumberProfiles.IncludeWhiteList>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IncludeWhiteList</mca:CSharpValue>
+          </InArgument>
+        </vffba1:CreateNumberProfiles.IncludeWhiteList>
+        <vffba1:CreateNumberProfiles.InputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vffba1:CreateNumberProfiles.InputQueue>
+        <vffba1:CreateNumberProfiles.NumberRange>
+          <InArgument x:TypeArguments="vfce:NumberRangeDefinition">
+            <mca:CSharpValue x:TypeArguments="vfce:NumberRangeDefinition">Input.NumberRange</mca:CSharpValue>
+          </InArgument>
+        </vffba1:CreateNumberProfiles.NumberRange>
+        <vffba1:CreateNumberProfiles.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vffba1:CreateNumberProfiles.OutputQueue>
+        <vffba1:CreateNumberProfiles.Parameters>
+          <InArgument x:TypeArguments="vffe:NumberProfileParameters">
+            <mca:CSharpValue x:TypeArguments="vffe:NumberProfileParameters">Input.Parameters</mca:CSharpValue>
+          </InArgument>
+        </vffba1:CreateNumberProfiles.Parameters>
+        <vffba1:CreateNumberProfiles.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpValue>
+          </InArgument>
+        </vffba1:CreateNumberProfiles.PreviousActivityStatus>
+        <vffba1:CreateNumberProfiles.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">createNumberProfilesStatus</mca:CSharpReference>
+          </OutArgument>
+        </vffba1:CreateNumberProfiles.Status>
+        <vffba1:CreateNumberProfiles.ToDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+          </InArgument>
+        </vffba1:CreateNumberProfiles.ToDate>
+      </vffba1:CreateNumberProfiles>
+      <vffba1:PrepareNumberProfilesForDBApply sap2010:WorkflowViewState.IdRef="PrepareNumberProfilesForDBApply_1">
+        <vffba1:PrepareNumberProfilesForDBApply.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileQueue</mca:CSharpValue>
+          </InArgument>
+        </vffba1:PrepareNumberProfilesForDBApply.InputQueue>
+        <vffba1:PrepareNumberProfilesForDBApply.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">preparedNumberProfilesQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vffba1:PrepareNumberProfilesForDBApply.OutputQueue>
+        <vffba1:PrepareNumberProfilesForDBApply.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">createNumberProfilesStatus</mca:CSharpValue>
+          </InArgument>
+        </vffba1:PrepareNumberProfilesForDBApply.PreviousActivityStatus>
+        <vffba1:PrepareNumberProfilesForDBApply.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareNumberProfilesStatus</mca:CSharpReference>
+          </OutArgument>
+        </vffba1:PrepareNumberProfilesForDBApply.Status>
+      </vffba1:PrepareNumberProfilesForDBApply>
+      <vffba1:ApplyNumberProfilesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNumberProfilesToDB_1">
+        <vffba1:ApplyNumberProfilesToDB.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedNumberProfilesQueue</mca:CSharpValue>
+          </InArgument>
+        </vffba1:ApplyNumberProfilesToDB.InputQueue>
+        <vffba1:ApplyNumberProfilesToDB.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareNumberProfilesStatus</mca:CSharpValue>
+          </InArgument>
+        </vffba1:ApplyNumberProfilesToDB.PreviousActivityStatus>
+      </vffba1:ApplyNumberProfilesToDB>
+    </Parallel>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="vffba:NumberProfilingForNumberRangeProcessOutput">
+          <mca:CSharpReference x:TypeArguments="vffba:NumberProfilingForNumberRangeProcessOutput">Output</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="vffba:NumberProfilingForNumberRangeProcessOutput">
+          <mca:CSharpValue x:TypeArguments="vffba:NumberProfilingForNumberRangeProcessOutput" xml:space="preserve">new NumberProfilingForNumberRangeProcessOutput {  CDRsProcessed = processedCDRs}</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXE51bWJlclByb2ZpbGluZ0Zvck51bWJlclJhbmdlUHJvY2Vzcy54YW1sHkcD1AEOAgEBSwXGARACAQvHAQXSAQ4CAQJVB3QYAwG0AXUHowElAgFQpAEHuQEwAgEjugEHxQEoAgEMzwELzwHWAQIBB8oBC8oBfwIBA10NXV8DAewBWA1YWwMB4QFsDWxvAwHWAWcNZ24DAcsBYg1ibgMBwAFxDXFZAwG1AZEBDZEBbwMBqQGWAQ2WAWcDAZ4BggENggFuAwGTAXgNeFsDAYgBmwENmwF7AgF9jAENjAGCAQIBcn0NfWICAWeHAQ2HAW4CAVygAQ2gAVkCAVGxAQ2xAXMCAUWnAQ2nAXoCATq2AQ22AXwCAS+sAQ2sAXwCASTCAQ3CAXQCARi9AQ29AXQCAQ0=</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="CreateNumberProfiles_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareNumberProfilesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyNumberProfilesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="1034,62" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056,312">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.NumberProfilingForNumberRangeProcess_1" sap:VirtualizedContainerService.HintSize="1096,392" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

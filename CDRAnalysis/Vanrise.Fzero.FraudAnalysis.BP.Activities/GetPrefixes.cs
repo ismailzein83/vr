@@ -23,21 +23,25 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            ContextExtensions.WriteTrackingMessage(context, LogEntryType.Verbose, "Started creating prefix list with length {0}", PrefixLength);
+            int prefixLength = this.PrefixLength.Get(context);
+            ContextExtensions.WriteTrackingMessage(context, LogEntryType.Verbose, "Started creating prefix list with length {0}", prefixLength);
 
             List<string> prefixes = new List<string>();
-            int prefixLength = this.PrefixLength.Get(context);
-            string prefixMax = "";
+            if (prefixLength == 0)
+                prefixes.Add("");
+            else
+            {
+                string prefixMax = "";
 
-            for (int i = 0; i < prefixLength; i++)
-                prefixMax = prefixMax + "9";
+                for (int i = 0; i < prefixLength; i++)
+                    prefixMax = prefixMax + "9";
 
-            int maxValue = 0;
-            int.TryParse(prefixMax, out maxValue);
+                int maxValue = 0;
+                int.TryParse(prefixMax, out maxValue);
 
-            for (int i = 1; i <= maxValue; i++)
-                prefixes.Add(i.ToString("D" + prefixLength as string));
-
+                for (int i = 0; i <= maxValue; i++)
+                    prefixes.Add(i.ToString("D" + prefixLength as string));
+            }
 
             ContextExtensions.WriteTrackingMessage(context, LogEntryType.Verbose, "Finished creating prefix list ");
 

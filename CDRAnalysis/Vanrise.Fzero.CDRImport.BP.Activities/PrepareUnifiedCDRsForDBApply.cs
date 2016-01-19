@@ -30,9 +30,10 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
             ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
             PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, cdrBatch =>
                 {
-                    var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
-                    System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
-                    return Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
+                    return cdrBatch.CDRs;
+                    //var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
+                    //System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
+                    //return Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
                 });
         }
 

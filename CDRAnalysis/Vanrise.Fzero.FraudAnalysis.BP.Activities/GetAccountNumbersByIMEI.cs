@@ -27,25 +27,17 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             IAccountInfoDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountInfoDataManager>();
             AccountNumbersByIMEI accountNumbersByIMEI = new AccountNumbersByIMEI();
 
-            dataManager.LoadAccountInfo(((accountInfo) =>
+            dataManager.LoadAccountInfo(new CaseStatus[] { CaseStatus.ClosedFraud, CaseStatus.Open, CaseStatus.Pending }, ((accountInfo) =>
                 {
-                    foreach ( var imei in accountInfo.InfoDetail.IMEIs)
+                    if (accountInfo.InfoDetail.IMEIs != null)
                     {
-	                        // This code does two hash lookups.
-	                        HashSet<String> accountNumbers;
-	                        if (accountNumbersByIMEI.TryGetValue(imei, out accountNumbers))
-	                        {
-                                accountNumbers.Add(accountInfo.AccountNumber);
-	                            accountNumbersByIMEI[imei] = accountNumbers;
-	                        }
-                            else
-                            {
-                                accountNumbers = new HashSet<string>();
-                                accountNumbers.Add(accountInfo.AccountNumber);
-                                accountNumbersByIMEI.Add(imei, accountNumbers);
-                            }
+                        foreach (var imei in accountInfo.InfoDetail.IMEIs)
+                        {
+                            // This code does two hash lookups.
+                            HashSet<String> accountNumbers = accountNumbersByIMEI.GetOrCreateItem(imei);
+                            accountNumbers.Add(accountInfo.AccountNumber);
+                        }
                     }
-
                 }));
 
 

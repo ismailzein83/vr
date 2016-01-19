@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-NumberProfilingProcessInputController.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'HourEnum', 'VRValidationService'];
+NumberProfilingProcessInputController.$inject = ['$scope', 'UtilsService', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'HourEnum', 'VRValidationService'];
 
-function NumberProfilingProcessInputController($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, HourEnum, VRValidationService) {
+function NumberProfilingProcessInputController($scope, UtilsService, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, HourEnum, VRValidationService) {
 
     defineScope();
 
@@ -41,6 +41,14 @@ function NumberProfilingProcessInputController($scope, $http, StrategyAPIService
                 $scope.selectedPeakHours.push(itm);
         });
 
+        $scope.fixedPrefixes = [{ value: "241820" }, { value: "241830" }];
+        $scope.selectedFixedPrefixes = [];
+        for (var i = 0; i < $scope.fixedPrefixes.length; i++) {
+            $scope.selectedFixedPrefixes.push($scope.fixedPrefixes[i]);
+        }
+
+        $scope.prefixLengths = [0, 1, 2, 3];
+        $scope.selectedPrefixLength = $scope.prefixLengths[1];
 
         $scope.createProcessInput.getData = function () {
 
@@ -65,6 +73,8 @@ function NumberProfilingProcessInputController($scope, $http, StrategyAPIService
                     $scope.createProcessInputObjects.push({
                         InputArguments: {
                             $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
+                            FixedPrefixes: $scope.selectedFixedPrefixes != undefined ? UtilsService.getPropValuesFromArray($scope.selectedFixedPrefixes, "value") : null,
+                            PrefixLength: $scope.selectedPrefixLength,
                             FromDate: new Date(fromDate),
                             ToDate: new Date(toDate),
                             PeriodId: $scope.selectedPeriod.Id,
@@ -86,6 +96,8 @@ function NumberProfilingProcessInputController($scope, $http, StrategyAPIService
                     $scope.createProcessInputObjects.push({
                         InputArguments: {
                             $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
+                            FixedPrefixes: $scope.selectedFixedPrefixes != undefined ? UtilsService.getPropValuesFromArray($scope.selectedFixedPrefixes, "value") : null,
+                            PrefixLength: $scope.selectedPrefixLength,
                             FromDate: new Date(fromDate),
                             ToDate: new Date(toDate),
                             PeriodId: $scope.selectedPeriod.Id,

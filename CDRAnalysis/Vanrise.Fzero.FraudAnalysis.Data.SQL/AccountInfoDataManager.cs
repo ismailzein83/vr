@@ -18,10 +18,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-        public void LoadAccountInfo(Action<AccountInfo> onBatchReady)
+        public void LoadAccountInfo(IEnumerable<CaseStatus> caseStatuses, Action<AccountInfo> onBatchReady)
         {
 
-            ExecuteReaderSP("FraudAnalysis.sp_AccountStatus_Load", (reader) =>
+            ExecuteReaderSP("[FraudAnalysis].[sp_AccountInfo_GetByAccountStatuses]", (reader) =>
             {
                 while (reader.Read())
                 {
@@ -36,10 +36,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     accountInfo.AccountNumber = reader["AccountNumber"] as string;
                     onBatchReady(accountInfo);
                 }
-
-
-
-            }
+            }, caseStatuses != null ? String.Join(",", caseStatuses.Select(itm => (int)itm)) : null
             );
         }
 

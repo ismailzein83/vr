@@ -26,10 +26,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public InArgument<DateTime> ToDate { get; set; }
 
 
-        [RequiredArgument]
-        public InArgument<bool> OverridePrevious { get; set; }
-
-
         #endregion
 
         protected override void Execute(CodeActivityContext context)
@@ -37,17 +33,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             List<StrategyExecutionInfo> strategiesExecutionInfo = new List<StrategyExecutionInfo>();
 
             StrategyManager strategyManager = new StrategyManager();
-
-            Console.WriteLine("Check if overiding previous results is required");
-            if (context.GetValue(OverridePrevious))
-            {
-                Console.WriteLine("Started overriding previous results");
-
-                strategyManager.OverrideStrategyExecution(context.GetValue(StrategyIds), context.GetValue(FromDate), context.GetValue(ToDate));
-
-                Console.WriteLine("Ended overriding previous results");
-            }
-
 
             foreach (int strategyID in context.GetValue(StrategyIds))
             {

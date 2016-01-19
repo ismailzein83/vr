@@ -122,6 +122,7 @@
     <Compile Include="LoadCDRs.cs" />
     <Compile Include="CreateNumberProfiles.cs" />
     <Compile Include="DataWarehouse\PrepareDWFactsForDBApply.cs" />
+    <Compile Include="OverridePreviousStrategyExecution.cs" />
     <Compile Include="PrepareNumberProfilesForDBApply.cs" />
     <Compile Include="PrepareStrategyExecutionDetailsForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

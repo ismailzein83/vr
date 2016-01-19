@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-ExecuteStrategyProcessInputController.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService','VRValidationService'];
+ExecuteStrategyProcessInputController.$inject = ['$scope', 'UtilsService', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRValidationService'];
 
-function ExecuteStrategyProcessInputController ($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService,VRValidationService) {
+function ExecuteStrategyProcessInputController($scope, UtilsService, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, VRValidationService) {
     var pageLoaded = false;
 
     defineScope();
@@ -26,7 +26,17 @@ function ExecuteStrategyProcessInputController ($scope, $http, StrategyAPIServic
         $scope.selectedStrategies = [];
         $scope.selectedStrategyIds = [];
         $scope.periods = [];
-        $scope.selectedPeriod ;
+        $scope.selectedPeriod;
+
+
+        $scope.fixedPrefixes = [{ value: "241820" }, { value: "241830" }];
+        $scope.selectedFixedPrefixes = [];
+        for (var i = 0; i < $scope.fixedPrefixes.length; i++) {
+            $scope.selectedFixedPrefixes.push($scope.fixedPrefixes[i]);
+        }
+
+        $scope.prefixLengths = [0, 1, 2, 3];
+        $scope.selectedPrefixLength = $scope.prefixLengths[1];
 
         $scope.createProcessInput.getData = function () {
 
@@ -76,6 +86,8 @@ function ExecuteStrategyProcessInputController ($scope, $http, StrategyAPIServic
             InputArguments: {
                 $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                 StrategyIds: $scope.selectedStrategyIds,
+                FixedPrefixes: $scope.selectedFixedPrefixes != undefined ? UtilsService.getPropValuesFromArray($scope.selectedFixedPrefixes, "value") : null,
+                PrefixLength: $scope.selectedPrefixLength,
                 FromDate: new Date(fromDate),
                 ToDate: new Date(toDate),
                 OverridePrevious: $scope.overridePrevious,

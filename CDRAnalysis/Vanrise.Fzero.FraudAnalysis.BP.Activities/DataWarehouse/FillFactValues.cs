@@ -176,9 +176,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue(
                         (cdrBatch) =>
                         {
-                            var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
-                            System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
-                            var cdrs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
+                            //var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
+                            //System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
+                            var cdrs = cdrBatch.CDRs;// Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
                             foreach (var cdr in cdrs)
                             {
                                 DWFact dwFact = new DWFact();

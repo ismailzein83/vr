@@ -42,12 +42,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(FindRelatedNumbersthroughIMEIsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-
-
             AccountNumbersByIMEI accountNumbersByIMEI = inputArgument.AccountsNumbersByIMEI;
-
-            IRelatedNumberDataManager dataManager = FraudDataManagerFactory.GetDataManager<IRelatedNumberDataManager>();
-
             AccountRelatedNumbers accountRelatedNumbers = new AccountRelatedNumbers();
             int cdrsCount = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -55,45 +50,28 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 bool hasItem = false;
                 do
                 {
-
                     hasItem = inputArgument.InputQueue.TryDequeue(
                         (cdrBatch) =>
                         {
-                            var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
-                            System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
-                            var cdrs = Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
-
-
-                            HashSet<String> accountNumbers ;
-                            HashSet<String> relatedNumbers ;
-
-
-                            foreach (var cdr in cdrs.Where(x => x.IMEI != null ))
+                            //var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
+                            //System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
+                            var cdrs = cdrBatch.CDRs;
+                            
+                            foreach (var cdr in cdrs)
                             {
-                                accountNumbers = new HashSet<string>();
-                                relatedNumbers = new HashSet<string>();
-
+                                if (cdr.IMEI == null)
+                                    continue;
+                                HashSet<String> accountNumbers ;
                                 if (accountNumbersByIMEI.TryGetValue(cdr.IMEI, out accountNumbers))
                                 {
                                     foreach (var accountNumber in accountNumbers)
+                                    {
                                         if (accountNumber != cdr.MSISDN)
                                         {
-                                            
-                                            if (accountRelatedNumbers.TryGetValue(accountNumber, out relatedNumbers))
-                                            {
-                                                if (accountNumber != cdr.MSISDN)
-                                                    relatedNumbers.Add(cdr.MSISDN);
-                                                accountRelatedNumbers[accountNumber] = relatedNumbers;
-                                            }
-                                            else
-                                            {
-                                                relatedNumbers = new HashSet<string>();
-                                                if (accountNumber != cdr.MSISDN)
-                                                    relatedNumbers.Add(cdr.MSISDN);
-                                                accountRelatedNumbers.Add(accountNumber, relatedNumbers);
-                                            }
+                                            HashSet<String> relatedNumbers = accountRelatedNumbers.GetOrCreateItem(accountNumber);
+                                            relatedNumbers.Add(cdr.MSISDN);
                                         }
-
+                                    }
                                 }
                             }
                             cdrsCount += cdrs.Count;
@@ -104,15 +82,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 while (!ShouldStop(handle) && hasItem);
             });
 
-            foreach (KeyValuePair<string, HashSet<string>> dicItem in accountRelatedNumbers)
-            {
-                foreach (string relatedNumber in dicItem.Value.ToList())
-                {
-                    if (relatedNumber == dicItem.Key)
-                        dicItem.Value.Remove(dicItem.Key);
-                }
-            }
-
+            IRelatedNumberDataManager dataManager = FraudDataManagerFactory.GetDataManager<IRelatedNumberDataManager>();
             dataManager.CreateTempTable();
             dataManager.SavetoDB(accountRelatedNumbers);
             dataManager.SwapTableWithTemp();

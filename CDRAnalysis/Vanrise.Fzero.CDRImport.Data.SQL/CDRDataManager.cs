@@ -1,38 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.CDRImport.Data.SQL
 {
     public class CDRDataManager : BaseSQLDataManager, ICDRDataManager
     {
-        static string[] s_cdrColumns = new string[] {
-            "MSISDN"
-          ,"IMSI"
-          ,"ConnectDateTime"
-          ,"Destination"
-          ,"DurationInSeconds"
-          ,"DisconnectDateTime"
-          ,"CallClassID"
-          ,"IsOnNet"
-          ,"CallTypeID"
-          ,"SubscriberTypeID"
-          ,"IMEI"
-          ,"BTS"
-          ,"Cell"
-          ,"SwitchID"
-          ,"UpVolume"
-          ,"DownVolume"
-          ,"CellLatitude"
-          ,"CellLongitude"
-          ,"ServiceTypeID"
-          ,"ServiceVASName"
-          ,"InTrunkID"
-          ,"OutTrunkID"
-          ,"ReleaseCode"
-          ,"MSISDNAreaCode"
-          ,"DestinationAreaCode"
-        };
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+
+        static CDRDataManager()
+        {
+            _columnMapper.Add("CallClassName", "CallClassID");
+            _columnMapper.Add("CallTypeName", "CallTypeID");
+            _columnMapper.Add("SubscriberTypeName", "SubscriberTypeID");
+            _columnMapper.Add("CellId", "Cell");
+            _columnMapper.Add("UpVolume", "UpVolume");
+            _columnMapper.Add("DownVolume", "DownVolume");
+            _columnMapper.Add("ServiceType", "ServiceTypeID");
+            _columnMapper.Add("ServiceVASName", "ServiceVASName");
+        }
+
         public CDRDataManager()
             : base("CDRDBConnectionString")
         {
@@ -50,62 +42,141 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             ApplyCDRsToDB(FinishDBApplyStream(dbApplyStream));
         }
 
-        public void ApplyCDRsToDB(object preparedCDRs)
-        {
-            InsertBulkToTable(preparedCDRs as BaseBulkInsertInfo);
-        }
-
-        public object FinishDBApplyStream(object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.Close();
-            return new StreamBulkInsertInfo
-            {
-                TableName = "[FraudAnalysis].[NormalCDR]",
-                ColumnNames = s_cdrColumns,
-                Stream = streamForBulkInsert,
-                TabLock = false,
-                KeepIdentity = false,
-                FieldSeparator = '^'
-            };
-        }
-
         public object InitialiazeStreamForDBApply()
         {
-            return base.InitializeStreamForBulkInsert();
+            Console.WriteLine("{0}: InitialiazeStreamForDBApply", DateTime.Now);
+            return new NormalCDRDBApplyStream { PartitionedStreamsByDBFromTime = new ConcurrentDictionary<DateTime, PartitionedNormalCDRStream>() };
         }
 
         public void WriteRecordToStream(CDR record, object dbApplyStream)
         {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}^{23}^{24}",
-                                     record.MSISDN
-                                   , record.IMSI
-                                   , record.ConnectDateTime
-                                   , record.Destination
-                                   , record.DurationInSeconds
-                                   , record.DisconnectDateTime
-                                   , record.CallClassId
-                                   , record.IsOnNet
-                                   , (int) record.CallType
-                                   , (int?) record.SubscriberType
-                                   , record.IMEI
-                                   , record.BTS
-                                   , record.Cell
-                                   , record.SwitchId
-                                   , record.UpVolume
-                                   , record.DownVolume
-                                   , record.CellLatitude
-                                   , record.CellLongitude
-                                   , record.ServiceTypeId
-                                   , record.ServiceVASName
-                                   , record.InTrunkId
-                                   , record.OutTrunkId
-                                   , record.ReleaseCode
-                                   , record.MSISDNAreaCode
-                                   , record.DestinationAreaCode
-                                    );
+            NormalCDRDBApplyStream normalCDRDBApplyStream = dbApplyStream as NormalCDRDBApplyStream;
+            var dbFromTime = PartitionedCDRDataManager.GetDBFromTime(record.ConnectDateTime);
+            PartitionedNormalCDRStream matchStream;
+            if(!normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.TryGetValue(dbFromTime, out matchStream))
+            {
+                PartitionedNormalCDRStream newStream = new PartitionedNormalCDRStream { DataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedNormalCDRDataManager>(dbFromTime, false) };
+                newStream.DBApplyStream = newStream.DataManager.InitialiazeStreamForDBApply();
+                if (normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.TryAdd(dbFromTime, newStream))
+                    matchStream = newStream;
+                else
+                {
+                    newStream.DataManager.FinishDBApplyStream(newStream.DBApplyStream);
+                    matchStream = normalCDRDBApplyStream.PartitionedStreamsByDBFromTime[dbFromTime];
+                }
+            }
+            matchStream.DataManager.WriteRecordToStream(record, matchStream.DBApplyStream);
 
         }
+
+        public object FinishDBApplyStream(object dbApplyStream)
+        {
+            Console.WriteLine("{0}: FinishDBApplyStream", DateTime.Now);
+            NormalCDRDBApplyStream normalCDRDBApplyStream = dbApplyStream as NormalCDRDBApplyStream;
+            foreach (var entry in normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.Values)
+            {
+                entry.DataManager.FinishDBApplyStream(entry.DBApplyStream);
+            }
+            return normalCDRDBApplyStream;
+        }
+
+        public void ApplyCDRsToDB(object preparedCDRs)
+        {
+            Console.WriteLine("{0}: ApplyCDRsToDB", DateTime.Now);
+            NormalCDRDBApplyStream normalCDRDBApplyStream = preparedCDRs as NormalCDRDBApplyStream;
+            //foreach (var entry in normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.Values)
+            Parallel.ForEach(normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.Values, (entry) =>
+            {
+                entry.DataManager.ApplyCDRsToDB(entry.DBApplyStream);
+            });
+        }
+
+        public void LoadCDR(DateTime from, DateTime to, IEnumerable<string> numberPrefixes, Action<CDR> onCDRReady)
+        {
+            var dbTimeRanges = PartitionedCDRDataManager.GetDBTimeRanges(from, to);
+            foreach (var cdrDBTimeRange in dbTimeRanges)
+            {
+                var dataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedNormalCDRDataManager>(cdrDBTimeRange.FromTime, true);
+                if (dataManager != null)
+                {
+                    dataManager.LoadCDR(cdrDBTimeRange.FromTime, numberPrefixes, onCDRReady);
+                }
+            }
+            //ConcurrentQueue<CDRDBTimeRange> qDBTimeRanges = new ConcurrentQueue<CDRDBTimeRange>(dbTimeRanges);
+            //ConcurrentQueue<CDR> qCDRs = new ConcurrentQueue<CDR>();
+            //bool isLoadingTaskCompleted = false;
+            //Task taskLoadCDRs = new Task(() =>
+            //{
+            //    Parallel.For(0, PartitionedCDRDataManager.MaxNumberOfReadThreads + 1, (threadNumber) =>
+            //    {
+            //       CDRDBTimeRange cdrDBTimeRange;
+            //       while (qDBTimeRanges.TryDequeue(out cdrDBTimeRange))
+            //       {
+            //           var dataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedNormalCDRDataManager>(cdrDBTimeRange.FromTime, true);
+            //           if (dataManager != null)
+            //           {
+            //               dataManager.LoadCDR(cdrDBTimeRange.FromTime, numberPrefix, (cdr) =>
+            //               {
+            //                   qCDRs.Enqueue(cdr);
+            //               });
+            //           }
+            //       }
+            //    });
+            //    isLoadingTaskCompleted = true;
+            //});
+            //taskLoadCDRs.Start();
+            //while (qCDRs.Count > 0 || !isLoadingTaskCompleted)
+            //{
+            //    CDR cdr;
+            //    while (qCDRs.TryDequeue(out cdr))
+            //    {
+            //        onCDRReady(cdr);
+            //    }
+            //    System.Threading.Thread.Sleep(100);
+            //}
+        }
+
+        public BigResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRQuery> input)
+        {
+            return null;
+            var dbTimeRanges = PartitionedCDRDataManager.GetDBTimeRanges(input.Query.FromDate, input.Query.ToDate);
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                string queryTempTableNotExists = string.Format(@"IF NOT OBJECT_ID('{0}', N'U') IS NOT NULL
+	                                                        BEGIN
+                                                                SELECT 1
+                                                            END 
+                                                            ELSE
+                                                            BEGIN
+                                                                SELECT 0
+                                                            END", tempTableName);
+                if(Convert.ToBoolean(ExecuteScalarText(queryTempTableNotExists, null)))
+                {
+
+                }
+                ExecuteNonQuerySP("FraudAnalysis.sp_NormalCDR_CreateTempByMSISDN", tempTableName, input.Query.MSISDN, input.Query.FromDate, input.Query.ToDate);
+            };
+
+            if (input.SortByColumnName != null)
+                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
+
+            return RetrieveData(input, createTempTableAction, (new PartitionedNormalCDRDataManager()).NormalCDRMapper, _columnMapper);
+        }
+
+        #region Private Classes
+
+        private class PartitionedNormalCDRStream
+        {
+            public PartitionedNormalCDRDataManager DataManager { get; set; }
+
+            public Object DBApplyStream { get; set; }
+        }
+
+        private class NormalCDRDBApplyStream
+        {
+            public ConcurrentDictionary<DateTime, PartitionedNormalCDRStream> PartitionedStreamsByDBFromTime { get; set; }
+        }
+
+        #endregion
     }
 }

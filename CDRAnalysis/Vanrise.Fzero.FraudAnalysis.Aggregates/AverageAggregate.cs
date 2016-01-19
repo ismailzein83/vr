@@ -19,13 +19,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
             _cdrExpressionToSum = cdrExpressionToSum;
         }
 
-       
-        public void Reset()
-        {
-            this._sum = 0;
-            this._count = 0;
-        }
-
         public void EvaluateCDR(CDR cdr)
         {
             if (this._condition == null || this._condition(cdr))

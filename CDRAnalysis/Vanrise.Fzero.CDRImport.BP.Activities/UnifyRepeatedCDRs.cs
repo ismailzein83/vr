@@ -209,12 +209,12 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
             if (cdrBatch.Count > 0)
             {
-                var cdrsBytes = Vanrise.Common.Compressor.Compress(Vanrise.Common.ProtoBufSerializer.Serialize(cdrBatch));
-                string filePath = !String.IsNullOrEmpty(configuredDirectory) ? System.IO.Path.Combine(configuredDirectory, Guid.NewGuid().ToString()) : System.IO.Path.GetTempFileName();
-                System.IO.File.WriteAllBytes(filePath, cdrsBytes);
+                //var cdrsBytes = Vanrise.Common.Compressor.Compress(Vanrise.Common.ProtoBufSerializer.Serialize(cdrBatch));
+                //string filePath = !String.IsNullOrEmpty(configuredDirectory) ? System.IO.Path.Combine(configuredDirectory, Guid.NewGuid().ToString()) : System.IO.Path.GetTempFileName();
+                //System.IO.File.WriteAllBytes(filePath, cdrsBytes);
                 return new CDRBatch
                 {
-                    CDRBatchFilePath = filePath
+                    CDRs = cdrBatch
                 };
             }
             else

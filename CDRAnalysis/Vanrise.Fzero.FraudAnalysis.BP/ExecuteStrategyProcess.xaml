@@ -2,7 +2,6 @@
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
- xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
@@ -11,12 +10,9 @@
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
- xmlns:vc="clr-namespace:Vanrise.Common;assembly=Vanrise.Common"
+ xmlns:vfcba="clr-namespace:Vanrise.Fzero.CDRImport.BP.Activities;assembly=Vanrise.Fzero.CDRImport.BP.Activities"
  xmlns:vfce="clr-namespace:Vanrise.Fzero.CDRImport.Entities;assembly=Vanrise.Fzero.CDRImport.Entities"
  xmlns:vffba="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Arguments;assembly=Vanrise.Fzero.FraudAnalysis.BP.Arguments"
- xmlns:vffba1="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Activities;assembly=Vanrise.Fzero.FraudAnalysis.BP.Activities"
- xmlns:vffe="clr-namespace:Vanrise.Fzero.FraudAnalysis.Entities;assembly=Vanrise.Fzero.FraudAnalysis.Entities"
- xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(vffba:ExecuteStrategyProcessInput)" />
@@ -35,6 +31,7 @@
       <x:String>Vanrise.Queueing</x:String>
       <x:String>Vanrise.BusinessProcess</x:String>
       <x:String>Vanrise.Fzero.CDRImport.Entities</x:String>
+      <x:String>Vanrise.BusinessProcess.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -60,7 +57,10 @@
       <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Security.Data</AssemblyReference>
+      <AssemblyReference>Vanrise.Security.Entities</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.CDRImport.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.CDRImport.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP.Activities</AssemblyReference>
@@ -72,243 +72,155 @@
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)" Name="strategiesExecutionInfo" />
+      <Variable x:TypeArguments="x:Int32" Name="subProcessByPrefixCompleted" />
+      <Variable x:TypeArguments="x:Int64" Name="totalProcessedCDRs" />
+      <Variable x:TypeArguments="scg:List(vfce:NumberRangeDefinition)" Name="numberRanges" />
     </Sequence.Variables>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
       <InArgument x:TypeArguments="x:String">
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Start Executing Strategies Count: {0}",Input.StrategyIds.Count)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <vffba1:GetStrategiesExecutionInfo sap2010:WorkflowViewState.IdRef="GetStrategiesExecutionInfo_1">
-      <vffba1:GetStrategiesExecutionInfo.FromDate>
-        <InArgument x:TypeArguments="s:DateTime">
-          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+    <vfcba:GetNumberRanges sap2010:WorkflowViewState.IdRef="GetNumberRanges_1">
+      <vfcba:GetNumberRanges.FixedPrefixes>
+        <InArgument x:TypeArguments="scg:IEnumerable(x:String)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:String)">Input.FixedPrefixes</mca:CSharpValue>
         </InArgument>
-      </vffba1:GetStrategiesExecutionInfo.FromDate>
-      <vffba1:GetStrategiesExecutionInfo.OverridePrevious>
-        <InArgument x:TypeArguments="x:Boolean">
-          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.OverridePrevious</mca:CSharpValue>
-        </InArgument>
-      </vffba1:GetStrategiesExecutionInfo.OverridePrevious>
-      <vffba1:GetStrategiesExecutionInfo.StrategiesExecutionInfo>
-        <OutArgument x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">
-          <mca:CSharpReference x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">strategiesExecutionInfo</mca:CSharpReference>
+      </vfcba:GetNumberRanges.FixedPrefixes>
+      <vfcba:GetNumberRanges.NumberRanges>
+        <OutArgument x:TypeArguments="scg:List(vfce:NumberRangeDefinition)">
+          <mca:CSharpReference x:TypeArguments="scg:List(vfce:NumberRangeDefinition)">numberRanges</mca:CSharpReference>
         </OutArgument>
-      </vffba1:GetStrategiesExecutionInfo.StrategiesExecutionInfo>
-      <vffba1:GetStrategiesExecutionInfo.StrategyIds>
-        <InArgument x:TypeArguments="scg:List(x:Int32)">
-          <mca:CSharpValue x:TypeArguments="scg:List(x:Int32)">Input.StrategyIds</mca:CSharpValue>
+      </vfcba:GetNumberRanges.NumberRanges>
+      <vfcba:GetNumberRanges.PrefixLength>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.PrefixLength</mca:CSharpValue>
         </InArgument>
-      </vffba1:GetStrategiesExecutionInfo.StrategyIds>
-      <vffba1:GetStrategiesExecutionInfo.ToDate>
-        <InArgument x:TypeArguments="s:DateTime">
-          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+      </vfcba:GetNumberRanges.PrefixLength>
+    </vfcba:GetNumberRanges>
+    <ParallelForEach x:TypeArguments="vfce:NumberRangeDefinition" DisplayName="ParallelForEach&lt;NumberRangeDefinition&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_2">
+      <ParallelForEach.Values>
+        <InArgument x:TypeArguments="scg:IEnumerable(vfce:NumberRangeDefinition)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vfce:NumberRangeDefinition)">numberRanges</mca:CSharpValue>
         </InArgument>
-      </vffba1:GetStrategiesExecutionInfo.ToDate>
-    </vffba1:GetStrategiesExecutionInfo>
-    <If sap2010:WorkflowViewState.IdRef="If_1">
-      <If.Condition>
-        <InArgument x:TypeArguments="x:Boolean">
-          <mca:CSharpValue x:TypeArguments="x:Boolean">strategiesExecutionInfo != null &amp;&amp; strategiesExecutionInfo.Count &gt; 0</mca:CSharpValue>
-        </InArgument>
-      </If.Condition>
-      <If.Then>
-        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-          <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
-            <Parallel.Variables>
-              <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="numberProfileQueue" />
-              <Variable x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailBatch)" Name="strategyExecutionDetailQueue" />
-              <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="createNumberProfilesStatus" />
-              <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="GetStrategyExecutionDetailStatus" />
-              <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="numberProfileToStoreQueue" />
-              <Variable x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)" Name="cdrQueue" />
-              <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadCDRsStatus" />
-              <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedStrategyExecutionDetailsQueue" />
-              <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedNumberProfilesQueue" />
-              <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareStrategyExecutionDetailsStatus" />
-              <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareNumberProfilesStatus" />
-            </Parallel.Variables>
-            <vffba1:LoadCDRs sap2010:WorkflowViewState.IdRef="LoadCDRs_1">
-              <vffba1:LoadCDRs.FromDate>
-                <InArgument x:TypeArguments="s:DateTime">
-                  <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
-                </InArgument>
-              </vffba1:LoadCDRs.FromDate>
-              <vffba1:LoadCDRs.OutputQueue>
-                <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
-                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
-                </InOutArgument>
-              </vffba1:LoadCDRs.OutputQueue>
-              <vffba1:LoadCDRs.Status>
-                <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpReference>
-                </OutArgument>
-              </vffba1:LoadCDRs.Status>
-              <vffba1:LoadCDRs.ToDate>
-                <InArgument x:TypeArguments="s:DateTime">
-                  <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
-                </InArgument>
-              </vffba1:LoadCDRs.ToDate>
-            </vffba1:LoadCDRs>
-            <vffba1:CreateNumberProfiles Parameters="{x:Null}" sap2010:WorkflowViewState.IdRef="CreateNumberProfiles_1">
-              <vffba1:CreateNumberProfiles.FromDate>
-                <InArgument x:TypeArguments="s:DateTime">
-                  <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
-                </InArgument>
-              </vffba1:CreateNumberProfiles.FromDate>
-              <vffba1:CreateNumberProfiles.IncludeWhiteList>
-                <InArgument x:TypeArguments="x:Boolean">
-                  <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IncludeWhiteList</mca:CSharpValue>
-                </InArgument>
-              </vffba1:CreateNumberProfiles.IncludeWhiteList>
-              <vffba1:CreateNumberProfiles.InputQueue>
-                <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
-                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
-                </InOutArgument>
-              </vffba1:CreateNumberProfiles.InputQueue>
-              <vffba1:CreateNumberProfiles.OutputQueue>
-                <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
-                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileQueue</mca:CSharpReference>
-                </InOutArgument>
-              </vffba1:CreateNumberProfiles.OutputQueue>
-              <vffba1:CreateNumberProfiles.PreviousActivityStatus>
-                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpValue>
-                </InArgument>
-              </vffba1:CreateNumberProfiles.PreviousActivityStatus>
-              <vffba1:CreateNumberProfiles.Status>
-                <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">createNumberProfilesStatus</mca:CSharpReference>
-                </OutArgument>
-              </vffba1:CreateNumberProfiles.Status>
-              <vffba1:CreateNumberProfiles.StrategiesExecutionInfo>
-                <InArgument x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">
-                  <mca:CSharpValue x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">strategiesExecutionInfo</mca:CSharpValue>
-                </InArgument>
-              </vffba1:CreateNumberProfiles.StrategiesExecutionInfo>
-              <vffba1:CreateNumberProfiles.ToDate>
-                <InArgument x:TypeArguments="s:DateTime">
-                  <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
-                </InArgument>
-              </vffba1:CreateNumberProfiles.ToDate>
-            </vffba1:CreateNumberProfiles>
-            <vffba1:GetStrategyExecutionDetails sap2010:WorkflowViewState.IdRef="GetStrategyExecutionDetails_2">
-              <vffba1:GetStrategyExecutionDetails.InputQueueForNumberProfile>
-                <InArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
-                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileQueue</mca:CSharpValue>
-                </InArgument>
-              </vffba1:GetStrategyExecutionDetails.InputQueueForNumberProfile>
-              <vffba1:GetStrategyExecutionDetails.OutputQueueForStrategyExecutionDetail>
-                <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailBatch)">
-                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailBatch)">strategyExecutionDetailQueue</mca:CSharpReference>
-                </InOutArgument>
-              </vffba1:GetStrategyExecutionDetails.OutputQueueForStrategyExecutionDetail>
-              <vffba1:GetStrategyExecutionDetails.PreviousActivityStatus>
-                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">createNumberProfilesStatus</mca:CSharpValue>
-                </InArgument>
-              </vffba1:GetStrategyExecutionDetails.PreviousActivityStatus>
-              <vffba1:GetStrategyExecutionDetails.Status>
-                <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">GetStrategyExecutionDetailStatus</mca:CSharpReference>
-                </OutArgument>
-              </vffba1:GetStrategyExecutionDetails.Status>
-              <vffba1:GetStrategyExecutionDetails.StrategiesExecutionInfo>
-                <InArgument x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">
-                  <mca:CSharpValue x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">strategiesExecutionInfo</mca:CSharpValue>
-                </InArgument>
-              </vffba1:GetStrategyExecutionDetails.StrategiesExecutionInfo>
-            </vffba1:GetStrategyExecutionDetails>
-            <vffba1:PrepareStrategyExecutionDetailsForDBApply sap2010:WorkflowViewState.IdRef="PrepareStrategyExecutionDetailsForDBApply_1">
-              <vffba1:PrepareStrategyExecutionDetailsForDBApply.InputQueue>
-                <InArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailBatch)">
-                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailBatch)">strategyExecutionDetailQueue</mca:CSharpValue>
-                </InArgument>
-              </vffba1:PrepareStrategyExecutionDetailsForDBApply.InputQueue>
-              <vffba1:PrepareStrategyExecutionDetailsForDBApply.OutputQueue>
-                <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
-                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">preparedStrategyExecutionDetailsQueue</mca:CSharpReference>
-                </InOutArgument>
-              </vffba1:PrepareStrategyExecutionDetailsForDBApply.OutputQueue>
-              <vffba1:PrepareStrategyExecutionDetailsForDBApply.PreviousActivityStatus>
-                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">GetStrategyExecutionDetailStatus</mca:CSharpValue>
-                </InArgument>
-              </vffba1:PrepareStrategyExecutionDetailsForDBApply.PreviousActivityStatus>
-              <vffba1:PrepareStrategyExecutionDetailsForDBApply.Status>
-                <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareStrategyExecutionDetailsStatus</mca:CSharpReference>
-                </OutArgument>
-              </vffba1:PrepareStrategyExecutionDetailsForDBApply.Status>
-            </vffba1:PrepareStrategyExecutionDetailsForDBApply>
-            <vffba1:ApplyStrategyExecutionDetailsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyStrategyExecutionDetailsToDB_1">
-              <vffba1:ApplyStrategyExecutionDetailsToDB.InputQueue>
-                <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
-                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedStrategyExecutionDetailsQueue</mca:CSharpValue>
-                </InArgument>
-              </vffba1:ApplyStrategyExecutionDetailsToDB.InputQueue>
-              <vffba1:ApplyStrategyExecutionDetailsToDB.PreviousActivityStatus>
-                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareStrategyExecutionDetailsStatus</mca:CSharpValue>
-                </InArgument>
-              </vffba1:ApplyStrategyExecutionDetailsToDB.PreviousActivityStatus>
-            </vffba1:ApplyStrategyExecutionDetailsToDB>
-          </Parallel>
-          <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2">
-            <InArgument x:TypeArguments="x:String">
-              <mca:CSharpValue x:TypeArguments="x:String">String.Format("End Executing Strategies Count: {0}", Input.StrategyIds.Count)</mca:CSharpValue>
-            </InArgument>
-          </WriteLine>
-          <vbw:RunProcess ProcessCompletedEventPayload="{x:Null}" ProcessInstanceId="{x:Null}" WaitProcessCompleted="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1">
+      </ParallelForEach.Values>
+      <ActivityAction x:TypeArguments="vfce:NumberRangeDefinition">
+        <ActivityAction.Argument>
+          <DelegateInArgument x:TypeArguments="vfce:NumberRangeDefinition" Name="numberRange" />
+        </ActivityAction.Argument>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="subProcessEventPayload" />
+          </Sequence.Variables>
+          <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_2" WaitProcessCompleted="True">
             <vbw:RunProcess.Input>
               <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
-                <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument">new AssignStrategyCasesProcessInput ()</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyForNumberRangeProcessInput
+            {
+                NumberRange = numberRange,
+                FromDate = Input.FromDate,
+                ToDate = Input.ToDate,
+                StrategyIds = Input.StrategyIds,
+                IncludeWhiteList = Input.IncludeWhiteList,
+                OverridePrevious = Input.OverridePrevious
+            }</mca:CSharpValue>
               </InArgument>
             </vbw:RunProcess.Input>
+            <vbw:RunProcess.ProcessCompletedEventPayload>
+              <OutArgument x:TypeArguments="vb:ProcessCompletedEventPayload">
+                <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">subProcessEventPayload</mca:CSharpReference>
+              </OutArgument>
+            </vbw:RunProcess.ProcessCompletedEventPayload>
           </vbw:RunProcess>
+          <If sap2010:WorkflowViewState.IdRef="If_2">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">subProcessEventPayload.ProcessStatus != Vanrise.BusinessProcess.Entities.BPInstanceStatus.Completed</mca:CSharpValue>
+              </InArgument>
+            </If.Condition>
+            <If.Then>
+              <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1">
+                <TerminateWorkflow.Reason>
+                  <InArgument x:TypeArguments="x:String">
+                    <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing number prefixes '{0}' failed due to error: {1}", String.Join(",", numberRange.Prefixes), subProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
+                  </InArgument>
+                </TerminateWorkflow.Reason>
+              </TerminateWorkflow>
+            </If.Then>
+            <If.Else>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+                <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int64">
+                      <mca:CSharpReference x:TypeArguments="x:Int64">totalProcessedCDRs</mca:CSharpReference>
+                    </OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int64">
+                      <mca:CSharpValue x:TypeArguments="x:Int64">totalProcessedCDRs + (subProcessEventPayload.ProcessOutput as ExecuteStrategyForNumberRangeProcessOutput).CDRsProcessed</mca:CSharpValue>
+                    </InArgument>
+                  </Assign.Value>
+                </Assign>
+                <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int32">
+                      <mca:CSharpReference x:TypeArguments="x:Int32">subProcessByPrefixCompleted</mca:CSharpReference>
+                    </OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int32">
+                      <mca:CSharpValue x:TypeArguments="x:Int32">subProcessByPrefixCompleted + 1</mca:CSharpValue>
+                    </InArgument>
+                  </Assign.Value>
+                </Assign>
+                <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2">
+                  <vbw:WriteTrackingMessage.Message>
+                    <InArgument x:TypeArguments="x:String">
+                      <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Number Prefixes '{0}' group completed. {1} processed CDRs. {2} totalProcessedCDRs. {3} groups remaining", String.Join(",", numberRange.Prefixes), (subProcessEventPayload.ProcessOutput as ExecuteStrategyForNumberRangeProcessOutput).CDRsProcessed, totalProcessedCDRs, (numberRanges.Count - subProcessByPrefixCompleted))</mca:CSharpValue>
+                    </InArgument>
+                  </vbw:WriteTrackingMessage.Message>
+                </vbw:WriteTrackingMessage>
+              </Sequence>
+            </If.Else>
+          </If>
         </Sequence>
-      </If.Then>
-      <If.Else>
-        <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="All Strategies are disabled">
-          <vbw:WriteTrackingMessage.Severity>
-            <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
-              <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Common.LogEntryType.Warning</mca:CSharpValue>
-            </InArgument>
-          </vbw:WriteTrackingMessage.Severity>
-        </vbw:WriteTrackingMessage>
-      </If.Else>
-    </If>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbDBJA5oCDgIBAU0FUREDAewCUgVsKQMB3AJtBZgCCgIBAk8JT5UBAwHtAmQLZGMDAekCWgtaYAMB5gJfC1+EAQMB4wJVC1VZAwHgAmkLaVcDAd0CcAtwmQECAQN0CY0CFAIBC5ACCZYCJAIBBnULgAIWAgEUgQILhQIXAgEQhgILjAIcAgEMkwIPkwKDAQIBCJACZJACgQECAQeDAQ2YAR8DAaMCmQENwgErAwGyAcMBDd0BMgIBa94BDfMBQAIBMvQBDf8BOAIBFYMCD4MCmgECARGJAhGJAokBAgENhgEThgFhAwHOApABE5ABdQMBwAKLAROLAXQDAbIClQETlQFfAwGkArABE7ABbQMBlQKmAROmAXQDAYcCugETugGEAQMB+QGcAROcAWEDAesBtQETtQGBAQMB3QGrAROrAYgBAwHPAaEBE6EBaAMBwQG/ARO/AV8DAbMBxgETxgGAAQMBpAHQARPQAXkDAZYB2gET2gGEAQMBiAHLARPLAZwBAgF61QET1QGHAQIBbOsBE+sBfwIBXeEBE+EBlAECAU/wARPwAYwBAgFB5gET5gGMAQIBM/wBE/wBhAECAST3ARP3AYQBAgEW</sads:DebugSymbol.Symbol>
+      </ActivityAction>
+    </ParallelForEach>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbBtJA74BDgIBAU8FUxECAWBUBWQdAgFQZQW8ARcCAQJRCVGVAQIBYVcLV20CAVthC2FaAgFWXAtceQIBUWgLaHgCAUtvCboBFAIBA3MLhgEcAgE7hwELuQEQAgEEdhF+IAIBRIMBEYMBhAECAT1zfHOCAQIBPIoBEYoBswECAQWOAQ+UASMCATOXAQ+3ARoCAQyRARWRAfABAgE0mAERowEaAgEkpAERrwEaAgEVsAERtgEsAgENoAEXoAHLAQIBLJsBF5sBbgIBJawBF6wBcwIBHacBF6cBdwIBFrMBF7MBrAMCAQ4=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1521,62" />
-      <sap2010:ViewStateData Id="GetStrategiesExecutionInfo_1" sap:VirtualizedContainerService.HintSize="1521,22" />
-      <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="CreateNumberProfiles_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="GetStrategyExecutionDetails_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="PrepareStrategyExecutionDetailsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ApplyStrategyExecutionDetailsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1274,86" />
-      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1274,62" />
-      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="1274,22" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1296,374">
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="541,62" />
+      <sap2010:ViewStateData Id="GetNumberRanges_1" sap:VirtualizedContainerService.HintSize="541,22" />
+      <sap2010:ViewStateData Id="RunProcess_2" sap:VirtualizedContainerService.HintSize="489,22" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="264,350">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1521,524" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1543,812">
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="489,500" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="511,686">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="1583,892" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="541,836" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="563,1124">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="603,1204" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

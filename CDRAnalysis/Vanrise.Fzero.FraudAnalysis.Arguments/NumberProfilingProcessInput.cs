@@ -6,6 +6,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 {
     public class NumberProfilingProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
+        public IEnumerable<string> FixedPrefixes { get; set; }
+
+        public int PrefixLength { get; set; }
+
         public NumberProfileParameters Parameters { get; set; }
 
         public DateTime FromDate { get; set; }
@@ -16,7 +20,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 
         public override string GetTitle()
         {
-            return String.Format("Number profiling ({0:dd-MMM-yy HH:mm}    to     {1:dd-MMM-yy HH:mm})", this.FromDate, this.ToDate);
+            return String.Format("Number profiling ({0:dd-MMM-yy HH:mm} to {1:dd-MMM-yy HH:mm})", this.FromDate, this.ToDate);
         }
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)

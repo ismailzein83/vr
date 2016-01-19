@@ -19,7 +19,12 @@
 
         </vr-row>
         <vr-row removeline>
-
+            <vr-columns width="1/4row">
+                <vr-select datasource="fixedPrefixes" datatextfield="value" datavaluefield="value" label="Fixed Prefixes" selectedvalues="selectedFixedPrefixes" ismultipleselection></vr-select>
+            </vr-columns>
+            <vr-columns width="1/4row">
+                <vr-select datasource="prefixLengths" label="Sub Processes Prefix Length" selectedvalues="selectedPrefixLength" isrequired hideremoveicon></vr-select>
+            </vr-columns>
             <vr-columns width="1/4row">
                 <vr-switch value="overridePrevious" label="Override Previous">  </vr-switch>
             </vr-columns>

@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.CDRImport.Entities
 {
-    public class CDRBatch
+    public class NumberRangeDefinition
     {
-        //public string CDRBatchFilePath { get; set; }
-
-        public List<CDR> CDRs { get; set; }
+        public List<string> Prefixes { get; set; }
     }
 }

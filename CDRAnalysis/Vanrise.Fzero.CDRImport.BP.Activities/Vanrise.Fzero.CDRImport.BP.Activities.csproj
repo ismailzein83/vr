@@ -75,6 +75,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyUnifiedCDRsToDB.cs" />
+    <Compile Include="GetNumberRanges.cs" />
+    <Compile Include="LoadCDRs.cs" />
     <Compile Include="UnifyRepeatedCDRs.cs" />
     <Compile Include="LoadStagingCDRs.cs" />
     <Compile Include="PrepareUnifiedCDRsForDBApply.cs" />

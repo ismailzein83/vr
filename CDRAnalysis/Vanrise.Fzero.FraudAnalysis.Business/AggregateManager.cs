@@ -7,20 +7,67 @@ using Vanrise.Fzero.Entities;
 using Vanrise.Fzero.FraudAnalysis.Aggregates;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class AggregateManager
     {
+        static Dictionary<int, string> s_aggregateDefinitionKeyNamesByIds;
+        static AggregateManager()
+        {
+            s_aggregateDefinitionKeyNamesByIds = new Dictionary<int, string>();
+
+            s_aggregateDefinitionKeyNamesByIds.Add(1, Constants._CountOutCalls);
+            s_aggregateDefinitionKeyNamesByIds.Add(2, Constants._CountInCalls);
+            s_aggregateDefinitionKeyNamesByIds.Add(3, Constants._TotalDataVolume);
+            s_aggregateDefinitionKeyNamesByIds.Add(4, Constants._CountOutFails);
+            s_aggregateDefinitionKeyNamesByIds.Add(5, Constants._CountInFails);
+            s_aggregateDefinitionKeyNamesByIds.Add(6, Constants._CountOutSMSs);
+            s_aggregateDefinitionKeyNamesByIds.Add(7, Constants._CountOutOffNets);
+            s_aggregateDefinitionKeyNamesByIds.Add(8, Constants._CountOutOnNets);
+            s_aggregateDefinitionKeyNamesByIds.Add(9, Constants._CountOutInters);
+            s_aggregateDefinitionKeyNamesByIds.Add(10, Constants._CountInInters);
+            s_aggregateDefinitionKeyNamesByIds.Add(11, Constants._CallOutDurAvg);
+            s_aggregateDefinitionKeyNamesByIds.Add(12, Constants._CallInDurAvg);
+            s_aggregateDefinitionKeyNamesByIds.Add(13, Constants._TotalOutVolume);
+            s_aggregateDefinitionKeyNamesByIds.Add(14, Constants._TotalInVolume);
+            s_aggregateDefinitionKeyNamesByIds.Add(15, Constants._TotalIMEI);
+            s_aggregateDefinitionKeyNamesByIds.Add(16, Constants._TotalBTS);
+            s_aggregateDefinitionKeyNamesByIds.Add(17, Constants._DiffOutputNumbers);
+            s_aggregateDefinitionKeyNamesByIds.Add(18, Constants._DiffInputNumbers);
+            s_aggregateDefinitionKeyNamesByIds.Add(19, Constants._CountInOffNets);
+            s_aggregateDefinitionKeyNamesByIds.Add(20, Constants._CountInOnNets);
+            s_aggregateDefinitionKeyNamesByIds.Add(21, Constants._DiffOutputNumbersNightCalls);
+            s_aggregateDefinitionKeyNamesByIds.Add(22, Constants._CountOutCallsPeakHours);
+            s_aggregateDefinitionKeyNamesByIds.Add(23, Constants._CountConsecutiveCalls);
+            s_aggregateDefinitionKeyNamesByIds.Add(24, Constants._CountActiveHours);
+            s_aggregateDefinitionKeyNamesByIds.Add(25, Constants._CountFailConsecutiveCalls);
+            s_aggregateDefinitionKeyNamesByIds.Add(26, Constants._CountInLowDurationCalls);
+            s_aggregateDefinitionKeyNamesByIds.Add(27, Constants._DiffDestZones);
+            s_aggregateDefinitionKeyNamesByIds.Add(28, Constants._DiffSourcesZones);
+        }
 
         private static Dictionary<int, AggregateDefinitionInfo> GetCachedAggregates()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAggregates",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAggregates",
                () =>
                {
                    IAggregateDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAggregateDataManager>();
                    IEnumerable<AggregateDefinitionInfo> aggregates = dataManager.GetAggregates();
-                   return aggregates.ToDictionary(kvp => kvp.Id, kvp => kvp);
+                   Dictionary<int, AggregateDefinitionInfo> dicAggregates = new Dictionary<int, AggregateDefinitionInfo>();
+                   foreach (var aggregateDefinitionInfo in aggregates)
+                   {
+                       if (!(aggregateDefinitionInfo.OperatorTypeAllowed == GlobalConstants._DefaultOperatorType || aggregateDefinitionInfo.OperatorTypeAllowed == OperatorType.Both))
+                           continue;
+                       string keyName;
+                       if (s_aggregateDefinitionKeyNamesByIds.TryGetValue(aggregateDefinitionInfo.Id, out keyName))
+                           aggregateDefinitionInfo.KeyName = keyName;
+                       else
+                           throw new Exception(String.Format("Aggregate Id '{0}' not found in s_aggregateDefinitionKeyNamesByIds", aggregateDefinitionInfo.Id));
+                       dicAggregates.Add(aggregateDefinitionInfo.Id, aggregateDefinitionInfo);
+                   }
+                   return dicAggregates;
                });
         }
 
@@ -51,21 +98,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         }
 
-        public List<AggregateDefinition> GetAggregateDefinitions(List<CallClass> callClasses)
+        public List<AggregateDefinition> GetAggregateDefinitions(Dictionary<int, NetType> callClassNetTypes)
         {
-            Dictionary<int?, NetType> callClassNetTypes = new Dictionary<int?, NetType>();
-            foreach (CallClass callClass in callClasses)
-            {
-                callClassNetTypes.Add(callClass.Id, callClass.NetType);
-            }
-
             Func<CDR, NetType, bool> IsMatchNetType = (cdr, compareToNetType) =>
             {
                 NetType netType;
 
                 if (cdr.CallClassId.HasValue)
                 {
-                    if (!callClassNetTypes.TryGetValue(cdr.CallClassId, out netType))
+                    if (!callClassNetTypes.TryGetValue(cdr.CallClassId.Value, out netType))
                         return false;
                     else
                         return netType == compareToNetType;
@@ -77,11 +118,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             };
 
+            List<AggregateDefinition> aggregateDefinitions = new List<AggregateDefinition>();
+            HashSet<int> aggregateIdsToUse = GetCachedAggregates().Values.Select(itm => itm.Id).ToHashSet();
 
-            List<AggregateDefinition> AggregateDefinitions = new List<AggregateDefinition>();
-
-
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
                 {
                     Id = 1,
                     Aggregation = new CountAggregate((cdr) =>
@@ -90,8 +130,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     })
                 });
 
-
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
             {
                 Id = 2,
                 Aggregation = new CountAggregate((cdr) =>
@@ -101,7 +140,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             });
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
             {
                 Id = 3,
                 Aggregation = new SumAggregate((cdr) =>
@@ -111,7 +150,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             });
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
             {
                 Id = 4,
                 Aggregation = new CountAggregate((cdr) =>
@@ -121,7 +160,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             });
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
             {
                 Id = 5,
                 Aggregation = new CountAggregate((cdr) =>
@@ -132,7 +171,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
             {
                 Id = 6,
                 Aggregation = new CountAggregate((cdr) =>
@@ -143,7 +182,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
             {
                 Id = 7,
                 Aggregation = new CountAggregate((cdr) =>
@@ -152,7 +191,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 })
             });
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
             {
                 Id = 8,
                 Aggregation = new CountAggregate((cdr) =>
@@ -162,7 +201,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             });
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
             {
                 Id = 9,
                 Aggregation = new CountAggregate((cdr) =>
@@ -172,7 +211,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             });
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
             {
                 Id = 10,
                 Aggregation = new CountAggregate((cdr) =>
@@ -183,7 +222,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
             {
                 Id = 11,
                 Aggregation = new AverageAggregate(
@@ -200,7 +239,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             )
             });
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
             {
                 Id = 12,
                 Aggregation = new AverageAggregate(
@@ -217,7 +256,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             });
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
             {
                 Id = 13,
                 Aggregation = new SumAggregate(
@@ -232,7 +271,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
              {
                  Id = 14,
                  Aggregation = new SumAggregate(
@@ -243,7 +282,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
              )
              });
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
              {
                  Id = 15,
                  Aggregation = new DistinctCountAggregate(
@@ -260,7 +299,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
              });
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
              {
                  Id = 16,
                  Aggregation = new DistinctCountAggregate(
@@ -277,7 +316,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
              });
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
              {
                  Id = 17,
                  Aggregation = new DistinctCountAggregate(
@@ -294,7 +333,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
              });
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
              {
                  Id = 18,
                  Aggregation = new DistinctCountAggregate(
@@ -311,7 +350,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
              });
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
              {
                  Id = 19,
                  Aggregation = new CountAggregate((cdr) =>
@@ -321,7 +360,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
              });
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
              {
                  Id = 20,
                  Aggregation = new CountAggregate((cdr) =>
@@ -331,7 +370,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
              });
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
              {
                  Id = 21,
                  Aggregation = new DistinctCountAggregate(
@@ -348,7 +387,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
              });
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
              {
                  Id = 22,
                  Aggregation = new CountAggregate((cdr, strategy) =>
@@ -358,7 +397,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
              });
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
              {
                  Id = 23,
                  Aggregation = new ConsecutiveAggregate(
@@ -367,13 +406,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                            return (cdr.CallType == CallType.OutgoingVoiceCall && cdr.DurationInSeconds > 0);
                        }
                        , _parameters
+                       ,(parameterSets) => parameterSets.GapBetweenConsecutiveCalls
                    )
              });
 
 
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
              {
                  Id = 24,
                  Aggregation = new GroupCountAggregate(
@@ -387,20 +427,21 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
             {
                 Id = 25,
-                Aggregation = new FailedConsecutiveAggregate(
+                Aggregation = new ConsecutiveAggregate(
                       (cdr, strategy) =>
                       {
                           return (cdr.CallType == CallType.OutgoingVoiceCall && cdr.DurationInSeconds == 0);
                       }
                       , _parameters
+                      , (parameterSets) => parameterSets.GapBetweenFailedConsecutiveCalls
                   )
             });
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
             {
                 Id = 26,
                 Aggregation = new CountAggregate((cdr, strategy) =>
@@ -412,7 +453,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
             {
                 Id = 27,
                 Aggregation = new DistinctCountAggregate(
@@ -431,7 +472,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
+            CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
             {
                 Id = 28,
                 Aggregation = new DistinctCountAggregate(
@@ -447,70 +488,25 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                   )
             });
 
+            return aggregateDefinitions;
+        }
 
-            List<AggregateDefinitionInfo> aggregateDefinitionInfo = GetAggregateDefinitionsInfo();
-
-
-            foreach (var j in aggregateDefinitionInfo)
+        private void CheckAndAddAggregateDefinition(List<AggregateDefinition> aggregateDefinitions, HashSet<int> aggregateIdsToUse, AggregateDefinition aggregateDefinition)
+        {
+            if (aggregateIdsToUse.Contains(aggregateDefinition.Id))
             {
-                foreach (var i in AggregateDefinitions)
-                {
-                    if (i.Id == j.Id)
-                    {
-                        i.KeyName = j.KeyName;
-                        i.OperatorTypeAllowed = j.OperatorTypeAllowed;
-                    }
-                }
+                string keyName;
+                if (s_aggregateDefinitionKeyNamesByIds.TryGetValue(aggregateDefinition.Id, out keyName))
+                    aggregateDefinition.KeyName = keyName;
+                else
+                    throw new Exception(String.Format("Aggregate Id '{0}' not found in s_aggregateDefinitionKeyNamesByIds", aggregateDefinition.Id));
+                aggregateDefinitions.Add(aggregateDefinition);
             }
-
-
-
-            return AggregateDefinitions.Where(x => x.KeyName != null && (x.OperatorTypeAllowed == GlobalConstants._DefaultOperatorType || x.OperatorTypeAllowed == OperatorType.Both)).ToList();
         }
 
         public List<AggregateDefinitionInfo> GetAggregateDefinitionsInfo()
         {
-            List<AggregateDefinitionInfo> AggregateDefinitionsInfo = new List<AggregateDefinitionInfo>();
-
-
-            foreach (var i in GetCachedAggregates())
-            {
-                switch (i.Value.Id)
-                {
-                    case 1: i.Value.KeyName = Constants._CountOutCalls; break;
-                    case 2: i.Value.KeyName = Constants._CountInCalls; break;
-                    case 3: i.Value.KeyName = Constants._TotalDataVolume; break;
-                    case 4: i.Value.KeyName = Constants._CountOutFails; break;
-                    case 5: i.Value.KeyName = Constants._CountInFails; break;
-                    case 6: i.Value.KeyName = Constants._CountOutSMSs; break;
-                    case 7: i.Value.KeyName = Constants._CountOutOffNets; break;
-                    case 8: i.Value.KeyName = Constants._CountOutOnNets; break;
-                    case 9: i.Value.KeyName = Constants._CountOutInters; break;
-                    case 10: i.Value.KeyName = Constants._CountInInters; break;
-                    case 11: i.Value.KeyName = Constants._CallOutDurAvg; break;
-                    case 12: i.Value.KeyName = Constants._CallInDurAvg; break;
-                    case 13: i.Value.KeyName = Constants._TotalOutVolume; break;
-                    case 14: i.Value.KeyName = Constants._TotalInVolume; break;
-                    case 15: i.Value.KeyName = Constants._TotalIMEI; break;
-                    case 16: i.Value.KeyName = Constants._TotalBTS; break;
-                    case 17: i.Value.KeyName = Constants._DiffOutputNumbers; break;
-                    case 18: i.Value.KeyName = Constants._DiffInputNumbers; break;
-                    case 19: i.Value.KeyName = Constants._CountInOffNets; break;
-                    case 20: i.Value.KeyName = Constants._CountInOnNets; break;
-                    case 21: i.Value.KeyName = Constants._DiffOutputNumbersNightCalls; break;
-                    case 22: i.Value.KeyName = Constants._CountOutCallsPeakHours; break;
-                    case 23: i.Value.KeyName = Constants._CountConsecutiveCalls; break;
-                    case 24: i.Value.KeyName = Constants._CountActiveHours; break;
-                    case 25: i.Value.KeyName = Constants._CountFailConsecutiveCalls; break;
-                    case 26: i.Value.KeyName = Constants._CountInLowDurationCalls; break;
-                    case 27: i.Value.KeyName = Constants._DiffDestZones; break;
-                    case 28: i.Value.KeyName = Constants._DiffSourcesZones; break;
-                }
-                AggregateDefinitionsInfo.Add(i.Value);
-            }
-
-
-            return AggregateDefinitionsInfo.Where(x => x.OperatorTypeAllowed == GlobalConstants._DefaultOperatorType || x.OperatorTypeAllowed == OperatorType.Both).ToList();
+            return GetCachedAggregates().Values.ToList();
         }
 
     }
