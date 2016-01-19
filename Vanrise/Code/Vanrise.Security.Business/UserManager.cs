@@ -186,8 +186,10 @@ namespace Vanrise.Security.Business
             return datamanager.GetMembers(groupId);
         }
 
-      
-
-       
+        public string GetUserName(int userId)
+        {
+            User user = GetUserbyId(userId);
+            return user != null ? user.Name : null;
+        }
     }
 }

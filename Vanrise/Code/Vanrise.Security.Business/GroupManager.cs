@@ -130,7 +130,10 @@ namespace Vanrise.Security.Business
             return dataManager.GetUserGroups(userId);
         }
 
-
-
+        public string GetGroupName(int groupId)
+        {
+            Group group = GetGroupbyId(groupId);
+            return group != null ? group.Name : null;
+        }
     }
 }
