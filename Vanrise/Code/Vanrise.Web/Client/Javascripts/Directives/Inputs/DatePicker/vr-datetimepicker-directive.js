@@ -59,6 +59,9 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                 case "time": format = 'HH:mm';
                     $scope.ctrl.isTime = true;
                     break;
+                case "dateHour": format = 'DD/MM/YYYY HH';
+                    $scope.ctrl.isDateTime = true;
+                    break;
                 default: format = 'DD/MM/YYYY HH:mm';
                     $scope.ctrl.isDateTime = true;
                     break;
@@ -126,6 +129,11 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                         selectedDate.setUTCHours(0, 0, 0, 0);
                         var date = moment.utc(selectedDate).format("L LT");
                         $scope.ctrl.value = date ;
+                    }
+                    else if ($attrs.type == "dateHour") {
+                        selectedDate.setUTCHours(selectedDate.getUTCHours(), 0, 0, 0);
+                        var date = moment.utc(selectedDate).format("L LT");
+                        $scope.ctrl.value = date;
                     }
                     else {                        
                         selectedDate.setUTCHours(selectedDate.getUTCHours(), selectedDate.getUTCMinutes(), 0, 0);
@@ -302,9 +310,9 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
             if (attrs.label != undefined)
                 labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
             var icontemplate = "";
-            if (attrs.type == 'date' || attrs.type == 'dateTime')
+            if (attrs.type == 'date' || attrs.type == 'dateTime' || attrs.type == 'dateHour')
                 icontemplate += ' <span ng-show="showtd" class="input-group-addon vr-small-addon " ng-click="ctrl.toggleDate($event)" ><i class="glyphicon glyphicon-calendar"></i></span>';
-            if (attrs.type == 'time' || attrs.type == 'dateTime')
+            if (attrs.type == 'time' || attrs.type == 'dateTime' || attrs.type == 'dateHour')
                 icontemplate += ' <span ng-show="showtd"  class="input-group-addon vr-small-addon " ng-click="ctrl.toggleTime($event)" > <i class="glyphicon glyphicon-time"></i></span>';
             else if (attrs.type == undefined)
                 icontemplate = ' <span ng-show="showtd" class="input-group-addon vr-small-addon " ng-click="ctrl.toggleDate($event)" ><i class="glyphicon glyphicon-calendar"></i></span>'
