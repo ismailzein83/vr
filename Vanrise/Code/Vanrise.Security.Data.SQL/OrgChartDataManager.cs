@@ -17,10 +17,10 @@ namespace Vanrise.Security.Data.SQL
 
         }
 
-        public List<OrgChart> GetOrgCharts()
-        {
-            return GetItemsSP("sec.sp_OrgChart_GetAll", OrgChartMapper);
-        }
+        //public List<OrgChart> GetOrgCharts()
+        //{
+        //    return GetItemsSP("sec.sp_OrgChart_GetAll", OrgChartMapper);
+        //}
 
         public Vanrise.Entities.BigResult<OrgChart> GetFilteredOrgCharts(Vanrise.Entities.DataRetrievalInput<OrgChartQuery> input)
         {
@@ -56,7 +56,7 @@ namespace Vanrise.Security.Data.SQL
             // serialize orgChartObject.Hierarchy
             string serializedHierarchy = Vanrise.Common.Serializer.Serialize(orgChartObject.Hierarchy, true);
 
-            int recordsEffected = ExecuteNonQuerySP("sec.sp_OrgChart_Update", orgChartObject.Id, orgChartObject.Name, serializedHierarchy);
+            int recordsEffected = ExecuteNonQuerySP("sec.sp_OrgChart_Update", orgChartObject.OrgChartId, orgChartObject.Name, serializedHierarchy);
             return (recordsEffected > 0);
         }
 
@@ -70,7 +70,7 @@ namespace Vanrise.Security.Data.SQL
         {
             return new OrgChart
             {
-                Id = Convert.ToInt32(reader["Id"]),
+                OrgChartId = Convert.ToInt32(reader["Id"]),
                 Name = reader["Name"] as string,
                 Hierarchy = Vanrise.Common.Serializer.Deserialize<List<Member>>(reader["Hierarchy"] as string),
             };

@@ -122,6 +122,8 @@
     <Content Include="Security\Directives\DynamicPage\Templates\DynamicPagesGrid.html" />
     <Content Include="Security\Directives\DynamicPage\vr-sec-dynamicpage-grid.js" />
     <Content Include="Security\Directives\DynamicPage\vr-sec-dynamicpageviewer.js" />
+    <Content Include="Security\Directives\OrgChart\Templates\OrgChartGrid.html" />
+    <Content Include="Security\Directives\OrgChart\vr-sec-orgchart-grid.js" />
     <Content Include="Security\Directives\Permission\Templates\PermissionGrid.html" />
     <Content Include="Security\Directives\Permission\vr-sec-permission-grid.js" />
     <Content Include="Security\Directives\User\Templates\UsersGrid.html" />
@@ -141,6 +143,7 @@
     <Content Include="Security\Services\APIServices\ViewAPIService.js" />
     <Content Include="Security\Services\APIServices\WidgetAPIService.js" />
     <Content Include="Security\Services\APIServices\WidgetDefinitionAPIService.js" />
+    <Content Include="Security\Services\OrgChartService.js" />
     <Content Include="Security\Services\PermissionService.js" />
     <Content Include="Security\Services\SecurityService.js" />
     <Content Include="Security\Services\GroupService .js" />

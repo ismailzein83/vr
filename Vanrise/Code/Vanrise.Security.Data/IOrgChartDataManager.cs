@@ -9,8 +9,6 @@ namespace Vanrise.Security.Data
 {
     public interface IOrgChartDataManager : IDataManager
     {
-        List<OrgChart> GetOrgCharts();
-
         Vanrise.Entities.BigResult<OrgChart> GetFilteredOrgCharts(Vanrise.Entities.DataRetrievalInput<OrgChartQuery> input);
         
         OrgChart GetOrgChartById(int orgChartId);

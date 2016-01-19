@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent draggable="" ng-controller="Security_OrgChartEditorController" width="'40%'" vr-loader="isGettingData">
+﻿<div vr-modalcontent ng-controller="VR_Sec_OrgChartEditorController" vr-loader="isLoading" width="'40%'" draggable="true">
     <vr-modalbody>
         <vr-form name="orgChartEditorForm">
             <vr-choices>
@@ -36,7 +36,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="orgChartEditorForm" data-onclick="saveOrgChart"></vr-button>
+                <vr-button type="Save" data-onclick="save" formname="orgChartEditorForm"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

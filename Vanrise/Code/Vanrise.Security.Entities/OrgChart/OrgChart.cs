@@ -8,7 +8,7 @@ namespace Vanrise.Security.Entities
 {
     public class OrgChart
     {
-        public int Id { get; set; }
+        public int OrgChartId { get; set; }
         public string Name { get; set; }
         public List<Member> Hierarchy { get; set; }
     }

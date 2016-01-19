@@ -11,12 +11,6 @@ namespace Vanrise.Security.Business
 {
     public class OrgChartManager
     {
-        public List<OrgChart> GetOrgCharts()
-        {
-            IOrgChartDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartDataManager>();
-            return dataManager.GetOrgCharts();
-        }
-
         public Vanrise.Entities.IDataRetrievalResult<OrgChart> GetFilteredOrgCharts(Vanrise.Entities.DataRetrievalInput<OrgChartQuery> input)
         {
             IOrgChartDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartDataManager>();
@@ -43,7 +37,7 @@ namespace Vanrise.Security.Business
             if (insertActionSucc)
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                orgChartObject.Id = orgChartId;
+                orgChartObject.OrgChartId = orgChartId;
                 insertOperationOutput.InsertedObject = orgChartObject;
             }
             else

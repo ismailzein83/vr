@@ -5,19 +5,16 @@ using System.Web;
 using System.Web.Http;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
+using Vanrise.Web.Base;
 
 namespace Vanrise.Security.Web.Controllers
 {
+    [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "OrgChart")]
     public class OrgChartController : Vanrise.Web.Base.BaseAPIController
     {
-        [HttpGet]
-        public IEnumerable<OrgChart> GetOrgCharts()
-        {
-            OrgChartManager manager = new OrgChartManager();
-            return manager.GetOrgCharts();
-        }
-
         [HttpPost]
+        [Route("GetFilteredOrgCharts")]
         public object GetFilteredOrgCharts(Vanrise.Entities.DataRetrievalInput<OrgChartQuery> input)
         {
             OrgChartManager manager = new OrgChartManager();
@@ -25,6 +22,7 @@ namespace Vanrise.Security.Web.Controllers
         }
         
         [HttpGet]
+        [Route("GetOrgChartById")]
         public OrgChart GetOrgChartById(int orgChartId)
         {
             OrgChartManager manager = new OrgChartManager();
@@ -32,6 +30,7 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpPost]
+        [Route("AddOrgChart")]
         public Vanrise.Entities.InsertOperationOutput<OrgChart> AddOrgChart(OrgChart orgChartObject)
         {
             OrgChartManager manager = new OrgChartManager();
@@ -39,6 +38,7 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpPost]
+        [Route("UpdateOrgChart")]
         public Vanrise.Entities.UpdateOperationOutput<OrgChart> UpdateOrgChart(OrgChart orgChartObject)
         {
             OrgChartManager manager = new OrgChartManager();
@@ -46,6 +46,7 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
+        [Route("DeleteOrgChart")]
         public Vanrise.Entities.DeleteOperationOutput<object> DeleteOrgChart(int orgChartId)
         {
             OrgChartManager manager = new OrgChartManager();

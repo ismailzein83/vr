@@ -1,34 +1,43 @@
-﻿app.service('OrgChartAPIService', function (BaseAPIService) {
-    return ({
-        GetOrgCharts: GetOrgCharts,
-        GetFilteredOrgCharts: GetFilteredOrgCharts,
-        GetOrgChartById: GetOrgChartById,
-        AddOrgChart: AddOrgChart,
-        UpdateOrgChart: UpdateOrgChart,
-        DeleteOrgChart: DeleteOrgChart
-    });
+﻿(function (appControllers) {
 
-    function GetOrgCharts() {
-        return BaseAPIService.get('/api/OrgChart/GetOrgCharts');
-    }
+    'use strict';
 
-    function GetFilteredOrgCharts(input) {
-        return BaseAPIService.post("/api/OrgChart/GetFilteredOrgCharts", input);
-    }
+    OrgChartAPIService.$inject = ['BaseAPIService', 'VR_Sec_ModuleConfig', 'UtilsService'];
 
-    function GetOrgChartById(orgChartId) {
-        return BaseAPIService.get("/api/OrgChart/GetOrgChartById", { orgChartId: orgChartId });
-    }
+    function OrgChartAPIService(BaseAPIService, VR_Sec_ModuleConfig, UtilsService) {
+        return ({
+            GetFilteredOrgCharts: GetFilteredOrgCharts,
+            GetOrgChartById: GetOrgChartById,
+            AddOrgChart: AddOrgChart,
+            UpdateOrgChart: UpdateOrgChart,
+            DeleteOrgChart: DeleteOrgChart
+        });
 
-    function AddOrgChart(orgChart) {
-        return BaseAPIService.post("/api/OrgChart/AddOrgChart", orgChart);
-    }
+        function GetFilteredOrgCharts(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'OrgChart', 'GetFilteredOrgCharts'), input);
+        }
 
-    function UpdateOrgChart(orgChart) {
-        return BaseAPIService.post('/api/OrgChart/UpdateOrgChart', orgChart);
-    }
+        function GetOrgChartById(orgChartId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'OrgChart', 'GetOrgChartById'), {
+                orgChartId: orgChartId
+            });
+        }
 
-    function DeleteOrgChart(orgChartId) {
-        return BaseAPIService.get('/api/OrgChart/DeleteOrgChart', { orgChartId: orgChartId });
-    }
-});
+        function AddOrgChart(addedOrgChart) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'OrgChart', 'AddOrgChart'), addedOrgChart);
+        }
+
+        function UpdateOrgChart(updatedOrgChart) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'OrgChart', 'UpdateOrgChart'), updatedOrgChart);
+        }
+
+        function DeleteOrgChart(orgChartId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'OrgChart', 'DeleteOrgChart'), {
+                orgChartId: orgChartId
+            });
+        }
+    };
+
+    appControllers.service('VR_Sec_OrgChartAPIService', OrgChartAPIService);
+
+})(appControllers);
