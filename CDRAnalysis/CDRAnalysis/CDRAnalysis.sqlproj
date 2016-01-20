@@ -131,7 +131,6 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_NormalCDR_GetByConnectDateTime.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_NormalCDR_CreateTempByMSISDN.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_GetStatusByAccountNumber.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_GetByStatuses.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetBlockedLines.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_DeleteByCaseIDs.sql" />
     <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
@@ -181,5 +180,6 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountInfo_GetByAccountStatuses.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetByCaseID.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\bp_AccountStatus_GetByNumberPrefixesAndStatuses.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_GetByStatuses.sql" />
   </ItemGroup>
 </Project>

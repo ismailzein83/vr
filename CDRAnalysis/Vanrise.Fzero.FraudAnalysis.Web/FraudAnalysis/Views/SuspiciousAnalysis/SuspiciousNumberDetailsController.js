@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-SuspiciousNumberDetailsController.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "UsersAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "CallTypeEnum", "LabelColorsEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService", "VRValidationService"];
+SuspiciousNumberDetailsController.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "VR_Sec_UserAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "CallTypeEnum", "LabelColorsEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService", "VRValidationService"];
 
-function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService, UsersAPIService, SuspicionLevelEnum, CaseStatusEnum, CallTypeEnum, LabelColorsEnum, UtilsService, VRNavigationService, VRNotificationService, VRModalService, VRValidationService) {
+function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService, VR_Sec_UserAPIService, SuspicionLevelEnum, CaseStatusEnum, CallTypeEnum, LabelColorsEnum, UtilsService, VRNavigationService, VRNotificationService, VRModalService, VRValidationService) {
     var gridAPI_Occurances = undefined;
     var occurancesLoaded = false;
 
@@ -427,7 +427,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         return CaseManagementAPIService.GetAccountCase($scope.caseID)
             .then(function (response) {
                 if (response != null) {
-                    
+
                     $scope.caseStatuses.splice(0, 1); // remove the open option
 
                     if (response.StatusID == CaseStatusEnum.Pending.value)
@@ -457,7 +457,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     }
 
     function loadUsers() {
-        return UsersAPIService.GetUsers()
+        return VR_Sec_UserAPIService.GetUsers()
             .then(function (response) {
 
                 angular.forEach(response, function (item) {

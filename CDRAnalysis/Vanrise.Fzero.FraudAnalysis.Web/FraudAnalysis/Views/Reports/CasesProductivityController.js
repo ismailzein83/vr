@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-CasesProductivityController.$inject = ['$scope', 'ReportingAPIService', 'StrategyAPIService', 'UsersAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum', 'VRValidationService'];
+CasesProductivityController.$inject = ['$scope', 'ReportingAPIService', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum', 'VRValidationService'];
 
-function CasesProductivityController($scope, ReportingAPIService, StrategyAPIService, UsersAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum, VRValidationService) {
+function CasesProductivityController($scope, ReportingAPIService, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum, VRValidationService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
@@ -84,7 +84,7 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
         return mainGridAPI.retrieveData(query);
     }
 
-   
+
 }
 
 appControllers.controller('FraudAnalysis_CasesProductivityController', CasesProductivityController);

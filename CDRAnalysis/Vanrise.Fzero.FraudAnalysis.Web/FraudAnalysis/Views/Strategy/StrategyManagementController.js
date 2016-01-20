@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-StrategyManagementController.$inject = ['$scope', 'StrategyAPIService', 'UsersAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum', 'VRValidationService'];
+StrategyManagementController.$inject = ['$scope', 'StrategyAPIService', 'VR_Sec_UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum', 'VRValidationService'];
 
-function StrategyManagementController($scope, StrategyAPIService, UsersAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum, VRValidationService) {
+function StrategyManagementController($scope, StrategyAPIService, VR_Sec_UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum, VRValidationService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
@@ -118,7 +118,7 @@ function StrategyManagementController($scope, StrategyAPIService, UsersAPIServic
     }
 
     function loadUsers() {
-        return UsersAPIService.GetUsers()
+        return VR_Sec_UserAPIService.GetUsers()
             .then(function (response) {
                 angular.forEach(response, function (item) {
                     $scope.users.push(item);
