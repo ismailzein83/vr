@@ -61,15 +61,29 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             DWAccountCaseManager accountCaseManager = new DWAccountCaseManager();
             IEnumerable<DWAccountCase> accountCases = accountCaseManager.GetDWAccountCases(inputArgument.FromDate, inputArgument.ToDate);
             DWAccountCaseDictionary AccountCases = new DWAccountCaseDictionary();
-            if (accountCases.Count() > 0)
-                foreach (var i in accountCases)
-                    AccountCases.Add(i.CaseID, i);
+
+            foreach (var accountCase in accountCases)
+            {
+                List<DWAccountCase> values = AccountCases.GetOrCreateItem(accountCase.AccountNumber, () =>
+                {
+                    return new List<DWAccountCase>();
+                });
+                values.Add(accountCase);
+            }
+
+
+          
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing {0} account cases", accountCases.Count());
 
             return new GetDWAccountCasesOutput
             {
                 AccountCases = AccountCases
             };
+        }
+
+        List<DWAccountCase> DWAccountCaseInstatnce()
+        {
+            return new List<DWAccountCase>();
         }
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, GetDWAccountCasesOutput result)

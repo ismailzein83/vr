@@ -29,20 +29,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
     }
-
-    public class FillFactValuesOutput
-    {
-        public List<DWDimension> ToBeInsertedBTSs { get; set; }
-
-        public List<DWTime> ToBeInsertedTimes { get; set; }
-
-    }
-
-
     # endregion
 
 
-    public class FillFactValues : DependentAsyncActivity<FillFactValuesInput, FillFactValuesOutput>
+    public class FillFactValues : DependentAsyncActivity<FillFactValuesInput>
     {
         #region Arguments
 
@@ -65,30 +55,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public InArgument<DWTimeDictionary> Times { get; set; }
 
 
-        [RequiredArgument]
-        public InOutArgument<List<DWDimension>> ToBeInsertedBTSs { get; set; }
-
-
-        [RequiredArgument]
-        public InOutArgument<List<DWTime>> ToBeInsertedTimes { get; set; }
-
-
-
-
         # endregion
 
-        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
-        {
-            if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new MemoryQueue<DWFactBatch>());
-
-            base.OnBeforeExecute(context, handle);
-        }
-
-        private static void CheckIfTimeAddedorAdd(DWTimeDictionary dwTimeDictionary, List<DWTime> ToBeInsertedTimes, DateTime givenTime)
+        #region Private Members
+        private static void CheckIfTimeAddedorAdd(DWTimeDictionary dwTimeDictionary,  List<DWTime> ToBeInsertedTimes, DateTime givenTime)
         {
             DWTime dwTime;
-            DateTime dateInstance = new DateTime(givenTime.Year, givenTime.Month, givenTime.Day, givenTime.Hour, givenTime.Minute, 0);
+            DateTime dateInstance = new DateTime(givenTime.Year, givenTime.Month, givenTime.Day, givenTime.Hour, 0, 0);
 
             if (!dwTimeDictionary.TryGetValue(dateInstance, out dwTime))
             {
@@ -108,19 +81,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             }
         }
 
-
-
-        public static int GetWeekOfMonth(DateTime date)
-        {
-            DateTime beginningOfMonth = new DateTime(date.Year, date.Month, 1);
-
-            while (date.Date.AddDays(1).DayOfWeek != CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek)
-                date = date.AddDays(1);
-
-            return (int)Math.Truncate((double)date.Subtract(beginningOfMonth).TotalDays / 7f) + 1;
-        }
-
-
         private static List<DWFact> SendDWFacttoOutputQueue(FillFactValuesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<DWFact> dwFactBatch, bool IsLastBatch)
         {
             if (dwFactBatch.Count >= batchSize || IsLastBatch)
@@ -135,20 +95,52 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             return dwFactBatch;
         }
 
-        protected override FillFactValuesInput GetInputArgument2(AsyncCodeActivityContext context)
+        private static void AppliedBTSstoDB(AsyncActivityHandle handle,  List<DWDimension> ToBeInsertedBTSs, IDWDimensionDataManager dimensionDataManager)
         {
-            return new FillFactValuesInput
+            if (ToBeInsertedBTSs.Count > 0)
             {
-                InputQueue = this.InputQueue.Get(context),
-                OutputQueue = this.OutputQueue.Get(context),
-                AccountCases = this.AccountCases.Get(context),
-                BTSs = this.BTSs.Get(context),
-                Times = this.Times.Get(context)
-            };
+                dimensionDataManager.TableName = "[dbo].[Dim_BTS]";
+                dimensionDataManager.SaveDWDimensionsToDB(ToBeInsertedBTSs);
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "added {0} BTS(s) ", ToBeInsertedBTSs.Count);
+                ToBeInsertedBTSs.Clear();
+            }
         }
 
-        protected override FillFactValuesOutput DoWorkWithResult(FillFactValuesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        private static void AppliedTimestoDB(AsyncActivityHandle handle,  List<DWTime> ToBeInsertedTimes, IDWTimeDataManager timeDataManager)
         {
+            if (ToBeInsertedTimes.Count > 0)
+            {
+                timeDataManager.SaveDWTimesToDB(ToBeInsertedTimes);
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished adding {0} time(s) ", ToBeInsertedTimes.Count);
+                ToBeInsertedTimes.Clear();
+            }
+        }
+
+        private static int GetWeekOfMonth(DateTime date)
+        {
+            DateTime beginningOfMonth = new DateTime(date.Year, date.Month, 1);
+
+            while (date.Date.AddDays(1).DayOfWeek != CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek)
+                date = date.AddDays(1);
+
+            return (int)Math.Truncate((double)date.Subtract(beginningOfMonth).TotalDays / 7f) + 1;
+        }
+
+        #endregion
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.OutputQueue.Get(context) == null)
+                this.OutputQueue.Set(context, new MemoryQueue<DWFactBatch>());
+
+            base.OnBeforeExecute(context, handle);
+        }
+
+        protected override void DoWork(FillFactValuesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        {
+            IDWTimeDataManager timeDataManager = FraudDataManagerFactory.GetDataManager<IDWTimeDataManager>();
+            IDWDimensionDataManager dimensionDataManager = FraudDataManagerFactory.GetDataManager<IDWDimensionDataManager>();
+
             int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["DWFactBatchSize"]);
             List<DWFact> dwFactBatch = new List<DWFact>();
 
@@ -166,7 +158,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             List<DWDimension> ToBeInsertedBTSs = new List<DWDimension>();
             List<DWTime> ToBeInsertedTimes = new List<DWTime>();
 
-         
+
             int cdrsCount = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -176,9 +168,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue(
                         (cdrBatch) =>
                         {
-                            //var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
-                            //System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
-                            var cdrs = cdrBatch.CDRs;// Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
+                            var cdrs = cdrBatch.CDRs;
                             foreach (var cdr in cdrs)
                             {
                                 DWFact dwFact = new DWFact();
@@ -224,30 +214,36 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                                 if (inputArgument.AccountCases.Values.Count() > 0)
                                 {
-                                    var accountCase = inputArgument.AccountCases.Values.FirstOrDefault(x => x.AccountNumber == cdr.MSISDN && cdr.ConnectDateTime >= x.FromDate && cdr.ConnectDateTime <= x.ToDate);
-                                    if (accountCase != null)
+                                    List<DWAccountCase> values;
+                                    if (inputArgument.AccountCases.TryGetValue(cdr.MSISDN, out values))
                                     {
-                                        dwFact.SuspicionLevel = accountCase.SuspicionLevel;
-                                        dwFact.Period = accountCase.PeriodID;
+                                        var accountCase = values.FirstOrDefault(x=>cdr.ConnectDateTime >= x.FromDate && cdr.ConnectDateTime <= x.ToDate);
+                                        if (accountCase != null)
+                                        {
+                                            dwFact.SuspicionLevel = accountCase.SuspicionLevel;
+                                            dwFact.Period = accountCase.PeriodID;
 
-                                        Strategy strategy = new Strategy();
-                                        strategy = strategies.Where(x => x.Id == accountCase.StrategyID).First();
+                                            Strategy strategy = new Strategy();
+                                            strategy = strategies.Where(x => x.Id == accountCase.StrategyID).First();
 
-                                        dwFact.StrategyId = accountCase.StrategyID;
-                                        dwFact.StrategyKind = (strategy.IsDefault ? StrategyKindEnum.SystemBuiltIn : StrategyKindEnum.UserDefined);
-                                        dwFact.StrategyUserId = strategy.UserId;
-                                        dwFact.CaseId = accountCase.CaseID;
-                                        dwFact.CaseStatus = accountCase.CaseStatus;
-                                        dwFact.CaseUserId = accountCase.CaseUser;
-                                        dwFact.CaseGenerationTime = accountCase.CaseGenerationTime;
-                                        inputArgument.AccountCases.Remove(accountCase.CaseID);
-                                        CheckIfTimeAddedorAdd(inputArgument.Times, ToBeInsertedTimes, accountCase.CaseGenerationTime);
-
+                                            dwFact.StrategyId = accountCase.StrategyID;
+                                            dwFact.StrategyKind = (strategy.IsDefault ? StrategyKindEnum.SystemBuiltIn : StrategyKindEnum.UserDefined);
+                                            dwFact.StrategyUserId = strategy.UserId;
+                                            dwFact.CaseId = accountCase.CaseID;
+                                            dwFact.CaseStatus = accountCase.CaseStatus;
+                                            dwFact.CaseUserId = accountCase.CaseUser;
+                                            dwFact.CaseGenerationTime = accountCase.CaseGenerationTime;
+                                            CheckIfTimeAddedorAdd(inputArgument.Times, ToBeInsertedTimes, accountCase.CaseGenerationTime);
+                                        }
                                     }
                                 }
                                 dwFactBatch.Add(dwFact);
                             }
                             cdrsCount += cdrs.Count;
+
+                            AppliedTimestoDB(handle, ToBeInsertedTimes, timeDataManager);
+
+                            AppliedBTSstoDB(handle, ToBeInsertedBTSs, dimensionDataManager);
 
                             dwFactBatch = SendDWFacttoOutputQueue(inputArgument, handle, batchSize, dwFactBatch, false);
 
@@ -260,26 +256,25 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             });
 
 
+            AppliedTimestoDB(handle, ToBeInsertedTimes, timeDataManager);
 
+            AppliedBTSstoDB(handle, ToBeInsertedBTSs, dimensionDataManager);
 
             dwFactBatch = SendDWFacttoOutputQueue(inputArgument, handle, batchSize, dwFactBatch, true);
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
-
-            return new FillFactValuesOutput
-            {
-
-                ToBeInsertedBTSs = ToBeInsertedBTSs,
-                ToBeInsertedTimes = ToBeInsertedTimes
-            };
-
         }
 
-        protected override void OnWorkComplete(AsyncCodeActivityContext context, FillFactValuesOutput result)
+        protected override FillFactValuesInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            this.ToBeInsertedBTSs.Set(context, result.ToBeInsertedBTSs);
-
-            this.ToBeInsertedTimes.Set(context, result.ToBeInsertedTimes);
+            return new FillFactValuesInput
+            {
+                InputQueue = this.InputQueue.Get(context),
+                OutputQueue = this.OutputQueue.Get(context),
+                AccountCases = this.AccountCases.Get(context),
+                BTSs = this.BTSs.Get(context),
+                Times = this.Times.Get(context)
+            };
         }
     }
 }

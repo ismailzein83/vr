@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class DWAccountCaseDictionary : Dictionary<int, DWAccountCase> 
+    public class DWAccountCaseDictionary : Dictionary<string, List<DWAccountCase>> 
     {
     }
 

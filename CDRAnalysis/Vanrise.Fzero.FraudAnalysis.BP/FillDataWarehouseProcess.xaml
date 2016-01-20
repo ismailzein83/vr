@@ -76,8 +76,6 @@
       <Variable x:TypeArguments="vffe:DWDimensionDictionary" Name="btss" />
       <Variable x:TypeArguments="vffe:DWAccountCaseDictionary" Name="accountCases" />
       <Variable x:TypeArguments="vffe:DWTimeDictionary" Name="times" />
-      <Variable x:TypeArguments="scg:List(vffe:DWTime)" Name="toBeInsertedTimes" />
-      <Variable x:TypeArguments="scg:List(vffe:DWDimension)" Name="toBeInsertedBTSs" />
     </Sequence.Variables>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="Started executing workflow: FillDataWarehouse ..." />
     <Parallel DisplayName="Dimensions" sap2010:WorkflowViewState.IdRef="Parallel_2">
@@ -494,7 +492,7 @@
           </InArgument>
         </vfcba:LoadCDRs.ToDate>
       </vfcba:LoadCDRs>
-      <vffba1:FillFactValues sap2010:WorkflowViewState.IdRef="FillFactValues_2">
+      <vffba1:FillFactValues sap2010:WorkflowViewState.IdRef="FillFactValues_3">
         <vffba1:FillFactValues.AccountCases>
           <InArgument x:TypeArguments="vffe:DWAccountCaseDictionary">
             <mca:CSharpValue x:TypeArguments="vffe:DWAccountCaseDictionary">accountCases</mca:CSharpValue>
@@ -530,16 +528,6 @@
             <mca:CSharpValue x:TypeArguments="vffe:DWTimeDictionary">times</mca:CSharpValue>
           </InArgument>
         </vffba1:FillFactValues.Times>
-        <vffba1:FillFactValues.ToBeInsertedBTSs>
-          <InOutArgument x:TypeArguments="scg:List(vffe:DWDimension)">
-            <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedBTSs</mca:CSharpReference>
-          </InOutArgument>
-        </vffba1:FillFactValues.ToBeInsertedBTSs>
-        <vffba1:FillFactValues.ToBeInsertedTimes>
-          <InOutArgument x:TypeArguments="scg:List(vffe:DWTime)">
-            <mca:CSharpReference x:TypeArguments="scg:List(vffe:DWTime)">toBeInsertedTimes</mca:CSharpReference>
-          </InOutArgument>
-        </vffba1:FillFactValues.ToBeInsertedTimes>
       </vffba1:FillFactValues>
       <vffba1:PrepareDWFactsForDBApply sap2010:WorkflowViewState.IdRef="PrepareDWFactsForDBApply_1">
         <vffba1:PrepareDWFactsForDBApply.InputQueue>
@@ -576,24 +564,8 @@
         </vffba1:ApplyDWFactsToDB.PreviousActivityStatus>
       </vffba1:ApplyDWFactsToDB>
     </Parallel>
-    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_3">
-      <vffba1:ApplyDWTimesToDB PreviousActivityStatus="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyDWTimesToDB_1">
-        <vffba1:ApplyDWTimesToDB.ToBeInsertedTimes>
-          <InArgument x:TypeArguments="scg:List(vffe:DWTime)">
-            <mca:CSharpValue x:TypeArguments="scg:List(vffe:DWTime)">toBeInsertedTimes</mca:CSharpValue>
-          </InArgument>
-        </vffba1:ApplyDWTimesToDB.ToBeInsertedTimes>
-      </vffba1:ApplyDWTimesToDB>
-      <vffba1:ApplyDWBTSsToDB PreviousActivityStatus="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyDWBTSsToDB_1">
-        <vffba1:ApplyDWBTSsToDB.ToBeInsertedCallBTSs>
-          <InArgument x:TypeArguments="scg:List(vffe:DWDimension)">
-            <mca:CSharpValue x:TypeArguments="scg:List(vffe:DWDimension)">toBeInsertedBTSs</mca:CSharpValue>
-          </InArgument>
-        </vffba1:ApplyDWBTSsToDB.ToBeInsertedCallBTSs>
-      </vffba1:ApplyDWBTSsToDB>
-    </Parallel>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2" Text="Finished executing workflow: FillDataWarehouse ..." />
-    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sbkoD1QQOAgEBUgVSeQMBzhBTBdADEAMBpALRAwXCBBACARXDBAXSBBACAQTTBAXTBHoCAQJSQ1J2AwHPEFkH4QISAwGABOICB5cDEgMBjAOYAwetAxsDAeMCrgMHuQMaAwHOAroDB88DIgMBpQLbAwfwAxgDAesB8QMHnwQfAgFsoAQHtQQpAgEztgQHwQQhAgEWxAQHygQhAgENywQH0QQgAgEF0wRD0wR3AgEDdQm3ASIDAYYNuAEJpwIrAwGDB6gCCeACKAMBgQTpAgn0AiIDAeMD9QIJigMrAwGqA4sDCZYDKAMBjQObAw2bA1sDAYIDpQMNpQNlAwH4AqADDaADeAMB7gKqAw2qA1kDAeQCtgMNtgN4AwHZArEDDbEDaQMBzwK9Aw29A3MDAcQCwgMNwgNbAwG6AscDDccDfwMBsALMAw3MA1kDAaYC3gMN3gNbAwGWAugDDegDdgMBiALjAw3jA24DAfoB7QMN7QNZAwHsAYgEDYgEbgMB3QH+Aw3+A2YDAc8B9AMN9ANrAwHBAZIEDZIEXQMBswGNBA2NBH0DAaUBgwQNgwR0AwGXAZwEDZwEcQMBiQH5Aw35A2ECAXuXBA2XBHUCAW2tBA2tBHUCAV6jBA2jBGwCAVCyBA2yBIcBAgFCqAQNqAR0AgE0vgQNvgR/AgEluQQNuQRsAgEXxwQNxwRpAgEOzgQNzgRtAgEGlgEPlgFuAwGrEKUBD6UBdgMBiBCCAQ+CAXMDAeUPjAEPjAFdAwHCD7QBD7QBbAMBnw99D31wAwH8DpsBD5sBgAEDAdkOhwEPhwFuAwG2DqoBD6oBdgMBkw54D3hyAwHwDaABD6ABdAMBzQ2vAQ+vAVsDAaoNkQEPkQFzAwGHDdQBD9QBZgMB4wz8AQ/8AX8DAcAMiwIPiwJ6AwGdDJoCD5oCggEDAfoL6AEP6AFuAwHXC/IBD/IBfgMBtAuQAg+QAoABAwGRC8UBD8UBawMB7grZAQ/ZAXgDAcsK9wEP9wF8AwGoCqQCD6QCZAMBhQqBAg+BAnoDAeIJwAEPwAFoAwG/Cd4BD94BiQEDAZwJygEPygFmAwH5CO0BD+0BbgMB1giVAg+VAoIBAwGzCIYCD4YCfwMBkAifAg+fAngDAe0HuwEPuwFqAwHKB+MBD+MBbAMBpwfPAQ/PAWsDAYQHugIPugJ/AwHgBskCD8kCegMBvQbYAg/YAoIBAwGaBrACD7ACfgMB9wXOAg/OAoABAwHUBasCD6sCgQEDAbEFtQIPtQJ8AwGOBb8CD78CegMB6wTTAg/TAoIBAwHIBMQCD8QCfwMBpQTdAg/dAngDAYIE7AIP7AJyAwHyA/ECD/ECgAEDAeQD/QIP/QJ4AwHVA/gCD/gCagMBxwOCAw+CA4kBAwG5A4cDD4cDfAMBqwOOAw+OA4EBAwGcA5MDD5MDfAMBjgM=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d09DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbGxEYXRhV2FyZWhvdXNlUHJvY2Vzcy54YW1sZ0oDuQQOAgEBUAVQeQMB/w5RBc4DEAMB1QHPAwW2BBACAQS3BAW3BHoCAQJQQ1B2AwGAD1cH3wISAwGNA+ACB5UDEgMBqQKWAwerAxsDAYgCrAMHtwMaAwH3AbgDB80DIgMB1gHZAwfuAxgDAaQB7wMHkwQfAgFPlAQHqQQpAgEeqgQHtQQhAgEFtwRDtwR3AgEDcwm1ASIDAdELtgEJpQIrAwH6BaYCCd4CKAMBjgPnAgnyAiIDAfQC8wIJiAMrAwHDAokDCZQDKAMBqgKZAw2ZA1sDAaECowMNowNlAwGZAp4DDZ4DeAMBkQKoAw2oA1kDAYkCtAMNtAN4AwGAAq8DDa8DaQMB+AG7Aw27A3MDAe8BwAMNwANbAwHnAcUDDcUDfwMB3wHKAw3KA1kDAdcB3AMN3ANbAwHJAeYDDeYDdgMBvQHhAw3hA24DAbEB6wMN6wNZAwGlAYYEDYYEbgMBmAH8Aw38A2YDAYwB8gMN8gNrAwGAAZAEDZAEXQIBdIsEDYsEfQIBaIEEDYEEdAIBXPcDDfcDYQIBUKEEDaEEdQIBQ5cEDZcEbAIBN6YEDaYEhwECASucBA2cBHQCAR+yBA2yBH8CARKtBA2tBGwCAQaUAQ+UAW4DAd4OowEPowF2AwG9DoABD4ABcwMBnA6KAQ+KAV0DAfsNsgEPsgFsAwHaDXsPe3ADAbkNmQEPmQGAAQMBmA2FAQ+FAW4DAfcMqAEPqAF2AwHWDHYPdnIDAbUMngEPngF0AwGUDK0BD60BWwMB8wuPAQ+PAXMDAdIL0gEP0gFmAwGwC/oBD/oBfwMBjwuJAg+JAnoDAe4KmAIPmAKCAQMBzQrmAQ/mAW4DAawK8AEP8AF+AwGLCo4CD44CgAEDAeoJwwEPwwFrAwHJCdcBD9cBeAMBqAn1AQ/1AXwDAYcJogIPogJkAwHmCP8BD/8BegMBxQi+AQ++AWgDAaQI3AEP3AGJAQMBgwjIAQ/IAWYDAeIH6wEP6wFuAwHBB5MCD5MCggEDAaAHhAIPhAJ/AwH/Bp0CD50CeAMB3ga5AQ+5AWoDAb0G4QEP4QFsAwGcBs0BD80BawMB+wW4Ag+4An8DAdkFxwIPxwJ6AwG4BdYCD9YCggEDAZcFrgIPrgJ+AwH2BMwCD8wCgAEDAdUEqQIPqQKBAQMBtASzAg+zAnwDAZMEvQIPvQJ6AwHyA9ECD9ECggEDAdEDwgIPwgJ/AwGwA9sCD9sCeAMBjwPqAg/qAnIDAYED7wIP7wKAAQMB9QL7Ag/7AngDAegC9gIP9gJqAwHcAoADD4ADiQEDAdAChQMPhQN8AwHEAowDD4wDgQEDAbcCkQMPkQN8AwGrAg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -623,22 +595,19 @@
       <sap2010:ViewStateData Id="GetDWAccountCases_1" sap:VirtualizedContainerService.HintSize="200,270" />
       <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1318,316" />
       <sap2010:ViewStateData Id="LoadCDRs_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="FillFactValues_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="FillFactValues_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareDWFactsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyDWFactsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1318,86" />
-      <sap2010:ViewStateData Id="ApplyDWTimesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ApplyDWBTSsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="1318,86" />
       <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="1318,62" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1340,896">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1340,770">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FillDataWarehouse_1" sap:VirtualizedContainerService.HintSize="1380,976" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FillDataWarehouse_1" sap:VirtualizedContainerService.HintSize="1380,850" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
