@@ -9,5 +9,8 @@ namespace Vanrise.Security.Entities
     public class ViewDetail
     {
         public View Entity { get; set; }
+        public string ModuleName { get; set; }
+
+        
     }
 }

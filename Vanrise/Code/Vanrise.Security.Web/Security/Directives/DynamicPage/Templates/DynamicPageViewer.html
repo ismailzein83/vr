@@ -1,4 +1,4 @@
-﻿<vr-form validationcontext="dynamicPagePreviewGroup" ng-show="!nonSearchable">
+﻿<vr-form validationcontext="dynamicPagePreviewGroup" ng-if="!nonSearchable">
     <div ng-hide="filterSectionCollapsed">
         <vr-row removeline>
             <vr-columns width="1/2row">
@@ -6,8 +6,7 @@
             </vr-columns>
 
             <vr-columns width="normal">
-                <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"
-                           selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
+                <vr-timedimension-selector on-ready="onTimeDimentionDirectiveReady" label="Grouping By"></vr-timedimension-selector>
             </vr-columns>
 
         </vr-row>
@@ -15,7 +14,7 @@
     <vr-row removeline>
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
             <div transclude-to="buttons">
-                <vr-button type="Search" validationcontext="dynamicPagePreviewGroup" data-onclick="Search"></vr-button>
+                <vr-button type="Search" validationcontext="dynamicPagePreviewGroup" ng-if="!nonSearchable" data-onclick="Search"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>

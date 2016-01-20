@@ -10,5 +10,6 @@ namespace Vanrise.Security.Data
     {
         List<Vanrise.Security.Entities.Module> GetModules();
         bool UpdateModuleRank(int moduleId, int rank);
+       bool AreModulesUpdated(ref object _updateHandle);
     }
 }

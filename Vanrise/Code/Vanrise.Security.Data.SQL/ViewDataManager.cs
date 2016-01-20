@@ -11,12 +11,16 @@ namespace Vanrise.Security.Data.SQL
 {
     public class ViewDataManager : BaseSQLDataManager, IViewDataManager
     {
+    
+        #region ctor
         public ViewDataManager()
             : base(GetConnectionStringName("SecurityDBConnStringKey", "SecurityDBConnString"))
         {
 
         }
+        #endregion
 
+        #region Public Methods
         public List<Entities.View> GetViews()
         {
             return GetItemsSP("sec.sp_View_GetAll", ViewMapper);
@@ -34,7 +38,7 @@ namespace Vanrise.Security.Data.SQL
             string url = "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview";
             int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Insert", out viewId, view.Name, view.Name, url, view.ModuleId, null,
                serialziedAudience, serialziedContent, ViewType.Dynamic);
-            insertedId  = (recordesEffected > 0) ? (int)viewId : -1;
+            insertedId = (recordesEffected > 0) ? (int)viewId : -1;
             return (recordesEffected > 0);
             //  return false;
         }
@@ -57,28 +61,7 @@ namespace Vanrise.Security.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Delete", viewId);
             return (recordesEffected > 0);
         }
-        private View ViewMapper(IDataReader reader)
-        {
 
-            View instance = new View
-            {
-                ViewId = (int)reader["Id"],
-                Name = reader["Name"] as string,
-                Title = reader["Title"] as string,
-                Url = reader["Url"] as string,
-                ModuleId = (int) reader["Module"],
-                ModuleName = reader["ModuleName"] as string,
-                RequiredPermissions = GetReaderValue<string>(reader, "RequiredPermissions"),
-                Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null,
-                ViewContent = ((reader["Content"] as string) != null) ? Common.Serializer.Deserialize<ViewContent>(reader["Content"] as string) : null,
-                Rank = GetReaderValue<int>(reader, "Rank"),
-                Type=(ViewType) reader["Type"],
-
-            };
-        
-
-            return instance;
-        }
         public bool UpdateViewRank(int viewId, int rank)
         {
             int recordesEffected = ExecuteNonQuerySP("sec.sp_View_UpdateRank", viewId, rank);
@@ -88,6 +71,35 @@ namespace Vanrise.Security.Data.SQL
         {
             return base.IsDataUpdated("[sec].[View]", ref updateHandle);
         }
+
+        #endregion
+
+        #region Mappers
+        private View ViewMapper(IDataReader reader)
+        {
+
+            View instance = new View
+            {
+                ViewId = (int)reader["Id"],
+                Name = reader["Name"] as string,
+                Title = reader["Title"] as string,
+                Url = reader["Url"] as string,
+                ModuleId = (int)reader["Module"],
+                RequiredPermissions = GetReaderValue<string>(reader, "RequiredPermissions"),
+                Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null,
+                ViewContent = ((reader["Content"] as string) != null) ? Common.Serializer.Deserialize<ViewContent>(reader["Content"] as string) : null,
+                Rank = GetReaderValue<int>(reader, "Rank"),
+                Type = (ViewType)reader["Type"],
+
+            };
+
+
+            return instance;
+        }
+        #endregion
+      
+    
+      
     }
 
 

@@ -88,7 +88,6 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 return obj;
             }
             api.load = function (payload) {
-               
                 if (payload != undefined) {
 
                     $scope.fromDate = payload.fromData;
@@ -113,10 +112,14 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
 
                 return loadPeriodPromiseDeferred.promise.then(function()
                 {
-                    date = periodDirectiveAPI.getData().getInterval();
-                    selectedPeriod = periodDirectiveAPI.getData();// $scope.selectedPeriod.getInterval();
-                    $scope.fromDate = date.from;
-                    $scope.toDate = date.to;
+                    if (payload && payload.period != undefined)
+                    {
+                        date = periodDirectiveAPI.getData().getInterval();
+                        selectedPeriod = periodDirectiveAPI.getData();// $scope.selectedPeriod.getInterval();
+                        $scope.fromDate = date.from;
+                        $scope.toDate = date.to;
+                    }
+                   
                 })
                
 

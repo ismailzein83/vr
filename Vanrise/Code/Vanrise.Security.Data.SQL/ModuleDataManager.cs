@@ -10,17 +10,33 @@ namespace Vanrise.Security.Data.SQL
 {
     class ModuleDataManager : BaseSQLDataManager, IModuleDataManager
     {
+     
+        #region ctor
         public ModuleDataManager()
             : base(GetConnectionStringName("SecurityDBConnStringKey", "SecurityDBConnString"))
         {
 
         }
+        #endregion
 
+        #region Public Methods
         public List<Entities.Module> GetModules()
         {
             return GetItemsSP("sec.sp_Module_GetAll", ModuleMapper);
         }
+        public bool UpdateModuleRank(int moduleId, int rank)
+        {
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_UpdateRank", moduleId, rank);
+            return (recordesEffected > 0);
+        }
+        public bool AreModulesUpdated(ref object _updateHandle)
+        {
+            return base.IsDataUpdated("sec.[Module]", ref _updateHandle);
+        }
 
+        #endregion
+
+        #region Mappers
         Entities.Module ModuleMapper(IDataReader reader)
         {
             Entities.Module module = new Entities.Module
@@ -36,10 +52,7 @@ namespace Vanrise.Security.Data.SQL
             };
             return module;
         }
-        public bool UpdateModuleRank(int moduleId, int rank)
-        {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_UpdateRank", moduleId, rank);
-            return (recordesEffected > 0);
-        }
+        #endregion
+
     }
 }

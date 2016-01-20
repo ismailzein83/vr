@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrSecDynamicpageGrid", ["VRNotificationService", "VR_Sec_ViewAPIService", "VR_ViewService", "UsersAPIService", "GroupAPIService", "TimeDimensionTypeEnum", "PeriodEnum", "UtilsService","VRModalService",
+app.directive("vrSecDynamicpageGrid", ["VRNotificationService", "VR_Sec_ViewAPIService", "VR_ViewService", "VR_Sec_UserAPIService", "VR_Sec_GroupAPIService", "TimeDimensionTypeEnum", "PeriodEnum", "UtilsService", "VRModalService",
 function (VRNotificationService, VR_Sec_ViewAPIService, VR_ViewService, UsersAPIService, GroupAPIService, TimeDimensionTypeEnum, PeriodEnum, UtilsService, VRModalService) {
 
     var directiveDefinitionObject = {

@@ -10,10 +10,23 @@ namespace Vanrise.Security.Business
 {
     public class MenuManager
     {
+  
+        #region ctor
+
+        ModuleManager _moduleManager;
+        ViewManager _viewManager;
+        public MenuManager()
+        {
+            _moduleManager = new ModuleManager();
+            _viewManager = new ViewManager();
+        }
+
+        #endregion
+
+        #region Public Methods
         public List<MenuItem> GetMenuItems()
         {
-            IModuleDataManager moduleDataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
-            List<Module> modules = moduleDataManager.GetModules();
+            List<Module> modules = _moduleManager.GetModules();
             List<MenuItem> retVal = new List<MenuItem>();
 
             foreach (Module item in modules)
@@ -28,58 +41,47 @@ namespace Vanrise.Security.Business
 
             return retVal;
         }
-
         public List<MenuItem> GetMenuItems(int userId)
         {
-            IModuleDataManager moduleDataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
-            List<Module> modules = moduleDataManager.GetModules();
+
+            List<Module> modules = _moduleManager.GetModules();
 
             GroupManager groupManager = new GroupManager();
             List<int> groups = groupManager.GetUserGroups(userId);
-            
-            List<View> views = GetViews();
+
+            List<View> views = _viewManager.GetViews();
             views = this.FilterViewsPerAudience(views, userId, groups);
 
             List<MenuItem> retVal = new List<MenuItem>();
 
             foreach (Module item in modules)
             {
-                if(item.ParentId == 0)
+                if (item.ParentId == 0)
                 {
                     MenuItem rootItem = GetModuleMenu(item, modules, views);
-                    if(rootItem.Childs != null && rootItem.Childs.Count > 0)
+                    if (rootItem.Childs != null && rootItem.Childs.Count > 0)
                         retVal.Add(rootItem);
                 }
             }
 
-            return  SortedMenuItems(retVal);;
+            return SortedMenuItems(retVal); ;
         }
         public List<MenuItem> SortedMenuItems(List<MenuItem> menuItems)
         {
-           
-            if (menuItems==null || menuItems.Count == 0)
+
+            if (menuItems == null || menuItems.Count == 0)
                 return menuItems;
             menuItems = menuItems.OrderBy(m => m.Rank).ToList();
-             foreach (MenuItem menuItem in menuItems)
-                 if (menuItem.Childs != null && menuItem.Childs.Count!=0)
-                   menuItem.Childs = SortedMenuItems(menuItem.Childs);
-             return menuItems;
+            foreach (MenuItem menuItem in menuItems)
+                if (menuItem.Childs != null && menuItem.Childs.Count != 0)
+                    menuItem.Childs = SortedMenuItems(menuItem.Childs);
+            return menuItems;
 
-           
+
         }
-        private List<View> GetViews()
-        {
-            IViewDataManager viewDataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
-            List<View> views = viewDataManager.GetViews();
-            for (int i = 0; i < views.Count; i++)
-            {
-                if (views[i].Type == ViewType.Dynamic)
-                    views[i].Url =string.Format("{0}/{{\"viewId\":\"{1}\"}}",views[i].Url,views[i].ViewId);
-            }
-            return views;
+        #endregion
 
-        } 
-
+        #region Private Methods
         private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views)
         {
             MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Title = module.Title, Location = module.Url, Icon = module.Icon, Rank = module.Rank };
@@ -93,9 +95,9 @@ namespace Vanrise.Security.Business
                 menu.Childs = new List<MenuItem>();
                 foreach (View viewItem in childViews)
                 {
-                    if(viewItem.RequiredPermissions == null || SecurityContext.Current.IsAllowed(viewItem.RequiredPermissions))
+                    if (viewItem.RequiredPermissions == null || SecurityContext.Current.IsAllowed(viewItem.RequiredPermissions))
                     {
-                        MenuItem viewMenu = new MenuItem() { Id = viewItem.ViewId, Name = viewItem.Name, Title = viewItem.Title, Location = viewItem.Url, Type = viewItem.Type, Rank = viewItem .Rank};
+                        MenuItem viewMenu = new MenuItem() { Id = viewItem.ViewId, Name = viewItem.Name, Title = viewItem.Title, Location = viewItem.Url, Type = viewItem.Type, Rank = viewItem.Rank };
                         menu.Childs.Add(viewMenu);
                     }
                 }
@@ -113,18 +115,17 @@ namespace Vanrise.Security.Business
 
             return menu;
         }
-
         private List<View> FilterViewsPerAudience(List<View> views, int userId, List<int> subscribedGroups)
         {
             List<View> filteredResults = new List<View>();
-            
+
             foreach (View item in views)
             {
-                if(item.Audience != null)
+                if (item.Audience != null)
                 {
                     //Check if the user is an audience then add the view; otherwise the view will not be in the filtered results
-                   if((item.Audience.Users != null && item.Audience.Users.Find(x => x == userId) != 0) || isAudienceInSubscribedGroups(item, subscribedGroups))
-                       filteredResults.Add(item);
+                    if ((item.Audience.Users != null && item.Audience.Users.Find(x => x == userId) != 0) || isAudienceInSubscribedGroups(item, subscribedGroups))
+                        filteredResults.Add(item);
                 }
                 else
                 {
@@ -135,7 +136,6 @@ namespace Vanrise.Security.Business
 
             return filteredResults;
         }
-
         private bool isAudienceInSubscribedGroups(View view, List<int> subscribedGroups)
         {
             if (view.Audience.Groups != null)
@@ -151,13 +151,12 @@ namespace Vanrise.Security.Business
 
             return false;
         }
-        
         private MenuItem GetModuleMenu(Module module, List<Module> modules)
         {
-            
-            
-            MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name,Title=module.Title, Location = module.Url, Icon = module.Icon, AllowDynamic=module.AllowDynamic };
-            
+
+
+            MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Title = module.Title, Location = module.Url, Icon = module.Icon, AllowDynamic = module.AllowDynamic };
+
             List<Module> subModules = modules.FindAll(x => x.ParentId == module.ModuleId && x.AllowDynamic);
 
             if (subModules.Count > 0)
@@ -165,12 +164,13 @@ namespace Vanrise.Security.Business
                 menu.Childs = new List<MenuItem>();
                 foreach (Module item in subModules)
                 {
-                        menu.Childs.Add(GetModuleMenu(item, modules));
+                    menu.Childs.Add(GetModuleMenu(item, modules));
                 }
             }
 
             return menu;
         }
+        #endregion       
         
     }
 }

@@ -1,6 +1,6 @@
-﻿DynamicPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'GroupAPIService', 'UsersAPIService', 'VR_Sec_ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum', 'VRModalService','VRUIUtilsService'];
+﻿DynamicPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'VR_Sec_GroupAPIService', 'VR_Sec_ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum', 'VRModalService', 'VRUIUtilsService'];
 
-function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, GroupAPIService, UsersAPIService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService, VRUIUtilsService) {
+function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, GroupAPIService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService, VRUIUtilsService) {
     $scope.scopeModal = {};
     var viewId;
     var viewEntity;
@@ -11,6 +11,9 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
 
     var timeDimentionDirectiveAPI;
     var timeDimentionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+    var userDirectiveAPI;
+    var userReadyPromiseDeferred = UtilsService.createPromiseDeferred();
     loadParameters();
     defineScope();
     load();
@@ -50,6 +53,12 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, timeDimentionDirectiveAPI, payload, setLoader,timeDimentionReadyPromiseDeferred);
         }
 
+        $scope.scopeModal.onUserDireciveReady = function (api)
+        {
+            userDirectiveAPI = api;
+            userReadyPromiseDeferred.resolve();
+        }
+
         $scope.scopeModal.tabObject;
 
         $scope.scopeModal.widgets = [];
@@ -72,23 +81,16 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
 
         $scope.scopeModal.selectedGroups = [];
 
-        $scope.scopeModal.subViewConnector = {};
 
         $scope.scopeModal.moduleId;
 
-        $scope.scopeModal.selectedViewTimeDimensionType;
+        $scope.scopeModal.selectedPeriod;
 
-        $scope.scopeModal.selectedViewPeriod;
-
-        $scope.scopeModal.selectedWidgetPeriod;
-
-        $scope.scopeModal.selectedWidgetTimeDimensionType;
+        $scope.scopeModal.selectedTimeDimensionType;
 
         $scope.scopeModal.summaryContents = [];
 
         $scope.scopeModal.bodyContents = [];
-
-        $scope.scopeModal.addedwidgets = [];
 
         $scope.scopeModal.summaryWidgets = [];
 
@@ -124,13 +126,9 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         }
 
         $scope.scopeModal.periodSelectionChanged = function () {
-            if ($scope.scopeModal.selectedWidget != undefined && ($scope.scopeModal.selectedViewPeriod != undefined || $scope.scopeModal.selectedWidgetPeriod !=undefined)) {
+            if ($scope.scopeModal.selectedWidget != undefined && $scope.scopeModal.selectedPeriod != undefined ) {
                 {
-                    var defaultPeriod;
-                    if (!$scope.scopeModal.nonSearchable)
-                        defaultPeriod = $scope.scopeModal.selectedViewPeriod.description;
-                    else
-                        defaultPeriod = $scope.scopeModal.selectedWidgetPeriod.description;
+                    var defaultPeriod = $scope.scopeModal.selectedPeriod.description;
                     var title = defaultPeriod + "-" + $scope.scopeModal.selectedWidget.Name;
                     $scope.scopeModal.sectionTitle = title;
                 }
@@ -139,13 +137,9 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         }
 
         $scope.scopeModal.onWidgetSelectionChanged = function () {
-            if ($scope.scopeModal.selectedWidget != undefined && ($scope.scopeModal.selectedViewPeriod != undefined || $scope.scopeModal.selectedWidgetPeriod != undefined)) {
+            if ($scope.scopeModal.selectedWidget != undefined && $scope.scopeModal.selectedPeriod != undefined) {
                 {
-                    var defaultPeriod;
-                    if (!$scope.scopeModal.nonSearchable)
-                        defaultPeriod = $scope.scopeModal.selectedViewPeriod.description;
-                    else
-                        defaultPeriod = $scope.scopeModal.selectedWidgetPeriod.description;
+                    var defaultPeriod = $scope.scopeModal.selectedPeriod.description;
                     var title = defaultPeriod + "-" + $scope.scopeModal.selectedWidget.Name;
                     $scope.scopeModal.sectionTitle = title;
                 }
@@ -199,8 +193,8 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
                 SectionTitle: $scope.scopeModal.sectionTitle
             }
             if ($scope.scopeModal.nonSearchable) {
-                viewWidget.DefaultPeriod = $scope.scopeModal.selectedWidgetPeriod.value
-                viewWidget.DefaultGrouping = $scope.scopeModal.selectedWidgetTimeDimensionType.value
+                viewWidget.DefaultPeriod = $scope.scopeModal.selectedPeriod.value
+                viewWidget.DefaultGrouping = $scope.scopeModal.selectedTimeDimensionType.value
             }
             switch ($scope.scopeModal.selectedSection.value)
             {
@@ -214,7 +208,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         $scope.scopeModal.itemsSortable = { handle: '.handeldrag', animation: 150 };
 
         $scope.scopeModal.removeViewContent = function (viewContent) {
-            var sections=viewContent.Widget.WidgetDefinitionSetting.Sections;
+            var sections = viewContent.Widget.WidgetDefinitionSetting.Sections;
             for (var i = 0; i < sections.length; i++) {
                 switch (sections[i]) {
                     case WidgetSectionEnum.Summary.value: $scope.scopeModal.addedSummaryWidgets.splice($scope.scopeModal.addedSummaryWidgets.indexOf(viewContent), 1);
@@ -231,11 +225,10 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
     {
         var payload=
             {
-                selectedViewPeriod: $scope.scopeModal.selectedViewPeriod != undefined?$scope.scopeModal.selectedViewPeriod.value: undefined,
-                selectedViewTimeDimensionType: $scope.scopeModal.selectedViewTimeDimensionType,
+                selectedPeriod: !$scope.scopeModal.nonSearchable? $scope.scopeModal.selectedPeriod.value: undefined,
+                selectedTimeDimensionType: !$scope.scopeModal.nonSearchable ? $scope.scopeModal.selectedTimeDimensionType : undefined,
                 bodyContents: $scope.scopeModal.bodyContents,
-                summaryContents: $scope.scopeModal.summaryContents,
-                nonSearchable:$scope.scopeModal.nonSearchable
+                summaryContents: $scope.scopeModal.summaryContents,         
             }
         return payload;
     }
@@ -247,14 +240,14 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
             modalScope.title = "Validate Dynamic Page: " + $scope.scopeModal.pageName;
         };
             
-        var selectedUsersIDs = [];
-        for (var i = 0; i < $scope.scopeModal.selectedUsers.length; i++)
-            selectedUsersIDs.push($scope.scopeModal.selectedUsers[i].UserId);
+        //var selectedUsersIDs = [];
+        //for (var i = 0; i < $scope.scopeModal.selectedUsers.length; i++)
+        //    selectedUsersIDs.push($scope.scopeModal.selectedUsers[i].UserId);
         var selectedGroupsIDs = [];
         for (var i = 0; i < $scope.scopeModal.selectedGroups.length; i++)
             selectedGroupsIDs.push($scope.scopeModal.selectedGroups[i].GroupId);
         var Audiences = {
-            Users: selectedUsersIDs,
+            Users: userDirectiveAPI.getSelectedIds(),// selectedUsersIDs,
             Groups: selectedGroupsIDs
         };
         buildContentsFromScope();
@@ -308,8 +301,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         $scope.scopeModal.timeDimensionTypes = [];
         for (var td in TimeDimensionTypeEnum)
             $scope.scopeModal.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
-        $scope.scopeModal.selectedViewTimeDimensionType = TimeDimensionTypeEnum.Daily;
-        $scope.scopeModal.selectedWidgetTimeDimensionType = TimeDimensionTypeEnum.Daily;
+        $scope.scopeModal.selectedTimeDimensionType = TimeDimensionTypeEnum.Daily;
     }
 
     function addView() {
@@ -389,8 +381,8 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
             BodyContents: $scope.scopeModal.bodyContents,
         }
         if (!$scope.scopeModal.nonSearchable) {
-            ViewContent.DefaultPeriod = $scope.scopeModal.selectedViewPeriod.value;
-            ViewContent.DefaultGrouping = $scope.scopeModal.selectedViewTimeDimensionType.value;
+            ViewContent.DefaultPeriod = $scope.scopeModal.selectedPeriod.value;
+            ViewContent.DefaultGrouping = $scope.scopeModal.selectedTimeDimensionType.value;
         }
         $scope.scopeModal.View = {
             Name: $scope.scopeModal.pageName,
@@ -476,11 +468,11 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         {
             $scope.scopeModal.pageName = viewEntity.Name;
             if (viewEntity.Audience !=null && (viewEntity.Audience.Users != undefined || viewEntity.Audience.Groups != undefined)) {
-                for (var i = 0; i < viewEntity.Audience.Users.length; i++) {
-                    var value = UtilsService.getItemByVal($scope.scopeModal.users, viewEntity.Audience.Users[i], 'UserId');
-                    if (value != null)
-                        $scope.scopeModal.selectedUsers.push(value);
-                }
+                //for (var i = 0; i < viewEntity.Audience.Users.length; i++) {
+                //    var value = UtilsService.getItemByVal($scope.scopeModal.users, viewEntity.Audience.Users[i], 'UserId');
+                //    if (value != null)
+                //        $scope.scopeModal.selectedUsers.push(value);
+                //}
 
                 for (var i = 0; i < viewEntity.Audience.Groups.length; i++) {
                     var value = UtilsService.getItemByVal($scope.scopeModal.groups, viewEntity.Audience.Groups[i], 'GroupId');
@@ -622,11 +614,20 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
     }
 
     function loadUsers() {
-        UsersAPIService.GetUsers().then(function (response) {
-            angular.forEach(response, function (users) {
-                $scope.scopeModal.users.push(users);
-                }) 
+        var userLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        userReadyPromiseDeferred.promise
+            .then(function () {
+                var directivePayload = { selectedIds: (viewEntity != undefined && viewEntity.Audience != null && viewEntity.Audience.Users != undefined) ? viewEntity.Audience.Users :undefined };
+                userReadyPromiseDeferred = undefined;
+                VRUIUtilsService.callDirectiveLoad(userDirectiveAPI, directivePayload, userLoadPromiseDeferred);
             });
+        //return userLoadPromiseDeferred.promise;
+        //UsersAPIService.GetUsers().then(function (response) {
+        //    angular.forEach(response, function (users) {
+        //        $scope.scopeModal.users.push(users);
+        //        }) 
+        //    });
       
     }
 
