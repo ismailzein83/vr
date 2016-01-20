@@ -67,23 +67,27 @@ app.directive('vrSecuserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
             if (attrs.label != undefined)
                 label = attrs.label;
 
-            //var required = "";
-            //if (attrs.isrequired != undefined)
-            //    required = "isrequired";
             var addCliked = '';
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="addNewUser"';
 
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="UserId" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="User" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="User" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>'
         }
 
         function userCtor(ctrl, $scope, attrs) {
 
+            var selectorApi;
+
+
+
             function initializeController() {
-                defineAPI();
+                ctrl.onSelectorReady = function (api) {
+                    selectorApi = api;
+                    defineAPI();
+                }
             }
 
             function defineAPI() {
