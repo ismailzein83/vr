@@ -130,8 +130,6 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_NumberProfile_CreateTempByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_NormalCDR_GetByConnectDateTime.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_NormalCDR_CreateTempByMSISDN.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_InsertOrUpdateStatus.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_GetSummaryByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_GetStatusByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_GetByStatuses.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetBlockedLines.sql" />
@@ -173,5 +171,15 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_CDRDatabase_SetReadyAndUnlock.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_CDRDatabase_GetIsReady.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_CDRDatabase_GetAllReady.sql" />
+    <Build Include="FraudAnalysis\Tables\AccountInfo.sql" />
+    <Build Include="dbo\Tables\tempdb.dbo.t_b7a60a20aae546668fba4e654e59712e.sql" />
+    <Build Include="dbo\Tables\tempdb.dbo.t_5bc70bdc8b414c9980673e55800865e8.sql" />
+    <Build Include="dbo\Tables\IranStringCDR.sql" />
+    <Build Include="dbo\Tables\IranCDR.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_GetSummaryByCaseID.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountInfo_InsertOrUpdate.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountInfo_GetByAccountStatuses.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetByCaseID.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\bp_AccountStatus_GetByNumberPrefixesAndStatuses.sql" />
   </ItemGroup>
 </Project>

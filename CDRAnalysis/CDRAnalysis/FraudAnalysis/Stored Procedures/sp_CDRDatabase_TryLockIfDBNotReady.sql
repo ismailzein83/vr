@@ -23,8 +23,8 @@ BEGIN
 	IF NOT EXISTS (SELECT TOP 1 NULL FROM FraudAnalysis.CDRDatabase WITH(NOLOCK) WHERE FromTime = @FromTime)
 	BEGIN
 		INSERT INTO FraudAnalysis.CDRDatabase --WITH (TABLOCK) 
-		(FromTime) 
-		SELECT @FromTime 
+		(FromTime, CreatedTime) 
+		SELECT @FromTime, GETDATE()
 		WHERE NOT EXISTS (SELECT TOP 1 NULL FROM FraudAnalysis.CDRDatabase WHERE FromTime = @FromTime)
 	END
 	

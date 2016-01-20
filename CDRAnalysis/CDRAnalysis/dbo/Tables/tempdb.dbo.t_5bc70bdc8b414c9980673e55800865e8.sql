@@ -1,4 +1,4 @@
-﻿CREATE TABLE [FraudAnalysis].[NormalCDR] (
+﻿CREATE TABLE [dbo].[tempdb.dbo.t_5bc70bdc8b414c9980673e55800865e8] (
     [MSISDN]              VARCHAR (30)    NOT NULL,
     [IMSI]                VARCHAR (20)    NULL,
     [ConnectDateTime]     DATETIME        NOT NULL,
@@ -6,7 +6,7 @@
     [DurationInSeconds]   NUMERIC (13, 4) NOT NULL,
     [DisconnectDateTime]  DATETIME        NULL,
     [CallClassID]         INT             NULL,
-    [IsOnNet]             BIT             NOT NULL,
+    [IsOnNet]             BIT             NULL,
     [CallTypeID]          INT             NOT NULL,
     [SubscriberTypeID]    INT             NULL,
     [IMEI]                VARCHAR (20)    NULL,
@@ -25,28 +25,4 @@
     [MSISDNAreaCode]      VARCHAR (10)    NULL,
     [DestinationAreaCode] VARCHAR (10)    NULL
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-GO
-CREATE CLUSTERED INDEX [IX_NormalCDR_MSISDN]
-    ON [FraudAnalysis].[NormalCDR]([MSISDN] ASC, [ConnectDateTime] ASC);
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_NormalCDR_ConnectDateTime]
-    ON [FraudAnalysis].[NormalCDR]([ConnectDateTime] ASC);
 

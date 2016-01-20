@@ -21,7 +21,7 @@ SELECT cdrs.[CGPN]
       ,cdrs.[DisconnectDateTime]
 	  ,cdrs.[CGPNAreaCode]
 	  ,cdrs.[CDPNAreaCode]
-FROM	StagingCDR cdrs with(nolock,index=IX_StagingCDRS_ConnectDateTime)
+FROM	[FraudAnalysis].StagingCDR cdrs with(nolock,index=IX_StagingCDRS_ConnectDateTime)
 WHERE	cdrs.connectDateTime between @From and @To 
 ORDER BY cdrs.connectDateTime
 END

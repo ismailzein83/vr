@@ -5,7 +5,6 @@
 -- =============================================
 CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_CreateTempByCaseID]
 	@TempTableName VARCHAR(200),
-	@AccountNumber VARCHAR(50),
 	@CaseID INT
 AS
 BEGIN
@@ -29,8 +28,7 @@ BEGIN
 		INNER JOIN FraudAnalysis.StrategyExecution e ON d.StrategyExecutionID = e.ID
 		INNER JOIN FraudAnalysis.Strategy s ON e.StrategyID = s.Id
 		
-		WHERE d.AccountNumber = @AccountNumber
-			AND d.CaseID = @CaseID
+		WHERE  d.CaseID = @CaseID
 	
 		DECLARE @sql VARCHAR(1000)
 		SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';

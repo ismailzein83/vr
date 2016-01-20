@@ -3,16 +3,16 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [FraudAnalysis].[sp_AccountStatus_InsertOrUpdate]
+CREATE PROCEDURE [FraudAnalysis].[sp_AccountStatus_InsertOrUpdate]
 	@AccountNumber VARCHAR(50),
 	@StatusID INT,
-	@AccountInfo VARCHAR(Max)
+	@ValidTill DATETIME = NULL
 AS
 BEGIN
-	UPDATE AccountStatus SET [Status] = @StatusID, AccountInfo=@AccountInfo WHERE AccountNumber = @AccountNumber
+	UPDATE AccountStatus SET [Status] = @StatusID, ValidTill = @ValidTill WHERE AccountNumber = @AccountNumber
 	
 	IF @@ROWCOUNT = 0
 	BEGIN
-		INSERT INTO AccountStatus (AccountNumber, [Status], AccountInfo) VALUES (@AccountNumber, @StatusID, @AccountInfo)
+		INSERT INTO AccountStatus (AccountNumber, [Status]) VALUES (@AccountNumber, @StatusID)
 	END
 END

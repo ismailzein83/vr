@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_CreateTempByAccountNumber]
 	@TempTableName VARCHAR(200),
-	@AccountNumber VARCHAR(50),
+	@CaseID int,
 	@FromDate DATETIME,
 	@ToDate DATETIME
 AS
@@ -26,7 +26,7 @@ BEGIN
 		    inner join FraudAnalysis.StrategyExecution se on se.ID = sed.StrategyExecutionID
 			inner join FraudAnalysis.Strategy s ON se.StrategyID = s.Id
 		
-		WHERE sed.AccountNumber = @AccountNumber
+		WHERE sed.CaseID = @CaseID
 			AND sed.SuspicionOccuranceStatus = 1
 			AND se.ExecutionDate >= @FromDate AND se.ExecutionDate <= @ToDate
 		

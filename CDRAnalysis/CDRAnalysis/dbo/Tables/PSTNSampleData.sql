@@ -5,8 +5,12 @@
     [ConnectDateTime]    DATETIME        NOT NULL,
     [DurationInSeconds]  NUMERIC (13, 4) NOT NULL,
     [DisconnectDateTime] DATETIME        NULL,
+    [InTrunkSymbol]      VARCHAR (10)    NULL,
+    [OutTrunkSymbol]     VARCHAR (10)    NULL,
     CONSTRAINT [PK_PSTNSampleData] PRIMARY KEY NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 
