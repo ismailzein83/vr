@@ -10,14 +10,10 @@ AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
-	SELECT	w.Id,w.WidgetDefinitionId,
+	SELECT	w.Id,
+		    w.WidgetDefinitionId,
 			w.Name AS WidgetName,
 			w.Title,
-			w.Setting,
-			wd.Name AS WidgetDefinitionName,
-			wd.DirectiveName AS DirectiveName,
-			wd.Setting as WidgetDefinitionSetting
+			w.Setting
 	FROM	sec.Widget w 
-	JOIN	sec.WidgetDefinition wd 
-	ON		w.WidgetDefinitionId=wd.ID
 END

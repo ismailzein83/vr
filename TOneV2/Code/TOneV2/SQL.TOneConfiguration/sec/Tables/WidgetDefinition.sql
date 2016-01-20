@@ -3,6 +3,9 @@
     [Name]          NCHAR (50)   NULL,
     [DirectiveName] NCHAR (50)   NULL,
     [Setting]       NCHAR (1000) NULL,
+    [timestamp]     ROWVERSION   NULL,
     CONSTRAINT [PK_WidgetDefinition] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

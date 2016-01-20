@@ -4,7 +4,10 @@
     [ModuleId]          INT            NOT NULL,
     [BreakInheritance]  BIT            NOT NULL,
     [PermissionOptions] NVARCHAR (255) NOT NULL,
+    [timestamp]         ROWVERSION     NULL,
     CONSTRAINT [PK_BusinessEntity] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_BusinessEntity_BusinessEntityModule] FOREIGN KEY ([ModuleId]) REFERENCES [sec].[BusinessEntityModule] ([Id])
 );
+
+
 

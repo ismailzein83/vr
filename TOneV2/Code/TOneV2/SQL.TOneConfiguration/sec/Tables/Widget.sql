@@ -4,8 +4,11 @@
     [Name]               NVARCHAR (50)  NULL,
     [Title]              NVARCHAR (50)  NULL,
     [Setting]            NVARCHAR (MAX) NULL,
+    [timestamp]          ROWVERSION     NULL,
     CONSTRAINT [PK_WidgetManagement] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

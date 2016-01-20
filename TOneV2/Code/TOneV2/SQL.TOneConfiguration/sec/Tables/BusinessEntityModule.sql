@@ -4,6 +4,9 @@
     [ParentId]          INT            NULL,
     [BreakInheritance]  BIT            NOT NULL,
     [PermissionOptions] NVARCHAR (255) NOT NULL,
+    [timestamp]         ROWVERSION     NULL,
     CONSTRAINT [PK_BusinessEntityModule] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
