@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrSecuserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService', 'UtilsService', 'VRUIUtilsService',
+app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService', 'UtilsService', 'VRUIUtilsService',
     function (VR_Sec_UserAPIService, VR_Sec_UserService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
