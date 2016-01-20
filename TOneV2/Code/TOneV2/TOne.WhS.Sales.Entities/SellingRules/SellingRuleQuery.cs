@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.BusinessEntity.Entities
+namespace TOne.WhS.Sales.Entities
 {
-    public class SaleZoneFilterSettings
+    public class SellingRuleQuery
     {
-        public int? RoutingProductId { get; set; }
-
         public int? SellingProductId { get; set; }
+        public IEnumerable<int> CustomerIds { get; set; }
+        public IEnumerable<long> SaleZoneIds { get; set; }
     }
 }
