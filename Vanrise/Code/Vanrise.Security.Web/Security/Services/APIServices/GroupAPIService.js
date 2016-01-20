@@ -1,4 +1,4 @@
-﻿app.service('GroupAPIService', function (BaseAPIService) {
+﻿app.service('VR_Sec_GroupAPIService', function (BaseAPIService) {
 
     return ({
         GetFilteredGroups: GetFilteredGroups,

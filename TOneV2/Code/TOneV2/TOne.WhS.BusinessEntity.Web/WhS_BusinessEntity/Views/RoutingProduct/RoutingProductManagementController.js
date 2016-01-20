@@ -11,8 +11,6 @@
         load();
 
         function defineScope() {
-            $scope.gridMenuActions = [];
-
             $scope.sellingNumberPlans = [];
             $scope.selectedSellingNumberPlans = [];
 

@@ -53,6 +53,7 @@
     <Compile Include="HashingUtility.cs" />
     <Compile Include="OrgChartManager.cs" />
     <Compile Include="SecurityContext.cs" />
+    <Compile Include="UserGroupManager.cs" />
     <Compile Include="ViewManager.cs" />
     <Compile Include="MenuManager.cs" />
     <Compile Include="PermissionManager.cs" />

@@ -1,0 +1,10 @@
+﻿<vr-datagrid datasource="groups"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="onGridReady"
+             menuactions="gridMenuActions"
+             idfield="Entity.GroupId">
+
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'"></vr-datagridcolumn>
+</vr-datagrid>

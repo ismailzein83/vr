@@ -174,7 +174,7 @@
         }
 
         function loadAllControls() {
-            UtilsService.waitMultipleAsyncOperations([loadTree, loadPermissions]).catch(function (error) {
+            UtilsService.waitMultipleAsyncOperations([setTitle, loadTree, loadPermissions]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -217,6 +217,11 @@
                     }
                 });
             }
+        }
+
+        function setTitle()
+        {
+            $scope.title = "Assign Permissions";
         }
     }
 

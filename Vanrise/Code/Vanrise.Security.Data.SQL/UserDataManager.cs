@@ -69,12 +69,6 @@ namespace Vanrise.Security.Data.SQL
             return base.IsDataUpdated("sec.[User]", ref updateHandle);
         }
 
-
-        public List<User> GetMembers(int groupId)
-        {
-            return GetItemsSP("sec.sp_User_GetMembers", UserMapper, groupId);
-        }
-
         #endregion
 
         #region Mappers

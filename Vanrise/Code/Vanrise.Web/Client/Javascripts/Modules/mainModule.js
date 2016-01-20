@@ -129,7 +129,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
           
 
         };
-        VRModalService.showModal('/Client/Modules/Security/Views/ChangePassword.html', null, modalSettings);
+        VRModalService.showModal('/Client/Modules/Security/Views/User/ChangePassword.html', null, modalSettings);
     }
 
     $scope.openEditProfileModal = function () {
@@ -140,7 +140,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             modalScope.title = "Edit my profile";
 
         };
-        VRModalService.showModal('/Client/Modules/Security/Views/EditProfile.html', null, modalSettings);
+        VRModalService.showModal('/Client/Modules/Security/Views/User/EditProfile.html', null, modalSettings);
     }
    
     $scope.menuItemsCurrent = null;

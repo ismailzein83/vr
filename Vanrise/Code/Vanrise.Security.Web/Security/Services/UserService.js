@@ -9,7 +9,7 @@
                 modalScope.onUserAdded = onUserAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Security/Views/UserEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/Security/Views/User/UserEditor.html', null, settings);
         }
 
         function editUser(userId, onUserUpdated) {
@@ -22,22 +22,18 @@
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onUserUpdated = onUserUpdated;
             };
-            VRModalService.showModal('/Client/Modules/Security/Views/UserEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Security/Views/User/UserEditor.html', parameters, modalSettings);
         }
 
         function resetPassword(userId) {
             var modalSettings = {
             };
+            
             var parameters = {
                 userId: userId
             };
 
-            modalSettings.onScopeReady = function (modalScope) {
-                modalScope.title = "Reset Password for User: " //+ userObj.Entity.Name;
-                
-            };
-
-            VRModalService.showModal('/Client/Modules/Security/Views/ResetPasswordEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Security/Views/User/ResetPasswordEditor.html', parameters, modalSettings);
         }
 
         function assignPermissions(userId) {
@@ -50,9 +46,9 @@
             };
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.title = "Assign Permissions to User: " //+ userObj.Entity.Name;
+                
             };
-            VRModalService.showModal('/Client/Modules/Security/Views/PermissionEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Security/Views/User/PermissionEditor.html', parameters, modalSettings);
         }
 
         return ({

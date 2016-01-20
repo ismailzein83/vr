@@ -40,9 +40,10 @@ namespace Vanrise.Security.Web.Controllers
         [HttpGet]
         [Authorization(Permissions = "Root/Administration Module/Users:View")]
         [Route("GetMembers")]
-        public List<User> GetMembers(int groupId)
+        public IEnumerable<int> GetMembers(int groupId)
         {
-            return _manager.GetMembers(groupId);
+            UserGroupManager userGroupManager = new UserGroupManager();
+            return userGroupManager.GetMembers(groupId);
         }
 
         [HttpGet]

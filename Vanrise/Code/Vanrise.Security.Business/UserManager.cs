@@ -140,12 +140,6 @@ namespace Vanrise.Security.Business
             return users.FindAllRecords(x => x.Name == name).Count() > 0;
         }
 
-        public List<User> GetMembers(int groupId)
-        {
-            IUserDataManager datamanager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            return datamanager.GetMembers(groupId);
-        }
-
         public string GetUserName(int userId)
         {
             User user = GetUserbyId(userId);

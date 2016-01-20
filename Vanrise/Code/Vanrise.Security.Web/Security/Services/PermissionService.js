@@ -26,7 +26,7 @@
                 modalScope.onPermissionAdded = onPermissionAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Security/Views/BusinessEntityEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Security/Views/Permissions/BusinessEntityEditor.html', modalParameters, modalSettings);
         }
 
         function editPermissions(holderType, holderId, entityType, entityId, entityName, permissionFlags, permissionOptions, onPermissionsUpdated) {
@@ -46,7 +46,7 @@
                 modalScope.onPermissionsUpdated = onPermissionsUpdated
             };
 
-            VRModalService.showModal('/Client/Modules/Security/Views/BusinessEntityEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Security/Views/Permissions/BusinessEntityEditor.html', modalParameters, modalSettings);
         }
 
         function deletePermission(scope, dataItem, onPermissionDeleted) {

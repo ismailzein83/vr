@@ -362,16 +362,19 @@ namespace Vanrise.BI.Business
 
 
            public Vanrise.Entities.IDataRetrievalResult<UserMeasuresValidator> GetUserMeasuresValidator(Vanrise.Entities.DataRetrievalInput<UserMeasuresValidatorInput> userMeasuresValidatorInput)
-        {
-             // Dictionary<int,List<string>> userMeasuresValidator=new   Dictionary<int,List<string>>();
-            
-              List<UserMeasuresValidator> userMeasuresValidator = new List<UserMeasuresValidator>();
-              List<string> distinctMeasures = new List<string>();
-              WidgetsManager widgetsManager = new WidgetsManager();
-              IEnumerable<WidgetDetail> widgets = widgetsManager.GetAllWidgets();
-              foreach (WidgetDetail widget in widgets)
-              {
-                 foreach (int widgetId in userMeasuresValidatorInput.Query.Widgets)
+           {
+               // Dictionary<int,List<string>> userMeasuresValidator=new   Dictionary<int,List<string>>();
+
+               UserManager userManager = new UserManager();
+               IEnumerable<UserInfo> allUserInfo = userManager.GetUsers();
+
+               List<UserMeasuresValidator> userMeasuresValidator = new List<UserMeasuresValidator>();
+               List<string> distinctMeasures = new List<string>();
+               WidgetsManager widgetsManager = new WidgetsManager();
+               IEnumerable<WidgetDetail> widgets = widgetsManager.GetAllWidgets();
+               foreach (WidgetDetail widget in widgets)
+               {
+                   foreach (int widgetId in userMeasuresValidatorInput.Query.Widgets)
                    {
                        if (widget.Entity.Id == widgetId)
                        {
@@ -384,68 +387,64 @@ namespace Vanrise.BI.Business
                        }
                    }
                }
-               BIConfigurationManager manager=new BIConfigurationManager();
-              List<BIConfiguration<BIConfigurationMeasure>> allMeasures= manager.GetMeasures();
+               BIConfigurationManager manager = new BIConfigurationManager();
+               List<BIConfiguration<BIConfigurationMeasure>> allMeasures = manager.GetMeasures();
 
-              List<BIConfiguration<BIConfigurationMeasure>> filteredMeasures = new List<BIConfiguration<BIConfigurationMeasure>>();
-              for (int i = 0; i < allMeasures.Count; i++)
-              {
-                  if (distinctMeasures.Contains(allMeasures[i].Name))
-                  {
-                      filteredMeasures.Add(allMeasures[i]);
-                  }
-              }
-              List<int> distinctUsers = new List<int>();
-              if ((userMeasuresValidatorInput.Query.UserIds!=null && userMeasuresValidatorInput.Query.UserIds.Count != 0) || (userMeasuresValidatorInput.Query.GroupIds!=null && userMeasuresValidatorInput.Query.GroupIds.Count != 0))
-              {
-                  for (int i = 0; i < userMeasuresValidatorInput.Query.UserIds.Count; i++)
-                  {
-                      if (!distinctUsers.Contains(userMeasuresValidatorInput.Query.UserIds[i]))
-                          distinctUsers.Add(userMeasuresValidatorInput.Query.UserIds[i]);
-                  }
-                  List<User> users = new List<User>();
-                  UserManager userManager = new UserManager();
-                  for (int i = 0; i < userMeasuresValidatorInput.Query.GroupIds.Count; i++)
-                  {
-                      users = userManager.GetMembers(userMeasuresValidatorInput.Query.GroupIds[i]);
-                      foreach (User user in users)
-                      {
-                          if (!distinctUsers.Contains(user.UserId) && user.Status != UserStatus.Inactive)
-                              distinctUsers.Add(user.UserId);
+               List<BIConfiguration<BIConfigurationMeasure>> filteredMeasures = new List<BIConfiguration<BIConfigurationMeasure>>();
+               for (int i = 0; i < allMeasures.Count; i++)
+               {
+                   if (distinctMeasures.Contains(allMeasures[i].Name))
+                   {
+                       filteredMeasures.Add(allMeasures[i]);
+                   }
+               }
+               List<int> distinctUsers = new List<int>();
+               if ((userMeasuresValidatorInput.Query.UserIds != null && userMeasuresValidatorInput.Query.UserIds.Count != 0) || (userMeasuresValidatorInput.Query.GroupIds != null && userMeasuresValidatorInput.Query.GroupIds.Count != 0))
+               {
+                   for (int i = 0; i < userMeasuresValidatorInput.Query.UserIds.Count; i++)
+                   {
+                       if (!distinctUsers.Contains(userMeasuresValidatorInput.Query.UserIds[i]))
+                           distinctUsers.Add(userMeasuresValidatorInput.Query.UserIds[i]);
+                   }
+                   IEnumerable<int> users = new List<int>();
+                   UserGroupManager userGroupManager = new UserGroupManager();
+                   for (int i = 0; i < userMeasuresValidatorInput.Query.GroupIds.Count; i++)
+                   {
+                       users = userGroupManager.GetMembers(userMeasuresValidatorInput.Query.GroupIds[i]);
+                       foreach (int userId in users)
+                       {
+                           UserInfo info = allUserInfo.FirstOrDefault(x => x.UserId == userId);
+                           if (!distinctUsers.Contains(userId) && info != null && info.Status != UserStatus.Inactive)
+                               distinctUsers.Add(userId);
+                       }
+                   }
+               }
+               else
+               {
+                   IEnumerable<UserInfo> users = userManager.GetUsers();
+                   foreach (UserInfo user in users)
+                   {
+                       if (!distinctUsers.Contains(user.UserId) && user.Status != UserStatus.Inactive)
+                           distinctUsers.Add(user.UserId);
+                   }
+               }
 
-                      }
-                  }
-              }
-              else
-              {
-                  UserManager userManager = new UserManager();
-                  IEnumerable<UserInfo> users = userManager.GetUsers();
-                  foreach (UserInfo user in users)
-                  {
-                      if (!distinctUsers.Contains(user.UserId) && user.Status != UserStatus.Inactive)
-                          distinctUsers.Add(user.UserId);
+               Vanrise.Security.Business.SecurityManager securityManager = new Vanrise.Security.Business.SecurityManager();
+               foreach (int user in distinctUsers)
+               {
+                   List<string> userDeniedMeasures = new List<string>();
+                   foreach (BIConfiguration<BIConfigurationMeasure> measure in filteredMeasures)
+                   {
+                       if (measure.Configuration.RequiredPermissions != null && !securityManager.IsAllowed(measure.Configuration.RequiredPermissions, user))
+                           userDeniedMeasures.Add(measure.Name);
+                   }
+                   if (userDeniedMeasures.Count > 0)
+                       userMeasuresValidator.Add(new UserMeasuresValidator { UserId = user, MeasuresDenied = userDeniedMeasures });
+               }
+               BigResult<UserMeasuresValidator> returnedData = new BigResult<UserMeasuresValidator>();
+               returnedData.Data = userMeasuresValidator;
+               return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(userMeasuresValidatorInput, returnedData);
 
-                  }
-              }
-              
-             
-               
-              Vanrise.Security.Business.SecurityManager securityManager = new Vanrise.Security.Business.SecurityManager();
-              foreach (int user in distinctUsers)
-              {
-                  List<string> userDeniedMeasures = new List<string>();
-                  foreach (BIConfiguration<BIConfigurationMeasure> measure in filteredMeasures)
-                  {
-                      if (measure.Configuration.RequiredPermissions != null && !securityManager.IsAllowed(measure.Configuration.RequiredPermissions, user))
-                          userDeniedMeasures.Add(measure.Name);
-                  }
-                  if (userDeniedMeasures.Count>0)
-                  userMeasuresValidator.Add(new UserMeasuresValidator{UserId=user,MeasuresDenied=userDeniedMeasures});
-              }
-              BigResult<UserMeasuresValidator> returnedData = new BigResult<UserMeasuresValidator>();
-              returnedData.Data = userMeasuresValidator;
-              return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(userMeasuresValidatorInput, returnedData);
-             
-        }
+           }
     }
 }

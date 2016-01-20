@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="Security_GroupManagementController">
+﻿<vr-panel ng-controller="VR_Sec_GroupManagementController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
@@ -20,17 +20,7 @@
     <div>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-
-                <vr-datagrid datasource="groups"
-                             dataretrievalfunction="dataRetrievalFunction"
-                             pagingtype="'PagingOnScroll'"
-                             on-ready="gridReady"
-                             menuactions="gridMenuActions"
-                             idfield="Entity.GroupId">
-
-                    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'"></vr-datagridcolumn>
-                </vr-datagrid>
+                <vr-sec-group-grid on-ready="onGroupGridReady"></vr-sec-group-grid>
             </vr-columns>
         </vr-row>
     </div>

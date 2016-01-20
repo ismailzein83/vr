@@ -52,6 +52,7 @@
     <Compile Include="IPermissionDataManager.cs" />
     <Compile Include="IGroupDataManager.cs" />
     <Compile Include="IUserDataManager.cs" />
+    <Compile Include="IUserGroupDataManager.cs" />
     <Compile Include="IViewDataManager.cs" />
     <Compile Include="IWidgetDefinitionDataManager.cs" />
     <Compile Include="IWidgetsDataManager.cs" />

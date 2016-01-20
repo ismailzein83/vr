@@ -24,8 +24,5 @@ namespace Vanrise.Security.Data
         bool EditUserProfile(string name, int userId);
 
         bool AreUsersUpdated(ref object updateHandle);
-
-        List<User> GetMembers(int roleId);
-       
     }
 }

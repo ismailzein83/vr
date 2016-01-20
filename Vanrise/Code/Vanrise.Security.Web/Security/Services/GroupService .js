@@ -1,4 +1,4 @@
-﻿app.service('VRSec_GroupService', [
+﻿app.service('VR_Sec_GroupService', [
     function () {
 
         
