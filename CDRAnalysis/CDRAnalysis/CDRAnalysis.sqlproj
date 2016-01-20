@@ -152,7 +152,6 @@
     <Build Include="PSTN_BE\Tables\NormalizationRule.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionDetails_DeleteByCaseIDs.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_CreateTempByFilters.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\bp_AccountStatus_GetNumbersByStatuses.sql" />
     <Build Include="PSTN_BE\Tables\SwitchBrand.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_GetAll.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchBrand_Update.sql" />
@@ -180,6 +179,5 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountInfo_GetByAccountStatuses.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetByCaseID.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\bp_AccountStatus_GetByNumberPrefixesAndStatuses.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_GetByStatuses.sql" />
   </ItemGroup>
 </Project>
