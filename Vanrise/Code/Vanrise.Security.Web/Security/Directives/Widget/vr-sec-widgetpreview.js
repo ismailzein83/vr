@@ -1,140 +1,157 @@
 ﻿'use strict';
-app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'VRModalService', 'PeriodEnum','VRValidationService',
-    function (UtilsService, TimeDimensionTypeEnum, VRModalService, PeriodEnum, VRValidationService) {
+app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'VRModalService', 'PeriodEnum', 'VRValidationService', 'VRUIUtilsService',
+    function (UtilsService, TimeDimensionTypeEnum, VRModalService, PeriodEnum, VRValidationService, VRUIUtilsService) {
 
-    var directiveDefinitionObject = {
-        restrict: 'E',
-        scope: {
-            onReady: '=',
-        },
-        controller: function ($scope, $element, $attrs) {
-            var ctrl = this;
+        var directiveDefinitionObject = {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
 
-            var ctor = new ctorWidgetPreview(ctrl, $scope);
-            ctor.initializeController();
+                var ctor = new ctorWidgetPreview(ctrl, $scope);
+                ctor.initializeController();
 
+                //$scope.openReportEntityModal = function (item) {
 
-            //$scope.openReportEntityModal = function (item) {
+                //    BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
 
-            //    BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
+                //}
 
-            //}
-
-        },
-        controllerAs: 'ctrl',
-        bindToController: true,
-        compile: function (element, attrs) {
-            return {
-                pre: function ($scope, iElem, iAttrs, ctrl) {
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            compile: function (element, attrs) {
+                return {
+                    pre: function ($scope, iElem, iAttrs, ctrl) { }
                 }
+            },
+            templateUrl: "/Client/Modules/Security/Directives/Widget/Templates/WidgetPreview.html"
+
+        };
+
+        function ctorWidgetPreview(ctrl, $scope) {
+
+            var widgetAPI;
+            var widgetReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var timeRangeDirectiveAPI;
+            var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var timeDimentionDirectiveAPI;
+            var timeDimentionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            function initializeController() {
+
+                $scope.onTimeRangeDirectiveReady = function (api) {
+                    timeRangeDirectiveAPI = api;
+                    timeRangeReadyPromiseDeferred.resolve();
+                }
+                $scope.onTimeDimentionDirectiveReady = function (api) {
+                    timeDimentionDirectiveAPI = api;
+                    timeDimentionReadyPromiseDeferred.resolve();
+                }
+
+             
+                $scope.onElementReady = function (api) {
+                    widgetAPI = api;
+                    widgetReadyPromiseDeferred.resolve();
+                };
+
+                $scope.Search = function () {
+                    var obj = timeRangeDirectiveAPI.getData();
+                    $scope.filter = {
+                        timeDimensionType: $scope.selectedTimeDimension,
+                        fromDate: obj.fromDate,
+                        toDate: obj.toDate
+                    }
+                    return refreshWidget();
+                };
+
+                defineAPI();
             }
-        },
-        templateUrl: "/Client/Modules/Security/Directives/Widget/Templates/WidgetPreview.html"
 
-    };
+            function defineAPI() {
+                var api = {};
+                api.load = function (payload) {
+                    if (payload != undefined)
+                        $scope.widget = payload;
+                    if ($scope.widget != null) {
+                        $scope.widget.SectionTitle = $scope.widget.Name;
+                    }
 
-    function ctorWidgetPreview(ctrl, $scope) {
+                    var loadTimeRangePromiseDeferred = UtilsService.createPromiseDeferred();
+                    var loadTimeDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var promises = [];
 
-        var date;
-        var widgetAPI;
-       
-        function initializeController() {
-            $scope.validateDateTime = function () {
-                return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+                    timeRangeReadyPromiseDeferred.promise.then(function () {
+                        var timeRangePeriod = {
+                            period: PeriodEnum.CurrentMonth.value
+                        };
+
+                        VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, timeRangePeriod, loadTimeRangePromiseDeferred);
+
+                    });
+
+                    timeDimentionReadyPromiseDeferred.promise.then(function () {
+                        var timeDimentionPeriod = {
+                            period: TimeDimensionTypeEnum.Daily.value
+                        };
+
+                        VRUIUtilsService.callDirectiveLoad(timeDimentionDirectiveAPI, timeDimentionPeriod, loadTimeDimentionPromiseDeferred);
+
+                    });
+                    var loadwidgetPromiseDeferred = UtilsService.createPromiseDeferred();
+                    UtilsService.waitMultiplePromises(promises)
+                        .then(function () {
+                            UtilsService.safeApply($scope);
+                            widgetReadyPromiseDeferred.promise.then(function () {
+                                var obj = timeRangeDirectiveAPI.getData();
+                                $scope.filter = {
+                                    timeDimensionType: $scope.selectedTimeDimension,
+                                    fromDate: obj.fromDate,
+                                    toDate: obj.toDate
+                                }
+                                var widgetPeriod = {
+                                    filter: $scope.filter,
+                                    title: $scope.widget.SectionTitle,
+                                    settings: $scope.widget.Setting.settings,
+
+                                };
+                                widgetReadyPromiseDeferred = undefined;
+                                VRUIUtilsService.callDirectiveLoad(widgetAPI, widgetPeriod, loadwidgetPromiseDeferred);
+
+                            });
+
+                        });
+                    return loadwidgetPromiseDeferred.promise;
+                }
+
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
             }
 
-            $scope.selectedPeriod = PeriodEnum.CurrentMonth;
-            date = $scope.selectedPeriod.getInterval();
-            $scope.fromDate = date.from;
-            $scope.toDate = date.to;
-
-            defineTimeDimensionTypes();
-            $scope.filter = {
-                timeDimensionType: $scope.selectedTimeDimensionType,
-                fromDate: $scope.fromDate,
-                toDate: $scope.toDate
-            }
-            $scope.periods = UtilsService.getArrayEnum(PeriodEnum);
-
-            var customize = {
-                value: -1,
-                description: "Customize"
-            }
-            $scope.onBlurChanged = function () {
-                var from = UtilsService.getShortDate($scope.fromDate);
-                var oldFrom = UtilsService.getShortDate(date.from);
-                var to = UtilsService.getShortDate($scope.toDate);
-                var oldTo = UtilsService.getShortDate(date.to);
-                if (from != oldFrom || to != oldTo)
-                    $scope.selectedPeriod = customize;
-
-            }
-
-
-
-
-            $scope.onElementReady = function (api) {
-                widgetAPI = api;
-                return widgetAPI.retrieveData($scope.filter);
-            };
-
-            $scope.Search = function () {
+            function refreshWidget() {
+                var obj = timeRangeDirectiveAPI.getData();
                 $scope.filter = {
-                    timeDimensionType: $scope.selectedTimeDimensionType,
-                    fromDate: $scope.fromDate,
-                    toDate: $scope.toDate
+                    timeDimensionType: $scope.selectedTimeDimension,
+                    fromDate: new Date(obj.fromDate),
+                    toDate: new Date(obj.toDate)
                 }
-                return refreshWidget();
-            };
-            $scope.periodSelectionChanged = function () {
+                var widgetPeriod = {
+                    filter: $scope.filter,
+                    title: $scope.widget.SectionTitle,
+                    settings: $scope.widget.Setting.settings,
 
-                if ($scope.selectedPeriod.value != -1) {
-
-                    date = $scope.selectedPeriod.getInterval();
-                    $scope.fromDate = date.from;
-                    $scope.toDate = date.to;
-                }
+                };
+                return widgetAPI.load(widgetPeriod);
 
             }
 
-            defineAPI();
+            this.initializeController = initializeController;
+            this.defineAPI = defineAPI;
         }
 
-        function defineAPI() {
-            var api = {};
-            api.load = function (payload) {
-                if (payload !=undefined)
-                    $scope.widget = payload;
-                if ($scope.widget != null) {
-                    $scope.widget.SectionTitle = $scope.widget.Name;
-                }
-                if (widgetAPI !=undefined)
-                    return widgetAPI.retrieveData($scope.filter);
-            }
-            
-            if (ctrl.onReady != null)
-                ctrl.onReady(api);
-        }
-
-        function refreshWidget() {
-           
-            return widgetAPI.retrieveData($scope.filter);
-        }
-        function defineTimeDimensionTypes() {
-            $scope.timeDimensionTypes = [];
-            for (var td in TimeDimensionTypeEnum)
-                $scope.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
-            $scope.selectedTimeDimensionType = TimeDimensionTypeEnum.Daily;
-        }
-
-
-        this.initializeController = initializeController;
-        this.defineAPI = defineAPI;
-    }
-
-
-
-
-    return directiveDefinitionObject;
-}]);
-
+        return directiveDefinitionObject;
+    }]);

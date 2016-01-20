@@ -1,27 +1,11 @@
-﻿ <vr-row>
-        <vr-columns width="1/4row">
-            <vr-select datasource="periods" datatextfield="description" datavaluefield="value" label="Period"
-                       selectedvalues="selectedPeriod" isrequired hidefilterbox onselectionchanged="periodSelectionChanged"></vr-select>
-        </vr-columns>
+﻿ <vr-row removeline>
+    <vr-columns width="1/2row">
+        <vr-timerange on-ready="onTimeRangeDirectiveReady"></vr-timerange>
+    </vr-columns>
 
-        <vr-columns width="1/2row">
-
-            <vr-validator validate="validateDateTime()">
-                <vr-columns width="1/2row">
-                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired onblurdatetime="onBlurChanged"></vr-datetimepicker>
-                </vr-columns>
-
-                <vr-columns width="1/2row">
-                    <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired onblurdatetime="onBlurChanged"></vr-datetimepicker>
-                </vr-columns>
-            </vr-validator>
-        </vr-columns>
-        <vr-columns width="1/4row">
-            <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"
-                       selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox hideremoveicon></vr-select>
-        </vr-columns>
-
-
+    <vr-columns width="normal">
+        <vr-timedimension-selector on-ready="onTimeDimentionDirectiveReady" label="Grouping By" selectedvalues="selectedTimeDimension"></vr-timedimension-selector>
+    </vr-columns>
 </vr-row>
 <vr-row>
     <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
@@ -33,8 +17,8 @@
 <vr-row>
 
         <vr-columns width="fullrow" ng-if="widget !=undefined">
-            <vr-directivewrapper directive="widget.Setting.directive" title="widget.SectionTitle" on-ready="onElementReady" settings="widget.Setting.settings"
-                                    retrievedataonload="false" filter="filter"></vr-directivewrapper>
+            <vr-directivewrapper directive="widget.Setting.directive" on-ready="onElementReady" 
+                                    retrievedataonload="false"></vr-directivewrapper>
         </vr-columns>
 </vr-row>
 

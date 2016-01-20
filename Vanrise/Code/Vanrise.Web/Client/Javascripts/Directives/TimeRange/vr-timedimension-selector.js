@@ -79,6 +79,7 @@ function (UtilsService, VRUIUtilsService, TimeDimensionTypeEnum) {
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('value', $attrs, ctrl);
             }
+
             api.load = function (payload) {
                 var selectedIds;
                 if (payload != undefined) {

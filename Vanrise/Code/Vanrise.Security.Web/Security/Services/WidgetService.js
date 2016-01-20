@@ -8,7 +8,7 @@
         function deleteWidget($scope, dataItem, onWidgetDeleted) {
             VRNotificationService.showConfirmation().then(function (response) {
                 if (response) {
-                    return WidgetAPIService.DeleteWidget(dataItem.Id).then(function (responseObject) {
+                    return WidgetAPIService.DeleteWidget(dataItem.Entity.Id).then(function (responseObject) {
                         if (responseObject.Result == DeleteOperationResultEnum.Succeeded.value)
                             onWidgetDeleted(dataItem);
                         VRNotificationService.notifyOnItemDeleted("Widget", responseObject, "dynamic pages");

@@ -6,7 +6,7 @@
             </vr-columns>
 
             <vr-columns width="normal">
-                <vr-timedimension-selector on-ready="onTimeDimentionDirectiveReady" label="Grouping By"></vr-timedimension-selector>
+                <vr-timedimension-selector on-ready="onTimeDimentionDirectiveReady" label="Grouping By" selectedvalues="selectedTimeDimension"></vr-timedimension-selector>
             </vr-columns>
 
         </vr-row>
@@ -24,16 +24,14 @@
     <vr-row ng-if="summaryWidgets.length>0">
         <div class="list-group">
             <vr-columns ng-repeat="summaryWidget in summaryWidgets" colnum="{{summaryWidget.NumberOfColumns.numberOfColumns}}">
-                <vr-directivewrapper directive="summaryWidget.Setting.Directive" title="summaryWidget.SectionTitle" on-ready="summaryWidget.onElementReady" settings="summaryWidget.Setting.Settings"
-                                     retrievedataonload="true"></vr-directivewrapper>
+                <vr-directivewrapper directive="summaryWidget.Setting.Directive"  on-ready="summaryWidget.onElementReady" ></vr-directivewrapper>
             </vr-columns>
         </div>
     </vr-row>
     <vr-row ng-if="bodyWidgets.length>0">
         <div class="list-group ">
             <vr-columns ng-repeat="bodyWidget in bodyWidgets" colnum="{{bodyWidget.NumberOfColumns.numberOfColumns}}">
-                <vr-directivewrapper directive="bodyWidget.Setting.Directive" title="bodyWidget.SectionTitle" on-ready="bodyWidget.onElementReady" settings="bodyWidget.Setting.Settings"
-                                     filter="filter" retrievedataonload="true"></vr-directivewrapper>
+                <vr-directivewrapper directive="bodyWidget.Setting.Directive" title="bodyWidget.SectionTitle" on-ready="bodyWidget.onElementReady" ></vr-directivewrapper>
             </vr-columns>
         </div>
     </vr-row>

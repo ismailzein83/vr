@@ -50,7 +50,7 @@ namespace Vanrise.Security.Business
             bool insertActionSucc = dataManager.AddWidget(widget, out widgetId);
             if (insertActionSucc)
             {
-
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 widget.Id = widgetId;
                 WidgetDetail widgetDetail = WidgetDetailMapper(widget);
@@ -80,6 +80,7 @@ namespace Vanrise.Security.Business
 
             if (updateActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 WidgetDetail widgetDetail = WidgetDetailMapper(widget);
                 updateOperationOutput.UpdatedObject = widgetDetail;
@@ -126,6 +127,7 @@ namespace Vanrise.Security.Business
 
             if (deleteActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
             }
 

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrSecWidgetGrid", ["VRNotificationService", "WidgetAPIService","VR_WidgetService",
+app.directive("vrSecWidgetGrid", ["VRNotificationService", "WidgetAPIService", "VR_WidgetService",
 function (VRNotificationService, WidgetAPIService, VR_WidgetService) {
 
     var directiveDefinitionObject = {
@@ -38,6 +38,7 @@ function (VRNotificationService, WidgetAPIService, VR_WidgetService) {
                 gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
+
                 function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
@@ -53,14 +54,15 @@ function (VRNotificationService, WidgetAPIService, VR_WidgetService) {
             ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WidgetAPIService.GetFilteredWidgets(dataRetrievalInput)
                     .then(function (response) {
-                         onResponseReady(response);
-                    }).catch(function (error) {
+                        onResponseReady(response);
+                    })
+                    .catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });;
             };
 
         }
-        
+
         function defineMenuActions() {
             ctrl.menuActions = [{
                 name: "Edit",

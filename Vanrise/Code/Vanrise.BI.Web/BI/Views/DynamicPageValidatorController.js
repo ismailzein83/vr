@@ -1,6 +1,6 @@
-﻿ValidateEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'UsersAPIService', 'VR_Sec_ViewAPIService', 'UtilsService', 'GroupAPIService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum', 'BIAPIService', 'DataRetrievalResultTypeEnum'];
+﻿ValidateEditorController.$inject = ['$scope', 'VR_Sec_UserAPIService', 'VRNavigationService', 'BIAPIService', 'DataRetrievalResultTypeEnum'];
 
-function ValidateEditorController($scope, MenuAPIService, WidgetAPIService, UsersAPIService, VR_Sec_ViewAPIService, UtilsService, GroupAPIService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, BIAPIService, DataRetrievalResultTypeEnum) {
+function ValidateEditorController($scope, UsersAPIService, VRNavigationService, BIAPIService, DataRetrievalResultTypeEnum) {
     loadParameters();
     var mainGridAPI;
     defineScope();

@@ -38,10 +38,7 @@
                             <vr-columns width="1/3row">
                                 <vr-section title="Audiences">
                                     <vr-row removeline>
-                                        <vr-sec-user-selector on-ready="scopeModal.onUserDireciveReady" selectedvalues="scopeModal.selectedUsers" ismultipleselection></vr-sec-user-selector>
-                                        <!--<vr-select ismultipleselection label="Users" datasource="scopeModal.users" selectedvalues="scopeModal.selectedUsers" datatextfield="Name" datavaluefield="UserId"
-                                                   entityname="Users">-->
-                                        </vr-select>
+                                        <vr-sec-user-selector on-ready="scopeModal.onUserDirectiveReady" selectedvalues="scopeModal.selectedUsers" ismultipleselection></vr-sec-user-selector>
                                     </vr-row>
                                     <vr-row width="fullrow">
                                         <vr-select ismultipleselection label="Groups" datasource="scopeModal.groups" selectedvalues="scopeModal.selectedGroups" datatextfield="Name" datavaluefield="GroupId"
@@ -98,8 +95,8 @@
                                             <div ng-class="scopeModal.validateWidgetError(addedSummaryWidget)">
                                                 <i class="glyphicon glyphicon-th-list handeldrag"></i>
                                                 <i class="glyphicon glyphicon-remove hand-cursor" ng-click="scopeModal.removeViewContent(addedSummaryWidget)"></i>
-                                                <vr-directivewrapper directive="addedSummaryWidget.Widget.Setting.Directive" on-ready="addedSummaryWidget.Widget.onElementReady" settings="addedSummaryWidget.Widget.Setting.Settings"
-                                                                     title="addedSummaryWidget.SectionTitle" previewmode="true"></vr-directivewrapper>
+                                                <vr-directivewrapper directive="addedSummaryWidget.Widget.Setting.Directive" on-ready="addedSummaryWidget.Widget.onElementReady"
+                                                                     previewmode vr-loader="scopeModal.isLoadingSummaryDirective"></vr-directivewrapper>
                                             </div>
                                         </vr-columns>
                                     </div>
@@ -114,8 +111,8 @@
 
                                             <i class="glyphicon glyphicon-th-list handeldrag"></i>
                                             <i class="glyphicon glyphicon-remove hand-cursor" ng-click="scopeModal.removeViewContent(addedBodyWidget)"></i>
-                                            <vr-directivewrapper directive="addedBodyWidget.Widget.Setting.Directive" on-ready="addedBodyWidget.Widget.onElementReady" settings="addedBodyWidget.Widget.Setting.Settings"
-                                                                 title="addedBodyWidget.SectionTitle" previewmode="true"></vr-directivewrapper>
+                                            <vr-directivewrapper directive="addedBodyWidget.Widget.Setting.Directive" on-ready="addedBodyWidget.Widget.onElementReady"
+                                                                 previewmode vr-loader="scopeModal.isloadingbodydirective"></vr-directivewrapper>
                                         </div>
                                     </vr-columns>
                                 </div>

@@ -9,11 +9,14 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
     var periodDirectiveAPI;
     var periodReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+    var userDirectiveAPI;
+    var userReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
     var timeDimentionDirectiveAPI;
     var timeDimentionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-    var userDirectiveAPI;
-    var userReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
     loadParameters();
     defineScope();
     load();
@@ -53,7 +56,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, timeDimentionDirectiveAPI, payload, setLoader,timeDimentionReadyPromiseDeferred);
         }
 
-        $scope.scopeModal.onUserDireciveReady = function (api)
+        $scope.scopeModal.onUserDirectiveReady = function (api)
         {
             userDirectiveAPI = api;
             userReadyPromiseDeferred.resolve();
@@ -80,7 +83,6 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         $scope.scopeModal.selectedMenuNode;
 
         $scope.scopeModal.selectedGroups = [];
-
 
         $scope.scopeModal.moduleId;
 
@@ -191,6 +193,16 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
                 Widget: $scope.scopeModal.selectedWidget,
                 NumberOfColumns: $scope.scopeModal.selectedColumnWidth,
                 SectionTitle: $scope.scopeModal.sectionTitle
+            }
+            viewWidget.Widget.onElementReady = function (api) {
+                viewWidget.Widget.API = api;
+                var payload = {
+                    previewMode: true,
+                    title: viewWidget.SectionTitle,
+                    settings: viewWidget.Widget.Setting.Settings
+                }
+                var setLoader = function (value) { $scope.scopeModal.isLoadingSummaryDirective = value; };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, api, payload, setLoader);
             }
             if ($scope.scopeModal.nonSearchable) {
                 viewWidget.DefaultPeriod = $scope.scopeModal.selectedPeriod.value
@@ -308,8 +320,8 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
        
         return VR_Sec_ViewAPIService.AddView($scope.scopeModal.View).then(function (response) {
             if (VRNotificationService.notifyOnItemAdded("View", response, "Name")) {
-                if ($scope.onPageAdded != undefined)
-                    $scope.onPageAdded(response.InsertedObject);
+                if ($scope.onDynamicPageAdded != undefined)
+                    $scope.onDynamicPageAdded(response.InsertedObject);
                 $scope.modalContext.closeModal();
             }
         }).catch(function (error) {
@@ -468,12 +480,6 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         {
             $scope.scopeModal.pageName = viewEntity.Name;
             if (viewEntity.Audience !=null && (viewEntity.Audience.Users != undefined || viewEntity.Audience.Groups != undefined)) {
-                //for (var i = 0; i < viewEntity.Audience.Users.length; i++) {
-                //    var value = UtilsService.getItemByVal($scope.scopeModal.users, viewEntity.Audience.Users[i], 'UserId');
-                //    if (value != null)
-                //        $scope.scopeModal.selectedUsers.push(value);
-                //}
-
                 for (var i = 0; i < viewEntity.Audience.Groups.length; i++) {
                     var value = UtilsService.getItemByVal($scope.scopeModal.groups, viewEntity.Audience.Groups[i], 'GroupId');
                     if (value != null)
@@ -482,15 +488,25 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
             }
             for (var i = 0; i < viewEntity.ViewContent.BodyContents.length; i++) {
                 var bodyContent = viewEntity.ViewContent.BodyContents[i];
-                var value = UtilsService.getItemByVal($scope.scopeModal.bodyWidgets, bodyContent.WidgetId, 'Id');
+                var bodyValue = UtilsService.getItemByVal($scope.scopeModal.bodyWidgets, bodyContent.WidgetId, 'Id');
                 var numberOfColumns;
                 for (var j = 0; j < $scope.scopeModal.columnWidth.length; j++)
                     if (bodyContent.NumberOfColumns == $scope.scopeModal.columnWidth[j].value)
                         numberOfColumns = $scope.scopeModal.columnWidth[j];
 
-                if (value != null) {
+                if (bodyValue != null) {
+                    bodyValue.onElementReady = function (api) {
+                        bodyValue.API = api;
+                        var bodyPayload = {
+                            previewMode: true,
+                            title: bodyContent.SectionTitle,
+                            settings: bodyValue.Setting.Settings
+                        }
+                        var setLoader = function (value) { $scope.scopeModal.isLoadingBodyDirective = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bodyValue.API, bodyPayload, setLoader);
+                    }
                     var viewWidget = {
-                        Widget: value,
+                        Widget: bodyValue,
                         NumberOfColumns: numberOfColumns,
                         SectionTitle: bodyContent.SectionTitle
                     }
@@ -499,22 +515,34 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
                         viewWidget.DefaultGrouping = bodyContent.DefaultGrouping
                     }
                     $scope.scopeModal.addedBodyWidgets.push(viewWidget);
-                    $scope.scopeModal.bodyWidgets.splice($scope.scopeModal.bodyWidgets.indexOf(value), 1);
+                    $scope.scopeModal.bodyWidgets.splice($scope.scopeModal.bodyWidgets.indexOf(bodyValue), 1);
                 }
 
             }
 
             for (var i = 0; i < viewEntity.ViewContent.SummaryContents.length; i++) {
                 var summaryContent = viewEntity.ViewContent.SummaryContents[i];
-                var value = UtilsService.getItemByVal($scope.scopeModal.summaryWidgets, summaryContent.WidgetId, 'Id');
+                var summaryValue = UtilsService.getItemByVal($scope.scopeModal.summaryWidgets, summaryContent.WidgetId, 'Id');
                 var numberOfColumns;
                 for (var j = 0; j < $scope.scopeModal.columnWidth.length; j++)
                     if (summaryContent.NumberOfColumns == $scope.scopeModal.columnWidth[j].value)
                         numberOfColumns = $scope.scopeModal.columnWidth[j];
 
-                if (value != null) {
+                if (summaryValue != null) {
+
+                    summaryValue.onElementReady = function (api)
+                    {
+                        summaryValue.API = api;
+                        var summaryPayload = {
+                            previewMode: true,
+                            title: summaryContent.SectionTitle,
+                            settings: summaryValue.Setting.Settings
+                        }
+                        var setLoader = function (value) { $scope.scopeModal.isLoadingSummaryDirective = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, summaryValue.API, summaryPayload, setLoader);
+                    }
                     var viewWidget = {
-                        Widget: value,
+                        Widget: summaryValue,
                         NumberOfColumns: numberOfColumns,
                         SectionTitle: summaryContent.SectionTitle
                     }
@@ -522,8 +550,9 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
                         viewWidget.DefaultPeriod = summaryContent.DefaultPeriod
                         viewWidget.DefaultGrouping = summaryContent.DefaultGrouping
                     }
+                  
                     $scope.scopeModal.addedSummaryWidgets.push(viewWidget);
-                    $scope.scopeModal.summaryWidgets.splice($scope.scopeModal.summaryWidgets.indexOf(value), 1);
+                    $scope.scopeModal.summaryWidgets.splice($scope.scopeModal.summaryWidgets.indexOf(summaryValue), 1);
                 }
 
 
@@ -616,18 +645,11 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
     function loadUsers() {
         var userLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        userReadyPromiseDeferred.promise
-            .then(function () {
+        userReadyPromiseDeferred.promise.then(function () {
                 var directivePayload = { selectedIds: (viewEntity != undefined && viewEntity.Audience != null && viewEntity.Audience.Users != undefined) ? viewEntity.Audience.Users :undefined };
-                userReadyPromiseDeferred = undefined;
                 VRUIUtilsService.callDirectiveLoad(userDirectiveAPI, directivePayload, userLoadPromiseDeferred);
             });
-        //return userLoadPromiseDeferred.promise;
-        //UsersAPIService.GetUsers().then(function (response) {
-        //    angular.forEach(response, function (users) {
-        //        $scope.scopeModal.users.push(users);
-        //        }) 
-        //    });
+        return userLoadPromiseDeferred.promise;
       
     }
 

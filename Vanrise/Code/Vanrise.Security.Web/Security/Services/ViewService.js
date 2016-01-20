@@ -10,7 +10,7 @@
             VRNotificationService.showConfirmation().then(function (response) {
 
                 if (response == true) {
-                    return VR_Sec_ViewAPIService.DeleteView(dataItem.ViewId).then(function (responseObject) {
+                    return VR_Sec_ViewAPIService.DeleteView(dataItem.Entity.ViewId).then(function (responseObject) {
                         if (responseObject.Result == DeleteOperationResultEnum.Succeeded.value)
                             onDynamicPageDeleted(dataItem);
 

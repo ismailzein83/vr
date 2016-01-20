@@ -45,7 +45,7 @@ namespace Vanrise.Security.Business
 
             if (insertActionSucc)
             {
-
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 view.ViewId = viewId;
                 insertOperationOutput.InsertedObject = ViewDetailMapper(view);
@@ -68,7 +68,7 @@ namespace Vanrise.Security.Business
 
             if (updateActionSucc)
             {
-
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = ViewDetailMapper(view);
             }
@@ -107,6 +107,7 @@ namespace Vanrise.Security.Business
 
             if (deleteActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
             }
 

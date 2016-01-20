@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'VRModalService', 'BIConfigurationAPIService', 'MainService', function (UtilsService, BIAPIService, BIUtilitiesService, BIVisualElementService, VRModalService, BIConfigurationAPIService, MainService) {
+app.directive('vrBiDatagrid1', ['UtilsService', 'BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'VRModalService', 'BIConfigurationAPIService', 'MainService', function (UtilsService, BIAPIService, BIUtilitiesService, BIVisualElementService, VRModalService, BIConfigurationAPIService, MainService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',

@@ -1,22 +1,18 @@
 ﻿'use strict';
 
-
-app.directive('vrBiDatagrid1', ['UtilsService', 'BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'VRModalService', 'BIConfigurationAPIService', 'MainService', function (UtilsService, BIAPIService, BIUtilitiesService, BIVisualElementService, VRModalService, BIConfigurationAPIService, MainService) {
+app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'VRModalService', 'BIConfigurationAPIService', 'MainService', function (UtilsService, BIAPIService, BIUtilitiesService, BIVisualElementService, VRModalService, BIConfigurationAPIService, MainService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
             onReady: '=',
-            settings: '=',
-            filter: '=',
-            title: '=',
             previewmode: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             var retrieveDataOnLoad = $scope.$parent.$eval($attrs.retrievedataonload);
 
-            var biDataGrid = new BIDataGrid(ctrl, ctrl.settings, retrieveDataOnLoad, BIAPIService, BIVisualElementService, BIConfigurationAPIService, UtilsService);
+            var biDataGrid = new BIDataGrid(ctrl, $scope);
             biDataGrid.initializeController();
 
             //$scope.openReportEntityModal = function (item) {
@@ -25,14 +21,12 @@ app.directive('vrBiDatagrid1', ['UtilsService', 'BIAPIService', 'BIUtilitiesServ
 
             //}
 
-
         },
         controllerAs: 'ctrl',
         bindToController: true,
         compile: function (element, attrs) {
             return {
-                pre: function ($scope, iElem, iAttrs, ctrl) {
-                }
+                pre: function ($scope, iElem, iAttrs, ctrl) { }
             }
         },
         template: function (element, attrs) {
@@ -42,59 +36,23 @@ app.directive('vrBiDatagrid1', ['UtilsService', 'BIAPIService', 'BIUtilitiesServ
     };
 
     function getDataGridTemplate(previewmode) {
-        if (previewmode != 'true') {
-            return '<vr-section title="{{ctrl.title}}"><div ng-if="ctrl.isAllowed==false" ng-class="\'gridpermission\'"><div  style="padding-top:115px;"><div   class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission, Please Contact Your Administrator..!!</div></div></div><div ng-if="ctrl.isAllowed" vr-loader="ctrl.isGettingData"><vr-datagrid  onexport="ctrl.onexport" datasource="ctrl.data" on-ready="ctrl.onGridReady" maxheight="300px">'
-                                        + '<vr-datagridcolumn  ng-show="ctrl.isTopEntities" ng-repeat="entityType in ctrl.entityType" headertext="entityType.DisplayName" field="\'EntityName[\' + $index + \']\'"'  // isclickable="\'true\'" \onclicked="openReportEntityModal"
-                                    + '  columnindex="$index"></vr-datagridcolumn>'
-                                        + '<vr-datagridcolumn ng-show="ctrl.isDateTimeGroupedData" headertext="\'Time\'" field="\'dateTimeValue\'"></vr-datagridcolumn>'
-                                        + '<vr-datagridcolumn ng-repeat="measureType in ctrl.measureTypes" headertext="measureType.DisplayName" field="\'Values[\' + $index + \']\'" type="\'Number\'"></vr-datagridcolumn>'
-                                    + '</vr-datagrid></div></vr-section>';
-        }
-        else
+        if (previewmode == undefined) {
+            return '<vr-section title="{{ctrl.title}}"><div ng-if="ctrl.isAllowed==false" ng-class="\'gridpermission\'"><div  style="padding-top:115px;"><div   class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission, Please Contact Your Administrator..!!</div></div></div><div ng-if="ctrl.isAllowed" vr-loader="ctrl.isGettingData"><vr-datagrid  onexport="ctrl.onexport" datasource="ctrl.data" on-ready="ctrl.onGridReady" maxheight="300px">' + '<vr-datagridcolumn  ng-show="ctrl.isTopEntities" ng-repeat="entityType in ctrl.entityType" headertext="entityType.DisplayName" field="\'EntityName[\' + $index + \']\'"' // isclickable="\'true\'" \onclicked="openReportEntityModal"
+                + '  columnindex="$index"></vr-datagridcolumn>' + '<vr-datagridcolumn ng-show="ctrl.isDateTimeGroupedData" headertext="\'Time\'" field="\'dateTimeValue\'"></vr-datagridcolumn>' + '<vr-datagridcolumn ng-repeat="measureType in ctrl.measureTypes" headertext="measureType.DisplayName" field="\'Values[\' + $index + \']\'" type="\'Number\'"></vr-datagridcolumn>' + '</vr-datagrid></div></vr-section>';
+        } else
             return '<vr-section title="{{ctrl.title}}"></br><vr-textbox value="ctrl.settings.OperationType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.EntityType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.MeasureTypes" vr-disabled="true"></vr-textbox></vr-section>';
-
-
 
     }
 
-    function BIDataGrid(ctrl, settings, retrieveDataOnLoad, BIAPIService, BIVisualElementService, BIConfigurationAPIService, UtilsService) {
+    function BIDataGrid(ctrl, $scope) {
 
         var gridAPI;
         var measures = [];
         var entity = [];
 
         function initializeController() {
-            UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities])
-           .then(function () {
 
-               if (!BIUtilitiesService.checkPermissions(measures)) {
-                   ctrl.isAllowed = false;
-                   return;
-               }
-
-               ctrl.isAllowed = true;
-               ctrl.onexport = function () {
-
-                   return BIVisualElementService.exportWidgetData(ctrl, settings, ctrl.filter).then(function (response) {
-
-                       return UtilsService.downloadFile(response.data, response.headers);
-                   });
-               }
-               ctrl.entityType = entity;
-               ctrl.measureTypes = measures;
-
-               ctrl.data = [];
-               ctrl.onGridReady = function (api) {
-                   gridAPI = api;
-                   defineAPI();
-               }
-
-
-
-           })
-           .finally(function () {
-           }).catch(function (error) {
-           });
+            defineAPI();
 
         }
 
@@ -102,9 +60,41 @@ app.directive('vrBiDatagrid1', ['UtilsService', 'BIAPIService', 'BIUtilitiesServ
             var api = {};
             api.retrieveData = retrieveData;
 
-            api.load = function (payload)
-            {
+            api.load = function (payload) {
+                if (payload != undefined) {
+                    ctrl.title = payload.title;
+                    ctrl.settings = payload.settings;
+                    ctrl.filter = payload.filter;
+                }
+                return UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities])
+                    .then(function () {
+                        ctrl.data = [];
 
+                        ctrl.entityType = entity;
+                        ctrl.measureTypes = measures;
+                        if (payload != undefined && !payload.previewMode) {
+                            ctrl.onGridReady = function (api) {
+                                gridAPI = api;
+
+                            }
+                            if (!BIUtilitiesService.checkPermissions(measures)) {
+                                ctrl.isAllowed = false;
+                                return;
+                            }
+
+                            ctrl.isAllowed = true;
+                            ctrl.onexport = function () {
+
+                                return BIVisualElementService.exportWidgetData(ctrl, ctrl.settings, ctrl.filter)
+                                    .then(function (response) {
+
+                                        return UtilsService.downloadFile(response.data, response.headers);
+                                    });
+                            }
+                            return retrieveData(ctrl.filter);
+                        }
+
+                    });
             }
 
             if (ctrl.onReady != null)
@@ -116,15 +106,16 @@ app.directive('vrBiDatagrid1', ['UtilsService', 'BIAPIService', 'BIUtilitiesServ
             if (!ctrl.isAllowed)
                 return;
             ctrl.isGettingData = true;
-            return BIVisualElementService.retrieveWidgetData(ctrl, settings, filter)
-                        .then(function (response) {
-                            if (ctrl.isDateTimeGroupedData)
-                                BIUtilitiesService.fillDateTimeProperties(response, filter.timeDimensionType.value, filter.fromDate, filter.toDate, true);
-                            refreshDataGrid(response);
+            return BIVisualElementService.retrieveWidgetData(ctrl, ctrl.settings, filter)
+                .then(function (response) {
+                    if (ctrl.isDateTimeGroupedData)
+                        BIUtilitiesService.fillDateTimeProperties(response, filter.timeDimensionType.value, filter.fromDate, filter.toDate, true);
+                    return refreshDataGrid(response);
 
-                        }).finally(function () {
-                            ctrl.isGettingData = false;
-                        });
+                })
+                .finally(function () {
+                    ctrl.isGettingData = false;
+                });
         }
 
         function refreshDataGrid(response) {
@@ -133,20 +124,28 @@ app.directive('vrBiDatagrid1', ['UtilsService', 'BIAPIService', 'BIUtilitiesServ
         }
 
         function loadMeasures() {
-            return BIConfigurationAPIService.GetMeasures().then(function (response) {
-                for (var i = 0; i < settings.MeasureTypes.length; i++) {
-                    var value = UtilsService.getItemByVal(response, settings.MeasureTypes[i], 'Name');
-                    if (value != null)
-                        measures.push(value);
-                }
-            });
+            measures.length = 0;
+            return BIConfigurationAPIService.GetMeasures()
+                .then(function (response) {
+                    for (var i = 0; i < ctrl.settings.MeasureTypes.length; i++) {
+                        var value = UtilsService.getItemByVal(response, ctrl.settings.MeasureTypes[i], 'Name');
+                        if (value != null)
+                            measures.push(value);
+                    }
+                });
         }
 
         function loadEntities() {
-            return BIConfigurationAPIService.GetEntities().then(function (response) {
-                for (var i = 0; i < settings.EntityType.length; i++)
-                    entity.push(UtilsService.getItemByVal(response, settings.EntityType[i], 'Name'));
-            });
+            entity.length = 0;
+            return BIConfigurationAPIService.GetEntities()
+                .then(function (response) {
+                    if (ctrl.settings.EntityType != undefined)
+                    {
+                        for (var i = 0; i < ctrl.settings.EntityType.length; i++)
+                            entity.push(UtilsService.getItemByVal(response, ctrl.settings.EntityType[i], 'Name'));
+                    }
+                   
+                });
 
         }
 
@@ -154,9 +153,5 @@ app.directive('vrBiDatagrid1', ['UtilsService', 'BIAPIService', 'BIUtilitiesServ
         this.defineAPI = defineAPI;
     }
 
-
-
-
     return directiveDefinitionObject;
 }]);
-

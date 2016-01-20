@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrBiChart1', ['BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'BIConfigurationAPIService', 'VRModalService', 'UtilsService', 'VRNotificationService', function (BIAPIService, BIUtilitiesService, BIVisualElementService, BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService) {
+app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'BIConfigurationAPIService', 'VRModalService', 'UtilsService', 'VRNotificationService', function (BIAPIService, BIUtilitiesService, BIVisualElementService, BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -17,7 +17,7 @@ app.directive('vrBiChart1', ['BIAPIService', 'BIUtilitiesService', 'BIVisualElem
             var ctrl = this;
             var retrieveDataOnLoad = $scope.$parent.$eval($attrs.retrievedataonload);
 
-            var biChart = new BIChart(ctrl, ctrl.settings, retrieveDataOnLoad, BIAPIService, BIVisualElementService, BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService);
+            var biChart = new BIChart(ctrl, $scope);
             biChart.initializeController();
 
 
@@ -47,20 +47,14 @@ app.directive('vrBiChart1', ['BIAPIService', 'BIUtilitiesService', 'BIVisualElem
             return '<vr-section title="{{ctrl.title}}"></br><vr-textbox value="ctrl.settings.OperationType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.EntityType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.MeasureTypes" vr-disabled="true"></vr-textbox></vr-section>'
 
     }
-    function BIChart(ctrl, settings, retrieveDataOnLoad, BIAPIService, BIVisualElementService, BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService) {
+    function BIChart(ctrl, $scope) {
         var chartAPI;
         var measures = [];
         var entity = [];
         var directiveSettings = {};
        
         function initializeController() {
-            getClassType();
-            function getClassType() {
-                if (settings.OperationType == "TopEntities" && settings.IsPieChart)
-                    ctrl.class = "piechartpermission";
-                else
-                    ctrl.class = "chartpermission";
-            }
+
            
             defineAPI();
         }
@@ -71,42 +65,57 @@ app.directive('vrBiChart1', ['BIAPIService', 'BIUtilitiesService', 'BIVisualElem
 
             api.load=function (payload)
             {
-              return  UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities]).then(function () {
-                                if (!BIUtilitiesService.checkPermissions(measures)) {
-                                    ctrl.isAllowed = false;
-                                    return;
-                                }
-
-                                directiveSettings = {
-                                      EntityType: entity,
-                                     MeasureTypes: measures
-                                }
-                                ctrl.isAllowed = true;
-                                 ctrl.onChartReady = function (api) {
-                                     chartAPI = api;
-                                   //chartAPI.onDataItemClicked = function (item) {
-                                   //    BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
-                                   //};
-                                   //if (retrieveDataOnLoad)
-                                   //    retrieveData();
-                                };
+                if (payload != undefined) {
+                    ctrl.title = payload.title;
+                    ctrl.settings = payload.settings;
+                    ctrl.filter = payload.filter;
+                }
+                return UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities]).then(function () {
+                    directiveSettings = {
+                        EntityType: entity,
+                        MeasureTypes: measures
+                    }
+                    if (payload != undefined && !payload.previewMode) {
+                        if (!BIUtilitiesService.checkPermissions(measures)) {
+                            ctrl.isAllowed = false;
+                            return;
+                        }
 
 
-                            })
+                        ctrl.isAllowed = true;
+                        ctrl.onChartReady = function (api) {
+                            chartAPI = api;
+                            //chartAPI.onDataItemClicked = function (item) {
+                            //    BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
+                            //};
+                            //if (retrieveDataOnLoad)
+                            //    retrieveData();
+                            return retrieveData(ctrl.filter);
+                        };
+                    }
+                    getClassType();
+                });
             }
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
 
+        function getClassType() {
+            if (ctrl.settings.OperationType == "TopEntities" && ctrl.settings.IsPieChart)
+                ctrl.class = "piechartpermission";
+            else
+                ctrl.class = "chartpermission";
+        }
+
         function retrieveData(filter) {
             if (!ctrl.isAllowed)
                 return;
             ctrl.isGettingData = true;
-            return BIVisualElementService.retrieveWidgetData(ctrl, settings, filter)
+            return BIVisualElementService.retrieveWidgetData(ctrl, ctrl.settings, filter)
 
                 .then(function (response) {
-                    if (settings.IsPieChart && settings.OperationType == "TopEntities")
+                    if (ctrl.settings.IsPieChart && ctrl.settings.OperationType == "TopEntities")
                         refreshPIEChart(response);
                     else {
                         BIUtilitiesService.fillDateTimeProperties(response, filter.timeDimensionType.value, filter.fromDate, filter.toDate, false);
@@ -136,11 +145,11 @@ app.directive('vrBiChart1', ['BIAPIService', 'BIUtilitiesService', 'BIVisualElem
 
         function refreshChart(response) {
             var chartDefinition = {
-                type: settings.DefinitionType,
+                type: ctrl.settings.DefinitionType,
                 yAxisTitle: "Value"
             };
             var xAxisDefinition;
-            switch (settings.OperationType) {
+            switch (ctrl.settings.OperationType) {
                 case "TopEntities": xAxisDefinition = { titlePath: "EntityName" }; break;
                 case "MeasuresGroupedByTime": xAxisDefinition = { titlePath: "dateTimeValue", groupNamePath: "dateTimeGroupValue" }; break;
             }
@@ -156,22 +165,23 @@ app.directive('vrBiChart1', ['BIAPIService', 'BIUtilitiesService', 'BIVisualElem
             chartAPI.renderChart(response, chartDefinition, seriesDefinitions, xAxisDefinition);
         }
 
-
         function loadMeasures() {
             return BIConfigurationAPIService.GetMeasures().then(function (response) {
-                for (var i = 0; i < settings.MeasureTypes.length; i++) {
-                    var value = UtilsService.getItemByVal(response, settings.MeasureTypes[i], 'Name');
+                for (var i = 0; i < ctrl.settings.MeasureTypes.length; i++) {
+                    var value = UtilsService.getItemByVal(response, ctrl.settings.MeasureTypes[i], 'Name');
                     if (value != null)
                         measures.push(value);
                 }
             });
         }
+
         function loadEntities() {
             return BIConfigurationAPIService.GetEntities().then(function (response) {
-                for (var i = 0; i < settings.EntityType.length; i++)
-                    entity.push(UtilsService.getItemByVal(response, settings.EntityType[i], 'Name'));
+                for (var i = 0; i < ctrl.settings.EntityType.length; i++)
+                    entity.push(UtilsService.getItemByVal(response, ctrl.settings.EntityType[i], 'Name'));
             });
         }
+
         this.initializeController = initializeController;
         this.defineAPI = defineAPI;
     }
