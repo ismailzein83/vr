@@ -1,45 +1,45 @@
 ﻿(function (appControllers) {
 
-    "use strict";
-    carrierAccountAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_BE_ModuleConfig'];
+    'use strict';
 
-    function carrierAccountAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
-        function GetAssignedCarriersDetail(managerId, withDescendants, carrierType) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "AccountManager", "GetAssignedCarriersDetail"), {
+    CarrierAccountAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_BE_ModuleConfig'];
+
+    function CarrierAccountAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
+        return ({
+            GetLinkedOrgChartId: GetLinkedOrgChartId,
+            GetFilteredAssignedCarriers: GetFilteredAssignedCarriers,
+            GetAssignedCarrierDetails: GetAssignedCarrierDetails,
+            UpdateLinkedOrgChart: UpdateLinkedOrgChart,
+            AssignCarriers: AssignCarriers
+        });
+
+        function GetLinkedOrgChartId() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, 'AccountManager', 'GetLinkedOrgChartId'));
+        }
+
+        function GetFilteredAssignedCarriers(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, 'AccountManager', 'GetFilteredAssignedCarriers'), input);
+        }
+
+        function GetAssignedCarrierDetails(managerId, withDescendants, carrierType) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, 'AccountManager', 'GetAssignedCarriersDetail'), {
                 managerId: managerId,
                 withDescendants: withDescendants,
                 carrierType: carrierType
             });
-
-        }
-
-        function GetFilteredAssignedCarriers(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "AccountManager", "GetFilteredAssignedCarriers"), input);
-        }
-
-        function GetLinkedOrgChartId() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "AccountManager", "GetLinkedOrgChartId"));
         }
 
         function UpdateLinkedOrgChart(orgChartId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "AccountManager", "UpdateLinkedOrgChart"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, 'AccountManager', 'UpdateLinkedOrgChart'), {
                 orgChartId: orgChartId
             });
         }
 
         function AssignCarriers(updatedCarriers) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "AccountManager", "AssignCarriers"), updatedCarriers);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, 'AccountManager', 'AssignCarriers'), updatedCarriers);
         }
-
-        return ({
-            GetFilteredAssignedCarriers: GetFilteredAssignedCarriers,
-            GetLinkedOrgChartId: GetLinkedOrgChartId,
-            AssignCarriers: AssignCarriers,
-            UpdateLinkedOrgChart: UpdateLinkedOrgChart,
-            GetAssignedCarriersDetail: GetAssignedCarriersDetail
-        });
     }
 
-    appControllers.service('WhS_BE_AccountManagerAPIService', carrierAccountAPIService);
+    appControllers.service('WhS_BE_AccountManagerAPIService', CarrierAccountAPIService);
 
 })(appControllers);

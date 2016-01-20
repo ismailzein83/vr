@@ -7,6 +7,7 @@
     function OrgChartAPIService(BaseAPIService, VR_Sec_ModuleConfig, UtilsService) {
         return ({
             GetFilteredOrgCharts: GetFilteredOrgCharts,
+            GetOrgChartInfo: GetOrgChartInfo,
             GetOrgChartById: GetOrgChartById,
             AddOrgChart: AddOrgChart,
             UpdateOrgChart: UpdateOrgChart,
@@ -15,6 +16,10 @@
 
         function GetFilteredOrgCharts(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'OrgChart', 'GetFilteredOrgCharts'), input);
+        }
+
+        function GetOrgChartInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'OrgChart', 'GetOrgChartInfo'));
         }
 
         function GetOrgChartById(orgChartId) {

@@ -12,16 +12,18 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class AccountManagerCarrierDataManager : BaseTOneDataManager, IAccountManagerCarrierDataManager
     {
-      
-        #region ctor/Local Variables
+        #region Fields / Constructors
+
         public AccountManagerCarrierDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
+
         #endregion
 
         #region Public Methods
+
         public IEnumerable<AssignedCarrier> GetAssignedCarriers()
         {
             return GetItemsSP("[TOneWhS_BE].[sp_AccountManager_GetAll]", AssignedCarrierMapper);
@@ -39,13 +41,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return recordsEffected > 0;
         }
-        public bool AreAccountManagerUpdated(ref object updateHandle)
+        public bool AreAssignedCarriersUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.AccountManager", ref updateHandle);
         }
+
         #endregion
 
         #region Private Methods
+
         private DataTable BuildUpdatedCarriersTable(UpdatedAccountManagerCarrier[] updatedCarriers)
         {
             DataTable table = new DataTable();
@@ -71,9 +75,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return table;
         } 
+        
         #endregion
 
         #region  Mappers
+
         AssignedCarrier AssignedCarrierMapper(IDataReader reader)
         {
             AssignedCarrier accountManager = new AssignedCarrier
@@ -85,6 +91,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return accountManager;
         }
+
         #endregion
     }
 }

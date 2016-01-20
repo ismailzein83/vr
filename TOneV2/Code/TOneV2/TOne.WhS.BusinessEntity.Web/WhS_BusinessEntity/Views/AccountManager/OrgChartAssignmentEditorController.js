@@ -1,59 +1,84 @@
-﻿OrgChartAssignmentEditorController.$inject = ['$scope', 'WhS_BE_AccountManagerAPIService', 'OrgChartAPIService', 'UtilsService', 'VRModalService', 'VRNavigationService', 'VRNotificationService'];
+﻿(function (appControllers) {
 
-function OrgChartAssignmentEditorController($scope, AccountManagerAPIService, OrgChartAPIService, UtilsService, VRModalService, VRNavigationService, VRNotificationService) {
+    'use strict';
 
-    var passedOrgChartId = undefined;
+    OrgChartAssignmentEditorController.$inject = ['$scope', 'WhS_BE_AccountManagerAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    loadParameters();
-    defineScope();
-    load();
+    function OrgChartAssignmentEditorController($scope, WhS_BE_AccountManagerAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+        var passedOrgChartId;
 
-    function loadParameters() {
-        var parameters = VRNavigationService.getParameters($scope);
+        var orgChartSelectorAPI;
+        var orgChartSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        if (parameters != undefined && parameters != null)
-            passedOrgChartId = parameters.assignedOrgChartId;
-    }
+        loadParameters();
+        defineScope();
+        load();
 
-    function defineScope() {
-        $scope.orgCharts = [];
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
 
-        $scope.assignOrgChart = function () {
+            if (parameters) {
+                passedOrgChartId = parameters.assignedOrgChartId;
+            }
+        }
 
-            AccountManagerAPIService.UpdateLinkedOrgChart($scope.assignedOrgChart.Id)
-                .then(function (response) {
-                    if (VRNotificationService.notifyOnItemUpdated("Org Chart", response)) {
-                        if ($scope.onOrgChartAssigned != undefined)
-                            $scope.onOrgChartAssigned($scope.assignedOrgChart.Id);
+        function defineScope() {
+            $scope.onOrgChartSelectorReady = function (api) {
+                orgChartSelectorAPI = api;
+                orgChartSelectorReadyDeferred.resolve();
+            };
 
+            $scope.assignOrgChart = function () {
+                var selectedOrgChartId = orgChartSelectorAPI.getSelectedIds();
+                
+                return WhS_BE_AccountManagerAPIService.UpdateLinkedOrgChart(selectedOrgChartId).then(function (response) {
+                    if (VRNotificationService.notifyOnItemUpdated('Org Chart', response)) {
+                        if ($scope.onOrgChartAssigned && typeof $scope.onOrgChartAssigned == 'function') {
+                            $scope.onOrgChartAssigned(selectedOrgChartId);
+                        }
                         $scope.modalContext.closeModal();
                     }
-                })
-                .catch(function (error) {
+                }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
+            };
+
+            $scope.close = function () {
+                $scope.modalContext.closeModal();
+            };
         }
 
-        $scope.closeModal = function () {
-            $scope.modalContext.closeModal();
+        function load() {
+            $scope.isLoading = true;
+            loadAllControls();
         }
-    }
 
-    function load() {
-        $scope.isGettingData = true;
-
-        return OrgChartAPIService.GetOrgCharts()
-            .then(function (response) {
-                $scope.orgCharts = response;
-                $scope.assignedOrgChart = UtilsService.getItemByVal($scope.orgCharts, passedOrgChartId, 'Id');
-            })
-            .catch(function (error) {
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadOrgChartSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-            })
-            .finally(function () {
-                $scope.isGettingData = false;
+            }).finally(function () {
+                $scope.isLoading = false;
             });
-    }
-}
 
-appControllers.controller('WhS_BE_OrgChartAssignmentEditorController', OrgChartAssignmentEditorController);
+            function setTitle() {
+                $scope.title = 'Assign Org Chart';
+            }
+
+            function loadOrgChartSelector() {
+                var loadOrgChartSelectorDeferred = UtilsService.createPromiseDeferred();
+
+                orgChartSelectorReadyDeferred.promise.then(function () {
+                    var orgChartSelectorPayload = {
+                        selectedIds: passedOrgChartId
+                    };
+                    VRUIUtilsService.callDirectiveLoad(orgChartSelectorAPI, orgChartSelectorPayload, loadOrgChartSelectorDeferred);
+                });
+
+                return loadOrgChartSelectorDeferred.promise;
+            }
+        }
+    }
+
+    appControllers.controller('WhS_BE_OrgChartAssignmentEditorController', OrgChartAssignmentEditorController);
+
+})(appControllers);

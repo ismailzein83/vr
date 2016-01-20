@@ -22,6 +22,12 @@ namespace Vanrise.Security.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedOrgCharts.Values.ToBigResult(input, filterExpression));
         }
 
+        public IEnumerable<OrgChartInfo> GetOrgChartInfo()
+        {
+            var cachedOrgCharts = GetCachedOrgCharts();
+            return cachedOrgCharts.Values.MapRecords(OrgChartInfoMapper);
+        }
+
         public OrgChart GetOrgChartById(int orgChartId)
         {
             var cachedOrgCharts = GetCachedOrgCharts();
@@ -216,6 +222,19 @@ namespace Vanrise.Security.Business
             }
         }
 
+        #endregion
+
+        #region Mappers
+
+        OrgChartInfo OrgChartInfoMapper(OrgChart orgChart)
+        {
+            return new OrgChartInfo()
+            {
+                OrgChartId = orgChart.OrgChartId,
+                Name = orgChart.Name
+            };
+        }
+        
         #endregion
     }
 }

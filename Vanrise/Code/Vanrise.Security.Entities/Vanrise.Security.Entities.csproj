@@ -57,6 +57,7 @@
     <Compile Include="MenuItem.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="OrgChart\OrgChart.cs" />
+    <Compile Include="OrgChart\OrgChartInfo.cs" />
     <Compile Include="OrgChart\OrgChartLinkedEntityInfo.cs" />
     <Compile Include="OrgChart\OrgChartLinkedEntityInstance.cs" />
     <Compile Include="OrgChart\OrgChartQuery.cs" />

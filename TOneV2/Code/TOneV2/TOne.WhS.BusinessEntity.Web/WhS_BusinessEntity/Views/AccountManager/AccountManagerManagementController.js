@@ -1,199 +1,224 @@
-﻿AccountManagerManagementController.$inject = ['$scope', 'WhS_BE_AccountManagerAPIService', 'UsersAPIService', 'OrgChartAPIService', 'VRModalService', 'VRNotificationService', 'UtilsService', 'WhS_BE_AccountManagerService'];
+﻿(function (appControllers) {
 
-function AccountManagerManagementController($scope, AccountManagerAPIService, UsersAPIService, OrgChartAPIService, VRModalService, VRNotificationService, UtilsService, WhS_BE_AccountManagerService) {
+    'use strict';
 
-    var users = [];
-    var members = [];
-    var assignedOrgChartId = undefined;
-    var gridAPI;
-    var treeAPI;
+    AccountManagerManagementController.$inject = ['$scope', 'WhS_BE_AccountManagerAPIService', 'WhS_BE_AccountManagerService', 'VR_Sec_UserAPIService', 'VR_Sec_OrgChartAPIService', 'UtilsService', 'VRNotificationService'];
 
-    defineScope();
-    load();
+    function AccountManagerManagementController($scope, WhS_BE_AccountManagerAPIService, WhS_BE_AccountManagerService, VR_Sec_UserAPIService, VR_Sec_OrgChartAPIService, UtilsService, VRNotificationService) {
+        var gridAPI;
+        var treeAPI;
+        var treeReadyDeferred = UtilsService.createPromiseDeferred();
 
-    function defineScope() {
-        $scope.nodes = [];
-        $scope.openOrgChartsModal = openOrgChartsModal;
-        $scope.assignCarriers = assignCarriers;
-        $scope.onGridReady = function (api) {
-            gridAPI = api;
-            var filter = {};
-            api.loadGrid(filter);
-        }
+        var nodes;
+        var members;
 
-        $scope.treeReady = function (api) {
-            treeAPI = api;
-        }
+        var users;
+        var assignedOrgChartId;
 
-        $scope.treeValueChanged = function () {
-            if (angular.isObject($scope.currentNode) && $scope.currentNode != undefined) {
-                gridAPI.loadGrid(getFilterData());
-            }
-        }
-    }
+        defineScope();
+        load();
 
-    function load() {
-        $scope.isLoading = true;
-
-        UtilsService.waitMultipleAsyncOperations([getUsers, getLinkedOrgChartId])
-        .then(function () {
-            if (assignedOrgChartId != undefined) {
-                buildTreeFromOrgHierarchy();
-            }
-            else {
-                buildTreeFromUsers();
-            }
-        })
-        .catch(function (error) {
-            $scope.isLoading = false;
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        });
-    }
-
-    function getFilterData() {
-        if ($scope.currentNode != undefined) {
-            var query = {
-                ManagerId: $scope.currentNode.nodeId,
-                WithDescendants: (assignedOrgChartId != undefined)
+        function defineScope() {
+            $scope.onGridReady = function (api) {
+                gridAPI = api;
+                gridAPI.loadGrid(getFilterObject());
             };
 
-            return query;
+            $scope.onTreeReady = function (api) {
+                treeAPI = api;
+                treeReadyDeferred.resolve();
+            };
+
+            $scope.onTreeValueChanged = function () {
+                if (angular.isObject($scope.currentNode) && $scope.currentNode != undefined) {
+                    gridAPI.loadGrid(getFilterObject());
+                }
+            };
+
+            $scope.assignOrgChart = function () {
+                var onOrgChartAssigned = function (orgChartId) {
+                    assignedOrgChartId = orgChartId;
+                    buildTreeFromOrgHierarchy(); // In this case, the grid could be loaded without waiting for the tree to load because currentNode = undefined
+                    $scope.currentNode = undefined;
+                    gridAPI.loadGrid(getFilterObject());
+                };
+                WhS_BE_AccountManagerService.assignOrgChart(assignedOrgChartId, onOrgChartAssigned);
+            };
+
+            $scope.assignCarriers = function () {
+                var onCarriersAssigned = function () {
+                    gridAPI.loadGrid(getFilterObject());
+                };
+                WhS_BE_AccountManagerService.assignCarriers($scope.currentNode.nodeId, onCarriersAssigned);
+            };
         }
-    }
 
-    function getUsers() {
-        return UsersAPIService.GetUsers()
-            .then(function (response) {
-                users = response;
-            });
-    }
+        function load() {
+            $scope.isLoading = true;
+            loadAllControls();
+        }
 
-    function getLinkedOrgChartId() {
-        return AccountManagerAPIService.GetLinkedOrgChartId()
-            .then(function (response) {
-                assignedOrgChartId = response;
-            });
-    }
+        function getFilterObject() {
+            return $scope.currentNode ? {
+                ManagerId: $scope.currentNode.nodeId,
+                WithDescendants: assignedOrgChartId != undefined
+            } : {};
+        }
 
-    function buildTreeFromOrgHierarchy() {
-        return OrgChartAPIService.GetOrgChartById(assignedOrgChartId)
-            .then(function (orgChartObject) {
-                members = orgChartObject.Hierarchy;
-                addMissingMembers();
-                $scope.nodes = mapMembersToNodes(members);
-                treeAPI.refreshTree($scope.nodes);
-            })
-            .catch(function (error) {
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadTree]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-            })
-            .finally(function () {
+            }).finally(function () {
                 $scope.isLoading = false;
             });
-    }
-    
-    function addMissingMembers() {
-        for (var i = 0; i < users.length; i++) {
-            var member = findNode(users[i].UserId);
+        }
 
-            if (member == null) { // the user isn't a member
-                var object = {
-                    Id: users[i].UserId,
-                    Name: users[i].Name,
-                    Members: []
-                };
+        function loadTree() {
+            var loadTreeDeferred = UtilsService.createPromiseDeferred();
 
-                members.push(object);
+            UtilsService.waitMultipleAsyncOperations([loadUsers, getLinkedOrgChartId]).then(function () {
+                if (assignedOrgChartId) {
+                    buildTreeFromOrgHierarchy().then(function () {
+                        loadTreeDeferred.resolve();
+                    }).catch(function (error) { loadTreeDeferred.reject(); });
+                }
+                else {
+                    buildTreeFromUsers().then(function () {
+                        loadTreeDeferred.resolve();
+                    }).catch(function (error) { loadTreeDeferred.reject(); });
+                }
+            }).catch(function (error) {
+                loadTreeDeferred.reject();
+            });
+
+            return loadTreeDeferred.promise;
+
+            function loadUsers() {
+                return VR_Sec_UserAPIService.GetUsers().then(function (response) {
+                    if (response) {
+                        users = [];
+
+                        for (var i = 0; i < response.length; i++) {
+                            users.push(response[i]);
+                        }
+                    }
+                });
+            }
+
+            function getLinkedOrgChartId() {
+                return WhS_BE_AccountManagerAPIService.GetLinkedOrgChartId().then(function (response) {
+                    assignedOrgChartId = response;
+                });
             }
         }
-    }
 
-    function findNode(id) {
-        for (var i = 0; i < members.length; i++) {
-            var node = getNodeRecursively(id, members[i]);
-            if (node != null)
+        function buildTreeFromOrgHierarchy() {
+            var loadHierarchyDeferred = UtilsService.createPromiseDeferred();
+
+            VR_Sec_OrgChartAPIService.GetOrgChartById(assignedOrgChartId).then(function (orgChartObject) {
+                members = orgChartObject.Hierarchy;
+                addMissingMembers();
+                nodes = mapMembersToNodes(members);
+
+                treeReadyDeferred.promise.then(function () {
+                    loadHierarchyDeferred.resolve();
+                    treeAPI.refreshTree(nodes);
+                });
+            }).catch(function (error) {
+                loadHierarchyDeferred.reject();
+            });
+
+            return loadHierarchyDeferred.promise;
+        }
+
+        function addMissingMembers() {
+            for (var i = 0; i < users.length; i++) {
+                var member = findNode(users[i].UserId);
+
+                if (member == null) { // the user isn't a member
+                    var object = {
+                        Id: users[i].UserId,
+                        Name: users[i].Name,
+                        Members: []
+                    };
+
+                    members.push(object);
+                }
+            }
+        }
+
+        function findNode(id) {
+            for (var i = 0; i < members.length; i++) {
+                var node = getNodeRecursively(id, members[i]);
+                if (node != null)
+                    return node;
+            }
+
+            return null;
+        }
+
+        function getNodeRecursively(id, node) {
+            if (node.Id == id)
                 return node;
-        }
 
-        return null;
-    }
-
-    function getNodeRecursively(id, node) {
-        if (node.Id == id)
-            return node;
-
-        if (node.Members != null && node.Members.length > 0) {
-            for (var i = 0; i < node.Members.length; i++) {
-                var result = getNodeRecursively(id, node.Members[i]);
-                if (result != null)
-                    return result;
+            if (node.Members != null && node.Members.length > 0) {
+                for (var i = 0; i < node.Members.length; i++) {
+                    var result = getNodeRecursively(id, node.Members[i]);
+                    if (result != null)
+                        return result;
+                }
             }
+
+            return null;
         }
 
-        return null;
-    }
+        function buildTreeFromUsers() {
+            var loadHierarchyDeferred = UtilsService.createPromiseDeferred();
+            nodes = [];
 
-    function buildTreeFromUsers() {
-        $scope.nodes = [];
+            for (var i = 0; i < users.length; i++) {
+                var node = mapUserToNode(users[i]);
+                nodes.push(node);
+            }
 
-        for (var i = 0; i < users.length; i++) {
-            var node = mapUserToNode(users[i]);
-            $scope.nodes.push(node);
+            treeReadyDeferred.promise.then(function () {
+                loadHierarchyDeferred.resolve();
+                treeAPI.refreshTree(nodes);
+            });
+
+            return loadHierarchyDeferred.promise;
         }
 
-        treeAPI.refreshTree($scope.nodes);
-        $scope.isLoading = false;
-    }
-
-    function mapUserToNode(user) {
-        return {
-            nodeId: user.UserId,
-            nodeName: user.Name,
-            nodeChildren: [],
-            isOpened: true
-        };
-    }
-
-    function mapMembersToNodes(members) {
-        if (members.length == 0)
-            return [];
-
-        var temp = [];
-
-        for (var i = 0; i < members.length; i++) {
-            var obj = {
-                nodeId: members[i].Id,
-                nodeName: UtilsService.getItemByVal(users, members[i].Id, 'UserId').Name,
-                nodeChildren: mapMembersToNodes(members[i].Members),
+        function mapUserToNode(user) {
+            return {
+                nodeId: user.UserId,
+                nodeName: user.Name,
+                nodeChildren: [],
                 isOpened: true
             };
-
-            temp.push(obj);
         }
 
-        return temp;
-    }
+        function mapMembersToNodes(members) {
+            if (members.length == 0)
+                return [];
 
-   
+            var temp = [];
 
-    function openOrgChartsModal() {
-        var onOrgChartAssigned = function (orgChartId) {
-            assignedOrgChartId = orgChartId;
-            buildTreeFromOrgHierarchy();
-            $scope.currentNode = undefined;
-            var filter = {};
-            gridAPI.loadGrid(filter);
-        };
+            for (var i = 0; i < members.length; i++) {
+                var obj = {
+                    nodeId: members[i].Id,
+                    nodeName: UtilsService.getItemByVal(users, members[i].Id, 'UserId').Name,
+                    nodeChildren: mapMembersToNodes(members[i].Members),
+                    isOpened: true
+                };
 
-        WhS_BE_AccountManagerService.openOrgChartsModal(onOrgChartAssigned, assignedOrgChartId);
-    }
-
-    function assignCarriers() {
-            var onCarriersAssigned = function () {
-                gridAPI.loadGrid(getFilterData());
+                temp.push(obj);
             }
-            WhS_BE_AccountManagerService.assignCarriers(onCarriersAssigned, $scope.currentNode.nodeId);
+
+            return temp;
+        }
     }
 
-}
+    appControllers.controller('WhS_BE_AccountManagerManagementController', AccountManagerManagementController);
 
-appControllers.controller('WhS_BE_AccountManagerManagementController', AccountManagerManagementController);
+})(appControllers);

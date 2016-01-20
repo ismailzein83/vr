@@ -9,9 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class AssignedCarrier
     {
         public int UserId { get; set; }
-
         public int CarrierAccountId { get; set; }
         public CarrierAccountType RelationType { get; set; }
-
     }
 }

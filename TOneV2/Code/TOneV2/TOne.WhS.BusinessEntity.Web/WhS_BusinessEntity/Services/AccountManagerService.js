@@ -1,42 +1,44 @@
-﻿
-app.service('WhS_BE_AccountManagerService', ['VRModalService', 'VRNotificationService', 'UtilsService',
-    function (VRModalService, VRNotificationService, UtilsService) {
+﻿(function (appControllers) {
 
-        function openOrgChartsModal(onOrgChartAssigned, assignedOrgChartId) {
-            var settings = {};
-            var parameters = null;
+    'use strict';
 
-            if (assignedOrgChartId != 0) {
-                parameters = {
-                    assignedOrgChartId: assignedOrgChartId
-                };
-            }
-            settings.onScopeReady = function (modalScope) {
-                modalScope.title = 'Assign Org Chart';
-                modalScope.onOrgChartAssigned = onOrgChartAssigned;
-            };
+    AccountManagerService.$inject = ['VRModalService', 'UtilsService'];
 
-            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/AccountManager/OrgChartAssignmentEditor.html', parameters, settings);
-        };
-        function assignCarriers(onCarriersAssigned, nodeId) {
-            var settings = {};
-
-            var parameters = {
-                selectedAccountManagerId: nodeId
-            };
-
-            settings.onScopeReady = function (modalScope) {
-                modalScope.title = 'Assign Carriers';
-                modalScope.onCarriersAssigned = onCarriersAssigned
-            };
-
-            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/AccountManager/CarrierAssignmentEditor.html', parameters, settings);
-        };
-
+    function AccountManagerService(VRModalService, UtilsService) {
         return ({
-            openOrgChartsModal: openOrgChartsModal,
+            assignOrgChart: assignOrgChart,
             assignCarriers: assignCarriers
         });
 
+        function assignOrgChart(assignedOrgChartId, onOrgChartAssigned) {
+            var modalParameters = {
+                assignedOrgChartId: assignedOrgChartId
+            };
 
-    }]);
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onOrgChartAssigned = onOrgChartAssigned;
+            };
+
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/AccountManager/OrgChartAssignmentEditor.html', modalParameters, modalSettings);
+        }
+
+        function assignCarriers(accountManagerId, onCarriersAssigned) {
+            var modalParameters = {
+                selectedAccountManagerId: accountManagerId
+            };
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onCarriersAssigned = onCarriersAssigned
+            };
+
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/AccountManager/CarrierAssignmentEditor.html', modalParameters, modalSettings);
+        }
+    }
+
+    appControllers.service('WhS_BE_AccountManagerService', AccountManagerService);
+
+})(appControllers);

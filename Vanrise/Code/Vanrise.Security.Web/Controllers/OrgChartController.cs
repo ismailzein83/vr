@@ -20,6 +20,14 @@ namespace Vanrise.Security.Web.Controllers
             OrgChartManager manager = new OrgChartManager();
             return GetWebResponse(input, manager.GetFilteredOrgCharts(input));
         }
+
+        [HttpGet]
+        [Route("GetOrgChartInfo")]
+        public IEnumerable<OrgChartInfo> GetOrgChartInfo()
+        {
+            OrgChartManager manager = new OrgChartManager();
+            return manager.GetOrgChartInfo();
+        }
         
         [HttpGet]
         [Route("GetOrgChartById")]

@@ -12,43 +12,110 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class AccountManagerManager
     {
-      
-        #region ctor/Local Variables
+        #region Fields / Constructors
+
+        CarrierAccountManager _carrierAccountManager;
+
+        public AccountManagerManager()
+        {
+            _carrierAccountManager = new CarrierAccountManager();
+        }
+
         #endregion
 
         #region Public Methods
+
         public IEnumerable<AssignedCarrier> GetAssignedCarriers()
         {
             return GetCachedAssignedCarriers();
         }
         public Vanrise.Entities.IDataRetrievalResult<AssignedCarrierDetail> GetFilteredAssignedCarriers(Vanrise.Entities.DataRetrievalInput<AssignedCarrierQuery> input)
         {
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            var carrierAccounts = carrierAccountManager.GetAllCarriers();
-
+            var carrierAccounts = _carrierAccountManager.GetAllCarriers();
             var assignedCarriers = GetCachedAssignedCarriers();
-            List<int> userIds = this.GetMemberIds(input.Query.ManagerId, input.Query.WithDescendants);
-            Func<AssignedCarrier, bool> filterExpression = (prod) =>
-               (userIds == null || userIds.Contains(prod.UserId));
+            
+            IEnumerable<int> userIds = GetMemberIds(input.Query.ManagerId, input.Query.WithDescendants);
+            Func<AssignedCarrier, bool> filterExpression = (assignedCarrier) => (userIds == null || userIds.Contains(assignedCarrier.UserId));
+
             var filteredAssignedCarriers = assignedCarriers.ToBigResult(input, filterExpression, AssignedCarrierDetailMapper);
             filteredAssignedCarriers.Data = FillNeededProperties(filteredAssignedCarriers.Data.ToList(), input.Query.ManagerId);
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, filteredAssignedCarriers);
         }
-        public IEnumerable<AssignedCarrierDetail> GetAssignedCarriersDetail(int managerId, bool withDescendants, CarrierAccountType carrierType)
+        public IEnumerable<AssignedCarrierDetail> GetAssignedCarrierDetails(int managerId, bool withDescendants, CarrierAccountType carrierType)
         {
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             var carrierAccounts = carrierAccountManager.GetAllCarriers();
             var assignedCarriers = GetCachedAssignedCarriers();
-            List<int> userIds = this.GetMemberIds(managerId, withDescendants);
-            Func<AssignedCarrier, bool> filterExpression = (prod) =>
-               (userIds == null || userIds.Contains(prod.UserId)
-            );
+            IEnumerable<int> userIds = this.GetMemberIds(managerId, withDescendants);
+            Func<AssignedCarrier, bool> filterExpression = (assignedCarrier) => (userIds == null || userIds.Contains(assignedCarrier.UserId));
             var filteredAssignedCarriers = assignedCarriers.MapRecords(AssignedCarrierDetailMapper, filterExpression).ToList();
             FillNeededProperties(filteredAssignedCarriers, managerId);
             return filteredAssignedCarriers;
         }
-        public List<AssignedCarrierDetail> FillNeededProperties(List<AssignedCarrierDetail> filteredAssignedCarriers, int managerId)
+        public Vanrise.Entities.UpdateOperationOutput<object> AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)
+        {
+            IAccountManagerCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerCarrierDataManager>();
+            Vanrise.Entities.UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            bool updateActionSucc = dataManager.AssignCarriers(updatedCarriers);
+
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+            }
+
+            updateOperationOutput.UpdatedObject = null;
+
+            return updateOperationOutput;
+        }
+        public int? GetLinkedOrgChartId()
+        {
+            OrgChartManager orgChartManager = new OrgChartManager();
+            return orgChartManager.GetLinkedOrgChartId(new OrgChartAccountManagerInfo());
+        }
+        public Vanrise.Entities.UpdateOperationOutput<object> UpdateLinkedOrgChart(int orgChartId)
+        {
+            OrgChartManager orgChartManager = new OrgChartManager();
+            return orgChartManager.UpdateOrgChartLinkedEntity(orgChartId, new OrgChartAccountManagerInfo());
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        IEnumerable<AssignedCarrier> GetCachedAssignedCarriers()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAssignedCarriers",
+               () =>
+               {
+                   IAccountManagerCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerCarrierDataManager>();
+                   return dataManager.GetAssignedCarriers();
+               });
+        }
+        List<int> GetMemberIds(int orgChartId, int managerId)
+        {
+            OrgChartManager orgChartManager = new OrgChartManager();
+            return orgChartManager.GetMemberIds(orgChartId, managerId);
+        }
+        IEnumerable<int> GetMemberIds(int managerId, bool withDescendants)
+        {
+            List<int> memberIds = new List<int>();
+
+            if (withDescendants)
+            {
+                int? orgChartId = GetLinkedOrgChartId();
+
+                if (orgChartId != null)
+                    memberIds = GetMemberIds((int)orgChartId, managerId); // GetMemberIds will add managerId to the list
+            }
+            else
+                memberIds.Add(managerId);
+
+            return memberIds;
+        }
+        List<AssignedCarrierDetail> FillNeededProperties(List<AssignedCarrierDetail> filteredAssignedCarriers, int managerId)
         {
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             var carrierAccounts = carrierAccountManager.GetAllCarriers();
@@ -86,94 +153,34 @@ namespace TOne.WhS.BusinessEntity.Business
                 filteredAssignedCarriers.Remove(obj);
             return filteredAssignedCarriers;
         }
-        public Vanrise.Entities.UpdateOperationOutput<object> AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)
-        {
-            IAccountManagerCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerCarrierDataManager>();
-            Vanrise.Entities.UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            bool updateActionSucc = dataManager.AssignCarriers(updatedCarriers);
-
-            if (updateActionSucc)
-            {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-            }
-
-            updateOperationOutput.UpdatedObject = null;
-
-            return updateOperationOutput;
-        }
-        public int? GetLinkedOrgChartId()
-        {
-            OrgChartManager orgChartManager = new OrgChartManager();
-            return orgChartManager.GetLinkedOrgChartId(new OrgChartAccountManagerInfo());
-        }
-        public Vanrise.Entities.UpdateOperationOutput<object> UpdateLinkedOrgChart(int orgChartId)
-        {
-            OrgChartManager orgChartManager = new OrgChartManager();
-            return orgChartManager.UpdateOrgChartLinkedEntity(orgChartId, new OrgChartAccountManagerInfo());
-        }
-
+        
         #endregion
 
-        #region Private Members
-        private List<int> GetMemberIds(int orgChartId, int managerId)
-        {
-            OrgChartManager orgChartManager = new OrgChartManager();
-            return orgChartManager.GetMemberIds(orgChartId, managerId);
-        }
-        private List<int> GetMemberIds(int managerId, bool withDescendants)
-        {
-            List<int> memberIds = new List<int>();
+        #region Private Classes
 
-            if (withDescendants)
-            {
-                int? orgChartId = GetLinkedOrgChartId();
-
-                if (orgChartId != null)
-                    memberIds = GetMemberIds((int)orgChartId, managerId); // GetMemberIds will add managerId to the list
-            }
-            else
-                memberIds.Add(managerId);
-
-            return memberIds;
-        }
-        IEnumerable<AssignedCarrier> GetCachedAssignedCarriers()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAssignedCarriers",
-               () =>
-               {
-                   IAccountManagerCarrierDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerCarrierDataManager>();
-                   return dataManager.GetAssignedCarriers();
-                    
-               });
-        }
-
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IAccountManagerCarrierDataManager _dataManager = BEDataManagerFactory.GetDataManager<IAccountManagerCarrierDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreAccountManagerUpdated(ref _updateHandle);
+                return _dataManager.AreAssignedCarriersUpdated(ref _updateHandle);
             }
         }
     
         #endregion
      
         #region  Mappers
-        private AssignedCarrierDetail AssignedCarrierDetailMapper(AssignedCarrier assignedCarrier)
+
+        AssignedCarrierDetail AssignedCarrierDetailMapper(AssignedCarrier assignedCarrier)
         {
-            AssignedCarrierDetail assignedCarrierDetail = new AssignedCarrierDetail();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            assignedCarrierDetail.Entity = assignedCarrier;
-            assignedCarrierDetail.CarrierName = carrierAccountManager.GetCarrierAccountName(assignedCarrier.CarrierAccountId);
-            return assignedCarrierDetail;
-
+            return new AssignedCarrierDetail() {
+                Entity = assignedCarrier,
+                CarrierName = _carrierAccountManager.GetCarrierAccountName(assignedCarrier.CarrierAccountId)
+            };
         }
+        
         #endregion
-      
-
     }
 }
