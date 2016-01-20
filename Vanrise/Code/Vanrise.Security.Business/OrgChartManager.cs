@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
+using Vanrise.Caching;
 using Vanrise.Entities;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
@@ -11,16 +13,19 @@ namespace Vanrise.Security.Business
 {
     public class OrgChartManager
     {
+        #region Public Methods
+
         public Vanrise.Entities.IDataRetrievalResult<OrgChart> GetFilteredOrgCharts(Vanrise.Entities.DataRetrievalInput<OrgChartQuery> input)
         {
-            IOrgChartDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredOrgCharts(input));
+            var cachedOrgCharts = GetCachedOrgCharts();
+            Func<OrgChart, bool> filterExpression = (orgChart) => (input.Query.Name == null || orgChart.Name.ToUpper().Contains(input.Query.Name.ToUpper()));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedOrgCharts.Values.ToBigResult(input, filterExpression));
         }
 
         public OrgChart GetOrgChartById(int orgChartId)
         {
-            IOrgChartDataManager datamanager = SecurityDataManagerFactory.GetDataManager<IOrgChartDataManager>();
-            return datamanager.GetOrgChartById(orgChartId);
+            var cachedOrgCharts = GetCachedOrgCharts();
+            return cachedOrgCharts.Values.FindRecord(orgChart => orgChart.OrgChartId == orgChartId);
         }
 
         public Vanrise.Entities.InsertOperationOutput<OrgChart> AddOrgChart(OrgChart orgChartObject)
@@ -93,7 +98,7 @@ namespace Vanrise.Security.Business
             {
                 deleteOperationOutput.Result = DeleteOperationResult.InUse;
             }
-            
+
             return deleteOperationOutput;
         }
 
@@ -106,7 +111,7 @@ namespace Vanrise.Security.Business
         public Vanrise.Entities.UpdateOperationOutput<object> UpdateOrgChartLinkedEntity(int orgChartId, OrgChartLinkedEntityInfo entityInfo)
         {
             IOrgChartLinkedEntityDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartLinkedEntityDataManager>();
-            
+
             bool updateActionSucc = dataManager.InsertOrUpdate(orgChartId, entityInfo.GetIdentifier());
             Vanrise.Entities.UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
 
@@ -119,9 +124,7 @@ namespace Vanrise.Security.Business
 
         public List<int> GetMemberIds(int orgChartId, int managerId)
         {
-            IOrgChartDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartDataManager>();
-            OrgChart orgChart = dataManager.GetOrgChartById(orgChartId);
-
+            OrgChart orgChart = GetOrgChartById(orgChartId);
             Member manager = GetMember(managerId, orgChart.Hierarchy);
 
             // manager would be null if he/she were added after the org chart's hierarchy was created
@@ -135,9 +138,25 @@ namespace Vanrise.Security.Business
 
             return memberIds;
         }
+        
+        #endregion
+        
+        #region Private Methods
 
-        public Member GetMember(int memberId, List<Member> members) {
-            for (int i = 0; i < members.Count; i++ )
+        Dictionary<int, OrgChart> GetCachedOrgCharts()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetOrgCharts",
+               () =>
+               {
+                   IOrgChartDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartDataManager>();
+                   IEnumerable<OrgChart> orgCharts = dataManager.GetOrgCharts();
+                   return orgCharts.ToDictionary(orgChart => orgChart.OrgChartId, orgChart => orgChart);
+               });
+        }
+
+        Member GetMember(int memberId, List<Member> members)
+        {
+            for (int i = 0; i < members.Count; i++)
             {
                 Member target = GetMemberRecursively(memberId, members[i]);
 
@@ -148,7 +167,7 @@ namespace Vanrise.Security.Business
             return null;
         }
 
-        public Member GetMemberRecursively(int memberId, Member member)
+        Member GetMemberRecursively(int memberId, Member member)
         {
             if (member.Id == memberId)
                 return member;
@@ -167,7 +186,7 @@ namespace Vanrise.Security.Business
             return null;
         }
 
-        public List<int> GetMemberIdsRecursively(Member manager)
+        List<int> GetMemberIdsRecursively(Member manager)
         {
             List<int> ids = new List<int>();
 
@@ -181,5 +200,22 @@ namespace Vanrise.Security.Business
 
             return ids;
         }
+
+        #endregion
+
+        #region Private Classes
+
+        class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IOrgChartDataManager _dataManager = SecurityDataManagerFactory.GetDataManager<IOrgChartDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreOrgChartsUpdated(ref _updateHandle);
+            }
+        }
+
+        #endregion
     }
 }

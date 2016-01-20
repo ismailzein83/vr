@@ -17,24 +17,11 @@ namespace Vanrise.Security.Data.SQL
 
         }
 
-        //public List<OrgChart> GetOrgCharts()
-        //{
-        //    return GetItemsSP("sec.sp_OrgChart_GetAll", OrgChartMapper);
-        //}
+        #region Public Methods
 
-        public Vanrise.Entities.BigResult<OrgChart> GetFilteredOrgCharts(Vanrise.Entities.DataRetrievalInput<OrgChartQuery> input)
+        public IEnumerable<OrgChart> GetOrgCharts()
         {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("sec.sp_OrgChart_CreateTempByName", tempTableName, input.Query.Name);
-            };
-
-            return RetrieveData(input, createTempTableAction, OrgChartMapper);
-        }
-
-        public OrgChart GetOrgChartById(int orgChartId)
-        {
-            return GetItemSP("sec.sp_OrgChart_GetById", OrgChartMapper, orgChartId);
+            return GetItemsSP("sec.sp_OrgChart_GetAll", OrgChartMapper);
         }
 
         public bool AddOrgChart(OrgChart orgChartObject, out int insertedId)
@@ -65,8 +52,17 @@ namespace Vanrise.Security.Data.SQL
             int recordsEffected = ExecuteNonQuerySP("sec.sp_OrgChart_Delete", orgChartId);
             return (recordsEffected > 0);
         }
+
+        public bool AreOrgChartsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("sec.OrgChart", ref updateHandle);
+        }
         
-        private OrgChart OrgChartMapper(IDataReader reader)
+        #endregion
+
+        #region Mappers
+
+        OrgChart OrgChartMapper(IDataReader reader)
         {
             return new OrgChart
             {
@@ -75,5 +71,7 @@ namespace Vanrise.Security.Data.SQL
                 Hierarchy = Vanrise.Common.Serializer.Deserialize<List<Member>>(reader["Hierarchy"] as string),
             };
         }
+        
+        #endregion
     }
 }

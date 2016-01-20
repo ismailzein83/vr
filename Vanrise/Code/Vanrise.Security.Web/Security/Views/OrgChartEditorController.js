@@ -31,25 +31,27 @@
         }
 
         function defineScope() {
-            $scope.treeReady = function (api) {
+            $scope.modalScope = {};
+
+            $scope.modalScope.onTreeReady = function (api) {
                 treeAPI = api;
                 treeReadyDeferred.resolve();
             };
 
-            $scope.save = function () {
+            $scope.modalScope.save = function () {
                 if (isEditMode)
                     return updateOrgChart();
                 else
                     return insertOrgChart();
             };
 
-            $scope.close = function () {
+            $scope.modalScope.close = function () {
                 $scope.modalContext.closeModal();
             };
         }
 
         function load() {
-            $scope.isLoading = true;
+            $scope.modalScope.isLoading = true;
 
             if (isEditMode) {
                 loadOrgChart().then(function () {
@@ -57,7 +59,7 @@
                         orgChartEntity = undefined;
                     });
                 }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    VRNotificationService.notifyExceptionWithClose(error, $scope.modalScope);
                 });
             }
             else {
@@ -74,7 +76,7 @@
                     mapUsersToMembers();
                 }
             }).finally(function () {
-                $scope.isLoading = false;
+                $scope.modalScope.isLoading = false;
             });
         }
 
@@ -121,7 +123,7 @@
         };
 
         function fillScopeFromOrgChartObj(orgChartObject) {
-            $scope.name = orgChartObject.Name;
+            $scope.modalScope.name = orgChartObject.Name;
 
             addMappedUnassignedUsersToHierarchy(orgChartObject.Hierarchy);
             removeDeletedUsersFromHierarchy(orgChartObject.Hierarchy);
@@ -254,7 +256,7 @@
             var orgChartObject = buildOrgChartObjFromScope();
 
             return VR_Sec_OrgChartAPIService.AddOrgChart(orgChartObject).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('Org Chart', response)) {
+                if (VRNotificationService.notifyOnItemAdded('Org Chart', response, 'Name')) {
                     if ($scope.onOrgChartAdded && typeof $scope.onOrgChartAdded == 'function') {
                         $scope.onOrgChartAdded(response.InsertedObject);
                     }
@@ -262,7 +264,7 @@
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
+                VRNotificationService.notifyException(error, $scope.modalScope);
             });
         }
 
@@ -278,14 +280,14 @@
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
+                VRNotificationService.notifyException(error, $scope.modalScope);
             });
         }
 
         function buildOrgChartObjFromScope() {
             return {
                 OrgChartId: (orgChartId != null) ? orgChartId : 0,
-                Name: $scope.name,
+                Name: $scope.modalScope.name,
                 Hierarchy: (treeAPI.getTree != undefined) ? treeAPI.getTree() : members
             };
         }

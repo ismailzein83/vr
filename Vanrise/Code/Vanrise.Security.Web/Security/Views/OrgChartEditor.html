@@ -1,43 +1,37 @@
-﻿<div vr-modalcontent ng-controller="VR_Sec_OrgChartEditorController" vr-loader="isLoading" width="'40%'" draggable="true">
+﻿<div vr-modalcontent ng-controller="VR_Sec_OrgChartEditorController" vr-loader="modalScope.isLoading" width="'40%'" draggable="true">
     <vr-modalbody>
         <vr-form name="orgChartEditorForm">
-            <vr-choices>
-                <vr-choice isselected="definitionSelected">Definition</vr-choice>
-                <vr-choice isselected="hierarchySelected">Hierarchy</vr-choice>
-            </vr-choices>
-
-            <div ng-show="definitionSelected">
-                <vr-row>
-                    <vr-columns colnum="6">
-                        <vr-textbox value="name" label="Name" isrequired></vr-textbox>
-                    </vr-columns>
-                </vr-row>
-            </div>
-
-            <div ng-show="hierarchySelected">
-
-                <vr-row>
-                    <vr-columns width="fullrow">
-                        <vr-treeview on-ready="treeReady"
-                                     datachildrenfield="Members"
-                                     datavaluefield="Id"
-                                     datatextfield="Name"
-                                     selecteditem="currentNode"
-                                     draggabletree
-                                     movesettings="alllevels"
-                                     wholerow>
-                        </vr-treeview>
-                    </vr-columns>
-                </vr-row>
-
-            </div>
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox label="Name" value="modalScope.name" isrequired></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Hierarchy'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-treeview on-ready="modalScope.onTreeReady"
+                                         datachildrenfield="Members"
+                                         datavaluefield="Id"
+                                         datatextfield="Name"
+                                         selecteditem="modalScope.currentNode"
+                                         draggabletree
+                                         movesettings="alllevels"
+                                         wholerow>
+                            </vr-treeview>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" data-onclick="save" formname="orgChartEditorForm"></vr-button>
-                <vr-button type="Close" data-onclick="close"></vr-button>
+                <vr-button type="Save" data-onclick="modalScope.save" formname="orgChartEditorForm"></vr-button>
+                <vr-button type="Close" data-onclick="modalScope.close"></vr-button>
             </div>
         </vr-actionbar>
 

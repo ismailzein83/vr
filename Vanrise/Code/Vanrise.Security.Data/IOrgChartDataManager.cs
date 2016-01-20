@@ -9,14 +9,14 @@ namespace Vanrise.Security.Data
 {
     public interface IOrgChartDataManager : IDataManager
     {
-        Vanrise.Entities.BigResult<OrgChart> GetFilteredOrgCharts(Vanrise.Entities.DataRetrievalInput<OrgChartQuery> input);
-        
-        OrgChart GetOrgChartById(int orgChartId);
+        IEnumerable<OrgChart> GetOrgCharts();
 
         bool AddOrgChart(OrgChart orgChart, out int insertedId);
 
         bool UpdateOrgChart(OrgChart orgChart);
 
         bool DeleteOrgChart(int orgChartId);
+
+        bool AreOrgChartsUpdated(ref object updateHandle);
     }
 }
