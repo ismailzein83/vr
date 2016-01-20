@@ -96,7 +96,7 @@ app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'V
 
                     timeDimentionReadyPromiseDeferred.promise.then(function () {
                         var timeDimentionPeriod = {
-                            period: TimeDimensionTypeEnum.Daily.value
+                            selectedIds: TimeDimensionTypeEnum.Daily.value
                         };
 
                         VRUIUtilsService.callDirectiveLoad(timeDimentionDirectiveAPI, timeDimentionPeriod, loadTimeDimentionPromiseDeferred);
@@ -107,13 +107,14 @@ app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'V
                         .then(function () {
                             UtilsService.safeApply($scope);
                             widgetReadyPromiseDeferred.promise.then(function () {
+
                                 var obj = timeRangeDirectiveAPI.getData();
                                 $scope.filter = {
                                     timeDimensionType: $scope.selectedTimeDimension,
                                     fromDate: obj.fromDate,
                                     toDate: obj.toDate
                                 }
-                                var widgetPeriod = {
+                                var widgetPeriod = { 
                                     filter: $scope.filter,
                                     title: $scope.widget.SectionTitle,
                                     settings: $scope.widget.Setting.settings,
