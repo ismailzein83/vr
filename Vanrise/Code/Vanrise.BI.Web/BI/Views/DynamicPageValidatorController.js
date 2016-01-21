@@ -1,6 +1,6 @@
-﻿ValidateEditorController.$inject = ['$scope', 'VR_Sec_UserAPIService', 'VRNavigationService', 'BIAPIService', 'DataRetrievalResultTypeEnum','UtilsService','VRNotificationService'];
+﻿ValidateEditorController.$inject = ['$scope', 'VR_Sec_UserAPIService', 'VRNavigationService', 'VR_BI_BIAPIService', 'DataRetrievalResultTypeEnum', 'UtilsService', 'VRNotificationService'];
 
-function ValidateEditorController($scope, UsersAPIService, VRNavigationService, BIAPIService, DataRetrievalResultTypeEnum, UtilsService, VRNotificationService) {
+function ValidateEditorController($scope, UsersAPIService, VRNavigationService, VR_BI_BIAPIService, DataRetrievalResultTypeEnum, UtilsService, VRNotificationService) {
     var mainGridAPI;
     loadParameters();
     defineScope();
@@ -33,7 +33,7 @@ function ValidateEditorController($scope, UsersAPIService, VRNavigationService, 
         };
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return BIAPIService.GetUserMeasuresValidator(dataRetrievalInput)
+            return VR_BI_BIAPIService.GetUserMeasuresValidator(dataRetrievalInput)
             .then(function (response) {
                 if (dataRetrievalInput.DataRetrievalResultType == DataRetrievalResultTypeEnum.Normal.value) {
                     if (response.Data.length == 0) {

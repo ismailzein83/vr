@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'BIConfigurationAPIService', 'VRModalService', 'UtilsService', 'VRNotificationService', function (BIAPIService, BIUtilitiesService, BIVisualElementService, BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService) {
+app.directive('vrBiChart', ['VR_BI_BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'VR_BI_BIConfigurationAPIService', 'VRModalService', 'UtilsService', 'VRNotificationService', function (VR_BI_BIAPIService, BIUtilitiesService, BIVisualElementService, VR_BI_BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -180,7 +180,7 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
 
         function loadMeasures() {
             measures.length = 0;
-            return BIConfigurationAPIService.GetMeasures()
+            return VR_BI_BIConfigurationAPIService.GetMeasuresInfo()
                 .then(function (response) {
                     for (var i = 0; i < ctrl.settings.MeasureTypes.length; i++) {
                         var value = UtilsService.getItemByVal(response, ctrl.settings.MeasureTypes[i], 'Name');
@@ -192,7 +192,7 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
 
         function loadEntities() {
             entity.length = 0;
-            return BIConfigurationAPIService.GetEntities()
+            return VR_BI_BIConfigurationAPIService.GetEntitiesInfo()
                 .then(function (response) {
                     for (var i = 0; i < ctrl.settings.EntityType.length; i++)
                         entity.push(UtilsService.getItemByVal(response, ctrl.settings.EntityType[i], 'Name'));

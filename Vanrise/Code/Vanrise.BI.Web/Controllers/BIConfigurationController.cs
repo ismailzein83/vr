@@ -6,31 +6,33 @@ using Vanrise.BI.Entities;
 using Vanrise.BI.Business;
 using System.Net.Http;
 using System.Web.Http;
-using Vanrise.BI.Web.Models;
-using Vanrise.BI.Web.ModelMappers;
 namespace Vanrise.BI.Web.Controllers
 {
+    [RoutePrefix(Constants.ROUTE_PREFIX + "BIConfiguration")]
     public class BIConfigurationController : Vanrise.Web.Base.BaseAPIController
     {
-
-
         [HttpGet]
-        public List<BIMeasureModel> GetMeasures()
+        [Route("GetMeasuresInfo")]
+        public IEnumerable<BIMeasureInfo> GetMeasuresInfo()
         {
             BIConfigurationManager manager = new BIConfigurationManager();
-            List<BIConfiguration<BIConfigurationMeasure>> managerData = new List<BIConfiguration<BIConfigurationMeasure>>();
-            managerData= manager.GetMeasures(); 
-            Mappers mapper = new Mappers();
-            return mapper.MeasuresMapper(managerData); ;
+            return manager.GetMeasuresInfo();
         }
+
         [HttpGet]
-        public List<BIEntityModel<BIConfigurationEntity>> GetEntities()
+        [Route("GetEntitiesInfo")]
+        public IEnumerable<BIEntityInfo<BIConfigurationEntity>> GetEntitiesInfo()
         {
             BIConfigurationManager manager = new BIConfigurationManager();
-            List<BIConfiguration<BIConfigurationEntity>> managerData = new List<BIConfiguration<BIConfigurationEntity>>();
-            managerData = manager.GetEntities();
-            Mappers mapper = new Mappers();
-            return mapper.EntitiesMapper(managerData); ;
+            return manager.GetEntitiesInfo();
+        }
+
+        [HttpGet]
+        [Route("GetTimeEntitiesInfo")]
+        public IEnumerable<BIEntityInfo<BIConfigurationTimeEntity>> GetTimeEntitiesInfo()
+        {
+            BIConfigurationManager manager = new BIConfigurationManager();
+            return manager.GetTimeEntitiesInfo();
         }
     }
 }

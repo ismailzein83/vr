@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrBiSummaryTemplate', ['UtilsService', '$compile', 'VRNotificationService', 'VRUIUtilsService', 'BIConfigurationAPIService',
-function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, BIConfigurationAPIService) {
+app.directive('vrBiSummaryTemplate', ['UtilsService', '$compile', 'VRNotificationService', 'VRUIUtilsService', 'VR_BI_BIConfigurationAPIService',
+function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, VR_BI_BIConfigurationAPIService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -51,7 +51,7 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, BICon
 
             api.load = function (payload) {
 
-                return BIConfigurationAPIService.GetMeasures()
+                return VR_BI_BIConfigurationAPIService.GetMeasuresInfo()
                     .then(function (response) {
                         ctrl.Measures.length = 0;
                         angular.forEach(response, function (itm) {

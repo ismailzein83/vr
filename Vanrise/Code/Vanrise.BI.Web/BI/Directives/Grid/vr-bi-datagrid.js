@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'VRModalService', 'BIConfigurationAPIService', 'MainService', function (UtilsService, BIAPIService, BIUtilitiesService, BIVisualElementService, VRModalService, BIConfigurationAPIService, MainService) {
+app.directive('vrBiDatagrid', ['UtilsService', 'VR_BI_BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'VRModalService', 'VR_BI_BIConfigurationAPIService', 'MainService', function (UtilsService, VR_BI_BIAPIService, BIUtilitiesService, BIVisualElementService, VRModalService, VR_BI_BIConfigurationAPIService, MainService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -125,7 +125,7 @@ app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesServi
 
         function loadMeasures() {
             measures.length = 0;
-            return BIConfigurationAPIService.GetMeasures()
+            return VR_BI_BIConfigurationAPIService.GetMeasuresInfo()
                 .then(function (response) {
                     for (var i = 0; i < ctrl.settings.MeasureTypes.length; i++) {
                         var value = UtilsService.getItemByVal(response, ctrl.settings.MeasureTypes[i], 'Name');
@@ -137,7 +137,7 @@ app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesServi
 
         function loadEntities() {
             entity.length = 0;
-            return BIConfigurationAPIService.GetEntities()
+            return VR_BI_BIConfigurationAPIService.GetEntitiesInfo()
                 .then(function (response) {
                     if (ctrl.settings.EntityType != undefined) {
                         for (var i = 0; i < ctrl.settings.EntityType.length; i++)

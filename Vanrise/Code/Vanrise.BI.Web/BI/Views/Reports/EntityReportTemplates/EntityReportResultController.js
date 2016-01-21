@@ -1,6 +1,6 @@
-﻿EntityReportResultController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'TimeDimensionTypeEnum', 'BIEntityTypeEnum', 'BIMeasureTypeEnum', 'BIAPIService', 'BIUtilitiesService'];
+﻿EntityReportResultController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'TimeDimensionTypeEnum', 'BIEntityTypeEnum', 'BIMeasureTypeEnum', 'VR_BI_BIAPIService', 'BIUtilitiesService'];
 
-function EntityReportResultController($scope, VRNavigationService, UtilsService, TimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum, BIAPIService, BIUtilitiesService) {
+function EntityReportResultController($scope, VRNavigationService, UtilsService, TimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum, VR_BI_BIAPIService, BIUtilitiesService) {
         var gridAPI;
         var entityType;
         var entityId;
@@ -93,7 +93,7 @@ function EntityReportResultController($scope, VRNavigationService, UtilsService,
                 measureTypes.push(measureType.value);
             });
           
-            return BIAPIService.GetEntityMeasuresValues(entityType, entityId, timeDimensionValue, fromDate, toDate, measureTypes)
+            return VR_BI_BIAPIService.GetEntityMeasuresValues(entityType, entityId, timeDimensionValue, fromDate, toDate, measureTypes)
              .then(function (response) {
                 $scope.data.length = 0;
                 angular.forEach(response, function (itm) {

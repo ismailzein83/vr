@@ -125,7 +125,11 @@
   <ItemGroup>
     <Content Include="BI\Constants\BIEntityTypeEnum.js" />
     <Content Include="BI\Constants\BIMeasureTypeEnum.js" />
+    <Content Include="BI\Constants\ModuleConfig.js" />
     <Content Include="BI\Directives\bi-visualelement-service.js" />
+    <Content Include="BI\Directives\BIConfiguration\vr-bi-entity-selector.js" />
+    <Content Include="BI\Directives\BIConfiguration\vr-bi-measure-selector.js" />
+    <Content Include="BI\Directives\BIConfiguration\vr-bi-timeentity-selector.js" />
     <Content Include="BI\Directives\Chart\Templates\BIChartTemplate.html" />
     <Content Include="BI\Directives\Chart\vr-bi-chart-template.js" />
     <Content Include="BI\Directives\Chart\vr-bi-chart.js" />
@@ -138,15 +142,6 @@
     <Content Include="BI\Directives\Summary\Templates\BISummaryTemplate.html" />
     <Content Include="BI\Directives\Summary\vr-bi-summary-template.js" />
     <Content Include="BI\Directives\Summary\vr-bi-summary.js" />
-    <Content Include="BI\Directives\Templates\vr-bi-chart-directive-template.html" />
-    <Content Include="BI\Directives\Templates\vr-bi-chart-directive-template.js" />
-    <Content Include="BI\Directives\Templates\vr-bi-datagrid-directive-template.html" />
-    <Content Include="BI\Directives\Templates\vr-bi-datagrid-directive-template.js" />
-    <Content Include="BI\Directives\Templates\vr-bi-summary-directive-template.html" />
-    <Content Include="BI\Directives\Templates\vr-bi-summary-directive-template.js" />
-    <Content Include="BI\Directives\vr-bi-chart-directive.js" />
-    <Content Include="BI\Directives\vr-bi-datagrid-directive.js" />
-    <Content Include="BI\Directives\vr-bi-summary-directive.js" />
     <Content Include="BI\Services\APIServices\BIAPIService.js" />
     <Content Include="BI\Services\APIServices\BIConfigurationAPIService.js" />
     <Content Include="BI\Services\bi-utilities-service.js" />
@@ -158,11 +153,9 @@
     <Content Include="BI\Views\Reports\EntityReportTemplates\EntityReportResultController.js" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BIConfigurationController.cs" />
     <Compile Include="Controllers\BIController.cs" />
-    <Compile Include="ModelMappers\Mappers.cs" />
-    <Compile Include="Models\BIConfigurationModel.cs" />
-    <Compile Include="Models\BIMeasureTypeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

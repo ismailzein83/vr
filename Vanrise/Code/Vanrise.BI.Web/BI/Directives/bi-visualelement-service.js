@@ -1,5 +1,5 @@
 ﻿
-app.service('BIVisualElementService', function (BIAPIService) {
+app.service('BIVisualElementService', function (VR_BI_BIAPIService) {
 
     return ({
         retrieveWidgetData: retrieveWidgetData,
@@ -13,10 +13,10 @@ app.service('BIVisualElementService', function (BIAPIService) {
         switch (visualElementSettings.OperationType) {
             case "TopEntities":
                 visualElementController.isTopEntities = true;
-                return BIAPIService.GetTopEntities(visualElementSettings.EntityType, visualElementSettings.TopMeasure, fromDate, toDate, visualElementSettings.TopRecords, visualElementSettings.MeasureTypes);
+                return VR_BI_BIAPIService.GetTopEntities(visualElementSettings.EntityType, visualElementSettings.TopMeasure, fromDate, toDate, visualElementSettings.TopRecords, visualElementSettings.MeasureTypes);
             case "MeasuresGroupedByTime":
                 visualElementController.isDateTimeGroupedData = true;
-                return BIAPIService.GetMeasureValues(filter.timeDimensionType.value, fromDate, toDate, visualElementSettings.MeasureTypes);
+                return VR_BI_BIAPIService.GetMeasureValues(filter.timeDimensionType.value, fromDate, toDate, visualElementSettings.MeasureTypes);
                 break;
 
         }
@@ -31,10 +31,10 @@ app.service('BIVisualElementService', function (BIAPIService) {
             switch (visualElementSettings.OperationType) {
                 case "TopEntities":
                     visualElementController.isTopEntities = true;
-                    return BIAPIService.ExportTopEntities(visualElementSettings.EntityType, visualElementSettings.TopMeasure, fromDate, toDate, visualElementSettings.TopRecords, visualElementSettings.MeasureTypes);
+                    return VR_BI_BIAPIService.ExportTopEntities(visualElementSettings.EntityType, visualElementSettings.TopMeasure, fromDate, toDate, visualElementSettings.TopRecords, visualElementSettings.MeasureTypes);
                 case "MeasuresGroupedByTime":
                     visualElementController.isDateTimeGroupedData = true;
-                    return BIAPIService.ExportMeasureValues(filter.timeDimensionType.value, fromDate,toDate, visualElementSettings.MeasureTypes);
+                    return VR_BI_BIAPIService.ExportMeasureValues(filter.timeDimensionType.value, fromDate, toDate, visualElementSettings.MeasureTypes);
                     break;
 
             }

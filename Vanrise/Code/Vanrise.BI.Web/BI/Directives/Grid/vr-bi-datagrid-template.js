@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrBiDatagridTemplate', ['UtilsService', '$compile', 'VRNotificationService', 'VRUIUtilsService', 'ChartSeriesTypeEnum', 'TimeDimensionTypeEnum', 'BIConfigurationAPIService',
-function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, ChartSeriesTypeEnum, TimeDimensionTypeEnum, BIConfigurationAPIService) {
+app.directive('vrBiDatagridTemplate', ['UtilsService', '$compile', 'VRNotificationService', 'VRUIUtilsService', 'ChartSeriesTypeEnum', 'TimeDimensionTypeEnum', 'VR_BI_BIConfigurationAPIService',
+function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, ChartSeriesTypeEnum, TimeDimensionTypeEnum, VR_BI_BIConfigurationAPIService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -108,7 +108,7 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
                     }
                 }
                 var promises = [];
-                var loadMeasures = BIConfigurationAPIService.GetMeasures()
+                var loadMeasures = VR_BI_BIConfigurationAPIService.GetMeasuresInfo()
                     .then(function (response) {
                         angular.forEach(response, function (itm) {
                             ctrl.Measures.push(itm);
@@ -126,7 +126,7 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
                         }
                     });
                 promises.push(loadMeasures);
-                var loadEntities = BIConfigurationAPIService.GetEntities()
+                var loadEntities = VR_BI_BIConfigurationAPIService.GetEntitiesInfo()
                     .then(function (response) {
                         angular.forEach(response, function (itm) {
                             ctrl.Entities.push(itm);

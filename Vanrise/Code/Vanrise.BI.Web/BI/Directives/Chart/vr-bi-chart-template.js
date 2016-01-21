@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrBiChartTemplate', ['UtilsService', 'TimeDimensionTypeEnum', 'VRNotificationService', 'VRUIUtilsService', 'ChartDefinitionTypeEnum', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum',
-function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsService, ChartDefinitionTypeEnum, BIConfigurationAPIService, ChartSeriesTypeEnum) {
+app.directive('vrBiChartTemplate', ['UtilsService', 'TimeDimensionTypeEnum', 'VRNotificationService', 'VRUIUtilsService', 'ChartDefinitionTypeEnum', 'VR_BI_BIConfigurationAPIService', 'ChartSeriesTypeEnum',
+function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsService, ChartDefinitionTypeEnum, VR_BI_BIConfigurationAPIService, ChartSeriesTypeEnum) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -164,7 +164,7 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
                 ctrl.isPieChart = payload != undefined ? payload.IsPieChart : undefined;
                 ctrl.topRecords = payload != undefined ? payload.TopRecords : undefined;
                 var promises = [];
-                var loadEntities = BIConfigurationAPIService.GetEntities()
+                var loadEntities = VR_BI_BIConfigurationAPIService.GetEntitiesInfo()
                     .then(function (response) {
                         angular.forEach(response, function (itm) {
                             ctrl.Entities.push(itm);
@@ -181,7 +181,7 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
                         }
                     });
                 promises.push(loadEntities);
-                var loadMeasures = BIConfigurationAPIService.GetMeasures()
+                var loadMeasures = VR_BI_BIConfigurationAPIService.GetMeasuresInfo()
                     .then(function (response) {
                         angular.forEach(response, function (itm) {
                             ctrl.Measures.push(itm);

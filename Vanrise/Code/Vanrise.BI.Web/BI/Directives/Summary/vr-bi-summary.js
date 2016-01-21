@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'VRModalService', function (UtilsService, BIConfigurationAPIService, BIAPIService, BIUtilitiesService, BIVisualElementService, VRModalService) {
+app.directive('vrBiSummary', ['UtilsService', 'VR_BI_BIConfigurationAPIService', 'VR_BI_BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'VRModalService', function (UtilsService, VR_BI_BIConfigurationAPIService, VR_BI_BIAPIService, BIUtilitiesService, BIVisualElementService, VRModalService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -94,7 +94,7 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
                 return;
             ctrl.isGettingData = true;
 
-            return BIAPIService.GetMeasureValues1(fromDate, toDate, ctrl.settings.MeasureTypes)
+            return VR_BI_BIAPIService.GetSummaryMeasureValues(fromDate, toDate, ctrl.settings.MeasureTypes)
                 .then(function (response) {
 
                     for (var i = 0; i < response.length; i++) {
@@ -113,7 +113,7 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
         }
 
         function loadMeasures() {
-            return BIConfigurationAPIService.GetMeasures()
+            return VR_BI_BIConfigurationAPIService.GetMeasuresInfo()
                 .then(function (response) {
                     if (ctrl.settings != undefined) {
                         for (var i = 0; i < ctrl.settings.MeasureTypes.length; i++) {

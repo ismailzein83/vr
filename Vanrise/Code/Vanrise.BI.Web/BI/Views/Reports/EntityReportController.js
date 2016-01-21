@@ -1,6 +1,6 @@
-﻿EntityReportController.$inject = ['$scope', 'UtilsService', 'TimeDimensionTypeEnum', 'BIEntityTypeEnum', 'BIMeasureTypeEnum', 'BIAPIService', 'BIUtilitiesService', 'VRNavigationService'];
+﻿EntityReportController.$inject = ['$scope', 'UtilsService', 'TimeDimensionTypeEnum', 'BIEntityTypeEnum', 'BIMeasureTypeEnum', 'VR_BI_BIAPIService', 'BIUtilitiesService', 'VRNavigationService'];
 
-function EntityReportController($scope, UtilsService, TimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum, BIAPIService, BIUtilitiesService, VRNavigationService) {
+function EntityReportController($scope, UtilsService, TimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum, VR_BI_BIAPIService, BIUtilitiesService, VRNavigationService) {
         var resultAPI;
         defineScope();
         load();
