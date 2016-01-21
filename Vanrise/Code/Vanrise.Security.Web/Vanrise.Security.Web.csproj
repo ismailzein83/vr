@@ -124,6 +124,7 @@
     <Content Include="Security\Directives\DynamicPage\vr-sec-dynamicpageviewer.js" />
     <Content Include="Security\Directives\Group\Templates\GroupGrid.html" />
     <Content Include="Security\Directives\Group\vr-sec-group-grid.js" />
+    <Content Include="Security\Directives\Group\vr-sec-group-selector.js" />
     <Content Include="Security\Directives\OrgChart\Templates\OrgChartGrid.html" />
     <Content Include="Security\Directives\OrgChart\Templates\vr-sec-orgchart-selector.js" />
     <Content Include="Security\Directives\OrgChart\vr-sec-orgchart-grid.js" />
