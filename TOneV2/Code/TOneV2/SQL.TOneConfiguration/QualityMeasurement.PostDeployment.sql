@@ -96,9 +96,9 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Users','Users','#/view/Security/Views/UserManagement',1,'Root/Administration Module/Users:View',null,null,0,10),
-(2,'Groups','Groups','#/view/Security/Views/GroupManagement',1,'Root/Administration Module/Groups:View',null,null,0,11),
-(3,'System Entities','System Entities','#/view/Security/Views/BusinessEntityManagement',1,'Root/Administration Module/System Entities:View',null,null,0,12),
+(1,'Users','Users','#/view/Security/Views/User/UserManagement',1,'Root/Administration Module/Users:View',null,null,0,10),
+(2,'Groups','Groups','#/view/Security/Views/Group/GroupManagement',1,'Root/Administration Module/Groups:View',null,null,0,11),
+(3,'System Entities','System Entities','#/view/Security/Views/Permission/BusinessEntityManagement',1,'Root/Administration Module/System Entities:View',null,null,0,12),
 (4,'Ranking Pages','Ranking Pages','#/view/Security/Views/Pages/RankingPageManagement',1,'Root/Administration Module:View',null,null,0,14),
 (5,'Test call','Test call','#/view/QM_CLITester/Views/TestPage/Test',2,null,null,null,0,11),
 (6,'Supplier','Supplier','#/view/QM_BusinessEntity/Views/Supplier/SupplierManagement',3,null,null,null,0,10),

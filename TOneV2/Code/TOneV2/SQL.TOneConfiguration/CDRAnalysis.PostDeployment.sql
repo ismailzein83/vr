@@ -113,9 +113,9 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Users','Users','#/view/Security/Views/UserManagement',1,'Root/Administration Module/Users:View',null,null,0,10),
-(2,'Groups','Groups','#/view/Security/Views/GroupManagement',1,'Root/Administration Module/Groups:View',null,null,0,11),
-(3,'System Entities','System Entities','#/view/Security/Views/BusinessEntityManagement',1,'Root/Administration Module/System Entities:View',null,null,0,12),
+(1,'Users','Users','#/view/Security/Views/User/UserManagement',1,'Root/Administration Module/Users:View',null,null,0,10),
+(2,'Groups','Groups','#/view/Security/Views/Group/GroupManagement',1,'Root/Administration Module/Groups:View',null,null,0,11),
+(3,'System Entities','System Entities','#/view/Security/Views/Permission/BusinessEntityManagement',1,'Root/Administration Module/System Entities:View',null,null,0,12),
 (4,'Suspicious Numbers','Suspicious Numbers','#/view/FraudAnalysis/Views/SuspiciousAnalysis/SuspicionAnalysis',2,'Root/Suspicion Analysis Module:View',null,null,0,11),
 (5,'Log','Log History','#/view/BusinessProcess/Views/BPHistory',3,'Root/Business Process Module/History:View',null,null,0,12),
 (6,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',3,'Root/Business Process Module/Management:View',null,null,0,10),
