@@ -6,7 +6,7 @@
 
     function currencyExchangeRateManagementController($scope, VRCommon_CurrencyExchangeRateService, UtilsService, VRUIUtilsService) {
         var gridAPI;
-        var currencyDirectiveApi;
+        var currencySelectorAPI;
         var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         load();
@@ -14,7 +14,7 @@
 
         function defineScope() {
             $scope.searchClicked = function () {
-                setFilterObject();
+                getFilterObject();
                 gridAPI.loadGrid(filter)
             };
 
@@ -24,7 +24,7 @@
             }
 
             $scope.onCurrencySelectReady = function (api) {
-                currencyDirectiveApi = api;
+                currencySelectorAPI = api;
                 currencyReadyPromiseDeferred.resolve();
             }
             $scope.addNewCurrencyExchangeRate = addNewCurrencyExchangeRate;
@@ -52,13 +52,12 @@
                 .then(function () {
                     var directivePayload = {};
 
-                    VRUIUtilsService.callDirectiveLoad(currencyDirectiveApi, directivePayload, currencyLoadPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, directivePayload, currencyLoadPromiseDeferred);
                 });
             return currencyLoadPromiseDeferred.promise;
         }
 
-        function setFilterObject() {
-            console.log(currencySelectorAPI.getSelectedIds());
+        function getFilterObject() {
             filter = {
                 ExchangeDate: $scope.exchangeDate,
                 Currencies: currencySelectorAPI.getSelectedIds() ? currencySelectorAPI.getSelectedIds() : null 
