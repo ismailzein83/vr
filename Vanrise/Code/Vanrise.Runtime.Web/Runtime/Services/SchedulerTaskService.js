@@ -17,7 +17,7 @@ app.service('VR_Runtime_SchedulerTaskService', ['VRModalService', 'UtilsService'
             settings.onScopeReady = function (modalScope) {               
                 modalScope.onTaskAdded = onTaskAdded;
             };
-            var editor = '/Client/Modules/Runtime/Views/SchedulerTaskEditor.html';
+            var editor = '/Client/Modules/Runtime/Views/NewSchedulerTaskEditor/NewSchedulerTaskEditor.html';
             VRModalService.showModal(editor, parameters, settings);
 
             // '/Client/Modules/Runtime/Views/NewSchedulerTaskEditor/NewSchedulerTaskEditor.html' new 
@@ -30,7 +30,7 @@ app.service('VR_Runtime_SchedulerTaskService', ['VRModalService', 'UtilsService'
             var parameters = {
                 taskId: taskId
             };
-            var editor = '/Client/Modules/Runtime/Views/SchedulerTaskEditor.html';
+            var editor = '/Client/Modules/Runtime/Views/NewSchedulerTaskEditor/NewSchedulerTaskEditor.html';
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onTaskUpdated = onTaskUpdated;

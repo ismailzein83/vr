@@ -23,14 +23,9 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/Runtime/Directives/TaskTrigger/Templates/TaskTriggerTimer.html"
     };
 
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/Runtime/Directives/TaskTrigger/Templates/TaskTriggerTimer.html";
-    }
 
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;

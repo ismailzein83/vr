@@ -44,6 +44,7 @@
         }
 
         function validateTimeRange(fromDate, toDate) {
+            console.log(fromDate instanceof Date);
             if (fromDate instanceof Date) {
                 if (fromDate == undefined || toDate == undefined)
                     return null;
@@ -57,6 +58,16 @@
             else if (fromDate instanceof Object && toDate instanceof Object)
             {
                 if (fromDate.Hour > toDate.Hour || (fromDate.Hour == toDate.Hour && fromDate.Minute > toDate.Minute))
+                    return "Start should be before end";
+                else
+                    return null;
+            }
+            else if (typeof fromDate == 'string') {
+                if (fromDate == undefined || toDate == undefined)
+                    return null;
+                var from = new Date(fromDate);
+                var to = new Date(toDate);
+                if (from.getTime() > to.getTime())
                     return "Start should be before end";
                 else
                     return null;

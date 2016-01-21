@@ -55,7 +55,7 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, DaysOfWeekEnum)
                 else {
                     angular.forEach($scope.selectedTimes, function (item) {
                         //Time to be added should not be repeated in the list of selected times
-                        if ($scope.selectedTime === item) {
+                        if (UtilsService.compareEqualsTimes($scope.selectedTime, item)) {
                             timeIsValid = false;
                         }
                     });

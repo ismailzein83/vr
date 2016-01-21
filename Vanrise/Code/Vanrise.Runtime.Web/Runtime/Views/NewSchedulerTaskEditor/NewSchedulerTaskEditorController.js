@@ -1,6 +1,6 @@
-﻿newSchedulerTaskEditorController.$inject = ['$scope', 'SchedulerTaskAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+﻿newSchedulerTaskEditorController.$inject = ['$scope', 'SchedulerTaskAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRValidationService'];
 
-function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService, VRUIUtilsService , VRValidationService) {
 
     var editMode;
     var taskId;
@@ -8,7 +8,7 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
     var additionalParameter;
     var taskObject;
     var taskTriggerDirectiveAPI;
-    var taskTriggerDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+    var taskTriggerDirectiveReadyPromiseDeferred; // = UtilsService.createPromiseDeferred();
     var taskActionDirectiveAPI;
     var taskActionDirectiveReadyPromiseDeferred; //= UtilsService.createPromiseDeferred();
     
@@ -63,7 +63,10 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
 
         $scope.onTaskTriggerDirectiveReady = function (api) {
             taskTriggerDirectiveAPI = api;
-            taskTriggerDirectiveReadyPromiseDeferred.resolve();
+            var setLoader = function (value) {
+                $scope.isLoadingTrigger = value;
+            };
+            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, taskTriggerDirectiveAPI, undefined, setLoader, taskTriggerDirectiveReadyPromiseDeferred);
 
         }
         $scope.onTaskActionDirectiveReady = function (api) {
@@ -74,6 +77,9 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, taskActionDirectiveAPI, undefined, setLoader, taskActionDirectiveReadyPromiseDeferred);
 
         }
+        $scope.scopeModel.validateDates = function () {
+            return VRValidationService.validateTimeRange($scope.scopeModel.startEffDate, $scope.scopeModel.endEffDate);
+        };
 
         $scope.onTaskActionSelctionChanged = function () {
             var payload;
@@ -93,22 +99,21 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
 
         if (editMode) {
             getTask().then(function () {
-                loadAllControls()
-                    .finally(function () {
-                    });
+                loadAllControls().finally(function () {
+                taskObject = undefined;
+            });
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.isLoading = false;
             });
         }
         else {
-            $scope.title = UtilsService.buildTitleForAddEditor("Task");
             loadAllControls();
         }
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadTriggers, loadActions])
+        return UtilsService.waitMultipleAsyncOperations([loadTriggers, loadActions, setTitle, loadStaticData])
            .catch(function (error) {
                VRNotificationService.notifyExceptionWithClose(error, $scope);
            })
@@ -121,18 +126,10 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
     function getTask() {
         return SchedulerTaskAPIService.GetTask(taskId)
            .then(function (response) {
-               taskObject = response;
-               $scope.title = UtilsService.buildTitleForUpdateEditor(taskObject.Name, "Task");
-               $scope.scopeModel.name = taskObject.Name;
-               $scope.scopeModel.isEnabled = taskObject.IsEnabled;
-               $scope.scopeModel.startEffDate = taskObject.TaskSettings.StartEffDate;
-               $scope.scopeModel.endEffDate = taskObject.TaskSettings.EndEffDate;
-           })
-            .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.isGettingData = false;
-            });
+               taskObject = response;              
+           }).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+        })
     }
 
     function loadTriggers() {
@@ -154,15 +151,18 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
             }
         });
         promises.push(taskTriggerTypesLoad);
-       //if (triggersPayload != undefined) {
+        if (triggersPayload) {
+            taskTriggerDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var loadTaskTriggerPromiseDeferred = UtilsService.createPromiseDeferred();
             promises.push(loadTaskTriggerPromiseDeferred.promise);
+
             taskTriggerDirectiveReadyPromiseDeferred.promise.then(function () {
+                taskTriggerDirectiveReadyPromiseDeferred = undefined;
                 VRUIUtilsService.callDirectiveLoad(taskTriggerDirectiveAPI, triggersPayload, loadTaskTriggerPromiseDeferred);
             });
-
-       // }
-       
+        }
+      
         return UtilsService.waitMultiplePromises(promises);
     }
 
@@ -192,9 +192,9 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
 
         });
 
-        promises.push(loadActionTypesPromise);
+       promises.push(loadActionTypesPromise);
 
-        //if (actionPayload != undefined) {
+       if (actionPayload != undefined && actionPayload.data) {
             taskActionDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var loadTaskActionPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -204,11 +204,28 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
                 taskActionDirectiveReadyPromiseDeferred = undefined;
                 VRUIUtilsService.callDirectiveLoad(taskActionDirectiveAPI, actionPayload, loadTaskActionPromiseDeferred);
             });
-      // }
+       }
 
         return UtilsService.waitMultiplePromises(promises);
     }
 
+    function setTitle() {
+        if (editMode && taskObject != undefined)
+            $scope.title = UtilsService.buildTitleForUpdateEditor(taskObject.Name, "Task");
+        else
+            $scope.title = UtilsService.buildTitleForAddEditor("Task");
+    }
+
+    function loadStaticData() {
+
+        if (taskObject == undefined)
+            return;
+
+        $scope.scopeModel.name = taskObject.Name;
+        $scope.scopeModel.isEnabled = taskObject.IsEnabled;
+        $scope.scopeModel.startEffDate = taskObject.TaskSettings.StartEffDate;
+        $scope.scopeModel.endEffDate = taskObject.TaskSettings.EndEffDate;
+    }
    
 
     function buildTaskObjFromScope() {
@@ -233,7 +250,7 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
   
 
     function insertTask() {
-        $scope.issaving = true;
+        $scope.isLoading = true;
         var taskObject = buildTaskObjFromScope();
         return SchedulerTaskAPIService.AddTask(taskObject)
         .then(function (response) {
@@ -244,7 +261,9 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
             }
         }).catch(function (error) {
             VRNotificationService.notifyException(error, $scope);
-        });
+        }).finally(function () {
+            $scope.isLoading = false;
+        });;
 
     }
 
@@ -259,7 +278,9 @@ function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, Utils
             }
         }).catch(function (error) {
             VRNotificationService.notifyException(error, $scope);
-        });
+        }).finally(function () {
+            $scope.isLoading = false;
+        });;
     }
 }
 appControllers.controller('Runtime_NewSchedulerTaskEditorController', newSchedulerTaskEditorController);

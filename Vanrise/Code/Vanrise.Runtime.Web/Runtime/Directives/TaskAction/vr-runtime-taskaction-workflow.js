@@ -99,22 +99,23 @@ function (UtilsService, VRUIUtilsService, BusinessProcessAPIService) {
                 promises.push(loadBPDefinitionSelectorPromiseDeferred.promise);
 
                 var loadBPDefinitionPromiseDeferred = UtilsService.createPromiseDeferred();
+                if (data != undefined && data.ProcessInputArguments) {
+                    bpDefenitionDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                    bpDefenitionDirectiveReadyPromiseDeferred.promise.then(function () {
+                        bpDefenitionDirectiveReadyPromiseDeferred = undefined;
+                        var payloadDirective;
+                        if (data != undefined) {
+                            payloadDirective = {
+                                data: (data != undefined && data.ProcessInputArguments) ? data.ProcessInputArguments : null,
+                                selectedDateOption: (data != undefined && data.RawExpressions != null) ? 0 : 1
+                            };
 
-                bpDefenitionDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                bpDefenitionDirectiveReadyPromiseDeferred.promise.then(function () {
-                    bpDefenitionDirectiveReadyPromiseDeferred = undefined;
-                    var payloadDirective;
-                    if (data != undefined) {
-                        payloadDirective = {
-                            data: (data != undefined ) ? data.ProcessInputArguments : null,
-                            selectedDateOption: (data!=undefined &&  data.RawExpressions != null) ? 0 : 1
-                        };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(bpDefenitionDirectiveAPI, payloadDirective, loadBPDefinitionPromiseDeferred);
 
-                    }
-                    VRUIUtilsService.callDirectiveLoad(bpDefenitionDirectiveAPI, payloadDirective, loadBPDefinitionPromiseDeferred);
-
-                });
-                promises.push(loadBPDefinitionPromiseDeferred.promise);
+                    });
+                    promises.push(loadBPDefinitionPromiseDeferred.promise);
+                }
                 return UtilsService.waitMultiplePromises(promises);
                
             }

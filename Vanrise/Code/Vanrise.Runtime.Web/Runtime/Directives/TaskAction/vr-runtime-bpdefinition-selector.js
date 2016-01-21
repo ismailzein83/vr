@@ -9,7 +9,7 @@ app.directive('vrRuntimeBpdefinitionSelector', ['BusinessProcessAPIService', 'Ut
                 ismultipleselection: "@",
                 onselectionchanged: '=',
                 selectedvalues: '=',
-                isrequired: "@",
+                isrequired: "=",
                 onselectitem: "=",
                 ondeselectitem: "=",
                 isdisabled: "=",
@@ -54,13 +54,10 @@ app.directive('vrRuntimeBpdefinitionSelector', ['BusinessProcessAPIService', 'Ut
                 multipleselection = "ismultipleselection";
             }
 
-            var required = "";
-            if (attrs.isrequired != undefined)
-                required = "isrequired";
-           
+        
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Title" datavaluefield="BPDefinitionID" '
-            + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Bp definition" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + '<vr-select ' + multipleselection + '  datatextfield="Title" datavaluefield="BPDefinitionID" isrequired="ctrl.isrequired"'
+               + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Bp definition" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                + '</div>'
         }
 
