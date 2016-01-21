@@ -19,104 +19,110 @@ using Vanrise.Security.Entities;
 namespace Vanrise.BI.Business
 {
     public class GenericEntityManager
-    {   
-
-        public IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params string[] measureTypeNames)
+    {
+        private BIConfigurationManager _configurations;
+        public GenericEntityManager()
+        {
+            _configurations = new BIConfigurationManager();
+        }
+        public IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate,int? timeEntityId, params string[] measureTypeNames)
         {
 
-            IBIConfigurationDataManager configurations = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
+             
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
-            List<BIConfiguration<BIConfigurationMeasure>> allMeasures= configurations.GetMeasures();
-            List<BIConfiguration<BIConfigurationEntity>> entities = configurations.GetEntities();
+            List<BIConfiguration<BIConfigurationMeasure>> allMeasures = _configurations.GetMeasures();
+            List<BIConfiguration<BIConfigurationEntity>> entities = _configurations.GetEntities();
             dataManager.MeasureDefinitions = allMeasures;
             dataManager.EntityDefinitions = entities;
             List<String> customerIds = new List<String>();
-            string customerColumnId=null;
-           foreach (BIConfiguration<BIConfigurationMeasure> measure in allMeasures){
-                foreach (string measureName in measureTypeNames)
-                 {
-                     if (measureName == measure.Name && measure.Configuration.Type == MeasureConfigurationType.Financial)
-                     {
-                         foreach (BIConfiguration<BIConfigurationEntity> entity in entities)
-                         {
-                             if (entity.Name == "Customer")
-                             {
-                                 customerColumnId = entity.Configuration.ColumnID;
-                                 var myObject = (IDimensionBehavior)Activator.CreateInstance(Type.GetType(entity.Configuration.BehaviorFQTN));
-                                 customerIds = myObject.GetFilteredValues();
-                             }
-                            
-                         }
-                     }
-                 }
-           }
-            
-            List<String> supplierIds = new List<String>();
-
-            return dataManager.GetMeasureValues(timeDimensionType, fromDate, toDate, customerIds, supplierIds,customerColumnId, measureTypeNames);
-        }
-
-        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(List<string> entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params string[] measureTypes)
-        {
-            IBIConfigurationDataManager configurations = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
-            IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
-            dataManager.MeasureDefinitions = configurations.GetMeasures();
-            dataManager.EntityDefinitions = configurations.GetEntities();
-            List<String> supplierIds=new List<String>();
-            List<String> customerIds=new List<String>();
             string customerColumnId = null;
-            return dataManager.GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, customerIds, supplierIds,customerColumnId, measureTypes);
+            foreach (BIConfiguration<BIConfigurationMeasure> measure in allMeasures)
+            {
+                foreach (string measureName in measureTypeNames)
+                {
+                    if (measureName == measure.Name && measure.Configuration.Type == MeasureConfigurationType.Financial)
+                    {
+                        foreach (BIConfiguration<BIConfigurationEntity> entity in entities)
+                        {
+                            if (entity.Name == "Customer")
+                            {
+                                customerColumnId = entity.Configuration.ColumnID;
+                                var myObject = (IDimensionBehavior)Activator.CreateInstance(Type.GetType(entity.Configuration.BehaviorFQTN));
+                                customerIds = myObject.GetFilteredValues();
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            List<String> supplierIds = new List<String>();
+            BIConfigurationTimeEntity configurationTimeEntity = GetDefaultTimeEntity(timeEntityId);
+            return dataManager.GetMeasureValues(timeDimensionType, fromDate, toDate, customerIds, supplierIds, customerColumnId,configurationTimeEntity, measureTypeNames);
         }
-        public IEnumerable<EntityRecord> GetTopEntities(List<string> entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, params string[] measureTypesNames)
+
+        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(List<string> entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate,int? timeEntityId, params string[] measureTypes)
         {
-          List<DimensionFilter> queryFilter = new  List<DimensionFilter>();
-            IBIConfigurationDataManager configurations = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
-            List<BIConfiguration<BIConfigurationEntity>> entities = configurations.GetEntities();
-          
+            dataManager.MeasureDefinitions = _configurations.GetMeasures();
+            dataManager.EntityDefinitions = _configurations.GetEntities();
+            List<String> supplierIds = new List<String>();
+            List<String> customerIds = new List<String>();
+            string customerColumnId = null;
+            BIConfigurationTimeEntity configurationTimeEntity = GetDefaultTimeEntity(timeEntityId);
+            return dataManager.GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, customerIds, supplierIds, customerColumnId, configurationTimeEntity,measureTypes);
+        }
+        public IEnumerable<EntityRecord> GetTopEntities(List<string> entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, int? timeEntityId, params string[] measureTypesNames)
+        {
+            List<DimensionFilter> queryFilter = new List<DimensionFilter>();
+            IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
+            List<BIConfiguration<BIConfigurationEntity>> entities = _configurations.GetEntities();
+
             foreach (BIConfiguration<BIConfigurationEntity> entity in entities)
             {
                 foreach (string entityType in entityTypeName)
                     if (entityType == entity.Name && entity.Configuration.BehaviorFQTN != null)
-                {
-                    var myObject = (IDimensionBehavior)Activator.CreateInstance(Type.GetType(entity.Configuration.BehaviorFQTN));
-                        List<string> data=myObject.GetFilteredValues();
-                        if(data.Count>0)
+                    {
+                        var myObject = (IDimensionBehavior)Activator.CreateInstance(Type.GetType(entity.Configuration.BehaviorFQTN));
+                        List<string> data = myObject.GetFilteredValues();
+                        if (data.Count > 0)
                         {
-                           queryFilter.Add(new DimensionFilter
-                             {
-                                Name = entity.Name,
-                               Data = data
-                             });
+                            queryFilter.Add(new DimensionFilter
+                              {
+                                  Name = entity.Name,
+                                  Data = data
+                              });
                         }
-                    
-                    
-                }
-                
+
+
+                    }
+
             }
             if (queryFilter.Count == 0)
                 queryFilter = null;
-            dataManager.MeasureDefinitions = configurations.GetMeasures();
+            dataManager.MeasureDefinitions = _configurations.GetMeasures();
             dataManager.EntityDefinitions = entities;
-            return dataManager.GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, queryFilter, measureTypesNames);
+
+            BIConfigurationTimeEntity configurationTimeEntity = GetDefaultTimeEntity(timeEntityId);
+            return dataManager.GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, queryFilter,configurationTimeEntity, measureTypesNames);
         }
 
-        public Decimal[] GetMeasureValues(DateTime fromDate, DateTime toDate, params string[] measureTypeNames)
+        public Decimal[] GetSummaryMeasureValues(DateTime fromDate, DateTime toDate, int? timeEntityId, params string[] measureTypeNames)
         {
 
-            IBIConfigurationDataManager configurations = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
-            dataManager.MeasureDefinitions = configurations.GetMeasures();
-            dataManager.EntityDefinitions = configurations.GetEntities();
-            return dataManager.GetMeasureValues(fromDate, toDate, measureTypeNames);
+            dataManager.MeasureDefinitions = _configurations.GetMeasures();
+            dataManager.EntityDefinitions = _configurations.GetEntities();
+           BIConfigurationTimeEntity configurationTimeEntity=GetDefaultTimeEntity(timeEntityId);
+           return dataManager.GetSummaryMeasureValues(fromDate, toDate, configurationTimeEntity, measureTypeNames);
         }
         public HttpResponseMessage ExportMeasureValues(IEnumerable<TimeValuesRecord> records, string entity, string[] measureTypesNames, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)
         {
             Workbook wbk = new Workbook();
             wbk.Worksheets.Clear();
             Worksheet RateWorkSheet = wbk.Worksheets.Add("Time Variation Report");
-        
-        
+
+
 
             int Irow = 1;
             int Icol = 1;
@@ -128,14 +134,14 @@ namespace Vanrise.BI.Business
                 RateWorkSheet.Cells[Irow, Icol].PutValue(header);
                 RateWorkSheet.Cells.SetColumnWidth(Icol, 20);
             }
-            
+
             foreach (TimeValuesRecord record in records)
             {
                 Irow++;
                 Icol = 1;
 
                 RateWorkSheet.Cells[Irow, Icol].PutValue(GetDateTimeProperties(record, timeDimensionType, fromDate, toDate, true));
-                foreach (Decimal value in  record.Values)
+                foreach (Decimal value in record.Values)
                 {
                     Icol++;
                     RateWorkSheet.Cells[Irow, Icol].PutValue(value);
@@ -143,7 +149,7 @@ namespace Vanrise.BI.Business
 
             }
 
-            for (int i = 1; i <= measureTypesNames.Length+1; i++)
+            for (int i = 1; i <= measureTypesNames.Length + 1; i++)
             {
                 Cell cell = RateWorkSheet.Cells.GetCell(1, i);
                 Style style = cell.GetStyle();
@@ -191,9 +197,9 @@ namespace Vanrise.BI.Business
             int Icol = 1;
             foreach (string entity in entities)
             {
-                    Icol++;
-                    RateWorkSheet.Cells.SetColumnWidth(Icol, 20);
-                    RateWorkSheet.Cells[Irow, Icol].PutValue(entity);
+                Icol++;
+                RateWorkSheet.Cells.SetColumnWidth(Icol, 20);
+                RateWorkSheet.Cells[Irow, Icol].PutValue(entity);
             }
             foreach (string header in measureTypesNames)
             {
@@ -213,7 +219,7 @@ namespace Vanrise.BI.Business
                     RateWorkSheet.Cells[Irow, Icol].PutValue(name);
                 }
 
-              
+
                 foreach (Decimal value in record.Values)
                 {
                     Icol++;
@@ -222,7 +228,7 @@ namespace Vanrise.BI.Business
 
             }
 
-            for (int i = 2; i <= measureTypesNames.Length + entities.Count()+1; i++)
+            for (int i = 2; i <= measureTypesNames.Length + entities.Count() + 1; i++)
             {
                 Cell cell = RateWorkSheet.Cells.GetCell(1, i);
                 Style style = cell.GetStyle();
@@ -243,7 +249,7 @@ namespace Vanrise.BI.Business
             //chart.NSeries.Add("C3:D5", true);
 
 
-           
+
 
             byte[] array;
             MemoryStream ms = new MemoryStream();
@@ -265,186 +271,203 @@ namespace Vanrise.BI.Business
 
         public string GetDateTimeProperties(TimeValuesRecord record, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, Boolean dontFillGroup)
         {
-                
-             if (dontFillGroup == false) {
-                 var isLongPeriod = CheckIsLongPeriod(timeDimensionType, fromDate, toDate);
-                        if (isLongPeriod == true)
-                         dontFillGroup = true;
-                     }
 
-             DateTime dateTimeValue = record.Time;
-                   switch (timeDimensionType) {
-                       case TimeDimensionType.Yearly:
-                           {
-                               return dateTimeValue.Year.ToString();
-                           }
-                       case TimeDimensionType.Monthly:
-                           {
-                               if (dontFillGroup)
-                                 return (GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue));
-                               break;
-                           }
-                       case TimeDimensionType.Weekly:
-                           {
-                               var groupName = GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
-                               if (dontFillGroup)
-                                   return ("Week " + record.WeekNumber + "-" + groupName);
-                               break;
-                           }
-                   
-                       case TimeDimensionType.Daily:
-                           {
-                               var groupName = GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
-                               if (dontFillGroup)
-                                   return (dateTimeValue.Day.ToString() + "-" + groupName);
-                               break;
-                           }
-                       case TimeDimensionType.Hourly:
-                           {
-                               string hour = dateTimeValue.Hour.ToString();
-                               string minute = dateTimeValue.Minute.ToString();
-                               var groupName = dateTimeValue.Day.ToString() + "-" + GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
-                               if (dontFillGroup)
-                                 return ( groupName + " " + (hour.ToCharArray().Length < 2 ? '0' + hour : hour) + ":" + (minute.ToCharArray().Length < 2 ? '0' + minute : minute));
-                               break;
-                           }
-                  
+            if (dontFillGroup == false)
+            {
+                var isLongPeriod = CheckIsLongPeriod(timeDimensionType, fromDate, toDate);
+                if (isLongPeriod == true)
+                    dontFillGroup = true;
+            }
+
+            DateTime dateTimeValue = record.Time;
+            switch (timeDimensionType)
+            {
+                case TimeDimensionType.Yearly:
+                    {
+                        return dateTimeValue.Year.ToString();
+                    }
+                case TimeDimensionType.Monthly:
+                    {
+                        if (dontFillGroup)
+                            return (GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue));
+                        break;
+                    }
+                case TimeDimensionType.Weekly:
+                    {
+                        var groupName = GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
+                        if (dontFillGroup)
+                            return ("Week " + record.WeekNumber + "-" + groupName);
+                        break;
+                    }
+
+                case TimeDimensionType.Daily:
+                    {
+                        var groupName = GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
+                        if (dontFillGroup)
+                            return (dateTimeValue.Day.ToString() + "-" + groupName);
+                        break;
+                    }
+                case TimeDimensionType.Hourly:
+                    {
+                        string hour = dateTimeValue.Hour.ToString();
+                        string minute = dateTimeValue.Minute.ToString();
+                        var groupName = dateTimeValue.Day.ToString() + "-" + GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
+                        if (dontFillGroup)
+                            return (groupName + " " + (hour.ToCharArray().Length < 2 ? '0' + hour : hour) + ":" + (minute.ToCharArray().Length < 2 ? '0' + minute : minute));
+                        break;
+                    }
+
+            }
+            return null;
+
+        }
+        public Boolean CheckIsLongPeriod(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)
+        {
+
+            switch (timeDimensionType)
+            {
+                case TimeDimensionType.Yearly:
+                    return false;
+                case TimeDimensionType.Monthly:
+                    if (toDate.Year - fromDate.Year > 4)
+                        return true;
+                    else
+                        return false;
+                case TimeDimensionType.Weekly:
+                    if (GetDateDifference(fromDate, toDate) > 200)
+                        return true;
+                    else
+                        return false;
+                case TimeDimensionType.Daily:
+                    if (GetDateDifference(fromDate, toDate) > 50)
+                        return true;
+                    else
+                        return false;
+                case TimeDimensionType.Hourly:
+                    if (GetDateDifference(fromDate, toDate) > 2)
+                        return true;
+                    else
+                        return false;
+            }
+            return false;
+        }
+        public double GetDateDifference(DateTime fromDate, DateTime toDate)
+        {
+            double timeDiff = toDate.Millisecond - fromDate.Millisecond;
+            return Math.Ceiling(timeDiff / (1000 * 3600 * 24));
+        }
+        public string GetShortYear(DateTime date)
+        {
+            string fullYear = date.Year.ToString();
+            if (fullYear.Length == 4)
+                return fullYear.Substring(2);
+            else
+                return fullYear;
+        }
+        public string GetMonthNameShort(DateTime date)
+        {
+            string[] shortMonthNames = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+            int monthIndex = date.Month;
+            return shortMonthNames[monthIndex - 1];
+        }
+
+
+
+        private BIConfigurationTimeEntity GetDefaultTimeEntity(int? timeEntityId = null)
+        {
+            List<BIConfiguration<BIConfigurationTimeEntity>> configurationTimeEntity= _configurations.GetTimeEntities();
+            if (timeEntityId != null)
+            {
+                return configurationTimeEntity.Find(x => x.Id == (int)timeEntityId).Configuration;
+            }
+            return configurationTimeEntity.Find(x => x.Configuration.IsDefault).Configuration;
+        }
+
+
+        public Vanrise.Entities.IDataRetrievalResult<UserMeasuresValidator> GetUserMeasuresValidator(Vanrise.Entities.DataRetrievalInput<UserMeasuresValidatorInput> userMeasuresValidatorInput)
+        {
+            // Dictionary<int,List<string>> userMeasuresValidator=new   Dictionary<int,List<string>>();
+
+            UserManager userManager = new UserManager();
+            IEnumerable<User> allUserInfo = userManager.GetUsers();
+
+            List<UserMeasuresValidator> userMeasuresValidator = new List<UserMeasuresValidator>();
+            List<string> distinctMeasures = new List<string>();
+            WidgetsManager widgetsManager = new WidgetsManager();
+            IEnumerable<WidgetDetail> widgets = widgetsManager.GetAllWidgets();
+            foreach (WidgetDetail widget in widgets)
+            {
+                foreach (int widgetId in userMeasuresValidatorInput.Query.Widgets)
+                {
+                    if (widget.Entity.Id == widgetId)
+                    {
+                        List<string> measures = ((BIWidgetSetting)widget.Entity.Setting.Settings).GetMeasures();
+                        foreach (string measure in measures)
+                        {
+                            if (!distinctMeasures.Contains(measure))
+                                distinctMeasures.Add(measure);
                         }
-                   return null;
-        
-    }
-         public Boolean CheckIsLongPeriod(TimeDimensionType timeDimensionType,DateTime fromDate, DateTime toDate) {
-       
-        switch (timeDimensionType) {
-            case TimeDimensionType.Yearly:
-                return false;
-            case TimeDimensionType.Monthly:
-                if (toDate.Year- fromDate.Year > 4)
-                    return true;
-                else
-                    return false;
-            case TimeDimensionType.Weekly:
-                if (GetDateDifference(fromDate, toDate) > 200)
-                    return true;
-                else
-                    return false;
-            case TimeDimensionType.Daily:
-                if (GetDateDifference(fromDate, toDate) > 50)
-                    return true;
-                else
-                    return false;
-            case TimeDimensionType.Hourly:
-                if (GetDateDifference(fromDate, toDate) > 2)
-                    return true;
-                else
-                    return false;
+                    }
+                }
             }
-        return false;
-         }
-         public double GetDateDifference(DateTime fromDate, DateTime toDate)
-         {
-             double timeDiff = toDate.Millisecond - fromDate.Millisecond;
-             return Math.Ceiling(timeDiff / (1000 * 3600 * 24));
+            BIConfigurationManager manager = new BIConfigurationManager();
+            List<BIConfiguration<BIConfigurationMeasure>> allMeasures = manager.GetMeasures();
+
+            List<BIConfiguration<BIConfigurationMeasure>> filteredMeasures = new List<BIConfiguration<BIConfigurationMeasure>>();
+            for (int i = 0; i < allMeasures.Count; i++)
+            {
+                if (distinctMeasures.Contains(allMeasures[i].Name))
+                {
+                    filteredMeasures.Add(allMeasures[i]);
+                }
             }
-            public string GetShortYear(DateTime date)
-    {
-        string fullYear = date.Year.ToString();
-        if (fullYear.Length == 4)
-            return fullYear.Substring(2);
-        else
-            return fullYear;
-    }
-           public string GetMonthNameShort(DateTime date) {
-               string[] shortMonthNames = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-                int monthIndex = date.Month;
-               return shortMonthNames[monthIndex-1];
+            List<int> distinctUsers = new List<int>();
+            if ((userMeasuresValidatorInput.Query.UserIds != null && userMeasuresValidatorInput.Query.UserIds.Count != 0) || (userMeasuresValidatorInput.Query.GroupIds != null && userMeasuresValidatorInput.Query.GroupIds.Count != 0))
+            {
+                for (int i = 0; i < userMeasuresValidatorInput.Query.UserIds.Count; i++)
+                {
+                    if (!distinctUsers.Contains(userMeasuresValidatorInput.Query.UserIds[i]))
+                        distinctUsers.Add(userMeasuresValidatorInput.Query.UserIds[i]);
+                }
+                IEnumerable<int> users = new List<int>();
+                UserGroupManager userGroupManager = new UserGroupManager();
+                for (int i = 0; i < userMeasuresValidatorInput.Query.GroupIds.Count; i++)
+                {
+                    users = userGroupManager.GetMembers(userMeasuresValidatorInput.Query.GroupIds[i]);
+                    foreach (int userId in users)
+                    {
+                        User user = allUserInfo.FirstOrDefault(x => x.UserId == userId);
+                        if (!distinctUsers.Contains(userId) && user != null && user.Status != UserStatus.Inactive)
+                            distinctUsers.Add(userId);
+                    }
+                }
+            }
+            else
+            {
+                IEnumerable<User> users = userManager.GetUsers();
+                foreach (User user in users)
+                {
+                    if (!distinctUsers.Contains(user.UserId) && user.Status != UserStatus.Inactive)
+                        distinctUsers.Add(user.UserId);
+                }
             }
 
+            Vanrise.Security.Business.SecurityManager securityManager = new Vanrise.Security.Business.SecurityManager();
+            foreach (int user in distinctUsers)
+            {
+                List<string> userDeniedMeasures = new List<string>();
+                foreach (BIConfiguration<BIConfigurationMeasure> measure in filteredMeasures)
+                {
+                    if (measure.Configuration.RequiredPermissions != null && !securityManager.IsAllowed(measure.Configuration.RequiredPermissions, user))
+                        userDeniedMeasures.Add(measure.Name);
+                }
+                if (userDeniedMeasures.Count > 0)
+                    userMeasuresValidator.Add(new UserMeasuresValidator { UserId = user, MeasuresDenied = userDeniedMeasures });
+            }
+            BigResult<UserMeasuresValidator> returnedData = new BigResult<UserMeasuresValidator>();
+            returnedData.Data = userMeasuresValidator;
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(userMeasuresValidatorInput, returnedData);
 
-           public Vanrise.Entities.IDataRetrievalResult<UserMeasuresValidator> GetUserMeasuresValidator(Vanrise.Entities.DataRetrievalInput<UserMeasuresValidatorInput> userMeasuresValidatorInput)
-           {
-               // Dictionary<int,List<string>> userMeasuresValidator=new   Dictionary<int,List<string>>();
-
-               UserManager userManager = new UserManager();
-               IEnumerable<User> allUserInfo = userManager.GetUsers();
-
-               List<UserMeasuresValidator> userMeasuresValidator = new List<UserMeasuresValidator>();
-               List<string> distinctMeasures = new List<string>();
-               WidgetsManager widgetsManager = new WidgetsManager();
-               IEnumerable<WidgetDetail> widgets = widgetsManager.GetAllWidgets();
-               foreach (WidgetDetail widget in widgets)
-               {
-                   foreach (int widgetId in userMeasuresValidatorInput.Query.Widgets)
-                   {
-                       if (widget.Entity.Id == widgetId)
-                       {
-                           List<string> measures = ((BIWidgetSetting)widget.Entity.Setting.Settings).GetMeasures();
-                           foreach (string measure in measures)
-                           {
-                               if (!distinctMeasures.Contains(measure))
-                                   distinctMeasures.Add(measure);
-                           }
-                       }
-                   }
-               }
-               BIConfigurationManager manager = new BIConfigurationManager();
-               List<BIConfiguration<BIConfigurationMeasure>> allMeasures = manager.GetMeasures();
-
-               List<BIConfiguration<BIConfigurationMeasure>> filteredMeasures = new List<BIConfiguration<BIConfigurationMeasure>>();
-               for (int i = 0; i < allMeasures.Count; i++)
-               {
-                   if (distinctMeasures.Contains(allMeasures[i].Name))
-                   {
-                       filteredMeasures.Add(allMeasures[i]);
-                   }
-               }
-               List<int> distinctUsers = new List<int>();
-               if ((userMeasuresValidatorInput.Query.UserIds != null && userMeasuresValidatorInput.Query.UserIds.Count != 0) || (userMeasuresValidatorInput.Query.GroupIds != null && userMeasuresValidatorInput.Query.GroupIds.Count != 0))
-               {
-                   for (int i = 0; i < userMeasuresValidatorInput.Query.UserIds.Count; i++)
-                   {
-                       if (!distinctUsers.Contains(userMeasuresValidatorInput.Query.UserIds[i]))
-                           distinctUsers.Add(userMeasuresValidatorInput.Query.UserIds[i]);
-                   }
-                   IEnumerable<int> users = new List<int>();
-                   UserGroupManager userGroupManager = new UserGroupManager();
-                   for (int i = 0; i < userMeasuresValidatorInput.Query.GroupIds.Count; i++)
-                   {
-                       users = userGroupManager.GetMembers(userMeasuresValidatorInput.Query.GroupIds[i]);
-                       foreach (int userId in users)
-                       {
-                           User user = allUserInfo.FirstOrDefault(x => x.UserId == userId);
-                           if (!distinctUsers.Contains(userId) && user != null && user.Status != UserStatus.Inactive)
-                               distinctUsers.Add(userId);
-                       }
-                   }
-               }
-               else
-               {
-                   IEnumerable<User> users = userManager.GetUsers();
-                   foreach (User user in users)
-                   {
-                       if (!distinctUsers.Contains(user.UserId) && user.Status != UserStatus.Inactive)
-                           distinctUsers.Add(user.UserId);
-                   }
-               }
-
-               Vanrise.Security.Business.SecurityManager securityManager = new Vanrise.Security.Business.SecurityManager();
-               foreach (int user in distinctUsers)
-               {
-                   List<string> userDeniedMeasures = new List<string>();
-                   foreach (BIConfiguration<BIConfigurationMeasure> measure in filteredMeasures)
-                   {
-                       if (measure.Configuration.RequiredPermissions != null && !securityManager.IsAllowed(measure.Configuration.RequiredPermissions, user))
-                           userDeniedMeasures.Add(measure.Name);
-                   }
-                   if (userDeniedMeasures.Count > 0)
-                       userMeasuresValidator.Add(new UserMeasuresValidator { UserId = user, MeasuresDenied = userDeniedMeasures });
-               }
-               BigResult<UserMeasuresValidator> returnedData = new BigResult<UserMeasuresValidator>();
-               returnedData.Data = userMeasuresValidator;
-               return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(userMeasuresValidatorInput, returnedData);
-
-           }
+        }
     }
 }

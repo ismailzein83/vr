@@ -15,17 +15,6 @@ namespace Vanrise.BI.Entities
         Hourly = 4
     }
 
-    public enum MeasureType
-    {
-        DurationInMinutes = 0,
-        Sale = 1,
-        Cost = 2,
-        Profit = 3,
-        SuccessfulAttempts = 4,
-        ACD = 5,
-        PDD = 6
-    }
-
     public enum EntityType
     {
         SaleZone = 0,
@@ -35,7 +24,8 @@ namespace Vanrise.BI.Entities
     public enum ConfigurationType
     {
         Entity=0,
-        Measure=1
+        Measure=1,
+        TimeEntity=2
     }
     public enum MeasureConfigurationType{
         Financial =0,

@@ -10,5 +10,7 @@ namespace Vanrise.BI.Data
     {
         List<BIConfiguration<BIConfigurationMeasure>> GetMeasures();
         List<BIConfiguration<BIConfigurationEntity>> GetEntities();
+        List<BIConfiguration<BIConfigurationTimeEntity>> GetTimeEntities();
+        bool AreBIConfigurationUpdated(ref object updateHandle);
     }
 }

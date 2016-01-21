@@ -250,20 +250,20 @@ namespace Vanrise.BI.Data.SQL
         #endregion
 
         #region DateTime dimension
-        protected string BuildQueryDateRowColumns(TimeDimensionType timeDimensionType)
+        protected string BuildQueryDateRowColumns(TimeDimensionType timeDimensionType, BIConfigurationTimeEntity configurationTimeEntity)
         {
             switch (timeDimensionType)
             {
                 case TimeDimensionType.Yearly:
-                    return BuildQueryRowsPart(DateTimeColumns.YEAR);
+                    return BuildQueryRowsPart(configurationTimeEntity.Year);
                 case TimeDimensionType.Monthly:
-                    return BuildQueryRowsPart(DateTimeColumns.YEAR, DateTimeColumns.MONTHOFYEAR);
+                    return BuildQueryRowsPart(configurationTimeEntity.Year, configurationTimeEntity.MonthOfYear);
                 case TimeDimensionType.Weekly:
-                    return BuildQueryRowsPart(DateTimeColumns.YEAR, DateTimeColumns.MONTHOFYEAR, DateTimeColumns.WEEKOFMONTH);
+                    return BuildQueryRowsPart(configurationTimeEntity.Year, configurationTimeEntity.MonthOfYear, configurationTimeEntity.WeekOfMonth);
                 case TimeDimensionType.Daily:
-                    return BuildQueryRowsPart(DateTimeColumns.YEAR, DateTimeColumns.MONTHOFYEAR, DateTimeColumns.DAYOFMONTH);
+                    return BuildQueryRowsPart(configurationTimeEntity.Year, configurationTimeEntity.MonthOfYear, configurationTimeEntity.DayOfMonth);
                 case TimeDimensionType.Hourly:
-                    return BuildQueryRowsPart(DateTimeColumns.YEAR, DateTimeColumns.MONTHOFYEAR, DateTimeColumns.DAYOFMONTH, DateTimeColumns.HOUR);
+                    return BuildQueryRowsPart(configurationTimeEntity.Year, configurationTimeEntity.MonthOfYear, configurationTimeEntity.DayOfMonth, configurationTimeEntity.Hour);
             }
             return null;
         }
@@ -273,10 +273,10 @@ namespace Vanrise.BI.Data.SQL
             return string.Format("{0: MMM}", new DateTime(2000, monthNumber, 1));
         }
 
-        protected void FillTimeCaptions(BaseTimeDimensionRecord record, IDataReader reader, TimeDimensionType timeDimensionType)
+        protected void FillTimeCaptions(BaseTimeDimensionRecord record, IDataReader reader, TimeDimensionType timeDimensionType, BIConfigurationTimeEntity configurationTimeEntity)
         {
             int year;
-            if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.YEAR)] as string, out year))
+            if (!int.TryParse(reader[GetRowColumnToRead(configurationTimeEntity.Year)] as string, out year))
                 return;
             int month = 1;
             int day = 1;
@@ -286,39 +286,39 @@ namespace Vanrise.BI.Data.SQL
                 case TimeDimensionType.Yearly:
                     break;
                 case TimeDimensionType.Monthly:
-                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.MONTHOFYEAR)] as string, out month))
+                    if (!int.TryParse(reader[GetRowColumnToRead(configurationTimeEntity.MonthOfYear)] as string, out month))
                         return;
                     break;
                 case TimeDimensionType.Weekly:
-                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.MONTHOFYEAR)] as string, out month))
+                    if (!int.TryParse(reader[GetRowColumnToRead(configurationTimeEntity.MonthOfYear)] as string, out month))
                         return;
                     int week;
-                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.WEEKOFMONTH)] as string, out week))
+                    if (!int.TryParse(reader[GetRowColumnToRead(configurationTimeEntity.WeekOfMonth)] as string, out week))
                         return;
                     record.WeekNumber = week;
                     day = (week - 1) * 7 + 1;
                     break;
                 case TimeDimensionType.Daily:
-                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.MONTHOFYEAR)] as string, out month))
+                    if (!int.TryParse(reader[GetRowColumnToRead(configurationTimeEntity.MonthOfYear)] as string, out month))
                         return;
-                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.DAYOFMONTH)] as string, out day))
+                    if (!int.TryParse(reader[GetRowColumnToRead(configurationTimeEntity.DayOfMonth)] as string, out day))
                         return;
                     break;
                 case TimeDimensionType.Hourly:
-                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.MONTHOFYEAR)] as string, out month))
+                    if (!int.TryParse(reader[GetRowColumnToRead(configurationTimeEntity.MonthOfYear)] as string, out month))
                         return;
-                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.DAYOFMONTH)] as string, out day))
+                    if (!int.TryParse(reader[GetRowColumnToRead(configurationTimeEntity.DayOfMonth)] as string, out day))
                         return;
-                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.HOUR)] as string, out hour))
+                    if (!int.TryParse(reader[GetRowColumnToRead(configurationTimeEntity.Hour)] as string, out hour))
                         return;
                     break;
             }
             record.Time = new DateTime(year, month, day, hour, 0, 0);
         }
 
-        protected string GetDateFilter(DateTime fromDate, DateTime toDate)
+        protected string GetDateFilter(DateTime fromDate, DateTime toDate, BIConfigurationTimeEntity defaultConfigurationTimeEntity)
         {
-            return String.Format("Filter({0}.AllMembers, ({0}.CurrentMember.member_caption>='{1:yyyy-MM-dd HH:mm:ss}' And {0}.CurrentMember.member_caption<='{2:yyyy-MM-dd HH:mm:ss} '))", DateTimeColumns.DATE, fromDate, toDate);
+            return String.Format("Filter({0}.AllMembers, ({0}.CurrentMember.member_caption>='{1:yyyy-MM-dd HH:mm:ss}' And {0}.CurrentMember.member_caption<='{2:yyyy-MM-dd HH:mm:ss} '))", defaultConfigurationTimeEntity.Date, fromDate, toDate);
         }
 
         #endregion
