@@ -18,14 +18,14 @@ namespace TOne.Analytics.Business
         }
         public List<Entities.TopNDestinationView> GetTopNDestinations(DateTime fromDate, DateTime toDate, string sortOrder, string customerID, string supplierID, int? switchID, char groupByCodeGroup, string codeGroup, char showSupplier, string orderTarget, int from, int to, int? topCount)
         {
-            toDate = toDate.AddDays(1).AddSeconds(-1);
+            toDate = toDate.AddSeconds(-1);
             return _datamanager.GetTopNDestinations(fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to, topCount);
         }
 
-        public List<Entities.AlertView> GetAlerts(int from, int to, int? topCount, char showHiddenAlerts, int? alertLevel, string tag, string source, int? userID)
+        public List<Entities.AlertView> GetAlerts(int from, int to, int? topCount, char showHiddenAlerts, int? alertLevel, string tag, string source, int? userID, string zone)
         {
             List<Entities.Alert> alerts = _datamanager.GetAlerts(from, to, topCount, showHiddenAlerts, alertLevel, tag, source, userID);
-            return CreateAlertViews(alerts);
+            return CreateAlertViews(alerts, zone);
         }
 
         public List<Entities.CarrierRateView> GetRates(string carrierType, DateTime effectiveOn, string carrierID, string codeGroup, string code, string zoneName, int from, int to)
@@ -79,7 +79,7 @@ namespace TOne.Analytics.Business
         }
         public List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int? topCount, char groupByProfile, int from, int to)
         {
-            toDate = toDate.AddDays(1).AddSeconds(-1);
+            //toDate = toDate.AddDays(1).AddSeconds(-1);
             return _datamanager.GetCarrierSummary(carrierType, fromDate, toDate, customerID, supplierID, groupByProfile, topCount, from, to);
         }
 
@@ -109,7 +109,7 @@ namespace TOne.Analytics.Business
         }
 
         #region Private Methods
-        private List<Entities.AlertView> CreateAlertViews(List<Entities.Alert> alerts)
+        private List<Entities.AlertView> CreateAlertViews(List<Entities.Alert> alerts, string zone)
         {
             List<Entities.AlertView> alertViews = new List<Entities.AlertView>();
             foreach (var alert in alerts)
@@ -117,6 +117,8 @@ namespace TOne.Analytics.Business
                 Entities.AlertView alertView = new Entities.AlertView(alert);
                 alertViews.Add(alertView);
             }
+            if (!string.IsNullOrEmpty(zone))
+                alertViews = alertViews.Where(a => a.Zone.ToLower().Contains(zone.ToLower())).ToList();
             return alertViews;
         }
 

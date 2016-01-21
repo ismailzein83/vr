@@ -34,10 +34,10 @@ namespace TOne.Web.Online.Controllers
         }
 
         [HttpGet]
-        public List<TOne.Analytics.Entities.AlertView> GetAlerts(int from, int to, int? topCount = null, int? alertLevel = null, char showHiddenAlerts = 'N', string tag = null, string source = null, int? userID = null)
+        public List<TOne.Analytics.Entities.AlertView> GetAlerts(int from, int to, int? topCount = null, int? alertLevel = null, char showHiddenAlerts = 'N', string tag = null, string source = null, int? userID = null, string zone = null)
         {
 
-            return _analyticsManager.GetAlerts(from, to, topCount, showHiddenAlerts, alertLevel, tag, source, userID);
+            return _analyticsManager.GetAlerts(from, to, topCount, showHiddenAlerts, alertLevel, tag, source, userID, zone);
         }
 
         [HttpGet]
