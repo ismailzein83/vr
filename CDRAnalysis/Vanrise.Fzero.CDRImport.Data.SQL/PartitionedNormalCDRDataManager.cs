@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -138,7 +139,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             } 
             //!String.IsNullOrEmpty(numberPrefix) ? string.Format("WHERE MSISDN LIKE '241820{0}%' OR MSISDN LIKE '241830{0}%'", numberPrefix) : null;
 
-            string query = String.Format(QUERY_GETCDRS, GetNormalCDRTableName(fromTime), filter);
+            string query = String.Format( @"SELECT {0} FROM {1} WITH(NOLOCK) {2}", CDR_COLUMNS, GetNormalCDRTableName(fromTime), filter);
             ExecuteReaderText(query, (reader) =>
             {
                 while (reader.Read())
@@ -146,6 +147,20 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                     onCDRReady(NormalCDRMapper(reader));
                 }
             }, null);
+        }
+
+        public void InsertCDRsByMSISDNToTempTable(string tempTableName, string msisdn, DateTime fromTime, DateTime toTime)
+        {
+            StringBuilder queryBuilder = new StringBuilder();
+            string query = String.Format(@"INSERT INTO {0}
+                                        SELECT {1} 
+                                        FROM {2} WITH(NOLOCK)
+                                        WHERE [MSISDN] = @MSISDN", tempTableName, CDR_COLUMNS, GetNormalCDRTableName(fromTime));
+
+            ExecuteNonQueryText(query, (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@MSISDN", msisdn));
+                });
         }
 
         #region Private Methods
@@ -184,22 +199,18 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         #region Constants
 
-        const string QUERY_GETCDRS = @"SELECT  cdrs.[MSISDN] ,cdrs.[IMSI] ,cdrs.[ConnectDateTime] ,cdrs.[Destination] ,
-		cdrs.[DurationInSeconds] ,cdrs.[DisconnectDateTime] ,cdrs.[CallClassID]  ,cdrs.[IsOnNet] ,
-		cdrs.[CallTypeID] ,cdrs.[SubscriberTypeID] ,cdrs.[IMEI]
-		,cdrs.[BTS]  ,cdrs.[Cell]  ,cdrs.[SwitchId]  ,cdrs.[UpVolume]  ,cdrs.[DownVolume] ,
-		cdrs.[CellLatitude]  ,cdrs.[CellLongitude]  ,cdrs.[InTrunkID]  ,cdrs.[OutTrunkID]  ,cdrs.[ServiceTypeID]  ,cdrs.[ServiceVASName] 
-		, cdrs.[ReleaseCode], cdrs.MSISDNAreaCode, cdrs.DestinationAreaCode
-FROM {0} cdrs WITH(NOLOCK)
-{1}
-";
+        const string CDR_COLUMNS = @" [MSISDN] ,[IMSI] ,[ConnectDateTime] ,[Destination] ,
+		[DurationInSeconds] ,[DisconnectDateTime] ,[CallClassID]  ,[IsOnNet] ,
+		[CallTypeID] ,[SubscriberTypeID] ,[IMEI]
+		,[BTS]  ,[Cell]  ,[SwitchId]  ,[UpVolume]  ,[DownVolume] ,
+		[CellLatitude]  ,[CellLongitude]  ,[InTrunkID]  ,[OutTrunkID]  ,[ServiceTypeID]  ,[ServiceVASName] 
+		, [ReleaseCode], MSISDNAreaCode, DestinationAreaCode";
 
         #endregion
 
         #region Private Classes
 
         private class PartitionedNormalCDRDBApplyStream
-
         {
             public ConcurrentDictionary<string, StreamForBulkInsert> StreamsByTableNames { get; set; }
         }

@@ -49,15 +49,20 @@
             </div>
 
             <div ng-show="normalCDRsSelected">
-                <vr-row>
-                    <vr-columns width="normal">
-                        <vr-datetimepicker label="From" value="fromDate_NormalCDRs" type="dateTime" onblurdatetime="filterData" isrequired customvalidate="validateTimeRangeNormalCDRs()"></vr-datetimepicker>
-                    </vr-columns>
+                <vr-form validationcontext="searchCDRsContext">
+                    <vr-row>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker label="From" value="fromDate_NormalCDRs" type="dateTime" isrequired customvalidate="validateTimeRangeNormalCDRs()"></vr-datetimepicker>
+                        </vr-columns>
 
-                    <vr-columns width="normal">
-                        <vr-datetimepicker label="To" value="toDate_NormalCDRs" type="dateTime" onblurdatetime="filterData" isrequired customvalidate="validateTimeRangeNormalCDRs()"></vr-datetimepicker>
-                    </vr-columns>
-                </vr-row>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker label="To" value="toDate_NormalCDRs" type="dateTime" customvalidate="validateTimeRangeNormalCDRs()"></vr-datetimepicker>
+                        </vr-columns>
+                        <vr-columns withemptyline width="1/4row">
+                            <vr-button type="Search" data-onclick="searchCDRs" standalone validationcontext="searchCDRsContext"></vr-button>
+                        </vr-columns>
+                    </vr-row>
+                </vr-form>  
                 <vr-row>
                     <vr-columns width="fullrow" simplecol>
                         <vr-datagrid datasource="normalCDRs"
@@ -87,40 +92,42 @@
             </div>
 
             <div ng-show="numberProfilesSelected">
-                <vr-row>
-                    <vr-columns width="normal" ng-show="showProfileOptions">
-                        <vr-select label="Profile Source"
-                                   datasource="profileSources"
-                                   selectedvalues="selectedProfileSource"
-                                   datavaluefield="value"
-                                   datatextfield="description"
-                                   onselectionchanged="onProfileSourceChanged"
-                                   hideremoveicon>
-                        </vr-select>
-                    </vr-columns>
+                <vr-validation-group validationcontext="searchNumberProfileContext">
+                    <vr-row>
+                        <vr-columns width="normal" ng-show="showProfileOptions">
+                            <vr-select label="Profile Source"
+                                       datasource="profileSources"
+                                       selectedvalues="selectedProfileSource"
+                                       datavaluefield="value"
+                                       datatextfield="description"
+                                       onselectionchanged="onProfileSourceChanged"
+                                       hideremoveicon>
+                            </vr-select>
+                        </vr-columns>
 
-                    <vr-columns width="normal">
-                        <vr-datetimepicker label="From"
-                                           value="fromDate_NumberProfiles"
-                                           type="dateTime"
-                                           onblurdatetime="filterData"
-                                           isrequired
-                                           ng-show="showDate"
-                                           customvalidate="validateTimeRangeNumberProfiles()">
-                        </vr-datetimepicker>
-                    </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker label="From"
+                                               value="fromDate_NumberProfiles"
+                                               type="dateTime"
+                                               isrequired
+                                               ng-show="showDate"
+                                               customvalidate="validateTimeRangeNumberProfiles()">
+                            </vr-datetimepicker>
+                        </vr-columns>
 
-                    <vr-columns width="normal">
-                        <vr-datetimepicker label="To"
-                                           value="toDate_NumberProfiles"
-                                           type="dateTime"
-                                           onblurdatetime="filterData"
-                                           isrequired
-                                           ng-show="showDate"
-                                           customvalidate="validateTimeRangeNumberProfiles()">
-                        </vr-datetimepicker>
-                    </vr-columns>
-                </vr-row>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker label="To"
+                                               value="toDate_NumberProfiles"
+                                               type="dateTime"
+                                               ng-show="showDate"
+                                               customvalidate="validateTimeRangeNumberProfiles()">
+                            </vr-datetimepicker>
+                        </vr-columns>
+                        <vr-columns withemptyline width="normal" ng-if="showDate">
+                            <vr-button type="Search" data-onclick="searchNumberProfiles" standalone validationcontext="searchNumberProfileContext"></vr-button>
+                        </vr-columns>
+                    </vr-row>
+                </vr-validation-group>                
                 <vr-row>
                     <vr-columns width="fullrow">
                         <div class="big-data-grid" ng-hide="showDate">
@@ -221,41 +228,43 @@
 
             <vr-row>
                 <vr-columns width="fullrow">
-                    <vr-section title="Update Case">
-                        <vr-row>
-                            <vr-columns width="normal">
-                                <vr-select label="Status"
-                                           datasource="caseStatuses"
-                                           selectedvalues="selectedCaseStatus"
-                                           datavaluefield="value"
-                                           datatextfield="description"
-                                           onselectionchanged="toggleValidTill"
-                                           isrequired>
-                                </vr-select>
-                            </vr-columns>
+                    <vr-validation-group validationcontext="updateCaseContext">
+                        <vr-section title="Update Case">
+                            <vr-row>
+                                <vr-columns width="normal">
+                                    <vr-select label="Status"
+                                               datasource="caseStatuses"
+                                               selectedvalues="selectedCaseStatus"
+                                               datavaluefield="value"
+                                               datatextfield="description"
+                                               onselectionchanged="toggleValidTill"
+                                               isrequired>
+                                    </vr-select>
+                                </vr-columns>
 
-                            <vr-columns width="normal" ng-show="whiteListSelected">
-                                <vr-datetimepicker label="Valid Till"
-                                                   value="validTill"
-                                                   type="dateTime">
-                                </vr-datetimepicker>
-                            </vr-columns>
-                        </vr-row>
-                        <vr-row>
-                            <vr-columns width="fullrow">
-                                <vr-textarea label="Reason" value="updateReason"></vr-textarea>
-                            </vr-columns>
-                        </vr-row>
-                    </vr-section>
+                                <vr-columns width="normal" ng-show="whiteListSelected">
+                                    <vr-datetimepicker label="Valid Till"
+                                                       value="validTill"
+                                                       type="dateTime">
+                                    </vr-datetimepicker>
+                                </vr-columns>
+                            </vr-row>
+                            <vr-row>
+                                <vr-columns width="fullrow">
+                                    <vr-textarea label="Reason" value="updateReason"></vr-textarea>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-section>
+                    </vr-validation-group>                    
                 </vr-columns>
             </vr-row>
-
+            
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formSuspiciousNumberDetails" data-onclick="updateAccountCase"></vr-button>
+                <vr-button type="Save" validationcontext="updateCaseContext" data-onclick="updateAccountCase"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

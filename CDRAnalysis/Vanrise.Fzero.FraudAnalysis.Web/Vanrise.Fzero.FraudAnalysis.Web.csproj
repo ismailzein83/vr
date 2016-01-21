@@ -155,6 +155,10 @@
       <Project>{a211ae1c-89e5-4b19-b737-7a0af4063f8f}</Project>
       <Name>Vanrise.Fzero.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Business\Vanrise.Fzero.CDRImport.Business.csproj">
+      <Project>{a4b118be-ded8-429c-9ef8-eab394085dff}</Project>
+      <Name>Vanrise.Fzero.CDRImport.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Entities\Vanrise.Fzero.CDRImport.Entities.csproj">
       <Project>{8ea7f723-709a-480a-9ecf-be40c336a0cb}</Project>
       <Name>Vanrise.Fzero.CDRImport.Entities</Name>

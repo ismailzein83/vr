@@ -74,6 +74,8 @@
     <Sequence.Variables>
       <Variable x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)" Name="strategiesExecutionInfo" />
       <Variable x:TypeArguments="x:Int64" Name="processedCDRs" />
+      <Variable x:TypeArguments="x:Int64" Name="numberOfSubscribers" />
+      <Variable x:TypeArguments="x:Int64" Name="numberOfSuspicions" />
     </Sequence.Variables>
     <If sap2010:WorkflowViewState.IdRef="If_2">
       <If.Condition>
@@ -193,6 +195,11 @@
                   <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
                 </InOutArgument>
               </vffba1:CreateNumberProfiles.InputQueue>
+              <vffba1:CreateNumberProfiles.NumberOfSubscribers>
+                <OutArgument x:TypeArguments="x:Int64">
+                  <mca:CSharpReference x:TypeArguments="x:Int64">numberOfSubscribers</mca:CSharpReference>
+                </OutArgument>
+              </vffba1:CreateNumberProfiles.NumberOfSubscribers>
               <vffba1:CreateNumberProfiles.NumberRange>
                 <InArgument x:TypeArguments="vfce:NumberRangeDefinition">
                   <mca:CSharpValue x:TypeArguments="vfce:NumberRangeDefinition">Input.NumberRange</mca:CSharpValue>
@@ -230,6 +237,11 @@
                   <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileQueue</mca:CSharpValue>
                 </InArgument>
               </vffba1:GetStrategyExecutionDetails.InputQueueForNumberProfile>
+              <vffba1:GetStrategyExecutionDetails.NumberOfSuspicions>
+                <OutArgument x:TypeArguments="x:Int64">
+                  <mca:CSharpReference x:TypeArguments="x:Int64">numberOfSuspicions</mca:CSharpReference>
+                </OutArgument>
+              </vffba1:GetStrategyExecutionDetails.NumberOfSuspicions>
               <vffba1:GetStrategyExecutionDetails.OutputQueueForStrategyExecutionDetail>
                 <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailBatch)">
                   <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailBatch)">strategyExecutionDetailQueue</mca:CSharpReference>
@@ -306,11 +318,15 @@
       </Assign.To>
       <Assign.Value>
         <InArgument x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessOutput">
-          <mca:CSharpValue x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessOutput" xml:space="preserve">new ExecuteStrategyForNumberRangeProcessOutput {  CDRsProcessed = processedCDRs}</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessOutput" xml:space="preserve">new ExecuteStrategyForNumberRangeProcessOutput {  
+                CDRsProcessed = processedCDRs,
+                NumberOfSubscribers = numberOfSubscribers,
+                NumberOfSuspicions = numberOfSuspicions
+            }</mca:CSharpValue>
         </InArgument>
       </Assign.Value>
     </Assign>
-    <sads:DebugSymbol.Symbol>d1tDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneUZvck51bWJlclJhbmdlUHJvY2Vzcy54YW1sNUkDugIOAgEBTgVnCgMB1gNoBX0pAwHBA34FrAIKAgENrQIFuAIOAgECUQtRYAMB1wNVCWU0AwHcA3ULdWMDAdEDcAtwhAEDAcwDawtrWQMBxwN6C3pXAwHCA4EBC4EBmQECAQ6FAQmhAhQCARqkAgmqAiQCARO1Agu1AtYBAgEIsAILsAJ/AgEDXQ9dZwMB5wNYD1hdAwHiA2IPYlsDAd0DhgELoAIWAgEbpwIPpwKDAQIBFaQCZKQCgQECARSUAQ2zAR4DAeACtAEN4gErAwHPAeMBDf0BMgIBfv4BDZMCQAIBPZQCDZ8COAIBHJwBE5wBZQMBsQOXAROXAWEDAaEDqwETqwF1AwGRA6YBE6YBdAMBgQOhAROhAXQDAfECsAETsAFfAwHhAtABE9ABbQMB0ALBARPBAXQDAcAC2gET2gGEAQMBsAK3ARO3AWEDAaAC1QET1QGBAQMBkALLARPLAYgBAwGAArwBE7wBaAMB8AHGARPGAXQDAeAB3wET3wFfAwHQAeYBE+YBgAEDAb8B8AET8AF5AwGvAfoBE/oBhAEDAZ8B6wET6wGcAQMBjwH1ARP1AYcBAgF/iwITiwJ/AgFugQITgQKUAQIBXpACE5ACjAECAU6GAhOGAowBAgE+nAITnAKEAQIBLZcCE5cChAECAR0=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneUZvck51bWJlclJhbmdlUHJvY2Vzcy54YW1sN0kDygIOAgEBUAVpCgMBvgRqBX8pAwGhBIABBbgCCgIBEbkCBcgCDgIBAlMLU2ADAb8EVwlnNAMBxgR3C3djAwG3BHILcoQBAwGwBG0LbVkDAakEfAt8VwMBogSDAQuDAZkBAgEShwEJrQIUAgEisAIJtgIkAgEZwQILxQIgAgEKvAILvAJ/AgEDXw9fZwMB1QRaD1pdAwHOBGQPZFsDAccEiAELrAIWAgEjswIPswKDAQIBG7ACZLACgQECARqWAQ21AR4DAbQDtgEN6QErAwH/AeoBDYkCMgMBkgGKAg2fAkACAUmgAg2rAjgCASSeAROeAWUDAY8EmQETmQFhAwH9A60BE60BdQMB6wOoAROoAXQDAdkDowETowF0AwHHA7IBE7IBXwMBtQPIARPIAWsDAaID1wET1wFtAwGQA8MBE8MBdAMB/gLhARPhAYQBAwHsArkBE7kBYQMB2gLcARPcAYEBAwHIAtIBE9IBiAEDAbYCvgETvgFoAwGkAs0BE80BdAMBkgLmARPmAV8DAYAC8gET8gFqAwHtAe0BE+0BgAEDAdsB/AET/AF5AwHJAYYCE4YChAEDAbcB9wET9wGcAQMBpQGBAhOBAocBAwGTAZcCE5cCfwMBgAGNAhONApQBAgFunAITnAKMAQIBXJICE5ICjAECAUqoAhOoAoQBAgE3owITowKEAQIBJQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

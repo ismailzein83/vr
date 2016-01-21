@@ -74,6 +74,7 @@
       <Variable x:TypeArguments="scg:List(vfce:NumberRangeDefinition)" Name="numberRanges" />
       <Variable x:TypeArguments="x:Int32" Name="subProcessByPrefixCompleted" />
       <Variable x:TypeArguments="x:Int64" Name="totalProcessedCDRs" />
+      <Variable x:TypeArguments="x:Int64" Name="totalNumberOfSubscribers" />
     </Sequence.Variables>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
       <InArgument x:TypeArguments="x:String">
@@ -148,6 +149,22 @@
             </If.Then>
             <If.Else>
               <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+                <Sequence.Variables>
+                  <Variable x:TypeArguments="x:String" Name="variable1" />
+                  <Variable x:TypeArguments="vffba:NumberProfilingForNumberRangeProcessOutput" Name="numberProfilingSubProcessOutput" />
+                </Sequence.Variables>
+                <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="vffba:NumberProfilingForNumberRangeProcessOutput">
+                      <mca:CSharpReference x:TypeArguments="vffba:NumberProfilingForNumberRangeProcessOutput">numberProfilingSubProcessOutput</mca:CSharpReference>
+                    </OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="vffba:NumberProfilingForNumberRangeProcessOutput">
+                      <mca:CSharpValue x:TypeArguments="vffba:NumberProfilingForNumberRangeProcessOutput">subProcessEventPayload.ProcessOutput as NumberProfilingForNumberRangeProcessOutput</mca:CSharpValue>
+                    </InArgument>
+                  </Assign.Value>
+                </Assign>
                 <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
                   <Assign.To>
                     <OutArgument x:TypeArguments="x:Int64">
@@ -156,7 +173,19 @@
                   </Assign.To>
                   <Assign.Value>
                     <InArgument x:TypeArguments="x:Int64">
-                      <mca:CSharpValue x:TypeArguments="x:Int64">totalProcessedCDRs + (subProcessEventPayload.ProcessOutput as NumberProfilingForNumberRangeProcessOutput).CDRsProcessed</mca:CSharpValue>
+                      <mca:CSharpValue x:TypeArguments="x:Int64">totalProcessedCDRs + numberProfilingSubProcessOutput.CDRsProcessed</mca:CSharpValue>
+                    </InArgument>
+                  </Assign.Value>
+                </Assign>
+                <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int64">
+                      <mca:CSharpReference x:TypeArguments="x:Int64">totalNumberOfSubscribers</mca:CSharpReference>
+                    </OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int64">
+                      <mca:CSharpValue x:TypeArguments="x:Int64">totalNumberOfSubscribers + numberProfilingSubProcessOutput.NumberOfSubscribers</mca:CSharpValue>
                     </InArgument>
                   </Assign.Value>
                 </Assign>
@@ -175,7 +204,7 @@
                 <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
                   <vbw:WriteTrackingMessage.Message>
                     <InArgument x:TypeArguments="x:String">
-                      <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Number Prefixes '{0}' group completed. {1} processed CDRs. {2} totalProcessedCDRs. {3} groups remaining", String.Join(",", numberRange.Prefixes), (subProcessEventPayload.ProcessOutput as NumberProfilingForNumberRangeProcessOutput).CDRsProcessed, totalProcessedCDRs, (numberRanges.Count - subProcessByPrefixCompleted))</mca:CSharpValue>
+                      <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Number Prefixes '{0}' group completed. {1} groups remaining. {2} processed CDRs. {3} totalProcessedCDRs. {4} subscribers. {5} total subscribers", String.Join(",", numberRange.Prefixes), (numberRanges.Count - subProcessByPrefixCompleted), numberProfilingSubProcessOutput.CDRsProcessed, totalProcessedCDRs, numberProfilingSubProcessOutput.NumberOfSubscribers, totalNumberOfSubscribers)</mca:CSharpValue>
                     </InArgument>
                   </vbw:WriteTrackingMessage.Message>
                 </vbw:WriteTrackingMessage>
@@ -190,7 +219,7 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Ended Profiling")</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXE51bWJlclByb2ZpbGluZ1Byb2Nlc3MueGFtbB1IA8IBDgIBAU4FUhECAWZTBWMdAgFWZAW7ARcCAQi8AQXAARECAQJQCVBpAgFnVgtWbQIBYWALYFoCAVxbC1t5AgFXZwtneAIBUW4JuQEUAgEJvgEJvgFnAgEDcguFARwCAUGGAQu4ARACAQp1EX0gAgFKggERggGEAQIBQ3J8coIBAgFCiQERiQGzAQIBC40BD5MBIwIBOZYBD7YBGgIBEpABFZAB8AECATqXARGiARoCASqjARGuARoCARuvARG1ASwCAROfARefAcsBAgEymgEXmgFuAgErqwEXqwFzAgEjpgEXpgF3AgEcsgEXsgGsAwIBFA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXE51bWJlclByb2ZpbGluZ1Byb2Nlc3MueGFtbCNIA98BDgIBAU8FUxEDAagBVAVkHQMBlQFlBdgBFwIBCdkBBd0BEQIBAlEJUWkDAakBVwtXbQMBogFhC2FaAwGcAVwLXHkDAZYBaAtoeAMBjwFvCdYBFAIBCtsBCdsBZwIBA3MLhgEcAgF9hwEL1QEQAgELdhF+IAMBhwGDARGDAYQBAgF/c3xzggECAX6KARGKAbMBAgEMjgEPlAEjAgF0lwEP0wEaAgEUkQEVkQHwAQIBdZwBEacBGgIBX6gBEbMBGgIBSrQBEb8BGgIBNcABEcsBGgIBIMwBEdIBLAIBFaQBF6QBzwECAWqfARefAaQBAgFgsAEXsAGWAQIBVasBF6sBbgIBS7wBF7wBogECAUC3ARe3AXQCATbIARfIAXMCASvDARfDAXcCASHPARfPAe4DAgEW</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -198,34 +227,36 @@
       <sap2010:ViewStateData Id="GetNumberRanges_1" sap:VirtualizedContainerService.HintSize="541,22" />
       <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,62" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="242,62" />
       <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="264,350">
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="264,554">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="489,500" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="511,686">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="489,704" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="511,890">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="541,836" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="541,1040" />
       <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="541,62" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="563,1226">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="563,1430">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ProfileNumber_1" sap:VirtualizedContainerService.HintSize="603,1306" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ProfileNumber_1" sap:VirtualizedContainerService.HintSize="603,1510" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

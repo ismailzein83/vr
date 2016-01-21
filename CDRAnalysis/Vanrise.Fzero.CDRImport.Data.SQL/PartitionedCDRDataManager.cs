@@ -97,7 +97,9 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             DateTime currentHour = fromTime;
             while(currentHour < toTime)
             {
-                ExecuteNonQueryText(String.Format(NORMALCDR_CREATETABLE_QUERYTEMPLATE, GetNormalCDRTableName(currentHour)), null);
+                string normalCDRTableName = GetNormalCDRTableName(currentHour);
+                ExecuteNonQueryText(String.Format(NORMALCDR_CREATETABLE_QUERYTEMPLATE, normalCDRTableName), null);
+                ExecuteNonQueryText(String.Format(NORMALCDR_CREATEINDEXES_QUERYTEMPLATE, normalCDRTableName), null);
                 currentHour = currentHour.AddHours(1);
             }
 
@@ -105,7 +107,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         #region Constants
 
-        const string NORMALCDR_CREATETABLE_QUERYTEMPLATE = @"CREATE TABLE [{0}](
+        internal const string NORMALCDR_CREATETABLE_QUERYTEMPLATE = @"CREATE TABLE {0} (
 	                                                            [MSISDN] [varchar](30) NOT NULL,
 	                                                            [IMSI] [varchar](20) NULL,
 	                                                            [ConnectDateTime] [datetime] NOT NULL,
@@ -131,12 +133,12 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 	                                                            [ReleaseCode] [varchar](50) NULL,
 	                                                            [MSISDNAreaCode] [varchar](10) NULL,
 	                                                            [DestinationAreaCode] [varchar](10) NULL
-                                                            ) ON [PRIMARY]
+                                                            ) ON [PRIMARY]";
 
-                                                            CREATE CLUSTERED INDEX [IX_{0}_MSISDN] ON [{0}] 
-                                                            (
-	                                                            [MSISDN] ASC
-                                                            )";
+        private const string NORMALCDR_CREATEINDEXES_QUERYTEMPLATE = @"CREATE CLUSTERED INDEX [IX_{0}_MSISDN] ON [{0}] 
+                                                                        (
+	                                                                        [MSISDN] ASC
+                                                                        )";
 
         #endregion
 

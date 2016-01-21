@@ -1,6 +1,7 @@
 ﻿app.service('CaseManagementAPIService', function (BaseAPIService) {
 
     return ({
+        GetLastAccountCase:GetLastAccountCase,
         GetFilteredAccountCases: GetFilteredAccountCases,
         GetOperatorType: GetOperatorType,
         GetFilteredAccountSuspicionSummaries: GetFilteredAccountSuspicionSummaries,
@@ -16,7 +17,11 @@
         CancelSelectedAccountCases: CancelSelectedAccountCases
     });
 
-
+    function GetLastAccountCase(accountNumber) {
+        return BaseAPIService.get("/api/CaseManagement/GetLastAccountCase", {
+            accountNumber: accountNumber
+        });
+    }
 
     function CancelSelectedAccountCases(caseIds) {
         return BaseAPIService.post("/api/CaseManagement/CancelSelectedAccountCases", caseIds);

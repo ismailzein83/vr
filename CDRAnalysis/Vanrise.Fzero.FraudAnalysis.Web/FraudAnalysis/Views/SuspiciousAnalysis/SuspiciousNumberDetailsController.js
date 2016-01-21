@@ -3,14 +3,14 @@
 SuspiciousNumberDetailsController.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "VR_Sec_UserAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "CallTypeEnum", "LabelColorsEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService", "VRValidationService"];
 
 function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService, VR_Sec_UserAPIService, SuspicionLevelEnum, CaseStatusEnum, CallTypeEnum, LabelColorsEnum, UtilsService, VRNavigationService, VRNotificationService, VRModalService, VRValidationService) {
+    var gridOccurances_ReadyPromiseDeferred = UtilsService.createPromiseDeferred();
     var gridAPI_Occurances = undefined;
     var occurancesLoaded = false;
 
     var gridAPI_NormalCDRs = undefined;
-    var normalCDRsLoaded = false;
+
 
     var gridAPI_NumberProfiles = undefined;
-    var numberProfilesLoaded = false;
 
     var gridAPI_CaseHistory = undefined;
     var casesLoaded = false;
@@ -40,6 +40,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     }
 
     function defineScope() {
+
         $scope.users = []; // the users array must be defined on the scope so that it can be passed to the case logs subgrid via viewScope
         $scope.selectedTabIndex = 0;
 
@@ -101,7 +102,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         $scope.onGridReady_Occurances = function (api) {
             gridAPI_Occurances = api;
-            return retrieveData_Occurances();
+            gridOccurances_ReadyPromiseDeferred.resolve();
         }
 
         $scope.onGridReady_NormalCDRs = function (api) {
@@ -145,13 +146,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                         for (var i = 0; i < response.Data.length; i++) {
                             $scope.detailAggregateValues.push(UtilsService.cloneObject(response.Data[i]));
                         }
-
                     }
                     else {
-                        $scope.showOccurancesGrid = false;
-                        $scope.message = "No open occurences were found for the current account number";
-                        $scope.showProfileOptions = false;
-                        $scope.showDate = true;
+                        setNoOccurences();
                     }
 
                     angular.forEach(response.Data, function (item) {
@@ -171,8 +168,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
             return NormalCDRAPIService.GetNormalCDRs(dataRetrievalInput)
             .then(function (response) {
-                normalCDRsLoaded = true;
-                console.log(response)
                 onResponseReady(response);
             })
             .catch(function (error) {
@@ -184,7 +179,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
             return NumberProfileAPIService.GetNumberProfiles(dataRetrievalInput)
             .then(function (response) {
-                numberProfilesLoaded = true;
                 onResponseReady(response);
             })
             .catch(function (error) {
@@ -212,9 +206,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
                 VRNotificationService.notifyException(error, $scope);
             });
         }
+        
 
-        $scope.updateAccountCase = function () {
-
+        $scope.updateAccountCase = function () {            
             return CaseManagementAPIService.UpdateAccountCase({
                 AccountNumber: $scope.accountNumber,
                 CaseStatus: $scope.selectedCaseStatus.value,
@@ -251,20 +245,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.close = function () {
             $scope.modalContext.closeModal()
         }
-
-        $scope.filterData = function () {
-
-            if ($scope.selectedTabIndex == 1 && $scope.validateTimeRangeNormalCDRs() == null && $scope.fromDate_NormalCDRs != null && $scope.toDate_NormalCDRs != null)
-                normalCDRsLoaded = false; // re-load the normal cdrs
-
-            else if ($scope.selectedTabIndex == 2 && $scope.validateTimeRangeNumberProfiles() == null && $scope.fromDate_NumberProfiles != null && $scope.toDate_NumberProfiles != null)
-                numberProfilesLoaded = false; // re-load the number profiles
-
-            return retrieveData();
-        }
-
+        
         $scope.onSelectedTabChanged = function () {
-            return retrieveData();
+            return onSelectedTabChanged();
         }
 
         $scope.onProfileSourceChanged = function () {
@@ -324,56 +307,55 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
             else if (dataItem.StatusID == CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
             else if (dataItem.StatusID == CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
         }
+
+        $scope.searchCDRs = retrieveData_NormalCDRs;
+
+        $scope.searchNumberProfiles = retrieveData_NumberProfiles;
     }
 
     function load() {
-        $scope.isLoading = true;
+        
+        var allPromises = [];
 
-        return UtilsService.waitMultipleAsyncOperations([loadAggregateDefinitions, loadUsers, loadAccountCase])
+        var loadPrerequisiteDataPromise = UtilsService.waitMultipleAsyncOperations([loadAggregateDefinitions, loadUsers]);
+        allPromises.push(loadPrerequisiteDataPromise);
+
+        var loadMainSectionsPromiseDeferred = UtilsService.createPromiseDeferred();
+        allPromises.push(loadMainSectionsPromiseDeferred.promise);
+
+        loadPrerequisiteDataPromise.then(function () {
+            UtilsService.waitMultipleAsyncOperations([loadAccountCaseAndOccurances])
+            .then(function () {
+                loadMainSectionsPromiseDeferred.resolve();
+            })
             .catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
+                loadMainSectionsPromiseDeferred.reject(error);
+            });
+        });
+
+        $scope.isLoading = true;
+        return UtilsService.waitMultiplePromises(allPromises)
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
             .finally(function () {
                 $scope.isLoading = false;
             });
     }
 
-    // retrieveData is invoked when the selected tab changes or when the date fields are changed
-    function retrieveData() {
-
-        if (gridAPI_Occurances != undefined && $scope.selectedTabIndex == 0 && !occurancesLoaded)
-            retrieveData_Occurances();
-
-        else if (gridAPI_NormalCDRs != undefined && $scope.selectedTabIndex == 1 && !normalCDRsLoaded && $scope.validateTimeRangeNormalCDRs() == null && $scope.fromDate_NormalCDRs != null && $scope.toDate_NormalCDRs != null)
-            retrieveData_NormalCDRs();
-
-        else if (gridAPI_NumberProfiles != undefined && $scope.selectedTabIndex == 2 && !numberProfilesLoaded && $scope.validateTimeRangeNumberProfiles() == null && $scope.fromDate_NumberProfiles != null && $scope.toDate_NumberProfiles != null)
-            retrieveData_NumberProfiles();
-
-        else if (gridAPI_CaseHistory != undefined && $scope.selectedTabIndex == 3 && !casesLoaded)
+    function onSelectedTabChanged() {        
+        if (gridAPI_CaseHistory != undefined && $scope.selectedTabIndex == 3 && !casesLoaded)
             retrieveData_CaseHistory();
     }
 
-    function retrieveData_Occurances() {
-        $scope.isLoading = true;
-        var query = {
-            CaseID: $scope.caseID,
-            FromDate: $scope.fromDate,
-            ToDate: $scope.toDate
-        };
-
-        return gridAPI_Occurances.retrieveData(query)
-             .catch(function (error) {
-                 VRNotificationService.notifyException(error, $scope);
-             })
-             .finally(function () {
-                 $scope.isLoading = false;
-             });
-
+    function setNoOccurences() {
+        $scope.showOccurancesGrid = false;
+        $scope.message = "No open occurences were found for the current account number";
+        $scope.showProfileOptions = false;
+        $scope.showDate = true;
     }
 
     function retrieveData_NormalCDRs() {
-        $scope.isLoading = true;
         var query = {
             MSISDN: $scope.accountNumber,
             FromDate: $scope.fromDate_NormalCDRs,
@@ -383,15 +365,12 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         return gridAPI_NormalCDRs.retrieveData(query)
                 .catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
-                })
-                .finally(function () {
-                    $scope.isLoading = false;
                 });
 
     }
 
     function retrieveData_NumberProfiles() {
-        $scope.isLoading = true;
+       
         var query = {
             AccountNumber: $scope.accountNumber,
             FromDate: $scope.fromDate_NumberProfiles,
@@ -401,9 +380,6 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         return gridAPI_NumberProfiles.retrieveData(query)
               .catch(function (error) {
                   VRNotificationService.notifyException(error, $scope);
-              })
-              .finally(function () {
-                  $scope.isLoading = false;
               });
     }
 
@@ -423,27 +399,73 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
     }
 
-    function loadAccountCase() {
-        return CaseManagementAPIService.GetAccountCase($scope.caseID)
-            .then(function (response) {
-                if (response != null) {
+    function loadAccountCaseAndOccurances() {
 
-                    $scope.caseStatuses.splice(0, 1); // remove the open option
+        $scope.isLoading = true;
 
-                    if (response.StatusID == CaseStatusEnum.Pending.value)
-                        $scope.caseStatuses.splice(0, 1); // remove the pending option
+        var promises = [];
 
-                    else if (response.StatusID == CaseStatusEnum.ClosedFraud.value)
-                        $scope.caseStatuses.splice(1, 1); // remove the closed: fruad option
+        var getAccountCasePromise = getAccountCase();
+        promises.push(getAccountCasePromise);
 
-                    else if (response.StatusID == CaseStatusEnum.ClosedWhitelist.value)
-                        $scope.caseStatuses.splice(2, 1); // remove the closed: white list option
+        var getOccurencesPromiseDeferred = UtilsService.createPromiseDeferred();
+        promises.push(getOccurencesPromiseDeferred.promise);
 
-                    var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response.StatusID);
-                    $scope.status = response.StatusID;
-                    $scope.accountStatusDescription = accountStatus.description;
-                }
-            });
+
+        function getAccountCase() {
+            var local_getAccountCasePromise;
+            if ($scope.caseID == undefined)
+                local_getAccountCasePromise = CaseManagementAPIService.GetLastAccountCase($scope.accountNumber);
+            else
+                local_getAccountCasePromise = CaseManagementAPIService.GetAccountCase($scope.caseID);
+            local_getAccountCasePromise
+                .then(function (response) {
+                    if (response != null) {
+                        $scope.caseID = response.CaseID;
+                        $scope.caseStatuses.splice(0, 1); // remove the open option
+
+                        if (response.StatusID == CaseStatusEnum.Pending.value)
+                            $scope.caseStatuses.splice(0, 1); // remove the pending option
+
+                        else if (response.StatusID == CaseStatusEnum.ClosedFraud.value)
+                            $scope.caseStatuses.splice(1, 1); // remove the closed: fruad option
+
+                        else if (response.StatusID == CaseStatusEnum.ClosedWhitelist.value)
+                            $scope.caseStatuses.splice(2, 1); // remove the closed: white list option
+
+                        var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response.StatusID);
+                        $scope.status = response.StatusID;
+                        $scope.accountStatusDescription = accountStatus.description;
+                        
+                    }
+                    getOccurances();                   
+                });
+            return local_getAccountCasePromise;
+        }
+
+        function getOccurances() {
+            if ($scope.caseID != undefined) {
+                var query = {
+                    CaseID: $scope.caseID,
+                    FromDate: $scope.fromDate,
+                    ToDate: $scope.toDate
+                };
+
+                gridAPI_Occurances.retrieveData(query)
+                     .then(function () {
+                         getOccurencesPromiseDeferred.resolve();
+                     })
+                     .catch(function (error) {
+                         getOccurencesPromiseDeferred.reject(error);
+                     });
+            }
+            else {
+                setNoOccurences();
+                getOccurencesPromiseDeferred.resolve();
+            }
+        }
+
+        return UtilsService.waitMultiplePromises(promises);
     }
 
     function loadAggregateDefinitions() {

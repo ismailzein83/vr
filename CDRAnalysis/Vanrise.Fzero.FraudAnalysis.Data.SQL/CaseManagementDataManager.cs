@@ -53,15 +53,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
                 BEGIN
                 
-                SELECT        MAX(sed.SuspicionLevelID) AS SuspicionLevelID, CASE WHEN ac.Status IN (1, 2) 
-                         THEN SUM(CASE WHEN sed.SuspicionOccuranceStatus = 1 THEN 1 ELSE 0 END) ELSE COUNT(*) END AS NumberOfOccurances, MAX(se.ExecutionDate) 
-                         AS LastOccurance, ac.AccountNumber, ac.Status, ac.ID AS CaseID
-                INTO #TEMP_TABLE_NAME#                
-                FROM            FraudAnalysis.StrategyExecution AS se INNER JOIN
-                                         FraudAnalysis.StrategyExecutionDetails AS sed ON se.ID = sed.StrategyExecutionID RIGHT OUTER JOIN
-                                         FraudAnalysis.AccountCase ac ON sed.CaseID = ac.ID
-                #WHERE_CLAUSE#                
-                GROUP BY ac.AccountNumber, ac.Status, ac.ID
+                    SELECT ac.ID AS CaseID, ac.AccountNumber, ac.[Status], 
+	                       COUNT(*) AS NumberOfOccurances,
+	                       MAX(sed.SuspicionLevelID) AS SuspicionLevelID, 
+	                       MAX(se.ExecutionDate) AS LastOccurance
+                    INTO #TEMP_TABLE_NAME#                
+                    FROM FraudAnalysis.AccountCase ac 
+                    LEFT JOIN FraudAnalysis.StrategyExecutionDetails AS sed ON sed.CaseID = ac.ID
+                    LEFT JOIN FraudAnalysis.StrategyExecution AS se ON se.ID = sed.StrategyExecutionID
+                    #WHERE_CLAUSE#                
+                    GROUP BY ac.ID, ac.AccountNumber, ac.Status
               
                 END
             ");
@@ -76,18 +77,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             StringBuilder whereClause = new StringBuilder();
 
-            whereClause.Append("WHERE (se.ExecutionDate IS NULL OR (se.ExecutionDate >= @FromDate AND se.ExecutionDate <= @ToDate))");
+            whereClause.Append("WHERE ac.CreatedTime >= @FromDate AND (@ToDate IS NULL OR ac.CreatedTime < @ToDate)");
 
             if (accountNumber != null)
                 whereClause.Append(" AND ac.AccountNumber = '" + accountNumber + "'");
 
-            if (strategyIDs != null)
+            if (strategyIDs != null && strategyIDs.Count > 0)
                 whereClause.Append(" AND se.StrategyID IN (" + string.Join(",", strategyIDs) + ")");
 
-            if (accountStatusIDs != null)
+            if (accountStatusIDs != null && accountStatusIDs.Count > 0)
                 whereClause.Append(" AND ac.[Status] IN (" + string.Join(",", GetCaseStatusListAsIntList(accountStatusIDs)) + ")");
 
-            if (suspicionLevelIDs != null)
+            if (suspicionLevelIDs != null && suspicionLevelIDs.Count > 0)
                 whereClause.Append(" AND sed.SuspicionLevelID IN (" + string.Join(",", GetSuspicionLevelListAsIntList(suspicionLevelIDs)) + ")");
 
             return whereClause.ToString();
@@ -169,9 +170,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, _columnMapper);
         }
 
-        public AccountSuspicionSummary GetAccountSuspicionSummaryByCaseId(int caseID, DateTime from, DateTime to)
+        public AccountSuspicionSummary GetAccountSuspicionSummaryByCaseId(int caseID)
         {
-            return GetItemSP("FraudAnalysis.sp_AccountStatus_GetSummaryByCaseID", AccountSuspicionSummaryMapper, caseID, from, to);
+            return GetItemSP("FraudAnalysis.sp_AccountCase_GetDetailsByID", AccountSuspicionSummaryMapper, caseID);
         }
 
         public List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber)

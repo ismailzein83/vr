@@ -364,6 +364,26 @@
       <Project>{54c7baa5-24c5-4a02-85ed-6a06c1ef1f6a}</Project>
       <Name>PSTN.BusinessEntity.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.BP.Arguments\Vanrise.Fzero.CDRImport.BP.Arguments.csproj">
+      <Project>{8c629dfd-0e97-4205-9f18-2a25962de38f}</Project>
+      <Name>Vanrise.Fzero.CDRImport.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Business\Vanrise.Fzero.CDRImport.Business.csproj">
+      <Project>{a4b118be-ded8-429c-9ef8-eab394085dff}</Project>
+      <Name>Vanrise.Fzero.CDRImport.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Data.SQL\Vanrise.Fzero.CDRImport.Data.SQL.csproj">
+      <Project>{3a5581db-9680-4cd4-af20-0339d02f5447}</Project>
+      <Name>Vanrise.Fzero.CDRImport.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Data\Vanrise.Fzero.CDRImport.Data.csproj">
+      <Project>{73e469c6-3ccb-4414-8ef1-3ea3600f1eba}</Project>
+      <Name>Vanrise.Fzero.CDRImport.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Entities\Vanrise.Fzero.CDRImport.Entities.csproj">
+      <Project>{8ea7f723-709a-480a-9ecf-be40c336a0cb}</Project>
+      <Name>Vanrise.Fzero.CDRImport.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Arguments\Vanrise.Fzero.FraudAnalysis.BP.Arguments.csproj">
       <Project>{8de7b4ac-2ea9-4a88-9a44-e73a21e26398}</Project>
       <Name>Vanrise.Fzero.FraudAnalysis.BP.Arguments</Name>

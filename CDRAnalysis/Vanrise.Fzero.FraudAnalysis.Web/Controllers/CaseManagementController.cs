@@ -12,7 +12,12 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {
     public class CaseManagementController : BaseAPIController
     {
-        
+        [HttpGet]
+        public AccountCase GetLastAccountCase(string accountNumber)
+        {
+            CaseManagmentManager manager = new CaseManagmentManager();
+            return manager.GetLastAccountCase(accountNumber);
+        }
 
         [HttpPost]
         public object GetFilteredAccountSuspicionSummaries(DataRetrievalInput<AccountSuspicionSummaryQuery> input)

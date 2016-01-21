@@ -8,6 +8,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class CaseManagmentManager
     {
+        public AccountCase GetLastAccountCase(string accountNumber)
+        {
+            ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
+            return dataManager.GetLastAccountCaseByAccountNumber(accountNumber);
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<AccountSuspicionSummary> GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input)
         {
             ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
@@ -77,13 +83,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             dataManager.InsertAccountCaseHistory(caseID, userID, input.CaseStatus, input.Reason);
 
-            dataManager.InsertOrUpdateAccountStatus(input.AccountNumber, input.CaseStatus, input.ValidTill);
+            if (accountCase.StatusID == CaseStatus.ClosedFraud || accountCase.StatusID == CaseStatus.ClosedWhiteList)
+                dataManager.InsertOrUpdateAccountStatus(input.AccountNumber, input.CaseStatus, input.ValidTill);
 
             dataManager.LinkDetailToCase(input.AccountNumber, caseID, input.CaseStatus);
             
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
 
-            updateOperationOutput.UpdatedObject = dataManager.GetAccountSuspicionSummaryByCaseId(input.CaseId, input.FromDate, input.ToDate);
+            updateOperationOutput.UpdatedObject = dataManager.GetAccountSuspicionSummaryByCaseId(caseID);
 
             return updateOperationOutput;
         }

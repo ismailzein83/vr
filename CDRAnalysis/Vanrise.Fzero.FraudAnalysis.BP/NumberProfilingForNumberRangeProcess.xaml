@@ -71,6 +71,7 @@
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:Int64" Name="processedCDRs" />
+      <Variable x:TypeArguments="x:Int64" Name="numberOfSubscribers" />
     </Sequence.Variables>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
@@ -130,6 +131,11 @@
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
           </InOutArgument>
         </vffba1:CreateNumberProfiles.InputQueue>
+        <vffba1:CreateNumberProfiles.NumberOfSubscribers>
+          <OutArgument x:TypeArguments="x:Int64">
+            <mca:CSharpReference x:TypeArguments="x:Int64">numberOfSubscribers</mca:CSharpReference>
+          </OutArgument>
+        </vffba1:CreateNumberProfiles.NumberOfSubscribers>
         <vffba1:CreateNumberProfiles.NumberRange>
           <InArgument x:TypeArguments="vfce:NumberRangeDefinition">
             <mca:CSharpValue x:TypeArguments="vfce:NumberRangeDefinition">Input.NumberRange</mca:CSharpValue>
@@ -204,11 +210,14 @@
       </Assign.To>
       <Assign.Value>
         <InArgument x:TypeArguments="vffba:NumberProfilingForNumberRangeProcessOutput">
-          <mca:CSharpValue x:TypeArguments="vffba:NumberProfilingForNumberRangeProcessOutput" xml:space="preserve">new NumberProfilingForNumberRangeProcessOutput {  CDRsProcessed = processedCDRs}</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="vffba:NumberProfilingForNumberRangeProcessOutput" xml:space="preserve">new NumberProfilingForNumberRangeProcessOutput {  
+                CDRsProcessed = processedCDRs,
+                NumberOfSubscribers = numberOfSubscribers
+            }</mca:CSharpValue>
         </InArgument>
       </Assign.Value>
     </Assign>
-    <sads:DebugSymbol.Symbol>d1tDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXE51bWJlclByb2ZpbGluZ0Zvck51bWJlclJhbmdlUHJvY2Vzcy54YW1sHkcD1AEOAgEBSwXGARACAQvHAQXSAQ4CAQJVB3QYAwG0AXUHowElAgFQpAEHuQEwAgEjugEHxQEoAgEMzwELzwHWAQIBB8oBC8oBfwIBA10NXV8DAewBWA1YWwMB4QFsDWxvAwHWAWcNZ24DAcsBYg1ibgMBwAFxDXFZAwG1AZEBDZEBbwMBqQGWAQ2WAWcDAZ4BggENggFuAwGTAXgNeFsDAYgBmwENmwF7AgF9jAENjAGCAQIBcn0NfWICAWeHAQ2HAW4CAVygAQ2gAVkCAVGxAQ2xAXMCAUWnAQ2nAXoCATq2AQ22AXwCAS+sAQ2sAXwCASTCAQ3CAXQCARi9AQ29AXQCAQ0=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXE51bWJlclByb2ZpbGluZ0Zvck51bWJlclJhbmdlUHJvY2Vzcy54YW1sH0cD3QEOAgEBTAXMARACAQ3NAQXbAQ4CAQJWB3UYAwHRAXYHqQElAgFYqgEHvwEwAgEnwAEHywEoAgEO1QEL2AEgAgEI0AEL0AF/AgEDXg1eXwMBjgJZDVlbAwGCAm0NbW8DAfYBaA1obgMB6gFjDWNuAwHeAXINclkDAdIBlwENlwFvAwHFAYgBDYgBZQMBuQGcAQ2cAWcDAa0BgwENgwFuAwGhAXkNeVsDAZUBoQENoQF7AwGJAZIBDZIBggECAX1+DX5iAgFxjQENjQFuAgFlpgENpgFZAgFZtwENtwFzAgFMrQENrQF6AgFAvAENvAF8AgE0sgENsgF8AgEoyAENyAF0AgEbwwENwwF0AgEP</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

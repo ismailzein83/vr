@@ -94,12 +94,12 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         public void LoadCDR(DateTime from, DateTime to, IEnumerable<string> numberPrefixes, Action<CDR> onCDRReady)
         {
             var dbTimeRanges = PartitionedCDRDataManager.GetDBTimeRanges(from, to);
-            foreach (var cdrDBTimeRange in dbTimeRanges)
+            foreach (var dbTimeRange in dbTimeRanges)
             {
-                var dataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedNormalCDRDataManager>(cdrDBTimeRange.FromTime, true);
+                var dataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedNormalCDRDataManager>(dbTimeRange.FromTime, true);
                 if (dataManager != null)
                 {
-                    dataManager.LoadCDR(cdrDBTimeRange.FromTime, numberPrefixes, onCDRReady);
+                    dataManager.LoadCDR(dbTimeRange.FromTime, numberPrefixes, onCDRReady);
                 }
             }
             //ConcurrentQueue<CDRDBTimeRange> qDBTimeRanges = new ConcurrentQueue<CDRDBTimeRange>(dbTimeRanges);
@@ -138,8 +138,6 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public BigResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRQuery> input)
         {
-            return null;
-            var dbTimeRanges = PartitionedCDRDataManager.GetDBTimeRanges(input.Query.FromDate, input.Query.ToDate);
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 string queryTempTableNotExists = string.Format(@"IF NOT OBJECT_ID('{0}', N'U') IS NOT NULL
@@ -152,9 +150,21 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                                                             END", tempTableName);
                 if(Convert.ToBoolean(ExecuteScalarText(queryTempTableNotExists, null)))
                 {
-
+                    var dbTimeRanges = PartitionedCDRDataManager.GetDBTimeRanges(input.Query.FromDate, input.Query.ToDate);
+                    if(dbTimeRanges != null)
+                    {
+                        ExecuteNonQueryText(String.Format(PartitionedCDRDataManager.NORMALCDR_CREATETABLE_QUERYTEMPLATE, tempTableName), null);
+                        //foreach(var dbTimeRange in dbTimeRanges)
+                        Parallel.ForEach(dbTimeRanges, (dbTimeRange) =>
+                        {
+                            var dataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedNormalCDRDataManager>(dbTimeRange.FromTime, true);
+                            if (dataManager != null)
+                            {
+                                dataManager.InsertCDRsByMSISDNToTempTable(tempTableName, input.Query.MSISDN, dbTimeRange.FromTime, dbTimeRange.ToTime);
+                            }
+                        });
+                    }
                 }
-                ExecuteNonQuerySP("FraudAnalysis.sp_NormalCDR_CreateTempByMSISDN", tempTableName, input.Query.MSISDN, input.Query.FromDate, input.Query.ToDate);
             };
 
             if (input.SortByColumnName != null)

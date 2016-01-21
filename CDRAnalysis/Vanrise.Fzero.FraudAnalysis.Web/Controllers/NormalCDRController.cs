@@ -1,6 +1,6 @@
 ﻿using System.Web.Http;
-using Vanrise.Fzero.FraudAnalysis.Business;
-using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.Fzero.CDRImport.Business;
+using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Web.Base;
 
 namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
@@ -12,10 +12,9 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         [HttpPost]
         public object GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRQuery> input)
         {
-            //NormalCDRManager manager = new NormalCDRManager();
+            NormalCDRManager manager = new NormalCDRManager();
 
-            //return GetWebResponse(input, manager.GetNormalCDRs(input));
-            return null;
+            return GetWebResponse(input, manager.GetNormalCDRs(input));
         }
 
     }

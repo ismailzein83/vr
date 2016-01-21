@@ -28,9 +28,6 @@ namespace Vanrise.Fzero.CDRImport.Business
             cdrsBigResult.ResultKey = cdrs.ResultKey;
             cdrsBigResult.TotalCount = cdrs.TotalCount;
 
-
-
-
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cdrsBigResult);
         }
 

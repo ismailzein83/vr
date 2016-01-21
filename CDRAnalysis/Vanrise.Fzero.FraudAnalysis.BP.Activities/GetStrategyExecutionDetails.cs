@@ -21,10 +21,15 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public List<StrategyExecutionInfo> StrategiesExecutionInfo { get; set; }
     }
 
+    public class GetStrategyExecutionDetailOuput
+    {
+        public long NumberOfSuspicions { get; set; }
+    }
+
     #endregion
 
 
-    public class GetStrategyExecutionDetails : DependentAsyncActivity<GetStrategyExecutionDetailInput>
+    public class GetStrategyExecutionDetails : DependentAsyncActivity<GetStrategyExecutionDetailInput, GetStrategyExecutionDetailOuput>
     {
         #region Arguments
 
@@ -36,6 +41,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InArgument<List<StrategyExecutionInfo>> StrategiesExecutionInfo { get; set; }
 
+        public OutArgument<long> NumberOfSuspicions { get; set; }
+
         #endregion
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
@@ -46,7 +53,17 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             base.OnBeforeExecute(context, handle);
         }
 
-        protected override void DoWork(GetStrategyExecutionDetailInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override GetStrategyExecutionDetailInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)
+        {
+            return new GetStrategyExecutionDetailInput()
+            {
+                InputQueueForNumberProfile = this.InputQueueForNumberProfile.Get(context),
+                OutputQueueForStrategyExecutionDetail = this.OutputQueueForStrategyExecutionDetail.Get(context),
+                StrategiesExecutionInfo = this.StrategiesExecutionInfo.Get(context)
+            };
+        }
+
+        protected override GetStrategyExecutionDetailOuput DoWorkWithResult(GetStrategyExecutionDetailInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Collecting Suspicious Numbers ");
 
@@ -59,59 +76,60 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 strategies.Add(strategiesExecutionInfo.Strategy);
             }
 
-                foreach (var strategy in strategies)
+            foreach (var strategy in strategies)
+            {
+                fraudManagers.Add(strategy.Id, new FraudManager(strategy));
+            }
+            int numberProfilesProcessed = 0;
+            long numberOfSuspicions = 0;
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
                 {
-                   fraudManagers.Add(strategy.Id, new FraudManager(strategy));
-                }
-                int numberProfilesProcessed = 0;
-                DoWhilePreviousRunning(previousActivityStatus, handle, () =>
-                {
-                    bool hasItem = false;
-                    do
-                    {
 
-                        hasItem = inputArgument.InputQueueForNumberProfile.TryDequeue(
-                            (item) =>
+                    hasItem = inputArgument.InputQueueForNumberProfile.TryDequeue(
+                        (item) =>
+                        {
+                            List<NumberProfile> numberProfiles = new List<NumberProfile>();
+                            List<StrategyExecutionDetail> strategyExecutionDetails = new List<StrategyExecutionDetail>();
+
+                            foreach (NumberProfile numberProfile in item.NumberProfiles)
                             {
-                                List<NumberProfile> numberProfiles = new List<NumberProfile>();
-                                List<StrategyExecutionDetail> strategyExecutionDetails = new List<StrategyExecutionDetail>();
+                                StrategyExecutionDetail strategyExecutionDetail = new StrategyExecutionDetail();
 
-                                foreach (NumberProfile numberProfile in item.NumberProfiles)
+                                if (fraudManagers[numberProfile.StrategyId].IsNumberSuspicious(numberProfile, out strategyExecutionDetail))
                                 {
-                                    StrategyExecutionDetail strategyExecutionDetail = new StrategyExecutionDetail();
-
-                                    if (fraudManagers[numberProfile.StrategyId].IsNumberSuspicious(numberProfile, out strategyExecutionDetail))
-                                    {
-                                        strategyExecutionDetails.Add(strategyExecutionDetail);
-                                    }
-
+                                    numberOfSuspicions++;
+                                    strategyExecutionDetails.Add(strategyExecutionDetail);
                                 }
 
-                                if (strategyExecutionDetails.Count > 0)
-                                     inputArgument.OutputQueueForStrategyExecutionDetail.Enqueue(new StrategyExecutionDetailBatch
-                                    {
-                                        StrategyExecutionDetails = strategyExecutionDetails
-                                    });
+                            }
 
-                                numberProfilesProcessed += item.NumberProfiles.Count;
-                                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Number Profiles Processed", numberProfilesProcessed);
+                            if (strategyExecutionDetails.Count > 0)
+                                inputArgument.OutputQueueForStrategyExecutionDetail.Enqueue(new StrategyExecutionDetailBatch
+                                {
+                                    StrategyExecutionDetails = strategyExecutionDetails
+                                });
 
-                            });
-                    }
-                    while (!ShouldStop(handle) && hasItem);
-                });
+                            numberProfilesProcessed += item.NumberProfiles.Count;
+                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Number Profiles Processed", numberProfilesProcessed);
 
-                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finshed Collecting Suspicious Numbers ");
+                        });
+                }
+                while (!ShouldStop(handle) && hasItem);
+            });
+
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finshed Collecting Suspicious Numbers ");
+            return new GetStrategyExecutionDetailOuput
+            {
+                NumberOfSuspicions = numberOfSuspicions
+            };
         }
 
-        protected override GetStrategyExecutionDetailInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetStrategyExecutionDetailOuput result)
         {
-            return new GetStrategyExecutionDetailInput()
-            {
-                InputQueueForNumberProfile = this.InputQueueForNumberProfile.Get(context),
-                OutputQueueForStrategyExecutionDetail = this.OutputQueueForStrategyExecutionDetail.Get(context),
-                StrategiesExecutionInfo = this.StrategiesExecutionInfo.Get(context)
-            };
+            this.NumberOfSuspicions.Set(context, result.NumberOfSuspicions);
         }
     }
 }
