@@ -1,9 +1,12 @@
 ﻿"use strict";
 
-ExecuteStrategyProcessInputController.$inject = ['$scope', 'UtilsService', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRValidationService'];
+ExecuteStrategyProcessInputController.$inject = ['$scope', 'UtilsService', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRValidationService','VRUIUtilsService'];
 
-function ExecuteStrategyProcessInputController($scope, UtilsService, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, VRValidationService) {
+function ExecuteStrategyProcessInputController($scope, UtilsService, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, VRValidationService, VRUIUtilsService) {
     var pageLoaded = false;
+
+    var prefixDirectiveAPI;
+    var prefixReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
     defineScope();
 
@@ -22,6 +25,7 @@ function ExecuteStrategyProcessInputController($scope, UtilsService, StrategyAPI
 
         $scope.createProcessInputObjects = [];
 
+        $scope.selectedPrefixes = [];
         $scope.strategies = [];
         $scope.selectedStrategies = [];
         $scope.selectedStrategyIds = [];
@@ -29,10 +33,9 @@ function ExecuteStrategyProcessInputController($scope, UtilsService, StrategyAPI
         $scope.selectedPeriod;
 
 
-        $scope.fixedPrefixes = [{ value: "241820" }, { value: "241830" }];
-        $scope.selectedFixedPrefixes = [];
-        for (var i = 0; i < $scope.fixedPrefixes.length; i++) {
-            $scope.selectedFixedPrefixes.push($scope.fixedPrefixes[i]);
+        $scope.onPrefixDirectiveReady = function (api) {
+            prefixDirectiveAPI = api;
+            prefixReadyPromiseDeferred.resolve();
         }
 
         $scope.prefixLengths = [0, 1, 2, 3];
@@ -80,13 +83,32 @@ function ExecuteStrategyProcessInputController($scope, UtilsService, StrategyAPI
 
     }
 
+    function getPrefixesInfo() {
+        var prefixLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        prefixReadyPromiseDeferred.promise
+            .then(function () {
+                var directivePayload;
+
+                VRUIUtilsService.callDirectiveLoad(prefixDirectiveAPI, directivePayload, prefixLoadPromiseDeferred);
+            });
+        return prefixLoadPromiseDeferred.promise;
+    }
 
     function createProcessInputObjects(fromDate, toDate) {
+
+        if ($scope.selectedSuppliers.length == 0)
+            filter.SupplierIDs = null;
+        else {
+            filter.SupplierIDs = UtilsService.getPropValuesFromArray($scope.selectedSuppliers, "SupplierId");
+        }
+
+
         $scope.createProcessInputObjects.push({
             InputArguments: {
                 $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                 StrategyIds: $scope.selectedStrategyIds,
-                FixedPrefixes: $scope.selectedFixedPrefixes != undefined ? UtilsService.getPropValuesFromArray($scope.selectedFixedPrefixes, "value") : null,
+                FixedPrefixes: $scope.selectedPrefixes != undefined ? UtilsService.getPropValuesFromArray($scope.selectedPrefixes, "value") : null,
                 PrefixLength: $scope.selectedPrefixLength,
                 FromDate: new Date(fromDate),
                 ToDate: new Date(toDate),
@@ -100,7 +122,17 @@ function ExecuteStrategyProcessInputController($scope, UtilsService, StrategyAPI
 
     function load()
     {
+        $scope.isGettingData = true;
         loadPeriods();
+
+        UtilsService.waitMultipleAsyncOperations([getPrefixesInfo]).then(function () {
+        }).finally(function () {
+            $scope.isGettingData = false;
+        });
+
+
+
+       
     }
 
     function loadPeriods() {

@@ -49,6 +49,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Data">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
     </Reference>
@@ -81,6 +84,7 @@
     <Compile Include="DataWarehouse\DWDimensionManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DataWarehouse\DWStrategyManager.cs" />
+    <Compile Include="DefineFixedPrefixesManager.cs" />
     <Compile Include="FilterManager.cs" />
     <Compile Include="FraudManager.cs" />
     <Compile Include="CallClassManager.cs" />

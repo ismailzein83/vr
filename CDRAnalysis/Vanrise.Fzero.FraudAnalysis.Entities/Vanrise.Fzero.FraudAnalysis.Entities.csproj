@@ -51,12 +51,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Queueing.Entities">
       <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountCaseLog.cs" />
+    <Compile Include="FixedPrefixes.cs" />
+    <Compile Include="FixedPrefixesQuery.cs" />
     <Compile Include="InfoDetail.cs" />
     <Compile Include="AccountInfo.cs" />
     <Compile Include="CDRDetail.cs" />

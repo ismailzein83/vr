@@ -1,0 +1,14 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="fixedPrefixes"
+                     on-ready="onGridReady"
+                     dataretrievalfunction="dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="gridMenuActions"
+                     idfield="Entity.Prefix">
+
+            <vr-datagridcolumn headertext="'Prefix'" field="'Entity.Prefix'" type="'Text'"></vr-datagridcolumn>
+
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>
