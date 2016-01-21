@@ -560,6 +560,13 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
           return  scope.$apply(callBack);
         //}
     }
+
+    function compareEqualsTimes(t1, t2) {
+        if (t1.Hour == t2.Hour && t1.Minute == t2.Minute)
+            return true;
+        else
+            return false;
+    }
     return ({
         replaceAll: replaceAll,
         waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -595,7 +602,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         serializetoJson: serializetoJson,
         generateJSVariableName: generateJSVariableName,
         buildTitleForUploadEditor: buildTitleForUploadEditor,
-        safeApply: safeApply
+        safeApply: safeApply,
+        compareEqualsTimes: compareEqualsTimes
     });
 
 }]);
