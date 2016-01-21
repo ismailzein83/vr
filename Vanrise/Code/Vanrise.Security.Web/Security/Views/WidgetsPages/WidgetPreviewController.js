@@ -1,10 +1,11 @@
-﻿WidgetPreviewController.$inject = ['$scope', 'TimeDimensionTypeEnum','PeriodEnum','UtilsService','VRValidationService'];
+﻿WidgetPreviewController.$inject = ['$scope', 'TimeDimensionTypeEnum', 'PeriodEnum', 'UtilsService', 'VRValidationService'];
 
 function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, UtilsService, VRValidationService) {
     var widgetAPI;
     defineScope();
     load();
     var date;
+
     function defineScope() {
         $scope.scopeModal = {};
 
@@ -16,7 +17,7 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
         date = $scope.scopeModal.selectedPeriod.getInterval();
         $scope.scopeModal.fromDate = date.from;
         $scope.scopeModal.toDate = date.to;
-        
+
         defineTimeDimensionTypes();
         $scope.scopeModal.filter = {
             timeDimensionType: $scope.scopeModal.selectedTimeDimensionType,
@@ -40,25 +41,24 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
                 $scope.scopeModal.selectedPeriod = customize;
 
         }
-   
-        
+
         $scope.scopeModal.widget = $scope.$parent.widget;
         if ($scope.scopeModal.widget != null) {
             $scope.scopeModal.widget.SectionTitle = $scope.scopeModal.widget.Name;
         }
-        
+
         $scope.scopeModal.onElementReady = function (api) {
             widgetAPI = api;
             widgetAPI.retrieveData($scope.scopeModal.filter);
         };
- 
+
         $scope.scopeModal.Search = function () {
             $scope.scopeModal.filter = {
                 timeDimensionType: $scope.scopeModal.selectedTimeDimensionType,
                 fromDate: $scope.scopeModal.fromDate,
                 toDate: $scope.scopeModal.toDate
             }
-               return refreshWidget();
+            return refreshWidget();
         };
         $scope.scopeModal.periodSelectionChanged = function () {
 
@@ -68,10 +68,11 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
                 $scope.scopeModal.fromDate = date.from;
                 $scope.scopeModal.toDate = date.to;
             }
-     
+
         }
 
     }
+
     function refreshWidget() {
         return widgetAPI.retrieveData($scope.scopeModal.filter);
     }
@@ -81,15 +82,14 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
         for (var td in TimeDimensionTypeEnum)
             $scope.scopeModal.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
         $scope.scopeModal.selectedTimeDimensionType = TimeDimensionTypeEnum.Daily;
-     
-    }
-    function load() {
-      
-        $scope.scopeModal.isGettingData = false;
-        
+
     }
 
-   
+    function load() {
+
+        $scope.scopeModal.isGettingData = false;
+
+    }
 
 }
-appControllers.controller('Security_WidgetPreviewController', WidgetPreviewController);
+appControllers.controller('VR_Sec_WidgetPreviewController', WidgetPreviewController);

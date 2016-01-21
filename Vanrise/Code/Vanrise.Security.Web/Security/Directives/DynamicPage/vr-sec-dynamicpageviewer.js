@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum', 'VRModalService', 'PeriodEnum', 'VRValidationService','VR_Sec_ViewAPIService','WidgetAPIService','ColumnWidthEnum','VRUIUtilsService',
+app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum', 'VRModalService', 'PeriodEnum', 'VRValidationService', 'VR_Sec_ViewAPIService', 'WidgetAPIService', 'ColumnWidthEnum', 'VRUIUtilsService',
     function (UtilsService, TimeDimensionTypeEnum, VRModalService, PeriodEnum, VRValidationService, VR_Sec_ViewAPIService, WidgetAPIService, ColumnWidthEnum, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -18,8 +18,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
             bindToController: true,
             compile: function (element, attrs) {
                 return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-                    }
+                    pre: function ($scope, iElem, iAttrs, ctrl) { }
                 }
             },
             templateUrl: "/Client/Modules/Security/Directives/DynamicPage/Templates/DynamicPageViewer.html"
@@ -66,45 +65,41 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
             function defineAPI() {
                 var api = {};
                 api.load = function (payload) {
-                    if(payload != undefined)
-                    {
+                    if (payload != undefined) {
                         if (payload.viewId != undefined) {
                             viewId = payload.viewId
                             return UtilsService.waitMultipleAsyncOperations([loadAllWidgets, loadViewByID])
-                                   .finally(function () {
-                                       loadViewWidgets($scope.allWidgets, $scope.bodyContents, $scope.summaryContents);
-                                   });
-                        }
-                        else {
+                                .finally(function () {
+                                    loadViewWidgets($scope.allWidgets, $scope.bodyContents, $scope.summaryContents);
+                                });
+                        } else {
                             $scope.nonSearchable = payload.selectedPeriod == undefined;
-                            fillDateAndPeriod(payload.selectedPeriod, payload.selectedTimeDimensionType).then(function ()
-                            {
-                                if (!$scope.nonSearchable)
-                                {
-                                    var obj = timeRangeDirectiveAPI.getData();
-                                    $scope.filter = {
-                                        timeDimensionType: timeDimentionDirectiveAPI.getSelectedValues(),
-                                        fromDate: obj.fromDate,
-                                        toDate: obj.toDate
+                            fillDateAndPeriod(payload.selectedPeriod, payload.selectedTimeDimensionType)
+                                .then(function () {
+                                    if (!$scope.nonSearchable) {
+                                        var obj = timeRangeDirectiveAPI.getData();
+                                        $scope.filter = {
+                                            timeDimensionType: timeDimentionDirectiveAPI.getSelectedValues(),
+                                            fromDate: obj.fromDate,
+                                            toDate: obj.toDate
+                                        }
                                     }
-                                }
-                              
-                                return UtilsService.waitMultipleAsyncOperations([loadAllWidgets])
-                                  .finally(function () {
-                                      loadViewWidgets($scope.allWidgets, payload.bodyContents, payload.summaryContents);
-                                  });
-                            });                 
+
+                                    return UtilsService.waitMultipleAsyncOperations([loadAllWidgets])
+                                        .finally(function () {
+                                            loadViewWidgets($scope.allWidgets, payload.bodyContents, payload.summaryContents);
+                                        });
+                                });
                         }
                     }
-                    
-                    
+
                 }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
 
-            function fillDateAndPeriod(selectedPeriod,selectedTimeDimention) {
+            function fillDateAndPeriod(selectedPeriod, selectedTimeDimention) {
                 var loadTimeRangePromiseDeferred = UtilsService.createPromiseDeferred();
                 var loadTimeDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
                 var promises = [];
@@ -113,7 +108,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                         timeRangeDirectiveAPI = api;
                         timeRangeReadyPromiseDeferred.resolve();
                     }
-                    $scope.onTimeDimentionDirectiveReady= function (api) {
+                    $scope.onTimeDimentionDirectiveReady = function (api) {
                         timeDimentionDirectiveAPI = api;
                         timeDimentionReadyPromiseDeferred.resolve();
                     }
@@ -134,30 +129,29 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                         VRUIUtilsService.callDirectiveLoad(timeDimentionDirectiveAPI, timeDimentionPeriod, loadTimeDimentionPromiseDeferred);
 
                     });
-                }
-                else
-                {
+                } else {
                     loadTimeRangePromiseDeferred.resolve();
                     loadTimeDimentionPromiseDeferred.resolve();
                 }
-                   
+
                 promises.push(loadTimeRangePromiseDeferred.promise);
                 promises.push(loadTimeDimentionPromiseDeferred.promise);
 
                 return UtilsService.waitMultiplePromises(promises);
-               
+
             }
 
             function loadAllWidgets() {
-                return WidgetAPIService.GetAllWidgets().then(function (response) {
-                    for (var i = 0; i < response.length; i++)
-                        $scope.allWidgets.push(response[i].Entity)
-                });
+                return WidgetAPIService.GetAllWidgets()
+                    .then(function (response) {
+                        for (var i = 0; i < response.length; i++)
+                            $scope.allWidgets.push(response[i].Entity)
+                    });
 
             }
 
             function loadViewWidgets(allWidgets, BodyContents, SummaryContents) {
-                
+
                 for (var i = 0; i < BodyContents.length; i++) {
                     var bodyContent = BodyContents[i];
                     var value = UtilsService.getItemByVal(allWidgets, bodyContent.WidgetId, 'Id');
@@ -175,8 +169,6 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                         }
                         addBodyWidget(value);
                     }
-                   
-
 
                 }
                 for (var i = 0; i < SummaryContents.length; i++) {
@@ -211,14 +203,11 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                 };
                 bodyWidget.onElementReady = function (api) {
                     bodyWidget.API = api;
-                   
-                    if (!$scope.nonSearchable)
-                    {
+
+                    if (!$scope.nonSearchable) {
                         widgetPeriod.filter = $scope.filter;
                         bodyWidget.API.load(widgetPeriod);
-                    }
-                       
-                    else {
+                    } else {
                         var widgetDate = UtilsService.getPeriod(bodyWidget.DefaultPeriod);
                         var timeDimention = UtilsService.getItemByVal($scope.timeDimensionTypes, bodyWidget.DefaultGrouping, 'value');
                         filter = {
@@ -231,18 +220,14 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                     }
 
                     bodyWidget.load = function () {
-                        if (!$scope.nonSearchable)
-                        {
+                        if (!$scope.nonSearchable) {
                             widgetPeriod.filter = $scope.filter;
                             return api.load(widgetPeriod);
-                        }
-                           
-                        else
-                        {
+                        } else {
                             widgetPeriod.filter = filter;
                             return api.load(filter);
                         }
-                            
+
                     };
                 };
                 $scope.bodyWidgets.push(bodyWidget);
@@ -257,12 +242,10 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                 summaryWidget.onElementReady = function (api) {
 
                     summaryWidget.API = api;
-                    if (!$scope.nonSearchable){
-                         widgetPeriod.filter= $scope.filter;
+                    if (!$scope.nonSearchable) {
+                        widgetPeriod.filter = $scope.filter;
                         summaryWidget.API.load(widgetPeriod);
-                    }
-                       
-                    else {
+                    } else {
                         var widgetDate = UtilsService.getPeriod(summaryWidget.DefaultPeriod);
                         var timeDimention = UtilsService.getItemByVal($scope.timeDimensionTypes, summaryWidget.DefaultGrouping, 'value');
                         filter = {
@@ -270,18 +253,15 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                             fromDate: widgetDate.from,
                             toDate: widgetDate.to
                         }
-                        widgetPeriod.filter= filter;
+                        widgetPeriod.filter = filter;
                         summaryWidget.API.load(widgetPeriod);
                     }
 
                     summaryWidget.load = function () {
-                        if (!$scope.nonSearchable)
-                        {
+                        if (!$scope.nonSearchable) {
                             widgetPeriod.filter = $scope.filter;
                             return api.load(widgetPeriod);
-                        }     
-                        else
-                        {
+                        } else {
                             var widgetDate = UtilsService.getPeriod(summaryWidget.DefaultPeriod);
                             var timeDimention = UtilsService.getItemByVal($scope.timeDimensionTypes, summaryWidget.DefaultGrouping, 'value');
                             filter = {
@@ -292,7 +272,6 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                             widgetPeriod.filter = filter;
                             return api.load(widgetPeriod);
                         }
-                            
 
                     };
                 };
@@ -301,25 +280,27 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
             }
 
             function loadViewByID() {
-                return VR_Sec_ViewAPIService.GetView(viewId).then(function (response) {
-                    $scope.summaryContents = response.ViewContent.SummaryContents;
-                    $scope.bodyContents = response.ViewContent.BodyContents;
-                    if (response.ViewContent.DefaultPeriod != undefined || response.ViewContent.DefaultGrouping != undefined) {
-                        $scope.nonSearchable = response.ViewContent.DefaultPeriod == undefined;
-                        fillDateAndPeriod(response.ViewContent.DefaultPeriod, response.ViewContent.DefaultGrouping).then(function () {
-                            if (!$scope.nonSearchable) {
-                                var obj = timeRangeDirectiveAPI.getData();
-                                $scope.filter = {
-                                    timeDimensionType: timeDimentionDirectiveAPI.getSelectedValues(),
-                                    fromDate: obj.fromDate,
-                                    toDate: obj.toDate
-                                }
-                            }
-                            
-                        });
-                    }
+                return VR_Sec_ViewAPIService.GetView(viewId)
+                    .then(function (response) {
+                        $scope.summaryContents = response.ViewContent.SummaryContents;
+                        $scope.bodyContents = response.ViewContent.BodyContents;
+                        if (response.ViewContent.DefaultPeriod != undefined || response.ViewContent.DefaultGrouping != undefined) {
+                            $scope.nonSearchable = response.ViewContent.DefaultPeriod == undefined;
+                            fillDateAndPeriod(response.ViewContent.DefaultPeriod, response.ViewContent.DefaultGrouping)
+                                .then(function () {
+                                    if (!$scope.nonSearchable) {
+                                        var obj = timeRangeDirectiveAPI.getData();
+                                        $scope.filter = {
+                                            timeDimensionType: timeDimentionDirectiveAPI.getSelectedValues(),
+                                            fromDate: obj.fromDate,
+                                            toDate: obj.toDate
+                                        }
+                                    }
 
-                });
+                                });
+                        }
+
+                    });
             }
 
             function refreshData() {
@@ -346,9 +327,5 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
             this.defineAPI = defineAPI;
         }
 
-
-
-
         return directiveDefinitionObject;
     }]);
-

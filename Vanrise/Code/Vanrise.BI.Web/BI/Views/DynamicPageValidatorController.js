@@ -1,8 +1,8 @@
-﻿ValidateEditorController.$inject = ['$scope', 'VR_Sec_UserAPIService', 'VRNavigationService', 'BIAPIService', 'DataRetrievalResultTypeEnum'];
+﻿ValidateEditorController.$inject = ['$scope', 'VR_Sec_UserAPIService', 'VRNavigationService', 'BIAPIService', 'DataRetrievalResultTypeEnum','UtilsService','VRNotificationService'];
 
-function ValidateEditorController($scope, UsersAPIService, VRNavigationService, BIAPIService, DataRetrievalResultTypeEnum) {
-    loadParameters();
+function ValidateEditorController($scope, UsersAPIService, VRNavigationService, BIAPIService, DataRetrievalResultTypeEnum, UtilsService, VRNotificationService) {
     var mainGridAPI;
+    loadParameters();
     defineScope();
     load();
     function loadParameters() {
@@ -25,11 +25,13 @@ function ValidateEditorController($scope, UsersAPIService, VRNavigationService, 
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
+
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
             if ($scope.widgets.length != 0)
                 retrieveData();
         };
+
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return BIAPIService.GetUserMeasuresValidator(dataRetrievalInput)
             .then(function (response) {
@@ -48,6 +50,7 @@ function ValidateEditorController($scope, UsersAPIService, VRNavigationService, 
         };
 
     }
+
     function fillNeededData(itm) {
         for (var i = 0; i < $scope.users.length; i++) {
             if ($scope.users[i].UserId == itm.UserId)
@@ -57,6 +60,7 @@ function ValidateEditorController($scope, UsersAPIService, VRNavigationService, 
             }
         }
     }
+
     function retrieveData() {
         var query = {
             UserIds: $scope.filter.Audience.Users,
@@ -67,12 +71,23 @@ function ValidateEditorController($scope, UsersAPIService, VRNavigationService, 
 
 
     }
+
     function load() {
-        loadWidgets();
-        loadUsers();
-        if (mainGridAPI!=undefined)
-        retrieveData();
+        $scope.isLoading = true;
+        UtilsService.waitMultipleAsyncOperations([ loadWidgets, loadUsers])
+            .then(function () {
+                if (mainGridAPI != undefined)
+                    retrieveData();
+            })
+            .catch(function (error) {
+                $scope.isLoading = false;
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            })
+            .finally(function () {
+                $scope.isLoading = false;
+            });     
     }
+
     function loadWidgets() {
         $scope.widgets = [];
         for (var i = 0; i < $scope.filter.BodyContents.length; i++) {
@@ -82,8 +97,9 @@ function ValidateEditorController($scope, UsersAPIService, VRNavigationService, 
             $scope.widgets.push($scope.filter.SummaryContents[i].WidgetId);
         }
     }
+
     function loadUsers() {
-        UsersAPIService.GetUsers().then(function (response) {
+      return  UsersAPIService.GetUsers().then(function (response) {
             angular.forEach(response, function (user) {
 
                 $scope.users.push(user);
@@ -95,4 +111,4 @@ function ValidateEditorController($scope, UsersAPIService, VRNavigationService, 
 
 
 }
-appControllers.controller('Security_ValidateEditorController', ValidateEditorController);
+appControllers.controller('VR_BI_ValidateEditorController', ValidateEditorController);

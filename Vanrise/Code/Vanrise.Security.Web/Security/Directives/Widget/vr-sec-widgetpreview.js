@@ -53,7 +53,6 @@ app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'V
                     timeDimentionReadyPromiseDeferred.resolve();
                 }
 
-             
                 $scope.onElementReady = function (api) {
                     widgetAPI = api;
                     widgetReadyPromiseDeferred.resolve();
@@ -114,7 +113,7 @@ app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'V
                                     fromDate: obj.fromDate,
                                     toDate: obj.toDate
                                 }
-                                var widgetPeriod = { 
+                                var widgetPeriod = {
                                     filter: $scope.filter,
                                     title: $scope.widget.SectionTitle,
                                     settings: $scope.widget.Setting.settings,

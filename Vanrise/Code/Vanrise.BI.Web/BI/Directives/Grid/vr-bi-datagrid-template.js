@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrBiDatagridTemplate', ['UtilsService', '$compile', 'VRNotificationService', 'VRUIUtilsService','ChartSeriesTypeEnum','TimeDimensionTypeEnum','BIConfigurationAPIService',
+app.directive('vrBiDatagridTemplate', ['UtilsService', '$compile', 'VRNotificationService', 'VRUIUtilsService', 'ChartSeriesTypeEnum', 'TimeDimensionTypeEnum', 'BIConfigurationAPIService',
 function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, ChartSeriesTypeEnum, TimeDimensionTypeEnum, BIConfigurationAPIService) {
 
     var directiveDefinitionObject = {
@@ -17,12 +17,10 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
         bindToController: true,
         compile: function (element, attrs) {
 
-
         },
         templateUrl: "/Client/Modules/BI/Directives/Grid/Templates/BIDataGridTemplate.html"
 
     };
-
 
     function biChart(ctrl, $scope, $attrs) {
 
@@ -46,8 +44,7 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
             ctrl.onSelectionOperationChanged = function () {
                 if (ctrl.selectedOperationType.value == "MeasuresGroupedByTime") {
                     ctrl.entityRequired = false;
-                }
-                else {
+                } else {
                     ctrl.entityRequired = true;
                 }
             }
@@ -64,8 +61,10 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
 
             api.getData = function () {
                 switch (ctrl.selectedOperationType.value) {
-                    case "TopEntities": if (ctrl.selectedEntitiesType.length == 0 || ctrl.selectedMeasureTypes == undefined || ctrl.selectedMeasureTypes.length == 0) return false;
-                    case "MeasuresGroupedByTime": if (ctrl.selectedMeasureTypes == undefined || ctrl.selectedMeasureTypes.length == 0) return false;
+                    case "TopEntities":
+                        if (ctrl.selectedEntitiesType.length == 0 || ctrl.selectedMeasureTypes == undefined || ctrl.selectedMeasureTypes.length == 0) return false;
+                    case "MeasuresGroupedByTime":
+                        if (ctrl.selectedMeasureTypes == undefined || ctrl.selectedMeasureTypes.length == 0) return false;
                 }
 
                 var topMeasure = null;
@@ -109,7 +108,8 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
                     }
                 }
                 var promises = [];
-                var loadMeasures = BIConfigurationAPIService.GetMeasures().then(function (response) {
+                var loadMeasures = BIConfigurationAPIService.GetMeasures()
+                    .then(function (response) {
                         angular.forEach(response, function (itm) {
                             ctrl.Measures.push(itm);
                         });
@@ -124,9 +124,10 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
                                 }
                             }
                         }
-                 });
-                 promises.push(loadMeasures);
-                 var loadEntities = BIConfigurationAPIService.GetEntities().then(function (response) {
+                    });
+                promises.push(loadMeasures);
+                var loadEntities = BIConfigurationAPIService.GetEntities()
+                    .then(function (response) {
                         angular.forEach(response, function (itm) {
                             ctrl.Entities.push(itm);
                         });
@@ -143,17 +144,14 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
                             }
                         }
                     });
-                 promises.push(loadEntities);
-                 return UtilsService.waitMultiplePromises(promises);
+                promises.push(loadEntities);
+                return UtilsService.waitMultiplePromises(promises);
             }
-
-          
-
-
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
+
         function defineTimeDimensionTypes() {
             ctrl.timeDimensionTypes = [];
             for (var td in TimeDimensionTypeEnum)
@@ -163,6 +161,7 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
                 return t == TimeDimensionTypeEnum.Daily;
             })[0];
         }
+
         function defineNumberOfColumns() {
             ctrl.numberOfColumns = [
                 {

@@ -66,24 +66,21 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
                     ctrl.filter = payload.filter;
                 }
                 return loadMeasures()
-                 .then(function () {
-                     ctrl.measureTypes = measures;
+                    .then(function () {
+                        ctrl.measureTypes = measures;
 
-                     if (payload != undefined && !payload.previewMode)
-                     {
-                         if (!BIUtilitiesService.checkPermissions(measures)) {
-                             ctrl.isAllowed = false;
-                             return;
-                         }
-                         ctrl.isAllowed = true;
-                         return retrieveData(ctrl.filter);
+                        if (payload != undefined && !payload.previewMode) {
+                            if (!BIUtilitiesService.checkPermissions(measures)) {
+                                ctrl.isAllowed = false;
+                                return;
+                            }
+                            ctrl.isAllowed = true;
+                            return retrieveData(ctrl.filter);
 
-                     }
-                     
+                        }
 
-                   
-                 });
-               
+                    });
+
             }
             api.retrieveData = retrieveData;
             if (ctrl.onReady != null)
@@ -118,8 +115,7 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
         function loadMeasures() {
             return BIConfigurationAPIService.GetMeasures()
                 .then(function (response) {
-                    if (ctrl.settings != undefined)
-                    {
+                    if (ctrl.settings != undefined) {
                         for (var i = 0; i < ctrl.settings.MeasureTypes.length; i++) {
                             var value = UtilsService.getItemByVal(response, ctrl.settings.MeasureTypes[i], 'Name');
 
@@ -129,7 +125,7 @@ app.directive('vrBiSummary', ['UtilsService', 'BIConfigurationAPIService', 'BIAP
 
                         }
                     }
-                    
+
                 });
         }
 

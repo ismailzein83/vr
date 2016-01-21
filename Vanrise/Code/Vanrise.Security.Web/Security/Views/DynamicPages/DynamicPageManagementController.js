@@ -1,5 +1,6 @@
 ﻿'use strict'
 dynamicPageManagementController.$inject = ['$scope', 'VR_ViewService'];
+
 function dynamicPageManagementController($scope, VR_ViewService) {
     var mainGridAPI;
     defineScope();
@@ -15,19 +16,18 @@ function dynamicPageManagementController($scope, VR_ViewService) {
             api.loadGrid(filter);
         };
 
-
         $scope.Add = addDynamicPage
 
         $scope.searchClicked = function () {
             if (mainGridAPI != undefined)
                 return mainGridAPI.loadGrid(getFilterObject());
-       };
+        };
     }
 
     function getFilterObject() {
         return $scope.filterValue;
     }
-  
+
     function addDynamicPage() {
         var onDynamicPageAdded = function (dynamicPageObj) {
             if (mainGridAPI != undefined)
@@ -37,10 +37,8 @@ function dynamicPageManagementController($scope, VR_ViewService) {
     }
 
     function load() {
-     
+
     }
-
-
 
 };
 

@@ -86,7 +86,7 @@ function (VRNotificationService, VR_Sec_ViewAPIService, VR_ViewService, UsersAPI
                 {
                     name: "Delete",
                     permissions: "Root/Administration Module/Dynamic Pages:Delete",
-                    clicked:deleteDynamicPage
+                    clicked: deleteDynamicPage
                 },
                 {
                     name: "Validate",
@@ -107,7 +107,7 @@ function (VRNotificationService, VR_Sec_ViewAPIService, VR_ViewService, UsersAPI
         }
 
         function fillNeededData(itm) {
-            if ( itm.Entity.ViewContent.DefaultPeriod != null)
+            if (itm.Entity.ViewContent.DefaultPeriod != null)
                 itm.Entity.ViewContent.DefaultPeriodDescription = UtilsService.getItemByVal(ctrl.periods, itm.Entity.ViewContent.DefaultPeriod, 'value')
                 .description;
             if (itm.Entity.ViewContent.DefaultGrouping != null)

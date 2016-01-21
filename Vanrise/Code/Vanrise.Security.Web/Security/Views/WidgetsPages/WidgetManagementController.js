@@ -1,5 +1,6 @@
 ﻿'use strict'
 widgetManagementController.$inject = ['$scope', 'UtilsService', 'WidgetDefinitionAPIService', 'VRNotificationService', 'VR_WidgetService'];
+
 function widgetManagementController($scope, UtilsService, WidgetDefinitionAPIService, VRNotificationService, VR_WidgetService) {
     var mainGridAPI;
     defineScope();
@@ -25,13 +26,13 @@ function widgetManagementController($scope, UtilsService, WidgetDefinitionAPISer
 
     function getFilterObject() {
 
-            var query = {
-                WidgetName: $scope.widgetName,
-                WidgetTypes: UtilsService.getPropValuesFromArray($scope.selectedWidgetsTypes, "ID")
-            }
-            return query;
+        var query = {
+            WidgetName: $scope.widgetName,
+            WidgetTypes: UtilsService.getPropValuesFromArray($scope.selectedWidgetsTypes, "ID")
+        }
+        return query;
     }
-   
+
     function addNewWidget() {
         var onWidgetAdded = function (widgetObj) {
             if (mainGridAPI != undefined)
@@ -48,24 +49,25 @@ function widgetManagementController($scope, UtilsService, WidgetDefinitionAPISer
     function loadAllControls() {
 
         return loadWidgets()
-           .catch(function (error) {
-               VRNotificationService.notifyExceptionWithClose(error, $scope);
-               $scope.isLoading = false;
-           })
-          .finally(function () {
-              $scope.isLoading = false;
-          });
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.isLoading = false;
+            })
+            .finally(function () {
+                $scope.isLoading = false;
+            });
     }
 
     function loadWidgets() {
-        return WidgetDefinitionAPIService.GetWidgetsDefinition().then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.widgetsTypes.push(itm);
+        return WidgetDefinitionAPIService.GetWidgetsDefinition()
+            .then(function (response) {
+                angular.forEach(response, function (itm) {
+                    $scope.widgetsTypes.push(itm);
+                });
             });
-        });
 
     }
-    
+
 };
 
 appControllers.controller('VR_Sec_WidgetManagementController', widgetManagementController);

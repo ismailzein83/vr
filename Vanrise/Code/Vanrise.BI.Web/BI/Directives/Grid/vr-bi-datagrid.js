@@ -139,12 +139,11 @@ app.directive('vrBiDatagrid', ['UtilsService', 'BIAPIService', 'BIUtilitiesServi
             entity.length = 0;
             return BIConfigurationAPIService.GetEntities()
                 .then(function (response) {
-                    if (ctrl.settings.EntityType != undefined)
-                    {
+                    if (ctrl.settings.EntityType != undefined) {
                         for (var i = 0; i < ctrl.settings.EntityType.length; i++)
                             entity.push(UtilsService.getItemByVal(response, ctrl.settings.EntityType[i], 'Name'));
                     }
-                   
+
                 });
 
         }

@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrBiSummaryTemplate', ['UtilsService', '$compile', 'VRNotificationService', 'VRUIUtilsService','BIConfigurationAPIService',
+app.directive('vrBiSummaryTemplate', ['UtilsService', '$compile', 'VRNotificationService', 'VRUIUtilsService', 'BIConfigurationAPIService',
 function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, BIConfigurationAPIService) {
 
     var directiveDefinitionObject = {
@@ -21,7 +21,6 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, BICon
         templateUrl: "/Client/Modules/BI/Directives/Summary/Templates/BISummaryTemplate.html"
 
     };
-
 
     function biChart(ctrl, $scope, $attrs) {
 
@@ -52,23 +51,24 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, BICon
 
             api.load = function (payload) {
 
-                return BIConfigurationAPIService.GetMeasures().then(function (response) {
-                    ctrl.Measures.length = 0;
-                    angular.forEach(response, function (itm) {
-                        ctrl.Measures.push(itm);
-                    });
+                return BIConfigurationAPIService.GetMeasures()
+                    .then(function (response) {
+                        ctrl.Measures.length = 0;
+                        angular.forEach(response, function (itm) {
+                            ctrl.Measures.push(itm);
+                        });
 
-                    if (payload != undefined) {
-                        for (var i = 0; i < payload.MeasureTypes.length; i++) {
+                        if (payload != undefined) {
+                            for (var i = 0; i < payload.MeasureTypes.length; i++) {
 
-                            for (var j = 0; j < ctrl.Measures.length; j++) {
+                                for (var j = 0; j < ctrl.Measures.length; j++) {
 
-                                if (payload.MeasureTypes[i] == ctrl.Measures[j].Name)
-                                    ctrl.selectedMeasureTypes.push(ctrl.Measures[j]);
+                                    if (payload.MeasureTypes[i] == ctrl.Measures[j].Name)
+                                        ctrl.selectedMeasureTypes.push(ctrl.Measures[j]);
+                                }
                             }
                         }
-                    }
-                });
+                    });
             }
 
             if (ctrl.onReady != null)

@@ -9,7 +9,7 @@ function dynamicPagePreviewController($scope, VRUIUtilsService, VRNavigationServ
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
-        if (parameters!=null && parameters.viewId != undefined) {
+        if (parameters != null && parameters.viewId != undefined) {
             viewId = parameters.viewId;
         }
     }
@@ -17,14 +17,18 @@ function dynamicPagePreviewController($scope, VRUIUtilsService, VRNavigationServ
     function defineScope() {
         $scope.onPreviewAPIReady = function (api) {
             previewDirectiveAPI = api;
-       
-                var payload = { viewId: viewId };
-                var setLoader = function (value) { $scope.isLoadingPreviewDirective = value; };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, previewDirectiveAPI, payload, setLoader);
+
+            var payload = {
+                viewId: viewId
+            };
+            var setLoader = function (value) {
+                $scope.isLoadingPreviewDirective = value;
+            };
+            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, previewDirectiveAPI, payload, setLoader);
 
         }
     }
-    
+
     function load() {
 
     }

@@ -1,6 +1,6 @@
-﻿<div vr-modalcontent ng-controller="Security_DynamicPageEditorController" width="'80%'">
+﻿<div vr-modalcontent ng-controller="VR_Sec_DynamicPageEditorController" width="'80%'">
     <vr-modalbody vr-loader="scopeModal.isLoading" maxheight="'700px'">
-        <vr-form >
+        <vr-form>
             <vr-tabs>
                 <vr-validation-group validationcontext="formDynamicPagesEditor">
                     <vr-tab header="'Setting'">
@@ -34,7 +34,7 @@
                                                      selecteditem="scopeModal.selectedMenuNode"
                                                      wholerow>
                                         </vr-treeview>
-                                        </vr-validator>
+                                    </vr-validator>
                                 </vr-section>
                             </vr-columns>
                             <vr-columns width="1/3row">
@@ -115,13 +115,13 @@
                                         </vr-columns>
                                     </div>
                                 </vr-row>
-                              </vr-validator>
-</div>
+                            </vr-validator>
+                        </div>
                     </vr-tab>
                 </vr-validation-group>
-                    <vr-tab header="'Preview'" tabobject="scopeModal.tabObject">
-                        <vr-sec-dynamicpageviewer on-ready="scopeModal.onPreviewAPIReady" ng-if="scopeModal.tabObject.isSelected && (scopeModal.addedSummaryWidgets.length>0 ||scopeModal.addedBodyWidgets.length>0)"></vr-sec-dynamicpageviewer>
-                    </vr-tab>
+                <vr-tab header="'Preview'" tabobject="scopeModal.tabObject">
+                    <vr-sec-dynamicpageviewer on-ready="scopeModal.onPreviewAPIReady" ng-if="scopeModal.tabObject.isSelected && (scopeModal.addedSummaryWidgets.length>0 ||scopeModal.addedBodyWidgets.length>0)"></vr-sec-dynamicpageviewer>
+                </vr-tab>
             </vr-tabs>
 
         </vr-form>
