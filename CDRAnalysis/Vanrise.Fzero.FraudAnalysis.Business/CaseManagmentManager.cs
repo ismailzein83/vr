@@ -60,20 +60,30 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         {
             Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary>();
 
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
+            ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
 
-            CaseManagmentManager manager = new CaseManagmentManager();
-            bool updated = manager.UpdateAccountCase(input.AccountNumber, input.CaseStatus, input.ValidTill, input.Reason);
+            int userID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            int caseID;
 
-            if (updated)
+            AccountCase accountCase = dataManager.GetLastAccountCaseByAccountNumber(input.AccountNumber);
+
+            if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
+                dataManager.InsertAccountCase(out caseID, input.AccountNumber, userID, input.CaseStatus, input.ValidTill, input.Reason);
+            else
             {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-
-                ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-
-                updateOperationOutput.UpdatedObject = dataManager.GetAccountSuspicionSummaryByCaseId(input.CaseId, input.FromDate, input.ToDate);
+                caseID = accountCase.CaseID;
+                dataManager.UpdateAccountCase(caseID, userID, input.CaseStatus, input.ValidTill, input.Reason);
             }
+
+            dataManager.InsertAccountCaseHistory(caseID, userID, input.CaseStatus, input.Reason);
+
+            dataManager.InsertOrUpdateAccountStatus(input.AccountNumber, input.CaseStatus, input.ValidTill);
+
+            dataManager.LinkDetailToCase(input.AccountNumber, caseID, input.CaseStatus);
+            
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+
+            updateOperationOutput.UpdatedObject = dataManager.GetAccountSuspicionSummaryByCaseId(input.CaseId, input.FromDate, input.ToDate);
 
             return updateOperationOutput;
         }
@@ -117,32 +127,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
             return updateOperationOutput;
-        }
-
-        public bool UpdateAccountCase(string accountNumber, CaseStatus caseStatus, DateTime? validTill, string reason)
-        {
-            ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-
-            int userID = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            int caseID;
-
-            AccountCase accountCase = dataManager.GetLastAccountCaseByAccountNumber(accountNumber);
-
-            if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
-                dataManager.InsertAccountCase(out caseID, accountNumber, userID, caseStatus, validTill, reason);
-            else
-            {
-                caseID = accountCase.CaseID;
-                dataManager.UpdateAccountCase(accountCase.CaseID, userID, caseStatus, validTill, reason);
-            }
-
-            dataManager.InsertAccountCaseHistory(caseID, userID, caseStatus, reason);
-
-            dataManager.InsertOrUpdateAccountStatus(accountNumber, caseStatus, validTill);
-
-            dataManager.LinkDetailToCase(accountNumber, caseID, caseStatus);
-
-            return true;
         }
 
         public bool AssignAccountCase(string accountNumber, HashSet<string> imeis)

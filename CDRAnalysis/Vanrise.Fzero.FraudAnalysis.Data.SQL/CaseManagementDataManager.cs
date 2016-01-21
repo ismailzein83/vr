@@ -58,7 +58,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                          AS LastOccurance, ac.AccountNumber, ac.Status, ac.ID AS CaseID
                 INTO #TEMP_TABLE_NAME#                
                 FROM            FraudAnalysis.StrategyExecution AS se INNER JOIN
-                                         FraudAnalysis.StrategyExecutionDetails AS sed ON se.ID = sed.StrategyExecutionID INNER JOIN
+                                         FraudAnalysis.StrategyExecutionDetails AS sed ON se.ID = sed.StrategyExecutionID RIGHT OUTER JOIN
                                          FraudAnalysis.AccountCase ac ON sed.CaseID = ac.ID
                 #WHERE_CLAUSE#                
                 GROUP BY ac.AccountNumber, ac.Status, ac.ID

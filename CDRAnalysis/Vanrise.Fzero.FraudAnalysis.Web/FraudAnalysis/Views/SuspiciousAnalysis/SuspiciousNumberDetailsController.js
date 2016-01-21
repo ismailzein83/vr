@@ -216,9 +216,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         $scope.updateAccountCase = function () {
 
             return CaseManagementAPIService.UpdateAccountCase({
-                accountNumber: $scope.accountNumber,
-                caseStatus: $scope.selectedCaseStatus.value,
-                validTill: $scope.validTill,
+                AccountNumber: $scope.accountNumber,
+                CaseStatus: $scope.selectedCaseStatus.value,
+                ValidTill: $scope.validTill,
                 FromDate: $scope.fromDate,
                 ToDate: $scope.toDate,
                 Reason: $scope.updateReason
