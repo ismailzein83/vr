@@ -26,13 +26,15 @@
 
                             <vr-columns width="1/3row">
                                 <vr-section title="Menu Location">
-                                    <vr-treeview datatextfield="Name"
-                                                 datavaluefield="Id"
-                                                 datachildrenfield="Childs"
-                                                 on-ready="scopeModal.menuReady"
-                                                 selecteditem="scopeModal.selectedMenuNode"
-                                                 wholerow>
-                                    </vr-treeview>
+                                    <vr-validator validate="scopeModal.validateMenu()">
+                                        <vr-treeview datatextfield="Name"
+                                                     datavaluefield="Id"
+                                                     datachildrenfield="Childs"
+                                                     on-ready="scopeModal.menuReady"
+                                                     selecteditem="scopeModal.selectedMenuNode"
+                                                     wholerow>
+                                        </vr-treeview>
+                                        </vr-validator>
                                 </vr-section>
                             </vr-columns>
                             <vr-columns width="1/3row">
@@ -41,9 +43,7 @@
                                         <vr-sec-user-selector on-ready="scopeModal.onUserDirectiveReady" selectedvalues="scopeModal.selectedUsers" ismultipleselection></vr-sec-user-selector>
                                     </vr-row>
                                     <vr-row width="fullrow">
-                                        <vr-select ismultipleselection label="Groups" datasource="scopeModal.groups" selectedvalues="scopeModal.selectedGroups" datatextfield="Name" datavaluefield="GroupId"
-                                                   entityname="Groups">
-                                        </vr-select>
+                                        <vr-sec-group-selector on-ready="scopeModal.onGroupDirectiveReady" selectedvalues="scopeModal.selectedGroups" ismultipleselection></vr-sec-group-selector>
                                     </vr-row>
                                 </vr-section>
                             </vr-columns>
@@ -55,8 +55,8 @@
                         <vr-form name="formDesigningSelectionModel">
                             <vr-row removeline>
                                 <vr-columns width="normal">
-                                    <vr-select label="Section" datatextfield="description" datavaluefield="value" label="Section" onselectionchanged="scopeModal.onSectionChanged"
-                                               datasource="scopeModal.sections" selectedvalues="scopeModal.selectedSection" isrequired></vr-select>
+                                    <vr-select label="Section" datatextfield="description" datavaluefield="value" onselectionchanged="scopeModal.onSectionChanged"
+                                               datasource="scopeModal.sections" selectedvalues="scopeModal.selectedSection" isrequired hideremoveicon></vr-select>
                                 </vr-columns>
                                 <vr-columns width="normal">
                                     <vr-select label="Widget" datatextfield="Name" datavaluefield="ID"
@@ -66,7 +66,7 @@
                                     <vr-textbox value="scopeModal.sectionTitle" label="Section Title"></vr-textbox>
                                 </vr-columns>
                                 <vr-columns width="normal">
-                                    <vr-select datasource="scopeModal.columnWidth" datatextfield="description" datavaluefield="value" label="Row Space" selectedvalues="scopeModal.selectedColumnWidth" isrequired hidefilterbox></vr-select>
+                                    <vr-select datasource="scopeModal.columnWidth" datatextfield="description" datavaluefield="value" hideremoveicon label="Row Space" selectedvalues="scopeModal.selectedColumnWidth" isrequired hidefilterbox></vr-select>
                                 </vr-columns>
                                 <vr-columns width="normal" ng-if="scopeModal.nonSearchable">
                                     <vr-period-selector on-ready="scopeModal.onPeriodDirectiveReady" label="Default Period" selectedvalues="scopeModal.selectedPeriod" onselectionchanged="scopeModal.periodSelectionChanged"></vr-period-selector>
@@ -88,36 +88,35 @@
                             </vr-row>
                         </vr-form>
                         <div>
-                            <vr-row ng-if="scopeModal.addedSummaryWidgets.length>0">
-                                <vr-section title="Summary">
+                            <vr-validator validate="scopeModal.validateWidget()">
+                                <vr-row ng-if="scopeModal.addedSummaryWidgets.length>0">
+                                    <vr-section title="Summary">
+                                        <div class="list-group dragbelzone" ng-sortable="itemsSortable">
+                                            <vr-columns ng-repeat="addedSummaryWidget in scopeModal.addedSummaryWidgets" colnum="{{addedSummaryWidget.NumberOfColumns.numberOfColumns}}">
+                                                <vr-validator validate="scopeModal.validateWidgetError(addedSummaryWidget)">
+                                                    <i class="glyphicon glyphicon-th-list handeldrag"></i>
+                                                    <i class="glyphicon glyphicon-remove hand-cursor" ng-click="scopeModal.removeViewContent(addedSummaryWidget)"></i>
+                                                    <vr-directivewrapper directive="addedSummaryWidget.Widget.Setting.Directive" on-ready="addedSummaryWidget.Widget.onElementReady"
+                                                                         previewmode vr-loader="scopeModal.isLoadingSummaryDirective"></vr-directivewrapper>
+                                                </vr-validator>
+                                            </vr-columns>
+                                        </div>
+                                    </vr-section>
+                                </vr-row>
+                                <vr-row ng-if="scopeModal.addedBodyWidgets.length>0">
                                     <div class="list-group dragbelzone" ng-sortable="itemsSortable">
-                                        <vr-columns ng-repeat="addedSummaryWidget in scopeModal.addedSummaryWidgets" colnum="{{addedSummaryWidget.NumberOfColumns.numberOfColumns}}">
-                                            <div ng-class="scopeModal.validateWidgetError(addedSummaryWidget)">
+                                        <vr-columns ng-repeat="addedBodyWidget in scopeModal.addedBodyWidgets" colnum="{{addedBodyWidget.NumberOfColumns.numberOfColumns}}">
+                                            <vr-validator validate="scopeModal.validateWidgetError(addedBodyWidget)">
                                                 <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                                                <i class="glyphicon glyphicon-remove hand-cursor" ng-click="scopeModal.removeViewContent(addedSummaryWidget)"></i>
-                                                <vr-directivewrapper directive="addedSummaryWidget.Widget.Setting.Directive" on-ready="addedSummaryWidget.Widget.onElementReady"
-                                                                     previewmode vr-loader="scopeModal.isLoadingSummaryDirective"></vr-directivewrapper>
-                                            </div>
+                                                <i class="glyphicon glyphicon-remove hand-cursor" ng-click="scopeModal.removeViewContent(addedBodyWidget)"></i>
+                                                <vr-directivewrapper directive="addedBodyWidget.Widget.Setting.Directive" on-ready="addedBodyWidget.Widget.onElementReady"
+                                                                     previewmode vr-loader="scopeModal.isloadingbodydirective"></vr-directivewrapper>
+                                            </vr-validator>
                                         </vr-columns>
                                     </div>
-                                </vr-section>
-                            </vr-row>
-                            <vr-row ng-if="scopeModal.addedBodyWidgets.length>0">
-                                <div class="list-group dragbelzone" ng-sortable="itemsSortable">
-                                    <vr-columns ng-repeat="addedBodyWidget in scopeModal.addedBodyWidgets" colnum="{{addedBodyWidget.NumberOfColumns.numberOfColumns}}">
-                                        <div ng-class="validateWidgetError(addedBodyWidget)" style="border-radius: 4px; height: auto; padding: 0px; ">
-
-
-
-                                            <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                                            <i class="glyphicon glyphicon-remove hand-cursor" ng-click="scopeModal.removeViewContent(addedBodyWidget)"></i>
-                                            <vr-directivewrapper directive="addedBodyWidget.Widget.Setting.Directive" on-ready="addedBodyWidget.Widget.onElementReady"
-                                                                 previewmode vr-loader="scopeModal.isloadingbodydirective"></vr-directivewrapper>
-                                        </div>
-                                    </vr-columns>
-                                </div>
-                            </vr-row>
-                        </div>
+                                </vr-row>
+                              </vr-validator>
+</div>
                     </vr-tab>
                 </vr-validation-group>
                     <vr-tab header="'Preview'" tabobject="scopeModal.tabObject">

@@ -38,7 +38,7 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
 
     };
     function getBIChartTemplate(previewmode) {
-        if (previewmode != 'true') {
+        if (previewmode == undefined) {
             return '<vr-section title="{{ctrl.title}}"><div ng-if="ctrl.isAllowed==false"  ng-class="\'{{ctrl.class}}\'"  >  ' +
                '<div style="padding-top:115px;" > <div class="alert alert-danger ng-scope" role="alert" style=""> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission, Please Contact Your Administrator..!!</div> </div>' +
                 '</div><div ng-if="!ctrl.isAllowed && ctrl.chart"> <img src="/Client/Images/chartpermission.jpg" width="100%"/></div><div ng-if="ctrl.isAllowed" vr-loader="ctrl.isGettingData"><vr-chart on-ready="ctrl.onChartReady" menuactions="ctrl.chartMenuActions"></vr-chart></div></vr-section>';
@@ -65,6 +65,7 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
 
             api.load=function (payload)
             {
+
                 if (payload != undefined) {
                     ctrl.title = payload.title;
                     ctrl.settings = payload.settings;
@@ -75,16 +76,17 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
                         EntityType: entity,
                         MeasureTypes: measures
                     }
+                  
                     if (payload != undefined && !payload.previewMode) {
+
                         if (!BIUtilitiesService.checkPermissions(measures)) {
                             ctrl.isAllowed = false;
                             return;
                         }
-
-
                         ctrl.isAllowed = true;
                         ctrl.onChartReady = function (api) {
                             chartAPI = api;
+                        
                             //chartAPI.onDataItemClicked = function (item) {
                             //    BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
                             //};
@@ -92,6 +94,8 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
                             //    retrieveData();
                             return retrieveData(ctrl.filter);
                         };
+                        if(chartAPI !=undefined)
+                            return retrieveData(ctrl.filter);
                     }
                     getClassType();
                 });
@@ -109,6 +113,7 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
         }
 
         function retrieveData(filter) {
+           
             if (!ctrl.isAllowed)
                 return;
             ctrl.isGettingData = true;
@@ -122,6 +127,7 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
                         refreshChart(response);
                     }
                 }).finally(function () {
+                   
                     ctrl.isGettingData = false;
                 });
 
@@ -166,6 +172,7 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
         }
 
         function loadMeasures() {
+            measures.length = 0;
             return BIConfigurationAPIService.GetMeasures().then(function (response) {
                 for (var i = 0; i < ctrl.settings.MeasureTypes.length; i++) {
                     var value = UtilsService.getItemByVal(response, ctrl.settings.MeasureTypes[i], 'Name');
@@ -176,6 +183,7 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
         }
 
         function loadEntities() {
+            entity.length = 0;
             return BIConfigurationAPIService.GetEntities().then(function (response) {
                 for (var i = 0; i < ctrl.settings.EntityType.length; i++)
                     entity.push(UtilsService.getItemByVal(response, ctrl.settings.EntityType[i], 'Name'));

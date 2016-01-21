@@ -12,6 +12,10 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
     var userDirectiveAPI;
     var userReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+    var groupDirectiveAPI;
+    var groupReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
     var timeDimentionDirectiveAPI;
     var timeDimentionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -62,27 +66,24 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
             userReadyPromiseDeferred.resolve();
         }
 
+        $scope.scopeModal.onGroupDirectiveReady = function (api) {
+            groupDirectiveAPI = api;
+            groupReadyPromiseDeferred.resolve();
+        }
+
         $scope.scopeModal.tabObject;
 
         $scope.scopeModal.widgets = [];
 
         $scope.scopeModal.selectedWidget;
 
-        $scope.scopeModal.users = [];
-
         $scope.scopeModal.menuList = [];
-
-        $scope.scopeModal.selectedUsers = [];
-
-        $scope.scopeModal.groups = [];
 
         $scope.scopeModal.pageName;
 
         $scope.scopeModal.sectionTitle;
 
         $scope.scopeModal.selectedMenuNode;
-
-        $scope.scopeModal.selectedGroups = [];
 
         $scope.scopeModal.moduleId;
 
@@ -114,12 +115,6 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         }
 
         $scope.scopeModal.nonSearchable = false;
-
-        $scope.scopeModal.nonSearchableSelectionChanged = function () {
-            $scope.scopeModal.nonSearchable = true;
-            
-           
-        }
 
         $scope.scopeModal.addedBodyWidgets = [];
 
@@ -154,15 +149,8 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         }
 
         $scope.scopeModal.save = function () {
-            if (!checkWidgetValidator()) {
-                return; 
-            }
-            if ($scope.scopeModal.selectedMenuNode == undefined)
-                return VRNotificationService.showWarning("You Should Select Menu Location Before Saving!!");
             buildContentsFromScope();
             buildViewObjFromScope(); 
-            if ($scope.scopeModal.summaryContents.length == 0 && $scope.scopeModal.bodyContents.length == 0)
-                return VRNotificationService.showWarning("You Should Add Widgets Before Saving!!");
           
             if (isEditMode)
                 return updateView(); 
@@ -170,6 +158,20 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
                 return addView();
               
         };
+
+        $scope.scopeModal.validateMenu = function ()
+        {
+            if ($scope.scopeModal.selectedMenuNode == undefined)
+                return "You Should Select Menu Location.";
+            return null;
+        }
+
+        $scope.scopeModal.validateWidget = function ()
+        {
+            if ($scope.scopeModal.addedSummaryWidgets.length == 0 && $scope.scopeModal.addedBodyWidgets.length == 0)
+                return "You should add at least one Widget.";
+            return null;
+        }
 
         $scope.scopeModal.close = function () {
             $scope.modalContext.closeModal()
@@ -251,16 +253,9 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Validate Dynamic Page: " + $scope.scopeModal.pageName;
         };
-            
-        //var selectedUsersIDs = [];
-        //for (var i = 0; i < $scope.scopeModal.selectedUsers.length; i++)
-        //    selectedUsersIDs.push($scope.scopeModal.selectedUsers[i].UserId);
-        var selectedGroupsIDs = [];
-        for (var i = 0; i < $scope.scopeModal.selectedGroups.length; i++)
-            selectedGroupsIDs.push($scope.scopeModal.selectedGroups[i].GroupId);
         var Audiences = {
-            Users: userDirectiveAPI.getSelectedIds(),// selectedUsersIDs,
-            Groups: selectedGroupsIDs
+            Users: userDirectiveAPI.getSelectedIds(),
+            Groups: groupDirectiveAPI.getSelectedIds(),
         };
         buildContentsFromScope();
         var ViewContent = {
@@ -279,34 +274,11 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         if ($scope.scopeModal.nonSearchable) {
             if (addedWidget.DefaultGrouping == undefined || addedWidget.DefaultPeriod == undefined) {
                   
-                return "ng-valid ng-valid-requiredvalue required-inpute";
+                return "The Widget should have default period and default grouping.";
                 }
 
-            }
-    }
-
-    function checkWidgetValidator() {
-        if ($scope.scopeModal.nonSearchable) {
-            for (var i = 0; i < $scope.scopeModal.addedBodyWidgets.length; i++) {
-                var widget = $scope.scopeModal.addedBodyWidgets[i];
-                if (widget.DefaultGrouping == undefined || widget.DefaultPeriod == undefined) {
-                    VRNotificationService.showWarning("You should select period and grouping for all body widgets.");
-                    $scope.scopeModal.addedBodyWidgets[i].isValid = false;
-                    return false;
-                }
-
-            }
-            for (var i = 0; i < $scope.scopeModal.addedSummaryWidgets.length; i++) {
-                var widget = $scope.scopeModal.addedSummaryWidgets[i];
-                if (widget.DefaultGrouping == undefined || widget.DefaultPeriod == undefined) {
-                    VRNotificationService.showWarning("You should select period and grouping for all summary widgets.");
-                    $scope.scopeModal.addedSummaryWidgets[i].isValid = false;
-                    return false;
-                }
-
-            }   
         }
-        return true;
+        return null;
     }
 
     function defineTimeDimensionTypes() {
@@ -377,15 +349,9 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
 
     function buildViewObjFromScope() {
         
-        var selectedUsersIDs = [];
-        for (var i = 0; i < $scope.scopeModal.selectedUsers.length; i++)
-            selectedUsersIDs.push($scope.scopeModal.selectedUsers[i].UserId);
-        var selectedGroupsIDs = [];
-        for (var i = 0; i < $scope.scopeModal.selectedGroups.length; i++)
-            selectedGroupsIDs.push($scope.scopeModal.selectedGroups[i].GroupId);
         var Audiences = {
-            Users: selectedUsersIDs,
-            Groups: selectedGroupsIDs
+            Users: userDirectiveAPI.getSelectedIds(),
+            Groups: groupDirectiveAPI.getSelectedIds(),
         };
        
         var ViewContent = {
@@ -479,13 +445,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
         if (viewEntity != undefined)
         {
             $scope.scopeModal.pageName = viewEntity.Name;
-            if (viewEntity.Audience !=null && (viewEntity.Audience.Users != undefined || viewEntity.Audience.Groups != undefined)) {
-                for (var i = 0; i < viewEntity.Audience.Groups.length; i++) {
-                    var value = UtilsService.getItemByVal($scope.scopeModal.groups, viewEntity.Audience.Groups[i], 'GroupId');
-                    if (value != null)
-                        $scope.scopeModal.selectedGroups.push(value);
-                }
-            }
+
             for (var i = 0; i < viewEntity.ViewContent.BodyContents.length; i++) {
                 var bodyContent = viewEntity.ViewContent.BodyContents[i];
                 var bodyValue = UtilsService.getItemByVal($scope.scopeModal.bodyWidgets, bodyContent.WidgetId, 'Id');
@@ -654,11 +614,13 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
     }
 
     function loadGroups() {
-        GroupAPIService.GetGroups().then(function (response) {
-            angular.forEach(response, function (group) {
-                $scope.scopeModal.groups.push(group);
-                }
-)});
+        var groupLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        groupReadyPromiseDeferred.promise.then(function () {
+            var directivePayload = { selectedIds: (viewEntity != undefined && viewEntity.Audience != null && viewEntity.Audience.Groups != undefined) ? viewEntity.Audience.Groups : undefined };
+            VRUIUtilsService.callDirectiveLoad(groupDirectiveAPI, directivePayload, groupLoadPromiseDeferred);
+        });
+        return groupLoadPromiseDeferred.promise;
     }
 
 
