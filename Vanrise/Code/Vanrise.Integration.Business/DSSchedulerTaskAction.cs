@@ -15,6 +15,13 @@ namespace Vanrise.Integration.Business
 {
     public class DSSchedulerTaskAction : SchedulerTaskAction
     {
+        public override bool IsHeavyTask
+        {
+            get
+            {
+                return true;
+            }
+        }
         DataSourceLogger _logger = new DataSourceLogger();
 
         public override SchedulerTaskExecuteOutput Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
