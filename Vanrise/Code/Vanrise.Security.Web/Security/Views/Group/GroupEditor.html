@@ -1,5 +1,5 @@
-﻿<div vr-modalcontent ng-controller="Security_GroupEditorController" vr-loader="isGettingData">
-    <vr-modalbody width="'50%'">
+﻿<div vr-modalcontent ng-controller="VR_Sec_GroupEditorController" vr-loader="isLoading">
+    <vr-modalbody>
         <vr-form name="formGroupEditor">
             <vr-row>
                 <vr-textbox value="name" label="Name" isrequired></vr-textbox>
@@ -8,11 +8,7 @@
                 <vr-textarea label="Description" value="description" />
             </vr-row>
             <vr-row>
-                <vr-label>Group Members</vr-label>
-                <vr-select ismultipleselection datasource="optionsUsers.datasource" selectedvalues="optionsUsers.selectedvalues" datatextfield="Name" datavaluefield="UserId" entityname="Users">
-                </vr-select>
-
-                <!--<vr-sec-user-selector ismultipleselection></vr-sec-user-selector>-->
+                <vr-sec-user-selector ismultipleselection on-ready="onUserSelectorReady" customlabel="Group Members"></vr-sec-user-selector>
             </vr-row>
         </vr-form>
     </vr-modalbody>

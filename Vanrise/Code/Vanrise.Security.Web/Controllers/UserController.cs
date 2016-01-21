@@ -31,10 +31,10 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetUsers")]
-        public IEnumerable<UserInfo> GetUsers()
+        [Route("GetUsersInfo")]
+        public IEnumerable<UserInfo> GetUsersInfo()
         {
-            return _manager.GetUsers();
+            return _manager.GetUsersInfo();
         }
 
         [HttpGet]

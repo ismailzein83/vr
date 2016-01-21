@@ -1,5 +1,5 @@
-﻿app.service('VR_Sec_UserService', ['VRModalService', 'VRNotificationService', 'UtilsService',
-    function (VRModalService, VRNotificationService, UtilsService) {
+﻿app.service('VR_Sec_UserService', ['VRModalService',
+    function (VRModalService) {
 
         function addUser(onUserAdded) {
 
@@ -36,26 +36,10 @@
             VRModalService.showModal('/Client/Modules/Security/Views/User/ResetPasswordEditor.html', parameters, modalSettings);
         }
 
-        function assignPermissions(userId) {
-            var modalSettings = {
-            };
-            var parameters = {
-                holderType: 0,
-                holderId: userId,
-                notificationResponseText: "User Permissions"
-            };
-
-            modalSettings.onScopeReady = function (modalScope) {
-                
-            };
-            VRModalService.showModal('/Client/Modules/Security/Views/User/PermissionEditor.html', parameters, modalSettings);
-        }
-
         return ({
             addUser: addUser,
             editUser: editUser,
-            resetPassword: resetPassword,
-            assignPermissions: assignPermissions
+            resetPassword: resetPassword
         });
 
  }]);

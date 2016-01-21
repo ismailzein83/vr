@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrSecUserGrid", ["VRNotificationService", "VR_Sec_UserAPIService", "VR_Sec_UserService",
-function (VRNotificationService, VR_Sec_UserAPIService, VR_Sec_UserService) {
+app.directive("vrSecUserGrid", ["VRNotificationService", "VR_Sec_UserAPIService", "VR_Sec_UserService", "VR_Sec_PermissionService", "HolderTypeEnum",
+function (VRNotificationService, VR_Sec_UserAPIService, VR_Sec_UserService, VR_Sec_PermissionService, HolderTypeEnum) {
 
     var directiveDefinitionObject = {
 
@@ -98,7 +98,7 @@ function (VRNotificationService, VR_Sec_UserAPIService, VR_Sec_UserService) {
         }
 
         function assignPermissions(userObj) {
-            VR_Sec_UserService.assignPermissions(userObj.Entity.UserId);
+            VR_Sec_PermissionService.assignPermissions(HolderTypeEnum.User.value, userObj.Entity.UserId);
         }
     }
 

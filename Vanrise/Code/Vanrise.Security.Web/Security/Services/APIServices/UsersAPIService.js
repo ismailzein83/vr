@@ -10,7 +10,7 @@
         }
 
         function GetUsers() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Users", "GetUsers"));
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Users", "GetUsersInfo"));
 
         }
 

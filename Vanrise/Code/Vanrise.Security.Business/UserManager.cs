@@ -27,8 +27,13 @@ namespace Vanrise.Security.Business
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, UserDetailMapper));
         }
 
+        public IEnumerable<User> GetUsers()
+        {
+            var users = GetCachedUsers();
+            return users.Values;
+        }
 
-        public IEnumerable<UserInfo> GetUsers()
+        public IEnumerable<UserInfo> GetUsersInfo()
         {
             var users = GetCachedUsers();
             return users.MapRecords(UserInfoMapper);

@@ -8,9 +8,11 @@ using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Web.Controllers
 {
+    [RoutePrefix(Constants.ROUTE_PREFIX + "Groups")]
     public class GroupController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
+        [Route("GetFilteredGroups")]
         public object GetFilteredGroups(Vanrise.Entities.DataRetrievalInput<GroupQuery> input)
         {
             GroupManager manager = new GroupManager();
@@ -18,6 +20,7 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetGroup")]
         public Group GetGroup(int groupId)
         {
             GroupManager manager = new GroupManager();
@@ -25,6 +28,7 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetGroups")]
         public IEnumerable<GroupInfo> GetGroups()
         {
             GroupManager manager = new GroupManager();
@@ -32,6 +36,7 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpPost]
+        [Route("AddGroup")]
         public Vanrise.Entities.InsertOperationOutput<GroupDetail> AddGroup(GroupEditorInput groupObj)
         {
             GroupManager manager = new GroupManager();
@@ -45,6 +50,7 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpPost]
+        [Route("UpdateGroup")]
         public Vanrise.Entities.UpdateOperationOutput<GroupDetail> UpdateGroup(GroupEditorInput groupObj)
         {
             GroupManager manager = new GroupManager();

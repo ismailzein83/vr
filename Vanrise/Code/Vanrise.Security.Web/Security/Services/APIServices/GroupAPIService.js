@@ -1,32 +1,41 @@
-﻿app.service('VR_Sec_GroupAPIService', function (BaseAPIService) {
+﻿(function (appControllers) {
+    "use strict";
 
-    return ({
-        GetFilteredGroups: GetFilteredGroups,
-        GetGroup: GetGroup,
-        GetGroups: GetGroups,
-        AddGroup: AddGroup,
-        UpdateGroup: UpdateGroup
-    });
+    groupAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig'];
 
-    function GetFilteredGroups(input) {
-        return BaseAPIService.post("/api/Group/GetFilteredGroups", input);
-    }
+    function groupAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig) {
 
-    function GetGroup(groupId) {
-        return BaseAPIService.get("/api/Group/GetGroup", {
-            groupId: groupId
+        function GetFilteredGroups(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Groups", "GetFilteredGroups"), input);
+        }
+
+        function GetGroup(groupId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Groups", "GetGroup"), {
+                groupId: groupId
+            });
+        }
+
+        function GetGroups() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Groups", "GetGroups"));
+        }
+
+        function AddGroup(group) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Groups", "AddGroup"), group);
+        }
+
+        function UpdateGroup(group) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Groups", "UpdateGroup"), group);
+        }
+
+        return ({
+            GetFilteredGroups: GetFilteredGroups,
+            GetGroup: GetGroup,
+            GetGroups: GetGroups,
+            AddGroup: AddGroup,
+            UpdateGroup: UpdateGroup
         });
     }
 
-    function GetGroups() {
-        return BaseAPIService.get("/api/Group/GetGroups");
-    }
+    appControllers.service('VR_Sec_GroupAPIService', groupAPIService);
 
-    function AddGroup(group) {
-        return BaseAPIService.post("/api/Group/AddGroup", group);
-    }
-
-    function UpdateGroup(group) {
-        return BaseAPIService.post("/api/Group/UpdateGroup", group);
-    }
-});
+})(appControllers);

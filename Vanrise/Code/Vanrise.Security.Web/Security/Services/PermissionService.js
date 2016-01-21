@@ -8,7 +8,8 @@
         return {
             addPermission: addPermission,
             editPermissions: editPermissions,
-            deletePermission: deletePermission
+            deletePermission: deletePermission,
+            assignPermissions: assignPermissions
         };
 
         function addPermission(entityType, entityId, permissionOptions, permissions, onPermissionAdded) {
@@ -26,7 +27,7 @@
                 modalScope.onPermissionAdded = onPermissionAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Security/Views/Permissions/BusinessEntityEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Security/Views/Permission/BusinessEntityEditor.html', modalParameters, modalSettings);
         }
 
         function editPermissions(holderType, holderId, entityType, entityId, entityName, permissionFlags, permissionOptions, onPermissionsUpdated) {
@@ -46,7 +47,7 @@
                 modalScope.onPermissionsUpdated = onPermissionsUpdated
             };
 
-            VRModalService.showModal('/Client/Modules/Security/Views/Permissions/BusinessEntityEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Security/Views/Permission/BusinessEntityEditor.html', modalParameters, modalSettings);
         }
 
         function deletePermission(scope, dataItem, onPermissionDeleted) {
@@ -59,6 +60,21 @@
                     });
                 }
             });
+        }
+
+        function assignPermissions(holderType, holderId) {
+            var modalSettings = {
+            };
+            var parameters = {
+                holderType: holderType,
+                holderId: holderId,
+                notificationResponseText: "Permissions"
+            };
+
+            modalSettings.onScopeReady = function (modalScope) {
+
+            };
+            VRModalService.showModal('/Client/Modules/Security/Views/Permission/PermissionEditor.html', parameters, modalSettings);
         }
     };
 

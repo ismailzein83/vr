@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrSecUserGrid", ["VRNotificationService", "VR_Sec_GroupAPIService", "VR_Sec_GroupService",
-function (VRNotificationService, VR_Sec_GroupAPIService, VR_Sec_GroupService) {
+app.directive("vrSecGroupGrid", ["VRNotificationService", "VR_Sec_GroupAPIService", "VR_Sec_GroupService", "VR_Sec_PermissionService", "HolderTypeEnum",
+function (VRNotificationService, VR_Sec_GroupAPIService, VR_Sec_GroupService, VR_Sec_PermissionService, HolderTypeEnum) {
 
     var directiveDefinitionObject = {
 
@@ -19,7 +19,7 @@ function (VRNotificationService, VR_Sec_GroupAPIService, VR_Sec_GroupService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/Security/Directives/User/Templates/GroupGrid.html"
+        templateUrl: "/Client/Modules/Security/Directives/Group/Templates/GroupGrid.html"
 
     };
 
@@ -45,7 +45,7 @@ function (VRNotificationService, VR_Sec_GroupAPIService, VR_Sec_GroupService) {
                         return gridAPI.retrieveData(query);
                     }
 
-                    directiveAPI.onUserAdded = function (groupObject) {
+                    directiveAPI.onGroupAdded = function (groupObject) {
                         gridAPI.itemAdded(groupObject);
                     }
 
@@ -85,15 +85,11 @@ function (VRNotificationService, VR_Sec_GroupAPIService, VR_Sec_GroupService) {
                 gridAPI.itemUpdated(groupObj);
             }
 
-            VR_Sec_GroupService.editUser(groupObj.Entity.UserId, onGroupUpdated);
+            VR_Sec_GroupService.editGroup(groupObj.Entity.GroupId, onGroupUpdated);
         }
 
-        function resetPassword(userObj) {
-            VR_Sec_UserService.resetPassword(userObj.Entity.UserId);
-        }
-
-        function assignPermissions(userObj) {
-            VR_Sec_UserService.assignPermissions(userObj.Entity.UserId);
+        function assignPermissions(groupObj) {
+            VR_Sec_PermissionService.assignPermissions(HolderTypeEnum.Group.value, groupObj.Entity.GroupId);
         }
     }
 

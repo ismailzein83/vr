@@ -7,7 +7,6 @@
 
         var gridApi;
         var filter = {};
-        var arrMenuAction = [];
 
         defineScope();
         load();
@@ -19,8 +18,8 @@
             }
 
             $scope.searchClicked = function () {
-                getFilterObject()
-                gridApi.loadGrid(filter)
+                getFilterObject();
+                gridApi.loadGrid(filter);
             };
 
             $scope.AddNewUser = AddUser;
@@ -43,7 +42,7 @@
                     gridApi.onUserAdded(userObj);
                 }
             };
-            VR_Sec_UserService.addUser(onUserAdded)
+            VR_Sec_UserService.addUser(onUserAdded);
         }
     }
 

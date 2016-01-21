@@ -13,6 +13,7 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                 onselectitem: "=",
                 ondeselectitem: "=",
                 isdisabled: "=",
+                customlabel: "@"
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -64,8 +65,9 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                 label = "Users";
                 multipleselection = "ismultipleselection";
             }
-            if (attrs.label != undefined)
-                label = attrs.label;
+
+            if (attrs.customlabel != undefined)
+                label = attrs.customlabel;
 
             var addCliked = '';
             if (attrs.showaddbutton != undefined)
@@ -81,8 +83,6 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
 
             var selectorApi;
 
-
-
             function initializeController() {
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
@@ -96,11 +96,21 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                 api.load = function (payload) {
 
                     var selectedIds;
+
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                     }
 
-                    return getUsersInfo(attrs, ctrl, selectedIds);
+                    return VR_Sec_UserAPIService.GetUsers().then(function (response) {
+                        ctrl.datasource.length = 0;
+                        angular.forEach(response, function (itm) {
+                            ctrl.datasource.push(itm);
+                        });
+
+                        if (selectedIds != undefined) {
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'UserId', attrs, ctrl);
+                        }
+                    });
                 }
 
                 api.getSelectedIds = function () {
@@ -113,17 +123,5 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
             this.initializeController = initializeController;
         }
 
-        function getUsersInfo(attrs, ctrl, selectedIds) {
-            return VR_Sec_UserAPIService.GetUsers().then(function (response) {
-                ctrl.datasource.length = 0;
-                angular.forEach(response, function (itm) {
-                    ctrl.datasource.push(itm);
-                });
-
-                if (selectedIds != undefined) {
-                    VRUIUtilsService.setSelectedValues(selectedIds, 'UserId', attrs, ctrl);
-                }
-            });
-        }
         return directiveDefinitionObject;
     }]);

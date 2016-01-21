@@ -366,7 +366,7 @@ namespace Vanrise.BI.Business
                // Dictionary<int,List<string>> userMeasuresValidator=new   Dictionary<int,List<string>>();
 
                UserManager userManager = new UserManager();
-               IEnumerable<UserInfo> allUserInfo = userManager.GetUsers();
+               IEnumerable<User> allUserInfo = userManager.GetUsers();
 
                List<UserMeasuresValidator> userMeasuresValidator = new List<UserMeasuresValidator>();
                List<string> distinctMeasures = new List<string>();
@@ -413,16 +413,16 @@ namespace Vanrise.BI.Business
                        users = userGroupManager.GetMembers(userMeasuresValidatorInput.Query.GroupIds[i]);
                        foreach (int userId in users)
                        {
-                           UserInfo info = allUserInfo.FirstOrDefault(x => x.UserId == userId);
-                           if (!distinctUsers.Contains(userId) && info != null && info.Status != UserStatus.Inactive)
+                           User user = allUserInfo.FirstOrDefault(x => x.UserId == userId);
+                           if (!distinctUsers.Contains(userId) && user != null && user.Status != UserStatus.Inactive)
                                distinctUsers.Add(userId);
                        }
                    }
                }
                else
                {
-                   IEnumerable<UserInfo> users = userManager.GetUsers();
-                   foreach (UserInfo user in users)
+                   IEnumerable<User> users = userManager.GetUsers();
+                   foreach (User user in users)
                    {
                        if (!distinctUsers.Contains(user.UserId) && user.Status != UserStatus.Inactive)
                            distinctUsers.Add(user.UserId);

@@ -38,9 +38,9 @@
         }
 
         function load() {
-            if (isEditMode) {
-                $scope.isLoading = true;
+            $scope.isLoading = true;
 
+            if (isEditMode) {
                 getUser().then(function () {
                     loadAllControls().finally(function () {
                         userEntity = undefined;

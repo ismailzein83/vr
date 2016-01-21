@@ -139,10 +139,10 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (9,'Traffic Monitor','Traffic Monitor','#/view/WhS_Analytics/Views/TrafficMonitor',4,null,null,null,0,10),
 (12,'CDR Log','CDR Log','#/view/WhS_Analytics/Views/CDR/CDRLog',4,null,null,null,0,12),
-(13,'Users','Users','#/view/Security/Views/UserManagement',28,'Root/Administration Module/Users:View',null,null,0,10),
-(14,'Groups','Groups','#/view/Security/Views/GroupManagement',28,'Root/Administration Module/Groups:View',null,null,0,11),
+(13,'Users','Users','#/view/Security/Views/User/UserManagement',28,'Root/Administration Module/Users:View',null,null,0,10),
+(14,'Groups','Groups','#/view/Security/Views/Group/GroupManagement',28,'Root/Administration Module/Groups:View',null,null,0,11),
 (17,'Carrier Accounts','Carrier Accounts','#/view/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountManagement',29,null,null,null,0,11),
-(35,'System Entities','System Entities','#/view/Security/Views/BusinessEntityManagement',28,'Root/Administration Module/System Entities:View',null,null,0,12),
+(35,'System Entities','System Entities','#/view/Security/Views/Permission/BusinessEntityManagement',28,'Root/Administration Module/System Entities:View',null,null,0,12),
 (39,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',23,'Root/Administration Module/Dynamic Pages:View',null,null,0,11),
 (41,'Log','Log History','#/view/BusinessProcess/Views/BPHistory',10,null,null,null,0,11),
 (42,'Management','Management','#/view/BusinessProcess/Views/BPDefinitionManagement',10,null,null,null,0,10),
