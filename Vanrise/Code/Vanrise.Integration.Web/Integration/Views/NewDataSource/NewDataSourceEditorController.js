@@ -1,14 +1,20 @@
-﻿newDataSourceEditorController.$inject = ['$scope', 'DataSourceAPIService', 'SchedulerTaskAPIService', 'UtilsService', 'VRUIUtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿(function (appControllers) {
+    "use strict";
+newDataSourceEditorController.$inject = ['$scope', 'DataSourceAPIService', 'SchedulerTaskAPIService', 'UtilsService', 'VRUIUtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
 function newDataSourceEditorController($scope, DataSourceAPIService, SchedulerTaskAPIService, UtilsService, VRUIUtilsService , VRModalService, VRNotificationService, VRNavigationService) {
     var dataSourceObj;
     var editMode;
+
     var dataSourceId;
     var taskId = 0;
+
     var taskTriggerDirectiveAPI;
     var taskTriggerDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
     var adapterTypeDirectiveAPI;
     var adapterTypeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
     loadParameters();
     defineScope();
     load();
@@ -56,7 +62,7 @@ function newDataSourceEditorController($scope, DataSourceAPIService, SchedulerTa
 
                 modalScope.onExecutionFlowAdded = function () {
                     // update the execution flows
-                    $scope.isGettingData = true;
+                    $scope.isLoading = true;
 
                     // clear the selection menu
                     $scope.executionFlows = [];
@@ -66,7 +72,7 @@ function newDataSourceEditorController($scope, DataSourceAPIService, SchedulerTa
                             VRNotificationService.notifyException(error, $scope);
                         })
                         .finally(function () {
-                            $scope.isGettingData = false;
+                            $scope.isLoading = false;
                         });
                 };
             };
@@ -88,73 +94,57 @@ function newDataSourceEditorController($scope, DataSourceAPIService, SchedulerTa
     }
 
     function load() {
-        $scope.isGettingData = true;
+        $scope.isLoading = true;
 
         if (editMode) {
             getDataSourceToEdit().catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isGettingData = false;
             });
         }
         else {
-            $scope.title = UtilsService.buildTitleForAddEditor("Data Source");
             loadAllControls();
-          
         }
     }
-   
 
-    
     function getDataSourceToEdit() {
         return DataSourceAPIService.GetDataSource(dataSourceId).then(function (dataSourceResponse) {
-
             getDataSourceTask(dataSourceResponse).then(function () {
-                loadAllControls()                    
+                loadAllControls().finally(function () {
+                });
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isGettingData = false;
+                $scope.isLoading = false;
             });;
             
         }).catch(function (error) {
             VRNotificationService.notifyException(error, $scope);
-            $scope.isGettingData = false;
+            $scope.isLoading = false;
         });
     }
    
     function getDataSourceTask(dataSourceResponse) {
         return SchedulerTaskAPIService.GetTask(dataSourceResponse.TaskId)
                .then(function (taskResponse) {
-
-                   dataSourceObj = { DataSourceData: dataSourceResponse, TaskData: taskResponse }
-                   $scope.title = UtilsService.buildTitleForUpdateEditor(taskResponse.Name, "Data Source");
-
-                   taskId = dataSourceObj.TaskData.TaskId;
-
-                   $scope.scopeModel.dataSourceName = dataSourceObj.DataSourceData.Name;
-
-                   $scope.scopeModel.customCode = dataSourceObj.DataSourceData.Settings.MapperCustomCode;
-                   $scope.scopeModel.isEnabled = dataSourceObj.TaskData.IsEnabled;
-
-                   $scope.scopeModel.startEffDate = dataSourceObj.TaskData.TaskSettings.StartEffDate;
-                   $scope.scopeModel.endEffDate = dataSourceObj.TaskData.TaskSettings.EndEffDate;
+                   dataSourceObj = { DataSourceData: dataSourceResponse, TaskData: taskResponse };                   
                })
                .catch(function (error) {
                    VRNotificationService.notifyException(error, $scope);
                }).finally(function () {
-                   $scope.isGettingData = false;
+                   $scope.isLoading = false;
                });
     }
+
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadAdapterType, loadExecutionFlows, loadTaskTrigger]).then(function () {
-            $scope.isGettingData = false;
+        return UtilsService.waitMultipleAsyncOperations([loadAdapterType, loadExecutionFlows, loadTaskTrigger, setTitle, loadStaticData]).then(function () {
+            dataSourceObj = undefined;
+        }).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
         })
-           .catch(function (error) {
-               VRNotificationService.notifyExceptionWithClose(error, $scope);
-           })
-          .finally(function () {
-              $scope.isGettingData = false;
-          });
+        .finally(function () {
+            $scope.isLoading = false;
+       });
     }
+
     function loadAdapters() {
         return DataSourceAPIService.GetDataSourceAdapterTypes().then(function (response) {
             angular.forEach(response, function (item) {
@@ -222,6 +212,29 @@ function newDataSourceEditorController($scope, DataSourceAPIService, SchedulerTa
         return loadTaskTriggerPromiseDeferred.promise;
     }
 
+    function setTitle() {
+        if (editMode && dataSourceObj != undefined && dataSourceObj.TaskData != undefined)
+            $scope.title = UtilsService.buildTitleForUpdateEditor(dataSourceObj.TaskData.Name, "Data Source");
+        else
+            $scope.title = UtilsService.buildTitleForAddEditor("Data Source");
+    }
+
+    function loadStaticData() {
+
+        if (dataSourceObj == undefined)
+            return;
+
+        taskId = dataSourceObj.TaskData.TaskId;
+
+        $scope.scopeModel.dataSourceName = dataSourceObj.DataSourceData.Name;
+
+        $scope.scopeModel.customCode = dataSourceObj.DataSourceData.Settings.MapperCustomCode;
+        $scope.scopeModel.isEnabled = dataSourceObj.TaskData.IsEnabled;
+
+        $scope.scopeModel.startEffDate = dataSourceObj.TaskData.TaskSettings.StartEffDate;
+        $scope.scopeModel.endEffDate = dataSourceObj.TaskData.TaskSettings.EndEffDate;
+    }
+
     function buildDataSourceObjFromScope() {
 
         var dataSourceData = {
@@ -250,9 +263,10 @@ function newDataSourceEditorController($scope, DataSourceAPIService, SchedulerTa
 
         return { DataSourceData: dataSourceData, TaskData: taskData };
     }
-
   
     function insertDataSource() {
+        $scope.isLoading = true;
+
         var dataSourceObject = buildDataSourceObjFromScope();
         return DataSourceAPIService.AddDataSource(dataSourceObject)
         .then(function (response) {
@@ -263,12 +277,16 @@ function newDataSourceEditorController($scope, DataSourceAPIService, SchedulerTa
             }
         }).catch(function (error) {
             VRNotificationService.notifyException(error, $scope);
+        }).finally(function () {
+            $scope.isLoading = false;
         });
 
     }
 
     function updateDataSource() {
+
         var dataSourceObject = buildDataSourceObjFromScope();
+        $scope.isLoading = true;
         DataSourceAPIService.UpdateDataSource(dataSourceObject)
         .then(function (response) {
             if (VRNotificationService.notifyOnItemUpdated("Data Source", response)) {
@@ -280,7 +298,11 @@ function newDataSourceEditorController($scope, DataSourceAPIService, SchedulerTa
             }
         }).catch(function (error) {
             VRNotificationService.notifyException(error, $scope);
+        }).finally(function () {
+            $scope.isLoading = false;
         });
     }
 }
+
 appControllers.controller('Integration_NewDataSourceEditorController', newDataSourceEditorController);
+})(appControllers);
