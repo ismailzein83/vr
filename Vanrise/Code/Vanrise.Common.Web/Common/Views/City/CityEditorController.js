@@ -16,6 +16,8 @@
 
         defineScope();
         loadParameters();
+        load();
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
@@ -25,8 +27,9 @@
             }
             editMode = (cityId != undefined);
             $scope.disableCountry = ((countryId != undefined) && !editMode) || disableCountry == true;
-            load();
+            
         }
+
         function defineScope() {
 
             $scope.onCountryDirectiveReady = function (api) {
@@ -35,12 +38,10 @@
             }
 
             $scope.saveCity = function () {
-                if (editMode) {
+                if (editMode)
                     return updateCity();
-                }
-                else {
+                else
                     return insertCity();
-                }
             };
 
             $scope.close = function () {
@@ -52,12 +53,9 @@
 
         function load() {
 
-            $scope.isGettingData = true;
-            if (countryId != undefined) {
-                $scope.title = UtilsService.buildTitleForAddEditor("City");
-                loadAllControls();
-            }
-            else if (editMode) {
+            $scope.isLoading = true;
+
+            if (editMode) {
                 getCity().then(function () {
                     loadAllControls()
                         .finally(function () {
@@ -69,18 +67,45 @@
             }
             else {
                 loadAllControls();
-                $scope.title = UtilsService.buildTitleForAddEditor("City");
             }
         }
+
+        function getCity() {
+            return VRCommon_CityAPIService.GetCity(cityId).then(function (city) {
+                cityEntity = city;
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
+        }
+
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadCountrySelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
-                  $scope.isGettingData = false;
+                  $scope.isLoading = false;
               });
         }
+
+        function setTitle()
+        {
+            if (editMode && cityEntity != undefined)
+                $scope.title = UtilsService.buildTitleForUpdateEditor(cityEntity.Name, "City");
+            else
+                $scope.title = UtilsService.buildTitleForAddEditor("City");
+        }
+
+        function loadStaticData() {
+
+            if (cityEntity == undefined)
+                return;
+
+            $scope.name = cityEntity.Name;
+        }
+
         function loadCountrySelector() {
             var countryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             countryReadyPromiseDeferred.promise
@@ -94,17 +119,6 @@
             return countryLoadPromiseDeferred.promise;
         }
 
-        function getCity() {
-            return VRCommon_CityAPIService.GetCity(cityId).then(function (city) {
-                cityEntity = city;
-                fillScopeFromCityObj(city);
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.isGettingData = false;
-            });
-        }
-
         function buildCityObjFromScope() {
             var obj = {
                 CityId: (cityId != null) ? cityId : 0,
@@ -114,11 +128,10 @@
             return obj;
         }
 
-        function fillScopeFromCityObj(city) {
-            $scope.name = city.Name;
-            $scope.title = UtilsService.buildTitleForUpdateEditor($scope.name, "City");
-        }
+        
         function insertCity() {
+            $scope.isLoading = true;
+
             var cityObject = buildCityObjFromScope();
             return VRCommon_CityAPIService.AddCity(cityObject)
             .then(function (response) {
@@ -129,10 +142,14 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
             });
 
         }
         function updateCity() {
+            $scope.isLoading = true;
+
             var cityObject = buildCityObjFromScope();
             VRCommon_CityAPIService.UpdateCity(cityObject)
             .then(function (response) {
@@ -143,6 +160,8 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
             });
         }
     }

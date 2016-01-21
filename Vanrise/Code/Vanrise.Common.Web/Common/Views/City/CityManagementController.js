@@ -6,21 +6,31 @@
 
     function cityManagementController($scope, VRCommon_CityService, UtilsService, VRUIUtilsService) {
         var gridAPI;
+        var filter = {};
+
         var countryDirectiveApi;
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
-        var filter = {};
 
         function defineScope() {
             $scope.searchClicked = function () {
-                setFilterObject()
+                getFilterObject()
                 return gridAPI.loadGrid(filter);
             };
 
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
+            }
+
+            function getFilterObject() {
+                filter = {
+                    Name: $scope.name,
+                    CountryIds: countryDirectiveApi.getSelectedIds()
+                };
+
             }
 
             $scope.onGridReady = function (api) {
@@ -31,10 +41,8 @@
         }
 
         function load() {
-            $scope.isGettingData = true;           
+            $scope.isLoadingFilters = true;
             loadAllControls();
-           
-
         }
 
         function loadAllControls() {
@@ -43,7 +51,7 @@
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
-                  $scope.isGettingData = false;
+                  $scope.isLoadingFilters = false;
               });
         }
         function loadCountrySelector() {
@@ -57,22 +65,15 @@
                 });
             return countryLoadPromiseDeferred.promise;
         }
-        function setFilterObject() {
-            filter = {
-                Name: $scope.name,
-                CountryIds: countryDirectiveApi.getSelectedIds()
-            };
-           
-        }
+
 
         function addNewCity() {
             var onCityAdded = function (cityObj) {
                 if (gridAPI != undefined) {
                     gridAPI.onCityAdded(cityObj);
                 }
-                   
-
             };
+
             VRCommon_CityService.addCity(onCityAdded);
         }
 

@@ -7,6 +7,7 @@
 
         var isEditMode;
         var userEntity;
+        var userId;
         
         loadParameters();
         defineScope();
@@ -15,12 +16,10 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
-            $scope.userId = undefined;
-
             if (parameters != undefined && parameters != null)
-                $scope.userId = parameters.userId;
+                userId = parameters.userId;
 
-            isEditMode = ($scope.userId != undefined);
+            isEditMode = (userId != undefined);
         }
 
         function defineScope() {
@@ -55,7 +54,7 @@
         }
 
         function getUser() {
-            return VR_Sec_UserAPIService.GetUserbyId($scope.userId).then(function (response) {
+            return VR_Sec_UserAPIService.GetUserbyId(userId).then(function (response) {
                 userEntity = response;
             });
         }
@@ -90,7 +89,7 @@
 
         function buildUserObjFromScope() {
             var userObject = {
-                userId: ($scope.userId != null) ? $scope.userId : 0,
+                userId: (userId != null) ? userId : 0,
                 name: $scope.name,
                 email: $scope.email,
                 description: $scope.description,

@@ -7,7 +7,7 @@
     function currencyExchangeRateEditorController($scope, VRCommon_CurrencyExchangeRateAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
         
-        var currencyDirectiveApi;
+        var currencySelectorAPI;
         var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var currencyId;
         var disableCurrency;
@@ -30,7 +30,7 @@
                 $scope.modalContext.closeModal()
             };
             $scope.onCurrencySelectReady = function (api) {
-                currencyDirectiveApi = api;
+                currencySelectorAPI = api;
                 currencyReadyPromiseDeferred.resolve()
             }
 
@@ -60,7 +60,7 @@
                     selectedIds:  currencyId 
                 };
 
-                VRUIUtilsService.callDirectiveLoad(currencyDirectiveApi, directivePayload, currencyLoadPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, directivePayload, currencyLoadPromiseDeferred);
             });
             return currencyLoadPromiseDeferred.promise;
         }

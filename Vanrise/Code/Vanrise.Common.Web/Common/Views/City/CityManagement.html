@@ -1,11 +1,10 @@
-﻿<vr-panel ng-controller="VRCommon_CityManagementController" vr-loader="isGettingData">
+﻿<vr-panel ng-controller="VRCommon_CityManagementController">
     <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
                 <vr-columns width="normal">
                     <vr-textbox value="name" label="Name"></vr-textbox>
                 </vr-columns>
-
                 <vr-columns width="normal">
                     <vr-common-country-selector on-ready="onCountryDirectiveReady" ismultipleselection></vr-common-country-selector>
                 </vr-columns>

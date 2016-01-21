@@ -5,13 +5,10 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                type: "=",
                 onReady: '=',
-                label: "@",
                 ismultipleselection: "@",
-                hideselectedvaluessection: '@',
                 onselectionchanged: '=',
-                isrequired: '@',
+                isrequired: '=',
                 isdisabled: "=",
                 selectedvalues: "=",
                 showaddbutton: '@'
@@ -66,22 +63,25 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                 multipleselection = "ismultipleselection";
             }
 
-            var required = "";
-            if (attrs.isrequired != undefined)
-                required = "isrequired";
             var addCliked = '';
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="addNewCity"';
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CityId" '
-            + required + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="City" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CityId" isrequired="ctrl.isrequired" '
+            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="City" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                + '</div>';
         }
         function City(ctrl, $scope, attrs) {
 
+            var selectorAPI;
+
             function initializeController() {
-                defineAPI();
+                $scope.onSelectorReady = function(api)
+                {
+                    selectorAPI = api;
+                    defineAPI();
+                }
             }
 
             function defineAPI() {
