@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrSecGroupSelector', ['VR_Sec_GroupAPIService', 'VR_Sec_UserService', 'UtilsService', 'VRUIUtilsService',
-    function (VR_Sec_GroupAPIService, VR_Sec_UserService, UtilsService, VRUIUtilsService) {
+app.directive('vrSecGroupSelector', ['VR_Sec_GroupAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (VR_Sec_GroupAPIService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -53,13 +53,9 @@ app.directive('vrSecGroupSelector', ['VR_Sec_GroupAPIService', 'VR_Sec_UserServi
                 multipleselection = "ismultipleselection";
             }
 
-            var addCliked = '';
-            if (attrs.showaddbutton != undefined)
-                addCliked = 'onaddclicked="addNewUser"';
-
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="UserId" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Group" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + ' label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Group" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>'
         }
 
@@ -85,20 +81,20 @@ app.directive('vrSecGroupSelector', ['VR_Sec_GroupAPIService', 'VR_Sec_UserServi
                         selectedIds = payload.selectedIds;
                     }
 
-                    return VR_Sec_UserAPIService.GetUsers().then(function (response) {
+                    return VR_Sec_GroupAPIService.GetGroups().then(function (response) {
                         ctrl.datasource.length = 0;
                         angular.forEach(response, function (itm) {
                             ctrl.datasource.push(itm);
                         });
 
                         if (selectedIds != undefined) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'UserId', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'GroupId', attrs, ctrl);
                         }
                     });
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('UserId', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('GroupId', attrs, ctrl);
                 }
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
