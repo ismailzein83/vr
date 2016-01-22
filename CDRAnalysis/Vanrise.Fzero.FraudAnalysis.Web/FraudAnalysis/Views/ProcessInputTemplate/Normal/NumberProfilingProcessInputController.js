@@ -41,7 +41,7 @@ function NumberProfilingProcessInputController($scope, UtilsService, StrategyAPI
                 $scope.selectedPeakHours.push(itm);
         });
 
-        $scope.fixedPrefixes = [{ value: "241820" }, { value: "241830" }];
+        $scope.fixedPrefixes = [{ value: "88888888" }];
         $scope.selectedFixedPrefixes = [];
         for (var i = 0; i < $scope.fixedPrefixes.length; i++) {
             $scope.selectedFixedPrefixes.push($scope.fixedPrefixes[i]);
@@ -58,13 +58,14 @@ function NumberProfilingProcessInputController($scope, UtilsService, StrategyAPI
             });
 
             var runningDate = new Date($scope.fromDate);
+            var selectedToDate = new Date($scope.toDate);
 
             $scope.createProcessInputObjects.length = 0;
 
 
             if ($scope.selectedPeriod.Id == 1)//Hourly
             {
-                while (runningDate < $scope.toDate) {
+                while (runningDate < selectedToDate) {
                     var fromDate = new Date(runningDate);
                     var toDate = new Date(runningDate.setHours(runningDate.getHours() + 1));
 
@@ -89,7 +90,7 @@ function NumberProfilingProcessInputController($scope, UtilsService, StrategyAPI
 
             else if ($scope.selectedPeriod.Id == 2) //Daily
             {
-                while (runningDate < $scope.toDate) {
+                while (runningDate < selectedToDate) {
                     var fromDate = new Date(runningDate);
                     var toDate = new Date(runningDate.setHours(runningDate.getHours() + 24));
 
