@@ -116,6 +116,7 @@ namespace Vanrise.Runtime
 
         public List<RunningProcessInfo> GetCachedRunningProcesses(TimeSpan maxCacheTime)
         {
+            maxCacheTime = new TimeSpan(0, 0, 2);
             if ((DateTime.Now - s_RunningProcessesRetrievedTime) > maxCacheTime)
             {
                 lock (s_lockObj)

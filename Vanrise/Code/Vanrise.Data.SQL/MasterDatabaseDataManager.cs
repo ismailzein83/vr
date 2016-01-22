@@ -47,6 +47,8 @@ namespace Vanrise.Data.SQL
             }
             else
                 ExecuteNonQueryText(String.Format(@"CREATE DATABASE {0}", databaseName), null);
+
+            ExecuteNonQueryText(String.Format("ALTER DATABASE [{0}] SET RECOVERY SIMPLE", databaseName), null);
         }
 
         /// <summary>
