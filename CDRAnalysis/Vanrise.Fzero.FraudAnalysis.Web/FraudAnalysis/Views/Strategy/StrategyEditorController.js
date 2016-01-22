@@ -121,7 +121,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
         $scope.hasFilters = function (parameter) {
-            console.log('hasFilter')
             var found = false;
             if ($scope.strategyFilters.length > 0) {
                 angular.forEach($scope.strategyFilters, function (filter) {
@@ -130,7 +129,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                     }
                 });
             }
-            console.log(found)
             return found;
         }
 
@@ -161,11 +159,9 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             else
                 return;
         }
-
     }
 
     function load() {
-
         $scope.isGettingData = true;
         UtilsService.waitMultipleAsyncOperations([loadFilters, loadPeriods])
         .then(function () {
@@ -228,40 +224,25 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         });
 
         angular.forEach($scope.strategyLevels, function (level) {
-
             var strategyLevelItem = {
                 SuspicionLevelId: level.suspicionLevel.id,
                 StrategyLevelCriterias: []
             };
 
-
-
-
-
             var index = 0;
             angular.forEach(level.StrategyLevelCriterias, function (levelCriteria) {
-
                 if ($scope.strategyFilters[index].isSelected && levelCriteria.isSelected) {
-
-
-
                     var levelCriteriaItem = {
                         FilterId: $scope.strategyFilters[index].filterId
                     };
 
                     levelCriteriaItem.Percentage = ((parseFloat(levelCriteria.percentage) + 100) / 100);
-                    //console.log(levelCriteriaItem.percentage)
-
                     strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
                 }
-
                 index++;
-
             });
 
             strategyObject.StrategyLevels.push(strategyLevelItem);
-
-
         });
 
         return strategyObject;
