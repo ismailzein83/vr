@@ -118,7 +118,7 @@ namespace TOne.Analytics.Business
                 alertViews.Add(alertView);
             }
             if (!string.IsNullOrEmpty(zone))
-                alertViews = alertViews.Where(a => a.Zone.ToLower().Contains(zone.ToLower())).ToList();
+                alertViews = alertViews.Where(a => string.IsNullOrEmpty(a.Zone) || a.Zone.ToLower().Contains(zone.ToLower())).ToList();
             return alertViews;
         }
 
