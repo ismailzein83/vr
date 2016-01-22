@@ -1,65 +1,57 @@
-﻿EditProfileController.$inject = ['$scope', 'UsersAPIService', 'VRNotificationService'];
+﻿(function (appControllers) {
 
-function EditProfileController($scope, UsersAPIService, VRNotificationService) {
+    'use strict';
 
-    loadParameters();
-    defineScope();
-    load();
+    EditProfileController.$inject = ['$scope', 'VR_Sec_UserAPIService', 'VRNotificationService'];
 
-    function loadParameters() {
-    }
+    function EditProfileController($scope, VR_Sec_UserAPIService, VRNotificationService) {
 
-    function defineScope() {
+        loadParameters();
+        defineScope();
+        load();
 
-        $scope.EditUserProfile = function () {
-
-            var userProfileObject = {
-                UserId: $scope.userObject.UserId,
-                Name: $scope.txtName
-            }
-
-
-            return UsersAPIService.EditUserProfile(userProfileObject)
-                        .then(function (response) {
-                            if (VRNotificationService.notifyOnItemUpdated("User's Name", response)) {
-                                $scope.modalContext.closeModal();
-                            }
-                        })
-                        .catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        });
-                      
+        function loadParameters() {
         }
 
-        $scope.close = function () {
-            $scope.modalContext.closeModal();
-        };
+        function defineScope() {
+            $scope.save = function () {
+                var userProfileObject = {
+                    UserId: $scope.userObject.UserId,
+                    Name: $scope.name
+                };
 
-    }
+                return VR_Sec_UserAPIService.EditUserProfile(userProfileObject).then(function (response) {
+                    if (VRNotificationService.notifyOnItemUpdated("User's Name", response)) {
+                        $scope.modalContext.closeModal();
+                    }
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
+            };
+
+            $scope.close = function () {
+                $scope.modalContext.closeModal();
+            };
+        }
     
-    function load() {
+        function load() {
+            $scope.isLoading = true;
 
-        $scope.isGettingData = true;
-        return UsersAPIService.LoadLoggedInUserProfile()
-          .then(function (response) {
-              fillScopeFromUserObj(response);
-          })
-          .catch(function (error) {
-              VRNotificationService.notifyExceptionWithClose(error, $scope);
-          })
-         .finally(function () {
-             $scope.isGettingData = false;
-         });
-     
+            return VR_Sec_UserAPIService.LoadLoggedInUserProfile().then(function (response) {
+                fillScopeFromUserObj(response);
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
+        }
 
+        function fillScopeFromUserObj(userObject) {
+            $scope.name = userObject.Name;
+            $scope.userObject = userObject;
+        }
     }
 
-    function fillScopeFromUserObj(userObject) {
-        $scope.txtName = userObject.Name;
-        $scope.userObject = userObject;
-     
-    }
+    appControllers.controller('VR_Sec_EditProfileController', EditProfileController);
 
-};
-
-appControllers.controller('Security_EditProfileController', EditProfileController);
+})(appControllers);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Security.Data;
@@ -12,6 +13,8 @@ namespace Vanrise.Security.Business
 {
     public class BusinessEntityManager
     {
+        #region Fields / Constructors
+
         BusinessEntityModuleManager _businessEntityModuleManager;
 
         public BusinessEntityManager()
@@ -19,11 +22,14 @@ namespace Vanrise.Security.Business
             _businessEntityModuleManager = new BusinessEntityModuleManager();
         }
 
+        #endregion
+
+        #region Public Methods
+
         public List<BusinessEntityNode> GetEntityNodes()
         {
             //TODO: pass the holder id to load the saved permissions
-            IBusinessEntityModuleDataManager moduleDataManager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityModuleDataManager>();
-            IEnumerable<BusinessEntityModule> modules = moduleDataManager.GetModules();
+            IEnumerable<BusinessEntityModule> modules = _businessEntityModuleManager.GetBusinessEntityModules();
             IEnumerable<BusinessEntity> entities = GetCachedBusinessEntities().Values;
 
             List<BusinessEntityNode> retVal = new List<BusinessEntityNode>();
@@ -39,35 +45,10 @@ namespace Vanrise.Security.Business
             return retVal;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<object> ToggleBreakInheritance(EntityType entityType, string entityId)
-        {
-            UpdateOperationOutput<object> updateOperationOutput = new UpdateOperationOutput<object>();
-            updateOperationOutput.UpdatedObject = null;
-
-            bool result = false;
-
-            if (entityType == EntityType.MODULE)
-            {
-                IBusinessEntityModuleDataManager manager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityModuleDataManager>();
-                result = manager.ToggleBreakInheritance(entityId);
-            }
-            else
-            {
-                IBusinessEntityDataManager manager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityDataManager>();
-                result = manager.ToggleBreakInheritance(entityId);
-            }
-
-            updateOperationOutput.Result = (result) ? UpdateOperationResult.Succeeded : UpdateOperationResult.Failed;
-
-            return updateOperationOutput;
-        }
-
         public BusinessEntity GetBusinessEntityById(int entityId)
         {
             var cachedEntities = GetCachedBusinessEntities();
-            BusinessEntity entity;
-            cachedEntities.TryGetValue(entityId, out entity);
-            return entity;
+            return cachedEntities.FindRecord(entity => entity.EntityId == entityId);
         }
 
         public string GetBusinessEntityName(EntityType entityType, string entityId)
@@ -80,6 +61,38 @@ namespace Vanrise.Security.Business
             BusinessEntity entity = GetBusinessEntityById(convertedEntityId);
             return entity != null ? entity.Name : null;
         }
+
+        public Vanrise.Entities.UpdateOperationOutput<object> ToggleBreakInheritance(EntityType entityType, string entityId)
+        {
+            UpdateOperationOutput<object> updateOperationOutput = new UpdateOperationOutput<object>();
+            updateOperationOutput.UpdatedObject = null;
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+
+            if (entityType == EntityType.MODULE)
+            {
+                IBusinessEntityModuleDataManager manager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityModuleDataManager>();
+                
+                if (manager.ToggleBreakInheritance(entityId))
+                {
+                    updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                    _businessEntityModuleManager.SetCacheExpired();
+                }
+            }
+            else
+            {
+                IBusinessEntityDataManager manager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityDataManager>();
+
+                if (manager.ToggleBreakInheritance(entityId))
+                {
+                    updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetEntities");
+                }
+            }
+
+            return updateOperationOutput;
+        }
+        
+        #endregion
 
         #region Private Methods
 

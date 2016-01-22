@@ -2,9 +2,9 @@
 
     'use strict';
 
-    PermissionEditorController.$inject = ['$scope', 'PermissionFlagEnum', 'VR_Sec_PermissionAPIService', 'BusinessEntitiesAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+    PermissionEditorController.$inject = ['$scope', 'PermissionFlagEnum', 'VR_Sec_PermissionAPIService', 'VR_Sec_BusinessEntityAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-    function PermissionEditorController($scope, PermissionFlagEnum, VR_Sec_PermissionAPIService, BusinessEntityAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+    function PermissionEditorController($scope, PermissionFlagEnum, VR_Sec_PermissionAPIService, VR_Sec_BusinessEntityAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
 
         var holderType;
         var holderId;
@@ -194,7 +194,7 @@
                 return loadTreeDeferred.promise;
 
                 function getEntityNodes() {
-                    return BusinessEntityAPIService.GetEntityNodes().then(function (response) {
+                    return VR_Sec_BusinessEntityAPIService.GetEntityNodes().then(function (response) {
                         if (response) {
                             $scope.beList = response;
 

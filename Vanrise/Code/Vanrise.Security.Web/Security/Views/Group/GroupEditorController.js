@@ -1,5 +1,5 @@
 ﻿(function (appControllers) {
-    "use strict";
+    'use strict';
 
     GroupEditorController.$inject = ['$scope', 'VR_Sec_GroupAPIService', 'VR_Sec_UserAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
@@ -19,14 +19,14 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
-            if (parameters != undefined && parameters != null)
+            if (parameters) {
                 $scope.groupId = parameters.groupId;
+            }
 
             isEditMode = ($scope.groupId != undefined);
         }
 
         function defineScope() {
-
             $scope.saveGroup = function () {
                 if (isEditMode)
                     return updateGroup();
@@ -38,11 +38,10 @@
                 $scope.modalContext.closeModal()
             };
 
-            $scope.onUserSelectorReady = function(api)
-            {
+            $scope.onUserSelectorReady = function (api) {
                 userSelecorDirectiveAPI = api;
                 userSelectorReadyPromiseDeferred.resolve();
-            }
+            };
         }
 
         function load() {
@@ -85,9 +84,9 @@
         function setTitle()
         {
             if (isEditMode && groupEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(groupEntity.Name, "Group");
+                $scope.title = UtilsService.buildTitleForUpdateEditor(groupEntity.Name, 'Group');
             else
-                $scope.title = UtilsService.buildTitleForAddEditor("Group");
+                $scope.title = UtilsService.buildTitleForAddEditor('Group');
         }
 
         function loadStaticData() {
@@ -104,25 +103,27 @@
             var userSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             userSelectorReadyPromiseDeferred.promise.then(function () {
-                    var selectedIds = undefined;
+                var directivePayload = {
+                    filter: null,
+                    selectedIds: undefined
+                };
 
-                    if (groupEntity != undefined)
-                    {
-                        var loadMembersPromise = VR_Sec_UserAPIService.GetMembers(groupEntity.GroupId).then(function (memberIds) {
-                            selectedIds = memberIds;
+                if (groupEntity) {
+                    VR_Sec_UserAPIService.GetMembers(groupEntity.GroupId).then(function (memberIds) {
+                        if (memberIds) {
+                            directivePayload.selectedIds = [];
 
-                            var directivePayload = {
-                                selectedIds: selectedIds
+                            for (var i = 0; i < memberIds.length; i++) {
+                                directivePayload.selectedIds.push(memberIds[i]);
                             }
-
-                            VRUIUtilsService.callDirectiveLoad(userSelecorDirectiveAPI, directivePayload, userSelectorLoadPromiseDeferred);
-                        });
-                    }
-                    else
-                    {
-                        VRUIUtilsService.callDirectiveLoad(userSelecorDirectiveAPI, undefined, userSelectorLoadPromiseDeferred);
-                    }
-                });
+                        }
+                        VRUIUtilsService.callDirectiveLoad(userSelecorDirectiveAPI, directivePayload, userSelectorLoadPromiseDeferred);
+                    });
+                }
+                else {
+                    VRUIUtilsService.callDirectiveLoad(userSelecorDirectiveAPI, directivePayload, userSelectorLoadPromiseDeferred);
+                }
+            });
             
             return userSelectorLoadPromiseDeferred.promise;
         }
@@ -138,7 +139,6 @@
             return groupObj;
         }
 
-
         function insertGroup() {
             $scope.isLoading = true;
 
@@ -146,7 +146,7 @@
 
             return VR_Sec_GroupAPIService.AddGroup(groupObj)
                 .then(function (response) {
-                    if (VRNotificationService.notifyOnItemAdded("Group", response)) {
+                    if (VRNotificationService.notifyOnItemAdded('Group', response)) {
                         if ($scope.onGroupAdded != undefined)
                             $scope.onGroupAdded(response.InsertedObject);
                         $scope.modalContext.closeModal();
@@ -167,7 +167,7 @@
 
             return VR_Sec_GroupAPIService.UpdateGroup(groupObj)
                 .then(function (response) {
-                    if (VRNotificationService.notifyOnItemUpdated("Group", response)) {
+                    if (VRNotificationService.notifyOnItemUpdated('Group', response)) {
                         if ($scope.onGroupUpdated != undefined)
                             $scope.onGroupUpdated(response.UpdatedObject);
                         $scope.modalContext.closeModal();
@@ -185,5 +185,3 @@
     appControllers.controller('VR_Sec_GroupEditorController', GroupEditorController);
 
 })(appControllers);
-
-

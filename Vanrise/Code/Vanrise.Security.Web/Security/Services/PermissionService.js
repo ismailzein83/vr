@@ -54,7 +54,9 @@
             VRNotificationService.showConfirmation().then(function (confirmed) {
                 if (confirmed) {
                     return VR_Sec_PermissionAPIService.DeletePermissions(dataItem.Entity.HolderType, dataItem.Entity.HolderId, dataItem.Entity.EntityType, dataItem.Entity.EntityId).then(function (response) {
-                        onPermissionDeleted();
+                        if (onPermissionDeleted && typeof onPermissionDeleted == 'function') {
+                            onPermissionDeleted();
+                        }
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, scope);
                     });
@@ -63,18 +65,15 @@
         }
 
         function assignPermissions(holderType, holderId) {
-            var modalSettings = {
-            };
-            var parameters = {
+            var modalParameters = {
                 holderType: holderType,
                 holderId: holderId,
-                notificationResponseText: "Permissions"
+                notificationResponseText: 'Permissions'
             };
 
-            modalSettings.onScopeReady = function (modalScope) {
+            var modalSettings = {};
 
-            };
-            VRModalService.showModal('/Client/Modules/Security/Views/Permission/PermissionEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Security/Views/Permission/PermissionEditor.html', modalParameters, modalSettings);
         }
     };
 

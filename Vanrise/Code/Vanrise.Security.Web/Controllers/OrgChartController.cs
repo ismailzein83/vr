@@ -13,52 +13,52 @@ namespace Vanrise.Security.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "OrgChart")]
     public class OrgChartController : Vanrise.Web.Base.BaseAPIController
     {
+        OrgChartManager _manager;
+        public OrgChartController()
+        {
+            _manager = new OrgChartManager();
+        }
+
         [HttpPost]
         [Route("GetFilteredOrgCharts")]
         public object GetFilteredOrgCharts(Vanrise.Entities.DataRetrievalInput<OrgChartQuery> input)
         {
-            OrgChartManager manager = new OrgChartManager();
-            return GetWebResponse(input, manager.GetFilteredOrgCharts(input));
+            return GetWebResponse(input, _manager.GetFilteredOrgCharts(input));
         }
 
         [HttpGet]
         [Route("GetOrgChartInfo")]
         public IEnumerable<OrgChartInfo> GetOrgChartInfo()
         {
-            OrgChartManager manager = new OrgChartManager();
-            return manager.GetOrgChartInfo();
+            return _manager.GetOrgChartInfo();
         }
         
         [HttpGet]
         [Route("GetOrgChartById")]
         public OrgChart GetOrgChartById(int orgChartId)
         {
-            OrgChartManager manager = new OrgChartManager();
-            return manager.GetOrgChartById(orgChartId);
+            return _manager.GetOrgChartById(orgChartId);
         }
 
         [HttpPost]
         [Route("AddOrgChart")]
         public Vanrise.Entities.InsertOperationOutput<OrgChart> AddOrgChart(OrgChart orgChartObject)
         {
-            OrgChartManager manager = new OrgChartManager();
-            return manager.AddOrgChart(orgChartObject);
+            return _manager.AddOrgChart(orgChartObject);
         }
 
         [HttpPost]
         [Route("UpdateOrgChart")]
         public Vanrise.Entities.UpdateOperationOutput<OrgChart> UpdateOrgChart(OrgChart orgChartObject)
         {
-            OrgChartManager manager = new OrgChartManager();
-            return manager.UpdateOrgChart(orgChartObject);
+            return _manager.UpdateOrgChart(orgChartObject);
         }
 
         [HttpGet]
         [Route("DeleteOrgChart")]
         public Vanrise.Entities.DeleteOperationOutput<object> DeleteOrgChart(int orgChartId)
         {
-            OrgChartManager manager = new OrgChartManager();
-            return manager.DeleteOrgChart(orgChartId);
+            return _manager.DeleteOrgChart(orgChartId);
         }
     }
 }

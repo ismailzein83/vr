@@ -1,19 +1,27 @@
-﻿app.service('BusinessEntitiesAPIService', function (BaseAPIService) {
+﻿(function (appControllers) {
 
-    return ({
-        GetEntityNodes: GetEntityNodes,
-        ToggleBreakInheritance: ToggleBreakInheritance
-    });
+    'use strict';
 
-    function GetEntityNodes() {
-        return BaseAPIService.get("/api/BusinessEntities/GetEntityNodes");
-    }
+    BusinessEntityAPIService.$inject = ['BaseAPIService', 'VR_Sec_ModuleConfig', 'UtilsService'];
 
-    function ToggleBreakInheritance(entityType, entityId) {
-        return BaseAPIService.get("/api/BusinessEntities/ToggleBreakInheritance", 
-            {
+    function BusinessEntityAPIService(BaseAPIService, VR_Sec_ModuleConfig, UtilsService) {
+        return ({
+            GetEntityNodes: GetEntityNodes,
+            ToggleBreakInheritance: ToggleBreakInheritance
+        });
+
+        function GetEntityNodes() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'BusinessEntity', 'GetEntityNodes'));
+        }
+
+        function ToggleBreakInheritance(entityType, entityId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'BusinessEntity', 'ToggleBreakInheritance'), {
                 entityType: entityType,
                 entityId: entityId
             });
+        }
     }
-});
+
+    appControllers.service('VR_Sec_BusinessEntityAPIService', BusinessEntityAPIService);
+
+})(appControllers);

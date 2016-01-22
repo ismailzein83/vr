@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Caching;
+using Vanrise.Common;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
 
@@ -10,12 +12,17 @@ namespace Vanrise.Security.Business
 {
     public class BusinessEntityModuleManager
     {
+        #region Public Methods
+
+        public IEnumerable<BusinessEntityModule> GetBusinessEntityModules()
+        {
+            return GetCachedBusinessEntityModules().Values;
+        }
+
         public BusinessEntityModule GetBusinessEntityModuleById(int moduleId)
         {
-            var cachedModules = GetCachedBusinessEntities();
-            BusinessEntityModule module;
-            cachedModules.TryGetValue(moduleId, out module);
-            return module;
+            var cachedModules = GetCachedBusinessEntityModules();
+            return cachedModules.FindRecord(module => module.ModuleId == moduleId);
         }
 
         public string GetBusinessEntityModuleName(int moduleId)
@@ -24,11 +31,18 @@ namespace Vanrise.Security.Business
             return module != null ? module.Name : null;
         }
 
+        public void SetCacheExpired()
+        {
+            CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetModules");
+        }
+        
+        #endregion
+        
         #region Private Methods
 
-        Dictionary<int, BusinessEntityModule> GetCachedBusinessEntities()
+        Dictionary<int, BusinessEntityModule> GetCachedBusinessEntityModules()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBusinessEntites",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetModules",
             () =>
             {
                 IBusinessEntityModuleDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityModuleDataManager>();

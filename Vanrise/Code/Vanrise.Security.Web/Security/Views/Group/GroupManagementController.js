@@ -5,25 +5,24 @@
 
     function GroupManagementController($scope, VR_Sec_GroupService) {
 
-        var gridApi;
+        var gridAPI;
         var filter = {};
 
         defineScope();
         load();
 
         function defineScope() {
-
-            $scope.onGroupGridReady = function (api) {
-                gridApi = api;
-                gridApi.loadGrid(filter);
+            $scope.onGridReady = function (api) {
+                gridAPI = api;
+                gridAPI.loadGrid(filter);
             };
 
-            $scope.searchClicked = function () {
+            $scope.search = function () {
                 getFilterObject();
-                gridApi.loadGrid(filter);
+                gridAPI.loadGrid(filter);
             };
 
-            $scope.addNewGroup = addGroup;
+            $scope.addGroup = addGroup;
         }
 
         function load() {
@@ -37,11 +36,10 @@
 
         function addGroup() {
             var onGroupAdded = function (groupObj) {
-                if (gridApi != undefined) {
-                    gridApi.onGroupAdded(groupObj);
+                if (gridAPI) {
+                    gridAPI.onGroupAdded(groupObj);
                 }
             };
-
             VR_Sec_GroupService.addGroup(onGroupAdded);
         }
     }
@@ -49,4 +47,3 @@
     appControllers.controller('VR_Sec_GroupManagementController', GroupManagementController);
 
 })(appControllers);
-

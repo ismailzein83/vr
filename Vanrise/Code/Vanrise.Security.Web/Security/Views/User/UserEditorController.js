@@ -1,13 +1,13 @@
 ﻿(function (appControllers) {
-    "use strict";
+
+    'use strict';
 
     UserEditorController.$inject = ['$scope', 'VR_Sec_UserAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
     function UserEditorController($scope, VR_Sec_UserAPIService, VRNotificationService, VRNavigationService, UtilsService) {
-
         var isEditMode;
-        var userEntity;
         var userId;
+        var userEntity;
         
         loadParameters();
         defineScope();
@@ -23,8 +23,7 @@
         }
 
         function defineScope() {
-            $scope.SaveUser = function () {
-                
+            $scope.save = function () {
                 if (isEditMode)
                     return updateUser();
                 else
@@ -32,7 +31,7 @@
             };
 
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
         }
 
@@ -71,9 +70,9 @@
 
         function setTitle() {
             if (isEditMode && userEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(userEntity.Name, "User");
+                $scope.title = UtilsService.buildTitleForUpdateEditor(userEntity.Name, 'User');
             else
-                $scope.title = UtilsService.buildTitleForAddEditor("User");
+                $scope.title = UtilsService.buildTitleForAddEditor('User');
         }
 
         function loadStaticData() {
@@ -93,7 +92,7 @@
                 name: $scope.name,
                 email: $scope.email,
                 description: $scope.description,
-                Status: $scope.isActive == false ? "0" : "1"
+                Status: $scope.isActive == false ? '0' : '1'
             };
             return userObject;
         }
@@ -105,7 +104,7 @@
 
             return VR_Sec_UserAPIService.AddUser(userObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("User", response, "Email")) {
+                if (VRNotificationService.notifyOnItemAdded('User', response, 'Email')) {
                     if ($scope.onUserAdded != undefined)
                         $scope.onUserAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -124,7 +123,7 @@
             var userObject = buildUserObjFromScope();
 
             return VR_Sec_UserAPIService.UpdateUser(userObject).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("User", response, "Email")) {
+                if (VRNotificationService.notifyOnItemUpdated('User', response, 'Email')) {
                     if ($scope.onUserUpdated != undefined)
                         $scope.onUserUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
@@ -140,5 +139,3 @@
     appControllers.controller('VR_Sec_UserEditorController', UserEditorController);
 
 })(appControllers);
-
-

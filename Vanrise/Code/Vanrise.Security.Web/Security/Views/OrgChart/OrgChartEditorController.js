@@ -94,7 +94,9 @@
         }
 
         function loadUsers() {
-            return VR_Sec_UserAPIService.GetUsers().then(function (response) {
+            var filter = UtilsService.serializetoJson(null);
+
+            return VR_Sec_UserAPIService.GetUsersInfo(filter).then(function (response) {
                 if (response) {
                     users = [];
 

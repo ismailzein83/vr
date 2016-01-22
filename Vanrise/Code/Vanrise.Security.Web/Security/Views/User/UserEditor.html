@@ -2,16 +2,16 @@
     <vr-modalbody>
         <vr-form name="formUserEditor">
             <vr-row>
-                <vr-columns colnum="6">
+                <vr-columns width="1/2row">
                     <vr-textbox value="email" label="Email" type="email" isrequired></vr-textbox>
                 </vr-columns>
-                <vr-columns colnum="6">
-                    <vr-textbox value="name" label="Name" isrequired></vr-textbox> <!--customvalidate="CheckUserName"-->
+                <vr-columns width="1/2row">
+                    <vr-textbox value="name" label="Name" isrequired></vr-textbox>
                 </vr-columns>
-                <vr-columns colnum="6">
+                <vr-columns width="1/2row">
                     <vr-textbox value="description" label="Description"></vr-textbox>
                 </vr-columns>
-                <vr-columns colnum="6">
+                <vr-columns width="1/2row">
                     <vr-switch value="isActive" label="Active"></vr-switch>
                 </vr-columns>
             </vr-row>
@@ -20,10 +20,9 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formUserEditor" data-onclick="SaveUser"></vr-button>
+                <vr-button type="Save" formname="formUserEditor" data-onclick="save"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>
-
     </div>
 </div>

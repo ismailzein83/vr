@@ -146,10 +146,9 @@
             }
 
             function deletePermission(dataItem) {
-                var onPermissionDeleted = function (deletedPermission) {
-                    gridAPI.retrieveData(gridQuery);
+                var onPermissionDeleted = function () {
+                    gridAPI.itemDeleted(dataItem);
                 };
-
                 VR_Sec_PermissionService.deletePermission($scope, dataItem, onPermissionDeleted);
             }
         }

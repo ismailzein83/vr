@@ -1,50 +1,49 @@
-﻿ChangePasswordController.$inject = ['$scope', 'SecurityAPIService', 'VRNotificationService'];
+﻿(function (appControllers) {
 
-function ChangePasswordController($scope, SecurityAPIService, VRNotificationService) {
+    'use strict';
 
-    loadParameters();
-    defineScope();
-    load();
+    ChangePasswordController.$inject = ['$scope', 'VR_Sec_SecurityAPIService', 'VRNotificationService'];
 
-    function loadParameters() {
-    }
+    function ChangePasswordController($scope, VR_Sec_SecurityAPIService, VRNotificationService) {
 
-    function defineScope() {
+        loadParameters();
+        defineScope();
+        load();
 
-        $scope.ChangePassword = function () {
+        function loadParameters() {
+        }
 
-            var ChangedPasswordObject = {
-                OldPassword: $scope.txtPasswordOld,
-                NewPassword: $scope.txtPasswordNew
-            }
+        function defineScope() {
+            $scope.save = function () {
+                var changedPasswordObject = {
+                    OldPassword: $scope.oldPassword,
+                    NewPassword: $scope.newPassword
+                };
 
-            return SecurityAPIService.ChangePassword(ChangedPasswordObject)
-                        .then(function (response) {
-                            if (VRNotificationService.notifyOnItemUpdated("User's password", response)) {
-                                $scope.modalContext.closeModal();
-                            }
-                        })
-                        .catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        });
-        };
+                return VR_Sec_SecurityAPIService.ChangePassword(changedPasswordObject).then(function (response) {
+                    if (VRNotificationService.notifyOnItemUpdated("User's password", response)) {
+                        $scope.modalContext.closeModal();
+                    }
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
+            };
 
-        $scope.close = function () {
-            $scope.modalContext.closeModal();
-        };
+            $scope.close = function () {
+                $scope.modalContext.closeModal();
+            };
 
-        $scope.ConfirmPassword = function () {
-
-            if ($scope.txtPasswordNew != $scope.txtPasswordConfirmed)
-                return "Your Passwords do not match";
-            else
+            $scope.validatePasswords = function () {
+                if ($scope.newPassword != $scope.confirmedPassword)
+                    return 'Passwords do not match';
                 return null;
-        };
-    }
+            };
+        }
 
-    function load() {
-    }
+        function load() {
+        }
+    };
 
-};
+    appControllers.controller('VR_Sec_ChangePasswordController', ChangePasswordController);
 
-appControllers.controller('Security_ChangePasswordController', ChangePasswordController);
+})(appControllers);

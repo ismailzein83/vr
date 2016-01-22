@@ -18,7 +18,7 @@
                 modalScope.onOrgChartAdded = onOrgChartAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Security/Views/OrgChartEditor.html', null, modalSettings);
+            VRModalService.showModal('/Client/Modules/Security/Views/OrgChart/OrgChartEditor.html', null, modalSettings);
         }
 
         function editOrgChart(orgChartId, onOrgChartUpdated) {
@@ -32,7 +32,7 @@
                 modalScope.onOrgChartUpdated = onOrgChartUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/Security/Views/OrgChartEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Security/Views/OrgChart/OrgChartEditor.html', modalParameters, modalSettings);
         }
 
         // scope is the grid's $scope

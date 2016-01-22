@@ -1,34 +1,40 @@
-﻿app.service('VR_Sec_GroupService', ['VRModalService',
-    function (VRModalService) {
+﻿(function (appControllers) {
 
-        function addGroup(onGroupAdded) {
-            var settings = {};
+    'use strict';
 
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onGroupAdded = onGroupAdded;
-            };
+    GroupService.$inject = ['VRModalService'];
 
-            VRModalService.showModal('/Client/Modules/Security/Views/Group/GroupEditor.html', null, settings);
-        }
-
-        function editGroup(groupId, onGroupUpdated) {
-            var modalSettings = {};
-
-            var parameters = {
-                groupId: groupId
-            };
-
-            modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onGroupUpdated = onGroupUpdated;
-            };
-
-            VRModalService.showModal('/Client/Modules/Security/Views/Group/GroupEditor.html', parameters, modalSettings);
-        }
-
-
+    function GroupService(VRModalService) {
         return ({
             addGroup: addGroup,
             editGroup: editGroup
         });
 
-    }]);
+        function addGroup(onGroupAdded) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onGroupAdded = onGroupAdded;
+            };
+
+            VRModalService.showModal('/Client/Modules/Security/Views/Group/GroupEditor.html', null, modalSettings);
+        }
+
+        function editGroup(groupId, onGroupUpdated) {
+            var modalParameters = {
+                groupId: groupId
+            };
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onGroupUpdated = onGroupUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/Security/Views/Group/GroupEditor.html', modalParameters, modalSettings);
+        }
+    }
+
+    appControllers.service('VR_Sec_GroupService', GroupService);
+
+})(appControllers);

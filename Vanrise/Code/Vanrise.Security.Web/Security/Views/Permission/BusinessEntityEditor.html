@@ -1,46 +1,40 @@
-﻿<div vr-modalcontent ng-controller="VR_Sec_BusinessEntityEditorController" width="'50%'" vr-loader="isGettingData">
+﻿<div vr-modalcontent ng-controller="VR_Sec_BusinessEntityEditorController" vr-loader="isLoading" width="'50%'">
     <vr-modalbody>
         <vr-form name="formBusinessEntityEditor">
             <vr-row>
 
                 <vr-columns width="1/2row" ng-hide="isEditMode">
                     <vr-section title="Permission Holders">
-                        <vr-columns width="fullrow">
-                            <vr-select label="Users"
-                                       datasource="users"
-                                       selectedvalues="selectedUsers"
-                                       datatextfield="Name"
-                                       datavaluefield="UserId"
-                                       ismultipleselection>
-                            </vr-select>
-                        </vr-columns>
-
-                        <vr-columns width="fullrow">
-                            <vr-select label="Groups"
-                                       datasource="groups"
-                                       selectedvalues="selectedGroups"
-                                       datatextfield="Name"
-                                       datavaluefield="GroupId"
-                                       ismultipleselection>
-                            </vr-select>
-                        </vr-columns>
+                        <vr-validator validationcontext="SaveGroup" validate="validateSelectors()">
+                            <vr-row>
+                                <vr-columns width="fullrow">
+                                    <vr-sec-user-selector on-ready="onUserSelectorReady" selectedvalues="selectedUsers" ismultipleselection></vr-sec-user-selector>
+                                </vr-columns>
+                            </vr-row>
+                            <vr-row>
+                                <vr-columns width="fullrow">
+                                    <vr-sec-group-selector on-ready="onGroupSelectorReady" selectedvalues="selectedGroups" ismultipleselection></vr-sec-group-selector>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-validator>
                     </vr-section>
                 </vr-columns>
 
                 <vr-columns width="1/2row">
                     <vr-section title="Assigned Permissions">
+                        <vr-validator validationcontext="SaveGroup" validate="validateAssignedPermissions()">
+                            <vr-row ng-repeat="permission in entityPermissions">
+                                <vr-columns width="1/2row">
+                                    {{permission.name}}
+                                </vr-columns>
 
-                        <vr-row ng-repeat="permission in entityPermissions">
-                            <vr-columns width="1/2row">
-                                {{permission.name}}
-                            </vr-columns>
-                            <vr-columns width="1/2row">
-                                <vr-choices selectedindex="permission.selectedFlagOptionIndex" onselectionchanged="permissionsSelected(permission)" isradio>
-                                    <vr-choice ng-repeat="permissionFlagOption in permissionFlagOptions">{{permissionFlagOption}}</vr-choice>
-                                </vr-choices>
-                            </vr-columns>
-                        </vr-row>
-
+                                <vr-columns width="1/2row">
+                                    <vr-choices selectedindex="permission.selectedFlagOptionIndex" onselectionchanged="onPermissionSelectionChanged(permission)" isradio>
+                                        <vr-choice ng-repeat="permissionFlagOption in permissionFlagOptions">{{permissionFlagOption}}</vr-choice>
+                                    </vr-choices>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-validator>
                     </vr-section>
                 </vr-columns>
 
@@ -50,7 +44,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formBusinessEntityEditor" vr-disabled="!isPermissionsFlagSelected()" data-onclick="savePermissions"></vr-button>
+                <vr-button type="Save" formname="formBusinessEntityEditor" data-onclick="save" validationcontext="SaveGroup"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

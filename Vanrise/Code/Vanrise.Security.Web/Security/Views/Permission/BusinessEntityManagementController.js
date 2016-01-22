@@ -2,11 +2,12 @@
 
     'use strict';
 
-    BusinessEntityManagementController.$inject = ['$scope', 'BusinessEntitiesAPIService', 'VR_Sec_PermissionService', 'PermissionFlagEnum', 'HolderTypeEnum', 'UtilsService', 'VRModalService', 'VRNotificationService'];
+    BusinessEntityManagementController.$inject = ['$scope', 'VR_Sec_BusinessEntityAPIService', 'VR_Sec_PermissionService', 'PermissionFlagEnum', 'HolderTypeEnum', 'UtilsService', 'VRModalService', 'VRNotificationService'];
 
-    function BusinessEntityManagementController($scope, BusinessEntityAPIService, VR_Sec_PermissionService, PermissionFlagEnum, HolderTypeEnum, UtilsService, VRModalService, VRNotificationService) {
-
+    function BusinessEntityManagementController($scope, VR_Sec_BusinessEntityAPIService, VR_Sec_PermissionService, PermissionFlagEnum, HolderTypeEnum, UtilsService, VRModalService, VRNotificationService) {
         var treeAPI;
+        var treeReadyDeferred = UtilsService.createPromiseDeferred();
+
         var gridAPI;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -15,10 +16,31 @@
 
         function defineScope() {
             $scope.beList = [];
+            $scope.showBreakInheritance = true;
 
-            $scope.onPermissionGridReady = function (api) {
+            $scope.onTreeReady = function (api) {
+                treeAPI = api;
+                treeReadyDeferred.resolve();
+            };
+
+            $scope.onTreeValueChanged = function () {
+                if ($scope.currentNode) {
+                    $scope.showBreakInheritance = !$scope.currentNode.BreakInheritance;
+                    gridAPI.loadGrid(getGridQuery());
+                }
+            };
+
+            $scope.onGridReady = function (api) {
                 gridAPI = api;
                 gridReadyDeferred.resolve();
+            };
+
+            $scope.toggleInheritance = function () {
+                return VR_Sec_BusinessEntityAPIService.ToggleBreakInheritance($scope.currentNode.EntType, $scope.currentNode.EntityId).then(function (response) {
+                       $scope.currentNode.BreakInheritance = !$scope.currentNode.BreakInheritance;
+                       $scope.showBreakInheritance = !$scope.currentNode.BreakInheritance;
+                       gridAPI.loadGrid(getGridQuery());
+                   });
             };
 
             $scope.addPermission = function () {
@@ -27,58 +49,44 @@
                 };
                 VR_Sec_PermissionService.addPermission($scope.currentNode.EntType, $scope.currentNode.EntityId, $scope.currentNode.PermissionOptions, $scope.permissions, onPermissionAdded);
             };
-
-            $scope.ToggleInheritance = toggleInheritance;
-            $scope.showBreakInheritance = true;
-
-            $scope.treeReady = function (api) {
-                treeAPI = api;
-            }
-
-            $scope.treeValueChanged = function () {
-                if (angular.isObject($scope.currentNode)) {
-                    $scope.showBreakInheritance = !$scope.currentNode.BreakInheritance;
-
-                    var query = {
-                        EntityId: $scope.currentNode.EntityId,
-                        EntityType: $scope.currentNode.EntType,
-                        BusinessEntityNode: $scope.currentNode
-                    };
-
-                    gridAPI.loadGrid(query);
-                }
-            }
         }
 
         function load() {
-            $scope.isGettingData = true;
-
-            UtilsService.waitMultiplePromises([loadTree(), gridReadyDeferred.promise]).finally(function () {
-                $scope.isGettingData = false;
-                treeAPI.refreshTree($scope.beList);
-            });
+            $scope.isLoading = true;
+            loadAllControls();
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations();
+            return UtilsService.waitMultiplePromises([loadTree(), gridReadyDeferred.promise]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
+
+            function loadTree() {
+                var loadTreeDeferred = UtilsService.createPromiseDeferred();
+
+                VR_Sec_BusinessEntityAPIService.GetEntityNodes().then(function (response) {
+                    $scope.beList = response;
+
+                    treeReadyDeferred.promise.then(function () {
+                        loadTreeDeferred.resolve();
+                        treeAPI.refreshTree($scope.beList);
+                    });
+                }).catch(function (error) {
+                    loadTreeDeferred.reject();
+                });
+
+                return loadTreeDeferred.promise;
+            }
         }
 
-        function loadTree() {
-            return BusinessEntityAPIService.GetEntityNodes()
-               .then(function (response) {
-                   $scope.beList = response;
-               }).catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               });
-        }
-
-        function toggleInheritance() {
-            return BusinessEntityAPIService.ToggleBreakInheritance($scope.currentNode.EntType, $scope.currentNode.EntityId)
-               .then(function (response) {
-                   $scope.currentNode.BreakInheritance = !$scope.currentNode.BreakInheritance;
-                   $scope.showBreakInheritance = !$scope.currentNode.BreakInheritance;
-                   refreshGrid();
-               });
+        function getGridQuery() {
+            return {
+                EntityId: $scope.currentNode.EntityId,
+                EntityType: $scope.currentNode.EntType,
+                BusinessEntityNode: $scope.currentNode
+            };
         }
     }
 
