@@ -61,7 +61,7 @@ function widgetEditorController($scope, VR_Sec_WidgetAPIService, UtilsService, V
                 VRNotificationService.showWarning("Please enter all required data!!");
                 return;
             }
-
+            $scope.scopeModal.isLoading = true;
             if (isEditMode)
                 return updateWidget();
             else
@@ -116,6 +116,8 @@ function widgetEditorController($scope, VR_Sec_WidgetAPIService, UtilsService, V
             })
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModal.isLoading = false;
             });
     }
 
@@ -131,6 +133,8 @@ function widgetEditorController($scope, VR_Sec_WidgetAPIService, UtilsService, V
             })
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModal.isLoading = false;
             });
     }
 

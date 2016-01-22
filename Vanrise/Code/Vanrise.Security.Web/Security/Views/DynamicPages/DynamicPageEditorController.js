@@ -153,6 +153,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
         }
 
         $scope.scopeModal.save = function () {
+            $scope.scopeModal.isLoading = true;
             buildContentsFromScope();
             buildViewObjFromScope();
 
@@ -350,6 +351,8 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
             })
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModal.isLoading = false;
             });
     }
 
@@ -363,9 +366,12 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                         $scope.onPageUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
+
             })
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function(){
+                $scope.scopeModal.isLoading = false;
             });
     }
 
