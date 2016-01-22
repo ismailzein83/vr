@@ -74,6 +74,7 @@ app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'V
             function defineAPI() {
                 var api = {};
                 api.load = function (payload) {
+
                     if (payload != undefined)
                         $scope.widget = payload;
                     if ($scope.widget != null) {

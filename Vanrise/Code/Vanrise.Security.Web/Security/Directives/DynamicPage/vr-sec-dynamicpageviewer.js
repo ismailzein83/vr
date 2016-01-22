@@ -194,7 +194,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
             }
 
             function addBodyWidget(bodyWidget) {
-
+              
                 var filter = {};
                 var widgetPeriod = {
                     title: bodyWidget.SectionTitle,

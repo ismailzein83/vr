@@ -18,7 +18,7 @@
                      ToDate: toDate,
                      TopCount: topCount,
                      MeasureTypesNames: measureTypesNames,
-                     TimeEntity:timeEntityName
+                     TimeEntityName: timeEntityName
                  }, {
                      returnAllResponseParameters: true,
                      responseTypeAsBufferArray: true
@@ -32,7 +32,7 @@
                      FromDate: fromDate,
                      ToDate: toDate,
                      MeasureTypesNames: measureTypesNames,
-                     TimeEntity: timeEntityName
+                     TimeEntityName: timeEntityName
                  }, {
                      returnAllResponseParameters: true,
                      responseTypeAsBufferArray: true
@@ -44,7 +44,7 @@
                  {
                      FromDate: fromDate,
                      ToDate: toDate,
-                     TimeEntityId: timeEntityName,
+                     TimeEntityName: timeEntityName,
                      MeasureTypesNames: measureTypesNames
                  });
          }
@@ -57,7 +57,7 @@
                      FromDate: fromDate,
                      ToDate: toDate,
                      TopCount: topCount,
-                     TimeEntityId: timeEntityName,
+                     TimeEntityName: timeEntityName,
                      MeasureTypesNames: measureTypesNames
                  });
          }
@@ -68,7 +68,7 @@
                      TimeDimensionType: timeDimensionType,
                      FromDate: fromDate,
                      ToDate: toDate,
-                     TimeEntityId: timeEntityName,
+                     TimeEntityName: timeEntityName,
                      MeasureTypesNames: measureTypesNames
                  });
          }
@@ -81,7 +81,7 @@
                      TimeDimensionType: timeDimensionType,
                      FromDate: fromDate,
                      ToDate: toDate,
-                     TimeEntityId: timeEntityName,
+                     TimeEntityName: timeEntityName,
                      MeasureTypesNames: measureTypesNames
                  });
          }
