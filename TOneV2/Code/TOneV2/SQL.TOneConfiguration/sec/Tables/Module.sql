@@ -7,6 +7,9 @@
     [Icon]         NVARCHAR (50)  NULL,
     [Rank]         INT            NULL,
     [AllowDynamic] BIT            NULL,
+    [timestamp]    ROWVERSION     NULL,
     CONSTRAINT [PK_Module] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 

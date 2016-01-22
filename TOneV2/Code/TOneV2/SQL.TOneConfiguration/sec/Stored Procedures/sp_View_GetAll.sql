@@ -23,9 +23,6 @@ BEGIN
       ,v.[Type]
       ,v.[Content]
       ,v.[Rank]
-      ,m.Name as ModuleName
       FROM [sec].[View] v
-      LEFT JOIN	sec.[Module] m 
-	  ON 	v.Module=m.Id 
       ORDER BY v.[Module],v.[Rank]
 END
