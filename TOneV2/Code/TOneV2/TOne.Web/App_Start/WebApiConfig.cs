@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -13,6 +14,8 @@ namespace TOne.Web
         public static void Register(HttpConfiguration config)
         {
             Vanrise.Web.WebApiConfig.Register(config);
+            var json = config.Formatters.JsonFormatter;
+            json.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
         }
     }
 }

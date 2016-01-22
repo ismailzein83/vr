@@ -13,6 +13,7 @@ namespace Vanrise.Web.Base
             controllerSettings.Formatters.Clear();
             var jsonFormatter = new System.Net.Http.Formatting.JsonMediaTypeFormatter();
             jsonFormatter.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Objects;
+            jsonFormatter.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Local;
             controllerSettings.Formatters.Add(jsonFormatter);
         }
     }

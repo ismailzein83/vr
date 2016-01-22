@@ -107,7 +107,8 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                     return;
                 }
                 var dt = e.date;
-                selectedDate = convertUTCDateToLocalDate(new Date(dt));
+                //selectedDate = convertUTCDateToLocalDate(new Date(dt));
+                selectedDate = new Date(dt);
                 selectedDate.setSeconds(0);
                 selectedDate.setMilliseconds(0);
                 var modelValue = $scope.ctrl.value;
@@ -118,26 +119,26 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                    
                     if ($attrs.type == "time") {
                         $scope.ctrl.value = {
-                            Hour: selectedDate.getUTCHours(),
-                            Minute: selectedDate.getUTCMinutes(),
-                            Second: selectedDate.getUTCSeconds(),
-                            Millisecond: selectedDate.getUTCMilliseconds()
+                            Hour: selectedDate.getHours(),
+                            Minute: selectedDate.getMinutes(),
+                            Second: selectedDate.getSeconds(),
+                            Millisecond: selectedDate.getMilliseconds()
                         };
                     }
                     else if($attrs.type == "date")
                     {
-                        selectedDate.setUTCHours(0, 0, 0, 0);
-                        var date = moment.utc(selectedDate).format("L LT");
+                        var date = new Date(selectedDate.setHours(0, 0, 0, 0));
+                        //var date = moment.utc(selectedDate).format("L LT");
                         $scope.ctrl.value = date ;
                     }
                     else if ($attrs.type == "dateHour") {
-                        selectedDate.setUTCHours(selectedDate.getUTCHours(), 0, 0, 0);
-                        var date = moment.utc(selectedDate).format("L LT");
+                        var date = new Date(selectedDate.setHours(selectedDate.getHours(), 0, 0, 0));
+                        //var date = moment.utc(selectedDate).format("L LT");
                         $scope.ctrl.value = date;
                     }
                     else {                        
-                        selectedDate.setUTCHours(selectedDate.getUTCHours(), selectedDate.getUTCMinutes(), 0, 0);
-                        var date = moment.utc(selectedDate).format("L LT"); 
+                        var date = new Date(selectedDate.setHours(selectedDate.getHours(), selectedDate.getMinutes(), 0, 0));
+                        //var date = moment.utc(selectedDate).format("L LT"); 
                         $scope.ctrl.value = date ;
 
                     }
@@ -149,14 +150,14 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                 return new Date(date).toUTCString().replace(' Z', '');
             }
             function convertUTCDateToLocalDate(date) {
-                var newDate = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+                //var newDate = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
 
                 //var offset = date.getTimezoneOffset() / 60;
                 //var hours = date.getHours();
 
                 //newDate.setHours(hours - offset);
 
-                return newDate;
+                //return newDate;
             }
 
 
@@ -221,8 +222,8 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                     if (ctrl.value.Millisecond == undefined)
                         ctrl.value.Millisecond = 0;
                     initialDate.setHours(ctrl.value.Hour, ctrl.value.Minute, ctrl.value.Second, ctrl.value.Millisecond);
-                    var convertedDate = convertUTCDateToLocalDate(initialDate);
-                    date = convertedDate;
+                    //var convertedDate = convertUTCDateToLocalDate(initialDate);
+                    //date = convertedDate;
                 }
                 else {
                     date = ctrl.value instanceof Date ? ctrl.value : (new Date(ctrl.value));
