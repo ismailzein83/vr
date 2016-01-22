@@ -6,39 +6,46 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 {
-    public class AverageAggregate : IAggregate
+    public class AverageAggregate : BaseAggregate
     {
         Func<CDR, bool> _condition;
         Func<CDR, Decimal> _cdrExpressionToSum;
-        decimal _sum;
-        int _count;
 
         public AverageAggregate(Func<CDR, bool> condition, Func<CDR, Decimal> cdrExpressionToSum)
         {
             this._condition = condition;
-            _cdrExpressionToSum = cdrExpressionToSum;
+            this._cdrExpressionToSum = cdrExpressionToSum;
         }
 
-        public void EvaluateCDR(CDR cdr)
+
+        public override AggregateState CreateState()
         {
-            if (this._condition == null || this._condition(cdr))
+            return new AverageAggregateState();
+        }
+
+        public override void Evaluate(AggregateState state, CDR normalCDR)
+        {
+            if (this._condition == null || this._condition(normalCDR))
             {
-                _sum += _cdrExpressionToSum(cdr);
-                _count += 1;
+                AverageAggregateState averageAggregateState = state as AverageAggregateState;
+                averageAggregateState.Sum += _cdrExpressionToSum(normalCDR);
+                averageAggregateState.Count += 1;
             }
-          
         }
 
-        public decimal GetResult(INumberProfileParameters parameters)
+        public override decimal GetResult(AggregateState state, INumberProfileParameters strategy)
         {
-            if (this._sum == 0 || this._count == 0)
+            AverageAggregateState averageAggregateState = state as AverageAggregateState;
+            if (averageAggregateState.Sum == 0 || averageAggregateState.Count == 0)
                 return 0;
             else
-                return _sum / _count;
+                return averageAggregateState.Sum / averageAggregateState.Count;
         }
-
-
     }
 
-
+    public class AverageAggregateState : AggregateState
+    {
+        public decimal Sum { get; set; }
+        public int Count { get; set; }
+    }
 }

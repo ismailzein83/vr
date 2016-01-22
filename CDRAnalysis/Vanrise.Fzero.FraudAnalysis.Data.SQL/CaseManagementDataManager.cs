@@ -54,13 +54,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 BEGIN
                 
                     SELECT ac.ID AS CaseID, ac.AccountNumber, ac.[Status], 
-	                       COUNT(*) AS NumberOfOccurances,
+	                       COUNT(sed.ID) AS NumberOfOccurances,
 	                       MAX(sed.SuspicionLevelID) AS SuspicionLevelID, 
 	                       MAX(se.ExecutionDate) AS LastOccurance
                     INTO #TEMP_TABLE_NAME#                
-                    FROM FraudAnalysis.AccountCase ac 
-                    LEFT JOIN FraudAnalysis.StrategyExecutionDetails AS sed ON sed.CaseID = ac.ID
-                    LEFT JOIN FraudAnalysis.StrategyExecution AS se ON se.ID = sed.StrategyExecutionID
+                    FROM FraudAnalysis.AccountCase ac  WITH (NOLOCK)
+                    LEFT JOIN FraudAnalysis.StrategyExecutionDetails AS sed WITH (NOLOCK) ON sed.CaseID = ac.ID
+                    LEFT JOIN FraudAnalysis.StrategyExecution AS se WITH (NOLOCK) ON se.ID = sed.StrategyExecutionID
                     #WHERE_CLAUSE#                
                     GROUP BY ac.ID, ac.AccountNumber, ac.Status
               

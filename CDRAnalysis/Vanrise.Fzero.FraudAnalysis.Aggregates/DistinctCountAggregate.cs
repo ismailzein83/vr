@@ -7,65 +7,89 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 {
-    public class DistinctCountAggregate : IAggregate
+    public class DistinctCountAggregate : BaseAggregate
     {
 
         Func<CDR, bool> _condition;
-        Func<CDR, INumberProfileParameters, bool> _conditionWithStrategy;
-        //MethodInfo _propertyGetMethod;
+        Func<CDR, INumberProfileParameters, bool> _conditionWithParametersSet;        
         Func<CDR, Object> _cdrExpressionToCountDistinct;
-        HashSet<Object> _distinctItems = new HashSet<Object>();
-
-        Dictionary<INumberProfileParameters, DistinctCountAggregateStrategyInfo> _strategiesInfo ;
-       
-
+        List<INumberProfileParameters> _parametersSets;
         public DistinctCountAggregate(Func<CDR, Object> cdrExpressionToCountDistinct, Func<CDR, bool> condition)
         {
             this._cdrExpressionToCountDistinct = cdrExpressionToCountDistinct;
             this._condition = condition;
         }
 
-        public DistinctCountAggregate(Func<CDR, Object> cdrExpressionToCountDistinct, Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> parameters)
+        public DistinctCountAggregate(Func<CDR, Object> cdrExpressionToCountDistinct, Func<CDR, INumberProfileParameters, bool> condition, List<INumberProfileParameters> parametersSets)
         {
             this._cdrExpressionToCountDistinct = cdrExpressionToCountDistinct;
-            this._conditionWithStrategy = condition;
-            foreach (var strategy in parameters)
-                _strategiesInfo.Add(strategy, new DistinctCountAggregateStrategyInfo());
+            this._conditionWithParametersSet = condition;
+            this._parametersSets = parametersSets;
         }
 
-        public void EvaluateCDR(CDR cdr)
+        public override AggregateState CreateState()
         {
-            if (_strategiesInfo != null)
+            var state = new DistinctCountAggregateState();
+            if (_parametersSets != null)
             {
-                foreach (var strategyCountEntry in _strategiesInfo)
+                state.ItemsStates = new List<DistinctCountAggregateItemState>();
+                for (int i = 0; i < _parametersSets.Count; i++)
                 {
-                    if (_conditionWithStrategy != null && _conditionWithStrategy(cdr, strategyCountEntry.Key))
-                        strategyCountEntry.Value.DistinctItems.Add(this._cdrExpressionToCountDistinct(cdr));
+                    state.ItemsStates.Add(new DistinctCountAggregateItemState { DistinctItems = new HashSet<object>() });
+                }
+            }
+            else
+                state.DistinctItems = new HashSet<object>();
+            return state;
+        }
+
+        public override void Evaluate(AggregateState state, CDR cdr)
+        {
+            DistinctCountAggregateState distinctCountAggregateState = state as DistinctCountAggregateState;
+            if (_parametersSets != null)
+            {
+                for (int i = 0; i < _parametersSets.Count; i++)
+                {
+                    var parameterSet = _parametersSets[i];
+                    if (_conditionWithParametersSet == null || _conditionWithParametersSet(cdr, parameterSet))
+                        distinctCountAggregateState.ItemsStates[i].DistinctItems.Add(this._cdrExpressionToCountDistinct(cdr));
                 }
             }
             else
             {
                 if (this._condition == null || this._condition(cdr))
-                    _distinctItems.Add(this._cdrExpressionToCountDistinct(cdr));
+                    distinctCountAggregateState.DistinctItems.Add(this._cdrExpressionToCountDistinct(cdr));
             }
         }
 
-        public decimal GetResult(INumberProfileParameters strategy)
+        public override decimal GetResult(AggregateState state, INumberProfileParameters parametersSet)
         {
-            if (_strategiesInfo != null)
-                return _strategiesInfo[strategy].DistinctItems.Count();
-            else
-                return _distinctItems.Count(); 
-        }
-
-        private class DistinctCountAggregateStrategyInfo
-        {
-            public DistinctCountAggregateStrategyInfo()
+            DistinctCountAggregateState distinctCountAggregateState = state as DistinctCountAggregateState;
+            if (_parametersSets != null)
             {
-                this.DistinctItems = new HashSet<object>();
+                int parameterSetIndex = this._parametersSets.IndexOf(parametersSet);
+                return distinctCountAggregateState.ItemsStates[parameterSetIndex].DistinctItems.Count();
             }
-            public HashSet<Object> DistinctItems { get; set; }
+            else
+                return distinctCountAggregateState.DistinctItems.Count();
         }
     }
-    
+
+
+    public class DistinctCountAggregateState : AggregateState
+    {
+        public HashSet<Object> DistinctItems { get; set; }
+
+        public List<DistinctCountAggregateItemState> ItemsStates { get; set; }
+    }
+
+    public class DistinctCountAggregateItemState
+    {
+        public DistinctCountAggregateItemState()
+        {
+            this.DistinctItems = new HashSet<object>();
+        }
+        public HashSet<Object> DistinctItems { get; set; }
+    }
+
 }

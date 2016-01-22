@@ -87,7 +87,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             base.OnBeforeExecute(context, handle);
         }
 
-        private void FinishNumberProfileProcessing(ProcessingNumberProfileItem processingNumberProfileItem, ref List<NumberProfile> numberProfileBatch, CreateNumberProfilesInput inputArgument)
+        private void FinishNumberProfileProcessing(ProcessingNumberProfileItem processingNumberProfileItem, List<AggregateDefinition> aggregateDefinitions, int aggregatesCount, ref List<NumberProfile> numberProfileBatch, CreateNumberProfilesInput inputArgument)
         {
             if (inputArgument.StrategiesExecutionInfo != null)
             {
@@ -102,9 +102,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         StrategyExecutionID = strategyExecutionInfo.StrategyExecution.ID,
                         IMEIs = processingNumberProfileItem.IMEIs
                     };
-                    foreach (var aggregateDef in processingNumberProfileItem.AggregateDefinitions)
+                    for (int i = 0; i < aggregatesCount; i++)
                     {
-                        numberProfile.AggregateValues.Add(aggregateDef.KeyName, aggregateDef.Aggregation.GetResult(strategyExecutionInfo.Strategy));
+                        var aggregateDef = aggregateDefinitions[i];
+                        numberProfile.AggregateValues.Add(aggregateDef.KeyName, aggregateDef.Aggregation.GetResult(processingNumberProfileItem.AggregateStates[i], strategyExecutionInfo.Strategy));
                     }
                     numberProfileBatch.Add(numberProfile);
                 }
@@ -118,9 +119,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     ToDate = inputArgument.ToDate,
                     IMEIs = processingNumberProfileItem.IMEIs
                 };
-                foreach (var aggregateDef in processingNumberProfileItem.AggregateDefinitions)
+                for (int i = 0; i < aggregatesCount; i++)
                 {
-                    numberProfile.AggregateValues.Add(aggregateDef.KeyName, aggregateDef.Aggregation.GetResult(inputArgument.Parameters));
+                    var aggregateDef = aggregateDefinitions[i];
+                    numberProfile.AggregateValues.Add(aggregateDef.KeyName, aggregateDef.Aggregation.GetResult(processingNumberProfileItem.AggregateStates[i], inputArgument.Parameters));
                 }
                 numberProfileBatch.Add(numberProfile);
             }
@@ -174,11 +176,12 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 }
 
             var aggregateManager = strategies.Count > 0 ?
-                new AggregateManager(strategies as IEnumerable<INumberProfileParameters>)
+                new AggregateManager(strategies.ToList<INumberProfileParameters>())
                 :
                 new AggregateManager(new List<INumberProfileParameters> { inputArgument.Parameters })
                 ;
-
+            var aggregateDefinitions = aggregateManager.GetAggregateDefinitions(callClassNetTypes);
+            int aggregatesCount = aggregateDefinitions.Count;
             ProcessingNumberProfileItemByNumbers processingNumberProfileItemByNumbers = new ProcessingNumberProfileItemByNumbers();
 
             int cdrsCount = 0;
@@ -210,16 +213,16 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                     currentProcessingNumberProfileItem = new ProcessingNumberProfileItem
                                     {
                                         Number = cdr.MSISDN,
-                                        AggregateDefinitions = aggregateManager.GetAggregateDefinitions(callClassNetTypes)
+                                        AggregateStates = aggregateManager.CreateAggregateStates(aggregateDefinitions)
                                     };
                                     processingNumberProfileItemByNumbers.Add(msidnAsNumber, currentProcessingNumberProfileItem);
                                 }
                                 if (cdr.IMEI != null)
                                     currentProcessingNumberProfileItem.IMEIs.Add(cdr.IMEI);
 
-                                foreach (var aggregateDef in currentProcessingNumberProfileItem.AggregateDefinitions)
+                                for (int i = 0; i < aggregatesCount; i++ )
                                 {
-                                    aggregateDef.Aggregation.EvaluateCDR(cdr);
+                                    aggregateDefinitions[i].Aggregation.Evaluate(currentProcessingNumberProfileItem.AggregateStates[i], cdr);
                                 }
                             }
 
@@ -246,7 +249,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             foreach (var processingNumberProfileItem in processingNumberProfileItemByNumbers.Values)
             {
                 numberOfSubscribers++;
-                FinishNumberProfileProcessing(processingNumberProfileItem, ref numberProfileBatch, inputArgument);
+                FinishNumberProfileProcessing(processingNumberProfileItem, aggregateDefinitions, aggregatesCount, ref numberProfileBatch, inputArgument);
 
 
                 if (numberProfileBatch.Count >= batchSize)
@@ -305,7 +308,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 }
             }
 
-            public List<AggregateDefinition> AggregateDefinitions { get; set; }
+            public List<AggregateState> AggregateStates { get; set; }
         }
 
         private class ProcessingNumberProfileItemByNumbers : BigDictionary<ProcessingNumberProfileItem>

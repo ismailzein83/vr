@@ -25,6 +25,7 @@
     <div ng-show="caseLogsSelected">
         <vr-datagrid datasource="logs"
                      dataretrievalfunction="dataRetrievalFunction_Logs"
+                     defaultsortbyfieldname="'AccountCaseStatusID'" defaultsortdirection="'DESC'"
                      pagingtype="'Pager'"
                      on-ready="gridReady_Logs"
                      idfield="LogID"

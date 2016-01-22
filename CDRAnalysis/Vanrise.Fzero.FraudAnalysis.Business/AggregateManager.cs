@@ -83,12 +83,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-        IEnumerable<INumberProfileParameters> _parameters;
+        List<INumberProfileParameters> _parameters;
         HashSet<int> _nightCallHours = new HashSet<int>() { 0, 1, 2, 3, 4, 5 };
 
 
 
-        public AggregateManager(IEnumerable<INumberProfileParameters> parameters)
+        public AggregateManager(List<INumberProfileParameters> parameters)
         {
             _parameters = parameters;
         }
@@ -128,6 +128,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     {
                         return (cdr.CallType == CallType.OutgoingVoiceCall);
                     })
+                     
                 });
 
             CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
@@ -489,6 +490,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             });
 
             return aggregateDefinitions;
+        }
+
+        public List<AggregateState> CreateAggregateStates(List<AggregateDefinition> aggregateDefinitions)
+        {
+            List<AggregateState> states = new List<AggregateState>();
+            foreach(var aggDef in aggregateDefinitions)
+            {
+                states.Add(aggDef.Aggregation.CreateState());
+            }
+            return states;
         }
 
         private void CheckAndAddAggregateDefinition(List<AggregateDefinition> aggregateDefinitions, HashSet<int> aggregateIdsToUse, AggregateDefinition aggregateDefinition)

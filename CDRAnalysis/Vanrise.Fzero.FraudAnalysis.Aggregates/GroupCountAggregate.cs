@@ -7,65 +7,69 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 {
-    public class GroupCountAggregate : IAggregate
+    public class GroupCountAggregate : BaseAggregate
     {
 
         Func<CDR, INumberProfileParameters, bool> _condition;
-
-        Dictionary<INumberProfileParameters, GroupCountAggregateStrategyInfo> _strategiesInfo;
-        IEnumerable<INumberProfileParameters> _parameters;
+        List<INumberProfileParameters> _parametersSets;
 
 
-        public GroupCountAggregate(Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> parameters)
+        public GroupCountAggregate(Func<CDR, INumberProfileParameters, bool> condition, List<INumberProfileParameters> parametersSets)
         {
             this._condition = condition;
-            _strategiesInfo = new Dictionary<INumberProfileParameters, GroupCountAggregateStrategyInfo>();
-            _parameters = parameters;
-            foreach (var strategy in _parameters)
-                _strategiesInfo.Add(strategy, new GroupCountAggregateStrategyInfo());
+            _parametersSets = parametersSets;
         }
 
-        public void EvaluateCDR(CDR cdr)
+        public override AggregateState CreateState()
         {
-            foreach (var strategyCountEntry in _strategiesInfo)
+            var state = new GroupCountAggregateState();
+            state.ItemsStates = new List<GroupCountAggregateItemState>();
+            for (int i = 0; i < _parametersSets.Count; i++)
             {
-                if (this._condition == null || this._condition(cdr, strategyCountEntry.Key))
-                {
-                    int value;
+                state.ItemsStates.Add(new GroupCountAggregateItemState { HoursvsCalls = new Dictionary<int,int>() });
+            }
+            return state;
+        }
 
-                    if (!strategyCountEntry.Value.HoursvsCalls.TryGetValue(cdr.ConnectDateTime.Hour, out value))
-                    {
-                        strategyCountEntry.Value.HoursvsCalls.Add(cdr.ConnectDateTime.Hour, 1);
-                    }
+        public override void Evaluate(AggregateState state, CDR cdr)
+        {
+            GroupCountAggregateState groupCountAggregateState = state as GroupCountAggregateState;
+            for (int i = 0; i < _parametersSets.Count; i++)
+            {
+                if (this._condition == null || this._condition(cdr, _parametersSets[i]))
+                {
+                    GroupCountAggregateItemState itemState = groupCountAggregateState.ItemsStates[i];
+                    int value;
+                    if (itemState.HoursvsCalls.TryGetValue(cdr.ConnectDateTime.Hour, out value))
+                        itemState.HoursvsCalls[cdr.ConnectDateTime.Hour] = value + 1;
                     else
-                    {
-                        strategyCountEntry.Value.HoursvsCalls[cdr.ConnectDateTime.Hour] = value + 1;
-                    }
+                        itemState.HoursvsCalls.Add(cdr.ConnectDateTime.Hour, 1);
                 }
             }
         }
 
-        public decimal GetResult(INumberProfileParameters strategy)
+        public override decimal GetResult(AggregateState state, INumberProfileParameters parametersSet)
         {
+            GroupCountAggregateState groupCountAggregateState = state as GroupCountAggregateState;
             decimal count = 0;
-            foreach(var value in _strategiesInfo[strategy].HoursvsCalls.Values)
+            int parameterSetIndex = this._parametersSets.IndexOf(parametersSet);
+            foreach (var value in groupCountAggregateState.ItemsStates[parameterSetIndex].HoursvsCalls.Values)
             {
-                if (value >= strategy.MinimumCountofCallsinActiveHour)
+                if (value >= parametersSet.MinimumCountofCallsinActiveHour)
                     count++;
             }
             return count;
         }
+    }
 
-        private class GroupCountAggregateStrategyInfo
-        {
-            public GroupCountAggregateStrategyInfo()
-            {
-                this.HoursvsCalls = new Dictionary<int, int>();
-            }
+    public class GroupCountAggregateState : AggregateState
+    {
+        public List<GroupCountAggregateItemState> ItemsStates { get; set; }
+    }
 
-            public Dictionary<int, int> HoursvsCalls { get; set; }
-        }
-
+    public class GroupCountAggregateItemState
+    {
+        public Dictionary<int, int> HoursvsCalls { get; set; }
     }
     
 }

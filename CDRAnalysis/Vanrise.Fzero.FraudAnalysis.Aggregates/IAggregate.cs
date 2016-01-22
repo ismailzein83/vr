@@ -9,4 +9,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 
         decimal GetResult(INumberProfileParameters strategy);
     }
+
+    public abstract class AggregateState
+    {
+
+    }
+
+    public abstract class BaseAggregate
+    {
+        public abstract AggregateState CreateState();
+
+        public abstract void Evaluate(AggregateState state, CDR cdr);
+
+        public abstract decimal GetResult(AggregateState state, INumberProfileParameters parametersSet);
+    }
 }

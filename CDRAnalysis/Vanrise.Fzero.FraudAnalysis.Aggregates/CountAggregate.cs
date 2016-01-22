@@ -6,57 +6,81 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 {
    
-    public class CountAggregate:IAggregate
+    public class CountAggregate:BaseAggregate
     {
         Func<CDR, bool> _condition;
         Func<CDR, INumberProfileParameters, bool> _conditionWithStrategy;
-        int _count;
-        Dictionary<INumberProfileParameters, CountAggregateStrategyInfo> _strategiesInfo;
-        IEnumerable<INumberProfileParameters> _parameters;
+        List<INumberProfileParameters> _parametersSets;
         public CountAggregate(Func<CDR,bool> condition)
         {
             this._condition = condition;
         }
 
-        public CountAggregate(Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> parameters)
+        public CountAggregate(Func<CDR, INumberProfileParameters, bool> condition, List<INumberProfileParameters> parametersSets)
         {
             this._conditionWithStrategy = condition;
-            _strategiesInfo = new Dictionary<INumberProfileParameters, CountAggregateStrategyInfo>();
-            _parameters = parameters;
-            foreach (var strategy in _parameters)
-                _strategiesInfo.Add(strategy, new CountAggregateStrategyInfo());
+            this._parametersSets = parametersSets;
         }
 
-        public void EvaluateCDR(CDR cdr)
+        public override AggregateState CreateState()
         {
-            if (_strategiesInfo != null)
+            var state = new CountAggregateState();
+            if (_parametersSets != null)
             {
-                foreach (var strategyCountEntry in _strategiesInfo)
+                state.ItemsStates = new List<CountAggregateItemState>();
+                for (int i = 0; i < _parametersSets.Count; i++)
                 {
-                    if (_conditionWithStrategy != null && _conditionWithStrategy(cdr, strategyCountEntry.Key))
-                        strategyCountEntry.Value.Count++;
+                    state.ItemsStates.Add(new CountAggregateItemState());
+                }
+            }
+            return state;
+        }
+
+        public override void Evaluate(AggregateState state, CDR cdr)
+        {
+            CountAggregateState countAggregateState = state as CountAggregateState;
+            if (_parametersSets != null)
+            {
+                for (int i = 0; i < _parametersSets.Count; i++)
+                {
+                    var parameterSet = _parametersSets[i];
+                    if (_conditionWithStrategy == null || _conditionWithStrategy(cdr, parameterSet))
+                    {
+                        var itemState = countAggregateState.ItemsStates[i];
+                        itemState.Count = itemState.Count + 1;
+                    }
                 }
             }
             else
             {
                 if (this._condition == null || this._condition(cdr))
-                    this._count++;
+                    countAggregateState.Count = countAggregateState.Count + 1;
             }
         }
 
-        public decimal GetResult(INumberProfileParameters parameters)
+        public override decimal GetResult(AggregateState state, INumberProfileParameters parametersSet)
         {
-            if (_strategiesInfo != null)
-                return _strategiesInfo[parameters].Count;
+            CountAggregateState countAggregateState = state as CountAggregateState;
+            if (_parametersSets != null)
+            {
+                int parameterSetIndex = this._parametersSets.IndexOf(parametersSet);
+                return countAggregateState.ItemsStates[parameterSetIndex].Count;
+            }
             else
-                return _count;
-        }
-
-        private class CountAggregateStrategyInfo
-        {
-            public int Count { get; set; }
+                return countAggregateState.Count;
         }
     }
 
+    public class CountAggregateState : AggregateState
+    {
+        public int Count { get; set; }
+
+        public List<CountAggregateItemState> ItemsStates { get; set; }
+    }
+
+    public class CountAggregateItemState
+    {
+        public int Count { get; set; }
+    }
     
 }

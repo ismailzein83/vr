@@ -278,7 +278,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing users");
             UserManager userManager = new UserManager();
-            IEnumerable<UserInfo> listUsers = userManager.GetUsersInfo();
+            IEnumerable<User> listUsers = userManager.GetUsers();
 
             foreach (var i in listUsers)
             {

@@ -44,7 +44,6 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public object InitialiazeStreamForDBApply()
         {
-            Console.WriteLine("{0}: InitialiazeStreamForDBApply", DateTime.Now);
             return new NormalCDRDBApplyStream { PartitionedStreamsByDBFromTime = new ConcurrentDictionary<DateTime, PartitionedNormalCDRStream>() };
         }
 
@@ -71,7 +70,6 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public object FinishDBApplyStream(object dbApplyStream)
         {
-            Console.WriteLine("{0}: FinishDBApplyStream", DateTime.Now);
             NormalCDRDBApplyStream normalCDRDBApplyStream = dbApplyStream as NormalCDRDBApplyStream;
             foreach (var entry in normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.Values)
             {
@@ -82,7 +80,6 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public void ApplyCDRsToDB(object preparedCDRs)
         {
-            Console.WriteLine("{0}: ApplyCDRsToDB", DateTime.Now);
             NormalCDRDBApplyStream normalCDRDBApplyStream = preparedCDRs as NormalCDRDBApplyStream;
             //foreach (var entry in normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.Values)
             Parallel.ForEach(normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.Values, (entry) =>

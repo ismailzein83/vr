@@ -7,53 +7,68 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 {
-    public class ConsecutiveAggregate : IAggregate
+    public class ConsecutiveAggregate : BaseAggregate
     {
 
         Func<CDR, INumberProfileParameters, bool> _condition;
 
-        Dictionary<INumberProfileParameters, ConsecutiveAggregateStrategyInfo> _parameterSetsExecutionInfo;
-
         Func<INumberProfileParameters, int> _getGapDistance;
 
-        public ConsecutiveAggregate(Func<CDR, INumberProfileParameters, bool> condition, IEnumerable<INumberProfileParameters> parameterSets, Func<INumberProfileParameters, int> getGapDistance)
+        List<INumberProfileParameters> _parametersSets;
+
+        public ConsecutiveAggregate(Func<CDR, INumberProfileParameters, bool> condition, List<INumberProfileParameters> parametersSets, Func<INumberProfileParameters, int> getGapDistance)
         {
             this._getGapDistance = getGapDistance;
             this._condition = condition;
-            _parameterSetsExecutionInfo = new Dictionary<INumberProfileParameters, ConsecutiveAggregateStrategyInfo>();
-
-            foreach (var strategy in parameterSets)
-                _parameterSetsExecutionInfo.Add(strategy, new ConsecutiveAggregateStrategyInfo { CDRTimes = new List<DateTime>() });
+            this._parametersSets = parametersSets; 
         }
 
-        public void EvaluateCDR(CDR cdr)
+        public override AggregateState CreateState()
         {
-            foreach (var strategyCountEntry in _parameterSetsExecutionInfo)
+            var state = new ConsecutiveAggregateState();
+            state.ItemsStates = new List<ConsecutiveAggregateItemState>();
+            for (int i = 0; i < _parametersSets.Count; i++)
             {
-                if (this._condition == null || this._condition(cdr, strategyCountEntry.Key))
-                {                    
-                    strategyCountEntry.Value.CDRTimes.Add(cdr.ConnectDateTime);
+                state.ItemsStates.Add(new ConsecutiveAggregateItemState { CDRTimes = new List<DateTime>() });
+            }
+            return state;
+        }
+
+        public override void Evaluate(AggregateState state, CDR cdr)
+        {
+            ConsecutiveAggregateState consecutiveAggregateState = state as ConsecutiveAggregateState;
+            for (int i = 0; i < _parametersSets.Count; i++)
+            {
+                if (this._condition == null || this._condition(cdr, _parametersSets[i]))
+                {
+                    consecutiveAggregateState.ItemsStates[i].CDRTimes.Add(cdr.ConnectDateTime);
                 }
             }
         }
 
-        public decimal GetResult(INumberProfileParameters parameterSet)
+        public override decimal GetResult(AggregateState state, INumberProfileParameters parametersSet)
         {
+            ConsecutiveAggregateState consecutiveAggregateState = state as ConsecutiveAggregateState;
             Decimal count = 0;
             DateTime previousCDRTime = default(DateTime);
-            foreach (var cdrTime in _parameterSetsExecutionInfo[parameterSet].CDRTimes.OrderBy(itm => itm))
+            int parameterSetIndex = this._parametersSets.IndexOf(parametersSet);
+            foreach (var cdrTime in consecutiveAggregateState.ItemsStates[parameterSetIndex].CDRTimes.OrderBy(itm => itm))
             {
-                if (previousCDRTime != default(DateTime) && cdrTime.Subtract(previousCDRTime).TotalSeconds <= this._getGapDistance(parameterSet))
+                if (previousCDRTime != default(DateTime) && cdrTime.Subtract(previousCDRTime).TotalSeconds <= this._getGapDistance(parametersSet))
                     count++;
                 previousCDRTime = cdrTime;
             }
             return count > 0 ? (count + 1) : count;
         }
+    }
 
-        private class ConsecutiveAggregateStrategyInfo
-        {
-            public List<DateTime> CDRTimes { get; set; }
-        }
+    public class ConsecutiveAggregateState : AggregateState
+    {
+        public List<ConsecutiveAggregateItemState> ItemsStates { get; set; }
     }
     
+    public class ConsecutiveAggregateItemState
+    {
+        public List<DateTime> CDRTimes { get; set; }
+    }
 }

@@ -83,7 +83,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             dataManager.InsertAccountCaseHistory(caseID, userID, input.CaseStatus, input.Reason);
 
-            if (accountCase.StatusID == CaseStatus.ClosedFraud || accountCase.StatusID == CaseStatus.ClosedWhiteList)
+            if (input.CaseStatus == CaseStatus.ClosedFraud || input.CaseStatus == CaseStatus.ClosedWhiteList)
                 dataManager.InsertOrUpdateAccountStatus(input.AccountNumber, input.CaseStatus, input.ValidTill);
 
             dataManager.LinkDetailToCase(input.AccountNumber, caseID, input.CaseStatus);

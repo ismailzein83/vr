@@ -10,9 +10,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 
         public string KeyName { get; set; }
 
-        public IAggregate Aggregation { get; set; }
+        public BaseAggregate Aggregation { get; set; }
 
         public OperatorType OperatorTypeAllowed { get; set; }
-
     }
 }
