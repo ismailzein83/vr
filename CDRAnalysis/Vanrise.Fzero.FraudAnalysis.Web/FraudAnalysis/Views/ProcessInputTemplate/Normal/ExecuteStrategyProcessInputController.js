@@ -49,13 +49,13 @@ function ExecuteStrategyProcessInputController($scope, UtilsService, StrategyAPI
 
 
             var runningDate = new Date($scope.fromDate);
-
+            var selectedToDate = new Date($scope.toDate);
             $scope.createProcessInputObjects.length = 0;
 
 
             if ($scope.selectedPeriod.Id == 1)//Hourly
             {
-                while (runningDate < $scope.toDate) {
+                while (runningDate < selectedToDate) {
                     var fromDate = new Date(runningDate);
                     var toDate = new Date(runningDate.setHours(runningDate.getHours() + 1));
                     createProcessInputObjects(fromDate, toDate);
@@ -66,7 +66,7 @@ function ExecuteStrategyProcessInputController($scope, UtilsService, StrategyAPI
 
             else if ($scope.selectedPeriod.Id == 2) //Daily
             {
-                while (runningDate < $scope.toDate) {
+                while (runningDate < selectedToDate) {
                     var fromDate = new Date(runningDate);
                     var toDate = new Date(runningDate.setHours(runningDate.getHours() + 24));
                     createProcessInputObjects(fromDate, toDate);
@@ -97,18 +97,11 @@ function ExecuteStrategyProcessInputController($scope, UtilsService, StrategyAPI
 
     function createProcessInputObjects(fromDate, toDate) {
 
-        if ($scope.selectedSuppliers.length == 0)
-            filter.SupplierIDs = null;
-        else {
-            filter.SupplierIDs = UtilsService.getPropValuesFromArray($scope.selectedSuppliers, "SupplierId");
-        }
-
-
         $scope.createProcessInputObjects.push({
             InputArguments: {
                 $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                 StrategyIds: $scope.selectedStrategyIds,
-                FixedPrefixes: $scope.selectedPrefixes != undefined ? UtilsService.getPropValuesFromArray($scope.selectedPrefixes, "value") : null,
+                FixedPrefixes: ['88888888'],//prefixDirectiveAPI.getSelectedIds(),
                 PrefixLength: $scope.selectedPrefixLength,
                 FromDate: new Date(fromDate),
                 ToDate: new Date(toDate),
