@@ -62,6 +62,13 @@ namespace TOne.WhS.BusinessEntity.Business
             var sellingProducts = GetCachedSellingProducts();
             return sellingProducts.GetRecord(sellingProductId);
         }
+
+        public string GetSellingProductName(int sellingProductId)
+        {
+            var sellingProduct = GetSellingProduct(sellingProductId);
+            return sellingProduct != null ? sellingProduct.Name : null;
+        }
+
         public int? GetSellingNumberPlanId(int sellingProductId)
         {
             var sellingProduct = GetSellingProduct(sellingProductId);
