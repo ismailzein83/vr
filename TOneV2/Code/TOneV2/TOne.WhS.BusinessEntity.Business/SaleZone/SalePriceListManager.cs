@@ -6,10 +6,27 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class SalePriceListManager
     {
+
+
+
+        public Vanrise.Entities.IDataRetrievalResult<SalePriceListDetail> GetPricelists(Vanrise.Entities.DataRetrievalInput<string> input) 
+        {
+            var salePricelists = GetCachedSalePriceLists();
+
+            Func<SalePriceList, bool> filterExpression = (priceList) =>
+                 ( priceList.OwnerId > 0 );
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, salePricelists.ToBigResult(input, filterExpression, SalePricelistDetailMapper));
+
+        }
+ 
+
         public SalePriceList GetPriceList(int priceListId)
         {
             List<SalePriceList> salePriceLists = GetCachedSalePriceLists();
@@ -45,6 +62,54 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
+        private string GetCurrencyName(int? currencyId)
+        {
+            if (currencyId != null)
+            {
+                CurrencyManager manager = new CurrencyManager();
+                Currency currency = manager.GetCurrency(currencyId.Value);
+
+                if (currency != null)
+                    return currency.Name;
+            }
+
+            return "Currency Not Found";
+        }
+
+
+        #region Mappers
+
+        private SalePriceListDetail SalePricelistDetailMapper(SalePriceList priceList)
+        {
+            SalePriceListDetail pricelistDetail = new SalePriceListDetail();
+            CarrierAccountManager accountManager = new CarrierAccountManager();
+            SellingProductManager productManager = new SellingProductManager();
+            pricelistDetail.Entity = priceList;
+            if (priceList.OwnerType == 0)
+            {
+                pricelistDetail.ownerType = "Selling Product";
+            }
+            else
+            {
+                pricelistDetail.ownerType = "Customer";
+            }
+             
+            if (priceList.OwnerType != SalePriceListOwnerType.Customer)
+            {
+                pricelistDetail.OwnerName = productManager.GetSellingProductName(priceList.OwnerId);
+            }
+
+
+            else {
+                pricelistDetail.OwnerName = accountManager.GetCarrierAccountName(priceList.OwnerId);
+            }
+          
+           
+            pricelistDetail.CurrencyName = GetCurrencyName(priceList.CurrencyId);
+             return pricelistDetail;
+        }
+
+        #endregion
 
     }
 }

@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\SalePricelistController.cs" />
     <Compile Include="Controllers\AccountManagerController.cs" />
     <Compile Include="Controllers\CodeGroupController.cs" />
     <Compile Include="Controllers\CarrierAccountController.cs" />
@@ -277,6 +278,7 @@
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-selector.js" />
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SalePricelistAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleCodeAPIService.js" />
@@ -341,6 +343,8 @@
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SaleCode\SaleCodeManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SaleCode\SaleCodeManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelist.html" />
+    <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelistController.js" />
     <Content Include="WhS_BusinessEntity\Views\SaleRate\SaleRateManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SaleRate\SaleRateManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SellingNumberPlan\SellingNumberPlanEditor.html" />

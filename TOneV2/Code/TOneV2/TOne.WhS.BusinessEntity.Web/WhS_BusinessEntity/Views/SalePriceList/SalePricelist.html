@@ -1,0 +1,50 @@
+﻿<vr-panel ng-controller="WhS_BE_SalePricelistController" vr-loader="isGettingData">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-select label="Owner Type"
+                               datasource="ownerTypes"
+                               selectedvalues="selectedOwnerType"
+                               onselectionchanged="onOwnerTypeChanged"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               entityname="Owner Type"
+                               hideremoveicon isrequired="true">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="normal" ng-show="showSellingProductSelector">
+                    <vr-whs-be-sellingproduct-selector on-ready="onSellingProductSelectorReady"
+                                                       selectedvalues="selectedSellingProduct"
+                                                       onselectionchanged="onSellingProductChanged"
+                                                       hideremoveicon isrequired="showSellingProductSelector">
+                    </vr-whs-be-sellingproduct-selector>
+                </vr-columns>
+
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-datagrid datasource="salepricelist"
+                             on-ready="onGridReady"
+                             dataretrievalfunction="dataRetrievalFunction"
+                             pagingtype="'PagingOnScroll'"
+                             menuactions="gridMenuActions"
+                             idfield="Entity.OwnerId">
+
+                    <vr-datagridcolumn headertext="'ID'" field="'Entity.OwnerId'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Owner Type'" field="'ownerType'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Owner Name'" field="'OwnerName'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Currency'" field="'CurrencyName'" type="'Text'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>
