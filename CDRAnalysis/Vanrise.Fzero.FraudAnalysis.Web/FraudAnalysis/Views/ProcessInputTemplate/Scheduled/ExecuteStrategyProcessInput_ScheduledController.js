@@ -1,20 +1,25 @@
 ﻿"use strict";
 
-ExecuteStrategyProcessInput_Scheduled.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+ExecuteStrategyProcessInput_Scheduled.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-function ExecuteStrategyProcessInput_Scheduled($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function ExecuteStrategyProcessInput_Scheduled($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
     var pageLoaded = false;
+
+    var prefixDirectiveAPI;
+    var prefixReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
     defineScope();
     load();
 
     function defineScope() {
-
+        $scope.selectedPrefixIds;
+        $scope.isEditMode = false;
         $scope.processInputArguments = [];
         $scope.strategies = [];
         $scope.selectedStrategies = [];
         $scope.selectedStrategyIds = [];
         $scope.periods = [];
-        $scope.selectedPeriod ;
+        $scope.selectedPeriod;
         $scope.schedulerTaskAction.rawExpressions.getData = function () {
             return { "ScheduleTime": "ScheduleTime" };
         };
@@ -27,10 +32,21 @@ function ExecuteStrategyProcessInput_Scheduled($scope, $http, StrategyAPIService
             return {
                 $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                 StrategyIds: $scope.selectedStrategyIds,
+                FixedPrefixes: prefixDirectiveAPI.getSelectedIds(),
+                PrefixLength: $scope.selectedPrefixLength,
                 OverridePrevious: false,
                 IncludeWhiteList: false
             };
         };
+
+        $scope.onPrefixDirectiveReady = function (api) {
+            prefixDirectiveAPI = api;
+            prefixReadyPromiseDeferred.resolve();
+        }
+
+        $scope.prefixLengths = [0, 1, 2, 3];
+        $scope.selectedPrefixLength = $scope.prefixLengths[1];
+
     }
 
 
@@ -67,6 +83,7 @@ function ExecuteStrategyProcessInput_Scheduled($scope, $http, StrategyAPIService
 
     function load() {
 
+        $scope.isGettingData = true;
         $scope.periods.length = 0;
         $scope.periods = [];
         StrategyAPIService.GetPeriods().then(function (response) {
@@ -74,18 +91,16 @@ function ExecuteStrategyProcessInput_Scheduled($scope, $http, StrategyAPIService
                 $scope.periods.push(itm);
             });
 
-            if ($scope.schedulerTaskAction.processInputArguments.data == undefined)
-                return;
 
             var data = $scope.schedulerTaskAction.processInputArguments.data;
 
-            if (data != null) {
-                $scope.isGettingData = true;
+            if (data != null && data != undefined) {
+                $scope.isEditMode = true;
+                $scope.selectedPrefixIds = data.FixedPrefixes;
+                $scope.selectedPrefixLength = data.PrefixLength;
                 UtilsService.waitMultipleAsyncOperations([loadStrategies])
                 .then(function () {
-
                     var strategyIndex = UtilsService.getItemIndexByVal($scope.strategies, data.StrategyIds[0], "id");
-
                     if (strategyIndex > -1) {
                         var selectedStrategy = $scope.strategies[strategyIndex];
 
@@ -100,16 +115,29 @@ function ExecuteStrategyProcessInput_Scheduled($scope, $http, StrategyAPIService
                 }
             )
             }
-            $scope.isGettingData = false;
-
-
+            getPrefixesInfo();
         }).catch(function (error) {
-            $scope.isGettingData = false;
+
             VRNotificationService.notifyExceptionWithClose(error, $scope);
+        }).finally(function () {
+            $scope.isGettingData = false;
         });
 
+    }
 
+    function getPrefixesInfo() {
+        var prefixLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+        prefixReadyPromiseDeferred.promise
+            .then(function () {
+                var directivePayload = {};
+                if (!$scope.isEditMode)
+                    directivePayload.selectAll = true;
+                directivePayload.selectedIds = $scope.selectedPrefixIds;
+                console.log($scope.selectedPrefixIds)
 
+                VRUIUtilsService.callDirectiveLoad(prefixDirectiveAPI, directivePayload, prefixLoadPromiseDeferred);
+            });
+        return prefixLoadPromiseDeferred.promise;
     }
 
 }

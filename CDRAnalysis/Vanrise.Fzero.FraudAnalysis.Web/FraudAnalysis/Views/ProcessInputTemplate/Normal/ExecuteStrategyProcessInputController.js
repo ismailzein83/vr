@@ -25,7 +25,6 @@ function ExecuteStrategyProcessInputController($scope, UtilsService, StrategyAPI
 
         $scope.createProcessInputObjects = [];
 
-        $scope.selectedPrefixes = [];
         $scope.strategies = [];
         $scope.selectedStrategies = [];
         $scope.selectedStrategyIds = [];
@@ -88,7 +87,8 @@ function ExecuteStrategyProcessInputController($scope, UtilsService, StrategyAPI
 
         prefixReadyPromiseDeferred.promise
             .then(function () {
-                var directivePayload;
+                var directivePayload = {};
+                directivePayload.selectAll = true;
 
                 VRUIUtilsService.callDirectiveLoad(prefixDirectiveAPI, directivePayload, prefixLoadPromiseDeferred);
             });
@@ -96,12 +96,11 @@ function ExecuteStrategyProcessInputController($scope, UtilsService, StrategyAPI
     }
 
     function createProcessInputObjects(fromDate, toDate) {
-
         $scope.createProcessInputObjects.push({
             InputArguments: {
                 $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                 StrategyIds: $scope.selectedStrategyIds,
-                FixedPrefixes: ['88888888'],//prefixDirectiveAPI.getSelectedIds(),
+                FixedPrefixes: prefixDirectiveAPI.getSelectedIds(),
                 PrefixLength: $scope.selectedPrefixLength,
                 FromDate: new Date(fromDate),
                 ToDate: new Date(toDate),

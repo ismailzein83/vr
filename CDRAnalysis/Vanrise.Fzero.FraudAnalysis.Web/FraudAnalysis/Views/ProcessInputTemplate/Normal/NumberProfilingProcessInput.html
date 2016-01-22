@@ -17,7 +17,7 @@
                 <vr-switch value="includeWhiteList" label="Include White List">  </vr-switch>
             </vr-columns>
             <vr-columns width="1/4row">
-                <vr-select datasource="fixedPrefixes" datatextfield="value" datavaluefield="value" label="Fixed Prefixes" selectedvalues="selectedFixedPrefixes" ismultipleselection></vr-select>
+                <vr-fzero-fraudanalysis-fixedprefixes-selector on-ready="onPrefixDirectiveReady" selectedvalues="selectedPrefix" ismultipleselection showaddbutton></vr-fzero-fraudanalysis-fixedprefixes-selector>
             </vr-columns>
             <vr-columns width="1/4row">
                 <vr-select datasource="prefixLengths" label="Sub Processes Prefix Length" selectedvalues="selectedPrefixLength" isrequired hideremoveicon></vr-select>

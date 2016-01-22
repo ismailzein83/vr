@@ -1,8 +1,11 @@
 ﻿"use strict";
 
-NumberProfilingProcessInputController.$inject = ['$scope', 'UtilsService', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'HourEnum', 'VRValidationService'];
+NumberProfilingProcessInputController.$inject = ['$scope', 'UtilsService', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'HourEnum', 'VRValidationService', 'VRUIUtilsService'];
 
-function NumberProfilingProcessInputController($scope, UtilsService, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, HourEnum, VRValidationService) {
+function NumberProfilingProcessInputController($scope, UtilsService, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, HourEnum, VRValidationService, VRUIUtilsService) {
+
+    var prefixDirectiveAPI;
+    var prefixReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
     defineScope();
 
@@ -23,8 +26,12 @@ function NumberProfilingProcessInputController($scope, UtilsService, StrategyAPI
         $scope.createProcessInputObjects = [];
 
         $scope.periods = [];
-        $scope.selectedPeriod ;
+        $scope.selectedPeriod;
 
+        $scope.onPrefixDirectiveReady = function (api) {
+            prefixDirectiveAPI = api;
+            prefixReadyPromiseDeferred.resolve();
+        }
 
         $scope.hours = [];
         angular.forEach(HourEnum, function (itm) {
@@ -41,12 +48,6 @@ function NumberProfilingProcessInputController($scope, UtilsService, StrategyAPI
                 $scope.selectedPeakHours.push(itm);
         });
 
-        $scope.fixedPrefixes = [{ value: "88888888" }];
-        $scope.selectedFixedPrefixes = [];
-        for (var i = 0; i < $scope.fixedPrefixes.length; i++) {
-            $scope.selectedFixedPrefixes.push($scope.fixedPrefixes[i]);
-        }
-
         $scope.prefixLengths = [0, 1, 2, 3];
         $scope.selectedPrefixLength = $scope.prefixLengths[1];
 
@@ -62,19 +63,15 @@ function NumberProfilingProcessInputController($scope, UtilsService, StrategyAPI
 
             $scope.createProcessInputObjects.length = 0;
 
-
             if ($scope.selectedPeriod.Id == 1)//Hourly
             {
                 while (runningDate < selectedToDate) {
                     var fromDate = new Date(runningDate);
                     var toDate = new Date(runningDate.setHours(runningDate.getHours() + 1));
-
-
-
                     $scope.createProcessInputObjects.push({
                         InputArguments: {
                             $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
-                            FixedPrefixes: $scope.selectedFixedPrefixes != undefined ? UtilsService.getPropValuesFromArray($scope.selectedFixedPrefixes, "value") : null,
+                            FixedPrefixes: prefixDirectiveAPI.getSelectedIds(),
                             PrefixLength: $scope.selectedPrefixLength,
                             FromDate: new Date(fromDate),
                             ToDate: new Date(toDate),
@@ -97,7 +94,7 @@ function NumberProfilingProcessInputController($scope, UtilsService, StrategyAPI
                     $scope.createProcessInputObjects.push({
                         InputArguments: {
                             $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
-                            FixedPrefixes: $scope.selectedFixedPrefixes != undefined ? UtilsService.getPropValuesFromArray($scope.selectedFixedPrefixes, "value") : null,
+                            FixedPrefixes: prefixDirectiveAPI.getSelectedIds(),
                             PrefixLength: $scope.selectedPrefixLength,
                             FromDate: new Date(fromDate),
                             ToDate: new Date(toDate),
@@ -121,7 +118,13 @@ function NumberProfilingProcessInputController($scope, UtilsService, StrategyAPI
     }
 
     function load() {
+        $scope.isGettingData = true;
         loadPeriods();
+
+        UtilsService.waitMultipleAsyncOperations([getPrefixesInfo]).then(function () {
+        }).finally(function () {
+            $scope.isGettingData = false;
+        });
     }
 
     function loadPeriods() {
@@ -130,6 +133,19 @@ function NumberProfilingProcessInputController($scope, UtilsService, StrategyAPI
                 $scope.periods.push(itm);
             });
         });
+    }
+
+    function getPrefixesInfo() {
+        var prefixLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        prefixReadyPromiseDeferred.promise
+            .then(function () {
+                var directivePayload = {};
+                directivePayload.selectAll = true;
+
+                VRUIUtilsService.callDirectiveLoad(prefixDirectiveAPI, directivePayload, prefixLoadPromiseDeferred);
+            });
+        return prefixLoadPromiseDeferred.promise;
     }
 
 }

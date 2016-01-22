@@ -1,19 +1,22 @@
 ﻿"use strict";
 
-NumberProfilingProcessInput_Scheduled.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'HourEnum'];
+NumberProfilingProcessInput_Scheduled.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'HourEnum', 'VRUIUtilsService'];
 
-function NumberProfilingProcessInput_Scheduled($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, HourEnum) {
+function NumberProfilingProcessInput_Scheduled($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, HourEnum, VRUIUtilsService) {
+    var prefixDirectiveAPI;
+    var prefixReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
     defineScope();
 
     load();
 
     function defineScope() {
-
+        $scope.selectedPrefixIds;
+        $scope.isEditMode = false;
         $scope.processInputArguments = [];
 
         $scope.periods = [];
-        $scope.selectedPeriod ;
+        $scope.selectedPeriod;
 
 
 
@@ -51,14 +54,24 @@ function NumberProfilingProcessInput_Scheduled($scope, $http, StrategyAPIService
                 $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                 PeriodId: $scope.selectedPeriod.Id,
                 IncludeWhiteList: false,
+                FixedPrefixes: prefixDirectiveAPI.getSelectedIds(),
+                PrefixLength: $scope.selectedPrefixLength,
                 Parameters: { GapBetweenConsecutiveCalls: $scope.gapBetweenConsecutiveCalls, GapBetweenFailedConsecutiveCalls: $scope.gapBetweenFailedConsecutiveCalls, MaxLowDurationCall: $scope.maxLowDurationCall, MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour, PeakHoursIds: $scope.PeakHoursIds }
             };
         };
 
+        $scope.onPrefixDirectiveReady = function (api) {
+            prefixDirectiveAPI = api;
+            prefixReadyPromiseDeferred.resolve();
+        }
+
+        $scope.prefixLengths = [0, 1, 2, 3];
+        $scope.selectedPrefixLength = $scope.prefixLengths[1];
+
     };
 
     function load() {
-
+        $scope.isGettingData = true;
 
         $scope.periods.length = 0;
         $scope.periods = [];
@@ -67,13 +80,12 @@ function NumberProfilingProcessInput_Scheduled($scope, $http, StrategyAPIService
                 $scope.periods.push(itm);
             });
 
-            if ($scope.schedulerTaskAction.processInputArguments.data == undefined)
-                return;
-
             var data = $scope.schedulerTaskAction.processInputArguments.data;
 
             if (data != null) {
-                $scope.isGettingData = true;
+                $scope.isEditMode = true;
+                $scope.selectedPrefixIds = data.FixedPrefixes;
+                $scope.selectedPrefixLength = data.PrefixLength;
 
                 $scope.gapBetweenConsecutiveCalls = data.Parameters.GapBetweenConsecutiveCalls;
                 $scope.gapBetweenFailedConsecutiveCalls = data.Parameters.GapBetweenFailedConsecutiveCalls;
@@ -86,27 +98,30 @@ function NumberProfilingProcessInput_Scheduled($scope, $http, StrategyAPIService
                     $scope.selectedPeakHours.push(UtilsService.getItemByVal($scope.hours, peakHour, "id"));
                 });
             }
-            $scope.isGettingData = false;
-
-
+            getPrefixesInfo();
         }).catch(function (error) {
-            $scope.isGettingData = false;
             VRNotificationService.notifyExceptionWithClose(error, $scope);
+        }).finally(function () {
+            $scope.isGettingData = false;
         });
-
-
-
-
 
     }
 
-    function loadPeriods() {
-        return StrategyAPIService.GetPeriods().then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.periods.push(itm);
+    function getPrefixesInfo() {
+        var prefixLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+        prefixReadyPromiseDeferred.promise
+            .then(function () {
+                var directivePayload = {};
+                if (!$scope.isEditMode)
+                    directivePayload.selectAll = true;
+                directivePayload.selectedIds = $scope.selectedPrefixIds;
+
+                VRUIUtilsService.callDirectiveLoad(prefixDirectiveAPI, directivePayload, prefixLoadPromiseDeferred);
             });
-        });
+        return prefixLoadPromiseDeferred.promise;
     }
+
+
 }
 
 appControllers.controller('FraudAnalysis_NumberProfilingProcessInput_Scheduled', NumberProfilingProcessInput_Scheduled)
