@@ -118,7 +118,6 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
 
 
     function cancelSelectedCases() {
-
         VRNotificationService.showConfirmation()
             .then(function (response) {
                 if (response == true) {
@@ -129,7 +128,6 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
                         selectedCaseIDs.push(item.CaseID);
                     });
 
-                    console.log(selectedCaseIDs)
                     return CaseManagementAPIService.CancelSelectedAccountCases(selectedCaseIDs)
                                           .then(function (response) {
                                               if (VRNotificationService.notifyOnItemUpdated("Account Cases", response)) {
