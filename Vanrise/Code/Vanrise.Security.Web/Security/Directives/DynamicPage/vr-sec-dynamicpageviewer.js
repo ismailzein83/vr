@@ -72,7 +72,8 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                                 });
                         } else {
                             $scope.nonSearchable = payload.selectedPeriod == undefined;
-                            fillDateAndPeriod(payload.selectedPeriod, payload.selectedTimeDimensionType.value)
+                            var timeDimentionType = payload.selectedTimeDimensionType !=undefined?payload.selectedTimeDimensionType.value:undefined;
+                            fillDateAndPeriod(payload.selectedPeriod, timeDimentionType)
                                 .then(function () {
                                     if (!$scope.nonSearchable) {
                                         var obj = timeRangeDirectiveAPI.getData();

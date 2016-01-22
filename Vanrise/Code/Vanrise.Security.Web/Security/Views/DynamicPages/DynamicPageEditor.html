@@ -14,10 +14,10 @@
                                         <vr-switch value="scopeModal.nonSearchable" label="Non Searchable" onvaluechanged="scopeModal.nonSearchableValueChanged()" "></vr-switch>
                                     </vr-row>
                                     <vr-row ng-if="!scopeModal.nonSearchable">
-                                        <vr-period-selector on-ready="scopeModal.onPeriodDirectiveReady" label="Default Period" selectedvalues="scopeModal.selectedPeriod" onselectionchanged="scopeModal.periodSelectionChanged"></vr-period-selector>
+                                        <vr-period-selector on-ready="scopeModal.onPeriodDirectiveReady" label="Default Period" selectedvalues="scopeModal.selectedPeriod" onselectionchanged="scopeModal.periodSelectionChanged" isrequired="true"></vr-period-selector>
                                     </vr-row>
                                     <vr-row ng-if="!scopeModal.nonSearchable">
-                                        <vr-timedimension-selector on-ready="scopeModal.onTimeDimentionDirectiveReady" label="Default Grouping" selectedvalues="scopeModal.selectedTimeDimensionType"></vr-timedimension-selector>
+                                        <vr-timedimension-selector on-ready="scopeModal.onTimeDimentionDirectiveReady" label="Default Grouping" selectedvalues="scopeModal.selectedTimeDimensionType" isrequired="true"></vr-timedimension-selector>
 
 
                                     </vr-row>
@@ -120,7 +120,7 @@
                     </vr-tab>
                 </vr-validation-group>
                 <vr-tab header="'Preview'" tabobject="scopeModal.tabObject">
-                    <vr-sec-dynamicpageviewer on-ready="scopeModal.onPreviewAPIReady" ng-if="scopeModal.tabObject.isSelected && (scopeModal.addedSummaryWidgets.length>0 ||scopeModal.addedBodyWidgets.length>0)"></vr-sec-dynamicpageviewer>
+                    <vr-sec-dynamicpageviewer on-ready="scopeModal.onPreviewAPIReady" ng-if="scopeModal.tabObject.isSelected && scopeModal.validateObjectBeforePreview()"></vr-sec-dynamicpageviewer>
                 </vr-tab>
             </vr-tabs>
 

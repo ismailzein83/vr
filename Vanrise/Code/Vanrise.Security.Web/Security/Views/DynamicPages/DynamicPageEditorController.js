@@ -198,6 +198,10 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
 
         }
 
+        $scope.scopeModal.validateObjectBeforePreview = function ()
+        {
+            return validateObjectBeforePreview();
+        }
         $scope.scopeModal.addViewContent = function () {
 
             var viewWidget = {
@@ -256,6 +260,31 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
             }
 
         };
+    }
+    
+    function validateObjectBeforePreview()
+    {
+        if ($scope.scopeModal.addedSummaryWidgets.length == 0 && $scope.scopeModal.addedBodyWidgets.length == 0)
+            return false;
+
+        buildContentsFromScope();
+        if ($scope.scopeModal.nonSearchable)
+        {
+            for (var i = 0; i < $scope.scopeModal.bodyContents.length; i++)
+                if ($scope.scopeModal.bodyContents[i].DefaultGrouping == undefined || $scope.scopeModal.bodyContents[i].DefaultPeriod == undefined) {
+                    return false;
+                }
+            for (var j = 0; j < $scope.scopeModal.summaryContents.length; j++)
+                if ($scope.scopeModal.summaryContents[j].DefaultGrouping == undefined || $scope.scopeModal.summaryContents[j].DefaultPeriod == undefined) {
+                    return false;
+                }
+        }
+        else
+        {
+            if ($scope.scopeModal.selectedPeriod == undefined || $scope.scopeModal.selectedTimeDimensionType == undefined)
+                return false;
+        }
+        return true;
     }
 
     function buildPreviewObjFromScope() {
@@ -341,8 +370,8 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
     }
 
     function buildContentsFromScope() {
-        $scope.scopeModal.summaryContents = [];
-        $scope.scopeModal.bodyContents = [];
+        $scope.scopeModal.summaryContents.length = 0;
+        $scope.scopeModal.bodyContents.length = 0;
         for (var i = 0; i < $scope.scopeModal.addedSummaryWidgets.length; i++) {
             var Widget = $scope.scopeModal.addedSummaryWidgets[i];
             var viewSummaryContent = {
