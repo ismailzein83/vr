@@ -255,6 +255,7 @@
         }
 
         function insertOrgChart() {
+            $scope.modalScope.isLoading = true;
             var orgChartObject = buildOrgChartObjFromScope();
 
             return VR_Sec_OrgChartAPIService.AddOrgChart(orgChartObject).then(function (response) {
@@ -267,10 +268,13 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope.modalScope);
+            }).finally(function () {
+                $scope.modalScope.isLoading = false;
             });
         }
 
         function updateOrgChart() {
+            $scope.modalScope.isLoading = true;
             var orgChartObject = buildOrgChartObjFromScope();
 
             return VR_Sec_OrgChartAPIService.UpdateOrgChart(orgChartObject).then(function (response) {
@@ -283,6 +287,8 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope.modalScope);
+            }).finally(function () {
+                $scope.modalScope.isLoading = false;
             });
         }
 

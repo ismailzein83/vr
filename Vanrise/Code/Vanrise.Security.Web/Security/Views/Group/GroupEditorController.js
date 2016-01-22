@@ -167,9 +167,10 @@
 
             return VR_Sec_GroupAPIService.UpdateGroup(groupObj)
                 .then(function (response) {
-                    if (VRNotificationService.notifyOnItemUpdated('Group', response)) {
-                        if ($scope.onGroupUpdated != undefined)
+                    if (VRNotificationService.notifyOnItemUpdated('Group', response, 'Name')) {
+                        if ($scope.onGroupUpdated && typeof $scope.onGroupUpdated == 'function') {
                             $scope.onGroupUpdated(response.UpdatedObject);
+                        }
                         $scope.modalContext.closeModal();
                     }
                 })

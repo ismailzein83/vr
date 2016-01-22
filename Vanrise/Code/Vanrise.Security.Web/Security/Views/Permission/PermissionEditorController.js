@@ -49,6 +49,8 @@
         }
 
         function savePermissions() {
+            $scope.isLoading = true;
+
             if ($scope.permissions) {
                 var permissionObject = [];
 
@@ -65,8 +67,16 @@
                         }
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
+                    }).finally(function () {
+                        $scope.isLoading = false;
                     });
                 }
+                else {
+                    $scope.isLoading = false;
+                }
+            }
+            else {
+                $scope.isLoading = false;
             }
         }
 
@@ -174,7 +184,7 @@
         }
 
         function loadAllControls() {
-            UtilsService.waitMultipleAsyncOperations([setTitle, loadTree, loadPermissions]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadTree, loadPermissions]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -202,7 +212,9 @@
                                 response[i].isOpened = true;
                             }
 
-                            treeAPI.refreshTree($scope.beList);
+                            treeReadyDeferred.promise.then(function () {
+                                treeAPI.refreshTree($scope.beList);
+                            });
                         }
                     });
                 }

@@ -199,6 +199,7 @@
         }
 
         function addPermissions() {
+            $scope.isLoading = true;
             var permissions = [];
 
             //Loop on all selected users
@@ -240,10 +241,13 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
             });
         }
 
         function updatePermissions() {
+            $scope.isLoading = true;
 
             var permissiontoUpdate = {
                 HolderType: holderType,
@@ -265,6 +269,8 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
             });
         }
     }
