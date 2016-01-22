@@ -20,15 +20,20 @@ namespace Vanrise.BI.Business
 {
     public class GenericEntityManager
     {
+
+        #region ctor
         private BIConfigurationManager _configurations;
         public GenericEntityManager()
         {
             _configurations = new BIConfigurationManager();
         }
+        #endregion
+
+        #region Public Methods
         public IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, string timeEntityName, params string[] measureTypeNames)
         {
 
-             
+
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
             List<BIConfiguration<BIConfigurationMeasure>> allMeasures = _configurations.GetMeasures();
             List<BIConfiguration<BIConfigurationEntity>> entities = _configurations.GetEntities();
@@ -58,9 +63,8 @@ namespace Vanrise.BI.Business
 
             List<String> supplierIds = new List<String>();
             BIConfigurationTimeEntity configurationTimeEntity = GetDefaultTimeEntity(timeEntityName);
-            return dataManager.GetMeasureValues(timeDimensionType, fromDate, toDate, customerIds, supplierIds, customerColumnId,configurationTimeEntity, measureTypeNames);
+            return dataManager.GetMeasureValues(timeDimensionType, fromDate, toDate, customerIds, supplierIds, customerColumnId, configurationTimeEntity, measureTypeNames);
         }
-
         public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(List<string> entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, string timeEntityName, params string[] measureTypes)
         {
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
@@ -70,7 +74,7 @@ namespace Vanrise.BI.Business
             List<String> customerIds = new List<String>();
             string customerColumnId = null;
             BIConfigurationTimeEntity configurationTimeEntity = GetDefaultTimeEntity(timeEntityName);
-            return dataManager.GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, customerIds, supplierIds, customerColumnId, configurationTimeEntity,measureTypes);
+            return dataManager.GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, customerIds, supplierIds, customerColumnId, configurationTimeEntity, measureTypes);
         }
         public IEnumerable<EntityRecord> GetTopEntities(List<string> entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, string timeEntityName, params string[] measureTypesNames)
         {
@@ -88,10 +92,10 @@ namespace Vanrise.BI.Business
                         if (data.Count > 0)
                         {
                             queryFilter.Add(new DimensionFilter
-                              {
-                                  Name = entity.Name,
-                                  Data = data
-                              });
+                            {
+                                Name = entity.Name,
+                                Data = data
+                            });
                         }
 
 
@@ -104,9 +108,8 @@ namespace Vanrise.BI.Business
             dataManager.EntityDefinitions = entities;
 
             BIConfigurationTimeEntity configurationTimeEntity = GetDefaultTimeEntity(timeEntityName);
-            return dataManager.GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, queryFilter,configurationTimeEntity, measureTypesNames);
+            return dataManager.GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, queryFilter, configurationTimeEntity, measureTypesNames);
         }
-
         public Decimal[] GetSummaryMeasureValues(DateTime fromDate, DateTime toDate, string timeEntityName, params string[] measureTypeNames)
         {
 
@@ -114,7 +117,7 @@ namespace Vanrise.BI.Business
             dataManager.MeasureDefinitions = _configurations.GetMeasures();
             dataManager.EntityDefinitions = _configurations.GetEntities();
             BIConfigurationTimeEntity configurationTimeEntity = GetDefaultTimeEntity(timeEntityName);
-           return dataManager.GetSummaryMeasureValues(fromDate, toDate, configurationTimeEntity, measureTypeNames);
+            return dataManager.GetSummaryMeasureValues(fromDate, toDate, configurationTimeEntity, measureTypeNames);
         }
         public HttpResponseMessage ExportMeasureValues(IEnumerable<TimeValuesRecord> records, string entity, string[] measureTypesNames, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)
         {
@@ -268,122 +271,6 @@ namespace Vanrise.BI.Business
 
             return result;
         }
-
-        public string GetDateTimeProperties(TimeValuesRecord record, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, Boolean dontFillGroup)
-        {
-
-            if (dontFillGroup == false)
-            {
-                var isLongPeriod = CheckIsLongPeriod(timeDimensionType, fromDate, toDate);
-                if (isLongPeriod == true)
-                    dontFillGroup = true;
-            }
-
-            DateTime dateTimeValue = record.Time;
-            switch (timeDimensionType)
-            {
-                case TimeDimensionType.Yearly:
-                    {
-                        return dateTimeValue.Year.ToString();
-                    }
-                case TimeDimensionType.Monthly:
-                    {
-                        if (dontFillGroup)
-                            return (GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue));
-                        break;
-                    }
-                case TimeDimensionType.Weekly:
-                    {
-                        var groupName = GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
-                        if (dontFillGroup)
-                            return ("Week " + record.WeekNumber + "-" + groupName);
-                        break;
-                    }
-
-                case TimeDimensionType.Daily:
-                    {
-                        var groupName = GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
-                        if (dontFillGroup)
-                            return (dateTimeValue.Day.ToString() + "-" + groupName);
-                        break;
-                    }
-                case TimeDimensionType.Hourly:
-                    {
-                        string hour = dateTimeValue.Hour.ToString();
-                        string minute = dateTimeValue.Minute.ToString();
-                        var groupName = dateTimeValue.Day.ToString() + "-" + GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
-                        if (dontFillGroup)
-                            return (groupName + " " + (hour.ToCharArray().Length < 2 ? '0' + hour : hour) + ":" + (minute.ToCharArray().Length < 2 ? '0' + minute : minute));
-                        break;
-                    }
-
-            }
-            return null;
-
-        }
-        public Boolean CheckIsLongPeriod(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)
-        {
-
-            switch (timeDimensionType)
-            {
-                case TimeDimensionType.Yearly:
-                    return false;
-                case TimeDimensionType.Monthly:
-                    if (toDate.Year - fromDate.Year > 4)
-                        return true;
-                    else
-                        return false;
-                case TimeDimensionType.Weekly:
-                    if (GetDateDifference(fromDate, toDate) > 200)
-                        return true;
-                    else
-                        return false;
-                case TimeDimensionType.Daily:
-                    if (GetDateDifference(fromDate, toDate) > 50)
-                        return true;
-                    else
-                        return false;
-                case TimeDimensionType.Hourly:
-                    if (GetDateDifference(fromDate, toDate) > 2)
-                        return true;
-                    else
-                        return false;
-            }
-            return false;
-        }
-        public double GetDateDifference(DateTime fromDate, DateTime toDate)
-        {
-            double timeDiff = toDate.Millisecond - fromDate.Millisecond;
-            return Math.Ceiling(timeDiff / (1000 * 3600 * 24));
-        }
-        public string GetShortYear(DateTime date)
-        {
-            string fullYear = date.Year.ToString();
-            if (fullYear.Length == 4)
-                return fullYear.Substring(2);
-            else
-                return fullYear;
-        }
-        public string GetMonthNameShort(DateTime date)
-        {
-            string[] shortMonthNames = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-            int monthIndex = date.Month;
-            return shortMonthNames[monthIndex - 1];
-        }
-
-
-
-        private BIConfigurationTimeEntity GetDefaultTimeEntity(string timeEntityName = null)
-        {
-            List<BIConfiguration<BIConfigurationTimeEntity>> configurationTimeEntity= _configurations.GetTimeEntities();
-            if (timeEntityName != null)
-            {
-                return configurationTimeEntity.Find(x => x.Name == timeEntityName).Configuration;
-            }
-            return configurationTimeEntity.Find(x => x.Configuration.IsDefault).Configuration;
-        }
-
-
         public Vanrise.Entities.IDataRetrievalResult<UserMeasuresValidator> GetUserMeasuresValidator(Vanrise.Entities.DataRetrievalInput<UserMeasuresValidatorInput> userMeasuresValidatorInput)
         {
             // Dictionary<int,List<string>> userMeasuresValidator=new   Dictionary<int,List<string>>();
@@ -469,5 +356,122 @@ namespace Vanrise.BI.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(userMeasuresValidatorInput, returnedData);
 
         }
+
+        #endregion
+
+        #region Private Methods
+        private string GetDateTimeProperties(TimeValuesRecord record, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, Boolean dontFillGroup)
+        {
+
+            if (dontFillGroup == false)
+            {
+                var isLongPeriod = CheckIsLongPeriod(timeDimensionType, fromDate, toDate);
+                if (isLongPeriod == true)
+                    dontFillGroup = true;
+            }
+
+            DateTime dateTimeValue = record.Time;
+            switch (timeDimensionType)
+            {
+                case TimeDimensionType.Yearly:
+                    {
+                        return dateTimeValue.Year.ToString();
+                    }
+                case TimeDimensionType.Monthly:
+                    {
+                        if (dontFillGroup)
+                            return (GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue));
+                        break;
+                    }
+                case TimeDimensionType.Weekly:
+                    {
+                        var groupName = GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
+                        if (dontFillGroup)
+                            return ("Week " + record.WeekNumber + "-" + groupName);
+                        break;
+                    }
+
+                case TimeDimensionType.Daily:
+                    {
+                        var groupName = GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
+                        if (dontFillGroup)
+                            return (dateTimeValue.Day.ToString() + "-" + groupName);
+                        break;
+                    }
+                case TimeDimensionType.Hourly:
+                    {
+                        string hour = dateTimeValue.Hour.ToString();
+                        string minute = dateTimeValue.Minute.ToString();
+                        var groupName = dateTimeValue.Day.ToString() + "-" + GetMonthNameShort(dateTimeValue) + "-" + GetShortYear(dateTimeValue);
+                        if (dontFillGroup)
+                            return (groupName + " " + (hour.ToCharArray().Length < 2 ? '0' + hour : hour) + ":" + (minute.ToCharArray().Length < 2 ? '0' + minute : minute));
+                        break;
+                    }
+
+            }
+            return null;
+
+        }
+        private Boolean CheckIsLongPeriod(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)
+        {
+
+            switch (timeDimensionType)
+            {
+                case TimeDimensionType.Yearly:
+                    return false;
+                case TimeDimensionType.Monthly:
+                    if (toDate.Year - fromDate.Year > 4)
+                        return true;
+                    else
+                        return false;
+                case TimeDimensionType.Weekly:
+                    if (GetDateDifference(fromDate, toDate) > 200)
+                        return true;
+                    else
+                        return false;
+                case TimeDimensionType.Daily:
+                    if (GetDateDifference(fromDate, toDate) > 50)
+                        return true;
+                    else
+                        return false;
+                case TimeDimensionType.Hourly:
+                    if (GetDateDifference(fromDate, toDate) > 2)
+                        return true;
+                    else
+                        return false;
+            }
+            return false;
+        }
+        private double GetDateDifference(DateTime fromDate, DateTime toDate)
+        {
+            double timeDiff = toDate.Millisecond - fromDate.Millisecond;
+            return Math.Ceiling(timeDiff / (1000 * 3600 * 24));
+        }
+        private string GetShortYear(DateTime date)
+        {
+            string fullYear = date.Year.ToString();
+            if (fullYear.Length == 4)
+                return fullYear.Substring(2);
+            else
+                return fullYear;
+        }
+        private string GetMonthNameShort(DateTime date)
+        {
+            string[] shortMonthNames = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+            int monthIndex = date.Month;
+            return shortMonthNames[monthIndex - 1];
+        }
+        private BIConfigurationTimeEntity GetDefaultTimeEntity(string timeEntityName = null)
+        {
+            List<BIConfiguration<BIConfigurationTimeEntity>> configurationTimeEntity = _configurations.GetTimeEntities();
+            if (timeEntityName != null)
+            {
+                return configurationTimeEntity.Find(x => x.Name == timeEntityName).Configuration;
+            }
+            return configurationTimeEntity.Find(x => x.Configuration.IsDefault).Configuration;
+        }
+
+        #endregion
+
     }
 }

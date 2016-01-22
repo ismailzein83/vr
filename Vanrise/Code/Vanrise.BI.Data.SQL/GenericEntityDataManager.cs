@@ -9,9 +9,13 @@ namespace Vanrise.BI.Data.SQL
 {
     public class GenericEntityDataManager : BaseDataManager, IGenericEntityDataManager
     {
-
+  
+        #region ctor
         List<BIConfiguration<BIConfigurationMeasure>> _measureDefinitions;
         List<BIConfiguration<BIConfigurationEntity>> _entityDefinitions;
+        #endregion
+
+        #region Public Methods
         public List<BIConfiguration<BIConfigurationMeasure>> MeasureDefinitions
         {
             set { _measureDefinitions = value; }
@@ -99,6 +103,13 @@ namespace Vanrise.BI.Data.SQL
             });
             return rslt;
         }
+        public Decimal[] GetSummaryMeasureValues(DateTime fromDate, DateTime toDate, BIConfigurationTimeEntity configurationTimeEntity, params string[] measureTypeNames)
+        {
+
+            return GetRecords(fromDate, toDate, null, measureTypeNames, configurationTimeEntity);
+        }
+
+        #endregion
 
         #region Private Methods
         protected string BuildQueryTopRowsParts(string columnBy, int count, List<string> columnsNames)
@@ -358,11 +369,6 @@ namespace Vanrise.BI.Data.SQL
                 }
             }
             return null;
-        }
-        public Decimal[] GetSummaryMeasureValues(DateTime fromDate, DateTime toDate, BIConfigurationTimeEntity configurationTimeEntity, params string[] measureTypeNames)
-        {
-
-            return GetRecords(fromDate, toDate, null, measureTypeNames, configurationTimeEntity);
         }
         private Decimal[] GetRecords(DateTime fromDate, DateTime toDate, string[] additionalFilters, string[] measureTypesNames, BIConfigurationTimeEntity configurationTimeEntity)
         {

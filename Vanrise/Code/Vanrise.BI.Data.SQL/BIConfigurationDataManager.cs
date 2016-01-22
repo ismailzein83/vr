@@ -53,10 +53,6 @@ namespace Vanrise.BI.Data.SQL
             return instance;
         }
         #endregion
-
-
-
-
    
     }
 }
