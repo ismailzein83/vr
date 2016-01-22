@@ -20,6 +20,7 @@
         loadParameters();
         defineScope();
         load();
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
@@ -102,37 +103,6 @@
 
         }
 
-
-        function loadCountries() {
-            var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
-            countryReadyPromiseDeferred.promise.then(function () {
-                var payload = {
-                    selectedIds:(carrierProfileEntity!=undefined ) ? carrierProfileEntity.Settings.CountryId : undefined
-                };
-
-                VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
-            });
-
-            return loadCountryPromiseDeferred.promise;
-        }
-
-
-
-        function loadCities() {
-            var loadCityPromiseDeferred = UtilsService.createPromiseDeferred();
-            cityReadyPromiseDeferred.promise.then(function () {             
-                var payload = {
-                    selectedIds:(carrierProfileEntity!=undefined ) ? carrierProfileEntity.Settings.CityId : undefined
-                };
-                if (carrierProfileEntity!=undefined && carrierProfileEntity.Settings.CountryId != undefined)
-                    payload.filter = { CountryId: carrierProfileEntity.Settings.CountryId }
-                VRUIUtilsService.callDirectiveLoad(cityDirectiveApi, payload, loadCityPromiseDeferred);
-            });
-
-            return loadCityPromiseDeferred.promise;
-        }
-
-
         function load() {
             $scope.isLoading = true;
 
@@ -140,6 +110,7 @@
                 getCarrierProfile().then(function () {
                     loadAllControls()
                         .finally(function () {
+                            carrierProfileEntity = undefined;
                         });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -162,6 +133,33 @@
               });
         }
 
+        function loadCountries() {
+            var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
+            countryReadyPromiseDeferred.promise.then(function () {
+                var payload = {
+                    selectedIds: (carrierProfileEntity != undefined) ? carrierProfileEntity.Settings.CountryId : undefined
+                };
+
+                VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
+            });
+
+            return loadCountryPromiseDeferred.promise;
+        }
+
+        function loadCities() {
+            var loadCityPromiseDeferred = UtilsService.createPromiseDeferred();
+            cityReadyPromiseDeferred.promise.then(function () {
+                var payload = {
+                    selectedIds: (carrierProfileEntity != undefined) ? carrierProfileEntity.Settings.CityId : undefined
+                };
+                if (carrierProfileEntity != undefined && carrierProfileEntity.Settings.CountryId != undefined)
+                    payload.filter = { CountryId: carrierProfileEntity.Settings.CountryId }
+                VRUIUtilsService.callDirectiveLoad(cityDirectiveApi, payload, loadCityPromiseDeferred);
+            });
+
+            return loadCityPromiseDeferred.promise;
+        }
+
         function loadContacts() {
             for (var x in WhS_Be_ContactTypeEnum) {
                 $scope.scopeModal.contacts.push(addcontactObj(x));
@@ -175,6 +173,7 @@
                             matchedItem.description = item.Description;
              }
         }
+
         function addcontactObj(x) {
             return {
                 label: WhS_Be_ContactTypeEnum[x].label,
@@ -235,6 +234,7 @@
 
         function insertCarrierProfile() {
             var carrierProfileObject = buildCarrierProfileObjFromScope();
+            $scope.isLoading = true;
             return WhS_BE_CarrierProfileAPIService.AddCarrierProfile(carrierProfileObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Carrier Profile", response,"Name")) {
@@ -244,6 +244,8 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
             });
 
         }
@@ -279,6 +281,7 @@
 
         function updateCarrierProfile() {
             var carrierProfileObject = buildCarrierProfileObjFromScope();
+            $scope.isLoading = true;
             WhS_BE_CarrierProfileAPIService.UpdateCarrierProfile(carrierProfileObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Carrier Profile", response ,"Name")) {
@@ -289,6 +292,8 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
             });
         }
     }

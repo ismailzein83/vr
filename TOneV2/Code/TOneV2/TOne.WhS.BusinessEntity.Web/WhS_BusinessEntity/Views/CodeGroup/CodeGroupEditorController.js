@@ -6,7 +6,6 @@
 
     function codeGroupEditorController($scope, WhS_BE_CodeGroupAPIService, VRNotificationService, VRNavigationService, UtilsService,VRUIUtilsService) {
 
-        
         var codeGroupId;
         var codeGroupEntity;
         var countryId;
@@ -14,7 +13,9 @@
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var editMode;
         var disableCountry;
+
         defineScope();
+
         loadParameters();
        
         function loadParameters() {
@@ -28,6 +29,7 @@
             $scope.disableCountry = ((countryId != undefined) && !editMode) || disableCountry == true;
             load();
         }
+
         function defineScope() {
 
             $scope.onCountryDirectiveReady = function (api) {
@@ -53,11 +55,7 @@
 
         function load() {
             $scope.isGettingData = true;
-            if (countryId != undefined) {
-                $scope.title = UtilsService.buildTitleForAddEditor("Code Group");
-                loadAllControls();
-            }
-            else if (editMode) {
+            if (editMode) {
                 getCodeGroup().then(function () {
                     loadAllControls()
                         .finally(function () {
@@ -69,23 +67,22 @@
             }
             else {
                 loadAllControls();
-                $scope.title = UtilsService.buildTitleForAddEditor("Code Group");
             }
            
         }
+
         function getCodeGroup() {
             return WhS_BE_CodeGroupAPIService.GetCodeGroup(codeGroupId).then(function (codeGroupeObj) {
                 codeGroupEntity = codeGroupeObj;
-                $scope.code = codeGroupEntity.Code;
-                $scope.title = UtilsService.buildTitleForUpdateEditor($scope.code, "Code Group");
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isGettingData = false;
             });
         }
+
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadCountrySelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -93,23 +90,31 @@
                   $scope.isGettingData = false;
               });
         }
+
         function loadCountrySelector() {
             var countryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            countryReadyPromiseDeferred.promise
-                .then(function () {
-                    var directivePayload = {
-                        selectedIds: codeGroupEntity != undefined ? codeGroupEntity.CountryId :(countryId != undefined) ?countryId: undefined
-                    }
-
-                    VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
-                });
+            countryReadyPromiseDeferred.promise.then(function () {
+                var directivePayload = {
+                    selectedIds: codeGroupEntity != undefined ? codeGroupEntity.CountryId :(countryId != undefined) ?countryId: undefined
+                }
+                VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
+            });
             return countryLoadPromiseDeferred.promise;
         }
 
-        function fillScopeFromCodeGroupObj(codeGroupe) {
-            $scope.code = codeGroupe.Code;
-            $scope.title = UtilsService.buildTitleForUpdateEditor($scope.code, "Code Group");
+        function setTitle() {
+            if (editMode && codeGroupEntity != undefined)
+                $scope.title = UtilsService.buildTitleForUpdateEditor(codeGroupEntity.Code, "Code Group");
+            else
+                $scope.title = UtilsService.buildTitleForAddEditor("Code Group");
+        }
+
+        function loadStaticData() {
+
+            if (codeGroupEntity == undefined)
+                return;
+
+            $scope.code = codeGroupEntity.Code;
         }
 
         function buildCodeGroupObjFromScope() {
@@ -122,8 +127,10 @@
                 obj.CodeGroupId = codeGroupId;
             return obj;
         }
+
         function insertCodeGroup() {
             var codeGroupObject = buildCodeGroupObjFromScope();
+            $scope.isGettingData = true;
             return WhS_BE_CodeGroupAPIService.AddCodeGroup(codeGroupObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Code Group", response,"Code")) {
@@ -133,11 +140,15 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isGettingData = false;
             });
 
         }
+
         function updateCodeGroup() {
             var codeGroupObject = buildCodeGroupObjFromScope();
+            $scope.isGettingData = true;
             WhS_BE_CodeGroupAPIService.UpdateCodeGroup(codeGroupObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Code Group", response, "Code")) {
@@ -147,6 +158,8 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isGettingData = false;
             });
         }
     }

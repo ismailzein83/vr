@@ -69,6 +69,7 @@
         }
         function insertRateType() {
             var rateTypeObject = buildRateTypeObjFromScope();
+            $scope.isGettingData = true;
             return WhS_BE_RateTypeAPIService.AddRateType(rateTypeObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("RateType", response, "Name")) {
@@ -78,11 +79,15 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isGettingData = false;
             });
 
         }
         function updateRateType() {
             var rateTypeObject = buildRateTypeObjFromScope();
+            $scope.isGettingData = true;
+
             WhS_BE_RateTypeAPIService.UpdateRateType(rateTypeObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("RateType", response, "Name")) {
@@ -92,6 +97,8 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isGettingData = false;
             });
         }
     }
