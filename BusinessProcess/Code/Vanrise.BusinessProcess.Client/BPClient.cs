@@ -12,7 +12,7 @@ using Vanrise.Common;
 
 namespace Vanrise.BusinessProcess.Client
 {
-    public  partial class  BPClient
+    public partial class BPClient
     {
         #region Process Workflow Methods
 
@@ -121,6 +121,11 @@ namespace Vanrise.BusinessProcess.Client
         {
             IBPTrackingDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
             return dataManager.GetTrackingsFrom(input);
+        }
+
+        public Dictionary<int, BPInstanceStatus> GetProcessesStatuses(List<int> Ids)
+        {
+            return GetProcessesStatuses(Ids);
         }
 
 

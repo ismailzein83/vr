@@ -18,11 +18,30 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
         }
 
+
+        public Dictionary<int, BPInstanceStatus> GetProcessesStatuses(List<int> Ids)
+        {
+            string stringIDs = (Ids != null && Ids.Count > 0) ? string.Join(",", Ids) : null;
+
+            Dictionary<int, BPInstanceStatus> processesStatuses = new Dictionary<int, BPInstanceStatus>();
+
+            ExecuteReaderSP("bp.sp_BPInstance_GetStatusesByIDs", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    processesStatuses.Add((int)reader["ID"], (BPInstanceStatus)reader["ExecutionStatus"]);
+                }
+
+            }, stringIDs);
+
+            return processesStatuses;
+        }
+
+
         public BPDefinition GetDefinition(int ID)
         {
             return GetItemSP("bp.sp_BPDefinition_Get", BPDefinitionMapper, ID);
         }
-
 
         public Vanrise.Entities.BigResult<BPDefinition> GetFilteredDefinitions(Vanrise.Entities.DataRetrievalInput<BPDefinitionQuery> input)
         {
@@ -32,8 +51,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
             }, BPDefinitionMapper);
         }
-
-
 
         public List<BPDefinition> GetDefinitions()
         {
@@ -50,7 +67,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         public int InsertDefinitionObjectState(int definitionId, string objectKey, object objectValue)
         {
-            if(objectKey == null)
+            if (objectKey == null)
                 objectKey = String.Empty;
             return ExecuteNonQuerySP("bp.sp_BPDefinitionState_Insert", definitionId, objectKey, objectKey != null ? Serializer.Serialize(objectValue) : null);
         }
@@ -67,12 +84,10 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsSP("bp.sp_BPInstance_GetByCriteria", BPInstanceMapper, definitionID, dateFrom, dateTo);
         }
 
-
         public List<BPInstance> GetRecentInstances(DateTime? StatusUpdatedAfter)
         {
             return GetItemsSP("bp.sp_BPInstance_GetRecent", BPInstanceMapper, StatusUpdatedAfter);
         }
-
 
         public Vanrise.Entities.BigResult<BPInstance> GetInstancesByCriteria(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
         {
@@ -83,7 +98,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
             }, BPInstanceMapper);
         }
-       
+
         public BPInstance GetInstance(long instanceId)
         {
             return GetItemSP("[bp].[sp_BPInstance_GetByID]", BPInstanceMapper, instanceId);
@@ -159,7 +174,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 }
             }, lastRetrievedId);
         }
-        
+
         public bool TryLockProcessInstance(long processInstanceId, Guid workflowInstanceId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, IEnumerable<BPInstanceStatus> acceptableStatuses)
         {
             int rslt = ExecuteNonQuerySPCmd("[bp].[sp_BPInstance_TryLockAndUpdateWorkflowInstanceID]",
@@ -228,7 +243,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 Status = (BPInstanceStatus)reader["ExecutionStatus"],
                 RetryCount = GetReaderValue<int>(reader, "RetryCount"),
                 LastMessage = reader["LastMessage"] as string,
-                CreatedTime =  (DateTime)reader["CreatedTime"],
+                CreatedTime = (DateTime)reader["CreatedTime"],
                 StatusUpdatedTime = GetReaderValue<DateTime?>(reader, "StatusUpdatedTime")
             };
             if (withInputArguments)
