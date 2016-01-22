@@ -94,20 +94,24 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                 var api = {};
 
                 api.load = function (payload) {
-
+                    var filter = {};
                     var selectedIds;
 
-                    if (payload != undefined) {
+                    if (payload) {
+                        filter = payload.filter;
                         selectedIds = payload.selectedIds;
                     }
 
-                    return VR_Sec_UserAPIService.GetUsers().then(function (response) {
+                    return VR_Sec_UserAPIService.GetUsersInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         ctrl.datasource.length = 0;
-                        angular.forEach(response, function (itm) {
-                            ctrl.datasource.push(itm);
-                        });
 
-                        if (selectedIds != undefined) {
+                        if (response) {
+                            for (var i = 0; i < response.length; i++) {
+                                ctrl.datasource.push(response[i]);
+                            }
+                        }
+
+                        if (selectedIds) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'UserId', attrs, ctrl);
                         }
                     });

@@ -1,41 +1,42 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    groupAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig'];
+    GroupAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig'];
 
-    function groupAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig) {
+    function GroupAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig) {
+        return ({
+            GetFilteredGroups: GetFilteredGroups,
+            GetGroupInfo: GetGroupInfo,
+            GetGroup: GetGroup,
+            AddGroup: AddGroup,
+            UpdateGroup: UpdateGroup
+        });
 
         function GetFilteredGroups(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Groups", "GetFilteredGroups"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Group", "GetFilteredGroups"), input);
+        }
+
+        function GetGroupInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Group", "GetGroupInfo"), {
+                filter: filter
+            });
         }
 
         function GetGroup(groupId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Groups", "GetGroup"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Group", "GetGroup"), {
                 groupId: groupId
             });
         }
 
-        function GetGroups() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Groups", "GetGroups"));
-        }
-
         function AddGroup(group) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Groups", "AddGroup"), group);
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Group", "AddGroup"), group);
         }
 
         function UpdateGroup(group) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Groups", "UpdateGroup"), group);
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Group", "UpdateGroup"), group);
         }
-
-        return ({
-            GetFilteredGroups: GetFilteredGroups,
-            GetGroup: GetGroup,
-            GetGroups: GetGroups,
-            AddGroup: AddGroup,
-            UpdateGroup: UpdateGroup
-        });
     }
 
-    appControllers.service('VR_Sec_GroupAPIService', groupAPIService);
+    appControllers.service('VR_Sec_GroupAPIService', GroupAPIService);
 
 })(appControllers);

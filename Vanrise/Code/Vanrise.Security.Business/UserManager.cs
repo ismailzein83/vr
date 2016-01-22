@@ -33,9 +33,22 @@ namespace Vanrise.Security.Business
             return users.Values;
         }
 
-        public IEnumerable<UserInfo> GetUsersInfo()
+        public IEnumerable<UserInfo> GetUsersInfo(UserFilter filter)
         {
             var users = GetCachedUsers();
+
+            if (filter != null)
+            {
+                if (filter.EntityType != null && filter.EntityId != null)
+                {
+                    PermissionManager permissionManager = new PermissionManager();
+                    IEnumerable<Permission> entityPermissions = permissionManager.GetEntityPermissions((EntityType)filter.EntityType, filter.EntityId);
+                    
+                    IEnumerable<int> excludedUserIds = entityPermissions.MapRecords(permission => Convert.ToInt32(permission.HolderId), permission => permission.HolderType == HolderType.USER);
+                    return users.MapRecords(UserInfoMapper, user => !excludedUserIds.Contains(user.UserId));
+                }
+            }
+
             return users.MapRecords(UserInfoMapper);
         }
 

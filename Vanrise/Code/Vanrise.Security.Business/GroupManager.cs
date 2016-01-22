@@ -13,67 +13,46 @@ namespace Vanrise.Security.Business
 {
     public class GroupManager
     {
-
-        private Dictionary<int, Group> GetCachedGroups()
-        {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetGroups",
-               () =>
-               {
-                   IGroupDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IGroupDataManager>();
-                   IEnumerable<Group> groups = dataManager.GetGroups();
-                   return groups.ToDictionary(kvp => kvp.GroupId, kvp => kvp);
-               });
-        }
+        #region Public Methods
 
         public IDataRetrievalResult<GroupDetail> GetFilteredGroups(DataRetrievalInput<GroupQuery> input)
         {
             var allItems = GetCachedGroups();
 
-            Func<Group, bool> filterExpression = (itemObject) =>
-                 (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            Func<Group, bool> filterExpression = (itemObject) => (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
 
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, GroupDetailMapper));
         }
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            IUserDataManager _dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.AreUsersUpdated(ref _updateHandle);
-            }
-        }
-
-
-        private GroupDetail GroupDetailMapper(Group groupObject)
-        {
-            GroupDetail groupDetail = new GroupDetail();
-            groupDetail.Entity = groupObject;
-            return groupDetail;
-        }
-
-
-        private GroupInfo GroupInfoMapper(Group groupObject)
-        {
-            GroupInfo groupInfo = new GroupInfo();
-            groupInfo.Name = groupObject.Name;
-            groupInfo.Description = groupObject.Description;
-            groupInfo.GroupId = groupObject.GroupId;
-            return groupInfo;
-        }
-
-        public IEnumerable<GroupInfo> GetGroups()
+        public IEnumerable<GroupInfo> GetGroupInfo(GroupFilter filter)
         {
             var groups = GetCachedGroups();
+
+            if (filter != null)
+            {
+                if (filter.EntityType != null && filter.EntityId != null)
+                {
+                    PermissionManager permissionManager = new PermissionManager();
+                    IEnumerable<Permission> entityPermissions = permissionManager.GetEntityPermissions((EntityType)filter.EntityType, filter.EntityId);
+
+                    IEnumerable<int> excludedGroupIds = entityPermissions.MapRecords(permission => Convert.ToInt32(permission.HolderId), permission => permission.HolderType == HolderType.GROUP);
+                    return groups.MapRecords(GroupInfoMapper, group => !excludedGroupIds.Contains(group.GroupId));
+                }
+            }
+            
             return groups.MapRecords(GroupInfoMapper);
         }
 
-        public Group GetGroupbyId(int groupId)
+        public Group GetGroup(int groupId)
         {
             var groups = GetCachedGroups();
             return groups.GetRecord(groupId);
+        }
+
+        public string GetGroupName(int groupId)
+        {
+            Group group = GetGroup(groupId);
+            return group != null ? group.Name : null;
         }
 
         public Vanrise.Entities.InsertOperationOutput<GroupDetail> AddGroup(Group groupObj, int[] members)
@@ -103,7 +82,6 @@ namespace Vanrise.Security.Business
             return insertOperationOutput;
         }
 
-
         public Vanrise.Entities.UpdateOperationOutput<GroupDetail> UpdateGroup(Group groupObj, int[] members)
         {
             IGroupDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IGroupDataManager>();
@@ -123,17 +101,62 @@ namespace Vanrise.Security.Business
             return updateOperationOutput;
         }
 
-
         public List<int> GetUserGroups(int userId)
         {
             IGroupDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IGroupDataManager>();
             return dataManager.GetUserGroups(userId);
         }
+        
+        #endregion
+        
+        #region Private Methods
 
-        public string GetGroupName(int groupId)
+        Dictionary<int, Group> GetCachedGroups()
         {
-            Group group = GetGroupbyId(groupId);
-            return group != null ? group.Name : null;
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetGroups",
+               () =>
+               {
+                   IGroupDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IGroupDataManager>();
+                   IEnumerable<Group> groups = dataManager.GetGroups();
+                   return groups.ToDictionary(kvp => kvp.GroupId, kvp => kvp);
+               });
         }
+        
+        #endregion
+
+        #region Private Classes
+
+        class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IUserDataManager _dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreUsersUpdated(ref _updateHandle);
+            }
+        }
+        
+        #endregion
+
+        #region Mappers
+
+        GroupDetail GroupDetailMapper(Group groupObject)
+        {
+            GroupDetail groupDetail = new GroupDetail();
+            groupDetail.Entity = groupObject;
+            return groupDetail;
+        }
+
+        GroupInfo GroupInfoMapper(Group groupObject)
+        {
+            GroupInfo groupInfo = new GroupInfo();
+            groupInfo.Name = groupObject.Name;
+            groupInfo.Description = groupObject.Description;
+            groupInfo.GroupId = groupObject.GroupId;
+            return groupInfo;
+        }
+
+        #endregion
     }
 }

@@ -7,11 +7,14 @@ using Vanrise.Entities;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
 using Vanrise.Common;
+using Vanrise.Caching;
 
 namespace Vanrise.Security.Business
 {
     public class PermissionManager
     {
+        #region Fields / Constructors
+
         GroupManager _groupManager;
         UserManager _userManager;
         BusinessEntityManager _businessEntityManager;
@@ -23,16 +26,51 @@ namespace Vanrise.Security.Business
             _businessEntityManager = new BusinessEntityManager();
         }
 
-        public IEnumerable<PermissionDetail> GetHolderPermissions(HolderType holderType, string holderId)
-        {
-            IEnumerable<Permission> cachedPermissions = GetCachedPermissions();
-            return cachedPermissions.MapRecords(PermissionDetailMapper, permission => permission.HolderType == holderType && permission.HolderId == holderId);
-        }
+        #endregion
 
         public Vanrise.Entities.IDataRetrievalResult<PermissionDetail> GetFilteredEntityPermissions(Vanrise.Entities.DataRetrievalInput<PermissionQuery> input)
         {
             IEnumerable<Permission> filteredPermissions = GetEntityPermissions(input.Query.EntityType, input.Query.EntityId);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult<PermissionDetail>(input, filteredPermissions.ToBigResult(input, null, PermissionDetailMapper));
+        }
+
+        public IEnumerable<Permission> GetEntityPermissions(EntityType entityType, string entityId)
+        {
+            IEnumerable<Permission> cachedPermissions = GetCachedPermissions();
+            IEnumerable<BusinessEntityNode> businessEntityHierarchy = _businessEntityManager.GetEntityNodes();
+
+            BusinessEntityNode targetNode = null;
+
+            foreach (BusinessEntityNode item in businessEntityHierarchy)
+            {
+                targetNode = item.Descendants().Where(x => x.EntType == entityType && x.EntityId.ToString() == entityId).FirstOrDefault();
+                if (targetNode != null)
+                {
+                    break;
+                }
+            }
+
+            List<Permission> permissionsResultList = new List<Permission>();
+
+            do
+            {
+                IEnumerable<Permission> nodePermissions = cachedPermissions.FindAllRecords(x => x.EntityType == targetNode.EntType && x.EntityId == targetNode.EntityId.ToString());
+                permissionsResultList.AddRange(nodePermissions);
+
+                if (targetNode.BreakInheritance)
+                    break;
+
+                targetNode = targetNode.Parent;
+
+            } while (targetNode != null);
+
+            return this.FillPermissionsListwithPathes(permissionsResultList, businessEntityHierarchy);
+        }
+
+        public IEnumerable<PermissionDetail> GetHolderPermissions(HolderType holderType, string holderId)
+        {
+            IEnumerable<Permission> cachedPermissions = GetCachedPermissions();
+            return cachedPermissions.MapRecords(PermissionDetailMapper, permission => permission.HolderType == holderType && permission.HolderId == holderId);
         }
 
         public EffectivePermissionsWrapper GetEffectivePermissions(int userId)
@@ -210,6 +248,7 @@ namespace Vanrise.Security.Business
                 }
             }
 
+            CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetPermissions");
             return updateOperationOutput;
         }
 
@@ -218,11 +257,19 @@ namespace Vanrise.Security.Business
             UpdateOperationOutput<object> updateOperationOutput = new UpdateOperationOutput<object>();
 
             IPermissionDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IPermissionDataManager>();
-            bool result = dataManager.DeletePermission(holderType, holderId, entityType, entityId);
-            
-            updateOperationOutput.Result = result ? UpdateOperationResult.Succeeded : UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
+            bool deleted = dataManager.DeletePermission(holderType, holderId, entityType, entityId);
 
+            if (deleted)
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetPermissions");
+            }
+            else
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Failed;
+            }
+
+            updateOperationOutput.UpdatedObject = null;
             return updateOperationOutput;
         }
 
@@ -236,39 +283,6 @@ namespace Vanrise.Security.Business
                 IPermissionDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IPermissionDataManager>();
                 return dataManager.GetPermissions();
             });
-        }
-
-        IEnumerable<Permission> GetEntityPermissions(EntityType entityType, string entityId)
-        {
-            IEnumerable<Permission> cachedPermissions = GetCachedPermissions();
-            IEnumerable<BusinessEntityNode> businessEntityHierarchy = _businessEntityManager.GetEntityNodes();
-
-            BusinessEntityNode targetNode = null;
-
-            foreach (BusinessEntityNode item in businessEntityHierarchy)
-            {
-                targetNode = item.Descendants().Where(x => x.EntType == entityType && x.EntityId.ToString() == entityId).FirstOrDefault();
-                if (targetNode != null)
-                {
-                    break;
-                }
-            }
-
-            List<Permission> permissionsResultList = new List<Permission>();
-
-            do
-            {
-                IEnumerable<Permission> nodePermissions = cachedPermissions.FindAllRecords(x => x.EntityType == targetNode.EntType && x.EntityId == targetNode.EntityId.ToString());
-                permissionsResultList.AddRange(nodePermissions);
-
-                if (targetNode.BreakInheritance)
-                    break;
-
-                targetNode = targetNode.Parent;
-
-            } while (targetNode != null);
-
-            return this.FillPermissionsListwithPathes(permissionsResultList, businessEntityHierarchy);
         }
 
         Dictionary<string, Dictionary<string, Flag>> ConvertPermissionsToPathDictionary(IEnumerable<Permission> permissions, IEnumerable<BusinessEntityNode> businessEntityHierarchy)

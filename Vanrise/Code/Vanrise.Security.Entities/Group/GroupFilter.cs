@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Security.Entities
 {
-    public class UserFilter
+    public class GroupFilter
     {
         public EntityType? EntityType { get; set; }
         public string EntityId { get; set; }

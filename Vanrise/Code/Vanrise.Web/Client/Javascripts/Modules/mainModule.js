@@ -2,7 +2,7 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, SecurityService, VR_Sec_PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService) {
+.controller('mainCtrl', function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, VR_Sec_PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService) {
         
     $rootScope.onValidationMessageShown = function (e) {
         var self = angular.element(e.currentTarget);
@@ -222,7 +222,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     setTimeout(tick, $scope.tickInterval);
 
     var allMenuItems = [];   
-    MenuAPIService.GetMenuItems().then(function (response) {
+    VR_Sec_MenuAPIService.GetMenuItems().then(function (response) {
        
         angular.forEach(response, function (value, key, itm) {
             value.keyclass = key % 16;

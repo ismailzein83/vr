@@ -13,28 +13,31 @@ namespace Vanrise.Security.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "Permission")]
     public class PermissionController : Vanrise.Web.Base.BaseAPIController
     {
-        [HttpGet]
-        [Route("GetHolderPermissions")]
-        public IEnumerable<PermissionDetail> GetHolderPermissions(HolderType holderType, string holderId)
+        PermissionManager _manager;
+        public PermissionController()
         {
-            PermissionManager manager = new PermissionManager();
-            return manager.GetHolderPermissions(holderType, holderId);
+            _manager = new PermissionManager();
         }
 
         [HttpPost]
         [Route("GetFilteredEntityPermissions")]
         public object GetFilteredEntityPermissions(Vanrise.Entities.DataRetrievalInput<PermissionQuery> input)
         {
-            PermissionManager manager = new PermissionManager();
-            return GetWebResponse(input, manager.GetFilteredEntityPermissions(input));
+            return GetWebResponse(input, _manager.GetFilteredEntityPermissions(input));
+        }
+
+        [HttpGet]
+        [Route("GetHolderPermissions")]
+        public IEnumerable<PermissionDetail> GetHolderPermissions(HolderType holderType, string holderId)
+        {
+            return _manager.GetHolderPermissions(holderType, holderId);
         }
 
         [HttpGet]
         [Route("GetEffectivePermissions")]
         public PermissionResultWrapper GetEffectivePermissions()
         {
-            PermissionManager manager = new PermissionManager();
-            EffectivePermissionsWrapper effectivePermissionsWrapper = manager.GetEffectivePermissions(SecurityContext.Current.GetLoggedInUserId());
+            EffectivePermissionsWrapper effectivePermissionsWrapper = _manager.GetEffectivePermissions(SecurityContext.Current.GetLoggedInUserId());
 
             List<PermissionResult> permissionResults = new List<PermissionResult>();
 
@@ -62,16 +65,14 @@ namespace Vanrise.Security.Web.Controllers
         [Route("UpdatePermissions")]
         public Vanrise.Entities.UpdateOperationOutput<object> UpdatePermissions(Permission[] permissionObject)
         {
-            PermissionManager manager = new PermissionManager();
-            return manager.UpdatePermissions(permissionObject);
+            return _manager.UpdatePermissions(permissionObject);
         } 
 
         [HttpGet]
         [Route("DeletePermissions")]
         public Vanrise.Entities.UpdateOperationOutput<object> DeletePermissions(HolderType holderType, string holderId, EntityType entityType, string entityId)
         {
-            PermissionManager manager = new PermissionManager();
-            return manager.DeletePermissions(holderType, holderId, entityType, entityId);
+            return _manager.DeletePermissions(holderType, holderId, entityType, entityId);
         }
        
         public class PermissionResult

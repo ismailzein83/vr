@@ -12,49 +12,52 @@ namespace Vanrise.Security.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "View")]
     public class ViewController : Vanrise.Web.Base.BaseAPIController
     {
+        ViewManager _manager;
+        public ViewController()
+        {
+            _manager = new ViewManager();
+        }
 
         [HttpPost]
         [Route("AddView")]
         public Vanrise.Entities.InsertOperationOutput<ViewDetail> AddView(View view)
         {
-            ViewManager manager = new ViewManager();
-            return manager.AddView(view);
+            return _manager.AddView(view);
         }
+
         [HttpPost]
         [Route("UpdateView")]
         public Vanrise.Entities.UpdateOperationOutput<ViewDetail> UpdateView(View view)
         {
-            ViewManager manager = new ViewManager();
-            return manager.UpdateView(view);
+            return _manager.UpdateView(view);
         }
+
         [HttpGet]
         [Route("GetView")]
         public View GetView(int viewId)
         {
-            ViewManager manager = new ViewManager();
-            return manager.GetView(viewId);
+            return _manager.GetView(viewId);
         }
+
         [HttpGet]
         [Route("DeleteView")]
         public Vanrise.Entities.DeleteOperationOutput<object> DeleteView(int viewId)
         {
-            ViewManager manager = new ViewManager();
-            return manager.DeleteView(viewId);
+            return _manager.DeleteView(viewId);
         }
+
         [HttpPost]
         [Route("GetFilteredDynamicViews")]
         public object GetFilteredDynamicViews(Vanrise.Entities.DataRetrievalInput<string> filter)
         {
-            ViewManager manager = new ViewManager();
-            return GetWebResponse(filter, manager.GetFilteredDynamicViews(filter));
+            return GetWebResponse(filter, _manager.GetFilteredDynamicViews(filter));
         }
+
         [HttpPost]
         [Route("UpdateViewsRank")]
         public Vanrise.Entities.UpdateOperationOutput<List<MenuItem>> UpdateViewsRank(List<MenuItem> updatedMenuItem)
         {
-            ViewManager manager = new ViewManager();
-            return manager.UpdateViewsRank(updatedMenuItem);
+            return _manager.UpdateViewsRank(updatedMenuItem);
         }
-
     }
 }

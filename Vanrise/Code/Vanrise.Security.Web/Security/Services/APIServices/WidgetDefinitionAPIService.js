@@ -1,19 +1,19 @@
 ﻿(function (appControllers) {
 
-    "use strict";
-    widgetDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig'];
+    'use strict';
 
-    function widgetDefinitionAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig) {
+    WidgetDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig'];
+
+    function WidgetDefinitionAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig) {
+        return ({
+            GetWidgetsDefinition: GetWidgetsDefinition
+        });
 
         function GetWidgetsDefinition() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "WidgetDefinition", "GetWidgetsDefinition"));
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'WidgetDefinition', 'GetWidgetsDefinition'));
         }
-      
-        return ({
-            GetWidgetsDefinition:GetWidgetsDefinition
-        });
     }
 
-    appControllers.service('WidgetDefinitionAPIService', widgetDefinitionAPIService);
+    appControllers.service('VR_Sec_WidgetDefinitionAPIService', WidgetDefinitionAPIService);
 
 })(appControllers);

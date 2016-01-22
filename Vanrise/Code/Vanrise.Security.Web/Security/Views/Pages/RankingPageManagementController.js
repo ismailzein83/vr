@@ -1,6 +1,6 @@
 ﻿'use strict'
-RankingPageManagementController.$inject = ['$scope', 'VR_Sec_ViewAPIService', 'VRModalService', 'VRNotificationService', 'DeleteOperationResultEnum', 'PeriodEnum', 'UtilsService', 'TimeDimensionTypeEnum', 'UsersAPIService', 'GroupAPIService', 'DataRetrievalResultTypeEnum', 'MenuAPIService'];
-function RankingPageManagementController($scope, VR_Sec_ViewAPIService, VRModalService, VRNotificationService, DeleteOperationResultEnum, PeriodEnum, UtilsService, TimeDimensionTypeEnum, UsersAPIService, GroupAPIService, DataRetrievalResultTypeEnum, MenuAPIService) {
+RankingPageManagementController.$inject = ['$scope', 'VR_Sec_ViewAPIService', 'VRModalService', 'VRNotificationService', 'DeleteOperationResultEnum', 'PeriodEnum', 'UtilsService', 'TimeDimensionTypeEnum', 'UsersAPIService', 'VR_Sec_GroupAPIService', 'DataRetrievalResultTypeEnum', 'VR_Sec_MenuAPIService'];
+function RankingPageManagementController($scope, VR_Sec_ViewAPIService, VRModalService, VRNotificationService, DeleteOperationResultEnum, PeriodEnum, UtilsService, TimeDimensionTypeEnum, UsersAPIService, VR_Sec_GroupAPIService, DataRetrievalResultTypeEnum, VR_Sec_MenuAPIService) {
     var treeAPI;
     defineScope();
     load();
@@ -68,7 +68,7 @@ function RankingPageManagementController($scope, VR_Sec_ViewAPIService, VRModalS
 
 
     function loadViews() {
-        return MenuAPIService.GetMenuItems().then(function (response) {
+        return VR_Sec_MenuAPIService.GetMenuItems().then(function (response) {
             $scope.menuItems = [];
             angular.forEach(response, function (item) {
 

@@ -13,50 +13,53 @@ namespace Vanrise.Security.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "Widget")]
     public class WidgetController:Vanrise.Web.Base.BaseAPIController
     {
+        WidgetsManager _manager;
+        public WidgetController()
+        {
+            _manager = new WidgetsManager();
+        }
 
         [HttpPost]
         [Route("AddWidget")]
         public Vanrise.Entities.InsertOperationOutput<WidgetDetail> AddWidget(Widget widget)
         {
-            WidgetsManager manager = new WidgetsManager();
-            return manager.AddWidget(widget);
+            return _manager.AddWidget(widget);
         }
+
         [HttpPost]
         [Route("UpdateWidget")]
         public Vanrise.Entities.UpdateOperationOutput<WidgetDetail> UpdateWidget(Widget widget)
         {
-            WidgetsManager manager = new WidgetsManager();
-            return manager.UpdateWidget(widget);
-        }
-         [HttpGet]
-         [Route("GetAllWidgets")]
-        public IEnumerable<WidgetDetail> GetAllWidgets()
-        {
-            WidgetsManager manager = new WidgetsManager();
-            return manager.GetAllWidgets();
+            return _manager.UpdateWidget(widget);
         }
 
-         [HttpPost]
-         [Route("GetFilteredWidgets")]
-         public object GetFilteredWidgets(Vanrise.Entities.DataRetrievalInput<WidgetFilter> filter)
-         {
-             WidgetsManager manager = new WidgetsManager();
-             return GetWebResponse(filter, manager.GetFilteredWidgets(filter));
-         }
-         [HttpGet]
-         [Route("DeleteWidget")]
-         public Vanrise.Entities.DeleteOperationOutput<WidgetDetail> DeleteWidget(int widgetId)
-         {
-             WidgetsManager manager = new WidgetsManager();
-             return manager.DeleteWidget(widgetId);
-         }
-         [HttpGet]
-         [Route("GetWidgetById")]
-         public Widget GetWidgetById(int widgetId)
-         {
-             WidgetsManager manager = new WidgetsManager();
-             return manager.GetWidgetById(widgetId);
-         }
+        [HttpGet]
+        [Route("GetAllWidgets")]
+        public IEnumerable<WidgetDetail> GetAllWidgets()
+        {
+            return _manager.GetAllWidgets();
+        }
+
+        [HttpPost]
+        [Route("GetFilteredWidgets")]
+        public object GetFilteredWidgets(Vanrise.Entities.DataRetrievalInput<WidgetFilter> filter)
+        {
+            return GetWebResponse(filter, _manager.GetFilteredWidgets(filter));
+        }
+
+        [HttpGet]
+        [Route("DeleteWidget")]
+        public Vanrise.Entities.DeleteOperationOutput<WidgetDetail> DeleteWidget(int widgetId)
+        {
+            return _manager.DeleteWidget(widgetId);
+        }
+
+        [HttpGet]
+        [Route("GetWidgetById")]
+        public Widget GetWidgetById(int widgetId)
+        {
+            return _manager.GetWidgetById(widgetId);
+        }
 
     }
 }

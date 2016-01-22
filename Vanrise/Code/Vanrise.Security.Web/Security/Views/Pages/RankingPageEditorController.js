@@ -1,6 +1,6 @@
-﻿RankPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'GroupAPIService', 'UsersAPIService', 'VR_Sec_ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum', 'VRModalService'];
+﻿RankPageEditorController.$inject = ['$scope', 'VR_Sec_MenuAPIService', 'VR_Sec_WidgetAPIService', 'GroupAPIService', 'UsersAPIService', 'VR_Sec_ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum', 'VRModalService'];
 
-function RankPageEditorController($scope, MenuAPIService, WidgetAPIService, GroupAPIService, UsersAPIService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService) {
+function RankPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_WidgetAPIService, GroupAPIService, UsersAPIService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService) {
     loadParameters();
     var treeAPI;
     defineScope();
@@ -51,7 +51,7 @@ function RankPageEditorController($scope, MenuAPIService, WidgetAPIService, Grou
            
     }
     function loadTree() {
-        return MenuAPIService.GetAllMenuItems()
+        return VR_Sec_MenuAPIService.GetAllMenuItems()
            .then(function (response) {
                $scope.menuList = response;
 

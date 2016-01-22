@@ -1,37 +1,37 @@
-﻿LoginController.$inject = ['$scope', 'SecurityAPIService', 'SecurityService', 'VRNotificationService'];
+﻿(function (appControllers) {
 
+    'use strict';
 
-function LoginController($scope, SecurityAPIService, SecurityService, VRNotificationService) {
-    defineScope();
-    load();
+    LoginController.$inject = ['$scope', 'VR_Sec_SecurityAPIService', 'SecurityService', 'VRNotificationService'];
 
-    function defineScope() {
-        
-        $scope.Login = login;
-    }
+    function LoginController($scope, VR_Sec_SecurityAPIService, SecurityService, VRNotificationService) {
+        defineScope();
+        load();
 
-    function load() {
-    }
+        function defineScope() {
 
-    function login()
-    {
-        var credentialsObject = {
-            Email: $scope.email,
-            Password: $scope.password
-        };
+            $scope.Login = login;
+        }
 
-        return SecurityAPIService.Authenticate(credentialsObject)
-            .then(function (response) {
-                if (VRNotificationService.notifyOnUserAuthenticated(response))
-                {
+        function load() {
+        }
+
+        function login() {
+            var credentialsObject = {
+                Email: $scope.email,
+                Password: $scope.password
+            };
+
+            return VR_Sec_SecurityAPIService.Authenticate(credentialsObject).then(function (response) {
+                if (VRNotificationService.notifyOnUserAuthenticated(response)) {
                     var userInfo = JSON.stringify(response.AuthenticationObject);
                     SecurityService.createAccessCookie(userInfo);
                     window.location.href = '/';
-                }                
+                }
+            });
         }
-        );       
     }
 
-   
-}
-appControllers.controller('Security_LoginController', LoginController);
+    appControllers.controller('VR_Sec_LoginController', LoginController);
+
+})(appControllers);

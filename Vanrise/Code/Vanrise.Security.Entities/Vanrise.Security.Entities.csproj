@@ -52,6 +52,7 @@
     <Compile Include="BusinessEntity.cs" />
     <Compile Include="BusinessEntityNode.cs" />
     <Compile Include="BusinessEntityModule.cs" />
+    <Compile Include="Group\GroupFilter.cs" />
     <Compile Include="Group\GroupInfo.cs" />
     <Compile Include="Group\GroupQuery.cs" />
     <Compile Include="MenuItem.cs" />

@@ -126,7 +126,7 @@
     <Content Include="Security\Directives\Group\vr-sec-group-grid.js" />
     <Content Include="Security\Directives\Group\vr-sec-group-selector.js" />
     <Content Include="Security\Directives\OrgChart\Templates\OrgChartGrid.html" />
-    <Content Include="Security\Directives\OrgChart\Templates\vr-sec-orgchart-selector.js" />
+    <Content Include="Security\Directives\OrgChart\vr-sec-orgchart-selector.js" />
     <Content Include="Security\Directives\OrgChart\vr-sec-orgchart-grid.js" />
     <Content Include="Security\Directives\Permission\Templates\PermissionGrid.html" />
     <Content Include="Security\Directives\Permission\vr-sec-permission-grid.js" />
@@ -139,7 +139,7 @@
     <Content Include="Security\Directives\Widget\vr-sec-widgetpreview.js" />
     <Content Include="Security\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="Security\Services\APIServices\OrgChartAPIService.js" />
-    <Content Include="Security\Services\APIServices\SecurityApiService.js" />
+    <Content Include="Security\Services\APIServices\SecurityAPIService.js" />
     <Content Include="Security\Services\APIServices\MenuAPIService.js" />
     <Content Include="Security\Services\APIServices\PermissionAPIService.js" />
     <Content Include="Security\Services\APIServices\GroupAPIService.js" />
@@ -168,10 +168,10 @@
     <Content Include="Security\Views\User\EditProfileController.js" />
     <Content Include="Security\Views\Login.html" />
     <Content Include="Security\Views\LoginController.js" />
-    <Content Include="Security\Views\OrgChartEditor.html" />
-    <Content Include="Security\Views\OrgChartEditorController.js" />
-    <Content Include="Security\Views\OrgChartManagementController.js" />
-    <Content Include="Security\Views\OrgChartManagement.html" />
+    <Content Include="Security\Views\OrgChart\OrgChartEditor.html" />
+    <Content Include="Security\Views\OrgChart\OrgChartEditorController.js" />
+    <Content Include="Security\Views\OrgChart\OrgChartManagementController.js" />
+    <Content Include="Security\Views\OrgChart\OrgChartManagement.html" />
     <Content Include="Security\Views\Permission\PermissionEditor.html" />
     <Content Include="Security\Views\Permission\PermissionEditorController.js" />
     <Content Include="Security\Views\Pages\RankingPageEditor.html" />
@@ -193,7 +193,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\BusinessEntitiesController.cs" />
+    <Compile Include="Controllers\BusinessEntityController.cs" />
     <Compile Include="Controllers\OrgChartController.cs" />
     <Compile Include="Controllers\ViewController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
@@ -244,9 +244,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Security\Views\OrgChart\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

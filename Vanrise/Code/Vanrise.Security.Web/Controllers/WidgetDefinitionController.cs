@@ -9,15 +9,21 @@ using Vanrise.Web.Base;
 
 namespace Vanrise.Security.Web.Controllers
 {
-     [RoutePrefix(Constants.ROUTE_PREFIX + "WidgetDefinition")]
-    public class WidgetDefinitionController:BaseAPIController
+    [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "WidgetDefinition")]
+    public class WidgetDefinitionController : BaseAPIController
     {
+        WidgetDefinitionManager _manager;
+        public WidgetDefinitionController()
+        {
+            _manager = new WidgetDefinitionManager();
+        }
+
         [HttpGet]
         [Route("GetWidgetsDefinition")]
         public IEnumerable<WidgetDefinition> GetWidgetsDefinition()
         {
-            WidgetDefinitionManager manager = new WidgetDefinitionManager();
-            return manager.GetWidgetsDefinition();
+            return _manager.GetWidgetsDefinition();
         }
     }
 }

@@ -1,21 +1,24 @@
-﻿'use strict';
-app.directive('vrSecGroupSelector', ['VR_Sec_GroupAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (VR_Sec_GroupAPIService, UtilsService, VRUIUtilsService) {
+﻿(function (app) {
+
+    'use strict';
+
+    GroupSelectorDirective.$inject = ['VR_Sec_GroupAPIService', 'UtilsService', 'VRUIUtilsService'];
+
+    function GroupSelectorDirective(VR_Sec_GroupAPIService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
                 onReady: '=',
-                ismultipleselection: "@",
+                ismultipleselection: '@',
                 onselectionchanged: '=',
                 selectedvalues: '=',
-                isrequired: "=",
-                onselectitem: "=",
-                ondeselectitem: "=",
-                isdisabled: "="
+                isrequired: '=',
+                onselectitem: '=',
+                ondeselectitem: '=',
+                isdisabled: '='
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
                 ctrl.datasource = [];
 
@@ -23,9 +26,8 @@ app.directive('vrSecGroupSelector', ['VR_Sec_GroupAPIService', 'UtilsService', '
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
 
-                var ctor = new groupCtor(ctrl, $scope, $attrs);
-                ctor.initializeController();
-
+                var groupSelector = new GroupSelector(ctrl, $scope, $attrs);
+                groupSelector.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -39,12 +41,58 @@ app.directive('vrSecGroupSelector', ['VR_Sec_GroupAPIService', 'UtilsService', '
             template: function (element, attrs) {
                 return getGroupTemplate(attrs);
             }
-
         };
 
+        function GroupSelector(ctrl, $scope, attrs) {
+            var selectorApi;
+
+            function initializeController() {
+                ctrl.onSelectorReady = function (api) {
+                    selectorApi = api;
+                    getDirectiveAPI();
+                };
+            }
+
+            function getDirectiveAPI() {
+                var api = {};
+
+                api.load = function (payload) {
+                    var filter = null;
+                    var selectedIds;
+
+                    if (payload) {
+                        filter = payload.filter;
+                        selectedIds = payload.selectedIds;
+                    }
+
+                    return VR_Sec_GroupAPIService.GetGroupInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                        ctrl.datasource.length = 0;
+
+                        if (response) {
+                            for (var i = 0; i < response.length; i++) {
+                                ctrl.datasource.push(response[i]);
+                            }
+                        }
+
+                        if (selectedIds) {
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'GroupId', attrs, ctrl);
+                        }
+                    });
+                };
+
+                api.getSelectedIds = function () {
+                    return VRUIUtilsService.getIdSelectedIds('GroupId', attrs, ctrl);
+                };
+
+                if (ctrl.onReady && typeof ctrl.onReady == 'function') {
+                    ctrl.onReady(api);
+                }
+            }
+
+            this.initializeController = initializeController;
+        }
 
         function getGroupTemplate(attrs) {
-
             var multipleselection = "";
 
             var label = "Group";
@@ -59,49 +107,9 @@ app.directive('vrSecGroupSelector', ['VR_Sec_GroupAPIService', 'UtilsService', '
                 + '</div>'
         }
 
-        function groupCtor(ctrl, $scope, attrs) {
-
-            var selectorApi;
-
-            function initializeController() {
-                ctrl.onSelectorReady = function (api) {
-                    selectorApi = api;
-                    defineAPI();
-                }
-            }
-
-            function defineAPI() {
-                var api = {};
-
-                api.load = function (payload) {
-
-                    var selectedIds;
-
-                    if (payload != undefined) {
-                        selectedIds = payload.selectedIds;
-                    }
-
-                    return VR_Sec_GroupAPIService.GetGroups().then(function (response) {
-                        ctrl.datasource.length = 0;
-                        angular.forEach(response, function (itm) {
-                            ctrl.datasource.push(itm);
-                        });
-
-                        if (selectedIds != undefined) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'GroupId', attrs, ctrl);
-                        }
-                    });
-                }
-
-                api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('GroupId', attrs, ctrl);
-                }
-                if (ctrl.onReady != null)
-                    ctrl.onReady(api);
-            }
-
-            this.initializeController = initializeController;
-        }
-
         return directiveDefinitionObject;
-    }]);
+    }
+
+    app.directive('vrSecGroupSelector', GroupSelectorDirective)
+
+})(app);

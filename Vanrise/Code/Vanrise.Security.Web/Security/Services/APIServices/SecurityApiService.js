@@ -1,15 +1,24 @@
-﻿app.service('SecurityAPIService', function (BaseAPIService) {
+﻿(function (appControllers) {
 
-    return ({
-        Authenticate: Authenticate,
-        ChangePassword: ChangePassword
-    });
+    'use strict';
 
-    function Authenticate(credentialsObject) {
-        return BaseAPIService.post("/api/Security/Authenticate", credentialsObject);
+    SecurityAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig'];
+
+    function SecurityAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig) {
+        return ({
+            Authenticate: Authenticate,
+            ChangePassword: ChangePassword
+        });
+
+        function Authenticate(credentialsObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Security', 'Authenticate'), credentialsObject);
+        }
+
+        function ChangePassword(changedPasswordObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Security', 'ChangePassword'), changedPasswordObject);
+        }
     }
 
-    function ChangePassword(ChangedPasswordObject) {
-        return BaseAPIService.post("/api/Security/ChangePassword", ChangedPasswordObject);
-    }
-});
+    appControllers.service('VR_Sec_SecurityAPIService', SecurityAPIService);
+
+})(appControllers);

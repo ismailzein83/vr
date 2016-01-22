@@ -10,13 +10,11 @@ using Vanrise.Web.Base;
 
 namespace Vanrise.Security.Web.Controllers
 {
-    
     [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "Users")]
     public class UsersController : Vanrise.Web.Base.BaseAPIController
     {
         private UserManager _manager = new UserManager();
-
         public UsersController()
         {
             this._manager = new UserManager();
@@ -32,9 +30,10 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpGet]
         [Route("GetUsersInfo")]
-        public IEnumerable<UserInfo> GetUsersInfo()
+        public IEnumerable<UserInfo> GetUsersInfo(string filter = null)
         {
-            return _manager.GetUsersInfo();
+            UserFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<UserFilter>(filter) : null;
+            return _manager.GetUsersInfo(deserializedFilter);
         }
 
         [HttpGet]

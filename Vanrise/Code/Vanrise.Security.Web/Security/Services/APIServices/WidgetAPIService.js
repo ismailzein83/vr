@@ -1,43 +1,49 @@
 ﻿(function (appControllers) {
 
-    "use strict";
-    widgetAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig'];
+    'use strict';
 
-    function widgetAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig) {
+    WidgetAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig'];
+
+    function WidgetAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig) {
+        return ({
+            GetFilteredWidgets: GetFilteredWidgets,
+            GetAllWidgets: GetAllWidgets,
+            GetWidgetById: GetWidgetById,
+            AddWidget: AddWidget,
+            UpdateWidget: UpdateWidget,
+            DeleteWidget: DeleteWidget
+        });
+        
+        function GetFilteredWidgets(filter) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Widget', 'GetFilteredWidgets'), filter);
+        }
+
+        function GetAllWidgets() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Widget', 'GetAllWidgets'));
+        }
 
         function GetWidgetById(widgetId)
         {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Widget", "GetWidgetById"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Widget', 'GetWidgetById'), {
                 widgetId: widgetId
             });
         }
+
         function AddWidget(widget) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Widget", "AddWidget"), widget);
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Widget', 'AddWidget'), widget);
         }
+
         function UpdateWidget(widget) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Widget", "UpdateWidget"), widget);
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Widget', 'UpdateWidget'), widget);
         }
-        function GetAllWidgets() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Widget", "GetAllWidgets"));
-        }
-        function GetFilteredWidgets(filter) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Widget", "GetFilteredWidgets"), filter);
-        }
+        
         function DeleteWidget(widgetId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Widget", "DeleteWidget"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Widget', 'DeleteWidget'), {
                 widgetId: widgetId
             });
         }
-        return ({
-            AddWidget: AddWidget,
-            GetAllWidgets: GetAllWidgets,
-            UpdateWidget: UpdateWidget,
-            GetFilteredWidgets: GetFilteredWidgets,
-            DeleteWidget: DeleteWidget,
-            GetWidgetById: GetWidgetById
-        });
     }
 
-    appControllers.service('WidgetAPIService', widgetAPIService);
+    appControllers.service('VR_Sec_WidgetAPIService', WidgetAPIService);
 
 })(appControllers);
