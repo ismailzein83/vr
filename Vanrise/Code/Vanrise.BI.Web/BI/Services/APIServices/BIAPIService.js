@@ -17,37 +17,39 @@
                      FromDate: fromDate,
                      ToDate: toDate,
                      TopCount: topCount,
-                     MeasureTypesNames: measureTypesNames
+                     MeasureTypesNames: measureTypesNames,
+                     TimeEntity:timeEntityName
                  }, {
                      returnAllResponseParameters: true,
                      responseTypeAsBufferArray: true
                  });
          }
 
-         function ExportMeasureValues(timeDimensionType, fromDate, toDate, measureTypesNames) {
+         function ExportMeasureValues(timeDimensionType, fromDate, toDate, timeEntityName, measureTypesNames) {
              return BaseAPIService.post(UtilsService.getServiceURL(VR_BI_ModuleConfig.moduleName, "BI", "ExportMeasureValues"),
                  {
                      TimeDimensionType: timeDimensionType,
                      FromDate: fromDate,
                      ToDate: toDate,
-                     MeasureTypesNames: measureTypesNames
+                     MeasureTypesNames: measureTypesNames,
+                     TimeEntity: timeEntityName
                  }, {
                      returnAllResponseParameters: true,
                      responseTypeAsBufferArray: true
                  });
          }
 
-         function GetSummaryMeasureValues(fromDate, toDate, measureTypesNames) {
+         function GetSummaryMeasureValues(fromDate, toDate,timeEntityName, measureTypesNames) {
              return BaseAPIService.post(UtilsService.getServiceURL(VR_BI_ModuleConfig.moduleName, "BI", "GetSummaryMeasureValues"),
                  {
                      FromDate: fromDate,
                      ToDate: toDate,
-                     TimeEntityId: null,
+                     TimeEntityId: timeEntityName,
                      MeasureTypesNames: measureTypesNames
                  });
          }
 
-         function GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, measureTypesNames) {
+         function GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount,timeEntityName, measureTypesNames) {
              return BaseAPIService.post(UtilsService.getServiceURL(VR_BI_ModuleConfig.moduleName, "BI", "GetTopEntities"),
                  {
                      EntityTypeName: entityTypeName,
@@ -55,23 +57,23 @@
                      FromDate: fromDate,
                      ToDate: toDate,
                      TopCount: topCount,
-                     TimeEntityId: null,
+                     TimeEntityId: timeEntityName,
                      MeasureTypesNames: measureTypesNames
                  });
          }
 
-         function GetMeasureValues(timeDimensionType, fromDate, toDate, measureTypesNames) {
+         function GetMeasureValues(timeDimensionType, fromDate, toDate,timeEntityName, measureTypesNames) {
              return BaseAPIService.post(UtilsService.getServiceURL(VR_BI_ModuleConfig.moduleName, "BI", "GetMeasureValues"),
                  {
                      TimeDimensionType: timeDimensionType,
                      FromDate: fromDate,
                      ToDate: toDate,
-                     TimeEntityId: null,
+                     TimeEntityId: timeEntityName,
                      MeasureTypesNames: measureTypesNames
                  });
          }
 
-         function GetEntityMeasuresValues(entityTypeName, entityId, timeDimensionType, fromDate, toDate, measureTypesNames) {
+         function GetEntityMeasuresValues(entityTypeName, entityId, timeDimensionType, fromDate, toDate,timeEntityName, measureTypesNames) {
              return BaseAPIService.post(UtilsService.getServiceURL(VR_BI_ModuleConfig.moduleName, "BI", "GetEntityMeasuresValues"),
                  {
                      EntityTypeName: entityTypeName,
@@ -79,7 +81,7 @@
                      TimeDimensionType: timeDimensionType,
                      FromDate: fromDate,
                      ToDate: toDate,
-                     TimeEntityId: null,
+                     TimeEntityId: timeEntityName,
                      MeasureTypesNames: measureTypesNames
                  });
          }

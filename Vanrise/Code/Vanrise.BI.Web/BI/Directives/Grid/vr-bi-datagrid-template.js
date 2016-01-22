@@ -10,7 +10,7 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
         controller: function ($scope, $element, $attrs) {
 
             var ctrl = this;
-            var ctor = new biChart(ctrl, $scope, $attrs);
+            var ctor = new biGrid(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
         controllerAs: 'ctrl',
@@ -22,13 +22,18 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
 
     };
 
-    function biChart(ctrl, $scope, $attrs) {
+    function biGrid(ctrl, $scope, $attrs) {
+        var measureDirectiveAPI;
+        var measureReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var timeEntityDirectiveAPI;
+        var timeEntityReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var entityDirectiveAPI;
+        var entityReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         function initializeController() {
-            ctrl.Measures = [];
-            ctrl.Entities = [];
             ctrl.selectedEntitiesType = [];
-            ctrl.topRecords = 10;
+           
             ctrl.selectedMeasureTypes = [];
             ctrl.selectedTopMeasure;
 
@@ -41,14 +46,21 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
                 }
             }
 
-            ctrl.onSelectionOperationChanged = function () {
-                if (ctrl.selectedOperationType.value == "MeasuresGroupedByTime") {
-                    ctrl.entityRequired = false;
-                } else {
-                    ctrl.entityRequired = true;
-                }
+
+
+            ctrl.onMeasureDirectiveReady = function (api) {
+                measureDirectiveAPI = api;
+                measureReadyPromiseDeferred.resolve();
             }
 
+            ctrl.onTimeEntityDirectiveReady = function (api) {
+                timeEntityDirectiveAPI = api;
+                timeEntityReadyPromiseDeferred.resolve();
+            }
+            ctrl.onEntityDirectiveReady = function (api) {
+                entityDirectiveAPI = api;
+                entityReadyPromiseDeferred.resolve();
+            }
             defineNumberOfColumns();
             defineOperationTypes();
             defineChartSeriesTypes();
@@ -60,27 +72,26 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
             var api = {};
 
             api.getData = function () {
-                switch (ctrl.selectedOperationType.value) {
-                    case "TopEntities":
-                        if (ctrl.selectedEntitiesType.length == 0 || ctrl.selectedMeasureTypes == undefined || ctrl.selectedMeasureTypes.length == 0) return false;
-                    case "MeasuresGroupedByTime":
-                        if (ctrl.selectedMeasureTypes == undefined || ctrl.selectedMeasureTypes.length == 0) return false;
-                }
-
-                var topMeasure = null;
+                var topMeasure;
                 if (ctrl.selectedTopMeasure != undefined)
                     topMeasure = ctrl.selectedTopMeasure.Name;
-                var measureTypes = [];
-                for (var i = 0; i < ctrl.selectedMeasureTypes.length; i++) {
-                    measureTypes.push(ctrl.selectedMeasureTypes[i].Name);
-                    if (ctrl.selectedMeasureTypes[i].Name == ctrl.selectedTopMeasure.Name) {
-                        var swap = measureTypes[0];
-                        measureTypes[0] = ctrl.selectedMeasureTypes[i].Name;
-                        measureTypes[i] = swap;
+                var measureTypes;
+                if (ctrl.selectedMeasureTypes.length > 0)
+                {
+                    measureTypes = [];
+                    for (var i = 0; i < ctrl.selectedMeasureTypes.length; i++) {
+                        measureTypes.push(ctrl.selectedMeasureTypes[i].Name);
+                        if (ctrl.selectedMeasureTypes[i].Name == ctrl.selectedTopMeasure.Name) {
+                            var swap = measureTypes[0];
+                            measureTypes[0] = ctrl.selectedMeasureTypes[i].Name;
+                            measureTypes[i] = swap;
+                        }
                     }
                 }
-                var entityType = [];
+                
+                var entityType;
                 if (ctrl.selectedEntitiesType.length > 0 && ctrl.selectedOperationType.value != "MeasuresGroupedByTime") {
+                    entityType = [];
                     for (var i = 0; i < ctrl.selectedEntitiesType.length; i++)
                         entityType.push(ctrl.selectedEntitiesType[i].Name);
 
@@ -88,18 +99,19 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
 
                 return {
                     $type: "Vanrise.BI.Entities.DataGridDirectiveSetting, Vanrise.BI.Entities",
-                    OperationType: ctrl.selectedOperationType.value,
+                    OperationType: ctrl.selectedOperationType !=undefined? ctrl.selectedOperationType.value : undefined,
                     EntityType: entityType,
                     MeasureTypes: measureTypes,
                     TopMeasure: topMeasure,
-                    TopRecords: ctrl.topRecords
+                    TopRecords: ctrl.topRecords,
+                    TimeEntity: ctrl.selectedTimeEntity !=undefined? ctrl.selectedTimeEntity.Name :undefined
                 };
 
             }
 
             api.load = function (payload) {
 
-                ctrl.topRecords = payload != undefined ? payload.TopRecords : undefined;
+                ctrl.topRecords = payload != undefined ? payload.TopRecords : 10;
                 if (payload != undefined && payload.OperationType != undefined) {
                     for (var i = 0; i < ctrl.operationTypes.length; i++) {
 
@@ -107,45 +119,49 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
                             ctrl.selectedOperationType = ctrl.operationTypes[i];
                     }
                 }
+
                 var promises = [];
-                var loadMeasures = VR_BI_BIConfigurationAPIService.GetMeasuresInfo()
-                    .then(function (response) {
-                        angular.forEach(response, function (itm) {
-                            ctrl.Measures.push(itm);
-                        });
-                        if (payload != undefined && payload.MeasureTypes != undefined) {
-                            for (var i = 0; i < payload.MeasureTypes.length; i++) {
-                                var measureType = payload.MeasureTypes[i];
-                                for (var j = 0; j < ctrl.Measures.length; j++) {
-                                    if (measureType == ctrl.Measures[j].Name)
-                                        ctrl.selectedMeasureTypes.push(ctrl.Measures[j]);
-                                    if (ctrl.Measures[j].Name == payload.TopMeasure)
-                                        ctrl.selectedTopMeasure = ctrl.Measures[j];
-                                }
-                            }
-                        }
-                    });
-                promises.push(loadMeasures);
-                var loadEntities = VR_BI_BIConfigurationAPIService.GetEntitiesInfo()
-                    .then(function (response) {
-                        angular.forEach(response, function (itm) {
-                            ctrl.Entities.push(itm);
-                        });
-                        if (payload != undefined && payload.EntityType != undefined) {
-                            ctrl.selectedEntitiesType.length = 0;
-                            for (var j = 0; j < payload.EntityType.length; j++) {
-                                for (var i = 0; i < ctrl.Entities.length; i++) {
+                var loadMeasurePromiseDeferred = UtilsService.createPromiseDeferred();
+                measureReadyPromiseDeferred.promise.then(function () {
+                    var measurePayload = { selectedIds: payload != undefined ? payload.MeasureTypes : undefined };
 
-                                    if (ctrl.Entities[i].Name == payload.EntityType[j] && !UtilsService.contains(ctrl.selectedEntitiesType, ctrl.Entities[i])) {
-                                        ctrl.selectedEntitiesType.push(ctrl.Entities[i]);
+                    VRUIUtilsService.callDirectiveLoad(measureDirectiveAPI, measurePayload, loadMeasurePromiseDeferred);
 
-                                    }
-                                }
-                            }
+                });
+
+                promises.push(loadMeasurePromiseDeferred.promise);
+
+                var loadTimeEntityPromiseDeferred = UtilsService.createPromiseDeferred();
+                timeEntityReadyPromiseDeferred.promise.then(function () {
+                    var timeEntityPayload = { selectedIds: payload != undefined ? payload.TimeEntity : undefined };
+
+                    VRUIUtilsService.callDirectiveLoad(timeEntityDirectiveAPI, timeEntityPayload, loadTimeEntityPromiseDeferred);
+
+                });
+                promises.push(loadTimeEntityPromiseDeferred.promise);
+
+
+                var loadEntityPromiseDeferred = UtilsService.createPromiseDeferred();
+                entityReadyPromiseDeferred.promise.then(function () {
+                    var entityPayload = { selectedIds: payload != undefined ? payload.EntityType : undefined };
+
+                    VRUIUtilsService.callDirectiveLoad(entityDirectiveAPI, entityPayload, loadEntityPromiseDeferred);
+
+                });
+                promises.push(loadEntityPromiseDeferred.promise);
+                return UtilsService.waitMultiplePromises(promises).then(function()
+                {
+                    if (payload != undefined)
+                    {
+                        for (var j = 0; j < ctrl.selectedMeasureTypes.length; j++) {
+                            if (ctrl.selectedMeasureTypes[j].Name == payload.TopMeasure)
+                                ctrl.selectedTopMeasure = ctrl.selectedMeasureTypes[j];
                         }
-                    });
-                promises.push(loadEntities);
-                return UtilsService.waitMultiplePromises(promises);
+
+                    }
+                   
+                });
+
             }
 
             if (ctrl.onReady != null)

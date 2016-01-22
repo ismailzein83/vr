@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrSecDynamicpageGrid", ["VRNotificationService", "VR_Sec_ViewAPIService", "VR_ViewService", "VR_Sec_UserAPIService", "VR_Sec_GroupAPIService", "TimeDimensionTypeEnum", "PeriodEnum", "UtilsService", "VRModalService",
-function (VRNotificationService, VR_Sec_ViewAPIService, VR_ViewService, UsersAPIService, GroupAPIService, TimeDimensionTypeEnum, PeriodEnum, UtilsService, VRModalService) {
+app.directive("vrSecDynamicpageGrid", ["VRNotificationService", "VR_Sec_ViewAPIService", "VR_Sec_ViewService", "VR_Sec_UserAPIService", "VR_Sec_GroupAPIService", "TimeDimensionTypeEnum", "PeriodEnum", "UtilsService", "VRModalService",
+function (VRNotificationService, VR_Sec_ViewAPIService, VR_Sec_ViewService, UsersAPIService, VR_Sec_GroupAPIService, TimeDimensionTypeEnum, PeriodEnum, UtilsService, VRModalService) {
 
     var directiveDefinitionObject = {
 
@@ -172,7 +172,7 @@ function (VRNotificationService, VR_Sec_ViewAPIService, VR_ViewService, UsersAPI
         }
 
         function loadGroups() {
-            GroupAPIService.GetGroups()
+            VR_Sec_GroupAPIService.GetGroupInfo()
                 .then(function (response) {
                     angular.forEach(response, function (role) {
                         ctrl.groups.push(role);
@@ -185,7 +185,7 @@ function (VRNotificationService, VR_Sec_ViewAPIService, VR_ViewService, UsersAPI
                 fillNeededData(updatedItem);
                 gridAPI.itemUpdated(updatedItem);
             };
-            VR_ViewService.updateDynamicPage(dataItem.Entity.ViewId, onDynamicPageUpdated);
+            VR_Sec_ViewService.updateDynamicPage(dataItem.Entity.ViewId, onDynamicPageUpdated);
         }
 
         function deleteDynamicPage(dataItem) {
@@ -193,7 +193,7 @@ function (VRNotificationService, VR_Sec_ViewAPIService, VR_ViewService, UsersAPI
                 gridAPI.itemDeleted(deletedItem);
             }
 
-            VR_ViewService.deleteDynamicPage($scope, dataItem, onDynamicPageDeleted);
+            VR_Sec_ViewService.deleteDynamicPage($scope, dataItem, onDynamicPageDeleted);
         }
 
     }

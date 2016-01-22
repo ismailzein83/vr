@@ -1,6 +1,6 @@
-﻿RankPageEditorController.$inject = ['$scope', 'VR_Sec_MenuAPIService', 'VR_Sec_WidgetAPIService', 'GroupAPIService', 'UsersAPIService', 'VR_Sec_ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum', 'VRModalService'];
+﻿RankPageEditorController.$inject = ['$scope', 'VR_Sec_MenuAPIService', 'VR_Sec_WidgetAPIService', 'VR_Sec_GroupAPIService', 'UsersAPIService', 'VR_Sec_ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum', 'VRModalService'];
 
-function RankPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_WidgetAPIService, GroupAPIService, UsersAPIService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService) {
+function RankPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_WidgetAPIService, VR_Sec_GroupAPIService, UsersAPIService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService) {
     loadParameters();
     var treeAPI;
     defineScope();

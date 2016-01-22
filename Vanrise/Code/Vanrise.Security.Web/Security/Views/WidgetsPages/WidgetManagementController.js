@@ -1,7 +1,7 @@
 ﻿'use strict'
-widgetManagementController.$inject = ['$scope', 'UtilsService', 'WidgetDefinitionAPIService', 'VRNotificationService', 'VR_WidgetService'];
+widgetManagementController.$inject = ['$scope', 'UtilsService', 'VR_Sec_WidgetDefinitionAPIService', 'VRNotificationService', 'VR_Sec_WidgetService'];
 
-function widgetManagementController($scope, UtilsService, WidgetDefinitionAPIService, VRNotificationService, VR_WidgetService) {
+function widgetManagementController($scope, UtilsService, VR_Sec_WidgetDefinitionAPIService, VRNotificationService, VR_Sec_WidgetService) {
     var mainGridAPI;
     defineScope();
     load();
@@ -38,7 +38,7 @@ function widgetManagementController($scope, UtilsService, WidgetDefinitionAPISer
             if (mainGridAPI != undefined)
                 mainGridAPI.onWidgetAdded(widgetObj);
         };
-        VR_WidgetService.addWidget(onWidgetAdded);
+        VR_Sec_WidgetService.addWidget(onWidgetAdded);
     }
 
     function load() {
@@ -59,7 +59,7 @@ function widgetManagementController($scope, UtilsService, WidgetDefinitionAPISer
     }
 
     function loadWidgets() {
-        return WidgetDefinitionAPIService.GetWidgetsDefinition()
+        return VR_Sec_WidgetDefinitionAPIService.GetWidgetsDefinition()
             .then(function (response) {
                 angular.forEach(response, function (itm) {
                     $scope.widgetsTypes.push(itm);

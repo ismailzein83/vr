@@ -16,9 +16,15 @@ namespace Vanrise.BI.Entities
         public string Title { get; set; }
         public bool IsPieChart { get; set; }
         public int TopRecords { get; set; }
+        public string TimeEntity { get; set; }
         public override List<string> GetMeasures()
         {
             return MeasureTypes;
+        }
+
+        public override string GetTimeEntity()
+        {
+            return TimeEntity;
         }
     }
 }

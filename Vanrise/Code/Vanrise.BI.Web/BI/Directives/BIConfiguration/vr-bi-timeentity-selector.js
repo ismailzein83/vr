@@ -38,7 +38,7 @@ app.directive('vrBiTimeentitySelector', ['VR_BI_BIConfigurationAPIService', 'Uti
                 }
             },
             template: function (element, attrs) {
-                return getUserTemplate(attrs);
+                return getTimeEntityTemplate(attrs);
             }
 
         };
@@ -58,8 +58,8 @@ app.directive('vrBiTimeentitySelector', ['VR_BI_BIConfigurationAPIService', 'Uti
                 label = attrs.customlabel;
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="Id" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="User" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="Name" isrequired="ctrl.isrequired"'
+                + ' label="' + label +  '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="User" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>'
         }
 
@@ -92,13 +92,13 @@ app.directive('vrBiTimeentitySelector', ['VR_BI_BIConfigurationAPIService', 'Uti
                         });
 
                         if (selectedIds != undefined) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'Id', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'Name', attrs, ctrl);
                         }
                     });
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('Id', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
                 }
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

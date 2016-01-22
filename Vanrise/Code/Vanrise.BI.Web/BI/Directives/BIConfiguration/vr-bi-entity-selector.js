@@ -24,7 +24,7 @@ app.directive('vrBiEntitySelector', ['VR_BI_BIConfigurationAPIService', 'UtilsSe
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
 
-                var ctor = new timeEntityCtor(ctrl, $scope, $attrs);
+                var ctor = new entityCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
 
             },
@@ -38,19 +38,19 @@ app.directive('vrBiEntitySelector', ['VR_BI_BIConfigurationAPIService', 'UtilsSe
                 }
             },
             template: function (element, attrs) {
-                return getUserTemplate(attrs);
+                return getEntityTemplate(attrs);
             }
 
         };
 
 
-        function getTimeEntityTemplate(attrs) {
+        function getEntityTemplate(attrs) {
 
             var multipleselection = "";
 
-            var label = "Time";
+            var label = "Entity";
             if (attrs.ismultipleselection != undefined) {
-                label = "Times";
+                label = "Entities";
                 multipleselection = "ismultipleselection";
             }
 
@@ -58,12 +58,12 @@ app.directive('vrBiEntitySelector', ['VR_BI_BIConfigurationAPIService', 'UtilsSe
                 label = attrs.customlabel;
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="Id" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="User" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="Name" isrequired="ctrl.isrequired"'
+                + ' label="' + label + '"  datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="User" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>'
         }
 
-        function timeEntityCtor(ctrl, $scope, attrs) {
+        function entityCtor(ctrl, $scope, attrs) {
 
             var selectorApi;
 
@@ -92,13 +92,13 @@ app.directive('vrBiEntitySelector', ['VR_BI_BIConfigurationAPIService', 'UtilsSe
                         });
 
                         if (selectedIds != undefined) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'Id', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'Name', attrs, ctrl);
                         }
                     });
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('Id', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
                 }
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

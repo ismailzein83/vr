@@ -22,8 +22,8 @@
                         </vr-row>
                     </vr-form>
                 </vr-tab>
-                <vr-tab header="'Preview'" tabobject="scopeModal.tabObject">
-                    <vr-sec-widgetpreview on-ready="scopeModal.onPreviewAPIReady" ng-if="scopeModal.tabObject.isSelected"></vr-sec-widgetpreview>
+                <vr-tab header="'Preview'" tabobject="scopeModal.tabObject" >
+                    <vr-sec-widgetpreview on-ready="scopeModal.onPreviewAPIReady" ng-if="scopeModal.tabObject.isSelected && scopeModal.buildWidgetObjFromScope()" vr-loader="scopeModal.isLoadingPreviewDirective"></vr-sec-widgetpreview>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

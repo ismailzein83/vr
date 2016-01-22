@@ -12,7 +12,7 @@ namespace Vanrise.BI.Entities
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
 
-        public  int? TimeEntityId { get; set; }
+        public  string TimeEntityName { get; set; }
 
         public string[] MeasureTypesNames { get; set; }
          

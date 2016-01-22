@@ -38,7 +38,7 @@ app.directive('vrBiMeasureSelector', ['VR_BI_BIConfigurationAPIService', 'UtilsS
                 }
             },
             template: function (element, attrs) {
-                return getUserTemplate(attrs);
+                return getTimeEntityTemplate(attrs);
             }
 
         };
@@ -48,9 +48,9 @@ app.directive('vrBiMeasureSelector', ['VR_BI_BIConfigurationAPIService', 'UtilsS
 
             var multipleselection = "";
 
-            var label = "Time";
+            var label = "Measure";
             if (attrs.ismultipleselection != undefined) {
-                label = "Times";
+                label = "Measures";
                 multipleselection = "ismultipleselection";
             }
 
@@ -58,8 +58,8 @@ app.directive('vrBiMeasureSelector', ['VR_BI_BIConfigurationAPIService', 'UtilsS
                 label = attrs.customlabel;
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="Id" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="User" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="Name" isrequired="ctrl.isrequired"'
+                + ' label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="User" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>'
         }
 
@@ -92,13 +92,13 @@ app.directive('vrBiMeasureSelector', ['VR_BI_BIConfigurationAPIService', 'UtilsS
                         });
 
                         if (selectedIds != undefined) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'Id', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'Name', attrs, ctrl);
                         }
                     });
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('Id', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
                 }
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

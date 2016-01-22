@@ -18,7 +18,7 @@
         return ({
             GetMeasuresInfo: GetMeasuresInfo,
             GetEntitiesInfo: GetEntitiesInfo,
-            GetTimeEntities: GetTimeEntitiesInfo
+            GetTimeEntitiesInfo: GetTimeEntitiesInfo
         });
     }
 

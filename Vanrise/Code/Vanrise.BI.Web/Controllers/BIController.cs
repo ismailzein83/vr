@@ -20,7 +20,7 @@ namespace Vanrise.BI.Web.Controllers
         public IEnumerable<TimeValuesRecord> GetMeasureValues(MeasureValueInput input)
         {
             GenericEntityManager manager = new GenericEntityManager();
-            return manager.GetMeasureValues(input.TimeDimensionType, input.FromDate, input.ToDate, input.TimeEntityId, input.MeasureTypesNames);
+            return manager.GetMeasureValues(input.TimeDimensionType, input.FromDate, input.ToDate, input.TimeEntityName, input.MeasureTypesNames);
         }
       
         [HttpPost]
@@ -28,7 +28,7 @@ namespace Vanrise.BI.Web.Controllers
         public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(EntityMeasureValueInput input)
         {
             GenericEntityManager manager = new GenericEntityManager();
-            return manager.GetEntityMeasuresValues(input.EntityType, input.EntityId, input.TimeDimensionType, input.FromDate, input.ToDate, input.TimeEntityId, input.MeasureTypesNames);
+            return manager.GetEntityMeasuresValues(input.EntityType, input.EntityId, input.TimeDimensionType, input.FromDate, input.ToDate, input.TimeEntityName, input.MeasureTypesNames);
         }
        
         [HttpPost]
@@ -36,7 +36,7 @@ namespace Vanrise.BI.Web.Controllers
         public IEnumerable<EntityRecord> GetTopEntities(TopEntityInput input)
         {
             GenericEntityManager manager = new GenericEntityManager();
-            return manager.GetTopEntities(input.EntityTypeName, input.TopByMeasureTypeName, input.FromDate, input.ToDate, input.TopCount, input.TimeEntityId, input.MeasureTypesNames);
+            return manager.GetTopEntities(input.EntityTypeName, input.TopByMeasureTypeName, input.FromDate, input.ToDate, input.TopCount, input.TimeEntityName, input.MeasureTypesNames);
         }
       
         [HttpPost]
@@ -44,7 +44,7 @@ namespace Vanrise.BI.Web.Controllers
         public Decimal[] GetSummaryMeasureValues(BaseBIInput input)
         {
             GenericEntityManager manager = new GenericEntityManager();
-            return manager.GetSummaryMeasureValues(input.FromDate, input.ToDate, input.TimeEntityId, input.MeasureTypesNames);
+            return manager.GetSummaryMeasureValues(input.FromDate, input.ToDate, input.TimeEntityName, input.MeasureTypesNames);
         }
        
         [HttpPost]
@@ -52,7 +52,7 @@ namespace Vanrise.BI.Web.Controllers
         public HttpResponseMessage ExportMeasureValues(MeasureValueInput input)
         {
             GenericEntityManager manager = new GenericEntityManager();
-            IEnumerable<TimeValuesRecord> records = manager.GetMeasureValues(input.TimeDimensionType, input.FromDate, input.ToDate, input.TimeEntityId, input.MeasureTypesNames);
+            IEnumerable<TimeValuesRecord> records = manager.GetMeasureValues(input.TimeDimensionType, input.FromDate, input.ToDate, input.TimeEntityName, input.MeasureTypesNames);
             return manager.ExportMeasureValues(records, "Time", input.MeasureTypesNames, input.TimeDimensionType, input.FromDate, input.ToDate);
         }
 
@@ -61,7 +61,7 @@ namespace Vanrise.BI.Web.Controllers
         public HttpResponseMessage ExportTopEntities(TopEntityInput input)
         {
             GenericEntityManager manager = new GenericEntityManager();
-            IEnumerable<EntityRecord> records = manager.GetTopEntities(input.EntityTypeName, input.TopByMeasureTypeName, input.FromDate, input.ToDate, input.TopCount, input.TimeEntityId, input.MeasureTypesNames);
+            IEnumerable<EntityRecord> records = manager.GetTopEntities(input.EntityTypeName, input.TopByMeasureTypeName, input.FromDate, input.ToDate, input.TopCount, input.TimeEntityName, input.MeasureTypesNames);
             return manager.ExportTopEntities(records, input.EntityTypeName, input.MeasureTypesNames);
         }
 

@@ -94,7 +94,7 @@ app.directive('vrBiSummary', ['UtilsService', 'VR_BI_BIConfigurationAPIService',
                 return;
             ctrl.isGettingData = true;
 
-            return VR_BI_BIAPIService.GetSummaryMeasureValues(fromDate, toDate, ctrl.settings.MeasureTypes)
+            return VR_BI_BIAPIService.GetSummaryMeasureValues(fromDate, toDate,ctrl.settings.TimeEntity, ctrl.settings.MeasureTypes)
                 .then(function (response) {
 
                     for (var i = 0; i < response.length; i++) {

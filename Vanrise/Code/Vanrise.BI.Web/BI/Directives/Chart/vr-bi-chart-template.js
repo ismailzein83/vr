@@ -24,11 +24,33 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
 
     function biChart(ctrl, $scope, $attrs) {
         var lastTopMeasureValue;
+        var measureDirectiveAPI;
+        var measureReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var timeEntityDirectiveAPI;
+        var timeEntityReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var entityDirectiveAPI;
+        var entityReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         function initializeController() {
 
-            ctrl.Measures = [];
-            ctrl.Entities = [];
+            ctrl.onMeasureDirectiveReady = function (api) {
+                measureDirectiveAPI = api;
+                var setLoader = function (value) { ctrl.isLoadingMeasures = value };
+                var payload;
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, measureDirectiveAPI, payload, setLoader, measureReadyPromiseDeferred);
+            }
+
+            ctrl.onTimeEntityDirectiveReady = function (api) {
+                timeEntityDirectiveAPI = api;
+                timeEntityReadyPromiseDeferred.resolve();
+            }
+
+            ctrl.onEntityDirectiveReady = function (api) {
+                entityDirectiveAPI = api;
+                entityReadyPromiseDeferred.resolve();
+            }
+
             ctrl.selectedEntitiesType = [];
             ctrl.definitionTypes = [];
             ctrl.selectedDefinitionType;
@@ -36,39 +58,16 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
             ctrl.selectedMeasureType;
             ctrl.selectedTopMeasure;
 
-            ctrl.singleMeasureRequired = false;
-            ctrl.topMeasureRequired = false;
-            ctrl.multipleMeasureRequired = false;
-            ctrl.entityRequired = false;
             ctrl.isPieChart = true;
 
             ctrl.onSwitchValueChanged = function () {
                 if (ctrl.isPieChart) {
                     ctrl.selectedTopMeasure = undefined;
-                    ctrl.singleMeasureRequired = true;
-                    ctrl.multipleMeasureRequired = false;
-                    ctrl.topMeasureRequired = false;
                     ctrl.selectedTopMeasure = lastTopMeasureValue;
                 } else {
-                    ctrl.singleMeasureRequired = false;
-                    ctrl.multipleMeasureRequired = true;
-                    ctrl.topMeasureRequired = true;
                     ctrl.selectedTopMeasure = ctrl.selectedMeasureTypes.length > 0 ? ctrl.selectedMeasureTypes[0] : undefined;
                 }
 
-            }
-            ctrl.onSelectionOperationChanged = function () {
-                if (ctrl.selectedOperationType.value == "MeasuresGroupedByTime") {
-                    ctrl.singleMeasureRequired = false;
-                    ctrl.topMeasureRequired = false;
-                    ctrl.multipleMeasureRequired = true;
-                    ctrl.entityRequired = false;
-                } else {
-                    ctrl.singleMeasureRequired = true;
-                    ctrl.topMeasureRequired = false;
-                    ctrl.multipleMeasureRequired = false;
-                    ctrl.entityRequired = true;
-                }
             }
 
             ctrl.onSelectionChanged = function () {
@@ -86,7 +85,6 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
                 }
                 lastTopMeasureValue = ctrl.selectedTopMeasure;
             }
-            ctrl.topRecords = 10;
 
             defineChartDefinitionTypes();
             defineOperationTypes();
@@ -100,17 +98,18 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
             var api = {};
 
             api.getData = function () {
-                var measureTypes = [];
-                if (ctrl.selectedOperationType.value == "TopEntities" && ctrl.isPieChart) {
-                    if (ctrl.selectedEntitiesType.length == 0 || ctrl.selectedMeasureType == undefined)
-                        return false;
-                    else {
-                        measureTypes.push(ctrl.selectedMeasureType.Name);
+                var measureTypes;
+                if (ctrl.selectedOperationType != undefined)
+                {
+                    if (ctrl.selectedOperationType.value == "TopEntities" && ctrl.isPieChart) {
+                        if (ctrl.selectedEntitiesType.length > 0 && ctrl.selectedMeasureType != undefined) {
+                            measureTypes = [];
+                            measureTypes.push(ctrl.selectedMeasureType.Name);
+                        }
+
                     }
-                } else if (ctrl.selectedOperationType.value == "MeasuresGroupedByTime" || !ctrl.isPieChart) {
-                    if (ctrl.selectedMeasureTypes == undefined || ctrl.selectedMeasureTypes.length == 0)
-                        return false;
-                    else {
+                    else if ((ctrl.selectedOperationType.value == "MeasuresGroupedByTime" || !ctrl.isPieChart) && ctrl.selectedMeasureTypes.length > 0 && ctrl.selectedTopMeasure != undefined) {
+                        measureTypes = [];
                         for (var i = 0; i < ctrl.selectedMeasureTypes.length; i++) {
                             measureTypes.push(ctrl.selectedMeasureTypes[i].Name);
                             if (ctrl.selectedMeasureTypes[i].Name == ctrl.selectedTopMeasure.Name) {
@@ -119,28 +118,30 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
                                 measureTypes[i] = swap;
                             }
                         }
-
                     }
                 }
-                var topMeasure = null;
+                var topMeasure;
                 if (ctrl.selectedTopMeasure != undefined)
                     topMeasure = ctrl.selectedTopMeasure.Name;
-                var entityType = [];
+
+                var entityType;
 
                 if (ctrl.selectedEntitiesType.length > 0 && ctrl.selectedOperationType.value != "MeasuresGroupedByTime") {
+                    entityType = [];
                     for (var i = 0; i < ctrl.selectedEntitiesType.length; i++)
                         entityType.push(ctrl.selectedEntitiesType[i].Name);
                 }
 
                 return {
                     $type: "Vanrise.BI.Entities.ChartDirectiveSetting, Vanrise.BI.Entities",
-                    OperationType: ctrl.selectedOperationType.value,
+                    OperationType: ctrl.selectedOperationType != undefined? ctrl.selectedOperationType.value : undefined,
                     EntityType: entityType,
                     MeasureTypes: measureTypes,
                     TopMeasure: topMeasure,
-                    DefinitionType: ctrl.selectedDefinitionType.value,
+                    DefinitionType: ctrl.selectedDefinitionType !=undefined? ctrl.selectedDefinitionType.value :undefined,
                     IsPieChart: ctrl.isPieChart,
-                    TopRecords: ctrl.topRecords
+                    TopRecords: ctrl.topRecords,
+                    TimeEntity: ctrl.selectedTimeEntity != undefined ? ctrl.selectedTimeEntity.Name : undefined
                 };
 
             }
@@ -162,64 +163,51 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
                 }
 
                 ctrl.isPieChart = payload != undefined ? payload.IsPieChart : undefined;
-                ctrl.topRecords = payload != undefined ? payload.TopRecords : undefined;
+                ctrl.topRecords = payload != undefined ? payload.TopRecords : 10;
+
+
                 var promises = [];
-                var loadEntities = VR_BI_BIConfigurationAPIService.GetEntitiesInfo()
-                    .then(function (response) {
-                        angular.forEach(response, function (itm) {
-                            ctrl.Entities.push(itm);
-                        });
-                        if (payload != undefined && payload.EntityType != undefined) {
-                            ctrl.selectedEntitiesType.length = 0;
-                            for (var j = 0; j < payload.EntityType.length; j++) {
-                                for (var i = 0; i < ctrl.Entities.length; i++) {
-                                    if (ctrl.Entities[i].Name == payload.EntityType[j] && !UtilsService.contains(ctrl.selectedEntitiesType, ctrl.Entities[i])) {
-                                        ctrl.selectedEntitiesType.push(ctrl.Entities[i]);
-                                    }
-                                }
-                            }
+                var loadMeasurePromiseDeferred = UtilsService.createPromiseDeferred();
+                measureReadyPromiseDeferred.promise.then(function () {
+                    var measurePayload = { selectedIds: payload != undefined ? payload.MeasureTypes : undefined };
+                    measureReadyPromiseDeferred = undefined;
+                    VRUIUtilsService.callDirectiveLoad(measureDirectiveAPI, measurePayload, loadMeasurePromiseDeferred);
+
+                });
+
+                promises.push(loadMeasurePromiseDeferred.promise);
+
+                var loadTimeEntityPromiseDeferred = UtilsService.createPromiseDeferred();
+                timeEntityReadyPromiseDeferred.promise.then(function () {
+                    var timeEntityPayload = { selectedIds: payload != undefined ? payload.TimeEntity : undefined };
+
+                    VRUIUtilsService.callDirectiveLoad(timeEntityDirectiveAPI, timeEntityPayload, loadTimeEntityPromiseDeferred);
+
+                });
+                promises.push(loadTimeEntityPromiseDeferred.promise);
+
+
+                var loadEntityPromiseDeferred = UtilsService.createPromiseDeferred();
+                entityReadyPromiseDeferred.promise.then(function () {
+                    var entityPayload = { selectedIds: payload != undefined ? payload.EntityType : undefined };
+
+                    VRUIUtilsService.callDirectiveLoad(entityDirectiveAPI, entityPayload, loadEntityPromiseDeferred);
+
+                });
+                promises.push(loadEntityPromiseDeferred.promise);
+
+                return UtilsService.waitMultiplePromises(promises).then(function () {
+                    if (payload != undefined)
+                    {
+                        for (var j = 0; j < ctrl.selectedMeasureTypes.length; j++) {
+                            if (ctrl.selectedMeasureTypes[j].Name == payload.TopMeasure)
+                                ctrl.selectedTopMeasure = ctrl.selectedMeasureTypes[j];
                         }
-                    });
-                promises.push(loadEntities);
-                var loadMeasures = VR_BI_BIConfigurationAPIService.GetMeasuresInfo()
-                    .then(function (response) {
-                        angular.forEach(response, function (itm) {
-                            ctrl.Measures.push(itm);
+                        lastTopMeasureValue = ctrl.selectedTopMeasure;
+                    }
+                   
+                });
 
-                        });
-                        if (payload != undefined && payload.MeasureTypes != undefined) {
-                            for (var i = 0; i < payload.MeasureTypes.length; i++) {
-                                var measureType = payload.MeasureTypes[i];
-                                for (var j = 0; j < ctrl.Measures.length; j++) {
-
-                                    if (measureType == ctrl.Measures[j].Name) {
-                                        if (ctrl.selectedOperationType.value == "TopEntities" && payload.IsPieChart) {
-                                            ctrl.singleMeasureRequired = true;
-                                            ctrl.multipleMeasureRequired = false;
-                                            ctrl.topMeasureRequired = false;
-                                            ctrl.selectedMeasureType = ctrl.Measures[j];
-                                        } else {
-                                            ctrl.selectedMeasureTypes.push(ctrl.Measures[j]);
-                                            ctrl.multipleMeasureRequired = true;
-                                            ctrl.singleMeasureRequired = false;
-                                            if (ctrl.selectedOperationType.value == "MeasuresGroupedByTime") {
-                                                ctrl.topMeasureRequired = false;
-                                                ctrl.entityRequired = false;
-                                            } else {
-                                                ctrl.topMeasureRequired = true;
-                                                ctrl.entityRequired = true;
-                                            }
-                                        }
-
-                                    }
-
-                                }
-                            }
-                        }
-                    });
-                promises.push(loadMeasures);
-                lastTopMeasureValue = ctrl.selectedTopMeasure;
-                return UtilsService.waitMultiplePromises(promises);
             }
 
             if (ctrl.onReady != null)

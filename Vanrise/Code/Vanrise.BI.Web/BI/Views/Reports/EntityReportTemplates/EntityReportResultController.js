@@ -93,7 +93,7 @@ function EntityReportResultController($scope, VRNavigationService, UtilsService,
                 measureTypes.push(measureType.value);
             });
           
-            return VR_BI_BIAPIService.GetEntityMeasuresValues(entityType, entityId, timeDimensionValue, fromDate, toDate, measureTypes)
+            return VR_BI_BIAPIService.GetEntityMeasuresValues(entityType, entityId, timeDimensionValue, fromDate, toDate,null, measureTypes)
              .then(function (response) {
                 $scope.data.length = 0;
                 angular.forEach(response, function (itm) {

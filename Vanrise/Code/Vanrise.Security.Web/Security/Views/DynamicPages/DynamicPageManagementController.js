@@ -1,7 +1,7 @@
 ﻿'use strict'
-dynamicPageManagementController.$inject = ['$scope', 'VR_ViewService'];
+dynamicPageManagementController.$inject = ['$scope', 'VR_Sec_ViewService'];
 
-function dynamicPageManagementController($scope, VR_ViewService) {
+function dynamicPageManagementController($scope, VR_Sec_ViewService) {
     var mainGridAPI;
     defineScope();
     load();
@@ -33,7 +33,7 @@ function dynamicPageManagementController($scope, VR_ViewService) {
             if (mainGridAPI != undefined)
                 mainGridAPI.onDynamicPageAdded(dynamicPageObj);
         };
-        VR_ViewService.addDynamicPage(onDynamicPageAdded);
+        VR_Sec_ViewService.addDynamicPage(onDynamicPageAdded);
     }
 
     function load() {

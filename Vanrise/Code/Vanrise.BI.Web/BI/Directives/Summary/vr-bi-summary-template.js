@@ -10,7 +10,7 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, VR_BI
         controller: function ($scope, $element, $attrs) {
 
             var ctrl = this;
-            var ctor = new biChart(ctrl, $scope, $attrs);
+            var ctor = new biChart(ctrl, $scope);
             ctor.initializeController();
         },
         controllerAs: 'ctrl',
@@ -22,11 +22,24 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, VR_BI
 
     };
 
-    function biChart(ctrl, $scope, $attrs) {
+    function biChart(ctrl, $scope) {
+        var measureDirectiveAPI;
+        var measureReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var timeEntityDirectiveAPI;
+        var timeEntityReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         function initializeController() {
-            ctrl.Measures = [];
-            ctrl.selectedMeasureTypes = [];
+            $scope.onMeasureDirectiveReady = function (api) {
+                measureDirectiveAPI = api;
+                measureReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onTimeEntityDirectiveReady = function (api) {
+                timeEntityDirectiveAPI = api;
+                timeEntityReadyPromiseDeferred.resolve();
+            }
+
+            $scope.selectedMeasureTypes = [];
             defineAPI();
         }
 
@@ -34,41 +47,44 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, VR_BI
             var api = {};
 
             api.getData = function () {
+                var measureTypes;
+                if ($scope.selectedMeasureTypes.length > 0)
+                {
+                    measureTypes = [];
+                    for (var i = 0; i < $scope.selectedMeasureTypes.length; i++) {
 
-                if (ctrl.selectedMeasureTypes.length == 0)
-                    return false;
-                var measureTypes = [];
-
-                for (var i = 0; i < ctrl.selectedMeasureTypes.length; i++) {
-
-                    measureTypes.push(ctrl.selectedMeasureTypes[i].Name);
+                        measureTypes.push($scope.selectedMeasureTypes[i].Name);
+                    }
                 }
                 return {
                     $type: "Vanrise.BI.Entities.SummaryDirectiveSetting, Vanrise.BI.Entities",
                     MeasureTypes: measureTypes,
+                    TimeEntity: ctrl.selectedTimeEntity != undefined ? ctrl.selectedTimeEntity.Name : undefined
                 };
             }
 
             api.load = function (payload) {
+                var promises=[];
+                var loadMeasurePromiseDeferred = UtilsService.createPromiseDeferred();
+                measureReadyPromiseDeferred.promise.then(function () {
+                    var measurePayload = { selectedIds: payload!= undefined ? payload.MeasureTypes : undefined };
 
-                return VR_BI_BIConfigurationAPIService.GetMeasuresInfo()
-                    .then(function (response) {
-                        ctrl.Measures.length = 0;
-                        angular.forEach(response, function (itm) {
-                            ctrl.Measures.push(itm);
-                        });
+                    VRUIUtilsService.callDirectiveLoad(measureDirectiveAPI, measurePayload, loadMeasurePromiseDeferred);
 
-                        if (payload != undefined) {
-                            for (var i = 0; i < payload.MeasureTypes.length; i++) {
+                });
 
-                                for (var j = 0; j < ctrl.Measures.length; j++) {
+                promises.push(loadMeasurePromiseDeferred.promise);
 
-                                    if (payload.MeasureTypes[i] == ctrl.Measures[j].Name)
-                                        ctrl.selectedMeasureTypes.push(ctrl.Measures[j]);
-                                }
-                            }
-                        }
-                    });
+                var loadTimeEntityPromiseDeferred = UtilsService.createPromiseDeferred();
+                timeEntityReadyPromiseDeferred.promise.then(function () {
+                    var timeEntityPayload = { selectedIds: payload != undefined ? payload.TimeEntity : undefined };
+
+                    VRUIUtilsService.callDirectiveLoad(timeEntityDirectiveAPI, timeEntityPayload, loadTimeEntityPromiseDeferred);
+
+                });
+                promises.push(loadTimeEntityPromiseDeferred.promise);
+
+                return UtilsService.waitMultiplePromises(promises);
             }
 
             if (ctrl.onReady != null)

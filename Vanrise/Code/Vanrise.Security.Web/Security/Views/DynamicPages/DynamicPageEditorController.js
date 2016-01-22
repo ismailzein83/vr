@@ -1,6 +1,6 @@
-﻿DynamicPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'VR_Sec_GroupAPIService', 'VR_Sec_ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum', 'VRModalService', 'VRUIUtilsService'];
+﻿DynamicPageEditorController.$inject = ['$scope', 'VR_Sec_MenuAPIService', 'VR_Sec_WidgetAPIService', 'VR_Sec_ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum', 'VRModalService', 'VRUIUtilsService'];
 
-function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, GroupAPIService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService, VRUIUtilsService) {
+function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_WidgetAPIService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService, VRUIUtilsService) {
     $scope.scopeModal = {};
     var viewId;
     var viewEntity;
@@ -566,7 +566,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
     }
 
     function loadTree() {
-        return MenuAPIService.GetAllMenuItems()
+        return VR_Sec_MenuAPIService.GetAllMenuItems()
             .then(function (response) {
                 checkAllowDynamic(response);
                 $scope.scopeModal.menuList = response;
@@ -599,7 +599,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, G
     }
 
     function loadWidgets() {
-        return WidgetAPIService.GetAllWidgets()
+        return VR_Sec_WidgetAPIService.GetAllWidgets()
             .then(function (response) {
                 angular.forEach(response, function (itm) {
                     for (var i = 0; i < itm.WidgetDefinitionSetting.Sections.length; i++) {

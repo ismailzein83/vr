@@ -1,24 +1,27 @@
 ﻿<vr-row>
     <vr-columns width="1/2row">
-        <vr-select datasource="ctrl.operationTypes" datatextfield="description" datavaluefield="value" label="Data Type" selectedvalues="ctrl.selectedOperationType" isrequired="true" hidefilterbox onselectionchanged="ctrl.onSelectionOperationChanged"></vr-select>
+        <vr-select datasource="ctrl.operationTypes" datatextfield="description" datavaluefield="value" label="Data Type" selectedvalues="ctrl.selectedOperationType" isrequired="true" hideremoveicon hidefilterbox></vr-select>
     </vr-columns>
     <vr-columns width="1/2row" ng-show="ctrl.selectedOperationType.value == 'TopEntities'">
-        <vr-select datasource="ctrl.Entities" datatextfield="Name" datavaluefield="DisplayName" label="Entity" selectedvalues="ctrl.selectedEntitiesType" ismultipleselection isrequired="ctrl.entityRequired" hidefilterbox></vr-select>
+        <vr-bi-entity-selector on-ready="ctrl.onEntityDirectiveReady" selectedvalues="ctrl.selectedEntitiesType" ismultipleselection isrequired="ctrl.selectedOperationType.value == 'TopEntities'"></vr-bi-entity-selector>
     </vr-columns>
-    <vr-columns width="1/2row" ng-show="ctrl.selectedOperationType.value == 'TopEntities' && ctrl.isPieChart">
-        <vr-select datasource="ctrl.Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="ctrl.selectedMeasureType" onselectionchanged="ctrl.onSelectionChanged" hidefilterbox isrequired="ctrl.singleMeasureRequired"></vr-select>
+    <vr-columns width="1/2row" ng-if="ctrl.selectedOperationType.value == 'TopEntities' && ctrl.isPieChart" vr-loader="ctrl.isLoadingMeasures">
+        <vr-bi-measure-selector on-ready="ctrl.onMeasureDirectiveReady" selectedvalues="ctrl.selectedMeasureType" isrequired="true" onselectionchanged="ctrl.onSelectionChanged"></vr-bi-measure-selector>
     </vr-columns>
-    <vr-columns width="1/2row" ng-show="ctrl.selectedOperationType.value == 'MeasuresGroupedByTime' || !isPieChart">
-        <vr-select datasource="ctrl.Measures" datatextfield="Name" datavaluefield="DisplayName" label="Measures" selectedvalues="ctrl.selectedMeasureTypes" onselectionchanged="ctrl.onSelectionChanged" ismultipleselection hidefilterbox isrequired="ctrl.multipleMeasureRequired"></vr-select>
+    <vr-columns width="1/2row" ng-if="ctrl.selectedOperationType.value == 'MeasuresGroupedByTime' || !ctrl.isPieChart" vr-loader="ctrl.isLoadingMeasures">
+        <vr-bi-measure-selector on-ready="ctrl.onMeasureDirectiveReady" selectedvalues="ctrl.selectedMeasureTypes" ismultipleselection isrequired="true" onselectionchanged="ctrl.onSelectionChanged"></vr-bi-measure-selector>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-bi-timeentity-selector on-ready="ctrl.onTimeEntityDirectiveReady" selectedvalues="ctrl.selectedTimeEntity"  hideremoveicon></vr-bi-timeentity-selector>
     </vr-columns>
     <vr-columns width="1/2row" ng-show="ctrl.selectedOperationType.value == 'TopEntities'">
         <vr-switch value="ctrl.isPieChart" label="Pie Chart" onvaluechanged="ctrl.onSwitchValueChanged"></vr-switch>
     </vr-columns>
     <vr-columns width="1/2row" ng-show="ctrl.selectedOperationType.value == 'TopEntities' && !ctrl.isPieChart ">
-        <vr-select datasource="ctrl.selectedMeasureTypes" datatextfield="Name" datavaluefield="DisplayName" label="Top Measure" selectedvalues="ctrl.selectedTopMeasure" hidefilterbox isrequired="ctrl.topMeasureRequired"></vr-select>
+        <vr-select datasource="ctrl.selectedMeasureTypes" datatextfield="Name" datavaluefield="DisplayName" label="Top Measure" selectedvalues="ctrl.selectedTopMeasure" hidefilterbox isrequired="ctrl.selectedOperationType.value == 'TopEntities' && !ctrl.isPieChart" hideremoveicon></vr-select>
     </vr-columns>
     <vr-columns width="1/2row" ng-show="ctrl.selectedOperationType.value == 'MeasuresGroupedByTime' || !ctrl.isPieChart">
-        <vr-select datasource="ctrl.definitionTypes" datatextfield="value" datavaluefield="description" label="Chart Type" selectedvalues="ctrl.selectedDefinitionType" hidefilterbox></vr-select>
+        <vr-select datasource="ctrl.definitionTypes" datatextfield="value" datavaluefield="description" label="Chart Type" selectedvalues="ctrl.selectedDefinitionType" isrequired="true" hidefilterbox hideremoveicon></vr-select>
     </vr-columns>
     <vr-columns width="1/2row" ng-show="ctrl.selectedOperationType.value == 'TopEntities'">
         <vr-numeric value="ctrl.topRecords" type="number" label="Number Of Records" minvalue="1" maxvalue="100" isrequired="true"></vr-numeric>

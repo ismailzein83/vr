@@ -1,6 +1,6 @@
-﻿widgetEditorController.$inject = ['$scope', 'WidgetAPIService', 'MenuAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WidgetDefinitionAPIService'];
+﻿widgetEditorController.$inject = ['$scope', 'VR_Sec_WidgetAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Sec_WidgetDefinitionAPIService'];
 
-function widgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService, VRUIUtilsService, WidgetDefinitionAPIService) {
+function widgetEditorController($scope, VR_Sec_WidgetAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Sec_WidgetDefinitionAPIService) {
     var widgetId;
     var widgetEntity;
     var templateDirectiveAPI;
@@ -43,7 +43,10 @@ function widgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsS
             }
 
         }
-
+        $scope.scopeModal.buildWidgetObjFromScope = function ()
+        {
+            return buildWidgetObjFromScope();
+        }
         $scope.scopeModal.widgets = [];
         $scope.scopeModal.selectedWidget;
         $scope.scopeModal.widgetName;
@@ -68,11 +71,19 @@ function widgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsS
     }
 
     function buildWidgetObjFromScope() {
-        if ($scope.scopeModal.selectedWidget == undefined) {
+        if ($scope.scopeModal.selectedWidget == undefined || templateDirectiveAPI == undefined) {
             $scope.scopeModal.widget = null;
             return false;
         }
 
+        var settings = templateDirectiveAPI.getData();
+        
+        for (var prop in settings)
+        {
+
+            if (settings[prop] == undefined && prop != 'TimeEntity')
+                return false;
+        }
         var widgetSetting = {
             settings: templateDirectiveAPI.getData(),
             directive: $scope.scopeModal.selectedWidget.DirectiveName,
@@ -95,7 +106,7 @@ function widgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsS
     }
 
     function addWidget() {
-        return WidgetAPIService.AddWidget($scope.scopeModal.widget)
+        return VR_Sec_WidgetAPIService.AddWidget($scope.scopeModal.widget)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Widget", response, "Name")) {
                     if ($scope.onWidgetAdded != undefined)
@@ -109,8 +120,8 @@ function widgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsS
     }
 
     function updateWidget() {
-
-        return WidgetAPIService.UpdateWidget($scope.scopeModal.widget)
+        $scope.scopeModal.widget.Id = widgetId;
+        return VR_Sec_WidgetAPIService.UpdateWidget($scope.scopeModal.widget)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Widget", response, "Name")) {
                     if ($scope.onWidgetUpdated != undefined)
@@ -143,7 +154,7 @@ function widgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsS
     }
 
     function getWidget() {
-        return WidgetAPIService.GetWidgetById(widgetId)
+        return VR_Sec_WidgetAPIService.GetWidgetById(widgetId)
             .then(function (widget) {
                 widgetEntity = widget;
                 $scope.title = UtilsService.buildTitleForUpdateEditor(widgetEntity.Name, "Widget");
@@ -176,7 +187,7 @@ function widgetEditorController($scope, WidgetAPIService, MenuAPIService, UtilsS
     }
 
     function loadWidgetsDefinition() {
-        return WidgetDefinitionAPIService.GetWidgetsDefinition()
+        return VR_Sec_WidgetDefinitionAPIService.GetWidgetsDefinition()
             .then(function (response) {
                 angular.forEach(response, function (itm) {
                     $scope.scopeModal.widgets.push(itm);

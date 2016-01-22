@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrSecWidgetGrid", ["VRNotificationService", "WidgetAPIService", "VR_WidgetService",
-function (VRNotificationService, WidgetAPIService, VR_WidgetService) {
+app.directive("vrSecWidgetGrid", ["VRNotificationService", "VR_Sec_WidgetAPIService", "VR_Sec_WidgetService",
+function (VRNotificationService, VR_Sec_WidgetAPIService, VR_Sec_WidgetService) {
 
     var directiveDefinitionObject = {
 
@@ -52,7 +52,7 @@ function (VRNotificationService, WidgetAPIService, VR_WidgetService) {
             };
 
             ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WidgetAPIService.GetFilteredWidgets(dataRetrievalInput)
+                return VR_Sec_WidgetAPIService.GetFilteredWidgets(dataRetrievalInput)
                     .then(function (response) {
                         onResponseReady(response);
                     })
@@ -80,7 +80,7 @@ function (VRNotificationService, WidgetAPIService, VR_WidgetService) {
             var onWidgetUpdated = function (updatedItem) {
                 gridAPI.itemUpdated(updatedItem);
             };
-            VR_WidgetService.updateWidget(dataItem.Entity.Id, onWidgetUpdated);
+            VR_Sec_WidgetService.updateWidget(dataItem.Entity.Id, onWidgetUpdated);
         }
 
         function deleteWidget(dataItem) {
@@ -88,7 +88,7 @@ function (VRNotificationService, WidgetAPIService, VR_WidgetService) {
                 gridAPI.itemDeleted(deletedItem);
             }
 
-            VR_WidgetService.deleteWidget($scope, dataItem, onWidgetDeleted);
+            VR_Sec_WidgetService.deleteWidget($scope, dataItem, onWidgetDeleted);
         }
 
     }
