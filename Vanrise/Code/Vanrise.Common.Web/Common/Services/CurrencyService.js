@@ -8,7 +8,6 @@ app.service('VRCommon_CurrencyService', ['UtilsService','VRModalService', 'VRNot
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForAddEditor("Currency");
                 modalScope.onCurrencyAdded = onCurrencyAdded;
             };
             var parameters = {};
@@ -16,17 +15,16 @@ app.service('VRCommon_CurrencyService', ['UtilsService','VRModalService', 'VRNot
             VRModalService.showModal('/Client/Modules/Common/Views/Currency/CurrencyEditor.html', parameters, settings);
         }
 
-        function editCurrency(obj, onCurrencyUpdated) {
+        function editCurrency(currencyId, onCurrencyUpdated) {
             var settings = {
 
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Name, "Currency");
                 modalScope.onCurrencyUpdated = onCurrencyUpdated;
             };
             var parameters = {
-                CurrencyId: obj.CurrencyId
+                CurrencyId:currencyId
             };
 
             VRModalService.showModal('/Client/Modules/Common/Views/Currency/CurrencyEditor.html', parameters, settings);

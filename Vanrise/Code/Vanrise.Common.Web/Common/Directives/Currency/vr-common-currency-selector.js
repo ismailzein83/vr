@@ -100,7 +100,6 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('CurrencyId', attrs, ctrl);
                 }
-
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

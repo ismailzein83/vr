@@ -9,7 +9,7 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
                 ismultipleselection: "@",
                 onselectionchanged: '=',
                 selectedvalues: '=',
-                isrequired: "@",
+                isrequired: "=",
                 onselectitem: "=",
                 ondeselectitem: "=",
                 isdisabled: "=",
@@ -64,17 +64,15 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
                 multipleselection = "ismultipleselection";
             }
 
-            var required = "";
-            if (attrs.isrequired != undefined)
-                required = "isrequired";
+           
             var addCliked = '';
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="addNewCountry"';
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CountryId" '
-            + required + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Country" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-               + '</div>'
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CountryId" isrequired="ctrl.isrequired"'
+                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Country" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + '</div>'
         }
 
         function countryCtor(ctrl, $scope, attrs) {

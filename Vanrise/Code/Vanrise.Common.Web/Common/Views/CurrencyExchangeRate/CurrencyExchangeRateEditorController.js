@@ -38,6 +38,7 @@
         }
 
         function load() {
+            $scope.isGettingData = true;
             loadAllControls();
             $scope.title = UtilsService.buildTitleForAddEditor("Currency Exchange Rate");
            
@@ -79,6 +80,8 @@
   
         function insertCurrencyExchangeRate() {
             var object = buildCurrencyExchangeRateObjFromScope();
+            $scope.isGettingData = true;
+
             return VRCommon_CurrencyExchangeRateAPIService.AddCurrencyExchangeRate(object)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Currency Exchange Rate", response)) {
@@ -88,6 +91,8 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isGettingData = false;
             });
 
         }

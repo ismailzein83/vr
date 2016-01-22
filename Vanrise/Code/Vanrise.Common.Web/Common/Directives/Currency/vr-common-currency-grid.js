@@ -98,7 +98,7 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCo
             var onCurrencyUpdated = function (currencyObj) {
                 gridAPI.itemUpdated(currencyObj);
             }
-            VRCommon_CurrencyService.editCurrency(currencyObj, onCurrencyUpdated);
+            VRCommon_CurrencyService.editCurrency(currencyObj.CurrencyId, onCurrencyUpdated);
         }
 
 
