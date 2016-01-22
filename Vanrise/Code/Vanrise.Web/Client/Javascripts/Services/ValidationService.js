@@ -44,7 +44,6 @@
         }
 
         function validateTimeRange(fromDate, toDate) {
-            console.log(fromDate instanceof Date);
             if (fromDate instanceof Date) {
                 if (fromDate == undefined || toDate == undefined)
                     return null;
