@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Converters;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,9 @@ namespace Vanrise.Web
             config.Filters.Add(new ExceptionFilter());
             config.Filters.Add(new AuthenticationFilter());
             config.Filters.Add(new AuthorizationFilter());
-            
+
+            var json = config.Formatters.JsonFormatter;
+            json.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
 
             // Web API routes
             config.MapHttpAttributeRoutes();
