@@ -61,12 +61,15 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
                     $scope.selectedType = UtilsService.getItemByVal($scope.schedulerTypes, data.TimerTriggerTypeFQTN, "FQTN");
                 }
                 else 
-                    $scope.selectedType = UtilsService.getItemByVal($scope.schedulerTypes, TimeSchedulerTypeEnum.Interval.FQTN, "FQTN");
+                {
+                    setToDefaultValues();
+                }
 
                 if (data != undefined) {
                     timerTypeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                     var loadTimerTypePromiseDeferred = UtilsService.createPromiseDeferred();
                     timerTypeDirectiveReadyPromiseDeferred.promise.then(function () {
+                        timerTypeDirectiveReadyPromiseDeferred = undefined;
                         var payload = {
                             data: data
                         };
@@ -77,6 +80,11 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
 
 
                 return UtilsService.waitMultiplePromises(promises);
+            }
+
+            function setToDefaultValues()
+            {
+                $scope.selectedType = UtilsService.getItemByVal($scope.schedulerTypes, TimeSchedulerTypeEnum.Interval.FQTN, "FQTN");
             }
 
             if (ctrl.onReady != null)

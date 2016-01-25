@@ -23,14 +23,8 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, DaysOfWeekEnum)
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/Runtime/Directives/TaskTrigger/Templates/TaskTriggerWeekly.html"
     };
-
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/Runtime/Directives/TaskTrigger/Templates/TaskTriggerWeekly.html";
-    }
 
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;

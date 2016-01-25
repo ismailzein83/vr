@@ -23,18 +23,11 @@ function (UtilsService, VRUIUtilsService, BusinessProcessAPIService) {
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/Runtime/Directives/TaskAction/Templates/TaskActionWorkFlow.html"
     };
-
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/Runtime/Directives/TaskAction/Templates/TaskActionWorkFlow.html";
-    }
 
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
-
 
         function initializeController() {
             defineAPI();
@@ -43,6 +36,7 @@ function (UtilsService, VRUIUtilsService, BusinessProcessAPIService) {
         function defineAPI() {
             $scope.bpDefinitions = [];
             $scope.selectedBPDefintion = undefined;
+
             var bpDefenitionDirectiveAPI;
             var bpDefenitionDirectiveReadyPromiseDeferred //= UtilsService.createPromiseDeferred();
 
@@ -57,16 +51,17 @@ function (UtilsService, VRUIUtilsService, BusinessProcessAPIService) {
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bpDefenitionDirectiveAPI, undefined, setLoader, bpDefenitionDirectiveReadyPromiseDeferred);
             }
+
             $scope.onBPDefinitionSelectorReady = function (api) {
                 bpDefenitionSelectorAPI = api;
                 bpDefenitionSelectorReadyPromiseDeferred.resolve();
             }
             
-            $scope.onBPDefenitionSelctionChanged = function () {
-                if(bpDefenitionDirectiveAPI!=undefined){
-                    bpDefenitionDirectiveAPI.load(undefined);
-                }
-            }
+            //$scope.onBPDefenitionSelctionChanged = function () {
+            //    if(bpDefenitionDirectiveAPI != undefined){
+            //        bpDefenitionDirectiveAPI.load(undefined);
+            //    }
+            //}
             var api = {};
            
             api.getData = function () {
@@ -106,8 +101,8 @@ function (UtilsService, VRUIUtilsService, BusinessProcessAPIService) {
                         var payloadDirective;
                         if (data != undefined) {
                             payloadDirective = {
-                                data: (data != undefined && data.ProcessInputArguments) ? data.ProcessInputArguments : null,
-                                selectedDateOption: (data != undefined && data.RawExpressions != null) ? 0 : 1
+                                data: (data != undefined && data.ProcessInputArguments) ? data.ProcessInputArguments : null
+                                //selectedDateOption: (data != undefined && data.RawExpressions != null) ? 0 : 1
                             };
 
                         }

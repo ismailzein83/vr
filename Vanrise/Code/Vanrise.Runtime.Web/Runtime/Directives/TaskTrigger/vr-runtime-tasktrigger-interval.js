@@ -62,11 +62,13 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, IntervalTimeTyp
                     $scope.selectedIntervalType = UtilsService.getItemByVal($scope.intervalTypes, data.IntervalType, "value");
                 }
                 else {
-                    $scope.interval = "30";
-                    $scope.selectedIntervalType = UtilsService.getItemByVal($scope.intervalTypes, IntervalTimeTypeEnum.Minute.value, "value");
+                    setToDefaultValues();
                 }
-               
+            }
 
+            function setToDefaultValues() {
+                $scope.interval = "30";
+                $scope.selectedIntervalType = UtilsService.getItemByVal($scope.intervalTypes, IntervalTimeTypeEnum.Minute.value, "value");
             }
 
             if (ctrl.onReady != null)

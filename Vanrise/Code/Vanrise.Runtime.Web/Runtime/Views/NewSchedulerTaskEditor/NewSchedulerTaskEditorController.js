@@ -268,6 +268,7 @@
         }
 
         function updateTask() {
+            $scope.isLoading = true;
             var taskObject = buildTaskObjFromScope();
             SchedulerTaskAPIService.UpdateTask(taskObject)
             .then(function (response) {
