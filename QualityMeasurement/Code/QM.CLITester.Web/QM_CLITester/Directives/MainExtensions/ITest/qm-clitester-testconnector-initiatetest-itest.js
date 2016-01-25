@@ -22,14 +22,8 @@ app.directive("qmClitesterTestconnectorInitiatetestItest", [function () {
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/QM_CliTester/Directives/MainExtensions/ITest/Templates/TestConnector-InitiateTest-ITest.html"
     };
-
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/QM_CliTester/Directives/MainExtensions/ITest/Templates/TestConnector-InitiateTest-ITest.html";
-    }
 
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;

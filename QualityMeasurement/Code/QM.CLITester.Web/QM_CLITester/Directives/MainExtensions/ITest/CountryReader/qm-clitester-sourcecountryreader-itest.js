@@ -22,16 +22,8 @@ app.directive("qmClitesterSourcecountryreaderItest", [function () {
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-         
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/QM_CLITester/Directives/MainExtensions/ITest/CountryReader/Templates/SourceCountryReaderItest.html"
     };
-
-    function getDirectiveTemplateUrl() {
-       
-        return "/Client/Modules/QM_CLITester/Directives/MainExtensions/ITest/CountryReader/Templates/SourceCountryReaderItest.html";
-    }
 
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;

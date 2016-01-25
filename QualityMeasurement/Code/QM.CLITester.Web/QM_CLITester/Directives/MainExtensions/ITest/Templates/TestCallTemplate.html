@@ -8,10 +8,10 @@
     </vr-columns>
 
     <vr-columns width="1/4row">
-        <vr-common-country-selector on-ready="onCountryDirectiveReady" selectedvalues="selectedCountry" isrequired onselectitem="onCountrySelectItem"></vr-common-country-selector>
+        <vr-common-country-selector on-ready="onCountryDirectiveReady" selectedvalues="selectedCountry" isrequired="true" onselectitem="onCountrySelectItem"></vr-common-country-selector>
     </vr-columns>
 
-    <vr-columns width="1/4row" vr-loader="isLoading" ng-show="selectedCountry!=undefined">
+    <vr-columns width="1/4row" vr-loader="isLoadingZoneSelector" ng-show="selectedCountry!=undefined">
         <vr-qm-be-zone-selector on-ready="onZoneDirectiveReady" selectedvalues="selectedZone" isrequired></vr-qm-be-zone-selector>
     </vr-columns>
 </vr-row>

@@ -22,16 +22,8 @@ app.directive("qmClitesterSourcezonereaderItest", [function () {
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-         
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/QM_CLITester/Directives/MainExtensions/ITest/ZoneReader/Templates/SourceZoneReaderItest.html"
     };
-
-    function getDirectiveTemplateUrl() {
-       
-        return "/Client/Modules/QM_CLITester/Directives/MainExtensions/ITest/ZoneReader/Templates/SourceZoneReaderItest.html";
-    }
 
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;

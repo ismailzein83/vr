@@ -22,20 +22,12 @@ app.directive("qmClitesterSourceprofilereaderItest", [function () {
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/QM_CLITester/Directives/MainExtensions/SourceProfileReader/Templates/SouceProfileReaderiTest.html"
     };
-
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/QM_CLITester/Directives/MainExtensions/SourceProfileReader/Templates/SouceProfileReaderiTest.html";
-    }
 
     function DirectiveConstructor($scope, ctrl) {
 
         this.initializeController = initializeController;
-
-        $scope.dummy = undefined;
 
         function initializeController() {
             defineAPI();
@@ -54,6 +46,7 @@ app.directive("qmClitesterSourceprofilereaderItest", [function () {
 
 
             api.load = function (payload) {
+                console.log(payload);
                 if (payload != undefined) {
                     $scope.dummy = payload.Dummy;
                 }

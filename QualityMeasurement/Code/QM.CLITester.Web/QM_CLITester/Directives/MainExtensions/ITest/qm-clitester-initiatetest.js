@@ -22,32 +22,29 @@ app.directive("qmClitesterInitiatetest", ['UtilsService', 'VRUIUtilsService', 'Q
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/QM_CliTester/Directives/MainExtensions/ITest/Templates/InitiateTestTemplate.html"
     };
 
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/QM_CliTester/Directives/MainExtensions/ITest/Templates/InitiateTestTemplate.html";
-    }
 
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
+
         var sourceTypeDirectiveAPI;
         var sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
+            $scope.sourceTypeTemplates = [];
+            $scope.onSourceTypeDirectiveReady = function (api) {
+                sourceTypeDirectiveAPI = api;
+                var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
+            }
+
             defineAPI();
         }
 
         function defineAPI() {
-            
-            $scope.sourceTypeTemplates = [];
-            $scope.onSourceTypeDirectiveReady = function (api) {
-                sourceTypeDirectiveAPI = api;
-                sourceDirectiveReadyPromiseDeferred.resolve();
-            }
-
+           
             var api = {};
             api.getData = function () {
                 var CLITestConnectorObj = sourceTypeDirectiveAPI.getData();
@@ -62,11 +59,10 @@ app.directive("qmClitesterInitiatetest", ['UtilsService', 'VRUIUtilsService', 'Q
 
             api.load = function (payload) {
 
-                var promises = [];
                 if (payload != undefined && payload.data != undefined ) 
                     $scope.maximumRetryCount = payload.data.MaximumRetryCount;
                 
-                var initiateTestTemplatesLoad = Qm_CliTester_TestCallAPIService.GetInitiateTestTemplates().then(function (response) {
+               return Qm_CliTester_TestCallAPIService.GetInitiateTestTemplates().then(function (response) {
                     if (payload != undefined && payload.data != undefined && payload.data.CLITestConnector != undefined)
                      var  sourceConfigId = payload.data.CLITestConnector.ConfigId;
                     angular.forEach(response, function (item) {
@@ -76,9 +72,6 @@ app.directive("qmClitesterInitiatetest", ['UtilsService', 'VRUIUtilsService', 'Q
                     if (sourceConfigId != undefined)
                         $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
                 });
-                promises.push(initiateTestTemplatesLoad);
-
-                return UtilsService.waitMultiplePromises(promises);
             }
 
 

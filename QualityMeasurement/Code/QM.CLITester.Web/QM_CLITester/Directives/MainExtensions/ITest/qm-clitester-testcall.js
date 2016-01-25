@@ -22,14 +22,8 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/QM_CliTester/Directives/MainExtensions/ITest/Templates/TestCallTemplate.html"
     };
-
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/QM_CliTester/Directives/MainExtensions/ITest/Templates/TestCallTemplate.html";
-    }
 
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
@@ -51,17 +45,18 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
 
 
         function initializeController() {
-            defineAPI();
-        }
-
-        function defineAPI() {
             $scope.countries = [];
+
             $scope.zones = [];
+
             $scope.suppliers = [];
 
             $scope.selectedProfile;
+
             $scope.selectedSupplier = [];
+
             $scope.selectedCountry;
+
             $scope.selectedZone;
 
             $scope.onProfileDirectiveReady = function (api) {
@@ -86,23 +81,30 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
 
             $scope.onCountrySelectItem = function (selectedItem) {
                 if (selectedItem != undefined) {
-                    var setLoader = function (value) { $scope.isLoadingZonesSelector = value };
+                    var setLoader = function (value) { $scope.isLoadingZoneSelector = value };
                     var payload = {
                         filter: {
                             CountryId: selectedItem.CountryId
                         }
                     }
-
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader);
                 }
             }
 
             $scope.sourceTypeTemplates = [];
+
             $scope.onSourceTypeDirectiveReady = function (api) {
                 sourceTypeDirectiveAPI = api;
                 var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
             }
+
+
+            defineAPI();
+        }
+
+        function defineAPI() {
+           
            
             var api = {};
             api.getData = function () {
@@ -112,6 +114,7 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                 };
                 
             };
+
             function buildTestCallObjFromScope() {
                 var obj = {
                     SupplierID: UtilsService.getPropValuesFromArray($scope.selectedSupplier, "SupplierId"),
@@ -124,48 +127,52 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
 
             api.load = function (payload) {
                 var promises = [];
+
                 var profileLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 profileReadyPromiseDeferred.promise
                     .then(function () {
                         var directivePayload;
-                        if (payload != undefined && payload.data != undefined && payload.data.AddTestCallInput && payload.data.AddTestCallInput.ProfileID != undefined)
+                        if (payload != undefined && payload.data != undefined && payload.data.AddTestCallInput)
                             directivePayload = {
                                 selectedIds: payload.data.AddTestCallInput.ProfileID
                             }
                         VRUIUtilsService.callDirectiveLoad(profileDirectiveAPI, directivePayload, profileLoadPromiseDeferred);
                     });
+
                 promises.push(profileLoadPromiseDeferred.promise);
 
                 var supplierLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 supplierReadyPromiseDeferred.promise
                     .then(function () {
                         var directivePayload;
-                        if (payload != undefined && payload.data != undefined && payload.data.AddTestCallInput && payload.data.AddTestCallInput.SupplierID != undefined)
+                        if (payload != undefined && payload.data != undefined && payload.data.AddTestCallInput)
                             directivePayload = {
                                 selectedIds: payload.data.AddTestCallInput.SupplierID
                             }
                         VRUIUtilsService.callDirectiveLoad(supplierDirectiveAPI, directivePayload, supplierLoadPromiseDeferred);
                     });
+
                 promises.push(supplierLoadPromiseDeferred.promise);
 
                 var countryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 countryReadyPromiseDeferred.promise
                     .then(function () {
                         var directivePayload;
-                        if (payload != undefined && payload.data != undefined && payload.data.AddTestCallInput && payload.data.AddTestCallInput.CountryID != undefined)
+                        if (payload != undefined && payload.data != undefined && payload.data.AddTestCallInput)
                             directivePayload = {
                                 selectedIds: payload.data.AddTestCallInput.CountryID
                             }
                         VRUIUtilsService.callDirectiveLoad(countryDirectiveAPI, directivePayload, countryLoadPromiseDeferred);
                     });
+
                 promises.push(countryLoadPromiseDeferred.promise);
 
-
-                var zoneLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                if(payload != undefined && payload.data != undefined && payload.data.AddTestCallInput && payload.data.AddTestCallInput.CountryID != undefined)
+                {
+                     var zoneLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 zoneReadyPromiseDeferred.promise
                     .then(function () {
                         var directivePayload;
-                        if (payload != undefined && payload.data != undefined && payload.data.AddTestCallInput && payload.data.AddTestCallInput.CountryID != undefined) {
                             directivePayload = {
                                 filter: {
                                     CountryId: payload.data.CountryID
@@ -173,12 +180,14 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                             }
                             if (payload.data.AddTestCallInput.ZoneID != undefined)
                                 directivePayload.selectedIds = payload.data.AddTestCallInput.ZoneID;
-                        }
-                            
 
-                        VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, directivePayload, zoneLoadPromiseDeferred);
+                            VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, directivePayload, zoneLoadPromiseDeferred);
+
                     });
-                promises.push(zoneLoadPromiseDeferred.promise);
+                      promises.push(zoneLoadPromiseDeferred.promise);
+                }
+               
+      
 
 
                 return UtilsService.waitMultiplePromises(promises);
