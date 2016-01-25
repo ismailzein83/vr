@@ -12,16 +12,16 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     #region Arguments Classes
 
-    public class GetStrategyExecutionDetailInput
+    public class GetStrategyExecutionItemInput
     {
         public BaseQueue<NumberProfileBatch> InputQueueForNumberProfile { get; set; }
 
-        public BaseQueue<StrategyExecutionDetailBatch> OutputQueueForStrategyExecutionDetail { get; set; }
+        public BaseQueue<StrategyExecutionItemBatch> OutputQueueForStrategyExecutionItem { get; set; }
 
         public List<StrategyExecutionInfo> StrategiesExecutionInfo { get; set; }
     }
 
-    public class GetStrategyExecutionDetailOuput
+    public class GetStrategyExecutionItemOuput
     {
         public long NumberOfSuspicions { get; set; }
     }
@@ -29,14 +29,14 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
     #endregion
 
 
-    public class GetStrategyExecutionDetails : DependentAsyncActivity<GetStrategyExecutionDetailInput, GetStrategyExecutionDetailOuput>
+    public class GetStrategyExecutionItem : DependentAsyncActivity<GetStrategyExecutionItemInput, GetStrategyExecutionItemOuput>
     {
         #region Arguments
 
         [RequiredArgument]
         public InArgument<BaseQueue<NumberProfileBatch>> InputQueueForNumberProfile { get; set; }
 
-        public InOutArgument<BaseQueue<StrategyExecutionDetailBatch>> OutputQueueForStrategyExecutionDetail { get; set; }
+        public InOutArgument<BaseQueue<StrategyExecutionItemBatch>> OutputQueueForStrategyExecutionItem { get; set; }
 
         [RequiredArgument]
         public InArgument<List<StrategyExecutionInfo>> StrategiesExecutionInfo { get; set; }
@@ -47,23 +47,23 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
-            if (this.OutputQueueForStrategyExecutionDetail.Get(context) == null)
-                this.OutputQueueForStrategyExecutionDetail.Set(context, new MemoryQueue<StrategyExecutionDetailBatch>());
+            if (this.OutputQueueForStrategyExecutionItem.Get(context) == null)
+                this.OutputQueueForStrategyExecutionItem.Set(context, new MemoryQueue<StrategyExecutionItemBatch>());
 
             base.OnBeforeExecute(context, handle);
         }
 
-        protected override GetStrategyExecutionDetailInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)
+        protected override GetStrategyExecutionItemInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)
         {
-            return new GetStrategyExecutionDetailInput()
+            return new GetStrategyExecutionItemInput()
             {
                 InputQueueForNumberProfile = this.InputQueueForNumberProfile.Get(context),
-                OutputQueueForStrategyExecutionDetail = this.OutputQueueForStrategyExecutionDetail.Get(context),
+                OutputQueueForStrategyExecutionItem = this.OutputQueueForStrategyExecutionItem.Get(context),
                 StrategiesExecutionInfo = this.StrategiesExecutionInfo.Get(context)
             };
         }
 
-        protected override GetStrategyExecutionDetailOuput DoWorkWithResult(GetStrategyExecutionDetailInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override GetStrategyExecutionItemOuput DoWorkWithResult(GetStrategyExecutionItemInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Collecting Suspicious Numbers ");
 
@@ -92,11 +92,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         (item) =>
                         {
                             List<NumberProfile> numberProfiles = new List<NumberProfile>();
-                            List<StrategyExecutionDetail> strategyExecutionDetails = new List<StrategyExecutionDetail>();
+                            List<StrategyExecutionItem> strategyExecutionDetails = new List<StrategyExecutionItem>();
 
                             foreach (NumberProfile numberProfile in item.NumberProfiles)
                             {
-                                StrategyExecutionDetail strategyExecutionDetail = new StrategyExecutionDetail();
+                                StrategyExecutionItem strategyExecutionDetail = new StrategyExecutionItem();
 
                                 if (fraudManagers[numberProfile.StrategyId].IsNumberSuspicious(numberProfile, out strategyExecutionDetail))
                                 {
@@ -107,9 +107,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             }
 
                             if (strategyExecutionDetails.Count > 0)
-                                inputArgument.OutputQueueForStrategyExecutionDetail.Enqueue(new StrategyExecutionDetailBatch
+                                inputArgument.OutputQueueForStrategyExecutionItem.Enqueue(new StrategyExecutionItemBatch
                                 {
-                                    StrategyExecutionDetails = strategyExecutionDetails
+                                    StrategyExecutionItem = strategyExecutionDetails
                                 });
 
                             numberProfilesProcessed += item.NumberProfiles.Count;
@@ -121,13 +121,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             });
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finshed Collecting Suspicious Numbers ");
-            return new GetStrategyExecutionDetailOuput
+            return new GetStrategyExecutionItemOuput
             {
                 NumberOfSuspicions = numberOfSuspicions
             };
         }
 
-        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetStrategyExecutionDetailOuput result)
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetStrategyExecutionItemOuput result)
         {
             this.NumberOfSuspicions.Set(context, result.NumberOfSuspicions);
         }

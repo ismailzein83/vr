@@ -13,39 +13,39 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
     #region Arguments Classes
 
-    public class LoadStrategyExecutionDetailSummariesInput
+    public class LoadStrategyExecutionItemSummariesInput
     {
-        public BaseQueue<StrategyExecutionDetailSummaryBatch> OutputQueue { get; set; }
+        public BaseQueue<StrategyExecutionItemSummaryBatch> OutputQueue { get; set; }
     }
 
     #endregion
 
-    public sealed class LoadStrategyExecutionDetailSummaries : BaseAsyncActivity<LoadStrategyExecutionDetailSummariesInput>
+    public sealed class LoadStrategyExecutionItemSummaries : BaseAsyncActivity<LoadStrategyExecutionItemSummariesInput>
     {
         #region Arguments
 
         [RequiredArgument]
-        public InOutArgument<BaseQueue<StrategyExecutionDetailSummaryBatch>> OutputQueue { get; set; }
+        public InOutArgument<BaseQueue<StrategyExecutionItemSummaryBatch>> OutputQueue { get; set; }
 
         #endregion
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new MemoryQueue<StrategyExecutionDetailSummaryBatch>());
+                this.OutputQueue.Set(context, new MemoryQueue<StrategyExecutionItemSummaryBatch>());
 
             base.OnBeforeExecute(context, handle);
         }
 
 
-        protected override void DoWork(LoadStrategyExecutionDetailSummariesInput inputArgument, AsyncActivityHandle handle)
+        protected override void DoWork(LoadStrategyExecutionItemSummariesInput inputArgument, AsyncActivityHandle handle)
         {
             IStrategyExecutionDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
             int index = 0;
             int totalIndex = 0;
-            List<StrategyExecutionDetailSummary> strategyExecutionDetailSummaries = new List<StrategyExecutionDetailSummary>();
+            List<StrategyExecutionItemSummary> strategyExecutionDetailSummaries = new List<StrategyExecutionItemSummary>();
 
-            dataManager.LoadStrategyExecutionDetailSummaries((strategyExecutionDetailSummary) =>
+            dataManager.LoadStrategyExecutionItemSummaries((strategyExecutionDetailSummary) =>
                 {
 
                     index++;
@@ -56,10 +56,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                    
                     if (index == 1000)
                     {
-                        inputArgument.OutputQueue.Enqueue(new StrategyExecutionDetailSummaryBatch() { StrategyExecutionDetailSummaries = strategyExecutionDetailSummaries });
+                        inputArgument.OutputQueue.Enqueue(new StrategyExecutionItemSummaryBatch() { StrategyExecutionItemSummaries = strategyExecutionDetailSummaries });
                         Console.WriteLine("{0} Accounts Loaded", totalIndex);
                         index = 0;
-                        strategyExecutionDetailSummaries = new List<StrategyExecutionDetailSummary>();
+                        strategyExecutionDetailSummaries = new List<StrategyExecutionItemSummary>();
                     }
                      
                     
@@ -69,16 +69,16 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
             if (strategyExecutionDetailSummaries.Count > 0)
             {
-                inputArgument.OutputQueue.Enqueue(new StrategyExecutionDetailSummaryBatch() { StrategyExecutionDetailSummaries = strategyExecutionDetailSummaries });
-                strategyExecutionDetailSummaries = new List<StrategyExecutionDetailSummary>();
+                inputArgument.OutputQueue.Enqueue(new StrategyExecutionItemSummaryBatch() { StrategyExecutionItemSummaries = strategyExecutionDetailSummaries });
+                strategyExecutionDetailSummaries = new List<StrategyExecutionItemSummary>();
             }
 
         }
        
 
-        protected override LoadStrategyExecutionDetailSummariesInput GetInputArgument(AsyncCodeActivityContext context)
+        protected override LoadStrategyExecutionItemSummariesInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            return new LoadStrategyExecutionDetailSummariesInput
+            return new LoadStrategyExecutionItemSummariesInput
             {
                 OutputQueue = this.OutputQueue.Get(context)
             };

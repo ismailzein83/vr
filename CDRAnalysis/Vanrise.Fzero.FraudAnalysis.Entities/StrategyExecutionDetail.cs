@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class StrategyExecutionDetail
+    public class StrategyExecutionItem
     {
         public long ID { get; set; }
 

@@ -101,7 +101,7 @@
     <Compile Include="DataWarehouse\ApplyDWStrategiesToDB.cs" />
     <Compile Include="DataWarehouse\ApplyDWFactsToDB.cs" />
     <Compile Include="ApplyNumberProfilesToDB.cs" />
-    <Compile Include="ApplyStrategyExecutionDetailsToDB.cs" />
+    <Compile Include="ApplyStrategyExecutionItemsToDB.cs" />
     <Compile Include="AssignCases.cs" />
     <Compile Include="DataWarehouse\CheckDWDimensionsChanges.cs" />
     <Compile Include="DataWarehouse\FillFactValues.cs" />

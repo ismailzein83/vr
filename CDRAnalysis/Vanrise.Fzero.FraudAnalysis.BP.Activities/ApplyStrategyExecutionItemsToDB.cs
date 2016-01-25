@@ -6,17 +6,17 @@ using Vanrise.Queueing;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
-    public class ApplyStrategyExecutionDetailsToDBInput
+    public class ApplyStrategyExecutionItemToDBInput
     {
         public BaseQueue<Object> InputQueue { get; set; }
     }
 
-    public sealed class ApplyStrategyExecutionDetailsToDB : DependentAsyncActivity<ApplyStrategyExecutionDetailsToDBInput>
+    public sealed class ApplyStrategyExecutionItemToDB : DependentAsyncActivity<ApplyStrategyExecutionItemToDBInput>
     {
         [RequiredArgument]
         public InArgument<BaseQueue<Object>> InputQueue { get; set; }
 
-        protected override void DoWork(ApplyStrategyExecutionDetailsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(ApplyStrategyExecutionItemToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             IStrategyExecutionDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
 
@@ -26,18 +26,18 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 do
                 {
                     hasItems = inputArgument.InputQueue.TryDequeue(
-                        (preparedStrategyExecutionDetails) =>
+                        (preparedStrategyExecutionItem) =>
                         {
-                            dataManager.ApplyStrategyExecutionDetailsToDB(preparedStrategyExecutionDetails);
+                            dataManager.ApplyStrategyExecutionItemToDB(preparedStrategyExecutionItem);
                         });
                 } while (!ShouldStop(handle) && hasItems);
             }
                 );
         }
 
-        protected override ApplyStrategyExecutionDetailsToDBInput GetInputArgument2(AsyncCodeActivityContext context)
+        protected override ApplyStrategyExecutionItemToDBInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            return new ApplyStrategyExecutionDetailsToDBInput()
+            return new ApplyStrategyExecutionItemToDBInput()
             {
                 InputQueue = this.InputQueue.Get(context)
             };

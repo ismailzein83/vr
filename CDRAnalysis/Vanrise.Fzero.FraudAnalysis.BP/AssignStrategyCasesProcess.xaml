@@ -70,30 +70,30 @@
     </WriteLine>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
       <Parallel.Variables>
-        <Variable x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailSummaryBatch)" Name="strategyExecutionDetailSummaries" />
-        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadStrategyExecutionDetailSummariesStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemSummaryBatch)" Name="strategyExecutionDetailSummaries" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadStrategyExecutionItemSummariesStatus" />
       </Parallel.Variables>
-      <vffba1:LoadStrategyExecutionDetailSummaries sap2010:WorkflowViewState.IdRef="LoadStrategyExecutionDetailSummaries_2">
-        <vffba1:LoadStrategyExecutionDetailSummaries.OutputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailSummaryBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailSummaryBatch)">strategyExecutionDetailSummaries</mca:CSharpReference>
+      <vffba1:LoadStrategyExecutionItemSummaries sap2010:WorkflowViewState.IdRef="LoadStrategyExecutionItemSummaries_2">
+        <vffba1:LoadStrategyExecutionItemSummaries.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemSummaryBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemSummaryBatch)">strategyExecutionDetailSummaries</mca:CSharpReference>
           </InOutArgument>
-        </vffba1:LoadStrategyExecutionDetailSummaries.OutputQueue>
-        <vffba1:LoadStrategyExecutionDetailSummaries.Status>
+        </vffba1:LoadStrategyExecutionItemSummaries.OutputQueue>
+        <vffba1:LoadStrategyExecutionItemSummaries.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadStrategyExecutionDetailSummariesStatus</mca:CSharpReference>
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadStrategyExecutionItemSummariesStatus</mca:CSharpReference>
           </OutArgument>
-        </vffba1:LoadStrategyExecutionDetailSummaries.Status>
-      </vffba1:LoadStrategyExecutionDetailSummaries>
+        </vffba1:LoadStrategyExecutionItemSummaries.Status>
+      </vffba1:LoadStrategyExecutionItemSummaries>
       <vffba1:AssignCases Status="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignCases_2">
         <vffba1:AssignCases.InputQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailSummaryBatch)">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailSummaryBatch)">strategyExecutionDetailSummaries</mca:CSharpValue>
+          <InArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemSummaryBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemSummaryBatch)">strategyExecutionDetailSummaries</mca:CSharpValue>
           </InArgument>
         </vffba1:AssignCases.InputQueue>
         <vffba1:AssignCases.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadStrategyExecutionDetailSummariesStatus</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadStrategyExecutionItemSummariesStatus</mca:CSharpValue>
           </InArgument>
         </vffba1:AssignCases.PreviousActivityStatus>
       </vffba1:AssignCases>
@@ -108,7 +108,7 @@
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="554,62" />
-      <sap2010:ViewStateData Id="LoadStrategyExecutionDetailSummaries_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="LoadStrategyExecutionItemSummaries_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="AssignCases_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="554,86" />
       <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="554,62" />

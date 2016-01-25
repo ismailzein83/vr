@@ -103,7 +103,7 @@
     <Compile Include="Query\AccountCaseUpdateQuery.cs" />
     <Compile Include="StrategyInfo.cs" />
     <Compile Include="Strategy.cs" />
-    <Compile Include="StrategyExecutionItem.cs" />
+    <Compile Include="StrategyExecutionDet.cs" />
     <Compile Include="StrategyExecutionDetailSummary.cs" />
     <Compile Include="StrategyExecutionInfo.cs" />
     <Compile Include="StrategyCases.cs" />

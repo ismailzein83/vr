@@ -105,11 +105,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             IStrategyExecutionDataManager strategyExecutionDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
             ICaseManagementDataManager caseManagementDataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
 
-            List<int> CaseIDs = strategyExecutionDataManager.GetCasesIDsofStrategyExecutionDetails(input.AccountNumber, input.From, input.To, input.StrategyIDs);
+            List<int> CaseIDs = strategyExecutionDataManager.GetCasesIDsofStrategyExecutionItem(input.AccountNumber, input.From, input.To, input.StrategyIDs);
 
             if (CaseIDs != null && CaseIDs.Count > 0)
             {
-                strategyExecutionDataManager.DeleteStrategyExecutionDetails_ByFilters(input.AccountNumber, input.From, input.To, input.StrategyIDs);
+                strategyExecutionDataManager.DeleteStrategyExecutionItem_ByFilters(input.AccountNumber, input.From, input.To, input.StrategyIDs);
 
                 caseManagementDataManager.DeleteAccountCases_ByCaseIDs(CaseIDs);
             }
@@ -129,7 +129,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             IStrategyExecutionDataManager strategyExecutionDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
             ICaseManagementDataManager caseManagementDataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-            strategyExecutionDataManager.DeleteStrategyExecutionDetails_ByCaseIDs(CaseIDs);
+            strategyExecutionDataManager.DeleteStrategyExecutionItem_ByCaseIDs(CaseIDs);
             caseManagementDataManager.DeleteAccountCases_ByCaseIDs(CaseIDs);
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;

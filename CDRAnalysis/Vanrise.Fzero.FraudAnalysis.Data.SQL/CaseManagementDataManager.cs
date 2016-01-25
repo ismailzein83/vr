@@ -59,7 +59,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 	                       MAX(se.ExecutionDate) AS LastOccurance
                     INTO #TEMP_TABLE_NAME#                
                     FROM FraudAnalysis.AccountCase ac  WITH (NOLOCK)
-                    LEFT JOIN FraudAnalysis.StrategyExecutionDetails AS sed WITH (NOLOCK) ON sed.CaseID = ac.ID
+                    LEFT JOIN FraudAnalysis.StrategyExecutionItem AS sed WITH (NOLOCK) ON sed.CaseID = ac.ID
                     LEFT JOIN FraudAnalysis.StrategyExecution AS se WITH (NOLOCK) ON se.ID = sed.StrategyExecutionID
                     #WHERE_CLAUSE#                
                     GROUP BY ac.ID, ac.AccountNumber, ac.Status
@@ -121,7 +121,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByAccountNumber", tempTableName, input.Query.CaseID, input.Query.FromDate, input.Query.ToDate);
+                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionItem_CreateTempByAccountNumber", tempTableName, input.Query.CaseID, input.Query.FromDate, input.Query.ToDate);
             };
 
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, _columnMapper);
@@ -164,7 +164,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_CreateTempByCaseID", tempTableName, input.Query.CaseID);
+                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionItem_CreateTempByCaseID", tempTableName, input.Query.CaseID);
             };
 
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, _columnMapper);
@@ -259,7 +259,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             SuspicionOccuranceStatus occuranceStatus = (caseStatus.CompareTo(CaseStatus.Open) == 0 || caseStatus.CompareTo(CaseStatus.Pending) == 0) ? SuspicionOccuranceStatus.Open : SuspicionOccuranceStatus.Closed;
 
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_UpdateStatus", accountNumber, caseID, occuranceStatus);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionItem_UpdateStatus", accountNumber, caseID, occuranceStatus);
             return (recordsAffected > 0);
         }
 

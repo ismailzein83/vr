@@ -7,8 +7,8 @@ using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class StrategyExecutionDetailBatch
+    public class StrategyExecutionItemBatch
     {
-        public List<StrategyExecutionDetail> StrategyExecutionDetails;
+        public List<StrategyExecutionItem> StrategyExecutionItem;
     }
 }

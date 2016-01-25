@@ -46,7 +46,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 		            INTO #TEMP_TABLE_NAME#
 		            
 		            FROM [FraudAnalysis].[AccountCase] ac WITH(NOLOCK)
-                    INNER JOIN FraudAnalysis.StrategyExecutionDetails sed WITH(NOLOCK) ON sed.CaseID = ac.ID
+                    INNER JOIN FraudAnalysis.StrategyExecutionItem sed WITH(NOLOCK) ON sed.CaseID = ac.ID
                     INNER JOIN FraudAnalysis.StrategyExecution se WITH(NOLOCK) ON se.ID = sed.StrategyExecutionID
                     INNER JOIN [FraudAnalysis].[Strategy] s WITH(NOLOCK) ON se.StrategyID = s.ID
 		            
@@ -136,7 +136,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                         SELECT distinct ', ' + ac1.[AccountNumber]
                         
                         FROM [FraudAnalysis].[AccountCase] ac1
-                        INNER JOIN FraudAnalysis.StrategyExecutionDetails sed1 ON sed1.CaseID = ac1.ID
+                        INNER JOIN FraudAnalysis.StrategyExecutionItem sed1 ON sed1.CaseID = ac1.ID
                         INNER JOIN FraudAnalysis.StrategyExecution se1 ON se1.ID = sed1.StrategyExecutionID
                         INNER JOIN [FraudAnalysis].[Strategy] s1 ON se1.StrategyID = s1.ID
                         
@@ -148,7 +148,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     INTO #TEMP_TABLE_NAME#
 
                     FROM [FraudAnalysis].[AccountCase] ac WITH(NOLOCK)
-                    INNER JOIN FraudAnalysis.StrategyExecutionDetails sed ON sed.CaseID=ac.ID
+                    INNER JOIN FraudAnalysis.StrategyExecutionItem sed ON sed.CaseID=ac.ID
                     INNER JOIN FraudAnalysis.StrategyExecution se ON se.ID = sed.StrategyExecutionID
                     INNER JOIN [FraudAnalysis].[Strategy] s ON se.StrategyID = s.ID
                     

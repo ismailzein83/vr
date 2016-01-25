@@ -55,7 +55,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             }
         }
 
-        public bool IsNumberSuspicious(NumberProfile numberProfile, out StrategyExecutionDetail strategyExecutionDetail)
+        public bool IsNumberSuspicious(NumberProfile numberProfile, out StrategyExecutionItem strategyExecutionDetail)
         {
 
             strategyExecutionDetail = null;
@@ -92,7 +92,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                 if (isLevelMatch)
                 {
-                    strategyExecutionDetail = new StrategyExecutionDetail();
+                    strategyExecutionDetail = new StrategyExecutionItem();
                     strategyExecutionDetail.AccountNumber = numberProfile.AccountNumber;
                     strategyExecutionDetail.SuspicionLevelID = strategyLevelWithCriterias.SuspicionLevelId;
                     strategyExecutionDetail.FilterValues = criteriaValuesThresholds;

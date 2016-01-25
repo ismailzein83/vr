@@ -16,7 +16,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class AssignCasesInput
     {
-        public BaseQueue<StrategyExecutionDetailSummaryBatch> InputQueue { get; set; }
+        public BaseQueue<StrategyExecutionItemSummaryBatch> InputQueue { get; set; }
     }
 
     #endregion
@@ -27,7 +27,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InArgument<BaseQueue<StrategyExecutionDetailSummaryBatch>> InputQueue { get; set; }
+        public InArgument<BaseQueue<StrategyExecutionItemSummaryBatch>> InputQueue { get; set; }
 
         #endregion
 
@@ -59,7 +59,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 index = 0;
                             }
 
-                            foreach (var strategyExecutionDetailSummary in strategyExecutionDetailSummaryBatch.StrategyExecutionDetailSummaries)
+                            foreach (var strategyExecutionDetailSummary in strategyExecutionDetailSummaryBatch.StrategyExecutionItemSummaries)
                                 manager.AssignAccountCase(strategyExecutionDetailSummary.AccountNumber, strategyExecutionDetailSummary.IMEIs);
                         });
                 }

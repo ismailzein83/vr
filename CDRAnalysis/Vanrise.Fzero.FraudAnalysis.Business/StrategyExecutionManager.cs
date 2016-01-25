@@ -38,18 +38,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             }
 
 
-            List<int> CaseIDs = strategyExecutionDataManager.GetCasesIDsofStrategyExecutionDetails(null, from, to, strategyIDs);
+            List<int> CaseIDs = strategyExecutionDataManager.GetCasesIDsofStrategyExecutionItem(null, from, to, strategyIDs);
 
             if (CaseIDs != null && CaseIDs.Count > 0)
             {
-                strategyExecutionDataManager.DeleteStrategyExecutionDetails_ByFilters(null, from, to, strategyIDs);
+                strategyExecutionDataManager.DeleteStrategyExecutionItem_ByFilters(null, from, to, strategyIDs);
 
                 caseManagementDataManager.DeleteAccountCases_ByCaseIDs(CaseIDs);
             }
         }
 
 
-        public BigResult<StrategyExecutionItem> GetFilteredStrategyExecutions(Vanrise.Entities.DataRetrievalInput<StrategyExecutionQuery> input)
+        public BigResult<StrategyExecutionDet> GetFilteredStrategyExecutions(Vanrise.Entities.DataRetrievalInput<StrategyExecutionQuery> input)
         {
             IStrategyExecutionDataManager strategyExecutionDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
             StrategyManager strategyManager = new StrategyManager();
@@ -57,8 +57,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             BigResult<StrategyExecution> bigResultItems = strategyExecutionDataManager.GetFilteredStrategyExecutions(input);
             List<StrategyExecution> executions = bigResultItems.Data.ToList();
 
-            BigResult<StrategyExecutionItem> rsltResultItems = new BigResult<StrategyExecutionItem>();
-            List<StrategyExecutionItem> items = new List<StrategyExecutionItem>();
+            BigResult<StrategyExecutionDet> rsltResultItems = new BigResult<StrategyExecutionDet>();
+            List<StrategyExecutionDet> items = new List<StrategyExecutionDet>();
             List<long> pcocessIds = new List<long>();
 
             foreach (var i in executions)
@@ -70,7 +70,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             foreach (var i in executions)
             {
-                StrategyExecutionItem item = new StrategyExecutionItem();
+                StrategyExecutionDet item = new StrategyExecutionDet();
                 item.Entity = i;
                 BPInstanceStatus status;
                 if (processInstances.TryGetValue(i.ProcessID, out status))
@@ -85,7 +85,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 items.Add(item);
             }
 
-            rsltResultItems.Data = (IEnumerable<StrategyExecutionItem>)items;
+            rsltResultItems.Data = (IEnumerable<StrategyExecutionDet>)items;
             rsltResultItems.ResultKey = bigResultItems.ResultKey;
             rsltResultItems.TotalCount = bigResultItems.TotalCount;
             return rsltResultItems;

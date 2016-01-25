@@ -104,7 +104,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             streamForBulkInsert.Close();
             return new StreamBulkInsertInfo
             {
-                TableName = "[FraudAnalysis].[StrategyExecutionDetails]",
+                TableName = "[FraudAnalysis].[StrategyExecutionItem]",
                 ColumnNames = s_Columns,
                 Stream = streamForBulkInsert,
                 TabLock = false,
@@ -118,7 +118,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return base.InitializeStreamForBulkInsert();
         }
 
-        public void WriteRecordToStream(StrategyExecutionDetail record, object dbApplyStream)
+        public void WriteRecordToStream(StrategyExecutionItem record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
@@ -133,9 +133,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                                  );
         }
 
-        public void ApplyStrategyExecutionDetailsToDB(object preparedStrategyExecutionDetails)
+        public void ApplyStrategyExecutionItemToDB(object preparedStrategyExecutionItem)
         {
-            InsertBulkToTable(preparedStrategyExecutionDetails as BaseBulkInsertInfo);
+            InsertBulkToTable(preparedStrategyExecutionItem as BaseBulkInsertInfo);
         }
 
         public bool OverrideStrategyExecution(int StrategyID, DateTime From, DateTime To)
@@ -145,14 +145,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return (recordsEffected > 0);
         }
 
-        public void DeleteStrategyExecutionDetails_StrategyExecutionID(int StrategyExecutionId)
+        public void DeleteStrategyExecutionItem_StrategyExecutionID(int StrategyExecutionId)
         {
-            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_DeleteByStrategyExecutionID", StrategyExecutionId);
+            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionItem_DeleteByStrategyExecutionID", StrategyExecutionId);
         }
 
-        public void LoadStrategyExecutionDetailSummaries(Action<StrategyExecutionDetailSummary> onBatchReady)
+        public void LoadStrategyExecutionItemSummaries(Action<StrategyExecutionItemSummary> onBatchReady)
         {
-            ExecuteReaderSP("FraudAnalysis.sp_StrategyExecutionDetails_GetByNULLCaseID", (reader) =>
+            ExecuteReaderSP("FraudAnalysis.sp_StrategyExecutionItem_GetByNULLCaseID", (reader) =>
             {
                 while (reader.Read())
                 {
@@ -167,7 +167,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
                         }
 
-                    onBatchReady(new StrategyExecutionDetailSummary() { AccountNumber = (reader["AccountNumber"] as string), IMEIs = iMEIs });
+                    onBatchReady(new StrategyExecutionItemSummary() { AccountNumber = (reader["AccountNumber"] as string), IMEIs = iMEIs });
                 }
 
 
@@ -177,35 +177,35 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
 
 
-        public List<int> GetCasesIDsofStrategyExecutionDetails(string accountNumber, DateTime? fromDate, DateTime? toDate, List<int> strategyIDs)
+        public List<int> GetCasesIDsofStrategyExecutionItem(string accountNumber, DateTime? fromDate, DateTime? toDate, List<int> strategyIDs)
         {
             string StrategiesCommaSeperatedList = null;
 
             if (strategyIDs != null)
                 StrategiesCommaSeperatedList = string.Join(",", strategyIDs);
 
-            return GetItemsSP("FraudAnalysis.sp_StrategyExecutionDetails_GetCaseIDs", CaseMapper, accountNumber, fromDate, toDate, StrategiesCommaSeperatedList);
+            return GetItemsSP("FraudAnalysis.sp_StrategyExecutionItem_GetCaseIDs", CaseMapper, accountNumber, fromDate, toDate, StrategiesCommaSeperatedList);
         }
 
 
-        public void DeleteStrategyExecutionDetails_ByFilters(string accountNumber, DateTime? fromDate, DateTime? toDate, List<int> strategyIDs)
+        public void DeleteStrategyExecutionItem_ByFilters(string accountNumber, DateTime? fromDate, DateTime? toDate, List<int> strategyIDs)
         {
             string StrategiesCommaSeperatedList = null;
 
             if (strategyIDs != null)
                 StrategiesCommaSeperatedList = string.Join(",", strategyIDs);
 
-            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_DeleteByFilters", accountNumber, fromDate, toDate, StrategiesCommaSeperatedList);
+            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionItem_DeleteByFilters", accountNumber, fromDate, toDate, StrategiesCommaSeperatedList);
         }
 
-        public void DeleteStrategyExecutionDetails_ByCaseIDs(List<int> caseIds)
+        public void DeleteStrategyExecutionItem_ByCaseIDs(List<int> caseIds)
         {
             string CasesCommaSeperatedList = null;
 
             if (caseIds != null)
                 CasesCommaSeperatedList = string.Join(",", caseIds);
 
-            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionDetails_DeleteByCaseIDs", CasesCommaSeperatedList);
+            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionItem_DeleteByCaseIDs", CasesCommaSeperatedList);
         }
 
 

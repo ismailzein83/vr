@@ -136,15 +136,15 @@
           <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
             <Parallel.Variables>
               <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="numberProfileQueue" />
-              <Variable x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailBatch)" Name="strategyExecutionDetailQueue" />
+              <Variable x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemBatch)" Name="strategyExecutionDetailQueue" />
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="createNumberProfilesStatus" />
-              <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="GetStrategyExecutionDetailStatus" />
+              <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="GetStrategyExecutionItemStatus" />
               <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="numberProfileToStoreQueue" />
               <Variable x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)" Name="cdrQueue" />
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadCDRsStatus" />
-              <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedStrategyExecutionDetailsQueue" />
+              <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedStrategyExecutionItemQueue" />
               <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedNumberProfilesQueue" />
-              <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareStrategyExecutionDetailsStatus" />
+              <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareStrategyExecutionItemStatus" />
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareNumberProfilesStatus" />
             </Parallel.Variables>
             <vfcba:LoadCDRs sap2010:WorkflowViewState.IdRef="LoadCDRs_1">
@@ -231,72 +231,72 @@
                 </InArgument>
               </vffba1:CreateNumberProfiles.ToDate>
             </vffba1:CreateNumberProfiles>
-            <vffba1:GetStrategyExecutionDetails sap2010:WorkflowViewState.IdRef="GetStrategyExecutionDetails_1">
-              <vffba1:GetStrategyExecutionDetails.InputQueueForNumberProfile>
+            <vffba1:GetStrategyExecutionItem sap2010:WorkflowViewState.IdRef="GetStrategyExecutionItem_1">
+              <vffba1:GetStrategyExecutionItem.InputQueueForNumberProfile>
                 <InArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
                   <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileQueue</mca:CSharpValue>
                 </InArgument>
-              </vffba1:GetStrategyExecutionDetails.InputQueueForNumberProfile>
-              <vffba1:GetStrategyExecutionDetails.NumberOfSuspicions>
+              </vffba1:GetStrategyExecutionItem.InputQueueForNumberProfile>
+              <vffba1:GetStrategyExecutionItem.NumberOfSuspicions>
                 <OutArgument x:TypeArguments="x:Int64">
                   <mca:CSharpReference x:TypeArguments="x:Int64">numberOfSuspicions</mca:CSharpReference>
                 </OutArgument>
-              </vffba1:GetStrategyExecutionDetails.NumberOfSuspicions>
-              <vffba1:GetStrategyExecutionDetails.OutputQueueForStrategyExecutionDetail>
-                <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailBatch)">
-                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailBatch)">strategyExecutionDetailQueue</mca:CSharpReference>
+              </vffba1:GetStrategyExecutionItem.NumberOfSuspicions>
+              <vffba1:GetStrategyExecutionItem.OutputQueueForStrategyExecutionItem>
+                <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemBatch)">
+                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemBatch)">strategyExecutionDetailQueue</mca:CSharpReference>
                 </InOutArgument>
-              </vffba1:GetStrategyExecutionDetails.OutputQueueForStrategyExecutionDetail>
-              <vffba1:GetStrategyExecutionDetails.PreviousActivityStatus>
+              </vffba1:GetStrategyExecutionItem.OutputQueueForStrategyExecutionItem>
+              <vffba1:GetStrategyExecutionItem.PreviousActivityStatus>
                 <InArgument x:TypeArguments="vb:AsyncActivityStatus">
                   <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">createNumberProfilesStatus</mca:CSharpValue>
                 </InArgument>
-              </vffba1:GetStrategyExecutionDetails.PreviousActivityStatus>
-              <vffba1:GetStrategyExecutionDetails.Status>
+              </vffba1:GetStrategyExecutionItem.PreviousActivityStatus>
+              <vffba1:GetStrategyExecutionItem.Status>
                 <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">GetStrategyExecutionDetailStatus</mca:CSharpReference>
+                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">GetStrategyExecutionItemStatus</mca:CSharpReference>
                 </OutArgument>
-              </vffba1:GetStrategyExecutionDetails.Status>
-              <vffba1:GetStrategyExecutionDetails.StrategiesExecutionInfo>
+              </vffba1:GetStrategyExecutionItem.Status>
+              <vffba1:GetStrategyExecutionItem.StrategiesExecutionInfo>
                 <InArgument x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">
                   <mca:CSharpValue x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">strategiesExecutionInfo</mca:CSharpValue>
                 </InArgument>
-              </vffba1:GetStrategyExecutionDetails.StrategiesExecutionInfo>
-            </vffba1:GetStrategyExecutionDetails>
-            <vffba1:PrepareStrategyExecutionDetailsForDBApply sap2010:WorkflowViewState.IdRef="PrepareStrategyExecutionDetailsForDBApply_1">
-              <vffba1:PrepareStrategyExecutionDetailsForDBApply.InputQueue>
-                <InArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailBatch)">
-                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionDetailBatch)">strategyExecutionDetailQueue</mca:CSharpValue>
+              </vffba1:GetStrategyExecutionItem.StrategiesExecutionInfo>
+            </vffba1:GetStrategyExecutionItem>
+            <vffba1:PrepareStrategyExecutionItemForDBApply sap2010:WorkflowViewState.IdRef="PrepareStrategyExecutionItemForDBApply_1">
+              <vffba1:PrepareStrategyExecutionItemForDBApply.InputQueue>
+                <InArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemBatch)">
+                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemBatch)">strategyExecutionDetailQueue</mca:CSharpValue>
                 </InArgument>
-              </vffba1:PrepareStrategyExecutionDetailsForDBApply.InputQueue>
-              <vffba1:PrepareStrategyExecutionDetailsForDBApply.OutputQueue>
+              </vffba1:PrepareStrategyExecutionItemForDBApply.InputQueue>
+              <vffba1:PrepareStrategyExecutionItemForDBApply.OutputQueue>
                 <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
-                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">preparedStrategyExecutionDetailsQueue</mca:CSharpReference>
+                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">preparedStrategyExecutionItemQueue</mca:CSharpReference>
                 </InOutArgument>
-              </vffba1:PrepareStrategyExecutionDetailsForDBApply.OutputQueue>
-              <vffba1:PrepareStrategyExecutionDetailsForDBApply.PreviousActivityStatus>
+              </vffba1:PrepareStrategyExecutionItemForDBApply.OutputQueue>
+              <vffba1:PrepareStrategyExecutionItemForDBApply.PreviousActivityStatus>
                 <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">GetStrategyExecutionDetailStatus</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">GetStrategyExecutionItemStatus</mca:CSharpValue>
                 </InArgument>
-              </vffba1:PrepareStrategyExecutionDetailsForDBApply.PreviousActivityStatus>
-              <vffba1:PrepareStrategyExecutionDetailsForDBApply.Status>
+              </vffba1:PrepareStrategyExecutionItemForDBApply.PreviousActivityStatus>
+              <vffba1:PrepareStrategyExecutionItemForDBApply.Status>
                 <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareStrategyExecutionDetailsStatus</mca:CSharpReference>
+                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareStrategyExecutionItemStatus</mca:CSharpReference>
                 </OutArgument>
-              </vffba1:PrepareStrategyExecutionDetailsForDBApply.Status>
-            </vffba1:PrepareStrategyExecutionDetailsForDBApply>
-            <vffba1:ApplyStrategyExecutionDetailsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyStrategyExecutionDetailsToDB_1">
-              <vffba1:ApplyStrategyExecutionDetailsToDB.InputQueue>
+              </vffba1:PrepareStrategyExecutionItemForDBApply.Status>
+            </vffba1:PrepareStrategyExecutionItemForDBApply>
+            <vffba1:ApplyStrategyExecutionItemToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyStrategyExecutionItemToDB_1">
+              <vffba1:ApplyStrategyExecutionItemToDB.InputQueue>
                 <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
-                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedStrategyExecutionDetailsQueue</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedStrategyExecutionItemQueue</mca:CSharpValue>
                 </InArgument>
-              </vffba1:ApplyStrategyExecutionDetailsToDB.InputQueue>
-              <vffba1:ApplyStrategyExecutionDetailsToDB.PreviousActivityStatus>
+              </vffba1:ApplyStrategyExecutionItemToDB.InputQueue>
+              <vffba1:ApplyStrategyExecutionItemToDB.PreviousActivityStatus>
                 <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareStrategyExecutionDetailsStatus</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareStrategyExecutionItemStatus</mca:CSharpValue>
                 </InArgument>
-              </vffba1:ApplyStrategyExecutionDetailsToDB.PreviousActivityStatus>
-            </vffba1:ApplyStrategyExecutionDetailsToDB>
+              </vffba1:ApplyStrategyExecutionItemToDB.PreviousActivityStatus>
+            </vffba1:ApplyStrategyExecutionItemToDB>
           </Parallel>
         </Sequence>
       </If.Then>
@@ -335,9 +335,9 @@
       <sap2010:ViewStateData Id="GetStrategiesExecutionInfo_1" sap:VirtualizedContainerService.HintSize="1521,22" />
       <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="CreateNumberProfiles_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="GetStrategyExecutionDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="PrepareStrategyExecutionDetailsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ApplyStrategyExecutionDetailsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetStrategyExecutionItem_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareStrategyExecutionItemForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyStrategyExecutionItemToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1274,86" />
       <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1296,210">
         <sap:WorkflowViewStateService.ViewState>

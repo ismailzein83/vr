@@ -8,32 +8,32 @@ using Vanrise.Queueing;
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
     #region Argument Classes
-    public class PrepareStrategyExecutionDetailsForDBApplyInput
+    public class PrepareStrategyExecutionItemForDBApplyInput
     {
-        public BaseQueue<StrategyExecutionDetailBatch> InputQueue { get; set; }
+        public BaseQueue<StrategyExecutionItemBatch> InputQueue { get; set; }
 
         public BaseQueue<Object> OutputQueue { get; set; }
     }
 
     #endregion
-    public sealed class PrepareStrategyExecutionDetailsForDBApply : DependentAsyncActivity<PrepareStrategyExecutionDetailsForDBApplyInput>
+    public sealed class PrepareStrategyExecutionItemForDBApply : DependentAsyncActivity<PrepareStrategyExecutionItemForDBApplyInput>
     {
         [RequiredArgument]
-        public InArgument<BaseQueue<StrategyExecutionDetailBatch>> InputQueue { get; set; }
+        public InArgument<BaseQueue<StrategyExecutionItemBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
 
-        protected override void DoWork(PrepareStrategyExecutionDetailsForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(PrepareStrategyExecutionItemForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             IStrategyExecutionDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
 
-            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, strategyExecutionDetailBatch => strategyExecutionDetailBatch.StrategyExecutionDetails);
+            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, strategyExecutionDetailBatch => strategyExecutionDetailBatch.StrategyExecutionItem);
         }
 
-        protected override PrepareStrategyExecutionDetailsForDBApplyInput GetInputArgument2(AsyncCodeActivityContext context)
+        protected override PrepareStrategyExecutionItemForDBApplyInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            return new PrepareStrategyExecutionDetailsForDBApplyInput
+            return new PrepareStrategyExecutionItemForDBApplyInput
             {
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
