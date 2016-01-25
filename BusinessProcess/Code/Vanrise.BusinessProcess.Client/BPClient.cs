@@ -125,7 +125,8 @@ namespace Vanrise.BusinessProcess.Client
 
         public Dictionary<long, BPInstanceStatus> GetProcessesStatuses(List<long> Ids)
         {
-            return GetProcessesStatuses(Ids);
+            IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
+            return dataManager.GetProcessesStatuses(Ids);
         }
 
 
