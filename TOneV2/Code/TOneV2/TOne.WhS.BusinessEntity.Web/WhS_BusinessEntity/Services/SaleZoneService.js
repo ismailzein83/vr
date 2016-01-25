@@ -39,22 +39,6 @@ app.service('WhS_BE_SaleZoneService', ['VRModalService', 'VRNotificationService'
 
             drillDownDefinition.title = "Sale Zones";
             drillDownDefinition.directive = "vr-whs-be-saleZone-grid";
-            drillDownDefinition.parentMenuActions = [{
-                name: "New Sale Zone",
-                clicked: function (sellingNumberPlanItem) {
-                    if (drillDownDefinition.setTabSelected != undefined)
-                        drillDownDefinition.setTabSelected(sellingNumberPlanItem);
-                    var query = {
-                        SellingNumberPlanIds: [sellingNumberPlanItem.Entity.SellingNumberPlanId]
-                    }
-                    var onSaleZoneAdded = function (saleZoneObj) {
-                        if (sellingNumberPlanItem.saleZoneGridAPI != undefined) {
-                            sellingNumberPlanItem.saleZoneGridAPI.onSaleZoneAdded(saleZoneObj);
-                        }
-                    };
-                    addSaleZone(onSaleZoneAdded, sellingNumberPlanItem.Entity.sellingNumberPlanId);
-                }
-            }];
 
             drillDownDefinition.loadDirective = function (directiveAPI, sellingNumberPlanItem) {
 
