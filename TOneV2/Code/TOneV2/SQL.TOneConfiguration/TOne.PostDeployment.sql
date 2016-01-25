@@ -148,7 +148,7 @@ as (select * from (values
 (42,'Management','Management','#/view/BusinessProcess/Views/BPDefinitionManagement',10,null,null,null,0,10),
 (43,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',5,null,null,null,0,16),
 (69,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',23,'Root/Administration Module/Dynamic Pages:View',null,null,0,10),
-(134,'Organizational Charts','Organizational Charts','#/view/Security/Views/OrgChartManagement',5,null,null,null,0,15),
+(134,'Organizational Charts','Organizational Charts','#/view/Security/Views/OrgChart/OrgChartManagement',5,null,null,null,0,15),
 (173,'Account Manager','Account Manager','#/view/WhS_BusinessEntity/Views/AccountManager/AccountManagerManagement',22,null,null,null,0,10),
 (200,'Carrier Profiles','Carrier Profiles','#/view/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileManagement',29,null,null,null,0,10),
 (236,'Ranking Pages','Ranking Pages','#/view/Security/Views/Pages/RankingPageManagement',5,'Root/Administration Module:View',null,null,0,17),
