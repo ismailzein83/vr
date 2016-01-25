@@ -44,7 +44,6 @@ app.directive("vrCdrFraudanalysisNumberprofilingManual", [ "StrategyAPIService",
             $scope.createProcessInputObjects = [];
 
             $scope.periods = [];
-            $scope.selectedPeriod;
 
 
             $scope.hours = [];

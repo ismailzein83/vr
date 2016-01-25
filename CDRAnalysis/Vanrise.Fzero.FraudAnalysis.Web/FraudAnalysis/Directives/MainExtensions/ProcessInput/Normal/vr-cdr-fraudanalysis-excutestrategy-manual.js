@@ -46,7 +46,6 @@ app.directive("vrCdrFraudanalysisExcutestrategyManual", ["UtilsService", "Strate
             $scope.selectedStrategies = [];
             $scope.selectedStrategyIds = [];
             $scope.periods = [];
-            $scope.selectedPeriod;
           
             $scope.selectedPeriodChanged = function () {
               

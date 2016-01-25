@@ -32,9 +32,6 @@ app.directive("vrCdrFraudanalysisNumberprofiling", ["UtilsService", "VRUIUtilsSe
         function initializeController() {
 
             $scope.periods = [];
-            $scope.selectedPeriod;
-
-
 
             $scope.hours = [];
             angular.forEach(HourEnum, function (itm) {
