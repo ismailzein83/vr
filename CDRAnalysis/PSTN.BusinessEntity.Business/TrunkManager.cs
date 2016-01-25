@@ -54,9 +54,6 @@ namespace PSTN.BusinessEntity.Business
             return trunks.GetRecord(trunkId);
         }
 
-
-      
-
         public int? GetTrunkIdBySymbol(string symbol)
         {
             if (symbol==null || symbol==string.Empty) 
@@ -68,7 +65,6 @@ namespace PSTN.BusinessEntity.Business
             else
                 return null;
         }
-
 
         public IEnumerable<TrunkInfo> GetTrunksBySwitchIds(TrunkFilter trunkFilterObj)
         {
