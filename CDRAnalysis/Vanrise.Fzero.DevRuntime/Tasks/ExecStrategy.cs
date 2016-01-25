@@ -4,6 +4,9 @@ using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Runtime;
+using Vanrise.Fzero.FraudAnalysis.Business;
+using Vanrise.Fzero.FraudAnalysis.Entities;
+using System.Linq;
 
 
 namespace Vanrise.Fzero.DevRuntime.Tasks
@@ -22,7 +25,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
             List<int> StrategyIds = new List<int>();
-            StrategyIds.Add(1);
+            StrategyIds.Add(new StrategyManager().GetStrategies().FirstOrDefault().Id);
             BPClient bpClient = new BPClient();
             var input = new CreateProcessInput
             {
