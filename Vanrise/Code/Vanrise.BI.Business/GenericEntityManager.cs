@@ -62,7 +62,7 @@ namespace Vanrise.BI.Business
             }
 
             List<String> supplierIds = new List<String>();
-            BIConfigurationTimeEntity configurationTimeEntity = GetDefaultTimeEntity(timeEntityName);
+            BIConfigurationTimeEntity configurationTimeEntity = GetUsedTimeEntityOrDefault(timeEntityName);
             return dataManager.GetMeasureValues(timeDimensionType, fromDate, toDate, customerIds, supplierIds, customerColumnId, configurationTimeEntity, measureTypeNames);
         }
         public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(List<string> entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, string timeEntityName, params string[] measureTypes)
@@ -73,7 +73,7 @@ namespace Vanrise.BI.Business
             List<String> supplierIds = new List<String>();
             List<String> customerIds = new List<String>();
             string customerColumnId = null;
-            BIConfigurationTimeEntity configurationTimeEntity = GetDefaultTimeEntity(timeEntityName);
+            BIConfigurationTimeEntity configurationTimeEntity = GetUsedTimeEntityOrDefault(timeEntityName);
             return dataManager.GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, customerIds, supplierIds, customerColumnId, configurationTimeEntity, measureTypes);
         }
         public IEnumerable<EntityRecord> GetTopEntities(List<string> entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, string timeEntityName, params string[] measureTypesNames)
@@ -107,7 +107,7 @@ namespace Vanrise.BI.Business
             dataManager.MeasureDefinitions = _configurations.GetMeasures();
             dataManager.EntityDefinitions = entities;
 
-            BIConfigurationTimeEntity configurationTimeEntity = GetDefaultTimeEntity(timeEntityName);
+            BIConfigurationTimeEntity configurationTimeEntity = GetUsedTimeEntityOrDefault(timeEntityName);
             return dataManager.GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, queryFilter, configurationTimeEntity, measureTypesNames);
         }
         public Decimal[] GetSummaryMeasureValues(DateTime fromDate, DateTime toDate, string timeEntityName, params string[] measureTypeNames)
@@ -116,7 +116,7 @@ namespace Vanrise.BI.Business
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
             dataManager.MeasureDefinitions = _configurations.GetMeasures();
             dataManager.EntityDefinitions = _configurations.GetEntities();
-            BIConfigurationTimeEntity configurationTimeEntity = GetDefaultTimeEntity(timeEntityName);
+            BIConfigurationTimeEntity configurationTimeEntity = GetUsedTimeEntityOrDefault(timeEntityName);
             return dataManager.GetSummaryMeasureValues(fromDate, toDate, configurationTimeEntity, measureTypeNames);
         }
         public HttpResponseMessage ExportMeasureValues(IEnumerable<TimeValuesRecord> records, string entity, string[] measureTypesNames, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)
@@ -461,14 +461,18 @@ namespace Vanrise.BI.Business
             int monthIndex = date.Month;
             return shortMonthNames[monthIndex - 1];
         }
-        private BIConfigurationTimeEntity GetDefaultTimeEntity(string timeEntityName = null)
+        private BIConfigurationTimeEntity GetUsedTimeEntityOrDefault(string timeEntityName = null)
         {
             List<BIConfiguration<BIConfigurationTimeEntity>> configurationTimeEntity = _configurations.GetTimeEntities();
             if (timeEntityName != null)
             {
                 return configurationTimeEntity.Find(x => x.Name == timeEntityName).Configuration;
             }
-            return configurationTimeEntity.Find(x => x.Configuration.IsDefault).Configuration;
+
+            var defaultTimeEntity = configurationTimeEntity.Find(x => x.Configuration.IsDefault);
+            if (defaultTimeEntity == null)
+                throw new Exception("There is no default time entity.");
+            return defaultTimeEntity.Configuration;
         }
 
         #endregion
