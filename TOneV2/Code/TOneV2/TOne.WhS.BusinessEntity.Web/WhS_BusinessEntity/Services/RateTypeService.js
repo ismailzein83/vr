@@ -1,5 +1,29 @@
-﻿app.service('WhS_BE_RateTypeService', ['VRModalService', 'VRNotificationService', 'UtilsService',
-    function (VRModalService, VRNotificationService, UtilsService) {
+﻿(function (appControllers) {
+
+    'use stict';
+
+    RateTypeService.$inject = ['UtilsService', 'VRModalService'];
+
+    function RateTypeService(UtilsService, VRModalService) {
+        return ({
+            addRateType: addRateType,
+            editRateType: editRateType
+        });
+
+        function addRateType(onRateTypeAdded) {
+            var settings = {
+                //useModalTemplate: true
+
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.title = UtilsService.buildTitleForAddEditor("Rate Type");
+                modalScope.onRateTypeAdded = onRateTypeAdded;
+            };
+            var parameters = {};
+
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RateType/RateTypeEditor.html', parameters, settings);
+        }
 
         function editRateType(obj, onRateTypeUpdated) {
             var settings = {
@@ -17,25 +41,8 @@
 
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RateType/RateTypeEditor.html', parameters, settings);
         }
+    }
 
-        function addRateType(onRateTypeAdded) {
-            var settings = {
-                //useModalTemplate: true
+    appControllers.service('WhS_BE_RateTypeService', RateTypeService);
 
-            };
-
-            settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForAddEditor("Rate Type");
-                modalScope.onRateTypeAdded = onRateTypeAdded;
-            };
-            var parameters = {};
-
-            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RateType/RateTypeEditor.html', parameters, settings);
-        }
-
-        return ({
-            editRateType: editRateType,
-            addRateType: addRateType
-        });
-
-    }]);
+})(appControllers);

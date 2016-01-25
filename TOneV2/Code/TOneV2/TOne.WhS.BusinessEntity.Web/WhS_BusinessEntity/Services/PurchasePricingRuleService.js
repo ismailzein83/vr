@@ -1,6 +1,15 @@
-﻿
-app.service('WhS_BE_PurchasePricingRuleService', ['WhS_BE_PurchasePricingRuleAPIService', 'WhS_BE_PricingTypeEnum', 'VRModalService', 'VRNotificationService', 'UtilsService',
-    function (WhS_BE_PurchasePricingRuleAPIService, WhS_BE_PricingTypeEnum, VRModalService, VRNotificationService, UtilsService) {
+﻿(function (appControllers) {
+
+    'use stict';
+
+    PurchasePricingRuleService.$inject = ['WhS_BE_PricingTypeEnum', 'VRModalService', 'VRNotificationService'];
+
+    function PurchasePricingRuleService(WhS_BE_PricingTypeEnum, VRModalService, VRNotificationService) {
+        return ({
+            addPurchasePricingRule: addPurchasePricingRule,
+            editPurchasePricingRule: editPurchasePricingRule,
+            deletePurchasePricingRule: deletePurchasePricingRule
+        });
 
         function addPurchasePricingRule(onPurchasePricingRuleAdded, type) {
             var settings = {};
@@ -49,11 +58,8 @@ app.service('WhS_BE_PurchasePricingRuleService', ['WhS_BE_PurchasePricingRuleAPI
                     }
                 });
         }
+    }
 
-        return ({
-            addPurchasePricingRule: addPurchasePricingRule,
-            editPurchasePricingRule: editPurchasePricingRule,
-            deletePurchasePricingRule: deletePurchasePricingRule
-        });
+    appControllers.service('WhS_BE_PurchasePricingRuleService', PurchasePricingRuleService);
 
-    }]);
+})(appControllers);

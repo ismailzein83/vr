@@ -1,7 +1,15 @@
-﻿app.service('WhS_BE_CustomerSellingProductService', ['WhS_BE_CustomerSellingProductAPIService',
-    'VRModalService', 'VRNotificationService', 'UtilsService',
-    function (WhS_BE_CustomerSellingProductAPIService, VRModalService, VRNotificationService, UtilsService) {
+﻿(function (appControllers) {
 
+    'use stict';
+
+    CustomerSellingProductService.CustomerSellingProductService = ['UtilsService', 'VRModalService', 'VRNotificationService'];
+
+    function CustomerSellingProductService(UtilsService, VRModalService, VRNotificationService) {
+        return ({
+            addCustomerSellingProduct: addCustomerSellingProduct,
+            editCustomerSellingProduct: editCustomerSellingProduct,
+            deleteCustomerSellingProduct: deleteCustomerSellingProduct
+        });
 
         function addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem) {
             var settings = {};
@@ -51,12 +59,8 @@
                     }
                 });
         }
+    }
 
+    appControllers.service('WhS_BE_CustomerSellingProductService', CustomerSellingProductService);
 
-        return ({
-            addCustomerSellingProduct: addCustomerSellingProduct,
-            editCustomerSellingProduct: editCustomerSellingProduct,
-            deleteCustomerSellingProduct: deleteCustomerSellingProduct
-        });
-
-    }]);
+})(appControllers);

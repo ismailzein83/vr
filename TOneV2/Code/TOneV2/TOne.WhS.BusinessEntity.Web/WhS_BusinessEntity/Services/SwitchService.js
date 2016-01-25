@@ -1,7 +1,10 @@
-﻿
-app.service('WhS_BE_SwitchService', ['WhS_BE_SwitchAPIService', 'VRModalService', 'VRNotificationService',
-    function (WhS_BE_SwitchAPIService, VRModalService, VRNotificationService) {
+﻿(function (appControllers) {
 
+    'use stict';
+
+    SwitchService.$inject = ['WhS_BE_SwitchAPIService', 'VRModalService', 'VRNotificationService'];
+
+    function SwitchService(WhS_BE_SwitchAPIService, VRModalService, VRNotificationService) {
         return ({
             addSwitch: addSwitch,
             editSwitch: editSwitch,
@@ -51,5 +54,8 @@ app.service('WhS_BE_SwitchService', ['WhS_BE_SwitchAPIService', 'VRModalService'
                     }
                 });
         }
+    }
 
-    }]);
+    appControllers.service('WhS_BE_SwitchService', SwitchService);
+
+})(appControllers);

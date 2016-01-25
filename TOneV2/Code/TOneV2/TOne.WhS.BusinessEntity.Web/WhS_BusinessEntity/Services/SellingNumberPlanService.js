@@ -1,14 +1,31 @@
-﻿
-app.service('WhS_BE_SellingNumberPlanService', ['VRModalService',
-    function (VRModalService) {
-        
+﻿(function (appControllers) {
+
+    'use stict';
+
+    SellingNumberPlanService.$inject = ['VRModalService'];
+
+    function SellingNumberPlanService(VRModalService) {
         var drillDownDefinitions = [];
+
         return ({
-            editSellingNumberPlan: editSellingNumberPlan,
             addSellingNumberPlan: addSellingNumberPlan,
+            editSellingNumberPlan: editSellingNumberPlan,
             addDrillDownDefinition: addDrillDownDefinition,
             getDrillDownDefinition: getDrillDownDefinition
         });
+
+        function addSellingNumberPlan(onSellingNumberPlanAdded) {
+            var settings = {
+
+            };
+            
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onSellingNumberPlanAdded = onSellingNumberPlanAdded;
+            };
+            var parameters = {};
+
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingNumberPlan/SellingNumberPlanEditor.html', parameters, settings);
+        }
 
         function editSellingNumberPlan(SellingNumberPlanId, onSellingNumberPlanUpdated) {
             var settings = {
@@ -25,19 +42,6 @@ app.service('WhS_BE_SellingNumberPlanService', ['VRModalService',
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingNumberPlan/SellingNumberPlanEditor.html', parameters, settings);
         }
 
-        function addSellingNumberPlan(onSellingNumberPlanAdded) {
-            var settings = {
-
-            };
-            
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onSellingNumberPlanAdded = onSellingNumberPlanAdded;
-            };
-            var parameters = {};
-
-            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingNumberPlan/SellingNumberPlanEditor.html', parameters, settings);
-        }
-
         function addDrillDownDefinition(drillDownDefinition) {
             drillDownDefinitions.push(drillDownDefinition);
         }
@@ -45,5 +49,8 @@ app.service('WhS_BE_SellingNumberPlanService', ['VRModalService',
         function getDrillDownDefinition() {
             return drillDownDefinitions;
         }
+    }
 
-    }]);
+    appControllers.service('WhS_BE_SellingNumberPlanService', SellingNumberPlanService);
+
+})(appControllers);

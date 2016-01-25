@@ -1,9 +1,15 @@
-﻿
+﻿(function (appControllers) {
 
-app.service('WhS_BE_RoutingProductService', ['WhS_BE_RoutingProductAPIService',
-    'VRModalService', 'VRNotificationService', 'UtilsService',
-    function (WhS_BE_RoutingProductAPIService, VRModalService, VRNotificationService, UtilsService) {
+    'use stict';
 
+    RoutingProductService.$inject = ['VRModalService', 'VRNotificationService'];
+
+    function RoutingProductService(VRModalService, VRNotificationService) {
+        return ({
+            addRoutingProduct: addRoutingProduct,
+            editRoutingProduct: editRoutingProduct,
+            deleteRoutingProduct: deleteRoutingProduct
+        });
 
         function addRoutingProduct(onRoutingProductAdded) {
             var settings = {};
@@ -47,12 +53,8 @@ app.service('WhS_BE_RoutingProductService', ['WhS_BE_RoutingProductAPIService',
                         }
                     });
         };
+    }
 
+    appControllers.service('WhS_BE_RoutingProductService', RoutingProductService);
 
-        return ({
-            addRoutingProduct: addRoutingProduct,
-            editRoutingProduct: editRoutingProduct,
-            deleteRoutingProduct: deleteRoutingProduct
-        });
-
-    }]);
+})(appControllers);

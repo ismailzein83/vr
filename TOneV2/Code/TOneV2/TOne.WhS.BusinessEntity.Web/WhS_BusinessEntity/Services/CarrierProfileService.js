@@ -1,7 +1,14 @@
-﻿
-app.service('WhS_BE_CarrierProfileService', ['VRModalService', 'VRNotificationService', 'UtilsService',
-    function (VRModalService, VRNotificationService, UtilsService) {
+﻿(function (appControllers) {
 
+    'use stict';
+
+    CarrierProfileService.$inject = ['VRModalService'];
+
+    function CarrierProfileService(VRModalService) {
+        return ({
+            addCarrierProfile: addCarrierProfile,
+            editCarrierProfile: editCarrierProfile
+        });
 
         function addCarrierProfile(onCarrierProfileAdded) {
             var settings = {};
@@ -27,11 +34,8 @@ app.service('WhS_BE_CarrierProfileService', ['VRModalService', 'VRNotificationSe
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileEditor.html', parameters, modalSettings);
         }
+    }
 
+    appControllers.service('WhS_BE_CarrierProfileService', CarrierProfileService);
 
-        return ({
-            addCarrierProfile: addCarrierProfile,
-            editCarrierProfile: editCarrierProfile
-        });
-
-    }]);
+})(appControllers);

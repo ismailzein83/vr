@@ -1,6 +1,14 @@
-﻿app.service('WhS_BE_CarrierAccountService', ['VRModalService', 'VRNotificationService', 'UtilsService',
-    function (VRModalService, VRNotificationService, UtilsService) {
+﻿(function (appControllers) {
 
+    'use strict';
+
+    CarrierAccountService.$inject = ['VRModalService'];
+
+    function CarrierAccountService(VRModalService) {
+        return ({
+            addCarrierAccount: addCarrierAccount,
+            editCarrierAccount: editCarrierAccount
+        });
 
         function addCarrierAccount(onCarrierAccountAdded, dataItem) {
             var settings = {};
@@ -32,11 +40,8 @@
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', parameters, modalSettings);
         }
+    }
 
+    appControllers.service('WhS_BE_CarrierAccountService', CarrierAccountService);
 
-        return ({
-            addCarrierAccount: addCarrierAccount,
-            editCarrierAccount: editCarrierAccount
-        });
-
-    }]);
+})(appControllers);

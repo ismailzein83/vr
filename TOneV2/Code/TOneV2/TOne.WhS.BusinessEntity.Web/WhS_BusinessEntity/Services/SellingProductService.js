@@ -1,8 +1,10 @@
-﻿
-app.service('WhS_BE_SellingProductService', ['WhS_BE_SellingProductAPIService',
-    'VRModalService', 'VRNotificationService', 'UtilsService',
-    function (WhS_BE_SellingProductAPIService, VRModalService, VRNotificationService, UtilsService) {
+﻿(function (appControllers) {
 
+    'use stict';
+
+    SellingProductService.$inject = ['WhS_BE_SellingProductAPIService', 'VRModalService', 'VRNotificationService'];
+
+    function SellingProductService(WhS_BE_SellingProductAPIService, VRModalService, VRNotificationService) {
         return ({
             addSellingProduct: addSellingProduct,
             editSellingProduct: editSellingProduct,
@@ -49,5 +51,8 @@ app.service('WhS_BE_SellingProductService', ['WhS_BE_SellingProductAPIService',
                     }
                 });
         }
+    }
 
-    }]);
+    appControllers.service('WhS_BE_SellingProductService', SellingProductService);
+
+})(appControllers);

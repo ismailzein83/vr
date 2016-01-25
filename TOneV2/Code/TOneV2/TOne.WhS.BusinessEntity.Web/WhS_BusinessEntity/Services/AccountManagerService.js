@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountManagerService.$inject = ['VRModalService', 'UtilsService'];
+    AccountManagerService.$inject = ['VRModalService'];
 
-    function AccountManagerService(VRModalService, UtilsService) {
+    function AccountManagerService(VRModalService) {
         return ({
             assignOrgChart: assignOrgChart,
             assignCarriers: assignCarriers

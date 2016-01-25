@@ -1,7 +1,12 @@
-﻿
-app.service('WhS_BE_SupplierCodeService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'WhS_BE_SupplierZoneService',
-    function (VRModalService, VRNotificationService, UtilsService, WhS_BE_SupplierZoneService) {
+﻿(function (appControllers) {
+
+    'use stict';
+
+    SupplierCodeService.$inject = ['WhS_BE_SupplierZoneService'];
+
+    function SupplierCodeService(WhS_BE_SupplierZoneService) {
         var drillDownDefinitions = [];
+
         return ({
             registerDrillDownToSupplierZone: registerDrillDownToSupplierZone
         });
@@ -25,6 +30,8 @@ app.service('WhS_BE_SupplierCodeService', ['VRModalService', 'VRNotificationServ
 
             WhS_BE_SupplierZoneService.addDrillDownDefinition(drillDownDefinition);
         }
-      
+    }
 
-    }]);
+    appControllers.service('WhS_BE_SupplierCodeService', SupplierCodeService);
+
+})(appControllers);

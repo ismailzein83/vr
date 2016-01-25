@@ -1,7 +1,12 @@
-﻿
-app.service('WhS_BE_SupplierZoneService', ['VRModalService', 'VRNotificationService', 'UtilsService',
-    function (VRModalService, VRNotificationService, UtilsService) {
+﻿(function (appControllers) {
+
+    'use stict';
+
+    SupplierZoneService.$inject = [];
+
+    function SupplierZoneService() {
         var drillDownDefinitions = [];
+
         return ({
             addDrillDownDefinition: addDrillDownDefinition,
             getDrillDownDefinition: getDrillDownDefinition
@@ -14,5 +19,8 @@ app.service('WhS_BE_SupplierZoneService', ['VRModalService', 'VRNotificationServ
         function getDrillDownDefinition() {
             return drillDownDefinitions;
         }
+    }
 
-    }]);
+    appControllers.service('WhS_BE_SupplierZoneService', SupplierZoneService);
+
+})(appControllers);

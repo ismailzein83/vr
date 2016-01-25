@@ -1,24 +1,16 @@
-﻿
-app.service('WhS_BE_SaleZoneService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'WhS_BE_SellingNumberPlanService',
-    function (VRModalService, VRNotificationService, UtilsService, WhS_BE_SellingNumberPlanService) {
+﻿(function (appControllers) {
+
+    'use stict';
+
+    SaleZoneService.$inject = ['WhS_BE_SellingNumberPlanService', 'VRModalService'];
+
+    function SaleZoneService(WhS_BE_SellingNumberPlanService, VRModalService) {
         return ({
-            editSaleZone: editSaleZone,
             addSaleZone: addSaleZone,
+            editSaleZone: editSaleZone,
             registerDrillDownToSellingNumberPlan: registerDrillDownToSellingNumberPlan
         });
-        function editSaleZone(saleZoneId, onSaleZoneUpdated) {
-            var settings = {
-            };
 
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onSaleZoneUpdated = onSaleZoneUpdated;
-            };
-            var parameters = {
-                SaleZoneId: saleZoneId
-            };
-
-            VRModalService.showModal('/Client/Modules/Common/Views/SaleZone/SaleZoneEditor.html', parameters, settings);
-        }
         function addSaleZone(onSaleZoneAdded, sellingNumberPlanId) {
             var settings = {
             };
@@ -30,6 +22,20 @@ app.service('WhS_BE_SaleZoneService', ['VRModalService', 'VRNotificationService'
             if (sellingNumberPlanId != undefined) {
                 parameters.sellingNumberPlanId = sellingNumberPlanId;
             }
+
+            VRModalService.showModal('/Client/Modules/Common/Views/SaleZone/SaleZoneEditor.html', parameters, settings);
+        }
+
+        function editSaleZone(saleZoneId, onSaleZoneUpdated) {
+            var settings = {
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onSaleZoneUpdated = onSaleZoneUpdated;
+            };
+            var parameters = {
+                SaleZoneId: saleZoneId
+            };
 
             VRModalService.showModal('/Client/Modules/Common/Views/SaleZone/SaleZoneEditor.html', parameters, settings);
         }
@@ -52,6 +58,8 @@ app.service('WhS_BE_SaleZoneService', ['VRModalService', 'VRNotificationService'
 
             WhS_BE_SellingNumberPlanService.addDrillDownDefinition(drillDownDefinition);
         }
+    }
 
+    appControllers.service('WhS_BE_SaleZoneService', SaleZoneService);
 
-    }]);
+})(appControllers);

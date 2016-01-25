@@ -1,5 +1,15 @@
-﻿app.service('WhS_BE_SalePricingRuleService', ['WhS_BE_SalePricingRuleAPIService', 'WhS_BE_PricingTypeEnum', 'VRModalService', 'VRNotificationService', 'UtilsService',
-    function (WhS_BE_SalePricingRuleAPIService,WhS_BE_PricingTypeEnum, VRModalService, VRNotificationService, UtilsService) {
+﻿(function (appControllers) {
+
+    'use stict';
+
+    SalePricingRuleService.$inject = ['WhS_BE_PricingTypeEnum', 'VRModalService', 'VRNotificationService'];
+
+    function SalePricingRuleService(WhS_BE_PricingTypeEnum, VRModalService, VRNotificationService) {
+        return ({
+            addSalePricingRule: addSalePricingRule,
+            editSalePricingRule: editSalePricingRule,
+            deleteSalePricingRule: deleteSalePricingRule
+        });
 
         function addSalePricingRule(onSalePricingRuleAdded, type) {
             var settings = {};
@@ -48,11 +58,8 @@
                     }
                 });
         }
+    }
 
-        return ({
-            addSalePricingRule: addSalePricingRule,
-            editSalePricingRule: editSalePricingRule,
-            deleteSalePricingRule: deleteSalePricingRule
-        });
+    appControllers.service('WhS_BE_SalePricingRuleService', SalePricingRuleService);
 
-    }]);
+})(appControllers);
