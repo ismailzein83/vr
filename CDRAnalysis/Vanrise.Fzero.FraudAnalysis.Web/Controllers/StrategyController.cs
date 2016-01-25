@@ -14,11 +14,11 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
         [HttpGet]
 
-        public IEnumerable<Strategy> GetStrategies(int PeriodId, bool? IsEnabled)
+        public IEnumerable<StrategyInfo> GetStrategies(int PeriodId, bool? IsEnabled)
         {
             StrategyManager manager = new StrategyManager();
 
-            return manager.GetStrategies(PeriodId, IsEnabled);
+            return manager.GetStrategiesInfo(PeriodId, IsEnabled);
         }
 
 
@@ -38,12 +38,12 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         {
             StrategyManager manager = new StrategyManager();
 
-            return manager.GetStrategy(StrategyId);
+            return manager.GetStrategyById(StrategyId);
         }
 
 
         [HttpPost]
-        public UpdateOperationOutput<Strategy> UpdateStrategy(Strategy strategyObject)
+        public UpdateOperationOutput<StrategyDetail> UpdateStrategy(Strategy strategyObject)
         {
             StrategyManager manager = new StrategyManager();
 
@@ -51,7 +51,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
         [HttpPost]
-        public InsertOperationOutput<Strategy> AddStrategy(Strategy strategyObject)
+        public InsertOperationOutput<StrategyDetail> AddStrategy(Strategy strategyObject)
         {
             StrategyManager manager = new StrategyManager();
 

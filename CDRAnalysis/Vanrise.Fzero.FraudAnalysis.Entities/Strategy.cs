@@ -9,11 +9,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public int PeriodId { get; set; }
 
-        public string StrategyType { get; set; }
-
         public string Name { get; set; }
-
-        public string Analyst { get; set; }
 
         public int UserId { get; set; }
 

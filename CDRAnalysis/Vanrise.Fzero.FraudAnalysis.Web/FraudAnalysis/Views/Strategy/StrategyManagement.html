@@ -49,15 +49,15 @@
     <div >
         <vr-row>
             <vr-columns width="fullrow" simplecol>
-                <vr-datagrid datasource="strategies" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady" menuactions="gridMenuActions" idfield="Id">
-                    <vr-datagridcolumn headertext="'Strategy Name'" field="'Name'"></vr-datagridcolumn>
+                <vr-datagrid datasource="strategies" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady" menuactions="gridMenuActions" idfield="Entity.Id">
+                    <vr-datagridcolumn headertext="'Strategy Name'" field="'Entity.Name'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Type'" field="'StrategyType'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Kind'" field="'IsDefaultText'"></vr-datagridcolumn>                    
-                    <vr-datagridcolumn headertext="'Status'" field="'IsEnabled'">
+                    <vr-datagridcolumn headertext="'Kind'" field="'StrategyKind'"></vr-datagridcolumn>                    
+                    <vr-datagridcolumn headertext="'Status'" field="'Entity.IsEnabled'">
                         <vr-icon icontype="dataItem.IsEnabled"></vr-icon>
                     </vr-datagridcolumn>                    
                     <vr-datagridcolumn headertext="'Analyst'" field="'Analyst'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Last Update On'" field="'LastUpdatedOn'" type="'Datetime'"></vr-datagridcolumn>                    
+                    <vr-datagridcolumn headertext="'Last Update On'" field="'Entity.LastUpdatedOn'" type="'Datetime'"></vr-datagridcolumn>                    
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

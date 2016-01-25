@@ -1,123 +1,160 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Vanrise.Caching;
+using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
-using Vanrise.Entities;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class StrategyManager
     {
-        public Strategy GetStrategy(int StrategyId)
+
+        private Dictionary<int, Strategy> GetCachedStrategies()
         {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetStrategies",
+               () =>
+               {
+                   IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+                   IEnumerable<Strategy> strategies = dataManager.GetStrategies();
+                   return strategies.ToDictionary(x => x.Id, x => x);
+               });
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<StrategyDetail> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyQuery> input)
+        {
+            var allStrategies = GetCachedStrategies();
+
+            Func<Strategy, bool> filterExpression = (strategyObject) =>
+                (input.Query.Name == null || strategyObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                && (input.Query.Description == null || strategyObject.Description.ToLower().Contains(input.Query.Description.ToLower()))
+                && (input.Query.FromDate == null || strategyObject.LastUpdatedOn >= input.Query.FromDate)
+                && (input.Query.ToDate == null || strategyObject.LastUpdatedOn < input.Query.ToDate)
+                && (input.Query.PeriodIDs == null || input.Query.PeriodIDs.Contains((PeriodEnum)strategyObject.PeriodId))
+                && (input.Query.UserIDs == null || input.Query.UserIDs.Contains(strategyObject.UserId))
+                && (input.Query.IsDefault == null || input.Query.IsDefault.Contains(strategyObject.IsDefault ? StrategyKindEnum.SystemBuiltIn : StrategyKindEnum.UserDefined))
+                && (input.Query.IsEnabled == null || input.Query.IsEnabled.Contains(strategyObject.IsEnabled ? StrategyStatusEnum.Enabled : StrategyStatusEnum.Disabled))
+                ;
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allStrategies.ToBigResult(input, filterExpression, StrategyDetailMapper));
+        }
+
+        public Strategy GetStrategyById(int StrategyId)
+        {
+            var strategies = GetCachedStrategies();
+            return strategies.GetRecord(StrategyId);
+        }
+
+        public IEnumerable<Strategy> GetStrategies()
+        {
+            var strategies = GetCachedStrategies();
+            return strategies.Select(kvp => kvp.Value).ToList();
+        }
+
+        public IEnumerable<StrategyInfo> GetStrategiesInfo(int periodId, bool? isEnabled)
+        {
+            var strategies = GetCachedStrategies();
+
+            Func<Strategy, bool> filterExpression = (strategyObject) =>
+                  (periodId == 0 || periodId == strategyObject.PeriodId)
+               && (isEnabled == null || isEnabled.Value == strategyObject.IsEnabled)
+               ;
+            return strategies.MapRecords(StrategyInfoMapper, filterExpression);
+        }
+
+        public InsertOperationOutput<StrategyDetail> AddStrategy(Strategy strategyObj)
+        {
+            InsertOperationOutput<StrategyDetail> insertOperationOutput = new InsertOperationOutput<StrategyDetail>();
+
+            insertOperationOutput.Result = InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            int strategyId = -1;
 
             IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+            strategyObj.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            bool inserted = dataManager.AddStrategy(strategyObj, out strategyId);
 
-            return dataManager.GetStrategy(StrategyId);
-
-        }
-
-        public IEnumerable<Strategy> GetStrategies(int PeriodId, bool? IsEnabled)
-        {
-            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            return manager.GetStrategies(PeriodId, IsEnabled);
-        }
-
-
-        public IEnumerable<Strategy> GetAll()
-        {
-            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            return manager.GetAll();
-        }
-
-        public Vanrise.Entities.IDataRetrievalResult<Strategy> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyQuery> input)
-        {
-            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, manager.GetFilteredStrategies(input));
-        }
-
-        public UpdateOperationOutput<Strategy> UpdateStrategy(Strategy strategyObject)
-        {
-            IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-
-            strategyObject.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            bool updateActionSucc = dataManager.UpdateStrategy(strategyObject);
-            
-            UpdateOperationOutput<Strategy> updateOperationOutput = new UpdateOperationOutput<Strategy>();
-            
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-
-            if (updateActionSucc)
+            if (inserted)
             {
-                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = strategyObject;
+                strategyObj.Id = strategyId;
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = StrategyDetailMapper(strategyObj);
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetStrategies");
             }
             else
             {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
+
+        public UpdateOperationOutput<StrategyDetail> UpdateStrategy(Strategy strategyObj)
+        {
+            UpdateOperationOutput<StrategyDetail> updateOperationOutput = new UpdateOperationOutput<StrategyDetail>();
+
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+            strategyObj.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            bool updated = dataManager.UpdateStrategy(strategyObj);
+
+            if (updated)
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = StrategyDetailMapper(strategyObj);
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetStrategies");
+            }
+            else
+            {
+                updateOperationOutput.Result = UpdateOperationResult.SameExists;
             }
 
             return updateOperationOutput;
         }
 
-        public InsertOperationOutput<Strategy> AddStrategy(Strategy strategyObject)
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            InsertOperationOutput<Strategy> insertOperationOutput = new InsertOperationOutput<Strategy>();
+            IStrategyDataManager _dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+            object _updateHandle;
 
-            int strategyId = -1;
-
-            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            strategyObject.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-
-            bool insertActionSucc = manager.AddStrategy(strategyObject, out strategyId);
-
-            if (insertActionSucc)
+            protected override bool ShouldSetCacheExpired(object parameter)
             {
-                insertOperationOutput.Result = InsertOperationResult.Succeeded;
-                strategyObject.Id = strategyId;
-                insertOperationOutput.InsertedObject = strategyObject;
-            }
-            else
-                insertOperationOutput.Result = InsertOperationResult.SameExists;
-            return insertOperationOutput;
-        }
-
-        public InsertOperationOutput<StrategyExecution> ExecuteStrategy(StrategyExecution strategyExecutionObject)
-        {
-            InsertOperationOutput<StrategyExecution> insertOperationOutput = new InsertOperationOutput<StrategyExecution>();
-
-            int strategyExecutionId = -1;
-
-            IStrategyExecutionDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
-            manager.ExecuteStrategy(strategyExecutionObject, out strategyExecutionId);
-
-            strategyExecutionObject.ID = strategyExecutionId;
-            insertOperationOutput.InsertedObject = strategyExecutionObject;
-
-            return insertOperationOutput;
-        }
-
-        public void OverrideStrategyExecution(List<int> strategyIDs, DateTime from, DateTime to)
-        {
-            IStrategyExecutionDataManager strategyExecutionDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
-            ICaseManagementDataManager caseManagementDataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-
-            foreach (var strategyID in strategyIDs)
-            {
-                strategyExecutionDataManager.OverrideStrategyExecution(strategyID, from, to);
-            }
-
-
-            List<int> CaseIDs = strategyExecutionDataManager.GetCasesIDsofStrategyExecutionDetails(null, from, to, strategyIDs);
-
-            if (CaseIDs !=null && CaseIDs.Count > 0)
-            {
-                strategyExecutionDataManager.DeleteStrategyExecutionDetails_ByFilters(null, from, to, strategyIDs);
-
-                caseManagementDataManager.DeleteAccountCases_ByCaseIDs(CaseIDs);
+                return _dataManager.AreStrategiesUpdated(ref _updateHandle);
             }
         }
+
+        #region Private Members
+
+        StrategyDetail StrategyDetailMapper(Strategy strategyObj)
+        {
+            UserManager userManager = new UserManager();
+            User user = userManager.GetUserbyId(strategyObj.UserId);
+
+            StrategyDetail strategyDetail = new StrategyDetail();
+            strategyDetail.Entity = strategyObj;
+            strategyDetail.Analyst = user.Name;
+            strategyDetail.StrategyType = Vanrise.Common.Utilities.GetEnumDescription<PeriodEnum>((PeriodEnum)strategyObj.PeriodId);
+            strategyDetail.StrategyKind = Vanrise.Common.Utilities.GetEnumDescription<StrategyKindEnum>((strategyObj.IsDefault ? StrategyKindEnum.SystemBuiltIn : StrategyKindEnum.UserDefined));
+            return strategyDetail;
+        }
+
+        StrategyInfo StrategyInfoMapper(Strategy strategy)
+        {
+            StrategyInfo strategyInfo = new StrategyInfo();
+            strategyInfo.Id = strategy.Id;
+            strategyInfo.Name = strategy.Name;
+            strategyInfo.PeriodId = strategy.PeriodId;
+            strategyInfo.IsDefault = strategy.IsDefault;
+            return strategyInfo;
+        }
+
+        # endregion
+
     }
 }

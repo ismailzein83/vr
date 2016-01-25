@@ -56,11 +56,6 @@ function StrategyManagementController($scope, StrategyAPIService, VR_Sec_UserAPI
 
             return StrategyAPIService.GetFilteredStrategies(dataRetrievalInput)
                 .then(function (response) {
-
-                    angular.forEach(response.Data, function (strategy) {
-                        fillStrategy(strategy);
-                    });
-
                     onResponseReady(response);
                 });
         }
@@ -68,11 +63,7 @@ function StrategyManagementController($scope, StrategyAPIService, VR_Sec_UserAPI
         defineMenuActions();
     }
 
-    function fillStrategy(strategy) {
-        strategy.IsDefaultText = strategy.IsDefault ? KindEnum.SystemBuiltIn.name : KindEnum.UserDefined.name;
-        strategy.StrategyType = (UtilsService.getItemByVal($scope.periods, strategy.PeriodId, "Id") != null ? UtilsService.getItemByVal($scope.periods, strategy.PeriodId, "Id").Name : null)
-        strategy.Analyst = (UtilsService.getItemByVal($scope.users, strategy.UserId, "UserId") != null ? UtilsService.getItemByVal($scope.users, strategy.UserId, "UserId").Name : null)
-    }
+   
 
     function load() {
         $scope.isInitializing = true;
@@ -143,7 +134,6 @@ function StrategyManagementController($scope, StrategyAPIService, VR_Sec_UserAPI
         settings.onScopeReady = function (modalScope) {
             modalScope.title = UtilsService.buildTitleForAddEditor("Strategy");
             modalScope.onStrategyAdded = function (strategy) {
-                fillStrategy(strategy);
                 mainGridAPI.itemAdded(strategy);
             };
         };
@@ -152,7 +142,7 @@ function StrategyManagementController($scope, StrategyAPIService, VR_Sec_UserAPI
 
     function editStrategy(gridObject) {
         var params = {
-            strategyId: gridObject.Id
+            strategyId: gridObject.Entity.Id
         };
 
         var settings = {
@@ -162,7 +152,6 @@ function StrategyManagementController($scope, StrategyAPIService, VR_Sec_UserAPI
         settings.onScopeReady = function (modalScope) {
             modalScope.title = UtilsService.buildTitleForUpdateEditor("Strategy", gridObject.Name);
             modalScope.onStrategyUpdated = function (strategy) {
-                fillStrategy(strategy);
                 mainGridAPI.itemUpdated(strategy);
             };
         };
