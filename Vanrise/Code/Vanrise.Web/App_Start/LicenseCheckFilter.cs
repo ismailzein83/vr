@@ -29,7 +29,11 @@ namespace Vanrise.Web
                 if (s_isLicensed.Value) s_licensedActivatationDate = DateTime.Now;
             }
             if (!s_isLicensed.Value)
+            {
+                if(String.IsNullOrEmpty(licenseKey))
+                    Vanrise.Components.Security.LicenceManagerControl.CheckLicence("Vanrise License", out licenseKey);
                 throw new Exception(string.Format("License Key is expired. key is:{0}", licenseKey));
+            }
         }
 
 
