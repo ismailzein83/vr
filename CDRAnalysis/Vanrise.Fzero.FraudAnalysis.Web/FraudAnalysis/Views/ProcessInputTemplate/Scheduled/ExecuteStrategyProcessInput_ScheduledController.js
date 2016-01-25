@@ -133,8 +133,6 @@ function ExecuteStrategyProcessInput_Scheduled($scope, $http, StrategyAPIService
                 if (!$scope.isEditMode)
                     directivePayload.selectAll = true;
                 directivePayload.selectedIds = $scope.selectedPrefixIds;
-                console.log($scope.selectedPrefixIds)
-
                 VRUIUtilsService.callDirectiveLoad(prefixDirectiveAPI, directivePayload, prefixLoadPromiseDeferred);
             });
         return prefixLoadPromiseDeferred.promise;
