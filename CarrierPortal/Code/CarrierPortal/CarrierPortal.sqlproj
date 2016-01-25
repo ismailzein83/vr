@@ -65,11 +65,15 @@
     <Folder Include="CP_SupPriceList\Tables\" />
     <Folder Include="CP_SupPriceList\Stored Procedures\" />
     <Folder Include="Security\" />
+    <Folder Include="CP_SupPriceList\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="CP_SupPriceList\Tables\PriceList.sql" />
     <Build Include="CP_SupPriceList\Stored Procedures\sp_PriceList_GetUpdated.sql" />
     <Build Include="CP_SupPriceList\Stored Procedures\sp_PriceList_Insert.sql" />
     <Build Include="Security\CP_SupPriceList.sql" />
+    <Build Include="CP_SupPriceList\Functions\ParseStringList.sql" />
+    <Build Include="CP_SupPriceList\Stored Procedures\sp_PriceList_UpdateInitiatePriceList.sql" />
+    <Build Include="CP_SupPriceList\Stored Procedures\sp_PriceList_GetRequestedPriceList.sql" />
   </ItemGroup>
 </Project>
