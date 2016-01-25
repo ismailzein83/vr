@@ -1,14 +1,17 @@
-﻿
-app.service('Qm_CliTester_TestCallService', ['LabelColorsEnum', 'Qm_CliTester_CallTestResultEnum', 'Qm_CliTester_CallTestStatusEnum',
-    function (LabelColorsEnum, Qm_CliTester_CallTestResultEnum, Qm_CliTester_CallTestStatusEnum) {
+﻿(function (appControllers) {
+
+    'use strict';
+
+    TestCallService.$inject = ['LabelColorsEnum', 'Qm_CliTester_CallTestResultEnum', 'Qm_CliTester_CallTestStatusEnum'];
+
+    function TestCallService(LabelColorsEnum, Qm_CliTester_CallTestResultEnum, Qm_CliTester_CallTestStatusEnum) {
         var drillDownDefinitions = [];
-        return ({
+        return {
             addDrillDownDefinition: addDrillDownDefinition,
             getDrillDownDefinition: getDrillDownDefinition,
             getCallTestStatusColor: getCallTestStatusColor,
             getCallTestResultColor: getCallTestResultColor
-        });
-
+        };
         function addDrillDownDefinition(drillDownDefinition) {
             drillDownDefinitions.push(drillDownDefinition);
         }
@@ -69,5 +72,7 @@ app.service('Qm_CliTester_TestCallService', ['LabelColorsEnum', 'Qm_CliTester_Ca
                     return undefined;
             }
         }
+    }
+    appControllers.service('Qm_CliTester_TestCallService', TestCallService);
 
-    }]);
+})(appControllers);

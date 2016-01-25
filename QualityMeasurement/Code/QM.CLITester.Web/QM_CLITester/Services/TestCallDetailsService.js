@@ -1,11 +1,14 @@
 ﻿
-app.service('Qm_CliTester_TestCallDetailsService', ['Qm_CliTester_TestCallService',
-    function (Qm_CliTester_TestCallService) {
+(function (appControllers) {
 
-       
-        return ({
+    'use strict';
+
+    TestCallDetailsService.$inject = ['Qm_CliTester_TestCallService', 'VRModalService', 'VRNotificationService'];
+
+    function TestCallDetailsService(Qm_CliTester_TestCallService, VRModalService, VRNotificationService) {
+        return {
             registerDrillDownToTestCallDetails: registerDrillDownToTestCallDetails
-        });
+        };
         function registerDrillDownToTestCallDetails() {
             var drillDownDefinition = {};
 
@@ -18,5 +21,7 @@ app.service('Qm_CliTester_TestCallDetailsService', ['Qm_CliTester_TestCallServic
 
             Qm_CliTester_TestCallService.addDrillDownDefinition(drillDownDefinition);
         }
+    }
+    appControllers.service('Qm_CliTester_TestCallDetailsService', TestCallDetailsService);
 
-    }]);
+})(appControllers);
