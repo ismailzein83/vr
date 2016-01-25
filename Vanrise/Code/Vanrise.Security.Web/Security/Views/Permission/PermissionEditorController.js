@@ -5,9 +5,9 @@
     PermissionEditorController.$inject = ['$scope', 'PermissionFlagEnum', 'VR_Sec_PermissionAPIService', 'VR_Sec_BusinessEntityAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
     function PermissionEditorController($scope, PermissionFlagEnum, VR_Sec_PermissionAPIService, VR_Sec_BusinessEntityAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
-
         var holderType;
         var holderId;
+        var notificationResponseText;
 
         var treeAPI;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
@@ -19,10 +19,10 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
-            if (parameters != undefined && parameters != null) {
+            if (parameters) {
                 holderType = parameters.holderType;
                 holderId = parameters.holderId;
-                $scope.notificationResponseText = parameters.notificationResponseText;
+                notificationResponseText = parameters.notificationResponseText;
             }
         }
 
@@ -32,55 +32,112 @@
             $scope.permissions = []; // The saved permissions in the data base for a single holder type and id
             $scope.permissionFlagOptions = UtilsService.getEnumPropertyAsArray(PermissionFlagEnum, 'description');
 
-            $scope.save = savePermissions;
-
-            $scope.close = function () {
-                $scope.modalContext.closeModal()
-            };
-
-            $scope.permissionsSelected = onPermissionsSelected;
-
             $scope.onTreeReady = function (api) {
                 treeAPI = api;
                 treeReadyDeferred.resolve();
             }
 
-            $scope.treeValueChanged = treeValueChanged;
+            $scope.onTreeValueChanged = onTreeValueChanged;
+
+            $scope.onPermissionSelectionChanged = onPermissionSelectionChanged;
+
+            $scope.save = savePermissions;
+
+            $scope.close = function () {
+                $scope.modalContext.closeModal()
+            };
         }
 
-        function savePermissions() {
+        function load() {
             $scope.isLoading = true;
+            loadAllControls();
+        }
 
-            if ($scope.permissions) {
-                var permissionObject = [];
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadTree, loadPermissions]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
 
-                for (var i = 0; i < $scope.permissions.length; i++) {
-                    if ($scope.permissions[i].isDirty) {
-                        permissionObject.push($scope.permissions[i]);
-                    }
-                }
+            function setTitle() {
+                $scope.title = "Assign Permissions";
+            }
 
-                if (permissionObject.length > 0) {
-                    return VR_Sec_PermissionAPIService.UpdatePermissions(permissionObject).then(function (response) {
-                        if (VRNotificationService.notifyOnItemUpdated($scope.notificationResponseText, response)) {
-                            $scope.modalContext.closeModal();
+            function loadTree() {
+                var loadTreeDeferred = UtilsService.createPromiseDeferred();
+
+                treeReadyDeferred.promise.then(function () {
+                    getEntityNodes().then(function () {
+                        loadTreeDeferred.resolve();
+                    }).catch(function () {
+                        loadTreeDeferred.reject();
+                    });
+                });
+
+                return loadTreeDeferred.promise;
+
+                function getEntityNodes() {
+                    return VR_Sec_BusinessEntityAPIService.GetEntityNodes().then(function (response) {
+                        if (response) {
+                            $scope.beList = response;
+
+                            for (var i = 0; i < response.length; i++) {
+                                response[i].isOpened = true;
+                            }
+
+                            treeReadyDeferred.promise.then(function () {
+                                treeAPI.refreshTree($scope.beList);
+                            });
                         }
-                    }).catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    }).finally(function () {
-                        $scope.isLoading = false;
                     });
                 }
-                else {
-                    $scope.isLoading = false;
-                }
             }
-            else {
-                $scope.isLoading = false;
+
+            function loadPermissions() {
+                return VR_Sec_PermissionAPIService.GetHolderPermissions(holderType, holderId).then(function (response) {
+                    if (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            $scope.permissions.push(response[i].Entity);
+                        }
+                    }
+                });
             }
         }
 
-        function onPermissionsSelected(selectedPermission) {
+        function onTreeValueChanged() {
+            if ($scope.currentNode) {
+                $scope.isLoadingPermissions = true;
+                $scope.entityPermissions.length = 0;
+
+                angular.forEach($scope.currentNode.PermissionOptions, function (permissionOption) {
+                    var entityPermission = {
+                        name: permissionOption,
+                        selectedFlagOptionIndex: 0
+                    };
+
+                    if ($scope.permissions) {
+                        for (var i = 0; i < $scope.permissions.length; i++) {
+                            var permission = $scope.permissions[i];
+
+                            if (permission.EntityType == $scope.currentNode.EntType && permission.EntityId == $scope.currentNode.EntityId) {
+                                angular.forEach(permission.PermissionFlags, function (permissionFlag) {
+                                    if (permissionFlag.Name == permissionOption) {
+                                        entityPermission.selectedFlagOptionIndex = permissionFlag.Value;
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    $scope.entityPermissions.push(entityPermission);
+                });
+
+                $scope.isLoadingPermissions = false;
+            }
+        }
+
+        function onPermissionSelectionChanged(selectedPermission) {
             var needforAddPermission = true;
             var needforAddPermissionFlag = true;
 
@@ -143,97 +200,48 @@
             }
         }
 
-        function treeValueChanged() {
-            if (angular.isObject($scope.currentNode)) {
-                $scope.isLoadingPermissions = true;
-
-                $scope.entityPermissions.length = 0;
-
-                angular.forEach($scope.currentNode.PermissionOptions, function (permissionOption) {
-                    var entityPermission = {
-                        name: permissionOption,
-                        selectedFlagOptionIndex: 0
-                    };
-                    
-                    if ($scope.permissions) {
-                        for (var i = 0; i < $scope.permissions.length; i++) {
-                            var permission = $scope.permissions[i];
-
-                            if (permission.EntityType == $scope.currentNode.EntType &&
-                            permission.EntityId == $scope.currentNode.EntityId) {
-
-                                angular.forEach(permission.PermissionFlags, function (permissionFlag) {
-                                    if (permissionFlag.Name == permissionOption) {
-                                        entityPermission.selectedFlagOptionIndex = permissionFlag.Value;
-                                    }
-                                });
-                            }
-                        }
-                    }
-                    
-                    $scope.entityPermissions.push(entityPermission);
-                });
-
-                $scope.isLoadingPermissions = false;
-            }
-        }
-
-        function load() {
+        function savePermissions() {
+            var saveDeferred = UtilsService.createPromiseDeferred();
             $scope.isLoading = true;
-            loadAllControls();
-        }
 
-        function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadTree, loadPermissions]).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.isLoading = false;
-            });
+            if ($scope.permissions) {
+                var permissionObject = [];
 
-            function loadTree() {
-                var loadTreeDeferred = UtilsService.createPromiseDeferred();
+                for (var i = 0; i < $scope.permissions.length; i++) {
+                    if ($scope.permissions[i].isDirty) {
+                        permissionObject.push($scope.permissions[i]);
+                    }
+                }
 
-                treeReadyDeferred.promise.then(function () {
-                    getEntityNodes().then(function () {
-                        loadTreeDeferred.resolve();
-                    }).catch(function () {
-                        loadTreeDeferred.reject();
-                    });
-                });
+                if (permissionObject.length > 0) {
+                    VR_Sec_PermissionAPIService.UpdatePermissions(permissionObject).then(function (response) {
+                        saveDeferred.resolve();
 
-                return loadTreeDeferred.promise;
-
-                function getEntityNodes() {
-                    return VR_Sec_BusinessEntityAPIService.GetEntityNodes().then(function (response) {
-                        if (response) {
-                            $scope.beList = response;
-
-                            for (var i = 0; i < response.length; i++) {
-                                response[i].isOpened = true;
-                            }
-
-                            treeReadyDeferred.promise.then(function () {
-                                treeAPI.refreshTree($scope.beList);
-                            });
+                        if (VRNotificationService.notifyOnItemUpdated(notificationResponseText, response)) {
+                            $scope.modalContext.closeModal();
                         }
+                    }).catch(function (error) {
+                        saveDeferred.reject();
+                        VRNotificationService.notifyException(error, $scope);
+                    }).finally(function () {
+                        $scope.isLoading = false;
                     });
                 }
+                else {
+                    resolveDeferredAndNotifyInfo();
+                }
+            }
+            else {
+                resolveDeferredAndNotifyInfo();
             }
 
-            function loadPermissions() {
-                return VR_Sec_PermissionAPIService.GetHolderPermissions(holderType, holderId).then(function (response) {
-                    if (response) {
-                        for (var i = 0; i < response.length; i++) {
-                            $scope.permissions.push(response[i].Entity);
-                        }
-                    }
-                });
-            }
-        }
+            return saveDeferred.promise;
 
-        function setTitle()
-        {
-            $scope.title = "Assign Permissions";
+            function resolveDeferredAndNotifyInfo() {
+                saveDeferred.resolve();
+                $scope.isLoading = false;
+                VRNotificationService.showInformation('No changes made');
+            }
         }
     }
 

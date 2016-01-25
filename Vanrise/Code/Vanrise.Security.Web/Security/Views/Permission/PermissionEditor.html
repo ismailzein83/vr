@@ -2,29 +2,27 @@
     <vr-modalbody>
         <vr-form name="formPermissionEditor">
             <vr-row>
-                <vr-columns colnum="6">
+                <vr-columns width="1/2row">
                     <vr-treeview on-ready="onTreeReady"
                                  datachildrenfield="Children"
                                  datatextfield="Name"
                                  selecteditem="currentNode"
-                                 onvaluechanged="treeValueChanged">
+                                 onvaluechanged="onTreeValueChanged">
                     </vr-treeview>
                 </vr-columns>
-                <vr-columns colnum="6" ng-show="currentNode != undefined">
-                    <div>
-                        <vr-section title="Assigned Permissions" vr-loader="isLoadingPermissions">
-                            <vr-row ng-repeat="permission in entityPermissions">
-                                <vr-columns colnum="6">
-                                    {{permission.name}}
-                                </vr-columns>
-                                <vr-columns colnum="6">
-                                    <vr-choices isradio onselectionchanged="permissionsSelected(permission)" selectedindex="permission.selectedFlagOptionIndex">
-                                        <vr-choice ng-repeat="permissionFlagOption in permissionFlagOptions">{{permissionFlagOption}}</vr-choice>
-                                    </vr-choices>
-                                </vr-columns>
-                            </vr-row>
-                        </vr-section>
-                    </div>
+                <vr-columns width="1/2row" ng-show="currentNode">
+                    <vr-section title="Assigned Permissions" vr-loader="isLoadingPermissions">
+                        <vr-row ng-repeat="permission in entityPermissions">
+                            <vr-columns width="1/2row">
+                                {{permission.name}}
+                            </vr-columns>
+                            <vr-columns width="1/2row">
+                                <vr-choices isradio onselectionchanged="onPermissionSelectionChanged(permission)" selectedindex="permission.selectedFlagOptionIndex">
+                                    <vr-choice ng-repeat="permissionFlagOption in permissionFlagOptions">{{permissionFlagOption}}</vr-choice>
+                                </vr-choices>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-section>
                 </vr-columns>
             </vr-row>
         </vr-form>
