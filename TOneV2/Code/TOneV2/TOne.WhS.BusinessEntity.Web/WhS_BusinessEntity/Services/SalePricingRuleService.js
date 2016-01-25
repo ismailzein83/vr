@@ -1,5 +1,5 @@
-﻿app.service('WhS_BE_SalePricingRuleService', ['WhS_BE_SalePricingRuleAPIService', 'WhS_Be_PricingTypeEnum', 'VRModalService', 'VRNotificationService', 'UtilsService',
-    function (WhS_BE_SalePricingRuleAPIService,WhS_Be_PricingTypeEnum, VRModalService, VRNotificationService, UtilsService) {
+﻿app.service('WhS_BE_SalePricingRuleService', ['WhS_BE_SalePricingRuleAPIService', 'WhS_BE_PricingTypeEnum', 'VRModalService', 'VRNotificationService', 'UtilsService',
+    function (WhS_BE_SalePricingRuleAPIService,WhS_BE_PricingTypeEnum, VRModalService, VRNotificationService, UtilsService) {
 
         function addSalePricingRule(onSalePricingRuleAdded, type) {
             var settings = {};
@@ -8,7 +8,7 @@
                 modalScope.onPricingRuleAdded = onSalePricingRuleAdded;
             };
             var parameters = {
-                PricingType: WhS_Be_PricingTypeEnum.Sale.value
+                PricingType: WhS_BE_PricingTypeEnum.Sale.value
             };
             if (type != undefined) {
                 parameters.PricingRuleType = type;

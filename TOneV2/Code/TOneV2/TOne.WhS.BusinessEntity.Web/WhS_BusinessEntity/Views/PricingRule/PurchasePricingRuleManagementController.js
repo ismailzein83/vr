@@ -2,9 +2,9 @@
 
     "use strict";
 
-    purchasePricingRuleManagementController.$inject = ['$scope', 'UtilsService', 'WhS_Be_PricingRuleTypeEnum', 'VRUIUtilsService', 'WhS_BE_PurchasePricingRuleService'];
+    purchasePricingRuleManagementController.$inject = ['$scope', 'UtilsService', 'WhS_BE_PricingRuleTypeEnum', 'VRUIUtilsService', 'WhS_BE_PurchasePricingRuleService'];
 
-    function purchasePricingRuleManagementController($scope, UtilsService, WhS_Be_PricingRuleTypeEnum, VRUIUtilsService, WhS_BE_PurchasePricingRuleService) {
+    function purchasePricingRuleManagementController($scope, UtilsService, WhS_BE_PricingRuleTypeEnum, VRUIUtilsService, WhS_BE_PurchasePricingRuleService) {
         var gridAPI;
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -25,19 +25,19 @@
             $scope.addMenuActions = [{
                 name: "Rate Type Rule",
                 clicked: function () {
-                    return AddNewPurchasePricingRule(WhS_Be_PricingRuleTypeEnum.RateType.value);
+                    return AddNewPurchasePricingRule(WhS_BE_PricingRuleTypeEnum.RateType.value);
                 }
             },
             {
                 name: "Tariff Rule",
                 clicked: function () {
-                    return AddNewPurchasePricingRule(WhS_Be_PricingRuleTypeEnum.Tariff.value);
+                    return AddNewPurchasePricingRule(WhS_BE_PricingRuleTypeEnum.Tariff.value);
                 }
             },
              {
                  name: "Extra Charge",
                  clicked: function () {
-                     return AddNewPurchasePricingRule(WhS_Be_PricingRuleTypeEnum.ExtraCharge.value);
+                     return AddNewPurchasePricingRule(WhS_BE_PricingRuleTypeEnum.ExtraCharge.value);
                  }
              }];
 
@@ -87,8 +87,8 @@
         }
         function definePricingRuleTypes() {
             $scope.pricingRuleTypes = [];
-            for (var p in WhS_Be_PricingRuleTypeEnum)
-                $scope.pricingRuleTypes.push(WhS_Be_PricingRuleTypeEnum[p]);
+            for (var p in WhS_BE_PricingRuleTypeEnum)
+                $scope.pricingRuleTypes.push(WhS_BE_PricingRuleTypeEnum[p]);
         }
     }
 

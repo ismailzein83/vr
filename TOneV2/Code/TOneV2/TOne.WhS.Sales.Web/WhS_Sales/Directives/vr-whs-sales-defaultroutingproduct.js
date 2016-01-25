@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesDefaultroutingproduct", ["WhS_Sales_SalePriceListOwnerTypeEnum", "UtilsService", "VRUIUtilsService",
-function (WhS_Sales_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) {
+app.directive("vrWhsSalesDefaultroutingproduct", ["WhS_BE_SalePriceListOwnerTypeEnum", "UtilsService", "VRUIUtilsService",
+function (WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) {
 
     return {
         restrict: "E",
@@ -72,7 +72,7 @@ function (WhS_Sales_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) 
                 var selectorPayload = {
                     filter: { ExcludedRoutingProductId: defaultItem.CurrentRoutingProductId, AssignableToOwnerType: defaultItem.OwnerType, AssignableToOwnerId: defaultItem.OwnerId },
                     selectedIds: selectedIds,
-                    defaultItems: (defaultItem.OwnerType == WhS_Sales_SalePriceListOwnerTypeEnum.Customer.value && defaultItem.IsCurrentRoutingProductEditable) ?
+                    defaultItems: (defaultItem.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value && defaultItem.IsCurrentRoutingProductEditable) ?
                         [{ RoutingProductId: -1, Name: "(Reset To Default)" }] : null
                 };
                 

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    carrierAccountManagementController.$inject = ['$scope',  'UtilsService', 'VRNotificationService', 'WhS_Be_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountService'];
+    carrierAccountManagementController.$inject = ['$scope',  'UtilsService', 'VRNotificationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountService'];
 
-    function carrierAccountManagementController($scope, UtilsService, VRNotificationService, WhS_Be_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountService) {
+    function carrierAccountManagementController($scope, UtilsService, VRNotificationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountService) {
         var gridAPI;
         var carrierProfileDirectiveAPI;
         var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -37,7 +37,7 @@
             }
 
             $scope.onCarrierTypeSelectionChanged = function () {
-                if (UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_Be_CarrierAccountTypeEnum.Customer) || UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_Be_CarrierAccountTypeEnum.Exchange)) {
+                if (UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Customer) || UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Exchange)) {
                        if (sellingNumberPlanDirectiveAPI != undefined) {
                             $scope.showSellingNumberPlan = true;
                             var setLoader = function (value) { $scope.isLoadingSellingNumberPlan = value };
@@ -103,8 +103,8 @@
         }
         function defineCarrierAccountTypes() {
                 $scope.carrierAccountTypes = [];
-                for (var p in WhS_Be_CarrierAccountTypeEnum)
-                    $scope.carrierAccountTypes.push(WhS_Be_CarrierAccountTypeEnum[p]);
+                for (var p in WhS_BE_CarrierAccountTypeEnum)
+                    $scope.carrierAccountTypes.push(WhS_BE_CarrierAccountTypeEnum[p]);
             
         }
         function AddNewCarrierAccount() {

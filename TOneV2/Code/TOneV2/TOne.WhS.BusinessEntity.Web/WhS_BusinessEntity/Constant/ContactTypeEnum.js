@@ -1,4 +1,4 @@
-﻿app.constant('WhS_Be_ContactTypeEnum', {
+﻿app.constant('WhS_BE_ContactTypeEnum', {
     BillingContactPerson: { value: 1, label: "Billing Contact Person" , type:"text"},
     BillingEmail: { value: 2, label: "Billing Email", type: "email" },
     DisputeEmail: { value: 3, label: "Dispute Email", type: "email" },

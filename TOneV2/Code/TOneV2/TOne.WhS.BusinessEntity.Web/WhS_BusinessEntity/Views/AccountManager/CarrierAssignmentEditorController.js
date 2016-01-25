@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CarrierAssignmentEditorController.$inject = ['$scope', 'WhS_BE_AccountManagerAPIService', 'WhS_Be_CarrierAccountTypeEnum', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    CarrierAssignmentEditorController.$inject = ['$scope', 'WhS_BE_AccountManagerAPIService', 'WhS_BE_CarrierAccountTypeEnum', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function CarrierAssignmentEditorController($scope, WhS_BE_AccountManagerAPIService, WhS_Be_CarrierAccountTypeEnum, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function CarrierAssignmentEditorController($scope, WhS_BE_AccountManagerAPIService, WhS_BE_CarrierAccountTypeEnum, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
         var selectedAccountManagerId;
         var assignedCarriers;
@@ -112,7 +112,7 @@
             }
 
             function loadAssignedCarriers() {
-                return WhS_BE_AccountManagerAPIService.GetAssignedCarrierDetails(selectedAccountManagerId, false, WhS_Be_CarrierAccountTypeEnum.Exchange.value).then(function (response) {
+                return WhS_BE_AccountManagerAPIService.GetAssignedCarrierDetails(selectedAccountManagerId, false, WhS_BE_CarrierAccountTypeEnum.Exchange.value).then(function (response) {
                     if (response) {
                         assignedCarriers = [];
 
@@ -126,7 +126,7 @@
 
         function toggleAndSelectAssignedCarriers() {
             for (var i = 0; i < assignedCarriers.length; i++) {
-                if (assignedCarriers[i].Entity.RelationType == WhS_Be_CarrierAccountTypeEnum.Customer.value || assignedCarriers[i].IsCustomerAssigned) {
+                if (assignedCarriers[i].Entity.RelationType == WhS_BE_CarrierAccountTypeEnum.Customer.value || assignedCarriers[i].IsCustomerAssigned) {
                     assignedCarriers[i].customerSwitchValue = true;
                     assignedCarriers[i].newCustomerSwitchValue = true;
                 }
@@ -134,7 +134,7 @@
                     assignedCarriers[i].customerSwitchValue = false;
                     assignedCarriers[i].newCustomerSwitchValue = false;
                 }
-                if (assignedCarriers[i].Entity.RelationType == WhS_Be_CarrierAccountTypeEnum.Supplier.value || assignedCarriers[i].IsSupplierAssigned) {
+                if (assignedCarriers[i].Entity.RelationType == WhS_BE_CarrierAccountTypeEnum.Supplier.value || assignedCarriers[i].IsSupplierAssigned) {
                     assignedCarriers[i].supplierSwitchValue = true;
                     assignedCarriers[i].newSupplierSwitchValue = true;
                 } else {
@@ -159,7 +159,7 @@
                 var object = {
                     UserId: carrier.Entity.UserId,
                     CarrierAccountId: carrier.Entity.CarrierAccountId,
-                    RelationType: WhS_Be_CarrierAccountTypeEnum.Customer.value,
+                    RelationType: WhS_BE_CarrierAccountTypeEnum.Customer.value,
                     Status: carrier.newCustomerSwitchValue
                 };
                 mappedCarriers.push(object);
@@ -168,7 +168,7 @@
                 var object = {
                     UserId: carrier.Entity.UserId,
                     CarrierAccountId: carrier.Entity.CarrierAccountId,
-                    RelationType: WhS_Be_CarrierAccountTypeEnum.Supplier.value,
+                    RelationType: WhS_BE_CarrierAccountTypeEnum.Supplier.value,
                     Status: carrier.newSupplierSwitchValue
                 };
                 mappedCarriers.push(object);

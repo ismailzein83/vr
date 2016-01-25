@@ -2,10 +2,10 @@
 
     "use strict";
 
-    routingProductEditorController.$inject = ['$scope', 'WhS_BE_RoutingProductAPIService', 'WhS_Be_RoutingProductSaleZoneRelationTypeEnum', 'WhS_Be_RoutingProductSupplierRelationTypeEnum',
+    routingProductEditorController.$inject = ['$scope', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_RoutingProductSaleZoneRelationTypeEnum', 'WhS_BE_RoutingProductSupplierRelationTypeEnum',
         'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-    function routingProductEditorController($scope, WhS_BE_RoutingProductAPIService, WhS_Be_RoutingProductSaleZoneRelationTypeEnum, WhS_Be_RoutingProductSupplierRelationTypeEnum,
+    function routingProductEditorController($scope, WhS_BE_RoutingProductAPIService, WhS_BE_RoutingProductSaleZoneRelationTypeEnum, WhS_BE_RoutingProductSupplierRelationTypeEnum,
         UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService) {
 
         var isEditMode;
@@ -69,19 +69,19 @@
             }
 
             $scope.scopeModal.onSaleZoneRelationTypeSelectionChanged = function () {
-                if ($scope.scopeModal.selectedSaleZones != undefined && $scope.scopeModal.selectedSaleZoneRelationType == WhS_Be_RoutingProductSaleZoneRelationTypeEnum.AllZones) {
+                if ($scope.scopeModal.selectedSaleZones != undefined && $scope.scopeModal.selectedSaleZoneRelationType == WhS_BE_RoutingProductSaleZoneRelationTypeEnum.AllZones) {
                     $scope.scopeModal.selectedSaleZones.length = 0;
                 }
 
-                $scope.scopeModal.showSaleZoneSelector = ($scope.scopeModal.selectedSaleZoneRelationType == WhS_Be_RoutingProductSaleZoneRelationTypeEnum.SpecificZones);
+                $scope.scopeModal.showSaleZoneSelector = ($scope.scopeModal.selectedSaleZoneRelationType == WhS_BE_RoutingProductSaleZoneRelationTypeEnum.SpecificZones);
             }
 
             $scope.scopeModal.onSupplierRelationTypeSelectionChanged = function () {
-                if ($scope.scopeModal.selectedSuppliers != undefined && $scope.scopeModal.selectedSupplierRelationType == WhS_Be_RoutingProductSupplierRelationTypeEnum.AllSuppliers) {
+                if ($scope.scopeModal.selectedSuppliers != undefined && $scope.scopeModal.selectedSupplierRelationType == WhS_BE_RoutingProductSupplierRelationTypeEnum.AllSuppliers) {
                     $scope.scopeModal.selectedSuppliers.length = 0;
                 }
 
-                $scope.scopeModal.showSupplierSelector = ($scope.scopeModal.selectedSupplierRelationType == WhS_Be_RoutingProductSupplierRelationTypeEnum.SpecificSuppliers);
+                $scope.scopeModal.showSupplierSelector = ($scope.scopeModal.selectedSupplierRelationType == WhS_BE_RoutingProductSupplierRelationTypeEnum.SpecificSuppliers);
             }
 
             $scope.scopeModal.SaveRoutingProduct = function () {
@@ -149,12 +149,12 @@
         }
 
         function loadSaleZoneRelationTypes() {
-            $scope.scopeModal.saleZoneRelationType = UtilsService.getArrayEnum(WhS_Be_RoutingProductSaleZoneRelationTypeEnum);
+            $scope.scopeModal.saleZoneRelationType = UtilsService.getArrayEnum(WhS_BE_RoutingProductSaleZoneRelationTypeEnum);
 
             if (routingProductEntity != undefined && routingProductEntity.Settings != null)
-                $scope.scopeModal.selectedSaleZoneRelationType = UtilsService.getEnum(WhS_Be_RoutingProductSaleZoneRelationTypeEnum, 'value', routingProductEntity.Settings.ZoneRelationType);
+                $scope.scopeModal.selectedSaleZoneRelationType = UtilsService.getEnum(WhS_BE_RoutingProductSaleZoneRelationTypeEnum, 'value', routingProductEntity.Settings.ZoneRelationType);
             else
-                $scope.scopeModal.selectedSaleZoneRelationType = UtilsService.getEnum(WhS_Be_RoutingProductSaleZoneRelationTypeEnum, 'value', WhS_Be_RoutingProductSaleZoneRelationTypeEnum.AllZones.value);
+                $scope.scopeModal.selectedSaleZoneRelationType = UtilsService.getEnum(WhS_BE_RoutingProductSaleZoneRelationTypeEnum, 'value', WhS_BE_RoutingProductSaleZoneRelationTypeEnum.AllZones.value);
         }
 
         function loadSaleZoneSelector() {
@@ -185,12 +185,12 @@
         }
 
         function loadSupplierRelationTypes() {
-            $scope.scopeModal.supplierRelationType = UtilsService.getArrayEnum(WhS_Be_RoutingProductSupplierRelationTypeEnum);
+            $scope.scopeModal.supplierRelationType = UtilsService.getArrayEnum(WhS_BE_RoutingProductSupplierRelationTypeEnum);
 
             if (routingProductEntity != undefined && routingProductEntity.Settings != null)
-                $scope.scopeModal.selectedSupplierRelationType = UtilsService.getEnum(WhS_Be_RoutingProductSupplierRelationTypeEnum, 'value', routingProductEntity.Settings.SupplierRelationType);
+                $scope.scopeModal.selectedSupplierRelationType = UtilsService.getEnum(WhS_BE_RoutingProductSupplierRelationTypeEnum, 'value', routingProductEntity.Settings.SupplierRelationType);
             else
-                $scope.scopeModal.selectedSupplierRelationType = UtilsService.getEnum(WhS_Be_RoutingProductSupplierRelationTypeEnum, 'value', WhS_Be_RoutingProductSupplierRelationTypeEnum.AllSuppliers.value);
+                $scope.scopeModal.selectedSupplierRelationType = UtilsService.getEnum(WhS_BE_RoutingProductSupplierRelationTypeEnum, 'value', WhS_BE_RoutingProductSupplierRelationTypeEnum.AllSuppliers.value);
         }
 
         function loadSupplierSelector() {

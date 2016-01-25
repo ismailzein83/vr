@@ -2,9 +2,9 @@
 
     "use strict";
 
-    saleRateManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Be_SaleRateOwnerTypeEnum'];
+    saleRateManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_SalePriceListOwnerTypeEnum'];
 
-    function saleRateManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_Be_SaleRateOwnerTypeEnum) {
+    function saleRateManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_SalePriceListOwnerTypeEnum) {
 
 
         var gridAPI;
@@ -52,7 +52,7 @@
                     
             }
 
-            $scope.ownerTypes = UtilsService.getArrayEnum(WhS_Be_SaleRateOwnerTypeEnum);
+            $scope.ownerTypes = UtilsService.getArrayEnum(WhS_BE_SalePriceListOwnerTypeEnum);
             $scope.selectedOwnerType = $scope.ownerTypes[0];
             $scope.selectedSellingProduct = undefined;
             $scope.showSellingProductSelector = false;
@@ -60,12 +60,12 @@
 
             $scope.onOwnerTypeChanged = function () {
                 if ($scope.selectedOwnerType != undefined) {
-                    if ($scope.selectedOwnerType.value == WhS_Be_SaleRateOwnerTypeEnum.SellingProduct.value) {
+                    if ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {
                         $scope.showSellingProductSelector = true;
                         $scope.showCarrierAccountSelector = false;
                         $scope.selectedCustomer = undefined;
                     }
-                    else if ($scope.selectedOwnerType.value == WhS_Be_SaleRateOwnerTypeEnum.Customer.value) {
+                    else if ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
                         $scope.showSellingProductSelector = false;
                         $scope.showCarrierAccountSelector = true;
                         $scope.selectedSellingProduct = undefined;
@@ -143,7 +143,7 @@
                 SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
                 ZonesIds: saleZoneDirectiveAPI.getSelectedIds(),
                 OwnerType:$scope.selectedOwnerType.value,
-                OwnerId: ($scope.selectedOwnerType.value == WhS_Be_SaleRateOwnerTypeEnum.SellingProduct.value) ? sellingProductSelectorAPI.getSelectedIds() : carrierAccountSelectorAPI.getSelectedIds()
+                OwnerId: ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) ? sellingProductSelectorAPI.getSelectedIds() : carrierAccountSelectorAPI.getSelectedIds()
             };
            
         }

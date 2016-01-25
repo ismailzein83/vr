@@ -2,9 +2,9 @@
 
     "use strict";
 
-    carrierProfileEditorController.$inject = ['$scope', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_Be_ContactTypeEnum', 'VRUIUtilsService'];
+    carrierProfileEditorController.$inject = ['$scope', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_ContactTypeEnum', 'VRUIUtilsService'];
 
-    function carrierProfileEditorController($scope, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_ContactTypeEnum, VRUIUtilsService) {
+    function carrierProfileEditorController($scope, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_ContactTypeEnum, VRUIUtilsService) {
         var isEditMode;
         var carrierProfileId;
         var carrierProfileEntity;
@@ -161,7 +161,7 @@
         }
 
         function loadContacts() {
-            for (var x in WhS_Be_ContactTypeEnum) {
+            for (var x in WhS_BE_ContactTypeEnum) {
                 $scope.scopeModal.contacts.push(addcontactObj(x));
             }
            
@@ -176,9 +176,9 @@
 
         function addcontactObj(x) {
             return {
-                label: WhS_Be_ContactTypeEnum[x].label,
-                value: WhS_Be_ContactTypeEnum[x].value,
-                inputetype: WhS_Be_ContactTypeEnum[x].type
+                label: WhS_BE_ContactTypeEnum[x].label,
+                value: WhS_BE_ContactTypeEnum[x].value,
+                inputetype: WhS_BE_ContactTypeEnum[x].type
             };
         }
 

@@ -186,14 +186,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountActivationStatusEnum.js" />
-    <Content Include="WhS_BusinessEntity\Constant\EmailTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\ContactTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="WhS_BusinessEntity\Constant\PricingRuleTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PricingTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RoutingProductSaleZoneRelationTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RoutingProductSupplierRelationTypeEnum.js" />
-    <Content Include="WhS_BusinessEntity\Constant\SaleRateOwnerTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\SalePriceListOwnerTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Directives\AccountManager\Templates\AssignedCarrierGrid.html" />
     <Content Include="WhS_BusinessEntity\Directives\AccountManager\vr-whs-be-assignedcarrier-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />

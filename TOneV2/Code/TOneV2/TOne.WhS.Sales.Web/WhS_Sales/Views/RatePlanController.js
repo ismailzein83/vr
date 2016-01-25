@@ -6,14 +6,14 @@
         "$scope",
         "WhS_Sales_RatePlanService",
         "WhS_Sales_RatePlanAPIService",
-        "WhS_Sales_SalePriceListOwnerTypeEnum",
+        "WhS_BE_SalePriceListOwnerTypeEnum",
         "WhS_Sales_RatePlanStatusEnum",
         "UtilsService",
         "VRUIUtilsService",
         "VRNotificationService"
     ];
 
-    function RatePlanController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanAPIService, WhS_Sales_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function RatePlanController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanAPIService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var sellingProductSelectorAPI;
         var sellingProductSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -41,7 +41,7 @@
         load();
 
         function defineScope() {
-            $scope.ownerTypes = UtilsService.getArrayEnum(WhS_Sales_SalePriceListOwnerTypeEnum);
+            $scope.ownerTypes = UtilsService.getArrayEnum(WhS_BE_SalePriceListOwnerTypeEnum);
             $scope.selectedOwnerType = $scope.ownerTypes[0];
             $scope.showSellingProductSelector = true;
             $scope.showCarrierAccountSelector = false;
@@ -52,12 +52,12 @@
                 $scope.showCancelButton = false;
 
                 if ($scope.selectedOwnerType != undefined) {
-                    if ($scope.selectedOwnerType.value == WhS_Sales_SalePriceListOwnerTypeEnum.SellingProduct.value) {
+                    if ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {
                         $scope.showSellingProductSelector = true;
                         $scope.showCarrierAccountSelector = false;
                         $scope.selectedCustomer = undefined;
                     }
-                    else if ($scope.selectedOwnerType.value == WhS_Sales_SalePriceListOwnerTypeEnum.Customer.value) {
+                    else if ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
                         $scope.showSellingProductSelector = false;
                         $scope.showCarrierAccountSelector = true;
                         $scope.selectedSellingProduct = undefined;

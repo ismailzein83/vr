@@ -12,9 +12,10 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public List<int> ZonesIds { get; set; }
 
-        public int OwnerType { get; set; }
+        public SalePriceListOwnerType OwnerType { get; set; }
 
         public int OwnerId { get; set; }
+
         public int? SellingNumberPlanId { get; set; }
 
     }

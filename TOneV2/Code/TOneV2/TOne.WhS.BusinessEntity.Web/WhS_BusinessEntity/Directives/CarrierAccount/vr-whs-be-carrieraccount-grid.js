@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCarrieraccountGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierAccountAPIService", "WhS_Be_CarrierAccountTypeEnum", "WhS_BE_CustomerSellingProductService", "WhS_BE_CarrierAccountService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, WhS_Be_CarrierAccountTypeEnum, WhS_BE_CustomerSellingProductService, WhS_BE_CarrierAccountService, VRUIUtilsService) {
+app.directive("vrWhsBeCarrieraccountGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierAccountAPIService", "WhS_BE_CarrierAccountTypeEnum", "WhS_BE_CustomerSellingProductService", "WhS_BE_CarrierAccountService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierAccountTypeEnum, WhS_BE_CustomerSellingProductService, WhS_BE_CarrierAccountService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -34,7 +34,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
             $scope.hideProfileColumn = false;
 
             $scope.isExpandable = function (dataItem) {
-                if (dataItem.Entity.AccountType == WhS_Be_CarrierAccountTypeEnum.Supplier.value)
+                if (dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Supplier.value)
                     return false;
                 return true
             }
@@ -89,7 +89,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
 
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
-                                if (response.Data[i].Entity.AccountType != WhS_Be_CarrierAccountTypeEnum.Supplier.value) {
+                                if (response.Data[i].Entity.AccountType != WhS_BE_CarrierAccountTypeEnum.Supplier.value) {
                                     gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                                 }
                             }
@@ -122,7 +122,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
             ];
 
             $scope.gridMenuActions = function (dataItem) {
-                if (dataItem.Entity.AccountType == WhS_Be_CarrierAccountTypeEnum.Customer.value || dataItem.Entity.AccountType == WhS_Be_CarrierAccountTypeEnum.Exchange.value) {
+                if (dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Customer.value || dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Exchange.value) {
                     return menuActionsWithSellingProduct;
                 } else {
                     return defaultMenuActions;
@@ -145,7 +145,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
         }
 
         function assignNew(dataItem) {
-            if (dataItem.Entity.AccountType == WhS_Be_CarrierAccountTypeEnum.Supplier.value)
+            if (dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Supplier.value)
                 return;
 
             gridAPI.expandRow(dataItem);

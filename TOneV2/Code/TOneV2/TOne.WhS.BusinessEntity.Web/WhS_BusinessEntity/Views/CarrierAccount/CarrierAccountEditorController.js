@@ -2,9 +2,9 @@
 
     "use strict";
 
-    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_Be_CarrierAccountTypeEnum', 'VRUIUtilsService','WhS_Be_CarrierAccountActivationStatusEnum'];
+    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService','WhS_BE_CarrierAccountActivationStatusEnum'];
 
-    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_CarrierAccountTypeEnum, VRUIUtilsService, WhS_Be_CarrierAccountActivationStatusEnum) {
+    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum) {
 
         var carrierProfileDirectiveAPI;
         var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -54,7 +54,7 @@
             $scope.scopeModal.onCarrierTypeSelectionChanged = function () {
                 if ($scope.scopeModal.selectedCarrierAccountType != undefined)
                 {
-                    if ($scope.scopeModal.selectedCarrierAccountType.value == WhS_Be_CarrierAccountTypeEnum.Customer.value || $scope.scopeModal.selectedCarrierAccountType.value == WhS_Be_CarrierAccountTypeEnum.Exchange.value) {
+                    if ($scope.scopeModal.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Customer.value || $scope.scopeModal.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Exchange.value) {
                         if (sellingNumberPlanDirectiveAPI != undefined) {
                             $scope.scopeModal.showSellingNumberPlan = true;
                             var setLoader = function (value) { $scope.scopeModal.isLoadingSellingNumberPlan = value };
@@ -76,13 +76,13 @@
             };
 
             //$scope.scopeModal.customerTabShow = function () {
-            //    if ($scope.selectedCarrierAccountType != undefined && $scope.selectedCarrierAccountType.value != WhS_Be_CarrierAccountTypeEnum.Supplier.value)
+            //    if ($scope.selectedCarrierAccountType != undefined && $scope.selectedCarrierAccountType.value != WhS_BE_CarrierAccountTypeEnum.Supplier.value)
             //        return true;
             //    return false;
             //}
 
             //$scope.scopeModal.SupplierTabShow = function () {
-            //    if ($scope.selectedCarrierAccountType != undefined && $scope.selectedCarrierAccountType.value != WhS_Be_CarrierAccountTypeEnum.Customer.value)
+            //    if ($scope.selectedCarrierAccountType != undefined && $scope.selectedCarrierAccountType.value != WhS_BE_CarrierAccountTypeEnum.Customer.value)
             //        return true;
             //    return false;
             //}
@@ -161,7 +161,7 @@
 
         function loadFilterBySection() {
             if (carrierAccountEntity != undefined) {
-                $scope.scopeModal.name = carrierAccountEntity.Name;
+                $scope.scopeModal.name = carrierAccountEntity.NameSuffix;
                 for (var i = 0; i < $scope.scopeModal.carrierAccountTypes.length; i++)
                     if (carrierAccountEntity.AccountType == $scope.scopeModal.carrierAccountTypes[i].value)
                         $scope.scopeModal.selectedCarrierAccountType = $scope.scopeModal.carrierAccountTypes[i];
@@ -190,14 +190,14 @@
 
         function defineCarrierAccountTypes() {
             $scope.scopeModal.carrierAccountTypes = [];
-            for (var p in WhS_Be_CarrierAccountTypeEnum)
-                $scope.scopeModal.carrierAccountTypes.push(WhS_Be_CarrierAccountTypeEnum[p]);
+            for (var p in WhS_BE_CarrierAccountTypeEnum)
+                $scope.scopeModal.carrierAccountTypes.push(WhS_BE_CarrierAccountTypeEnum[p]);
 
         }
         function defineActivationStatusTypes() {
             $scope.scopeModal.activationStatus = [];
-            for (var p in WhS_Be_CarrierAccountActivationStatusEnum)
-                $scope.scopeModal.activationStatus.push(WhS_Be_CarrierAccountActivationStatusEnum[p]);
+            for (var p in WhS_BE_CarrierAccountActivationStatusEnum)
+                $scope.scopeModal.activationStatus.push(WhS_BE_CarrierAccountActivationStatusEnum[p]);
 
         }
 

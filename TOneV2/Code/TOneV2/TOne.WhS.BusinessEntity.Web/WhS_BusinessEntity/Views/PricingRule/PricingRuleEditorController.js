@@ -2,9 +2,9 @@
 
     "use strict";
 
-    pricingRuleEditorController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService',  'UtilsService', 'VRNotificationService', 'VRNavigationService','WhS_Be_PricingRuleTypeEnum','WhS_Be_PricingTypeEnum','VRUIUtilsService','WhS_BE_PurchasePricingRuleAPIService','VRValidationService'];
+    pricingRuleEditorController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService',  'UtilsService', 'VRNotificationService', 'VRNavigationService','WhS_BE_PricingRuleTypeEnum','WhS_BE_PricingTypeEnum','VRUIUtilsService','WhS_BE_PurchasePricingRuleAPIService','VRValidationService'];
 
-    function pricingRuleEditorController($scope, WhS_BE_SalePricingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_Be_PricingRuleTypeEnum, WhS_Be_PricingTypeEnum, VRUIUtilsService, WhS_BE_PurchasePricingRuleAPIService, VRValidationService) {
+    function pricingRuleEditorController($scope, WhS_BE_SalePricingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_PricingRuleTypeEnum, WhS_BE_PricingTypeEnum, VRUIUtilsService, WhS_BE_PurchasePricingRuleAPIService, VRValidationService) {
 
         var isEditMode;
         var pricingRuleType;
@@ -68,13 +68,13 @@
 
             definePricingRuleTypes();
             if (pricingType != undefined)
-                for (var p in WhS_Be_PricingTypeEnum)
-                    if (WhS_Be_PricingTypeEnum[p].value == pricingType)
-                        $scope.scopeModal.selectedPricingType = WhS_Be_PricingTypeEnum[p];
+                for (var p in WhS_BE_PricingTypeEnum)
+                    if (WhS_BE_PricingTypeEnum[p].value == pricingType)
+                        $scope.scopeModal.selectedPricingType = WhS_BE_PricingTypeEnum[p];
 
-            if ($scope.scopeModal.selectedPricingType.value == WhS_Be_PricingTypeEnum.Sale.value)
+            if ($scope.scopeModal.selectedPricingType.value == WhS_BE_PricingTypeEnum.Sale.value)
                 service = WhS_BE_SalePricingRuleAPIService;
-            else if ($scope.scopeModal.selectedPricingType.value == WhS_Be_PricingTypeEnum.Purchase.value)
+            else if ($scope.scopeModal.selectedPricingType.value == WhS_BE_PricingTypeEnum.Purchase.value)
                 service = WhS_BE_PurchasePricingRuleAPIService;
 
 
@@ -133,9 +133,9 @@
             return loadCriteriaPromiseDeferred.promise;
         }
         function setDefaultValues() {
-            for (var p in WhS_Be_PricingRuleTypeEnum) {
-                if (WhS_Be_PricingRuleTypeEnum[p].value == pricingRuleType) {
-                    $scope.scopeModal.selectedPricingRuleType = WhS_Be_PricingRuleTypeEnum[p];
+            for (var p in WhS_BE_PricingRuleTypeEnum) {
+                if (WhS_BE_PricingRuleTypeEnum[p].value == pricingRuleType) {
+                    $scope.scopeModal.selectedPricingRuleType = WhS_BE_PricingRuleTypeEnum[p];
                 }
             }
             $scope.title = UtilsService.buildTitleForAddEditor($scope.scopeModal.selectedPricingRuleType.title);
@@ -144,8 +144,8 @@
 
         function definePricingRuleTypes() {
             $scope.scopeModal.pricingRuleTypes = [];
-            for (var p in WhS_Be_PricingRuleTypeEnum)
-                $scope.scopeModal.pricingRuleTypes.push(WhS_Be_PricingRuleTypeEnum[p]);
+            for (var p in WhS_BE_PricingRuleTypeEnum)
+                $scope.scopeModal.pricingRuleTypes.push(WhS_BE_PricingRuleTypeEnum[p]);
         }
         function getPricingRule() {
             return service.GetRule(ruleId).then(function (pricingRule) {
@@ -179,9 +179,9 @@
                 $scope.scopeModal.beginEffectiveDate = pricingRuleEntity.BeginEffectiveTime;
                 $scope.scopeModal.endEffectiveDate = pricingRuleEntity.EndEffectiveTime;
                 $scope.scopeModal.description = pricingRuleEntity.Description;
-                for (var p in WhS_Be_PricingRuleTypeEnum) {
-                    if (WhS_Be_PricingRuleTypeEnum[p].value == pricingRuleEntity.Settings.RuleType) {
-                        $scope.scopeModal.selectedPricingRuleType = WhS_Be_PricingRuleTypeEnum[p];
+                for (var p in WhS_BE_PricingRuleTypeEnum) {
+                    if (WhS_BE_PricingRuleTypeEnum[p].value == pricingRuleEntity.Settings.RuleType) {
+                        $scope.scopeModal.selectedPricingRuleType = WhS_BE_PricingRuleTypeEnum[p];
                     }
                 }
                 $scope.title = UtilsService.buildTitleForUpdateEditor($scope.scopeModal.selectedPricingRuleType.title);
