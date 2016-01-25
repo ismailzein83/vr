@@ -15,7 +15,6 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "New Selling Product";
                 modalScope.onSellingProductAdded = onSellingProductAdded;
             };
 
@@ -30,7 +29,6 @@
             };
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.title = "Edit Selling Product";
                 modalScope.onSellingProductUpdated = onSellingProductUpdated;
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingProduct/SellingProductEditor.html', parameters, modalSettings);

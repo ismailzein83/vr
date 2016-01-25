@@ -15,7 +15,6 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Customer Selling Product";
                 modalScope.onCustomerSellingProductAdded = onCustomerSellingProductAdded;
             };
             var parameters = null;
@@ -34,7 +33,6 @@
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.SellingProductName, "Customer Selling Product");
                 modalScope.onCustomerSellingProductUpdated = onCustomerSellingProductUpdated;
             };
             var parameters = {

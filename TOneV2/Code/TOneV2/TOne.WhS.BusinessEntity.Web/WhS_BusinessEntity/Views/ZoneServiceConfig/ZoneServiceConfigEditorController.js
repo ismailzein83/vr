@@ -2,16 +2,17 @@
 
     "use strict";
 
-    zoneServiceConfigEditorController.$inject = ['$scope', 'WhS_BE_ZoneServiceConfigAPIService', 'VRNotificationService', 'VRNavigationService'];
+    zoneServiceConfigEditorController.$inject = ['$scope', 'WhS_BE_ZoneServiceConfigAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-    function zoneServiceConfigEditorController($scope, WhS_BE_ZoneServiceConfigAPIService, VRNotificationService, VRNavigationService) {
-
-
+    function zoneServiceConfigEditorController($scope, WhS_BE_ZoneServiceConfigAPIService, UtilsService, VRNotificationService, VRNavigationService) {
+        var isEditMode;
         var serviceFlag;
-        var editMode;
+        var zoneServiceConfigEntity;
+
         defineScope();
         loadParameters();
         load();
+
         function loadParameters() {
            
             var parameters = VRNavigationService.getParameters($scope);
@@ -19,11 +20,12 @@
             if (parameters != undefined && parameters != null) {
                 serviceFlag = parameters.ServiceFlag;
             }
-            $scope.inedit = editMode = (serviceFlag != undefined);
+            $scope.inedit = isEditMode = (serviceFlag != undefined);
         }
+
         function defineScope() {
             $scope.saveZoneServiceConfig = function () {
-                if (editMode) {
+                if (isEditMode) {
                     return updateZoneServiceConfig();
                 }
                 else {
@@ -39,37 +41,49 @@
         }
 
         function load() {
-            $scope.isGettingData = true;
-            if (editMode) {
-                getZoneServiceConfig();
+            $scope.isLoading = true;
+
+            if (isEditMode) {
+                getZoneServiceConfig().then(function () {
+                    loadAllControls().finally(function () { zoneServiceConfigEntity = undefined; });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
             }
             else {
-                $scope.isGettingData = false;
+                loadAllControls();
             }
-
         }
+        
         function getZoneServiceConfig() {
-            return WhS_BE_ZoneServiceConfigAPIService.GetZoneServiceConfig(serviceFlag).then(function (zoneServiceConfig) {
-                fillScopeFromZoneServiceConfigObj(zoneServiceConfig);
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.isGettingData = false;
+            return WhS_BE_ZoneServiceConfigAPIService.GetZoneServiceConfig(serviceFlag).then(function (response) {
+                zoneServiceConfigEntity = response;
             });
         }
 
-        function buildZoneServiceConfigObjFromScope() {
-            var obj = {
-                ServiceFlag: $scope.serviceFlag,
-                Name: $scope.name
-            };
-            return obj;
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticControls]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
+        }
+
+        function setTitle() {
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(zoneServiceConfigEntity ? zoneServiceConfigEntity.Name : null, 'Zone Service Config') : UtilsService.buildTitleForAddEditor('Zone Service Config');
+        }
+
+        function loadStaticControls() {
+            if (zoneServiceConfigEntity) {
+                $scope.name = zoneServiceConfigEntity.Name;
+                $scope.serviceFlag = zoneServiceConfigEntity.ServiceFlag;
+            }
         }
 
         function fillScopeFromZoneServiceConfigObj(zoneServiceConfig) {
-            $scope.name = zoneServiceConfig.Name;
-            $scope.serviceFlag = zoneServiceConfig.ServiceFlag;
+            
         }
+
         function insertZoneServiceConfig() {
             var zoneServiceConfigObject = buildZoneServiceConfigObjFromScope();
             return WhS_BE_ZoneServiceConfigAPIService.AddZoneServiceConfig(zoneServiceConfigObject)
@@ -84,6 +98,7 @@
             });
 
         }
+
         function updateZoneServiceConfig() {
             var zoneServiceConfigObject = buildZoneServiceConfigObjFromScope();
             WhS_BE_ZoneServiceConfigAPIService.UpdateZoneServiceConfig(zoneServiceConfigObject)
@@ -97,7 +112,16 @@
                 VRNotificationService.notifyException(error, $scope);
             });
         }
+
+        function buildZoneServiceConfigObjFromScope() {
+            var obj = {
+                ServiceFlag: $scope.serviceFlag,
+                Name: $scope.name
+            };
+            return obj;
+        }
     }
 
     appControllers.controller('WhS_BE_ZoneServiceConfigEditorController', zoneServiceConfigEditorController);
+
 })(appControllers);

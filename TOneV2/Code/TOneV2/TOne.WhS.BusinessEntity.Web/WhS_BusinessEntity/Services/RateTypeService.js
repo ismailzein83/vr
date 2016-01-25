@@ -17,7 +17,6 @@
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForAddEditor("Rate Type");
                 modalScope.onRateTypeAdded = onRateTypeAdded;
             };
             var parameters = {};
@@ -32,7 +31,6 @@
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Name, "Rate Type");
                 modalScope.onRateTypeUpdated = onRateTypeUpdated;
             };
             var parameters = {

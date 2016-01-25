@@ -90,14 +90,17 @@
                  
         }
         function loadAllControls() {
-  
-            return UtilsService.waitMultipleAsyncOperations([isAssignableCustomerToSellingProduct,loadFilterBySection,loadSellingProducts, loadCarrierAccounts])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, isAssignableCustomerToSellingProduct, loadFilterBySection, loadSellingProducts, loadCarrierAccounts])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
                .finally(function () {
                    $scope.isLoading = false;
                });
+        }
+        function setTitle() {
+            // Note that the CustomerSellingProduct entity has no Name property
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor('Customer Selling Product') : UtilsService.buildTitleForAddEditor('Customer Selling Product');
         }
         function loadFilterBySection() {
 
@@ -208,8 +211,7 @@
                 VRNotificationService.notifyException(error, $scope);
             });
         }
-        }
-        
-  
+    }
+    
     appControllers.controller('WhS_BE_CustomerSellingProductEditorController', customerSellingProductEditorController);
 })(appControllers);

@@ -14,7 +14,6 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "New Carrier Account";
                 modalScope.onCarrierAccountAdded = onCarrierAccountAdded;
             };
             var parameters;
@@ -35,7 +34,6 @@
             };
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.title = "Edit Carrier Account";
                 modalScope.onCarrierAccountUpdated = onCarrierAccountUpdated;
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', parameters, modalSettings);

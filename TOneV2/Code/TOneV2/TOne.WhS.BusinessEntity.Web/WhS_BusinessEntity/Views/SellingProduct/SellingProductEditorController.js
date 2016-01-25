@@ -2,15 +2,15 @@
 
     "use strict";
 
-    sellingProductEditorController.$inject = ['$scope', 'WhS_BE_SellingProductAPIService','UtilsService', 'VRNotificationService', 'VRNavigationService','VRUIUtilsService'];
+    sellingProductEditorController.$inject = ['$scope', 'WhS_BE_SellingProductAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService','VRUIUtilsService'];
 
     function sellingProductEditorController($scope, WhS_BE_SellingProductAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
-
         var isEditMode;
         var sellingProductId;
         var sellingNumberPlanDirectiveAPI;
         var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var sellingProductEntity;
+
         loadParameters();
         defineScope();
         load();
@@ -62,9 +62,15 @@
                 loadAllControls();
             }
         }
+
+        function getSellingProduct() {
+            return WhS_BE_SellingProductAPIService.GetSellingProduct(sellingProductId).then(function (sellingProduct) {
+                sellingProductEntity = sellingProduct;
+            });
+        }
+
         function loadAllControls() {
-            
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadSellingNumberPlans])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadFilterBySection, loadSellingNumberPlans])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -72,6 +78,17 @@
                   $scope.scopeModal.isLoading = false;
               });
         }
+
+        function setTitle() {
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(sellingProductEntity ? sellingProductEntity.Name : null, 'Selling Product') : UtilsService.buildTitleForAddEditor('Selling Product');
+        }
+
+        function loadFilterBySection() {
+            if (sellingProductEntity != undefined) {
+                $scope.scopeModal.name = sellingProductEntity.Name;
+            }
+        }
+
         function loadSellingNumberPlans() {
             var sellingNumberPlanLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -86,27 +103,6 @@
             return sellingNumberPlanLoadPromiseDeferred.promise;
         }
 
-        function getSellingProduct() {
-            return WhS_BE_SellingProductAPIService.GetSellingProduct(sellingProductId).then(function (sellingProduct) {
-                sellingProductEntity = sellingProduct;
-            });
-        }
-
-        function buildSellingProductObjFromScope() {
-            var sellingProduct = {
-                SellingProductId: (sellingProductId != null) ? sellingProductId : 0,
-                Name: $scope.scopeModal.name,
-                SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
-            };
-            return sellingProduct;
-        }
-
-        function loadFilterBySection() {
-            if(sellingProductEntity!=undefined)
-            {
-                $scope.scopeModal.name = sellingProductEntity.Name;
-            }
-        }
         function insertSellingProduct() {
             var sellingProductObject = buildSellingProductObjFromScope();
             return WhS_BE_SellingProductAPIService.AddSellingProduct(sellingProductObject)
@@ -136,7 +132,16 @@
             });
         }
 
+        function buildSellingProductObjFromScope() {
+            var sellingProduct = {
+                SellingProductId: (sellingProductId != null) ? sellingProductId : 0,
+                Name: $scope.scopeModal.name,
+                SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
+            };
+            return sellingProduct;
+        }
     }
 
     appControllers.controller('WhS_BE_SellingProductEditorController', sellingProductEditorController);
+
 })(appControllers);

@@ -2,26 +2,30 @@
 
     "use strict";
 
-    rateTypeEditorController.$inject = ['$scope', 'WhS_BE_RateTypeAPIService', 'VRNotificationService', 'VRNavigationService'];
+    rateTypeEditorController.$inject = ['$scope', 'WhS_BE_RateTypeAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-    function rateTypeEditorController($scope, WhS_BE_RateTypeAPIService, VRNotificationService, VRNavigationService) {
-
-
+    function rateTypeEditorController($scope, WhS_BE_RateTypeAPIService, UtilsService, VRNotificationService, VRNavigationService) {
+        var isEditMode;
         var rateTypetId;
-        var editMode;
+        var rateTypeEntity;
+
         defineScope();
         loadParameters();
         load();
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-            if (parameters != undefined && parameters != null) {
+
+            if (parameters) {
                 rateTypetId = parameters.RateTypeId;
             }
-            editMode = (rateTypetId != undefined);
+
+            isEditMode = (rateTypetId != undefined);
         }
+
         function defineScope() {
             $scope.saveRateType = function () {
-                if (editMode) {
+                if (isEditMode) {
                     return updateRateType();
                 }
                 else {
@@ -37,20 +41,75 @@
         }
 
         function load() {
-            $scope.isGettingData = true;
-            if (editMode) {
-                getRateType();
+            $scope.isLoading = true;
+
+            if (isEditMode) {
+                getRateType().then(function () {
+                    loadAllControls().finally(function () { rateTypeEntity = undefined; });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
             }
             else {
-                $scope.isGettingData = false;
+                loadAllControls();
             }
+        }
+
+        function getRateType() {
+            return WhS_BE_RateTypeAPIService.GetRateType(rateTypetId).then(function (response) {
+                rateTypeEntity = response;
+            });
+        }
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticControls]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
+        }
+
+        function setTitle() {
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(rateTypeEntity ? rateTypeEntity.Name : null, 'Rate Type') : UtilsService.buildTitleForAddEditor('Rate Type');
+        }
+
+        function loadStaticControls() {
+            if (rateTypeEntity) {
+                $scope.name = rateTypeEntity.Name;
+            }
+        }
+
+        function insertRateType() {
+            var rateTypeObject = buildRateTypeObjFromScope();
+            $scope.isGettingData = true;
+            return WhS_BE_RateTypeAPIService.AddRateType(rateTypeObject)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded("Rate Type", response, "Name")) {
+                    if ($scope.onRateTypeAdded != undefined)
+                        $scope.onRateTypeAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isGettingData = false;
+            });
 
         }
-        function getRateType() {
-            return WhS_BE_RateTypeAPIService.GetRateType(rateTypetId).then(function (rateType) {
-                fillScopeFromRateTypeObj(rateType);
+
+        function updateRateType() {
+            var rateTypeObject = buildRateTypeObjFromScope();
+            $scope.isGettingData = true;
+
+            WhS_BE_RateTypeAPIService.UpdateRateType(rateTypeObject)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated("Rate Type", response, "Name")) {
+                    if ($scope.onRateTypeUpdated != undefined)
+                        $scope.onRateTypeUpdated(response.UpdatedObject);
+                    $scope.modalContext.closeModal();
+                }
             }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.isGettingData = false;
             });
@@ -63,45 +122,8 @@
             };
             return obj;
         }
-
-        function fillScopeFromRateTypeObj(rateType) {
-            $scope.name = rateType.Name;
-        }
-        function insertRateType() {
-            var rateTypeObject = buildRateTypeObjFromScope();
-            $scope.isGettingData = true;
-            return WhS_BE_RateTypeAPIService.AddRateType(rateTypeObject)
-            .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("RateType", response, "Name")) {
-                    if ($scope.onRateTypeAdded != undefined)
-                        $scope.onRateTypeAdded(response.InsertedObject);
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.isGettingData = false;
-            });
-
-        }
-        function updateRateType() {
-            var rateTypeObject = buildRateTypeObjFromScope();
-            $scope.isGettingData = true;
-
-            WhS_BE_RateTypeAPIService.UpdateRateType(rateTypeObject)
-            .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("RateType", response, "Name")) {
-                    if ($scope.onRateTypeUpdated != undefined)
-                        $scope.onRateTypeUpdated(response.UpdatedObject);
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.isGettingData = false;
-            });
-        }
     }
 
     appControllers.controller('WhS_BE_RateTypeEditorController', rateTypeEditorController);
+
 })(appControllers);

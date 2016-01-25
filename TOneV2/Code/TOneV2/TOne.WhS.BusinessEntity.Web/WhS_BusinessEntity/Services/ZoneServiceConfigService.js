@@ -17,7 +17,6 @@
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForAddEditor("Zone Service Config");
                 modalScope.onZoneServiceConfigAdded = onZoneServiceConfigAdded;
             };
             var parameters = {};
@@ -31,7 +30,6 @@
 
             };
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForUpdateEditor(obj.Name, "Zone Service Config");
                 modalScope.onZoneServiceConfigUpdated = onZoneServiceConfigUpdated;
             };
             var parameters = {
