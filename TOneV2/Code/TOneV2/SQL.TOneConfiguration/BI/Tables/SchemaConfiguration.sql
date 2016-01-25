@@ -5,8 +5,11 @@
     [Type]          INT             NOT NULL,
     [Configuration] NVARCHAR (1000) NOT NULL,
     [Rank]          INT             NULL,
+    [timestamp]     ROWVERSION      NULL,
     CONSTRAINT [PK_MeasureDefinition] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

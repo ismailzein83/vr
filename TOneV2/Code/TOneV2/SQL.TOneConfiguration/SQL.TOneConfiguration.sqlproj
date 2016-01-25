@@ -95,7 +95,6 @@
     <Build Include="sec\Tables\User.sql" />
     <Build Include="BI\Tables\SchemaConfiguration.sql" />
     <Build Include="sec\Stored Procedures\sp_WidgetDefinition_Get.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_GetMembers.sql" />
     <Build Include="sec\Stored Procedures\sp_User_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_BusinessEntityModule_ToggleBreakInheritance.sql" />
     <Build Include="sec\Stored Procedures\sp_BusinessEntity_ToggleBreakInheritance.sql" />
@@ -211,6 +210,7 @@
     <Build Include="common\Stored Procedures\sp_DataRecordField_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_DataRecordField_GetAll.sql" />
     <Build Include="common\Stored Procedures\sp_DataRecordField_Delete.sql" />
+    <Build Include="sec\Stored Procedures\sp_UserGroup_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
