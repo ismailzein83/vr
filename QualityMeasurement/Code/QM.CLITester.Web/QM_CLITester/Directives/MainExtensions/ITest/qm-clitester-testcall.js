@@ -51,13 +51,7 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
 
             $scope.suppliers = [];
 
-            $scope.selectedProfile;
-
             $scope.selectedSupplier = [];
-
-            $scope.selectedCountry;
-
-            $scope.selectedZone;
 
             $scope.onProfileDirectiveReady = function (api) {
                 profileDirectiveAPI = api;
