@@ -13,7 +13,7 @@ BEGIN
 			END
 
     Delete ac from FraudAnalysis.AccountCase ac
-	left join FraudAnalysis.StrategyExecutionDetails dt on ac.Id = dt.CaseId
+	left join FraudAnalysis.StrategyExecutionItem dt on ac.Id = dt.CaseId
 	where dt.CaseId is null and  ac.ID in (select CaseID from @CaseIDsTable)
            
 		

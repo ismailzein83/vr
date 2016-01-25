@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_DeleteByCaseIDs] 
+﻿Create PROCEDURE [FraudAnalysis].[sp_StrategyExecutionItem_DeleteByCaseIDs] 
     @CaseIDs varchar(1000)
 AS
 BEGIN
@@ -11,7 +11,7 @@ DECLARE @CaseIDsTable TABLE (CaseID INT);
 				SELECT CONVERT(INT, ParsedString) FROM [FraudAnalysis].[ParseStringList](@CaseIDs);
 			END
 
-         Delete details from FraudAnalysis.StrategyExecutionDetails  details where (@CaseIDs is null or details.CaseID in (SELECT CaseID FROM @CaseIDsTable) ) 
+         Delete details from FraudAnalysis.StrategyExecutionItem  details where (@CaseIDs is null or details.CaseID in (SELECT CaseID FROM @CaseIDsTable) ) 
         
 END
 

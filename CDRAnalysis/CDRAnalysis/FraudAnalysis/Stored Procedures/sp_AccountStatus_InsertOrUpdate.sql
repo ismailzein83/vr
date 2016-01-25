@@ -13,6 +13,6 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0
 	BEGIN
-		INSERT INTO AccountStatus (AccountNumber, [Status]) VALUES (@AccountNumber, @StatusID)
+		INSERT INTO AccountStatus (AccountNumber, [Status], ValidTill) VALUES (@AccountNumber, @StatusID, @ValidTill)
 	END
 END

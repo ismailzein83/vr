@@ -1,11 +1,11 @@
 ﻿
-CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_UpdateStatus]
+Create PROCEDURE [FraudAnalysis].[sp_StrategyExecutionItem_UpdateStatus]
 	@AccountNumber VARCHAR(50),
 	@CaseID INT,
 	@OccuranceStatusID INT
 AS
 BEGIN
-	UPDATE FraudAnalysis.StrategyExecutionDetails
+	UPDATE FraudAnalysis.StrategyExecutionItem
 	SET	CaseID = @CaseID,
 		[SuspicionOccuranceStatus] = @OccuranceStatusID
 	WHERE AccountNumber = @AccountNumber

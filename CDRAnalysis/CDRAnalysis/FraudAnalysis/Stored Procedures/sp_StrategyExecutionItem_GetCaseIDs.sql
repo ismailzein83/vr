@@ -1,9 +1,6 @@
 ﻿
 
-
-
-
-	CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_GetCaseIDs] 
+	Create PROCEDURE [FraudAnalysis].[sp_StrategyExecutionItem_GetCaseIDs] 
 	
 	@AccountNumber VARCHAR(50),
 	@FromDate DATETIME,
@@ -23,7 +20,7 @@
 	
 
 		Select distinct CaseID 
-		from FraudAnalysis.StrategyExecutionDetails details
+		from FraudAnalysis.StrategyExecutionItem details
 		inner join FraudAnalysis.StrategyExecution exe on details.StrategyExecutionID=exe.ID
 		WHERE (exe.StrategyID in (SELECT StrategyID FROM @StrategyIDsTable)   or @StrategyIDs is null )  and  
 		(@FromDate is null or exe.FromDate >= @FromDate)

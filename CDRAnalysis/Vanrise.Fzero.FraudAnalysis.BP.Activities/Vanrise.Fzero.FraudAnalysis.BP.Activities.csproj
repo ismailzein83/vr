@@ -113,16 +113,16 @@
     <Compile Include="DataWarehouse\GetDWStrategies.cs" />
     <Compile Include="GetPrefixes.cs" />
     <Compile Include="GetStrategiesExecutionInfo.cs" />
-    <Compile Include="GetStrategyExecutionDetails.cs" />
+    <Compile Include="GetStrategyExecutionItems.cs" />
     <Compile Include="GetAccountNumbersByIMEI.cs" />
     <Compile Include="DataWarehouse\GetDWDimensions.cs" />
-    <Compile Include="LoadStrategyExecutionDetailSummaries.cs" />
+    <Compile Include="LoadStrategyExecutionItemSummaries.cs" />
     <Compile Include="LoadCDRs.cs" />
     <Compile Include="CreateNumberProfiles.cs" />
     <Compile Include="DataWarehouse\PrepareDWFactsForDBApply.cs" />
     <Compile Include="OverridePreviousStrategyExecution.cs" />
     <Compile Include="PrepareNumberProfilesForDBApply.cs" />
-    <Compile Include="PrepareStrategyExecutionDetailsForDBApply.cs" />
+    <Compile Include="PrepareStrategyExecutionItemsForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

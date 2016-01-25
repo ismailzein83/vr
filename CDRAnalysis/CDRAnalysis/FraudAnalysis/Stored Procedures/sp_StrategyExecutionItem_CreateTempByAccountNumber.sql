@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_CreateTempByAccountNumber]
+Create PROCEDURE [FraudAnalysis].[sp_StrategyExecutionItem_CreateTempByAccountNumber]
 	@TempTableName VARCHAR(200),
 	@CaseID int,
 	@FromDate DATETIME,
@@ -22,13 +22,11 @@ BEGIN
 			
 		INTO #RESULT
 			
-		FROM FraudAnalysis.StrategyExecutionDetails sed
-		    inner join FraudAnalysis.StrategyExecution se on se.ID = sed.StrategyExecutionID
-			inner join FraudAnalysis.Strategy s ON se.StrategyID = s.Id
+		FROM FraudAnalysis.StrategyExecutionItem sed WITH (NOLOCK)
+	    inner join FraudAnalysis.StrategyExecution se WITH (NOLOCK) on se.ID = sed.StrategyExecutionID
+		inner join FraudAnalysis.Strategy s WITH (NOLOCK) ON se.StrategyID = s.Id
 		
-		WHERE sed.CaseID = @CaseID
-			AND sed.SuspicionOccuranceStatus = 1
-			AND se.ExecutionDate >= @FromDate AND se.ExecutionDate <= @ToDate
+		WHERE sed.CaseID = @CaseID			
 		
 		ORDER BY se.ExecutionDate DESC
 		

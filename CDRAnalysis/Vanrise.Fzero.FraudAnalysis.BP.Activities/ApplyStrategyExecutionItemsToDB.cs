@@ -28,7 +28,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     hasItems = inputArgument.InputQueue.TryDequeue(
                         (preparedStrategyExecutionItem) =>
                         {
-                            dataManager.ApplyStrategyExecutionItemToDB(preparedStrategyExecutionItem);
+                            dataManager.ApplyStrategyExecutionItemsToDB(preparedStrategyExecutionItem);
                         });
                 } while (!ShouldStop(handle) && hasItems);
             }

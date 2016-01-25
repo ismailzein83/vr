@@ -10,7 +10,7 @@ BEGIN
 								 stra.UserID AS StrategyUser, ac.UserID AS CaseUser, stra.ID AS StrategyID, ex.FromDate, ex.ToDate, ac.AccountNumber, ac.Status AS CaseStatus
 		FROM            FraudAnalysis.StrategyExecution AS ex INNER JOIN
 								 FraudAnalysis.Strategy AS stra ON ex.StrategyID = stra.ID INNER JOIN
-								 FraudAnalysis.StrategyExecutionDetails AS exD INNER JOIN
+								 FraudAnalysis.StrategyExecutionItem AS exD INNER JOIN
 								 FraudAnalysis.AccountCase AS ac ON exD.CaseID = ac.ID ON ex.ID = exD.StrategyExecutionID INNER JOIN
 								 FraudAnalysis.CallClass ON ex.ID = FraudAnalysis.CallClass.ID
 

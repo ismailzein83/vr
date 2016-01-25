@@ -1,6 +1,6 @@
 ﻿
 
-CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_DeleteByFilters] 
+Create PROCEDURE [FraudAnalysis].[sp_StrategyExecutionItem_DeleteByFilters] 
     @AccountNumber VARCHAR(50),
 	@FromDate DATETIME,
 	@ToDate DATETIME,
@@ -17,7 +17,7 @@ DECLARE @StrategyIDsTable TABLE (StrategyID INT);
 			END
 
 
-         Delete details from FraudAnalysis.StrategyExecutionDetails  details
+         Delete details from FraudAnalysis.StrategyExecutionItem  details
 			inner join FraudAnalysis.StrategyExecution exe on details.StrategyExecutionID=exe.ID
 			where (@StrategyIDs is null or exe.StrategyID in (SELECT StrategyID FROM @StrategyIDsTable) ) 
 			and (@FromDate is null or exe.FromDate >= @FromDate)

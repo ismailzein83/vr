@@ -24,7 +24,7 @@ BEGIN
 		
 		FROM FraudAnalysis.AccountCase AS ac WITH(NOLOCK)
 		INNER JOIN FraudAnalysis.NormalCDR AS cdr WITH(NOLOCK, INDEX = IX_NormalCDR_MSISDN) ON ac.AccountNumber = cdr.MSISDN
-		Inner join FraudAnalysis.StrategyExecutionDetails as details  WITH(NOLOCK) on details.CaseID = ac.ID
+		Inner join FraudAnalysis.StrategyExecutionItem as details  WITH(NOLOCK) on details.CaseID = ac.ID
 
 		
 		WHERE ac.[Status] = 3

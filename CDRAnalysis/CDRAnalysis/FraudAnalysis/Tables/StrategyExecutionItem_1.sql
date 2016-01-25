@@ -1,4 +1,4 @@
-﻿CREATE TABLE [FraudAnalysis].[StrategyExecutionDetails] (
+﻿CREATE TABLE [FraudAnalysis].[StrategyExecutionItem] (
     [ID]                       BIGINT         IDENTITY (1, 1) NOT NULL,
     [StrategyExecutionID]      INT            NOT NULL,
     [AccountNumber]            VARCHAR (50)   NOT NULL,
@@ -12,26 +12,27 @@
 );
 
 
-
-
-
-
 GO
-CREATE NONCLUSTERED INDEX [IX_StrategyExecutionDetails_SuspicionLevel]
-    ON [FraudAnalysis].[StrategyExecutionDetails]([SuspicionLevelID] ASC);
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_StrategyExecutionDetails_StrategyExecutionID]
-    ON [FraudAnalysis].[StrategyExecutionDetails]([StrategyExecutionID] ASC);
+CREATE NONCLUSTERED INDEX [IX_StrategyExecutionDetails_CaseID]
+    ON [FraudAnalysis].[StrategyExecutionItem]([CaseID] ASC);
 
 
 GO
 CREATE NONCLUSTERED INDEX [IX_StrategyExecutionDetails_Status]
-    ON [FraudAnalysis].[StrategyExecutionDetails]([SuspicionOccuranceStatus] ASC);
+    ON [FraudAnalysis].[StrategyExecutionItem]([SuspicionOccuranceStatus] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_StrategyExecutionDetails_SuspicionLevel]
+    ON [FraudAnalysis].[StrategyExecutionItem]([SuspicionLevelID] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_StrategyExecutionDetails_StrategyExecutionID]
+    ON [FraudAnalysis].[StrategyExecutionItem]([StrategyExecutionID] ASC);
 
 
 GO
 CREATE NONCLUSTERED INDEX [IX_StrategyExecutionDetails_AccountNumber]
-    ON [FraudAnalysis].[StrategyExecutionDetails]([AccountNumber] ASC);
+    ON [FraudAnalysis].[StrategyExecutionItem]([AccountNumber] ASC);
 

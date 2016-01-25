@@ -133,7 +133,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                                  );
         }
 
-        public void ApplyStrategyExecutionItemToDB(object preparedStrategyExecutionItem)
+        public void ApplyStrategyExecutionItemsToDB(object preparedStrategyExecutionItem)
         {
             InsertBulkToTable(preparedStrategyExecutionItem as BaseBulkInsertInfo);
         }

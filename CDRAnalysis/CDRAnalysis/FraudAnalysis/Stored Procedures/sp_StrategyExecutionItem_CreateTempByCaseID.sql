@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionDetails_CreateTempByCaseID]
+Create PROCEDURE [FraudAnalysis].[sp_StrategyExecutionItem_CreateTempByCaseID]
 	@TempTableName VARCHAR(200),
 	@CaseID INT
 AS
@@ -24,9 +24,9 @@ BEGIN
 		
 		INTO #RESULT
 		
-		FROM FraudAnalysis.StrategyExecutionDetails d
-		INNER JOIN FraudAnalysis.StrategyExecution e ON d.StrategyExecutionID = e.ID
-		INNER JOIN FraudAnalysis.Strategy s ON e.StrategyID = s.Id
+		FROM FraudAnalysis.StrategyExecutionItem d WITH (NOLOCK)
+		INNER JOIN FraudAnalysis.StrategyExecution e WITH (NOLOCK) ON d.StrategyExecutionID = e.ID
+		INNER JOIN FraudAnalysis.Strategy s WITH (NOLOCK) ON e.StrategyID = s.Id
 		
 		WHERE  d.CaseID = @CaseID
 	

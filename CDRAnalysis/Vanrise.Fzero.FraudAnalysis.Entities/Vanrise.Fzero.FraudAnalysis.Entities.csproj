@@ -77,7 +77,7 @@
     <Compile Include="AccountNumbersByIMEI.cs" />
     <Compile Include="AccountStatus.cs" />
     <Compile Include="Batches\DWFactBatch.cs" />
-    <Compile Include="Batches\StrategyExecutionDetailSummaryBatch.cs" />
+    <Compile Include="Batches\StrategyExecutionItemSummaryBatch.cs" />
     <Compile Include="AccountRelatedNumbers.cs" />
     <Compile Include="DataWarehouse\DWStrategy.cs" />
     <Compile Include="DataWarehouse\DWTime.cs" />
@@ -94,7 +94,7 @@
     <Compile Include="AccountSuspicionSummary.cs" />
     <Compile Include="AccountSuspicionSummaryQuery.cs" />
     <Compile Include="AccountThreshold.cs" />
-    <Compile Include="Batches\StrategyExecutionDetailBatch.cs" />
+    <Compile Include="Batches\StrategyExecutionItemBatch.cs" />
     <Compile Include="CaseDetailQuery.cs" />
     <Compile Include="CasesSummary.cs" />
     <Compile Include="Enums.cs" />
@@ -104,7 +104,7 @@
     <Compile Include="StrategyInfo.cs" />
     <Compile Include="Strategy.cs" />
     <Compile Include="StrategyExecutionDet.cs" />
-    <Compile Include="StrategyExecutionDetailSummary.cs" />
+    <Compile Include="StrategyExecutionItemSummary.cs" />
     <Compile Include="StrategyExecutionInfo.cs" />
     <Compile Include="StrategyCases.cs" />
     <Compile Include="BTSHighValueCases.cs" />
@@ -132,7 +132,7 @@
     <Compile Include="StrategyDetail.cs" />
     <Compile Include="AccountCase.cs" />
     <Compile Include="StrategyExecution.cs" />
-    <Compile Include="StrategyExecutionDetail.cs" />
+    <Compile Include="StrategyExecutionItem.cs" />
     <Compile Include="SuspiciousNumber.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -31,7 +31,7 @@ BEGIN
 			
 		FROM FraudAnalysis.AccountCase ac
 
-		inner join FraudAnalysis.StrategyExecutionDetails details on ac.ID=details.CaseID
+		inner join FraudAnalysis.StrategyExecutionItem details on ac.ID=details.CaseID
 		inner join FraudAnalysis.StrategyExecution exe on details.StrategyExecutionID=exe.ID
 
 		WHERE (exe.StrategyID in (SELECT StrategyID FROM @StrategyIDsTable)   or @StrategyIDs is null )  and  
