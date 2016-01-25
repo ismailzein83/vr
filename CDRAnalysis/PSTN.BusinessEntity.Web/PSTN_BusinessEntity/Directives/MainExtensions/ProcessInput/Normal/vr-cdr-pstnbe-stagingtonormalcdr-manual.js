@@ -21,26 +21,15 @@ app.directive("vrCdrPstnbeStagingtonormalcdrManual", ["VRValidationService", fun
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-           return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/PSTN_BusinessEntity/Directives/MainExtensions/ProcessInput/Normal/Templates/StagingToNormalCDRManualTemplate.html"
     };
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/PSTN_BusinessEntity/Directives/MainExtensions/ProcessInput/Normal/Templates/StagingToNormalCDRManualTemplate.html";
-    }
 
     function DirectiveConstructor($scope, ctrl) {
 
-       
-        this.initializeController = initializeController;
-
-        
+        this.initializeController = initializeController; 
 
         function initializeController() {
-            defineAPI();
-        }
 
-        function defineAPI() {
             var yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
 
@@ -53,8 +42,14 @@ app.directive("vrCdrPstnbeStagingtonormalcdrManual", ["VRValidationService", fun
 
             $scope.createProcessInputObjects = [];
 
-           
+
+            defineAPI();
+        }
+
+        function defineAPI() {
+            
             var api = {};
+
             api.getData = function () {
 
                 $scope.createProcessInputObjects.length = 0;

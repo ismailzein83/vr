@@ -21,44 +21,37 @@ app.directive("vrCdrFraudanalysisNumberprofiling", ["UtilsService", "VRUIUtilsSe
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/FraudAnalysis/Directives/MainExtensions/ProcessInput/Scheduled/Templates/NumberProfilingTemplate.html"
     };
 
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/FraudAnalysis/Directives/MainExtensions/ProcessInput/Scheduled/Templates/NumberProfilingTemplate.html";
-    }
 
     function DirectiveConstructor($scope, ctrl) {
 
-        $scope.periods = [];
-        $scope.selectedPeriod;
-
-
-
-        $scope.hours = [];
-        angular.forEach(HourEnum, function (itm) {
-            $scope.hours.push({ id: itm.id, name: itm.name })
-        });
-
-        $scope.gapBetweenConsecutiveCalls = 10;
-        $scope.gapBetweenFailedConsecutiveCalls = 10;
-        $scope.maxLowDurationCall = 8;
-        $scope.minCountofCallsinActiveHour = 5;
-        $scope.selectedPeakHours = [];
-        angular.forEach($scope.hours, function (itm) {
-            if (itm.id >= 12 && itm.id <= 17)
-                $scope.selectedPeakHours.push(itm);
-        });
-
-
         this.initializeController = initializeController;
 
-        
-
         function initializeController() {
+
+            $scope.periods = [];
+            $scope.selectedPeriod;
+
+
+
+            $scope.hours = [];
+            angular.forEach(HourEnum, function (itm) {
+                $scope.hours.push({ id: itm.id, name: itm.name })
+            });
+
+            $scope.gapBetweenConsecutiveCalls = 10;
+            $scope.gapBetweenFailedConsecutiveCalls = 10;
+            $scope.maxLowDurationCall = 8;
+            $scope.minCountofCallsinActiveHour = 5;
+            $scope.selectedPeakHours = [];
+            angular.forEach($scope.hours, function (itm) {
+                if (itm.id >= 12 && itm.id <= 17)
+                    $scope.selectedPeakHours.push(itm);
+            });
+
+
             defineAPI();
         }
 
@@ -82,6 +75,7 @@ app.directive("vrCdrFraudanalysisNumberprofiling", ["UtilsService", "VRUIUtilsSe
                 };
 
             };
+
             api.getExpressionsData = function () {
                 
                 return { "ScheduleTime": "ScheduleTime" };
@@ -93,7 +87,7 @@ app.directive("vrCdrFraudanalysisNumberprofiling", ["UtilsService", "VRUIUtilsSe
                 if (payload != undefined && payload.data != undefined) {
                     data = payload.data;
                 }
-                StrategyAPIService.GetPeriods().then(function (response) {
+              return  StrategyAPIService.GetPeriods().then(function (response) {
                     $scope.periods.length = 0;
                     angular.forEach(response, function (itm) {
                         $scope.periods.push(itm);
@@ -111,9 +105,6 @@ app.directive("vrCdrFraudanalysisNumberprofiling", ["UtilsService", "VRUIUtilsSe
                             $scope.selectedPeakHours.push(UtilsService.getItemByVal($scope.hours, peakHour, "id"));
                         });
                     }
-                }).catch(function (error) {
-                    $scope.isGettingData = false;
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
 
             }

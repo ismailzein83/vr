@@ -3,7 +3,7 @@
         <vr-select datasource="periods" datatextfield="Name" datavaluefield="Id" label="Period" selectedvalues="selectedPeriod" isrequired hideremoveicon onselectionchanged="selectedPeriodChanged"></vr-select>
     </vr-columns>
 
-    <vr-columns width="1/4row">
+    <vr-columns width="1/4row" vr-loader="isLoadingData">
         <vr-select datasource="strategies" datatextfield="name" datavaluefield="id" label="Strategy" ismultipleselection selectedvalues="selectedStrategies" isrequired>  </vr-select>
     </vr-columns>
 

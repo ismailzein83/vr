@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrCdrFraudanalysisNumberprofilingManual", ["UtilsService", "VRUIUtilsService", "VRNotificationService", "StrategyAPIService", "HourEnum", "VRValidationService", function (UtilsService, VRUIUtilsService, VRNotificationService, StrategyAPIService, HourEnum, VRValidationService) {
+app.directive("vrCdrFraudanalysisNumberprofilingManual", [ "StrategyAPIService", "HourEnum", "VRValidationService", function ( StrategyAPIService, HourEnum, VRValidationService) {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -21,60 +21,54 @@ app.directive("vrCdrFraudanalysisNumberprofilingManual", ["UtilsService", "VRUIU
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/FraudAnalysis/Directives/MainExtensions/ProcessInput/Normal/Templates/NumberProfilingManualTemplate.html"
     };
-
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/FraudAnalysis/Directives/MainExtensions/ProcessInput/Normal/Templates/NumberProfilingManualTemplate.html";
-    }
 
     function DirectiveConstructor($scope, ctrl) {
 
-        var yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-
-        $scope.fromDate = yesterday;
-        $scope.toDate = new Date();
-
-        $scope.validateTimeRange = function () {
-            return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-        }
-
-        $scope.createProcessInputObjects = [];
-
-        $scope.periods = [];
-        $scope.selectedPeriod;
-
-
-        $scope.hours = [];
-        angular.forEach(HourEnum, function (itm) {
-            $scope.hours.push({ id: itm.id, name: itm.name })
-        });
-
-        $scope.gapBetweenConsecutiveCalls = 10;
-        $scope.gapBetweenFailedConsecutiveCalls = 10;
-        $scope.maxLowDurationCall = 8;
-        $scope.minCountofCallsinActiveHour = 5;
-        $scope.selectedPeakHours = [];
-        angular.forEach($scope.hours, function (itm) {
-            if (itm.id >= 12 && itm.id <= 17)
-                $scope.selectedPeakHours.push(itm);
-        });
-
         this.initializeController = initializeController;
-
         
 
         function initializeController() {
+
+            var yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            $scope.fromDate = yesterday;
+            $scope.toDate = new Date();
+
+            $scope.validateTimeRange = function () {
+                return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+            }
+
+            $scope.createProcessInputObjects = [];
+
+            $scope.periods = [];
+            $scope.selectedPeriod;
+
+
+            $scope.hours = [];
+            angular.forEach(HourEnum, function (itm) {
+                $scope.hours.push({ id: itm.id, name: itm.name })
+            });
+
+            $scope.gapBetweenConsecutiveCalls = 10;
+            $scope.gapBetweenFailedConsecutiveCalls = 10;
+            $scope.maxLowDurationCall = 8;
+            $scope.minCountofCallsinActiveHour = 5;
+            $scope.selectedPeakHours = [];
+
+            angular.forEach($scope.hours, function (itm) {
+                if (itm.id >= 12 && itm.id <= 17)
+                    $scope.selectedPeakHours.push(itm);
+            });
+
+
             defineAPI();
         }
 
         function defineAPI() {
-
-           
+          
             var api = {};
             api.getData = function () {
 
@@ -144,11 +138,7 @@ app.directive("vrCdrFraudanalysisNumberprofilingManual", ["UtilsService", "VRUIU
                     $scope.periods.length = 0;
                     angular.forEach(response, function (itm) {
                         $scope.periods.push(itm);
-                    });
-                    
-                }).catch(function (error) {
-                    $scope.isGettingData = false;
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    });  
                 });
 
             }

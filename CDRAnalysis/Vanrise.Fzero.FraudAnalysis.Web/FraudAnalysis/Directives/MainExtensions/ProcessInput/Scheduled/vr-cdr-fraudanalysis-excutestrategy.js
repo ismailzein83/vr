@@ -21,44 +21,40 @@ app.directive("vrCdrFraudanalysisExcutestrategy", ["UtilsService", "VRUIUtilsSer
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/FraudAnalysis/Directives/MainExtensions/ProcessInput/Scheduled/Templates/ExcuteStrategyTemplate.html"
     };
 
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/FraudAnalysis/Directives/MainExtensions/ProcessInput/Scheduled/Templates/ExcuteStrategyTemplate.html";
-    }
 
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
-
-        
-
+ 
+        var firstTimeToload = false;
         function initializeController() {
-            defineAPI();
-        }
-
-        function defineAPI() {
-
             $scope.strategies = [];
             $scope.selectedStrategies = [];
             $scope.selectedStrategyIds = [];
             $scope.periods = [];
             $scope.selectedPeriod;
+
            
-            var firstTimeToload = false;
             $scope.selectedPeriodChanged = function () {
-                
+
 
                 if ($scope.selectedPeriod != undefined && firstTimeToload == true) {
+                    $scope.isLoadingData = true;
                     $scope.strategies.length = 0;
                     $scope.selectedStrategies.length = 0;
                     loadStrategies($scope.selectedPeriod.Id);
                 }
-               
+
             }
+
+            defineAPI();
+        }
+
+        function defineAPI() {
+
+          
             var api = {};
             api.getData = function () {
                 angular.forEach($scope.selectedStrategies, function (itm) {
@@ -73,6 +69,7 @@ app.directive("vrCdrFraudanalysisExcutestrategy", ["UtilsService", "VRUIUtilsSer
                 };
 
             };
+
             api.getExpressionsData = function () {
                 
                 return { "ScheduleTime": "ScheduleTime" };
@@ -129,17 +126,18 @@ app.directive("vrCdrFraudanalysisExcutestrategy", ["UtilsService", "VRUIUtilsSer
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
+        }
 
+        function loadStrategies(periodId) {
 
-            function loadStrategies(periodId ) {            
-
-                return StrategyAPIService.GetStrategies(periodId, true).then(function (response) {
-                    $scope.strategies.length = 0;
-                    angular.forEach(response, function (itm) {
-                        $scope.strategies.push({ id: itm.Id, name: itm.Name, periodId: itm.PeriodId });
-                    });
-                });
-            }
+            return StrategyAPIService.GetStrategies(periodId, true).then(function (response) {
+                $scope.strategies.length = 0;
+                angular.forEach(response, function (itm) {
+                    $scope.strategies.push({ id: itm.Id, name: itm.Name, periodId: itm.PeriodId });
+                })
+            }).finally(function () {
+                $scope.isLoadingData = false;
+            });;
         }
     }
 

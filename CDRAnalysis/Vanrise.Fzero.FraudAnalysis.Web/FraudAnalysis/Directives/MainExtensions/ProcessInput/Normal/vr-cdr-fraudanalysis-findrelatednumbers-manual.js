@@ -37,10 +37,7 @@ app.directive("vrCdrFraudanalysisFindrelatednumbersManual", ["VRValidationServic
         
 
         function initializeController() {
-            defineAPI();
-        }
 
-        function defineAPI() {
             var yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
 
@@ -53,6 +50,10 @@ app.directive("vrCdrFraudanalysisFindrelatednumbersManual", ["VRValidationServic
 
             $scope.createProcessInputObjects = [];
 
+            defineAPI();
+        }
+
+        function defineAPI() {
            
             var api = {};
             api.getData = function () {
