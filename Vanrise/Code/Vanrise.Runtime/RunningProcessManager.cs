@@ -101,7 +101,12 @@ namespace Vanrise.Runtime
             lock(s_lockObj)
             {
                 if (_currentProcess == null)
+                {
+                    LoggerFactory.GetLogger().WriteInformation("Registering Runtime Host...");
                     _currentProcess = _dataManager.InsertProcessInfo(System.Diagnostics.Process.GetCurrentProcess().ProcessName, Environment.MachineName);
+                    System.Threading.Thread.Sleep(3000);
+                    LoggerFactory.GetLogger().WriteInformation("Runtime Host registered");
+                }
             }
         }
 
