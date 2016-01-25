@@ -123,6 +123,7 @@
     <Compile Include="SaleRate\SaleRateQuery.cs" />
     <Compile Include="SaleZone\CallSale.cs" />
     <Compile Include="SaleZone\SaleCodeDetail.cs" />
+    <Compile Include="SaleZone\SalePriceListQuery.cs" />
     <Compile Include="SaleZone\SaleEntityZoneRate.cs" />
     <Compile Include="SaleZone\SalePriceListDetail.cs" />
     <Compile Include="SaleZone\SaleZoneFilterSettings.cs" />

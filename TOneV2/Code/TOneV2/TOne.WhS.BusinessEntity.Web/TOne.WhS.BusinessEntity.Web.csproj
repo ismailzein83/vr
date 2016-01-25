@@ -218,6 +218,8 @@
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\vr-whs-be-routingproduct-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleCode\Templates\SaleCodeGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SaleCode\vr-whs-be-salecode-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceList\Templates\SalePriceListGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-be-salepricelist-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleRate\Templates\SaleRateGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SaleRate\vr-whs-be-salerate-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleZone\Templates\SaleZoneGridTemplate.html" />

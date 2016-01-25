@@ -10,17 +10,25 @@
                                datavaluefield="value"
                                datatextfield="description"
                                entityname="Owner Type"
-                               hideremoveicon isrequired="true">
+                               hideremoveicon isrequired="false">
                     </vr-select>
                 </vr-columns>
-                <vr-columns width="normal" ng-show="showSellingProductSelector">
+                <vr-columns width="normal" ng-if="showSellingProductSelector">
                     <vr-whs-be-sellingproduct-selector on-ready="onSellingProductSelectorReady"
                                                        selectedvalues="selectedSellingProduct"
                                                        onselectionchanged="onSellingProductChanged"
-                                                       hideremoveicon isrequired="showSellingProductSelector">
+                                                       hideremoveicon isrequired="isRequiredSellingProductSelector">
                     </vr-whs-be-sellingproduct-selector>
                 </vr-columns>
+                <vr-columns width="normal" ng-if="showCarrierAccountSelector">
+                    <vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountSelectorReady"
+                                                       selectedvalues="selectedCustomer"
+                                                       onselectionchanged="onCarrierAccountChanged"
+                                                       getcustomers
+                                                       hideremoveicon isrequired="isRequiredCarrierAccountSelector">
 
+                    </vr-whs-be-carrieraccount-selector>
+                </vr-columns>     
             </vr-row>
         </div>
         <vr-row removeline>
@@ -32,18 +40,10 @@
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <vr-datagrid datasource="salepricelist"
-                             on-ready="onGridReady"
-                             dataretrievalfunction="dataRetrievalFunction"
-                             pagingtype="'PagingOnScroll'"
-                             menuactions="gridMenuActions"
-                             idfield="Entity.OwnerId">
 
-                    <vr-datagridcolumn headertext="'ID'" field="'Entity.OwnerId'" type="'Text'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Owner Type'" field="'ownerType'" type="'Text'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Owner Name'" field="'OwnerName'" type="'Text'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Currency'" field="'CurrencyName'" type="'Text'"></vr-datagridcolumn>
-                </vr-datagrid>
+                <vr-whs-be-salepricelist-grid on-ready="onGridReady"></vr-whs-be-salepricelist-grid>
+
+                
             </vr-columns>
         </vr-row>
     </vr-form>

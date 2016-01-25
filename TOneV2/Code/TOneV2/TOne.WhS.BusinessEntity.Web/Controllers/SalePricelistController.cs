@@ -17,7 +17,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     {
         [HttpPost]
         [Route("GetCachedSalePriceLists")]
-        public object GetCachedSalePriceLists(Vanrise.Entities.DataRetrievalInput<string> input)
+        public object GetCachedSalePriceLists(Vanrise.Entities.DataRetrievalInput<SalePriceListQuery> input)
         {
             SalePriceListManager manager = new SalePriceListManager();
             return GetWebResponse(input,manager.GetPricelists(input));

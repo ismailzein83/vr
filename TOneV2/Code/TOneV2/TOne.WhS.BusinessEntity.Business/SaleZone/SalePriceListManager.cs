@@ -15,17 +15,20 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
 
-        public Vanrise.Entities.IDataRetrievalResult<SalePriceListDetail> GetPricelists(Vanrise.Entities.DataRetrievalInput<string> input) 
+        public Vanrise.Entities.IDataRetrievalResult<SalePriceListDetail> GetPricelists(Vanrise.Entities.DataRetrievalInput<SalePriceListQuery> input)
         {
             var salePricelists = GetCachedSalePriceLists();
 
             Func<SalePriceList, bool> filterExpression = (priceList) =>
-                 ( priceList.OwnerId > 0 );
+
+                     (input.Query.OwnerId == null || priceList.OwnerId == input.Query.OwnerId) &&
+                      (input.Query.OwnerType == null || priceList.OwnerType == input.Query.OwnerType);
+
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, salePricelists.ToBigResult(input, filterExpression, SalePricelistDetailMapper));
 
         }
- 
+
 
         public SalePriceList GetPriceList(int priceListId)
         {
@@ -82,31 +85,24 @@ namespace TOne.WhS.BusinessEntity.Business
         private SalePriceListDetail SalePricelistDetailMapper(SalePriceList priceList)
         {
             SalePriceListDetail pricelistDetail = new SalePriceListDetail();
-            CarrierAccountManager accountManager = new CarrierAccountManager();
-            SellingProductManager productManager = new SellingProductManager();
             pricelistDetail.Entity = priceList;
-            if (priceList.OwnerType == 0)
-            {
-                pricelistDetail.ownerType = "Selling Product";
-            }
-            else
-            {
-                pricelistDetail.ownerType = "Customer";
-            }
-             
+            pricelistDetail.OwnerType = Vanrise.Common.Utilities.GetEnumDescription(priceList.OwnerType);
+
             if (priceList.OwnerType != SalePriceListOwnerType.Customer)
             {
+                SellingProductManager productManager = new SellingProductManager();
                 pricelistDetail.OwnerName = productManager.GetSellingProductName(priceList.OwnerId);
             }
 
-
-            else {
+            else
+            {
+                CarrierAccountManager accountManager = new CarrierAccountManager();
                 pricelistDetail.OwnerName = accountManager.GetCarrierAccountName(priceList.OwnerId);
             }
-          
-           
+
+
             pricelistDetail.CurrencyName = GetCurrencyName(priceList.CurrencyId);
-             return pricelistDetail;
+            return pricelistDetail;
         }
 
         #endregion
