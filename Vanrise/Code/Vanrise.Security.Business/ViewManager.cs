@@ -87,15 +87,7 @@ namespace Vanrise.Security.Business
 
         public List<View> GetViews()
         {
-            IViewDataManager viewDataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
-            List<View> views = GetCachedViews().Values.ToList() ;
-            for (int i = 0; i < views.Count; i++)
-            {
-                if (views[i].Type == ViewType.Dynamic)
-                    views[i].Url = string.Format("{0}/{{\"viewId\":\"{1}\"}}", views[i].Url, views[i].ViewId);
-            }
-            return views;
-
+            return GetCachedViews().Values.ToList();
         } 
 
         public Vanrise.Entities.DeleteOperationOutput<object> DeleteView(int viewId)
@@ -178,11 +170,21 @@ namespace Vanrise.Security.Business
                () =>
                {
                    IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
-                   IEnumerable<View> views = dataManager.GetViews();
+                   IEnumerable<View> views = GetViews(dataManager.GetViews());
+
                    return views.ToDictionary(kvp => kvp.ViewId, kvp => kvp);
                });
         }
+        private IEnumerable<View> GetViews(List<View> views)
+        {
+            for (int i = 0; i < views.Count; i++)
+            {
+                if (views[i].Type == ViewType.Dynamic)
+                    views[i].Url = string.Format("{0}/{{\"viewId\":\"{1}\"}}", views[i].Url, views[i].ViewId);
+            }
+            return views;
 
+        } 
         #endregion
 
         #region  Mappers
