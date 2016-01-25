@@ -12,6 +12,13 @@ namespace Vanrise.BusinessProcess
 {
     public abstract class DependentAsyncActivity<T, Q> : BaseAsyncActivity<Tuple<T, AsyncActivityStatus>, Q>
     {
+        public virtual int PrepareDataForDBApplyBatchSize
+        {
+            get
+            {
+                return 100000;
+            }
+        }
         //[RequiredArgument]
         public InArgument<AsyncActivityStatus> PreviousActivityStatus { get; set; }
 
@@ -43,9 +50,7 @@ namespace Vanrise.BusinessProcess
 
         protected void PrepareDataForDBApply<R, S>(AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle, IBulkApplyDataManager<R> dataManager, BaseQueue<S> inputQueue, BaseQueue<Object> outputQueue, Func<S, IEnumerable<R>> GetItems)
         {
-            int batchSize = 100000;//ConfigParameterManager.Current.GetRouteBCPBatchSize();
-
-            System.Threading.Tasks.Parallel.For(0, 3, (i) =>
+           System.Threading.Tasks.Parallel.For(0, 3, (i) =>
            {
                object dbApplyStream = null;
                int addedItemsToStream = 0;
@@ -64,7 +69,7 @@ namespace Vanrise.BusinessProcess
                                dataManager.WriteRecordToStream(item, dbApplyStream);
                                addedItemsToStream++;
                            }
-                           if (addedItemsToStream >= batchSize)
+                           if (addedItemsToStream >= this.PrepareDataForDBApplyBatchSize)
                            {
                                Object preparedItemsForDBApply = dataManager.FinishDBApplyStream(dbApplyStream);
                                outputQueue.Enqueue(preparedItemsForDBApply);
