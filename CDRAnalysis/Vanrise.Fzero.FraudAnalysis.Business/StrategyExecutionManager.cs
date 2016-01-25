@@ -49,7 +49,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-        public BigResult<StrategyExecutionDet> GetFilteredStrategyExecutions(Vanrise.Entities.DataRetrievalInput<StrategyExecutionQuery> input)
+        public BigResult<StrategyExecutionDetail> GetFilteredStrategyExecutions(Vanrise.Entities.DataRetrievalInput<StrategyExecutionQuery> input)
         {
             IStrategyExecutionDataManager strategyExecutionDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
             StrategyManager strategyManager = new StrategyManager();
@@ -57,8 +57,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             BigResult<StrategyExecution> bigResultItems = strategyExecutionDataManager.GetFilteredStrategyExecutions(input);
             List<StrategyExecution> executions = bigResultItems.Data.ToList();
 
-            BigResult<StrategyExecutionDet> rsltResultItems = new BigResult<StrategyExecutionDet>();
-            List<StrategyExecutionDet> items = new List<StrategyExecutionDet>();
+            BigResult<StrategyExecutionDetail> rsltResultItems = new BigResult<StrategyExecutionDetail>();
+            List<StrategyExecutionDetail> items = new List<StrategyExecutionDetail>();
             List<long> pcocessIds = new List<long>();
 
             foreach (var i in executions)
@@ -70,7 +70,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             foreach (var i in executions)
             {
-                StrategyExecutionDet item = new StrategyExecutionDet();
+                StrategyExecutionDetail item = new StrategyExecutionDetail();
                 item.Entity = i;
                 BPInstanceStatus status;
                 if (processInstances.TryGetValue(i.ProcessID, out status))
@@ -85,7 +85,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 items.Add(item);
             }
 
-            rsltResultItems.Data = (IEnumerable<StrategyExecutionDet>)items;
+            rsltResultItems.Data = (IEnumerable<StrategyExecutionDetail>)items;
             rsltResultItems.ResultKey = bigResultItems.ResultKey;
             rsltResultItems.TotalCount = bigResultItems.TotalCount;
             return rsltResultItems;

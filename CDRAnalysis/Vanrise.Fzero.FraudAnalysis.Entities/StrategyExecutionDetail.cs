@@ -7,7 +7,7 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class StrategyExecutionDet
+    public class StrategyExecutionDetail
     {
         public StrategyExecution Entity { get; set; }
 
