@@ -35,38 +35,38 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         static StrategyExecutionDataManager()
         {
-            //_columnMapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
-            //_columnMapper.Add("AccountStatusDescription", "Status");
-            //_columnMapper.Add("UserName", "UserID");
-            //_columnMapper.Add("CaseStatusDescription", "StatusID");
-            //_columnMapper.Add("SuspicionOccuranceStatusDescription", "SuspicionOccuranceStatus");
-            //_columnMapper.Add("AccountCaseStatusDescription", "AccountCaseStatusID");
+            _columnMapper.Add("StrategyName", "StrategyID");
+            _columnMapper.Add("PeriodName", "PeriodID");
+            _columnMapper.Add("Entity.ExecutionDate", "ExecutionDate");
+            _columnMapper.Add("Entity.FromDate", "FromDate");
+            _columnMapper.Add("Entity.ToDate", "ToDate");
         }
 
-       
 
-        public BigResult<StrategyExecutionItem> GetFilteredStrategyExecutions(Vanrise.Entities.DataRetrievalInput<StrategyExecutionQuery> input)
+
+        public BigResult<StrategyExecution> GetFilteredStrategyExecutions(Vanrise.Entities.DataRetrievalInput<StrategyExecutionQuery> input)
         {
             string strategyIDs = (input.Query.StrategyIds != null && input.Query.StrategyIds.Count > 0) ? string.Join(",", input.Query.StrategyIds) : null;
+            string periodIDs = (input.Query.PeriodIDs != null && input.Query.PeriodIDs.Count > 0) ? string.Join(",", input.Query.PeriodIDs) : null;
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutions_CreateTempByFilters", tempTableName, input.Query.FromCDRDate, input.Query.ToCDRDate, input.Query.FromExecutionDate, input.Query.ToExecutionDate, strategyIDs);
+                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_CreateTempByFilters", tempTableName, input.Query.FromCDRDate, input.Query.ToCDRDate, input.Query.FromExecutionDate, input.Query.ToExecutionDate, strategyIDs, periodIDs);
             };
 
-            return RetrieveData(input, createTempTableAction, StrategyExecutionItemMapper, _columnMapper);
+            return RetrieveData(input, createTempTableAction, StrategyExecutionMapper, _columnMapper);
         }
 
-        private StrategyExecutionItem StrategyExecutionItemMapper(IDataReader reader)
+        private StrategyExecution StrategyExecutionMapper(IDataReader reader)
         {
-            var item = new StrategyExecutionItem();
-            item.Entity.ID = (int)reader["ID"];
-            item.Entity.ProcessID = (long)reader["ProcessID"];
-            item.Entity.StrategyID = (int) reader["StrategyID"] ;
-            item.Entity.FromDate = (DateTime)reader["FromDate"];
-            item.Entity.ToDate = (DateTime)reader["ToDate"];
-            item.Entity.PeriodID = (int)reader["PeriodID"];
-            item.Entity.ExecutionDate = (DateTime)reader["ExecutionDate"];
+            var item = new StrategyExecution();
+            item.ID = (long)reader["ID"];
+            item.ProcessID = (long)reader["ProcessID"];
+            item.StrategyID = (int)reader["StrategyID"];
+            item.FromDate = (DateTime)reader["FromDate"];
+            item.ToDate = (DateTime)reader["ToDate"];
+            item.PeriodID = (int)reader["PeriodID"];
+            item.ExecutionDate = (DateTime)reader["ExecutionDate"];
             return item;
         }
 
@@ -105,7 +105,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return new StreamBulkInsertInfo
             {
                 TableName = "[FraudAnalysis].[StrategyExecutionDetails]",
-                ColumnNames=s_Columns,
+                ColumnNames = s_Columns,
                 Stream = streamForBulkInsert,
                 TabLock = false,
                 KeepIdentity = false,

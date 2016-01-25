@@ -1,5 +1,5 @@
 ﻿
-Create PROCEDURE [bp].[sp_BPInstance_GetStatusesByIDs]
+CREATE PROCEDURE [bp].[sp_BPInstance_GetStatusesByIDs]
 	@ProcessIDs varchar(1000)
 AS
 BEGIN
@@ -13,14 +13,15 @@ BEGIN
         IF (@ProcessIDs IS NOT NULL)
 			BEGIN
 				INSERT INTO @ProcessIDsTable (ProcessID)
-				SELECT CONVERT(INT, ParsedString) FROM [ParseStringList](@ProcessIDs);
+				SELECT CONVERT(INT, ParsedString) FROM bp.[ParseStringList](@ProcessIDs);
 			END
+
 
 
     SELECT [ID]
       ,[ExecutionStatus]
 	FROM bp.[BPInstance] as bps WITH(NOLOCK)
 	WHERE 
-	(@ProcessIDs is NULL or  bps.DefinitionID in (SELECT ProcessID FROM @ProcessIDsTable)   ) 
+	(@ProcessIDs is NULL or  bps.ID in (SELECT ProcessID FROM @ProcessIDsTable)   ) 
 	ORDER BY CreatedTime
 END

@@ -19,9 +19,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public DateTime? ToExecutionDate { get; set; }
 
-        public BPInstanceStatus Status { get; set; }
-
         public List<int> StrategyIds { get; set; }
+
+        public List<int> PeriodIDs { get; set; }
 
     }
 }

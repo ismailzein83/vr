@@ -1,0 +1,60 @@
+﻿<vr-panel ng-controller="FraudAnalysis_StrategyExecutionManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-choices-filter selectedindex="selectedFilternIndex">
+                        <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
+                        <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+                    </vr-choices-filter>
+
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-select datasource="filterDateType" datatextfield="name" datavaluefield="id" label="Filter Date Type" selectedvalues="selectedFilterDateType"></vr-select>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" customvalidate="validateTimeRange()"></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="dateTime" value="toDate" label="To" customvalidate="validateTimeRange()"></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-select datasource="periods" datatextfield="name" ng-show="advancedSelected" datavaluefield="id" label="Type" selectedvalues="selectedPeriods" ismultipleselection></vr-select>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-select label="Strategy" ng-show="advancedSelected" datasource="strategies" selectedvalues="selectedStrategies" datavaluefield="id" datatextfield="name" ismultipleselection>
+                    </vr-select>
+                </vr-columns>
+
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+    </vr-form>
+    <div>
+        <vr-row>
+            <vr-columns width="fullrow" simplecol>
+                <vr-datagrid datasource="strategyExecutions" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady" menuactions="gridMenuActions" idfield="Entity.Id">
+                    <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Type'" field="'PeriodName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" widthfactor="5" getcolor="getStatusColor" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Execution Date'" field="'Entity.ExecutionDate'" type="'Datetime'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'From CDR Date'" field="'Entity.FromDate'" type="'Datetime'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'To CDR Date'" field="'Entity.ToDate'" type="'Datetime'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </div>
+
+</vr-panel>

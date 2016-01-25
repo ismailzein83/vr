@@ -148,6 +148,7 @@
     <Compile Include="Controllers\NumberProfileController.cs" />
     <Compile Include="Controllers\NormalCDRController.cs" />
     <Compile Include="Controllers\ReportingController.cs" />
+    <Compile Include="Controllers\StrategyExecutionController.cs" />
     <Compile Include="Controllers\StrategyController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -221,6 +222,7 @@
     <Content Include="FraudAnalysis\Directives\vr-fzero-fraudanalysis-fixedprefixes-grid.js" />
     <Content Include="FraudAnalysis\Directives\vr-fzero-fraudanalysis-fixedprefixes-selector.js" />
     <Content Include="FraudAnalysis\Services\APIServices\DefineFixedPrefixesAPIService.js" />
+    <Content Include="FraudAnalysis\Services\APIServices\StrategyExecutionAPIService.js" />
     <Content Include="FraudAnalysis\Services\MainService.js" />
     <Content Include="FraudAnalysis\Views\FixedPrefixes\DefineFixedPrefixesEditor.html" />
     <Content Include="FraudAnalysis\Views\FixedPrefixes\DefineFixedPrefixesEditorController.js" />
@@ -247,6 +249,10 @@
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\NumberProfilingProcessInput_Scheduled.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\AssignStrategyCasesProcessInput_ScheduledController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\NumberProfilingProcessInput_ScheduledController.js" />
+    <Content Include="FraudAnalysis\Views\StrategyExecution\StrategyExecutionEditor.html" />
+    <Content Include="FraudAnalysis\Views\StrategyExecution\StrategyExecutionEditorController.js" />
+    <Content Include="FraudAnalysis\Views\StrategyExecution\StrategyExecutionManagement.html" />
+    <Content Include="FraudAnalysis\Views\StrategyExecution\StrategyExecutionManagementController.js" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\CancelCases.html" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\CancelCasesController.js" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\Includes\CaseOccuranceGrid.html" />

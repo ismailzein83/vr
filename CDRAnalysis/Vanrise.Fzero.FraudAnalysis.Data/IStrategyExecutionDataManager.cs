@@ -8,7 +8,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface IStrategyExecutionDataManager : IDataManager, IBulkApplyDataManager<StrategyExecutionDetail>
     {
-        BigResult<StrategyExecutionItem> GetFilteredStrategyExecutions(Vanrise.Entities.DataRetrievalInput<StrategyExecutionQuery> input);
+        BigResult<StrategyExecution> GetFilteredStrategyExecutions(Vanrise.Entities.DataRetrievalInput<StrategyExecutionQuery> input);
 
         bool ExecuteStrategy(StrategyExecution strategyExecutionObject, out int insertedId);
 
