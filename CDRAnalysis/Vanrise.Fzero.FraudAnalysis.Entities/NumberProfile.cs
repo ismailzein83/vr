@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string StrategyName { get; set; }
 
-        public int StrategyExecutionID { get; set; }
+        public long StrategyExecutionID { get; set; }
 
         public HashSet<string> IMEIs { get; set; }
 

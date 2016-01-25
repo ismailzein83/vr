@@ -94,6 +94,7 @@
     <Compile Include="NormalCDRManager.cs" />
     <Compile Include="PeriodManager.cs" />
     <Compile Include="ReportingManager.cs" />
+    <Compile Include="StrategyExecutionManager.cs" />
     <Compile Include="StrategyManager.cs" />
   </ItemGroup>
   <ItemGroup>

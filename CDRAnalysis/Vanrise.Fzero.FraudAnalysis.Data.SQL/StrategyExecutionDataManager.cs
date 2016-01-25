@@ -10,7 +10,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public class StrategyExecutionDataManager : BaseSQLDataManager, IStrategyExecutionDataManager
     {
-
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
 
         static string[] s_Columns = new string[] {
             "ID"
@@ -26,12 +26,51 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
 
 
-
         public StrategyExecutionDataManager()
             : base("CDRDBConnectionString")
         {
 
         }
+
+
+        static StrategyExecutionDataManager()
+        {
+            //_columnMapper.Add("SuspicionLevelDescription", "SuspicionLevelID");
+            //_columnMapper.Add("AccountStatusDescription", "Status");
+            //_columnMapper.Add("UserName", "UserID");
+            //_columnMapper.Add("CaseStatusDescription", "StatusID");
+            //_columnMapper.Add("SuspicionOccuranceStatusDescription", "SuspicionOccuranceStatus");
+            //_columnMapper.Add("AccountCaseStatusDescription", "AccountCaseStatusID");
+        }
+
+       
+
+        public BigResult<StrategyExecutionItem> GetFilteredStrategyExecutions(Vanrise.Entities.DataRetrievalInput<StrategyExecutionQuery> input)
+        {
+            string strategyIDs = (input.Query.StrategyIds != null && input.Query.StrategyIds.Count > 0) ? string.Join(",", input.Query.StrategyIds) : null;
+
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutions_CreateTempByFilters", tempTableName, input.Query.FromCDRDate, input.Query.ToCDRDate, input.Query.FromExecutionDate, input.Query.ToExecutionDate, strategyIDs);
+            };
+
+            return RetrieveData(input, createTempTableAction, StrategyExecutionItemMapper, _columnMapper);
+        }
+
+        private StrategyExecutionItem StrategyExecutionItemMapper(IDataReader reader)
+        {
+            var item = new StrategyExecutionItem();
+            item.Entity.ID = (int)reader["ID"];
+            item.Entity.ProcessID = (long)reader["ProcessID"];
+            item.Entity.StrategyID = (int) reader["StrategyID"] ;
+            item.Entity.FromDate = (DateTime)reader["FromDate"];
+            item.Entity.ToDate = (DateTime)reader["ToDate"];
+            item.Entity.PeriodID = (int)reader["PeriodID"];
+            item.Entity.ExecutionDate = (DateTime)reader["ExecutionDate"];
+            return item;
+        }
+
+
 
         public bool ExecuteStrategy(StrategyExecution strategyExecutionObject, out int insertedId)
         {

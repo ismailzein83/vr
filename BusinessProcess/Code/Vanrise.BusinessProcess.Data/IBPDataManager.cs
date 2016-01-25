@@ -5,7 +5,7 @@ namespace Vanrise.BusinessProcess.Data
 {
     public interface IBPDataManager : IDataManager
     {
-        Dictionary<int, BPInstanceStatus> GetProcessesStatuses(List<int> Ids);
+        Dictionary<long, BPInstanceStatus> GetProcessesStatuses(List<long> Ids);
 
         int DeleteEvent(long eventId);
 

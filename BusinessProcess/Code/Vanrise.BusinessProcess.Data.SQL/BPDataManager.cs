@@ -19,17 +19,17 @@ namespace Vanrise.BusinessProcess.Data.SQL
         }
 
 
-        public Dictionary<int, BPInstanceStatus> GetProcessesStatuses(List<int> Ids)
+        public Dictionary<long, BPInstanceStatus> GetProcessesStatuses(List<long> Ids)
         {
             string stringIDs = (Ids != null && Ids.Count > 0) ? string.Join(",", Ids) : null;
 
-            Dictionary<int, BPInstanceStatus> processesStatuses = new Dictionary<int, BPInstanceStatus>();
+            Dictionary<long, BPInstanceStatus> processesStatuses = new Dictionary<long, BPInstanceStatus>();
 
             ExecuteReaderSP("bp.sp_BPInstance_GetStatusesByIDs", (reader) =>
             {
                 while (reader.Read())
                 {
-                    processesStatuses.Add((int)reader["ID"], (BPInstanceStatus)reader["ExecutionStatus"]);
+                    processesStatuses.Add((long)reader["ID"], (BPInstanceStatus)reader["ExecutionStatus"]);
                 }
 
             }, stringIDs);

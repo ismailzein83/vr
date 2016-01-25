@@ -31,19 +31,19 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             List<StrategyExecutionInfo> strategiesExecutionInfo = new List<StrategyExecutionInfo>();
-
             StrategyManager strategyManager = new StrategyManager();
+            StrategyExecutionManager strategyExecutionManager = new StrategyExecutionManager();
 
             foreach (int strategyID in context.GetValue(StrategyIds))
             {
-                Strategy strategy = strategyManager.GetStrategy(strategyID);
+                Strategy strategy = strategyManager.GetStrategyById(strategyID);
                 if (!strategy.IsEnabled)
                     ContextExtensions.WriteTrackingMessage(context, LogEntryType.Warning, "Strategy named: {0} was not loaded because it is disabled", strategy.Name);
                 else
                 {
                     StrategyExecution strategyExecution = new StrategyExecution() { FromDate = this.FromDate.Get(context), ToDate = this.ToDate.Get(context), PeriodID = strategy.PeriodId, StrategyID = strategyID, ProcessID = ContextExtensions.GetSharedInstanceData(context).InstanceInfo.ProcessInstanceID };
 
-                    strategyManager.ExecuteStrategy(strategyExecution);
+                    strategyExecutionManager.ExecuteStrategy(strategyExecution);
 
                     strategiesExecutionInfo.Add(new StrategyExecutionInfo { Strategy = strategy, StrategyExecution = strategyExecution });
                 }

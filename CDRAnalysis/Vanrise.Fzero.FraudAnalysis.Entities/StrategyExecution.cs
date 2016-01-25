@@ -8,7 +8,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
     public class StrategyExecution
     {
-        public int ID { get; set; }
+        public long ID { get; set; }
 
         public long ProcessID { get; set; }
 

@@ -28,8 +28,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             Console.WriteLine("Started overriding previous results");
-            StrategyManager strategyManager = new StrategyManager();
-            strategyManager.OverrideStrategyExecution(context.GetValue(StrategyIds), context.GetValue(FromDate), context.GetValue(ToDate));
+            StrategyExecutionManager strategyExecutionManager = new StrategyExecutionManager();
+            strategyExecutionManager.OverrideStrategyExecution(context.GetValue(StrategyIds), context.GetValue(FromDate), context.GetValue(ToDate));
 
             Console.WriteLine("Ended overriding previous results");
         }

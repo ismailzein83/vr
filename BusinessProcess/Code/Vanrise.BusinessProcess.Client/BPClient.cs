@@ -123,7 +123,7 @@ namespace Vanrise.BusinessProcess.Client
             return dataManager.GetTrackingsFrom(input);
         }
 
-        public Dictionary<int, BPInstanceStatus> GetProcessesStatuses(List<int> Ids)
+        public Dictionary<long, BPInstanceStatus> GetProcessesStatuses(List<long> Ids)
         {
             return GetProcessesStatuses(Ids);
         }

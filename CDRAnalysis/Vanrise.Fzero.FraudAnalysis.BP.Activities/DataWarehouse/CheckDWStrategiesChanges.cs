@@ -60,7 +60,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing strategies");
             List<DWStrategy> ToBeInsertedStrategies = new List<DWStrategy>();
             StrategyManager strategyManager = new StrategyManager();
-            IEnumerable<Strategy> listStrategies = strategyManager.GetAll();
+            IEnumerable<Strategy> listStrategies = strategyManager.GetStrategies();
 
             foreach (var i in listStrategies)
                 if (!inputArgument.DWStrategies.ContainsKey(i.Id))

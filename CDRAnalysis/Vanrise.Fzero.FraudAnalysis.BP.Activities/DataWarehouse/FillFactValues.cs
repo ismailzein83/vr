@@ -148,7 +148,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             IEnumerable<CallClass> callClasses = callClassManager.GetClasses();
 
             StrategyManager strategyManager = new StrategyManager();
-            IEnumerable<Strategy> strategies = strategyManager.GetAll();
+            IEnumerable<Strategy> strategies = strategyManager.GetStrategies();
 
             int LastBTSId = 0;
             if (inputArgument.BTSs.Count() > 0)
