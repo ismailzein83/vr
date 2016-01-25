@@ -1,6 +1,6 @@
 ﻿'use strict'
-RankingPageManagementController.$inject = ['$scope', 'VR_Sec_ViewAPIService', 'VRModalService', 'VRNotificationService', 'DeleteOperationResultEnum', 'PeriodEnum', 'UtilsService', 'TimeDimensionTypeEnum', 'UsersAPIService', 'VR_Sec_GroupAPIService', 'DataRetrievalResultTypeEnum', 'VR_Sec_MenuAPIService'];
-function RankingPageManagementController($scope, VR_Sec_ViewAPIService, VRModalService, VRNotificationService, DeleteOperationResultEnum, PeriodEnum, UtilsService, TimeDimensionTypeEnum, UsersAPIService, VR_Sec_GroupAPIService, DataRetrievalResultTypeEnum, VR_Sec_MenuAPIService) {
+RankingPageManagementController.$inject = ['$scope', 'VR_Sec_ViewAPIService', 'VRNotificationService', 'UtilsService', 'VR_Sec_MenuAPIService'];
+function RankingPageManagementController($scope, VR_Sec_ViewAPIService, VRNotificationService, UtilsService, VR_Sec_MenuAPIService) {
     var treeAPI;
     defineScope();
     load();
@@ -20,27 +20,6 @@ function RankingPageManagementController($scope, VR_Sec_ViewAPIService, VRModalS
                 treeAPI.refreshTree($scope.menu);
             }
         }
-        //$scope.onSelectedMenuNodechanged = function () {
-        //    var settings = {};
-        //    if ($scope.selectedMenuNode != undefined)
-        //    {
-        //        settings.onScopeReady = function (modalScope) {
-        //            modalScope.title = "Ranking Page Editor: " + $scope.selectedMenuNode.Name;
-        //            modalScope.onPageUpdated = function (menuItem) {
-        //                var menu =[];
-        //                menu.push({
-        //                    Name: "Root",
-        //                    Childs: menuItem,
-        //                    isOpened: true
-        //                });
-        //                treeAPI.refreshTree(menu);
-        //            };
-        //        };
-        //        VRModalService.showModal('/Client/Modules/Security/Views/Pages/RankingPageEditor.html', $scope.selectedMenuNode, settings);
-        //    }
-
-           
-        //}
         $scope.save = function () {
             if (treeAPI.getTree!= undefined) {
                 var menu = treeAPI.getTree();
