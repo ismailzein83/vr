@@ -65,7 +65,7 @@
   <ItemGroup>
     <Compile Include="AccountCaseLog.cs" />
     <Compile Include="FixedPrefixes.cs" />
-    <Compile Include="FixedPrefixesQuery.cs" />
+    <Compile Include="Query\FixedPrefixesQuery.cs" />
     <Compile Include="InfoDetail.cs" />
     <Compile Include="AccountInfo.cs" />
     <Compile Include="CDRDetail.cs" />
@@ -90,12 +90,11 @@
     <Compile Include="Query\CancelAccountCasesQuery.cs" />
     <Compile Include="Query\AccountCaseQuery.cs" />
     <Compile Include="AccountSuspicionDetail.cs" />
-    <Compile Include="AccountSuspicionDetailQuery.cs" />
     <Compile Include="AccountSuspicionSummary.cs" />
-    <Compile Include="AccountSuspicionSummaryQuery.cs" />
+    <Compile Include="Query\AccountSuspicionSummaryQuery.cs" />
     <Compile Include="AccountThreshold.cs" />
     <Compile Include="Batches\StrategyExecutionItemBatch.cs" />
-    <Compile Include="CaseDetailQuery.cs" />
+    <Compile Include="Query\CaseDetailQuery.cs" />
     <Compile Include="CasesSummary.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="INumberProfileParameters.cs" />

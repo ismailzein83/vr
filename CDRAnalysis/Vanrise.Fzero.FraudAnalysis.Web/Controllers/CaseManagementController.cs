@@ -27,10 +27,10 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
         [HttpPost]
-        public object GetFilteredAccountSuspicionDetails(DataRetrievalInput<AccountSuspicionDetailQuery> input)
+        public object GetFilteredDetailsByCaseID(DataRetrievalInput<CaseDetailQuery> input)
         {
             CaseManagmentManager manager = new CaseManagmentManager();
-            return GetWebResponse(input, manager.GetFilteredAccountSuspicionDetails(input));
+            return GetWebResponse(input, manager.GetFilteredDetailsByCaseID(input));
         }
 
         [HttpPost]
@@ -49,12 +49,6 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredCasesByFilters(input));
         }
 
-        [HttpPost]
-        public object GetFilteredDetailsByCaseID(DataRetrievalInput<CaseDetailQuery> input)
-        {
-            CaseManagmentManager manager = new CaseManagmentManager();
-            return GetWebResponse(input, manager.GetFilteredDetailsByCaseID(input));
-        }
 
         [HttpGet]
         public List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber)

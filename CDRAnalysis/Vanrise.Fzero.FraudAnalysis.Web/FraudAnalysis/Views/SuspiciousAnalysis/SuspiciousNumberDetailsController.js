@@ -135,7 +135,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         $scope.dataRetrievalFunction_Occurances = function (dataRetrievalInput, onResponseReady) {
 
-            return CaseManagementAPIService.GetFilteredAccountSuspicionDetails(dataRetrievalInput)
+            return CaseManagementAPIService.GetFilteredDetailsByCaseID(dataRetrievalInput)
             .then(function (response) {
 
                 occurancesLoaded = true;

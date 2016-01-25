@@ -32,9 +32,7 @@ function CaseOccuranceGridController($scope, CaseManagementAPIService, Suspicion
             
             return CaseManagementAPIService.GetFilteredDetailsByCaseID(dataRetrievalInput)
                 .then(function (response) {
-
                     angular.forEach(response.Data, function (item) {
-
                         var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
                         item.SuspicionLevelDescription = suspicionLevel.description;
                     });

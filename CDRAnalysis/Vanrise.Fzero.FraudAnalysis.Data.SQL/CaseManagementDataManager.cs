@@ -116,17 +116,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         #endregion
 
-        public BigResult<AccountSuspicionDetail> GetFilteredAccountSuspicionDetails(Vanrise.Entities.DataRetrievalInput<AccountSuspicionDetailQuery> input)
-        {
-
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionItem_CreateTempByAccountNumber", tempTableName, input.Query.CaseID, input.Query.FromDate, input.Query.ToDate);
-            };
-
-            return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, _columnMapper);
-        }
-
         public BigResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseQuery> input)
         {
 
@@ -199,7 +188,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             return GetItemSP("FraudAnalysis.sp_AccountCase_GetByCaseID", AccountCaseMapper, caseID);
         }
-        
+
         public BigResult<AccountCaseLog> GetFilteredAccountCaseHistoryByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseLogQuery> input)
         {
 
@@ -211,7 +200,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             return RetrieveData(input, createTempTableAction, AccountCaseLogMapper, _columnMapper);
         }
-        
+
         #region Methods that update an account case
 
         public AccountCase GetLastAccountCaseByAccountNumber(string accountNumber)

@@ -5,7 +5,6 @@
         GetFilteredAccountCases: GetFilteredAccountCases,
         GetOperatorType: GetOperatorType,
         GetFilteredAccountSuspicionSummaries: GetFilteredAccountSuspicionSummaries,
-        GetFilteredAccountSuspicionDetails: GetFilteredAccountSuspicionDetails,
         GetFilteredCasesByAccountNumber: GetFilteredCasesByAccountNumber,
         GetFilteredDetailsByCaseID: GetFilteredDetailsByCaseID,
         GetRelatedNumbersByAccountNumber: GetRelatedNumbersByAccountNumber,
@@ -44,9 +43,6 @@
         return BaseAPIService.post("/api/CaseManagement/GetFilteredAccountSuspicionSummaries", input);
     }
 
-    function GetFilteredAccountSuspicionDetails(input) {
-        return BaseAPIService.post("/api/CaseManagement/GetFilteredAccountSuspicionDetails", input);
-    }
 
     function GetFilteredCasesByAccountNumber(input) {
         return BaseAPIService.post("/api/CaseManagement/GetFilteredCasesByAccountNumber", input);
