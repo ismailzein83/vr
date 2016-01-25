@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.service('SecurityService', ['$rootScope', 'UtilsService', 'PermissionFlagEnum', '$cookies', function ($rootScope, UtilsService, PermissionFlagEnum, $cookies) {
+app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_PermissionFlagEnum', '$cookies', function ($rootScope, UtilsService, VR_Sec_PermissionFlagEnum, $cookies) {
 
     return ({
         isAllowed: isAllowed,
@@ -60,7 +60,7 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'PermissionFlagEnu
             var fullControlFlag = UtilsService.getItemByVal(effectivePermissionFlag.PermissionFlags, 'Full Control', 'FlagName');
             if (fullControlFlag != null)
             {
-                if (fullControlFlag.FlagValue === PermissionFlagEnum.Deny.value) {
+                if (fullControlFlag.FlagValue === VR_Sec_PermissionFlagEnum.Deny.value) {
                     return false;
                 }
                 else
@@ -76,7 +76,7 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'PermissionFlagEnu
                 {
                     var effectiveFlag = UtilsService.getItemByVal(effectivePermissionFlag.PermissionFlags, requiredFlags[i], 'FlagName');
                     if (effectiveFlag != null) {
-                        if (effectiveFlag.FlagValue === PermissionFlagEnum.Deny.value)
+                        if (effectiveFlag.FlagValue === VR_Sec_PermissionFlagEnum.Deny.value)
                             return false;
                         else
                             allowedFlags.push(requiredFlags[i]);

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BusinessEntityManagementController.$inject = ['$scope', 'VR_Sec_BusinessEntityAPIService', 'VR_Sec_PermissionService', 'PermissionFlagEnum', 'HolderTypeEnum', 'UtilsService', 'VRModalService', 'VRNotificationService'];
+    BusinessEntityManagementController.$inject = ['$scope', 'VR_Sec_BusinessEntityAPIService', 'VR_Sec_PermissionService', 'UtilsService', 'VRNotificationService'];
 
-    function BusinessEntityManagementController($scope, VR_Sec_BusinessEntityAPIService, VR_Sec_PermissionService, PermissionFlagEnum, HolderTypeEnum, UtilsService, VRModalService, VRNotificationService) {
+    function BusinessEntityManagementController($scope, VR_Sec_BusinessEntityAPIService, VR_Sec_PermissionService, UtilsService, VRNotificationService) {
         var treeAPI;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
 

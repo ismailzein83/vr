@@ -113,7 +113,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Security\Constants\ChartDefinitionTypeEnum.js" />
     <Content Include="Security\Constants\HolderTypeEnum.js" />
     <Content Include="Security\Constants\ModuleConfig.js" />
     <Content Include="Security\Constants\PermissionFlagEnum.js" />
@@ -174,8 +173,6 @@
     <Content Include="Security\Views\OrgChart\OrgChartManagement.html" />
     <Content Include="Security\Views\Permission\PermissionEditor.html" />
     <Content Include="Security\Views\Permission\PermissionEditorController.js" />
-    <Content Include="Security\Views\Pages\RankingPageEditor.html" />
-    <Content Include="Security\Views\Pages\RankingPageEditorController.js" />
     <Content Include="Security\Views\Pages\RankingPageManagement.html" />
     <Content Include="Security\Views\Pages\RankingPageManagementController.js" />
     <Content Include="Security\Views\User\ChangePassword.html" />

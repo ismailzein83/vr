@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BusinessEntityEditorController.$inject = ['$scope', 'VR_Sec_PermissionAPIService', 'VRUIUtilsService', 'UtilsService', 'VR_Sec_GroupAPIService', 'VR_Sec_UserAPIService', 'HolderTypeEnum', 'PermissionFlagEnum', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+    BusinessEntityEditorController.$inject = ['$scope', 'VR_Sec_PermissionAPIService', 'VR_Sec_PermissionFlagEnum', 'VR_Sec_HolderTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function BusinessEntityEditorController($scope, VR_Sec_PermissionAPIService, VRUIUtilsService, UtilsService, VR_Sec_GroupAPIService, VR_Sec_UserAPIService, HolderTypeEnum, PermissionFlagEnum, VRModalService, VRNotificationService, VRNavigationService) {
+    function BusinessEntityEditorController($scope, VR_Sec_PermissionAPIService, VR_Sec_PermissionFlagEnum, VR_Sec_HolderTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
         // Modal parameters
         var holderType;
         var holderId;
@@ -50,7 +50,7 @@
             $scope.selectedGroups = [];
 
             $scope.entityPermissions = [];
-            $scope.permissionFlagOptions = UtilsService.getEnumPropertyAsArray(PermissionFlagEnum, 'description');
+            $scope.permissionFlagOptions = UtilsService.getEnumPropertyAsArray(VR_Sec_PermissionFlagEnum, 'description');
 
             $scope.onUserSelectorReady = function (api) {
                 userSelectorAPI = api;
@@ -205,7 +205,7 @@
             //Loop on all selected users
             angular.forEach($scope.selectedUsers, function (user) {
                 var permissiontoAdd = {
-                    HolderType: HolderTypeEnum.User.value,
+                    HolderType: VR_Sec_HolderTypeEnum.User.value,
                     HolderId: user.UserId,
                     EntityType: entityType,
                     EntityId: entityId,
@@ -219,7 +219,7 @@
             //Loop again on all selected groups
             angular.forEach($scope.selectedGroups, function (group) {
                 var permissiontoAdd = {
-                    HolderType: HolderTypeEnum.Group.value,
+                    HolderType: VR_Sec_HolderTypeEnum.Group.value,
                     HolderId: group.GroupId,
                     EntityType: entityType,
                     EntityId: entityId,

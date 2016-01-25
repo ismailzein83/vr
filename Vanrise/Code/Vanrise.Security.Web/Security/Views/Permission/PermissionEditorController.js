@@ -2,9 +2,9 @@
 
     'use strict';
 
-    PermissionEditorController.$inject = ['$scope', 'PermissionFlagEnum', 'VR_Sec_PermissionAPIService', 'VR_Sec_BusinessEntityAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+    PermissionEditorController.$inject = ['$scope', 'VR_Sec_BusinessEntityAPIService', 'VR_Sec_PermissionAPIService', 'VR_Sec_PermissionFlagEnum', 'UtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function PermissionEditorController($scope, PermissionFlagEnum, VR_Sec_PermissionAPIService, VR_Sec_BusinessEntityAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+    function PermissionEditorController($scope, VR_Sec_BusinessEntityAPIService, VR_Sec_PermissionAPIService, VR_Sec_PermissionFlagEnum, UtilsService, VRNavigationService, VRNotificationService) {
         var holderType;
         var holderId;
         var notificationResponseText;
@@ -30,7 +30,7 @@
             $scope.beList = [];
             $scope.entityPermissions = []; // The temporary permission list that appear next to the tree on node selection1
             $scope.permissions = []; // The saved permissions in the data base for a single holder type and id
-            $scope.permissionFlagOptions = UtilsService.getEnumPropertyAsArray(PermissionFlagEnum, 'description');
+            $scope.permissionFlagOptions = UtilsService.getEnumPropertyAsArray(VR_Sec_PermissionFlagEnum, 'description');
 
             $scope.onTreeReady = function (api) {
                 treeAPI = api;

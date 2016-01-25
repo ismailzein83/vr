@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrBiDatagridTemplate', ['UtilsService', '$compile', 'VRNotificationService', 'VRUIUtilsService', 'ChartSeriesTypeEnum', 'TimeDimensionTypeEnum', 'VR_BI_BIConfigurationAPIService',
-function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, ChartSeriesTypeEnum, TimeDimensionTypeEnum, VR_BI_BIConfigurationAPIService) {
+app.directive('vrBiDatagridTemplate', ['UtilsService', '$compile', 'VRNotificationService', 'VRUIUtilsService', 'TimeDimensionTypeEnum', 'VR_BI_BIConfigurationAPIService',
+function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, TimeDimensionTypeEnum, VR_BI_BIConfigurationAPIService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -63,7 +63,6 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
             }
             defineNumberOfColumns();
             defineOperationTypes();
-            defineChartSeriesTypes();
             defineTimeDimensionTypes();
             defineAPI();
         }
@@ -203,13 +202,6 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, Chart
             }
             ];
             ctrl.selectedOperationType = ctrl.operationTypes[0];
-        }
-
-        function defineChartSeriesTypes() {
-            ctrl.chartSeriesTypes = [];
-            for (var m in ChartSeriesTypeEnum) {
-                ctrl.chartSeriesTypes.push(ChartSeriesTypeEnum[m]);
-            }
         }
 
         this.initializeController = initializeController;

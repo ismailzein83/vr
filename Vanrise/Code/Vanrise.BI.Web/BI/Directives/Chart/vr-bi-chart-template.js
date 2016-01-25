@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrBiChartTemplate', ['UtilsService', 'TimeDimensionTypeEnum', 'VRNotificationService', 'VRUIUtilsService', 'ChartDefinitionTypeEnum', 'VR_BI_BIConfigurationAPIService', 'ChartSeriesTypeEnum',
-function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsService, ChartDefinitionTypeEnum, VR_BI_BIConfigurationAPIService, ChartSeriesTypeEnum) {
+app.directive('vrBiChartTemplate', ['UtilsService', 'TimeDimensionTypeEnum', 'VRNotificationService', 'VRUIUtilsService', 'VR_ChartDefinitionTypeEnum', 'VR_BI_BIConfigurationAPIService',
+function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsService, VR_ChartDefinitionTypeEnum, VR_BI_BIConfigurationAPIService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -88,7 +88,6 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
 
             defineChartDefinitionTypes();
             defineOperationTypes();
-            defineChartSeriesTypes();
             defineTimeDimensionTypes();
 
             defineAPI();
@@ -237,17 +236,10 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
             ctrl.selectedOperationType = ctrl.operationTypes[0];
         }
 
-        function defineChartSeriesTypes() {
-            ctrl.chartSeriesTypes = [];
-            for (var m in ChartSeriesTypeEnum) {
-                ctrl.chartSeriesTypes.push(ChartSeriesTypeEnum[m]);
-            }
-        }
-
         function defineChartDefinitionTypes() {
             ctrl.definitionTypes = [];
-            for (var m in ChartDefinitionTypeEnum) {
-                ctrl.definitionTypes.push(ChartDefinitionTypeEnum[m]);
+            for (var m in VR_ChartDefinitionTypeEnum) {
+                ctrl.definitionTypes.push(VR_ChartDefinitionTypeEnum[m]);
             }
             ctrl.selectedDefinitionType = ctrl.definitionTypes[0];
         }

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    PermissionGridDirective.$inject = ["VR_Sec_PermissionAPIService", "VR_Sec_PermissionService", "HolderTypeEnum", "PermissionFlagEnum", "VRNotificationService"];
+    PermissionGridDirective.$inject = ["VR_Sec_PermissionAPIService", "VR_Sec_PermissionService", "VR_Sec_HolderTypeEnum", "VR_Sec_PermissionFlagEnum", "VRNotificationService"];
 
-    function PermissionGridDirective(VR_Sec_PermissionAPIService, VR_Sec_PermissionService, HolderTypeEnum, PermissionFlagEnum, VRNotificationService) {
+    function PermissionGridDirective(VR_Sec_PermissionAPIService, VR_Sec_PermissionService, VR_Sec_HolderTypeEnum, VR_Sec_PermissionFlagEnum, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -55,7 +55,7 @@
                     });
 
                     function addPermissionDataItem(permission) {
-                        permission.Entity.HolderType = permission.Entity.HolderType == HolderTypeEnum.User.value ? HolderTypeEnum.User.description : HolderTypeEnum.Group.description;
+                        permission.Entity.HolderType = permission.Entity.HolderType == VR_Sec_HolderTypeEnum.User.value ? VR_Sec_HolderTypeEnum.User.description : VR_Sec_HolderTypeEnum.Group.description;
                         permission.PermissionFlagsDescription = buildPermissionFlagsDescription(permission.Entity.PermissionFlags);
 
                         permission.isInherited = !(permission.Entity.EntityType == businessEntityNode.EntType && permission.Entity.EntityId == businessEntityNode.EntityId);
@@ -68,7 +68,7 @@
                             var denyFlags = "";
 
                             angular.forEach(permissionFlags, function (item) {
-                                if (item.Value == PermissionFlagEnum.Allow.value)
+                                if (item.Value == VR_Sec_PermissionFlagEnum.Allow.value)
                                     allowFlags = allowFlags + item.Name + ", ";
                                 else
                                     denyFlags = denyFlags + item.Name + ", ";

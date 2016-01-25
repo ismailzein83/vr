@@ -1,6 +1,6 @@
-﻿DynamicPageEditorController.$inject = ['$scope', 'VR_Sec_MenuAPIService', 'VR_Sec_WidgetAPIService', 'VR_Sec_ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum', 'VRModalService', 'VRUIUtilsService'];
+﻿DynamicPageEditorController.$inject = ['$scope', 'VR_Sec_MenuAPIService', 'VR_Sec_WidgetAPIService', 'VR_Sec_ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VR_Sec_WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum', 'VRModalService', 'VRUIUtilsService'];
 
-function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_WidgetAPIService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService, VRUIUtilsService) {
+function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_WidgetAPIService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, VR_Sec_WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService, VRUIUtilsService) {
     $scope.scopeModal = {};
     var viewId;
     var viewEntity;
@@ -183,12 +183,12 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
         $scope.scopeModal.onSectionChanged = function () {
             if ($scope.scopeModal.selectedSection != undefined) {
                 switch ($scope.scopeModal.selectedSection.value) {
-                    case WidgetSectionEnum.Summary.value:
+                    case VR_Sec_WidgetSectionEnum.Summary.value:
                         $scope.scopeModal.widgets = $scope.scopeModal.summaryWidgets;
                         $scope.scopeModal.columnWidth = $scope.scopeModal.summaryColumnWidth;
                         $scope.scopeModal.selectedColumnWidth = $scope.scopeModal.columnWidth[0];
                         break;
-                    case WidgetSectionEnum.Body.value:
+                    case VR_Sec_WidgetSectionEnum.Body.value:
                         $scope.scopeModal.widgets = $scope.scopeModal.bodyWidgets;
                         $scope.scopeModal.columnWidth = $scope.scopeModal.bodyColumnWidth;
                         $scope.scopeModal.selectedColumnWidth = $scope.scopeModal.columnWidth[0];
@@ -227,11 +227,11 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 viewWidget.DefaultGrouping = $scope.scopeModal.selectedTimeDimensionType.value
             }
             switch ($scope.scopeModal.selectedSection.value) {
-                case WidgetSectionEnum.Summary.value:
+                case VR_Sec_WidgetSectionEnum.Summary.value:
                     $scope.scopeModal.addedSummaryWidgets.push(viewWidget);
                     $scope.scopeModal.widgets.splice($scope.scopeModal.widgets.indexOf($scope.scopeModal.selectedWidget), 1);
                     break;
-                case WidgetSectionEnum.Body.value:
+                case VR_Sec_WidgetSectionEnum.Body.value:
                     $scope.scopeModal.addedBodyWidgets.push(viewWidget);
                     $scope.scopeModal.widgets.splice($scope.scopeModal.widgets.indexOf($scope.scopeModal.selectedWidget), 1);
                     break;
@@ -249,11 +249,11 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
             var sections = viewContent.Widget.WidgetDefinitionSetting.Sections;
             for (var i = 0; i < sections.length; i++) {
                 switch (sections[i]) {
-                    case WidgetSectionEnum.Summary.value:
+                    case VR_Sec_WidgetSectionEnum.Summary.value:
                         $scope.scopeModal.addedSummaryWidgets.splice($scope.scopeModal.addedSummaryWidgets.indexOf(viewContent), 1);
                         $scope.scopeModal.summaryWidgets.push(viewContent.Widget);
                         break;
-                    case WidgetSectionEnum.Body.value:
+                    case VR_Sec_WidgetSectionEnum.Body.value:
                         $scope.scopeModal.addedBodyWidgets.splice($scope.scopeModal.addedBodyWidgets.indexOf(viewContent), 1);
                         $scope.scopeModal.bodyWidgets.push(viewContent.Widget);
                         break;
@@ -641,9 +641,9 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                         var value = itm.WidgetDefinitionSetting.Sections[i];
                         var obj = itm.Entity;
                         obj.WidgetDefinitionSetting = itm.WidgetDefinitionSetting;
-                        if (value == WidgetSectionEnum.Summary.value)
+                        if (value == VR_Sec_WidgetSectionEnum.Summary.value)
                             $scope.scopeModal.summaryWidgets.push(obj);
-                        else if (value == WidgetSectionEnum.Body.value)
+                        else if (value == VR_Sec_WidgetSectionEnum.Body.value)
                             $scope.scopeModal.bodyWidgets.push(obj);
                     }
                 });
@@ -692,8 +692,8 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
 
     function defineWidgetSections() {
         $scope.scopeModal.sections = [];
-        for (var m in WidgetSectionEnum) {
-            $scope.scopeModal.sections.push(WidgetSectionEnum[m]);
+        for (var m in VR_Sec_WidgetSectionEnum) {
+            $scope.scopeModal.sections.push(VR_Sec_WidgetSectionEnum[m]);
         }
 
         $scope.scopeModal.selectedSection = $scope.scopeModal.sections[0];
