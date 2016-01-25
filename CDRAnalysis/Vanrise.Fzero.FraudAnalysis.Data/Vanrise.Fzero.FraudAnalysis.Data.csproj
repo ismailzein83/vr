@@ -65,7 +65,6 @@
     <Compile Include="DataWarehouse\IDWFactDataManager.cs" />
     <Compile Include="IRelatedNumberDataManager.cs" />
     <Compile Include="INumberProfileDataManager.cs" />
-    <Compile Include="INormalCDRDataManager.cs" />
     <Compile Include="IPeriodDataManager.cs" />
     <Compile Include="IClassDataManager.cs" />
     <Compile Include="IReportingDataManager.cs" />

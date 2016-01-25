@@ -111,7 +111,6 @@
     <Compile Include="FindRelatedNumbersthroughIMEIs.cs" />
     <Compile Include="DataWarehouse\GetDWTimes.cs" />
     <Compile Include="DataWarehouse\GetDWStrategies.cs" />
-    <Compile Include="GetPrefixes.cs" />
     <Compile Include="GetStrategiesExecutionInfo.cs" />
     <Compile Include="GetStrategyExecutionItems.cs" />
     <Compile Include="GetAccountNumbersByIMEI.cs" />
