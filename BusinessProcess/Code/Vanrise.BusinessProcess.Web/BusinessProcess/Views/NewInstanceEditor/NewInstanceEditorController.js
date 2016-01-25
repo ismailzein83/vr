@@ -76,14 +76,21 @@ function NewInstanceEditorController($scope, BusinessProcessAPIService, $routePa
 
     function load()
     {
+        $scope.isLoading = true;
         getBPDefinition().then(function () {
-            loadAllControls();
+            if ($scope.bpDefinitionObj.Configuration.ManualExecEditor)
+            {
+                loadAllControls().finally(function () {
+                    $scope.isLoading = false;
+                });
+            }
+            else
+                $scope.isLoading = false;
+       
         }).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error, $scope);
-            $scope.isGettingData = false;
-        }).finally(function () {
-            $scope.isGettingData = false;
-        });
+            $scope.isLoading = false;
+        })
     }
 
 
@@ -93,10 +100,11 @@ function NewInstanceEditorController($scope, BusinessProcessAPIService, $routePa
         return BusinessProcessAPIService.GetDefinition($scope.BPDefinitionID)
            .then(function (response) {
                $scope.bpDefinitionObj = response;
-           })
-            .catch(function (error) {
+           }).catch(function(error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-            });
+            }).finally(function() {
+               
+            });;
     }
 
 

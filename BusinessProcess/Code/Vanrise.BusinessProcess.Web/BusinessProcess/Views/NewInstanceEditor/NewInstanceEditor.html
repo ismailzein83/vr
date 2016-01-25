@@ -1,6 +1,6 @@
 ﻿<div vr-modalcontent width="'50%'" ng-controller="FraudAnalysis_NewInstanceEditorController">
-    <vr-modalbody vr-loader="isGettingData">
-        <vr-form name="formCreateProcessInput">
+    <vr-modalbody >
+        <vr-form name="formCreateProcessInput" vr-loader="isLoading">
             <vr-row>
                 <vr-columns width="fullrow" ng-if="bpDefinitionObj.Configuration.ManualExecEditor">
                     <vr-directivewrapper directive="bpDefinitionObj.Configuration.ManualExecEditor" on-ready="onBPDefinitionManualDirectiveReady"></vr-directivewrapper>

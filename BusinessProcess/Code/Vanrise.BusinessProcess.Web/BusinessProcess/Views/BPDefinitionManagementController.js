@@ -64,7 +64,7 @@ function BPDefinitionManagementController($scope, BusinessProcessService, Busine
     }
 
     function showStartNewInstance(BPDefinitionObj) {
-        VRModalService.showModal('/Client/Modules/BusinessProcess/Views/InstanceEditor.html', {
+        VRModalService.showModal('/Client/Modules/BusinessProcess/Views/NewInstanceEditor/NewInstanceEditor.html', {
             BPDefinitionID: BPDefinitionObj.BPDefinitionID
         },
         {
