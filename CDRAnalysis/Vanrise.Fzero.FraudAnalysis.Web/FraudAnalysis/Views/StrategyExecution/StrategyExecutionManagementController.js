@@ -12,21 +12,33 @@ function StrategyExecutionManagementController($scope, StrategyExecutionAPIServi
 
     function defineScope() {
 
+        var Now = new Date();
+
+        var Yesterday = new Date();
+        Yesterday.setDate(Yesterday.getDate() - 1);
+
+        $scope.fromDate = Yesterday;
+        $scope.toDate = Now;
+
         $scope.validateTimeRange = function () {
             return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
         }
 
         $scope.gridMenuActions = [];
 
-        $scope.strategyExecutions = [];
+       
         $scope.strategies = [];
+        $scope.periods = [];
+
+        $scope.strategyExecutions = [];
         $scope.selectedStrategies = [];
+        $scope.selectedPeriods = [];
 
-        $scope.filterDateType = [];
-        $scope.filterDateType.push({ id: 1, name: 'By CDR' })
-        $scope.filterDateType.push({ id: 2, name: 'By Strategy Execution' })
+        $scope.filterDateTypes = [];
+        $scope.filterDateTypes.push({ id: 1, name: 'By CDR' })
+        $scope.filterDateTypes.push({ id: 2, name: 'By Strategy Execution' })
 
-        $scope.selectedFilterDateType = $scope.filterDateType[0];
+        $scope.selectedFilterDateType = $scope.filterDateTypes[0];
 
 
         $scope.getStatusColor = function (dataItem, colDef) {
@@ -45,9 +57,7 @@ function StrategyExecutionManagementController($scope, StrategyExecutionAPIServi
             return retrieveData();
         }
 
-        $scope.periods = [];
-
-        $scope.selectedPeriods = [];
+        
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
@@ -98,7 +108,7 @@ function StrategyExecutionManagementController($scope, StrategyExecutionAPIServi
     function defineMenuActions() {
         $scope.gridMenuActions = [{
             name: "Details",
-            clicked: viewStrategyExecutionDetails
+            clicked: viewStrategyExecutionItem
         }];
     }
 
@@ -128,7 +138,7 @@ function StrategyExecutionManagementController($scope, StrategyExecutionAPIServi
             });
     }
 
-    function viewStrategyExecutionDetails(gridObject) {
+    function viewStrategyExecutionItem(gridObject) {
         var params = {
             strategyExecutionId: gridObject.Entity.Id
         };
@@ -140,7 +150,7 @@ function StrategyExecutionManagementController($scope, StrategyExecutionAPIServi
         settings.onScopeReady = function (modalScope) {
             modalScope.title = UtilsService.buildTitleForUpdateEditor("Strategy Execution on: ", gridObject.Entity.ExecutionDate);
         };
-        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/StrategyExecution/StrategyExecutionDetails.html", params, settings);
+        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/StrategyExecution/StrategyExecutionItem.html", params, settings);
     }
 }
 

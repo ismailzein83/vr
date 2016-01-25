@@ -12,11 +12,11 @@
             </vr-row>
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-select datasource="filterDateType" datatextfield="name" datavaluefield="id" label="Filter Date Type" selectedvalues="selectedFilterDateType"></vr-select>
+                    <vr-select datasource="filterDateTypes" datatextfield="name" datavaluefield="id" label="Filter Date Type" selectedvalues="selectedFilterDateType" hideremoveicon></vr-select>
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" customvalidate="validateTimeRange()"></vr-datetimepicker>
+                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" customvalidate="validateTimeRange()"  isrequired ></vr-datetimepicker>
                 </vr-columns>
 
                 <vr-columns width="normal">
