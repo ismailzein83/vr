@@ -1,12 +1,15 @@
-﻿
-app.service('QM_BE_SupplierService', ['QM_BE_SupplierAPIService', 'VRModalService',
-    function (QM_BE_SupplierAPIService, VRModalService) {
+﻿(function (appControllers) {
 
-        return ({
+    'use strict';
+
+    SupplierService.$inject = ['QM_BE_SupplierAPIService', 'VRModalService', 'VRNotificationService'];
+
+    function SupplierService(QM_BE_SupplierAPIService, VRModalService, VRNotificationService) {
+        return {
             addSupplier: addSupplier,
             editSupplier: editSupplier,
             uploadNewSuppliers: uploadNewSuppliers
-        });
+        };
 
         function addSupplier(onSupplierAdded) {
             var settings = {
@@ -43,10 +46,12 @@ app.service('QM_BE_SupplierService', ['QM_BE_SupplierAPIService', 'VRModalServic
 
 
             }
-            var parameters = {  };
-            
+            var parameters = {};
+
 
             VRModalService.showModal('/Client/Modules/QM_BusinessEntity/Views/Supplier/SupplierUploader.html', parameters, modalSettings);
         }
+    }
+    appControllers.service('QM_BE_SupplierService', SupplierService);
 
-    }]);
+})(appControllers);

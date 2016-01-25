@@ -1,9 +1,13 @@
-﻿
-app.service('Qm_BE_ZoneService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_CountryService',
-    function (VRModalService, VRNotificationService, UtilsService, VRCommon_CountryService) {
-        return ({
+﻿(function (appControllers) {
+
+    'use strict';
+
+    ZoneService.$inject = ['VRCommon_CountryService'];
+
+    function ZoneService(VRCommon_CountryService) {
+        return {
             registerDrillDownToCountry: registerDrillDownToCountry
-        });
+        };
 
         function registerDrillDownToCountry() {
             var drillDownDefinition = {};
@@ -21,5 +25,7 @@ app.service('Qm_BE_ZoneService', ['VRModalService', 'VRNotificationService', 'Ut
 
             VRCommon_CountryService.addDrillDownDefinition(drillDownDefinition);
         }
+    }
+    appControllers.service('Qm_BE_ZoneService', ZoneService);
 
-    }]);
+})(appControllers);

@@ -3,10 +3,10 @@
     "use strict";
 
     Qm_CliTester_HistoryTestCallManagementController.$inject = ['$scope', 'Qm_CliTester_TestCallAPIService', 'UtilsService', 'Qm_CliTester_CallTestResultEnum', 'Qm_CliTester_CallTestStatusEnum',
-        'UsersAPIService', 'VRUIUtilsService'];
+        'VR_Sec_UserAPIService', 'VRUIUtilsService'];
 
     function Qm_CliTester_HistoryTestCallManagementController($scope, Qm_CliTester_TestCallAPIService, UtilsService, Qm_CliTester_CallTestResultEnum, Qm_CliTester_CallTestStatusEnum,
-        UsersAPIService, VRUIUtilsService) {
+        VR_Sec_UserAPIService, VRUIUtilsService) {
 
         var gridAPI;
 
@@ -178,7 +178,7 @@
         }
 
         function loadUsers() {
-            return UsersAPIService.GetUsers().then(function (response) {
+            return VR_Sec_UserAPIService.GetUsers().then(function (response) {
                 $scope.users = response;
             });
         }

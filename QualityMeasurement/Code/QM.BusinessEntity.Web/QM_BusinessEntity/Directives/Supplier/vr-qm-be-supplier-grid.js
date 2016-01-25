@@ -42,10 +42,6 @@ function (UtilsService, VRNotificationService, QM_BE_SupplierAPIService, QM_BE_S
                         return gridAPI.retrieveData(query);
                     }
 
-                    directiveAPI.onSupplierUpdated = function (supplierObject) {
-                        gridAPI.itemUpdated(supplierObject);
-                    }
-
                     directiveAPI.onSupplierAdded = function (supplierObject) {
                         gridAPI.itemAdded(supplierObject);
                     }

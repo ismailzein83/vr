@@ -29,7 +29,7 @@
           
         }
         function load() {
-            $scope.isGettingData = true;
+            $scope.isLoading = true;
             loadAllControls();
 
         }
@@ -37,9 +37,10 @@
             return UtilsService.waitMultipleAsyncOperations([loadCountrySelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                   $scope.isLoading = false;
                })
               .finally(function () {
-                  $scope.isGettingData = false;
+                  $scope.isLoading = false;
               });
         }
         function loadCountrySelector() {
