@@ -27,14 +27,9 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, DaysOfWeekEnum)
     };
 
     function DirectiveConstructor($scope, ctrl) {
-        this.initializeController = initializeController;
-
 
         function initializeController() {
-            defineAPI();
-        }
 
-        function defineAPI() {
             $scope.daysOfWeek = UtilsService.getArrayEnum(DaysOfWeekEnum);
 
             $scope.selectedDays = [];
@@ -63,6 +58,10 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, DaysOfWeekEnum)
                 $scope.selectedTimes.splice($scope.selectedTimes.indexOf(timeToRemove), 1);
             }
 
+            defineAPI();
+        }
+
+        function defineAPI() {
             var api = {};
             api.getData = function () {
                 var numbersOfSelectedDays = [];
@@ -77,7 +76,6 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, DaysOfWeekEnum)
                 };
 
             };
-
 
             api.load = function (payload) {
                 if (payload != undefined && payload.data != undefined) {
@@ -97,6 +95,8 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, DaysOfWeekEnum)
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
+
+        this.initializeController = initializeController;
     }
 
     return directiveDefinitionObject;

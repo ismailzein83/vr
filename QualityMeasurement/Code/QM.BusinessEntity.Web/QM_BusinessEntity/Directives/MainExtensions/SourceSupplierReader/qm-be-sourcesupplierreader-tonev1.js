@@ -22,19 +22,10 @@ app.directive("qmBeSourcesupplierreaderTonev1", [function () {
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/QM_BusinessEntity/Directives/MainExtensions/SourceSupplierReader/Templates/SourceSupplierReaderTOneV1.html"
     };
 
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/QM_BusinessEntity/Directives/MainExtensions/SourceSupplierReader/Templates/SourceSupplierReaderTOneV1.html";
-    }
-
     function DirectiveConstructor($scope, ctrl) {
-        this.initializeController = initializeController;
-
-        $scope.connectionString = undefined;
 
         function initializeController() {
             defineAPI();
@@ -50,17 +41,17 @@ app.directive("qmBeSourcesupplierreaderTonev1", [function () {
                 };
             };
 
-
             api.load = function (payload) {
                 if (payload != undefined) {
                     $scope.connectionString = payload.connectionString;
                 }
             }
 
-
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
+
+        this.initializeController = initializeController;
     }
 
     return directiveDefinitionObject;

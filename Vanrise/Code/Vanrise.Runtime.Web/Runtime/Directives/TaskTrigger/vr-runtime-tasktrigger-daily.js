@@ -27,18 +27,11 @@ function (UtilsService, VRUIUtilsService , TimeSchedulerTypeEnum) {
     };
 
     function DirectiveConstructor($scope, ctrl) {
-        this.initializeController = initializeController;
-
 
         function initializeController() {
-
-            defineAPI();
-        }
-
-        function defineAPI() {
-            var api = {};
             $scope.selectedTimes = [];
             $scope.timeButtonIsDisabled = false;
+
             $scope.addTime = function () {
                 var timeIsValid = true;
 
@@ -57,11 +50,16 @@ function (UtilsService, VRUIUtilsService , TimeSchedulerTypeEnum) {
                     $scope.selectedTimes.push($scope.selectedTime);
             }
 
-            
-
             $scope.removeTime = function (timeToRemove) {
                 $scope.selectedTimes.splice($scope.selectedTimes.indexOf(timeToRemove), 1);
             }
+
+            defineAPI();
+        }
+
+        function defineAPI() {
+            var api = {};
+        
             api.getData = function () {
                 return {
                     $type: "Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.DailyTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments",
@@ -69,7 +67,6 @@ function (UtilsService, VRUIUtilsService , TimeSchedulerTypeEnum) {
                     ScheduledTimesToRun: $scope.selectedTimes
                 };
             };
-
 
             api.load = function (payload) {
                 if (payload != undefined && payload.data != undefined) {
@@ -84,6 +81,8 @@ function (UtilsService, VRUIUtilsService , TimeSchedulerTypeEnum) {
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
+
+        this.initializeController = initializeController;
     }
 
     return directiveDefinitionObject;

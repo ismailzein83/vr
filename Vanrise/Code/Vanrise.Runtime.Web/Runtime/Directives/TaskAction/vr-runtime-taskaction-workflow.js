@@ -27,21 +27,14 @@ function (UtilsService, VRUIUtilsService, BusinessProcessAPIService) {
     };
 
     function DirectiveConstructor($scope, ctrl) {
-        this.initializeController = initializeController;
+        var bpDefenitionDirectiveAPI;
+        var bpDefenitionDirectiveReadyPromiseDeferred;
+
+        var bpDefenitionSelectorAPI;
+        var bpDefenitionSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
-            defineAPI();
-        }
-
-        function defineAPI() {
             $scope.bpDefinitions = [];
-            $scope.selectedBPDefintion = undefined;
-
-            var bpDefenitionDirectiveAPI;
-            var bpDefenitionDirectiveReadyPromiseDeferred //= UtilsService.createPromiseDeferred();
-
-            var bpDefenitionSelectorAPI;
-            var bpDefenitionSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             $scope.onBPDefinitionDirectiveReady = function (api) {
                 bpDefenitionDirectiveAPI = api;
@@ -56,12 +49,11 @@ function (UtilsService, VRUIUtilsService, BusinessProcessAPIService) {
                 bpDefenitionSelectorAPI = api;
                 bpDefenitionSelectorReadyPromiseDeferred.resolve();
             }
-            
-            //$scope.onBPDefenitionSelctionChanged = function () {
-            //    if(bpDefenitionDirectiveAPI != undefined){
-            //        bpDefenitionDirectiveAPI.load(undefined);
-            //    }
-            //}
+
+            defineAPI();
+        }
+
+        function defineAPI() {
             var api = {};
            
             api.getData = function () {
@@ -73,7 +65,6 @@ function (UtilsService, VRUIUtilsService, BusinessProcessAPIService) {
                     ProcessInputArguments:(bpDefenitionDirectiveAPI!=undefined)? bpDefenitionDirectiveAPI.getData() : null
                 };
             };
-
 
             api.load = function (payload) {
                 var data;
@@ -118,6 +109,8 @@ function (UtilsService, VRUIUtilsService, BusinessProcessAPIService) {
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
+
+        this.initializeController = initializeController;
     }
 
     return directiveDefinitionObject;

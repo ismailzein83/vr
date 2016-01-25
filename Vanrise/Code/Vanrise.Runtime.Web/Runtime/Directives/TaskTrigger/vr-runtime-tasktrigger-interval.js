@@ -23,27 +23,20 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, IntervalTimeTyp
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/Runtime/Directives/TaskTrigger/Templates/TaskTriggerInterval.html"
     };
 
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/Runtime/Directives/TaskTrigger/Templates/TaskTriggerInterval.html";
-    }
-
     function DirectiveConstructor($scope, ctrl) {
-        this.initializeController = initializeController;
-
 
         function initializeController() {
+            $scope.intervalTypes = UtilsService.getArrayEnum(IntervalTimeTypeEnum);
 
             defineAPI();
         }
 
         function defineAPI() {
             var api = {};
-            $scope.intervalTypes = UtilsService.getArrayEnum(IntervalTimeTypeEnum);
+            
             api.getData = function () {
                 return {
                     $type: "Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments",
@@ -53,7 +46,6 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, IntervalTimeTyp
                 };
 
             };
-
 
             api.load = function (payload) {
                 if (payload != undefined && payload.data != undefined) {
@@ -74,6 +66,8 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, IntervalTimeTyp
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
+
+        this.initializeController = initializeController;
     }
 
     return directiveDefinitionObject;

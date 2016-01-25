@@ -28,30 +28,30 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
 
 
     function DirectiveConstructor($scope, ctrl) {
-        this.initializeController = initializeController;
-
+        
+        var timerTypeDirectiveAPI;
+        var timerTypeDirectiveReadyPromiseDeferred;
 
         function initializeController() {
+            $scope.schedulerTypes = UtilsService.getArrayEnum(TimeSchedulerTypeEnum);
+
+            $scope.onTimerTypeDirectiveReady = function (api) {
+                timerTypeDirectiveAPI = api;
+                var setLoader = function (value) {
+                    $scope.isLoadingTimerSection = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, timerTypeDirectiveAPI, undefined, setLoader, timerTypeDirectiveReadyPromiseDeferred);
+            }
+
             defineAPI();
         }
 
         function defineAPI() {
             var api = {};
-            $scope.schedulerTypes = UtilsService.getArrayEnum(TimeSchedulerTypeEnum);
-            var timerTypeDirectiveAPI;
-            var timerTypeDirectiveReadyPromiseDeferred;
-
-            $scope.onTimerTypeDirectiveReady = function (api) {
-                timerTypeDirectiveAPI = api;
-                var setLoader = function (value) {
-                        $scope.isLoadingTimerSection = value;
-                };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, timerTypeDirectiveAPI, undefined, setLoader, timerTypeDirectiveReadyPromiseDeferred);
-            }
+            
             api.getData = function () {
                 return timerTypeDirectiveAPI.getData();
             };
-
 
             api.load = function (payload) {
                 var data;
@@ -90,6 +90,8 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
+
+        this.initializeController = initializeController;
     }
 
     return directiveDefinitionObject;
