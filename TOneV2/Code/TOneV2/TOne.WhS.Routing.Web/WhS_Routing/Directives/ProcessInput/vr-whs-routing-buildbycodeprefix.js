@@ -21,20 +21,12 @@ app.directive("vrWhsRoutingBuildbycodeprefix", [ function () {
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/WhS_Routing/Directives/ProcessInput/Templates/BuildRoutesByCodePrefixTemplate.html"
     };
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/WhS_Routing/Directives/ProcessInput/Templates/BuildRoutesByCodePrefixTemplate.html";
-    }
 
     function DirectiveConstructor($scope, ctrl) {
 
-
         this.initializeController = initializeController;
-
-
 
         function initializeController() {
             defineAPI();

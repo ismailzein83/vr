@@ -22,13 +22,8 @@ app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_Rou
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl:"/Client/Modules/WhS_Routing/Directives/ProcessInput/Templates/BuildRouteProcessTemplate.html"
     };
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/WhS_Routing/Directives/ProcessInput/Templates/BuildRouteProcessTemplate.html";
-    }
 
     function DirectiveConstructor($scope, ctrl) {
 
@@ -51,8 +46,6 @@ app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_Rou
             $scope.onRoutingProductDatabaseTypeSelectionChanged = function () {
                 $scope.isFuture = $scope.selectedRoutingDatabaseType == WhS_Routing_RoutingDatabaseTypeEnum.Future;
             }
-
-           
 
             /* directive API definition */
 
