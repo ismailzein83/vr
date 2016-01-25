@@ -37,17 +37,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.AccountNumber, input.Query.StrategyIDs, input.Query.Statuses, input.Query.SuspicionLevelIDs), (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromDate));
-                    cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.ToDate));
-                });
+                ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.AccountNumber, input.Query.StrategyIDs, input.Query.Statuses, input.Query.SuspicionLevelIDs, input.Query.FromDate, input.Query.ToDate), (cmd) => { });
             };
 
             return RetrieveData(input, createTempTableAction, AccountSuspicionSummaryMapper, _columnMapper);
         }
 
-        private string CreateTempTableIfNotExists(string tempTableName, string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs)
+        private string CreateTempTableIfNotExists(string tempTableName, string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs, DateTime fromDate, DateTime? toDate)
         {
             StringBuilder query = new StringBuilder(@"
                 IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
@@ -68,16 +64,19 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             ");
 
             query.Replace("#TEMP_TABLE_NAME#", tempTableName);
-            query.Replace("#WHERE_CLAUSE#", GetWhereClause(accountNumber, strategyIDs, accountStatusIDs, suspicionLevelIDs));
+            query.Replace("#WHERE_CLAUSE#", GetWhereClause(accountNumber, strategyIDs, accountStatusIDs, suspicionLevelIDs, fromDate, toDate));
 
             return query.ToString();
         }
 
-        private string GetWhereClause(string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs)
+        private string GetWhereClause(string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs, DateTime fromDate, DateTime? toDate)
         {
             StringBuilder whereClause = new StringBuilder();
 
-            whereClause.Append("WHERE ac.CreatedTime >= @FromDate AND (@ToDate IS NULL OR ac.CreatedTime < @ToDate)");
+            if (toDate.HasValue)
+                whereClause.Append("WHERE ac.CreatedTime >= '" + fromDate + "' AND ac.CreatedTime < '" + toDate + "'");
+            else
+                whereClause.Append("WHERE ac.CreatedTime >= '" + fromDate + "' ");
 
             if (accountNumber != null)
                 whereClause.Append(" AND ac.AccountNumber = '" + accountNumber + "'");
