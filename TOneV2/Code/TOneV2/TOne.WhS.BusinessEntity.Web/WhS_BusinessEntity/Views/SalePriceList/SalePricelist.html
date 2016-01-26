@@ -13,15 +13,17 @@
                                hideremoveicon isrequired="false">
                     </vr-select>
                 </vr-columns>
-                <vr-columns width="normal" ng-if="showSellingProductSelector">
+                <vr-columns width="normal" ng-show="showSellingProductSelector">
                     <vr-whs-be-sellingproduct-selector on-ready="onSellingProductSelectorReady"
                                                        selectedvalues="selectedSellingProduct"
+                                                       ismultipleselection
                                                        onselectionchanged="onSellingProductChanged"
                                                        hideremoveicon isrequired="isRequiredSellingProductSelector">
                     </vr-whs-be-sellingproduct-selector>
                 </vr-columns>
-                <vr-columns width="normal" ng-if="showCarrierAccountSelector">
+                <vr-columns width="normal" ng-show="showCarrierAccountSelector">
                     <vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountSelectorReady"
+                                                       ismultipleselection
                                                        selectedvalues="selectedCustomer"
                                                        onselectionchanged="onCarrierAccountChanged"
                                                        getcustomers

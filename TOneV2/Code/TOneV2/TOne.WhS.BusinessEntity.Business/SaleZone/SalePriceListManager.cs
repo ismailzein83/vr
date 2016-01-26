@@ -15,14 +15,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
 
-        public Vanrise.Entities.IDataRetrievalResult<SalePriceListDetail> GetPricelists(Vanrise.Entities.DataRetrievalInput<SalePriceListQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<SalePriceListDetail> GetFilteredPricelists(Vanrise.Entities.DataRetrievalInput<SalePriceListQuery> input)
         {
             var salePricelists = GetCachedSalePriceLists();
 
             Func<SalePriceList, bool> filterExpression = (priceList) =>
 
-                     (input.Query.OwnerId == null || priceList.OwnerId == input.Query.OwnerId) &&
-                      (input.Query.OwnerType == null || priceList.OwnerType == input.Query.OwnerType);
+                     (input.Query.OwnerId == null ||  input.Query.OwnerId.Contains(priceList.OwnerId)) &&
+                      (input.Query.OwnerType == null || priceList.OwnerType==input.Query.OwnerType);
 
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, salePricelists.ToBigResult(input, filterExpression, SalePricelistDetailMapper));

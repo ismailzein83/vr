@@ -16,11 +16,11 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     public class WhS_BE_SalePricelistController : Vanrise.Web.Base.BaseAPIController 
     {
         [HttpPost]
-        [Route("GetCachedSalePriceLists")]
-        public object GetCachedSalePriceLists(Vanrise.Entities.DataRetrievalInput<SalePriceListQuery> input)
+        [Route("GetFilteredSalePriceLists")]
+        public object GetFilteredSalePriceLists(Vanrise.Entities.DataRetrievalInput<SalePriceListQuery> input)
         {
             SalePriceListManager manager = new SalePriceListManager();
-            return GetWebResponse(input,manager.GetPricelists(input));
+            return GetWebResponse(input,manager.GetFilteredPricelists(input));
         }
         
        

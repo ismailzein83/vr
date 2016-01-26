@@ -21,7 +21,7 @@
         load();
 
         function defineScope() {
-      
+
 
             $scope.onGridReady = function (api) {
                 gridApi = api;
@@ -29,13 +29,12 @@
             };
 
 
-           
+
 
             $scope.ownerTypes = UtilsService.getArrayEnum(WhS_BE_SalePriceListOwnerTypeEnum);
-            $scope.selectedOwnerType = $scope.ownerTypes[0];
-            $scope.selectedSellingProduct = undefined;
-            $scope.showSellingProductSelector = false;
-            $scope.showCarrierAccountSelector = false;
+
+            $scope.selectedSellingProduct = [];
+            $scope.selectedCustomer = [];
 
             $scope.isRequiredSellingProductSelector = false;
             $scope.isRequiredCarrierAccountSelector = false;
@@ -43,14 +42,14 @@
             $scope.onOwnerTypeChanged = function () {
                 if ($scope.selectedOwnerType != undefined) {
                     if ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {
-                        $scope.showSellingProductSelector = false;
+                        $scope.showSellingProductSelector = true;
                         $scope.showCarrierAccountSelector = false;
-                        $scope.selectedCustomer = undefined;
+                        $scope.selectedCustomer.length = 0;
                     }
                     else if ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
                         $scope.showSellingProductSelector = false;
                         $scope.showCarrierAccountSelector = true;
-                        $scope.selectedSellingProduct = undefined;
+                        $scope.selectedSellingProduct.length = 0;
                     }
                 }
             };
@@ -64,7 +63,7 @@
             $scope.onSellingProductSelectorReady = function (api) {
                 sellingProductSelectorAPI = api;
                 sellingProductSelectorReadyDeferred.resolve();
-                 
+
             };
 
             $scope.onCarrierAccountSelectorReady = function (api) {
@@ -131,7 +130,7 @@
         }
 
 
-       
+
 
     }
 

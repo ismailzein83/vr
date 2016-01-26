@@ -5,7 +5,7 @@
 
     function salePricelistAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
         this.GetFilteredSalePricelists = function (input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "salePricelist", "GetCachedSalePriceLists"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "salePricelist", "GetFilteredSalePriceLists"), input);
         }
 
     }

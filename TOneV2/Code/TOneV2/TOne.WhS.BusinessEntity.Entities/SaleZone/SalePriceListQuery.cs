@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SalePriceListQuery
     {
 
-        public int? OwnerId { get; set; }
+        public List<int> OwnerId { get; set; }
         public SalePriceListOwnerType? OwnerType { get; set; }
        
 
