@@ -34,7 +34,6 @@ function ExecuteStrategyProcessInput_Scheduled($scope, $http, StrategyAPIService
                 StrategyIds: $scope.selectedStrategyIds,
                 FixedPrefixes: prefixDirectiveAPI.getSelectedIds(),
                 PrefixLength: $scope.selectedPrefixLength,
-                OverridePrevious: false,
                 IncludeWhiteList: false
             };
         };

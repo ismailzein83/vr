@@ -27,28 +27,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return insertOperationOutput;
         }
 
-        public void OverrideStrategyExecution(List<int> strategyIDs, DateTime from, DateTime to)
-        {
-            IStrategyExecutionDataManager strategyExecutionDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
-            ICaseManagementDataManager caseManagementDataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-
-            foreach (var strategyID in strategyIDs)
-            {
-                strategyExecutionDataManager.OverrideStrategyExecution(strategyID, from, to);
-            }
-
-
-            List<int> CaseIDs = strategyExecutionDataManager.GetCasesIDsofStrategyExecutionItem(null, from, to, strategyIDs);
-
-            if (CaseIDs != null && CaseIDs.Count > 0)
-            {
-                strategyExecutionDataManager.DeleteStrategyExecutionItem_ByFilters(null, from, to, strategyIDs);
-
-                caseManagementDataManager.DeleteAccountCases_ByCaseIDs(CaseIDs);
-            }
-        }
-
-
         public BigResult<StrategyExecutionDetail> GetFilteredStrategyExecutions(Vanrise.Entities.DataRetrievalInput<StrategyExecutionQuery> input)
         {
             IStrategyExecutionDataManager strategyExecutionDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();

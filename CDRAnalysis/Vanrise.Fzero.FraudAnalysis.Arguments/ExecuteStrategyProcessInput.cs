@@ -18,8 +18,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 
         public DateTime ToDate { get; set; }
 
-        public bool OverridePrevious { get; set; }
-
         public override string GetTitle()
         {
             IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();

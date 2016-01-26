@@ -104,7 +104,6 @@ function ExecuteStrategyProcessInputController($scope, UtilsService, StrategyAPI
                 PrefixLength: $scope.selectedPrefixLength,
                 FromDate: new Date(fromDate),
                 ToDate: new Date(toDate),
-                OverridePrevious: $scope.overridePrevious,
                 IncludeWhiteList: $scope.includeWhiteList
             }
         });

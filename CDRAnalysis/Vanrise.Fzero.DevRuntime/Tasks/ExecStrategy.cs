@@ -33,7 +33,6 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
                 {
                     FromDate = DateTime.Parse("2015-03-10"),
                     ToDate = DateTime.Parse("2015-03-20"),
-                    OverridePrevious=false,
                     IncludeWhiteList =false,
                     StrategyIds = StrategyIds
                 }

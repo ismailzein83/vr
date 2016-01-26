@@ -131,7 +131,6 @@ app.directive("vrCdrFraudanalysisExcutestrategyManual", ["UtilsService", "Strate
                     StrategyIds: $scope.selectedStrategyIds,
                     FromDate: new Date(fromDate),
                     ToDate: new Date(toDate),
-                    OverridePrevious: $scope.overridePrevious,
                     IncludeWhiteList: $scope.includeWhiteList
                 }
             });

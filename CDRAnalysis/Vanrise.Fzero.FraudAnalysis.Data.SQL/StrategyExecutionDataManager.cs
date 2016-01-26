@@ -138,13 +138,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             InsertBulkToTable(preparedStrategyExecutionItem as BaseBulkInsertInfo);
         }
 
-        public bool OverrideStrategyExecution(int StrategyID, DateTime From, DateTime To)
-        {
-            int recordsEffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_Override", StrategyID, From, To);
-
-            return (recordsEffected > 0);
-        }
-
         public void DeleteStrategyExecutionItem_StrategyExecutionID(int StrategyExecutionId)
         {
             ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionItem_DeleteByStrategyExecutionID", StrategyExecutionId);
