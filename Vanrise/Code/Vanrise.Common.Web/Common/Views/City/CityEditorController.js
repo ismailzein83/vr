@@ -14,8 +14,8 @@
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var disableCountry;
 
-        defineScope();
         loadParameters();
+        defineScope();
         load();
 
         function loadParameters() {
@@ -63,6 +63,7 @@
                         });
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
                 });
             }
             else {
@@ -73,10 +74,6 @@
         function getCity() {
             return VRCommon_CityAPIService.GetCity(cityId).then(function (city) {
                 cityEntity = city;
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.isLoading = false;
             });
         }
 

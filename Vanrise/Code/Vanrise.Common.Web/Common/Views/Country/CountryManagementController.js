@@ -2,17 +2,19 @@
 
     "use strict";
 
-    countryManagementController.$inject = ['$scope', 'VRCommon_CountryService'  ];
+    countryManagementController.$inject = ['$scope', 'VRCommon_CountryService'];
 
     function countryManagementController($scope, VRCommon_CountryService) {
         var gridAPI;
+
         defineScope();
         load();
+
         var filter = {};
 
         function defineScope() {
             $scope.searchClicked = function () {
-                setFilterObject()
+                setFilterObject();
                 return gridAPI.loadGrid(filter);
             };
 
@@ -27,17 +29,14 @@
                 VRCommon_CountryService.uploadCountrires(); 
             }
         }
+
         function load() {
-
-           
-
         }
 
         function setFilterObject() {
             filter = {
                 Name: $scope.name,
             };
-           
         }
 
         function addNewCountry() {
@@ -45,13 +44,10 @@
                 if (gridAPI != undefined) {
                     gridAPI.onCountryAdded(countryObj);
                 }
-                   
-
             };
+
             VRCommon_CountryService.addCountry(onCountryAdded);
         }
-       // function uploadCountires() 
-
     }
 
     appControllers.controller('VRCommon_CountryManagementController', countryManagementController); 

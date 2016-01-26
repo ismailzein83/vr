@@ -11,9 +11,11 @@
         var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var currencyId;
         var disableCurrency;
-        defineScope();
+
         loadParameters();
+        defineScope();
         load();
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
@@ -21,6 +23,7 @@
             }
             $scope.disableCurrency = (currencyId != undefined);
         }
+
         function defineScope() {
             $scope.saveExchangeRate = function () {
                 return insertCurrencyExchangeRate();
@@ -38,7 +41,7 @@
         }
 
         function load() {
-            $scope.isGettingData = true;
+            $scope.isLoading = true;
             loadAllControls();
             $scope.title = UtilsService.buildTitleForAddEditor("Currency Exchange Rate");
            
@@ -49,9 +52,10 @@
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
-                  $scope.isGettingData = false;
+                  $scope.isLoading = false;
               });
         }
+
         function loadCurrencySelector() {
             var currencyLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -79,8 +83,9 @@
 
   
         function insertCurrencyExchangeRate() {
+            $scope.isLoading = true;
+
             var object = buildCurrencyExchangeRateObjFromScope();
-            $scope.isGettingData = true;
 
             return VRCommon_CurrencyExchangeRateAPIService.AddCurrencyExchangeRate(object)
             .then(function (response) {
@@ -92,11 +97,9 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-                $scope.isGettingData = false;
+                $scope.isLoading = false;
             });
-
         }
-       
     }
 
     appControllers.controller('VRCommon_CurrencyExchangeRateEditorController', currencyExchangeRateEditorController);

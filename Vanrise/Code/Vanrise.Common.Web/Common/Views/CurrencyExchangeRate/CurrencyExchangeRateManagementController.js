@@ -6,10 +6,13 @@
 
     function currencyExchangeRateManagementController($scope, VRCommon_CurrencyExchangeRateService, UtilsService, VRUIUtilsService) {
         var gridAPI;
+
         var currencySelectorAPI;
         var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
+
         var filter = {};
 
         function defineScope() {
@@ -29,11 +32,10 @@
             }
             $scope.addNewCurrencyExchangeRate = addNewCurrencyExchangeRate;
         }
+
         function load() {
             $scope.isGettingData = true;
             loadAllControls();
-
-
         }
 
         function loadAllControls() {
@@ -50,9 +52,7 @@
 
             currencyReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = {};
-
-                    VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, directivePayload, currencyLoadPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, undefined, currencyLoadPromiseDeferred);
                 });
             return currencyLoadPromiseDeferred.promise;
         }

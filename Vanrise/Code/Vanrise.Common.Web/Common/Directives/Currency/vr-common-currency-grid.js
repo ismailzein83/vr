@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCommonCurrencyGrid", ["UtilsService", "VRNotificationService", "VRCommon_CurrencyAPIService","VRCommon_CurrencyService","VRCommon_CurrencyExchangeRateService",
-function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCommon_CurrencyService , VRCommon_CurrencyExchangeRateService) {
+app.directive("vrCommonCurrencyGrid", ["UtilsService", "VRNotificationService", "VRCommon_CurrencyAPIService","VRCommon_CurrencyService","VRCommon_CurrencyExchangeRateService", 'VRUIUtilsService',
+function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCommon_CurrencyService, VRCommon_CurrencyExchangeRateService, VRUIUtilsService) {
   
     var directiveDefinitionObject = {
 
@@ -27,13 +27,16 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCo
     function CurrencyGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
-        this.initializeController = initializeController;
+        var gridDrillDownTabsObj;
 
         function initializeController() {
            
             $scope.currencies = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+
+                var drillDownDefinitions = VRCommon_CurrencyService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
@@ -45,6 +48,7 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCo
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onCurrencyAdded = function (currencyObject) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(currencyObject);
                         gridAPI.itemAdded(currencyObject);
                     }
                     return directiveAPI;
@@ -55,7 +59,7 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCo
                     .then(function (response) {
                         if (response.Data != undefined) {
                             for (var i = 0; i < response.Data.length; i++) {
-                                setDataItemExtension(response.Data[i]);
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                             }
                         }
                         onResponseReady(response);
@@ -65,61 +69,25 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCo
                     });
             };
             defineMenuActions();
-        }
-        function setDataItemExtension(dataItem) {
-
-            var extensionObject = {};
-            var query = {
-                Currencies: [dataItem.CurrencyId]
-
-            }
-            extensionObject.onGridReady = function (api) {
-                extensionObject.currencyExchangeGridAPI = api;
-                extensionObject.currencyExchangeGridAPI.loadGrid(query);
-                extensionObject.onGridReady = undefined;
-            };
-            dataItem.extensionObject = extensionObject;
-
-        }
-                
+        }                
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
                clicked: editCurrency
-            }, {
-                name: "New Exchange Rate",
-                clicked: addExchangeRate
             }
             ];
         }
 
         function editCurrency(currencyObj) {
             var onCurrencyUpdated = function (currencyObj) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(currencyObj);
                 gridAPI.itemUpdated(currencyObj);
             }
             VRCommon_CurrencyService.editCurrency(currencyObj.CurrencyId, onCurrencyUpdated);
         }
-
-
-        function addExchangeRate(dataItem) {
-            gridAPI.expandRow(dataItem);
-            var query = {
-                Currencies: [dataItem.CurrencyId]
-            }
-            if (dataItem.extensionObject.currencyExchangeGridAPI != undefined)
-                dataItem.extensionObject.currencyExchangeGridAPI.loadGrid(query);
-            var onCurrencyExchangeRateAdded = function (exchangeObject) {
-                if (dataItem.extensionObject.currencyExchangeGridAPI != undefined) {
-                    dataItem.extensionObject.currencyExchangeGridAPI.onExchangeRateAdded(exchangeObject);
-                }
-
-            };
-            VRCommon_CurrencyExchangeRateService.addExchangeRate(onCurrencyExchangeRateAdded, dataItem);
-
-        }
         
-        
+        this.initializeController = initializeController;
     }
 
     return directiveDefinitionObject;

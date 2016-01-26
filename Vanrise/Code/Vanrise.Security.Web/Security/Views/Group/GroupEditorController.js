@@ -55,6 +55,7 @@
                     });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
                 });
             }
             else

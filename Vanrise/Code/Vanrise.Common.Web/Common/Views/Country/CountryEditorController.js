@@ -5,13 +5,15 @@
     countryEditorController.$inject = ['$scope', 'VRCommon_CountryAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
     function countryEditorController($scope, VRCommon_CountryAPIService, VRNotificationService, VRNavigationService ,UtilsService) {
-
         
         var countrytId;
         var editMode;
-        defineScope();
+        var countryEntity;
+
         loadParameters();
+        defineScope();
         load();
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
@@ -21,40 +23,58 @@
         }
         function defineScope() {
             $scope.saveCountry = function () {
-                    if (editMode) {
-                        return updateCountry();
-                    }
-                    else {
-                        return insertCountry();
-                    }
+                if (editMode)
+                    return updateCountry();
+                else
+                    return insertCountry();
             };
 
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
-
-
         }
 
         function load() {
-                $scope.isGettingData = true;
-                if (editMode) {
-                  getCountry();
-                }
-                else {
-                    $scope.title = UtilsService.buildTitleForAddEditor("Country");
-                    $scope.isGettingData = false;
-                }
-          
+            $scope.isLoading = true;
+
+            if (editMode) {
+                getCountry().then(function(){
+                    loadAllControls().finally(function () {
+                        countryEntity = undefined;
+                    }).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        $scope.isLoading = false;
+                    });
+                });
+            }
+            else {
+                $scope.title = UtilsService.buildTitleForAddEditor("Country");
+                $scope.isLoading = false;
+            }
+
         }
+
         function getCountry() {
             return VRCommon_CountryAPIService.GetCountry(countrytId).then(function (country) {
-                fillScopeFromCountryObj(country);
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.isGettingData = false;
+                countryEntity = country;
             });
+        }
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+              .finally(function () {
+                  $scope.isLoading = false;
+              });
+        }
+
+        function setTitle() {
+            if (editMode && countryEntity != undefined)
+                $scope.title = UtilsService.buildTitleForUpdateEditor(countryEntity.Name, "Country");
+            else
+                $scope.title = UtilsService.buildTitleForAddEditor("Country");
         }
 
         function buildCountryObjFromScope() {
@@ -65,14 +85,19 @@
             return obj;
         }
 
-        function fillScopeFromCountryObj(country) {
-            $scope.name = country.Name;
-            $scope.title = UtilsService.buildTitleForUpdateEditor(country.Name, "Country");
+        function loadStaticData() {
+
+            if (countryEntity == undefined)
+                return;
+
+            $scope.name = countryEntity.Name;
         }
+
         function insertCountry() {
+            $scope.isLoading = true;
+
             var countryObject = buildCountryObjFromScope();
-            return VRCommon_CountryAPIService.AddCountry(countryObject)
-            .then(function (response) {
+            return VRCommon_CountryAPIService.AddCountry(countryObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Country", response ,"Name")) {
                     if ($scope.onCountryAdded != undefined)
                         $scope.onCountryAdded(response.InsertedObject);
@@ -80,13 +105,18 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
             });
 
         }
+
         function updateCountry() {
+            $scope.isLoading = true;
+
             var countryObject = buildCountryObjFromScope();
-            VRCommon_CountryAPIService.UpdateCountry(countryObject)
-            .then(function (response) {
+
+            VRCommon_CountryAPIService.UpdateCountry(countryObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Country", response, "Name")) {
                     if ($scope.onCountryUpdated != undefined)
                         $scope.onCountryUpdated(response.UpdatedObject);
@@ -94,6 +124,8 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
             });
         }
     }

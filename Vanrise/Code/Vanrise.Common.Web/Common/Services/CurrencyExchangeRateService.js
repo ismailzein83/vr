@@ -1,8 +1,8 @@
 ﻿
-app.service('VRCommon_CurrencyExchangeRateService', ['UtilsService', 'VRModalService', 'VRNotificationService',
-    function (UtilsService, VRModalService, VRNotificationService) {
+app.service('VRCommon_CurrencyExchangeRateService', ['UtilsService', 'VRModalService', 'VRNotificationService', 'VRCommon_CurrencyService',
+    function (UtilsService, VRModalService, VRNotificationService, VRCommon_CurrencyService) {
 
-        function addExchangeRate(onCurrencyExchangeRateAdded , currency) {
+        function addExchangeRate(onCurrencyExchangeRateAdded, currencyId) {
             var settings = {
 
             };
@@ -13,14 +13,47 @@ app.service('VRCommon_CurrencyExchangeRateService', ['UtilsService', 'VRModalSer
             };
             var parameters = {};
 
-            if (currency != undefined)
-                parameters.CurrencyId = currency.CurrencyId;
+            if (currencyId != undefined)
+                parameters.CurrencyId = currencyId;
             VRModalService.showModal('/Client/Modules/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateEditor.html', parameters, settings);
+        }
+
+        function registerDrillDownToCurrency() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = "Exchange Rates";
+            drillDownDefinition.directive = "vr-common-currencyexchangerate-grid";
+            drillDownDefinition.parentMenuActions = [{
+                name: "New Exchange Rate",
+                clicked: function (currencyItem) {
+                    if (drillDownDefinition.setTabSelected != undefined)
+                        drillDownDefinition.setTabSelected(currencyItem);
+                    
+                    var onExchangeRateAdded = function (exchangeRateObj) {
+                        if (currencyItem.exchangeGridAPI != undefined) {
+                            currencyItem.exchangeGridAPI.onExchangeRateAdded(exchangeRateObj);
+                        }
+                    };
+                    addExchangeRate(onExchangeRateAdded, currencyItem.CurrencyId);
+                }
+            }];
+
+            drillDownDefinition.loadDirective = function (directiveAPI, currencyItem) {
+                currencyItem.exchangeGridAPI = directiveAPI;
+                var query = {
+                    Currencies: [currencyItem.CurrencyId],
+                };
+
+                return currencyItem.exchangeGridAPI.loadGrid(query);
+            };
+
+            VRCommon_CurrencyService.addDrillDownDefinition(drillDownDefinition);
         }
 
 
         return ({
-            addExchangeRate: addExchangeRate
+            addExchangeRate: addExchangeRate,
+            registerDrillDownToCurrency: registerDrillDownToCurrency
         });
 
     }]);

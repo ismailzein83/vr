@@ -1,7 +1,7 @@
 ﻿
 app.service('VRCommon_CurrencyService', ['UtilsService','VRModalService', 'VRNotificationService',
     function (UtilsService, VRModalService, VRNotificationService) {
-
+        var drillDownDefinitions = [];
         function addCurrency(onCurrencyAdded) {
             var settings = {
 
@@ -30,9 +30,19 @@ app.service('VRCommon_CurrencyService', ['UtilsService','VRModalService', 'VRNot
             VRModalService.showModal('/Client/Modules/Common/Views/Currency/CurrencyEditor.html', parameters, settings);
         }
 
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
+
         return ({
             addCurrency: addCurrency,
-            editCurrency: editCurrency
+            editCurrency: editCurrency,
+            addDrillDownDefinition: addDrillDownDefinition,
+            getDrillDownDefinition: getDrillDownDefinition
         });
 
     }]);

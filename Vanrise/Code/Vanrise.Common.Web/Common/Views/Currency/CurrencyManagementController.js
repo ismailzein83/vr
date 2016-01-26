@@ -6,8 +6,10 @@
 
     function currencyManagementController($scope, VRCommon_CurrencyService) {
         var gridAPI;
+
         defineScope();
         load();
+
         var filter = {};
 
         function defineScope() {
@@ -24,9 +26,6 @@
         }
 
         function load() {
-
-           
-
         }
 
         function setFilterObject() {
@@ -38,7 +37,6 @@
         }
 
         function addNewCurrency() {
-           
             var onCurrencyAdded = function (currencyObj) {
                 if (gridAPI != undefined) {
                     gridAPI.onCurrencyAdded(currencyObj);

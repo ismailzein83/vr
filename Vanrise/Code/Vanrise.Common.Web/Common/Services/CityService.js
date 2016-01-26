@@ -45,9 +45,7 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
                 clicked: function (countryItem) {
                     if (drillDownDefinition.setTabSelected != undefined)
                         drillDownDefinition.setTabSelected(countryItem);
-                    var query = {
-                        CountriesIds: [countryItem.Entity.CountryId]
-                    }
+                   
                     var onCityAdded = function (cityObj) {
                         if (countryItem.cityGridAPI != undefined) {
                             countryItem.cityGridAPI.onCityAdded(cityObj);
