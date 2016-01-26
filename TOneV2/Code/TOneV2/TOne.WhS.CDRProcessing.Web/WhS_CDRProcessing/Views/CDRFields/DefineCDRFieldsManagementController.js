@@ -2,9 +2,9 @@
 
     "use strict";
 
-    defineCDRFieldsManagementController.$inject = ['$scope', 'WhS_CDRProcessing_MainService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService','WhS_CDRProcessing_DefineCDRFieldsAPIService'];
+    defineCDRFieldsManagementController.$inject = ['$scope', 'WhS_CDRProcessing_CDRFieldService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService','WhS_CDRProcessing_DefineCDRFieldsAPIService'];
 
-    function defineCDRFieldsManagementController($scope, WhS_CDRProcessing_MainService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_CDRProcessing_DefineCDRFieldsAPIService) {
+    function defineCDRFieldsManagementController($scope, WhS_CDRProcessing_CDRFieldService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_CDRProcessing_DefineCDRFieldsAPIService) {
         var gridAPI;
 
         defineScope();
@@ -58,7 +58,7 @@
                     gridAPI.onCDRFieldAdded(cdrFieldObj);
             };
 
-            WhS_CDRProcessing_MainService.addNewCDRField(onCDRFieldAdded);
+            WhS_CDRProcessing_CDRFieldService.addNewCDRField(onCDRFieldAdded);
         }
     }
 

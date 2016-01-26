@@ -1,7 +1,10 @@
-﻿
-app.service('WhS_Routing_RPRouteService', ['VRModalService', 'VRNotificationService',
-    function (VRModalService, VRNotificationService) {
+﻿(function (appControllers) {
 
+    'use strict';
+
+    RPRouteService.$inject = ['VRModalService'];
+
+    function RPRouteService(VRModalService) {
         return ({
             viewRPRouteOptionSupplier: viewRPRouteOptionSupplier
         });
@@ -16,4 +19,8 @@ app.service('WhS_Routing_RPRouteService', ['VRModalService', 'VRNotificationServ
 
             VRModalService.showModal("/Client/Modules/WhS_Routing/Views/RPRoute/RPRouteOptionSupplier.html", parameters, null);
         }
-    }]);
+    }
+
+    appControllers.service('WhS_Routing_RPRouteService', RPRouteService);
+
+})(appControllers);

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    customerIdentificationRuleManagementController.$inject = ['$scope', 'WhS_CDRProcessing_MainService', 'UtilsService', 'VRNotificationService','VRUIUtilsService'];
+    customerIdentificationRuleManagementController.$inject = ['$scope', 'WhS_CDRProcessing_CustomerIdentificationRuleService', 'UtilsService', 'VRNotificationService','VRUIUtilsService'];
 
-    function customerIdentificationRuleManagementController($scope, WhS_CDRProcessing_MainService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function customerIdentificationRuleManagementController($scope, WhS_CDRProcessing_CustomerIdentificationRuleService, UtilsService, VRNotificationService, VRUIUtilsService) {
         var gridAPI;
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -68,7 +68,7 @@
                     gridAPI.onCustomerIdentificationRuleAdded(customerRuleObj);
             };
 
-            WhS_CDRProcessing_MainService.addCustomerIdentificationRule(onCustomerIdentificationRuleAdded);
+            WhS_CDRProcessing_CustomerIdentificationRuleService.addCustomerIdentificationRule(onCustomerIdentificationRuleAdded);
         }
     }
 

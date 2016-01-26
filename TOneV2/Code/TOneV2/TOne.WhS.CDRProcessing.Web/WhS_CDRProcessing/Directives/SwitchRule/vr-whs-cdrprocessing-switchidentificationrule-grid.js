@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsCdrprocessingSwitchidentificationruleGrid", ["UtilsService", "VRNotificationService", "WhS_CDRProcessing_MainService", "WhS_CDRProcessing_SwitchIdentificationRuleAPIService",
-function (UtilsService, VRNotificationService, WhS_CDRProcessing_MainService, WhS_CDRProcessing_SwitchIdentificationRuleAPIService) {
+app.directive("vrWhsCdrprocessingSwitchidentificationruleGrid", ["UtilsService", "VRNotificationService", "WhS_CDRProcessing_SwitchIdentificationRuleService", "WhS_CDRProcessing_SwitchIdentificationRuleAPIService",
+function (UtilsService, VRNotificationService, WhS_CDRProcessing_SwitchIdentificationRuleService, WhS_CDRProcessing_SwitchIdentificationRuleAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -80,14 +80,14 @@ function (UtilsService, VRNotificationService, WhS_CDRProcessing_MainService, Wh
                 gridAPI.itemUpdated(switchRule);
             }
 
-            WhS_CDRProcessing_MainService.editSwitchIdentificationRule(switchRuleObj.Entity, onSwitchIdentificationRuleUpdated);
+            WhS_CDRProcessing_SwitchIdentificationRuleService.editSwitchIdentificationRule(switchRuleObj.Entity, onSwitchIdentificationRuleUpdated);
         }
         function deleteSwitchIdentificationRule(switchRuleObj) {
             var onSwitchIdentificationRuleObjDeleted = function (switchRule) {
                 gridAPI.itemDeleted(switchRule);
             };
 
-            WhS_CDRProcessing_MainService.deleteSwitchIdentificationRule($scope, switchRuleObj, onSwitchIdentificationRuleObjDeleted);
+            WhS_CDRProcessing_SwitchIdentificationRuleService.deleteSwitchIdentificationRule($scope, switchRuleObj, onSwitchIdentificationRuleObjDeleted);
         }
     }
 

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsCdrprocessingDefinecdrfieldsGrid", ["UtilsService", "VRNotificationService", "WhS_CDRProcessing_MainService", "WhS_CDRProcessing_DefineCDRFieldsAPIService",
-function (UtilsService, VRNotificationService, WhS_CDRProcessing_MainService, WhS_CDRProcessing_DefineCDRFieldsAPIService) {
+app.directive("vrWhsCdrprocessingDefinecdrfieldsGrid", ["UtilsService", "VRNotificationService", "WhS_CDRProcessing_CDRFieldService", "WhS_CDRProcessing_DefineCDRFieldsAPIService",
+function (UtilsService, VRNotificationService, WhS_CDRProcessing_CDRFieldService, WhS_CDRProcessing_DefineCDRFieldsAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -83,14 +83,14 @@ function (UtilsService, VRNotificationService, WhS_CDRProcessing_MainService, Wh
                 gridAPI.itemUpdated(cdrField);
             }
 
-            WhS_CDRProcessing_MainService.editCDRField(cdrFieldObj.Entity, onCDRFieldUpdated);
+            WhS_CDRProcessing_CDRFieldService.editCDRField(cdrFieldObj.Entity, onCDRFieldUpdated);
         }
         function deleteCDRField(cdrFieldObj) {
             var onCDRFieldObjDeleted = function (cdrField) {
                 gridAPI.itemDeleted(cdrField);
             };
 
-            WhS_CDRProcessing_MainService.deleteCDRField($scope, cdrFieldObj, onCDRFieldObjDeleted);
+            WhS_CDRProcessing_CDRFieldService.deleteCDRField($scope, cdrFieldObj, onCDRFieldObjDeleted);
         }
     }
 

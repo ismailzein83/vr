@@ -1,7 +1,10 @@
-﻿
-app.service('WhS_Sales_SellingRuleService', ['WhS_Sales_SellingRuleAPIService', 'VRModalService', 'VRNotificationService',
-    function (WhS_Sales_SellingRuleAPIService, VRModalService, VRNotificationService) {
+﻿(function (appControllers) {
 
+    'use strict';
+
+    SellingRuleService.$inject = ['WhS_Sales_SellingRuleAPIService', 'VRModalService', 'VRNotificationService'];
+
+    function SellingRuleService(WhS_Sales_SellingRuleAPIService, VRModalService, VRNotificationService) {
         return ({
             addSellingRule: addSellingRule,
             editSellingRule: editSellingRule,
@@ -52,5 +55,8 @@ app.service('WhS_Sales_SellingRuleService', ['WhS_Sales_SellingRuleAPIService', 
                     }
                 });
         }
+    }
 
-    }]);
+    appControllers.service('WhS_Sales_SellingRuleService', SellingRuleService);
+
+})(appControllers);

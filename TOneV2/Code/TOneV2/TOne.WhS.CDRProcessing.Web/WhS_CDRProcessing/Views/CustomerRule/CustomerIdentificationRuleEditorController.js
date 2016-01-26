@@ -93,7 +93,6 @@
         function load() {
             $scope.scopeModal.isLoading = true;
             if (isEditMode) {
-                $scope.title = UtilsService.buildTitleForUpdateEditor("Customer Identification Rule");
                 getCustomerRule().then(function () {
                     loadAllControls()
                         .finally(function () {
@@ -105,7 +104,6 @@
                 });
             }
             else {
-                $scope.title = UtilsService.buildTitleForAddEditor("Customer Identification Rule");
                 loadAllControls();
             }
 
@@ -114,13 +112,16 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadCarrierAccountDirective])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadFilterBySection, loadCarrierAccountDirective])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
                .finally(function () {
                    $scope.scopeModal.isLoading = false;
                });
+        }
+        function setTitle() {
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor('Customer Identification Rule') : UtilsService.buildTitleForAddEditor('Customer Identification Rule');
         }
         function loadCarrierAccountDirective() {
 

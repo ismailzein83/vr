@@ -19,6 +19,7 @@
         loadParameters();
         defineScope();
         load();
+
         function loadParameters() {
             
             var parameters = VRNavigationService.getParameters($scope);
@@ -62,8 +63,8 @@
 
         function load() {
             $scope.scopeModal.isLoading = true;
+
             if (isEditMode) {
-                $scope.title = UtilsService.buildTitleForUpdateEditor("Switch Identification Rule");
                 getSwitchRule().then(function () {
                     loadAllControls()
                         .finally(function () {
@@ -75,23 +76,25 @@
                 });
             }
             else {
-                $scope.title = UtilsService.buildTitleForAddEditor("Switch Identification Rule");
                 loadAllControls();
             }
-
         }
 
         function setDefaultValues() {
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadSwitches, loadDataSources])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadFilterBySection, loadSwitches, loadDataSources])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
                .finally(function () {
                    $scope.scopeModal.isLoading = false;
                });
+        }
+
+        function setTitle() {
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor('Switch Identification Rule') : UtilsService.buildTitleForAddEditor('Switch Identification Rule');
         }
 
         function loadSwitches() {

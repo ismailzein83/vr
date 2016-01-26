@@ -1,6 +1,6 @@
-﻿normalizationRuleManagementController.$inject = ["$scope", "WhS_CDRProcessing_MainService", "WhS_CDRProcessing_PhoneNumberTypeEnum", "UtilsService", "VRNotificationService"];
+﻿normalizationRuleManagementController.$inject = ["$scope", "WhS_CDRProcessing_NormalizationRuleService", "WhS_CDRProcessing_PhoneNumberTypeEnum", "UtilsService", "VRNotificationService"];
 
-function normalizationRuleManagementController($scope, WhS_CDRProcessing_MainService, WhS_CDRProcessing_PhoneNumberTypeEnum, UtilsService, VRNotificationService) {
+function normalizationRuleManagementController($scope, WhS_CDRProcessing_NormalizationRuleService, WhS_CDRProcessing_PhoneNumberTypeEnum, UtilsService, VRNotificationService) {
 
     var gridAPI;
 
@@ -64,7 +64,7 @@ function normalizationRuleManagementController($scope, WhS_CDRProcessing_MainSer
             gridAPI.onNormalizationRuleAdded(normalizationRuleDetail);
         };
 
-        WhS_CDRProcessing_MainService.addNormalizationRule(onNormalizationRuleAdded);
+        WhS_CDRProcessing_NormalizationRuleService.addNormalizationRule(onNormalizationRuleAdded);
     }
 }
 

@@ -1,57 +1,63 @@
-﻿SupplierPriceListController.$inject = ['$scope', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcessService', 'VRUIUtilsService', 'UtilsService', 'WhS_SupPL_SupplierPriceListService'];
+﻿(function (appControllers) {
 
-function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcessService, VRUIUtilsService, UtilsService, WhS_SupPL_SupplierPriceListService) {
-    defineScope();
-    var carrierAccountDirectiveAPI;
-    var carrierAccountReadyPromiseDeferred;
+    'use strict';
 
-    var currencyDirectiveAPI;
-    var currencyReadyPromiseDeferred;
+    SupplierPriceListController.$inject = ['$scope', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcessService', 'VRUIUtilsService', 'UtilsService', 'WhS_SupPL_SupplierPriceListService'];
 
-    loadParameters();
-    load();
-    function loadParameters() {
-    }
-    function defineScope() {
-        $scope.selectedSupplier;
-        $scope.selectedCurrency;
-        $scope.zoneList;
-        $scope.upload = function () {
-            var input = {
-                SupplierId: $scope.selectedSupplier.CarrierAccountId,
-                CurrencyId: $scope.selectedCurrency.CurrencyId,
-                FileId: $scope.zoneList.fileId
-            };
+    function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcessService, VRUIUtilsService, UtilsService, WhS_SupPL_SupplierPriceListService) {
+        var carrierAccountDirectiveAPI;
+        var carrierAccountReadyPromiseDeferred;
 
-            return WhS_SupPL_SupplierPriceListAPIService.UploadSupplierPriceList(input).then(function (response) {
+        var currencyDirectiveAPI;
+        var currencyReadyPromiseDeferred;
+
+        loadParameters();
+        defineScope();
+        load();
+
+        function loadParameters() {
+        }
+        function defineScope() {
+            $scope.selectedSupplier;
+            $scope.selectedCurrency;
+            $scope.zoneList;
+            $scope.upload = function () {
+                var input = {
+                    SupplierId: $scope.selectedSupplier.CarrierAccountId,
+                    CurrencyId: $scope.selectedCurrency.CurrencyId,
+                    FileId: $scope.zoneList.fileId
+                };
+
+                return WhS_SupPL_SupplierPriceListAPIService.UploadSupplierPriceList(input).then(function (response) {
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
                         return BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
                 });
-        }
-        $scope.onCurrencyDirectiveReady = function (api) {
-            currencyDirectiveAPI = api;
-            var setLoader = function (value) { $scope.isLoadingCurrencies = value };
-            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, currencyDirectiveAPI, undefined, setLoader, currencyReadyPromiseDeferred);
-        }
-        $scope.onCarrierAccountDirectiveReady = function (api) {
-            carrierAccountDirectiveAPI = api;
-            var setLoader = function (value) { $scope.isLoadingSuppliers = value };
-            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountDirectiveAPI, undefined, setLoader, carrierAccountReadyPromiseDeferred);
-        }
-        $scope.downloadTemplate = function () {
-            return WhS_SupPL_SupplierPriceListAPIService.DownloadSupplierPriceListTemplate().then(function (response) {
-                UtilsService.downloadFile(response.data, response.headers);
-            });
-        }
-        $scope.previewSupplierPriceList = function () {
-            WhS_SupPL_SupplierPriceListService.previewSupplierPriceList(228);
-        }       
+            }
+            $scope.onCurrencyDirectiveReady = function (api) {
+                currencyDirectiveAPI = api;
+                var setLoader = function (value) { $scope.isLoadingCurrencies = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, currencyDirectiveAPI, undefined, setLoader, currencyReadyPromiseDeferred);
+            }
+            $scope.onCarrierAccountDirectiveReady = function (api) {
+                carrierAccountDirectiveAPI = api;
+                var setLoader = function (value) { $scope.isLoadingSuppliers = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountDirectiveAPI, undefined, setLoader, carrierAccountReadyPromiseDeferred);
+            }
+            $scope.downloadTemplate = function () {
+                return WhS_SupPL_SupplierPriceListAPIService.DownloadSupplierPriceListTemplate().then(function (response) {
+                    UtilsService.downloadFile(response.data, response.headers);
+                });
+            }
+            $scope.previewSupplierPriceList = function () {
+                WhS_SupPL_SupplierPriceListService.previewSupplierPriceList(228);
+            }       
 
-    }
-    function load() {
+        }
+        function load() {
      
+        }
     }
- 
-   
-};
-appControllers.controller('WhS_SupPL_SupplierPriceListController', SupplierPriceListController);
+
+    appControllers.controller('WhS_SupPL_SupplierPriceListController', SupplierPriceListController);
+
+})(appControllers);

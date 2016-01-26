@@ -186,7 +186,11 @@
     <Content Include="WhS_CDRProcessing\Services\APIServices\CustomerIdentificationRuleAPIService.js" />
     <Content Include="WhS_CDRProcessing\Services\APIServices\NormalizationRuleAPIService.js" />
     <Content Include="WhS_CDRProcessing\Services\APIServices\SupplierIdentificationRuleAPIService.js" />
-    <Content Include="WhS_CDRProcessing\Services\MainService.js" />
+    <Content Include="WhS_CDRProcessing\Services\CustomerIdentificationRuleService.js" />
+    <Content Include="WhS_CDRProcessing\Services\CDRFieldService.js" />
+    <Content Include="WhS_CDRProcessing\Services\NormalizationRuleService.js" />
+    <Content Include="WhS_CDRProcessing\Services\SupplierIdentificationRuleService.js" />
+    <Content Include="WhS_CDRProcessing\Services\SwitchIdentificationRuleService.js" />
     <Content Include="WhS_CDRProcessing\Views\CDRFields\DefineCDRFieldsEditor.html" />
     <Content Include="WhS_CDRProcessing\Views\CDRFields\DefineCDRFieldsEditorController.js" />
     <Content Include="WhS_CDRProcessing\Views\CDRFields\DefineCDRFieldsManagement.html" />

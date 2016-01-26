@@ -2,9 +2,9 @@
 
     "use strict";
 
-    supplierIdentificationRuleManagementController.$inject = ['$scope', 'WhS_CDRProcessing_MainService', 'UtilsService', 'VRNotificationService','VRUIUtilsService'];
+    supplierIdentificationRuleManagementController.$inject = ['$scope', 'WhS_CDRProcessing_SupplierIdentificationRuleService', 'UtilsService', 'VRNotificationService','VRUIUtilsService'];
 
-    function supplierIdentificationRuleManagementController($scope, WhS_CDRProcessing_MainService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function supplierIdentificationRuleManagementController($scope, WhS_CDRProcessing_SupplierIdentificationRuleService, UtilsService, VRNotificationService, VRUIUtilsService) {
         var gridAPI;
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -67,7 +67,7 @@
                     gridAPI.onSupplierIdentificationRuleAdded(supplierRuleObj);
             };
 
-            WhS_CDRProcessing_MainService.addSupplierIdentificationRule(onSupplierIdentificationRuleAdded);
+            WhS_CDRProcessing_SupplierIdentificationRuleService.addSupplierIdentificationRule(onSupplierIdentificationRuleAdded);
         }
     }
 

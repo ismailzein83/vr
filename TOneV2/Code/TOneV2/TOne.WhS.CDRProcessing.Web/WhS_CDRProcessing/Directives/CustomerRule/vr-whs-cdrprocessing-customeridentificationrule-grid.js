@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsCdrprocessingCustomeridentificationruleGrid", ["UtilsService", "VRNotificationService", "WhS_CDRProcessing_MainService", "WhS_CDRProcessing_CustomerIdentificationRuleAPIService",
-function (UtilsService, VRNotificationService, WhS_CDRProcessing_MainService, WhS_CDRProcessing_CustomerIdentificationRuleAPIService) {
+app.directive("vrWhsCdrprocessingCustomeridentificationruleGrid", ["UtilsService", "VRNotificationService", "WhS_CDRProcessing_CustomerIdentificationRuleService", "WhS_CDRProcessing_CustomerIdentificationRuleAPIService",
+function (UtilsService, VRNotificationService, WhS_CDRProcessing_CustomerIdentificationRuleService, WhS_CDRProcessing_CustomerIdentificationRuleAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -80,14 +80,14 @@ function (UtilsService, VRNotificationService, WhS_CDRProcessing_MainService, Wh
                 gridAPI.itemUpdated(customerRule);
             }
 
-            WhS_CDRProcessing_MainService.editCustomerIdentificationRule(customerRuleObj.Entity, onCustomerIdentificationRuleUpdated);
+            WhS_CDRProcessing_CustomerIdentificationRuleService.editCustomerIdentificationRule(customerRuleObj.Entity, onCustomerIdentificationRuleUpdated);
         }
         function deleteCustomerIdentificationRule(customerRuleObj) {
             var onCustomerIdentificationRuleObjDeleted = function (customerRule) {
                 gridAPI.itemDeleted(customerRule);
             };
 
-            WhS_CDRProcessing_MainService.deleteCustomerIdentificationRule($scope,customerRuleObj, onCustomerIdentificationRuleObjDeleted);
+            WhS_CDRProcessing_CustomerIdentificationRuleService.deleteCustomerIdentificationRule($scope,customerRuleObj, onCustomerIdentificationRuleObjDeleted);
         }
     }
 

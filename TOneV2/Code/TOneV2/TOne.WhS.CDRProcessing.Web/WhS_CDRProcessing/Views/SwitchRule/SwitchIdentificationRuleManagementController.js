@@ -2,9 +2,9 @@
 
     "use strict";
 
-    switchIdentificationRuleManagementController.$inject = ['$scope', 'WhS_CDRProcessing_MainService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    switchIdentificationRuleManagementController.$inject = ['$scope', 'WhS_CDRProcessing_SwitchIdentificationRuleService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function switchIdentificationRuleManagementController($scope, WhS_CDRProcessing_MainService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function switchIdentificationRuleManagementController($scope, WhS_CDRProcessing_SwitchIdentificationRuleService, UtilsService, VRNotificationService, VRUIUtilsService) {
         var gridAPI;
         var switchDirectiveAPI;
         var switchReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -87,7 +87,7 @@
                     gridAPI.onSwitchIdentificationRuleAdded(switchRuleObj);
             };
 
-            WhS_CDRProcessing_MainService.addSwitchIdentificationRule(onSwitchIdentificationRuleAdded);
+            WhS_CDRProcessing_SwitchIdentificationRuleService.addSwitchIdentificationRule(onSwitchIdentificationRuleAdded);
         }
     }
 

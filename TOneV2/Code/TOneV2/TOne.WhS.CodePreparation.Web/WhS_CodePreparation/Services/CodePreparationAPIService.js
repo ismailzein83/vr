@@ -1,57 +1,57 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    codePreparationAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_CodePrep_ModuleConfig', 'VRModalService'];
+    codePreparationAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_CP_ModuleConfig', 'VRModalService'];
 
-    function codePreparationAPIService(BaseAPIService, UtilsService, WhS_CodePrep_ModuleConfig, VRModalService) {
+    function codePreparationAPIService(BaseAPIService, UtilsService, WhS_CP_ModuleConfig, VRModalService) {
 
         function ApplyCodePreparationForEntities(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "ApplyCodePreparationForEntities"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "ApplyCodePreparationForEntities"), input);
         }
 
 
         function GetZoneItems(sellingNumberPlanId, countryId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "GetZoneItems"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "GetZoneItems"), {
                 sellingNumberPlanId: sellingNumberPlanId,
                 countryId: countryId
             });
         }
         function CheckCodePreparationState(sellingNumberPlanId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "CheckCodePreparationState"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "CheckCodePreparationState"), {
                 sellingNumberPlanId: sellingNumberPlanId
             });
         }
         function CancelCodePreparationState(sellingNumberPlanId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "CancelCodePreparationState"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "CancelCodePreparationState"), {
                 sellingNumberPlanId: sellingNumberPlanId
             });
         }
         function GetCodeItems(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "GetCodeItems"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "GetCodeItems"), input);
         }
         function DownloadImportCodePreparationTemplate() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "DownloadImportCodePreparationTemplate"), {}, {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "DownloadImportCodePreparationTemplate"), {}, {
                 returnAllResponseParameters: true,
                 responseTypeAsBufferArray: true
             });
         }
         function SaveChanges(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "SaveChanges"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "SaveChanges"), input);
         }
         function MoveCodes(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "MoveCodes"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "MoveCodes"), input);
         }
         function CloseCodes(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "CloseCodes"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "CloseCodes"), input);
         }
         function SaveNewZone(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "SaveNewZone"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "SaveNewZone"), input);
         }
         function SaveNewCode(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "SaveNewCode"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "SaveNewCode"), input);
         }
         function GetChanges(sellingNumberPlanId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CodePrep_ModuleConfig.moduleName, "CodePreparation", "GetChanges"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "GetChanges"), {
                 sellingNumberPlanId: sellingNumberPlanId
             });
         }

@@ -1,7 +1,10 @@
-﻿
-app.service('WhS_Routing_RouteRuleService', ['WhS_Routing_RouteRuleAPIService', 'VRModalService', 'VRNotificationService', 
-    function (WhS_Routing_RouteRuleAPIService, VRModalService, VRNotificationService) {
+﻿(function (appControllers) {
 
+    'use strict';
+
+    RouteRuleService.$inject = ['WhS_Routing_RouteRuleAPIService', 'VRModalService', 'VRNotificationService'];
+
+    function RouteRuleService(WhS_Routing_RouteRuleAPIService, VRModalService, VRNotificationService) {
         return ({
             addRouteRule: addRouteRule,
             editRouteRule: editRouteRule,
@@ -52,5 +55,8 @@ app.service('WhS_Routing_RouteRuleService', ['WhS_Routing_RouteRuleAPIService', 
                     }
                 });
         }
+    }
 
-    }]);
+    appControllers.service('WhS_Routing_RouteRuleService', RouteRuleService);
+
+})(appControllers);

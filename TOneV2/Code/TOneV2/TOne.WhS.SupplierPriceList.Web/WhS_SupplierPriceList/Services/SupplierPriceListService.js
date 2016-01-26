@@ -1,6 +1,10 @@
-﻿
-app.service('WhS_SupPL_SupplierPriceListService', ['VRModalService', 'VRNotificationService', 'UtilsService',
-    function (VRModalService, VRNotificationService, UtilsService) {
+﻿(function (appControllers) {
+
+    'use strict';
+
+    SupplierPriceListService.$inject = ['VRModalService'];
+
+    function SupplierPriceListService(VRModalService) {
         return ({
             previewSupplierPriceList: previewSupplierPriceList
         });
@@ -20,5 +24,8 @@ app.service('WhS_SupPL_SupplierPriceListService', ['VRModalService', 'VRNotifica
 
             VRModalService.showModal('/Client/Modules/WhS_SupplierPriceList/Views/SupplierPriceListPreview.html', parameters, settings);
         }
-      
- }]);
+    }
+
+    appControllers.service('WhS_SupPL_SupplierPriceListService', SupplierPriceListService);
+
+})(appControllers);

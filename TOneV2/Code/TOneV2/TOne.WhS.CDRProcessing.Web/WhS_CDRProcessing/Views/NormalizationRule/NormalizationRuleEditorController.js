@@ -29,7 +29,7 @@
         function defineScope() {
             $scope.scopeModal = {};
             $scope.scopeModal.validateDateTime = function () {
-                return VRValidationService.validateTimeRange($scope.scopeModal.beginEffectiveDate, $scope.scopeModal.endEffectiveDate);
+                return VRValidationService.validateTimeRange($scope.scopeModal.beginEffectiveTime, $scope.scopeModal.endEffectiveTime);
             }
             $scope.scopeModal.phoneNumberTypes = UtilsService.getArrayEnum(WhS_CDRProcessing_PhoneNumberTypeEnum);
             $scope.scopeModal.selectedPhoneNumberTypes = [];
@@ -37,8 +37,8 @@
             $scope.scopeModal.phoneNumberLength = undefined;
             $scope.scopeModal.phoneNumberPrefix = undefined;
 
-            $scope.scopeModal.beginEffectiveDate = Date.now();
-            $scope.scopeModal.endEffectiveDate = undefined;
+            $scope.scopeModal.beginEffectiveTime = Date.now();
+            $scope.scopeModal.endEffectiveTime = undefined;
             $scope.scopeModal.onNormalizeNumberSettingsDirectiveReady = function (api) {
                 normalizationRuleSettingsDirectiveAPI = api;
                 normalizationRuleReadyPromiseDeferred.resolve();
@@ -59,10 +59,7 @@
         function load() {
             $scope.scopeModal.isLoading = true;
 
-
-
             if (isEditMode) {
-                $scope.title = UtilsService.buildTitleForUpdateEditor("Normalization Rule");
                 getNormalizationRule().then(function () {
                     loadAllControls()
                         .finally(function () {
@@ -74,10 +71,8 @@
                 });
             }
             else {
-                $scope.title = UtilsService.buildTitleForAddEditor("Normalization Rule");
                 loadAllControls();
             }     
-                          
         }
         function getNormalizationRule() {
             return WhS_CDRProcessing_NormalizationRuleAPIService.GetRule(normalizationRuleId).then(function (normalizationRule) {
@@ -85,13 +80,16 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadNormalizationRuleDirective])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadFilterBySection, loadNormalizationRuleDirective])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
                .finally(function () {
                    $scope.scopeModal.isLoading = false;
                });
+        }
+        function setTitle() {
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor('Normalization Rule') : UtilsService.buildTitleForAddEditor('Normalization Rule');
         }
         function loadNormalizationRuleDirective() {
 

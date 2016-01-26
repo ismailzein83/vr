@@ -1,6 +1,6 @@
 ﻿"use strict"
 
-app.directive("vrWhsCdrprocessingNormalizationruleGrid", ["WhS_CDRProcessing_MainService", "WhS_CDRProcessing_NormalizationRuleAPIService", "WhS_CDRProcessing_PhoneNumberTypeEnum", "UtilsService", "VRNotificationService", function (WhS_CDRProcessing_MainService, WhS_CDRProcessing_NormalizationRuleAPIService, WhS_CDRProcessing_PhoneNumberTypeEnum, UtilsService, VRNotificationService) {
+app.directive("vrWhsCdrprocessingNormalizationruleGrid", ["WhS_CDRProcessing_NormalizationRuleService", "WhS_CDRProcessing_NormalizationRuleAPIService", "WhS_CDRProcessing_PhoneNumberTypeEnum", "UtilsService", "VRNotificationService", function (WhS_CDRProcessing_NormalizationRuleService, WhS_CDRProcessing_NormalizationRuleAPIService, WhS_CDRProcessing_PhoneNumberTypeEnum, UtilsService, VRNotificationService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -77,7 +77,7 @@ app.directive("vrWhsCdrprocessingNormalizationruleGrid", ["WhS_CDRProcessing_Mai
                 gridAPI.itemUpdated(normalizationRuleObj);
             }
 
-            WhS_CDRProcessing_MainService.editNormalizationRule(dataItem, onNormalizationRuleUpdated);
+            WhS_CDRProcessing_NormalizationRuleService.editNormalizationRule(dataItem, onNormalizationRuleUpdated);
         }
 
         function deleteNormalizationRule(dataItem) {
@@ -85,7 +85,7 @@ app.directive("vrWhsCdrprocessingNormalizationruleGrid", ["WhS_CDRProcessing_Mai
                 gridAPI.itemDeleted(normalizationRuleObj);
             }
 
-            WhS_CDRProcessing_MainService.deleteNormalizationRule(dataItem, onNormalizationRuleDeleted);
+            WhS_CDRProcessing_NormalizationRuleService.deleteNormalizationRule(dataItem, onNormalizationRuleDeleted);
         }
         function AddPhoneTypeDescriptionName(obj) {
             for (var i = 0; i < obj.Entity.Criteria.PhoneNumberTypes.length; i++)

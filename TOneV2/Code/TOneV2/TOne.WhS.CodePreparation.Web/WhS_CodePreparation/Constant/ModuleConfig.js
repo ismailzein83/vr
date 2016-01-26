@@ -1,3 +1,3 @@
-﻿app.constant('WhS_CodePrep_ModuleConfig', {
+﻿app.constant('WhS_CP_ModuleConfig', {
     moduleName: "WhS_CodePrep"
 });
