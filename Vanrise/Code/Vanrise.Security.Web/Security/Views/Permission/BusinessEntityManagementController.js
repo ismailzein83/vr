@@ -9,7 +9,6 @@
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
 
         var gridAPI;
-        var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -32,7 +31,6 @@
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                gridReadyDeferred.resolve();
             };
 
             $scope.toggleInheritance = function () {
@@ -57,7 +55,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultiplePromises([loadTree(), gridReadyDeferred.promise]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadTree]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
