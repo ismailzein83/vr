@@ -82,6 +82,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ExecutionFlowController.cs" />
     <Compile Include="Controllers\QueueingController.cs" />
     <Compile Include="ModelMappers\QueueingMappers.cs" />
     <Compile Include="Models\EnumModel.cs" />
@@ -91,7 +92,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Queueing\Constants\QueueItemStatusEnum.js" />
+    <Content Include="Queueing\Directives\ExecutionFlowDefinition\executionflowdefinition_selector.js" />
+    <Content Include="Queueing\Services\APIServices\ExecutionFlowAPIService.js" />
     <Content Include="Queueing\Services\QueueingAPIService.js" />
+    <Content Include="Queueing\Services\ExecutionFlowService.js" />
+    <Content Include="Queueing\Views\ExecutionFlow\ExecutionFlowManagement.html" />
+    <Content Include="Queueing\Views\ExecutionFlow\ExecutionFlowManagementController.js" />
+    <Content Include="Queueing\Views\ExecutionFlow\ExecutionFlowEditor.html" />
+    <Content Include="Queueing\Views\ExecutionFlow\ExecutionFlowEditorController.js" />
     <Content Include="Queueing\Views\QueueItemManagement.html" />
     <Content Include="Queueing\Views\QueueItemManagementController.js" />
   </ItemGroup>
@@ -105,6 +113,7 @@
       <Name>Vanrise.Queueing</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
