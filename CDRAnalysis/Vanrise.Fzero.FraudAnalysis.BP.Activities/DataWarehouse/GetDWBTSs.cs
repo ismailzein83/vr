@@ -18,7 +18,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class GetDWBTSsOutput
     {
-        public DWDimensionDictionary BTSs { get; set; }
+        public DWBTSDictionary BTSs { get; set; }
     }
 
     #endregion
@@ -28,7 +28,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InOutArgument<DWDimensionDictionary> BTSs { get; set; }
+        public InOutArgument<DWBTSDictionary> BTSs { get; set; }
 
         #endregion
 
@@ -46,10 +46,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing BTSs");
             DWDimensionManager BTSManager = new DWDimensionManager();
             IEnumerable<DWDimension> listBTSs = BTSManager.GetDimensions("Dim_BTS");
-            DWDimensionDictionary BTSs = new DWDimensionDictionary();
+            DWBTSDictionary BTSs = new DWBTSDictionary();
             if (listBTSs.Count() > 0)
                 foreach (var i in listBTSs)
-                    BTSs.Add(i.Id, i);
+                    BTSs.Add(i.Description, i);
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing BTSs");
             return new GetDWBTSsOutput
             {

@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public BaseQueue<DWFactBatch> OutputQueue { get; set; }
 
-        public DWDimensionDictionary BTSs { get; set; }
+        public DWBTSDictionary BTSs { get; set; }
 
         public DWAccountCaseDictionary AccountCases { get; set; }
 
@@ -46,7 +46,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public InOutArgument<BaseQueue<DWFactBatch>> OutputQueue { get; set; }
 
         [RequiredArgument]
-        public InArgument<DWDimensionDictionary> BTSs { get; set; }
+        public InArgument<DWBTSDictionary> BTSs { get; set; }
 
         [RequiredArgument]
         public InArgument<DWAccountCaseDictionary> AccountCases { get; set; }
@@ -152,7 +152,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
             int LastBTSId = 0;
             if (inputArgument.BTSs.Count() > 0)
-                LastBTSId = inputArgument.BTSs.Last().Key;
+                LastBTSId = inputArgument.BTSs.Last().Value.Id;
 
 
             List<DWDimension> ToBeInsertedBTSs = new List<DWDimension>();
@@ -191,14 +191,15 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                                 if (!string.IsNullOrEmpty(cdr.BTS))
                                 {
-                                    DWDimension bts = inputArgument.BTSs.Values.FirstOrDefault(x => x.Description == cdr.BTS);
 
-                                    if (bts == null)
+                                    DWDimension bts;
+                                    if (!inputArgument.BTSs.TryGetValue(cdr.BTS, out bts))
                                     {
                                         bts = new DWDimension() { Id = ++LastBTSId, Description = cdr.BTS };
-                                        inputArgument.BTSs.Add(bts.Id, bts);
+                                        inputArgument.BTSs.Add(bts.Description, bts);
                                         ToBeInsertedBTSs.Add(bts);
                                     }
+                                   
                                     dwFact.BTSId = bts.Id;
                                 }
 

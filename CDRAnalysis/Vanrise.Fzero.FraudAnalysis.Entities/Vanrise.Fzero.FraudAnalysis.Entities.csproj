@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountCaseLog.cs" />
+    <Compile Include="DataWarehouse\DWBTSDictionary.cs" />
     <Compile Include="FixedPrefixes.cs" />
     <Compile Include="Query\FixedPrefixesQuery.cs" />
     <Compile Include="InfoDetail.cs" />
