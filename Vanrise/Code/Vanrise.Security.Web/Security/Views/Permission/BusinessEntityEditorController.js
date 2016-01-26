@@ -113,65 +113,21 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadUserSelector, loadGroupSelector, loadAssignedPermissions]).catch(function (error) {
+            var loadPromise = $scope.isEditMode ? loadEditModeControls() : loadAddModeControls();
+            
+            return loadPromise.catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
             });
 
-            function setTitle() {
-                $scope.title = $scope.isEditMode ? UtilsService.buildTitleForUpdateEditor(entityName, 'Permissions') : UtilsService.buildTitleForAddEditor('Permissions');
-            }
+            function loadEditModeControls() {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadEditModeAssignedPermissions]);
 
-            function loadUserSelector() {
-                var loadUserSelectorDeferred = UtilsService.createPromiseDeferred();
+                function loadEditModeAssignedPermissions() {
+                    if (!permissionOptions)
+                        return;
 
-                userSelectorReadyDeferred.promise.then(function () {
-                    if ($scope.isEditMode) {
-                        loadUserSelectorDeferred.resolve();
-                    }
-                    else {
-                        var userSelectorPayload = {};
-
-                        userSelectorPayload.filter = $scope.isEditMode ? null : {
-                            EntityType: entityType,
-                            EntityId: entityId
-                        };
-
-                        VRUIUtilsService.callDirectiveLoad(userSelectorAPI, userSelectorPayload, loadUserSelectorDeferred);
-                    }
-                });
-                
-                return loadUserSelectorDeferred.promise;
-            }
-
-            function loadGroupSelector() {
-                var loadGroupSelectorDeferred = UtilsService.createPromiseDeferred();
-
-                groupSelectorReadyDeferred.promise.then(function () {
-                    if ($scope.isEditMode) {
-                        loadGroupSelectorDeferred.resolve();
-                    }
-                    else {
-                        var groupSelectorPayload = {};
-
-                        groupSelectorPayload.filter = $scope.isEditMode ? null : {
-                            EntityType: entityType,
-                            EntityId: entityId
-                        };
-
-                        VRUIUtilsService.callDirectiveLoad(groupSelectorAPI, groupSelectorPayload, loadGroupSelectorDeferred);
-                    }
-                });
-                
-                return loadGroupSelectorDeferred.promise;
-            }
-
-            function loadAssignedPermissions() {
-                if (!permissionOptions)
-                    return;
-
-                if ($scope.isEditMode) {
                     for (var i = 0; i < permissionOptions.length; i++) {
                         var entityPermission = {
                             name: permissionOptions[i],
@@ -185,7 +141,49 @@
                         $scope.entityPermissions.push(entityPermission);
                     }
                 }
-                else {
+            }
+
+            function loadAddModeControls() {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadUserSelector, loadGroupSelector, loadAddModeAssignedPermissions]);
+
+                function loadUserSelector() {
+                    var loadUserSelectorDeferred = UtilsService.createPromiseDeferred();
+
+                    userSelectorReadyDeferred.promise.then(function () {
+                        var userSelectorPayload = {};
+
+                        userSelectorPayload.filter = $scope.isEditMode ? null : {
+                            EntityType: entityType,
+                            EntityId: entityId
+                        };
+
+                        VRUIUtilsService.callDirectiveLoad(userSelectorAPI, userSelectorPayload, loadUserSelectorDeferred);
+                    });
+
+                    return loadUserSelectorDeferred.promise;
+                }
+
+                function loadGroupSelector() {
+                    var loadGroupSelectorDeferred = UtilsService.createPromiseDeferred();
+
+                    groupSelectorReadyDeferred.promise.then(function () {
+                        var groupSelectorPayload = {};
+
+                        groupSelectorPayload.filter = $scope.isEditMode ? null : {
+                            EntityType: entityType,
+                            EntityId: entityId
+                        };
+
+                        VRUIUtilsService.callDirectiveLoad(groupSelectorAPI, groupSelectorPayload, loadGroupSelectorDeferred);
+                    });
+
+                    return loadGroupSelectorDeferred.promise;
+                }
+
+                function loadAddModeAssignedPermissions() {
+                    if (!permissionOptions)
+                        return;
+                    
                     for (var i = 0; i < permissionOptions.length; i++) {
                         var entityPermission = {
                             name: permissionOptions[i],
@@ -195,6 +193,10 @@
                         $scope.entityPermissions.push(entityPermission);
                     }
                 }
+            }
+
+            function setTitle() {
+                $scope.title = $scope.isEditMode ? UtilsService.buildTitleForUpdateEditor(entityName, 'Permissions') : UtilsService.buildTitleForAddEditor('Permissions');
             }
         }
 
