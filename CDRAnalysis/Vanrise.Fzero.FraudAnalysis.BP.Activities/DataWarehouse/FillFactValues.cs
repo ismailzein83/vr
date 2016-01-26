@@ -58,7 +58,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         # endregion
 
         #region Private Members
-        private static void CheckIfTimeAddedorAdd(DWTimeDictionary dwTimeDictionary,  List<DWTime> ToBeInsertedTimes, DateTime givenTime)
+        private static void CheckIfTimeAddedorAdd(DWTimeDictionary dwTimeDictionary, List<DWTime> ToBeInsertedTimes, DateTime givenTime)
         {
             DWTime dwTime;
             DateTime dateInstance = new DateTime(givenTime.Year, givenTime.Month, givenTime.Day, givenTime.Hour, 0, 0);
@@ -95,7 +95,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             return dwFactBatch;
         }
 
-        private static void AppliedBTSstoDB(AsyncActivityHandle handle,  List<DWDimension> ToBeInsertedBTSs, IDWDimensionDataManager dimensionDataManager)
+        private static void AppliedBTSstoDB(AsyncActivityHandle handle, List<DWDimension> ToBeInsertedBTSs, IDWDimensionDataManager dimensionDataManager)
         {
             if (ToBeInsertedBTSs.Count > 0)
             {
@@ -106,7 +106,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             }
         }
 
-        private static void AppliedTimestoDB(AsyncActivityHandle handle,  List<DWTime> ToBeInsertedTimes, IDWTimeDataManager timeDataManager)
+        private static void AppliedTimestoDB(AsyncActivityHandle handle, List<DWTime> ToBeInsertedTimes, IDWTimeDataManager timeDataManager)
         {
             if (ToBeInsertedTimes.Count > 0)
             {
@@ -191,13 +191,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                                 if (!string.IsNullOrEmpty(cdr.BTS))
                                 {
-                                    DWDimension bts;
+                                    DWDimension bts = inputArgument.BTSs.Values.FirstOrDefault(x => x.Description == cdr.BTS);
 
-                                    if (inputArgument.BTSs.Where(x => x.Value.Description == cdr.BTS).Count() > 0)
-                                    {
-                                        bts = inputArgument.BTSs.Where(x => x.Value.Description == cdr.BTS).First().Value;
-                                    }
-                                    else
+                                    if (bts == null)
                                     {
                                         bts = new DWDimension() { Id = ++LastBTSId, Description = cdr.BTS };
                                         inputArgument.BTSs.Add(bts.Id, bts);
@@ -217,7 +213,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                     List<DWAccountCase> values;
                                     if (inputArgument.AccountCases.TryGetValue(cdr.MSISDN, out values))
                                     {
-                                        var accountCase = values.FirstOrDefault(x=>cdr.ConnectDateTime >= x.FromDate && cdr.ConnectDateTime <= x.ToDate);
+                                        var accountCase = values.FirstOrDefault(x => cdr.ConnectDateTime >= x.FromDate && cdr.ConnectDateTime <= x.ToDate);
                                         if (accountCase != null)
                                         {
                                             dwFact.SuspicionLevel = accountCase.SuspicionLevel;

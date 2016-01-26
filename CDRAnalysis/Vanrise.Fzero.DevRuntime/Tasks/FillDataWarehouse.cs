@@ -27,8 +27,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             {
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.FillDataWarehouseProcessInput
                 {
-                    FromDate = DateTime.Parse("2015-03-10"),
-                    ToDate = DateTime.Parse("2016-03-20")
+                    FromDate = DateTime.Parse("2015-03-10 00:00:00"),
+                    ToDate = DateTime.Parse("2016-03-20 00:59:59")
                 }
             };
             bpClient.CreateNewProcess(input);
