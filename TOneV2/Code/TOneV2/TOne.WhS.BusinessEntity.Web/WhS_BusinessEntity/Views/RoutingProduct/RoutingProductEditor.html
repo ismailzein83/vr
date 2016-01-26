@@ -14,12 +14,12 @@
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Sale Zones'">
-                    <vr-row vr-loader="isLoadingSaleZonesSelector">
+                    <vr-row vr-loader="scopeModal.isLoadingSaleZonesSelector">
                         <vr-columns width="1/2row">
                             <vr-select datatextfield="description" datavaluefield="value" label="Sale Zones" datasource="scopeModal.saleZoneRelationType"
                                        selectedvalues="scopeModal.selectedSaleZoneRelationType" onselectionchanged="scopeModal.onSaleZoneRelationTypeSelectionChanged" hideremoveicon />
                         </vr-columns>
-                        <vr-columns width="1/2row" ng-show="scopeModal.showSaleZoneSelector">
+                        <vr-columns width="1/2row" ng-if="scopeModal.showSaleZoneSelector">
                             <vr-whs-be-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady"
                                                          isdisabled="!scopeModal.selectedSellingNumberPlan"
                                                          selectedvalues="scopeModal.selectedSaleZones"

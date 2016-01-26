@@ -15,7 +15,6 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "New Routing Product";
                 modalScope.onRoutingProductAdded = onRoutingProductAdded
             };
 
@@ -31,7 +30,6 @@
             };
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.title = "Edit Routing Product: " + routingProductObj.Name;
                 modalScope.onRoutingProductUpdated = onRoutingProductUpdated;
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductEditor.html', parameters, modalSettings);

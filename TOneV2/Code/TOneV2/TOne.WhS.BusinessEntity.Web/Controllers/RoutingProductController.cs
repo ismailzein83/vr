@@ -11,55 +11,61 @@ using Vanrise.Web.Base;
 namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
     [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "RoutingProduct")]
     public class RoutingProductController : BaseAPIController
     {
+        RoutingProductManager _manager;
+        public RoutingProductController()
+        {
+            _manager = new RoutingProductManager();
+        }
+
         [HttpPost]
+        [Route("GetFilteredRoutingProducts")]
         public object GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<RoutingProductQuery> input)
         {
-            RoutingProductManager manager = new RoutingProductManager();
-            return GetWebResponse(input, manager.GetFilteredRoutingProducts(input));
+            return GetWebResponse(input, _manager.GetFilteredRoutingProducts(input));
         }
 
         [HttpGet]
+        [Route("GetRoutingProductInfo")]
         public IEnumerable<RoutingProductInfo> GetRoutingProductInfo(string filter)
         {
             RoutingProductInfoFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<RoutingProductInfoFilter>(filter) : null;
-            RoutingProductManager manager = new RoutingProductManager();
-            return manager.GetRoutingProductInfo(deserializedFilter);
+            return _manager.GetRoutingProductInfo(deserializedFilter);
         }
         [HttpGet]
         public IEnumerable<RoutingProductInfo> GetRoutingProductsInfoBySellingNumberPlan(int sellingNumberPlanId)
         {
-            RoutingProductManager manager = new RoutingProductManager();
-            return manager.GetRoutingProductsInfoBySellingNumberPlan(sellingNumberPlanId);
+            return _manager.GetRoutingProductsInfoBySellingNumberPlan(sellingNumberPlanId);
         }
         
         [HttpGet]
+        [Route("GetRoutingProduct")]
         public RoutingProduct GetRoutingProduct(int routingProductId)
         {
-            RoutingProductManager manager = new RoutingProductManager();
-            return manager.GetRoutingProduct(routingProductId);
+            return _manager.GetRoutingProduct(routingProductId);
         }
 
         [HttpPost]
+        [Route("AddRoutingProduct")]
         public TOne.Entities.InsertOperationOutput<RoutingProduct> AddRoutingProduct(RoutingProduct routingProduct)
         {
-            RoutingProductManager manager = new RoutingProductManager();
-            return manager.AddRoutingProduct(routingProduct);
+            return _manager.AddRoutingProduct(routingProduct);
         }
 
         [HttpPost]
+        [Route("UpdateRoutingProduct")]
         public TOne.Entities.UpdateOperationOutput<RoutingProduct> UpdateRoutingProduct(RoutingProduct routingProduct)
         {
-            RoutingProductManager manager = new RoutingProductManager();
-            return manager.UpdateRoutingProduct(routingProduct);
+            return _manager.UpdateRoutingProduct(routingProduct);
         }
 
         [HttpGet]
+        [Route("DeleteRoutingProduct")]
         public TOne.Entities.DeleteOperationOutput<object> DeleteRoutingProduct(int routingProductId)
         {
-            RoutingProductManager manager = new RoutingProductManager();
-            return manager.DeleteRoutingProduct(routingProductId);
+            return _manager.DeleteRoutingProduct(routingProductId);
         } 
     }
 }
