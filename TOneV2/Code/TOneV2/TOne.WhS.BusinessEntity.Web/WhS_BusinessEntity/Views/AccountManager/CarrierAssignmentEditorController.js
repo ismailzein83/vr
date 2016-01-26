@@ -46,6 +46,7 @@
                         IsSupplierInDirect: value != null ? value.IsSupplierInDirect : false,
                     }
 
+                    extendGridItem(obj);
                     $scope.carriers.push(obj)
                 }
             };
@@ -78,7 +79,7 @@
             $scope.validateForm = function () {
                 if (mapCarriersForAssignment().length > 0)
                     return null;
-                return 'You must assign new carriers';
+                return 'No changes made';
             };
         }
 
@@ -141,9 +142,19 @@
                     assignedCarriers[i].supplierSwitchValue = false;
                     assignedCarriers[i].newSupplierSwitchValue = false;
                 }
-
+                
+                extendGridItem(assignedCarriers[i]);
+                
                 $scope.carriers.push(assignedCarriers[i])
             }
+        }
+
+        function extendGridItem(gridItem) {
+            gridItem.isDirty = false;
+
+            gridItem.onSwitchValueChanged = function () {
+                gridItem.isDirty = !gridItem.isDirty;
+            };
         }
 
         function mapCarriersForAssignment() {
@@ -155,6 +166,9 @@
         }
 
         function mapCarrierForAssignment(carrier, mappedCarriers) {
+            if (!carrier.isDirty)
+                return;
+
             if (carrier.customerSwitchValue != carrier.newCustomerSwitchValue && carrier.IsCustomerAvailable) {
                 var object = {
                     UserId: carrier.Entity.UserId,
@@ -164,6 +178,7 @@
                 };
                 mappedCarriers.push(object);
             }
+
             if (carrier.supplierSwitchValue != carrier.newSupplierSwitchValue && carrier.IsSupplierAvailable) {
                 var object = {
                     UserId: carrier.Entity.UserId,
