@@ -116,7 +116,6 @@
     <Compile Include="GetAccountNumbersByIMEI.cs" />
     <Compile Include="DataWarehouse\GetDWDimensions.cs" />
     <Compile Include="LoadStrategyExecutionItemSummaries.cs" />
-    <Compile Include="LoadCDRs.cs" />
     <Compile Include="CreateNumberProfiles.cs" />
     <Compile Include="DataWarehouse\PrepareDWFactsForDBApply.cs" />
     <Compile Include="OverridePreviousStrategyExecution.cs" />
