@@ -57,11 +57,7 @@ function (UtilsService, VRNotificationService, WhS_BE_RateTypeAPIService, WhS_BE
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_RateTypeAPIService.GetFilteredRateTypes(dataRetrievalInput)
                     .then(function (response) {
-                        if (response && response.Data) {
-                            for (var i = 0; i < response.Data.length; i++) {
-                                setDataItemExtension(response.Data[i]);
-                            }
-                        }
+                        
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -69,19 +65,6 @@ function (UtilsService, VRNotificationService, WhS_BE_RateTypeAPIService, WhS_BE
                     });
             };
             defineMenuActions();
-        }
-
-        function setDataItemExtension(dataItem) {
-
-            var extensionObject = {};
-            var query = {
-                RateTypesIds: [dataItem.RateTypeId],
-            }
-            extensionObject.onGridReady = function (api) {
-                extensionObject.onGridReady = undefined;
-            };
-            dataItem.extensionObject = extensionObject;
-
         }
 
         function defineMenuActions() {
@@ -94,7 +77,6 @@ function (UtilsService, VRNotificationService, WhS_BE_RateTypeAPIService, WhS_BE
 
         function editRateType(rateTypeObj) {
             var onRateTypeUpdated = function (rateTypeObj) {
-                setDataItemExtension(rateTypeObj);
                 gridAPI.itemUpdated(rateTypeObj);
             }
 

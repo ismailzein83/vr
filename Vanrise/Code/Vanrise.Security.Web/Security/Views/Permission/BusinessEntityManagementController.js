@@ -6,7 +6,6 @@
 
     function BusinessEntityManagementController($scope, VR_Sec_BusinessEntityAPIService, VR_Sec_PermissionService, UtilsService, VRNotificationService) {
         var treeAPI;
-        var treeReadyDeferred = UtilsService.createPromiseDeferred();
 
         var gridAPI;
 
@@ -19,7 +18,6 @@
 
             $scope.onTreeReady = function (api) {
                 treeAPI = api;
-                treeReadyDeferred.resolve();
             };
 
             $scope.onTreeValueChanged = function () {
@@ -62,20 +60,10 @@
             });
 
             function loadTree() {
-                var loadTreeDeferred = UtilsService.createPromiseDeferred();
-
-                VR_Sec_BusinessEntityAPIService.GetEntityNodes().then(function (response) {
+                return VR_Sec_BusinessEntityAPIService.GetEntityNodes().then(function (response) {
                     $scope.beList = response;
-
-                    treeReadyDeferred.promise.then(function () {
-                        loadTreeDeferred.resolve();
-                        treeAPI.refreshTree($scope.beList);
-                    });
-                }).catch(function (error) {
-                    loadTreeDeferred.reject();
+                    treeAPI.refreshTree($scope.beList);
                 });
-
-                return loadTreeDeferred.promise;
             }
         }
 

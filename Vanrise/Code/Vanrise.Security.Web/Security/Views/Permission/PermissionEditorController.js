@@ -10,7 +10,6 @@
         var notificationResponseText;
 
         var treeAPI;
-        var treeReadyDeferred = UtilsService.createPromiseDeferred();
         
         defineScope();
         loadParameters();
@@ -34,7 +33,6 @@
 
             $scope.onTreeReady = function (api) {
                 treeAPI = api;
-                treeReadyDeferred.resolve();
             }
 
             $scope.onTreeValueChanged = onTreeValueChanged;
@@ -65,17 +63,9 @@
             }
 
             function loadTree() {
-                var loadTreeDeferred = UtilsService.createPromiseDeferred();
-
-                treeReadyDeferred.promise.then(function () {
-                    getEntityNodes().then(function () {
-                        loadTreeDeferred.resolve();
-                    }).catch(function () {
-                        loadTreeDeferred.reject();
-                    });
+                return getEntityNodes().then(function () {
+                    treeAPI.refreshTree($scope.beList);
                 });
-
-                return loadTreeDeferred.promise;
 
                 function getEntityNodes() {
                     return VR_Sec_BusinessEntityAPIService.GetEntityNodes().then(function (response) {
@@ -85,10 +75,6 @@
                             for (var i = 0; i < response.length; i++) {
                                 response[i].isOpened = true;
                             }
-
-                            treeReadyDeferred.promise.then(function () {
-                                treeAPI.refreshTree($scope.beList);
-                            });
                         }
                     });
                 }
