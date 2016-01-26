@@ -98,6 +98,11 @@ namespace Vanrise.Security.Business
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = GroupDetailMapper(groupObj);
             }
+            else
+            {
+                updateOperationOutput.Result = UpdateOperationResult.SameExists;
+            }
+
             return updateOperationOutput;
         }
 

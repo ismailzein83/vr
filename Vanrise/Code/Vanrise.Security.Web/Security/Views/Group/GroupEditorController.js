@@ -146,7 +146,7 @@
 
             return VR_Sec_GroupAPIService.AddGroup(groupObj)
                 .then(function (response) {
-                    if (VRNotificationService.notifyOnItemAdded('Group', response)) {
+                    if (VRNotificationService.notifyOnItemAdded('Group', response, 'Name')) {
                         if ($scope.onGroupAdded != undefined)
                             $scope.onGroupAdded(response.InsertedObject);
                         $scope.modalContext.closeModal();
