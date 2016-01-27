@@ -196,9 +196,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue(
                         (cdrBatch) =>
                         {
-                            //var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
-                            //System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
-                            var cdrs = cdrBatch.CDRs;// Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
+                            var cdrs = cdrBatch.CDRs;
                             foreach (var cdr in cdrs)
                             {
                                 cdrsCount++;
@@ -221,7 +219,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 if (cdr.IMEI != null)
                                     currentProcessingNumberProfileItem.IMEIs.Add(cdr.IMEI);
 
-                                for (int i = 0; i < aggregatesCount; i++ )
+                                for (int i = 0; i < aggregatesCount; i++)
                                 {
                                     aggregateDefinitions[i].Aggregation.Evaluate(currentProcessingNumberProfileItem.AggregateStates[i], cdr);
                                 }

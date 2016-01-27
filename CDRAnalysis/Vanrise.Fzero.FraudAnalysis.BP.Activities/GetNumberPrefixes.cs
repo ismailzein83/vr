@@ -15,7 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             List<string> prefixes = new List<string>();
-            prefixes.Add("00961");
+            prefixes.Add("88888888");
             this.NumberPrefixes.Set(context, prefixes);
 
         }

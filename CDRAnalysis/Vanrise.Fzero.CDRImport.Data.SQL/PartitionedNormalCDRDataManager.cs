@@ -122,7 +122,6 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public void LoadCDR(DateTime fromTime, IEnumerable<string> numberPrefixes, Action<CDR> onCDRReady)
         {
-            //string filter = !String.IsNullOrEmpty(numberPrefix) ? string.Format("WHERE LEFT(MSISDN, {0}) LIKE '%{1}'", (9 + numberPrefix.Length), numberPrefix) : null;
             string filter = null;
             if (numberPrefixes != null && numberPrefixes.Count() > 0)
             {
@@ -137,7 +136,6 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                 }
                 filter = filterBuilder.ToString();
             } 
-            //!String.IsNullOrEmpty(numberPrefix) ? string.Format("WHERE MSISDN LIKE '241820{0}%' OR MSISDN LIKE '241830{0}%'", numberPrefix) : null;
 
             string query = String.Format( @"SELECT {0} FROM {1} WITH(NOLOCK) {2}", CDR_COLUMNS, GetNormalCDRTableName(fromTime), filter);
             ExecuteReaderText(query, (reader) =>

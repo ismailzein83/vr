@@ -77,6 +77,18 @@
       <Variable x:TypeArguments="x:Int64" Name="numberOfSubscribers" />
       <Variable x:TypeArguments="x:Int64" Name="numberOfSuspicions" />
     </Sequence.Variables>
+    <vffba1:ConvertStrategyExecItemsToInfos sap2010:WorkflowViewState.IdRef="ConvertStrategyExecItemsToInfos_1">
+      <vffba1:ConvertStrategyExecItemsToInfos.StrategyExecutionInfos>
+        <OutArgument x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">
+          <mca:CSharpReference x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">strategiesExecutionInfo</mca:CSharpReference>
+        </OutArgument>
+      </vffba1:ConvertStrategyExecItemsToInfos.StrategyExecutionInfos>
+      <vffba1:ConvertStrategyExecItemsToInfos.StrategyExecutionItems>
+        <InArgument x:TypeArguments="scg:List(vffba:ExecuteStrategyExecutionItem)">
+          <mca:CSharpValue x:TypeArguments="scg:List(vffba:ExecuteStrategyExecutionItem)">Input.StrategyExecutionItems</mca:CSharpValue>
+        </InArgument>
+      </vffba1:ConvertStrategyExecItemsToInfos.StrategyExecutionItems>
+    </vffba1:ConvertStrategyExecItemsToInfos>
     <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
         <InArgument x:TypeArguments="x:Boolean">
@@ -99,7 +111,6 @@
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareStrategyExecutionItemStatus" />
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareNumberProfilesStatus" />
               <Variable x:TypeArguments="scg:List(x:String)" Name="numberOfPrefixes" />
-              <Variable x:TypeArguments="scg:List(x:String)" Name="numberPrefixes" />
             </Parallel.Variables>
             <vfcba:LoadCDRs sap2010:WorkflowViewState.IdRef="LoadCDRs_2">
               <vfcba:LoadCDRs.FromDate>
@@ -114,7 +125,7 @@
               </vfcba:LoadCDRs.NumberOfCDRs>
               <vfcba:LoadCDRs.NumberPrefix>
                 <InArgument x:TypeArguments="scg:List(x:String)">
-                  <mca:CSharpValue x:TypeArguments="scg:List(x:String)">numberOfPrefixes</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.NumberPrefixes</mca:CSharpValue>
                 </InArgument>
               </vfcba:LoadCDRs.NumberPrefix>
               <vfcba:LoadCDRs.OutputQueue>
@@ -156,7 +167,7 @@
               </vffba1:CreateNumberProfiles.NumberOfSubscribers>
               <vffba1:CreateNumberProfiles.NumberPrefixes>
                 <InArgument x:TypeArguments="scg:List(x:String)">
-                  <mca:CSharpValue x:TypeArguments="scg:List(x:String)">numberPrefixes</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.NumberPrefixes</mca:CSharpValue>
                 </InArgument>
               </vffba1:CreateNumberProfiles.NumberPrefixes>
               <vffba1:CreateNumberProfiles.OutputQueue>
@@ -280,10 +291,11 @@
         </InArgument>
       </Assign.Value>
     </Assign>
-    <sads:DebugSymbol.Symbol>d1tDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneUZvck51bWJlclJhbmdlUHJvY2Vzcy54YW1sLEkDnAIOAgEBUAWKAgoCARGLAgWaAg4CAQJTC1OZAQIBElcJ/wEUAgEiggIJiAIkAgEZkwILlwIgAgEKjgILjgJ/AgEDWAv+ARYCASOFAg+FAoMBAgEbggJkggKBAQIBGmgNhwEeAwHgA4gBDbsBKwMBlwK8AQ3bAS8DAZ4B3AEN8QE9AgFN8gEN/QE1AgEkcBNwZQMBxQR1E3VrAwGxBGsTa2EDAZ0EfxN/dQMBiQR6E3p0AwH1A4QBE4QBXwMB4QOaAROaAWsDAcwDqQETqQFtAwG4A5UBE5UBdAMBpAOzAROzAYQBAwGQA58BE58BaQMB/AKLAROLAWEDAegCrgETrgGBAQMB1AKkAROkAYgBAwHAApABE5ABaAMBrAK4ARO4AV8DAZgCxAETxAFqAwGDAr8BE78BgAEDAe8BzgETzgF5AwHbAdgBE9gBhAEDAccB0wET0wGFAQMBswHJARPJAZoBAwGfAekBE+kBfQMBigHfARPfAZIBAgF27gET7gGJAQIBYuQBE+QBiQECAU76ARP6AYEBAgE59QET9QGBAQIBJQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneUZvck51bWJlclJhbmdlUHJvY2Vzcy54YW1sL0kDpwIOAgEBUAVbLgMBvQRcBZUCCgIBEZYCBaUCDgIBAlMLU4QBAwHFBFgLWIkBAwG+BF8LX5kBAgESYwmKAhQCASKNAgmTAiQCARmeAguiAiACAQqZAguZAn8CAQNkC4kCFgIBI5ACD5ACgwECARuNAmSNAoEBAgEacw2SAR4DAcoDkwENxgErAwGLAscBDeYBLwMBmAHnAQ38AT0CAUv9AQ2IAjUCASR7E3tlAwGqBIABE4ABbwMBlwR2E3ZhAwGEBIoBE4oBdQMB8QOFAROFAXQDAd4DjwETjwFfAwHLA6UBE6UBawMBtwO0ARO0AW0DAaQDoAEToAF0AwGRA74BE74BhAEDAf4CqgETqgFvAwHrApYBE5YBYQMB2AK5ARO5AYEBAwHFAq8BE68BiAEDAbICmwETmwFoAwGfAsMBE8MBXwMBjALPARPPAWoDAfgBygETygGAAQMB5QHZARPZAXkDAdIB4wET4wGEAQMBvwHeARPeAYUBAwGsAdQBE9QBmgEDAZkB9AET9AF9AwGFAeoBE+oBkgECAXL5ARP5AYkBAgFf7wET7wGJAQIBTIUCE4UCgQECATiAAhOAAoEBAgEl</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="ConvertStrategyExecItemsToInfos_1" sap:VirtualizedContainerService.HintSize="1521,22" />
       <sap2010:ViewStateData Id="LoadCDRs_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="CreateNumberProfiles_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetStrategyExecutionItem_1" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -300,14 +312,14 @@
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1521,360" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="1521,62" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1543,586">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1543,648">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyForNumberRangeProcess_1" sap:VirtualizedContainerService.HintSize="1583,666" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyForNumberRangeProcess_1" sap:VirtualizedContainerService.HintSize="1583,728" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
