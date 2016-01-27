@@ -48,6 +48,11 @@
   <ItemGroup>
     <Content Include="DB Scripts\Clean Scripts\Clean TOne_Entities.sql" />
     <Content Include="DB Scripts\Clean Scripts\Clean TOne_CDR.sql" />
+    <Content Include="DB Scripts\Test Scenarios\Scenario 1\TOne_Configuration.sql" />
+    <Content Include="DB Scripts\Test Scenarios\Scenario 1\TOne_Entities.sql" />
+    <Content Include="DB Scripts\Clean Scripts\Clean TOne_Logging.sql" />
+    <Content Include="DB Scripts\Test Scenarios\Scenario 1\TOne_Queueing.sql" />
+    <Content Include="DB Scripts\Test Scenarios\Scenario 1\TOne_Transaction.sql" />
     <Content Include="DLLs\antlr.runtime.dll" />
     <Content Include="DLLs\Aspose.Cells.dll" />
     <Content Include="DLLs\Castle.DynamicProxy.dll" />

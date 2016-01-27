@@ -276,7 +276,4 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetBySellingNumberPlan_1.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByCountry_1.sql" />
   </ItemGroup>
-  <ItemGroup>
-    <PostDeploy Include="TOneWhs.TestDataScenario.sql" />
-  </ItemGroup>
 </Project>
