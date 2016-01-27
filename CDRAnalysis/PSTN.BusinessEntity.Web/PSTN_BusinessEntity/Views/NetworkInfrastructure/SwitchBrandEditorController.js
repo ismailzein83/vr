@@ -2,8 +2,9 @@
 
 function SwitchBrandEditorController($scope, SwitchBrandAPIService, VRNavigationService, VRNotificationService, VRModalService) {
 
-    var brandId = undefined;
-    var editMode = undefined;
+    var brandId;
+    var brandEntity;
+    var isEditMode;
 
     loadParameters();
     defineScope();
@@ -15,15 +16,14 @@ function SwitchBrandEditorController($scope, SwitchBrandAPIService, VRNavigation
         if (parameters != undefined && parameters != null)
             brandId = parameters.BrandId;
 
-        editMode = (brandId != undefined);
+        isEditMode = (brandId != undefined);
     }
 
     function defineScope() {
 
-        $scope.name = undefined;
-
         $scope.saveBrand = function () {
-            if (editMode)
+            $scope.isLoading = true;
+            if (isEditMode)
                 return updateBrand();
             else
                 return insertBrand();
@@ -35,25 +35,37 @@ function SwitchBrandEditorController($scope, SwitchBrandAPIService, VRNavigation
     }
 
     function load() {
+        $scope.isLoading = true;
+        if (isEditMode) {
+            GetBrand().then(function () {
+                loadAllControls();
 
-        if (editMode) {
-            $scope.isGettingData = true;
-
-            SwitchBrandAPIService.GetBrandById(brandId)
-                .then(function (response) {
-                    fillScopeFromBrandObj(response);
-                })
-                .catch(function (error) {
+            }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
                 })
-                .finally(function () {
-                    $scope.isGettingData = false;
-                });
         }
+        else {
+            loadAllControls();
+        }
+             
+
     }
 
-    function fillScopeFromBrandObj(brandObj) {
-        $scope.name = brandObj.Name;
+    function loadAllControls() {
+        loadFilterBySection();
+        brandEntity = undefined;
+        $scope.isLoading = false;
+    }
+    function GetBrand()
+    {
+        return SwitchBrandAPIService.GetBrandById(brandId).then(function (response) {
+            brandEntity = response;
+        });
+    }
+    function loadFilterBySection() {
+        if (brandEntity !=undefined)
+            $scope.name = brandEntity.Name;
     }
 
     function updateBrand() {
@@ -61,7 +73,9 @@ function SwitchBrandEditorController($scope, SwitchBrandAPIService, VRNavigation
 
         return SwitchBrandAPIService.UpdateBrand(brandObj)
             .then(function (response) {
+                $scope.isLoading = false;
                 if (VRNotificationService.notifyOnItemUpdated("Switch Brand", response, "Name")) {
+
                     if ($scope.onBrandUpdated != undefined)
                         $scope.onBrandUpdated(response.UpdatedObject);
 
@@ -78,6 +92,7 @@ function SwitchBrandEditorController($scope, SwitchBrandAPIService, VRNavigation
 
         return SwitchBrandAPIService.AddBrand(brandObj)
             .then(function (response) {
+                $scope.isLoading = false;
                 if (VRNotificationService.notifyOnItemAdded("Switch Brand", response, "Name")) {
                     if ($scope.onBrandAdded != undefined)
                         $scope.onBrandAdded(response.InsertedObject);

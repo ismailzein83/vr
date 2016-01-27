@@ -8,6 +8,7 @@
         UpdateSwitch: UpdateSwitch,
         AddSwitch: AddSwitch,
         DeleteSwitch: DeleteSwitch
+     
     });
 
     function GetFilteredSwitches(input) {

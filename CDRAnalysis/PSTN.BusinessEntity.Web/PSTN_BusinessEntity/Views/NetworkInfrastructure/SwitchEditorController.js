@@ -1,9 +1,14 @@
-﻿SwitchEditorController.$inject = ["$scope", "SwitchAPIService", "SwitchBrandAPIService", "DataSourceAPIService", "DataSourceService", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService"];
+﻿SwitchEditorController.$inject = ["$scope", "SwitchAPIService", "SwitchBrandAPIService", "VR_Integration_DataSourceAPIService", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService", 'VRUIUtilsService'];
 
-function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService, DataSourceAPIService, DataSourceService, UtilsService, VRNavigationService, VRNotificationService, VRModalService) {
+function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService, VR_Integration_DataSourceAPIService, UtilsService, VRNavigationService, VRNotificationService, VRModalService, VRUIUtilsService) {
 
     var switchId;
-    var editMode;
+    var isEditMode;
+    var switchEntity;
+    var allExceptDataSources;
+    var dataSourceDirectiveAPI;
+    var dataSourceReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
 
     loadParameters();
     defineScope();
@@ -15,21 +20,24 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
         if (parameters != undefined && parameters != null)
             switchId = parameters.SwitchId;
 
-        editMode = (switchId != undefined);
+        isEditMode = (switchId != undefined);
     }
 
     function defineScope() {
 
-        $scope.name = undefined;
         $scope.brands = [];
-        $scope.selectedBrand = undefined;
-        $scope.areaCode = undefined;
-        $scope.timeOffset = (!editMode) ? "00.00:00:00" : null;
+        $scope.timeOffset = (!isEditMode) ? "00.00:00:00" : null;
         $scope.dataSources = [];
-        $scope.selectedDataSource = undefined;
+
+        $scope.onDataSourceSelectorReady =function(api)
+        {
+            dataSourceDirectiveAPI = api;
+            dataSourceReadyPromiseDeferred.resolve();
+        }
 
         $scope.saveSwitch = function () {
-            if (editMode)
+            $scope.isLoading = true;
+            if (isEditMode)
                 return updateSwitch();
             else
                 return insertSwitch();
@@ -67,16 +75,6 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
             return "Format: DD.HH:MM:SS";
         }
 
-        $scope.addDataSource = function () {
-
-            var onDataSourceAdded = function (dataSourceObj) {
-                $scope.dataSources.push(dataSourceObj);
-                $scope.selectedDataSource = dataSourceObj;
-            }
-
-            DataSourceService.addDataSource(onDataSourceAdded);
-        }
-
         $scope.addBrand = function () {
             var settings = {};
 
@@ -98,30 +96,44 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
     }
 
     function load() {
-        $scope.isGettingData = true;
-
-        UtilsService.waitMultipleAsyncOperations([loadBrands, loadDataSources])
-            .then(function () {
-                if (editMode) {
-                    return SwitchAPIService.GetSwitchById(switchId)
-                        .then(function (response) {
-                            fillScopeFromSwitchObj(response);
-                        })
-                        .catch(function (error) {
-                            VRNotificationService.notifyExceptionWithClose(error, $scope);
-                        })
-
-                    .finally(function (error) {
-                        $scope.isGettingData = false;
-                    });
-                }
-            })
-            .catch(function (error) {
+        $scope.isLoading = true;
+        if (isEditMode) {
+            GetSwitch().then(function () {
+                loadAllControls();
+            }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.isLoading = false;
+            })
+        }
+        else {
+            loadSwitchAssignedDataSources().then(function () {
+                loadAllControls();
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.isLoading = false;
+            })
+        }
+       
+    }
+
+    function loadAllControls() {
+      return  UtilsService.waitMultipleAsyncOperations([loadBrands, loadDataSourceSelector]).then(function () {
+                      loadFilterBySection();
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.isLoading = false;
             }).finally(function (error) {
-                loadSwitchAssignedDataSources();
-                $scope.isGettingData = false;
+                switchEntity = undefined;
+                $scope.isLoading = false;
             });
+      
+    }
+
+    function GetSwitch()
+    {
+        return SwitchAPIService.GetSwitchById(switchId).then(function (response) {
+            switchEntity = response;
+        });
     }
 
     function loadBrands() {
@@ -133,50 +145,49 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
             });
     }
 
-    function loadDataSources() {
-        return DataSourceAPIService.GetDataSources()
-            .then(function (response) {
+    function loadDataSourceSelector()
+    {
+        var dataSourceLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                angular.forEach(response, function (item) {
-                    $scope.dataSources.push(item);
-                });
+        dataSourceReadyPromiseDeferred.promise
+            .then(function () {
+
+                var directivePayload = {
+                    selectedIds: switchEntity != undefined ? switchEntity.DataSourceId : undefined,
+                    filter: allExceptDataSources != undefined ? { AllExcept: allExceptDataSources } : null
+                };
+                periodReadyPromiseDeferred = undefined;
+                VRUIUtilsService.callDirectiveLoad(dataSourceDirectiveAPI, directivePayload, dataSourceLoadPromiseDeferred);
             });
+        return dataSourceLoadPromiseDeferred.promise;
     }
 
     function loadSwitchAssignedDataSources() {
 
         return SwitchAPIService.GetSwitchAssignedDataSources()
             .then(function (response) {
-                var selectedDataSourceIndex = ($scope.selectedDataSource != undefined) ?
-                    UtilsService.getItemIndexByVal($scope.dataSources, $scope.selectedDataSource.DataSourceID, "DataSourceID") : -1;
-
-                angular.forEach(response, function (item) {
-                    var index = UtilsService.getItemIndexByVal($scope.dataSources, item, "DataSourceID");
-                    if (index > -1 && index != selectedDataSourceIndex) {
-                        $scope.dataSources.splice(index, 1);
-                    }
-                });
-            })
-            .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            })
-            .finally(function () {
-                $scope.isGettingData = false;
+                console.log(response);
+                allExceptDataSources=response;
             });
     }
 
-    function fillScopeFromSwitchObj(switchObj) {
-        $scope.name = switchObj.Name;
-        $scope.selectedBrand = UtilsService.getItemByVal($scope.brands, switchObj.BrandId, "BrandId");
-        $scope.areaCode = switchObj.AreaCode;
-        $scope.timeOffset = switchObj.TimeOffset;
-        $scope.selectedDataSource = UtilsService.getItemByVal($scope.dataSources, switchObj.DataSourceId, "DataSourceID");
+    function loadFilterBySection() {
+        if(switchEntity !=undefined)
+        {
+            $scope.name = switchEntity.Name;
+            $scope.selectedBrand = UtilsService.getItemByVal($scope.brands, switchEntity.BrandId, "BrandId");
+            $scope.areaCode = switchEntity.AreaCode;
+            $scope.timeOffset = switchEntity.TimeOffset;
+            $scope.selectedDataSource = UtilsService.getItemByVal($scope.dataSources, switchEntity.DataSourceId, "DataSourceID");
+        }
+       
     }
 
     function updateSwitch() {
         var switchObj = buildSwitchObjFromScope();
         return SwitchAPIService.UpdateSwitch(switchObj)
             .then(function (response) {
+                $scope.isLoading = false;
                 if (VRNotificationService.notifyOnItemUpdated("Switch", response, "Name")) {
                     if ($scope.onSwitchUpdated != undefined)
                         $scope.onSwitchUpdated(response.UpdatedObject);
@@ -194,6 +205,7 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
 
         return SwitchAPIService.AddSwitch(switchObj)
             .then(function (response) {
+                $scope.isLoading = false;
                 if (VRNotificationService.notifyOnItemAdded("Switch", response, "Name")) {
                     if ($scope.onSwitchAdded != undefined)
                         $scope.onSwitchAdded(response.InsertedObject);

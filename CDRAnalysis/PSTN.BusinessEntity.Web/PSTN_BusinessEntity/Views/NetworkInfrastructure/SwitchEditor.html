@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_SwitchEditorController" vr-loader="isGettingData">
+﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_SwitchEditorController" vr-loader="isLoading">
 
     <vr-modalbody>
         <vr-form name="formSwitchEditor">
@@ -32,7 +32,8 @@
                     </vr-select>
                 </vr-columns>
                 <vr-columns width="1/2row">
-                    <vr-select label="Data Source"
+                    <vr-integration-datasource-selector on-ready="onDataSourceSelectorReady" adddatasource selectedvalues="selectedDataSource" onselectionchanged="onDataSourceChanged"></vr-integration-datasource-selector>
+                    <!--<vr-select label="Data Source"
                                datasource="dataSources"
                                selectedvalues="selectedDataSource"
                                datavaluefield="DataSourceId"
@@ -40,7 +41,7 @@
                                entityname="Data Source"
                                onaddclicked="addDataSource"
                                onselectionchanged="onDataSourceChanged">
-                    </vr-select>
+                    </vr-select>-->
                 </vr-columns>
             </vr-row>
         </vr-form>
