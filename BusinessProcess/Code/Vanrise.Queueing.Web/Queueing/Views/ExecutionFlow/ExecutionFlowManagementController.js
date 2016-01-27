@@ -5,8 +5,8 @@
 
     function ExecutionFlowController($scope, VR_Queueing_ExecutionFlowService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
-        var gridAPI;
-        var filter = {};
+        var gridApi;
+        
 
         var executionFlowDefinitionSelectorAPI;
         var executionFlowDirectionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -24,19 +24,19 @@
 
 
             $scope.onGridReady = function (api) {
-                gridAPI = api;
-                gridAPI.loadGrid(filter);
+                gridApi = api;
+               var filter = {};
+             gridApi.loadGrid(filter);
             };
 
             $scope.search = function () {
-                getFilterObject();
-                gridAPI.loadGrid(filter);
+               return gridApi.loadGrid(getFilterObject());
             };
 
             $scope.addExecutionFlow = function () {
                 var onExecutionFlowAdded = function (executionFlowObj) {
-                    if (gridAPI) {
-                        gridAPI.onExecutionFlowAdded(executionFlowObj);
+                    if (gridApi) {
+                        gridApi.onExecutionFlowAdded(executionFlowObj);
                     }
                 };
                 VR_Queueing_ExecutionFlowService.addExecutionFlow(onExecutionFlowAdded);
@@ -76,10 +76,12 @@
 
 
         function getFilterObject() {
-            filter = {
-                ID: $scope.selectedExecutionFlowDefinition,
+          var  filter = {
+                DefinitionId: executionFlowDefinitionSelectorAPI.getSelectedIds(),
                 Name: $scope.name
             };
+            return filter;
+            
         }
     }
 

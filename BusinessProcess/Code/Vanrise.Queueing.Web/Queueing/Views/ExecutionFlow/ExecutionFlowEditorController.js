@@ -2,12 +2,16 @@
 
     'use strict';
 
-    ExecutionFlowEditorController.$inject = ['$scope', 'VR_Queueing_ExecutionFlowAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+    ExecutionFlowEditorController.$inject = ['$scope', 'VR_Queueing_ExecutionFlowAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService','VRUIUtilsService'];
 
-    function ExecutionFlowEditorController($scope, VR_Queueing_ExecutionFlowAPIService, VRNotificationService, VRNavigationService, UtilsService) {
+    function ExecutionFlowEditorController($scope, VR_Queueing_ExecutionFlowAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
         var isEditMode;
-        var userId;
-        var userEntity;
+        var executionFlowId;
+        var executionFlowEntity;
+
+        var executionFlowDefinitionSelectorAPI;
+        var executionFlowDirectionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
 
         loadParameters();
         defineScope();
@@ -17,17 +21,24 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null)
-                userId = parameters.userId;
+                executionFlowId = parameters.ID;
 
-            isEditMode = (userId != undefined);
+            isEditMode = (executionFlowId != undefined);
         }
 
         function defineScope() {
+
+            $scope.onExecutionFlowDefinitionSelectorReady = function (api) {
+                executionFlowDefinitionSelectorAPI = api;
+                executionFlowDirectionSelectorReadyDeferred.resolve();
+            };
+
             $scope.save = function () {
                 if (isEditMode)
-                    return updateUser();
-                else
-                    return insertUser();
+                    return updateExecutionFlow();
+                else {
+                    return insertExecutionFlow();
+                }
             };
 
             $scope.close = function () {
@@ -39,9 +50,9 @@
             $scope.isLoading = true;
 
             if (isEditMode) {
-                getUser().then(function () {
+                getExecutionFlow().then(function () {
                     loadAllControls().finally(function () {
-                        userEntity = undefined;
+                        executionFlowEntity = undefined;
                     });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -52,14 +63,14 @@
             }
         }
 
-        function getUser() {
-            return VR_Queueing_ExecutionFlowAPIService.GetUserbyId(userId).then(function (response) {
-                userEntity = response;
+        function getExecutionFlow() {
+            return VR_Queueing_ExecutionFlowAPIService.GetExecutionFlow(executionFlowId).then(function (response) {
+                executionFlowEntity = response;
             });
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadExecutionFlowDefinition])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -69,40 +80,56 @@
         }
 
         function setTitle() {
-            if (isEditMode && userEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(userEntity.Name, 'User');
+            if (isEditMode && executionFlowEntity != undefined)
+                $scope.title = UtilsService.buildTitleForUpdateEditor(executionFlowEntity.Name, 'Execution Flow');
             else
-                $scope.title = UtilsService.buildTitleForAddEditor('User');
+                $scope.title = UtilsService.buildTitleForAddEditor('Execution Flow');
         }
 
         function loadStaticData() {
 
-            if (userEntity == undefined)
+            if (executionFlowEntity == undefined) {
                 return;
+            }
+            
 
-            $scope.name = userEntity.Name;
-            $scope.email = userEntity.Email;
-            $scope.description = userEntity.Description;
-            $scope.isActive = userEntity.Status;
+            $scope.name = executionFlowEntity.Name;
+             
         }
 
-        function buildUserObjFromScope() {
-            var userObject = {
-                userId: (userId != null) ? userId : 0,
+        function loadExecutionFlowDefinition() {
+            var executionFlowDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            executionFlowDirectionSelectorReadyDeferred.promise.then(function () {
+                
+                var payload = {
+                    filter: null,
+                    selectedIds: executionFlowEntity == undefined ? null:executionFlowEntity.DefinitionId 
+                   
+                };
+
+                VRUIUtilsService.callDirectiveLoad(executionFlowDefinitionSelectorAPI, payload, executionFlowDefinitionSelectorLoadDeferred);
+            });
+           
+            return executionFlowDefinitionSelectorLoadDeferred.promise;
+        }
+
+
+        function buildExecutionFlowObjFromScope() {
+            var executionFlowObject = {
+                executionFlowId: (executionFlowId != null) ? executionFlowId : 0,
                 name: $scope.name,
-                email: $scope.email,
-                description: $scope.description,
-                Status: $scope.isActive == false ? '0' : '1'
+                definitionId: executionFlowDefinitionSelectorAPI.getSelectedIds()
             };
-            return userObject;
+            return executionFlowObject;
         }
 
-        function insertUser() {
+        function insertExecutionFlow() {
             $scope.isLoading = true;
 
-            var userObject = buildUserObjFromScope();
+            var userObject = buildExecutionFlowObjFromScope();
 
-            return ExecutionFlowAPIService.AddUser(userObject)
+            return VR_Queueing_ExecutionFlowAPIService.AddUser(userObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('User', response, 'Email')) {
                     if ($scope.onUserAdded != undefined)
@@ -117,15 +144,15 @@
 
         }
 
-        function updateUser() {
+        function updateExecutionFlow() {
             $scope.isLoading = true;
 
-            var userObject = buildUserObjFromScope();
+            var executionFlowObject = buildExecutionFlowObjFromScope();
 
-            return ExecutionFlowAPIService.UpdateUser(userObject).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated('User', response, 'Email')) {
-                    if ($scope.onUserUpdated != undefined)
-                        $scope.onUserUpdated(response.UpdatedObject);
+            return VR_Queueing_ExecutionFlowAPIService.UpdateExecutionFlow(executionFlowObject).then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated('Execution Flow', response, 'Email')) {
+                    if ($scope.onExecutionFlowUpdated != undefined)
+                        $scope.onExecutionFlowUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {

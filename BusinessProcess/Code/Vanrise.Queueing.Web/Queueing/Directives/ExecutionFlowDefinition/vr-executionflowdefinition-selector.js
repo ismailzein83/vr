@@ -93,6 +93,8 @@ app.directive('vrExecutionflowdefinitionSelector', ['VR_Queueing_ExecutionFlowAP
                     if (payload) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
+                        
+
                     }
 
                     return VR_Queueing_ExecutionFlowAPIService.GetExecutionFlowDefinitions(UtilsService.serializetoJson(filter)).then(function (response) {
@@ -107,6 +109,8 @@ app.directive('vrExecutionflowdefinitionSelector', ['VR_Queueing_ExecutionFlowAP
                         if (selectedIds) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'ID', attrs, ctrl);
                         }
+
+                        
                     });
                 }
 

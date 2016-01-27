@@ -1,12 +1,13 @@
 ﻿<vr-datagrid datasource="executionFlows"
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
-             on-ready="onGridReady"
+             on-ready="ongridReady"
              menuactions="gridMenuActions"
-             idfield="Entity.ID">
+             idfield="Entity.DefinitionId">
 
-    <vr-datagridcolumn headertext="'ID'" field="'ID'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.ExecutionFlowId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Title'" field="'Title'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
    
+
 </vr-datagrid>

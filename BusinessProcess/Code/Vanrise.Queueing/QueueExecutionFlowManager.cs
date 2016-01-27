@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
+using Vanrise.Common;
 using Vanrise.Queueing.Data;
 using Vanrise.Queueing.Entities;
 
@@ -100,5 +101,65 @@ namespace Vanrise.Queueing
                    return dataManager.GetExecutionFlows().ToDictionary(kvp => kvp.ExecutionFlowId, kvp => kvp);
                });
         }
+
+
+        public Vanrise.Entities.IDataRetrievalResult<QueueExecutionFlowDetail> GetFilteredExecutionFlows(Vanrise.Entities.DataRetrievalInput<QueueExecutionFlowQuery> input)
+        {
+            var queueExecutionFlows = GetCachedQueueExecutionFlows();
+
+            Func<QueueExecutionFlow, bool> filterExpression = (priceList) =>
+
+                      (input.Query.DefinitionId == null || input.Query.DefinitionId == priceList.DefinitionId) &&
+                      (input.Query.Name == null || priceList.Name.Contains(input.Query.Name));
+
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input,queueExecutionFlows.ToBigResult(input,filterExpression,QueueExecutionFlowMapper));
+
+        }
+
+
+        public QueueExecutionFlow GetExecutionFlow(int executionFlowId) 
+        {
+            List<QueueExecutionFlow> allExecutionFlows = GetExecutionFlows();
+            QueueExecutionFlow executionFlow = allExecutionFlows.Where(x => x.ExecutionFlowId == executionFlowId).FirstOrDefault();
+            return executionFlow;
+        
+        }
+
+
+        public Vanrise.Entities.UpdateOperationOutput<QueueExecutionFlowDetail> UpdateExecutionFlow(QueueExecutionFlow executionFlowObject) 
+        {
+            IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
+            bool updateActionSucc = dataManager.UpdateExecutionFlow(executionFlowObject);
+            UpdateOperationOutput<QueueExecutionFlowDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<QueueExecutionFlowDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().SetCacheExpired("QueueExecutionFlowManager_GetCachedQueueExecutionFlows");
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = QueueExecutionFlowMapper(executionFlowObject);
+            }
+            return updateOperationOutput;
+            
+        }
+
+
+        #region Mappers
+
+        private QueueExecutionFlowDetail QueueExecutionFlowMapper(QueueExecutionFlow executionFlow)
+        {
+            QueueExecutionFlowDetail executionFlowDetail = new QueueExecutionFlowDetail();
+            QueueExecutionFlowDefinitionManager executionFlowDefinitionManager = new QueueExecutionFlowDefinitionManager();
+            executionFlowDetail.Entity = executionFlow;
+            executionFlowDetail.Title = executionFlowDefinitionManager.GetExecutionFlowDefinitionName(executionFlow.DefinitionId);
+            return executionFlowDetail;
+        }
+
+        #endregion
+
+
     }
 }

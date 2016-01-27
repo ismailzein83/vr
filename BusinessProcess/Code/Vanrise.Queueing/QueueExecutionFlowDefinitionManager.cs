@@ -15,5 +15,14 @@ namespace Vanrise.Queueing
             IQueueExecutionFlowDefinitionDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDefinitionDataManager>();
             return dataManager.GetAll();
         }
+
+        public string GetExecutionFlowDefinitionName(int definitionID) {
+
+            List<QueueExecutionFlowDefinition> allExecutionFlowDefinitions = GetAll();
+            QueueExecutionFlowDefinition executionFlowDefinitionItem = allExecutionFlowDefinitions.Where(x => x.ID == definitionID).FirstOrDefault();
+            return executionFlowDefinitionItem.Title;
+        
+        }
+
     }
 }

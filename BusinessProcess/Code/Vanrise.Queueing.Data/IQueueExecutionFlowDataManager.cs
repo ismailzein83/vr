@@ -11,5 +11,8 @@ namespace Vanrise.Queueing.Data
         bool AddExecutionFlow(Vanrise.Queueing.Entities.QueueExecutionFlow executionFlow, out int insertedId);
 
         bool AreExecutionFlowsUpdated(ref object updateHandle);
+
+
+        bool UpdateExecutionFlow(Vanrise.Queueing.Entities.QueueExecutionFlow executionFlowObject);
     }
 }
