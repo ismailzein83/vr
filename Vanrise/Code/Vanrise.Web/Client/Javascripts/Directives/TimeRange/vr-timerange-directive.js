@@ -7,7 +7,8 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
         scope: {
             onReady: '=',
             hideperiodsection: "@",
-            width:'@'
+            width: '@',
+            type:'@'
         },
         controller: function ($scope, $element, $attrs) {
 
@@ -44,15 +45,15 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                           + '</vr-columns>'
             onblurchanged = ' onblurdatetime="onBlurChanged" '
         }
-          
+        var type = attrs.type;
 
         return   '<vr-row removeline>'
                +  periodSection
                + '<vr-columns width="' + width + '">'
-               + '    <vr-datetimepicker type="dateTime" value="fromDate" label="From" customvalidate="validateDateTime()" isrequired ' + onblurchanged + '></vr-datetimepicker>'
+               + '    <vr-datetimepicker type="' + type + '" value="fromDate" label="From" customvalidate="validateDateTime()" isrequired ' + onblurchanged + '></vr-datetimepicker>'
                + '</vr-columns>'
                + '<vr-columns width="' + width + '">'
-               + '    <vr-datetimepicker type="dateTime" value="toDate" label="To" customvalidate="validateDateTime()" isrequired ' + onblurchanged + '></vr-datetimepicker>'
+               + '    <vr-datetimepicker type="' + type + '" value="toDate" label="To" customvalidate="validateDateTime()" isrequired ' + onblurchanged + '></vr-datetimepicker>'
                + '</vr-columns>'
                +'</vr-row>'
     }
