@@ -16,31 +16,34 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 
         public override string GetTitle()
         {
-            IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            return String.Format("Execute Strategy Process ({0:dd-MMM-yy HH:mm} to {1:dd-MMM-yy HH:mm}), Strategies: {2}", this.FromDate, this.ToDate, String.Join(",", dataManager.GetStrategyNames(StrategyIds)));
+            IStrategyManager strategyManager = FraudManagerFactory.GetManager<IStrategyManager>();
+            return String.Format("Execute Strategy Process ({0:dd-MMM-yy HH:mm} to {1:dd-MMM-yy HH:mm}), Strategies: {2}", this.FromDate, this.ToDate, String.Join(",", strategyManager.GetStrategyNames(StrategyIds)));
         }
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
         {
-            IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            int PeriodId = dataManager.GetStrategy(StrategyIds.First()).PeriodId;
+            IStrategyManager strategyManager = FraudManagerFactory.GetManager<IStrategyManager>();
+            int? periodId = strategyManager.GetStrategyPeriodId(StrategyIds.First());
+
+            if (periodId == null)
+            {
+                throw new ArgumentNullException("Strategy not found");
+            }
 
             if (evaluatedExpressions.ContainsKey("ScheduleTime"))
             {
-                if (PeriodId == (int)PeriodEnum.Hourly)
+                if (periodId == (int)PeriodEnum.Hourly)
                 {
                     FromDate = ((DateTime)evaluatedExpressions["ScheduleTime"]).AddDays(-1);
                     ToDate = (DateTime)evaluatedExpressions["ScheduleTime"];
                 }
-                else if (PeriodId == (int)PeriodEnum.Daily)
+                else if (periodId == (int)PeriodEnum.Daily)
                 {
                     FromDate = ((DateTime)evaluatedExpressions["ScheduleTime"]).AddHours(-1);
                     ToDate = (DateTime)evaluatedExpressions["ScheduleTime"];
                 }
 
             }
-
-
         }
 
         public bool IncludeWhiteList { get; set; }

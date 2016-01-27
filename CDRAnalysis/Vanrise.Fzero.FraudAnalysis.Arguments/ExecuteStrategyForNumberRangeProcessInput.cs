@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Fzero.FraudAnalysis.Data;
+using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 {
@@ -24,8 +25,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 
         public override string GetTitle()
         {
-            IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            return String.Format("Execute Strategy Process For Number Prefixes '{0}', Time Range ({1:dd-MMM-yy HH:mm} to {2:dd-MMM-yy HH:mm}), Strategies: {3}",  string.Join(",", this.NumberPrefixes), this.FromDate, this.ToDate, String.Join(",", dataManager.GetStrategyNames(StrategyExecutionItems.Select(itm => itm.StrategyId).ToList())));
+            IStrategyManager strategyManager = FraudManagerFactory.GetManager<IStrategyManager>();
+            return String.Format("Execute Strategy Process For Number Prefixes '{0}', Time Range ({1:dd-MMM-yy HH:mm} to {2:dd-MMM-yy HH:mm}), Strategies: {3}", string.Join(",", this.NumberPrefixes), this.FromDate, this.ToDate, String.Join(",", strategyManager.GetStrategyNames(StrategyExecutionItems.Select(itm => itm.StrategyId).ToList())));
         }
     }
 

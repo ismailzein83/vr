@@ -7,10 +7,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface IStrategyDataManager : IDataManager
     {
-        List<String> GetStrategyNames(List<int> strategyIds);
-
-        Strategy GetStrategy(int strategyId);
-
         List<Strategy> GetStrategies();
 
         bool AddStrategy(Strategy strategyObject, out int insertedId);
@@ -18,6 +14,5 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
         bool UpdateStrategy(Strategy strategy);
 
         bool AreStrategiesUpdated(ref object updateHandle);
-
     }
 }

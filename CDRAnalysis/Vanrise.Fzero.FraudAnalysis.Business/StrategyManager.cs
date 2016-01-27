@@ -11,23 +11,24 @@ using Vanrise.Security.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
-    public class StrategyManager
+    public class StrategyManager : IStrategyManager
     {
+        #region Fields / Constructors
 
-        private Dictionary<int, Strategy> GetCachedStrategies()
+        UserManager _userManager;
+
+        public StrategyManager()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetStrategies",
-               () =>
-               {
-                   IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-                   IEnumerable<Strategy> strategies = dataManager.GetStrategies();
-                   return strategies.ToDictionary(x => x.Id, x => x);
-               });
+            _userManager = new UserManager();
         }
+
+        #endregion
+
+        #region Public Methods
 
         public Vanrise.Entities.IDataRetrievalResult<StrategyDetail> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyQuery> input)
         {
-            var allStrategies = GetCachedStrategies();
+            var cachedStrategies = GetCachedStrategies();
 
             Func<Strategy, bool> filterExpression = (strategyObject) =>
                 (input.Query.Name == null || strategyObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
@@ -37,10 +38,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 && (input.Query.PeriodIds == null || input.Query.PeriodIds.Contains((PeriodEnum)strategyObject.PeriodId))
                 && (input.Query.UserIds == null || input.Query.UserIds.Contains(strategyObject.UserId))
                 && (input.Query.Kinds == null || input.Query.Kinds.Contains(strategyObject.IsDefault ? StrategyKindEnum.SystemBuiltIn : StrategyKindEnum.UserDefined))
-                && (input.Query.Statuses == null || input.Query.Statuses.Contains(strategyObject.IsEnabled ? StrategyStatusEnum.Enabled : StrategyStatusEnum.Disabled))
-                ;
+                && (input.Query.Statuses == null || input.Query.Statuses.Contains(strategyObject.IsEnabled ? StrategyStatusEnum.Enabled : StrategyStatusEnum.Disabled));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allStrategies.ToBigResult(input, filterExpression, StrategyDetailMapper));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedStrategies.ToBigResult(input, filterExpression, StrategyDetailMapper));
         }
 
         public Strategy GetStrategyById(int StrategyId)
@@ -55,6 +55,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return strategies.Select(kvp => kvp.Value).ToList();
         }
 
+        public int? GetStrategyPeriodId(int strategyId)
+        {
+            Strategy strategy = GetStrategyById(strategyId);
+            
+            if (strategy != null)
+                return strategy.PeriodId;
+            return null;
+        }
+
         public IEnumerable<StrategyInfo> GetStrategiesInfo(int periodId, bool? isEnabled)
         {
             var strategies = GetCachedStrategies();
@@ -64,6 +73,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                && (isEnabled == null || isEnabled.Value == strategyObject.IsEnabled)
                ;
             return strategies.MapRecords(StrategyInfoMapper, filterExpression);
+        }
+
+        public IEnumerable<string> GetStrategyNames(IEnumerable<int> strategyIds)
+        {
+            var cachedStrategies = GetCachedStrategies();
+            Func<Strategy, bool> filterExpression = null;
+            if (strategyIds != null)
+                filterExpression =  (strategy) => strategyIds.Contains(strategy.Id);
+            return cachedStrategies.MapRecords(strategy => strategy.Name, filterExpression);
         }
 
         public InsertOperationOutput<StrategyDetail> AddStrategy(Strategy strategyObj)
@@ -117,8 +135,27 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             return updateOperationOutput;
         }
+        
+        #endregion
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        #region Private Methods
+
+        Dictionary<int, Strategy> GetCachedStrategies()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetStrategies",
+               () =>
+               {
+                   IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+                   IEnumerable<Strategy> strategies = dataManager.GetStrategies();
+                   return strategies.ToDictionary(x => x.Id, x => x);
+               });
+        }
+        
+        #endregion
+
+        #region Private Classes
+
+        class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IStrategyDataManager _dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
             object _updateHandle;
@@ -128,19 +165,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 return _dataManager.AreStrategiesUpdated(ref _updateHandle);
             }
         }
+        
+        #endregion
 
-        #region Private Members
+        #region Mappers
 
-        StrategyDetail StrategyDetailMapper(Strategy strategyObj)
+        StrategyDetail StrategyDetailMapper(Strategy strategy)
         {
-            UserManager userManager = new UserManager();
-            User user = userManager.GetUserbyId(strategyObj.UserId);
-
             StrategyDetail strategyDetail = new StrategyDetail();
-            strategyDetail.Entity = strategyObj;
-            strategyDetail.Analyst = user.Name;
-            strategyDetail.StrategyType = Vanrise.Common.Utilities.GetEnumDescription<PeriodEnum>((PeriodEnum)strategyObj.PeriodId);
-            strategyDetail.StrategyKind = Vanrise.Common.Utilities.GetEnumDescription<StrategyKindEnum>((strategyObj.IsDefault ? StrategyKindEnum.SystemBuiltIn : StrategyKindEnum.UserDefined));
+            strategyDetail.Entity = strategy;
+            strategyDetail.Analyst = _userManager.GetUserName(strategy.UserId);
+            strategyDetail.StrategyType = Vanrise.Common.Utilities.GetEnumDescription<PeriodEnum>((PeriodEnum)strategy.PeriodId);
+            strategyDetail.StrategyKind = Vanrise.Common.Utilities.GetEnumDescription<StrategyKindEnum>((strategy.IsDefault ? StrategyKindEnum.SystemBuiltIn : StrategyKindEnum.UserDefined));
             return strategyDetail;
         }
 
@@ -154,7 +190,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return strategyInfo;
         }
 
-        # endregion
-
+        #endregion
     }
 }

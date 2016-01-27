@@ -10,24 +10,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public class StrategyDataManager : BaseSQLDataManager, IStrategyDataManager
     {
-        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
-
         public StrategyDataManager()
             : base("CDRDBConnectionString")
         {
 
-        }
-
-        static StrategyDataManager()
-        {
-            _columnMapper.Add("IsDefaultText", "PeriodId");
-            _columnMapper.Add("Analyst", "UserID");
-            _columnMapper.Add("LastUpdatedOn", "LastUpdatedOn");
-        }
-
-        public Strategy GetStrategy(int strategyId)
-        {
-            return GetItemSP("FraudAnalysis.sp_Strategy_GetByID", StrategyMapper, strategyId);
         }
 
         public List<Strategy> GetStrategies()
@@ -81,19 +67,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return (recordsEffected > 0);
         }
 
-        public List<String> GetStrategyNames(List<int> strategyIds)
-        {
-            string strategyIDs = (strategyIds != null && strategyIds.Count > 0) ? string.Join(",", strategyIds) : null;
-
-            return GetItemsSP("FraudAnalysis.sp_Strategy_GetNamesByIDs", StrategyNameMapper, strategyIDs);
-        }
-
         public bool AreStrategiesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("FraudAnalysis.Strategy", ref updateHandle);
         }
 
-        #region Private Methods
+        #region Mappers
 
         private Strategy StrategyMapper(IDataReader reader)
         {
