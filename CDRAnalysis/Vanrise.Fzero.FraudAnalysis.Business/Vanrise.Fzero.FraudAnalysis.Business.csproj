@@ -85,6 +85,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountCaseHistoryManager.cs" />
+    <Compile Include="AccountCaseManager.cs" />
+    <Compile Include="AccountInfoManager.cs" />
+    <Compile Include="AccountStatusManager.cs" />
     <Compile Include="AggregateManager.cs" />
     <Compile Include="DataWarehouse\DWAccountCaseManager.cs" />
     <Compile Include="DataWarehouse\DWTimeManager.cs" />
@@ -99,7 +103,9 @@
     <Compile Include="CaseManagmentManager.cs" />
     <Compile Include="NumberProfileManager.cs" />
     <Compile Include="PeriodManager.cs" />
+    <Compile Include="RelatedNumbersManager.cs" />
     <Compile Include="ReportingManager.cs" />
+    <Compile Include="StrategyExecutionItemManager.cs" />
     <Compile Include="StrategyExecutionManager.cs" />
     <Compile Include="StrategyManager.cs" />
   </ItemGroup>
