@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Rules.DynamicRules
+namespace Vanrise.GenericData.Entities
 {
-    public class DynamicRule : BaseRule
+    public abstract class DataRecordFieldType
     {
-        public DynamicRuleCriteria Criteria { get; set; }
+        public int ConfigId { get; set; }
     }
 }

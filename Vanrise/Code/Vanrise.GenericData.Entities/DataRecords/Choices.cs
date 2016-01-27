@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Rules.DynamicRules
+namespace Vanrise.GenericData.Entities
 {
-    public class DynamicRuleCriteriaFieldValue
+    public class Choices
     {
-        public string FieldName { get; set; }
+        public String Choice { get; set; }
     }
 }
