@@ -132,10 +132,6 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="queue\Stored Procedures\sp_QueueItemHeader_GetByQueueItemIDs.sql">
-      <AnsiNulls>Off</AnsiNulls>
-      <QuotedIdentifier>Off</QuotedIdentifier>
-    </Build>
     <Build Include="queue\User Defined Types\ItemIds.sql" />
     <Build Include="queue\Tables\LKUP_QueueItemStatus.sql">
       <AnsiNulls>On</AnsiNulls>
@@ -145,6 +141,7 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
+    <Build Include="queue\Stored Procedures\sp_QueueItemHeader_CreateTempByFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
