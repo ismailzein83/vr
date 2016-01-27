@@ -22,10 +22,6 @@ app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
                     $scope.codeCriteriaArray.push(codeCriteria);
                 };
 
-                $scope.removeCode = function (codeToRemove) {
-                    $scope.codeCriteriaArray.splice($scope.codeCriteriaArray.indexOf(codeToRemove), 1);
-                }
-
                 var ctor = new codeCriteriaCtor(ctrl, $scope);
                 ctor.initializeController();
 
