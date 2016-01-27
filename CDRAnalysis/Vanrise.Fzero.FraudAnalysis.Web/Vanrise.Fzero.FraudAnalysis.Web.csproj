@@ -143,10 +143,12 @@
     <None Include="Properties\PublishProfiles\New.pubxml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CaseManagementController.cs" />
     <Compile Include="Controllers\DefineFixedPrefixesController.cs" />
     <Compile Include="Controllers\NumberProfileController.cs" />
     <Compile Include="Controllers\NormalCDRController.cs" />
+    <Compile Include="Controllers\PeriodController.cs" />
     <Compile Include="Controllers\ReportingController.cs" />
     <Compile Include="Controllers\StrategyExecutionController.cs" />
     <Compile Include="Controllers\StrategyController.cs" />
@@ -219,11 +221,16 @@
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-fraudanalysis-numberprofiling.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-fraudanalysis-excutestrategy.js" />
     <Content Include="FraudAnalysis\Directives\FixedPrefixes\Templates\DefineFixedPrefixesGrid.html" />
+    <Content Include="FraudAnalysis\Directives\Period\cdranalysis-fa-period-selector.js" />
+    <Content Include="FraudAnalysis\Directives\Strategy\cdranalysis-fa-strategy-grid.js" />
+    <Content Include="FraudAnalysis\Directives\Strategy\Templates\StrategyGridTemplate.html" />
     <Content Include="FraudAnalysis\Directives\vr-fzero-fraudanalysis-fixedprefixes-grid.js" />
     <Content Include="FraudAnalysis\Directives\vr-fzero-fraudanalysis-fixedprefixes-selector.js" />
     <Content Include="FraudAnalysis\Services\APIServices\DefineFixedPrefixesAPIService.js" />
+    <Content Include="FraudAnalysis\Services\APIServices\PeriodAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyExecutionAPIService.js" />
     <Content Include="FraudAnalysis\Services\MainService.js" />
+    <Content Include="FraudAnalysis\Services\StrategyService.js" />
     <Content Include="FraudAnalysis\Views\FixedPrefixes\DefineFixedPrefixesEditor.html" />
     <Content Include="FraudAnalysis\Views\FixedPrefixes\DefineFixedPrefixesEditorController.js" />
     <Content Include="FraudAnalysis\Views\FixedPrefixes\DefineFixedPrefixesManagement.html" />
