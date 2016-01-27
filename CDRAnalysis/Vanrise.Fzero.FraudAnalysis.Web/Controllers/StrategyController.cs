@@ -8,19 +8,15 @@ using Vanrise.Fzero.FraudAnalysis.Aggregates;
 
 namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {
-
     public class StrategyController : BaseAPIController
     {
-
         [HttpGet]
-
         public IEnumerable<StrategyInfo> GetStrategies(int PeriodId, bool? IsEnabled)
         {
             StrategyManager manager = new StrategyManager();
 
             return manager.GetStrategiesInfo(PeriodId, IsEnabled);
         }
-
 
         [HttpPost]
         public object GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyQuery> input)
@@ -31,8 +27,6 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredStrategies(input));
         }
 
-
-
         [HttpGet]
         public Strategy GetStrategy(int StrategyId)
         {
@@ -40,7 +34,6 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
             return manager.GetStrategyById(StrategyId);
         }
-
 
         [HttpPost]
         public UpdateOperationOutput<StrategyDetail> UpdateStrategy(Strategy strategyObject)
@@ -58,7 +51,6 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return manager.AddStrategy(strategyObject);
         }
 
-
         [HttpGet]
         public List<FilterDefinitionInfo> GetFilters()
         {
@@ -67,7 +59,6 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return manager.GetCriteriaNames();
         }
 
-
         [HttpGet]
         public List<AggregateDefinitionInfo> GetAggregates()
         {
@@ -75,16 +66,5 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
             return manager.GetAggregateDefinitionsInfo();
         }
-
-
-        [HttpGet]
-        public List<Period> GetPeriods()
-        {
-            PeriodManager manager = new PeriodManager();
-
-            return manager.GetPeriods();
-        }
-
-
     }
 }

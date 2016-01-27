@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="FraudAnalysis_StrategyManagementController">
+﻿<vr-panel ng-controller="CDRAnalysis_FA_StrategyManagementController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
@@ -7,7 +7,6 @@
                         <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
                         <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
                     </vr-choices-filter>
-
                 </vr-columns>
             </vr-row>
             <vr-row removeline>
@@ -15,52 +14,40 @@
                     <vr-textbox value="name" label="Strategy Name"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" customvalidate="validateTimeRange()" ></vr-datetimepicker>
+                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" customvalidate="validateTimeRange()"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="dateTime" value="toDate" label="To" customvalidate="validateTimeRange()" ></vr-datetimepicker>
+                    <vr-datetimepicker type="dateTime" value="toDate" label="To" customvalidate="validateTimeRange()"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-textbox value="description" label="Description" ng-show="advancedSelected"></vr-textbox>
                 </vr-columns>
-                <vr-columns width="normal">
-                    <vr-select datasource="users" datatextfield="Name" ng-show="advancedSelected" datavaluefield="UserId" label="Analyst" selectedvalues="selectedUsers" ismultipleselection></vr-select>
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <vr-sec-user-selector on-ready="onUserSelectorReady" customlabel="Analysts" ismultipleselection></vr-sec-user-selector>
                 </vr-columns>
-                <vr-columns width="normal">
-                    <vr-select datasource="periods" datatextfield="Name" ng-show="advancedSelected" datavaluefield="Id" label="Type" selectedvalues="selectedPeriods" ismultipleselection></vr-select>
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <cdranalysis-fa-period-selector on-ready="onPeriodSelectorReady" label="Types" ismultipleselection></cdranalysis-fa-period-selector>
                 </vr-columns>
-                <vr-columns width="normal">
-                    <vr-select datasource="isDefault" datatextfield="name" ng-show="advancedSelected" datavaluefield="value" label="Kind" selectedvalues="selectedIsDefault" ismultipleselection></vr-select>
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <vr-select datasource="kinds" selectedvalues="selectedKinds" datatextfield="name" datavaluefield="value" label="Kind" ismultipleselection></vr-select>
                 </vr-columns>
-                <vr-columns width="normal">
-                    <vr-select datasource="isEnabled" datatextfield="name" ng-show="advancedSelected" datavaluefield="value" label="Status" selectedvalues="selectedIsEnabled" ismultipleselection></vr-select>
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <vr-select datasource="statuses" selectedvalues="selectedStatuses" datatextfield="name" datavaluefield="value" label="Status" ismultipleselection></vr-select>
                 </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"  ></vr-button>
-                    <vr-button type="Add" formname="formFilter" data-onclick="addNewStrategy" permissions="Root/Strategy Module:Add"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
+                    <vr-button type="Add" formname="formFilter" data-onclick="addStrategy" permissions="Root/Strategy Module:Add"></vr-button>
                 </div>
             </vr-actionbar>
-        </vr-row>       
-    </vr-form>
-    <div >
-        <vr-row>
-            <vr-columns width="fullrow" simplecol>
-                <vr-datagrid datasource="strategies" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady" menuactions="gridMenuActions" idfield="Entity.Id">
-                    <vr-datagridcolumn headertext="'Strategy Name'" field="'Entity.Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Type'" field="'StrategyType'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Kind'" field="'StrategyKind'"></vr-datagridcolumn>                    
-                    <vr-datagridcolumn headertext="'Status'" field="'Entity.IsEnabled'">
-                        <vr-icon icontype="dataItem.IsEnabled"></vr-icon>
-                    </vr-datagridcolumn>                    
-                    <vr-datagridcolumn headertext="'Analyst'" field="'Analyst'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Last Update On'" field="'Entity.LastUpdatedOn'" type="'Datetime'"></vr-datagridcolumn>                    
-                </vr-datagrid>
-            </vr-columns>
         </vr-row>
-    </div>
-
+    </vr-form>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <cdranalysis-fa-strategy-grid on-ready="onGridReady"></cdranalysis-fa-strategy-grid>
+        </vr-columns>
+    </vr-row>
 </vr-panel>

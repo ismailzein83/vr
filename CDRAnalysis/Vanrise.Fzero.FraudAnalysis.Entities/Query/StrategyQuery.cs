@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
     public class StrategyQuery
@@ -13,13 +12,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string Description { get; set; }
 
-        public List<PeriodEnum> PeriodIDs { get; set; }
+        public IEnumerable<int> UserIds { get; set; }
 
-        public List<int> UserIDs { get; set; }
+        public IEnumerable<PeriodEnum> PeriodIds { get; set; }
 
-        public List<StrategyKindEnum> IsDefault { get; set; }
+        public IEnumerable<StrategyKindEnum> Kinds { get; set; }
 
-        public List<StrategyStatusEnum> IsEnabled { get; set; }
+        public IEnumerable<StrategyStatusEnum> Statuses { get; set; }
 
         public DateTime? FromDate { get; set; }
 

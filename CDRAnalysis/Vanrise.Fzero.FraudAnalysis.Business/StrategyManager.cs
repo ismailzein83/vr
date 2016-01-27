@@ -34,10 +34,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 && (input.Query.Description == null || strategyObject.Description.ToLower().Contains(input.Query.Description.ToLower()))
                 && (input.Query.FromDate == null || strategyObject.LastUpdatedOn >= input.Query.FromDate)
                 && (input.Query.ToDate == null || strategyObject.LastUpdatedOn < input.Query.ToDate)
-                && (input.Query.PeriodIDs == null || input.Query.PeriodIDs.Contains((PeriodEnum)strategyObject.PeriodId))
-                && (input.Query.UserIDs == null || input.Query.UserIDs.Contains(strategyObject.UserId))
-                && (input.Query.IsDefault == null || input.Query.IsDefault.Contains(strategyObject.IsDefault ? StrategyKindEnum.SystemBuiltIn : StrategyKindEnum.UserDefined))
-                && (input.Query.IsEnabled == null || input.Query.IsEnabled.Contains(strategyObject.IsEnabled ? StrategyStatusEnum.Enabled : StrategyStatusEnum.Disabled))
+                && (input.Query.PeriodIds == null || input.Query.PeriodIds.Contains((PeriodEnum)strategyObject.PeriodId))
+                && (input.Query.UserIds == null || input.Query.UserIds.Contains(strategyObject.UserId))
+                && (input.Query.Kinds == null || input.Query.Kinds.Contains(strategyObject.IsDefault ? StrategyKindEnum.SystemBuiltIn : StrategyKindEnum.UserDefined))
+                && (input.Query.Statuses == null || input.Query.Statuses.Contains(strategyObject.IsEnabled ? StrategyStatusEnum.Enabled : StrategyStatusEnum.Disabled))
                 ;
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allStrategies.ToBigResult(input, filterExpression, StrategyDetailMapper));

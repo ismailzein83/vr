@@ -3,7 +3,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public static class Constants
     {
-        public const string ROUTE_PREFIX = "api/Fzero_FraudAnalysis/";
         public const string _Critical = "critical";
         public const string _Safe = "safe";
         public const string _NoDecimal = "NoDecimal";

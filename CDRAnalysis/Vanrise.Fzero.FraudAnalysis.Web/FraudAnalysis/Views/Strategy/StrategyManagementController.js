@@ -1,162 +1,112 @@
-﻿"use strict";
+﻿(function (appControllers) {
 
-StrategyManagementController.$inject = ['$scope', 'StrategyAPIService', 'VR_Sec_UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum', 'VRValidationService'];
+    "use strict";
 
-function StrategyManagementController($scope, StrategyAPIService, VR_Sec_UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum, VRValidationService) {
+    StrategyManagementController.$inject = ['$scope', 'CDRAnalysis_FA_StrategyService', 'KindEnum', 'StatusEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRValidationService'];
 
-    var mainGridAPI;
-    var arrMenuAction = [];
+    function StrategyManagementController($scope, CDRAnalysis_FA_StrategyService, KindEnum, StatusEnum, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService) {
+        var periodSelectorAPI;
+        var periodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-    defineScope();
-    load();
+        var userSelectorAPI;
+        var userSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-    function defineScope() {
+        var gridAPI;
+        var gridQuery = {};
 
-        $scope.validateTimeRange = function () {
-            return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+        defineScope();
+        load();
+
+        function defineScope() {
+            $scope.onUserSelectorReady = function (api) {
+                userSelectorAPI = api;
+                userSelectorReadyDeferred.resolve();
+            };
+
+            $scope.onPeriodSelectorReady = function (api) {
+                periodSelectorAPI = api;
+                periodSelectorReadyDeferred.resolve();
+            };
+
+            $scope.onGridReady = function (api) {
+                gridAPI = api;
+                gridAPI.loadGrid(gridQuery);
+            };
+
+            $scope.search = function () {
+                setGridQuery();
+                return gridAPI.loadGrid(gridQuery);
+            };
+
+            $scope.addStrategy = function () {
+                var onStrategyAdded = function (addedStrategy) {
+                    gridAPI.itemAdded(addedStrategy);
+                };
+                CDRAnalysis_FA_StrategyService.addStrategy();
+            };
+
+            $scope.validateTimeRange = function () {
+                return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+            };
         }
 
-        $scope.gridMenuActions = [];
-
-        $scope.strategies = [];
-
-        $scope.onMainGridReady = function (api) {
-            mainGridAPI = api;
-
-            if (!$scope.isInitializing) // if the filters are loaded
-                return retrieveData();
-        };
-
-        $scope.searchClicked = function () {
-            return retrieveData();
+        function load() {
+            $scope.isLoadingFilterSection = true;
+            loadAllControls();
         }
 
-        $scope.isDefault = [];
-        angular.forEach(KindEnum, function (kind) {
-            $scope.isDefault.push({ value: kind.value, name: kind.name })
-        });
-        $scope.selectedIsDefault = [];
-
-        $scope.isEnabled = [];
-        angular.forEach(StatusEnum, function (itm) {
-            $scope.isEnabled.push({ value: itm.value, name: itm.name })
-        });
-        $scope.selectedIsEnabled = [];
-
-        $scope.periods = [];
-
-        $scope.selectedPeriods = [];
-
-        $scope.users = [];
-        $scope.selectedUsers = [];
-
-        $scope.addNewStrategy = addNewStrategy;
-
-        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-
-            return StrategyAPIService.GetFilteredStrategies(dataRetrievalInput)
-                .then(function (response) {
-                    onResponseReady(response);
-                });
-        }
-
-        defineMenuActions();
-    }
-
-   
-
-    function load() {
-        $scope.isInitializing = true;
-
-        return UtilsService.waitMultipleAsyncOperations([loadUsers, loadPeriods])
-            .then(function () {
-                if (mainGridAPI != undefined) // i.e. the grid has been waiting for the periods to load before it gets the data
-                    return retrieveData();
-            })
-            .catch(function (error) {
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadStaticSelectors, loadUserSelector, loadPeriodSelector]).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
-            })
-            .finally(function () {
-                $scope.isInitializing = false;
+            }).finally(function () {
+                $scope.isLoadingFilterSection = false;
             });
-    }
 
-    function defineMenuActions() {
-        $scope.gridMenuActions = [{
-            name: "Edit",
-            clicked: editStrategy,
-            permissions: "Root/Strategy Module:Edit"
-        }];
-    }
+            function loadStaticSelectors() {
+                $scope.kinds = UtilsService.getArrayEnum(KindEnum);
+                $scope.selectedKinds = [];
 
-    function retrieveData() {
+                $scope.statuses = UtilsService.getArrayEnum(StatusEnum);
+                $scope.selectedStatuses = [];
+            }
 
-        var query = {
-            Name: ($scope.name != undefined) ? $scope.name : null,
-            Description: ($scope.description != undefined) ? $scope.description : null,
+            function loadUserSelector() {
+                var userSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-            PeriodIDs: ($scope.selectedPeriods.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedPeriods, "Id") : null,
-            UserIDs: ($scope.selectedUsers.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedUsers, "UserId") : null,
-
-            IsDefault: ($scope.selectedIsDefault.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedIsDefault, "value") : null,
-            IsEnabled: ($scope.selectedIsEnabled.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedIsEnabled, "value") : null,
-
-            FromDate: $scope.fromDate,
-            ToDate: $scope.toDate
-        };
-
-        return mainGridAPI.retrieveData(query);
-    }
-
-    function loadUsers() {
-        return VR_Sec_UserAPIService.GetUsers()
-            .then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.users.push(item);
+                userSelectorReadyDeferred.promise.then(function () {
+                    var userSelectorPayload = null;
+                    VRUIUtilsService.callDirectiveLoad(userSelectorAPI, userSelectorPayload, userSelectorLoadDeferred);
                 });
-            });
-    }
 
-    function loadPeriods() {
-        return StrategyAPIService.GetPeriods()
-            .then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.periods.push(item);
+                return userSelectorLoadDeferred.promise;
+            }
+
+            function loadPeriodSelector() {
+                var periodSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                periodSelectorReadyDeferred.promise.then(function () {
+                    var periodSelectorPayload = null;
+                    VRUIUtilsService.callDirectiveLoad(periodSelectorAPI, periodSelectorPayload, periodSelectorLoadDeferred);
                 });
-            });
-    }
 
-    function addNewStrategy() {
-        var settings = {
-            width: '95%'
-        };
+                return periodSelectorLoadDeferred.promise;
+            }
+        }
 
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = UtilsService.buildTitleForAddEditor("Strategy");
-            modalScope.onStrategyAdded = function (strategy) {
-                mainGridAPI.itemAdded(strategy);
+        function setGridQuery() {
+            gridQuery = {
+                Name: $scope.name,
+                Description: $scope.description,
+                UserIds: userSelectorAPI.getSelectedIds(),
+                PeriodIds: periodSelectorAPI.getSelectedIds(),
+                Kinds: ($scope.selectedKinds.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedKinds, "value") : null,
+                Statuses: ($scope.selectedStatuses.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedStatuses, "value") : null,
+                FromDate: $scope.fromDate,
+                ToDate: $scope.toDate
             };
-        };
-        VRModalService.showModal('/Client/Modules/FraudAnalysis/Views/Strategy/StrategyEditor.html', null, settings);
+        }
     }
 
-    function editStrategy(gridObject) {
-        var params = {
-            strategyId: gridObject.Entity.Id
-        };
+    appControllers.controller('CDRAnalysis_FA_StrategyManagementController', StrategyManagementController);
 
-        var settings = {
-            width: '95%'
-        };
-
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = UtilsService.buildTitleForUpdateEditor("Strategy", gridObject.Name);
-            modalScope.onStrategyUpdated = function (strategy) {
-                mainGridAPI.itemUpdated(strategy);
-            };
-        };
-        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/Strategy/StrategyEditor.html", params, settings);
-    }
-}
-
-appControllers.controller('FraudAnalysis_StrategyManagementController', StrategyManagementController);
+})(appControllers);

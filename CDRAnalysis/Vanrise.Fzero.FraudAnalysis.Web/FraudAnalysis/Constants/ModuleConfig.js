@@ -1,3 +1,3 @@
-﻿app.constant('Fzero_FraudAnalysis_ModuleConfig', {
+﻿app.constant('CDRAnalysis_FA_ModuleConfig', {
     moduleName: "Fzero_FraudAnalysis"
 });

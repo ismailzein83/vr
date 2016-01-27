@@ -1,0 +1,16 @@
+﻿<vr-datagrid datasource="ctrl.strategies"
+             dataretrievalfunction="ctrl.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="ctrl.onGridReady"
+             menuactions="ctrl.menuActions"
+             maxheight="400px"
+             idfield="Entity.Id">
+    <vr-datagridcolumn headertext="'Strategy Name'" field="'Entity.Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Type'" field="'StrategyType'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Kind'" field="'StrategyKind'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'Entity.IsEnabled'">
+        <vr-icon icontype="dataItem.IsEnabled"></vr-icon>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Analyst'" field="'Analyst'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Last Update On'" field="'Entity.LastUpdatedOn'" type="'Datetime'"></vr-datagridcolumn>
+</vr-datagrid>
