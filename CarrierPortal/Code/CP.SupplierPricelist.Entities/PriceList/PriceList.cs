@@ -18,5 +18,6 @@ namespace CP.SupplierPricelist.Entities
         public string PriceListProgress { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime EffectiveOnDate { get; set; }
+        public int QueueId { get; set; }
     }
 }

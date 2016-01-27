@@ -9,6 +9,6 @@ namespace CP.SupplierPricelist.Data
         bool Insert(PriceList priceList);
         List<PriceList> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int userId);
         List<PriceList> GetPriceLists(List<PriceListStatus> listStatuses);
-        bool UpdateInitiatePriceList(long priceListId, int status, int result);
+        bool UpdateInitiatePriceList(long id, int result, int queueId);
     }
 }

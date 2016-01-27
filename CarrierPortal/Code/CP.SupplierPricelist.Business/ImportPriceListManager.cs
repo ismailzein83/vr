@@ -1,6 +1,7 @@
 ﻿using CP.SupplierPricelist.Data;
 using CP.SupplierPricelist.Entities;
 using System.Collections.Generic;
+using Vanrise.Common.Business;
 
 namespace CP.SupplierPricelist.Business
 {
@@ -31,11 +32,16 @@ namespace CP.SupplierPricelist.Business
             return dataManager.GetPriceLists(listPriceListStatuses);
         }
 
-        public bool UpdateInitiatePriceList(long priceListId, int status, int result)
+        public bool UpdateInitiatePriceList(long id, int result, int queueId)
         {
             IPriceListDataManager dataManager =
                 ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
-            return dataManager.UpdateInitiatePriceList(priceListId,status,result);
+            return dataManager.UpdateInitiatePriceList(id, result, queueId);
+        }
+        public List<Vanrise.Entities.TemplateConfig> GetUploadPriceListTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.SupplierPriceListConnectorInitiateTest);
         }
 
     }

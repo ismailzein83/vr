@@ -11,10 +11,13 @@
         function GetUpdated(input) {
             return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "PriceList", "GetUpdated"), input);
         }
-
+        function GetUploadPriceListTemplates() {
+            return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "PriceList", "GetUploadPriceListTemplates"));
+        }
         return ({
             importPriceList: importPriceList,
-            GetUpdated: GetUpdated
+            GetUpdated: GetUpdated,
+            GetUploadPriceListTemplates: GetUploadPriceListTemplates
         });
 
     }

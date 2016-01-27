@@ -8,10 +8,11 @@ namespace CarrierPortal.DevRuntime.Tasks
 {
     public class ZeinabTask : ITask
     {
-        private readonly UploadPriceList _upload = new UploadPriceList();
+        //private readonly UploadPriceList _upload = new UploadPriceList();
+        private readonly  ResultManagement _getResult = new ResultManagement();
         public void Execute()
         {
-            _upload.Start(new MainForm());
+            _getResult.Start(new MainForm());
         }
     }
 }

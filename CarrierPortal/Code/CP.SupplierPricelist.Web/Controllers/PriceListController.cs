@@ -1,7 +1,9 @@
 ﻿using CP.SupplierPricelist.Business;
 using CP.SupplierPricelist.Data;
 using CP.SupplierPricelist.Entities;
+using System.Collections.Generic;
 using System.Web.Http;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace CP.SupplierPricelist.Web.Controllers
@@ -25,5 +27,13 @@ namespace CP.SupplierPricelist.Web.Controllers
             byte[] maxTimeStamp = input.LastUpdateHandle;
             return manager.GetUpdated(ref maxTimeStamp, input.NbOfRows);
         }
+        [HttpGet]
+        [Route("GetUploadPriceListTemplates")]
+        public List<TemplateConfig> GetUploadPriceListTemplates()
+        {
+            ImportPriceListManager manager = new ImportPriceListManager();
+            return manager.GetUploadPriceListTemplates();
+        }
+
     }
 }

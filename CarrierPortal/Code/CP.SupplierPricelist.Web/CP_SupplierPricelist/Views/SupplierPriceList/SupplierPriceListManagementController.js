@@ -10,7 +10,7 @@
                     PriceListType: $scope.selectedpriceListType.pricelistID,
                     EffectiveOnDate: $scope.effectiveOn,
                     UserId: 1,
-                    Satus: -1
+                    Satus: 0
                 };
                 supplierPriceListAPIService.importPriceList(priceListObject);
             }

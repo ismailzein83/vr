@@ -52,7 +52,8 @@ namespace CP.SupplierPricelist.Data.SQL
                 UserId = (int)reader["UserID"],
                 Result = GetReaderValue<PriceListResult>(reader, "Result"),
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
-                EffectiveOnDate = GetReaderValue<DateTime>(reader, "EffectiveOnDate")
+                EffectiveOnDate = GetReaderValue<DateTime>(reader, "EffectiveOnDate"),
+                QueueId = GetReaderValue<int>(reader, "QueueId")
             };
 
             //string uploadedInformationSerialized = reader["UploadedInformation"] as string;
@@ -76,9 +77,9 @@ namespace CP.SupplierPricelist.Data.SQL
         }
 
 
-        public bool UpdateInitiatePriceList(long priceListId, int status, int result)
+        public bool UpdateInitiatePriceList(long id, int result, int queueId)
         {
-            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_UpdateInitiatePriceList]", priceListId, status, result);
+            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_UpdateInitiatePriceList]", id, result, queueId);
             return (recordsEffected > 0);
         }
     }

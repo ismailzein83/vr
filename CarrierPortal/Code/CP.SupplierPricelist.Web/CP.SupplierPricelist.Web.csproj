@@ -106,6 +106,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -144,6 +148,8 @@
     <Content Include="CP_SupplierPricelist\Constant\PriceListResultEnum.js" />
     <Content Include="CP_SupplierPricelist\Constant\PriceListStatusEnum.js" />
     <Content Include="CP_SupplierPricelist\Constant\PriceListTypeEnum.js" />
+    <Content Include="CP_SupplierPricelist\Directives\MainExtensions\cp-supplierpricelist-uploadsupplierpricelist.js" />
+    <Content Include="CP_SupplierPricelist\Directives\MainExtensions\Templates\UploadPriceListTemplate.html" />
     <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\Templates\SupplierPriceListGridTemplate.html" />
     <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\vr-cp-supplierpricelist-grid.js" />
     <Content Include="CP_SupplierPricelist\Services\APIServices\SupplierPriceListAPIService.js" />

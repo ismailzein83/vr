@@ -48,9 +48,9 @@ namespace CP.SupplierPriceList.TOneV1Integration
             catch (Exception e) { }
             return res;
         }
-        public bool UploadOnline(string token, string tokenName, SupplierPriceListConnector.SupplierPriceListUserInput userInput)
+        public int UploadOnline(string token, string tokenName, SupplierPriceListConnector.SupplierPriceListUserInput userInput)
         {
-            bool succ = true;
+            int insertedId;
             try
             {
                 string URL = "http://localhost:7676/api/SupplierPriceList/UploadPriceList";
@@ -70,7 +70,8 @@ namespace CP.SupplierPriceList.TOneV1Integration
                     var httpResponse = (HttpWebResponse)request.GetResponse();
                     using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                     {
-                        string result = streamReader.ReadToEnd();
+                        string resultString = streamReader.ReadToEnd();
+                        insertedId = int.Parse(resultString);
                         // object response = JsonConvert.DeserializeObject<object>(result);
                     }
                     httpResponse.Close();
@@ -78,15 +79,49 @@ namespace CP.SupplierPriceList.TOneV1Integration
 
                 catch (Exception e)
                 {
-                    succ = false;
+                    insertedId = 0;
                     // throw e;
                 }
             }
             catch (Exception)
             {
-                succ = false;
+                insertedId = 0;
             }
-            return succ;
+            return insertedId;
+        }
+
+        public int GetResults(int queueId, string token, string tokenName)
+        {
+            int result;
+            try
+            {
+                string URL = "http://localhost:7676/api/SupplierPriceList/GetResults?QueueId=" + queueId;
+                // string jSOnData = JsonConvert.SerializeObject(queueId);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL);
+                request.Method = "GET";
+                request.Headers.Add(tokenName, token);
+                try
+                {
+                    var httpResponse = (HttpWebResponse)request.GetResponse();
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        string resultString = streamReader.ReadToEnd();
+                        result = int.Parse(resultString);
+                    }
+                    httpResponse.Close();
+                }
+                catch (Exception e)
+                {
+                    result = 0;
+                    // throw e;
+                }
+            }
+            catch (Exception)
+            {
+                result = 0;
+                //throw;
+            }
+            return result;
         }
     }
 }

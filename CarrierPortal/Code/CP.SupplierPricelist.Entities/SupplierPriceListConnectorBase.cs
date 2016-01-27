@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using Vanrise.Entities;
 
 namespace CP.SupplierPricelist.Entities
@@ -10,10 +11,11 @@ namespace CP.SupplierPricelist.Entities
         public abstract PriceListProgressOutput GetPriceListProgressOutput(IPriceListProgressContext context);
     }
     public enum InitiateSupplierResult { Uploaded, Failed }
-    public enum PriceListProgressResult { Completed, Failed }
+    public enum PriceListProgressResult { Received, Processing,AwaitingSaveConfirmationbySystemparam, SuspendedDueToBusinessErrors, SuspendedToProcessingErrors, AwaitingWarningsConfirmation, AwaitingSaveConfirmation, WarningsConfirmed, SaveConfirmed, ProcessedSuccessfuly, FailedDuetoSheetError,Rejected,SuspendedDueToConfigurationErrors,ProcessedSuccessfulyByImport,Processedwithnochanges, Failed }
 
     public class InitiatePriceListOutput
     {
+        public int QueueId { get; set; }
         public InitiateSupplierResult Result { get; set; }
 
         public Object InitiateTestInformation { get; set; }
@@ -38,6 +40,7 @@ namespace CP.SupplierPricelist.Entities
     }
     public interface IPriceListProgressContext
     {
+        int QueueId { get; set; }
         Object InitiateTestInformation { get; }
 
         Object RecentTestProgress { get; }

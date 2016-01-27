@@ -34,7 +34,7 @@ namespace CarrierPortal.DevRuntime
                     ImportPriceListManager manager = new ImportPriceListManager();
                     List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>()
                     {
-                        PriceListStatus.Recieved
+                        PriceListStatus.New
                     };
                     _locked = true;
                     lock (SyncRoot)
@@ -64,10 +64,16 @@ namespace CarrierPortal.DevRuntime
                             switch (initiatePriceListOutput.Result)
                             {
                                 case InitiateSupplierResult.Uploaded:
-                                    priceListstatus = PriceListStatus.New;
+                                    priceListstatus = PriceListStatus.Uploaded;
+                                    break;
+                                case InitiateSupplierResult.Failed:
+                                    priceListstatus = PriceListStatus.Failed;
+                                    break;
+                                default:
+                                    priceListstatus = PriceListStatus.Failed;
                                     break;
                             }
-                            manager.UpdateInitiatePriceList(pricelist.PriceListId, (int)pricelist.Status, (int)pricelist.Result);
+                            manager.UpdateInitiatePriceList(pricelist.PriceListId, (int)priceListstatus, initiatePriceListOutput.QueueId);
                         }
                         _locked = false;
                         Thread.Sleep(1000);
