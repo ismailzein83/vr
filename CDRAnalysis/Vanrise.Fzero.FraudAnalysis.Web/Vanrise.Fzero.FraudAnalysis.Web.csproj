@@ -231,6 +231,8 @@
     <Content Include="FraudAnalysis\Services\APIServices\StrategyExecutionAPIService.js" />
     <Content Include="FraudAnalysis\Services\MainService.js" />
     <Content Include="FraudAnalysis\Services\StrategyService.js" />
+    <Content Include="FraudAnalysis\Views\Dialogs\NewNumberPrefixDialog.html" />
+    <Content Include="FraudAnalysis\Views\Dialogs\NewNumberPrefixDialogController.js" />
     <Content Include="FraudAnalysis\Views\FixedPrefixes\DefineFixedPrefixesEditor.html" />
     <Content Include="FraudAnalysis\Views\FixedPrefixes\DefineFixedPrefixesEditorController.js" />
     <Content Include="FraudAnalysis\Views\FixedPrefixes\DefineFixedPrefixesManagement.html" />
@@ -240,6 +242,8 @@
     <Content Include="FraudAnalysis\Services\APIServices\NormalCDRAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\ReportingAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
+    <Content Include="FraudAnalysis\Views\NumberPrefix\NumberPrefixManagement.html" />
+    <Content Include="FraudAnalysis\Views\NumberPrefix\NumberPrefixManagementController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\FillDataWarehouseProcessInput.html" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\FillDataWarehouseProcessInputController.js" />
     <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\FindRelatedNumbersProcessInput.html" />
