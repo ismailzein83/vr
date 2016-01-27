@@ -119,9 +119,6 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
     function getDataSource() {
         return VR_Integration_DataSourceAPIService.GetDataSource(dataSourceId).then(function (dataSourceResponse) {
             dataSourceEntity = dataSourceResponse;
-        }).catch(function (error) {
-            VRNotificationService.notifyException(error, $scope);
-            $scope.scopeModel.isLoading = false;
         });
     }
    
@@ -129,10 +126,8 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
         return SchedulerTaskAPIService.GetTask(dataSourceEntity.TaskId)
                .then(function (taskResponse) {
                    dataSourceTask = { DataSourceData: dataSourceEntity, TaskData: taskResponse };
-               })
-               .catch(function (error) {
-                   VRNotificationService.notifyException(error, $scope);
                });
+              
     }
 
     function loadAllControls() {

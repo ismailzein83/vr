@@ -23,35 +23,21 @@ function (UtilsService) {
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/Integration/Directives/Adapter/Templates/AdapterFTPTemplate.html"
     };
-
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/Integration/Directives/Adapter/Templates/AdapterFTPTemplate.html";
-    }
-
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
 
 
         function initializeController() {
+            $scope.actionsAfterImport = [{ value: 0, name: 'Rename' }, { value: 1, name: 'Delete' }, { value: 2, name: 'Move' }];
             defineAPI();
         }
 
         function defineAPI() {
 
 
-            $scope.extension = undefined;
-            $scope.directory = undefined;
-            $scope.serverIP = undefined;
-            $scope.userName = undefined;
-            $scope.password = undefined;
-            $scope.directorytoMoveFile = undefined;
-            $scope.selectedAction = undefined;
-
-            $scope.actionsAfterImport = [{ value: 0, name: 'Rename' }, { value: 1, name: 'Delete' }, { value: 2, name: 'Move' }];
+          
             var api = {};
                         
             api.getData = function () {

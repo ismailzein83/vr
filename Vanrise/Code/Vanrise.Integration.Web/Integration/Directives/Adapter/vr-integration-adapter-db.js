@@ -23,27 +23,20 @@ function (UtilsService) {
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-            return getDirectiveTemplateUrl();
-        }
+        templateUrl: "/Client/Modules/Integration/Directives/Adapter/Templates/AdapterDBTemplate.html"
     };
-
-    function getDirectiveTemplateUrl() {
-        return "/Client/Modules/Integration/Directives/Adapter/Templates/AdapterDBTemplate.html";
-    }
 
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
 
 
         function initializeController() {
+            $scope.lastImportedId = 0;
             defineAPI();
         }
 
         function defineAPI() {
-            $scope.connectionString = undefined;
-            $scope.query = undefined;
-            $scope.lastImportedId = 0;
+           
           
             var api = {};
                         
