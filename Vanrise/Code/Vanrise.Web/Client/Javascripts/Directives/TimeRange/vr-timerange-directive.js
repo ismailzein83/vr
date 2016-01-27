@@ -6,7 +6,8 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
         restrict: 'E',
         scope: {
             onReady: '=',
-            hideperiodsection: "@"
+            hideperiodsection: "@",
+            width:'@'
         },
         controller: function ($scope, $element, $attrs) {
 
@@ -25,11 +26,36 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 }
             }
         },
-        templateUrl: "/Client/Javascripts/Directives/TimeRange/Templates/TimeRangeTemplate.html"
-
+        template: function (element, attrs) {
+            return getTemplate(attrs);
+        }
 
     };
 
+    function getTemplate(attrs)
+    {
+        var periodSection = "";
+        var onblurchanged = "";
+        var width = attrs.width;
+        if (attrs.hideperiodsection == undefined)
+        {
+            periodSection = '<vr-columns width="' + width + '">'
+                          + '<vr-period-selector on-ready="onPeriodDirectiveReady" selectedvalues="selectedPeriod" onselectionchanged="periodSelectionChanged"></vr-period-selector>'
+                          + '</vr-columns>'
+            onblurchanged = ' onblurdatetime="onBlurChanged" '
+        }
+          
+
+        return   '<vr-row removeline>'
+               +  periodSection
+               + '<vr-columns width="' + width + '">'
+               + '    <vr-datetimepicker type="dateTime" value="fromDate" label="From" customvalidate="validateDateTime()" isrequired ' + onblurchanged + '></vr-datetimepicker>'
+               + '</vr-columns>'
+               + '<vr-columns width="' + width + '">'
+               + '    <vr-datetimepicker type="dateTime" value="toDate" label="To" customvalidate="validateDateTime()" isrequired ' + onblurchanged + '></vr-datetimepicker>'
+               + '</vr-columns>'
+               +'</vr-row>'
+    }
 
     function timeRangeCtor(ctrl, $scope, $attrs) {
         var periodDirectiveAPI;
@@ -50,6 +76,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 periodReadyPromiseDeferred.resolve();
                 defineAPI();
             }
+
             $scope.periodSelectionChanged = function () {
                 if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
                     selectedPeriod = $scope.selectedPeriod;
@@ -60,19 +87,19 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
 
             }
 
-            //var customize = {
-            //    value: -1,
-            //    description: "Customize"
-            //}
-            //$scope.onBlurChanged = function () {
-            //    var from = UtilsService.getShortDate($scope.fromDate);
-            //    var oldFrom = UtilsService.getShortDate(date.from);
-            //    var to = UtilsService.getShortDate($scope.toDate);
-            //    var oldTo = UtilsService.getShortDate(date.to);
-            //    if (from != oldFrom || to != oldTo)
-            //        $scope.selectedPeriod = customize;
+            var customize = {
+                value: -1,
+                description: "Customize"
+            }
+            $scope.onBlurChanged = function () {
+                var from = UtilsService.getShortDate($scope.fromDate);
+                var oldFrom = UtilsService.getShortDate(date.from);
+                var to = UtilsService.getShortDate($scope.toDate);
+                var oldTo = UtilsService.getShortDate(date.to);
+                if (from != oldFrom || to != oldTo)
+                    $scope.selectedPeriod = customize;
 
-            //}
+            }
        
         }
 
@@ -82,9 +109,9 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 var obj = {
                     fromDate: $scope.fromDate,
                     toDate: $scope.toDate,
-                    period: selectedPeriod
-
                 }
+                if ($attrs.hideperiodsection == undefined)
+                     obj.period = selectedPeriod
                 return obj;
             }
             api.load = function (payload) {
