@@ -189,7 +189,7 @@ function (VRNotificationService, VR_Sec_ViewAPIService, VR_Sec_ViewService, User
         }
 
         function deleteDynamicPage(dataItem) {
-            var onDynamicPageDeleted = function (deletedItem) {
+            var onDynamicPageDeleted = function () {
                 gridAPI.itemDeleted(deletedItem);
             }
 
