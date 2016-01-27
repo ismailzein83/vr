@@ -12,12 +12,21 @@ namespace TOne.Web.Online.Controllers
     public class SupplierPriceListController : ApiController
     {
         [HttpPost]
-        public bool UploadPriceList(SupplierPriceListUserInput userInput)
+        public int UploadPriceList(SupplierPriceListUserInput userInput)
         {
             //return true;
-            int insertedId = 0;
+            int insertedId;
             SupplierPriceListManager manager = new SupplierPriceListManager();
-            return manager.SavePriceList(0, userInput.EffectiveOnDateTime, "C159", userInput.PriceListType, "portal@vanrise.com", userInput.ContentFile, userInput.FileName, out insertedId);
+            manager.SavePriceList(0, userInput.EffectiveOnDateTime, "C159", userInput.PriceListType, "portal@vanrise.com", userInput.ContentFile, userInput.FileName, out insertedId);
+            return insertedId;
+        }
+
+        [HttpGet]
+        public int GetResults(int queueId)
+        {
+            int id;
+            SupplierPriceListManager manager = new SupplierPriceListManager();
+            return manager.GetQueueStatus(queueId);
         }
 
         [HttpGet]
