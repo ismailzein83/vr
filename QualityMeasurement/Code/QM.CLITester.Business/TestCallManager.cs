@@ -38,6 +38,7 @@ namespace QM.CLITester.Business
             }
 
             output.BatchNumber = batchNumber;
+            output.ListEmails = testCallResult.ListEmails;
             return output;
         }
 

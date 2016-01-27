@@ -9,7 +9,7 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-
+            
             var directiveConstructor = new DirectiveConstructor($scope, ctrl);
             directiveConstructor.initializeController();
         },
@@ -46,7 +46,7 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
 
         function initializeController() {
             $scope.countries = [];
-
+            
             $scope.zones = [];
 
             $scope.suppliers = [];
@@ -85,13 +85,29 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                 }
             }
 
-            $scope.sourceTypeTemplates = [];
-
             $scope.onSourceTypeDirectiveReady = function (api) {
                 sourceTypeDirectiveAPI = api;
                 var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
             }
+
+            $scope.scopeModal = {
+                emails: []
+            };
+
+            $scope.scopeModal.disabledemail = true;
+            $scope.scopeModal.onEmailValueChange = function (value) {
+                $scope.scopeModal.disabledemail = (value == undefined);
+            }
+
+            $scope.addEmailOption = function () {
+                var email = $scope.scopeModal.emailvalue;
+                $scope.scopeModal.emails.push({
+                    email: email
+                });
+                $scope.scopeModal.emailvalue = undefined;
+                $scope.scopeModal.disabledemail = true;
+            };
 
 
             defineAPI();
@@ -99,7 +115,7 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
 
         function defineAPI() {
            
-           
+            
             var api = {};
             api.getData = function () {
                 return {
@@ -110,11 +126,18 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
             };
 
             function buildTestCallObjFromScope() {
+                var listEmailsObj = "";
+               
+                for (var i = 0; i < $scope.scopeModal.emails.length; i++) {
+                    listEmailsObj = listEmailsObj + $scope.scopeModal.emails[i].email + ";";
+                }
+
                 var obj = {
                     SupplierID: UtilsService.getPropValuesFromArray($scope.selectedSupplier, "SupplierId"),
                     CountryID: $scope.selectedCountry.CountryId,
                     ZoneID: $scope.selectedZone.ZoneId,
-                    ProfileID: $scope.selectedProfile.ProfileId
+                    ProfileID: $scope.selectedProfile.ProfileId,
+                    ListEmails: listEmailsObj
                 };
                 return obj;
             }
@@ -180,9 +203,18 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                     });
                       promises.push(zoneLoadPromiseDeferred.promise);
                 }
-               
-      
 
+                if (payload != undefined && payload.data != undefined && payload.data.AddTestCallInput && payload.data.AddTestCallInput.ListEmails != undefined) {
+                    var listEmails = payload.data.AddTestCallInput.ListEmails.split(";");
+
+                    for (var i = 0; i < listEmails.length; i++) {
+                        if (i != listEmails.length - 1) {
+                            $scope.scopeModal.emails.push({
+                                email: listEmails[i]
+                            });
+                        }
+                    }
+                }
 
                 return UtilsService.waitMultiplePromises(promises);
             }

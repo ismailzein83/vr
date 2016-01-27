@@ -88,7 +88,7 @@ namespace QM.CLITester.Business
                         
                         CreateWorkSheet(wbk, ((AddTestCallOutput)context.ExecutionInfo).BatchNumber.ToString(), listTestCalls, listTestCallsCount);
                         MemoryStream memoryStream = wbk.SaveToStream();
-                        SendMail(memoryStream, user.Email);
+                        SendMail(memoryStream, user.Email, ((AddTestCallOutput)context.ExecutionInfo).ListEmails);
 
                         string filename = "D:\\" + DateTime.Now.Minute + DateTime.Now.Second + "book1.xls";
                         wbk.Save(filename);
@@ -145,7 +145,7 @@ namespace QM.CLITester.Business
             worksheet.Cells.SetColumnWidth(row, 20);
         }
 
-        private void SendMail(MemoryStream memoryStream, string userMail)
+        private void SendMail(MemoryStream memoryStream, string userMail, string listEmails)
         {
 
             memoryStream.Position = 0;
@@ -175,6 +175,11 @@ namespace QM.CLITester.Business
             MailMessage objMail = new MailMessage();
 
             objMail.To.Add(userMail);
+
+            foreach (var address in listEmails.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                objMail.To.Add(address);
+            }
 
             string strEmailFrom = "vanrise.clitester@gmail.com";
 

@@ -9,5 +9,6 @@ namespace QM.CLITester.Entities
     public class AddTestCallOutput
     {
         public long? BatchNumber { get; set; }
+        public string ListEmails { get; set; }
     }
 }
