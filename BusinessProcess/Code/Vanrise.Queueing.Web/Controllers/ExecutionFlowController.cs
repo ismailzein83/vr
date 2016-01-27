@@ -8,14 +8,31 @@ using Vanrise.Queueing.Web.Models;
 
 namespace Vanrise.Queueing.Web.Controllers
 {
+    [RoutePrefix(Constants.ROUTE_PREFIX + "ExecutionFlow")]
     public class ExecutionFlowController : Vanrise.Web.Base.BaseAPIController
     {
 
-        public List<QueueExecutionFlowDefinition> GetFilteredExecutionFlowDefinitions() 
+         private  QueueExecutionFlowManager _manager;
+        public ExecutionFlowController()
+        {
+            this._manager = new QueueExecutionFlowManager();
+        }
+
+        [HttpPost]
+        [Route("GetFilteredExecutionFlowDefinitions")]
+        public List<QueueExecutionFlowDefinition> GetFilteredExecutionFlowDefinitions()
         {
 
             return new List<QueueExecutionFlowDefinition>();
-            
+
+        }
+
+
+        [HttpPost]
+        [Route("GetFilteredExecutionFlows")]
+        public object GetFilteredExecutionFlows()
+        {
+            return new object();
         }
 
     }

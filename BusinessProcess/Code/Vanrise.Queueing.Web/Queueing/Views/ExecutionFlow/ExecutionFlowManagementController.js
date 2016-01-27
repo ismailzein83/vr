@@ -1,14 +1,14 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    ExecutionFlowController.$inject = ['$scope', 'ExecutionFlowService', 'UtilsService'];
+    ExecutionFlowController.$inject = ['$scope', 'VR_Queueing_ExecutionFlowService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function ExecutionFlowController($scope, ExecutionFlowService, UtilsService) {
+    function ExecutionFlowController($scope, VR_Queueing_ExecutionFlowService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var gridAPI;
         var filter = {};
 
-        var executionFlowDirectionSelectorAPI;
+        var executionFlowDefinitionSelectorAPI;
         var executionFlowDirectionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
 
@@ -18,7 +18,7 @@
         function defineScope() {
 
             $scope.onExecutionFlowDefinitionSelectorReady = function (api) {
-                executionFlowDirectionSelectorAPI = api;
+                executionFlowDefinitionSelectorAPI = api;
                 executionFlowDirectionSelectorReadyDeferred.resolve();
             };
 
@@ -39,18 +39,46 @@
                         gridAPI.onExecutionFlowAdded(executionFlowObj);
                     }
                 };
-                ExecutionFlowService.addExecutionFlow(onExecutionFlowAdded);
+                VR_Queueing_ExecutionFlowService.addExecutionFlow(onExecutionFlowAdded);
             };
         }
 
         function load() {
-
+            loadAllControls();
         }
+
+        function loadAllControls() {
+            $scope.isLoading = true;
+            return UtilsService.waitMultipleAsyncOperations([loadExecutionFlowDefinition])
+              .catch(function (error) {
+                  VRNotificationService.notifyExceptionWithClose(error, $scope);
+              })
+             .finally(function () {
+                 $scope.isLoading = false;
+             });
+        }
+
+
+        function loadExecutionFlowDefinition() {
+            var executionFlowDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            executionFlowDirectionSelectorReadyDeferred.promise.then(function () {
+                var payload = {
+                    filter: null,
+                    selectedIds: null
+                };
+
+                VRUIUtilsService.callDirectiveLoad(executionFlowDefinitionSelectorAPI, payload, executionFlowDefinitionSelectorLoadDeferred);
+            });
+            return executionFlowDefinitionSelectorLoadDeferred.promise;
+        }
+
+
 
         function getFilterObject() {
             filter = {
-                ID: $scope.name,
-                Name: $scope.email
+                ID: $scope.selectedExecutionFlowDefinition,
+                Name: $scope.name
             };
         }
     }

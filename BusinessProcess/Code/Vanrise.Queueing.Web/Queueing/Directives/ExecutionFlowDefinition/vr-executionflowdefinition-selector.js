@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('executionflowdefinitionSelector', ['ExecutionFlowAPIService', 'ExecutionFlowService', 'UtilsService', 'VRUIUtilsService',
-    function (ExecutionFlowAPIService, ExecutionFlowService, UtilsService, VRUIUtilsService) {
+app.directive('vrExecutionflowdefinitionSelector', ['VR_Queueing_ExecutionFlowAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (VR_Queueing_ExecutionFlowAPIService, UtilsService, VRUIUtilsService) {
 
 
 
@@ -43,13 +43,13 @@ app.directive('executionflowdefinitionSelector', ['ExecutionFlowAPIService', 'Ex
                 }
             },
             template: function (element, attrs) {
-                return getUserTemplate(attrs);
+                return getExecutionFlowDefinitionTemplate(attrs);
             }
 
         };
 
 
-        function getUserTemplate(attrs) {
+        function getExecutionFlowDefinitionTemplate(attrs) {
 
             var multipleselection = "";
 
@@ -67,7 +67,7 @@ app.directive('executionflowdefinitionSelector', ['ExecutionFlowAPIService', 'Ex
                 addCliked = 'onaddclicked="addNewExecutionFlow"';
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="UserId" isrequired="ctrl.isrequired"'
+                + '<vr-select ' + multipleselection + '  datatextfield="Title" datavaluefield="ID" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Execution Flow Definition" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>'
         }
@@ -95,7 +95,7 @@ app.directive('executionflowdefinitionSelector', ['ExecutionFlowAPIService', 'Ex
                         selectedIds = payload.selectedIds;
                     }
 
-                    return ExecutionFlowAPIService.GetExecutionFlowDefinitions(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VR_Queueing_ExecutionFlowAPIService.GetExecutionFlowDefinitions(UtilsService.serializetoJson(filter)).then(function (response) {
                         ctrl.datasource.length = 0;
 
                         if (response) {
@@ -105,13 +105,13 @@ app.directive('executionflowdefinitionSelector', ['ExecutionFlowAPIService', 'Ex
                         }
 
                         if (selectedIds) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'UserId', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'ID', attrs, ctrl);
                         }
                     });
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('UserId', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('ID', attrs, ctrl);
                 }
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

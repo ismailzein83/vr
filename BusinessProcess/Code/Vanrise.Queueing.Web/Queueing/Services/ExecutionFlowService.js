@@ -20,15 +20,15 @@
             VRModalService.showModal('/Client/Modules/Queueing/Views/ExecutionFlow/ExecutionFlowEditor.html', null, modalSettings);
         }
 
-        function editExecutionFlow(userId, onUserUpdated) {
+        function editExecutionFlow(ID, onExecutionFlowUpdated) {
             var modalParameters = {
-                userId: userId
+                ID: ID
             };
 
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onUserUpdated = onUserUpdated;
+                modalScope.onExecutionFlowUpdated = onExecutionFlowUpdated;
             };
 
             VRModalService.showModal('/Client/Modules/Queueing/Views/ExecutionFlow/ExecutionFlowEditor.html', modalParameters, modalSettings);
@@ -36,6 +36,6 @@
  
     };
 
-    appControllers.service('ExecutionFlowService', ExecutionFlowService);
+    appControllers.service('VR_Queueing_ExecutionFlowService', ExecutionFlowService);
 
 })(appControllers);

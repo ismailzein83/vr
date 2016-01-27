@@ -82,6 +82,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Controllers\ExecutionFlowController.cs" />
     <Compile Include="Controllers\QueueingController.cs" />
     <Compile Include="ModelMappers\QueueingMappers.cs" />
@@ -91,8 +92,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Queueing\Constants\ModuleConfig.js" />
     <Content Include="Queueing\Constants\QueueItemStatusEnum.js" />
-    <Content Include="Queueing\Directives\ExecutionFlowDefinition\executionflowdefinition_selector.js" />
+    <Content Include="Queueing\Directives\ExecutionFlowDefinition\vr-executionflowdefinition-selector.js" />
+    <Content Include="Queueing\Directives\ExecutionFlow\Templates\ExecutionFlowGrid.html" />
+    <Content Include="Queueing\Directives\ExecutionFlow\vr-executionflow-grid.js" />
     <Content Include="Queueing\Services\APIServices\ExecutionFlowAPIService.js" />
     <Content Include="Queueing\Services\QueueingAPIService.js" />
     <Content Include="Queueing\Services\ExecutionFlowService.js" />

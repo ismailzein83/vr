@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ExecutionFlowEditorController.$inject = ['$scope', 'ExecutionFlowAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+    ExecutionFlowEditorController.$inject = ['$scope', 'VR_Queueing_ExecutionFlowAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-    function ExecutionFlowEditorController($scope, ExecutionFlowAPIService, VRNotificationService, VRNavigationService, UtilsService) {
+    function ExecutionFlowEditorController($scope, VR_Queueing_ExecutionFlowAPIService, VRNotificationService, VRNavigationService, UtilsService) {
         var isEditMode;
         var userId;
         var userEntity;
@@ -53,7 +53,7 @@
         }
 
         function getUser() {
-            return ExecutionFlowAPIService.GetUserbyId(userId).then(function (response) {
+            return VR_Queueing_ExecutionFlowAPIService.GetUserbyId(userId).then(function (response) {
                 userEntity = response;
             });
         }
