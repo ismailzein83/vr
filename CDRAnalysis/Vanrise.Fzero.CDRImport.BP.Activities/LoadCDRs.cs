@@ -17,14 +17,15 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
     public class LoadCDRsInput
     {
-        public NumberRangeDefinition NumberRange { get; set; }
-
         public BaseQueue<CDRBatch> OutputQueue { get; set; }
+
+        public List<string> NumberPrefix { get; set; }
 
         public DateTime FromDate { get; set; }
 
         public DateTime ToDate { get; set; }
     }
+
 
     public class LoadCDRsOutput
     {
@@ -36,11 +37,11 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
     public sealed class LoadCDRs : BaseAsyncActivity<LoadCDRsInput, LoadCDRsOutput>
     {
         #region Arguments
-        
-        public InArgument<NumberRangeDefinition> NumberRange { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<CDRBatch>> OutputQueue { get; set; }
+
+        public InArgument<List<string>> NumberPrefix { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime> FromDate { get; set; }
@@ -65,15 +66,9 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
         private CDRBatch BuildCDRBatch(List<CDR> cdrs)
         {
-            //if (String.IsNullOrEmpty(configuredDirectory))
-            //    throw new ArgumentNullException("FraudAnalysis_LoadCDRsDirectory");
-            //var cdrsBytes = Vanrise.Common.Compressor.Compress(Vanrise.Common.ProtoBufSerializer.Serialize(cdrs));
-            //string filePath = !String.IsNullOrEmpty(configuredDirectory) ? System.IO.Path.Combine(configuredDirectory, Guid.NewGuid().ToString()) : System.IO.Path.GetTempFileName();
-            //System.IO.File.WriteAllBytes(filePath, cdrsBytes);
             return new CDRBatch
             {
                 CDRs = cdrs
-                //CDRBatchFilePath = filePath
             };
         }
 
@@ -81,7 +76,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
         {
             return new LoadCDRsInput
             {
-                NumberRange = this.NumberRange.Get(context),
+                NumberPrefix = this.NumberPrefix.Get(context),
                 FromDate = this.FromDate.Get(context),
                 ToDate = this.ToDate.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
@@ -92,22 +87,16 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
         {
             List<CDR> cdrs = new List<CDR>();
             int totalCount = 0;
-            int index = 0;
             ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
-            dataManager.LoadCDR(inputArgument.FromDate, inputArgument.ToDate, inputArgument.NumberRange != null ? inputArgument.NumberRange.Prefixes : null, (cdr) =>
+            dataManager.LoadCDR(inputArgument.NumberPrefix, inputArgument.FromDate, inputArgument.ToDate, 0, (cdr) =>
             {
                 cdrs.Add(cdr);
-                index++;
-                if (cdrs.Count >= 25000)
+                if (cdrs.Count >= 100000)
                 {
                     totalCount += cdrs.Count;
                     inputArgument.OutputQueue.Enqueue(BuildCDRBatch(cdrs));
+                    handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs loaded", totalCount);
                     cdrs = new List<CDR>();
-                    if (index >= 100000)
-                    {
-                        handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs loaded", totalCount);
-                        index = 0;
-                    }
                 }
             });
             if (cdrs.Count > 0)
@@ -119,6 +108,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
             {
                 NumberOfCDRs = totalCount
             };
+           
         }
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, LoadCDRsOutput result)

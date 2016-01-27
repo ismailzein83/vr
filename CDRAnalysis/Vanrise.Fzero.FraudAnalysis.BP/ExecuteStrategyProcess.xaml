@@ -1,7 +1,9 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
@@ -10,9 +12,9 @@
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
- xmlns:vfcba="clr-namespace:Vanrise.Fzero.CDRImport.BP.Activities;assembly=Vanrise.Fzero.CDRImport.BP.Activities"
- xmlns:vfce="clr-namespace:Vanrise.Fzero.CDRImport.Entities;assembly=Vanrise.Fzero.CDRImport.Entities"
+ xmlns:vc="clr-namespace:Vanrise.Common;assembly=Vanrise.Common"
  xmlns:vffba="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Arguments;assembly=Vanrise.Fzero.FraudAnalysis.BP.Arguments"
+ xmlns:vffba1="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Activities;assembly=Vanrise.Fzero.FraudAnalysis.BP.Activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(vffba:ExecuteStrategyProcessInput)" />
@@ -74,149 +76,240 @@
     <Sequence.Variables>
       <Variable x:TypeArguments="x:Int32" Name="subProcessByPrefixCompleted" />
       <Variable x:TypeArguments="x:Int64" Name="totalProcessedCDRs" />
-      <Variable x:TypeArguments="scg:List(vfce:NumberRangeDefinition)" Name="numberRanges" />
       <Variable x:TypeArguments="x:Int64" Name="totalNumberOfSubscribers" />
       <Variable x:TypeArguments="x:Int64" Name="totalNumberOfSuspicions" />
+      <Variable x:TypeArguments="scg:List(vffba:ExecuteStrategyExecutionItem)" Name="strategiesExecutionItems" />
     </Sequence.Variables>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
       <InArgument x:TypeArguments="x:String">
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Start Executing Strategies Count: {0}",Input.StrategyIds.Count)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <vfcba:GetNumberRanges sap2010:WorkflowViewState.IdRef="GetNumberRanges_1">
-      <vfcba:GetNumberRanges.FixedPrefixes>
-        <InArgument x:TypeArguments="scg:IEnumerable(x:String)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:String)">Input.FixedPrefixes</mca:CSharpValue>
+    <vffba1:CreateStrategiesExecutionItems sap2010:WorkflowViewState.IdRef="CreateStrategiesExecutionItems_1">
+      <vffba1:CreateStrategiesExecutionItems.FromDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
         </InArgument>
-      </vfcba:GetNumberRanges.FixedPrefixes>
-      <vfcba:GetNumberRanges.NumberRanges>
-        <OutArgument x:TypeArguments="scg:List(vfce:NumberRangeDefinition)">
-          <mca:CSharpReference x:TypeArguments="scg:List(vfce:NumberRangeDefinition)">numberRanges</mca:CSharpReference>
+      </vffba1:CreateStrategiesExecutionItems.FromDate>
+      <vffba1:CreateStrategiesExecutionItems.StrategyExecutionItems>
+        <OutArgument x:TypeArguments="scg:List(vffba:ExecuteStrategyExecutionItem)">
+          <mca:CSharpReference x:TypeArguments="scg:List(vffba:ExecuteStrategyExecutionItem)">strategiesExecutionItems</mca:CSharpReference>
         </OutArgument>
-      </vfcba:GetNumberRanges.NumberRanges>
-      <vfcba:GetNumberRanges.PrefixLength>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.PrefixLength</mca:CSharpValue>
+      </vffba1:CreateStrategiesExecutionItems.StrategyExecutionItems>
+      <vffba1:CreateStrategiesExecutionItems.StrategyIds>
+        <InArgument x:TypeArguments="scg:List(x:Int32)">
+          <mca:CSharpValue x:TypeArguments="scg:List(x:Int32)">Input.StrategyIds</mca:CSharpValue>
         </InArgument>
-      </vfcba:GetNumberRanges.PrefixLength>
-    </vfcba:GetNumberRanges>
-    <ParallelForEach x:TypeArguments="vfce:NumberRangeDefinition" DisplayName="ParallelForEach&lt;NumberRangeDefinition&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_2">
-      <ParallelForEach.Values>
-        <InArgument x:TypeArguments="scg:IEnumerable(vfce:NumberRangeDefinition)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vfce:NumberRangeDefinition)">numberRanges</mca:CSharpValue>
+      </vffba1:CreateStrategiesExecutionItems.StrategyIds>
+      <vffba1:CreateStrategiesExecutionItems.ToDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
         </InArgument>
-      </ParallelForEach.Values>
-      <ActivityAction x:TypeArguments="vfce:NumberRangeDefinition">
-        <ActivityAction.Argument>
-          <DelegateInArgument x:TypeArguments="vfce:NumberRangeDefinition" Name="numberRange" />
-        </ActivityAction.Argument>
-        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+      </vffba1:CreateStrategiesExecutionItems.ToDate>
+    </vffba1:CreateStrategiesExecutionItems>
+    <If sap2010:WorkflowViewState.IdRef="If_3">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">strategiesExecutionItems != null &amp;&amp; strategiesExecutionItems.Count &gt; 0</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
           <Sequence.Variables>
-            <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="subProcessEventPayload" />
+            <Variable x:TypeArguments="scg:List(x:String)" Name="numberPrefixes" />
           </Sequence.Variables>
-          <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_2" WaitProcessCompleted="True">
-            <vbw:RunProcess.Input>
-              <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
-                <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyForNumberRangeProcessInput
-            {
-                NumberRange = numberRange,
-                FromDate = Input.FromDate,
-                ToDate = Input.ToDate,
-                StrategyIds = Input.StrategyIds,
-                IncludeWhiteList = Input.IncludeWhiteList
-            }</mca:CSharpValue>
-              </InArgument>
-            </vbw:RunProcess.Input>
-            <vbw:RunProcess.ProcessCompletedEventPayload>
-              <OutArgument x:TypeArguments="vb:ProcessCompletedEventPayload">
-                <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">subProcessEventPayload</mca:CSharpReference>
+          <vffba1:GetNumberPrefixes sap2010:WorkflowViewState.IdRef="GetNumberPrefixes_1">
+            <vffba1:GetNumberPrefixes.NumberPrefixes>
+              <OutArgument x:TypeArguments="scg:List(x:String)">
+                <mca:CSharpReference x:TypeArguments="scg:List(x:String)">numberPrefixes</mca:CSharpReference>
               </OutArgument>
-            </vbw:RunProcess.ProcessCompletedEventPayload>
-          </vbw:RunProcess>
-          <If sap2010:WorkflowViewState.IdRef="If_2">
+            </vffba1:GetNumberPrefixes.NumberPrefixes>
+          </vffba1:GetNumberPrefixes>
+          <If sap2010:WorkflowViewState.IdRef="If_4">
             <If.Condition>
               <InArgument x:TypeArguments="x:Boolean">
-                <mca:CSharpValue x:TypeArguments="x:Boolean">subProcessEventPayload.ProcessStatus != Vanrise.BusinessProcess.Entities.BPInstanceStatus.Completed</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="x:Boolean">numberPrefixes != null &amp;&amp; numberPrefixes.Count() &gt; 0</mca:CSharpValue>
               </InArgument>
             </If.Condition>
             <If.Then>
-              <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1">
-                <TerminateWorkflow.Reason>
-                  <InArgument x:TypeArguments="x:String">
-                    <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing number prefixes '{0}' failed due to error: {1}", String.Join(",", numberRange.Prefixes), subProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
+              <ParallelForEach x:TypeArguments="x:String" DisplayName="ParallelForEach&lt;NumberPrefix&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_3">
+                <ParallelForEach.Values>
+                  <InArgument x:TypeArguments="scg:IEnumerable(x:String)">
+                    <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:String)">numberPrefixes</mca:CSharpValue>
                   </InArgument>
-                </TerminateWorkflow.Reason>
-              </TerminateWorkflow>
+                </ParallelForEach.Values>
+                <ActivityAction x:TypeArguments="x:String">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="x:String" Name="numberPrefix" />
+                  </ActivityAction.Argument>
+                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+                    <Sequence.Variables>
+                      <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="subProcessEventPayload" />
+                    </Sequence.Variables>
+                    <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5">
+                      <vbw:WriteTrackingMessage.Message>
+                        <InArgument x:TypeArguments="x:String">
+                          <mca:CSharpValue x:TypeArguments="x:String">String.Format("Sub Process created for Number Prefix '{0}'", numberPrefix)</mca:CSharpValue>
+                        </InArgument>
+                      </vbw:WriteTrackingMessage.Message>
+                    </vbw:WriteTrackingMessage>
+                    <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_2" WaitProcessCompleted="True">
+                      <vbw:RunProcess.Input>
+                        <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
+                          <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new ExecuteStrategyForNumberRangeProcessInput
+            {
+                NumberPrefixes = new List&lt;string&gt; {numberPrefix},
+                FromDate = Input.FromDate,
+                ToDate = Input.ToDate,
+                StrategyExecutionItems = strategiesExecutionItems,
+                IncludeWhiteList = Input.IncludeWhiteList
+            }</mca:CSharpValue>
+                        </InArgument>
+                      </vbw:RunProcess.Input>
+                      <vbw:RunProcess.ProcessCompletedEventPayload>
+                        <OutArgument x:TypeArguments="vb:ProcessCompletedEventPayload">
+                          <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">subProcessEventPayload</mca:CSharpReference>
+                        </OutArgument>
+                      </vbw:RunProcess.ProcessCompletedEventPayload>
+                    </vbw:RunProcess>
+                    <If sap2010:WorkflowViewState.IdRef="If_2">
+                      <If.Condition>
+                        <InArgument x:TypeArguments="x:Boolean">
+                          <mca:CSharpValue x:TypeArguments="x:Boolean">subProcessEventPayload.ProcessStatus != Vanrise.BusinessProcess.Entities.BPInstanceStatus.Completed</mca:CSharpValue>
+                        </InArgument>
+                      </If.Condition>
+                      <If.Then>
+                        <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1">
+                          <TerminateWorkflow.Reason>
+                            <InArgument x:TypeArguments="x:String">
+                              <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing number prefixe '{0}' failed due to error: {1}", numberPrefix, subProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
+                            </InArgument>
+                          </TerminateWorkflow.Reason>
+                        </TerminateWorkflow>
+                      </If.Then>
+                      <If.Else>
+                        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+                          <Sequence.Variables>
+                            <Variable x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessOutput" Name="executeStrategySubProcessEventOutput" />
+                          </Sequence.Variables>
+                          <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessOutput">
+                                <mca:CSharpReference x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessOutput">executeStrategySubProcessEventOutput</mca:CSharpReference>
+                              </OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessOutput">
+                                <mca:CSharpValue x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessOutput">subProcessEventPayload.ProcessOutput as ExecuteStrategyForNumberRangeProcessOutput</mca:CSharpValue>
+                              </InArgument>
+                            </Assign.Value>
+                          </Assign>
+                          <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="x:Int64">
+                                <mca:CSharpReference x:TypeArguments="x:Int64">totalProcessedCDRs</mca:CSharpReference>
+                              </OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="x:Int64">
+                                <mca:CSharpValue x:TypeArguments="x:Int64">totalProcessedCDRs + executeStrategySubProcessEventOutput.CDRsProcessed</mca:CSharpValue>
+                              </InArgument>
+                            </Assign.Value>
+                          </Assign>
+                          <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="x:Int64">
+                                <mca:CSharpReference x:TypeArguments="x:Int64">totalNumberOfSubscribers</mca:CSharpReference>
+                              </OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="x:Int64">
+                                <mca:CSharpValue x:TypeArguments="x:Int64">totalNumberOfSubscribers + executeStrategySubProcessEventOutput.NumberOfSubscribers</mca:CSharpValue>
+                              </InArgument>
+                            </Assign.Value>
+                          </Assign>
+                          <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="x:Int64">
+                                <mca:CSharpReference x:TypeArguments="x:Int64">totalNumberOfSuspicions</mca:CSharpReference>
+                              </OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="x:Int64">
+                                <mca:CSharpValue x:TypeArguments="x:Int64">totalNumberOfSuspicions + executeStrategySubProcessEventOutput.NumberOfSuspicions</mca:CSharpValue>
+                              </InArgument>
+                            </Assign.Value>
+                          </Assign>
+                          <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="x:Int32">
+                                <mca:CSharpReference x:TypeArguments="x:Int32">subProcessByPrefixCompleted</mca:CSharpReference>
+                              </OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="x:Int32">
+                                <mca:CSharpValue x:TypeArguments="x:Int32">subProcessByPrefixCompleted + 1</mca:CSharpValue>
+                              </InArgument>
+                            </Assign.Value>
+                          </Assign>
+                          <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2">
+                            <vbw:WriteTrackingMessage.Message>
+                              <InArgument x:TypeArguments="x:String">
+                                <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Number Prefix '{0}' group completed. {1} groups remaining. {2} processed CDRs. {3} total processed CDRs. {4} subscribers. {5} total subscribers. {6} suspicions. {7} total suspicions", numberPrefix, (numberPrefixes.Count - subProcessByPrefixCompleted), executeStrategySubProcessEventOutput.CDRsProcessed, totalProcessedCDRs, executeStrategySubProcessEventOutput.NumberOfSubscribers, totalNumberOfSubscribers, executeStrategySubProcessEventOutput.NumberOfSuspicions, totalNumberOfSuspicions)</mca:CSharpValue>
+                              </InArgument>
+                            </vbw:WriteTrackingMessage.Message>
+                          </vbw:WriteTrackingMessage>
+                        </Sequence>
+                      </If.Else>
+                    </If>
+                  </Sequence>
+                </ActivityAction>
+              </ParallelForEach>
             </If.Then>
             <If.Else>
-              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
                 <Sequence.Variables>
                   <Variable x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessOutput" Name="executeStrategySubProcessEventOutput" />
                 </Sequence.Variables>
-                <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
-                  <Assign.To>
+                <local:ExecuteStrategyForNumberRangeProcess sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyForNumberRangeProcess_1">
+                  <local:ExecuteStrategyForNumberRangeProcess.Input>
+                    <InArgument x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessInput">
+                      <mca:CSharpValue x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessInput" xml:space="preserve">new ExecuteStrategyForNumberRangeProcessInput
+            {
+                FromDate = Input.FromDate,
+                ToDate = Input.ToDate,
+                StrategyExecutionItems = strategiesExecutionItems,
+                IncludeWhiteList = Input.IncludeWhiteList
+            
+            }</mca:CSharpValue>
+                    </InArgument>
+                  </local:ExecuteStrategyForNumberRangeProcess.Input>
+                  <local:ExecuteStrategyForNumberRangeProcess.Output>
                     <OutArgument x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessOutput">
                       <mca:CSharpReference x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessOutput">executeStrategySubProcessEventOutput</mca:CSharpReference>
                     </OutArgument>
-                  </Assign.To>
-                  <Assign.Value>
-                    <InArgument x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessOutput">
-                      <mca:CSharpValue x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessOutput">subProcessEventPayload.ProcessOutput as ExecuteStrategyForNumberRangeProcessOutput</mca:CSharpValue>
-                    </InArgument>
-                  </Assign.Value>
-                </Assign>
-                <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
-                  <Assign.To>
-                    <OutArgument x:TypeArguments="x:Int64">
-                      <mca:CSharpReference x:TypeArguments="x:Int64">totalProcessedCDRs</mca:CSharpReference>
-                    </OutArgument>
-                  </Assign.To>
-                  <Assign.Value>
-                    <InArgument x:TypeArguments="x:Int64">
-                      <mca:CSharpValue x:TypeArguments="x:Int64">totalProcessedCDRs + executeStrategySubProcessEventOutput.CDRsProcessed</mca:CSharpValue>
-                    </InArgument>
-                  </Assign.Value>
-                </Assign>
-                <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
-                  <Assign.To>
-                    <OutArgument x:TypeArguments="x:Int64">
-                      <mca:CSharpReference x:TypeArguments="x:Int64">totalNumberOfSubscribers</mca:CSharpReference>
-                    </OutArgument>
-                  </Assign.To>
-                  <Assign.Value>
-                    <InArgument x:TypeArguments="x:Int64">
-                      <mca:CSharpValue x:TypeArguments="x:Int64">totalNumberOfSubscribers + executeStrategySubProcessEventOutput.NumberOfSubscribers</mca:CSharpValue>
-                    </InArgument>
-                  </Assign.Value>
-                </Assign>
-                <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
-                  <Assign.To>
-                    <OutArgument x:TypeArguments="x:Int64">
-                      <mca:CSharpReference x:TypeArguments="x:Int64">totalNumberOfSuspicions</mca:CSharpReference>
-                    </OutArgument>
-                  </Assign.To>
-                  <Assign.Value>
-                    <InArgument x:TypeArguments="x:Int64">
-                      <mca:CSharpValue x:TypeArguments="x:Int64">totalNumberOfSuspicions + executeStrategySubProcessEventOutput.NumberOfSuspicions</mca:CSharpValue>
-                    </InArgument>
-                  </Assign.Value>
-                </Assign>
-                <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
-                  <Assign.To>
-                    <OutArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpReference x:TypeArguments="x:Int32">subProcessByPrefixCompleted</mca:CSharpReference>
-                    </OutArgument>
-                  </Assign.To>
-                  <Assign.Value>
-                    <InArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpValue x:TypeArguments="x:Int32">subProcessByPrefixCompleted + 1</mca:CSharpValue>
-                    </InArgument>
-                  </Assign.Value>
-                </Assign>
-                <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2">
+                  </local:ExecuteStrategyForNumberRangeProcess.Output>
+                  <sap2010:WorkflowViewState.ViewStateManager>
+                    <sap2010:ViewStateManager>
+                      <sap2010:ViewStateData Id="LoadCDRs_2" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
+                      <sap2010:ViewStateData Id="CreateNumberProfiles_2" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
+                      <sap2010:ViewStateData Id="GetStrategyExecutionItem_1" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
+                      <sap2010:ViewStateData Id="PrepareStrategyExecutionItemForDBApply_1" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
+                      <sap2010:ViewStateData Id="ApplyStrategyExecutionItemToDB_1" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
+                      <sap2010:ViewStateData Id="Parallel_1" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
+                      <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
+                      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap2010:WorkflowViewState.IdRef="ViewStateData_8" />
+                      <sap2010:ViewStateData Id="If_1" sap2010:WorkflowViewState.IdRef="ViewStateData_9" />
+                      <sap2010:ViewStateData Id="Assign_1" sap2010:WorkflowViewState.IdRef="ViewStateData_10" />
+                      <sap2010:ViewStateData Id="Sequence_2" sap2010:WorkflowViewState.IdRef="ViewStateData_11" />
+                      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyForNumberRangeProcess_1" sap2010:WorkflowViewState.IdRef="ViewStateData_12" />
+                    </sap2010:ViewStateManager>
+                  </sap2010:WorkflowViewState.ViewStateManager>
+                </local:ExecuteStrategyForNumberRangeProcess>
+                <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3">
                   <vbw:WriteTrackingMessage.Message>
                     <InArgument x:TypeArguments="x:String">
-                      <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Number Prefixes '{0}' group completed. {1} groups remaining. {2} processed CDRs. {3} total processed CDRs. {4} subscribers. {5} total subscribers. {6} suspicions. {7} total suspicions", String.Join(",", numberRange.Prefixes), (numberRanges.Count - subProcessByPrefixCompleted), executeStrategySubProcessEventOutput.CDRsProcessed, totalProcessedCDRs, executeStrategySubProcessEventOutput.NumberOfSubscribers, totalNumberOfSubscribers, executeStrategySubProcessEventOutput.NumberOfSuspicions, totalNumberOfSuspicions)</mca:CSharpValue>
+                      <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0} total processed CDRs. {1} total subscribers. {2} total suspicions", executeStrategySubProcessEventOutput.CDRsProcessed, executeStrategySubProcessEventOutput.NumberOfSubscribers, executeStrategySubProcessEventOutput.NumberOfSuspicions)</mca:CSharpValue>
                     </InArgument>
                   </vbw:WriteTrackingMessage.Message>
                 </vbw:WriteTrackingMessage>
@@ -224,14 +317,25 @@
             </If.Else>
           </If>
         </Sequence>
-      </ActivityAction>
-    </ParallelForEach>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbCRJA+YBDgIBAVEFVREDAb4BVgVmHQMBqAFnBeQBFwIBAlMJU5UBAwG/AVkLWW0DAbcBYwtjWgMBsAFeC155AwGpAWoLangDAaEBcQniARQCAQN1C4cBHAMBjQGIAQvhARACAQR4EX8gAwGYAYQBEYQBhAEDAY8BdXx1ggEDAY4BiwERiwGzAQIBBY8BD5UBIwMBgwGYAQ/fARoCAQ6SARWSAfABAwGEAZwBEacBGgIBbqgBEbMBGgIBWbQBEb8BGgIBRMABEcsBGgIBL8wBEdcBGgIBGtgBEd4BLAIBD6QBF6QBzwECAXmfARefAakBAgFvsAEXsAGbAQIBZKsBF6sBbgIBWrwBF7wBpwECAU+3ARe3AXQCAUXIARfIAaUBAgE6wwEXwwFzAgEw1AEX1AFzAgElzwEXzwF3AgEb2wEX2wHyBAIBEA==</sads:DebugSymbol.Symbol>
+      </If.Then>
+      <If.Else>
+        <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4" Message="All Strategies are disabled">
+          <vbw:WriteTrackingMessage.Severity>
+            <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
+              <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Common.LogEntryType.Warning</mca:CSharpValue>
+            </InArgument>
+          </vbw:WriteTrackingMessage.Severity>
+        </vbw:WriteTrackingMessage>
+      </If.Else>
+    </If>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbDdLA8wCDgIBAVMFVxEDAaICWAVtLQMBhQJuBcoCCgIBAlUJVZUBAwGjAmULZWMDAZsCWwtbWQMBlAJgC2CNAQMBjQJqC2pXAwGGAnELcZsBAgEDdQm/AhQCARPCAgnIAiQCAQp5C38mAwH8AYABC74CEAIBFMUCD8UCgwECAQzCAmTCAoEBAgELfBF8bwMB/QGDARGDAY8BAgEVhwEPiwIhAgE7jgIPvAIaAgEdigEVigFyAwH0AZEBE4kCHgIBPJICEbQCPgIBKLUCEbsCLAIBHpUBFZsBMAMB6QGcARWuASYDAdMBrwEViAIaAgE9oQIXoQKpAQIBMpUCF5wCIAIBKbgCF7gC0gICAR+YARuYAaMBAwHqAZ8BG6YBIAMB3wGrARurAY4BAwHVAZwBhgGcAYwBAwHUAbIBG7IBvQECAT62ARm8AS0DAcgBvwEZhgIkAgFIuQEfuQHfAQMByQHDARvOASQDAbEBzwEb2gEkAwGaAdsBG+YBJAMBgwHnARvyASQCAWzzARv+ASQCAVX/ARuFAjYCAUnLASHLAdkBAwG9AcYBIcYBswEDAbIB1wEh1wGlAQMBpgHSASHSAXgDAZsB4wEh4wGxAQMBjwHeASHeAX4DAYQB7wEh7wGvAQIBeOoBIeoBfQIBbfsBIfsBfQIBYfYBIfYBgQECAVaCAiGCAuIEAgFK</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="541,62" />
-      <sap2010:ViewStateData Id="GetNumberRanges_1" sap:VirtualizedContainerService.HintSize="541,22" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1035,62" />
+      <sap2010:ViewStateData Id="CreateStrategiesExecutionItems_1" sap:VirtualizedContainerService.HintSize="1035,22" />
+      <sap2010:ViewStateData Id="GetNumberPrefixes_1" sap:VirtualizedContainerService.HintSize="788,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="RunProcess_2" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,62" />
@@ -248,22 +352,65 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="489,806" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="511,992">
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="511,1054">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="541,1142" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="563,1430">
+      <sap2010:ViewStateData Id="ParallelForEach`1_3" sap:VirtualizedContainerService.HintSize="541,1204" />
+      <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_4" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_5" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_6" sap:VirtualizedContainerService.HintSize="1274,86" />
+      <sap2010:ViewStateData Id="ViewStateData_7" sap:VirtualizedContainerService.HintSize="1296,210">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="603,1510" />
+      <sap2010:ViewStateData Id="ViewStateData_8" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ViewStateData_9" sap:VirtualizedContainerService.HintSize="1521,360" />
+      <sap2010:ViewStateData Id="ViewStateData_10" sap:VirtualizedContainerService.HintSize="1521,62" />
+      <sap2010:ViewStateData Id="ViewStateData_11" sap:VirtualizedContainerService.HintSize="1543,586">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ViewStateData_12" sap:VirtualizedContainerService.HintSize="1583,666" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyForNumberRangeProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="788,1354" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="810,1540">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="1035,1690" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1057,1978">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="1097,2058" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

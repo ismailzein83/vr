@@ -470,7 +470,7 @@
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="applyDWFactsToDBActivityStatus" />
         <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedDWFactQueue" />
       </Parallel.Variables>
-      <vfcba:LoadCDRs NumberOfCDRs="{x:Null}" NumberRange="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadCDRs_2">
+      <vfcba:LoadCDRs NumberOfCDRs="{x:Null}" NumberPrefix="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadCDRs_3">
         <vfcba:LoadCDRs.FromDate>
           <InArgument x:TypeArguments="s:DateTime">
             <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
@@ -594,7 +594,7 @@
       <sap2010:ViewStateData Id="GetDWBTSs_2" sap:VirtualizedContainerService.HintSize="200,270" />
       <sap2010:ViewStateData Id="GetDWAccountCases_1" sap:VirtualizedContainerService.HintSize="200,270" />
       <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1318,316" />
-      <sap2010:ViewStateData Id="LoadCDRs_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="LoadCDRs_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="FillFactValues_4" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareDWFactsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyDWFactsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />

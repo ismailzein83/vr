@@ -97,6 +97,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConvertStrategyExecItemsToInfos.cs" />
+    <Compile Include="CreateStrategiesExecutionItems.cs" />
     <Compile Include="DataWarehouse\ApplyDWDimensionsToDB.cs" />
     <Compile Include="DataWarehouse\ApplyDWStrategiesToDB.cs" />
     <Compile Include="DataWarehouse\ApplyDWFactsToDB.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="FindRelatedNumbersthroughIMEIs.cs" />
     <Compile Include="DataWarehouse\GetDWTimes.cs" />
     <Compile Include="DataWarehouse\GetDWStrategies.cs" />
+    <Compile Include="GetNumberPrefixes.cs" />
     <Compile Include="GetStrategiesExecutionInfo.cs" />
     <Compile Include="GetStrategyExecutionItems.cs" />
     <Compile Include="GetAccountNumbersByIMEI.cs" />

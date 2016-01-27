@@ -72,7 +72,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
                 Vanrise.Fzero.CDRImport.Data.ICDRDataManager dataManager = Vanrise.Fzero.CDRImport.Data.CDRDataManagerFactory.GetDataManager<Vanrise.Fzero.CDRImport.Data.ICDRDataManager>();
                 int count = 0;
                 int index = 0;
-                dataManager.LoadCDR(DateTime.Today.AddDays(-10), DateTime.Today.AddDays(1), null, (cdr) =>
+                dataManager.LoadCDR(new List<String> { "120" }, DateTime.Today.AddDays(-10), DateTime.Today.AddDays(1), null, (cdr) =>
                 {
                     count++;
                     index++;

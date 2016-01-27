@@ -21,8 +21,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class CreateNumberProfilesInput
     {
-        public NumberRangeDefinition NumberRange { get; set; }
-
         public BaseQueue<CDRBatch> InputQueue { get; set; }
 
         public BaseQueue<NumberProfileBatch> OutputQueue { get; set; }
@@ -36,6 +34,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public NumberProfileParameters Parameters { get; set; }
 
         public bool IncludeWhiteList { get; set; }
+
+        public List<string> NumberPrefixes { get; set; }
+
 
     }
 
@@ -51,8 +52,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
     {
 
         #region Arguments
-        
-        public InArgument<NumberRangeDefinition> NumberRange { get; set; }
+
+        public InArgument<List<string>> NumberPrefixes { get; set; }
 
 
         [RequiredArgument]
@@ -99,7 +100,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         FromDate = inputArgument.FromDate,
                         ToDate = inputArgument.ToDate,
                         StrategyId = strategyExecutionInfo.Strategy.Id,
-                        StrategyExecutionID = strategyExecutionInfo.StrategyExecution.ID,
+                        StrategyExecutionID = strategyExecutionInfo.StrategyExecutionId,
                         IMEIs = processingNumberProfileItem.IMEIs
                     };
                     for (int i = 0; i < aggregatesCount; i++)
@@ -133,7 +134,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             return new CreateNumberProfilesInput
             {
-                NumberRange = this.NumberRange.Get(context),
+                NumberPrefixes = this.NumberPrefixes.Get(context),
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context),
                 FromDate = this.FromDate.Get(context),
@@ -151,7 +152,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             if (!inputArgument.IncludeWhiteList)
             {
                 IAccountStatusDataManager accountStatusDataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
-                var whiteListNumbers = accountStatusDataManager.GetAccountNumbersByNumberPrefixAndStatuses(new List<CaseStatus> { CaseStatus.ClosedWhiteList }, inputArgument.NumberRange != null ? inputArgument.NumberRange.Prefixes : null);
+                var whiteListNumbers = accountStatusDataManager.GetAccountNumbersByNumberPrefixAndStatuses(new List<CaseStatus> { CaseStatus.ClosedWhiteList}, inputArgument.NumberPrefixes);
                 whiteListNumbersHashSet = new HashSet<string>(whiteListNumbers);
             }
 

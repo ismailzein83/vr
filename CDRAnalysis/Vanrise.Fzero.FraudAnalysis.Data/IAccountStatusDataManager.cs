@@ -8,6 +8,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface IAccountStatusDataManager : IDataManager 
     {
-        List<string> GetAccountNumbersByNumberPrefixAndStatuses(List<CaseStatus> caseStatuses, IEnumerable<string> numberPrefixes);
+        List<string> GetAccountNumbersByNumberPrefixAndStatuses(List<CaseStatus> caseStatuses, List<string> numberPrefixes);
     }
 }

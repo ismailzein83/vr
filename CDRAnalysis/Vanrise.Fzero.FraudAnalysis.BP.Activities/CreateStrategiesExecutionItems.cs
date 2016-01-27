@@ -3,20 +3,22 @@ using System.Activities;
 using System.Collections.Generic;
 using Vanrise.BusinessProcess;
 using Vanrise.Common;
+using Vanrise.Fzero.FraudAnalysis.BP.Arguments;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
 
-    public class GetStrategiesExecutionInfo : CodeActivity
+    public class CreateStrategiesExecutionItems : CodeActivity
     {
         #region Arguments
 
         [RequiredArgument]
         public InArgument<List<int>> StrategyIds { get; set; }
 
-        public OutArgument<List<StrategyExecutionInfo>> StrategiesExecutionInfo { get; set; }
+        public OutArgument<List<ExecuteStrategyExecutionItem>> StrategyExecutionItems { get; set; }
+
 
         [RequiredArgument]
         public InArgument<DateTime> FromDate { get; set; }
@@ -26,13 +28,16 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public InArgument<DateTime> ToDate { get; set; }
 
 
+
         #endregion
 
         protected override void Execute(CodeActivityContext context)
         {
-            List<StrategyExecutionInfo> strategiesExecutionInfo = new List<StrategyExecutionInfo>();
+            List<ExecuteStrategyExecutionItem> strategiesExecutionItems = new List<ExecuteStrategyExecutionItem>();
+
             StrategyManager strategyManager = new StrategyManager();
             StrategyExecutionManager strategyExecutionManager = new StrategyExecutionManager();
+
 
             foreach (int strategyID in context.GetValue(StrategyIds))
             {
@@ -45,11 +50,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                     strategyExecutionManager.ExecuteStrategy(strategyExecution);
 
-                    strategiesExecutionInfo.Add(new StrategyExecutionInfo { Strategy = strategy, StrategyExecutionId = strategyExecution.ID });
+            
+                    strategiesExecutionItems.Add(new ExecuteStrategyExecutionItem { StrategyId = strategyID, StrategyExecutionId = strategyExecution.ID });
                 }
             }
 
-            context.SetValue(StrategiesExecutionInfo, strategiesExecutionInfo);
+            
+            this.StrategyExecutionItems.Set(context, strategiesExecutionItems);
         }
     }
 }

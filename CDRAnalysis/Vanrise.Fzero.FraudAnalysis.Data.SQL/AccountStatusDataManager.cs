@@ -18,13 +18,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-        public List<string> GetAccountNumbersByNumberPrefixAndStatuses(List<CaseStatus> caseStatuses, IEnumerable<string> numberPrefixes)
+        public List<string> GetAccountNumbersByNumberPrefixAndStatuses(List<CaseStatus> caseStatuses, List<string> numberPrefixes)
         {
             return GetItemsSP("[FraudAnalysis].[bp_AccountStatus_GetByNumberPrefixesAndStatuses]", (reader) =>
             {
                 return reader["AccountNumber"] as string;
             }, string.Join(",", caseStatuses.Select(itm => (int)itm)), numberPrefixes != null ? String.Join(",", numberPrefixes) : null);
         }
-
     }
 }

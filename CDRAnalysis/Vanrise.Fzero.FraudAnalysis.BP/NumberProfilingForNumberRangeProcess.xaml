@@ -83,7 +83,7 @@
         <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedNumberProfilesQueue" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareNumberProfilesStatus" />
       </Parallel.Variables>
-      <vfcba:LoadCDRs sap2010:WorkflowViewState.IdRef="LoadCDRs_1">
+      <vfcba:LoadCDRs sap2010:WorkflowViewState.IdRef="LoadCDRs_2">
         <vfcba:LoadCDRs.FromDate>
           <InArgument x:TypeArguments="s:DateTime">
             <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
@@ -94,11 +94,11 @@
             <mca:CSharpReference x:TypeArguments="x:Int64">processedCDRs</mca:CSharpReference>
           </OutArgument>
         </vfcba:LoadCDRs.NumberOfCDRs>
-        <vfcba:LoadCDRs.NumberRange>
-          <InArgument x:TypeArguments="vfce:NumberRangeDefinition">
-            <mca:CSharpValue x:TypeArguments="vfce:NumberRangeDefinition">Input.NumberRange</mca:CSharpValue>
+        <vfcba:LoadCDRs.NumberPrefix>
+          <InArgument x:TypeArguments="scg:List(x:String)">
+            <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.NumberPrefixes</mca:CSharpValue>
           </InArgument>
-        </vfcba:LoadCDRs.NumberRange>
+        </vfcba:LoadCDRs.NumberPrefix>
         <vfcba:LoadCDRs.OutputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
@@ -115,7 +115,7 @@
           </InArgument>
         </vfcba:LoadCDRs.ToDate>
       </vfcba:LoadCDRs>
-      <vffba1:CreateNumberProfiles StrategiesExecutionInfo="{x:Null}" sap2010:WorkflowViewState.IdRef="CreateNumberProfiles_1">
+      <vffba1:CreateNumberProfiles Parameters="{x:Null}" StrategiesExecutionInfo="{x:Null}" sap2010:WorkflowViewState.IdRef="CreateNumberProfiles_2">
         <vffba1:CreateNumberProfiles.FromDate>
           <InArgument x:TypeArguments="s:DateTime">
             <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
@@ -136,21 +136,16 @@
             <mca:CSharpReference x:TypeArguments="x:Int64">numberOfSubscribers</mca:CSharpReference>
           </OutArgument>
         </vffba1:CreateNumberProfiles.NumberOfSubscribers>
-        <vffba1:CreateNumberProfiles.NumberRange>
-          <InArgument x:TypeArguments="vfce:NumberRangeDefinition">
-            <mca:CSharpValue x:TypeArguments="vfce:NumberRangeDefinition">Input.NumberRange</mca:CSharpValue>
+        <vffba1:CreateNumberProfiles.NumberPrefixes>
+          <InArgument x:TypeArguments="scg:List(x:String)">
+            <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.NumberPrefixes</mca:CSharpValue>
           </InArgument>
-        </vffba1:CreateNumberProfiles.NumberRange>
+        </vffba1:CreateNumberProfiles.NumberPrefixes>
         <vffba1:CreateNumberProfiles.OutputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileQueue</mca:CSharpReference>
           </InOutArgument>
         </vffba1:CreateNumberProfiles.OutputQueue>
-        <vffba1:CreateNumberProfiles.Parameters>
-          <InArgument x:TypeArguments="vffe:NumberProfileParameters">
-            <mca:CSharpValue x:TypeArguments="vffe:NumberProfileParameters">Input.Parameters</mca:CSharpValue>
-          </InArgument>
-        </vffba1:CreateNumberProfiles.Parameters>
         <vffba1:CreateNumberProfiles.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpValue>
@@ -217,12 +212,12 @@
         </InArgument>
       </Assign.Value>
     </Assign>
-    <sads:DebugSymbol.Symbol>d1tDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXE51bWJlclByb2ZpbGluZ0Zvck51bWJlclJhbmdlUHJvY2Vzcy54YW1sH0cD3QEOAgEBTAXMARACAQ3NAQXbAQ4CAQJWB3UYAwHRAXYHqQElAgFYqgEHvwEwAgEnwAEHywEoAgEO1QEL2AEgAgEI0AEL0AF/AgEDXg1eXwMBjgJZDVlbAwGCAm0NbW8DAfYBaA1obgMB6gFjDWNuAwHeAXINclkDAdIBlwENlwFvAwHFAYgBDYgBZQMBuQGcAQ2cAWcDAa0BgwENgwFuAwGhAXkNeVsDAZUBoQENoQF7AwGJAZIBDZIBggECAX1+DX5iAgFxjQENjQFuAgFlpgENpgFZAgFZtwENtwFzAgFMrQENrQF6AgFAvAENvAF8AgE0sgENsgF8AgEoyAENyAF0AgEbwwENwwF0AgEP</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXE51bWJlclByb2ZpbGluZ0Zvck51bWJlclJhbmdlUHJvY2Vzcy54YW1sHkcD2AEOAgEBTAXHARACAQ3IAQXWAQ4CAQJWB3UYAwHFAXYHpAElAgFYpQEHugEwAgEnuwEHxgEoAgEO0AEL0wEgAgEIywELywF/AgEDXg1eXwMBggJjDWNpAwH2AVkNWVsDAeoBbQ1tbwMB3gFoDWhuAwHSAXINclkDAcYBiAENiAFlAwG5AZcBDZcBZwMBrQGDAQ2DAW4DAaEBjQENjQFpAwGVAXkNeVsDAYkBnAENnAF7AgF9kgENkgGCAQIBcX4NfmICAWWhAQ2hAVkCAVmyAQ2yAXMCAUyoAQ2oAXoCAUC3AQ23AXwCATStAQ2tAXwCASjDAQ3DAXQCARu+AQ2+AXQCAQ8=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="CreateNumberProfiles_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="LoadCDRs_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="CreateNumberProfiles_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareNumberProfilesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyNumberProfilesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />

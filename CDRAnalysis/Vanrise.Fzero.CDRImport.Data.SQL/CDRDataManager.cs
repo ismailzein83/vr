@@ -88,7 +88,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             });
         }
 
-        public void LoadCDR(DateTime from, DateTime to, IEnumerable<string> numberPrefixes, Action<CDR> onCDRReady)
+        public void LoadCDR(List<string> numberPrefix, DateTime from, DateTime to, int? batchSize, Action<CDR> onCDRReady)
         {
             var dbTimeRanges = PartitionedCDRDataManager.GetDBTimeRanges(from, to);
             foreach (var dbTimeRange in dbTimeRanges)
@@ -96,42 +96,11 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                 var dataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedNormalCDRDataManager>(dbTimeRange.FromTime, true);
                 if (dataManager != null)
                 {
-                    dataManager.LoadCDR(dbTimeRange.FromTime, numberPrefixes, onCDRReady);
+                    dataManager.LoadCDR(dbTimeRange.FromTime, numberPrefix, onCDRReady);
                 }
             }
-            //ConcurrentQueue<CDRDBTimeRange> qDBTimeRanges = new ConcurrentQueue<CDRDBTimeRange>(dbTimeRanges);
-            //ConcurrentQueue<CDR> qCDRs = new ConcurrentQueue<CDR>();
-            //bool isLoadingTaskCompleted = false;
-            //Task taskLoadCDRs = new Task(() =>
-            //{
-            //    Parallel.For(0, PartitionedCDRDataManager.MaxNumberOfReadThreads + 1, (threadNumber) =>
-            //    {
-            //       CDRDBTimeRange cdrDBTimeRange;
-            //       while (qDBTimeRanges.TryDequeue(out cdrDBTimeRange))
-            //       {
-            //           var dataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedNormalCDRDataManager>(cdrDBTimeRange.FromTime, true);
-            //           if (dataManager != null)
-            //           {
-            //               dataManager.LoadCDR(cdrDBTimeRange.FromTime, numberPrefix, (cdr) =>
-            //               {
-            //                   qCDRs.Enqueue(cdr);
-            //               });
-            //           }
-            //       }
-            //    });
-            //    isLoadingTaskCompleted = true;
-            //});
-            //taskLoadCDRs.Start();
-            //while (qCDRs.Count > 0 || !isLoadingTaskCompleted)
-            //{
-            //    CDR cdr;
-            //    while (qCDRs.TryDequeue(out cdr))
-            //    {
-            //        onCDRReady(cdr);
-            //    }
-            //    System.Threading.Thread.Sleep(100);
-            //}
         }
+
 
         public BigResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRQuery> input)
         {
