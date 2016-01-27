@@ -22,6 +22,8 @@ app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
                     $scope.codeCriteriaArray.push(codeCriteria);
                 };
 
+
+
                 var ctor = new codeCriteriaCtor(ctrl, $scope);
                 ctor.initializeController();
 
