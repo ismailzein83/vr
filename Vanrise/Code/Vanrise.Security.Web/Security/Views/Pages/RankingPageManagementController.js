@@ -7,12 +7,6 @@ function RankingPageManagementController($scope, VR_Sec_ViewAPIService, VRNotifi
     function defineScope() {
         $scope.menu = [];
        
-        $scope.searchClicked = function () {
-            $scope.searchClicked = function () {
-                return retrieveData();
-            };
-
-        }
         $scope.selectedMenuNode;
         $scope.menuReady = function (api) {
             treeAPI = api;
@@ -32,19 +26,13 @@ function RankingPageManagementController($scope, VR_Sec_ViewAPIService, VRNotifi
                     }
                 })
             }
-            
-
         };
     }
-
-
-
 
     function load() {
         loadViews();
      
     }
-
 
     function loadViews() {
         return VR_Sec_MenuAPIService.GetMenuItems().then(function (response) {
@@ -63,11 +51,7 @@ function RankingPageManagementController($scope, VR_Sec_ViewAPIService, VRNotifi
                 treeAPI.refreshTree($scope.menu);
             }
         });
-
     }
-
-  
-
 };
 
 appControllers.controller('Security_RankingPageManagementController', RankingPageManagementController);

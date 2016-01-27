@@ -1086,7 +1086,7 @@
            
             var promise = retrieveDataFunction(retrieveDataInput, onResponseReady);//this function should return a promise in case it is getting data
             
-            if (!pagingOnScrollEnabled && promise != undefined && promise != null) {
+            if (promise != undefined && promise != null) {
                 ctrl.isLoadingMoreData = true;
                 promise.finally(function () {
                     ctrl.isLoadingMoreData = false;

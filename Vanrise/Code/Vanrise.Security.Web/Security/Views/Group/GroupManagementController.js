@@ -19,7 +19,7 @@
 
             $scope.search = function () {
                 getFilterObject();
-                gridAPI.loadGrid(filter);
+                return gridAPI.loadGrid(filter);
             };
 
             $scope.addGroup = addGroup;

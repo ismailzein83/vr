@@ -15,7 +15,7 @@
         function defineScope() {
             $scope.searchClicked = function () {
                 setFilterObject();
-                gridAPI.loadGrid(filter)
+                return gridAPI.loadGrid(filter);
             };
 
             $scope.onGridReady = function (api) {
@@ -38,11 +38,9 @@
 
         function addNewCurrency() {
             var onCurrencyAdded = function (currencyObj) {
-                if (gridAPI != undefined) {
-                    gridAPI.onCurrencyAdded(currencyObj);
-                }
-
+                gridAPI.onCurrencyAdded(currencyObj);
             };
+
             VRCommon_CurrencyService.addCurrency(onCurrencyAdded);
         }
 

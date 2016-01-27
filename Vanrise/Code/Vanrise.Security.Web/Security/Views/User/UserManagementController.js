@@ -19,15 +19,14 @@
 
             $scope.search = function () {
                 getFilterObject();
-                gridAPI.loadGrid(filter);
+                return gridAPI.loadGrid(filter);
             };
 
             $scope.addUser = function () {
                 var onUserAdded = function (userObj) {
-                    if (gridAPI) {
-                        gridAPI.onUserAdded(userObj);
-                    }
+                    gridAPI.onUserAdded(userObj);
                 };
+
                 VR_Sec_UserService.addUser(onUserAdded);
             };
         }

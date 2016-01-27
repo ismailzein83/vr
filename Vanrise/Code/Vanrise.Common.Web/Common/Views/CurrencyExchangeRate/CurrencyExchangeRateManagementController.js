@@ -18,7 +18,7 @@
         function defineScope() {
             $scope.searchClicked = function () {
                 getFilterObject();
-                gridAPI.loadGrid(filter)
+                return gridAPI.loadGrid(filter);
             };
 
             $scope.onGridReady = function (api) {
@@ -67,14 +67,11 @@
         function addNewCurrencyExchangeRate() {
            
             var onExchangeRateAdded = function (exchangeRateObj) {
-                if (gridAPI != undefined) {
-                    gridAPI.onExchangeRateAdded(exchangeRateObj);
-                }
-
+                gridAPI.onExchangeRateAdded(exchangeRateObj);
             };
+
             VRCommon_CurrencyExchangeRateService.addExchangeRate(onExchangeRateAdded);
         }
-
     }
 
     appControllers.controller('VRCommon_CurrencyExchangeRateManagementController', currencyExchangeRateManagementController);

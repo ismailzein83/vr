@@ -11,18 +11,18 @@
         load();
 
         function defineScope() {
-            $scope.searchClicked = function () {
-                if (!$scope.isGettingData && gridAPI != undefined)
-                    return gridAPI.loadGrid(getFilterObject());
-            };
             $scope.selectedDataRecordFieldTypeTemplate = [];
             $scope.dataRecordFieldTypeTemplates = [];
+
+            $scope.searchClicked = function () {
+                return gridAPI.loadGrid(getFilterObject());
+            };
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                var filter = {};
-                api.loadGrid(filter);
+                api.loadGrid({});
             }
-            $scope.name;
+
             $scope.AddDataRecordField = AddDataRecordField;
         }
 
@@ -57,8 +57,7 @@
 
         function AddDataRecordField() {
             var onDataRecordFieldAdded = function (dataRecordFieldObj) {
-                if (gridAPI != undefined)
-                    gridAPI.onDataRecordFieldAdded(dataRecordFieldObj);
+                gridAPI.onDataRecordFieldAdded(dataRecordFieldObj);
             };
 
             VRCommon_DataRecordFieldService.addDataRecordField(onDataRecordFieldAdded);

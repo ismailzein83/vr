@@ -19,8 +19,7 @@ function dynamicPageManagementController($scope, VR_Sec_ViewService) {
         $scope.Add = addDynamicPage
 
         $scope.searchClicked = function () {
-            if (mainGridAPI != undefined)
-                return mainGridAPI.loadGrid(getFilterObject());
+            return mainGridAPI.loadGrid(getFilterObject());
         };
     }
 

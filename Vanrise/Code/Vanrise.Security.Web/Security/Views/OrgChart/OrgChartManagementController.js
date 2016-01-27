@@ -17,7 +17,7 @@
                 gridAPI.loadGrid(getFilterObject());
             };
             $scope.search = function () {
-                gridAPI.loadGrid(getFilterObject());
+                return gridAPI.loadGrid(getFilterObject());
             };
             $scope.addOrgChart = function () {
                 var onOrgChartAdded = function (addedOrgChart) {

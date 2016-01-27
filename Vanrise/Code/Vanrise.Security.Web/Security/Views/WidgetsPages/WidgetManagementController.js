@@ -15,12 +15,11 @@ function widgetManagementController($scope, UtilsService, VR_Sec_WidgetDefinitio
             api.loadGrid(filter);
         };
 
-        $scope.Add = addNewWidget;
-
         $scope.searchClicked = function () {
-            if (mainGridAPI != undefined)
-                return mainGridAPI.loadGrid(getFilterObject());
+            return mainGridAPI.loadGrid(getFilterObject());
         }
+
+        $scope.Add = addNewWidget;
 
     }
 
@@ -35,9 +34,9 @@ function widgetManagementController($scope, UtilsService, VR_Sec_WidgetDefinitio
 
     function addNewWidget() {
         var onWidgetAdded = function (widgetObj) {
-            if (mainGridAPI != undefined)
-                mainGridAPI.onWidgetAdded(widgetObj);
+            mainGridAPI.onWidgetAdded(widgetObj);
         };
+
         VR_Sec_WidgetService.addWidget(onWidgetAdded);
     }
 

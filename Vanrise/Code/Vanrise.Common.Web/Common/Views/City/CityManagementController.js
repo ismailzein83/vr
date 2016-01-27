@@ -16,7 +16,7 @@
 
         function defineScope() {
             $scope.searchClicked = function () {
-                getFilterObject()
+                getFilterObject();
                 return gridAPI.loadGrid(filter);
             };
 
@@ -69,9 +69,7 @@
 
         function addNewCity() {
             var onCityAdded = function (cityObj) {
-                if (gridAPI != undefined) {
-                    gridAPI.onCityAdded(cityObj);
-                }
+                gridAPI.onCityAdded(cityObj);
             };
 
             VRCommon_CityService.addCity(onCityAdded);
