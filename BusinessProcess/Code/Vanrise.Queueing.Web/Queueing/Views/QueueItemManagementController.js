@@ -4,9 +4,9 @@
 
     appControllers.controller('Queueing_QueueItemManagementController', queueItemManagementController);
 
-    queueItemManagementController.$inject = ['$scope', 'QueueingAPIService', 'UtilsService', 'QueueItemStatusEnum', 'LabelColorsEnum'];
+    queueItemManagementController.$inject = ['$scope', 'VR_Queueing_QueueingAPIService', 'UtilsService', 'QueueItemStatusEnum', 'LabelColorsEnum'];
 
-    function queueItemManagementController($scope, QueueingAPIService, UtilsService, QueueItemStatusEnum, LabelColorsEnum) {
+    function queueItemManagementController($scope, VR_Queueing_QueueingAPIService, UtilsService, QueueItemStatusEnum, LabelColorsEnum) {
 
         var mainGridApi;
         
@@ -21,7 +21,7 @@
         function getData() {
 
             var pageInfo = mainGridApi.getPageInfo();
-            return QueueingAPIService.GetHeaders(UtilsService.getPropValuesFromArray($scope.selectedQueueInstances, "QueueInstanceId"),
+            return VR_Queueing_QueueingAPIService.GetHeaders(UtilsService.getPropValuesFromArray($scope.selectedQueueInstances, "QueueInstanceId"),
                 pageInfo.fromRow,
                 pageInfo.toRow,
                 UtilsService.getPropValuesFromArray($scope.selectedQueueItemStatus, "Value"),
@@ -41,7 +41,7 @@
             $scope.queueInstances = [];
             $scope.selectedQueueInstances = [];
             $scope.onchangeQueueItemTypes = function () {
-                QueueingAPIService.GetQueueInstances(UtilsService.getPropValuesFromArray($scope.selectedQueueItemTypes, "Id")).then(function (response) {
+                VR_Queueing_QueueingAPIService.GetQueueInstances(UtilsService.getPropValuesFromArray($scope.selectedQueueItemTypes, "Id")).then(function (response) {
                     $scope.queueInstances = [];
                     $scope.selectedQueueInstances = [];
                     for (var i = 0, len = response.length; i < len; i++) {
@@ -77,14 +77,14 @@
 
         function loadFilters() {
 
-            QueueingAPIService.GetQueueItemTypes().then(function (response) {
+            VR_Queueing_QueueingAPIService.GetQueueItemTypes().then(function (response) {
 
                 for (var i = 0, len = response.length; i < len; i++) {
                     $scope.queueItemTypes.push(response[i]);
                 }
             });
 
-            QueueingAPIService.GetItemStatusList().then(function (response) {
+            VR_Queueing_QueueingAPIService.GetItemStatusList().then(function (response) {
 
                 for (var i = 0, len = response.length; i < len; i++) {
                     $scope.queueItemStatus.push(response[i]);

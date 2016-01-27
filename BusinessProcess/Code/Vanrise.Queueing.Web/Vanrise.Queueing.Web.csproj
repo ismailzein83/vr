@@ -101,8 +101,10 @@
     <Content Include="Queueing\Directives\ExecutionFlowDefinition\vr-executionflowdefinition-selector.js" />
     <Content Include="Queueing\Directives\ExecutionFlow\Templates\ExecutionFlowGrid.html" />
     <Content Include="Queueing\Directives\ExecutionFlow\vr-executionflow-grid.js" />
+    <Content Include="Queueing\Directives\QueueItemHeader\Templates\QueueItemHeaderGridTemplate.html" />
+    <Content Include="Queueing\Directives\QueueItemHeader\vr-queueing-queueitemheader-grid.js" />
     <Content Include="Queueing\Services\APIServices\ExecutionFlowAPIService.js" />
-    <Content Include="Queueing\Services\QueueingAPIService.js" />
+    <Content Include="Queueing\Services\APIServices\QueueingAPIService.js" />
     <Content Include="Queueing\Services\ExecutionFlowService.js" />
     <Content Include="Queueing\Views\ExecutionFlow\ExecutionFlowManagement.html" />
     <Content Include="Queueing\Views\ExecutionFlow\ExecutionFlowManagementController.js" />

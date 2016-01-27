@@ -176,34 +176,20 @@ namespace Vanrise.Queueing.Data.SQL
             return result;
         }
 
-        public List<QueueItemHeader> GetQueueItemsHeader(List<long> itemIds)
+        public Vanrise.Entities.BigResult<QueueItemHeader> GetQueueItemsHeader(Vanrise.Entities.DataRetrievalInput<List<long>> input)
         {
-            List<QueueItemHeader> result = new List<QueueItemHeader>();
-
-            ExecuteReaderSPCmd("queue.sp_QueueItemHeader_GetByQueueItemIDs", (reader) =>
+            Action<string> createTempTableAction = (tempTableName) =>
             {
-                while (reader.Read())
+                ExecuteNonQuerySPCmd("queue.sp_QueueItemHeader_CreateTempByFiltered", (cmd) =>
                 {
-                    QueueItemHeader item = new QueueItemHeader
-                    {
-                        ItemId = (long)reader["ItemID"],
-                        Description = reader["Description"] as string,
-                        Status = (QueueItemStatus)reader["Status"],
-                        RetryCount = GetReaderValue<int>(reader, "RetryCount"),
-                        ErrorMessage = reader["ErrorMessage"] as string,
-                        CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
-                        LastUpdatedTime = GetReaderValue<DateTime>(reader, "LastUpdatedTime")
-                    };
-                    result.Add(item);
-                }
-            }, (cmd) =>
-            {
-                var dtParameter = new SqlParameter("@ItemIds", SqlDbType.Structured);
-                dtParameter.Value = BuildItemIdsTable(itemIds);
-                cmd.Parameters.Add(dtParameter);
-            });
+                    cmd.Parameters.Add(new SqlParameter("@TempTableName", tempTableName));
+                    var dtParameter = new SqlParameter("@ItemIds", SqlDbType.Structured);
+                    dtParameter.Value = BuildItemIdsTable(input.Query);
+                    cmd.Parameters.Add(dtParameter);
+                });
+            };
 
-            return result;
+            return RetrieveData(input, createTempTableAction, QueueItemHeaderMapper);
         }
 
         #region Private Methods

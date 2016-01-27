@@ -33,6 +33,6 @@ namespace Vanrise.Queueing.Data
 
         List<ItemExecutionFlowInfo> GetItemExecutionFlowInfo(List<long> itemIds);
 
-        List<QueueItemHeader> GetQueueItemsHeader(List<long> itemIds);
+        Vanrise.Entities.BigResult<QueueItemHeader> GetQueueItemsHeader(Vanrise.Entities.DataRetrievalInput<List<long>> input);
     }
 }

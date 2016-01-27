@@ -110,9 +110,9 @@ namespace Vanrise.Queueing
             return result;
         }
 
-        public List<QueueItemHeader> GetQueueItemsHeader(List<long> itemIds)
+        public Vanrise.Entities.IDataRetrievalResult<QueueItemHeader> GetQueueItemsHeader(Vanrise.Entities.DataRetrievalInput<List<long>> input)
         {
-            return _itemDataManager.GetQueueItemsHeader(itemIds);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _itemDataManager.GetQueueItemsHeader(input));
         }
 
         private QueueItemStatus GetSubStatus(List<ItemExecutionFlowInfo> subList)
