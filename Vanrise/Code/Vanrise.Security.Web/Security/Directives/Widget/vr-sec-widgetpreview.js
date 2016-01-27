@@ -59,12 +59,6 @@ app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'V
                 };
 
                 $scope.Search = function () {
-                    var obj = timeRangeDirectiveAPI.getData();
-                    $scope.filter = {
-                        timeDimensionType: $scope.selectedTimeDimension,
-                        fromDate: obj.fromDate,
-                        toDate: obj.toDate
-                    }
                     return refreshWidget();
                 };
 
@@ -107,15 +101,8 @@ app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'V
                         .then(function () {
                             UtilsService.safeApply($scope);
                             widgetReadyPromiseDeferred.promise.then(function () {
-
-                                var obj = timeRangeDirectiveAPI.getData();
-                                $scope.filter = {
-                                    timeDimensionType: $scope.selectedTimeDimension,
-                                    fromDate: obj.fromDate,
-                                    toDate: obj.toDate
-                                }
                                 var widgetPeriod = {
-                                    filter: $scope.filter,
+                                    filter: getFilter(),
                                     title: $scope.widget.SectionTitle,
                                     settings: $scope.widget.Setting.settings,
 
@@ -134,14 +121,8 @@ app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'V
             }
 
             function refreshWidget() {
-                var obj = timeRangeDirectiveAPI.getData();
-                $scope.filter = {
-                    timeDimensionType: $scope.selectedTimeDimension,
-                    fromDate: new Date(obj.fromDate),
-                    toDate: new Date(obj.toDate)
-                }
                 var widgetPeriod = {
-                    filter: $scope.filter,
+                    filter: getFilter(),
                     title: $scope.widget.SectionTitle,
                     settings: $scope.widget.Setting.settings,
 
@@ -149,7 +130,14 @@ app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'V
                 return widgetAPI.load(widgetPeriod);
 
             }
-
+            function getFilter()
+            {
+               return {
+                    timeDimensionType: $scope.selectedTimeDimension,
+                    fromDate: $scope.fromDate,
+                    toDate: $scope.toDate
+                }
+            }
             this.initializeController = initializeController;
             this.defineAPI = defineAPI;
         }

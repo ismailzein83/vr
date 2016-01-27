@@ -8,7 +8,10 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
             onReady: '=',
             hideperiodsection: "@",
             width: '@',
-            type:'@'
+            type: '@',
+            from: '=',
+            to: '=',
+            period:'='
         },
         controller: function ($scope, $element, $attrs) {
 
@@ -37,23 +40,21 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
     {
         var periodSection = "";
         var onblurchanged = "";
-        var width = attrs.width;
         if (attrs.hideperiodsection == undefined)
         {
-            periodSection = '<vr-columns width="' + width + '">'
-                          + '<vr-period-selector on-ready="onPeriodDirectiveReady" selectedvalues="selectedPeriod" onselectionchanged="periodSelectionChanged"></vr-period-selector>'
+            periodSection = '<vr-columns width="' + attrs.width + '">'
+                          + '<vr-period-selector on-ready="onPeriodDirectiveReady" selectedvalues="ctrltimerange.period" onselectionchanged="periodSelectionChanged"></vr-period-selector>'
                           + '</vr-columns>'
             onblurchanged = ' onblurdatetime="onBlurChanged" '
         }
-        var type = attrs.type;
 
         return   '<vr-row removeline>'
                +  periodSection
-               + '<vr-columns width="' + width + '">'
-               + '    <vr-datetimepicker type="' + type + '" value="fromDate" label="From" customvalidate="validateDateTime()" isrequired ' + onblurchanged + '></vr-datetimepicker>'
+               + '<vr-columns width="' + attrs.width + '">'
+               + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.from" label="From" customvalidate="validateDateTime()" isrequired ' + onblurchanged + '></vr-datetimepicker>'
                + '</vr-columns>'
-               + '<vr-columns width="' + width + '">'
-               + '    <vr-datetimepicker type="' + type + '" value="toDate" label="To" customvalidate="validateDateTime()" isrequired ' + onblurchanged + '></vr-datetimepicker>'
+               + '<vr-columns width="' + attrs.width + '">'
+               + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.to" label="To" customvalidate="validateDateTime()" isrequired ' + onblurchanged + '></vr-datetimepicker>'
                + '</vr-columns>'
                +'</vr-row>'
     }
@@ -62,13 +63,13 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
         var periodDirectiveAPI;
         var periodReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var date;
-        var selectedPeriod;
+
         function initializeController() {
 
 
             var date;
             $scope.validateDateTime = function () {
-                return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+                return VRValidationService.validateTimeRange(ctrl.from, ctrl.to);
             }
 
             $scope.onPeriodDirectiveReady = function (api)
@@ -79,11 +80,10 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
             }
 
             $scope.periodSelectionChanged = function () {
-                if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
-                    selectedPeriod = $scope.selectedPeriod;
-                    date = $scope.selectedPeriod.getInterval();
-                    $scope.fromDate = date.from;
-                    $scope.toDate = date.to;
+                if (ctrl.period != undefined && ctrl.period.value != -1) {
+                    date = ctrl.period.getInterval();
+                    ctrl.from = date.from;
+                    ctrl.to = date.to;
                 }
 
             }
@@ -93,12 +93,12 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 description: "Customize"
             }
             $scope.onBlurChanged = function () {
-                var from = UtilsService.getShortDate($scope.fromDate);
+                var from = UtilsService.getShortDate(ctrl.from);
                 var oldFrom = UtilsService.getShortDate(date.from);
-                var to = UtilsService.getShortDate($scope.toDate);
+                var to = UtilsService.getShortDate(ctrl.to);
                 var oldTo = UtilsService.getShortDate(date.to);
                 if (from != oldFrom || to != oldTo)
-                    $scope.selectedPeriod = customize;
+                    ctrl.period = customize;
 
             }
        
@@ -106,20 +106,12 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
 
         function defineAPI() {
             var api = {};
-            api.getData = function () {
-                var obj = {
-                    fromDate: $scope.fromDate,
-                    toDate: $scope.toDate,
-                }
-                if ($attrs.hideperiodsection == undefined)
-                     obj.period = selectedPeriod
-                return obj;
-            }
+           
             api.load = function (payload) {
                 if (payload != undefined) {
 
-                    $scope.fromDate = payload.fromData;
-                    $scope.toDate = payload.toDate;
+                    ctrl.from = payload.fromData;
+                    ctrl.to = payload.toDate;
                 }
 
                 var loadPeriodPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -143,9 +135,8 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                     if (payload && payload.period != undefined)
                     {
                         date = periodDirectiveAPI.getData().getInterval();
-                        selectedPeriod = periodDirectiveAPI.getData();// $scope.selectedPeriod.getInterval();
-                        $scope.fromDate = date.from;
-                        $scope.toDate = date.to;
+                        ctrl.from = date.from;
+                        ctrl.to = date.to;
                     }
                    
                 })

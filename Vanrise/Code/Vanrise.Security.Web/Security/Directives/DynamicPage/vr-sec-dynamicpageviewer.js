@@ -37,7 +37,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
             var timeDimentionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-
+                $scope.scopeModal = {};
                 $scope.nonSearchable = true;
                 $scope.selectedTimeDimension;
                 $scope.allWidgets = [];
@@ -46,12 +46,6 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                 $scope.bodyWidgets = [];
                 defineTimeDimensionTypes();
                 $scope.Search = function () {
-                    var obj = timeRangeDirectiveAPI.getData();
-                    $scope.filter = {
-                        timeDimensionType: timeDimentionDirectiveAPI.getSelectedValues(),
-                        fromDate: new Date(obj.fromDate),
-                        toDate: new Date(obj.toDate)
-                    }
                     if (($scope.bodyWidgets != null && $scope.bodyWidgets != undefined) || ($scope.summaryWidgets != null && $scope.summaryWidgets != undefined)) {
                         return refreshData();
                     }
@@ -75,15 +69,6 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                             var timeDimentionType = payload.selectedTimeDimensionType !=undefined?payload.selectedTimeDimensionType.value:undefined;
                             fillDateAndPeriod(payload.selectedPeriod, timeDimentionType)
                                 .then(function () {
-                                    if (!$scope.nonSearchable) {
-                                        var obj = timeRangeDirectiveAPI.getData();
-                                        $scope.filter = {
-                                            timeDimensionType: timeDimentionDirectiveAPI.getSelectedValues(),
-                                            fromDate: obj.fromDate,
-                                            toDate: obj.toDate
-                                        }
-                                    }
-
                                     return UtilsService.waitMultipleAsyncOperations([loadAllWidgets])
                                         .finally(function () {
                                             loadViewWidgets($scope.allWidgets, payload.bodyContents, payload.summaryContents);
@@ -204,7 +189,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                     bodyWidget.API = api;
 
                     if (!$scope.nonSearchable) {
-                        widgetPeriod.filter = $scope.filter;
+                        widgetPeriod.filter = GetFilter();
                         bodyWidget.API.load(widgetPeriod);
                     } else {
                         var widgetDate = UtilsService.getPeriod(bodyWidget.DefaultPeriod);
@@ -220,7 +205,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
 
                     bodyWidget.load = function () {
                         if (!$scope.nonSearchable) {
-                            widgetPeriod.filter = $scope.filter;
+                            widgetPeriod.filter = GetFilter();
                             return api.load(widgetPeriod);
                         } else {
                             widgetPeriod.filter = filter;
@@ -242,7 +227,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
 
                     summaryWidget.API = api;
                     if (!$scope.nonSearchable) {
-                        widgetPeriod.filter = $scope.filter;
+                        widgetPeriod.filter = GetFilter();
                         summaryWidget.API.load(widgetPeriod);
                     } else {
                         var widgetDate = UtilsService.getPeriod(summaryWidget.DefaultPeriod);
@@ -258,7 +243,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
 
                     summaryWidget.load = function () {
                         if (!$scope.nonSearchable) {
-                            widgetPeriod.filter = $scope.filter;
+                            widgetPeriod.filter = GetFilter();
                             return api.load(widgetPeriod);
                         } else {
                             var widgetDate = UtilsService.getPeriod(summaryWidget.DefaultPeriod);
@@ -285,18 +270,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                         $scope.bodyContents = response.ViewContent.BodyContents;
                         if (response.ViewContent.DefaultPeriod != undefined || response.ViewContent.DefaultGrouping != undefined) {
                             $scope.nonSearchable = response.ViewContent.DefaultPeriod == undefined;
-                            fillDateAndPeriod(response.ViewContent.DefaultPeriod, response.ViewContent.DefaultGrouping)
-                                .then(function () {
-                                    if (!$scope.nonSearchable) {
-                                        var obj = timeRangeDirectiveAPI.getData();
-                                        $scope.filter = {
-                                            timeDimensionType: timeDimentionDirectiveAPI.getSelectedValues(),
-                                            fromDate: obj.fromDate,
-                                            toDate: obj.toDate
-                                        }
-                                    }
-
-                                });
+                            fillDateAndPeriod(response.ViewContent.DefaultPeriod, response.ViewContent.DefaultGrouping);
                         }
 
                     });
@@ -322,6 +296,15 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                     $scope.timeDimensionTypes.push(TimeDimensionTypeEnum[td]);
             }
 
+            function GetFilter()
+            {
+                var filter = {
+                    timeDimensionType: timeDimentionDirectiveAPI.getSelectedValues(),
+                    fromDate: $scope.scopeModal.fromDate,
+                    toDate: $scope.scopeModal.toDate
+                }
+                return filter;
+            }
             this.initializeController = initializeController;
             this.defineAPI = defineAPI;
         }

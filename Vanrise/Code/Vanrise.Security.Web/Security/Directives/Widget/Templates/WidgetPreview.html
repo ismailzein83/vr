@@ -1,24 +1,26 @@
-﻿ <vr-row removeline>
-    <vr-columns width="1/2row">
-        <vr-timerange on-ready="onTimeRangeDirectiveReady" width="1/3row" type="dateTime"></vr-timerange>
-    </vr-columns>
-
-    <vr-columns width="normal">
-        <vr-timedimension-selector on-ready="onTimeDimentionDirectiveReady" label="Grouping By" selectedvalues="selectedTimeDimension" ></vr-timedimension-selector>
-    </vr-columns>
-</vr-row>
-<vr-row>
-    <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-        <div transclude-to="buttons">
-            <vr-button type="Search" validationcontext="widgetPreviewGroup" data-onclick="Search"></vr-button>
-        </div>
-    </vr-actionbar>
-</vr-row>
-<vr-row>
-        <vr-columns width="fullrow" ng-if="widget !=undefined">
-            <vr-directivewrapper directive="widget.Setting.directive" on-ready="onElementReady" 
-                                    retrievedataonload="false"></vr-directivewrapper>
+﻿<vr-form validationcontext="widgetPreviewGroup">
+    <vr-row removeline>
+        <vr-columns width="1/2row">
+            <vr-timerange on-ready="onTimeRangeDirectiveReady" width="1/3row" type="dateTime" from="fromDate" to="toDate" period="selectedPeriod"></vr-timerange>
         </vr-columns>
-</vr-row>
+
+        <vr-columns width="normal">
+            <vr-timedimension-selector on-ready="onTimeDimentionDirectiveReady" label="Grouping By" selectedvalues="selectedTimeDimension"></vr-timedimension-selector>
+        </vr-columns>
+    </vr-row>
+</vr-form>
+    <vr-row>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Search" validationcontext="widgetPreviewGroup" data-onclick="Search"></vr-button>
+            </div>
+        </vr-actionbar>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow" ng-if="widget !=undefined">
+            <vr-directivewrapper directive="widget.Setting.directive" on-ready="onElementReady"
+                                 retrievedataonload="false"></vr-directivewrapper>
+        </vr-columns>
+    </vr-row>
 
 
