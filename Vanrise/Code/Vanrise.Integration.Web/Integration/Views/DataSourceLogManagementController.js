@@ -1,90 +1,74 @@
-﻿DataSourceLogManagementController.$inject = ['$scope', 'DataSourceLogAPIService', 'DataSourceAPIService', 'UtilsService', 'VRNotificationService'];
+﻿DataSourceLogManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService','VRUIUtilsService'];
 
-function DataSourceLogManagementController($scope, DataSourceLogsAPIService, DataSourceAPIService, UtilsService, VRNotificationService) {
+function DataSourceLogManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var gridApi;
-    var filtersAreNotReady = true;
+    var dataSourceDirectiveAPI;
+    var dataSourceReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
 
     defineScope();
     load();
 
     function defineScope() {
-
+        $scope.showGrid = false;
         $scope.dataSources = [];
-        $scope.selectedDataSource = undefined;
         $scope.severities = [];
         $scope.selectedSeverities = [];
-        fromDate = new Date();
+        var fromDate = new Date();
         
         fromDate.setHours(0, 0, 0, 0);
         $scope.selectedFromDateTime = fromDate;
-        $scope.selectedToDateTime = undefined;
-        $scope.logs = [];
 
         $scope.gridReady = function (api) {
             gridApi = api;
-            return retrieveData();
-        }
-
-        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-
-            return DataSourceLogsAPIService.GetFilteredDataSourceLogs(dataRetrievalInput)
-                .then(function (response) {
-
-                    angular.forEach(response.Data, function (item) {
-                        item.SeverityDescription = UtilsService.getLogEntryTypeDescription(item.Severity);
-                    });
-                    onResponseReady(response);
-                })
-                .catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
         }
 
         $scope.searchClicked = function () {
-            return retrieveData();
+            $scope.showGrid = true;
+            return gridApi.loadGrid(getQueryGrid());
         }
-
-        $scope.getSeverityColor = function (dataItem, colDef) {
-            return UtilsService.getLogEntryTypeColor(dataItem.Severity);
+        $scope.onDataSourceSelectorReady = function (api) {
+            dataSourceDirectiveAPI = api;
+            dataSourceReadyPromiseDeferred.resolve();
         }
+      
     }
 
     function load() {
-        $scope.isLoadingForm = true;
-
-        loadSeverities();
-
-        DataSourceAPIService.GetDataSources()
-            .then(function (response) {
-                $scope.dataSources = response;
-                
-                if (response.length > 0) // select the first data source
-                    $scope.selectedDataSource = $scope.dataSources[0];
-
-                filtersAreNotReady = false;
-                return retrieveData();
-            })
-            .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            })
-            .finally(function () {
-                $scope.isLoadingForm = false;
-            });
+        $scope.isLoading = true;
+        loadAllControls();
     }
 
-    function retrieveData() {
+    function loadAllControls() {
+        return UtilsService.waitMultipleAsyncOperations([loadSeverities, loadDatasourceSelector]).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+            $scope.isLoading = false;
+        }).finally(function () {
+            $scope.isLoading = false;
+        });
+    }
 
-        if (gridApi == undefined || filtersAreNotReady) return;
+    function loadDatasourceSelector()
+    {
+        var dataSourceLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        dataSourceReadyPromiseDeferred.promise
+            .then(function () {
+                periodReadyPromiseDeferred = undefined;
+                VRUIUtilsService.callDirectiveLoad(dataSourceDirectiveAPI, undefined, dataSourceLoadPromiseDeferred);
+            });
+        return dataSourceLoadPromiseDeferred.promise;
+    }
+
+    function getQueryGrid() {
         var query = {
             DataSourceId: ($scope.selectedDataSource != undefined) ? $scope.selectedDataSource.DataSourceID : null,
             Severities: getMappedSelectedSeverities(),
             From: ($scope.selectedFromDateTime != undefined) ? $scope.selectedFromDateTime : null,
             To: ($scope.selectedToDateTime != undefined) ? $scope.selectedToDateTime : null
         };
-
-        return gridApi.retrieveData(query);
+        return query
     }
 
     function loadSeverities() {

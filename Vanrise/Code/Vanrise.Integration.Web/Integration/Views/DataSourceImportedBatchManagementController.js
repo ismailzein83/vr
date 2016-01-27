@@ -1,78 +1,53 @@
-﻿DataSourceImportedBatchManagementController.$inject = ['$scope', 'DataSourceImportedBatchAPIService', 'DataSourceAPIService', 'Integration_MappingResultEnum', 'UtilsService', 'DataSourceService', 'VRNotificationService'];
+﻿DataSourceImportedBatchManagementController.$inject = ['$scope', 'VR_Integration_MappingResultEnum', 'UtilsService', 'VRNotificationService','VRUIUtilsService'];
 
-function DataSourceImportedBatchManagementController($scope, DataSourceImportedBatchAPIService, DataSourceAPIService, Integration_MappingResultEnum, UtilsService, DataSourceService, VRNotificationService) {
+function DataSourceImportedBatchManagementController($scope, VR_Integration_MappingResultEnum, UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var gridApi;
-    var filtersAreNotReady = true;
+    var dataSourceDirectiveAPI;
+    var dataSourceReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
     defineScope();
     load();
 
     function defineScope() {
-        $scope.dataSources = [];
-        $scope.selectedDataSource = [];
         $scope.mappingResults = [];
         $scope.selectedMappingResults = [];
-        $scope.batchName = undefined;
-        $scope.selectedFromDateTime = undefined;
-        $scope.selectedToDateTime = undefined;
         $scope.importedBatches = [];
+
+        $scope.showGrid = false;
 
         $scope.gridReady = function (api) {
             gridApi = api;
-            return retrieveData();
-        }
-
-        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-
-            return DataSourceImportedBatchAPIService.GetFilteredDataSourceImportedBatches(dataRetrievalInput)
-                .then(function (response) {
-                    angular.forEach(response.Data, function (item) {
-                        item.MappingResultDescription = DataSourceService.getMappingResultDescription(item.MappingResult);
-                        item.ExecutionStatusDescription = DataSourceService.getExecutionStatusDescription(item.ExecutionStatus);
-                    });
-                    onResponseReady(response);
-                })
-                .catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
         }
 
         $scope.searchClicked = function () {
-            return retrieveData();
+            $scope.showGrid = true;
+            return gridApi.loadGrid(getGridQuery());
         }
 
-        $scope.getStatusColor = function (dataItem, colDef) {
-            return DataSourceService.getExecutionStatusColor(dataItem.ExecutionStatus);
+        $scope.mappingResults = UtilsService.getArrayEnum(VR_Integration_MappingResultEnum);
+
+        $scope.onDataSourceSelectorReady = function (api) {
+            dataSourceDirectiveAPI = api;
+            dataSourceReadyPromiseDeferred.resolve();
         }
     }
 
     function load() {
-        $scope.isLoadingForm = true;
-
-        $scope.mappingResults = UtilsService.getArrayEnum(Integration_MappingResultEnum);
-
-        DataSourceAPIService.GetDataSources()
-            .then(function (response) {
-                $scope.dataSources = response;
-
-                if (response.length > 0) // select the first data source
-                    $scope.selectedDataSource = $scope.dataSources[0];
-
-                filtersAreNotReady = false;
-                return retrieveData();
-            })
-            .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            })
-            .finally(function () {
-                $scope.isLoadingForm = false;
-            });
+        $scope.isLoading= true;
+        loadAllControls();
     }
 
-    function retrieveData() {
-        if (gridApi == undefined || filtersAreNotReady) return;
+    function loadAllControls() {
+        return UtilsService.waitMultipleAsyncOperations([loadDatasourceSelector]).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+            $scope.isLoading = false;
+        }).finally(function () {
+            $scope.isLoading = false;
+        });
+    }
 
+    function getGridQuery() {
         var query = {
             DataSourceId: $scope.selectedDataSource.DataSourceId,
             BatchName: ($scope.batchName != undefined && $scope.batchName != "") ? $scope.batchName : null,
@@ -80,17 +55,26 @@ function DataSourceImportedBatchManagementController($scope, DataSourceImportedB
             From: $scope.selectedFromDateTime,
             To: $scope.selectedToDateTime
         };
+        return query;
 
-        console.log(query);
+    }
 
-        return gridApi.retrieveData(query);
+    function loadDatasourceSelector() {
+        var dataSourceLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        dataSourceReadyPromiseDeferred.promise
+            .then(function () {
+                periodReadyPromiseDeferred = undefined;
+                VRUIUtilsService.callDirectiveLoad(dataSourceDirectiveAPI, undefined, dataSourceLoadPromiseDeferred);
+            });
+        return dataSourceLoadPromiseDeferred.promise;
     }
 
     function getMappedMappingResults() {
 
         if ($scope.selectedMappingResults.length == 0) {
             // select all
-            $scope.selectedMappingResults = UtilsService.getArrayEnum(Integration_MappingResultEnum);
+            $scope.selectedMappingResults = UtilsService.getArrayEnum(VR_Integration_MappingResultEnum);
         }
 
         var mappedMappingResults = [];

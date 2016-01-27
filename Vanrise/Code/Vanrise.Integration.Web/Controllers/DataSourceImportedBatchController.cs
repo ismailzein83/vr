@@ -10,20 +10,17 @@ using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Integration.Web.Controllers
 {
+    [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "DataSourceImportedBatch")]
     public class DataSourceImportedBatchController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
+        [Route("GetFilteredDataSourceImportedBatches")]
         public object GetFilteredDataSourceImportedBatches(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
         {
             DataSourceImportedBatchManager manager = new DataSourceImportedBatchManager();
             return GetWebResponse(input, manager.GetFilteredDataSourceImportedBatches(input));
         }
 
-        [HttpPost]
-        public object GetQueueItemHeaders(Vanrise.Entities.DataRetrievalInput<List<long>> input)
-        {
-            DataSourceImportedBatchManager manager = new DataSourceImportedBatchManager();
-            return GetWebResponse(input, manager.GetQueueItemHeaders(input));
-        }
     }
 }

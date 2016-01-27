@@ -1,19 +1,17 @@
-﻿DataSourceExecutionFlowEditorController.$inject = ['$scope', 'DataSourceAPIService', 'VRNotificationService'];
+﻿DataSourceExecutionFlowEditorController.$inject = ['$scope', 'VR_Integration_DataSourceAPIService', 'VRNotificationService'];
 
-function DataSourceExecutionFlowEditorController($scope, DataSourceAPIService, VRNotificationService) {
+function DataSourceExecutionFlowEditorController($scope, VR_Integration_DataSourceAPIService, VRNotificationService) {
 
     defineScope();
     load();
 
     function defineScope() {
         $scope.executionFlowDefinitions = [];
-        $scope.selectedExecutionFlowDefinition = undefined;
-        $scope.executionFlowName = undefined;
 
         $scope.saveExecutionFlow = function () {
             var execFlowObject = buildExecFlowObjFromScope();
 
-            return DataSourceAPIService.AddExecutionFlow(execFlowObject)
+            return VR_Integration_DataSourceAPIService.AddExecutionFlow(execFlowObject)
                 .then(function (response) {
 
                     if (VRNotificationService.notifyOnItemAdded('Execution Flow', response)) {
@@ -34,7 +32,7 @@ function DataSourceExecutionFlowEditorController($scope, DataSourceAPIService, V
     }
 
     function load() {
-        DataSourceAPIService.GetExecutionFlowDefinitions()
+        VR_Integration_DataSourceAPIService.GetExecutionFlowDefinitions()
             .then(function (response) {
                 angular.forEach(response, function (item) {
                     $scope.executionFlowDefinitions.push(item);

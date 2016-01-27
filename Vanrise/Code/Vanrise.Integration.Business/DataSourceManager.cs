@@ -14,10 +14,14 @@ namespace Vanrise.Integration.Business
 {
     public class DataSourceManager : IDataSourceManager
     {
-        public List<Vanrise.Integration.Entities.DataSourceInfo> GetDataSources()
+        public IEnumerable<Vanrise.Integration.Entities.DataSourceInfo> GetDataSources(DataSourceFilter filter)
         {
             IDataSourceDataManager datamanager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
-            return datamanager.GetDataSources();
+            if (filter !=null)
+            {
+                return datamanager.GetDataSources().Where(x => (!filter.AllExcept.Contains(x.DataSourceID)));
+            }
+            return datamanager.GetDataSources() ;
         }
 
         public Vanrise.Entities.IDataRetrievalResult<Vanrise.Integration.Entities.DataSourceDetail> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<DataSourceQuery> input)

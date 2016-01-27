@@ -1,15 +1,19 @@
-﻿app.service('DataSourceImportedBatchAPIService', function (BaseAPIService) {
+﻿(function (appControllers) {
 
-    return ({
-        GetFilteredDataSourceImportedBatches: GetFilteredDataSourceImportedBatches,
-        GetQueueItemHeaders: GetQueueItemHeaders
-    });
+    'use strict';
 
-    function GetFilteredDataSourceImportedBatches(input) {
-        return BaseAPIService.post('/api/DataSourceImportedBatch/GetFilteredDataSourceImportedBatches', input);
+    DataSourceImportedBatchAPIService.$inject = ['BaseAPIService', 'VR_Integration_ModuleConfig', 'UtilsService'];
+
+    function DataSourceImportedBatchAPIService(BaseAPIService, VR_Integration_ModuleConfig, UtilsService) {
+        return ({
+            GetFilteredDataSourceImportedBatches: GetFilteredDataSourceImportedBatches,
+        });
+
+        function GetFilteredDataSourceImportedBatches(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, 'DataSourceImportedBatch', 'GetFilteredDataSourceImportedBatches'), input);
+        }
     }
 
-    function GetQueueItemHeaders(input) {
-        return BaseAPIService.post('/api/DataSourceImportedBatch/GetQueueItemHeaders', input);
-    }
-});
+    appControllers.service('VR_Integration_DataSourceImportedBatchAPIService', DataSourceImportedBatchAPIService);
+
+})(appControllers);

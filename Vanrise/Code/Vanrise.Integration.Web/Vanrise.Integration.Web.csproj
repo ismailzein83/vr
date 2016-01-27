@@ -43,6 +43,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -84,9 +88,6 @@
     <Reference Include="System.Web.Mvc">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http.Formatting">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
@@ -98,6 +99,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Controllers\DataSourceController.cs" />
     <Compile Include="Controllers\DataSourceImportedBatchController.cs" />
     <Compile Include="Controllers\DataSourceLogController.cs" />
@@ -107,12 +109,19 @@
   <ItemGroup>
     <Content Include="Integration\Constants\MappingResultEnum.js" />
     <Content Include="Integration\Constants\ExecutionStatusEnum.js" />
+    <Content Include="Integration\Constants\ModuleConfig.js" />
     <Content Include="Integration\Directives\Adapter\Templates\AdapterDBTemplate.html" />
     <Content Include="Integration\Directives\Adapter\Templates\AdapterFTPTemplate.html" />
     <Content Include="Integration\Directives\Adapter\Templates\AdapterFileTemplate.html" />
     <Content Include="Integration\Directives\Adapter\vr-integration-adapter-db.js" />
     <Content Include="Integration\Directives\Adapter\vr-integration-adapter-ftp.js" />
     <Content Include="Integration\Directives\Adapter\vr-integration-adapter-file.js" />
+    <Content Include="Integration\Directives\DataSource\Templates\DataSourceGridTemplate.html" />
+    <Content Include="Integration\Directives\DataSource\Templates\ImportedBatchGridTemplate.html" />
+    <Content Include="Integration\Directives\DataSource\Templates\LogGridTemplate.html" />
+    <Content Include="Integration\Directives\DataSource\vr-integration-datasource-grid.js" />
+    <Content Include="Integration\Directives\DataSource\vr-integration-log-grid.js" />
+    <Content Include="Integration\Directives\DataSource\vr-integration-importedbatch-grid.js" />
     <Content Include="Integration\Directives\DataSource\vr-integration-datasource-selector.js" />
     <Content Include="Integration\Services\APIServices\DataSourceAPIService.js" />
     <Content Include="Integration\Services\APIServices\DataSourceImportedBatchAPIService.js" />
@@ -124,8 +133,6 @@
     <Content Include="Integration\Views\AdapterTemplates\FTPReceiveAdapterTemplateController.js" />
     <Content Include="Integration\Views\AdapterTemplates\DBReceiveAdapterTemplateController.js" />
     <Content Include="Integration\Views\AdapterTemplates\FileReceiveAdapterTemplateController.js" />
-    <Content Include="Integration\Views\DataSourceEditor.html" />
-    <Content Include="Integration\Views\DataSourceEditorController.js" />
     <Content Include="Integration\Views\DataSourceExecutionFlowEditor.html" />
     <Content Include="Integration\Views\DataSourceExecutionFlowEditorController.js" />
     <Content Include="Integration\Views\DataSourceImportedBatchManagement.html" />
@@ -134,12 +141,14 @@
     <Content Include="Integration\Views\DataSourceLogManagementController.js" />
     <Content Include="Integration\Views\DataSourceManagement.html" />
     <Content Include="Integration\Views\DataSourceManagementController.js" />
-    <Content Include="Integration\Views\NewDataSource\NewDataSourceEditor.html" />
-    <Content Include="Integration\Views\NewDataSource\NewDataSourceEditorController.js" />
-    <Content Include="Integration\Views\QueueItemHeaderGrid.html" />
-    <Content Include="Integration\Views\QueueItemHeaderGridController.js" />
+    <Content Include="Integration\Views\DataSource\DataSourceEditor.html" />
+    <Content Include="Integration\Views\DataSource\DataSourceEditorController.js" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
+      <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
+      <Name>Vanrise.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>

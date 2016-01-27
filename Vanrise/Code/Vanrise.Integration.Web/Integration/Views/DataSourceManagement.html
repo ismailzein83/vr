@@ -1,7 +1,7 @@
 ﻿<vr-panel ng-controller="Integration_DataSourceManagementController">
     
     <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
             <vr-row removeline>
                 <vr-columns width="normal">
                     <vr-textbox label="Name" value="name"></vr-textbox>
@@ -40,24 +40,10 @@
         </vr-row>
     </vr-form>
     
-    <div vr-loader="isGettingData">
+    <div>
         <vr-row>
             <vr-columns colnum="12">
-
-                <vr-datagrid datasource="dataSources"
-                             dataretrievalfunction="dataRetrievalFunction"
-                             pagingtype="'PagingOnScroll'"
-                             on-ready="gridReady"
-                             menuactions="gridMenuActions"
-                             idfield="DataSourceId">
-
-                    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Type'" field="'AdapterName'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Scheduler Task Enabled'" field="'IsEnabled'">
-                        <vr-icon icontype="dataItem.IsEnabled"></vr-icon>
-                    </vr-datagridcolumn>
-                </vr-datagrid>
-
+                <vr-integration-datasource-grid on-ready="gridReady"></vr-integration-datasource-grid>
             </vr-columns>
         </vr-row>
     </div>

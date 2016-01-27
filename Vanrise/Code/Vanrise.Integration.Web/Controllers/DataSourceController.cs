@@ -11,16 +11,20 @@ using Vanrise.Web.Base;
 namespace Vanrise.Integration.Web.Controllers
 {
     [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "DataSource")]
     public class DataSourceController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
-        public List<Vanrise.Integration.Entities.DataSourceInfo> GetDataSources()
+        [Route("GetDataSources")]
+        public IEnumerable<Vanrise.Integration.Entities.DataSourceInfo> GetDataSources(string filter = null)
         {
             DataSourceManager manager = new DataSourceManager();
-            return manager.GetDataSources();
+            DataSourceFilter deserializedFilter = Vanrise.Common.Serializer.Deserialize<DataSourceFilter>(filter);
+            return manager.GetDataSources(deserializedFilter);
         }
 
         [HttpPost]
+        [Route("GetFilteredDataSources")]
         public object GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<DataSourceQuery> input)
         {
             DataSourceManager manager = new DataSourceManager();
@@ -28,6 +32,7 @@ namespace Vanrise.Integration.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetDataSource")]
         public Vanrise.Integration.Entities.DataSourceDetail GetDataSource(int dataSourceId)
         {
             DataSourceManager manager = new DataSourceManager();
@@ -35,6 +40,7 @@ namespace Vanrise.Integration.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetDataSourceAdapterTypes")]
         public List<Vanrise.Integration.Entities.DataSourceAdapterType> GetDataSourceAdapterTypes()
         {
             DataSourceManager manager = new DataSourceManager();
@@ -42,6 +48,7 @@ namespace Vanrise.Integration.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetExecutionFlows")]
         public List<Vanrise.Queueing.Entities.QueueExecutionFlow> GetExecutionFlows()
         {
             DataSourceManager manager = new DataSourceManager();
@@ -49,6 +56,7 @@ namespace Vanrise.Integration.Web.Controllers
         }
 
         [HttpPost]
+        [Route("AddExecutionFlow")]
         public Vanrise.Entities.InsertOperationOutput<QueueExecutionFlow> AddExecutionFlow(QueueExecutionFlow execFlowObject)
         {
             DataSourceManager manager = new DataSourceManager();
@@ -56,6 +64,7 @@ namespace Vanrise.Integration.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetExecutionFlowDefinitions")]
         public List<QueueExecutionFlowDefinition> GetExecutionFlowDefinitions()
         {
             DataSourceManager manager = new DataSourceManager();
@@ -63,6 +72,7 @@ namespace Vanrise.Integration.Web.Controllers
         }
 
         [HttpPost]
+        [Route("AddDataSource")]
         public Vanrise.Entities.InsertOperationOutput<Vanrise.Integration.Entities.DataSourceDetail> AddDataSource(DataSourceWrapper dataSourceWrapper)
         {
             DataSourceManager manager = new DataSourceManager();
@@ -70,6 +80,7 @@ namespace Vanrise.Integration.Web.Controllers
         }
 
         [HttpPost]
+        [Route("UpdateDataSource")]
         public Vanrise.Entities.UpdateOperationOutput<Vanrise.Integration.Entities.DataSourceDetail> UpdateDataSource(DataSourceWrapper dataSourceWrapper)
         {
             DataSourceManager manager = new DataSourceManager();
@@ -77,6 +88,7 @@ namespace Vanrise.Integration.Web.Controllers
         }
 
         [HttpGet]
+        [Route("DeleteDataSource")]
         public Vanrise.Entities.DeleteOperationOutput<object> DeleteDataSource(int dataSourceId, int taskId)
         {
             DataSourceManager manager = new DataSourceManager();

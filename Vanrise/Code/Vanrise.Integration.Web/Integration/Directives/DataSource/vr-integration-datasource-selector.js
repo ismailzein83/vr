@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrIntegrationDatasourceSelector', ['DataSourceAPIService', 'UtilsService', '$compile', 'VRUIUtilsService',
-function (DataSourceAPIService, UtilsService, $compile, VRUIUtilsService) {
+app.directive('vrIntegrationDatasourceSelector', ['VR_Integration_DataSourceAPIService', 'UtilsService', '$compile', 'VRUIUtilsService', 'VR_Integration_DataSourceService',
+function (VR_Integration_DataSourceAPIService, UtilsService, $compile, VRUIUtilsService, VR_Integration_DataSourceService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -10,7 +10,8 @@ function (DataSourceAPIService, UtilsService, $compile, VRUIUtilsService) {
             isdisabled: "=",
             onselectionchanged: '=',
             isrequired: "@",
-            selectedvalues: '='
+            selectedvalues: '=',
+            onaddclicked:'='
 
         },
         controller: function ($scope, $element, $attrs) {
@@ -50,10 +51,13 @@ function (DataSourceAPIService, UtilsService, $compile, VRUIUtilsService) {
         if (attrs.isrequired != undefined)
             required = "isrequired";
         var disabled = "";
-        return '<div  vr-loader="isLoadingDirective">'
-            + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="DataSourceID" '
-        + required + ' label="DataSource" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
-           + '</div>'
+        var addDataSource="";
+        if (attrs.adddatasource != undefined)
+          addDataSource='onaddclicked="addDataSource"';
+
+        return  '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="DataSourceID" '
+        + required + ' label="DataSource" datasource="ctrl.datasource" ' + addDataSource + ' selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled" "></vr-select>'
+
     }
 
     function dataSourceCtor(ctrl, $scope, $attrs) {
@@ -64,18 +68,27 @@ function (DataSourceAPIService, UtilsService, $compile, VRUIUtilsService) {
         }
 
         function defineAPI() {
+            $scope.addDataSource = function () {
+
+                var onDataSourceAdded = function (dataSourceObj) {
+                    ctrl.dataSources.push(dataSourceObj);
+                }
+
+                VR_Integration_DataSourceService.addDataSource(onDataSourceAdded);
+            }
             var api = {};
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('DataSourceID', $attrs, ctrl);
             }
             api.load = function (payload) {
-
+                var filter = null;
                 var selectedIds;
                 if (payload != undefined) {
+                    filter = payload.filter;
                     selectedIds = payload.selectedIds;
                 }
-
-                return DataSourceAPIService.GetDataSources().then(function (response) {
+                ctrl.datasource.length = 0;
+                return VR_Integration_DataSourceAPIService.GetDataSources(UtilsService.serializetoJson(filter)).then(function (response) {
                     angular.forEach(response, function (item) {
                         ctrl.datasource.push(item);
 

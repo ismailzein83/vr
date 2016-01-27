@@ -1,10 +1,10 @@
 ﻿<vr-panel ng-controller="Integration_DataSourceImportedBatchManagementController">
 
     <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingForm">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-select label="Data Source" datatextfield="Name" datavaluefield="DataSourceId" datasource="dataSources" selectedvalues="selectedDataSource" isrequired></vr-select>
+                    <vr-integration-datasource-selector on-ready="onDataSourceSelectorReady" adddatasource selectedvalues="selectedDataSource" isrequired="true"></vr-integration-datasource-selector>
                 </vr-columns>
 
                 <vr-columns width="normal">
@@ -35,29 +35,9 @@
     </vr-row>
 
     <div>
-        <vr-row>
+        <vr-row ng-show="showGrid">
             <vr-columns width="fullrow" simplecol>
-
-                <vr-datagrid defaultsortbyfieldname="'ID'" defaultsortdirection="'DESC'"
-                             datasource="importedBatches"
-                             dataretrievalfunction="dataRetrievalFunction"
-                             pagingtype="'PagingOnScroll'"
-                             on-ready="gridReady">
-
-                    <vr-datagridcolumn headertext="'ID'" field="'ID'" widthfactor="3"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Batch Description'" field="'BatchDescription'" widthfactor="8"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Batch Size'" field="'BatchSize'" widthfactor="3"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Records Count'" field="'RecordsCount'" widthfactor="3"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Mapping Result'" field="'MappingResultDescription'" widthfactor="5"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Mapper Message'" field="'MapperMessage'" widthfactor="17"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Execution Status'" field="'ExecutionStatusDescription'" getcolor="getStatusColor" widthfactor="5" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Log Entry Time'" field="'LogEntryTime'" type="'LongDatetime'" widthfactor="5"></vr-datagridcolumn>
-
-                    <vr-datagridexpandablerow>
-                        <div ng-include="'/Client/Modules/Integration/Views/QueueItemHeaderGrid.html'"></div>
-                    </vr-datagridexpandablerow>
-                </vr-datagrid>
-
+                <vr-integration-importedbatch-grid on-ready="gridReady"></vr-integration-importedbatch-grid>
             </vr-columns>
         </vr-row>
     </div>

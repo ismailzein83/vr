@@ -1,5 +1,5 @@
 ﻿<div vr-modalcontent ng-controller="Integration_NewDataSourceEditorController">
-    <vr-modalbody width="'50%'" vr-loader="isLoading">
+    <vr-modalbody width="'50%'" vr-loader="scopeModel.isLoading">
         <vr-form name="formDataSourceEditor">
             <vr-tabs>
                 <vr-tab header="'Task Definition'">
@@ -11,22 +11,16 @@
                 </vr-tab>
                 <vr-tab header="'Adapter'">
                     <vr-row>
-                        <vr-columns colnum="4">
+                        <vr-columns width="1/2row">
                             <vr-select datatextfield="Name" label="Type" datavaluefield="AdapterTypeId"
-                                       datasource="adapterTypes" selectedvalues="scopeModel.selectedAdapterType"></vr-select>
+                                       datasource="scopeModel.adapterTypes" selectedvalues="scopeModel.selectedAdapterType"></vr-select>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="fullrow">
-
-                            <vr-row>
-                                <vr-columns width="fullrow" ng-if="scopeModel.selectedAdapterType">
-                                    <vr-section title="{{scopeModel.selectedAdapterType.Name}} Adapter">
-                                        <vr-directivewrapper directive="scopeModel.selectedAdapterType.Info.Editor" on-ready="onAdapterTypeDirectiveReady"></vr-directivewrapper>
-                                    </vr-section>
-                                </vr-columns>
-                            </vr-row>
-                            <!--<div ng-include="scopeModel.selectedAdapterType.Info.AdapterTemplateURL"></div>-->
+                        <vr-columns width="fullrow" ng-if="scopeModel.selectedAdapterType">
+                            <vr-section title="{{scopeModel.selectedAdapterType.Name}} Adapter" vr-loader="scopeModel.isLoadingAdapterDirective">
+                                <vr-directivewrapper directive="scopeModel.selectedAdapterType.Info.Editor" on-ready="scopeModel.onAdapterTypeDirectiveReady"></vr-directivewrapper>
+                            </vr-section>
                         </vr-columns>
 
                     </vr-row>
@@ -56,7 +50,7 @@
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-section title="Timer Trigger">
-                                <vr-runtime-tasktrigger-timer on-ready="onTaskTriggerDirectiveReady"></vr-runtime-tasktrigger-timer>
+                                <vr-runtime-tasktrigger-timer on-ready="scopeModel.onTaskTriggerDirectiveReady"></vr-runtime-tasktrigger-timer>
                             </vr-section>
                             <!--<div ng-include="'/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html'"></div>-->
                         </vr-columns>
@@ -65,7 +59,7 @@
                 <vr-tab header="'Execution Flow'">
                     <vr-row>
                         <vr-columns colnum="6">
-                            <vr-select datasource="executionFlows" datatextfield="Name" onaddclicked="addExecutionFlow" datavaluefield="ExecutionFlowId" label="Associated Flow" selectedvalues="scopeModel.selectedExecutionFlow" isrequired></vr-select>
+                            <vr-select datasource="scopeModel.executionFlows" datatextfield="Name" onaddclicked="scopeModel.addExecutionFlow" datavaluefield="ExecutionFlowId" label="Associated Flow" selectedvalues="scopeModel.selectedExecutionFlow" isrequired></vr-select>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
@@ -75,8 +69,8 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formDataSourceEditor" data-onclick="SaveDataSource"></vr-button>
-                <vr-button type="Close" data-onclick="close"></vr-button>
+                <vr-button type="Save" formname="formDataSourceEditor" data-onclick="scopeModel.SaveDataSource"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
 

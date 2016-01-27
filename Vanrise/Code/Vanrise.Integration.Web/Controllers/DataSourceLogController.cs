@@ -9,9 +9,12 @@ using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Web.Controllers
 {
+    [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "DataSourceLog")]
     public class DataSourceLogController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
+        [Route("GetFilteredDataSourceLogs")]
         public object GetFilteredDataSourceLogs(Vanrise.Entities.DataRetrievalInput<DataSourceLogQuery> input)
         {
             DataSourceLogManager manager = new DataSourceLogManager();            

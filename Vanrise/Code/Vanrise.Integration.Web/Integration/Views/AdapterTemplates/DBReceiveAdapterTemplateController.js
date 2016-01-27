@@ -1,14 +1,11 @@
-﻿DBReceiveAdapterTemplateController.$inject = ['$scope', 'DataSourceAPIService', 'VRNotificationService'];
+﻿DBReceiveAdapterTemplateController.$inject = ['$scope', 'VR_Integration_DataSourceAPIService', 'VRNotificationService'];
 
-function DBReceiveAdapterTemplateController($scope, DataSourceAPIService, VRNotificationService) {
+function DBReceiveAdapterTemplateController($scope, VR_Integration_DataSourceAPIService, VRNotificationService) {
 
     defineScope();
     load();
 
     function defineScope() {
-
-        $scope.connectionString = undefined;
-        $scope.query = undefined;
         $scope.lastImportedId = 0;
 
         $scope.dataSourceAdapter.argument.getData = function () {
@@ -61,4 +58,4 @@ function DBReceiveAdapterTemplateController($scope, DataSourceAPIService, VRNoti
 
 
 }
-appControllers.controller('Integration_DBReceiveAdapterTemplateController', DBReceiveAdapterTemplateController);
+appControllers.controller('VR_Integration_DBReceiveAdapterTemplateController', DBReceiveAdapterTemplateController);

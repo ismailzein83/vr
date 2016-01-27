@@ -53,6 +53,7 @@
     <Compile Include="DataSourceAdapterType.cs" />
     <Compile Include="DataMapper.cs" />
     <Compile Include="DataSourceDetail.cs" />
+    <Compile Include="DataSourceFilter.cs" />
     <Compile Include="DataSourceImportedBatch.cs" />
     <Compile Include="DataSourceImportedBatchQuery.cs" />
     <Compile Include="DataSourceInfo.cs" />

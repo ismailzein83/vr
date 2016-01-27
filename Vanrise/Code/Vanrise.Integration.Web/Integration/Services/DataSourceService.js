@@ -1,38 +1,41 @@
-﻿'use strict';
+﻿(function (appControllers) {
 
-app.service('DataSourceService', ['UtilsService', 'VRModalService', 'Integration_ExecutionStatusEnum', 'Integration_MappingResultEnum', 'LabelColorsEnum',
-    function (UtilsService, VRModalService, Integration_ExecutionStatusEnum, Integration_MappingResultEnum, LabelColorsEnum) {
+    'use strict';
 
-        return ({
+    DataSourceService.$inject = ['UtilsService', 'VRModalService', 'VR_Integration_ExecutionStatusEnum', 'VR_Integration_MappingResultEnum', 'LabelColorsEnum'];
+
+    function DataSourceService(UtilsService, VRModalService, VR_Integration_ExecutionStatusEnum, VR_Integration_MappingResultEnum, LabelColorsEnum) {
+        return {
             getExecutionStatusDescription: getExecutionStatusDescription,
             getMappingResultDescription: getMappingResultDescription,
             getExecutionStatusColor: getExecutionStatusColor,
             editDataSource: editDataSource,
-            addDataSource: addDataSource
-        });
+            addDataSource: addDataSource,
+            deleteDataSource: deleteDataSource
+        };
 
         function getExecutionStatusDescription(executionStatusValue) {
-            return UtilsService.getEnumDescription(Integration_ExecutionStatusEnum, executionStatusValue);
+            return UtilsService.getEnumDescription(VR_Integration_ExecutionStatusEnum, executionStatusValue);
         }
 
         function getMappingResultDescription(mappingResultValue) {
-            return UtilsService.getEnumDescription(Integration_MappingResultEnum, mappingResultValue);
+            return UtilsService.getEnumDescription(VR_Integration_MappingResultEnum, mappingResultValue);
         }
 
         function getExecutionStatusColor(executionStatusValue) {
             var color = undefined;
 
             switch (executionStatusValue) {
-                case Integration_ExecutionStatusEnum.New.value:
+                case VR_Integration_ExecutionStatusEnum.New.value:
                     color = LabelColorsEnum.New.color;
                     break;
-                case Integration_ExecutionStatusEnum.Processing.value:
+                case VR_Integration_ExecutionStatusEnum.Processing.value:
                     color = LabelColorsEnum.Processing.color;
                     break;
-                case Integration_ExecutionStatusEnum.Failed.value:
+                case VR_Integration_ExecutionStatusEnum.Failed.value:
                     color = LabelColorsEnum.Failed.color;
                     break;
-                case Integration_ExecutionStatusEnum.Processed.value:
+                case VR_Integration_ExecutionStatusEnum.Processed.value:
                     color = LabelColorsEnum.Processed.color;
                     break;
             }
@@ -51,9 +54,7 @@ app.service('DataSourceService', ['UtilsService', 'VRModalService', 'Integration
                 modalScope.title = "Edit Data Source";
                 modalScope.onDataSourceUpdated = onDataSourceUpdated;
             };
-            //Client/Modules/Integration/Views/DataSourceEditor.html
-            //Client/Modules/Integration/Views/NewDataSource/NewDataSourceEditor.html
-            VRModalService.showModal('Client/Modules/Integration/Views/DataSourceEditor.html', parameters, modalSettings);
+            VRModalService.showModal('Client/Modules/Integration/Views/DataSource/DataSourceEditor.html', parameters, modalSettings);
         }
 
         function addDataSource(onDataSourceAdded) {
@@ -65,7 +66,26 @@ app.service('DataSourceService', ['UtilsService', 'VRModalService', 'Integration
                 modalScope.onDataSourceAdded = onDataSourceAdded;
             };
 
-            VRModalService.showModal('Client/Modules/Integration/Views/DataSourceEditor.html', null, modalSettings);
+            VRModalService.showModal('Client/Modules/Integration/Views/DataSource/DataSourceEditor.html', null, modalSettings);
         }
 
-}]);
+        function deleteDataSource(scope, dataSourceObj, onDataSourceDeleted) {
+            VRNotificationService.showConfirmation().then(function (response) {
+
+                    if (response) {
+                        return VR_Integration_DataSourceAPIService.DeleteDataSource(dataSourceObj.DataSourceId, dataSourceObj.TaskId)
+                            .then(function (deletionResponse) {
+                                VRNotificationService.notifyOnItemDeleted("DataSource", deletionResponse);
+                                onDataSourceDeleted(dataSourceObj);
+                            })
+                            .catch(function (error) {
+                                VRNotificationService.notifyException(error, scope);
+                            });
+                    }
+                });
+        }
+    };
+
+    appControllers.service('VR_Integration_DataSourceService', DataSourceService);
+
+})(appControllers);

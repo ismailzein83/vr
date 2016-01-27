@@ -1,0 +1,20 @@
+﻿<vr-datagrid defaultsortdirection="'DESC'"
+             datasource="importedBatches"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="gridReady"
+             idfield="ID">
+
+    <vr-datagridcolumn headertext="'ID'" field="'ID'" widthfactor="3"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Batch Description'" field="'BatchDescription'" widthfactor="8"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Batch Size'" field="'BatchSize'" widthfactor="3"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Records Count'" field="'RecordsCount'" widthfactor="3"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Mapping Result'" field="'MappingResultDescription'" widthfactor="5"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Mapper Message'" field="'MapperMessage'" widthfactor="17"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Execution Status'" field="'ExecutionStatusDescription'" getcolor="getStatusColor" widthfactor="5" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Log Entry Time'" field="'LogEntryTime'" type="'LongDatetime'" widthfactor="5"></vr-datagridcolumn>
+
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+</vr-datagrid>
