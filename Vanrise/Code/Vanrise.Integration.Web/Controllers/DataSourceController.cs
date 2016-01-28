@@ -57,7 +57,7 @@ namespace Vanrise.Integration.Web.Controllers
 
         [HttpPost]
         [Route("AddExecutionFlow")]
-        public Vanrise.Entities.InsertOperationOutput<QueueExecutionFlow> AddExecutionFlow(QueueExecutionFlow execFlowObject)
+        public Vanrise.Entities.InsertOperationOutput<QueueExecutionFlowDetail> AddExecutionFlow(QueueExecutionFlow execFlowObject)
         {
             DataSourceManager manager = new DataSourceManager();
             return manager.AddExecutionFlow(execFlowObject);

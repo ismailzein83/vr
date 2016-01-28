@@ -157,7 +157,7 @@ namespace Vanrise.Integration.Business
             return manager.GetExecutionFlows();
         }
 
-        public Vanrise.Entities.InsertOperationOutput<QueueExecutionFlow> AddExecutionFlow(QueueExecutionFlow execFlowObject)
+        public Vanrise.Entities.InsertOperationOutput<QueueExecutionFlowDetail> AddExecutionFlow(QueueExecutionFlow execFlowObject)
         {
             QueueExecutionFlowManager manager = new QueueExecutionFlowManager();
             return manager.AddExecutionFlow(execFlowObject);
