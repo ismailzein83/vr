@@ -20,6 +20,10 @@
 
         function defineScope() {
 
+            $scope.onGridReady = function (api) {
+                gridAPI = api;
+                api.loadGrid({});
+            }
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
                 carrierAccountReadyPromiseDeferred.resolve();
@@ -45,10 +49,6 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
             }
 
-            $scope.onGridReady = function (api) {
-                gridAPI = api;
-                api.loadGrid({});
-            }
 
             $scope.searchClicked = function () {
                 if (gridAPI != undefined)

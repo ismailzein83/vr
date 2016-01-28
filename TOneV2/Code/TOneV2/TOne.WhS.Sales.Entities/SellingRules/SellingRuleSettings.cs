@@ -8,5 +8,6 @@ namespace TOne.WhS.Sales.Entities
     public abstract class SellingRuleSettings
     {
         public int ConfigId { get; set; }
+        public abstract void Execute(IMarginSellingRuleExecutionContext context);
     }
 }

@@ -40,6 +40,13 @@
         }
 
         function defineScope() {
+            $scope.saleZoneGroupTemplates = [];
+            $scope.customerGroupTemplates = [];
+            $scope.sellingRuleSettingsTemplates = [];
+
+            $scope.beginEffectiveDate = new Date();
+            $scope.endEffectiveDate = undefined;
+
             $scope.scopeModal = {}
             $scope.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                 saleZoneGroupSettingsAPI = api;
@@ -60,13 +67,17 @@
                 }
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingRuleSettingsAPI, sellingRuleSettingsPayload, setLoader, sellingRuleSettingsReadyPromiseDeferred);
             }
-            
-            $scope.saleZoneGroupTemplates = [];
-            $scope.customerGroupTemplates = [];
-            $scope.sellingRuleSettingsTemplates = [];
 
-            $scope.beginEffectiveDate = new Date();
-            $scope.endEffectiveDate = undefined;
+
+
+            $scope.SaveSellingRule = function () {
+                if (isEditMode) {
+                    return updateSellingRule();
+                }
+                else {
+                    return insertSellingRule();
+                }
+            };
         }
 
         function load() {
@@ -226,7 +237,7 @@
                     SaleZoneGroupSettings: saleZoneGroupSettingsAPI.getData(),
                     CustomerGroupSettings: customerGroupSettingsAPI.getData()
                 },
-                Settings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModal, sellingRuleSettingsAPI, 'selectedSellingRuleSettingsTemplate'),
+                Settings: VRUIUtilsService.getSettingsFromDirective($scope, sellingRuleSettingsAPI, 'selectedSellingRuleSettingsTemplate'),
                 BeginEffectiveTime: $scope.beginEffectiveDate,
                 EndEffectiveTime: $scope.endEffectiveDate
             };

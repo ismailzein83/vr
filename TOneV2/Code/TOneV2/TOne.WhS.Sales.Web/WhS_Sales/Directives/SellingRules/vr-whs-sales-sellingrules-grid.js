@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive('vrWhsSellingSellingruleGrid', ['VRNotificationService', 'WhS_Sales_SellingRuleAPIService', 'WhS_Sales_SellingRuleService',
+app.directive('vrWhsSalesSellingrulesGrid', ['VRNotificationService', 'WhS_Sales_SellingRuleAPIService', 'WhS_Sales_SellingRuleService',
 function (VRNotificationService, WhS_Sales_SellingRuleAPIService, WhS_Sales_SellingRuleService) {
 
     var directiveDefinitionObject = {
@@ -20,7 +20,7 @@ function (VRNotificationService, WhS_Sales_SellingRuleAPIService, WhS_Sales_Sell
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_Sales/Directives/SellingRules/Templates/SellingRuleGridTemplate.html"
+        templateUrl: "/Client/Modules/WhS_Sales/Directives/SellingRules/Templates/SellingRulesGridTemplate.html"
 
     };
 

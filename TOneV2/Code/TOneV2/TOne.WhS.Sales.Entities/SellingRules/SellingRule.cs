@@ -20,11 +20,11 @@ namespace TOne.WhS.Sales.Entities
             ISaleZoneGroupContext context = ContextFactory.CreateContext<ISaleZoneGroupContext>();
             context.FilterSettings = new SaleZoneFilterSettings
             {
-                RoutingProductId = this.Criteria.SellingProductId
+                SellingProductId = this.Criteria.SellingProductId
             };
             return context;
         }
-        
+
         public ICustomerGroupContext GetCustomerGroupContext()
         {
             ICustomerGroupContext context = ContextFactory.CreateContext<ICustomerGroupContext>();
