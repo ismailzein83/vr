@@ -5,35 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierPriceListManager
     {
+      
+        #region Public Methods
         public SupplierPriceList GetPriceList(int priceListId)
         {
             List<SupplierPriceList> priceLists = GetCachedPriceLists();
             var priceList = priceLists.FindRecord(x => x.PriceListId == priceListId);
             return priceList;
         }
-        List<SupplierPriceList> GetCachedPriceLists()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetPriceLists"),
-               () =>
-               {
-                   ISupplierPriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
-                   return dataManager.GetPriceLists();
-               });
-        }
-
-        //To save priceList from portal into Queue
         public bool SavePriceList(int priceListStatus, DateTime effectiveOnDateTime, string supplierId, string priceListType, string activeSupplierEmail, byte[] contentBytes, string fileName, out int insertdId)
         {
             ISupplierPriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
             return dataManager.SavePriceList(priceListStatus, effectiveOnDateTime, supplierId, priceListType, activeSupplierEmail, contentBytes, fileName, "Portal", out  insertdId);
         }
-
         public int GetQueueStatus(int queueId)
         {
             ISupplierPriceListDataManager dataManager =
@@ -48,6 +37,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return priceLists.FindAllRecords(filterExpression);
         }
+
+
+        #endregion
+        
+        #region Private Members
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ISupplierPriceListDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
@@ -66,5 +60,17 @@ namespace TOne.WhS.BusinessEntity.Business
                 return _dataManager.ArGetPriceListsUpdated(ref _updateHandle);
             }
         }
+        List<SupplierPriceList> GetCachedPriceLists()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetPriceLists"),
+               () =>
+               {
+                   ISupplierPriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
+                   return dataManager.GetPriceLists();
+               });
+        }
+      
+        #endregion
+
     }
 }

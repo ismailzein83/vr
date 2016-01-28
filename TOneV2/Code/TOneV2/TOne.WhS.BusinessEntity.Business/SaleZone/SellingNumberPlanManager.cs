@@ -27,17 +27,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
+        #region Public Methods
         public IEnumerable<SellingNumberPlanInfo> GetSellingNumberPlans()
         {
             return GetCachedSellingNumberPlans().Values.MapRecords(SellingNumberPlanInfoMapper);
 
         }
-
         public SellingNumberPlan GetSellingNumberPlan(int numberPlanId)
         {
             return GetCachedSellingNumberPlans().GetRecord(numberPlanId);
         }
-
         public IDataRetrievalResult<SellingNumberPlanDetail> GetFilteredSellingNumberPlans(DataRetrievalInput<SellingNumberPlanQuery> input)
         {
             var allSellingNumberPlans = GetCachedSellingNumberPlans();
@@ -45,8 +44,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSellingNumberPlans.ToBigResult(input, filterExpression, SellingNumberPlanDetailMapper));
 
         }
-
-
         public TOne.Entities.InsertOperationOutput<SellingNumberPlanDetail> AddSellingNumberPlan(SellingNumberPlan sellingNumberPlan)
         {
             TOne.Entities.InsertOperationOutput<SellingNumberPlanDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<SellingNumberPlanDetail>();
@@ -96,8 +93,8 @@ namespace TOne.WhS.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-
-
+        #endregion
+  
         #region Private Method
         Dictionary<int ,SellingNumberPlan> GetCachedSellingNumberPlans()
         {

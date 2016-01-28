@@ -62,13 +62,11 @@ namespace TOne.WhS.BusinessEntity.Business
             var sellingProducts = GetCachedSellingProducts();
             return sellingProducts.GetRecord(sellingProductId);
         }
-
         public string GetSellingProductName(int sellingProductId)
         {
             var sellingProduct = GetSellingProduct(sellingProductId);
             return sellingProduct != null ? sellingProduct.Name : null;
         }
-
         public int? GetSellingNumberPlanId(int sellingProductId)
         {
             var sellingProduct = GetSellingProduct(sellingProductId);
@@ -140,16 +138,6 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Members
-        Dictionary<int, SellingProduct> GetCachedSellingProducts()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSellingProducts",
-               () =>
-               {
-                   ISellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();
-                   IEnumerable<SellingProduct> sellingProducts = dataManager.GetSellingProducts();
-                   return sellingProducts.ToDictionary(kvp => kvp.SellingProductId, kvp => kvp);
-               });
-        }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ISellingProductDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();
@@ -160,7 +148,17 @@ namespace TOne.WhS.BusinessEntity.Business
                 return _dataManager.AreSellingProductsUpdated(ref _updateHandle);
             }
         }
-     
+        Dictionary<int, SellingProduct> GetCachedSellingProducts()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSellingProducts",
+               () =>
+               {
+                   ISellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();
+                   IEnumerable<SellingProduct> sellingProducts = dataManager.GetSellingProducts();
+                   return sellingProducts.ToDictionary(kvp => kvp.SellingProductId, kvp => kvp);
+               });
+        }
+         
         #endregion
      
         #region  Mappers

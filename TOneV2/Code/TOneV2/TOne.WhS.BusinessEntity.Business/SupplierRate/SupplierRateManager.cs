@@ -11,47 +11,7 @@ namespace TOne.WhS.BusinessEntity.Business
     public class SupplierRateManager
     {
 
-        private SupplierRateDetail SupplierRateDetailMapper(SupplierRate supplierRate)
-        {
-            SupplierPriceListManager manager = new SupplierPriceListManager();
-            SupplierPriceList priceList = manager.GetPriceList(supplierRate.PriceListId);
-            
-            int currencyId = supplierRate.CurrencyId.HasValue ? supplierRate.CurrencyId.Value : priceList.CurrencyId;
-            string currencyName = this.GetCurrencyName(currencyId);
-
-            return new SupplierRateDetail()
-            {
-                Entity = supplierRate,
-                CurrencyName = currencyName,
-                SupplierZoneName = this.GetSupplierZoneName(supplierRate.ZoneId),
-            };
-        }
-
-        private string GetCurrencyName(int? currencyId)
-        {
-            if (currencyId != null)
-            {
-                CurrencyManager manager = new CurrencyManager();
-                Currency currency = manager.GetCurrency(currencyId.Value);
-
-                if (currency != null)
-                    return currency.Name;
-            }
-
-            return "Currency Not Found";
-        }
-
-        private string GetSupplierZoneName(long zoneId)
-        {
-            SupplierZoneManager manager = new SupplierZoneManager();
-            SupplierZone suplierZone = manager.GetSupplierZone(zoneId);
-
-            if (suplierZone != null)
-                return suplierZone.Name;
-
-            return "Zone Not Found";
-        }
-
+        #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<SupplierRateDetail> GetFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
         {
             ISupplierRateDataManager manager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
@@ -67,19 +27,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, supplierRateDetailResult);
         }
-
         public List<SupplierRate> GetSupplierRatesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
             return dataManager.GetSupplierRates(supplierId, minimumDate);
         }
-
         public List<SupplierRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos)
         {
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
             return dataManager.GetEffectiveSupplierRatesBySuppliers(effectiveOn, isEffectiveInFuture, supplierInfos);
         }
-
         public CallCost GetCallCost(int supplierId, long supplierZoneId, int durationInSeconds, DateTime effectiveOn)
         {
             CallCost callSale = null;
@@ -101,24 +58,70 @@ namespace TOne.WhS.BusinessEntity.Business
                 var pricingRulesResult = purchasePricingRuleManager.ApplyPricingRules(purchasePricingRulesInput);
                 callSale = new CallCost
                 {
-                    RateValue =  pricingRulesResult.Rate,
+                    RateValue = pricingRulesResult.Rate,
                     TotalNet = pricingRulesResult.TotalAmount,
                     CurrencyId = currencyId,
                     EffectiveDurationInSeconds = pricingRulesResult.EffectiveDurationInSeconds,
                     ExtraChargeValue = pricingRulesResult.ExtraChargeValue,
-                    RateType=pricingRulesResult.RateType
+                    RateType = pricingRulesResult.RateType
 
                 };
             }
             return callSale;
         }
-
         public long ReserveIDRange(int numberOfIDs)
         {
             long startingId;
             IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIDs, out startingId);
             return startingId;
         }
+       
+        #endregion
+
+        #region Private Members
+       
+        private string GetCurrencyName(int? currencyId)
+        {
+            if (currencyId != null)
+            {
+                CurrencyManager manager = new CurrencyManager();
+                Currency currency = manager.GetCurrency(currencyId.Value);
+
+                if (currency != null)
+                    return currency.Name;
+            }
+
+            return "Currency Not Found";
+        }
+        private string GetSupplierZoneName(long zoneId)
+        {
+            SupplierZoneManager manager = new SupplierZoneManager();
+            SupplierZone suplierZone = manager.GetSupplierZone(zoneId);
+
+            if (suplierZone != null)
+                return suplierZone.Name;
+
+            return "Zone Not Found";
+        }
+        #endregion
+
+        #region Mappers
+        private SupplierRateDetail SupplierRateDetailMapper(SupplierRate supplierRate)
+        {
+            SupplierPriceListManager manager = new SupplierPriceListManager();
+            SupplierPriceList priceList = manager.GetPriceList(supplierRate.PriceListId);
+
+            int currencyId = supplierRate.CurrencyId.HasValue ? supplierRate.CurrencyId.Value : priceList.CurrencyId;
+            string currencyName = this.GetCurrencyName(currencyId);
+
+            return new SupplierRateDetail()
+            {
+                Entity = supplierRate,
+                CurrencyName = currencyName,
+                SupplierZoneName = this.GetSupplierZoneName(supplierRate.ZoneId),
+            };
+        }
+        #endregion
 
     }
 }

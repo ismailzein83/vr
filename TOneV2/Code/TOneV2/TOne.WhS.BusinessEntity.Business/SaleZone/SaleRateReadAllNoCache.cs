@@ -10,17 +10,30 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleRateReadAllNoCache : ISaleRateReader
     {
-
+       
+        #region ctor/Local Variables
         SaleRatesByOwner _allSaleRatesByOwner;
         ISaleRateDataManager _saleRateDataManager;
         SalePriceListManager _salePriceListManager;
+        #endregion
+
+        #region Public Methods
         public SaleRateReadAllNoCache(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             _saleRateDataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
             _salePriceListManager = new SalePriceListManager();
             _allSaleRatesByOwner = GetAllSaleRatesByOwner(customerInfos, effectiveOn, isEffectiveInFuture);
         }
+        public SaleRatesByZone GetZoneRates(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            var saleRateByOwnerType = ownerType == SalePriceListOwnerType.Customer ? _allSaleRatesByOwner.SaleRatesByCustomer : _allSaleRatesByOwner.SaleRatesByProduct;
+            SaleRatesByZone saleRatesByZone;
+            saleRateByOwnerType.TryGetValue(ownerId, out saleRatesByZone);
+            return saleRatesByZone;
+        }
+        #endregion
 
+        #region Private Members
         private SaleRatesByOwner GetAllSaleRatesByOwner(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             SaleRatesByOwner result = new SaleRatesByOwner();
@@ -48,16 +61,6 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return result;
         }
-
-
-        public SaleRatesByZone GetZoneRates(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            var saleRateByOwnerType = ownerType == SalePriceListOwnerType.Customer ? _allSaleRatesByOwner.SaleRatesByCustomer : _allSaleRatesByOwner.SaleRatesByProduct;
-            SaleRatesByZone saleRatesByZone;
-            saleRateByOwnerType.TryGetValue(ownerId, out saleRatesByZone);
-            return saleRatesByZone;
-        }
-
         private SaleRatePriceList GetSaleRatePriceList(SaleRate saleRate)
         {
             SalePriceList priceList = _salePriceListManager.GetPriceList(saleRate.PriceListId);
@@ -68,5 +71,8 @@ namespace TOne.WhS.BusinessEntity.Business
             };
             return saleRatePriceList;
         }
+        #endregion
+
+       
     }
 }

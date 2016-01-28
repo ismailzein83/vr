@@ -12,16 +12,16 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleRateManager
     {
+     
+        #region Public Methods
         public List<SaleRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             throw new NotImplementedException();
         }
-
         public List<SaleRate> GetSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
         {
             throw new NotImplementedException();
         }
-      
         public Vanrise.Entities.IDataRetrievalResult<SaleRateDetail> GetFilteredSaleRates(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
         {
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
@@ -35,18 +35,18 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult);
         }
-        private SaleRateDetail SaleRateDetailMapper(SaleRate saleRate){
+        private SaleRateDetail SaleRateDetailMapper(SaleRate saleRate)
+        {
             SaleZoneManager sz = new SaleZoneManager();
             SaleRateDetail saleRateDetail = new SaleRateDetail();
             saleRateDetail.Entity = saleRate;
             saleRateDetail.ZoneName = sz.GetSaleZone(saleRate.ZoneId).Name;
             return saleRateDetail;
         }
-        
         public CallSale GetCallSale(int customerId, long saleZoneId, int durationInSeconds, DateTime effectiveOn)
         {
             CallSale callSale = null;
-           
+
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
             CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, false);
             if (customerSellingProduct == null)
@@ -72,16 +72,18 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 callSale = new CallSale
                 {
-                    RateValue =  pricingRulesResult.Rate ,
+                    RateValue = pricingRulesResult.Rate,
                     TotalNet = pricingRulesResult.TotalAmount,
                     CurrencyId = currencyId,
                     EffectiveDurationInSeconds = pricingRulesResult.EffectiveDurationInSeconds,
                     ExtraChargeValue = pricingRulesResult.ExtraChargeValue,
                     RateType = pricingRulesResult.RateType,
-                    
+
                 };
             }
             return callSale;
         }
+        #endregion
+        
     }
 }

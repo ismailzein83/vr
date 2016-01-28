@@ -25,16 +25,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRateTypes.ToBigResult(input, filterExpression, RateTypeDetailMapper));
 
         }
-        public Dictionary<int, RateType> GetCachedRateTypes()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRateTypes",
-               () =>
-               {
-                   IRateTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IRateTypeDataManager>();
-                   IEnumerable<RateType> rateTypes = dataManager.GetRateTypes();
-                   return rateTypes.ToDictionary(x => x.RateTypeId, x => x);
-               });
-        }
+       
         public IEnumerable<RateTypeInfo> GetAllRateTypes()
         {
             var allRateTypes = GetCachedRateTypes();
@@ -110,7 +101,16 @@ namespace TOne.WhS.BusinessEntity.Business
                 return dataManager.AreRateTypesUpdated(ref _updateHandle);
             }
         }
-
+        private Dictionary<int, RateType> GetCachedRateTypes()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRateTypes",
+               () =>
+               {
+                   IRateTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IRateTypeDataManager>();
+                   IEnumerable<RateType> rateTypes = dataManager.GetRateTypes();
+                   return rateTypes.ToDictionary(x => x.RateTypeId, x => x);
+               });
+        }
         #endregion
 
         #region  Mappers

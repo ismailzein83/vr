@@ -12,6 +12,8 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleCodeManager
     {
+
+        #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<SaleCodeDetail> GetFilteredSaleCodes(Vanrise.Entities.DataRetrievalInput<SaleCodeQuery> input)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
@@ -25,13 +27,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult);
         }
-
         public List<SaleCode> GetSaleCodesByZoneID(long zoneID, DateTime effectiveDate)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
             return dataManager.GetSaleCodesByZoneID(zoneID, effectiveDate);
         }
-
         public long ReserveIDRange(int numberOfIDs)
         {
             long startingId;
@@ -43,30 +43,28 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
             return dataManager.GetSellingNumberPlanSaleCodes(sellingNumberPlanId, effectiveOn);
         }
-
         public List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
             return dataManager.GetSaleCodesByPrefix(codePrefix, effectiveOn, isFuture, getChildCodes, getParentCodes);
         }
-
         public IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
             return dataManager.GetDistinctCodeByPrefixes(prefixLength, effectiveOn, isFuture);
         }
-
         public List<SaleCode> GetSaleCodesByZoneName(int sellingNumberPlanId, string zoneName, DateTime effectiveDate)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
             return dataManager.GetSaleCodesByZoneName(sellingNumberPlanId, zoneName, effectiveDate);
         }
-
         public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
             return dataManager.GetSaleCodesEffectiveAfter(sellingNumberPlanId, countryId, minimumDate);
         }
+
+        #endregion
 
         #region private Methode
         private class CacheManager : Vanrise.Caching.BaseCacheManager

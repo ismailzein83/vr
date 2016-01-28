@@ -10,17 +10,24 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierRateReadWithCache : ISupplierRateReader
     {
+       
+        #region ctor/Local Variables
         private DateTime effectiveOn { get; set; }
+        #endregion     
+
+        #region Public Methods
         public SupplierRateReadWithCache(DateTime effectiveOn)
         {
             this.effectiveOn = effectiveOn;
         }
-
         public SupplierRatesByZone GetSupplierRates(int supplierId)
         {
             SupplierRatesByZone supplierRatesByZone = new SupplierRatesByZone();
             return GetCachedSupplierRates(supplierId);
         }
+        #endregion
+       
+        #region Private Members
         SupplierRatesByZone GetCachedSupplierRates(int supplierId)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierRateCacheManager>().GetOrCreateObject(String.Format("GetSupplierRates_{0}_{1:MM/dd/yy}", supplierId, effectiveOn.Date),
@@ -28,7 +35,7 @@ namespace TOne.WhS.BusinessEntity.Business
                {
                    ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
 
-                   List<SupplierRate> supplierRates= dataManager.GetEffectiveSupplierRates(supplierId, this.effectiveOn);
+                   List<SupplierRate> supplierRates = dataManager.GetEffectiveSupplierRates(supplierId, this.effectiveOn);
                    SupplierRatesByZone supplierRatesByZone = new SupplierRatesByZone();
                    foreach (SupplierRate supplierRate in supplierRates)
                    {
@@ -40,5 +47,7 @@ namespace TOne.WhS.BusinessEntity.Business
                    return supplierRatesByZone;
                });
         }
+        #endregion
+       
     }
 }

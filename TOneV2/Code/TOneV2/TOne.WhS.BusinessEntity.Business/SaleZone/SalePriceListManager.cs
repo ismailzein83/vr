@@ -14,22 +14,20 @@ namespace TOne.WhS.BusinessEntity.Business
     {
 
 
-
+        #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<SalePriceListDetail> GetFilteredPricelists(Vanrise.Entities.DataRetrievalInput<SalePriceListQuery> input)
         {
             var salePricelists = GetCachedSalePriceLists();
 
             Func<SalePriceList, bool> filterExpression = (priceList) =>
 
-                     (input.Query.OwnerId == null ||  input.Query.OwnerId.Contains(priceList.OwnerId)) &&
-                      (input.Query.OwnerType == null || priceList.OwnerType==input.Query.OwnerType);
+                     (input.Query.OwnerId == null || input.Query.OwnerId.Contains(priceList.OwnerId)) &&
+                      (input.Query.OwnerType == null || priceList.OwnerType == input.Query.OwnerType);
 
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, salePricelists.ToBigResult(input, filterExpression, SalePricelistDetailMapper));
 
         }
-
-
         public SalePriceList GetPriceList(int priceListId)
         {
             List<SalePriceList> salePriceLists = GetCachedSalePriceLists();
@@ -37,6 +35,9 @@ namespace TOne.WhS.BusinessEntity.Business
             return salePriceList;
         }
 
+        #endregion
+
+        #region  Private Members
         List<SalePriceList> GetCachedSalePriceLists()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetCashedSalePriceLists"),
@@ -64,7 +65,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 return _dataManager.ArGetSalePriceListsUpdated(ref _updateHandle);
             }
         }
-
         private string GetCurrencyName(int? currencyId)
         {
             if (currencyId != null)
@@ -79,6 +79,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return "Currency Not Found";
         }
 
+        #endregion
 
         #region Mappers
 
