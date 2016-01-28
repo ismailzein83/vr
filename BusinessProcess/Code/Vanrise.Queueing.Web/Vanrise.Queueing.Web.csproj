@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\QueueInstanceController.cs" />
     <Compile Include="Controllers\ExecutionFlowController.cs" />
     <Compile Include="Controllers\QueueingController.cs" />
     <Compile Include="ModelMappers\QueueingMappers.cs" />
@@ -101,15 +102,24 @@
     <Content Include="Queueing\Directives\ExecutionFlowDefinition\vr-executionflowdefinition-selector.js" />
     <Content Include="Queueing\Directives\ExecutionFlow\Templates\ExecutionFlowGrid.html" />
     <Content Include="Queueing\Directives\ExecutionFlow\vr-executionflow-grid.js" />
+    <Content Include="Queueing\Directives\ExecutionFlow\vr-executionflow-selector.js" />
+    <Content Include="Queueing\Directives\QueueInstance\Templates\QueueInstanceGrid.html" />
+    <Content Include="Queueing\Directives\QueueInstance\vr-queueinstance-grid.js" />
+    <Content Include="Queueing\Directives\QueueInstance\vr-queueitemtype-selector.js" />
+    <Content Include="Queueing\Directives\QueueInstance\vr-queuestagename-selector.js" />
     <Content Include="Queueing\Directives\QueueItemHeader\Templates\QueueItemHeaderGridTemplate.html" />
     <Content Include="Queueing\Directives\QueueItemHeader\vr-queueing-queueitemheader-grid.js" />
     <Content Include="Queueing\Services\APIServices\ExecutionFlowAPIService.js" />
     <Content Include="Queueing\Services\APIServices\QueueingAPIService.js" />
+    <Content Include="Queueing\Services\APIServices\QueueInstanceAPIService.js" />
     <Content Include="Queueing\Services\ExecutionFlowService.js" />
+    <Content Include="Queueing\Services\QueueInstanceService.js" />
     <Content Include="Queueing\Views\ExecutionFlow\ExecutionFlowManagement.html" />
     <Content Include="Queueing\Views\ExecutionFlow\ExecutionFlowManagementController.js" />
     <Content Include="Queueing\Views\ExecutionFlow\ExecutionFlowEditor.html" />
     <Content Include="Queueing\Views\ExecutionFlow\ExecutionFlowEditorController.js" />
+    <Content Include="Queueing\Views\QueueInstance\QueueInstanceManagementController.js" />
+    <Content Include="Queueing\Views\QueueInstance\QueueInstanceManagement.html" />
     <Content Include="Queueing\Views\QueueItemManagement.html" />
     <Content Include="Queueing\Views\QueueItemManagementController.js" />
   </ItemGroup>

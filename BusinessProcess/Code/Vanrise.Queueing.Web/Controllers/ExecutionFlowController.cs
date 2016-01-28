@@ -19,14 +19,27 @@ namespace Vanrise.Queueing.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetFilteredExecutionFlowDefinitions")]
-        public List<QueueExecutionFlowDefinition> GetFilteredExecutionFlowDefinitions()
+        [Route("GetExecutionFlowDefinitions")]
+        public IEnumerable<QueueExecutionFlowDefinition> GetExecutionFlowDefinitions()
         {
             QueueExecutionFlowDefinitionManager manager = new QueueExecutionFlowDefinitionManager();
 
-            return manager.GetFilteredExecutionFlowDefinitions();
+            return manager.GetExecutionFlowDefinitions();
 
         }
+
+
+        [HttpGet]
+        [Route("GetExecutionFlows")]
+        public IEnumerable<QueueExecutionFlow> GetExecutionFlows()
+        {
+            QueueExecutionFlowManager manager = new QueueExecutionFlowManager();
+
+            return manager.GetExecutionFlows();
+
+        }
+
+
 
         [HttpGet]
         [Route("GetExecutionFlow")]

@@ -20,6 +20,11 @@ namespace Vanrise.Queueing.Data.SQL
             return GetItemsSP("queue.sp_ExecutionFlowDefinition_GetAll", ExecutionFlowDefinitionMapper);
         }
 
+
+        public bool AreQueueExecutionFlowDefinitionUpdated(ref object updateHandle) {
+            return base.IsDataUpdated("queue.[ExecutionFlowDefinition]", ref updateHandle);
+        }
+
         private Entities.QueueExecutionFlowDefinition ExecutionFlowDefinitionMapper(IDataReader reader)
         {
             return new Entities.QueueExecutionFlowDefinition

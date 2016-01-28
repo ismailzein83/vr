@@ -57,12 +57,15 @@
     <Compile Include="QueueExecutionFlowDetail.cs" />
     <Compile Include="QueueExecutionFlowQuery.cs" />
     <Compile Include="QueueInstance.cs" />
+    <Compile Include="QueueInstanceDetail.cs" />
+    <Compile Include="QueueInstanceQuery.cs" />
     <Compile Include="QueueItem.cs" />
     <Compile Include="QueueItemHeader.cs" />
     <Compile Include="QueueItemHeaderDetails.cs" />
     <Compile Include="QueueItemType.cs" />
     <Compile Include="QueueSettings.cs" />
     <Compile Include="QueueSubscription.cs" />
+    <Compile Include="StageName.cs" />
     <Compile Include="StageQueue.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

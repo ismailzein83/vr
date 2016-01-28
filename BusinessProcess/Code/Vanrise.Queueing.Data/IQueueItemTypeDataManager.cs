@@ -7,11 +7,9 @@ using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Queueing.Data
 {
-    public interface IQueueExecutionFlowDefinitionDataManager : IDataManager
+   public interface IQueueItemTypeDataManager:IDataManager
     {
-        List<QueueExecutionFlowDefinition> GetAll();
+       List<QueueItemType> GetItemTypes();
 
-
-        bool AreQueueExecutionFlowDefinitionUpdated(ref object updateHandle);
     }
 }
