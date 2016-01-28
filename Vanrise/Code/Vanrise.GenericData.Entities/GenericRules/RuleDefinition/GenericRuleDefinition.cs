@@ -10,6 +10,10 @@ namespace Vanrise.GenericData.Entities
     {
         public int GenericRuleDefinitionId { get; set; }
 
+        public string Name { get; set; }
+
         public GenericRuleDefinitionCriteria CriteriaDefinition { get; set; }
+
+        public GenericRuleDefinitionSettings SettingsDefinition { get; set; }
     }
 }

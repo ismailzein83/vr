@@ -64,6 +64,7 @@
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionCriteriaField.cs" />
     <Compile Include="GenericRules\GenericRuleTarget.cs" />
     <Compile Include="BusinessEntities\IBusinessEntityGroup.cs" />
+    <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

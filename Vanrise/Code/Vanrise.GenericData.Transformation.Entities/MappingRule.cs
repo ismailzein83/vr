@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 
-namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
+namespace Vanrise.GenericData.Transformation.Entities
 {
     public class MappingRule : GenericRule
     {

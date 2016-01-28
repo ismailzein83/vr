@@ -48,6 +48,9 @@
     <Compile Include="GenericRuleCriteriaFieldMapping.cs" />
     <Compile Include="IDataTransformationExecutionContext.cs" />
     <Compile Include="IMappingStepExecutionContext.cs" />
+    <Compile Include="MappingRule.cs" />
+    <Compile Include="MappingRuleDefinitionSettings.cs" />
+    <Compile Include="MappingRuleSettings.cs" />
     <Compile Include="MappingStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
