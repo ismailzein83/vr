@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     public class SellingNumberPlanController:BaseAPIController
     {
         [HttpGet]
-        public List<SellingNumberPlan> GetSellingNumberPlans()
+        public IEnumerable<SellingNumberPlanInfo> GetSellingNumberPlans()
         {
             SellingNumberPlanManager manager = new SellingNumberPlanManager();
             return manager.GetSellingNumberPlans();

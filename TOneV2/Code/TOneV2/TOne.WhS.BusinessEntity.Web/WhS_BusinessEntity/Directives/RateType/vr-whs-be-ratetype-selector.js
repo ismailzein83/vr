@@ -119,14 +119,6 @@ app.directive('vrWhsBeRatetypeSelector', ['WhS_BE_RateTypeAPIService', 'WhS_BE_R
         this.initializeController = initializeController;
 
     }
-
-    function getAllRateTypes(ctrl, WhS_BE_RateTypeAPIService) {
-        return WhS_BE_RateTypeAPIService.GetAllRateTypes().then(function (response) {
-            angular.forEach(response, function (itm) {
-                ctrl.datasource.push(itm);
-            });
-        });
-    }
     return directiveDefinitionObject;
 }]);
 

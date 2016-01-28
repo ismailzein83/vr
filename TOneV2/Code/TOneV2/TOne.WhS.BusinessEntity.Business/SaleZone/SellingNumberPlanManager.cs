@@ -27,9 +27,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
-        public List<SellingNumberPlan> GetSellingNumberPlans()
+        public IEnumerable<SellingNumberPlanInfo> GetSellingNumberPlans()
         {
-            return GetCachedSellingNumberPlans().Values.ToList();
+            return GetCachedSellingNumberPlans().Values.MapRecords(SellingNumberPlanInfoMapper);
 
         }
 
@@ -117,7 +117,14 @@ namespace TOne.WhS.BusinessEntity.Business
             };
             return sellingNumberPlanDetail;
         }
-
+        private SellingNumberPlanInfo SellingNumberPlanInfoMapper(SellingNumberPlan sellingNumberPlan)
+        {
+            return new SellingNumberPlanInfo
+            {
+                Name = sellingNumberPlan.Name,
+                SellingNumberPlanId = sellingNumberPlan.SellingNumberPlanId
+            };
+        }
         #endregion
     }
 }

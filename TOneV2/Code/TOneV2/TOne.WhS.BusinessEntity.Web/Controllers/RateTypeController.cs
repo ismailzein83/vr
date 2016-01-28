@@ -25,7 +25,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetAllRateTypes")]
-        public IEnumerable<RateType> GetAllRateTypes()
+        public IEnumerable<RateTypeInfo> GetAllRateTypes()
         {
             RateTypeManager manager = new RateTypeManager();
             return manager.GetAllRateTypes();

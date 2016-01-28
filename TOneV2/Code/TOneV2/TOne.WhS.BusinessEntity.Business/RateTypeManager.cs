@@ -18,11 +18,11 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Public Methods
-        public IDataRetrievalResult<RateType> GetFilteredRateTypes(DataRetrievalInput<RateTypeQuery> input)
+        public IDataRetrievalResult<RateTypeDetail> GetFilteredRateTypes(DataRetrievalInput<RateTypeQuery> input)
         {
             var allRateTypes = GetCachedRateTypes();
             Func<RateType, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRateTypes.ToBigResult(input, filterExpression));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRateTypes.ToBigResult(input, filterExpression, RateTypeDetailMapper));
 
         }
         public Dictionary<int, RateType> GetCachedRateTypes()
@@ -35,12 +35,12 @@ namespace TOne.WhS.BusinessEntity.Business
                    return rateTypes.ToDictionary(x => x.RateTypeId, x => x);
                });
         }
-        public IEnumerable<RateType> GetAllRateTypes()
+        public IEnumerable<RateTypeInfo> GetAllRateTypes()
         {
             var allRateTypes = GetCachedRateTypes();
             if (allRateTypes == null)
                 return null;
-            return allRateTypes.Values;
+            return allRateTypes.Values.MapRecords(RateTypeInfoMapper);
         }
         public RateType GetRateType(int rateTypeId)
         {
@@ -114,6 +114,21 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region  Mappers
+        private RateTypeInfo RateTypeInfoMapper(RateType rateType)
+        {
+            return new RateTypeInfo
+            {
+                Name = rateType.Name,
+                RateTypeId = rateType.RateTypeId
+            };
+        }
+        private RateTypeDetail RateTypeDetailMapper(RateType rateType)
+        {
+            return new RateTypeDetail
+            {
+                Entity = rateType,
+            };
+        }
         #endregion
         
     }
