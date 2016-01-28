@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups
 {
@@ -14,7 +15,21 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups
 
         public override IEnumerable<long> GetZoneIds(ISaleZoneGroupContext context)
         {
-            return this.ZoneIds;
+            SaleZoneManager manager = new SaleZoneManager();
+            IEnumerable<SaleZone> saleZonesofSellingNumberPlan = manager.GetSaleZonesBySellingNumberPlan(base.SellingNumberPlanId);
+            
+            IEnumerable<long> allExceptZoneIds = null;
+
+            if (saleZonesofSellingNumberPlan != null)
+            {
+                IEnumerable<SaleZone> allExceptSaleZoneList = saleZonesofSellingNumberPlan.FindAllRecords(x => !this.ZoneIds.Contains(x.SaleZoneId));
+                if(allExceptSaleZoneList != null)
+                {
+                    allExceptZoneIds = allExceptSaleZoneList.Select(x => x.SaleZoneId);
+                }
+            }
+
+            return allExceptZoneIds;
         }
 
         public override string GetDescription(ISaleZoneGroupContext context)
