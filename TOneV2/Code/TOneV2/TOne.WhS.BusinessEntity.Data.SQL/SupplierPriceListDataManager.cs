@@ -62,8 +62,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
         #endregion
-
-
-
+        public int GetQueueStatus(int queueId)
+        {
+            object result;
+            ExecuteNonQuerySP("[sp_SupplierPriceList_GetResults]", out result, queueId);
+            return (int)result;
+        }
     }
 }
