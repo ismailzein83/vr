@@ -9,8 +9,7 @@
         var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var sellingNumberPlanDirectiveAPI;
-        var sellingNumberPlanReadyPromiseDeferred;
-
+            
         var isEditMode;
         $scope.scopeModal = {};
 
@@ -71,28 +70,14 @@
             }
 
             $scope.scopeModal.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
-
-            //$scope.scopeModal.customerTabShow = function () {
-            //    if ($scope.selectedCarrierAccountType != undefined && $scope.selectedCarrierAccountType.value != WhS_BE_CarrierAccountTypeEnum.Supplier.value)
-            //        return true;
-            //    return false;
-            //}
-
-            //$scope.scopeModal.SupplierTabShow = function () {
-            //    if ($scope.selectedCarrierAccountType != undefined && $scope.selectedCarrierAccountType.value != WhS_BE_CarrierAccountTypeEnum.Customer.value)
-            //        return true;
-            //    return false;
-            //}
         }
 
         function load() {
 
             $scope.scopeModal.isLoading = true;
 
-            defineCarrierAccountTypes();
-            defineActivationStatusTypes();
             if (isEditMode) {
                 getCarrierAccount()
                     .then(function () {
@@ -112,7 +97,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadFilterBySection, loadCarrierProfileDirective])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCarrierAccountType, loadCarrierActivationStatusType, loadFilterBySection, loadCarrierProfileDirective])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -174,7 +159,17 @@
             }
         }
 
+        function loadCarrierAccountType() {
+            $scope.scopeModal.carrierAccountTypes = UtilsService.getArrayEnum(WhS_BE_CarrierAccountTypeEnum);
+        }
+
+        function loadCarrierActivationStatusType() {
+            $scope.scopeModal.activationStatus = UtilsService.getArrayEnum(WhS_BE_CarrierAccountActivationStatusEnum);
+        }
+
         function insertCarrierAccount() {
+            $scope.scopeModal.isLoading = true;
+
             var carrierAccountObject = buildCarrierAccountObjFromScope();
             return WhS_BE_CarrierAccountAPIService.AddCarrierAccount(carrierAccountObject)
                 .then(function (response) {
@@ -186,26 +181,15 @@
                 })
                 .catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.scopeModal.isLoading = false;
                 });
 
         }
 
-        function defineCarrierAccountTypes() {
-            $scope.scopeModal.carrierAccountTypes = [];
-            for (var p in WhS_BE_CarrierAccountTypeEnum)
-                $scope.scopeModal.carrierAccountTypes.push(WhS_BE_CarrierAccountTypeEnum[p]);
-
-        }
-        function defineActivationStatusTypes() {
-            $scope.scopeModal.activationStatus = [];
-            for (var p in WhS_BE_CarrierAccountActivationStatusEnum)
-                $scope.scopeModal.activationStatus.push(WhS_BE_CarrierAccountActivationStatusEnum[p]);
-
-        }
-
-        
-
         function updateCarrierAccount() {
+            $scope.scopeModal.isLoading = true;
+
             var carrierAccountObject = buildCarrierAccountObjFromScope();
             WhS_BE_CarrierAccountAPIService.UpdateCarrierAccount(carrierAccountObject)
                 .then(function (response) {
@@ -217,7 +201,9 @@
                 })
                 .catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
-                });
+                }).finally(function () {
+                $scope.scopeModal.isLoading = false;
+            });
         }
     }
 

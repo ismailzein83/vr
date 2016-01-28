@@ -106,8 +106,7 @@
         function loadSellingNumberPlan() {
             var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
             sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
-                var payload = {};
-                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, payload, loadSellingNumberPlanPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, undefined, loadSellingNumberPlanPromiseDeferred);
             });
 
             return loadSellingNumberPlanPromiseDeferred.promise;

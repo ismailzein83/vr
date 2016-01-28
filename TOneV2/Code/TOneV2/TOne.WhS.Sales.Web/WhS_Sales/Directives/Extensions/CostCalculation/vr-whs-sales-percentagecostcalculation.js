@@ -44,7 +44,7 @@ app.directive("vrWhsSalesPercentagecostcalculation", ["WhS_Routing_RoutRuleSetti
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload) {
+                    if (payload != undefined) {
                         $scope.title = payload.Title;
                         directivePayload = payload.PercentageSettings;
                         $scope.selectedTemplate = payload.SelectedTemplate;

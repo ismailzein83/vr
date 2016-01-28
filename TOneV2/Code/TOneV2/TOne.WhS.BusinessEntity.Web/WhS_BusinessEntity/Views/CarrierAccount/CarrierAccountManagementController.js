@@ -17,10 +17,9 @@
 
         function defineScope() {
             $scope.searchClicked = function () {
-                if (!$scope.isGettingData  && gridAPI != undefined)
-                   return gridAPI.loadGrid(getFilterObject());
+                return gridAPI.loadGrid(getFilterObject());
             };
-
+            
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 var filter = {};
@@ -52,32 +51,41 @@
                         
             }
 
-            $scope.name;
-
             $scope.selectedCarrierAccountTypes=[];
             $scope.selectedSellingNumberPlans = [];
             $scope.AddNewCarrierAccount = AddNewCarrierAccount;
+
+            function getFilterObject() {
+                var data = {
+                    AccountsTypes: UtilsService.getPropValuesFromArray($scope.selectedCarrierAccountTypes, "value"),
+                    CarrierProfilesIds: carrierProfileDirectiveAPI.getSelectedIds(),
+                    Name: $scope.name,
+                    SellingNumberPlanIds: sellingNumberPlanDirectiveAPI.getSelectedIds()
+
+                };
+                return data;
+            }
         }
 
         function load() {
-
             $scope.isLoading = true;
-            defineCarrierAccountTypes();
             loadAllControls();
-
-
         }
         function loadAllControls() {
-            return loadCarrierProfiles()
+            return UtilsService.waitMultipleAsyncOperations([loadCarrierAccountType, loadCarrierProfiles])
                 .catch(function (error) {
                     $scope.isLoading = false;
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-
                 })
                .finally(function () {
                    $scope.isLoading = false;
                });
         }
+
+        function loadCarrierAccountType() {
+            $scope.carrierAccountTypes = UtilsService.getArrayEnum(WhS_BE_CarrierAccountTypeEnum);
+        }
+
         function loadCarrierProfiles() {
             var loadCarrierProfilePromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -91,26 +99,9 @@
             return loadCarrierProfilePromiseDeferred.promise;
         }
 
-        function getFilterObject() {
-            var data = {
-                AccountsTypes: UtilsService.getPropValuesFromArray($scope.selectedCarrierAccountTypes, "value"),
-                CarrierProfilesIds:carrierProfileDirectiveAPI.getSelectedIds(),
-                Name: $scope.name,
-                SellingNumberPlanIds: sellingNumberPlanDirectiveAPI.getSelectedIds()
-
-            };
-            return data;
-        }
-        function defineCarrierAccountTypes() {
-                $scope.carrierAccountTypes = [];
-                for (var p in WhS_BE_CarrierAccountTypeEnum)
-                    $scope.carrierAccountTypes.push(WhS_BE_CarrierAccountTypeEnum[p]);
-            
-        }
         function AddNewCarrierAccount() {
             var onCarrierAccountAdded = function (carrierAccountObj) {
-                if (gridAPI != undefined)
-                    gridAPI.onCarrierAccountAdded(carrierAccountObj);
+                gridAPI.onCarrierAccountAdded(carrierAccountObj);
             };
 
             WhS_BE_CarrierAccountService.addCarrierAccount(onCarrierAccountAdded);

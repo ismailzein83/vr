@@ -19,21 +19,30 @@
                 countryReadyPromiseDeferred.resolve();
             }
 
-            $scope.searchClicked = function () {
-                if (!$scope.isGettingData && gridAPI != undefined)
-                   return gridAPI.loadGrid(getFilterObject());
-            };
-
-            $scope.name;
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid({});
             }
 
+            $scope.searchClicked = function () {
+                return gridAPI.loadGrid(getFilterObject());
+            };
+
             $scope.AddNewCarrierProfile = AddNewCarrierProfile;
+
+            function getFilterObject() {
+                var data = {
+                    Name: $scope.name,
+                    CountriesIds: countryDirectiveApi.getSelectedIds(),
+                    Company: $scope.company
+                };
+
+                return data;
+            }
         }
+
         function load() {
-            $scope.isLoading = true;
+            $scope.isLoadingFilters = true;
              loadAllControls();
         }
 
@@ -43,33 +52,24 @@
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
-                  $scope.isLoading = false;
+                  $scope.isLoadingFilters = false;
               });
         }
+
         function loadCountries() {
             var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
             countryReadyPromiseDeferred.promise.then(function () {
-                var payload = {  };
-                VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, undefined, loadCountryPromiseDeferred);
             });
 
             return loadCountryPromiseDeferred.promise;
         }
-        function getFilterObject() {
-            var data = {
-                Name: $scope.name,
-                CountriesIds: countryDirectiveApi.getSelectedIds(),
-                Company: $scope.company
-            };
-            
-            return data;
-        }
 
         function AddNewCarrierProfile() {
             var onCarrierProfileAdded = function (carrierProfileObj) {
-                if (gridAPI != undefined)
-                    gridAPI.onCarrierProfileAdded(carrierProfileObj);
+                gridAPI.onCarrierProfileAdded(carrierProfileObj);
             };
+
             WhS_BE_CarrierProfileService.addCarrierProfile(onCarrierProfileAdded);
         }
 

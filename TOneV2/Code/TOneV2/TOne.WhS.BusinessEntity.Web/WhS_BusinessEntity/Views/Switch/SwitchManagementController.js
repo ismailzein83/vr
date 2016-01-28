@@ -18,8 +18,7 @@
             }
 
             $scope.searchClicked = function () {
-                if (gridAPI != undefined)
-                    return gridAPI.loadGrid(getFilterObject());
+                return gridAPI.loadGrid(getFilterObject());
             };
 
             $scope.AddNewSwitch = AddNewSwitch;

@@ -1,7 +1,7 @@
-﻿<vr-panel ng-controller="WhS_BE_CarrierProfileManagementController" vr-loader="isLoading">
+﻿<vr-panel ng-controller="WhS_BE_CarrierProfileManagementController" >
 
-    <vr-form name="formFilter" vr-loader="isLoading">
-        <div ng-hide="filterSectionCollapsed">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
                 <vr-columns width="normal">
                     <vr-textbox value="name" label="Name"></vr-textbox>
@@ -19,9 +19,6 @@
                     <vr-textbox value="billingEmail" label="Billing Email"></vr-textbox>
                 </vr-columns>
             </vr-row>
-
-
-
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">

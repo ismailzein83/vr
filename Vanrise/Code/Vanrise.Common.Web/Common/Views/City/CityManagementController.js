@@ -59,9 +59,7 @@
 
             countryReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = {};
-
-                    VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, undefined, countryLoadPromiseDeferred);
                 });
             return countryLoadPromiseDeferred.promise;
         }

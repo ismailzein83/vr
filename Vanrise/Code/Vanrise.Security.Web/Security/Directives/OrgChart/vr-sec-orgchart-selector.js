@@ -77,7 +77,7 @@
                 directiveAPI.load = function (payload) {
                     var selectedIds;
 
-                    if (payload) {
+                    if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                     }
 

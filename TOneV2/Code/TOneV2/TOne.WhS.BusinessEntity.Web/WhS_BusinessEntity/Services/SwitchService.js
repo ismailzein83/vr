@@ -38,15 +38,15 @@
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/Switch/SwitchEditor.html', parameters, modalSettings);
         }
 
-        function deleteSwitch(scope, switchObj, onSwitchDeleted) {
+        function deleteSwitch(scope, switchId, onSwitchDeleted) {
             VRNotificationService.showConfirmation()
                 .then(function (response) {
                    
                     if (response) {
-                        return WhS_BE_SwitchAPIService.DeleteSwitch(switchObj.Entity.SwitchId)
+                        return WhS_BE_SwitchAPIService.DeleteSwitch(switchId)
                             .then(function (deletionResponse) {
                                 VRNotificationService.notifyOnItemDeleted("Switch", deletionResponse);
-                                onSwitchDeleted(switchObj);
+                                onSwitchDeleted();
                             })
                             .catch(function (error) {
                                 VRNotificationService.notifyException(error, scope);

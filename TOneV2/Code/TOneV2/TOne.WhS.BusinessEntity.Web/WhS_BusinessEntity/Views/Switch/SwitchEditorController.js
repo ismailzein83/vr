@@ -38,7 +38,7 @@
             };
 
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
         }
@@ -80,6 +80,8 @@
         }
 
         function insertSwitch() {
+            $scope.isLoading = true;
+
             var switchObject = buildSwitchObjFromScope();
             return WhS_BE_SwitchAPIService.AddSwitch(switchObject)
             .then(function (response) {
@@ -90,11 +92,15 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
             });
         }
 
 
         function updateSwitch() {
+            $scope.isLoading = true;
+
             var switchObject = buildSwitchObjFromScope();
             WhS_BE_SwitchAPIService.UpdateSwitch(switchObject)
             .then(function (response) {
@@ -105,6 +111,8 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
             });
         }
     }

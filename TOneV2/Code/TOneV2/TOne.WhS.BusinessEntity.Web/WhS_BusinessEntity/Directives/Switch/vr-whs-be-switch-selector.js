@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeSwitchSelector', ['WhS_BE_SwitchAPIService', 'UtilsService', '$compile','VRUIUtilsService',
-function (WhS_BE_SwitchAPIService, UtilsService, $compile, VRUIUtilsService) {
+app.directive('vrWhsBeSwitchSelector', ['WhS_BE_SwitchAPIService', 'UtilsService','VRUIUtilsService',
+function (WhS_BE_SwitchAPIService, UtilsService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -75,16 +75,14 @@ function (WhS_BE_SwitchAPIService, UtilsService, $compile, VRUIUtilsService) {
                     selectedIds = payload.selectedIds;
                 }
 
-                    return WhS_BE_SwitchAPIService.GetSwitchesInfo().then(function (response) {
-                        angular.forEach(response, function (item) {
-                            ctrl.datasource.push(item);
-
-                        });
-                        if (selectedIds!=undefined)
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'SwitchId', $attrs, ctrl);
-
+                return WhS_BE_SwitchAPIService.GetSwitchesInfo().then(function (response) {
+                    angular.forEach(response, function (item) {
+                        ctrl.datasource.push(item);
                     });
+                    if (selectedIds != undefined)
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'SwitchId', $attrs, ctrl);
 
+                });
             }
 
             if (ctrl.onReady != null)

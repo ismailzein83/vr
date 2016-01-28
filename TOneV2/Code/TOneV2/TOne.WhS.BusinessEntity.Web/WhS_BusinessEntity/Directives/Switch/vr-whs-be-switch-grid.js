@@ -92,11 +92,11 @@ function (UtilsService, VRNotificationService, WhS_BE_SwitchAPIService, WhS_BE_S
         }
 
         function deleteSwitch(whsSwitch) {
-            var onSwitchDeleted = function (deletedItem) {
-                gridAPI.itemDeleted(deletedItem);
+            var onSwitchDeleted = function () {
+                gridAPI.itemDeleted(whsSwitch);
             }
 
-            WhS_BE_SwitchService.deleteSwitch($scope, whsSwitch, onSwitchDeleted);
+            WhS_BE_SwitchService.deleteSwitch($scope, whsSwitch.Entity.SwitchId, onSwitchDeleted);
         }
 
         this.initializeController = initializeController;

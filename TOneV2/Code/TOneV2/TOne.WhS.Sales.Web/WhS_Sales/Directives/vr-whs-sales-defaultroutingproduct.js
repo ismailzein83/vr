@@ -56,7 +56,7 @@ function (WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) {
             api.load = function (payload) {
                 counter = 0;
 
-                if (payload) {
+                if (payload != undefined) {
                     defaultItem = payload;
                     ctrl.CurrentName = defaultItem.IsCurrentRoutingProductEditable === false ? defaultItem.CurrentRoutingProductName + " (Inherited)" : defaultItem.CurrentRoutingProductName;
                 }

@@ -71,7 +71,6 @@ function (UtilsService, Common_AppendixSample_Service, VRUIUtilsService) {
                         var dynamicAppendixItem = {
                             editor: matchItem.editor
                         };
-                        var dynamicAppendixPayload = {};
 
                         dynamicAppendixItem.dynamicAppendixReady = function (api) {
                             dynamicAppendixItem.dynamicAppendixAPI = api;
@@ -80,7 +79,7 @@ function (UtilsService, Common_AppendixSample_Service, VRUIUtilsService) {
 
                         appendixItem.readyPromiseDeferred.promise
                             .then(function () {
-                                VRUIUtilsService.callDirectiveLoad(dynamicAppendixItem.dynamicAppendixAPI, dynamicAppendixPayload, appendixItem.loadPromiseDeferred);
+                                VRUIUtilsService.callDirectiveLoad(dynamicAppendixItem.dynamicAppendixAPI, undefined, appendixItem.loadPromiseDeferred);
                             });
 
                         ctrl.dynamicAppendixList.push(dynamicAppendixItem);

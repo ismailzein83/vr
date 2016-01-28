@@ -115,7 +115,7 @@ function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
                     dataItem.configId = ctrl.selectedTemplate.TemplateConfigID;
                     dataItem.name = ctrl.selectedTemplate.Name;
                     dataItem.directive = ctrl.selectedTemplate.Editor;
-                    dataItem.directivePayload = null;
+                    dataItem.directivePayload = undefined;
                 }
 
                 dataItem.loadDeferred = UtilsService.createPromiseDeferred();

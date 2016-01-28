@@ -101,7 +101,7 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                     return UtilsService.waitMultiplePromises(promises);
 
                     function setGlobalVairables(payload) {
-                        if (payload) {
+                        if (payload != undefined) {
                             rpRouteDetail = payload.rpRouteDetail;
                             routingDatabaseId = payload.routingDatabaseId;
                             policies = payload.filteredPolicies;

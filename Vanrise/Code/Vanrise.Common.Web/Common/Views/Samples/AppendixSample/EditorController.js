@@ -141,7 +141,7 @@
                 .then(function () {
                     var directivePayload;
                     if (entity != undefined)
-                        directivePayload = {};
+                        directivePayload = undefined;
                     VRUIUtilsService.callDirectiveLoad(appendixAPI, directivePayload, loadAppendixPromiseDeferred);
                 });
 
@@ -156,7 +156,7 @@
                 .then(function () {
                     var directivePayload;
                     if (entity != undefined)
-                        directivePayload = {};
+                        directivePayload = undefined;
                     VRUIUtilsService.callDirectiveLoad(appendix2API, directivePayload, loadAppendix2PromiseDeferred);
                 });
 
@@ -168,7 +168,7 @@
             var dynamicAppendixPayload;
             var selectedDefaultItem;
             if (entity != undefined)
-                dynamicAppendixPayload = {};
+                dynamicAppendixPayload = undefined;
             else
                 selectedDefaultItem = {};
             var loadTemplatesPromise = Common_AppendixSample_Service.getRemoteData(1000)
@@ -251,7 +251,6 @@
                 var dynamicAppendixItem = {
                     editor: matchItem.editor
                 };
-                var dynamicAppendixPayload = {};
                 
                 dynamicAppendixItem.dynamicAppendixReady = function (api) {
                     dynamicAppendixItem.dynamicAppendixAPI = api;
@@ -260,7 +259,7 @@
 
                 appendixItem.readyPromiseDeferred.promise
                     .then(function () {
-                        VRUIUtilsService.callDirectiveLoad(dynamicAppendixItem.dynamicAppendixAPI, dynamicAppendixPayload, appendixItem.loadPromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(dynamicAppendixItem.dynamicAppendixAPI, undefined, appendixItem.loadPromiseDeferred);
                     });
 
                 $scope.dynamicAppendixList.push(dynamicAppendixItem);

@@ -118,19 +118,28 @@
                 });
             }
             else {
-                $scope.title = UtilsService.buildTitleForAddEditor("Carrier Profile");
                 loadAllControls();
             }
         }
 
+        function getCarrierProfile() {
+            return WhS_BE_CarrierProfileAPIService.GetCarrierProfile(carrierProfileId).then(function (carrierProfile) {
+                carrierProfileEntity = carrierProfile;
+            });
+        }
+
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadCountries, loadCities, loadStaticSection ,loadContacts])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountries, loadCities, loadStaticSection, loadContacts])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
                   $scope.isLoading = false;
               });
+        }
+
+        function setTitle() {
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(carrierProfileEntity ? carrierProfileEntity.Name : null, 'Carrier Profile') : UtilsService.buildTitleForAddEditor('Carrier Profile');
         }
 
         function loadCountries() {
@@ -182,13 +191,6 @@
             };
         }
 
-        function getCarrierProfile() {
-            return WhS_BE_CarrierProfileAPIService.GetCarrierProfile(carrierProfileId).then(function (carrierProfile) {
-                carrierProfileEntity = carrierProfile;
-                $scope.title = UtilsService.buildTitleForUpdateEditor(carrierProfileEntity.Name, "Carrier Profile");
-            });
-        }
-
         function loadStaticSection() {
             if (carrierProfileEntity != undefined) {
                 $scope.scopeModal.name = carrierProfileEntity.Name;
@@ -232,24 +234,6 @@
 
         }
 
-        function insertCarrierProfile() {
-            var carrierProfileObject = buildCarrierProfileObjFromScope();
-            $scope.isLoading = true;
-            return WhS_BE_CarrierProfileAPIService.AddCarrierProfile(carrierProfileObject)
-            .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Carrier Profile", response,"Name")) {
-                    if ($scope.onCarrierProfileAdded != undefined)
-                        $scope.onCarrierProfileAdded(response.InsertedObject);
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.isLoading = false;
-            });
-
-        }
-
         function buildCarrierProfileObjFromScope() {
 
             var obj = {
@@ -279,9 +263,31 @@
            return obj;
         }
 
-        function updateCarrierProfile() {
-            var carrierProfileObject = buildCarrierProfileObjFromScope();
+        function insertCarrierProfile() {
             $scope.isLoading = true;
+
+            var carrierProfileObject = buildCarrierProfileObjFromScope();
+            
+            return WhS_BE_CarrierProfileAPIService.AddCarrierProfile(carrierProfileObject)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded("Carrier Profile", response, "Name")) {
+                    if ($scope.onCarrierProfileAdded != undefined)
+                        $scope.onCarrierProfileAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
+
+        }
+
+        function updateCarrierProfile() {
+            $scope.isLoading = true;
+
+            var carrierProfileObject = buildCarrierProfileObjFromScope();
+            
             WhS_BE_CarrierProfileAPIService.UpdateCarrierProfile(carrierProfileObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Carrier Profile", response ,"Name")) {

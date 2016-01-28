@@ -28,7 +28,7 @@ app.directive("vrWhsSalesRoutepercentagecostcalculation", [function () {
             function getAPI() {
                 var api = {};
                 api.load = function (payload) {
-                    if (payload)
+                    if (payload != undefined)
                         ctrl.title = payload.Title;
                 };
                 api.getData = function () {

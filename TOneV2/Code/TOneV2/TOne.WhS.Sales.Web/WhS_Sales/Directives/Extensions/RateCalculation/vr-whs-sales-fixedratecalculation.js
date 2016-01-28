@@ -30,7 +30,7 @@ app.directive("vrWhsSalesFixedratecalculation", [function () {
             var api = {};
 
             api.load = function (payload) {
-                if (payload) {
+                if (payload != undefined) {
                     ctrl.fixedRate = payload.FixedRate;
                 }
             };

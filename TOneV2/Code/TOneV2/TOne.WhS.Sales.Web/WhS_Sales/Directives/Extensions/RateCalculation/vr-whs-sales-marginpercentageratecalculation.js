@@ -30,7 +30,7 @@ app.directive("vrWhsSalesMarginpercentageratecalculation", [function () {
             var api = {};
 
             api.load = function (payload) {
-                if (payload) {
+                if (payload != undefined) {
                     ctrl.marginPercentage = payload.MarginPercentage;
                 }
             };
