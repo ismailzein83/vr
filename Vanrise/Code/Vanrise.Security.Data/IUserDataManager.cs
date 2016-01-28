@@ -11,7 +11,9 @@ namespace Vanrise.Security.Data
     {
         List<User> GetUsers();
 
-        bool AddUser(User user, out int insertedId);
+        string GetUserPassword(int userId);
+
+        bool AddUser(User user, string password, out int insertedId);
 
         bool UpdateUser(User user);
 

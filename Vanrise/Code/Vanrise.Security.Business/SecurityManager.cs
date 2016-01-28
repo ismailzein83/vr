@@ -36,11 +36,13 @@ namespace Vanrise.Security.Business
                 authToken.UserDisplayName = user.Name;
                 authToken.ExpirationIntervalInMinutes = expirationPeriodInMinutes;
 
+                string loggedInUserPassword = manager.GetUserPassword(user.UserId);
+
                 if (user.Status == UserStatus.Inactive)
                 {
                     authenticationOperationOutput.Result = AuthenticateOperationResult.Inactive;
                 }
-                else if (!HashingUtility.VerifyHash(password, "", user.Password))
+                else if (!HashingUtility.VerifyHash(password, "", loggedInUserPassword))
                 {
                     authenticationOperationOutput.Result = AuthenticateOperationResult.WrongCredentials;
                 }
@@ -101,9 +103,10 @@ namespace Vanrise.Security.Business
             updateOperationOutput.UpdatedObject = null;
 
             User currentUser = manager.GetUserbyId(loggedInUserId);
+            string currentUserPassword = manager.GetUserPassword(loggedInUserId);
 
             bool changePasswordActionSucc = false;
-            bool oldPasswordIsCorrect = HashingUtility.VerifyHash(oldPassword, "", currentUser.Password);
+            bool oldPasswordIsCorrect = HashingUtility.VerifyHash(oldPassword, "", currentUserPassword);
 
             if (oldPasswordIsCorrect)
             {

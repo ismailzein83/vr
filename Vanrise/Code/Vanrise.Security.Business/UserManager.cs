@@ -64,6 +64,12 @@ namespace Vanrise.Security.Business
             return users.FindRecord(x => x.Email == email);
         }
 
+        public string GetUserPassword(int userId)
+        {
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            return dataManager.GetUserPassword(userId);
+        }
+
         public Vanrise.Entities.InsertOperationOutput<UserDetail> AddUser(User userObject)
         {
             InsertOperationOutput<UserDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<UserDetail>();
@@ -73,10 +79,10 @@ namespace Vanrise.Security.Business
             int userId = -1;
 
             string defPassword = "123456";
-            userObject.Password = HashingUtility.ComputeHash(defPassword, "", null);
+            string encryptedPassword = HashingUtility.ComputeHash(defPassword, "", null);
 
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            bool insertActionSucc = dataManager.AddUser(userObject, out userId);
+            bool insertActionSucc = dataManager.AddUser(userObject, encryptedPassword, out userId);
 
             if (insertActionSucc)
             {

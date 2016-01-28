@@ -60,7 +60,7 @@
                     var filter = null;
                     var selectedIds;
 
-                    if (payload) {
+                    if (payload != undefined) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
                     }

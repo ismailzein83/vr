@@ -28,11 +28,16 @@ namespace Vanrise.Security.Data.SQL
             return GetItemsSP("sec.sp_User_GetAll", UserMapper);
         }
 
-        public bool AddUser(User userObject, out int insertedId)
+        public string GetUserPassword(int userId)
+        {
+            return (string)ExecuteScalarSP("sec.sp_User_GetPassword", userId);
+        }
+
+        public bool AddUser(User userObject, string password, out int insertedId)
         {
             object userID;
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, userObject.Password, userObject.Email, userObject.Status, userObject.Description);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, password, userObject.Email, userObject.Status, userObject.Description);
             insertedId = (recordesEffected > 0) ? (int)userID : -1;
 
             return (recordesEffected > 0);
@@ -79,7 +84,6 @@ namespace Vanrise.Security.Data.SQL
             {
                 UserId = Convert.ToInt32(reader["Id"]),
                 Name = reader["Name"] as string,
-                Password = reader["Password"] as string,
                 Email = reader["Email"] as string,
                 LastLogin = GetReaderValue<DateTime?>(reader, "LastLogin"),
                 Status = (Entities.UserStatus)reader["Status"],
@@ -88,6 +92,5 @@ namespace Vanrise.Security.Data.SQL
         }
         
         #endregion
-
     }
 }
