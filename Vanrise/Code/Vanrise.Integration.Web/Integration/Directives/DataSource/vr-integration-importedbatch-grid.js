@@ -41,7 +41,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceImported
                 var drillDownDefinitions = [];
                 var drillDownDefinition = {};
 
-                drillDownDefinition.title = "Queue Item Header";
+                drillDownDefinition.title = "Queue Items";
                 drillDownDefinition.directive = "vr-queueing-queueitemheader-grid";
 
                 drillDownDefinition.loadDirective = function (directiveAPI, dataItem) {
