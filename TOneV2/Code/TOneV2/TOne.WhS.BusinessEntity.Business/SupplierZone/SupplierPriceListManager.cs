@@ -33,6 +33,13 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierPriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
             return dataManager.SavePriceList(priceListStatus, effectiveOnDateTime, supplierId, priceListType, activeSupplierEmail, contentBytes, fileName, "Portal", out  insertdId);
         }
+
+        public int GetQueueStatus(int queueId)
+        {
+            ISupplierPriceListDataManager dataManager =
+                BEDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
+            return dataManager.GetQueueStatus(queueId);
+        }
         public IEnumerable<SupplierPriceList> GetFilteredSupplierPriceLists(SupplierPricelistFilter filter)
         {
             List<SupplierPriceList> priceLists = GetCachedPriceLists();
