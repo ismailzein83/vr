@@ -36,7 +36,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Assigning Cases ");
 
-            CaseManagmentManager manager = new CaseManagmentManager();
+            AccountCaseManager manager = new AccountCaseManager();
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {

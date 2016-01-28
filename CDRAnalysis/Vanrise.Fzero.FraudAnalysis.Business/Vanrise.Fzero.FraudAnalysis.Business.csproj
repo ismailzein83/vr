@@ -100,10 +100,9 @@
     <Compile Include="FraudManager.cs" />
     <Compile Include="CallClassManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CaseManagmentManager.cs" />
     <Compile Include="NumberProfileManager.cs" />
     <Compile Include="PeriodManager.cs" />
-    <Compile Include="RelatedNumbersManager.cs" />
+    <Compile Include="RelatedNumberManager.cs" />
     <Compile Include="ReportingManager.cs" />
     <Compile Include="StrategyExecutionItemManager.cs" />
     <Compile Include="StrategyExecutionManager.cs" />

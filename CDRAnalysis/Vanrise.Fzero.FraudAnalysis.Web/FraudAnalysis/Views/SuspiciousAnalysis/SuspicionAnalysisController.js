@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-SuspicionAnalysisController.$inject = ["$scope", "CaseManagementAPIService", "StrategyAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService", "VRValidationService"];
+SuspicionAnalysisController.$inject = ["$scope", "StrategyAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService", "VRValidationService",'CDRAnalysis_FA_AccountCaseAPIService'];
 
-function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyAPIService, SuspicionLevelEnum, CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, VRModalService, VRNavigationService, VRValidationService) {
+function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionLevelEnum, CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, VRModalService, VRNavigationService, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService) {
 
     var gridAPI = undefined;
 
@@ -47,7 +47,7 @@ function SuspicionAnalysisController($scope, CaseManagementAPIService, StrategyA
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
-            return CaseManagementAPIService.GetFilteredAccountSuspicionSummaries(dataRetrievalInput)
+            return CDRAnalysis_FA_AccountCaseAPIService.GetFilteredAccountSuspicionSummaries(dataRetrievalInput)
                 .then(function (response) {
 
                     angular.forEach(response.Data, function (item) {

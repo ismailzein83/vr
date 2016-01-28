@@ -11,13 +11,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public class AccountInfoDataManager : BaseSQLDataManager, IAccountInfoDataManager
     {
-
+       
+        #region ctor
         public AccountInfoDataManager()
             : base("CDRDBConnectionString")
         {
 
         }
-
+        #endregion
+     
+        #region Public Methods
         public void LoadAccountInfo(IEnumerable<CaseStatus> caseStatuses, Action<AccountInfo> onBatchReady)
         {
 
@@ -39,6 +42,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             }, caseStatuses != null ? String.Join(",", caseStatuses.Select(itm => (int)itm)) : null
             );
         }
+        public bool InsertOrUpdateAccountInfo(string accountNumber, InfoDetail infoDetail)
+        {
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountInfo_InsertOrUpdate", accountNumber, Vanrise.Common.Serializer.Serialize(infoDetail));
+            return (recordsAffected > 0);
+        }
+      
+        #endregion
 
     }
 }

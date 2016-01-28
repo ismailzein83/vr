@@ -77,12 +77,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NormalCDRDataManager.cs" />
     <Compile Include="PeriodDataManager.cs" />
-    <Compile Include="RelatedNumbersDataManager.cs" />
     <Compile Include="ReportingDataManager.cs" />
     <Compile Include="FilterDataManager.cs" />
     <Compile Include="StrategyExecutionDataManager.cs" />
     <Compile Include="StrategyDataManager.cs" />
-    <Compile Include="CaseManagementDataManager.cs" />
     <Compile Include="StrategyExecutionItemDataManager.cs" />
   </ItemGroup>
   <ItemGroup>

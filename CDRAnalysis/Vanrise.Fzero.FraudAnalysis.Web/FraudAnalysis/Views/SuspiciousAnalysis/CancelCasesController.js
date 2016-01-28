@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-CancelCasesController.$inject = ["$scope", "CaseManagementAPIService", "StrategyAPIService", "VRNotificationService", "LabelColorsEnum", "UtilsService", "CaseStatusEnum", "VRValidationService"];
+CancelCasesController.$inject = ["$scope", "StrategyAPIService", "VRNotificationService", "LabelColorsEnum", "UtilsService", "CaseStatusEnum", "VRValidationService",'CDRAnalysis_FA_AccountCaseAPIService'];
 
-function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIService, VRNotificationService, LabelColorsEnum, UtilsService, CaseStatusEnum, VRValidationService ) {
+function CancelCasesController($scope, StrategyAPIService, VRNotificationService, LabelColorsEnum, UtilsService, CaseStatusEnum, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService) {
 
     var gridAPI;
 
@@ -41,7 +41,7 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
-            return CaseManagementAPIService.GetFilteredCasesByFilters(dataRetrievalInput)
+            return CDRAnalysis_FA_AccountCaseAPIService.GetFilteredCasesByFilters(dataRetrievalInput)
             .then(function (response) {
 
                 angular.forEach(response.Data, function (item) {
@@ -98,7 +98,7 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
                 if (response == true) {
                     $scope.isGettingData = true;
                     var accountCaseObject = buildAccountCaseObjectFromScope();
-                    return CaseManagementAPIService.CancelAccountCases(accountCaseObject)
+                    return CDRAnalysis_FA_AccountCaseAPIService.CancelAccountCases(accountCaseObject)
                                           .then(function (response) {
                                               if (VRNotificationService.notifyOnItemUpdated("Account Cases", response)) {
                                                   $scope.isGettingData = false;
@@ -128,7 +128,7 @@ function CancelCasesController($scope, CaseManagementAPIService, StrategyAPIServ
                         selectedCaseIDs.push(item.CaseID);
                     });
 
-                    return CaseManagementAPIService.CancelSelectedAccountCases(selectedCaseIDs)
+                    return CDRAnalysis_FA_AccountCaseAPIService.CancelSelectedAccountCases(selectedCaseIDs)
                                           .then(function (response) {
                                               if (VRNotificationService.notifyOnItemUpdated("Account Cases", response)) {
                                                   $scope.isGettingData = false;

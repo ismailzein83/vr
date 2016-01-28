@@ -68,8 +68,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Collecting Suspicious Numbers ");
 
             Dictionary<int, FraudManager> fraudManagers = new Dictionary<int, FraudManager>();
-            ICaseManagementDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICaseManagementDataManager>();
-
+          
             List<Strategy> strategies = new List<Strategy>();
             foreach (var strategiesExecutionInfo in inputArgument.StrategiesExecutionInfo)
             {

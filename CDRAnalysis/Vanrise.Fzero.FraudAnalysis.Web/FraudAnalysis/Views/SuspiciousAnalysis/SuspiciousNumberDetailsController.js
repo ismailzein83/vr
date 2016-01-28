@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-SuspiciousNumberDetailsController.$inject = ["$scope", "CaseManagementAPIService", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "VR_Sec_UserAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "CallTypeEnum", "LabelColorsEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService", "VRValidationService"];
+SuspiciousNumberDetailsController.$inject = ["$scope", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "VR_Sec_UserAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "CallTypeEnum", "LabelColorsEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService", "VRValidationService",'CDRAnalysis_FA_AccountCaseAPIService','CDRAnalysis_FA_RelatedNumberAPIService','CDRAnalysis_FA_StrategyExecutionItemAPIService'];
 
-function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService, VR_Sec_UserAPIService, SuspicionLevelEnum, CaseStatusEnum, CallTypeEnum, LabelColorsEnum, UtilsService, VRNavigationService, VRNotificationService, VRModalService, VRValidationService) {
+function SuspiciousNumberDetailsController($scope, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService, VR_Sec_UserAPIService, SuspicionLevelEnum, CaseStatusEnum, CallTypeEnum, LabelColorsEnum, UtilsService, VRNavigationService, VRNotificationService, VRModalService, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService, CDRAnalysis_FA_RelatedNumberAPIService, CDRAnalysis_FA_StrategyExecutionItemAPIService) {
     var gridOccurances_ReadyPromiseDeferred = UtilsService.createPromiseDeferred();
     var gridAPI_Occurances = undefined;
     var occurancesLoaded = false;
@@ -135,7 +135,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         $scope.dataRetrievalFunction_Occurances = function (dataRetrievalInput, onResponseReady) {
 
-            return CaseManagementAPIService.GetFilteredDetailsByCaseID(dataRetrievalInput)
+            return CDRAnalysis_FA_StrategyExecutionItemAPIService.GetFilteredDetailsByCaseID(dataRetrievalInput)
             .then(function (response) {
 
                 occurancesLoaded = true;
@@ -188,7 +188,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
 
         $scope.dataRetrievalFunction_CaseHistory = function (dataRetrievalInput, onResponseReady) {
 
-            return CaseManagementAPIService.GetFilteredCasesByAccountNumber(dataRetrievalInput)
+            return CDRAnalysis_FA_AccountCaseAPIService.GetFilteredCasesByAccountNumber(dataRetrievalInput)
             .then(function (response) {
                 casesLoaded = true;
 
@@ -209,7 +209,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         
 
         $scope.updateAccountCase = function () {            
-            return CaseManagementAPIService.UpdateAccountCase({
+            return CDRAnalysis_FA_AccountCaseAPIService.UpdateAccountCase({
                 AccountNumber: $scope.accountNumber,
                 CaseStatus: $scope.selectedCaseStatus.value,
                 ValidTill: $scope.validTill,
@@ -415,9 +415,9 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
         function getAccountCase() {
             var local_getAccountCasePromise;
             if ($scope.caseID == undefined)
-                local_getAccountCasePromise = CaseManagementAPIService.GetLastAccountCase($scope.accountNumber);
+                local_getAccountCasePromise = CDRAnalysis_FA_AccountCaseAPIService.GetLastAccountCase($scope.accountNumber);
             else
-                local_getAccountCasePromise = CaseManagementAPIService.GetAccountCase($scope.caseID);
+                local_getAccountCasePromise = CDRAnalysis_FA_AccountCaseAPIService.GetAccountCase($scope.caseID);
             local_getAccountCasePromise
                 .then(function (response) {
                     if (response != null) {
@@ -491,7 +491,7 @@ function SuspiciousNumberDetailsController($scope, CaseManagementAPIService, Nor
     function loadRelatedNumbers() {
         $scope.relatedNumbers = [];
 
-        return CaseManagementAPIService.GetRelatedNumbersByAccountNumber($scope.accountNumber)
+        return CDRAnalysis_FA_RelatedNumberAPIService.GetRelatedNumbersByAccountNumber($scope.accountNumber)
             .then(function (response) {
 
                 angular.forEach(response, function (item) {

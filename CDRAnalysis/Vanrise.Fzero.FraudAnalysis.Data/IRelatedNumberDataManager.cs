@@ -1,4 +1,5 @@
-﻿using Vanrise.Fzero.FraudAnalysis.Entities;
+﻿using System.Collections.Generic;
+using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data
 {
@@ -9,5 +10,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
         void CreateTempTable();
 
         void SwapTableWithTemp();
+        List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber);
     }
 }

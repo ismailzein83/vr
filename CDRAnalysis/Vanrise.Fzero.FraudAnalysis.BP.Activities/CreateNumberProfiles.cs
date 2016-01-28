@@ -151,8 +151,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             HashSet<string> whiteListNumbersHashSet = new HashSet<string>();
             if (!inputArgument.IncludeWhiteList)
             {
-                IAccountStatusDataManager accountStatusDataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
-                var whiteListNumbers = accountStatusDataManager.GetAccountNumbersByNumberPrefixAndStatuses(new List<CaseStatus> { CaseStatus.ClosedWhiteList}, inputArgument.NumberPrefixes);
+                AccountStatusManager accountStatusManager = new AccountStatusManager();
+                var whiteListNumbers = accountStatusManager.GetAccountNumbersByNumberPrefixAndStatuses(new List<CaseStatus> { CaseStatus.ClosedWhiteList }, inputArgument.NumberPrefixes);
                 whiteListNumbersHashSet = new HashSet<string>(whiteListNumbers);
             }
 

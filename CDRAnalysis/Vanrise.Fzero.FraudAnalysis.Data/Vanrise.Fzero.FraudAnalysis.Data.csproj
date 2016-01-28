@@ -74,7 +74,6 @@
     <Compile Include="IFilterDataManager.cs" />
     <Compile Include="IStrategyExecutionDataManager.cs" />
     <Compile Include="IStrategyDataManager.cs" />
-    <Compile Include="ICaseManagementDataManager.cs" />
     <Compile Include="IStrategyExecutionItemDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

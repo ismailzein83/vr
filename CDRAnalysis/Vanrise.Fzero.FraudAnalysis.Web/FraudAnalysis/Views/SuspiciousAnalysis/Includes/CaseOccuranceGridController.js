@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-CaseOccuranceGridController.$inject = ["$scope", "CaseManagementAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService"];
+CaseOccuranceGridController.$inject = ["$scope", "SuspicionLevelEnum", "CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService",'CDRAnalysis_FA_AccountCaseHistoryAPIService','CDRAnalysis_FA_StrategyExecutionItemAPIService'];
 
-function CaseOccuranceGridController($scope, CaseManagementAPIService, SuspicionLevelEnum, CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService) {
+function CaseOccuranceGridController($scope, SuspicionLevelEnum, CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, CDRAnalysis_FA_AccountCaseHistoryAPIService, CDRAnalysis_FA_StrategyExecutionItemAPIService) {
 
     var gridApi = undefined;
     var gridApi_Logs = undefined;
@@ -30,7 +30,7 @@ function CaseOccuranceGridController($scope, CaseManagementAPIService, Suspicion
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             
-            return CaseManagementAPIService.GetFilteredDetailsByCaseID(dataRetrievalInput)
+            return CDRAnalysis_FA_StrategyExecutionItemAPIService.GetFilteredDetailsByCaseID(dataRetrievalInput)
                 .then(function (response) {
                     angular.forEach(response.Data, function (item) {
                         var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
@@ -46,7 +46,7 @@ function CaseOccuranceGridController($scope, CaseManagementAPIService, Suspicion
 
         $scope.dataRetrievalFunction_Logs = function (dataRetrievalInput, onResponseReady) {
 
-            return CaseManagementAPIService.GetFilteredAccountCaseHistoryByCaseID(dataRetrievalInput)
+            return CDRAnalysis_FA_AccountCaseHistoryAPIService.GetFilteredAccountCaseHistoryByCaseID(dataRetrievalInput)
                 .then(function (response) {
 
                     angular.forEach(response.Data, function (item) {
