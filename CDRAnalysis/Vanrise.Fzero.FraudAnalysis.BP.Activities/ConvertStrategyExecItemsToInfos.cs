@@ -29,7 +29,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             {
                 StrategyExecutionInfo info = new StrategyExecutionInfo
                 {
-                    Strategy = strategyManager.GetStrategyById(item.StrategyId),
+                    Strategy = strategyManager.GetStrategy(item.StrategyId),
                     StrategyExecutionId = item.StrategyExecutionId
                 };
                 infos.Add(info);

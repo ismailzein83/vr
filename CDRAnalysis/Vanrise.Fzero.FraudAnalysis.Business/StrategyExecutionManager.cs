@@ -54,7 +54,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 if (processInstances.TryGetValue(i.ProcessID, out status))
                     item.Status = status;
 
-                strategy = strategyManager.GetStrategyById(i.StrategyID);
+                strategy = strategyManager.GetStrategy(i.StrategyID);
                 if (strategy != null)
                     item.StrategyName = strategy.Name;
 

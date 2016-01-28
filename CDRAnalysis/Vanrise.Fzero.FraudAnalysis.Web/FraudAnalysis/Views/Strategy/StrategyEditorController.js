@@ -2,16 +2,21 @@
 
     'use strict';
 
-    StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'SuspicionLevelEnum', 'HourEnum', 'VRUIUtilsService'];
+    StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'SuspicionLevelEnum', 'HourEnum', 'VRUIUtilsService', 'CDRAnalysis_FA_PeriodEnum', 'CDRAnalysis_FA_ParametersService'];
 
-    function StrategyEditorController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, SuspicionLevelEnum, HourEnum, VRUIUtilsService) {
+    function StrategyEditorController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, SuspicionLevelEnum, HourEnum, VRUIUtilsService, CDRAnalysis_FA_PeriodEnum, CDRAnalysis_FA_ParametersService) {
         var isEditMode;
 
         var periodSelectorAPI;
         var periodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         
+        var hourSelectorAPI;
+        var hourSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var strategyId;
         var strategyEntity;
+
+        var filterDefinitions;
 
         loadParameters();
         defineScope();
@@ -28,55 +33,17 @@
         }
 
         function defineScope() {
-            // ?
-            $scope.filterDefinitions = [];
-
             // Directives
             $scope.onPeriodSelectorReady = function (api) {
                 periodSelectorAPI = api;
                 periodSelectorReadyDeferred.resolve();
             };
-            
-            // Strategy filters
-            $scope.showSwitch = function (filter) {
-                if (filter.excludeHourly && periodSelectorAPI.getSelectedIds() == 1) {
-                    filter.isSelected = false;
-                    return false;
-                }
-                return true;
-            };
-            $scope.showParametersHint = function (item) {
-                if (item.parameters != undefined) {
-                    if (item.parameters.length > 0)
-                        return 'This filter requires the following parameter(s): ' + item.parameters.join(',');
-                }
-                return;
-            };
-            $scope.hasParameters = function (item) {
-                if (item.parameters != undefined) {
-                    return (item.parameters.length > 0);
-                }
-                return;
-            };
-            $scope.showFiltersHint = function (parameter) {
-                var filters = [];
-
-                if (parameter != undefined) {
-                    if ($scope.strategyFilters.length > 0) {
-                        angular.forEach($scope.strategyFilters, function (filter) {
-                            if (filter.parameters != undefined)
-                                if (filter.parameters.indexOf(parameter) > -1) {
-                                    filters.push(filter.abbreviation);
-                                }
-                        });
-                        return filters.join(',');
-                    }
-                }
-                return;
+            $scope.onHourSelectorReady = function (api) {
+                hourSelectorAPI = api;
+                hourSelectorReadyDeferred.resolve();
             };
 
             // Strategy parameters
-            $scope.hours = UtilsService.getArrayEnum(HourEnum);
             $scope.strategyFilters = [];
             $scope.selectedPeakHours = [];
 
@@ -84,6 +51,20 @@
             $scope.gapBetweenFailedConsecutiveCalls = 10;
             $scope.maxLowDurationCall = 8;
             $scope.minCountofCallsinActiveHour = 5;
+
+            $scope.getFilterHint = function (parameter) {
+                if (parameter && $scope.strategyFilters) {
+                    var filters = [];
+                    for (var i = 0; i < $scope.strategyFilters.length; i++) {
+                        var filter = $scope.strategyFilters[i];
+                        if (filter.parameters && filter.parameters.indexOf(parameter) > -1) {
+                            filters.push(filter.abbreviation);
+                        }
+                    }
+                    return filters.join(',');
+                }
+                return null;
+            };
 
             // Suspicion rules
             $scope.strategyLevels = [];
@@ -134,18 +115,68 @@
                 $scope.modalContext.closeModal()
             };
 
-            // Junk code
-            //$scope.hasFilters = function (parameter) {
-            //    var found = false;
-            //    if ($scope.strategyFilters.length > 0) {
-            //        angular.forEach($scope.strategyFilters, function (filter) {
-            //            if (filter.parameters.indexOf(parameter) > -1 && filter.isSelected) {
-            //                found = true;
-            //            }
-            //        });
-            //    }
-            //    return found;
-            //}
+            // Validation functions
+            $scope.validateStrategyFilters = function () {
+                if ($scope.strategyFilters.length == 0)
+                    return 'No filters found';
+
+                for (var i = 0; i < $scope.strategyFilters.length; i++) {
+                    if ($scope.strategyFilters[i].isSelected)
+                        return null;
+                }
+                return 'No filter(s) selected';
+            };
+            $scope.validateStrategyLevels = function () {
+                if ($scope.strategyFilters.length == 0) {
+                    //VRNotificationService.showError('No filters found');
+                    return 'No filters found';
+                }
+
+                if ($scope.strategyLevels.length == 0) {
+                    //VRNotificationService.showError('No strategy levels added');
+                    return 'No strategy levels added';
+                }
+
+                var filtersToUseCount = 0;
+                var filterUsages = [];
+                for (var i = 0; i < $scope.strategyFilters.length; i++) {
+                    var filterUsage = {
+                        mustBeUsed: $scope.strategyFilters[i].isSelected,
+                        isUsed: false
+                    };
+
+                    if (filterUsage.mustBeUsed)
+                        filtersToUseCount++;
+
+                    filterUsages.push(filterUsage);
+                }
+
+                for (var i = 0; i < $scope.strategyLevels.length; i++) {
+                    var strategyLevel = $scope.strategyLevels[i];
+
+                    for (var j = 0; j < strategyLevel.StrategyLevelCriterias.length; j++) {
+                        if ($scope.strategyFilters[j].isSelected) {
+                            if (!filterUsages[j].isUsed) {
+                                filterUsages[j].isUsed = strategyLevel.StrategyLevelCriterias[j].isSelected;
+                            }
+                        }
+                    }
+                }
+
+                var usedFiltersCount = 0;
+                for (var i = 0; i < filterUsages.length; i++) {
+                    if (filterUsages[i].mustBeUsed && filterUsages[i].isUsed) {
+                        usedFiltersCount++;
+                    }
+                }
+
+                if (usedFiltersCount < filtersToUseCount) {
+                    //VRNotificationService.showError('Not all selected filters are used');
+                    return 'Not all selected filters are used';
+                }
+
+                return null;
+            };
         }
 
         function load() {
@@ -173,14 +204,13 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticControls, loadPeriodSelector, loadFilters]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticControls, loadPeriodSelector, loadHourSelector, loadFilters]).then(function () {
                 if (isEditMode) {
-                    loadPeakHoursForEditMode();
-                    setFiltersForEditMode();
+                    loadStrategyFiltersForEditMode();
+                    loadStrategyLevelsForEditMode();
                 }
                 else {
-                    loadPeakHoursForAddMode();
-                    setFiltersForAddMode();
+                    loadStrategyFiltersForAddMode();
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -201,36 +231,6 @@
                     $scope.gapBetweenFailedConsecutiveCalls = strategyEntity.GapBetweenFailedConsecutiveCalls;
                     $scope.maxLowDurationCall = strategyEntity.MaxLowDurationCall;
                     $scope.minCountofCallsinActiveHour = strategyEntity.MinimumCountofCallsinActiveHour;
-                    
-                    loadStrategyLevels();
-                }
-
-                function loadStrategyLevels() {
-                    angular.forEach(strategyEntity.StrategyLevels, function (level) {
-                        var strategyLevelItem = {
-                            suspicionLevel: UtilsService.getItemByVal($scope.suspicionLevels, level.SuspicionLevelId, 'value'),
-                            StrategyLevelCriterias: []
-                        };
-
-                        angular.forEach($scope.filterDefinitions, function (filterDef) {
-
-                            var levelCriteriaItem = {
-                                filterId: filterDef.FilterId,
-                                upSign: filterDef.upSign,
-                                downSign: filterDef.downSign,
-                                percentage: 0
-                            };
-
-                            var existingItem = UtilsService.getItemByVal(level.StrategyLevelCriterias, filterDef.filterId, 'FilterId');
-                            if (existingItem != undefined && existingItem != null) {
-                                levelCriteriaItem.isSelected = true;
-                                levelCriteriaItem.percentage = ((parseFloat(existingItem.Percentage) * 100) - 100);
-                            }
-                            strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
-                        });
-
-                        $scope.strategyLevels.push(strategyLevelItem);
-                    });
                 }
             }
             function loadPeriodSelector() {
@@ -245,124 +245,175 @@
 
                 return periodSelectorLoadDeferred.promise;
             }
+            function loadHourSelector() {
+                var hourSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                hourSelectorReadyDeferred.promise.then(function () {
+                    var selectedIds;
+                    if (strategyEntity != undefined) {
+                        if (strategyEntity.PeakHours != null) {
+                            selectedIds = [];
+                            for (var i = 0; i < strategyEntity.PeakHours.length; i++) {
+                                selectedIds.push(strategyEntity.PeakHours[i].Id);
+                            }
+                        }
+                        callDirectiveLoad(selectedIds);
+                    }
+                    else {
+                        CDRAnalysis_FA_ParametersService.getDefaultPeakHourIds().then(function (response) {
+                            callDirectiveLoad(response);
+                        });
+                    }
+                });
+
+                return hourSelectorLoadDeferred.promise;
+
+                function callDirectiveLoad(selectedIds) {
+                    var hourSelectorPayload = {
+                        selectedIds: selectedIds
+                    };
+                    VRUIUtilsService.callDirectiveLoad(hourSelectorAPI, hourSelectorPayload, hourSelectorLoadDeferred);
+                }
+            }
             function loadFilters() {
                 return StrategyAPIService.GetFilters().then(function (response) {
-                    angular.forEach(response, function (itm) {
-                        $scope.filterDefinitions.push({
-                            filterId: itm.FilterId,
-                            description: itm.Description,
-                            abbreviation: itm.Abbreviation,
-                            label: itm.Label,
-                            minValue: itm.MinValue,
-                            maxValue: itm.MaxValue,
-                            decimalPrecision: itm.DecimalPrecision,
-                            excludeHourly: itm.ExcludeHourly,
-                            toolTip: itm.ToolTip,
-                            upSign: itm.UpSign,
-                            downSign: itm.DownSign,
-                            parameters: itm.Parameters
-                        });
+                    if (response) {
+                        filterDefinitions = [];
+
+                        for (var i = 0; i < response.length; i++) {
+                            var filterDef = {};
+
+                            filterDef.filterId =  response[i].FilterId,
+                            filterDef.description = response[i].Description,
+                            filterDef.abbreviation = response[i].Abbreviation,
+                            filterDef.label = response[i].Label,
+                            filterDef.minValue = response[i].MinValue,
+                            filterDef.maxValue = response[i].MaxValue,
+                            filterDef.decimalPrecision = response[i].DecimalPrecision,
+                            filterDef.excludeHourly = response[i].ExcludeHourly,
+                            filterDef.toolTip = response[i].ToolTip,
+                            filterDef.upSign = response[i].UpSign,
+                            filterDef.downSign = response[i].DownSign,
+                            filterDef.parameters = response[i].Parameters
+
+                            filterDefinitions.push(filterDef);
+                        }
+                    }
+                });
+            }
+            function loadStrategyLevelsForEditMode() {
+                angular.forEach(strategyEntity.StrategyLevels, function (level) {
+                    var strategyLevelItem = {
+                        suspicionLevel: UtilsService.getItemByVal($scope.suspicionLevels, level.SuspicionLevelId, 'value'),
+                        StrategyLevelCriterias: []
+                    };
+
+                    angular.forEach(filterDefinitions, function (filterDef) {
+
+                        var levelCriteriaItem = {
+                            filterId: filterDef.FilterId,
+                            upSign: filterDef.upSign,
+                            downSign: filterDef.downSign,
+                            percentage: 0
+                        };
+
+                        var existingItem = UtilsService.getItemByVal(level.StrategyLevelCriterias, filterDef.filterId, 'FilterId');
+                        if (existingItem != undefined && existingItem != null) {
+                            levelCriteriaItem.isSelected = true;
+                            levelCriteriaItem.percentage = ((parseFloat(existingItem.Percentage) * 100) - 100);
+                        }
+                        strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
                     });
+
+                    $scope.strategyLevels.push(strategyLevelItem);
                 });
             }
-
-            function setFiltersForAddMode() {
-                angular.forEach($scope.filterDefinitions, function (filterDef) {
-                    var filterItem = {
-                        filterId: filterDef.filterId,
-                        description: filterDef.description,
-                        abbreviation: filterDef.abbreviation,
-                        label: filterDef.label,
-                        minValue: filterDef.minValue,
-                        maxValue: filterDef.maxValue,
-                        decimalPrecision: filterDef.decimalPrecision,
-                        excludeHourly: filterDef.excludeHourly,
-                        toolTip: filterDef.toolTip,
-                        upSign: filterDef.upSign,
-                        downSign: filterDef.downSign,
-                        parameters: filterDef.parameters
-                    };
-                    $scope.strategyFilters.push(filterItem);
-                });
-            }
-            function setFiltersForEditMode() {
-                angular.forEach($scope.filterDefinitions, function (filterDef) {
-                    var filterItem = {
-                        filterId: filterDef.filterId,
-                        description: filterDef.description,
-                        abbreviation: filterDef.abbreviation,
-                        label: filterDef.label,
-                        minValue: filterDef.minValue,
-                        maxValue: filterDef.maxValue,
-                        decimalPrecision: filterDef.decimalPrecision,
-                        excludeHourly: filterDef.excludeHourly,
-                        toolTip: filterDef.toolTip,
-                        upSign: filterDef.upSign,
-                        downSign: filterDef.downSign,
-                        parameters: filterDef.parameters
-                    };
-
-                    var existingItem = UtilsService.getItemByVal(strategyEntity.StrategyFilters, filterDef.filterId, 'FilterId');
-
-                    if (existingItem != undefined && existingItem != null) {
-                        filterItem.isSelected = true;
-                        filterItem.threshold = existingItem.Threshold;
-                    }
-
-                    $scope.strategyFilters.push(filterItem);
-                });
-            }
-            function loadPeakHoursForAddMode() {
-                for (var i = 0; i < $scope.hours; i++) {
-                    if ($scope.hours[i].id >= 12 && $scope.hours[i].id <= 17) {
-                        $scope.selectedPeakHours.push($scope.hours[i]);
+            function loadStrategyFiltersForAddMode() {
+                if (filterDefinitions) {
+                    for (var i = 0; i < filterDefinitions.length; i++) {
+                        var strategyFilter = getStrategyFilterDataItemWithCommonProperties(filterDefinitions[i]);
+                        $scope.strategyFilters.push(strategyFilter);
                     }
                 }
             }
-            function loadPeakHoursForEditMode() {
-                if (strategyEntity.PeakHours) {
-                    for (var i = 0; i < strategyEntity.PeakHours.length; i++) {
-                        $scope.selectedPeakHours.push({
-                            id: strategyEntity.PeakHours[i].Id,
-                            name: strategyEntity.PeakHours[i].Name
-                        });
+            function loadStrategyFiltersForEditMode() {
+                if (filterDefinitions) {
+                    for (var i = 0; i < filterDefinitions.length; i++) {
+                        var strategyFilter = getStrategyFilterDataItemWithCommonProperties(filterDefinitions[i]);
+
+                        if (strategyEntity != null) {
+                            var entityStrategyFilter = UtilsService.getItemByVal(strategyEntity.StrategyFilters, strategyFilter.filterId, 'FilterId');
+                            if (entityStrategyFilter != null) {
+                                strategyFilter.isSelected = true;
+                                strategyFilter.threshold = entityStrategyFilter.Threshold;
+                            }
+                        }
+
+                        $scope.strategyFilters.push(strategyFilter);
                     }
                 }
+            }
+            function getStrategyFilterDataItemWithCommonProperties(filterDef) {
+                var item = {};
+
+                item.filterId = filterDef.filterId;
+                item.description = filterDef.description;
+                item.abbreviation = filterDef.abbreviation;
+                item.label = filterDef.label;
+                item.minValue = filterDef.minValue;
+                item.maxValue = filterDef.maxValue;
+                item.decimalPrecision = filterDef.decimalPrecision;
+                item.excludeHourly = filterDef.excludeHourly;
+                item.toolTip = filterDef.toolTip;
+                item.upSign = filterDef.upSign;
+                item.downSign = filterDef.downSign;
+                item.parameters = filterDef.parameters;
+
+                if (item.parameters != null && item.parameters.length > 0) {
+                    item.hint = 'This filter requires the following parameter(s): ' + item.parameters.join(',');
+                    item.hasParameters = true;
+                }
+                else {
+                    item.hint = null;
+                    item.hasParameters = false;
+                }
+
+                if (item.excludeHourly && periodSelectorAPI.getSelectedIds() == CDRAnalysis_FA_PeriodEnum.Hourly.value) {
+                    item.isSelected = false;
+                    item.isShown = false;
+                }
+                else {
+                    item.isShown = true;
+                }
+
+                return item;
             }
         }
 
         function addStrategy() {
             var strategyObject = buildStrategyObjFromScope();
-
-            if (isValid(strategyObject)) {
-                return StrategyAPIService.AddStrategy(strategyObject)
-              .then(function (response) {
-                  if (VRNotificationService.notifyOnItemAdded('Strategy', response, 'Name')) {
-                      if ($scope.onStrategyAdded != undefined)
-                          $scope.onStrategyAdded(response.InsertedObject);
-                      $scope.modalContext.closeModal();
-                  }
-              }).catch(function (error) {
-                  VRNotificationService.notifyException(error, $scope);
-              });
-            }
+            return StrategyAPIService.AddStrategy(strategyObject).then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded('Strategy', response, 'Name')) {
+                    if ($scope.onStrategyAdded != undefined)
+                        $scope.onStrategyAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
         }
 
         function updateStrategy() {
             var strategyObject = buildStrategyObjFromScope();
-
-            if (isValid(strategyObject)) {
-                return StrategyAPIService.UpdateStrategy(strategyObject)
-                                  .then(function (response) {
-                                      if (VRNotificationService.notifyOnItemUpdated('Strategy', response, 'Name')) {
-                                          if ($scope.onStrategyUpdated != undefined)
-                                              $scope.onStrategyUpdated(response.UpdatedObject);
-                                          $scope.modalContext.closeModal();
-                                      }
-                                  }).catch(function (error) {
-                                      VRNotificationService.notifyException(error, $scope);
-                                  });
-            }
+            return StrategyAPIService.UpdateStrategy(strategyObject).then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated('Strategy', response, 'Name')) {
+                    if ($scope.onStrategyUpdated != undefined)
+                        $scope.onStrategyUpdated(response.UpdatedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
         }
 
         function buildStrategyObjFromScope() {
@@ -418,41 +469,6 @@
             });
 
             return strategyObject;
-        }
-
-        function isValid(strategyObject) {
-            var countStrategyFilters = 0;
-            var countStrategyLevels = 0;
-
-
-            angular.forEach(strategyObject.StrategyFilters, function (itm) {
-                countStrategyFilters++;
-            });
-
-
-            angular.forEach(strategyObject.StrategyLevels, function (level) {
-                angular.forEach(level.StrategyLevelCriterias, function (itm) {
-                    countStrategyLevels++;
-                });
-            });
-
-
-
-
-            if (countStrategyFilters == 0) {
-                VRNotificationService.showError('At least one filter should be specified in a strategy. ');
-                return false;
-
-            }
-
-            if (countStrategyLevels == 0) {
-                VRNotificationService.showError('At least one rule with filter(s) should be specified in a strategy. ');
-                return false;
-
-            }
-
-
-            return true;
         }
     }
 

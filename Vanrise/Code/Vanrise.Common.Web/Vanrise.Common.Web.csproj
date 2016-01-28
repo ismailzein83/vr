@@ -173,6 +173,7 @@
     <Content Include="Common\Directives\GenericDataRecord\Templates\DataRecordFieldGrid.html" />
     <Content Include="Common\Directives\GenericDataRecord\vr-common-datarecordtype-grid.js" />
     <Content Include="Common\Directives\GenericDataRecord\vr-common-datarecordfield-grid.js" />
+    <Content Include="Common\Directives\Hour\vr-common-hour-selector.js" />
     <Content Include="Common\Directives\MainExtensions\GenericDataRecord\Templates\SelectiveBooleanDirectiveTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\GenericDataRecord\Templates\SelectiveChoicesDirectiveTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\GenericDataRecord\Templates\SelectiveDateTimeDirectiveTemplate.html" />

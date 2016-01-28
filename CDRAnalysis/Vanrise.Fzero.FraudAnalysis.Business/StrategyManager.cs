@@ -43,10 +43,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedStrategies.ToBigResult(input, filterExpression, StrategyDetailMapper));
         }
 
-        public Strategy GetStrategyById(int StrategyId)
+        public Strategy GetStrategy(int strategyId)
         {
-            var strategies = GetCachedStrategies();
-            return strategies.GetRecord(StrategyId);
+            var cachedStrategies = GetCachedStrategies();
+            return cachedStrategies.GetRecord(strategyId);
         }
 
         public IEnumerable<Strategy> GetStrategies()
@@ -57,7 +57,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         public int? GetStrategyPeriodId(int strategyId)
         {
-            Strategy strategy = GetStrategyById(strategyId);
+            Strategy strategy = GetStrategy(strategyId);
             
             if (strategy != null)
                 return strategy.PeriodId;

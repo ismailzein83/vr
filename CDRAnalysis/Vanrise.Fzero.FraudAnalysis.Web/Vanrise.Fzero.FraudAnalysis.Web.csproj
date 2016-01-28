@@ -210,6 +210,7 @@
     <Content Include="FraudAnalysis\Constants\SuspicionOccuranceStatusEnum.js" />
     <Content Include="FraudAnalysis\Constants\SuspicionLevelEnum.js" />
     <Content Include="FraudAnalysis\Constants\HourEnum.js" />
+    <Content Include="FraudAnalysis\Directives\Hour\cdranalysis-fa-hour-selector.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\Templates\FindRelatedNumbersManualTemplate.html" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\Templates\ExcuteStrategyManualTemplate.html" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\Templates\NumberProfilingManualTemplate.html" />
@@ -238,6 +239,7 @@
     <Content Include="FraudAnalysis\Services\APIServices\StrategyExecutionAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyExecutionItemAPIService.js" />
     <Content Include="FraudAnalysis\Services\MainService.js" />
+    <Content Include="FraudAnalysis\Services\ParametersService.js" />
     <Content Include="FraudAnalysis\Services\StrategyService.js" />
     <Content Include="FraudAnalysis\Views\Dialogs\NewNumberPrefixDialog.html" />
     <Content Include="FraudAnalysis\Views\Dialogs\NewNumberPrefixDialogController.js" />

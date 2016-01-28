@@ -2,9 +2,9 @@
 
     'use strict';
 
-    StrategyAPIService.$inject = ['BaseAPIService'];
+    StrategyAPIService.$inject = ['BaseAPIService', 'UtilsService', 'CDRAnalysis_FA_ModuleConfig'];
 
-    function StrategyAPIService(BaseAPIService) {
+    function StrategyAPIService(BaseAPIService, UtilsService, CDRAnalysis_FA_ModuleConfig) {
         return ({
             GetFilteredStrategies: GetFilteredStrategies,
             GetStrategies: GetStrategies,
@@ -16,44 +16,36 @@
         });
 
         function GetFilteredStrategies(input) {
-            return BaseAPIService.post("/api/Strategy/GetFilteredStrategies", input
-               );
+            return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, 'Strategy', 'GetFilteredStrategies'), input);
         }
 
         function GetStrategies(periodId, isEnabled) {
-            return BaseAPIService.get("/api/Strategy/GetStrategies",
-                {
-                    PeriodId: periodId,
-                    IsEnabled: isEnabled
-                });
+            return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, 'Strategy', 'GetStrategies'), {
+                PeriodId: periodId,
+                IsEnabled: isEnabled
+            });
         }
 
-        function GetStrategy(StrategyId) {
-            return BaseAPIService.get("/api/Strategy/GetStrategy",
-                {
-                    StrategyId: StrategyId
-                }
-               );
+        function GetStrategy(strategyId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, 'Strategy', 'GetStrategy'), {
+                strategyId: strategyId
+            });
         }
 
         function GetFilters() {
-            return BaseAPIService.get("/api/Strategy/GetFilters");
+            return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, 'Strategy', 'GetFilters'));
         }
 
         function GetAggregates() {
-            return BaseAPIService.get("/api/Strategy/GetAggregates");
+            return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, 'Strategy', 'GetAggregates'));
         }
 
         function AddStrategy(strategy) {
-            return BaseAPIService.post("/api/Strategy/AddStrategy",
-                strategy
-               );
+            return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, 'Strategy', 'AddStrategy'), strategy);
         }
 
         function UpdateStrategy(strategy) {
-            return BaseAPIService.post("/api/Strategy/UpdateStrategy",
-                strategy
-               );
+            return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, 'Strategy', 'UpdateStrategy'), strategy);
         }
     }
 

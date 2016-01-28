@@ -36,7 +36,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
             foreach (int strategyID in context.GetValue(StrategyIds))
             {
-                Strategy strategy = strategyManager.GetStrategyById(strategyID);
+                Strategy strategy = strategyManager.GetStrategy(strategyID);
                 if (!strategy.IsEnabled)
                     ContextExtensions.WriteTrackingMessage(context, LogEntryType.Warning, "Strategy named: {0} was not loaded because it is disabled", strategy.Name);
                 else
