@@ -11,5 +11,5 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	Select [ID], [Name], [Email], [Password], [Status], LastLogin, [Description] FROM sec.[User]
+	Select [ID], [Name], [Email], [Status], LastLogin, [Description] FROM sec.[User]
 END

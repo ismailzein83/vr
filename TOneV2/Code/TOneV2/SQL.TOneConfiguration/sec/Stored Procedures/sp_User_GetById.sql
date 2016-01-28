@@ -2,6 +2,6 @@
 	@ID int
 AS
 BEGIN
-	Select [ID], [Name], [Email], [Password], [Status], LastLogin, [Description] FROM sec.[User]
+	Select [ID], [Name], [Email], [Status], LastLogin, [Description] FROM sec.[User]
 	WHERE ID = @ID
 END

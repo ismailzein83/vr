@@ -211,6 +211,7 @@
     <Build Include="common\Stored Procedures\sp_DataRecordField_GetAll.sql" />
     <Build Include="common\Stored Procedures\sp_DataRecordField_Delete.sql" />
     <Build Include="sec\Stored Procedures\sp_UserGroup_GetAll.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_GetPassword.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
