@@ -80,15 +80,15 @@
                 if (assignedOrgChartId) {
                     buildTreeFromOrgHierarchy().then(function () {
                         loadTreeDeferred.resolve();
-                    }).catch(function (error) { loadTreeDeferred.reject(); });
+                    }).catch(function (error) { loadTreeDeferred.reject(error); });
                 }
                 else {
                     buildTreeFromUsers().then(function () {
                         loadTreeDeferred.resolve();
-                    }).catch(function (error) { loadTreeDeferred.reject(); });
+                    }).catch(function (error) { loadTreeDeferred.reject(error); });
                 }
             }).catch(function (error) {
-                loadTreeDeferred.reject();
+                loadTreeDeferred.reject(error);
             });
 
             return loadTreeDeferred.promise;
@@ -125,7 +125,7 @@
                     treeAPI.refreshTree(nodes);
                 });
             }).catch(function (error) {
-                loadHierarchyDeferred.reject();
+                loadHierarchyDeferred.reject(error);
             });
 
             return loadHierarchyDeferred.promise;

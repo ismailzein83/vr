@@ -4,27 +4,44 @@
 	- The good use of filters in selectors (vr-whs-be-routingproduct-selector in business entities)
 	- All business directives should be clean of technical code and events (vr-whs-be-routingproduct-selector in business entities)
 	- Same exits messages should be clear and right parameters are passed (take an example the SellingNumberPlanEditorController in Business Entities, Insert and Update methods)
+	- Pages should have good design (textboxes aligned, suitable width for editors, no white spaces)
+	- For labels, use correct english words (no miss-spelling), in addition the word should not be technical for example, Enabled instead of Is Enabled
+	- All controls on all pages should be used, if a control is not used remove it
+	- Make sure to organize java script methods the same way in all pages as much as you can
+	- Try also to have nested functions when needed to make the page readable
+	- When you are sending a payload to a directive, do not send it as empty object, send it undefined because the checks inside directives are against undefined
+	- Do not use promise deffered unless it is needed, for example when you are waiting a user action to load another directive, no need to create a ready promise deffered for that directive
+	- No need to check against api if different than nulls or undefined in case you are dealing with the grid, as all actions now are user actions like search
+	- Make sure to decrease dependencies between directives:
+		- the case when DW is used
+		- the case when the variable the second directive is depending on can be got from the loaded Entity
 
 Editors:
 	- Using tabs (Routing Product Editor)
+	- Where tabs are used, create a scope modal object and append all variables to this object
 	- Validations
-	- Loaders
+	- Loaders on load and Insert and Update
+
+Management Pages:
+	- return the promise after search click for the loader to appear
+	- put loaders on filter section in case controls are calling server
 
 Grids:
 	- Grids should be directives
-	- Needed menu actions should be called from the service
+	- Grids templates should not have vr row or columns
+	- Needed menu actions should be called from the module service
 	- Make sure call backs are called correctly
-	- Make sure of columns sorting
+	- Try Add, Update and Delete and make sure the items are shown correclty in updated items tab without any errors
+	- Make sure of columns sorting (try all clomuns making sure no errors appear in the console)
 	- Make sure of header texts and columns types
 	- The use of grids drill downs using tabs (check in Common > Country - City, Code Groups betweek FWK and TOne)
-	- Loaders on filter section
 
 Controllers:
 	- Should have the name in the correct format (FWK user VR_ModuleName_XX)
-	- Should have the title set in the Editor
+	- Should have the title set in the Editor (make sure we are using setTitle method inside loadAllControls)
 
 Api Services (Any example in Business Entities of TOne):
-	- Should apply the new convention )
+	- Should apply the new convention
 	- Should use the Module Config
 	- Should have its name in the correct format
 	- Use of Get and Post correctly
