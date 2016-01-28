@@ -61,6 +61,7 @@ namespace Vanrise.Queueing
 
             if (insertActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 executionFlowObj.ExecutionFlowId = executionFlowId;
                 insertOperationOutput.InsertedObject = QueueExecutionFlowMapper(executionFlowObj);
@@ -138,7 +139,7 @@ namespace Vanrise.Queueing
 
             if (updateActionSucc)
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().SetCacheExpired("QueueExecutionFlowManager_GetCachedQueueExecutionFlows");
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = QueueExecutionFlowMapper(executionFlowObject);
             }
