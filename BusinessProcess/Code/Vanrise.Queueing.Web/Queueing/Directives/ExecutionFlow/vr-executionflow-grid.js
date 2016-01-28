@@ -25,14 +25,14 @@ app.directive("vrExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR
 
     function ExecutionFlowGrid($scope, ctrl, $attrs) {
 
-        var gridapi;
+        var gridAPI;
         this.initializeController = initializeController;
 
         function initializeController() {
 
             $scope.executionFlows = [];
             $scope.ongridReady = function (api) {
-                gridapi = api;
+                gridAPI = api;
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
@@ -42,8 +42,13 @@ app.directive("vrExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                      
-                        return gridapi.retrieveData(query);
+                        return gridAPI.retrieveData(query);
                     }
+
+                    directiveAPI.onExecutionFlowAdded = function (executionFlowObject) {
+                        gridAPI.itemAdded(executionFlowObject);
+                    }
+
 
                     return directiveAPI;
                 }

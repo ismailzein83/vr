@@ -34,9 +34,12 @@
             };
 
             $scope.save = function () {
-                if (isEditMode)
+                if (isEditMode) {
+                   
                     return updateExecutionFlow();
+                }
                 else {
+                    
                     return insertExecutionFlow();
                 }
             };
@@ -50,8 +53,10 @@
             $scope.isLoading = true;
 
             if (isEditMode) {
+                
                 getExecutionFlow().then(function () {
                     loadAllControls().finally(function () {
+                        executionFlowDefinitionSelectorAPI.setDisabled(true);
                         executionFlowEntity = undefined;
                     });
                 }).catch(function (error) {
@@ -59,7 +64,11 @@
                 });
             }
             else {
-                loadAllControls();
+               
+                loadAllControls().finally(function () {
+                    executionFlowDefinitionSelectorAPI.setDisabled(false);
+                })
+                
             }
         }
 
@@ -127,13 +136,13 @@
         function insertExecutionFlow() {
             $scope.isLoading = true;
 
-            var userObject = buildExecutionFlowObjFromScope();
+            var executionFlowObject = buildExecutionFlowObjFromScope();
 
-            return VR_Queueing_ExecutionFlowAPIService.AddUser(userObject)
+            return VR_Queueing_ExecutionFlowAPIService.AddExecutionFlow(executionFlowObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('User', response, 'Email')) {
-                    if ($scope.onUserAdded != undefined)
-                        $scope.onUserAdded(response.InsertedObject);
+                if (VRNotificationService.notifyOnItemAdded('Execution Flow', response, 'Email')) {
+                    if ($scope.onExecutionFlowAdded != undefined)
+                        $scope.onExecutionFlowAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {

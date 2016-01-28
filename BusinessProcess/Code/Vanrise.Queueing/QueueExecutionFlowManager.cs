@@ -48,9 +48,9 @@ namespace Vanrise.Queueing
             
         }
 
-        public Vanrise.Entities.InsertOperationOutput<QueueExecutionFlow> AddExecutionFlow(QueueExecutionFlow executionFlowObj)
+        public Vanrise.Entities.InsertOperationOutput<QueueExecutionFlowDetail> AddExecutionFlow(QueueExecutionFlow executionFlowObj)
         {
-            InsertOperationOutput<QueueExecutionFlow> insertOperationOutput = new InsertOperationOutput<QueueExecutionFlow>();
+            InsertOperationOutput<QueueExecutionFlowDetail> insertOperationOutput = new InsertOperationOutput<QueueExecutionFlowDetail>();
 
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -63,7 +63,7 @@ namespace Vanrise.Queueing
             {
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 executionFlowObj.ExecutionFlowId = executionFlowId;
-                insertOperationOutput.InsertedObject = executionFlowObj;
+                insertOperationOutput.InsertedObject = QueueExecutionFlowMapper(executionFlowObj);
             }
             else
             {
@@ -118,12 +118,12 @@ namespace Vanrise.Queueing
         }
 
 
+
+
         public QueueExecutionFlow GetExecutionFlow(int executionFlowId) 
         {
-            List<QueueExecutionFlow> allExecutionFlows = GetExecutionFlows();
-            QueueExecutionFlow executionFlow = allExecutionFlows.Where(x => x.ExecutionFlowId == executionFlowId).FirstOrDefault();
-            return executionFlow;
-        
+            var executionFlows = GetCachedQueueExecutionFlows();
+            return executionFlows.GetRecord(executionFlowId);
         }
 
 
@@ -154,7 +154,7 @@ namespace Vanrise.Queueing
             QueueExecutionFlowDetail executionFlowDetail = new QueueExecutionFlowDetail();
             QueueExecutionFlowDefinitionManager executionFlowDefinitionManager = new QueueExecutionFlowDefinitionManager();
             executionFlowDetail.Entity = executionFlow;
-            executionFlowDetail.Title = executionFlowDefinitionManager.GetExecutionFlowDefinitionName(executionFlow.DefinitionId);
+            executionFlowDetail.Title = executionFlowDefinitionManager.GetExecutionFlowDefinitionTitle(executionFlow.DefinitionId);
             return executionFlowDetail;
         }
 

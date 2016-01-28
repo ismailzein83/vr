@@ -24,7 +24,7 @@ namespace Vanrise.Queueing.Web.Controllers
         {
             QueueExecutionFlowDefinitionManager manager = new QueueExecutionFlowDefinitionManager();
 
-            return manager.GetAll();
+            return manager.GetFilteredExecutionFlowDefinitions();
 
         }
 
@@ -47,6 +47,15 @@ namespace Vanrise.Queueing.Web.Controllers
 
         }
 
+
+        [HttpPost]
+        [Route("AddExecutionFlow")]
+        public Vanrise.Entities.InsertOperationOutput<QueueExecutionFlowDetail> AddExecutionFlow(QueueExecutionFlow executionFlowObject)
+        {
+
+            return _manager.AddExecutionFlow(executionFlowObject);
+
+        }
 
         [HttpPost]
         [Route("GetFilteredExecutionFlows")]

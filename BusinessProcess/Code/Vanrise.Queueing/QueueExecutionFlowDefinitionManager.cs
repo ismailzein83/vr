@@ -5,24 +5,28 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Queueing.Data;
 using Vanrise.Queueing.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.Queueing
 {
     public class QueueExecutionFlowDefinitionManager
     {
-        public List<QueueExecutionFlowDefinition> GetAll()
+        public List<QueueExecutionFlowDefinition> GetFilteredExecutionFlowDefinitions()
         {
             IQueueExecutionFlowDefinitionDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDefinitionDataManager>();
             return dataManager.GetAll();
         }
 
-        public string GetExecutionFlowDefinitionName(int definitionID) {
+        public string GetExecutionFlowDefinitionTitle(int definitionID) {
 
-            List<QueueExecutionFlowDefinition> allExecutionFlowDefinitions = GetAll();
-            QueueExecutionFlowDefinition executionFlowDefinitionItem = allExecutionFlowDefinitions.Where(x => x.ID == definitionID).FirstOrDefault();
-            return executionFlowDefinitionItem.Title;
+            List<QueueExecutionFlowDefinition> executionFlowDefinitions = GetFilteredExecutionFlowDefinitions();
+
+            QueueExecutionFlowDefinition executionFlowDefinition = executionFlowDefinitions.Where(x => x.ID == definitionID).FirstOrDefault();
+            return executionFlowDefinition.Title;
         
         }
+
+
 
     }
 }

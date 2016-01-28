@@ -117,6 +117,11 @@ app.directive('vrExecutionflowdefinitionSelector', ['VR_Queueing_ExecutionFlowAP
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('ID', attrs, ctrl);
                 }
+
+                api.setDisabled = function (isDisabled) {
+                    ctrl.isdisabled = isDisabled;
+                }
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
