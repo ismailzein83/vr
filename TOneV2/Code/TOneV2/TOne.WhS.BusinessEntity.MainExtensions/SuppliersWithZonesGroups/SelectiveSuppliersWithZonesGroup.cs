@@ -19,12 +19,12 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SuppliersWithZonesGroups
 
         public override string GetDescription(ISuppliersWithZonesGroupContext context)
         {
-            var validZoneIds = context.GetSuppliersWithZones(this);
-            if (validZoneIds != null)
+            var validSuppliersWithZoneIds = context != null ? context.GetSuppliersWithZones(this) : this.SuppliersWithZones;
+            if (validSuppliersWithZoneIds != null)
             {
                 CarrierAccountManager manager = new CarrierAccountManager();
                 List<int> carrierAccountsIds=new List<int>();
-                foreach (SupplierWithZones validZoneId in validZoneIds)
+                foreach (SupplierWithZones validZoneId in validSuppliersWithZoneIds)
                 {
                     carrierAccountsIds.Add(validZoneId.SupplierId);
                 }

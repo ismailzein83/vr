@@ -6,10 +6,13 @@
 	@Description ntext
 AS
 BEGIN
-	UPDATE sec.[User]
-	SET Name = @Name,
-		Email = @Email,
-		[Status] = @Status,
-		Description = @Description
-	WHERE ID = @ID
+	IF NOT EXISTS(SELECT 1 FROM sec.[User] WHERE ID != @ID AND Email = @Email)
+	begin
+		UPDATE sec.[User]
+		SET Name = @Name,
+			Email = @Email,
+			[Status] = @Status,
+			[Description] = @Description
+		WHERE ID = @ID
+	end
 END

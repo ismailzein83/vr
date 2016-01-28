@@ -9,8 +9,11 @@ CREATE PROCEDURE [sec].[sp_Group_Update]
 	@Description ntext
 AS
 BEGIN
-	UPDATE [sec].[Group]
-	SET Name = @Name,
-		[Description] = @Description
-	WHERE ID = @ID
+	IF NOT EXISTS(SELECT 1 FROM sec.[Group] WHERE ID != @ID AND Name = @Name)
+	begin
+		UPDATE [sec].[Group]
+		SET Name = @Name,
+			[Description] = @Description
+		WHERE ID = @ID
+	end
 END

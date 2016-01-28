@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups
 
         public override string GetDescription(ICodeCriteriaGroupContext context)
         {
-            var validCodes = context.GetGroupCodeCriterias(this);
+            var validCodes = context != null ? context.GetGroupCodeCriterias(this) : this.Codes;
             if (validCodes != null)            
                 return string.Join(", ", validCodes.Select(item => item.Code));            
             else

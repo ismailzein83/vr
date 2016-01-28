@@ -19,7 +19,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups
 
         public override string GetDescription(ICustomerGroupContext context)
         {
-            var validCustomerIds = context.GetGroupCustomerIds(this);
+            var validCustomerIds = context != null ? context.GetGroupCustomerIds(this) : this.CustomerIds;
             if (validCustomerIds != null)
             {
                 CarrierAccountManager manager = new CarrierAccountManager();
