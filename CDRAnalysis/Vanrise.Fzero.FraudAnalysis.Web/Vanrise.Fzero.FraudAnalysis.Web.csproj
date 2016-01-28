@@ -210,7 +210,6 @@
     <Content Include="FraudAnalysis\Constants\SuspicionOccuranceStatusEnum.js" />
     <Content Include="FraudAnalysis\Constants\SuspicionLevelEnum.js" />
     <Content Include="FraudAnalysis\Constants\HourEnum.js" />
-    <Content Include="FraudAnalysis\Directives\Hour\cdranalysis-fa-hour-selector.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\Templates\FindRelatedNumbersManualTemplate.html" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\Templates\ExcuteStrategyManualTemplate.html" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\Templates\NumberProfilingManualTemplate.html" />
