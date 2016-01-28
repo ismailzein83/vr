@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericRuleCriteria
+    public interface IDataRecordTypeReferenceContext
     {
-        public Dictionary<string, GenericRuleCriteriaFieldValues> FieldsValues { get; set; }
     }
 }

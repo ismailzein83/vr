@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessEntityGroupContext.cs" />
+    <Compile Include="DataRecordTypeManager.cs" />
     <Compile Include="GenericRules\GenericRuleManager.cs" />
     <Compile Include="GenericRules\RuleStructureBehaviors\GenericRuleStructureBehaviorByKey.cs" />
     <Compile Include="GenericRules\RuleStructureBehaviors\GenericRuleStructureBehaviorByPrefix.cs" />

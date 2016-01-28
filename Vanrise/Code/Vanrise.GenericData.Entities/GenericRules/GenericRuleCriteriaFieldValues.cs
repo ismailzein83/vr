@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericRuleCriteria
+    public abstract class GenericRuleCriteriaFieldValues
     {
-        public Dictionary<string, GenericRuleCriteriaFieldValues> FieldsValues { get; set; }
+        public abstract IEnumerable<Object> GetValues();
+
+        public abstract string GetDescription();
     }
 }

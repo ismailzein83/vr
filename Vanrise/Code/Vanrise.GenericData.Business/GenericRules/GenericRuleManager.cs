@@ -37,26 +37,39 @@ namespace Vanrise.GenericData.Business
                 case MappingRuleStructureBehaviorType.ByKey: behavior = new GenericRules.RuleStructureBehaviors.GenericRuleStructureBehaviorByKey(); break;
                 case MappingRuleStructureBehaviorType.ByPrefix: behavior = new GenericRules.RuleStructureBehaviors.GenericRuleStructureBehaviorByPrefix(); break;
             }
-            behavior.Field = ruleDefinitionCriteriaField;
+            behavior.FieldName = ruleDefinitionCriteriaField.FieldName;
             return behavior as BaseRuleStructureBehavior;
         }
 
-        public static bool TryGetTargetFieldValue(GenericRuleTarget target, GenericRuleDefinitionCriteriaField ruleDefinitionCriteriaField, out Object value)
+        public static IEnumerable<Object> GetCriteriaFieldValues(GenericRule rule, string fieldName)
+        {
+            if (rule == null)
+                throw new ArgumentNullException("rule");
+            if (rule.Criteria == null)
+                throw new ArgumentNullException("rule.Criteria");
+            if (rule.Criteria.FieldsValues == null)
+                throw new ArgumentNullException("rule.Criteria.FieldsValues");
+            GenericRuleCriteriaFieldValues genericRuleCriteriaFieldValues;
+            if (rule.Criteria.FieldsValues.TryGetValue(fieldName, out genericRuleCriteriaFieldValues))
+            {
+                return genericRuleCriteriaFieldValues.GetValues();
+            }
+            else
+                return null;
+        }
+
+        public static bool TryGetTargetFieldValue(GenericRuleTarget target, string fieldName, out Object value)
         {
             if (target == null)
                 throw new ArgumentNullException("target");
-            if (ruleDefinitionCriteriaField == null)
-                throw new ArgumentNullException("ruleDefinitionCriteriaField");
-            if (String.IsNullOrEmpty(ruleDefinitionCriteriaField.FieldName))
-                throw new ArgumentNullException("ruleDefinitionCriteriaField.FieldName");
-            if (String.IsNullOrEmpty(ruleDefinitionCriteriaField.FieldDataRecordName))
-                throw new ArgumentNullException("ruleDefinitionCriteriaField.FieldDataRecordName");
-            if(target.DataRecords == null)
-                throw new ArgumentNullException("target.DataRecords");
-            DataRecord dataRecord;
-            if (!target.DataRecords.TryGetValue(ruleDefinitionCriteriaField.FieldDataRecordName, out dataRecord))
-                throw new Exception(String.Format("Data Record '{0}' is not available in target.DataRecords", ruleDefinitionCriteriaField.FieldDataRecordName));
-            return dataRecord.FieldsValues.TryGetValue(ruleDefinitionCriteriaField.FieldName, out value);
+            if(target.TargetFieldValues == null)
+                throw new ArgumentNullException("target.TargetFieldValues");
+            return target.TargetFieldValues.TryGetValue(fieldName, out value);
+        }
+
+        private IEnumerable<GenericRuleDefinitionCriteriaField> GetRuleDefinitionCriteriaFields(int ruleDefinitionId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

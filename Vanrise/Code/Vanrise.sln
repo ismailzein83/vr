@@ -161,9 +161,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.GenericData.Transfo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataTransformation", "DataTransformation", "{768DBB47-FFE4-4BAE-A289-963CFB561B64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.GenericData.MainExtensions", "Vanrise.GenericData.MainExtensions\Vanrise.GenericData.MainExtensions.csproj", "{9FBA4641-EDD5-4A59-A053-CE879F31AD14}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 66
+		SccNumberOfProjects = 67
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -427,6 +429,10 @@ Global
 		SccProjectTopLevelParentUniqueName65 = Vanrise.sln
 		SccProjectName65 = Vanrise.GenericData.Transformation.Entities
 		SccLocalPath65 = Vanrise.GenericData.Transformation.Entities
+		SccProjectUniqueName66 = Vanrise.GenericData.MainExtensions\\Vanrise.GenericData.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName66 = Vanrise.sln
+		SccProjectName66 = Vanrise.GenericData.MainExtensions
+		SccLocalPath66 = Vanrise.GenericData.MainExtensions
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -977,6 +983,14 @@ Global
 		{E8B1931E-F1F5-4937-9CB0-A7D0CF5EDCB1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E8B1931E-F1F5-4937-9CB0-A7D0CF5EDCB1}.Release|x64.ActiveCfg = Release|Any CPU
 		{E8B1931E-F1F5-4937-9CB0-A7D0CF5EDCB1}.Release|x86.ActiveCfg = Release|Any CPU
+		{9FBA4641-EDD5-4A59-A053-CE879F31AD14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FBA4641-EDD5-4A59-A053-CE879F31AD14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FBA4641-EDD5-4A59-A053-CE879F31AD14}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9FBA4641-EDD5-4A59-A053-CE879F31AD14}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9FBA4641-EDD5-4A59-A053-CE879F31AD14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FBA4641-EDD5-4A59-A053-CE879F31AD14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FBA4641-EDD5-4A59-A053-CE879F31AD14}.Release|x64.ActiveCfg = Release|Any CPU
+		{9FBA4641-EDD5-4A59-A053-CE879F31AD14}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1046,6 +1060,7 @@ Global
 		{E196C862-BE33-49DD-9E0D-2948FB289861} = {6B701700-ECEA-40F9-B034-5E5C41C1A85A}
 		{500611B7-1CC7-495D-B329-571B81E3ABE0} = {6B701700-ECEA-40F9-B034-5E5C41C1A85A}
 		{768DBB47-FFE4-4BAE-A289-963CFB561B64} = {6B701700-ECEA-40F9-B034-5E5C41C1A85A}
+		{9FBA4641-EDD5-4A59-A053-CE879F31AD14} = {6B701700-ECEA-40F9-B034-5E5C41C1A85A}
 		{A8A1A6C8-BE71-4B51-B5B8-490645C32BF2} = {6BE52FDB-BABE-49FA-845F-32FA1272F631}
 		{D18E2992-89EA-4367-9EEC-C737915BB438} = {6BE52FDB-BABE-49FA-845F-32FA1272F631}
 		{7827B1A9-AC2A-4B72-87E7-101223EC0396} = {768DBB47-FFE4-4BAE-A289-963CFB561B64}

@@ -10,13 +10,12 @@ namespace Vanrise.GenericData.Business.GenericRules.RuleStructureBehaviors
 {
     public class GenericRuleStructureBehaviorByPrefix : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByPrefix, IGenericRuleStructureBehavior
     {
-        public GenericRuleDefinitionCriteriaField Field { get; set; }
+        public string FieldName { get; set; }
 
         protected override void GetPrefixesFromRule(BaseRule rule, out System.Collections.Generic.IEnumerable<string> prefixes)
         {
-            GenericRule genericRule = rule as GenericRule;
-            List<Object> fieldValues;
-            if (genericRule.Criteria.FieldsValues.TryGetValue(this.Field.FieldName, out fieldValues) && fieldValues != null)
+            IEnumerable<Object> fieldValues = GenericRuleManager<GenericRule>.GetCriteriaFieldValues(rule as GenericRule, this.FieldName);
+            if (fieldValues != null)
                 prefixes = fieldValues.Select(itm => itm as string);
             else
                 prefixes = null;
@@ -25,7 +24,7 @@ namespace Vanrise.GenericData.Business.GenericRules.RuleStructureBehaviors
         protected override bool TryGetValueToCompareFromTarget(object target, out string value)
         {
             object fieldValue;
-            if (GenericRuleManager<GenericRule>.TryGetTargetFieldValue(target as GenericRuleTarget, this.Field, out fieldValue))
+            if (GenericRuleManager<GenericRule>.TryGetTargetFieldValue(target as GenericRuleTarget, this.FieldName, out fieldValue))
             {
                 value = fieldValue as string;
                 return true;

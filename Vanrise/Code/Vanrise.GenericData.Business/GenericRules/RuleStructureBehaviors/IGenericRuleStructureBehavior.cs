@@ -9,6 +9,6 @@ namespace Vanrise.GenericData.Business.GenericRules.RuleStructureBehaviors
 {
     public interface IGenericRuleStructureBehavior
     {
-        GenericRuleDefinitionCriteriaField Field { set; }
+        string FieldName { set; }
     }
 }

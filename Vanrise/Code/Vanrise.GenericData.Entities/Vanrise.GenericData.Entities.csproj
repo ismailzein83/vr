@@ -43,7 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataRecords\Choices.cs" />
+    <Compile Include="BusinessEntities\BusinessEntityDefinition.cs" />
+    <Compile Include="BusinessEntities\BusinessEntityDefinitionSettings.cs" />
+    <Compile Include="BusinessEntities\IBusinessEntityGroupContext.cs" />
     <Compile Include="DataRecords\DataRecord.cs" />
     <Compile Include="DataRecords\DataRecordField.cs" />
     <Compile Include="DataRecords\DataRecordFieldDetail.cs" />
@@ -52,12 +54,16 @@
     <Compile Include="DataRecords\DataRecordType.cs" />
     <Compile Include="DataRecords\DataRecordTypeDetail.cs" />
     <Compile Include="DataRecords\DataRecordTypeQuery.cs" />
+    <Compile Include="DataRecords\DataRecordTypeReference.cs" />
+    <Compile Include="DataRecords\IDataRecordTypeReferenceContext.cs" />
     <Compile Include="GenericRules\GenericRule.cs" />
     <Compile Include="GenericRules\GenericRuleCriteria.cs" />
+    <Compile Include="GenericRules\GenericRuleCriteriaFieldValues.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinition.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionCriteria.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionCriteriaField.cs" />
     <Compile Include="GenericRules\GenericRuleTarget.cs" />
+    <Compile Include="BusinessEntities\IBusinessEntityGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -66,7 +72,11 @@
       <Name>Vanrise.Rules</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

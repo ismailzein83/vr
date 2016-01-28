@@ -8,28 +8,18 @@ using Vanrise.GenericData.Transformation.Entities;
 
 namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
 {
-    public class ExecuteMappingRuleStep : MappingStep
+    public class ExecuteMappingRuleStep : BaseGenericRuleMappingStep
     {
-        public int RuleDefinitionId { get; set; }
-
-        public string EffectiveTimeRecordName { get; set; }
-
         public string TargetRecordName { get; set; }
 
         public string TargetFieldName { get; set; }
 
         public override void Execute(IMappingStepExecutionContext context)
         {
-            if (this.EffectiveTimeRecordName == null)
-                throw new ArgumentNullException("EffectiveTimeRecordName");
-            var effectiveTimeRecord = context.GetDataRecord(this.EffectiveTimeRecordName);
+            GenericRuleTarget ruleTarget = CreateGenericRuleTarget(context);
+
             MappingRuleManager ruleManager = new MappingRuleManager();
-            GenericRuleTarget target = new GenericRuleTarget
-            {
-                DataRecords = context.GetAllDataRecords(),
-                EffectiveOn = effectiveTimeRecord.Time
-            };
-            var rule = ruleManager.GetMatchRule(this.RuleDefinitionId, target);
+            var rule = ruleManager.GetMatchRule(this.RuleDefinitionId, ruleTarget);
             if (rule != null)
             {
                 var targetRecord = context.GetDataRecord(this.TargetFieldName);

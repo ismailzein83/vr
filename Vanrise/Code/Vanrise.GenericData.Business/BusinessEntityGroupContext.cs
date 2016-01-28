@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.Entities.BusinessEntities;
 
-namespace Vanrise.GenericData.Transformation.Entities
+namespace Vanrise.GenericData.Business
 {
-    public interface IMappingStepExecutionContext
+    public class BusinessEntityGroupContext : IBusinessEntityGroupContext
     {
-        DataRecord GetDataRecord(string recordName);
     }
 }

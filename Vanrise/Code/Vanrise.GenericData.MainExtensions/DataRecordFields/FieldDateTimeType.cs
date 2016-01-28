@@ -5,10 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 
-namespace Vanrise.GenericData.Transformation.Entities
+namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
-    public interface IMappingStepExecutionContext
+    public class FieldDateTimeType : DataRecordFieldType
     {
-        DataRecord GetDataRecord(string recordName);
     }
 }

@@ -19,10 +19,8 @@ namespace Vanrise.GenericData.Entities
             get
             {
                 Object value;
-                if (this.FieldsValues.TryGetValue(fieldName, out value))
-                    return value;
-                else
-                    throw new Exception(String.Format("Field '{0}' not found", fieldName));
+                this.FieldsValues.TryGetValue(fieldName, out value);
+                return value;
             }
             set
             {
@@ -36,6 +34,8 @@ namespace Vanrise.GenericData.Entities
         public T GetFieldValue<T>(string fieldName)
         {
             Object value = this[fieldName];
+            if (value == null)
+                return default(T);
             if (value is T)
                 return (T)value;
             else

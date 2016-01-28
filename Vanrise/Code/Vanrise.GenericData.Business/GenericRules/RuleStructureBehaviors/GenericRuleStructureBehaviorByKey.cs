@@ -10,19 +10,16 @@ namespace Vanrise.GenericData.Business.GenericRules.RuleStructureBehaviors
 {
     public class GenericRuleStructureBehaviorByKey : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByKey<Object>, IGenericRuleStructureBehavior
     {
-        public GenericRuleDefinitionCriteriaField Field { get; set; }
+        public string FieldName { get; set; }
 
         protected override void GetKeysFromRule(BaseRule rule, out IEnumerable<object> keys)
         {
-            GenericRule genericRule = rule as GenericRule;
-            List<Object> fieldValues;
-            genericRule.Criteria.FieldsValues.TryGetValue(this.Field.FieldName, out fieldValues);
-            keys = fieldValues;
+            keys = GenericRuleManager<GenericRule>.GetCriteriaFieldValues(rule as GenericRule, this.FieldName);
         }
 
         protected override bool TryGetKeyFromTarget(object target, out object key)
         {
-            return GenericRuleManager<GenericRule>.TryGetTargetFieldValue(target as GenericRuleTarget, this.Field, out key);
+            return GenericRuleManager<GenericRule>.TryGetTargetFieldValue(target as GenericRuleTarget, this.FieldName, out key);
         }
     }
 }

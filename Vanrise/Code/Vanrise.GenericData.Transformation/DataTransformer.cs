@@ -15,8 +15,7 @@ namespace Vanrise.GenericData.Transformation
             IEnumerable<MappingStep> mappingSteps = GetMappingSteps(context.DataTransformationDefinitionId);
             var stepExecutionContext = new MappingStepExecutionContext
             {
-                DataRecords = context.DataRecords,
-                DefaultRecord = new DataRecord { FieldsValues = new Dictionary<string, object>() }
+                DataRecords = context.DataRecords
             };
             foreach (var step in mappingSteps)
             {
@@ -24,7 +23,7 @@ namespace Vanrise.GenericData.Transformation
             }
         }
 
-        private IEnumerable<MappingStep> GetMappingSteps(int p)
+        private IEnumerable<MappingStep> GetMappingSteps(int transformationDefinitionId)
         {
             throw new NotImplementedException();
         }

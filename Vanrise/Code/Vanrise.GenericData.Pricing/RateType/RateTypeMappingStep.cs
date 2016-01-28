@@ -8,12 +8,8 @@ using Vanrise.GenericData.Transformation.Entities;
 
 namespace Vanrise.GenericData.Pricing
 {
-    public class RateTypeMappingStep : MappingStep
+    public class RateTypeMappingStep : BaseGenericRuleMappingStep
     {
-        public int RuleDefinitionId { get; set; }
-
-        public string EffectiveTimeRecordName { get; set; }
-
         public string SourceRecordName { get; set; }
 
         public string NormalRateFieldName { get; set; }
@@ -28,22 +24,15 @@ namespace Vanrise.GenericData.Pricing
 
         public override void Execute(IMappingStepExecutionContext context)
         {
-            if (this.EffectiveTimeRecordName == null)
-                throw new ArgumentNullException("EffectiveTimeRecordName");
-            var effectiveTimeRecord = context.GetDataRecord(this.EffectiveTimeRecordName);
+            var ruleTarget = CreateGenericRuleTarget(context);
             var sourceRecord = context.GetDataRecord(this.SourceRecordName);
-            var target = new GenericRuleTarget
-            {
-                DataRecords = context.GetAllDataRecords(),
-                EffectiveOn = effectiveTimeRecord.Time
-            };
             var ruleContext = new RateTypeRuleContext
             {
                 NormalRate = sourceRecord.GetFieldValue<Decimal>(this.NormalRateFieldName),
                 RatesByRateType = sourceRecord.GetFieldValue<Dictionary<int, Decimal>>(this.RatesByRateTypeFieldName)
             };
             var ruleManager = new RateTypeRuleManager();
-            ruleManager.ApplyRateTypeRule(ruleContext, this.RuleDefinitionId, target);
+            ruleManager.ApplyRateTypeRule(ruleContext, this.RuleDefinitionId, ruleTarget);
             var targetRecord = context.GetDataRecord(this.TargetRecordName);
             targetRecord[this.EffectiveRateFieldName] = ruleContext.EffectiveRate;
             targetRecord[this.RateTypeFieldName] = ruleContext.RateTypeId;

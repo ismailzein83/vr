@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class Choices
+    public class BusinessEntityDefinitionSettings
     {
-        public String Choice { get; set; }
+        public string SelectorUIControl { get; set; }
+
+        public string GroupSelectorUIControl { get; set; }
     }
 }
