@@ -11,6 +11,8 @@ namespace Vanrise.Queueing
 {
     public class QueueingManager
     {
+        
+        #region ctor
         private readonly IQueueDataManager _dataManager;
         private readonly IQueueItemDataManager _itemDataManager;
 
@@ -19,17 +21,21 @@ namespace Vanrise.Queueing
             _dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
             _itemDataManager = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
         }
+        #endregion
 
+        #region Public Methods
         public QueueInstance GetQueueInstance(string queueName)
         {
             return GetCachedQueueInstancesByName().GetRecord(queueName);
         }
-
+        public QueueInstance GetQueueInstanceById(int instanceId)
+        {
+            return GetCachedQueueInstances().GetRecord(instanceId);
+        }
         public List<QueueItemType> GetQueueItemTypes()
         {
             return _dataManager.GetQueueItemTypes();
         }
-
         public IEnumerable<QueueInstance> GetQueueInstances(IEnumerable<int> queueItemTypes)
         {
             var readyQueueInstances = GetReadyQueueInstances();
@@ -37,12 +43,10 @@ namespace Vanrise.Queueing
                 return null;
             return readyQueueInstances.Where(itm => queueItemTypes == null || queueItemTypes.Contains(itm.ItemTypeId));
         }
-
         public List<QueueItemHeader> GetHeaders(IEnumerable<int> queueIds, IEnumerable<QueueItemStatus> statuses, DateTime dateFrom, DateTime dateTo)
         {
             return _itemDataManager.GetHeaders(queueIds, statuses, dateFrom, dateTo);
         }
-
         public Dictionary<long, ItemExecutionFlowInfo> GetItemsExecutionFlowStatus(List<long> itemIds)
         {
             List<ItemExecutionFlowInfo> originalList = _itemDataManager.GetItemExecutionFlowInfo(itemIds);
@@ -63,7 +67,6 @@ namespace Vanrise.Queueing
 
             return itemsExectionStatusDic;
         }
-
         public ItemExecutionFlowStatus GetExecutionFlowStatus(List<ItemExecutionFlowInfo> list)
         {
             ItemExecutionFlowStatus result = ItemExecutionFlowStatus.New;
@@ -109,17 +112,15 @@ namespace Vanrise.Queueing
 
             return result;
         }
-
-        public Vanrise.Entities.IDataRetrievalResult<QueueItemHeader> GetQueueItemsHeader(Vanrise.Entities.DataRetrievalInput<List<long>> input)
+        public Vanrise.Entities.IDataRetrievalResult<QueueItemHeaderDetails> GetQueueItemsHeader(Vanrise.Entities.DataRetrievalInput<List<long>> input)
         {
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _itemDataManager.GetQueueItemsHeader(input));
+            var data = _itemDataManager.GetQueueItemsHeader(input);
+            Vanrise.Entities.BigResult<QueueItemHeaderDetails> returnedResult = new Vanrise.Entities.BigResult<QueueItemHeaderDetails>();
+            returnedResult.ResultKey = data.ResultKey;
+            returnedResult.TotalCount = data.TotalCount;
+            returnedResult.Data = data.Data.MapRecords(QueueItemHeaderDetailsMapper);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, returnedResult);
         }
-
-        private QueueItemStatus GetSubStatus(List<ItemExecutionFlowInfo> subList)
-        {
-            return QueueItemStatus.Processed;
-        }
-
         public IEnumerable<QueueInstance> GetReadyQueueInstances()
         {
             var cachedQueues = GetCachedQueueInstances();
@@ -128,6 +129,7 @@ namespace Vanrise.Queueing
             else
                 return null;
         }
+        #endregion
 
         #region Private Classes
 
@@ -152,7 +154,25 @@ namespace Vanrise.Queueing
                    return queueInstances.ToDictionary(kvp => kvp.QueueInstanceId, kvp => kvp);
                });
         }
+        private QueueItemStatus GetSubStatus(List<ItemExecutionFlowInfo> subList)
+        {
+            return QueueItemStatus.Processed;
+        }
 
+        #endregion
+
+        #region Mappers
+        QueueItemHeaderDetails QueueItemHeaderDetailsMapper(QueueItemHeader queueItemHeader)
+        {
+            var instance = GetQueueInstanceById(queueItemHeader.QueueId);
+            return new QueueItemHeaderDetails
+            {
+                Entity = queueItemHeader,
+                StageName = instance != null ? instance.StageName : "",
+
+            };
+        }
+       
         #endregion
     }
 

@@ -13,10 +13,24 @@ namespace Vanrise.Queueing.Data.SQL
 {
     public class QueueItemDataManager : BaseSQLDataManager, IQueueItemDataManager
     {
+
+        #region ctor
+        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
         static QueueItemDataManager()
         {
+            _columnMapper.Add("Entity.ItemId", "ItemID");
+            _columnMapper.Add("Entity.ExecutionFlowTriggerItemId", "ExecutionFlowTriggerItemID");
+            _columnMapper.Add("Entity.SourceItemId", "SourceItemID");
+            _columnMapper.Add("Entity.Description", "Description");
+            _columnMapper.Add("Entity.Status", "Status");
+            _columnMapper.Add("Entity.RetryCount", "RetryCount");
+            _columnMapper.Add("Entity.ErrorMessage", "ErrorMessage");
+            _columnMapper.Add("Entity.CreatedTime", "CreatedTime");
+            _columnMapper.Add("Entity.LastUpdatedTime", "LastUpdatedTime");
+
+
             s_query_EnqueueItemAndHeaderTemplate = String.Format(@"{0} 
-                                                                   {1}", 
+                                                                   {1}",
                                                                   query_EnqueueItemTemplate,
                                                                   query_EnqueueItemHeaderTemplate);
         }
@@ -25,67 +39,49 @@ namespace Vanrise.Queueing.Data.SQL
         {
         }
   
+        #endregion
+
+        #region Public Methods
         public void CreateQueue(int queueId)
         {
             ExecuteNonQueryText(String.Format(query_CreateQueueTable, queueId), null);
         }
-
         public long GenerateItemID()
         {
             return (long)ExecuteScalarSP("queue.sp_QueueItemIDGen_GenerateID");
         }
-
         public void EnqueueItem(int queueId, long itemId, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus)
         {
             ExecuteEnqueueItemQuery(String.Format(s_query_EnqueueItemAndHeaderTemplate, queueId, itemId, "null"), item, executionFlowTriggerItemId, description, queueItemStatus);
         }
-
         public void EnqueueItem(Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus)
         {
-            
+
             StringBuilder queryItemBuilder = new StringBuilder();
             StringBuilder queryItemHeaderBuilder = new StringBuilder();
-            foreach(var targetQueueItemId in targetQueuesItemsIds)
+            foreach (var targetQueueItemId in targetQueuesItemsIds)
             {
                 int queueId = targetQueueItemId.Key;
                 long itemId = targetQueueItemId.Value;
                 queryItemBuilder.AppendLine(String.Format(query_EnqueueItemTemplate, queueId, itemId));
-                queryItemHeaderBuilder.AppendLine(String.Format(query_EnqueueItemHeaderTemplate, 
-                    queueId, 
-                    itemId, 
+                queryItemHeaderBuilder.AppendLine(String.Format(query_EnqueueItemHeaderTemplate,
+                    queueId,
+                    itemId,
                     sourceQueueId != queueId ? sourceItemId.ToString() : "null"));
             }
 
             string query = String.Format(@" {0} 
-                                            {1}", 
-                                            queryItemBuilder, 
+                                            {1}",
+                                            queryItemBuilder,
                                             queryItemHeaderBuilder);
 
             ExecuteEnqueueItemQuery(query, item, executionFlowTriggerItemId, description, queueItemStatus);
         }
-
-        void ExecuteEnqueueItemQuery(string query, byte[] item, long executionFlowTriggerItemID, string description, QueueItemStatus queueItemStatus)
-        {
-            query = String.Format(@" BEGIN TRANSACTION 
-                                     {0}
-                                     COMMIT;",
-                                            query);
-
-            ExecuteNonQueryText(query,
-               (cmd) =>
-               {
-                   cmd.Parameters.Add(new SqlParameter("@ExecutionFlowTriggerItemID", executionFlowTriggerItemID));
-                   cmd.Parameters.Add(new SqlParameter("@Content", item));
-                   cmd.Parameters.Add(new SqlParameter("@Description", description));
-                   cmd.Parameters.Add(new SqlParameter("@Status", (int)queueItemStatus));
-               });
-        }
-
         public QueueItem DequeueItem(int queueId, int currentProcessId, IEnumerable<int> runningProcessesIds, bool singleQueueReader)
         {
             StringBuilder processIdsBuilder = new StringBuilder();
             processIdsBuilder.Append(',');
-            foreach(var processId in runningProcessesIds)
+            foreach (var processId in runningProcessesIds)
             {
                 processIdsBuilder.Append(processId);
                 processIdsBuilder.Append(',');
@@ -108,7 +104,6 @@ namespace Vanrise.Queueing.Data.SQL
                         cmd.Parameters.Add(new SqlParameter("@SingleQueueReader", singleQueueReader));
                     });
         }
-
         public void DeleteItem(int queueId, long itemId)
         {
             ExecuteNonQueryText(String.Format(query_DeleteFromQueue, queueId),
@@ -117,28 +112,23 @@ namespace Vanrise.Queueing.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@ID", itemId));
                 });
         }
-
         public QueueItemHeader GetHeader(long itemId, int queueId)
         {
             return GetItemSP("queue.sp_QueueItemHeader_GetByID", QueueItemHeaderMapper, itemId, queueId);
         }
-
         public List<QueueItemHeader> GetHeaders(IEnumerable<int> queueIds, IEnumerable<QueueItemStatus> statuses, DateTime dateFrom, DateTime dateTo)
         {
             return GetItemsSP("queue.sp_QueueItemHeader_GetFiltered", QueueItemHeaderMapper, queueIds == null ? null : string.Join(",", queueIds.Select(n => ((int)n).ToString()).ToArray())
-                , statuses == null ? null : string.Join(",", statuses.Select(n => ((int)n).ToString()).ToArray()),dateFrom,dateTo);
+                , statuses == null ? null : string.Join(",", statuses.Select(n => ((int)n).ToString()).ToArray()), dateFrom, dateTo);
         }
-
         public void UpdateHeaderStatus(long itemId, QueueItemStatus queueItemStatus)
         {
             ExecuteNonQuerySP("queue.sp_QueueItemHeader_UpdateStatus", itemId, (int)queueItemStatus);
         }
-
         public void UpdateHeader(long itemId, QueueItemStatus queueItemStatus, int retryCount, string errorMessage)
         {
             ExecuteNonQuerySP("queue.sp_QueueItemHeader_Update", itemId, (int)queueItemStatus, retryCount, errorMessage);
         }
-        
         public void UnlockItem(int queueId, long itemId, bool isSuspended)
         {
             ExecuteNonQueryText(String.Format(query_UnlockItem, queueId),
@@ -148,34 +138,31 @@ namespace Vanrise.Queueing.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@IsSuspended", isSuspended));
                 });
         }
-
-
         public List<ItemExecutionFlowInfo> GetItemExecutionFlowInfo(List<long> itemIds)
         {
             List<ItemExecutionFlowInfo> result = new List<ItemExecutionFlowInfo>();
 
             ExecuteReaderSPCmd("queue.sp_QueueItemHeader_GetItemsExecutionStatus", (reader) =>
+            {
+                while (reader.Read())
                 {
-                    while (reader.Read())
+                    ItemExecutionFlowInfo item = new ItemExecutionFlowInfo()
                     {
-                        ItemExecutionFlowInfo item = new ItemExecutionFlowInfo()
-                        {
-                            ItemId = (long)reader["ItemID"],
-                            ExecutionFlowTriggerItemId = GetReaderValue<long>(reader, "ExecutionFlowTriggerItemID"),
-                            Status = (ItemExecutionFlowStatus)reader["Status"]
-                        };
-                        result.Add(item);
-                    }
-                }, (cmd) =>
-                {
-                    var dtParameter = new SqlParameter("@ItemIds", SqlDbType.Structured);
-                    dtParameter.Value = BuildItemIdsTable(itemIds);
-                    cmd.Parameters.Add(dtParameter);
-                });
+                        ItemId = (long)reader["ItemID"],
+                        ExecutionFlowTriggerItemId = GetReaderValue<long>(reader, "ExecutionFlowTriggerItemID"),
+                        Status = (ItemExecutionFlowStatus)reader["Status"]
+                    };
+                    result.Add(item);
+                }
+            }, (cmd) =>
+            {
+                var dtParameter = new SqlParameter("@ItemIds", SqlDbType.Structured);
+                dtParameter.Value = BuildItemIdsTable(itemIds);
+                cmd.Parameters.Add(dtParameter);
+            });
 
             return result;
         }
-
         public Vanrise.Entities.BigResult<QueueItemHeader> GetQueueItemsHeader(Vanrise.Entities.DataRetrievalInput<List<long>> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
@@ -189,26 +176,27 @@ namespace Vanrise.Queueing.Data.SQL
                 });
             };
 
-            return RetrieveData(input, createTempTableAction, QueueItemHeaderMapper);
+            return RetrieveData(input, createTempTableAction, QueueItemHeaderMapper, _columnMapper);
         }
 
-        #region Private Methods
+        #endregion
 
-        private QueueItemHeader QueueItemHeaderMapper(IDataReader reader)
+        #region Private Methods
+        void ExecuteEnqueueItemQuery(string query, byte[] item, long executionFlowTriggerItemID, string description, QueueItemStatus queueItemStatus)
         {
-            return new QueueItemHeader
-            {
-                ItemId = (long)reader["ItemID"],
-                QueueId = (int)reader["QueueID"],
-                ExecutionFlowTriggerItemId = GetReaderValue<long>(reader, "ExecutionFlowTriggerItemID"),
-                SourceItemId = GetReaderValue<long>(reader, "SourceItemID"),
-                Description = reader["Description"] as string,
-                Status = (QueueItemStatus)reader["Status"],
-                RetryCount = GetReaderValue<int>(reader, "RetryCount"),
-                ErrorMessage = reader["ErrorMessage"] as string,
-                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
-                LastUpdatedTime = GetReaderValue<DateTime>(reader, "LastUpdatedTime")
-            };
+            query = String.Format(@" BEGIN TRANSACTION 
+                                     {0}
+                                     COMMIT;",
+                                            query);
+
+            ExecuteNonQueryText(query,
+               (cmd) =>
+               {
+                   cmd.Parameters.Add(new SqlParameter("@ExecutionFlowTriggerItemID", executionFlowTriggerItemID));
+                   cmd.Parameters.Add(new SqlParameter("@Content", item));
+                   cmd.Parameters.Add(new SqlParameter("@Description", description));
+                   cmd.Parameters.Add(new SqlParameter("@Status", (int)queueItemStatus));
+               });
         }
         private DataTable BuildItemIdsTable(List<long> itemIds)
         {
@@ -226,7 +214,25 @@ namespace Vanrise.Queueing.Data.SQL
             dt.EndLoadData();
             return dt;
         }
+        #endregion
 
+        #region Mappers
+        private QueueItemHeader QueueItemHeaderMapper(IDataReader reader)
+        {
+            return new QueueItemHeader
+            {
+                ItemId = (long)reader["ItemID"],
+                QueueId = (int)reader["QueueID"],
+                ExecutionFlowTriggerItemId = GetReaderValue<long>(reader, "ExecutionFlowTriggerItemID"),
+                SourceItemId = GetReaderValue<long>(reader, "SourceItemID"),
+                Description = reader["Description"] as string,
+                Status = (QueueItemStatus)reader["Status"],
+                RetryCount = GetReaderValue<int>(reader, "RetryCount"),
+                ErrorMessage = reader["ErrorMessage"] as string,
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                LastUpdatedTime = GetReaderValue<DateTime>(reader, "LastUpdatedTime")
+            };
+        }
         #endregion
 
         #region Queries

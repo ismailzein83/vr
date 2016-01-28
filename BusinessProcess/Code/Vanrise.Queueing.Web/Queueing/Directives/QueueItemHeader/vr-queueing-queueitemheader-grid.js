@@ -56,7 +56,7 @@ function (UtilsService, VRNotificationService, VR_Queueing_QueueingAPIService, V
                     .then(function (response) {
 
                         angular.forEach(response.Data, function (item) {
-                            item.ExecutionStatusDescription = VR_Integration_DataSourceService.getExecutionStatusDescription(item.Status);
+                            item.Entity.ExecutionStatusDescription = VR_Integration_DataSourceService.getExecutionStatusDescription(item.Entity.Status);
                         });
 
                         onResponseReady(response);

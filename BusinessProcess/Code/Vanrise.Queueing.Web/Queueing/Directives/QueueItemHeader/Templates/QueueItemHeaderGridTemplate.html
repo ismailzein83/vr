@@ -2,14 +2,15 @@
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              on-ready="gridReady"
-             issubgrid>
+             idfield="Entity.ItemId">
 
-    <vr-datagridcolumn headertext="'Item Id'" field="'ItemId'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Status'" field="'ExecutionStatusDescription'" getcolor="getStatusColor"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Retry Count'" field="'RetryCount'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Error Message'" field="'ErrorMessage'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Created Time'" field="'CreatedTime'" type="'Datetime'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Last Updated Time'" field="'LastUpdatedTime'" type="'LongDatetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Item Id'" field="'Entity.ItemId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Stage Name'" field="'StageName'" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'Entity.ExecutionStatusDescription'" getcolor="getStatusColor"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Retry Count'" field="'Entity.RetryCount'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Error Message'" field="'Entity.ErrorMessage'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Created Time'" field="'Entity.CreatedTime'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Last Updated Time'" field="'Entity.LastUpdatedTime'" type="'LongDatetime'"></vr-datagridcolumn>
 
 </vr-datagrid>
