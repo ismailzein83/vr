@@ -9,7 +9,7 @@ namespace Vanrise.GenericData.Transformation.Entities
 {
     public class MappingRuleDefinitionSettings : GenericRuleDefinitionSettings
     {
-        public string FieldTitle { get; set; }
+        public string FieldName { get; set; }
 
         public DataRecordFieldType FieldType { get; set; }
     }

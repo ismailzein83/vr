@@ -21,7 +21,7 @@ namespace Vanrise.GenericData.Business
             GenericRuleDefinition ruleDefinition = null;
             IEnumerable<T> rules = null;
             List<BaseRuleStructureBehavior> ruleStructureBehaviors = new List<BaseRuleStructureBehavior>();
-            foreach (var ruleDefinitionCriteriaField in ruleDefinition.CriteriaDefinition.Fields)
+            foreach (var ruleDefinitionCriteriaField in ruleDefinition.CriteriaDefinition.Fields.OrderBy(itm => itm.Priority))
             {
                 BaseRuleStructureBehavior ruleStructureBehavior = CreateRuleStructureBehavior(ruleDefinitionCriteriaField);
                 ruleStructureBehaviors.Add(ruleStructureBehavior);

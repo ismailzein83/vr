@@ -12,18 +12,25 @@ namespace Vanrise.GenericData.Transformation
     {
         public void ExecuteDataTransformation(IDataTransformationExecutionContext context)
         {
-            IEnumerable<MappingStep> mappingSteps = GetMappingSteps(context.DataTransformationDefinitionId);
+            DataTransformationDefinition dataTransformationDefinition = GetDataTransformationDefinition(context.DataTransformationDefinitionId);
             var stepExecutionContext = new MappingStepExecutionContext
             {
                 DataRecords = context.DataRecords
             };
-            foreach (var step in mappingSteps)
+            if (stepExecutionContext.DataRecords == null)
+                stepExecutionContext.DataRecords = new Dictionary<string, DataRecord>();
+            foreach(var dataRecordType in dataTransformationDefinition.RecordTypes)
+            {
+                if (!stepExecutionContext.DataRecords.ContainsKey(dataRecordType.Key))
+                    stepExecutionContext.DataRecords.Add(dataRecordType.Key, new DataRecord() { FieldsValues = new Dictionary<string, object>() });
+            }
+            foreach (var step in dataTransformationDefinition.MappingSteps)
             {
                 step.Execute(stepExecutionContext);
             }
         }
 
-        private IEnumerable<MappingStep> GetMappingSteps(int transformationDefinitionId)
+        private DataTransformationDefinition GetDataTransformationDefinition(int dataTransformationDefinitionId)
         {
             throw new NotImplementedException();
         }

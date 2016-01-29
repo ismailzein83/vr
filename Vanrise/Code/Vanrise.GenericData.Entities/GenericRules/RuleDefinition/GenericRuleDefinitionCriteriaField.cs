@@ -14,8 +14,10 @@ namespace Vanrise.GenericData.Entities
 
         public string Title { get; set; }
 
+        public DataRecordFieldType FieldType { get; set; }
+
         public MappingRuleStructureBehaviorType RuleStructureBehaviorType { get; set; }
 
-        public DataRecordFieldType FieldType { get; set; }
+        public int Priority { get; set; }
     }
 }

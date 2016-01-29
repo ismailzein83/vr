@@ -43,15 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataRecordFields\FieldBigIntType.cs" />
     <Compile Include="DataRecordFields\FieldBusinessEntityType.cs" />
-    <Compile Include="DataRecordFields\FieldIntType.cs" />
+    <Compile Include="DataRecordFields\FieldNumberType.cs" />
     <Compile Include="DataRecordTypeReferences\LocalDataRecordType.cs" />
     <Compile Include="DataRecordTypeReferences\GlobalDataRecordType.cs" />
     <Compile Include="DataRecordFields\FieldBooleanType.cs" />
     <Compile Include="DataRecordFields\FieldChoicesType.cs" />
     <Compile Include="DataRecordFields\FieldDateTimeType.cs" />
-    <Compile Include="DataRecordFields\FieldDecimalType.cs" />
     <Compile Include="DataRecordFields\FieldTextType.cs" />
     <Compile Include="GenericRuleCriteriaFieldValues\BusinessEntityValues.cs" />
     <Compile Include="GenericRuleCriteriaFieldValues\StaticValues.cs" />

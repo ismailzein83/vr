@@ -7,7 +7,9 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
-    public class FieldIntType : DataRecordFieldType
+    public enum FieldNumberDataType { Decimal = 0, Int = 1, BigInt = 2}
+    public class FieldNumberType : DataRecordFieldType
     {
+        public FieldNumberDataType DataType { get; set; }
     }
 }

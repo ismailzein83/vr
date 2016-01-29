@@ -8,6 +8,6 @@ namespace Vanrise.GenericData.Entities
 {
     public class GenericRuleDefinitionSettings
     {
-        public string Editor { get; set; }
+        public int ConfigId { get; set; }
     }
 }
