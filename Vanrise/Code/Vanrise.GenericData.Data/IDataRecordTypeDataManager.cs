@@ -11,5 +11,8 @@ namespace Vanrise.GenericData.Data
     {
         List<DataRecordType> GetDataRecordTypes();
         bool AreDataRecordTypeUpdated(ref object updateHandle);
+        bool UpdateDataRecordType(DataRecordType dataRecordType);
+
+        bool AddDataRecordType(DataRecordType dataRecordType,out int dataRecordTypeId);
     }
 }

@@ -152,10 +152,15 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-datetime-selective.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-number-selective.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-text-selective.js" />
+    <Content Include="VR_GenericData\Directives\RecordField\Templates\DataRecordFieldManagement.html" />
+    <Content Include="VR_GenericData\Directives\RecordField\vr-genericdata-datarecordfield-management.js" />
     <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeGrid.html" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
+    <Content Include="VR_GenericData\Services\DataRecordFieldService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordTypeAPIService.js" />
     <Content Include="VR_GenericData\Services\DataRecordTypeService.js" />
+    <Content Include="VR_GenericData\Views\DataRecordFieldEditor.html" />
+    <Content Include="VR_GenericData\Views\DataRecordFieldEditorController.js" />
     <Content Include="VR_GenericData\Views\DataRecordTypeEditor.html" />
     <Content Include="VR_GenericData\Views\DataRecordTypeEditorController.js" />
     <Content Include="VR_GenericData\Views\DataRecordTypeManagement.html" />
