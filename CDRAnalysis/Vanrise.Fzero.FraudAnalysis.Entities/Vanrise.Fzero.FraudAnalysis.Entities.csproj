@@ -136,7 +136,7 @@
     <Compile Include="AccountCase.cs" />
     <Compile Include="StrategyExecution.cs" />
     <Compile Include="StrategyExecutionItem.cs" />
-    <Compile Include="Strategy\StrategyFilter.cs" />
+    <Compile Include="Strategy\StrategyInfoFilter.cs" />
     <Compile Include="SuspiciousNumber.cs" />
   </ItemGroup>
   <ItemGroup>
