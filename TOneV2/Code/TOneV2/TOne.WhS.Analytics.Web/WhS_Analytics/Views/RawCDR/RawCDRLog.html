@@ -66,19 +66,22 @@
                 </vr-columns>
             </vr-row>
         </div>
+
+
+        <vr-row>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="getData"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-whs-analytics-rawcdrlog-grid on-ready="onMainGridReady"></vr-whs-analytics-rawcdrlog-grid>
+            </vr-columns>
+        </vr-row>
     </vr-form>
-
-    <vr-row>
-        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-
-            <div transclude-to="buttons">
-                <vr-button type="Search" formname="formFilter" data-onclick="getData"></vr-button>
-            </div>
-        </vr-actionbar>
-    </vr-row>
-    <div>
-        <vr-whs-analytics-rawcdrlog-grid on-ready="onMainGridReady"></vr-whs-analytics-rawcdrlog-grid>
-    </div>
 
 
 </vr-panel>

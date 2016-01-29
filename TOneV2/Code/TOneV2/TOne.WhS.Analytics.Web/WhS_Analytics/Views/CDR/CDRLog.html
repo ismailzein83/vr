@@ -14,12 +14,12 @@
             <vr-row removeline>
                 <vr-columns width="fullrow">
                     <vr-row>
-                      
+
                         <vr-columns width="normal">
                             <vr-datetimepicker type="dateTime" label="From" value="fromDate" isrequired customvalidate="validateDateTime()"></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-datetimepicker type="dateTime" label="To" value="toDate"  customvalidate="validateDateTime()"></vr-datetimepicker>
+                            <vr-datetimepicker type="dateTime" label="To" value="toDate" customvalidate="validateDateTime()"></vr-datetimepicker>
                         </vr-columns>
 
                         <vr-columns width="normal" ng-show="advancedSelected">
@@ -29,10 +29,10 @@
                             <vr-whs-be-switch-selector on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
                         </vr-columns>
 
-                       
+
 
                         <vr-columns width="normal" ng-show="advancedSelected">
-                            <vr-whs-be-carrieraccount-selector ismultipleselection getcustomers  on-ready="onCustomerAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
+                            <vr-whs-be-carrieraccount-selector ismultipleselection getcustomers on-ready="onCustomerAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
                         </vr-columns>
 
                         <vr-columns width="normal" ng-show="advancedSelected">
@@ -56,18 +56,24 @@
                 </vr-columns>
             </vr-row>
         </div>
+
+
+        <vr-row>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="getData"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-whs-analytics-cdrlog-grid on-ready="onMainGridReady"></vr-whs-analytics-cdrlog-grid>
+            </vr-columns>
+        </vr-row>
     </vr-form>
+ </vr-panel>
+    
 
-    <vr-row>
-        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-
-            <div transclude-to="buttons">
-                <vr-button type="Search" formname="formFilter" data-onclick="getData"></vr-button>
-            </div>
-        </vr-actionbar>
-    </vr-row>
-    <div>
-        <vr-whs-analytics-cdrlog-grid on-ready="onMainGridReady"></vr-whs-analytics-cdrlog-grid>
-    </div>
 
 

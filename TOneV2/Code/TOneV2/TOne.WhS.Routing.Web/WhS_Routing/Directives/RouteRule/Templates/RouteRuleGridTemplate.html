@@ -1,15 +1,12 @@
-﻿<vr-row removeline>
-    <vr-columns width="fullrow">
-        <vr-datagrid datasource="routeRules"
-                     dataretrievalfunction="dataRetrievalFunction"
-                     pagingtype="'PagingOnScroll'"
-                     on-ready="onGridReady"
-                     menuactions="gridMenuActions"
-                     idfield="Entity.RuleId">
-            <vr-datagridcolumn headertext="'Id'" field="'Entity.RuleId'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Included Codes'" field="'IncludedCodes'" ng-show="hideIncludedCodesColumn"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Customers'" field="'Customers'" ng-show="hideCustomerColumn"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Sale Zones'" field="'SaleZones'"></vr-datagridcolumn>
-        </vr-datagrid>
-    </vr-columns>
-</vr-row>
+﻿
+<vr-datagrid datasource="routeRules"
+                dataretrievalfunction="dataRetrievalFunction"
+                pagingtype="'PagingOnScroll'"
+                on-ready="onGridReady"
+                menuactions="gridMenuActions"
+                idfield="Entity.RuleId">
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.RuleId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Included Codes'" field="'IncludedCodes'" ng-show="hideIncludedCodesColumn"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Customers'" field="'Customers'" ng-show="hideCustomerColumn"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Sale Zones'" field="'SaleZones'"></vr-datagridcolumn>
+</vr-datagrid>

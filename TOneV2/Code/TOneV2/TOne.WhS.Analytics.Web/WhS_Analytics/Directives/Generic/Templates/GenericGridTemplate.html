@@ -1,6 +1,5 @@
 ﻿
-<vr-row removeline ng-show="ctrl.showGrid" >
-<vr-columns width="fullrow">
+<div ng-show="ctrl.showGrid" >
     <vr-datagrid datasource="ctrl.datasource" defaultsortbyfieldname="ctrl.sortField" pagingtype="'Pager'"
                     menuactions="ctrl.gridMenuActions" gridmenuactions="ctrl.gridLeftMenuActions" dataretrievalfunction="ctrl.dataRetrievalFunction" on-ready="ctrl.gridReady">
         <vr-datagridcolumn ng-repeat="dimension in ctrl.dimensionFields" ng-show="ctrl.dimensionFields.length > 0" headertext="dimension.description" type="dimension.type"
@@ -13,5 +12,4 @@
             <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
         </vr-datagridexpandablerow>
     </vr-datagrid>
-</vr-columns>
-</vr-row>
+</div>
