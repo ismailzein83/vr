@@ -7,7 +7,7 @@
     function StrategyAPIService(BaseAPIService, UtilsService, CDRAnalysis_FA_ModuleConfig) {
         return ({
             GetFilteredStrategies: GetFilteredStrategies,
-            GetStrategies: GetStrategies,
+            GetStrategiesInfo: GetStrategiesInfo,
             GetStrategy: GetStrategy,
             GetFilters: GetFilters,
             GetAggregates: GetAggregates,
@@ -19,10 +19,9 @@
             return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, 'Strategy', 'GetFilteredStrategies'), input);
         }
 
-        function GetStrategies(periodId, isEnabled) {
-            return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, 'Strategy', 'GetStrategies'), {
-                PeriodId: periodId,
-                IsEnabled: isEnabled
+        function GetStrategiesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, 'Strategy', 'GetStrategiesInfo'), {
+                filter: filter
             });
         }
 

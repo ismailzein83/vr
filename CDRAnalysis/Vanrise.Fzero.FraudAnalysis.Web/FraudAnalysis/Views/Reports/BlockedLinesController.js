@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-BlockedLinesController.$inject = ['$scope', 'ReportingAPIService', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum', 'VRValidationService'];
+BlockedLinesController.$inject = ['$scope', 'ReportingAPIService', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService'];
 
-function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum, VRValidationService) {
+function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService) {
 
     var mainGridAPI;
     var arrMenuAction = [];

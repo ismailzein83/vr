@@ -2,9 +2,9 @@
 
     'use strict';
 
-    StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'SuspicionLevelEnum', 'HourEnum', 'VRUIUtilsService', 'CDRAnalysis_FA_PeriodEnum', 'CDRAnalysis_FA_ParametersService'];
+    StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CDRAnalysis_FA_SuspicionLevelEnum', 'VRCommon_HourEnum', 'VRUIUtilsService', 'CDRAnalysis_FA_PeriodEnum', 'CDRAnalysis_FA_ParametersService'];
 
-    function StrategyEditorController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, SuspicionLevelEnum, HourEnum, VRUIUtilsService, CDRAnalysis_FA_PeriodEnum, CDRAnalysis_FA_ParametersService) {
+    function StrategyEditorController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CDRAnalysis_FA_SuspicionLevelEnum, VRCommon_HourEnum, VRUIUtilsService, CDRAnalysis_FA_PeriodEnum, CDRAnalysis_FA_ParametersService) {
         var isEditMode;
 
         var periodSelectorAPI;
@@ -33,31 +33,39 @@
         }
 
         function defineScope() {
+            $scope.modalScope = {};
+            $scope.modalScope.strategyFilters = [];
+
             // Directives
-            $scope.onPeriodSelectorReady = function (api) {
+            $scope.modalScope.onPeriodSelectorReady = function (api) {
                 periodSelectorAPI = api;
                 periodSelectorReadyDeferred.resolve();
             };
-            $scope.onHourSelectorReady = function (api) {
+            $scope.modalScope.onPeriodSelectionChanged = function (selectedPeriod) {
+                if (selectedPeriod != undefined) {
+                    for (var i = 0; i < $scope.modalScope.strategyFilters.length; i++) {
+                        setIsSelectedAndIsShownForFilterDataItem($scope.modalScope.strategyFilters[i]);
+                    }
+                }
+            };
+            $scope.modalScope.onHourSelectorReady = function (api) {
                 hourSelectorAPI = api;
                 hourSelectorReadyDeferred.resolve();
             };
 
             // Strategy parameters
-            $scope.strategyFilters = [];
-            $scope.selectedPeakHours = [];
+            $scope.modalScope.selectedPeakHours = [];
+            $scope.modalScope.gapBetweenConsecutiveCalls = 10;
+            $scope.modalScope.gapBetweenFailedConsecutiveCalls = 10;
+            $scope.modalScope.maxLowDurationCall = 8;
+            $scope.modalScope.minCountofCallsinActiveHour = 5;
 
-            $scope.gapBetweenConsecutiveCalls = 10;
-            $scope.gapBetweenFailedConsecutiveCalls = 10;
-            $scope.maxLowDurationCall = 8;
-            $scope.minCountofCallsinActiveHour = 5;
-
-            $scope.getFilterHint = function (parameter) {
-                if (parameter && $scope.strategyFilters) {
+            $scope.modalScope.getFilterHint = function (parameter) {
+                if (parameter != undefined && parameter != null) {
                     var filters = [];
-                    for (var i = 0; i < $scope.strategyFilters.length; i++) {
-                        var filter = $scope.strategyFilters[i];
-                        if (filter.parameters && filter.parameters.indexOf(parameter) > -1) {
+                    for (var i = 0; i < $scope.modalScope.strategyFilters.length; i++) {
+                        var filter = $scope.modalScope.strategyFilters[i];
+                        if (filter.parameters != null && filter.parameters.indexOf(parameter) > -1) {
                             filters.push(filter.abbreviation);
                         }
                     }
@@ -67,17 +75,16 @@
             };
 
             // Suspicion rules
-            $scope.strategyLevels = [];
-            $scope.suspicionLevels = UtilsService.getArrayEnum(SuspicionLevelEnum);
+            $scope.modalScope.suspicionRules = [];
+            $scope.modalScope.suspicionLevels = UtilsService.getArrayEnum(CDRAnalysis_FA_SuspicionLevelEnum);
 
-            $scope.addRule = function () {
+            $scope.modalScope.addSuspicionRule = function () {
                 var strategyLevelItem = {
-                    suspicionLevel: $scope.suspicionLevels[0],
+                    suspicionLevel: $scope.modalScope.suspicionLevels[0],
                     StrategyLevelCriterias: []
                 };
 
-                angular.forEach($scope.strategyFilters, function (filter) {
-
+                angular.forEach($scope.modalScope.strategyFilters, function (filter) {
                     var levelCriteriaItem = {
                         filterId: filter.filterId,
                         percentage: 0,
@@ -85,16 +92,15 @@
                         downSign: filter.downSign
                     };
                     strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
-
                 });
 
-                $scope.strategyLevels.push(strategyLevelItem);
+                $scope.modalScope.suspicionRules.push(strategyLevelItem);
             };
-            $scope.deleteRule = function (rule) {
-                var index = $scope.strategyLevels.indexOf(rule);
-                $scope.strategyLevels.splice(index, 1);
+            $scope.modalScope.deleteSuspicionRule = function (rule) {
+                var index = $scope.modalScope.suspicionRules.indexOf(rule);
+                $scope.modalScope.suspicionRules.splice(index, 1);
             };
-            $scope.showThresholdHint = function (filter, strategyLevel) {
+            $scope.modalScope.showThresholdHint = function (filter, strategyLevel) {
                 if (filter && filter.threshold && strategyLevel && strategyLevel.percentage) {
                     var newThreshold = (parseInt(filter.threshold) + (parseInt(strategyLevel.percentage) * parseInt(filter.threshold) / 100));
                     return filter.label + ': ' + newThreshold;
@@ -103,7 +109,7 @@
             };
 
             // User actions
-            $scope.save = function () {
+            $scope.modalScope.saveStrategy = function () {
                 if (isEditMode) {
                     return updateStrategy();
                 }
@@ -111,37 +117,36 @@
                     return addStrategy();
                 }
             };
-            $scope.close = function () {
-                $scope.modalContext.closeModal()
+            $scope.modalScope.close = function () {
+                $scope.closeModal();
             };
 
             // Validation functions
-            $scope.validateStrategyFilters = function () {
-                if ($scope.strategyFilters.length == 0)
+            $scope.modalScope.validateStrategyFilters = function () {
+                if ($scope.modalScope.strategyFilters.length == 0)
                     return 'No filters found';
 
-                for (var i = 0; i < $scope.strategyFilters.length; i++) {
-                    if ($scope.strategyFilters[i].isSelected)
+                for (var i = 0; i < $scope.modalScope.strategyFilters.length; i++) {
+                    if ($scope.modalScope.strategyFilters[i].isSelected)
                         return null;
                 }
+
                 return 'No filter(s) selected';
             };
-            $scope.validateStrategyLevels = function () {
-                if ($scope.strategyFilters.length == 0) {
-                    //VRNotificationService.showError('No filters found');
+            $scope.modalScope.validateStrategyLevels = function () {
+                if ($scope.modalScope.strategyFilters.length == 0) {
                     return 'No filters found';
                 }
 
-                if ($scope.strategyLevels.length == 0) {
-                    //VRNotificationService.showError('No strategy levels added');
+                if ($scope.modalScope.suspicionRules.length == 0) {
                     return 'No strategy levels added';
                 }
 
                 var filtersToUseCount = 0;
                 var filterUsages = [];
-                for (var i = 0; i < $scope.strategyFilters.length; i++) {
+                for (var i = 0; i < $scope.modalScope.strategyFilters.length; i++) {
                     var filterUsage = {
-                        mustBeUsed: $scope.strategyFilters[i].isSelected,
+                        mustBeUsed: $scope.modalScope.strategyFilters[i].isSelected,
                         isUsed: false
                     };
 
@@ -151,11 +156,11 @@
                     filterUsages.push(filterUsage);
                 }
 
-                for (var i = 0; i < $scope.strategyLevels.length; i++) {
-                    var strategyLevel = $scope.strategyLevels[i];
+                for (var i = 0; i < $scope.modalScope.suspicionRules.length; i++) {
+                    var strategyLevel = $scope.modalScope.suspicionRules[i];
 
                     for (var j = 0; j < strategyLevel.StrategyLevelCriterias.length; j++) {
-                        if ($scope.strategyFilters[j].isSelected) {
+                        if ($scope.modalScope.strategyFilters[j].isSelected) {
                             if (!filterUsages[j].isUsed) {
                                 filterUsages[j].isUsed = strategyLevel.StrategyLevelCriterias[j].isSelected;
                             }
@@ -171,7 +176,6 @@
                 }
 
                 if (usedFiltersCount < filtersToUseCount) {
-                    //VRNotificationService.showError('Not all selected filters are used');
                     return 'Not all selected filters are used';
                 }
 
@@ -180,7 +184,7 @@
         }
 
         function load() {
-            $scope.isLoading = true;
+            $scope.modalScope.isLoading = true;
             
             if (isEditMode) {
                 getStrategy().then(function () {
@@ -188,8 +192,8 @@
                         strategyEntity = undefined;
                     });
                 }).catch(function (error) {
-                    $scope.isLoading = false;
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.modalScope.isLoading = false;
+                    VRNotificationService.notifyExceptionWithClose(error, $scope.modalScope);
                 });
             }
             else {
@@ -207,15 +211,15 @@
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticControls, loadPeriodSelector, loadHourSelector, loadFilters]).then(function () {
                 if (isEditMode) {
                     loadStrategyFiltersForEditMode();
-                    loadStrategyLevelsForEditMode();
+                    loadSuspicionRulesForEditMode();
                 }
                 else {
                     loadStrategyFiltersForAddMode();
                 }
             }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                VRNotificationService.notifyExceptionWithClose(error, $scope.modalScope);
             }).finally(function () {
-                $scope.isLoading = false;
+                $scope.modalScope.isLoading = false;
             });
 
             function setTitle() {
@@ -223,14 +227,14 @@
             }
             function loadStaticControls() {
                 if (strategyEntity) {
-                    $scope.name = strategyEntity.Name;
-                    $scope.description = strategyEntity.Description;
-                    $scope.isDefault = strategyEntity.IsDefault;
-                    $scope.isEnabled = strategyEntity.IsEnabled;
-                    $scope.gapBetweenConsecutiveCalls = strategyEntity.GapBetweenConsecutiveCalls;
-                    $scope.gapBetweenFailedConsecutiveCalls = strategyEntity.GapBetweenFailedConsecutiveCalls;
-                    $scope.maxLowDurationCall = strategyEntity.MaxLowDurationCall;
-                    $scope.minCountofCallsinActiveHour = strategyEntity.MinimumCountofCallsinActiveHour;
+                    $scope.modalScope.name = strategyEntity.Name;
+                    $scope.modalScope.description = strategyEntity.Description;
+                    $scope.modalScope.isDefault = strategyEntity.IsDefault;
+                    $scope.modalScope.isEnabled = strategyEntity.IsEnabled;
+                    $scope.modalScope.gapBetweenConsecutiveCalls = strategyEntity.GapBetweenConsecutiveCalls;
+                    $scope.modalScope.gapBetweenFailedConsecutiveCalls = strategyEntity.GapBetweenFailedConsecutiveCalls;
+                    $scope.modalScope.maxLowDurationCall = strategyEntity.MaxLowDurationCall;
+                    $scope.modalScope.minCountofCallsinActiveHour = strategyEntity.MinimumCountofCallsinActiveHour;
                 }
             }
             function loadPeriodSelector() {
@@ -301,38 +305,11 @@
                     }
                 });
             }
-            function loadStrategyLevelsForEditMode() {
-                angular.forEach(strategyEntity.StrategyLevels, function (level) {
-                    var strategyLevelItem = {
-                        suspicionLevel: UtilsService.getItemByVal($scope.suspicionLevels, level.SuspicionLevelId, 'value'),
-                        StrategyLevelCriterias: []
-                    };
-
-                    angular.forEach(filterDefinitions, function (filterDef) {
-
-                        var levelCriteriaItem = {
-                            filterId: filterDef.FilterId,
-                            upSign: filterDef.upSign,
-                            downSign: filterDef.downSign,
-                            percentage: 0
-                        };
-
-                        var existingItem = UtilsService.getItemByVal(level.StrategyLevelCriterias, filterDef.filterId, 'FilterId');
-                        if (existingItem != undefined && existingItem != null) {
-                            levelCriteriaItem.isSelected = true;
-                            levelCriteriaItem.percentage = ((parseFloat(existingItem.Percentage) * 100) - 100);
-                        }
-                        strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
-                    });
-
-                    $scope.strategyLevels.push(strategyLevelItem);
-                });
-            }
             function loadStrategyFiltersForAddMode() {
                 if (filterDefinitions) {
                     for (var i = 0; i < filterDefinitions.length; i++) {
                         var strategyFilter = getStrategyFilterDataItemWithCommonProperties(filterDefinitions[i]);
-                        $scope.strategyFilters.push(strategyFilter);
+                        $scope.modalScope.strategyFilters.push(strategyFilter);
                     }
                 }
             }
@@ -349,7 +326,7 @@
                             }
                         }
 
-                        $scope.strategyFilters.push(strategyFilter);
+                        $scope.modalScope.strategyFilters.push(strategyFilter);
                     }
                 }
             }
@@ -378,41 +355,78 @@
                     item.hasParameters = false;
                 }
 
-                if (item.excludeHourly && periodSelectorAPI.getSelectedIds() == CDRAnalysis_FA_PeriodEnum.Hourly.value) {
-                    item.isSelected = false;
-                    item.isShown = false;
-                }
-                else {
-                    item.isShown = true;
-                }
-
+                setIsSelectedAndIsShownForFilterDataItem(item);
                 return item;
+            }
+            function loadSuspicionRulesForEditMode() {
+                angular.forEach(strategyEntity.StrategyLevels, function (level) {
+                    var strategyLevelItem = {
+                        suspicionLevel: UtilsService.getItemByVal($scope.modalScope.suspicionLevels, level.SuspicionLevelId, 'value'),
+                        StrategyLevelCriterias: []
+                    };
+
+                    angular.forEach(filterDefinitions, function (filterDef) {
+                        var levelCriteriaItem = {
+                            filterId: filterDef.FilterId,
+                            upSign: filterDef.upSign,
+                            downSign: filterDef.downSign,
+                            percentage: 0
+                        };
+
+                        var existingItem = UtilsService.getItemByVal(level.StrategyLevelCriterias, filterDef.filterId, 'FilterId');
+                        if (existingItem != undefined && existingItem != null) {
+                            levelCriteriaItem.isSelected = true;
+                            levelCriteriaItem.percentage = ((parseFloat(existingItem.Percentage) * 100) - 100);
+                        }
+                        strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
+                    });
+
+                    $scope.modalScope.suspicionRules.push(strategyLevelItem);
+                });
+            }
+        }
+
+        function setIsSelectedAndIsShownForFilterDataItem(filter) {
+            if (filter.excludeHourly && periodSelectorAPI.getSelectedIds() == CDRAnalysis_FA_PeriodEnum.Hourly.value) {
+                filter.isSelected = false;
+                filter.isShown = false;
+            }
+            else {
+                filter.isShown = true;
             }
         }
 
         function addStrategy() {
             var strategyObject = buildStrategyObjFromScope();
+            $scope.modalScope.isLoading = true;
+
             return StrategyAPIService.AddStrategy(strategyObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Strategy', response, 'Name')) {
-                    if ($scope.onStrategyAdded != undefined)
+                    if ($scope.onStrategyAdded != undefined && typeof $scope.onStrategyAdded == 'function')
                         $scope.onStrategyAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
+                VRNotificationService.notifyException(error, $scope.modalScope);
+            }).finally(function () {
+                $scope.modalScope.isLoading = false;
             });
         }
 
         function updateStrategy() {
             var strategyObject = buildStrategyObjFromScope();
+            $scope.modalScope.isLoading = true;
+
             return StrategyAPIService.UpdateStrategy(strategyObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('Strategy', response, 'Name')) {
-                    if ($scope.onStrategyUpdated != undefined)
+                    if ($scope.onStrategyUpdated != undefined && typeof $scope.onStrategyUpdated == 'function')
                         $scope.onStrategyUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
+                VRNotificationService.notifyException(error, $scope.modalScope);
+            }).finally(function () {
+                $scope.modalScope.isLoading = false;
             });
         }
 
@@ -420,21 +434,21 @@
             var strategyObject = {
                 Id: (strategyId != null) ? strategyId : 0,
                 PeriodId: periodSelectorAPI.getSelectedIds(),
-                Name: $scope.name,
-                Description: $scope.description,
-                IsDefault: $scope.isDefault,
-                IsEnabled: $scope.isEnabled,
-                GapBetweenConsecutiveCalls: $scope.gapBetweenConsecutiveCalls,
-                GapBetweenFailedConsecutiveCalls: $scope.gapBetweenFailedConsecutiveCalls,
-                MaxLowDurationCall: $scope.maxLowDurationCall,
-                MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour,
-                PeakHours: $scope.selectedPeakHours,
+                Name: $scope.modalScope.name,
+                Description: $scope.modalScope.description,
+                IsDefault: $scope.modalScope.isDefault,
+                IsEnabled: $scope.modalScope.isEnabled,
+                GapBetweenConsecutiveCalls: $scope.modalScope.gapBetweenConsecutiveCalls,
+                GapBetweenFailedConsecutiveCalls: $scope.modalScope.gapBetweenFailedConsecutiveCalls,
+                MaxLowDurationCall: $scope.modalScope.maxLowDurationCall,
+                MinimumCountofCallsinActiveHour: $scope.modalScope.minCountofCallsinActiveHour,
+                PeakHours: $scope.modalScope.selectedPeakHours,
                 StrategyFilters: [],
                 StrategyLevels: [],
                 LastUpdatedOn: new Date()
             };
 
-            angular.forEach($scope.strategyFilters, function (filter) {
+            angular.forEach($scope.modalScope.strategyFilters, function (filter) {
                 if (filter.isSelected) {
                     var filterItem = {
                         FilterId: filter.filterId,
@@ -446,7 +460,7 @@
                 }
             });
 
-            angular.forEach($scope.strategyLevels, function (level) {
+            angular.forEach($scope.modalScope.suspicionRules, function (level) {
                 var strategyLevelItem = {
                     SuspicionLevelId: level.suspicionLevel.id,
                     StrategyLevelCriterias: []
@@ -454,9 +468,9 @@
 
                 var index = 0;
                 angular.forEach(level.StrategyLevelCriterias, function (levelCriteria) {
-                    if ($scope.strategyFilters[index].isSelected && levelCriteria.isSelected) {
+                    if ($scope.modalScope.strategyFilters[index].isSelected && levelCriteria.isSelected) {
                         var levelCriteriaItem = {
-                            FilterId: $scope.strategyFilters[index].filterId
+                            FilterId: $scope.modalScope.strategyFilters[index].filterId
                         };
 
                         levelCriteriaItem.Percentage = ((parseFloat(levelCriteria.percentage) + 100) / 100);

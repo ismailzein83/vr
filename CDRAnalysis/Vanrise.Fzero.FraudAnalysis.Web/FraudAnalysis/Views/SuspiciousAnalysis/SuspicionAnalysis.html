@@ -22,14 +22,8 @@
                 <vr-columns width="normal">
                     <vr-datetimepicker label="To" value="toDate" type="dateTime" customvalidate="validateTimeRange()"></vr-datetimepicker>
                 </vr-columns>
-                <vr-columns width="normal">
-                    <vr-select label="Strategy" ng-show="advancedSelected"
-                               datasource="strategies"
-                               selectedvalues="selectedStrategies"
-                               datavaluefield="value"
-                               datatextfield="description"
-                               ismultipleselection>
-                    </vr-select>
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <cdranalysis-fa-strategy-selector on-ready="onStrategySelectorReady" ismultipleselection></cdranalysis-fa-strategy-selector>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-select label="Status" ng-show="advancedSelected"

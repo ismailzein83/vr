@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrCdrFraudanalysisNumberprofilingManual", [ "StrategyAPIService", "HourEnum", "VRValidationService", function ( StrategyAPIService, HourEnum, VRValidationService) {
+app.directive("vrCdrFraudanalysisNumberprofilingManual", [ "StrategyAPIService", "VRCommon_HourEnum", "VRValidationService", function ( StrategyAPIService, VRCommon_HourEnum, VRValidationService) {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -47,7 +47,7 @@ app.directive("vrCdrFraudanalysisNumberprofilingManual", [ "StrategyAPIService",
 
 
             $scope.hours = [];
-            angular.forEach(HourEnum, function (itm) {
+            angular.forEach(VRCommon_HourEnum, function (itm) {
                 $scope.hours.push({ id: itm.id, name: itm.name })
             });
 

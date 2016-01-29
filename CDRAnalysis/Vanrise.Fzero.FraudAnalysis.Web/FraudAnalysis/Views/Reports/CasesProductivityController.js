@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-CasesProductivityController.$inject = ['$scope', 'ReportingAPIService', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum', 'VRValidationService'];
+CasesProductivityController.$inject = ['$scope', 'ReportingAPIService', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService'];
 
-function CasesProductivityController($scope, ReportingAPIService, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum, VRValidationService) {
+function CasesProductivityController($scope, ReportingAPIService, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService) {
 
     var mainGridAPI;
     var arrMenuAction = [];

@@ -104,6 +104,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
@@ -208,9 +212,7 @@
     <Content Include="FraudAnalysis\Constants\StatusEnum.js" />
     <Content Include="FraudAnalysis\Constants\PercentageEnum.js" />
     <Content Include="FraudAnalysis\Constants\CallTypeEnum.js" />
-    <Content Include="FraudAnalysis\Constants\SuspicionOccuranceStatusEnum.js" />
     <Content Include="FraudAnalysis\Constants\SuspicionLevelEnum.js" />
-    <Content Include="FraudAnalysis\Constants\HourEnum.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\Templates\FindRelatedNumbersManualTemplate.html" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\Templates\ExcuteStrategyManualTemplate.html" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\Templates\NumberProfilingManualTemplate.html" />

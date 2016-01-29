@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-StrategyExecutionManagementController.$inject = ['$scope', 'StrategyExecutionAPIService', 'VR_Sec_UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'KindEnum', 'StatusEnum', 'VRValidationService', 'BusinessProcessService', 'BusinessProcessAPIService', 'StrategyAPIService'];
+StrategyExecutionManagementController.$inject = ['$scope', 'StrategyExecutionAPIService', 'VR_Sec_UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService', 'BusinessProcessService', 'BusinessProcessAPIService', 'StrategyAPIService'];
 
-function StrategyExecutionManagementController($scope, StrategyExecutionAPIService, VR_Sec_UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, KindEnum, StatusEnum, VRValidationService, BusinessProcessService, BusinessProcessAPIService, StrategyAPIService) {
+function StrategyExecutionManagementController($scope, StrategyExecutionAPIService, VR_Sec_UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService, BusinessProcessService, BusinessProcessAPIService, StrategyAPIService) {
 
     var mainGridAPI;
     var arrMenuAction = [];

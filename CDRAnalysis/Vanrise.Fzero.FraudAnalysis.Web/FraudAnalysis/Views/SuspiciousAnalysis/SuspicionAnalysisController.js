@@ -1,8 +1,11 @@
 ﻿"use strict";
 
-SuspicionAnalysisController.$inject = ["$scope", "StrategyAPIService", "SuspicionLevelEnum", "CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService", "VRValidationService",'CDRAnalysis_FA_AccountCaseAPIService'];
+SuspicionAnalysisController.$inject = ["$scope", "StrategyAPIService", "CDRAnalysis_FA_SuspicionLevelEnum", "CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService", "VRValidationService", 'CDRAnalysis_FA_AccountCaseAPIService', 'VRUIUtilsService'];
 
-function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionLevelEnum, CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, VRModalService, VRNavigationService, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService) {
+function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_SuspicionLevelEnum, CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, VRModalService, VRNavigationService, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService, VRUIUtilsService) {
+
+    var strategySelectorAPI;
+    var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
     var gridAPI = undefined;
 
@@ -10,6 +13,11 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionLevelE
     load();
 
     function defineScope() {
+        $scope.onStrategySelectorReady = function (api) {
+            strategySelectorAPI = api;
+            strategySelectorReadyDeferred.resolve();
+        };
+
         $scope.accountNumber = undefined;
 
         var Now = new Date();
@@ -25,12 +33,11 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionLevelE
         }
 
         $scope.strategies = [];
-        $scope.selectedStrategies = [];
 
         $scope.accountStatuses = UtilsService.getArrayEnum(CaseStatusEnum);
         $scope.selectedAccountStatuses = [$scope.accountStatuses[0]]; // select the Open status by default
 
-        $scope.suspicionLevels = UtilsService.getArrayEnum(SuspicionLevelEnum);
+        $scope.suspicionLevels = UtilsService.getArrayEnum(CDRAnalysis_FA_SuspicionLevelEnum);
         $scope.selectedSuspicionLevels = [];
 
         $scope.accountSuspicionSummaries = [];
@@ -53,7 +60,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionLevelE
                     angular.forEach(response.Data, function (item) {
 
                         if (item.SuspicionLevelID != 0) {
-                            var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
+                            var suspicionLevel = UtilsService.getEnum(CDRAnalysis_FA_SuspicionLevelEnum, "value", item.SuspicionLevelID);
                             item.SuspicionLevelDescription = suspicionLevel.description;
                         }
 
@@ -74,9 +81,9 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionLevelE
 
         $scope.getSuspicionLevelColor = function (dataItem) {
 
-            if (dataItem.SuspicionLevelID == SuspicionLevelEnum.Suspicious.value) return LabelColorsEnum.WarningLevel1.color;
-            else if (dataItem.SuspicionLevelID == SuspicionLevelEnum.HighlySuspicious.value) return LabelColorsEnum.WarningLevel2.color;
-            else if (dataItem.SuspicionLevelID == SuspicionLevelEnum.Fraud.value) return LabelColorsEnum.Error.color;
+            if (dataItem.SuspicionLevelID == CDRAnalysis_FA_SuspicionLevelEnum.Suspicious.value) return LabelColorsEnum.WarningLevel1.color;
+            else if (dataItem.SuspicionLevelID == CDRAnalysis_FA_SuspicionLevelEnum.HighlySuspicious.value) return LabelColorsEnum.WarningLevel2.color;
+            else if (dataItem.SuspicionLevelID == CDRAnalysis_FA_SuspicionLevelEnum.Fraud.value) return LabelColorsEnum.Error.color;
         }
 
         $scope.getCaseStatusColor = function (dataItem) {
@@ -93,7 +100,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionLevelE
             AccountNumber: ($scope.accountNumber != undefined && $scope.accountNumber != "") ? $scope.accountNumber : null,
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate,
-            StrategyIDs: UtilsService.getPropValuesFromArray($scope.selectedStrategies, "value"),
+            StrategyIDs: strategySelectorAPI.getSelectedIds(),
             Statuses: UtilsService.getPropValuesFromArray($scope.selectedAccountStatuses, "value"),
             SuspicionLevelIDs: UtilsService.getPropValuesFromArray($scope.selectedSuspicionLevels, "value")
         };
@@ -103,22 +110,23 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionLevelE
 
     function load() {
         $scope.isInitializing = true;
+        loadAllControls();
+    }
 
-        return StrategyAPIService.GetStrategies(0, "") // get all the enabled and disabled strategies (2nd arg) for all periods (1st arg)
-            .then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.strategies.push({
-                        value: item.Id,
-                        description: item.Name
-                    });
-                });
-            })
-            .catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            })
-            .finally(function () {
-                $scope.isInitializing = false;
+    function loadAllControls() {
+        return UtilsService.waitMultipleAsyncOperations([loadStrategySelector]).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+        }).finally(function () {
+            $scope.isInitializing = false;
+        });
+
+        function loadStrategySelector() {
+            var strategySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            strategySelectorReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(strategySelectorAPI, undefined, strategySelectorLoadDeferred);
             });
+            return strategySelectorLoadDeferred.promise;
+        }
     }
 
     function openSummaryDetails(accountNumber, caseID) {

@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-NumberProfilingProcessInput_Scheduled.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'HourEnum', 'VRUIUtilsService'];
+NumberProfilingProcessInput_Scheduled.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRCommon_HourEnum', 'VRUIUtilsService'];
 
-function NumberProfilingProcessInput_Scheduled($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, HourEnum, VRUIUtilsService) {
+function NumberProfilingProcessInput_Scheduled($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRCommon_HourEnum, VRUIUtilsService) {
     var prefixDirectiveAPI;
     var prefixReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -21,7 +21,7 @@ function NumberProfilingProcessInput_Scheduled($scope, $http, StrategyAPIService
 
 
         $scope.hours = [];
-        angular.forEach(HourEnum, function (itm) {
+        angular.forEach(VRCommon_HourEnum, function (itm) {
             $scope.hours.push({ id: itm.id, name: itm.name })
         });
 

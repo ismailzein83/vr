@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
+using Vanrise.Entities;
+using Vanrise.Fzero.FraudAnalysis.Aggregates;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Web.Base;
-using Vanrise.Entities;
-using Vanrise.Fzero.FraudAnalysis.Aggregates;
 
 namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {
@@ -26,10 +26,11 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetStrategies")]
-        public IEnumerable<StrategyInfo> GetStrategies(int PeriodId, bool? IsEnabled)
+        [Route("GetStrategiesInfo")]
+        public IEnumerable<StrategyInfo> GetStrategiesInfo(string filter = null)
         {
-            return _manager.GetStrategiesInfo(PeriodId, IsEnabled);
+            StrategyInfoFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<StrategyInfoFilter>(filter) : null;
+            return _manager.GetStrategiesInfo(deserializedFilter);
         }
 
         [HttpGet]

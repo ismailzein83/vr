@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-CaseOccuranceGridController.$inject = ["$scope", "SuspicionLevelEnum", "CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService",'CDRAnalysis_FA_AccountCaseHistoryAPIService','CDRAnalysis_FA_StrategyExecutionItemAPIService'];
+CaseOccuranceGridController.$inject = ["$scope", "CDRAnalysis_FA_SuspicionLevelEnum", "CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService",'CDRAnalysis_FA_AccountCaseHistoryAPIService','CDRAnalysis_FA_StrategyExecutionItemAPIService'];
 
-function CaseOccuranceGridController($scope, SuspicionLevelEnum, CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, CDRAnalysis_FA_AccountCaseHistoryAPIService, CDRAnalysis_FA_StrategyExecutionItemAPIService) {
+function CaseOccuranceGridController($scope, CDRAnalysis_FA_SuspicionLevelEnum, CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, CDRAnalysis_FA_AccountCaseHistoryAPIService, CDRAnalysis_FA_StrategyExecutionItemAPIService) {
 
     var gridApi = undefined;
     var gridApi_Logs = undefined;
@@ -33,7 +33,7 @@ function CaseOccuranceGridController($scope, SuspicionLevelEnum, CaseStatusEnum,
             return CDRAnalysis_FA_StrategyExecutionItemAPIService.GetFilteredDetailsByCaseID(dataRetrievalInput)
                 .then(function (response) {
                     angular.forEach(response.Data, function (item) {
-                        var suspicionLevel = UtilsService.getEnum(SuspicionLevelEnum, "value", item.SuspicionLevelID);
+                        var suspicionLevel = UtilsService.getEnum(CDRAnalysis_FA_SuspicionLevelEnum, "value", item.SuspicionLevelID);
                         item.SuspicionLevelDescription = suspicionLevel.description;
                     });
 
@@ -75,9 +75,9 @@ function CaseOccuranceGridController($scope, SuspicionLevelEnum, CaseStatusEnum,
 
         $scope.getSuspicionLevelColor = function (dataItem) {
 
-            if (dataItem.SuspicionLevelID == SuspicionLevelEnum.Suspicious.value) return LabelColorsEnum.WarningLevel1.color;
-            else if (dataItem.SuspicionLevelID == SuspicionLevelEnum.HighlySuspicious.value) return LabelColorsEnum.WarningLevel2.color;
-            else if (dataItem.SuspicionLevelID == SuspicionLevelEnum.Fraud.value) return LabelColorsEnum.Error.color;
+            if (dataItem.SuspicionLevelID == CDRAnalysis_FA_SuspicionLevelEnum.Suspicious.value) return LabelColorsEnum.WarningLevel1.color;
+            else if (dataItem.SuspicionLevelID == CDRAnalysis_FA_SuspicionLevelEnum.HighlySuspicious.value) return LabelColorsEnum.WarningLevel2.color;
+            else if (dataItem.SuspicionLevelID == CDRAnalysis_FA_SuspicionLevelEnum.Fraud.value) return LabelColorsEnum.Error.color;
         }
 
         $scope.getCaseStatusColor = function (dataItem) {

@@ -2,9 +2,9 @@
     
     'use strict';
 
-    ParametersService.$inject = ['HourEnum', 'UtilsService'];
+    ParametersService.$inject = ['VRCommon_HourEnum', 'UtilsService'];
 
-    function ParametersService(HourEnum, UtilsService) {
+    function ParametersService(VRCommon_HourEnum, UtilsService) {
         return {
             getDefaultPeakHourIds: getDefaultPeakHourIds
         };
@@ -12,7 +12,7 @@
         function getDefaultPeakHourIds() {
             var deferred = UtilsService.createPromiseDeferred();
             var ids = [];
-            var hours = UtilsService.getArrayEnum(HourEnum);
+            var hours = UtilsService.getArrayEnum(VRCommon_HourEnum);
             for (var key in hours) {
                 var hour = hours[key];
                 if (hour.id >= 12 && hour.id <= 17) {

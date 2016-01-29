@@ -64,15 +64,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return null;
         }
 
-        public IEnumerable<StrategyInfo> GetStrategiesInfo(int periodId, bool? isEnabled)
+        public IEnumerable<StrategyInfo> GetStrategiesInfo(StrategyInfoFilter filter)
         {
-            var strategies = GetCachedStrategies();
-
-            Func<Strategy, bool> filterExpression = (strategyObject) =>
-                  (periodId == 0 || periodId == strategyObject.PeriodId)
-               && (isEnabled == null || isEnabled.Value == strategyObject.IsEnabled)
-               ;
-            return strategies.MapRecords(StrategyInfoMapper, filterExpression);
+            var cachedStrategies = GetCachedStrategies();
+            Func<Strategy, bool> filterExpression = null;
+            if (filter != null)
+            {
+                filterExpression = (strategy) => (filter.PeriodId == null || filter.PeriodId.Value == strategy.PeriodId) && (filter.IsEnabled == null || filter.IsEnabled.Value == strategy.IsEnabled);
+            }
+            return cachedStrategies.MapRecords(StrategyInfoMapper, filterExpression);
         }
 
         public IEnumerable<string> GetStrategyNames(IEnumerable<int> strategyIds)

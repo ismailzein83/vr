@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-StrategyExecutionEditorController.$inject = ['$scope', 'StrategyExecutionAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'SuspicionLevelEnum', 'HourEnum'];
+StrategyExecutionEditorController.$inject = ['$scope', 'StrategyExecutionAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CDRAnalysis_FA_SuspicionLevelEnum', 'VRCommon_HourEnum'];
 
-function StrategyExecutionEditorController($scope, StrategyExecutionAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, SuspicionLevelEnum, HourEnum) {
+function StrategyExecutionEditorController($scope, StrategyExecutionAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CDRAnalysis_FA_SuspicionLevelEnum, VRCommon_HourEnum) {
 
     var editMode;
     loadParameters();
@@ -39,12 +39,12 @@ function StrategyExecutionEditorController($scope, StrategyExecutionAPIService, 
         StrategyExecutionEditorController.isLevelsTabShow = false;
 
         $scope.suspicionLevels = [];
-        angular.forEach(SuspicionLevelEnum, function (itm) {
+        angular.forEach(CDRAnalysis_FA_SuspicionLevelEnum, function (itm) {
             $scope.suspicionLevels.push({ id: itm.value, name: itm.description })
         });
 
         $scope.hours = [];
-        angular.forEach(HourEnum, function (itm) {
+        angular.forEach(VRCommon_HourEnum, function (itm) {
             $scope.hours.push({ id: itm.id, name: itm.name })
         });
 

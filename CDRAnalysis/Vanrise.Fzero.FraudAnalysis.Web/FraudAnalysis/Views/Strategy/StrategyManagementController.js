@@ -2,9 +2,12 @@
 
     "use strict";
 
-    StrategyManagementController.$inject = ['$scope', 'CDRAnalysis_FA_StrategyService', 'KindEnum', 'StatusEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRValidationService'];
+    StrategyManagementController.$inject = ['$scope', 'CDRAnalysis_FA_StrategyService', 'CDRAnalysis_FA_KindEnum', 'CDRAnalysis_FA_StatusEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRValidationService'];
 
-    function StrategyManagementController($scope, CDRAnalysis_FA_StrategyService, KindEnum, StatusEnum, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService) {
+    function StrategyManagementController($scope, CDRAnalysis_FA_StrategyService, CDRAnalysis_FA_KindEnum, CDRAnalysis_FA_StatusEnum, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService) {
+        var timeRangeDirectiveAPI;
+        var timeRangeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
         var periodSelectorAPI;
         var periodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -18,6 +21,11 @@
         load();
 
         function defineScope() {
+            $scope.onTimeRangeDirectiveReady = function (api) {
+                timeRangeDirectiveAPI = api;
+                timeRangeDirectiveReadyDeferred.resolve();
+            };
+
             $scope.onUserSelectorReady = function (api) {
                 userSelectorAPI = api;
                 userSelectorReadyDeferred.resolve();
@@ -40,9 +48,9 @@
 
             $scope.addStrategy = function () {
                 var onStrategyAdded = function (addedStrategy) {
-                    gridAPI.itemAdded(addedStrategy);
+                    gridAPI.onStrategyAdded(addedStrategy);
                 };
-                CDRAnalysis_FA_StrategyService.addStrategy();
+                CDRAnalysis_FA_StrategyService.addStrategy(onStrategyAdded);
             };
 
             $scope.validateTimeRange = function () {
@@ -63,19 +71,28 @@
             });
 
             function loadStaticSelectors() {
-                $scope.kinds = UtilsService.getArrayEnum(KindEnum);
+                $scope.kinds = UtilsService.getArrayEnum(CDRAnalysis_FA_KindEnum);
                 $scope.selectedKinds = [];
 
-                $scope.statuses = UtilsService.getArrayEnum(StatusEnum);
+                $scope.statuses = UtilsService.getArrayEnum(CDRAnalysis_FA_StatusEnum);
                 $scope.selectedStatuses = [];
+            }
+
+            function loadTimeRangeDirective() {
+                var timeRangeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                timeRangeDirectiveReadyDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, undefined, timeRangeDirectiveLoadDeferred);
+                });
+
+                return timeRangeDirectiveLoadDeferred.promise;
             }
 
             function loadUserSelector() {
                 var userSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                 userSelectorReadyDeferred.promise.then(function () {
-                    var userSelectorPayload = null;
-                    VRUIUtilsService.callDirectiveLoad(userSelectorAPI, userSelectorPayload, userSelectorLoadDeferred);
+                    VRUIUtilsService.callDirectiveLoad(userSelectorAPI, undefined, userSelectorLoadDeferred);
                 });
 
                 return userSelectorLoadDeferred.promise;
@@ -85,8 +102,7 @@
                 var periodSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                 periodSelectorReadyDeferred.promise.then(function () {
-                    var periodSelectorPayload = null;
-                    VRUIUtilsService.callDirectiveLoad(periodSelectorAPI, periodSelectorPayload, periodSelectorLoadDeferred);
+                    VRUIUtilsService.callDirectiveLoad(periodSelectorAPI, undefined, periodSelectorLoadDeferred);
                 });
 
                 return periodSelectorLoadDeferred.promise;
