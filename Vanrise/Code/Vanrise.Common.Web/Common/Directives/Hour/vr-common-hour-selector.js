@@ -2,9 +2,9 @@
 
     'use strict';
 
-    HourSelectorDirective.$inject = ['HourEnum', 'UtilsService', 'VRUIUtilsService'];
+    HourSelectorDirective.$inject = ['VRCommon_HourEnum', 'UtilsService', 'VRUIUtilsService'];
 
-    function HourSelectorDirective(HourEnum, UtilsService, VRUIUtilsService) {
+    function HourSelectorDirective(VRCommon_HourEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -66,7 +66,7 @@
 
                 directiveAPI.load = function (payload) {
                     selectorAPI.clearDataSource();
-                    ctrl.datasource = UtilsService.getArrayEnum(HourEnum);
+                    ctrl.datasource = UtilsService.getArrayEnum(VRCommon_HourEnum);
 
                     var selectedIds;
 

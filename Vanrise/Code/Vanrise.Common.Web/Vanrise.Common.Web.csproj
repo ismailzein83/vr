@@ -150,6 +150,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Common\Constant\HourEnum.js" />
     <Content Include="Common\Constant\ModuleConfig.js" />
     <Content Include="Common\Directives\City\Templates\CityGridTemplate.html" />
     <Content Include="Common\Directives\City\vr-common-city-grid.js" />
