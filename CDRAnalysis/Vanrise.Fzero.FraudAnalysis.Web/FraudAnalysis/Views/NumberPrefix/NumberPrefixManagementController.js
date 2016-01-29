@@ -134,12 +134,48 @@
             });
         }
 
+
+
+        function findRootNodes() {
+            for (var i = 0; i < numberPrefixes.length; i++) {
+                numberPrefixes[i].isRoot = true;
+                numberPrefixes[i].effectiveNumberPrefixes = [];
+                if (numberPrefixes[i].Prefix.length > 1) {
+                    for (var j = 0; j < numberPrefixes.length; j++) {
+                        if (numberPrefixes[i].Prefix.slice(0, -1) == numberPrefixes[j].Prefix)
+                            numberPrefixes[i].isRoot = false;
+                    }
+                }
+            }
+        }
+
+        function findChildrenNodes(rootNode) {
+            var children = [];
+            for (var i = 0; i < numberPrefixes.length; i++) {
+                if (numberPrefixes[i].isRoot == false && numberPrefixes[i].Prefix.length == rootNode.Prefix.length + 1 && numberPrefixes[i].Prefix.slice(0, -1) == rootNode.Prefix) {
+                    rootNode.effectiveNumberPrefixes.push(mapNumberPrefixToNode(numberPrefixes[i]));
+                }
+            }
+        }
+
+
+
         function buildNumberPrefixesTree() {
             $scope.nodes.length = 0;
+
+            findRootNodes();
+
             for (var i = 0; i < numberPrefixes.length; i++) {
-                var node = mapNumberPrefixToNode(numberPrefixes[i]);
-                $scope.nodes.push(node);
+                    findChildrenNodes(numberPrefixes[i])
             }
+
+            for (var i = 0; i < numberPrefixes.length; i++) {
+                if (numberPrefixes[i].isRoot == true) {
+                    var node = mapNumberPrefixToNode(numberPrefixes[i]);
+                    $scope.nodes.push(node);
+                }
+            }
+
             treeAPI.refreshTree($scope.nodes);
 
         }
@@ -149,7 +185,7 @@
                 nodeId: numberPrefixInfo.Prefix,
                 nodeName: numberPrefixInfo.Prefix,
                 hasRemoteChildren: false,
-                effectiveNumberPrefixes: []
+                effectiveNumberPrefixes: numberPrefixInfo.effectiveNumberPrefixes
             };
         }
 
