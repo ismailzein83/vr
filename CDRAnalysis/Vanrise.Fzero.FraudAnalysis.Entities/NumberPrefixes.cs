@@ -3,25 +3,25 @@ using Vanrise.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class FixedPrefixes : GenericConfiguration
+    public class NumberPrefixes : GenericConfiguration
     {
-        public List<FixedPrefix> Prefixes { get; set; }
+        public List<NumberPrefix> Prefixes { get; set; }
         public override string OwnerKey
         {
             get { return null; }
         }
     }
-    public class FixedPrefix
+    public class NumberPrefix
     {
         public int ID { get; set; }
         public string Prefix { get; set; }
     }
-    public class FixedPrefixDetail
+    public class NumberPrefixDetail
     {
-        public FixedPrefix Entity { get; set; }
+        public NumberPrefix Entity { get; set; }
     }
 
-    public class FixedPrefixInfo
+    public class NumberPrefixInfo
     {
         public int ID { get; set; }
         public string Prefix { get; set; }

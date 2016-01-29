@@ -1,7 +1,7 @@
 ﻿
-app.service('Fzero_FraudAnalysis_MainService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'Fzero_FraudAnalysis_DefineFixedPrefixesAPIService',
+app.service('Fzero_FraudAnalysis_MainService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'Fzero_FraudAnalysis_NumberPrefixesAPIService',
 
-    function (VRModalService, VRNotificationService, UtilsService, Fzero_FraudAnalysis_DefineFixedPrefixesAPIService) {
+    function (VRModalService, VRNotificationService, UtilsService, Fzero_FraudAnalysis_NumberPrefixesAPIService) {
 
         return ({
             addNewFixedPrefix: addNewFixedPrefix,
@@ -18,7 +18,7 @@ app.service('Fzero_FraudAnalysis_MainService', ['VRModalService', 'VRNotificatio
             };
             var parameters = {
             };
-            VRModalService.showModal('/Client/Modules/FraudAnalysis/Views/FixedPrefixes/DefineFixedPrefixesEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/FraudAnalysis/Views/FixedPrefixes/NumberPrefixesEditor.html', parameters, settings);
         }
 
         function editFixedPrefix(obj, onFixedPrefixUpdated) {
@@ -30,14 +30,14 @@ app.service('Fzero_FraudAnalysis_MainService', ['VRModalService', 'VRNotificatio
             var parameters = {
                 ID: obj.ID,
             };
-            VRModalService.showModal('/Client/Modules/FraudAnalysis/Views/FixedPrefixes/DefineFixedPrefixesEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/FraudAnalysis/Views/FixedPrefixes/NumberPrefixesEditor.html', parameters, settings);
         }
 
         function deleteFixedPrefix($scope, obj, onFixedPrefixObjDeleted) {
             VRNotificationService.showConfirmation()
                 .then(function (response) {
                     if (response) {
-                        return Fzero_FraudAnalysis_DefineFixedPrefixesAPIService.DeleteFixedPrefix(obj.Entity.ID)
+                        return Fzero_FraudAnalysis_NumberPrefixesAPIService.DeleteFixedPrefix(obj.Entity.ID)
                             .then(function (deletionResponse) {
                                 VRNotificationService.notifyOnItemDeleted("Fixed Prefix", deletionResponse);
                                 onFixedPrefixObjDeleted(obj);

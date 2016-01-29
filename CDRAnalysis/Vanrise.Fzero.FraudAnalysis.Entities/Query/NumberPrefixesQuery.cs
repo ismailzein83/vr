@@ -1,7 +1,7 @@
 ﻿
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class FixedPrefixesQuery
+    public class NumberPrefixesQuery
     {
         public string Name { get; set; }
     }

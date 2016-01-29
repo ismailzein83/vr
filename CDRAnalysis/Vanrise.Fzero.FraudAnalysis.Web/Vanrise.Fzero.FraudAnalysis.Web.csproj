@@ -146,7 +146,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountCaseController.cs" />
     <Compile Include="Controllers\AccountCaseHistoryController.cs" />
-    <Compile Include="Controllers\DefineFixedPrefixesController.cs" />
+    <Compile Include="Controllers\NumberPrefixController.cs" />
     <Compile Include="Controllers\NumberProfileController.cs" />
     <Compile Include="Controllers\NormalCDRController.cs" />
     <Compile Include="Controllers\PeriodController.cs" />
@@ -238,6 +238,7 @@
     <Content Include="FraudAnalysis\Services\APIServices\StrategyExecutionAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyExecutionItemAPIService.js" />
     <Content Include="FraudAnalysis\Services\MainService.js" />
+    <Content Include="FraudAnalysis\Services\APIServices\NumberPrefixAPIService.js" />
     <Content Include="FraudAnalysis\Services\ParametersService.js" />
     <Content Include="FraudAnalysis\Services\StrategyService.js" />
     <Content Include="FraudAnalysis\Views\Dialogs\NewNumberPrefixDialog.html" />

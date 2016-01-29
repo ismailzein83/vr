@@ -2,142 +2,72 @@
 
     'use strict';
 
-    NumberPrefixManagementController.$inject = ['$scope', 'WhS_CodePrep_CodePrepAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcessService', 'VRUIUtilsService', 'UtilsService', 'VRCommon_CountryAPIService', 'WhS_BE_SaleZoneAPIService', 'VRModalService', 'VRNotificationService'];
 
-    function NumberPrefixManagementController($scope, WhS_CodePrep_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcessService, VRUIUtilsService, UtilsService, VRCommon_CountryAPIService, WhS_BE_SaleZoneAPIService, VRModalService, VRNotificationService) {
+    NumberPrefixManagementController.$inject = ['$scope', 'FraudAnalysis_NumberPrefixAPIService', 'VRUIUtilsService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
 
-        //#region Global Variables
+    function NumberPrefixManagementController($scope, FraudAnalysis_NumberPrefixAPIService, VRUIUtilsService, UtilsService, VRModalService, VRNotificationService) {
 
-        var sellingNumberPlanDirectiveAPI;
-        var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var treeAPI;
-        var codesGridAPI;
-        var currencyDirectiveAPI;
-        var currencyReadyPromiseDeferred;
-        var countries = [];
-        var filter;
-        var codesFilter;
-
-        //#endregion
-
-        //#region Load
+        var numberPrefixes = [];
 
         defineScope();
-        loadParameters();
         load();
-
-        //#endregion
-
-        //#region Functions
 
         function defineScope() {
             $scope.nodes = [];
-            $scope.sellingNumberPlans = [];
-            $scope.selectedSellingNumberPlan;
             $scope.currentNode;
             $scope.hasState = false;
-            $scope.showGrid = false;
 
             $scope.selectedCodes = [];
 
             $scope.applyNumberPrefixState = function () {
                 var onNumberPrefixStateApplied = function () {
                 };
-                WhS_CodePrep_CodePrepAPIService.ApplyNumberPrefixState(filter.sellingNumberPlanId, onNumberPrefixStateApplied);
+                FraudAnalysis_NumberPrefixAPIService.ApplyNumberPrefixState(onNumberPrefixStateApplied);
             }
 
-            $scope.uploadNumberPrefix = function () {
-                var onNumberPrefixUpdated = function () {
-                };
-                WhS_CodePrep_CodePrepAPIService.UploadNumberPrefixSheet(filter.sellingNumberPlanId, onNumberPrefixUpdated);
-            }
-
-            $scope.onSellingNumberPlanSelectorReady = function (api) {
-                sellingNumberPlanDirectiveAPI = api;
-                sellingNumberPlanReadyPromiseDeferred.resolve();
-            }
-
-            $scope.countriesTreeReady = function (api) {
+            $scope.numberPrefixesTreeReady = function (api) {
                 treeAPI = api;
             }
 
-            $scope.countriesTreeValueChanged = function () {
+            $scope.numberPrefixesTreeValueChanged = function () {
 
                 if ($scope.currentNode != undefined) {
-                    if ($scope.currentNode.type == 'Zone') {
-                        checkState();
-                        codesGridAPI.clearUpdatedItems();
-                        setCodesFilterObject();
-                        $scope.showGrid = true;
-                        // codesGridAPI.clearUpdatedItems();
-                        return codesGridAPI.loadGrid(codesFilter);
-                    }
-                    $scope.showGrid = false;
                 }
             }
 
-            $scope.loadEffectiveSaleZones = function (countryNode) {
-                var effectiveZonesPromiseDeffered = UtilsService.createPromiseDeferred();
-                WhS_CodePrep_CodePrepAPIService.GetZoneItems(filter.sellingNumberPlanId, countryNode.nodeId).then(function (response) {
-                    var effectiveZones = [];
+            $scope.loadEffectiveNumberPrefixes = function (numberPrefixNode) {
+                var effectiveNumberPrefixesPromiseDeffered = UtilsService.createPromiseDeferred();
+                FraudAnalysis_NumberPrefixAPIService.GetNumberPrefixItems(numberPrefixNode.nodeId).then(function (response) {
+                    var effectiveNumberPrefixes = [];
                     angular.forEach(response, function (itm) {
-                        effectiveZones.push(mapZoneToNode(itm));
+                        effectiveNumberPrefixes.push(mapNumberPrefixToNode(itm));
                     });
-                    var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, countryNode.nodeId, 'nodeId');
-                    var parentNode = $scope.nodes[countryIndex];
-                    parentNode.effectiveZones = effectiveZones;
-                    $scope.nodes[countryIndex] = parentNode;
-                    effectiveZonesPromiseDeffered.resolve(effectiveZones);
+                    var numberPrefixIndex = UtilsService.getItemIndexByVal($scope.nodes, numberPrefixNode.nodeId, 'nodeId');
+                    var parentNode = $scope.nodes[numberPrefixIndex];
+                    parentNode.effectiveNumberPrefixes = effectiveNumberPrefixes;
+                    $scope.nodes[numberPrefixIndex] = parentNode;
+                    effectiveNumberPrefixesPromiseDeffered.resolve(effectiveNumberPrefixes);
                 });
-                return effectiveZonesPromiseDeffered.promise;
+                return effectiveNumberPrefixesPromiseDeffered.promise;
             }
 
-            $scope.onSellingNumberPlanSelectorChanged = function (selectedPlan) {
 
-                if (selectedPlan != undefined && !$scope.isLoading) {
-                    countries.length = 0;
 
-                    filter = getFilter();
-                    $scope.isLoading = true;
 
-                    UtilsService.waitMultipleAsyncOperations([getCountries, checkState]).then(function () {
-                        buildCountriesTree();
-                        $scope.currentNode = undefined;
-                        $scope.isLoading = false;
-                    }).catch(function (error) {
-                        $scope.isLoading = false;
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    });
-                }
+
+
+
+            $scope.newNumberPrefixClicked = function () {
+                addNewNumberPrefix();
             }
 
-            $scope.saleCodesGridReady = function (api) {
-
-                codesGridAPI = api;
-                $scope.selectedCodes = codesGridAPI.getSelectedCodes();
-            }
-
-            $scope.newZoneClicked = function () {
-                addNewZone();
-            }
-
-            $scope.newCodeClicked = function () {
-                addNewCode();
-            }
-
-            $scope.moveCodesClicked = function () {
-                moveCodes();
-            }
-
-            $scope.closeCodesClicked = function () {
-                closeCodes();
-            }
 
             $scope.cancelState = function () {
                 return VRNotificationService.showConfirmation().then(function (result) {
                     if (result) {
-                        countries.length = 0;
-                        return WhS_CodePrep_CodePrepAPIService.CancelNumberPrefixState(filter.sellingNumberPlanId).then(function (response) {
+                        numberPrefixes.length = 0;
+                        return FraudAnalysis_NumberPrefixAPIService.CancelNumberPrefixState().then(function (response) {
                             $scope.hasState = !response;
                             treeAPI.refreshTree($scope.nodes);
                             $scope.currentNode = undefined;
@@ -148,39 +78,28 @@
             }
         }
 
-        function loadParameters() {
-        }
-
         function load() {
             $scope.isLoading = true;
 
-            UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlans]).then(function () {
-                $scope.isLoading = false;
+            UtilsService.waitMultipleAsyncOperations([getNumberPrefixes]).then(function () {
+                buildNumberPrefixesTree();
+                $scope.currentNode = undefined;
             }).catch(function (error) {
-                $scope.isLoading = false;
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
             });
         }
 
-        function loadSellingNumberPlans() {
-            var loadSNPPromiseDeferred = UtilsService.createPromiseDeferred();
-            sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
-                var payload = {};
-                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, payload, loadSNPPromiseDeferred);
-            });
-
-            return loadSNPPromiseDeferred.promise;
-        }
-
-        function onZoneAdded(addedZones) {
-            if (addedZones != undefined) {
+        function onNumberPrefixAdded(addedNumberPrefixes) {
+            if (addedNumberPrefixes != undefined) {
                 $scope.hasState = true;
-                for (var i = 0; i < addedZones.length; i++) {
-                    var node = mapZoneToNode(addedZones[i]);
+                for (var i = 0; i < addedNumberPrefixes.length; i++) {
+                    var node = mapNumberPrefixToNode(addedNumberPrefixes[i]);
                     treeAPI.createNode(node);
                     for (var i = 0; i < $scope.nodes.length; i++) {
                         if ($scope.nodes[i].nodeId == $scope.currentNode.nodeId) {
-                            $scope.nodes[i].effectiveZones.push(node);
+                            $scope.nodes[i].effectiveNumberPrefixes.push(node);
                         }
 
                     }
@@ -190,219 +109,80 @@
             }
         }
 
-        function onCodeAdded(addedCodes) {
-            if (addedCodes != undefined) {
-                $scope.showGrid = true;
-                $scope.hasState = true;
-                for (var i = 0; i < addedCodes.length; i++)
-                    codesGridAPI.onCodeAdded(addedCodes[i]);
-
-                if ($scope.currentNode != undefined) {
-                    if ($scope.currentNode.type == 'Zone') {
-                        setCodesFilterObject();
-                        return codesGridAPI.loadGrid(codesFilter);
-                    }
-                }
-            }
-
-        }
-
-        function onCodesMoved(movedCodes) {
-
-            if (movedCodes != undefined) {
-                $scope.selectedCodes.length = 0;
-                $scope.showGrid = true;
-                $scope.hasState = true;
-                for (var i = 0; i < movedCodes.length; i++)
-                    codesGridAPI.onCodeAdded(movedCodes[i]);
-
-                if ($scope.currentNode != undefined) {
-                    if ($scope.currentNode.type == 'Zone') {
-                        setCodesFilterObject();
-                        return codesGridAPI.loadGrid(codesFilter);
-                    }
-                }
-            }
-
-        }
-
-        function onCodesClosed(closedCodes) {
-            if (closedCodes != undefined) {
-                $scope.selectedCodes.length = 0;
-                $scope.showGrid = true;
-                $scope.hasState = true;
-                for (var i = 0; i < closedCodes.length; i++)
-                    codesGridAPI.onCodeAdded(closedCodes[i]);
-
-                if ($scope.currentNode != undefined) {
-                    if ($scope.currentNode.type == 'Zone') {
-                        setCodesFilterObject();
-                        return codesGridAPI.loadGrid(codesFilter);
-                    }
-                }
-            }
-        }
-
-        function addNewZone() {
+        function addNewNumberPrefix() {
             var parameters = {
-                CountryId: $scope.currentNode.nodeId,
-                CountryName: $scope.currentNode.nodeName,
-                SellingNumberPlanId: filter.sellingNumberPlanId
             };
             var settings = {};
             settings.onScopeReady = function (modalScope) {
-                modalScope.onZoneAdded = onZoneAdded;
+                modalScope.onNumberPrefixAdded = onNumberPrefixAdded;
             };
 
-            VRModalService.showModal("/Client/Modules/WhS_NumberPrefix/Views/Dialogs/NewZoneDialog.html", parameters, settings);
+            VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/Dialogs/NewNumberPrefixDialog.html", parameters, settings);
         }
 
-        function addNewCode() {
-
-            var parameters = {
-                ZoneId: $scope.currentNode.nodeId,
-                ZoneName: $scope.currentNode.nodeName,
-                SellingNumberPlanId: filter.sellingNumberPlanId,
-                CountryId: $scope.currentNode.countryId,
-                ZoneStatus: $scope.currentNode.status
-            };
-            var settings = {};
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onCodeAdded = onCodeAdded;
-            };
-
-            VRModalService.showModal("/Client/Modules/WhS_NumberPrefix/Views/Dialogs/NewCodeDialog.html", parameters, settings);
+        function GetCurrentNumberPrefixNodeNumberPrefixes() {
+            var numberPrefixIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.numberPrefixId, 'nodeId');
+            var numberPrefixNode = $scope.nodes[numberPrefixIndex];
+            return getNumberPrefixInfos(numberPrefixNode.effectiveNumberPrefixes);
         }
 
-        function moveCodes() {
-
-            var codes = codesGridAPI.getSelectedCodes();
-            var parameters = {
-                ZoneId: $scope.currentNode.nodeId,
-                ZoneName: $scope.currentNode.nodeName,
-                SellingNumberPlanId: filter.sellingNumberPlanId,
-                CountryId: $scope.currentNode.countryId,
-                ZoneDataSource: GetCurrentCountryNodeZones(),
-                Codes: UtilsService.getPropValuesFromArray(codes, 'Code')
-            };
-            var settings = {};
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onCodesMoved = onCodesMoved;
-            };
-
-            VRModalService.showModal("/Client/Modules/WhS_NumberPrefix/Views/Dialogs/MoveCodeDialog.html", parameters, settings);
-        }
-
-        function closeCodes() {
-
-            var codes = codesGridAPI.getSelectedCodes();
-            var parameters = {
-                ZoneId: $scope.currentNode.nodeId,
-                ZoneName: $scope.currentNode.nodeName,
-                SellingNumberPlanId: filter.sellingNumberPlanId,
-                Codes: UtilsService.getPropValuesFromArray(codes, 'Code')
-            };
-            var settings = {};
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onCodesClosed = onCodesClosed;
-            };
-
-            VRModalService.showModal("/Client/Modules/WhS_NumberPrefix/Views/Dialogs/CloseCodeDialog.html", parameters, settings);
-        }
-
-        function GetCurrentCountryNodeZones() {
-            var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.countryId, 'nodeId');
-            var countryNode = $scope.nodes[countryIndex];
-            return getZoneInfos(countryNode.effectiveZones);
-        }
-
-        function getZoneInfos(zoneNodes) {
-            var zoneInfos = [];
-            angular.forEach(zoneNodes, function (itm) {
-                zoneInfos.push(mapZoneInfoFromNode(itm));
+        function getNumberPrefixInfos(numberPrefixNodes) {
+            var numberPrefixInfos = [];
+            angular.forEach(numberPrefixNodes, function (itm) {
+                numberPrefixInfos.push(mapNumberPrefixInfoFromNode(itm));
             });
 
-            return zoneInfos;
+            return numberPrefixInfos;
         }
 
-        function mapZoneInfoFromNode(zoneItem) {
+        function mapNumberPrefixInfoFromNode(numberPrefixItem) {
             return {
-                // SaleZoneId: zoneItem.nodeId,
-                Name: zoneItem.nodeName
+                Name: numberPrefixItem.nodeName
             };
         }
 
-        function getCountries() {
-            countries.length = 0;
-            return VRCommon_CountryAPIService.GetCountriesInfo().then(function (response) {
+        function getNumberPrefixes() {
+            numberPrefixes.length = 0;
+            return FraudAnalysis_NumberPrefixAPIService.GetPrefixesInfo().then(function (response) {
+                console.log('response')
+                console.log(response)
                 angular.forEach(response, function (itm) {
-                    countries.push(itm);
+                    numberPrefixes.push(itm);
                 });
             });
         }
 
-        function checkState() {
-            countries.length = 0;
-            return WhS_CodePrep_CodePrepAPIService.CheckNumberPrefixState(filter.sellingNumberPlanId).then(function (response) {
-                $scope.hasState = response;
-            });
-        }
-
-        function buildCountriesTree() {
+        function buildNumberPrefixesTree() {
             $scope.nodes.length = 0;
 
-            for (var i = 0; i < countries.length; i++) {
-                var node = mapCountryToNode(countries[i]);
+            for (var i = 0; i < numberPrefixes.length; i++) {
+                var node = mapNumberPrefixToNode(numberPrefixes[i]);
                 $scope.nodes.push(node);
             }
             treeAPI.refreshTree($scope.nodes);
 
         }
 
-        function mapCountryToNode(country) {
+        function mapNumberPrefixToNode(numberPrefix) {
             return {
-                nodeId: country.CountryId,
-                nodeName: country.Name,
-                effectiveZones: [],
-                hasRemoteChildren: true,
-                type: 'Country'
+                nodeId: numberPrefix.NumberPrefixId,
+                nodeName: numberPrefix.Name,
+                effectiveNumberPrefixes: [],
+                hasRemoteChildren: true
             };
         }
 
-        function mapZoneToNode(zoneInfo) {
+        function mapNumberPrefixToNode(numberPrefixInfo) {
 
             return {
-                nodeId: zoneInfo.ZoneId,
-                nodeName: zoneInfo.Name,
+                nodeId: numberPrefixInfo.NumberPrefixId,
+                nodeName: numberPrefixInfo.Name,
                 hasRemoteChildren: false,
-                effectiveZones: [],
-                type: 'Zone',
-                status: zoneInfo.Status,
-                countryId: zoneInfo.CountryId
+                effectiveNumberPrefixes: [],
+                status: numberPrefixInfo.Status,
+                numberPrefixId: numberPrefixInfo.NumberPrefixId
             };
         }
-
-        //#endregion
-
-        //#region Filters
-        function setCodesFilterObject() {
-            codesFilter = {
-                SellingNumberPlanId: filter.sellingNumberPlanId,
-                ZoneId: $scope.currentNode.nodeId,
-                ZoneName: $scope.currentNode.nodeName,
-                ZoneItemStatus: $scope.currentNode.status,
-                CountryId: $scope.currentNode.countryId
-            };
-        }
-
-        function getFilter() {
-            return {
-                sellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds()
-            };
-        }
-
-
-        //#endregion
 
     };
 

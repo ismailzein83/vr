@@ -95,7 +95,7 @@
     <Compile Include="DataWarehouse\DWDimensionManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DataWarehouse\DWStrategyManager.cs" />
-    <Compile Include="DefineFixedPrefixesManager.cs" />
+    <Compile Include="NumberPrefixesManager.cs" />
     <Compile Include="FilterManager.cs" />
     <Compile Include="FraudManager.cs" />
     <Compile Include="CallClassManager.cs" />

@@ -68,8 +68,8 @@
     <Compile Include="BusinessManager\IBusinessManager.cs" />
     <Compile Include="BusinessManager\IStrategyManager.cs" />
     <Compile Include="DataWarehouse\DWBTSDictionary.cs" />
-    <Compile Include="FixedPrefixes.cs" />
-    <Compile Include="Query\FixedPrefixesQuery.cs" />
+    <Compile Include="NumberPrefixes.cs" />
+    <Compile Include="Query\NumberPrefixesQuery.cs" />
     <Compile Include="InfoDetail.cs" />
     <Compile Include="AccountInfo.cs" />
     <Compile Include="CDRDetail.cs" />
