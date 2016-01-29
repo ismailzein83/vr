@@ -72,7 +72,6 @@
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="scg:List(vfce:NumberRangeDefinition)" Name="numberRanges" />
       <Variable x:TypeArguments="x:Int32" Name="subProcessByPrefixCompleted" />
       <Variable x:TypeArguments="x:Int64" Name="totalProcessedCDRs" />
       <Variable x:TypeArguments="x:Int64" Name="totalNumberOfSubscribers" />

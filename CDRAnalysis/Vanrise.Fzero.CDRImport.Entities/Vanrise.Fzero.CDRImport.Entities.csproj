@@ -65,7 +65,6 @@
     <Compile Include="CDRDetail.cs" />
     <Compile Include="ImportedStagingCDRBatch.cs" />
     <Compile Include="NormalCDRQuery.cs" />
-    <Compile Include="NumberRangeDefinition.cs" />
     <Compile Include="StagingCDR.cs" />
     <Compile Include="CDR.cs" />
     <Compile Include="Enums.cs" />
