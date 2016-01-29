@@ -127,7 +127,6 @@
     <Compile Include="Controllers\CurrencyExchangeRateController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\DataRecordFieldController.cs" />
-    <Compile Include="Controllers\DataRecordTypeController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -27,5 +27,27 @@ namespace Vanrise.GenericData.Web.Controllers
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             return GetWebResponse(input, dataRecordTypeManager.GetFilteredDataRecordTypes(input));
         }
+
+        [Route("UpdateDataRecordType")]
+        public Vanrise.Entities.UpdateOperationOutput<DataRecordTypeDetail> UpdateDataRecordType(DataRecordType dataRecordType)
+        {
+            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+            return dataRecordTypeManager.UpdateDataRecordType(dataRecordType);
+        }
+
+        [HttpPost]
+        [Route("AddDataRecordType")]
+        public Vanrise.Entities.InsertOperationOutput<DataRecordTypeDetail> AddDataRecordType(DataRecordType dataRecordType)
+        {
+            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+            return dataRecordTypeManager.AddDataRecordType(dataRecordType);
+        }
+        [HttpGet]
+        [Route("GetDataRecordFieldTypeTemplates")]
+        public List<Vanrise.Entities.TemplateConfig> GetDataRecordFieldTypeTemplates()
+        {
+            DataRecordTypeManager manager = new DataRecordTypeManager();
+            return manager.GetDataRecordFieldTypeTemplates();
+        }
     }
 }

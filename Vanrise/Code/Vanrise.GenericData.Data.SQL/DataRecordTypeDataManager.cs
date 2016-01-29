@@ -11,7 +11,11 @@ namespace Vanrise.GenericData.Data.SQL
 {
     public class DataRecordTypeDataManager : BaseSQLDataManager,IDataRecordTypeDataManager
     {
+        public DataRecordTypeDataManager()
+            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey"))
+        {
 
+        }
         #region Public Methods
         public List<DataRecordType> GetDataRecordTypes()
         {
@@ -39,5 +43,31 @@ namespace Vanrise.GenericData.Data.SQL
         }
 
         #endregion
+
+
+        public bool UpdateDataRecordType(DataRecordType dataRecordType)
+        {
+            string serializedObj = null;
+            if (dataRecordType.Fields != null)
+            {
+                serializedObj = Vanrise.Common.Serializer.Serialize(dataRecordType.Fields);
+            }
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataRecordType_Update", dataRecordType.DataRecordTypeId, dataRecordType.Name, dataRecordType.ParentId, serializedObj);
+            return (recordesEffected > 0);
+        }
+
+        public bool AddDataRecordType(DataRecordType dataRecordType, out int dataRecordTypeId)
+        {
+            object recordTypeID;
+            string serializedObj = null;
+            if(dataRecordType.Fields !=null)
+            {
+                serializedObj = Vanrise.Common.Serializer.Serialize(dataRecordType.Fields);
+            }
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataRecordType_Insert", out recordTypeID, dataRecordType.Name, dataRecordType.ParentId, serializedObj);
+            dataRecordTypeId = (recordesEffected > 0) ? (int)recordTypeID : -1;
+
+            return (recordesEffected > 0);
+        }
     }
 }

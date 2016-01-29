@@ -8,6 +8,7 @@ using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.Common.Business;
 namespace Vanrise.GenericData.Business
 {
     public class DataRecordTypeManager
@@ -41,7 +42,59 @@ namespace Vanrise.GenericData.Business
 
             return null;
         }
+        public Vanrise.Entities.InsertOperationOutput<DataRecordTypeDetail> AddDataRecordType(DataRecordType dataRecordType)
+        {
+            InsertOperationOutput<DataRecordTypeDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<DataRecordTypeDetail>();
 
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            int dataRecordTypeId = -1;
+
+
+            IDataRecordTypeDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordTypeDataManager>();
+            bool insertActionSucc = dataManager.AddDataRecordType(dataRecordType, out dataRecordTypeId);
+
+            if (insertActionSucc)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetDataRecordTypes");
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                dataRecordType.DataRecordTypeId = dataRecordTypeId;
+                insertOperationOutput.InsertedObject = DataRecordTypeDetailMapper(dataRecordType);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
+        public Vanrise.Entities.UpdateOperationOutput<DataRecordTypeDetail> UpdateDataRecordType(DataRecordType dataRecordType)
+        {
+            IDataRecordTypeDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordTypeDataManager>();
+            bool updateActionSucc = dataManager.UpdateDataRecordType(dataRecordType);
+            UpdateOperationOutput<DataRecordTypeDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<DataRecordTypeDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetDataRecordTypes");
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = DataRecordTypeDetailMapper(dataRecordType);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
+        public List<Vanrise.Entities.TemplateConfig> GetDataRecordFieldTypeTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.DataRecordFieldConfigType);
+        }
         #endregion
       
         #region Private Methods

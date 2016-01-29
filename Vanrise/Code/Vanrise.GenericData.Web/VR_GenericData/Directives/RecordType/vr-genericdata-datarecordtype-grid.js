@@ -21,7 +21,7 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/GenericData/Directives/GenericDataRecord/Templates/DataRecordTypeGrid.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/RecordType/Templates/DataRecordTypeGrid.html"
 
         };
 
@@ -41,6 +41,10 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
                             return gridAPI.retrieveData(query);
+                        }
+                        directiveAPI.onDataRecordTypeAdded = function (onDataRecordTypeObj)
+                        {
+                            gridAPI.itemAdded(onDataRecordTypeObj);
                         }
                         return directiveAPI;
                     }
@@ -63,27 +67,20 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
             function defineMenuActions() {
                 var defaultMenuActions = [
                 {
-                    name: "Assign Data Record Field",
-                    clicked: assignDataRecordField,
+                    name: "Edit",
+                    clicked: editDataRecordField,
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
                 }
             }
-
-            function assignDataRecordField(dataItem) {
-                gridAPI.expandRow(dataItem);
-                var query = {
-                    DataRecordTypeId: dataItem.Entity.DataRecordTypeId,
+            function editDataRecordField(dataItem) {
+                var onDataRecordFieldUpdated = function (dataRecordFieldObj) {
+                    gridAPI.itemUpdated(dataRecordFieldObj);
                 }
-                if (dataItem.extensionObject.dataRecordFieldGridAPI != undefined)
-                    dataItem.extensionObject.dataRecordFieldGridAPI.loadGrid(query);
-                var onDataRecordFieldAdded = function (dataRecordFieldObj) {
-                    if (dataItem.extensionObject.dataRecordFieldGridAPI != undefined)
-                        dataItem.extensionObject.dataRecordFieldGridAPI.onDataRecordFieldAdded(dataRecordFieldObj);
-                };
-                VR_GenericData_DataRecordTypeService.addDataRecordField(onDataRecordFieldAdded, dataItem.Entity);
+
+                VR_GenericData_DataRecordTypeService.editDataRecordType(dataItem.Entity.DataRecordTypeId, onDataRecordFieldUpdated);
             }
         }
 

@@ -8,16 +8,27 @@
         return ({
             GetDataRecordType: GetDataRecordType,
             GetFilteredDataRecordTypes: GetFilteredDataRecordTypes,
+            AddDataRecordType: AddDataRecordType,
+            UpdateDataRecordType: UpdateDataRecordType,
+            GetDataRecordFieldTypeTemplates: GetDataRecordFieldTypeTemplates
         });
 
         function GetFilteredDataRecordTypes(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordType', 'GetFilteredDataRecordTypes'), input);
         }
 
-        function GetDataRecordType() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordType', 'GetDataRecordType'));
+        function GetDataRecordType(dataRecordTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordType', 'GetDataRecordType'), { dataRecordTypeId: dataRecordTypeId });
         }
-
+        function AddDataRecordType(dataRecordTypeObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordType', 'AddDataRecordType'), dataRecordTypeObject);
+        }
+        function UpdateDataRecordType(dataRecordTypeObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordType', 'UpdateDataRecordType'), dataRecordTypeObject);
+        }
+        function GetDataRecordFieldTypeTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataRecordType", "GetDataRecordFieldTypeTemplates"));
+        }
     }
 
     appControllers.service('VR_GenericData_DataRecordTypeAPIService', DataRecordTypeAPIService);
