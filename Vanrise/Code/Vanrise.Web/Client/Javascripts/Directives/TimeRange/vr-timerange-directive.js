@@ -88,8 +88,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                     ctrl.from = date.from;
                     ctrl.to = date.to;
                 }
-                if ($attrs.hideperiodsection)
-                    defineAPI();
+                
             }
 
             var customize = {
@@ -105,7 +104,8 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                     ctrl.period = customize;
 
             }
-       
+            if ($attrs.hideperiodsection)
+                defineAPI();
         }
 
         function defineAPI() {
