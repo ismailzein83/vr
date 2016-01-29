@@ -6,6 +6,7 @@
 
     function newNumberPrefixDialogController($scope, FraudAnalysis_NumberPrefixAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, FraudAnalysis_NewFAOutputResultEnum) {
 
+        var treeNumberPrefixes;
         var numberPrefixId;
         var countryId;
         var editMode;
@@ -23,6 +24,7 @@
                 countryId = parameters.CountryId;
                 $scope.countryName = parameters.CountryName;
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
+                treeNumberPrefixes = parameters.NumberPrefixes;
             }
             editMode = (numberPrefixId != undefined);
             load();
@@ -36,7 +38,7 @@
 
             $scope.validateNumberPrefixs = function () {
                 if ($scope.numberPrefixes != undefined && $scope.numberPrefixes.length == 0)
-                    return "Enter at least one numberPrefix.";
+                    return "Enter at least one prefix.";
                 return null;
             };
             $scope.saveNumberPrefix = function () {
@@ -54,10 +56,10 @@
 
             $scope.disabledNumberPrefix = true;
             $scope.onNumberPrefixValueChange = function (value) {
-                $scope.disabledNumberPrefix = (value == undefined) || UtilsService.getItemIndexByVal($scope.numberPrefixes, value, "numberPrefix") != -1;
+                $scope.disabledNumberPrefix = (value == undefined) || UtilsService.getItemIndexByVal($scope.numberPrefixes, value, "prefix") != -1 || UtilsService.getItemIndexByVal(treeNumberPrefixes, value, "Prefix") != -1;
             }
             $scope.addNumberPrefixValue = function () {
-                $scope.numberPrefixes.push({ numberPrefix: $scope.numberPrefixValue });
+                $scope.numberPrefixes.push({ prefix: $scope.numberPrefixValue });
                 $scope.numberPrefixValue = undefined;
                 $scope.disabledNumberPrefix = true;
             };
@@ -93,56 +95,22 @@
 
         }
 
-        function buildNumberPrefixObjFromScope() {
-            var result = [];
-            for (var i = 0; i < $scope.numberPrefixes.length; i++) {
-                result.push({
-                    Name: $scope.numberPrefixes[i].numberPrefix,
-                    CountryId: countryId
-                });
-            }
-
-            return result;
-        }
-
-        function getNewNumberPrefixFromNumberPrefixObj(numberPrefixObj) {
-            return {
-                SellingNumberPlanId: sellingNumberPlanId,
-                NewNumberPrefixs: numberPrefixObj
-            }
-        }
-
-        function fillScopeFromNumberPrefixObj(numberPrefix) {
-            $scope.name = numberPrefix.Name;
+        function fillScopeFromNumberPrefixObj(prefix) {
+            $scope.name = prefix.Name;
             $scope.title = UtilsService.buildTitleForUpdateEditor($scope.name, "NumberPrefix");
         }
 
         function insertNumberPrefix() {
-            var numberPrefixItem = buildNumberPrefixObjFromScope();
-            var input = getNewNumberPrefixFromNumberPrefixObj(numberPrefixItem);
-            return FraudAnalysis_NumberPrefixAPIService.SaveNewNumberPrefix(input)
-            .then(function (response) {
+            if ($scope.onNumberPrefixAdded != undefined) {
+                var addedNumberPrefixes = [];
+                for (var i = 0; i < $scope.numberPrefixes.length; i++) {
+                    addedNumberPrefixes.push({ Prefix: $scope.numberPrefixes[i].prefix });
+                }
 
-                if (response.Result == FraudAnalysis_NewFAOutputResultEnum.Existing.value) {
-                    VRNotificationService.showWarning(response.Message);
-                    $scope.numberPrefixes.length = 0;
-                    for (var i = 0; i < response.NumberPrefixItems.length; i++) {
-                        $scope.numberPrefixes.push({ numberPrefix: response.NumberPrefixItems[i].Name, message: response.NumberPrefixItems[i].Message });
-                    }
-                }
-                else if (response.Result == FraudAnalysis_NewFAOutputResultEnum.Inserted.value) {
-                    VRNotificationService.showSuccess(response.Message);
-                    $scope.modalContext.closeModal();
-                }
-                else if (response.Result == FraudAnalysis_NewFAOutputResultEnum.Failed.value) {
-                    VRNotificationService.showError(response.Message);
-                }
-                if ($scope.onNumberPrefixAdded != undefined)
-                    $scope.onNumberPrefixAdded(response.NumberPrefixItems);
-
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            });
+                $scope.onNumberPrefixAdded(addedNumberPrefixes);
+                $scope.numberPrefixes.length = 0;
+                $scope.modalContext.closeModal();
+            }
         }
 
         function updateNumberPrefix() {

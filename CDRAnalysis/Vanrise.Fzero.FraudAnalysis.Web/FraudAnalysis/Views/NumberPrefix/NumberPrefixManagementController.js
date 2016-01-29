@@ -16,7 +16,6 @@
         function defineScope() {
             $scope.nodes = [];
             $scope.currentNode;
-            $scope.hasState = false;
 
             $scope.selectedCodes = [];
 
@@ -52,23 +51,15 @@
                 return effectiveNumberPrefixesPromiseDeffered.promise;
             }
 
-
-
-
-
-
-
             $scope.newNumberPrefixClicked = function () {
                 addNewNumberPrefix();
             }
-
 
             $scope.cancelState = function () {
                 return VRNotificationService.showConfirmation().then(function (result) {
                     if (result) {
                         numberPrefixes.length = 0;
                         return FraudAnalysis_NumberPrefixAPIService.CancelNumberPrefixState().then(function (response) {
-                            $scope.hasState = !response;
                             treeAPI.refreshTree($scope.nodes);
                             $scope.currentNode = undefined;
                         });
@@ -93,24 +84,16 @@
 
         function onNumberPrefixAdded(addedNumberPrefixes) {
             if (addedNumberPrefixes != undefined) {
-                $scope.hasState = true;
                 for (var i = 0; i < addedNumberPrefixes.length; i++) {
-                    var node = mapNumberPrefixToNode(addedNumberPrefixes[i]);
-                    treeAPI.createNode(node);
-                    for (var i = 0; i < $scope.nodes.length; i++) {
-                        if ($scope.nodes[i].nodeId == $scope.currentNode.nodeId) {
-                            $scope.nodes[i].effectiveNumberPrefixes.push(node);
-                        }
-
-                    }
+                    numberPrefixes.push(addedNumberPrefixes[i]);
                 }
-
-
+                buildNumberPrefixesTree();
             }
         }
 
         function addNewNumberPrefix() {
             var parameters = {
+                NumberPrefixes: numberPrefixes
             };
             var settings = {};
             settings.onScopeReady = function (modalScope) {
@@ -154,7 +137,6 @@
             $scope.nodes.length = 0;
             for (var i = 0; i < numberPrefixes.length; i++) {
                 var node = mapNumberPrefixToNode(numberPrefixes[i]);
-                console.log(node)
                 $scope.nodes.push(node);
             }
             treeAPI.refreshTree($scope.nodes);
@@ -162,13 +144,12 @@
         }
 
         function mapNumberPrefixToNode(numberPrefixInfo) {
-
             return {
-                nodeId: numberPrefixInfo.ID,
+                nodeId: numberPrefixInfo.Prefix,
                 nodeName: numberPrefixInfo.Prefix,
                 hasRemoteChildren: false,
                 effectiveNumberPrefixes: [],
-                numberPrefixId: numberPrefixInfo.ID
+                numberPrefixId: numberPrefixInfo.Prefix
             };
         }
 
