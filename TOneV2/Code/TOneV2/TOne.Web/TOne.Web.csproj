@@ -189,6 +189,37 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.MainExtensions">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Pricing">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Pricing.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.MainExtensions">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Web">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Adapters.BaseDB">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.BaseDB.dll</HintPath>
     </Reference>
