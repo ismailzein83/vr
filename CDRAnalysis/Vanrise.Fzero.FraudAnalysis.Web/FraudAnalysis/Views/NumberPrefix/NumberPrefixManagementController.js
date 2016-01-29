@@ -2,13 +2,13 @@
 
     'use strict';
 
+    numberPrefixManagementController.$inject = ['$scope', 'FraudAnalysis_NumberPrefixAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
 
-    NumberPrefixManagementController.$inject = ['$scope', 'FraudAnalysis_NumberPrefixAPIService', 'VRUIUtilsService', 'UtilsService', 'VRModalService', 'VRNotificationService'];
-
-    function NumberPrefixManagementController($scope, FraudAnalysis_NumberPrefixAPIService, VRUIUtilsService, UtilsService, VRModalService, VRNotificationService) {
+    function numberPrefixManagementController($scope, FraudAnalysis_NumberPrefixAPIService, UtilsService, VRModalService, VRNotificationService) {
 
         var treeAPI;
         var numberPrefixes = [];
+
 
         defineScope();
         load();
@@ -16,44 +16,27 @@
         function defineScope() {
             $scope.nodes = [];
             $scope.currentNode;
+            $scope.nodesUpdated = false;
 
-            $scope.selectedCodes = [];
+            $scope.applyNumberPrefixes = function () {
 
-            $scope.applyNumberPrefixState = function () {
-                var onNumberPrefixStateApplied = function () {
-                };
-                FraudAnalysis_NumberPrefixAPIService.ApplyNumberPrefixState(onNumberPrefixStateApplied);
+            }
+
+            $scope.cancelChanges = function () {
+                $scope.nodesUpdated = false;
+                load();
             }
 
             $scope.numberPrefixesTreeReady = function (api) {
                 treeAPI = api;
             }
 
-            $scope.numberPrefixesTreeValueChanged = function () {
-
-                if ($scope.currentNode != undefined) {
-                }
-            }
-
-            $scope.loadEffectiveNumberPrefixes = function (numberPrefixNode) {
-                console.log('$scope.loadEffectiveNumberPrefixes')
-                var effectiveNumberPrefixesPromiseDeffered = UtilsService.createPromiseDeferred();
-                FraudAnalysis_NumberPrefixAPIService.GetNumberPrefixItems(numberPrefixNode.nodeId).then(function (response) {
-                    var effectiveNumberPrefixes = [];
-                    angular.forEach(response, function (itm) {
-                        effectiveNumberPrefixes.push(mapNumberPrefixToNode(itm));
-                    });
-                    var numberPrefixIndex = UtilsService.getItemIndexByVal($scope.nodes, numberPrefixNode.nodeId, 'nodeId');
-                    var parentNode = $scope.nodes[numberPrefixIndex];
-                    parentNode.effectiveNumberPrefixes = effectiveNumberPrefixes;
-                    $scope.nodes[numberPrefixIndex] = parentNode;
-                    effectiveNumberPrefixesPromiseDeffered.resolve(effectiveNumberPrefixes);
-                });
-                return effectiveNumberPrefixesPromiseDeffered.promise;
-            }
-
             $scope.newNumberPrefixClicked = function () {
                 addNewNumberPrefix();
+            }
+
+            $scope.expandNumberPrefixClicked = function () {
+                expandNumberPrefix();
             }
 
             $scope.cancelState = function () {
@@ -83,11 +66,10 @@
             });
         }
 
-        function onNumberPrefixAdded(addedNumberPrefixes) {
-            if (addedNumberPrefixes != undefined) {
-                for (var i = 0; i < addedNumberPrefixes.length; i++) {
-                    numberPrefixes.push(addedNumberPrefixes[i]);
-                }
+        function onNumberPrefixAdded(addedNumberPrefix) {
+            if (addedNumberPrefix != undefined) {
+                $scope.nodesUpdated = true;
+                numberPrefixes.push(mapPrefixtoInfo(addedNumberPrefix.prefix));
                 buildNumberPrefixesTree();
             }
         }
@@ -104,25 +86,17 @@
             VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/Dialogs/NewNumberPrefixDialog.html", parameters, settings);
         }
 
-        function GetCurrentNumberPrefixNodeNumberPrefixes() {
-            var numberPrefixIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.Prefix, 'nodeId');
-            var numberPrefixNode = $scope.nodes[numberPrefixIndex];
-            return getNumberPrefixInfos(numberPrefixNode.effectiveNumberPrefixes);
+        function mapPrefixtoInfo(prefix) {
+            return { $type: "Vanrise.Fzero.FraudAnalysis.Entities.NumberPrefixInfo, Vanrise.Fzero.FraudAnalysis.Entities", Prefix: prefix }
         }
 
-        function getNumberPrefixInfos(numberPrefixNodes) {
-            var numberPrefixInfos = [];
-            angular.forEach(numberPrefixNodes, function (itm) {
-                numberPrefixInfos.push(mapNumberPrefixInfoFromNode(itm));
-            });
-
-            return numberPrefixInfos;
-        }
-
-        function mapNumberPrefixInfoFromNode(numberPrefixItem) {
-            return {
-                Name: numberPrefixItem.nodeName
-            };
+        function expandNumberPrefix() {
+            var currentPrefix = $scope.currentNode.nodeName;
+            for (var i = 0; i <= 9; i++) {
+                numberPrefixes.push(mapPrefixtoInfo(currentPrefix + i));
+            }
+            $scope.nodesUpdated = true;
+            buildNumberPrefixesTree();
         }
 
         function getNumberPrefixes() {
@@ -133,8 +107,6 @@
                 });
             });
         }
-
-
 
         function findRootNodes() {
             for (var i = 0; i < numberPrefixes.length; i++) {
@@ -158,15 +130,13 @@
             }
         }
 
-
-
         function buildNumberPrefixesTree() {
             $scope.nodes.length = 0;
 
             findRootNodes();
 
             for (var i = 0; i < numberPrefixes.length; i++) {
-                    findChildrenNodes(numberPrefixes[i])
+                findChildrenNodes(numberPrefixes[i])
             }
 
             for (var i = 0; i < numberPrefixes.length; i++) {
@@ -191,6 +161,6 @@
 
     };
 
-    appControllers.controller('FraudAnalysis_NumberPrefixManagementController', NumberPrefixManagementController);
+    appControllers.controller('FraudAnalysis_NumberPrefixManagementController', numberPrefixManagementController);
 
 })(appControllers);

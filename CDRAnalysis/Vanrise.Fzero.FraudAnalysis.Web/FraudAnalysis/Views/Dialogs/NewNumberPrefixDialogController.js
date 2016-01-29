@@ -21,22 +21,11 @@
         function defineScope() {
 
             $scope.title = UtilsService.buildTitleForAddEditor("Number Prefix");
-            $scope.numberPrefixes = [];
 
-            $scope.validateNumberPrefixes = function () {
-                if ($scope.numberPrefixes != undefined && $scope.numberPrefixes.length == 0)
-                    return "Enter at least one prefix.";
-                return null;
-            };
             $scope.saveNumberPrefix = function () {
                 if ($scope.onNumberPrefixAdded != undefined) {
-                    var addedNumberPrefixes = [];
-                    for (var i = 0; i < $scope.numberPrefixes.length; i++) {
-                        addedNumberPrefixes.push({ Prefix: $scope.numberPrefixes[i].prefix });
-                    }
-
-                    $scope.onNumberPrefixAdded(addedNumberPrefixes);
-                    $scope.numberPrefixes.length = 0;
+                    var addedNumberPrefix = { prefix: $scope.numberPrefixValue };
+                    $scope.onNumberPrefixAdded(addedNumberPrefix);
                     $scope.close();
                 }
             };
@@ -47,13 +36,9 @@
 
             $scope.disabledNumberPrefix = true;
             $scope.onNumberPrefixValueChange = function (value) {
-                $scope.disabledNumberPrefix = (value == undefined) || UtilsService.getItemIndexByVal($scope.numberPrefixes, value, "prefix") != -1 || UtilsService.getItemIndexByVal(treeNumberPrefixes, value, "Prefix") != -1;
+                $scope.disabledNumberPrefix = (value == undefined) || UtilsService.getItemIndexByVal(treeNumberPrefixes, value, "Prefix") != -1;
             }
-            $scope.addNumberPrefixValue = function () {
-                $scope.numberPrefixes.push({ prefix: $scope.numberPrefixValue });
-                $scope.numberPrefixValue = undefined;
-                $scope.disabledNumberPrefix = true;
-            };
+           
         }
        
     }
