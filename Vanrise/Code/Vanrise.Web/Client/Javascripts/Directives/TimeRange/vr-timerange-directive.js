@@ -66,8 +66,6 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
         var date;
 
         function initializeController() {
-
-
             var date;
             $scope.validateDateTime = function () {
                 return VRValidationService.validateTimeRange(ctrl.from, ctrl.to);
@@ -79,8 +77,6 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 periodReadyPromiseDeferred.resolve();
                 defineAPI();
             }
-
-           
 
             $scope.periodSelectionChanged = function () {
                 if (ctrl.period != undefined && ctrl.period.value != -1) {
@@ -95,6 +91,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 value: -1,
                 description: "Customize"
             }
+
             $scope.onBlurChanged = function () {
                 var from = UtilsService.getShortDate(ctrl.from);
                 var oldFrom = UtilsService.getShortDate(date.from);
@@ -104,8 +101,10 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                     ctrl.period = customize;
 
             }
-            if ($attrs.hideperiodsection)
+
+            if ($attrs.hideperiodsection != undefined) {
                 defineAPI();
+            }
         }
 
         function defineAPI() {
@@ -118,8 +117,11 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                     ctrl.to = payload.toDate;
                 }
 
-                var loadPeriodPromiseDeferred = UtilsService.createPromiseDeferred();
+                if ($attrs.hideperiodsection != undefined) {
+                    return;
+                }
 
+                var loadPeriodPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 periodReadyPromiseDeferred.promise.then(function () {
                     var payloadPeriod;
@@ -131,7 +133,6 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                     }
 
                     VRUIUtilsService.callDirectiveLoad(periodDirectiveAPI, payloadPeriod, loadPeriodPromiseDeferred);
-
                 });
 
                 return loadPeriodPromiseDeferred.promise.then(function()
@@ -144,9 +145,8 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                     }
                    
                 })
-               
-
             }
+
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
