@@ -132,13 +132,14 @@
                 }
                 else if (response.Result == WhS_CP_NewCPOutputResultEnum.Inserted.value) {
                     VRNotificationService.showSuccess(response.Message);
+                    if ($scope.onZoneAdded != undefined)
+                        $scope.onZoneAdded(response.ZoneItems);
                     $scope.modalContext.closeModal();
                 }
                 else if (response.Result == WhS_CP_NewCPOutputResultEnum.Failed.value) {
                     VRNotificationService.showError(response.Message);
                 }
-                if ($scope.onZoneAdded != undefined)
-                    $scope.onZoneAdded(response.ZoneItems);
+              
 
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
