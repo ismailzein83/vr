@@ -44,12 +44,10 @@
         function CloseCodes(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, "CodePreparation", "CloseCodes"), input);
         }
-        function SaveNewZone(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, "CodePreparation", "SaveNewZone"), input);
+        function SaveNewNumberPrefix(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, "NumberPrefix", "SaveNewNumberPrefix"), input);
         }
-        function SaveNewCode(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, "CodePreparation", "SaveNewCode"), input);
-        }
+
         function GetChanges(sellingNumberPlanId) {
             return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, "CodePreparation", "GetChanges"), {
                 sellingNumberPlanId: sellingNumberPlanId
@@ -94,8 +92,7 @@
             DownloadImportCodePreparationTemplate: DownloadImportCodePreparationTemplate,
             GetChanges: GetChanges,
             SaveChanges: SaveChanges,
-            SaveNewCode: SaveNewCode,
-            SaveNewZone: SaveNewZone,
+            SaveNewNumberPrefix: SaveNewNumberPrefix,
             GetZoneItems: GetZoneItems,
             GetCodeItems: GetCodeItems,
             MoveCodes: MoveCodes,

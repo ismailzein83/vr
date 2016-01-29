@@ -144,8 +144,6 @@
         function getNumberPrefixes() {
             numberPrefixes.length = 0;
             return FraudAnalysis_NumberPrefixAPIService.GetPrefixesInfo().then(function (response) {
-                console.log('response')
-                console.log(response)
                 angular.forEach(response, function (itm) {
                     numberPrefixes.push(itm);
                 });
@@ -154,33 +152,23 @@
 
         function buildNumberPrefixesTree() {
             $scope.nodes.length = 0;
-
             for (var i = 0; i < numberPrefixes.length; i++) {
                 var node = mapNumberPrefixToNode(numberPrefixes[i]);
+                console.log(node)
                 $scope.nodes.push(node);
             }
             treeAPI.refreshTree($scope.nodes);
 
         }
 
-        function mapNumberPrefixToNode(numberPrefix) {
-            return {
-                nodeId: numberPrefix.NumberPrefixId,
-                nodeName: numberPrefix.Name,
-                effectiveNumberPrefixes: [],
-                hasRemoteChildren: true
-            };
-        }
-
         function mapNumberPrefixToNode(numberPrefixInfo) {
 
             return {
-                nodeId: numberPrefixInfo.NumberPrefixId,
-                nodeName: numberPrefixInfo.Name,
+                nodeId: numberPrefixInfo.ID,
+                nodeName: numberPrefixInfo.Prefix,
                 hasRemoteChildren: false,
                 effectiveNumberPrefixes: [],
-                status: numberPrefixInfo.Status,
-                numberPrefixId: numberPrefixInfo.NumberPrefixId
+                numberPrefixId: numberPrefixInfo.ID
             };
         }
 

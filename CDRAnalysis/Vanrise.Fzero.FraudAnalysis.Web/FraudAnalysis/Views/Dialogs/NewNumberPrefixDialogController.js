@@ -2,14 +2,14 @@
 
     "use strict";
 
-    newZoneDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService','FraudAnalysis_NewCPOutputResultEnum'];
+    newNumberPrefixDialogController.$inject = ['$scope', 'FraudAnalysis_NumberPrefixAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'FraudAnalysis_NewFAOutputResultEnum'];
 
-    function newZoneDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, FraudAnalysis_NewCPOutputResultEnum) {
+    function newNumberPrefixDialogController($scope, FraudAnalysis_NumberPrefixAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, FraudAnalysis_NewFAOutputResultEnum) {
 
-        var zoneId;
+        var numberPrefixId;
         var countryId;
         var editMode;
-        var zoneEntity;
+        var numberPrefixEntity;
         var sellingNumberPlanId;
         var disableCountry;
 
@@ -19,32 +19,32 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                zoneId = parameters.ZoneId;
+                numberPrefixId = parameters.NumberPrefixId;
                 countryId = parameters.CountryId;
                 $scope.countryName = parameters.CountryName;
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
             }
-            editMode = (zoneId != undefined);
+            editMode = (numberPrefixId != undefined);
             load();
         }
- 
+
         function defineScope() {
             $scope.bed;
             $scope.eed;
             $scope.countryName;
-            $scope.zones = [];
+            $scope.numberPrefixes = [];
 
-            $scope.validateZones = function () {
-                if ($scope.zones != undefined && $scope.zones.length == 0)
-                    return "Enter at least one zone.";
+            $scope.validateNumberPrefixs = function () {
+                if ($scope.numberPrefixes != undefined && $scope.numberPrefixes.length == 0)
+                    return "Enter at least one numberPrefix.";
                 return null;
             };
-            $scope.saveZone = function () {
+            $scope.saveNumberPrefix = function () {
                 if (editMode) {
-                    return updateZone();
+                    return updateNumberPrefix();
                 }
                 else {
-                    return insertZone();
+                    return insertNumberPrefix();
                 }
             };
 
@@ -52,28 +52,28 @@
                 $scope.modalContext.closeModal()
             };
 
-            $scope.disabledZone = true;
-            $scope.onZoneValueChange = function (value) {
-                $scope.disabledZone = (value == undefined) || UtilsService.getItemIndexByVal($scope.zones, value, "zone") != -1;
+            $scope.disabledNumberPrefix = true;
+            $scope.onNumberPrefixValueChange = function (value) {
+                $scope.disabledNumberPrefix = (value == undefined) || UtilsService.getItemIndexByVal($scope.numberPrefixes, value, "numberPrefix") != -1;
             }
-            $scope.addZoneValue = function () {
-                $scope.zones.push({ zone: $scope.zoneValue });
-                $scope.zoneValue = undefined;
-                $scope.disabledZone = true;
+            $scope.addNumberPrefixValue = function () {
+                $scope.numberPrefixes.push({ numberPrefix: $scope.numberPrefixValue });
+                $scope.numberPrefixValue = undefined;
+                $scope.disabledNumberPrefix = true;
             };
         }
 
         function load() {
             $scope.isGettingData = true;
             if (countryId != undefined) {
-                $scope.title = UtilsService.buildTitleForAddEditor("Zone for Country " + $scope.countryName);
+                $scope.title = UtilsService.buildTitleForAddEditor("NumberPrefix for Country " + $scope.countryName);
                 loadAllControls();
             }
             else if (editMode) {
-                getZone().then(function () {
+                getNumberPrefix().then(function () {
                     loadAllControls()
                         .finally(function () {
-                            zoneEntity = undefined;
+                            numberPrefixEntity = undefined;
                         });
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -81,7 +81,7 @@
             }
             else {
                 loadAllControls();
-                $scope.title = UtilsService.buildTitleForAddEditor("Zone");
+                $scope.title = UtilsService.buildTitleForAddEditor("Number Prefix");
             }
         }
 
@@ -89,15 +89,15 @@
             $scope.isGettingData = false;
         }
 
-        function getZone() {
+        function getNumberPrefix() {
 
         }
 
-        function buildZoneObjFromScope() {
+        function buildNumberPrefixObjFromScope() {
             var result = [];
-            for (var i = 0; i < $scope.zones.length; i++) {
+            for (var i = 0; i < $scope.numberPrefixes.length; i++) {
                 result.push({
-                    Name: $scope.zones[i].zone,
+                    Name: $scope.numberPrefixes[i].numberPrefix,
                     CountryId: countryId
                 });
             }
@@ -105,50 +105,50 @@
             return result;
         }
 
-        function getNewZoneFromZoneObj(zoneObj) {
+        function getNewNumberPrefixFromNumberPrefixObj(numberPrefixObj) {
             return {
                 SellingNumberPlanId: sellingNumberPlanId,
-                NewZones: zoneObj
+                NewNumberPrefixs: numberPrefixObj
             }
         }
 
-        function fillScopeFromZoneObj(zone) {
-            $scope.name = zone.Name;
-            $scope.title = UtilsService.buildTitleForUpdateEditor($scope.name, "Zone");
+        function fillScopeFromNumberPrefixObj(numberPrefix) {
+            $scope.name = numberPrefix.Name;
+            $scope.title = UtilsService.buildTitleForUpdateEditor($scope.name, "NumberPrefix");
         }
 
-        function insertZone() {
-            var zoneItem = buildZoneObjFromScope();
-            var input = getNewZoneFromZoneObj(zoneItem);
-            return WhS_CodePrep_CodePrepAPIService.SaveNewZone(input)
+        function insertNumberPrefix() {
+            var numberPrefixItem = buildNumberPrefixObjFromScope();
+            var input = getNewNumberPrefixFromNumberPrefixObj(numberPrefixItem);
+            return FraudAnalysis_NumberPrefixAPIService.SaveNewNumberPrefix(input)
             .then(function (response) {
 
-                if (response.Result ==  FraudAnalysis_NewCPOutputResultEnum.Existing.value) {
+                if (response.Result == FraudAnalysis_NewFAOutputResultEnum.Existing.value) {
                     VRNotificationService.showWarning(response.Message);
-                    $scope.zones.length = 0;
-                    for (var i = 0; i < response.ZoneItems.length; i++) {
-                        $scope.zones.push({ zone: response.ZoneItems[i].Name, message: response.ZoneItems[i].Message });
+                    $scope.numberPrefixes.length = 0;
+                    for (var i = 0; i < response.NumberPrefixItems.length; i++) {
+                        $scope.numberPrefixes.push({ numberPrefix: response.NumberPrefixItems[i].Name, message: response.NumberPrefixItems[i].Message });
                     }
                 }
-                else if (response.Result == FraudAnalysis_NewCPOutputResultEnum.Inserted.value) {
+                else if (response.Result == FraudAnalysis_NewFAOutputResultEnum.Inserted.value) {
                     VRNotificationService.showSuccess(response.Message);
                     $scope.modalContext.closeModal();
                 }
-                else if (response.Result == FraudAnalysis_NewCPOutputResultEnum.Failed.value) {
+                else if (response.Result == FraudAnalysis_NewFAOutputResultEnum.Failed.value) {
                     VRNotificationService.showError(response.Message);
                 }
-                if ($scope.onZoneAdded != undefined)
-                    $scope.onZoneAdded(response.ZoneItems);
+                if ($scope.onNumberPrefixAdded != undefined)
+                    $scope.onNumberPrefixAdded(response.NumberPrefixItems);
 
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
         }
 
-        function updateZone() {
+        function updateNumberPrefix() {
 
         }
     }
 
-    appControllers.controller('whs-numberprefix-newzonedialog', newZoneDialogController);
+    appControllers.controller('cdranalysis-fa-numberprefix-newprefixdialog', newNumberPrefixDialogController);
 })(appControllers);
