@@ -227,6 +227,7 @@
     <Content Include="FraudAnalysis\Directives\FixedPrefixes\Templates\DefineFixedPrefixesGrid.html" />
     <Content Include="FraudAnalysis\Directives\Period\cdranalysis-fa-period-selector.js" />
     <Content Include="FraudAnalysis\Directives\Strategy\cdranalysis-fa-strategy-grid.js" />
+    <Content Include="FraudAnalysis\Directives\Strategy\cdranalysis-fa-strategy-selector.js" />
     <Content Include="FraudAnalysis\Directives\Strategy\Templates\StrategyGridTemplate.html" />
     <Content Include="FraudAnalysis\Directives\vr-fzero-fraudanalysis-fixedprefixes-grid.js" />
     <Content Include="FraudAnalysis\Directives\vr-fzero-fraudanalysis-fixedprefixes-selector.js" />
