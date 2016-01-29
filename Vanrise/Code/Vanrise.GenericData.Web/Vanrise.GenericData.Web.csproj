@@ -112,14 +112,29 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\DataRecordTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
+      <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
+      <Name>Vanrise.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Business\Vanrise.GenericData.Business.csproj">
+      <Project>{e196c862-be33-49dd-9e0d-2948fb289861}</Project>
+      <Name>Vanrise.GenericData.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
+      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
+      <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
@@ -127,6 +142,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_GenericData\Constants\ModuleConfig.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\SelectiveBooleanDirectiveTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\SelectiveChoicesDirectiveTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\SelectiveDateTimeDirectiveTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\SelectiveNumberDirectiveTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\SelectiveTextDirectiveTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-boolean-selective.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-choices-selective.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-datetime-selective.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-number-selective.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-text-selective.js" />
+    <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeGrid.html" />
+    <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
+    <Content Include="VR_GenericData\Services\APIServices\DataRecordTypeAPIService.js" />
+    <Content Include="VR_GenericData\Services\DataRecordTypeService.js" />
+    <Content Include="VR_GenericData\Views\DataRecordTypeEditor.html" />
+    <Content Include="VR_GenericData\Views\DataRecordTypeEditorController.js" />
+    <Content Include="VR_GenericData\Views\DataRecordTypeManagement.html" />
+    <Content Include="VR_GenericData\Views\DataRecordTypeManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -156,6 +189,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y $(TargetPath) ..\..\Output</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
