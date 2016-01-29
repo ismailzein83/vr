@@ -7,7 +7,6 @@
     function newNumberPrefixDialogController($scope, VRNavigationService, UtilsService) {
 
         var treeNumberPrefixes;
-        var numberPrefixEntity;
 
         defineScope();
         loadParameters();

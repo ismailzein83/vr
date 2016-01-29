@@ -36,6 +36,7 @@
             }
 
             $scope.loadEffectiveNumberPrefixes = function (numberPrefixNode) {
+                console.log('$scope.loadEffectiveNumberPrefixes')
                 var effectiveNumberPrefixesPromiseDeffered = UtilsService.createPromiseDeferred();
                 FraudAnalysis_NumberPrefixAPIService.GetNumberPrefixItems(numberPrefixNode.nodeId).then(function (response) {
                     var effectiveNumberPrefixes = [];
