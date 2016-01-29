@@ -13,7 +13,7 @@
             </vr-row>
             <vr-row removeline>
                 <vr-columns width="fullrow">
-                    <vr-validator validate="validatePrefixes()">
+                    <vr-validator validate="validateNumberPrefixes()">
                         <vr-datalist maxitemsperrow="4" datasource="numberPrefixes" autoremoveitem="true">
                             <vr-validator validate="dataItem.message">
                                 {{dataItem.prefix}}

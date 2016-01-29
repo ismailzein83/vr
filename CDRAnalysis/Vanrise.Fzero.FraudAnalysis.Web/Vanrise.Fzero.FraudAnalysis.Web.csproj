@@ -207,7 +207,6 @@
     <Content Include="FraudAnalysis\Constants\CaseStatusEnum.js" />
     <Content Include="FraudAnalysis\Constants\KindEnum.js" />
     <Content Include="FraudAnalysis\Constants\ModuleConfig.js" />
-    <Content Include="FraudAnalysis\Constants\NewFAOutputResultEnum.js" />
     <Content Include="FraudAnalysis\Constants\PeriodEnum.js" />
     <Content Include="FraudAnalysis\Constants\StatusEnum.js" />
     <Content Include="FraudAnalysis\Constants\PercentageEnum.js" />
