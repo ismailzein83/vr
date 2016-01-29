@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class StrategyFilter
+    public class StrategyInfoFilter
     {
-        public int PeriodId { get; set; }
+        public int? PeriodId { get; set; }
         public bool? IsEnabled { get; set; }
     }
 }
