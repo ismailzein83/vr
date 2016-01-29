@@ -80,13 +80,16 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 defineAPI();
             }
 
+           
+
             $scope.periodSelectionChanged = function () {
                 if (ctrl.period != undefined && ctrl.period.value != -1) {
                     date = ctrl.period.getInterval();
                     ctrl.from = date.from;
                     ctrl.to = date.to;
                 }
-
+                if ($attrs.hideperiodsection)
+                    defineAPI();
             }
 
             var customize = {
