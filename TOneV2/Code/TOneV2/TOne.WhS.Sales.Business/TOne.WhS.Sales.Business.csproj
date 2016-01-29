@@ -75,6 +75,7 @@
     <Compile Include="RatePlanZoneManager.cs" />
     <Compile Include="Changes\SaveChangesManager.cs" />
     <Compile Include="SellingRuleManager.cs" />
+    <Compile Include="SellingRules\FixedRule.cs" />
     <Compile Include="SellingRules\MarginRule.cs" />
     <Compile Include="ZoneItem\ZoneRateSetter.cs" />
     <Compile Include="ZoneItem\ZoneRouteOptionSetter.cs" />

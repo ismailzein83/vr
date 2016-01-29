@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="WhS_Sales_SellingRuleEditorController" vr-loader="isLoading" width="'55%'">
+﻿<div vr-modalcontent ng-controller="WhS_Sales_SellingRuleEditorController" vr-loader="scopeModel.isLoading" width="'55%'">
     <vr-modalbody>
         <vr-form name="formSellingRuleEditor">
             <vr-tabs>
@@ -6,14 +6,14 @@
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-section title="Sale Zone">
-                                <vr-whs-be-salezonegroup on-ready="onSaleZoneGroupSettingsDirectiveReady"></vr-whs-be-salezonegroup>
+                                <vr-whs-be-salezonegroup on-ready="scopeModel.onSaleZoneGroupSettingsDirectiveReady"></vr-whs-be-salezonegroup>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-section title="Customers">
-                                <vr-whs-be-customergroup on-ready="onCustomerGroupSettingsDirectiveReady"></vr-whs-be-customergroup>
+                                <vr-whs-be-customergroup on-ready="scopeModel.onCustomerGroupSettingsDirectiveReady"></vr-whs-be-customergroup>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
@@ -21,14 +21,14 @@
                 <vr-tab header="'Settings'">
                     <vr-row>
                         <vr-columns width="1/4row">
-                            <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Rule Type" datasource="sellingRuleSettingsTemplates"
-                                       selectedvalues="selectedSellingRuleSettingsTemplate" isrequired>
+                            <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Rule Type" datasource="scopeModel.sellingRuleSettingsTemplates"
+                                       selectedvalues="scopeModel.selectedSellingRuleSettingsTemplate" isrequired>
                             </vr-select>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="fullrow" vr-loader="isLoadingSellingRuleSettings">
-                            <vr-directivewrapper directive="selectedSellingRuleSettingsTemplate.Editor" on-ready="onSellingRuleSettingsDirectiveReady" />
+                        <vr-columns width="fullrow" ng-show="scopeModel.selectedSellingRuleSettingsTemplate" vr-loader="scopeModel.isLoadingSellingRuleSettings">
+                            <vr-directivewrapper directive="scopeModel.selectedSellingRuleSettingsTemplate.Editor" on-ready="scopeModel.onSellingRuleSettingsDirectiveReady" />
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
@@ -36,10 +36,10 @@
                 <vr-tab header="'Scheduler'">
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <vr-datetimepicker value="beginEffectiveDate" type="date" label="Begin Effective Date" isrequired></vr-datetimepicker>
+                            <vr-datetimepicker value="scopeModel.beginEffectiveDate" type="date" label="Begin Effective Date" isrequired></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns width="1/2row">
-                            <vr-datetimepicker value="endEffectiveDate" type="date" label="End Effective Date"></vr-datetimepicker>
+                            <vr-datetimepicker value="scopeModel.endEffectiveDate" type="date" label="End Effective Date"></vr-datetimepicker>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
@@ -49,8 +49,8 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formSellingRuleEditor" data-onclick="SaveSellingRule"></vr-button>
-                <vr-button type="Close" data-onclick="close"></vr-button>
+                <vr-button type="Save" formname="formSellingRuleEditor" data-onclick="scopeModel.SaveSellingRule"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
 

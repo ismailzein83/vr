@@ -40,27 +40,29 @@
         }
 
         function defineScope() {
-            $scope.saleZoneGroupTemplates = [];
-            $scope.customerGroupTemplates = [];
-            $scope.sellingRuleSettingsTemplates = [];
+            $scope.scopeModel = {}
+            $scope.scopeModel.saleZoneGroupTemplates = [];
+            $scope.scopeModel.customerGroupTemplates = [];
+            $scope.scopeModel.sellingRuleSettingsTemplates = [];
 
-            $scope.beginEffectiveDate = new Date();
-            $scope.endEffectiveDate = undefined;
+            $scope.scopeModel.beginEffectiveDate = new Date();
+            $scope.scopeModel.endEffectiveDate = undefined;
 
-            $scope.scopeModal = {}
-            $scope.onSaleZoneGroupSettingsDirectiveReady = function (api) {
+
+            $scope.scopeModel.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                 saleZoneGroupSettingsAPI = api;
                 saleZoneGroupSettingsReadyPromiseDeferred.resolve();
             }
 
-            $scope.onCustomerGroupSettingsDirectiveReady = function (api) {
+            $scope.scopeModel.onCustomerGroupSettingsDirectiveReady = function (api) {
                 customerGroupSettingsAPI = api;
                 customerGroupSettingsReadyPromiseDeferred.resolve();
             }
 
-            $scope.onSellingRuleSettingsDirectiveReady = function (api) {
+            $scope.scopeModel.onSellingRuleSettingsDirectiveReady = function (api) {
+                console.log(api);
                 sellingRuleSettingsAPI = api;
-                var setLoader = function (value) { $scope.isLoadingSellingRuleSettings = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSellingRuleSettings = value };
 
                 var sellingRuleSettingsPayload = {
                     FilterSettings: { SellingProductId: sellingProductId }
@@ -70,7 +72,7 @@
 
 
 
-            $scope.SaveSellingRule = function () {
+            $scope.scopeModel.SaveSellingRule = function () {
                 if (isEditMode) {
                     return updateSellingRule();
                 }
@@ -78,10 +80,14 @@
                     return insertSellingRule();
                 }
             };
+
+            $scope.scopeModel.close = function () {
+                $scope.modalContext.closeModal()
+            };
         }
 
         function load() {
-            $scope.isLoading = true;
+            $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
                 $scope.title = "Edit Selling Rule";
@@ -92,7 +98,7 @@
                         });
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
+                    $scope.scopeModel.isLoading = false;
                 });
             }
             else {
@@ -114,7 +120,7 @@
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
                .finally(function () {
-                   $scope.isLoading = false;
+                   $scope.scopeModel.isLoading = false;
                });
         }
         function editScopeTitle() {
@@ -128,8 +134,8 @@
 
         function loadFilterBySection() {
 
-            $scope.sellingRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Sales_SellingRuleCriteriaTypeEnum);
-            $scope.selectedSellingRuleCriteriaType = UtilsService.getEnum(WhS_Sales_SellingRuleCriteriaTypeEnum, 'value', WhS_Sales_SellingRuleCriteriaTypeEnum.SaleZone.value);
+            $scope.scopeModel.sellingRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Sales_SellingRuleCriteriaTypeEnum);
+            $scope.scopeModel.selectedSellingRuleCriteriaType = UtilsService.getEnum(WhS_Sales_SellingRuleCriteriaTypeEnum, 'value', WhS_Sales_SellingRuleCriteriaTypeEnum.SaleZone.value);
         }
 
         function loadSaleZoneGroupSection() {
@@ -188,25 +194,24 @@
 
             if (sellingRuleEntity != undefined && sellingRuleEntity.Settings != null) {
                 sellingRuleSettingsPayload = {
-                    SupplierFilterSettings: { SellingProductId: sellingProductId },
+                    //SupplierFilterSettings: { SellingProductId: 1 },
                     SellingRuleSettings: sellingRuleEntity.Settings
                 }
             }
 
             var loadSellingRuleSettingsTemplatesPromise = WhS_Sales_SellingRuleAPIService.GetSellingRuleSettingsTemplates().then(function (response) {
                 angular.forEach(response, function (item) {
-                    $scope.sellingRuleSettingsTemplates.push(item);
+                    $scope.scopeModel.sellingRuleSettingsTemplates.push(item);
                 });
 
                 if (sellingRuleSettingsPayload != undefined)
-                    $scope.selectedsellingRuleSettingsTemplate = UtilsService.getItemByVal($scope.sellingRuleSettingsTemplates, sellingRuleSettingsPayload.SellingRuleSettings.ConfigId, "TemplateConfigID");
+                    $scope.scopeModel.selectedSellingRuleSettingsTemplate = UtilsService.getItemByVal($scope.scopeModel.sellingRuleSettingsTemplates, sellingRuleSettingsPayload.SellingRuleSettings.ConfigId, "TemplateConfigID");
             });
 
             promises.push(loadSellingRuleSettingsTemplatesPromise);
-
+            
             if (sellingRuleSettingsPayload != undefined) {
                 sellingRuleSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
                 var sellingRuleSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 promises.push(sellingRuleSettingsLoadPromiseDeferred.promise);
 
@@ -223,8 +228,8 @@
             if (sellingRuleEntity == undefined)
                 return;
 
-            $scope.beginEffectiveDate = sellingRuleEntity.BeginEffectiveTime;
-            $scope.endEffectiveDate = sellingRuleEntity.EndEffectiveTime;
+            $scope.scopeModel.beginEffectiveDate = sellingRuleEntity.BeginEffectiveTime;
+            $scope.scopeModel.endEffectiveDate = sellingRuleEntity.EndEffectiveTime;
 
         }
 
@@ -237,9 +242,9 @@
                     SaleZoneGroupSettings: saleZoneGroupSettingsAPI.getData(),
                     CustomerGroupSettings: customerGroupSettingsAPI.getData()
                 },
-                Settings: VRUIUtilsService.getSettingsFromDirective($scope, sellingRuleSettingsAPI, 'selectedSellingRuleSettingsTemplate'),
-                BeginEffectiveTime: $scope.beginEffectiveDate,
-                EndEffectiveTime: $scope.endEffectiveDate
+                Settings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModel, sellingRuleSettingsAPI, 'selectedSellingRuleSettingsTemplate'),
+                BeginEffectiveTime: $scope.scopeModel.beginEffectiveDate,
+                EndEffectiveTime: $scope.scopeModel.endEffectiveDate
             };
 
             return sellingRule;

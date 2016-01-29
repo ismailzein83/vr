@@ -83,7 +83,7 @@
     <Compile Include="RatePlanning\ZoneItem.cs" />
     <Compile Include="RatePlanning\ZoneRateChangesDetail.cs" />
     <Compile Include="RatePlanning\ZoneRoutingProductChangesDetail.cs" />
-    <Compile Include="SellingRules\IMarginSellingRuleExecutionContext.cs" />
+    <Compile Include="SellingRules\ISellingRuleExecutionContext.cs" />
     <Compile Include="SellingRules\SellingRule.cs" />
     <Compile Include="SellingRules\SellingRuleCriteria.cs" />
     <Compile Include="SellingRules\SellingRuleDetail.cs" />

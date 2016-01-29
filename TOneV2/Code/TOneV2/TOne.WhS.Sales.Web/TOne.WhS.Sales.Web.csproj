@@ -164,6 +164,8 @@
     <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\vr-whs-sales-marginratecalculation.js" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\Templates\AvgCostCalculation.html" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\Templates\CostColumnsTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Fixed\Templates\FixedRuleDirective.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Fixed\vr-whs-sales-sellingrulesettings-fixed.js" />
     <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Margin\Templates\MarginRuleDirective.html" />
     <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Margin\vr-whs-sales-sellingrulesettings-margin.js" />
     <Content Include="WhS_Sales\Directives\SellingRules\Templates\SellingRulesGridTemplate.html" />

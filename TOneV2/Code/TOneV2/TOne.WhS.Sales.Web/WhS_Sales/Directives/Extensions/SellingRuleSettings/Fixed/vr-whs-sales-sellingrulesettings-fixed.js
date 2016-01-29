@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsSalesSellingrulesettingsMargin', ['UtilsService',
+app.directive('vrWhsSalesSellingrulesettingsFixed', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {
@@ -25,7 +25,7 @@ app.directive('vrWhsSalesSellingrulesettingsMargin', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/WhS_Sales/Directives/Extensions/SellingRuleSettings/Margin/Templates/MarginRuleDirective.html';
+                return '/Client/Modules/WhS_Sales/Directives/Extensions/SellingRuleSettings/Fixed/Templates/FixedRuleDirective.html';
             }
 
         };
@@ -42,23 +42,16 @@ app.directive('vrWhsSalesSellingrulesettingsMargin', ['UtilsService',
                 api.load = function (payload) {
                     console.log(payload);
                     if (payload.SellingRuleSettings != undefined) {
-                        ctrl.minMargin = payload.SellingRuleSettings.MinMargin;
-                        ctrl.maxMargin = payload.SellingRuleSettings.MaxMargin;
                         ctrl.fromRate = payload.SellingRuleSettings.FromRate;
                         ctrl.toRate = payload.SellingRuleSettings.ToRate;
-                        ctrl.isPercentage = payload.SellingRuleSettings.IsPercentage;
                     }
-
                 }
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Sales.Business.SellingRules.MarginRule, TOne.WhS.Sales.Business",
-                        MinMargin: ctrl.minMargin,
-                        MaxMargin: ctrl.maxMargin,
+                        $type: "TOne.WhS.Sales.Business.SellingRules.FixedRule, TOne.WhS.Sales.Business",
                         FromRate: ctrl.fromRate,
                         ToRate: ctrl.toRate,
-                        IsPercentage: ctrl.isPercentage
                     };
                 }
 

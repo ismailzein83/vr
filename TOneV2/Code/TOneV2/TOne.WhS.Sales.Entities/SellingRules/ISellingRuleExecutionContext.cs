@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public interface IMarginSellingRuleExecutionContext
+    public interface ISellingRuleExecutionContext
     {
-        Decimal? Margin { get; }
+        Decimal? CustomerRate { get; }
+        Decimal? ProductRate { get; }
+        MarginStatus Status { set; }
     }
 }
