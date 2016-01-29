@@ -59,15 +59,15 @@
         }
 
         function load() {
-            $scope.isLoadingFilterSection = true;
+            $scope.isLoading = true;
             loadAllControls();
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadStaticSelectors, loadUserSelector, loadPeriodSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadStaticSelectors, loadTimeRangeDirective, loadUserSelector, loadPeriodSelector]).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-                $scope.isLoadingFilterSection = false;
+                $scope.isLoading = false;
             });
 
             function loadStaticSelectors() {

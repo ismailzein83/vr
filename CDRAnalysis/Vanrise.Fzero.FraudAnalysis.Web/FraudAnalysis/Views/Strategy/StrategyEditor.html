@@ -49,8 +49,8 @@
                                                                 decimalprecision="{{dataItem.decimalPrecision}}"
                                                                 placeholder="{{dataItem.label}}"
                                                                 title="{{dataItem.toolTip}}"
-                                                                ng-if="dataItem.isSelected"
-                                                                isrequired>
+                                                                ng-show="dataItem.isSelected"
+                                                                isrequired="dataItem.isSelected">
                                                     </vr-textbox>
                                                 </div>
                                             </vr-datagridcolumn>
@@ -67,29 +67,29 @@
                                                                              label="Peak Hours"
                                                                              selectedvalues="modalScope.selectedPeakHours"
                                                                              hint="Related to the following filter(s):  {{modalScope.getFilterHint('Peak Hours')}}"
-                                                                             isrequired="true"
+                                                                             isrequired="modalScope.strategyFilters[13].isSelected"
                                                                              ismultipleselection>
                                                     </vr-common-hour-selector>
                                                 </vr-columns>
                                             </vr-row>
                                             <vr-row ng-show="modalScope.strategyFilters[15].isSelected">
                                                 <vr-columns width="fullrow">
-                                                    <vr-textbox hint="Related to the following filter(s):  {{modalScope.getFilterHint('Gap between Consecutive Calls in Seconds')}}" value="modalScope.gapBetweenConsecutiveCalls" type="number" label="Gap between Consecutive Calls in Seconds" isrequired></vr-textbox>
+                                                    <vr-textbox hint="Related to the following filter(s):  {{modalScope.getFilterHint('Gap between Consecutive Calls in Seconds')}}" value="modalScope.gapBetweenConsecutiveCalls" type="number" label="Gap between Consecutive Calls in Seconds" isrequired="modalScope.strategyFilters[15].isSelected"></vr-textbox>
                                                 </vr-columns>
                                             </vr-row>
                                             <vr-row ng-show="modalScope.strategyFilters[16].isSelected ">
                                                 <vr-columns width="fullrow">
-                                                    <vr-textbox hint="Related to the following filter(s):  {{modalScope.getFilterHint('Gap between Failed Consecutive Calls in Seconds')}}" value="modalScope.gapBetweenFailedConsecutiveCalls" type="number" label="Gap between Failed Consecutive Calls in Seconds" isrequired></vr-textbox>
+                                                    <vr-textbox hint="Related to the following filter(s):  {{modalScope.getFilterHint('Gap between Failed Consecutive Calls in Seconds')}}" value="modalScope.gapBetweenFailedConsecutiveCalls" type="number" label="Gap between Failed Consecutive Calls in Seconds" isrequired="modalScope.strategyFilters[16].isSelected"></vr-textbox>
                                                 </vr-columns>
                                             </vr-row>
                                             <vr-row ng-show="modalScope.strategyFilters[17].isSelected">
                                                 <vr-columns width="fullrow">
-                                                    <vr-textbox hint="Related to the following filter(s):  {{modalScope.getFilterHint('Maximum Low Duration Call (s)')}}" value="modalScope.maxLowDurationCall" type="number" label="Maximum Low Duration Call (s)" isrequired></vr-textbox>
+                                                    <vr-textbox hint="Related to the following filter(s):  {{modalScope.getFilterHint('Maximum Low Duration Call (s)')}}" value="modalScope.maxLowDurationCall" type="number" label="Maximum Low Duration Call (s)" isrequired="modalScope.strategyFilters[17].isSelected"></vr-textbox>
                                                 </vr-columns>
                                             </vr-row>
                                             <vr-row ng-show="modalScope.strategyFilters[8].isSelected">
                                                 <vr-columns width="fullrow">
-                                                    <vr-textbox hint="Related to the following filter(s):  {{modalScope.getFilterHint('Minimum Count of Calls per Hour')}}" value="modalScope.minCountofCallsinActiveHour" type="number" label="Minimum Count of Calls per Hour" isrequired></vr-textbox>
+                                                    <vr-textbox hint="Related to the following filter(s):  {{modalScope.getFilterHint('Minimum Count of Calls per Hour')}}" value="modalScope.minCountofCallsinActiveHour" type="number" label="Minimum Count of Calls per Hour" isrequired="modalScope.strategyFilters[8].isSelected"></vr-textbox>
                                                 </vr-columns>
                                             </vr-row>
                                         </div>

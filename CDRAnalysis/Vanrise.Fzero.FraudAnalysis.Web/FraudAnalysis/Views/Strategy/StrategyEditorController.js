@@ -101,11 +101,12 @@
                 $scope.modalScope.suspicionRules.splice(index, 1);
             };
             $scope.modalScope.showThresholdHint = function (filter, strategyLevel) {
-                if (filter && filter.threshold && strategyLevel && strategyLevel.percentage) {
-                    var newThreshold = (parseInt(filter.threshold) + (parseInt(strategyLevel.percentage) * parseInt(filter.threshold) / 100));
+                if (filter != undefined && strategyLevel != undefined) {
+                    var newThreshold = (filter.threshold != undefined && strategyLevel.percentage != undefined) ?
+                        (parseFloat(filter.threshold) + (parseFloat(strategyLevel.percentage) * parseFloat(filter.threshold) / 100)).toFixed(2) : 'None';
                     return filter.label + ': ' + newThreshold;
                 }
-                return;
+                return null;
             };
 
             // User actions
@@ -118,7 +119,7 @@
                 }
             };
             $scope.modalScope.close = function () {
-                $scope.closeModal();
+                $scope.modalContext.closeModal();
             };
 
             // Validation functions
@@ -155,19 +156,27 @@
 
                     filterUsages.push(filterUsage);
                 }
-
+                
                 for (var i = 0; i < $scope.modalScope.suspicionRules.length; i++) {
                     var strategyLevel = $scope.modalScope.suspicionRules[i];
+                    var aFilterIsUsed = false;
 
                     for (var j = 0; j < strategyLevel.StrategyLevelCriterias.length; j++) {
                         if ($scope.modalScope.strategyFilters[j].isSelected) {
                             if (!filterUsages[j].isUsed) {
                                 filterUsages[j].isUsed = strategyLevel.StrategyLevelCriterias[j].isSelected;
                             }
+                            if (!aFilterIsUsed) {
+                                aFilterIsUsed = strategyLevel.StrategyLevelCriterias[j].isSelected;
+                            }
                         }
                     }
+                    
+                    if (!aFilterIsUsed) {
+                        return 'Some suspicion rules are not using any filters';
+                    }
                 }
-
+                
                 var usedFiltersCount = 0;
                 for (var i = 0; i < filterUsages.length; i++) {
                     if (filterUsages[i].mustBeUsed && filterUsages[i].isUsed) {
@@ -442,7 +451,7 @@
                 GapBetweenFailedConsecutiveCalls: $scope.modalScope.gapBetweenFailedConsecutiveCalls,
                 MaxLowDurationCall: $scope.modalScope.maxLowDurationCall,
                 MinimumCountofCallsinActiveHour: $scope.modalScope.minCountofCallsinActiveHour,
-                PeakHours: $scope.modalScope.selectedPeakHours,
+                PeakHours: $scope.modalScope.selectedPeakHours, // (periodSelectorAPI.getSelectedIds() == CDRAnalysis_FA_PeriodEnum.Hourly.value) ? [] : 
                 StrategyFilters: [],
                 StrategyLevels: [],
                 LastUpdatedOn: new Date()

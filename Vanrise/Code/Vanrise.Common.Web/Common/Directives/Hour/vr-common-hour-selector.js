@@ -16,7 +16,7 @@
                 ondeselectitem: '=',
                 ismultipleselection: '@',
                 isdisabled: '@',
-                isrequired: '@',
+                isrequired: '=',
                 hideremoveicon: '@'
             },
             controller: function ($scope, $element, $attrs) {
@@ -27,7 +27,7 @@
                 if ($attrs.ismultipleselection != undefined && $attrs.ismultipleselection != null)
                     ctrl.selectedvalues = [];
 
-                ctrl.isrequired = ($attrs.isrequired != undefined && $attrs.isrequired != null);
+                //ctrl.isrequired = ($attrs.isrequired != undefined);
 
                 var hourSelector = new HourSelector(ctrl, $scope, $attrs);
                 hourSelector.initializeController();
