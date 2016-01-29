@@ -104,7 +104,7 @@
         }
 
         function GetCurrentNumberPrefixNodeNumberPrefixes() {
-            var numberPrefixIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.numberPrefixId, 'nodeId');
+            var numberPrefixIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.Prefix, 'nodeId');
             var numberPrefixNode = $scope.nodes[numberPrefixIndex];
             return getNumberPrefixInfos(numberPrefixNode.effectiveNumberPrefixes);
         }
@@ -148,8 +148,7 @@
                 nodeId: numberPrefixInfo.Prefix,
                 nodeName: numberPrefixInfo.Prefix,
                 hasRemoteChildren: false,
-                effectiveNumberPrefixes: [],
-                numberPrefixId: numberPrefixInfo.Prefix
+                effectiveNumberPrefixes: []
             };
         }
 

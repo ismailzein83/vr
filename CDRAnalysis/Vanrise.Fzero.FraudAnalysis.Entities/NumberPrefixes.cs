@@ -13,7 +13,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     }
     public class NumberPrefix
     {
-        public int ID { get; set; }
         public string Prefix { get; set; }
     }
     public class NumberPrefixDetail
@@ -23,7 +22,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
     public class NumberPrefixInfo
     {
-        public int ID { get; set; }
         public string Prefix { get; set; }
 
     }
