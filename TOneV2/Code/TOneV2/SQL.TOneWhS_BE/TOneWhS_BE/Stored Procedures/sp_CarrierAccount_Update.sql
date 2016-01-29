@@ -16,7 +16,7 @@ BEGIN
 IF NOT EXISTS(select 1 from TOneWhS_BE.CarrierProfile where Name = @Name and Id!=@ID) 
 BEGIN
 	Update TOneWhS_BE.CarrierAccount
-	Set Name = @Name,
+	Set NameSuffix = @Name,
 		CarrierProfileID=@CarrierProfileId,
 		AccountType=@AccountType,
 		CustomerSettings=@CustomerSettings,

@@ -7,7 +7,7 @@ BEGIN
 	SELECT ca.ID,
 		ca.AccountType,
 		ca.CarrierProfileID,
-		ca.Name, -- The Name column should be renamed to NameSuffix
+		ca.NameSuffix,
 		ca.CustomerSettings,
 		ca.SupplierSettings,
 		ca.SellingNumberPlanID,
