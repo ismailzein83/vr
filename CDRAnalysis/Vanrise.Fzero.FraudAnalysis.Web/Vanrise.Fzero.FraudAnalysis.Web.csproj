@@ -209,7 +209,6 @@
     <Content Include="FraudAnalysis\Constants\ModuleConfig.js" />
     <Content Include="FraudAnalysis\Constants\PeriodEnum.js" />
     <Content Include="FraudAnalysis\Constants\StatusEnum.js" />
-    <Content Include="FraudAnalysis\Constants\PercentageEnum.js" />
     <Content Include="FraudAnalysis\Constants\CallTypeEnum.js" />
     <Content Include="FraudAnalysis\Constants\SuspicionLevelEnum.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\Templates\FindRelatedNumbersManualTemplate.html" />

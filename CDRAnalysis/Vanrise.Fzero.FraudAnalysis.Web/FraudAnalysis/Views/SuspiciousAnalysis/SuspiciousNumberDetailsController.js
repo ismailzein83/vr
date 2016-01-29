@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-SuspiciousNumberDetailsController.$inject = ["$scope", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "VR_Sec_UserAPIService", "CDRAnalysis_FA_SuspicionLevelEnum", "CaseStatusEnum", "CallTypeEnum", "LabelColorsEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService", "VRValidationService",'CDRAnalysis_FA_AccountCaseAPIService','CDRAnalysis_FA_RelatedNumberAPIService','CDRAnalysis_FA_StrategyExecutionItemAPIService'];
+SuspiciousNumberDetailsController.$inject = ["$scope", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "VR_Sec_UserAPIService", "CDRAnalysis_FA_SuspicionLevelEnum", "CDRAnalysis_FA_CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService", "VRValidationService",'CDRAnalysis_FA_AccountCaseAPIService','CDRAnalysis_FA_RelatedNumberAPIService','CDRAnalysis_FA_StrategyExecutionItemAPIService'];
 
-function SuspiciousNumberDetailsController($scope, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService, VR_Sec_UserAPIService, CDRAnalysis_FA_SuspicionLevelEnum, CaseStatusEnum, CallTypeEnum, LabelColorsEnum, UtilsService, VRNavigationService, VRNotificationService, VRModalService, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService, CDRAnalysis_FA_RelatedNumberAPIService, CDRAnalysis_FA_StrategyExecutionItemAPIService) {
+function SuspiciousNumberDetailsController($scope, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService, VR_Sec_UserAPIService, CDRAnalysis_FA_SuspicionLevelEnum, CDRAnalysis_FA_CaseStatusEnum, LabelColorsEnum, UtilsService, VRNavigationService, VRNotificationService, VRModalService, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService, CDRAnalysis_FA_RelatedNumberAPIService, CDRAnalysis_FA_StrategyExecutionItemAPIService) {
     var gridOccurances_ReadyPromiseDeferred = UtilsService.createPromiseDeferred();
     var gridAPI_Occurances = undefined;
     var occurancesLoaded = false;
@@ -94,7 +94,7 @@ function SuspiciousNumberDetailsController($scope, NormalCDRAPIService, NumberPr
         $scope.relatedNumbers = [];
 
         // Update Case
-        $scope.caseStatuses = UtilsService.getArrayEnum(CaseStatusEnum);
+        $scope.caseStatuses = UtilsService.getArrayEnum(CDRAnalysis_FA_CaseStatusEnum);
         $scope.selectedCaseStatus = undefined;
         $scope.updateReason = undefined;
         $scope.validTill = undefined;
@@ -193,7 +193,7 @@ function SuspiciousNumberDetailsController($scope, NormalCDRAPIService, NumberPr
                 casesLoaded = true;
 
                 angular.forEach(response.Data, function (item) {
-                    var caseStatus = UtilsService.getEnum(CaseStatusEnum, "value", item.StatusID);
+                    var caseStatus = UtilsService.getEnum(CDRAnalysis_FA_CaseStatusEnum, "value", item.StatusID);
                     item.CaseStatusDescription = caseStatus.description;
 
                     var user = UtilsService.getItemByVal($scope.users, item.UserID, "UserId");
@@ -226,7 +226,7 @@ function SuspiciousNumberDetailsController($scope, NormalCDRAPIService, NumberPr
                                 response.UpdatedObject.SuspicionLevelDescription = suspicionLevel.description;
                             }
 
-                            var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response.UpdatedObject.Status);
+                            var accountStatus = UtilsService.getEnum(CDRAnalysis_FA_CaseStatusEnum, "value", response.UpdatedObject.Status);
                             response.UpdatedObject.AccountStatusDescription = accountStatus.description;
 
                             $scope.onAccountCaseUpdated(response.UpdatedObject);
@@ -263,7 +263,7 @@ function SuspiciousNumberDetailsController($scope, NormalCDRAPIService, NumberPr
         }
 
         $scope.toggleValidTill = function (selectedStatus) {
-            $scope.whiteListSelected = (selectedStatus != undefined && selectedStatus.value == CaseStatusEnum.ClosedWhitelist.value);
+            $scope.whiteListSelected = (selectedStatus != undefined && selectedStatus.value == CDRAnalysis_FA_CaseStatusEnum.ClosedWhitelist.value);
         }
 
         $scope.onReasonChanged = function () {
@@ -302,10 +302,10 @@ function SuspiciousNumberDetailsController($scope, NormalCDRAPIService, NumberPr
 
         $scope.getCaseStatusColor = function (dataItem) {
 
-            if (dataItem.StatusID == CaseStatusEnum.Open.value) return LabelColorsEnum.New.color;
-            else if (dataItem.StatusID == CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
-            else if (dataItem.StatusID == CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
-            else if (dataItem.StatusID == CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
+            if (dataItem.StatusID == CDRAnalysis_FA_CaseStatusEnum.Open.value) return LabelColorsEnum.New.color;
+            else if (dataItem.StatusID == CDRAnalysis_FA_CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
+            else if (dataItem.StatusID == CDRAnalysis_FA_CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
+            else if (dataItem.StatusID == CDRAnalysis_FA_CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
         }
 
         $scope.searchCDRs = retrieveData_NormalCDRs;
@@ -424,16 +424,16 @@ function SuspiciousNumberDetailsController($scope, NormalCDRAPIService, NumberPr
                         $scope.caseID = response.CaseID;
                         $scope.caseStatuses.splice(0, 1); // remove the open option
 
-                        if (response.StatusID == CaseStatusEnum.Pending.value)
+                        if (response.StatusID == CDRAnalysis_FA_CaseStatusEnum.Pending.value)
                             $scope.caseStatuses.splice(0, 1); // remove the pending option
 
-                        else if (response.StatusID == CaseStatusEnum.ClosedFraud.value)
+                        else if (response.StatusID == CDRAnalysis_FA_CaseStatusEnum.ClosedFraud.value)
                             $scope.caseStatuses.splice(1, 1); // remove the closed: fruad option
 
-                        else if (response.StatusID == CaseStatusEnum.ClosedWhitelist.value)
+                        else if (response.StatusID == CDRAnalysis_FA_CaseStatusEnum.ClosedWhitelist.value)
                             $scope.caseStatuses.splice(2, 1); // remove the closed: white list option
 
-                        var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", response.StatusID);
+                        var accountStatus = UtilsService.getEnum(CDRAnalysis_FA_CaseStatusEnum, "value", response.StatusID);
                         $scope.status = response.StatusID;
                         $scope.accountStatusDescription = accountStatus.description;
                         

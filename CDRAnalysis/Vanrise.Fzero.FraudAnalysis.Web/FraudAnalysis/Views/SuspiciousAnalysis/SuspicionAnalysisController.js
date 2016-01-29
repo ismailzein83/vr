@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-SuspicionAnalysisController.$inject = ["$scope", "StrategyAPIService", "CDRAnalysis_FA_SuspicionLevelEnum", "CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService", "VRValidationService", 'CDRAnalysis_FA_AccountCaseAPIService', 'VRUIUtilsService'];
+SuspicionAnalysisController.$inject = ["$scope", "StrategyAPIService", "CDRAnalysis_FA_SuspicionLevelEnum", "CDRAnalysis_FA_CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService", "VRValidationService", 'CDRAnalysis_FA_AccountCaseAPIService', 'VRUIUtilsService'];
 
-function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_SuspicionLevelEnum, CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, VRModalService, VRNavigationService, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService, VRUIUtilsService) {
+function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_SuspicionLevelEnum, CDRAnalysis_FA_CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, VRModalService, VRNavigationService, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService, VRUIUtilsService) {
 
     var strategySelectorAPI;
     var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -34,7 +34,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
 
         $scope.strategies = [];
 
-        $scope.accountStatuses = UtilsService.getArrayEnum(CaseStatusEnum);
+        $scope.accountStatuses = UtilsService.getArrayEnum(CDRAnalysis_FA_CaseStatusEnum);
         $scope.selectedAccountStatuses = [$scope.accountStatuses[0]]; // select the Open status by default
 
         $scope.suspicionLevels = UtilsService.getArrayEnum(CDRAnalysis_FA_SuspicionLevelEnum);
@@ -64,7 +64,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
                             item.SuspicionLevelDescription = suspicionLevel.description;
                         }
 
-                        var accountStatus = UtilsService.getEnum(CaseStatusEnum, "value", item.Status);
+                        var accountStatus = UtilsService.getEnum(CDRAnalysis_FA_CaseStatusEnum, "value", item.Status);
                         item.AccountStatusDescription = accountStatus.description;
                     });
 
@@ -88,10 +88,10 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
 
         $scope.getCaseStatusColor = function (dataItem) {
 
-            if (dataItem.Status == CaseStatusEnum.Open.value) return LabelColorsEnum.New.color;
-            else if (dataItem.Status == CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
-            else if (dataItem.Status == CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
-            else if (dataItem.Status == CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
+            if (dataItem.Status == CDRAnalysis_FA_CaseStatusEnum.Open.value) return LabelColorsEnum.New.color;
+            else if (dataItem.Status == CDRAnalysis_FA_CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
+            else if (dataItem.Status == CDRAnalysis_FA_CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
+            else if (dataItem.Status == CDRAnalysis_FA_CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
         }
     }
 

@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-CancelCasesController.$inject = ["$scope", "StrategyAPIService", "VRNotificationService", "LabelColorsEnum", "UtilsService", "CaseStatusEnum", "VRValidationService",'CDRAnalysis_FA_AccountCaseAPIService'];
+CancelCasesController.$inject = ["$scope", "StrategyAPIService", "VRNotificationService", "LabelColorsEnum", "UtilsService", "CDRAnalysis_FA_CaseStatusEnum", "VRValidationService",'CDRAnalysis_FA_AccountCaseAPIService'];
 
-function CancelCasesController($scope, StrategyAPIService, VRNotificationService, LabelColorsEnum, UtilsService, CaseStatusEnum, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService) {
+function CancelCasesController($scope, StrategyAPIService, VRNotificationService, LabelColorsEnum, UtilsService, CDRAnalysis_FA_CaseStatusEnum, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService) {
 
     var gridAPI;
 
@@ -45,7 +45,7 @@ function CancelCasesController($scope, StrategyAPIService, VRNotificationService
             .then(function (response) {
 
                 angular.forEach(response.Data, function (item) {
-                    var caseStatus = UtilsService.getEnum(CaseStatusEnum, "value", item.StatusID);
+                    var caseStatus = UtilsService.getEnum(CDRAnalysis_FA_CaseStatusEnum, "value", item.StatusID);
                     item.CaseStatusDescription = caseStatus.description;
                 });
 
@@ -60,10 +60,10 @@ function CancelCasesController($scope, StrategyAPIService, VRNotificationService
 
         $scope.getCaseStatusColor = function (dataItem) {
 
-            if (dataItem.StatusID == CaseStatusEnum.Open.value) return LabelColorsEnum.New.color;
-            else if (dataItem.StatusID == CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
-            else if (dataItem.StatusID == CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
-            else if (dataItem.StatusID == CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
+            if (dataItem.StatusID == CDRAnalysis_FA_CaseStatusEnum.Open.value) return LabelColorsEnum.New.color;
+            else if (dataItem.StatusID == CDRAnalysis_FA_CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
+            else if (dataItem.StatusID == CDRAnalysis_FA_CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
+            else if (dataItem.StatusID == CDRAnalysis_FA_CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
         }
 
         $scope.cancelClicked = function () {

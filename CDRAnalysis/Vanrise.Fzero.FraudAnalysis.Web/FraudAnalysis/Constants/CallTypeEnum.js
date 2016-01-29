@@ -1,5 +1,4 @@
-﻿
-app.constant("CallTypeEnum", {
+﻿app.constant("CDRAnalysis_FA_CallTypeEnum", {
     NotDefined: { value: 0, description: "Not Defined" },
     OutgoingVoiceCall: { value: 1, description: "Outgoing Voice Call" },
     IncomingVoiceCall: { value: 2, description: "Incoming Voice Call" },

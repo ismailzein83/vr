@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-CaseOccuranceGridController.$inject = ["$scope", "CDRAnalysis_FA_SuspicionLevelEnum", "CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService",'CDRAnalysis_FA_AccountCaseHistoryAPIService','CDRAnalysis_FA_StrategyExecutionItemAPIService'];
+CaseOccuranceGridController.$inject = ["$scope", "CDRAnalysis_FA_SuspicionLevelEnum", "CDRAnalysis_FA_CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService",'CDRAnalysis_FA_AccountCaseHistoryAPIService','CDRAnalysis_FA_StrategyExecutionItemAPIService'];
 
-function CaseOccuranceGridController($scope, CDRAnalysis_FA_SuspicionLevelEnum, CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, CDRAnalysis_FA_AccountCaseHistoryAPIService, CDRAnalysis_FA_StrategyExecutionItemAPIService) {
+function CaseOccuranceGridController($scope, CDRAnalysis_FA_SuspicionLevelEnum, CDRAnalysis_FA_CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, CDRAnalysis_FA_AccountCaseHistoryAPIService, CDRAnalysis_FA_StrategyExecutionItemAPIService) {
 
     var gridApi = undefined;
     var gridApi_Logs = undefined;
@@ -54,7 +54,7 @@ function CaseOccuranceGridController($scope, CDRAnalysis_FA_SuspicionLevelEnum, 
                         var user = UtilsService.getItemByVal($scope.viewScope.users, item.UserID, "UserId");
                         item.UserName = (user != null) ? user.Name : "System";
 
-                        var caseStatus = UtilsService.getEnum(CaseStatusEnum, "value", item.AccountCaseStatusID);
+                        var caseStatus = UtilsService.getEnum(CDRAnalysis_FA_CaseStatusEnum, "value", item.AccountCaseStatusID);
                         item.AccountCaseStatusDescription = caseStatus.description;
                     });
 
@@ -82,10 +82,10 @@ function CaseOccuranceGridController($scope, CDRAnalysis_FA_SuspicionLevelEnum, 
 
         $scope.getCaseStatusColor = function (dataItem) {
 
-            if (dataItem.AccountCaseStatusID == CaseStatusEnum.Open.value) return LabelColorsEnum.New.color;
-            else if (dataItem.AccountCaseStatusID == CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
-            else if (dataItem.AccountCaseStatusID == CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
-            else if (dataItem.AccountCaseStatusID == CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
+            if (dataItem.AccountCaseStatusID == CDRAnalysis_FA_CaseStatusEnum.Open.value) return LabelColorsEnum.New.color;
+            else if (dataItem.AccountCaseStatusID == CDRAnalysis_FA_CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
+            else if (dataItem.AccountCaseStatusID == CDRAnalysis_FA_CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
+            else if (dataItem.AccountCaseStatusID == CDRAnalysis_FA_CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
         }
     }
 
