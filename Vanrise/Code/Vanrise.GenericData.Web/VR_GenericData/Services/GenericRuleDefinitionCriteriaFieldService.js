@@ -25,8 +25,9 @@
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionCriteriaFieldEditor.html', modalParameters, modalSettings);
         }
 
-        function editGenericRuleDefinitionCriteriaField(genericRuleDefinitionCriteriaFields, onGenericRuleDefinitionCriteriaFieldUpdated) {
+        function editGenericRuleDefinitionCriteriaField(genericRuleDefinitionCriteriaFieldName, genericRuleDefinitionCriteriaFields, onGenericRuleDefinitionCriteriaFieldUpdated) {
             var modalParameters = {
+                genericRuleDefinitionCriteriaFieldName: genericRuleDefinitionCriteriaFieldName,
                 genericRuleDefinitionCriteriaFields: genericRuleDefinitionCriteriaFields
             };
 
