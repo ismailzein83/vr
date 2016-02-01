@@ -197,6 +197,21 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Apply',
                     class: "glyphicon glyphicon-ok-circle"
                 }
+
+            case 'Split':
+                return {
+                    text: 'Split',
+                    class: "glyphicon glyphicon-resize-full"
+                }
+
+            case 'Merge':
+                return {
+                    text: 'Merge',
+                    class: "glyphicon glyphicon-resize-small"
+                }
+
+
+
             case 'SelectAll':
                 return {
                     text: 'Select All',
