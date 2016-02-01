@@ -2,29 +2,30 @@
 
     "use strict";
 
-    genericRuleEditorController.$inject = ['$scope', 'UtilsService'];
+    genericRuleEditorController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'UtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function genericRuleEditorController($scope, UtilsService) {
+    function genericRuleEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, UtilsService, VRNavigationService, VRNotificationService) {
 
         var isEditMode;
 
         //var routeRuleId;
-
+        var genericRuleDefinitionId;
+        var genericRuleDefintion;
         var genericRuleEntity;
+
 
         loadParameters();
         defineScope();
         load();
 
         function loadParameters() {
-            //var parameters = VRNavigationService.getParameters($scope);
+            var parameters = VRNavigationService.getParameters($scope);
 
-            //if (parameters != undefined && parameters != null) {
+            if (parameters != undefined && parameters != null) {
 
-            //    routeRuleId = parameters.routeRuleId;
-            //    routingProductId = parameters.routingProductId;
-            //    sellingNumberPlanId = parameters.sellingNumberPlanId;
-            //}
+                genericRuleDefinitionId = parameters.genericRuleDefinitionId;
+            }
+            isEditMode = false;
             //isEditMode = (routeRuleId != undefined);
         }
 
@@ -51,26 +52,37 @@
         function load() {
             $scope.scopeModel.isLoading = true;
 
-            //if (isEditMode) {
-            //    $scope.title = "Edit Route Rule";
-            //    getRouteRule().then(function () {
-            //        loadAllControls()
-            //            .finally(function () {
-            //                routeRuleEntity = undefined;
-            //            });
-            //    }).catch(function () {
-            //        VRNotificationService.notifyExceptionWithClose(error, $scope);
-            //        $scope.scopeModal.isLoading = false;
-            //    });
-            //}
-            //else {
-            //    $scope.title = "New Route Rule";
-            //    loadAllControls();
-            //}
+            getGenericRuleDefinition().then(function () {
+                if (isEditMode) {
+                    getGenericRule().then(function () {
+                        loadAllControls()
+                            .finally(function () {
+                                genericRuleEntity = undefined;
+                            });
+                    }).catch(function () {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        $scope.scopeModal.isLoading = false;
+                    });
+                }
+                else {
+                    loadAllControls();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.scopeModal.isLoading = false;
+            });
+
+            
+        }
+
+        function getGenericRuleDefinition() {
+            return VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(genericRuleDefinitionId).then(function (response) {
+                genericRuleDefintion = response;
+            });
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadCriteriaSection])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -106,6 +118,26 @@
             //        $scope.scopeModal.excludedCodes.push(item);
             //    });
             //}
+        }
+
+        function loadCriteriaSection()
+        {
+            if (genericRuleDefintion == undefined || genericRuleDefintion.CriteriaDefinition == null)
+                return;
+
+            angular.forEach(genericRuleDefintion.CriteriaDefinition.Fields, function (item) {
+                if(item.FieldType.ConfigId == 34)
+                {
+                    item.TempDirectiveNameHolder = 'vr-genericdata-render-text';
+                }
+                else if(item.FieldType.ConfigId == 36)
+                {
+                    item.TempDirectiveNameHolder = 'vr-genericdata-render-numeric';
+                }
+            });
+
+            $scope.scopeModel.criteriaFields = genericRuleDefintion.CriteriaDefinition.Fields;
+            
         }
 
         function buildRouteRuleObjFromScope() {

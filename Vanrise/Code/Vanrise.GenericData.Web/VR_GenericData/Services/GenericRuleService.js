@@ -9,14 +9,18 @@
             addGenericRule: addGenericRule
         });
 
-        function addGenericRule(onGenericRuleAdded) {
+        function addGenericRule(genericRuleDefinitionId, onGenericRuleAdded) {
+            var modalParameters = {
+                genericRuleDefinitionId: genericRuleDefinitionId
+            };
+
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onGenericRuleAdded = onGenericRuleAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericRule/GenericRuleEditor.html', null, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericRule/GenericRuleEditor.html', modalParameters, modalSettings);
         }
     };
 

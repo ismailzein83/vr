@@ -178,6 +178,10 @@
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformation-recordtype-management.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-selector.js" />
+    <Content Include="VR_GenericData\Directives\RenderDirectives\Templates\NumericEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\RenderDirectives\Templates\TextEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\RenderDirectives\vr-genericdata-render-numeric.js" />
+    <Content Include="VR_GenericData\Directives\RenderDirectives\vr-genericdata-render-text.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\DataTransformationDefinitionService.js" />

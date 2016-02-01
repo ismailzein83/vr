@@ -27,7 +27,7 @@
                     gridAPI.onGenericRuleAdded(ruleObj);
                 };
 
-                VR_GenericData_GenericRule.addGenericRule(onGenericRuleAdded);
+                VR_GenericData_GenericRule.addGenericRule(1, onGenericRuleAdded);
             };
 
             //function getFilterObject() {
