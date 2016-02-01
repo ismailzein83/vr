@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleDefinitionController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    GenericRuleDefinitionController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function GenericRuleDefinitionController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function GenericRuleDefinitionController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var isEditMode;
 
@@ -108,14 +108,13 @@
 
         function insertGenericRuleDefinition() {
             $scope.isLoading = true;
+            var genericRuleDefinitionObject = buildGenericRuleDefinitionObjectFromScope();
 
-            var userObject = buildGenericRuleDefinitionObjectFromScope();
-
-            return VR_GenericData_GenericRuleDefinitionAPIService.AddUser(userObject)
-            .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('User', response, 'Email')) {
-                    if ($scope.onUserAdded != undefined)
-                        $scope.onUserAdded(response.InsertedObject);
+            return VR_GenericData_GenericRuleDefinitionAPIService.AddGenericRuleDefinition(genericRuleDefinitionObject).then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded('Generic Rule Definition', response, 'Name')) {
+                    if ($scope.onGenericRuleDefinitionAdded != undefined && typeof ($scope.onGenericRuleDefinitionAdded) == 'function') {
+                        $scope.onGenericRuleDefinitionAdded(response.InsertedObject);
+                    }
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -123,18 +122,18 @@
             }).finally(function () {
                 $scope.isLoading = false;
             });
-
         }
 
         function updateGenericRuleDefinition() {
             $scope.isLoading = true;
+            var genericRuleDefinitionObject = buildGenericRuleDefinitionObjectFromScope();
+            console.log(genericRuleDefinitionObject);
 
-            var userObject = buildGenericRuleDefinitionObjectFromScope();
-
-            return VR_GenericData_GenericRuleDefinitionAPIService.UpdateUser(userObject).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated('User', response, 'Email')) {
-                    if ($scope.onUserUpdated != undefined)
-                        $scope.onUserUpdated(response.UpdatedObject);
+            return VR_GenericData_GenericRuleDefinitionAPIService.UpdateGenericRuleDefinition(genericRuleDefinitionObject).then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated('Generic Rule Definition', response, 'Name')) {
+                    if ($scope.onGenericRuleDefinitionUpdated != undefined && typeof ($scope.onGenericRuleDefinitionUpdated)) {
+                        $scope.onGenericRuleDefinitionUpdated(response.UpdatedObject);
+                    }
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -145,14 +144,12 @@
         }
 
         function buildGenericRuleDefinitionObjectFromScope() {
-            var userObject = {
-                userId: (userId != null) ? userId : 0,
-                name: $scope.name,
-                email: $scope.email,
-                description: $scope.description,
-                Status: $scope.isActive == false ? '0' : '1'
+            return {
+                GenericRuleDefinitionId: genericRuleDefinitionId,
+                Name: $scope.scopeModel.name,
+                CriteriaDefinition: criteriaDirectiveAPI.getData(),
+                SettingsDefinition: null
             };
-            return userObject;
         }
     }
 

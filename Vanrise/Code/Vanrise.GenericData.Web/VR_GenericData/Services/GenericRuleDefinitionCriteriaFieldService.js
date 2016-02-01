@@ -19,7 +19,7 @@
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                onGenericRuleDefinitionCriteriaFieldAdded: onGenericRuleDefinitionCriteriaFieldAdded
+                modalScope.onGenericRuleDefinitionCriteriaFieldAdded = onGenericRuleDefinitionCriteriaFieldAdded;
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionCriteriaFieldEditor.html', modalParameters, modalSettings);
@@ -34,7 +34,7 @@
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                onGenericRuleDefinitionCriteriaFieldUpdated: onGenericRuleDefinitionCriteriaFieldUpdated
+                modalScope.onGenericRuleDefinitionCriteriaFieldUpdated = onGenericRuleDefinitionCriteriaFieldUpdated;
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionCriteriaFieldEditor.html', modalParameters, modalSettings);

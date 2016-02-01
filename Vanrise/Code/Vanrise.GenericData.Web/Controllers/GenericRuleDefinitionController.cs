@@ -27,5 +27,19 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.GetGenericRuleDefinition(genericRuleDefinitionId);
         }
+
+        [HttpPost]
+        [Route("AddGenericRuleDefinition")]
+        public Vanrise.Entities.InsertOperationOutput<GenericRuleDefinition> AddGenericRuleDefinition(GenericRuleDefinition genericRuleDefinition)
+        {
+            return _manager.AddGenericRuleDefinition(genericRuleDefinition);
+        }
+
+        [HttpPost]
+        [Route("UpdateGenericRuleDefinition")]
+        public Vanrise.Entities.UpdateOperationOutput<GenericRuleDefinition> UpdateGenericRuleDefinition(GenericRuleDefinition genericRuleDefinition)
+        {
+            return _manager.UpdateGenericRuleDefinition(genericRuleDefinition);
+        }
     }
 }

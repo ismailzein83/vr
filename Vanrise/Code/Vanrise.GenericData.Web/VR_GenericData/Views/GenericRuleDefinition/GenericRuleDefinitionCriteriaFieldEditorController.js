@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleDefinitionCriteriaFieldEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    GenericRuleDefinitionCriteriaFieldEditorController.$inject = ['$scope', 'VR_GenericData_MappingRuleStructureBehaviorTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function GenericRuleDefinitionCriteriaFieldEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function GenericRuleDefinitionCriteriaFieldEditorController($scope, VR_GenericData_MappingRuleStructureBehaviorTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
         var isEditMode;
         var criteriaFields;
@@ -33,6 +33,8 @@
         }
 
         function defineScope() {
+            $scope.behaviorTypes = UtilsService.getArrayEnum(VR_GenericData_MappingRuleStructureBehaviorTypeEnum);
+
             $scope.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyDeferred.resolve();
@@ -43,12 +45,26 @@
 
             $scope.save = function () {
                 if (isEditMode)
-                    return updateGenericRuleDefinition();
+                    return updateCriteriaField();
                 else
-                    return insertGenericRuleDefinition();
+                    return insertCriteriaField();
             };
             $scope.close = function () {
                 $scope.modalContext.closeModal();
+            };
+            $scope.validateCriteriaField = function () {
+                if (criteriaFields == undefined) {
+                    return null;
+                }
+
+                for (var i = 0; i < criteriaFields.length; i++) {
+                    if ($scope.name != undefined && criteriaFields[i].FieldName == $scope.name) {
+                        return 'Invalid name';
+                    }
+                    if ($scope.priority != undefined && criteriaFields[i].Priority == Number($scope.priority)) {
+                        return 'Invalid priority';
+                    }
+                }
             };
         }
 
@@ -95,7 +111,7 @@
                     return;
                 }
                 $scope.name = criteriaFieldEntity.FieldName;
-                $scope.title = criteriaFieldEntity.Title;
+                $scope.fieldTitle = criteriaFieldEntity.Title;
                 $scope.priority = criteriaFieldEntity.Priority;
             }
             function loadDataRecordTypeSelector() {
@@ -129,54 +145,35 @@
             }
         }
 
-        //function insertGenericRuleDefinition() {
-        //    $scope.isLoading = true;
+        function insertCriteriaField() {
+            var criteriaFieldObject = buildCriteriaFieldObjectFromScope();
+            
+            console.log($scope.onGenericRuleDefinitionCriteriaFieldAdded);
+            if ($scope.onGenericRuleDefinitionCriteriaFieldAdded != undefined && typeof ($scope.onGenericRuleDefinitionCriteriaFieldAdded) == 'fucnction') {
+                $scope.onGenericRuleDefinitionCriteriaFieldAdded(criteriaFieldObject);
+                $scope.modalContext.closeModal();
+            }
+        }
 
-        //    var userObject = buildGenericRuleDefinitionObjectFromScope();
+        function updateCriteriaField() {
+            var criteriaFieldObject = buildCriteriaFieldObjectFromScope();
+            VRNotificationService.showSuccess('Generic rule definition criteria field updated');
 
-        //    return VR_GenericData_GenericRuleDefinitionAPIService.AddUser(userObject)
-        //    .then(function (response) {
-        //        if (VRNotificationService.notifyOnItemAdded('User', response, 'Email')) {
-        //            if ($scope.onUserAdded != undefined)
-        //                $scope.onUserAdded(response.InsertedObject);
-        //            $scope.modalContext.closeModal();
-        //        }
-        //    }).catch(function (error) {
-        //        VRNotificationService.notifyException(error, $scope);
-        //    }).finally(function () {
-        //        $scope.isLoading = false;
-        //    });
+            if ($scope.onGenericRuleDefinitionCriteriaFieldUpdated != undefined && typeof ($scope.onGenericRuleDefinitionCriteriaFieldUpdated) == 'fucnction') {
+                $scope.onGenericRuleDefinitionCriteriaFieldUpdated(criteriaFieldObject);
+                $scope.modalContext.closeModal();
+            }
+        }
 
-        //}
-
-        //function updateGenericRuleDefinition() {
-        //    $scope.isLoading = true;
-
-        //    var userObject = buildGenericRuleDefinitionObjectFromScope();
-
-        //    return VR_GenericData_GenericRuleDefinitionAPIService.UpdateUser(userObject).then(function (response) {
-        //        if (VRNotificationService.notifyOnItemUpdated('User', response, 'Email')) {
-        //            if ($scope.onUserUpdated != undefined)
-        //                $scope.onUserUpdated(response.UpdatedObject);
-        //            $scope.modalContext.closeModal();
-        //        }
-        //    }).catch(function (error) {
-        //        VRNotificationService.notifyException(error, $scope);
-        //    }).finally(function () {
-        //        $scope.isLoading = false;
-        //    });
-        //}
-
-        //function buildGenericRuleDefinitionObjectFromScope() {
-        //    var userObject = {
-        //        userId: (userId != null) ? userId : 0,
-        //        name: $scope.name,
-        //        email: $scope.email,
-        //        description: $scope.description,
-        //        Status: $scope.isActive == false ? '0' : '1'
-        //    };
-        //    return userObject;
-        //}
+        function buildCriteriaFieldObjectFromScope() {
+            return {
+                FieldName: $scope.name,
+                Title: $scope.fieldTitle,
+                FieldType: dataRecordTypeSelectorAPI.getSelectedIds(),
+                RuleStructureBehaviorType: $scope.selectedBehaviorType,
+                Priority: $scope.priority
+            };
+        }
     }
 
     appControllers.controller('VR_GenericData_GenericRuleDefinitionCriteriaFieldEditorController', GenericRuleDefinitionCriteriaFieldEditorController);

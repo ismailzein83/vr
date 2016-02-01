@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleDefinitionGridDirective.$inject = ['VR_GenericData_GenericRuleDefinitionAPIService', 'VRNotificationService'];
+    GenericRuleDefinitionGridDirective.$inject = ['VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_GenericRuleDefinitionService', 'VRNotificationService'];
 
-    function GenericRuleDefinitionGridDirective(VR_GenericData_GenericRuleDefinitionAPIService, VRNotificationService) {
+    function GenericRuleDefinitionGridDirective(VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_GenericRuleDefinitionService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -78,11 +78,13 @@
             }
 
             function editGenericRuleDefinition(genericRuleDefinition) {
-                var onUserUpdated = function (userObj) {
-                    gridAPI.itemUpdated(userObj);
-                }
+                console.log(genericRuleDefinition);
+                console.log(genericRuleDefinition.GenericRuleDefinitionId);
 
-                VR_Sec_UserService.editUser(userObj.Entity.UserId, onUserUpdated);
+                var onGenericRuleDefinitionUpdated = function (updatedGenericRuleDefinition) {
+                    gridAPI.itemUpdated(updatedGenericRuleDefinition);
+                };
+                VR_GenericData_GenericRuleDefinitionService.editGenericRuleDefinition(genericRuleDefinition.GenericRuleDefinitionId, onGenericRuleDefinitionUpdated);
             }
 
             function deleteGenericRuleDefinition(genericRuleDefinition) {

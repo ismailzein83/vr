@@ -25,7 +25,7 @@
 
             $scope.addGenericRuleDefinition = function () {
                 var onGenericRuleDefinitionAdded = function (addedGenericRuleDefinition) {
-                    gridAPI.onUserAdded(addedGenericRuleDefinition);
+                    gridAPI.onGenericRuleDefinitionAdded(addedGenericRuleDefinition);
                 };
                 VR_GenericData_GenericRuleDefinitionService.addGenericRuleDefinition(onGenericRuleDefinitionAdded);
             };
