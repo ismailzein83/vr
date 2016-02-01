@@ -170,6 +170,10 @@
     <Content Include="VR_GenericData\Views\DataRecordTypeManagementController.js" />
     <Content Include="VR_GenericData\Views\GenericRuleDefinition\GenericRuleDefinitionManagement.html" />
     <Content Include="VR_GenericData\Views\GenericRuleDefinition\GenericRuleDefinitionManagementController.js" />
+    <Content Include="VR_GenericData\Views\GenericRule\GenericRuleEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericRule\GenericRuleEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagement.html" />
+    <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
