@@ -142,6 +142,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_GenericData\Constants\ModuleConfig.js" />
+    <Content Include="VR_GenericData\Directives\GenericRuleDefinition\Templates\GenericRuleDefinitionGridTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericRuleDefinition\vr-genericdata-genericruledefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\SelectiveBooleanDirectiveTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\SelectiveChoicesDirectiveTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\SelectiveDateTimeDirectiveTemplate.html" />
