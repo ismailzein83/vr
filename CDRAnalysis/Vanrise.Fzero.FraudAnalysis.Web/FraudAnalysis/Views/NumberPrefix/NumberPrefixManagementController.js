@@ -39,6 +39,18 @@
                 expandNumberPrefix();
             }
 
+            $scope.splitNumberPrefixClicked = function () {
+                splitNumberPrefix();
+            }
+
+            $scope.mergeNumberPrefixesClicked = function () {
+                mergeNumberPrefix();
+            }
+
+            $scope.removeNumberPrefixesClicked = function () {
+                removeNumberPrefix();
+            }
+
             $scope.cancelState = function () {
                 return VRNotificationService.showConfirmation().then(function (result) {
                     if (result) {
@@ -90,11 +102,59 @@
             return { $type: "Vanrise.Fzero.FraudAnalysis.Entities.NumberPrefixInfo, Vanrise.Fzero.FraudAnalysis.Entities", Prefix: prefix }
         }
 
-        function expandNumberPrefix() {
+        function splitNumberPrefix() {
+
             var currentPrefix = $scope.currentNode.nodeName;
             for (var i = 0; i <= 9; i++) {
-                numberPrefixes.push(mapPrefixtoInfo(currentPrefix + i));
+                var mapped = mapPrefixtoInfo(currentPrefix + i);
+                if (!contains(numberPrefixes, mapped))
+                    numberPrefixes.push(mapPrefixtoInfo(currentPrefix + i));
             }
+            $scope.nodesUpdated = true;
+            buildNumberPrefixesTree();
+        }
+
+        function mergeNumberPrefix() {
+            var toBeRemoved = [];
+            var currentPrefix = $scope.currentNode.nodeName;
+
+            angular.forEach(numberPrefixes, function (item) {
+                if (currentPrefix != item.Prefix)
+                    if (item.Prefix.indexOf(currentPrefix) == 0) {
+                        toBeRemoved.push(item)
+                    }
+            });
+
+
+            for (var i = 0; i <= toBeRemoved.length; i++)
+                for (var j = 0; j <= numberPrefixes.length; j++) {
+                    if (toBeRemoved[i] == numberPrefixes[j]) {
+                        numberPrefixes.splice(j, 1);
+                    }
+                }
+
+            $scope.nodesUpdated = true;
+            buildNumberPrefixesTree();
+        }
+
+        function removeNumberPrefix() {
+            var toBeRemoved = [];
+            var currentPrefix = $scope.currentNode.nodeName;
+
+            angular.forEach(numberPrefixes, function (item) {
+                if (item.Prefix.indexOf(currentPrefix) == 0) {
+                    toBeRemoved.push(item)
+                }
+            });
+
+
+            for (var i = 0; i <= toBeRemoved.length; i++)
+                for (var j = 0; j <= numberPrefixes.length; j++) {
+                    if (toBeRemoved[i] == numberPrefixes[j]) {
+                        numberPrefixes.splice(j, 1);
+                    }
+                }
+
             $scope.nodesUpdated = true;
             buildNumberPrefixesTree();
         }
@@ -131,6 +191,8 @@
         }
 
         function buildNumberPrefixesTree() {
+            console.log(numberPrefixes)
+            numberPrefixes.sort(compare);
             $scope.nodes.length = 0;
 
             findRootNodes();
@@ -150,6 +212,15 @@
 
         }
 
+        function compare(a, b) {
+            if (a.Prefix < b.Prefix)
+                return -1;
+            else if (a.Prefix > b.Prefix)
+                return 1;
+            else
+                return 0;
+        }
+
         function mapNumberPrefixToNode(numberPrefixInfo) {
             return {
                 nodeId: numberPrefixInfo.Prefix,
@@ -157,6 +228,15 @@
                 hasRemoteChildren: false,
                 effectiveNumberPrefixes: numberPrefixInfo.effectiveNumberPrefixes
             };
+        }
+
+        function contains(a, obj) {
+            for (var i = 0; i < a.length; i++) {
+                if (a[i].Prefix === obj.Prefix) {
+                    return true;
+                }
+            }
+            return false;
         }
 
     };
