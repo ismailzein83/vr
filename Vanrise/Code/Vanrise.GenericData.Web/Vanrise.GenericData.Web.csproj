@@ -165,6 +165,8 @@
     <Content Include="VR_GenericData\Views\DataRecordTypeEditorController.js" />
     <Content Include="VR_GenericData\Views\DataRecordTypeManagement.html" />
     <Content Include="VR_GenericData\Views\DataRecordTypeManagementController.js" />
+    <Content Include="VR_GenericData\Views\GenericRuleDefinition\GenericRuleDefinitionManagement.html" />
+    <Content Include="VR_GenericData\Views\GenericRuleDefinition\GenericRuleDefinitionManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
