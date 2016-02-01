@@ -21,7 +21,7 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: '/Client/Modules/GenericData/Directives/GenericRuleDefinition/Templates/GenericRuleDefinitionGridTemplate.html'
+            templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericRuleDefinition/Templates/GenericRuleDefinitionGridTemplate.html'
         };
 
         function GenericRuleDefinitionGrid($scope, ctrl, $attrs) {

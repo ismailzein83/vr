@@ -11,15 +11,25 @@ namespace Vanrise.GenericData.Data.SQL
 {
     public class GenericRuleDefinitionDataManager : BaseSQLDataManager, IGenericRuleDefinitionDataManager
     {
+        public GenericRuleDefinitionDataManager()
+            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey"))
+        {
+
+        }
+
+        #region Public Methods
+        
         public IEnumerable<GenericRuleDefinition> GetGenericRuleDefinitions()
         {
-            return GetItemsSP("genericdata.GetGenericRuleDefinitions", GenericRuleDefinitionMapper);
+            return GetItemsSP("genericdata.sp_GenericRuleDefinition_GetAll", GenericRuleDefinitionMapper);
         }
 
         public bool AreGenericRuleDefinitionsUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("genericdata.GenericRuleDefinition", ref updateHandle);
         }
+        
+        #endregion
 
         #region Mappers
 

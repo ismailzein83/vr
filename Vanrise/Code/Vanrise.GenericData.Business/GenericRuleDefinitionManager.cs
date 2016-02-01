@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
+using Vanrise.Common;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
 
@@ -15,7 +16,9 @@ namespace Vanrise.GenericData.Business
 
         public Vanrise.Entities.IDataRetrievalResult<GenericRuleDefinition> GetFilteredGenericRuleDefinitions(Vanrise.Entities.DataRetrievalInput<GenericRuleDefinitionQuery> input)
         {
-            return null;
+            var cachedGenericRuleDefinitions = GetCachedGenericRuleDefinitions();
+            Func<GenericRuleDefinition, bool> filterExpression = (genericRuleDefinition) => (input.Query.Name == null || genericRuleDefinition.Name.ToUpper().Contains(input.Query.Name.ToUpper()));
+            return cachedGenericRuleDefinitions.ToBigResult(input, filterExpression);
         }
         
         #endregion
