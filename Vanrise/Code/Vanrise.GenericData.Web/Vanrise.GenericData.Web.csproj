@@ -116,6 +116,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\DataRecordTypeController.cs" />
+    <Compile Include="Controllers\DataTransformationDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -159,15 +160,21 @@
     <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeGrid.html" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-selector.js" />
+    <Content Include="VR_GenericData\Services\APIServices\DataTransformationDefinitionAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\DataTransformationDefinitionService.js" />
     <Content Include="VR_GenericData\Services\DataRecordFieldService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordTypeAPIService.js" />
     <Content Include="VR_GenericData\Services\DataRecordTypeService.js" />
-    <Content Include="VR_GenericData\Views\DataRecordFieldEditor.html" />
-    <Content Include="VR_GenericData\Views\DataRecordFieldEditorController.js" />
-    <Content Include="VR_GenericData\Views\DataRecordTypeEditor.html" />
-    <Content Include="VR_GenericData\Views\DataRecordTypeEditorController.js" />
-    <Content Include="VR_GenericData\Views\DataRecordTypeManagement.html" />
-    <Content Include="VR_GenericData\Views\DataRecordTypeManagementController.js" />
+    <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationDefinitionEditor.html" />
+    <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationDefinitionEditorController.js" />
+    <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationDefinitionManagement.html" />
+    <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationDefinitionManagementController.js" />
+    <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordFieldEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordFieldEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordTypeEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordTypeEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordTypeManagement.html" />
+    <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordTypeManagementController.js" />
     <Content Include="VR_GenericData\Views\GenericRuleDefinition\GenericRuleDefinitionManagement.html" />
     <Content Include="VR_GenericData\Views\GenericRuleDefinition\GenericRuleDefinitionManagementController.js" />
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleEditor.html" />

@@ -20,7 +20,7 @@
             var modalParameters = {
                 ExistingFields: existingFields
             };
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataRecordFieldEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericDataRecord/DataRecordFieldEditor.html', modalParameters, modalSettings);
         }
 
         function editDataRecordField(dataRecordField, onDataRecordFieldUpdated, existingFields) {
@@ -35,7 +35,7 @@
                 modalScope.onDataRecordFieldUpdated = onDataRecordFieldUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataRecordFieldEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericDataRecord/DataRecordFieldEditor.html', modalParameters, modalSettings);
         }
         function deleteDataRecordField($scope, dataRecordFieldObj, onDataRecordFieldDeleted) {
             VRNotificationService.showConfirmation()

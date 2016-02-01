@@ -17,7 +17,7 @@
                 modalScope.onDataRecordTypeAdded = onDataRecordTypeAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataRecordTypeEditor.html', null, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericDataRecord/DataRecordTypeEditor.html', null, modalSettings);
         }
 
         function editDataRecordType(dataRecordTypeId, onDataRecordTypeUpdated) {
@@ -31,7 +31,7 @@
                 modalScope.onDataRecordTypeUpdated = onDataRecordTypeUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataRecordTypeEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericDataRecord/DataRecordTypeEditor.html', modalParameters, modalSettings);
         }
     };
 
