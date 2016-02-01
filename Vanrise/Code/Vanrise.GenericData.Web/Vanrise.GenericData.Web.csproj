@@ -181,6 +181,7 @@
     <Content Include="VR_GenericData\Services\DataRecordFieldService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordTypeAPIService.js" />
     <Content Include="VR_GenericData\Services\DataRecordTypeService.js" />
+    <Content Include="VR_GenericData\Services\GenericRuleDefinitionCriteriaFieldService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleService.js" />
     <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationDefinitionEditor.html" />

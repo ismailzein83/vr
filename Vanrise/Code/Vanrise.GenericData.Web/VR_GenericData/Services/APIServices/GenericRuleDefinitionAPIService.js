@@ -6,11 +6,18 @@
 
     function GenericRuleDefinitionAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
         return {
-            GetFilteredGenericRuleDefinitions: GetFilteredGenericRuleDefinitions
+            GetFilteredGenericRuleDefinitions: GetFilteredGenericRuleDefinitions,
+            GetGenericRuleDefinition: GetGenericRuleDefinition
         };
 
         function GetFilteredGenericRuleDefinitions(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRuleDefinition', 'GetFilteredGenericRuleDefinitions'), input);
+        }
+
+        function GetGenericRuleDefinition(genericRuleDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRuleDefinition', 'GetGenericRuleDefinition'), {
+                genericRuleDefinitionId: genericRuleDefinitionId
+            });
         }
     }
 

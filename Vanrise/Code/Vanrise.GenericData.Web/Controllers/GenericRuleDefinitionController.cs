@@ -20,5 +20,12 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredGenericRuleDefinitions(input));
         }
+
+        [HttpGet]
+        [Route("GetGenericRuleDefinition")]
+        public GenericRuleDefinition GetGenericRuleDefinition(int genericRuleDefinitionId)
+        {
+            return _manager.GetGenericRuleDefinition(genericRuleDefinitionId);
+        }
     }
 }

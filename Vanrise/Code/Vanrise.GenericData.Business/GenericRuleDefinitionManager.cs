@@ -21,6 +21,12 @@ namespace Vanrise.GenericData.Business
             return cachedGenericRuleDefinitions.ToBigResult(input, filterExpression);
         }
         
+        public GenericRuleDefinition GetGenericRuleDefinition(int genericRuleDefinitionId)
+        {
+            var cachedGenericRuleDefinitions = GetCachedGenericRuleDefinitions();
+            return cachedGenericRuleDefinitions.FindRecord((genericRuleDefinition) => genericRuleDefinition.GenericRuleDefinitionId == genericRuleDefinitionId);
+        }
+
         #endregion
 
         #region Private Methods

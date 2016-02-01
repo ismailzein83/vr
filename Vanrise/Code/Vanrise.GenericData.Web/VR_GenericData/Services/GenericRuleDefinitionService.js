@@ -6,8 +6,19 @@
 
     function GenericRuleDefinitionService(VRModalService) {
         return {
+            addGenericRuleDefinition: addGenericRuleDefinition,
             editGenericRuleDefinition: editGenericRuleDefinition
         };
+
+        function addGenericRuleDefinition(onGenericRuleDefinitionAdded) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onGenericRuleDefinitionAdded = onGenericRuleDefinitionAdded;
+            };
+            
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionEditor.html', undefined, modalSettings);
+        }
 
         function editGenericRuleDefinition(genericRuleDefinitionId, onGenericRuleDefinitionUpdated) {
             var modalParameters = {

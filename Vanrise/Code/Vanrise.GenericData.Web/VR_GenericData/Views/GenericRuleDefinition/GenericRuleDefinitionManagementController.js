@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleDefinitionManagementController.$inject = ['$scope'];
+    GenericRuleDefinitionManagementController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionService'];
 
-    function GenericRuleDefinitionManagementController($scope) {
+    function GenericRuleDefinitionManagementController($scope, VR_GenericData_GenericRuleDefinitionService) {
 
         var gridAPI;
         var gridQuery = {};
@@ -24,11 +24,10 @@
             };
 
             $scope.addGenericRuleDefinition = function () {
-                var onUserAdded = function (userObj) {
-                    gridAPI.onUserAdded(userObj);
+                var onGenericRuleDefinitionAdded = function (addedGenericRuleDefinition) {
+                    gridAPI.onUserAdded(addedGenericRuleDefinition);
                 };
-
-                VR_Sec_UserService.addUser(onUserAdded);
+                VR_GenericData_GenericRuleDefinitionService.addGenericRuleDefinition(onGenericRuleDefinitionAdded);
             };
         }
 
