@@ -14,7 +14,7 @@
             GetDataRecordTypeInfo: GetDataRecordTypeInfo
         });
         function GetDataRecordTypeInfo(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "DataRecordType", "GetDataRecordTypeInfo"), { filter: filter });
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataRecordType", "GetDataRecordTypeInfo"), { filter: filter });
         }
         function GetFilteredDataRecordTypes(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordType', 'GetFilteredDataRecordTypes'), input);

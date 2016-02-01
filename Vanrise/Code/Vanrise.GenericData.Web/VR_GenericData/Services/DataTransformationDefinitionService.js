@@ -8,6 +8,10 @@
         return ({
             addDataTransformationDefinition: addDataTransformationDefinition,
             editDataTransformationDefinition: editDataTransformationDefinition,
+            addDataRecordType: addDataRecordType,
+            editDataRecordType: editDataRecordType,
+            deleteDataRecordType: deleteDataRecordType
+
         });
 
         function addDataTransformationDefinition(onDataTransformationDefinitionAdded) {
@@ -32,6 +36,41 @@
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataTransformationDefinition/DataTransformationDefinitionEditor.html', modalParameters, modalSettings);
+        }
+
+        function addDataRecordType(onDataRecordTypeAdded, existingTypes) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onDataRecordTypeAdded = onDataRecordTypeAdded;
+            };
+            var modalParameters = {
+                ExistingTypes: existingTypes
+            };
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataTransformationDefinition/TransformationRecordTypeEditor.html', modalParameters, modalSettings);
+        }
+
+        function editDataRecordType(dataRecordType, onDataRecordTypeUpdated, existingTypes) {
+            var modalParameters = {
+                DataRecordType: dataRecordType,
+                ExistingTypes: existingTypes
+            };
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onDataRecordTypeUpdated = onDataRecordTypeUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataTransformationDefinition/TransformationRecordTypeEditor.html', modalParameters, modalSettings);
+        }
+        function deleteDataRecordType($scope, dataRecordTypeObj, onDataRecordTypeDeleted) {
+            VRNotificationService.showConfirmation()
+                .then(function (response) {
+                    if (response) {
+                        onDataRecordTypeDeleted(dataRecordTypeObj);
+                    }
+                });
         }
     };
 

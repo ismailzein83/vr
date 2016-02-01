@@ -9,8 +9,8 @@
         var isEditMode;
         var dataTransformationDefinitionEntity;
         var dataTransformationDefinitionId;
-        var dataRecordFieldAPI;
-        var dataRecordFieldReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var dataRecordTypeAPI;
+        var dataRecordTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
 
@@ -27,9 +27,9 @@
         function defineScope() {
             $scope.scopeModal = {}
 
-            $scope.scopeModal.onDataRecordFieldDirectiveReady = function (api) {
-                dataRecordFieldAPI = api;
-                dataRecordFieldReadyPromiseDeferred.resolve();
+            $scope.scopeModal.onDataRecordTypeDirectiveReady = function (api) {
+                dataRecordTypeAPI = api;
+                dataRecordTypeReadyPromiseDeferred.resolve();
             }
 
             $scope.scopeModal.SaveDataTransformationDefinition = function () {
@@ -68,7 +68,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordType])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -92,19 +92,21 @@
             }
             return dataTransformationDefinition;
         }
-        function loadDataRecordField() {
 
-            var loadDataRecordFieldPromiseDeferred = UtilsService.createPromiseDeferred();
+        function loadDataRecordType() {
 
-            dataRecordFieldReadyPromiseDeferred.promise
+            var loadDataRecordTypePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            dataRecordTypeReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = (dataTransformationDefinitionEntity != undefined) ? { Fields: dataTransformationDefinitionEntity.Fields } : undefined
+                    var directivePayload = (dataTransformationDefinitionEntity != undefined) ? { Types: dataTransformationDefinitionEntity.Types } : undefined
 
-                    VRUIUtilsService.callDirectiveLoad(dataRecordFieldAPI, directivePayload, loadDataRecordFieldPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(dataRecordTypeAPI, directivePayload, loadDataRecordTypePromiseDeferred);
                 });
 
-            return loadDataRecordFieldPromiseDeferred.promise;
+            return loadDataRecordTypePromiseDeferred.promise;
         }
+
         function loadFilterBySection() {
             if (dataTransformationDefinitionEntity != undefined) {
                 $scope.scopeModal.name = dataTransformationDefinitionEntity.Name;
