@@ -17,7 +17,8 @@ namespace Vanrise.Queueing.Data.SQL
         {
         }
 
-        public int InsertOrUpdateQueueItemType(string itemFQTN, string title, QueueSettings defaultQueueSettings )
+       
+        public int InsertOrUpdateQueueItemType(string itemFQTN, string title, QueueSettings defaultQueueSettings)
         {
             object id;
             ExecuteNonQuerySP("queue.sp_QueueItemType_InsertOrUpdate", out id, itemFQTN, title, Serializer.Serialize(defaultQueueSettings));
@@ -45,12 +46,12 @@ namespace Vanrise.Queueing.Data.SQL
         {
             return ExecuteNonQuerySP("queue.sp_QueueInstance_UpdateName", queueName, (int)status, newQueueName) > 0;
         }
-        
+
         public List<QueueInstance> GetAllQueueInstances()
         {
             return GetItemsSP("queue.sp_QueueInstance_GetAll", QueueInstanceMapper);
         }
-       
+
         public List<QueueItemType> GetQueueItemTypes()
         {
             return GetItemsSP("queue.sp_QueueItemTypes_GetAll", QueueItemTypeMapper);
@@ -58,7 +59,7 @@ namespace Vanrise.Queueing.Data.SQL
 
         #region Private Methods
 
-        
+
         private QueueInstance QueueInstanceMapper(IDataReader reader)
         {
             return new QueueInstance
@@ -75,6 +76,7 @@ namespace Vanrise.Queueing.Data.SQL
                 CreateTime = GetReaderValue<DateTime>(reader, "CreatedTime")
             };
         }
+
 
         private QueueSubscription QueueSubscriptionMapper(IDataReader reader)
         {

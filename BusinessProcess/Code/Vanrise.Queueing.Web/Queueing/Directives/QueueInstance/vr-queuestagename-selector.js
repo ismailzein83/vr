@@ -102,12 +102,12 @@ app.directive('vrQueuestagenameSelector', ['VR_Queueing_QueueInstanceAPIService'
 
                         if (response) {
                             for (var i = 0; i < response.length; i++) {
-                                ctrl.datasource.push(response[i]);
+                                ctrl.datasource.push({ Name: response[i] });
                             }
                         }
 
                         if (selectedIds) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'ID', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'Name', attrs, ctrl);
                         }
 
 
@@ -115,7 +115,7 @@ app.directive('vrQueuestagenameSelector', ['VR_Queueing_QueueInstanceAPIService'
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('ID', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
                 }
 
 

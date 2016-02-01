@@ -93,6 +93,13 @@ namespace Vanrise.Queueing
                 return null;
         }
 
+
+        public string GetExecutionFlowName(int executionFlowId)
+        {
+            QueueExecutionFlow executionFlow = GetExecutionFlow(executionFlowId);
+            return executionFlow != null ? executionFlow.Name : null;
+        }
+
         Dictionary<int, QueueExecutionFlow> GetCachedQueueExecutionFlows()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().GetOrCreateObject("QueueExecutionFlowManager_GetCachedQueueExecutionFlows",
@@ -110,7 +117,7 @@ namespace Vanrise.Queueing
 
             Func<QueueExecutionFlow, bool> filterExpression = (priceList) =>
 
-                      (input.Query.DefinitionId == null || input.Query.DefinitionId == priceList.DefinitionId) &&
+                      (input.Query.DefinitionId == null || input.Query.DefinitionId.Contains(priceList.DefinitionId)) &&
                       (input.Query.Name == null || priceList.Name.Contains(input.Query.Name));
 
 

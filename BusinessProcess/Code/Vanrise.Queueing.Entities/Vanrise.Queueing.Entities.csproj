@@ -65,7 +65,6 @@
     <Compile Include="QueueItemType.cs" />
     <Compile Include="QueueSettings.cs" />
     <Compile Include="QueueSubscription.cs" />
-    <Compile Include="StageName.cs" />
     <Compile Include="StageQueue.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

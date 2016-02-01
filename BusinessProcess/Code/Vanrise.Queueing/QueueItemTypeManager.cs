@@ -17,6 +17,47 @@ namespace Vanrise.Queueing
             return manager.GetItemTypes();
             
         }
+
+
+        Dictionary<int, QueueItemType> GetCachedQueueItemTypes()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().GetOrCreateObject("QueueItemTypeManager_GetCachedQueueItemTypes",
+               () =>
+               {
+                   IQueueItemTypeDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueItemTypeDataManager>();
+                   List<QueueItemType>  queueItemTypes = dataManager.GetItemTypes();
+                   return queueItemTypes.ToDictionary(kvp => kvp.Id, kvp => kvp);
+               });
+        }
+
+        private QueueItemType GetQueueItemType(int queueItemTypeId)
+        {
+            var queueItemTypes = GetCachedQueueItemTypes();
+            return queueItemTypes.GetRecord(queueItemTypeId);
+        }
+
+        public string GetItemTypeName(int itemTypeId)
+        {
+            QueueItemType queueItemType = GetQueueItemType(itemTypeId);
+            return queueItemType != null ? queueItemType.Title : null;
+        }
+
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IQueueItemTypeDataManager _dataManager = QDataManagerFactory.GetDataManager<IQueueItemTypeDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreItemTypeUpdated(ref _updateHandle);
+            }
+        }
+
+
+        #endregion
+
         
     }
 

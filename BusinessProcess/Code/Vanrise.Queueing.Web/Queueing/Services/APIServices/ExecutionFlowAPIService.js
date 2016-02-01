@@ -10,7 +10,8 @@
             GetFilteredExecutionFlows: GetFilteredExecutionFlows,
             GetExecutionFlow: GetExecutionFlow,
             UpdateExecutionFlow: UpdateExecutionFlow,
-            AddExecutionFlow: AddExecutionFlow
+            AddExecutionFlow: AddExecutionFlow,
+            GetExecutionFlows: GetExecutionFlows
         });
 
         function GetExecutionFlowDefinitions() {
@@ -31,6 +32,10 @@
 
         function AddExecutionFlow(executionFlowObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionFlow', 'AddExecutionFlow'), executionFlowObject);
+        }
+
+        function GetExecutionFlows() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionFlow', 'GetExecutionFlows'));
         }
 
         

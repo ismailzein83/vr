@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrExecutionflowSelector', ['VR_Queueing_QueueInstanceAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (VR_Queueing_QueueInstanceAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrExecutionflowSelector', ['VR_Queueing_ExecutionFlowAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (VR_Queueing_ExecutionFlowAPIService, UtilsService, VRUIUtilsService) {
 
 
 
@@ -67,7 +67,7 @@ app.directive('vrExecutionflowSelector', ['VR_Queueing_QueueInstanceAPIService',
                 addCliked = 'onaddclicked="addNewExecutionFlow"';
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="DefinitionId" isrequired="ctrl.isrequired"'
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="ExecutionFlowId" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Execution Flow" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>'
         }
@@ -97,7 +97,7 @@ app.directive('vrExecutionflowSelector', ['VR_Queueing_QueueInstanceAPIService',
 
                     }
 
-                    return VR_Queueing_QueueInstanceAPIService.GetExecutionFlows(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VR_Queueing_ExecutionFlowAPIService.GetExecutionFlows(UtilsService.serializetoJson(filter)).then(function (response) {
                         ctrl.datasource.length = 0;
 
                         if (response) {
@@ -107,7 +107,7 @@ app.directive('vrExecutionflowSelector', ['VR_Queueing_QueueInstanceAPIService',
                         }
 
                         if (selectedIds) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'ID', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'ExecutionFlowId', attrs, ctrl);
                         }
 
 
@@ -115,7 +115,7 @@ app.directive('vrExecutionflowSelector', ['VR_Queueing_QueueInstanceAPIService',
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('ID', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('ExecutionFlowId', attrs, ctrl);
                 }
 
                 

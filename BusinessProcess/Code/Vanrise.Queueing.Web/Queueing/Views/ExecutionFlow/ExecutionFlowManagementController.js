@@ -22,6 +22,7 @@
                 executionFlowDirectionSelectorReadyDeferred.resolve();
             };
 
+            $scope.selectedExecutionFlowDefinition = [];
 
             $scope.onGridReady = function (api) {
                 gridApi = api;

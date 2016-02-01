@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Vanrise.Queueing.Entities
 {
-    public enum QueueInstanceStatus { New = 0, ReadyToUse = 10, Deleted = 20 }
+    public enum QueueInstanceStatus {
+         [Description("New")]
+        New = 0,
+        [Description("Ready To Use")]
+        ReadyToUse = 10,
+        [Description("Deleted")]
+        Deleted = 20 }
     public class QueueInstance
     {
         public int QueueInstanceId { get; set; }

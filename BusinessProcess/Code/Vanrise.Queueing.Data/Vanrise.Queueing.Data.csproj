@@ -54,7 +54,6 @@
     <Compile Include="IQueueExecutionFlowDataManager.cs" />
     <Compile Include="IQueueDataManager.cs" />
     <Compile Include="IQueueExecutionFlowDefinitionDataManager.cs" />
-    <Compile Include="IQueueInstanceDataManager.cs" />
     <Compile Include="IQueueItemDataManager.cs" />
     <Compile Include="IQueueItemTypeDataManager.cs" />
     <Compile Include="IQueueSubscriptionDataManager.cs" />

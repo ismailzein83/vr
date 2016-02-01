@@ -25,6 +25,12 @@ namespace Vanrise.Queueing.Data.SQL
         }
 
 
+        public bool AreItemTypeUpdated(ref object updateHandle) {
+            return base.IsDataUpdated("[queue].[QueueItemType]", ref updateHandle);
+        
+        }
+
+
         #region Mappers
         private QueueItemType QueueItemTypeMapper(IDataReader reader)
         {

@@ -62,7 +62,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueDataManager.cs" />
     <Compile Include="QueueExecutionFlowDefinitionDataManager.cs" />
-    <Compile Include="QueueInstanceDataManager.cs" />
     <Compile Include="QueueItemDataManager.cs" />
     <Compile Include="QueueItemTypeDataManager.cs" />
     <Compile Include="QueueSubscriptionDataManager.cs" />

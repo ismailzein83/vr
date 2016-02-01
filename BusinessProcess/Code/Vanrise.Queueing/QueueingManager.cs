@@ -11,7 +11,7 @@ namespace Vanrise.Queueing
 {
     public class QueueingManager
     {
-        
+
         #region ctor
         private readonly IQueueDataManager _dataManager;
         private readonly IQueueItemDataManager _itemDataManager;
@@ -24,6 +24,30 @@ namespace Vanrise.Queueing
         #endregion
 
         #region Public Methods
+
+        public Vanrise.Entities.IDataRetrievalResult<QueueInstanceDetail> GetFilteredQueueInstances(Vanrise.Entities.DataRetrievalInput<QueueInstanceQuery> input)
+        {
+            var queueInstances = GetCachedQueueInstances();
+
+            Func<QueueInstance, bool> filterExpression = (queueInstance) =>
+
+                      (input.Query.ExecutionFlowId == null || input.Query.ExecutionFlowId.Contains((int)queueInstance.ExecutionFlowId)) &&
+                      (input.Query.Name == null || queueInstance.Name.Contains(input.Query.Name)) &&
+                      (input.Query.StageName == null || input.Query.StageName.Contains(queueInstance.StageName)) &&
+                      (input.Query.Title == null || queueInstance.Title.Contains(input.Query.Title)) &&
+                      (input.Query.ItemTypeId == null || input.Query.ItemTypeId.Contains(queueInstance.ItemTypeId));
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, queueInstances.ToBigResult(input, filterExpression, QueueInstanceDetailMapper));
+
+        }
+
+        public List<string> GetStageNames()
+        {
+            List<string> filteredStageNames = GetCachedQueueInstances().Values.Select(x => x.StageName).Distinct().ToList();
+            return filteredStageNames;
+
+        }
+
         public QueueInstance GetQueueInstance(string queueName)
         {
             return GetCachedQueueInstancesByName().GetRecord(queueName);
@@ -172,7 +196,29 @@ namespace Vanrise.Queueing
 
             };
         }
-       
+
+
+        private QueueInstanceDetail QueueInstanceDetailMapper(QueueInstance queueInstance)
+        {
+            QueueInstanceDetail queueInstanceDetail = new QueueInstanceDetail();
+            QueueItemTypeManager itemTypeManager = new QueueItemTypeManager();
+            queueInstanceDetail.Entity = queueInstance;
+            if (queueInstanceDetail.Entity.ExecutionFlowId != null)
+            {
+                QueueExecutionFlowManager manager = new QueueExecutionFlowManager();
+                queueInstanceDetail.ExecutionFlowName = manager.GetExecutionFlowName((int)queueInstanceDetail.Entity.ExecutionFlowId);
+            }
+            else
+            {
+                queueInstanceDetail.ExecutionFlowName = string.Empty;
+            }
+
+            queueInstanceDetail.StatusName = Vanrise.Common.Utilities.GetEnumDescription(queueInstance.Status);
+            queueInstanceDetail.ItemTypeName = itemTypeManager.GetItemTypeName(queueInstanceDetail.Entity.ItemTypeId);
+
+            return queueInstanceDetail;
+        }
+
         #endregion
     }
 

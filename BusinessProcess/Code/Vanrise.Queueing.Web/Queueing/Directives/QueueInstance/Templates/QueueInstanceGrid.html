@@ -2,14 +2,14 @@
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              on-ready="ongridReady"
-             idfield="ID">
+             idfield="Entity.QueueInstanceId">
 
-    <vr-datagridcolumn headertext="'ID'" field="'ID'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.QueueInstanceId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Execution Flow'" field="'ExecutionFlowName'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Stage Name'" field="'StageName'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Title'" field="'Title'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Status'" field="'Status'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Item Type'" field="'ItemType'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Stage Name'" field="'Entity.StageName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Title'" field="'Entity.Title'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'StatusName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Item Type'" field="'ItemTypeName'"></vr-datagridcolumn>
 
 </vr-datagrid>

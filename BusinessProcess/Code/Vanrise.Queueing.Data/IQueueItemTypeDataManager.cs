@@ -11,5 +11,7 @@ namespace Vanrise.Queueing.Data
     {
        List<QueueItemType> GetItemTypes();
 
+       bool AreItemTypeUpdated(ref object updateHandle);
+
     }
 }

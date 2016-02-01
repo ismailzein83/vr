@@ -12,15 +12,15 @@ namespace Vanrise.Queueing.Web.Controllers
     public class QueueInstanceController : Vanrise.Web.Base.BaseAPIController
     {
 
-        private QueueInstanceManager _manager;
+        private QueueingManager _manager;
         public QueueInstanceController()
         {
-            this._manager = new QueueInstanceManager();
+            this._manager = new QueueingManager();
         }
 
         [HttpGet]
         [Route("GetStageNames")]
-        public List<StageName> GetStageNames()
+        public List<string> GetStageNames()
         {
             return _manager.GetStageNames();
         }
@@ -33,7 +33,8 @@ namespace Vanrise.Queueing.Web.Controllers
             return manager.GetItemTypes();
         }
 
-
+        [HttpPost]
+        [Route("GetFilteredQueueInstances")]
         public object GetFilteredQueueInstances(Vanrise.Entities.DataRetrievalInput<QueueInstanceQuery> input) {
 
             return GetWebResponse(input, _manager.GetFilteredQueueInstances(input));

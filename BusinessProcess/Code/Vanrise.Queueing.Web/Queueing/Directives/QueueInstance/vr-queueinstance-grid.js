@@ -51,7 +51,7 @@ app.directive("vrQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIService", "VR
 
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return VR_Queueing_QueueInstanceAPIService.GetExecutionFlows(dataRetrievalInput)
+                    return VR_Queueing_QueueInstanceAPIService.GetFilteredQueueInstances(dataRetrievalInput)
                         .then(function (response) {
                             onResponseReady(response);
                         })

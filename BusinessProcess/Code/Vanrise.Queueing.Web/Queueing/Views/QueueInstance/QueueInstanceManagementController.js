@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    QueueInstanceController.$inject = ['$scope','UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    QueueInstanceController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function QueueInstanceController($scope,UtilsService, VRUIUtilsService, VRNotificationService) {
+    function QueueInstanceController($scope, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var gridAPI;
         var filter = {};
@@ -23,6 +23,9 @@
 
         function defineScope() {
 
+            $scope.selectedExecutionFlow = [];
+            $scope.selectedStageName=[];
+            $scope.selectedQueueItemType = [];
 
             $scope.onExecutionFlowSelectorReady = function (api) {
                 executionFlowSelectorAPI = api;
@@ -61,7 +64,7 @@
 
         function loadAllControls() {
             $scope.isLoading = true;
-            return UtilsService.waitMultipleAsyncOperations([loadExecutionFlow,loadStageName,loadItemType])
+            return UtilsService.waitMultipleAsyncOperations([loadExecutionFlow, loadStageName, loadItemType])
               .catch(function (error) {
                   VRNotificationService.notifyExceptionWithClose(error, $scope);
               })
@@ -119,10 +122,10 @@
         function getFilterObject() {
             filter = {
                 Name: $scope.name,
-                ExecutionFlowID: executionFlowSelectorAPI.getSelectedIds(),
-                StageName:stageNameSelectorAPI.getSelectedIds(),
+                ExecutionFlowId: executionFlowSelectorAPI.getSelectedIds(),
+                StageName: stageNameSelectorAPI.getSelectedIds(),
                 Title: $scope.title,
-                ItemTypeID:itemTypeSelectorAPI.getSelectedIds()
+                ItemTypeId: itemTypeSelectorAPI.getSelectedIds()
             };
         }
     }

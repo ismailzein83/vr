@@ -11,13 +11,13 @@ namespace Vanrise.Queueing.Entities
 
         public string Name { get; set; }
 
-        public int? ExecutionFlowId { get; set; }
+        public List<int> ExecutionFlowId { get; set; }
 
-        public string StageName { get; set; }
+        public List<string> StageName { get; set; }
 
         public string Title { get; set;}
 
-        public int? ItemTypeId { get; set; }
+        public List<int> ItemTypeId { get; set; }
     }
 
 

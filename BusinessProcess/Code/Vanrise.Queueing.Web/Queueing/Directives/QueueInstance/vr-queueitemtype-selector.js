@@ -107,7 +107,7 @@ app.directive('vrQueueitemtypeSelector', ['VR_Queueing_QueueInstanceAPIService',
                         }
 
                         if (selectedIds) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'ID', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'Id', attrs, ctrl);
                         }
 
 
@@ -115,7 +115,7 @@ app.directive('vrQueueitemtypeSelector', ['VR_Queueing_QueueInstanceAPIService',
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('ID', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('Id', attrs, ctrl);
                 }
 
 
