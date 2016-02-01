@@ -9,6 +9,8 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Common.Business;
+using System.Reflection;
+using System.Reflection.Emit;
 namespace Vanrise.GenericData.Business
 {
     public class DataRecordTypeManager
@@ -100,6 +102,15 @@ namespace Vanrise.GenericData.Business
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.DataRecordFieldConfigType);
         }
+       
+        public dynamic CreateDataRecordObject(string dataRecordTypeName)
+        {
+            Type dataRecordRuntimeType = GetDataRecordRuntimeType(dataRecordTypeName);
+            if (dataRecordRuntimeType != null)
+                return Activator.CreateInstance(dataRecordRuntimeType);
+            return null;
+        }
+                
         #endregion
       
         #region Private Methods
@@ -112,6 +123,86 @@ namespace Vanrise.GenericData.Business
                    IEnumerable<DataRecordType> dataRecordTypes = dataManager.GetDataRecordTypes();
                    return dataRecordTypes.ToDictionary(kvp => kvp.DataRecordTypeId, kvp => kvp);
                });
+        }
+        
+        private Type GetDataRecordRuntimeType(string dataRecordTypeName)
+        {
+            string cacheName = String.Format("GetDataRecordRuntimeType_{0}", dataRecordTypeName);
+            var runtimeType = CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(dataRecordTypeName,
+                () =>
+                {
+                    DataRecordType dataRecordType = GetCachedDataRecordTypes().FindRecord(itm => itm.Name == dataRecordTypeName);
+                    if (dataRecordType != null)
+                        return GetOrCreateRuntimeType(dataRecordType);
+                    else
+                        return null;
+                });
+            if (runtimeType == null)
+                throw new ArgumentException(String.Format("Cannot create runtime type from Data Record Type '{0}'", dataRecordTypeName));
+            return runtimeType;
+        }
+
+        private Type GetOrCreateRuntimeType(DataRecordType dataRecordType)
+        {
+            string typeSignature = String.Format("DRT_{0}_{1:yyyyMMdd_HHmmss}", dataRecordType.DataRecordTypeId, DateTime.Now);
+            var assemblyName = new AssemblyName(typeSignature);
+            AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+            ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("MainModule");
+            TypeBuilder typeBuilder = moduleBuilder.DefineType(typeSignature, TypeAttributes.Public |
+                                TypeAttributes.Class |
+                                TypeAttributes.AutoClass |
+                                TypeAttributes.AnsiClass |
+                                TypeAttributes.BeforeFieldInit |
+                                TypeAttributes.AutoLayout
+                                , null);
+
+            ConstructorBuilder constructor = typeBuilder.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
+
+            if (dataRecordType.Fields != null)
+            {
+                foreach (var field in dataRecordType.Fields)
+                {
+                    CreateProperty(typeBuilder, field.Name, field.Type.GetRuntimeType());
+                }
+            }
+
+            return typeBuilder.CreateType();
+        }
+
+        private void CreateProperty(TypeBuilder tb, string propertyName, Type propertyType)
+        {
+            FieldBuilder fieldBuilder = tb.DefineField("_" + propertyName, propertyType, FieldAttributes.Private);
+
+            PropertyBuilder propertyBuilder = tb.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
+            MethodBuilder getPropMthdBldr = tb.DefineMethod("get_" + propertyName, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, propertyType, Type.EmptyTypes);
+            ILGenerator getIl = getPropMthdBldr.GetILGenerator();
+
+            getIl.Emit(OpCodes.Ldarg_0);
+            getIl.Emit(OpCodes.Ldfld, fieldBuilder);
+            getIl.Emit(OpCodes.Ret);
+
+            MethodBuilder setPropMthdBldr =
+                tb.DefineMethod("set_" + propertyName,
+                  MethodAttributes.Public |
+                  MethodAttributes.SpecialName |
+                  MethodAttributes.HideBySig,
+                  null, new[] { propertyType });
+
+            ILGenerator setIl = setPropMthdBldr.GetILGenerator();
+            Label modifyProperty = setIl.DefineLabel();
+            Label exitSet = setIl.DefineLabel();
+
+            setIl.MarkLabel(modifyProperty);
+            setIl.Emit(OpCodes.Ldarg_0);
+            setIl.Emit(OpCodes.Ldarg_1);
+            setIl.Emit(OpCodes.Stfld, fieldBuilder);
+
+            setIl.Emit(OpCodes.Nop);
+            setIl.MarkLabel(exitSet);
+            setIl.Emit(OpCodes.Ret);
+
+            propertyBuilder.SetGetMethod(getPropMthdBldr);
+            propertyBuilder.SetSetMethod(setPropMthdBldr);
         }
 
         #endregion
