@@ -18,8 +18,8 @@
             $scope.currentNode;
             $scope.nodesUpdated = false;
 
-            $scope.applyNumberPrefixes = function () {
-
+            $scope.applyNumberPrefixesClicked = function () {
+                applyNumberPrefixes();
             }
 
             $scope.cancelChanges = function () {
@@ -51,18 +51,6 @@
                 removeNumberPrefix();
             }
 
-            $scope.cancelState = function () {
-                return VRNotificationService.showConfirmation().then(function (result) {
-                    if (result) {
-                        numberPrefixes.length = 0;
-                        return FraudAnalysis_NumberPrefixAPIService.CancelNumberPrefixState().then(function (response) {
-                            treeAPI.refreshTree($scope.nodes);
-                            $scope.currentNode = undefined;
-                        });
-                    }
-                });
-
-            }
         }
 
         function load() {
@@ -86,6 +74,17 @@
             }
         }
 
+        function applyNumberPrefixes() {
+            console.log(numberPrefixes)
+            return FraudAnalysis_NumberPrefixAPIService.UpdatePrefixes(numberPrefixes).then(function (response) {
+                if (response) {
+                    $scope.nodesUpdated = false;
+                }
+                else { }
+
+            });
+        }
+
         function addNewNumberPrefix() {
             var parameters = {
                 NumberPrefixes: numberPrefixes
@@ -99,7 +98,7 @@
         }
 
         function mapPrefixtoInfo(prefix) {
-            return { $type: "Vanrise.Fzero.FraudAnalysis.Entities.NumberPrefixInfo, Vanrise.Fzero.FraudAnalysis.Entities", Prefix: prefix }
+            return { $type: "Vanrise.Fzero.FraudAnalysis.Entities.NumberPrefix, Vanrise.Fzero.FraudAnalysis.Entities", Prefix: prefix }
         }
 
         function splitNumberPrefix() {
@@ -160,7 +159,6 @@
         }
 
         function getNumberPrefixes() {
-            numberPrefixes.length = 0;
             return FraudAnalysis_NumberPrefixAPIService.GetPrefixesInfo().then(function (response) {
                 angular.forEach(response, function (itm) {
                     numberPrefixes.push(itm);
@@ -191,7 +189,6 @@
         }
 
         function buildNumberPrefixesTree() {
-            console.log(numberPrefixes)
             numberPrefixes.sort(compare);
             $scope.nodes.length = 0;
 

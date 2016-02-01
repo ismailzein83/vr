@@ -23,5 +23,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Web.Controllers
          }
 
 
+         [HttpPost]
+         [Route("UpdatePrefixes")]
+         public bool UpdatePrefixes(List<NumberPrefix> prefixes)
+         {
+             NumberPrefixesManager manager = new NumberPrefixesManager();
+             return manager.UpdatePrefixes(prefixes);
+         }
+
+
     }
 }

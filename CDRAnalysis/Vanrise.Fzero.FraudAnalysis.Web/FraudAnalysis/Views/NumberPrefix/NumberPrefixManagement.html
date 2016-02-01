@@ -2,7 +2,7 @@
     <vr-row>
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
             <div transclude-to="buttons">
-                <vr-button type="Apply" ng-show="nodesUpdated==true" validationcontext="SearchGroup" data-onclick="applyNumberPrefixes"></vr-button>
+                <vr-button type="Apply" ng-show="nodesUpdated==true" validationcontext="SearchGroup" data-onclick="applyNumberPrefixesClicked"></vr-button>
                 <vr-button type="CancelChanges" ng-show="nodesUpdated==true" validationcontext="SearchGroup" data-onclick="cancelChanges"></vr-button>
                 <vr-button type="Split" text="Split Number Prefix" ng-show="currentNode != undefined" formname="formFilter" validationcontext="SearchGroup" data-onclick="splitNumberPrefixClicked"></vr-button>
                 <vr-button type="Merge" text="Merge Number Prefixes" ng-show="currentNode != undefined"  formname="formFilter" validationcontext="SearchGroup" data-onclick="mergeNumberPrefixesClicked"></vr-button>

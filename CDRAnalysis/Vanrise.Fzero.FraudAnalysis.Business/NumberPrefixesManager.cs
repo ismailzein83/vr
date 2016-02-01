@@ -35,5 +35,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             var cachedPrefixes = GetCachedNumberPrefixes();
             return cachedPrefixes.Prefixes.MapRecords(NumberPrefixInfoMapper);
         }
+
+        public bool UpdatePrefixes(List<NumberPrefix> prefixes)
+        {
+            var cachedPrefixes = GetCachedNumberPrefixes();
+            cachedPrefixes.Prefixes = prefixes;
+            bool updateActionSucc = false;
+            updateActionSucc = base.UpdateConfiguration(cachedPrefixes);
+            return updateActionSucc;
+        }
+
+
     }
 }
