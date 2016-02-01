@@ -31,13 +31,10 @@ namespace Vanrise.GenericData.Business
             var dataRecordTypes = GetCachedDataRecordTypes();
             return dataRecordTypes.GetRecord(dataRecordTypeId);
         }
-        public string GetDataRecordTypeName(int? dataRecordTypeId)
+        public string GetDataRecordTypeName(int dataRecordTypeId)
         {
-            if (dataRecordTypeId == null)
-                return null;
             var dataRecordTypes = GetCachedDataRecordTypes();
-
-            DataRecordType dataRecordType = dataRecordTypes.GetRecord((int)dataRecordTypeId);
+            DataRecordType dataRecordType = dataRecordTypes.GetRecord(dataRecordTypeId);
 
             if (dataRecordType != null)
               return dataRecordType.Name;
@@ -228,7 +225,8 @@ namespace Vanrise.GenericData.Business
         {
             DataRecordTypeDetail dataRecordTypeDetail = new DataRecordTypeDetail();
             dataRecordTypeDetail.Entity = dataRecordTypeObject;
-            dataRecordTypeDetail.ParentName = GetDataRecordTypeName(dataRecordTypeObject.ParentId);
+            if (dataRecordTypeObject.ParentId != null)
+             dataRecordTypeDetail.ParentName = GetDataRecordTypeName((int)dataRecordTypeObject.ParentId);
             return dataRecordTypeDetail;
         }
         private DataRecordTypeInfo DataRecordTypeInfoMapper(DataRecordType dataRecordTypeObject)

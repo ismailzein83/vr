@@ -40,7 +40,7 @@ app.directive('vrGenericdataChoices', ['UtilsService',
                     if (ctrl.values !=undefined && ctrl.values.length > 0)
                         return null;
                     return "You Should Add At Least One Choice."
-                }
+                } 
                 ctrl.disableAddButton = true;
                 ctrl.addValue = function () {
                     ctrl.values.push(AddChoice(ctrl.value));
@@ -49,9 +49,8 @@ app.directive('vrGenericdataChoices', ['UtilsService',
                     ctrl.disableAddButton = true;
                 }
                 ctrl.onValueChange = function (value) {
-                    ctrl.disableAddButton = value == undefined || (UtilsService.getItemIndexByVal(ctrl.values, ctrl.value, "Text") != -1 && UtilsService.getItemIndexByVal(ctrl.values, ctrl.value, "Value") != -1);
+                    ctrl.disableAddButton = value == undefined || (UtilsService.getItemIndexByVal(ctrl.values, ctrl.value, "Text") != -1 || UtilsService.getItemIndexByVal(ctrl.values, ctrl.Id, "Value") != -1);
                 }
-
 
                 defineAPI();
             }
