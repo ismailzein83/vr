@@ -140,7 +140,7 @@
                 }
 
                 if ($scope.modalScope.suspicionRules.length == 0) {
-                    return 'No strategy levels added';
+                    return 'No suspicion rules added';
                 }
 
                 var filtersToUseCount = 0;
@@ -385,7 +385,7 @@
                         var existingItem = UtilsService.getItemByVal(level.StrategyLevelCriterias, filterDef.filterId, 'FilterId');
                         if (existingItem != undefined && existingItem != null) {
                             levelCriteriaItem.isSelected = true;
-                            levelCriteriaItem.percentage = ((parseFloat(existingItem.Percentage) * 100) - 100);
+                            levelCriteriaItem.percentage = parseInt((parseFloat(existingItem.Percentage) * 100) - 100); // The outer parseInt call is used for formatting purposes
                         }
                         strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
                     });
@@ -451,7 +451,7 @@
                 GapBetweenFailedConsecutiveCalls: $scope.modalScope.gapBetweenFailedConsecutiveCalls,
                 MaxLowDurationCall: $scope.modalScope.maxLowDurationCall,
                 MinimumCountofCallsinActiveHour: $scope.modalScope.minCountofCallsinActiveHour,
-                PeakHours: $scope.modalScope.selectedPeakHours, // (periodSelectorAPI.getSelectedIds() == CDRAnalysis_FA_PeriodEnum.Hourly.value) ? [] : 
+                PeakHours: (periodSelectorAPI.getSelectedIds() == CDRAnalysis_FA_PeriodEnum.Hourly.value) ? [] : $scope.modalScope.selectedPeakHours,
                 StrategyFilters: [],
                 StrategyLevels: [],
                 LastUpdatedOn: new Date()
@@ -471,7 +471,7 @@
 
             angular.forEach($scope.modalScope.suspicionRules, function (level) {
                 var strategyLevelItem = {
-                    SuspicionLevelId: level.suspicionLevel.id,
+                    SuspicionLevelId: level.suspicionLevel.value,
                     StrategyLevelCriterias: []
                 };
 
