@@ -161,7 +161,7 @@
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-selector.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationDefinitionAPIService.js" />
-    <Content Include="VR_GenericData\Services\APIServices\DataTransformationDefinitionService.js" />
+    <Content Include="VR_GenericData\Services\DataTransformationDefinitionService.js" />
     <Content Include="VR_GenericData\Services\DataRecordFieldService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordTypeAPIService.js" />
     <Content Include="VR_GenericData\Services\DataRecordTypeService.js" />
