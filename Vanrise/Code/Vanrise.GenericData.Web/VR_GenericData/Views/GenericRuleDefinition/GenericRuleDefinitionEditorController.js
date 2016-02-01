@@ -2,11 +2,15 @@
 
     'use strict';
 
-    GenericRuleDefinitionController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VRNavigationService', 'UtilsService'];
+    GenericRuleDefinitionController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function GenericRuleDefinitionController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VRNavigationService, UtilsService) {
+    function GenericRuleDefinitionController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
         var isEditMode;
+
+        var criteriaDirectiveAPI;
+        var criteriaDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        
         var genericRuleDefinitionId;
         var genericRuleDefinitionEntity;
 
@@ -27,13 +31,16 @@
         function defineScope() {
             $scope.scopeModel = {};
 
+            $scope.scopeModel.onCriteriaDirectiveReady = function (api) {
+                criteriaDirectiveAPI = api;
+                criteriaDirectiveReadyDeferred.resolve();
+            };
             $scope.scopeModel.save = function () {
                 if (isEditMode)
                     return updateGenericRuleDefinition();
                 else
                     return insertGenericRuleDefinition();
             };
-
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -64,7 +71,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCriteriaDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -75,13 +82,27 @@
                     UtilsService.buildTitleForUpdateEditor((genericRuleDefinitionEntity != undefined) ? genericRuleDefinitionEntity.Name : null, 'Generic Rule Definition') :
                     UtilsService.buildTitleForAddEditor('Generic Rule Definition');
             }
-
             function loadStaticData() {
                 if (genericRuleDefinitionEntity == undefined) {
                     return;
                 }
 
                 $scope.scopeModel.name = genericRuleDefinitionEntity.Name;
+            }
+            function loadCriteriaDirective() {
+                var criteriaDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                criteriaDirectiveReadyDeferred.promise.then(function () {
+                    var criteriaDirectivePayload;
+                    if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.CriteriaDefinition != null) {
+                        criteriaDirectivePayload = {
+                            GenericRuleDefinitionCriteriaFields: genericRuleDefinitionEntity.CriteriaDefinition.Fields
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(criteriaDirectiveAPI, criteriaDirectivePayload, criteriaDirectiveLoadDeferred);
+                });
+                
+                return criteriaDirectiveLoadDeferred.promise;
             }
         }
 

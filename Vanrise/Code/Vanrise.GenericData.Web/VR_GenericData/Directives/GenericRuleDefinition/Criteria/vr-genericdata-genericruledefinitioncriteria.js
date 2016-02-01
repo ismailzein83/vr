@@ -25,7 +25,7 @@
                     }
                 }
             },
-            templateUrl: '/Client/Modules/VR_Rules/Directives/GenericRuleDefinition/Criteria/Templates/GenericRuleDefinitionCriteriaTemplate.html'
+            templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericRuleDefinition/Criteria/Templates/GenericRuleDefinitionCriteriaTemplate.html'
         };
 
         function GenericRuleDefinitionCriteria($scope, ctrl) {
@@ -94,6 +94,6 @@
         }
     }
 
-    app.directive('vrGenericdataGenericruledefinitionCriteria', GenericRuleDefinitionCriteriaDirective);
+    app.directive('vrGenericdataGenericruledefinitioncriteria', GenericRuleDefinitionCriteriaDirective);
 
 })(app);
