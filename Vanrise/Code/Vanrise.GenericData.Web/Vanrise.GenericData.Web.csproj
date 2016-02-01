@@ -115,6 +115,7 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\GenericRuleDefinitionController.cs" />
     <Compile Include="Controllers\DataRecordTypeController.cs" />
     <Compile Include="Controllers\DataTransformationDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -161,6 +162,7 @@
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-selector.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationDefinitionAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\DataTransformationDefinitionService.js" />
     <Content Include="VR_GenericData\Services\DataRecordFieldService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordTypeAPIService.js" />

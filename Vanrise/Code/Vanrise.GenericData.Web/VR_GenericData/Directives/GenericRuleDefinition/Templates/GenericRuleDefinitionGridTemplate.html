@@ -1,1 +1,10 @@
-﻿
+﻿<vr-datagrid datasource="genericRuleDefinitions"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="onGridReady"
+             menuactions="gridMenuActions"
+             idfield="GenericRuleDefinitionId">
+
+    <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Created Time'" type="'Date'" field="'CreatedTime'"></vr-datagridcolumn>
+</vr-datagrid>  
