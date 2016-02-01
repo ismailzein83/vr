@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataChoicesSelective', ['UtilsService',
+app.directive('vrGenericdataChoices', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {
@@ -26,7 +26,7 @@ app.directive('vrGenericdataChoicesSelective', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/SelectiveChoicesDirectiveTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/ChoicesDirectiveTemplate.html';
             }
 
         };
@@ -35,26 +35,30 @@ app.directive('vrGenericdataChoicesSelective', ['UtilsService',
 
             function initializeController() {
                 ctrl.values = [];
+                ctrl.Id = ctrl.values.length + 1;
                 ctrl.isValid = function () {
-                    if (ctrl.values.length > 0)
+                    if (ctrl.values !=undefined && ctrl.values.length > 0)
                         return null;
                     return "You Should Add At Least One Choice."
                 }
                 ctrl.disableAddButton = true;
                 ctrl.addValue = function () {
                     ctrl.values.push(AddChoice(ctrl.value));
+                    ctrl.Id = ctrl.values.length + 1;
                     ctrl.value = undefined;
                     ctrl.disableAddButton = true;
                 }
                 ctrl.onValueChange = function (value) {
-                    ctrl.disableAddButton = value == undefined || UtilsService.getItemIndexByVal(ctrl.values, ctrl.value, "Choice") != -1;
+                    ctrl.disableAddButton = value == undefined || (UtilsService.getItemIndexByVal(ctrl.values, ctrl.value, "Text") != -1 && UtilsService.getItemIndexByVal(ctrl.values, ctrl.value, "Value") != -1);
                 }
+
+
                 defineAPI();
             }
 
             function AddChoice(choice) {
                 var obj = {
-                    Value: ctrl.values.length+1,
+                    Value: ctrl.Id,
                     Text: choice
                 }
                 return obj;

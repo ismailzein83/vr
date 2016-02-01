@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.GenericData.Business
+namespace Vanrise.GenericData.Transformation
 {
     public class Constants
     {
-        public const string DataRecordFieldConfigType = "VRGeneric_DataRecordFieldType";
+        public const string MappingStepConfigType = "VRGeneric__DataTransformationMappingSteps";
     }
 }

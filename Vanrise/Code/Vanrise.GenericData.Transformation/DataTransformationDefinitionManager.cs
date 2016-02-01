@@ -8,6 +8,7 @@ using Vanrise.GenericData.Transformation.Entities;
 using Vanrise.Common;
 using Vanrise.Caching;
 using Vanrise.GenericData.Transformation.Data;
+using Vanrise.Common.Business;
 namespace Vanrise.GenericData.Transformation
 {
     public class DataTransformationDefinitionManager
@@ -88,6 +89,11 @@ namespace Vanrise.GenericData.Transformation
             }
 
             return updateOperationOutput;
+        }
+        public List<Vanrise.Entities.TemplateConfig> GetMappingStepsTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.MappingStepConfigType);
         }
         #endregion
 

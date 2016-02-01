@@ -68,7 +68,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordField])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -113,9 +113,9 @@
 
         function setTitle() {
             if (isEditMode && dataTransformationDefinitionEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(dataTransformationDefinitionEntity.Name, 'Data Record Type');
+                $scope.title = UtilsService.buildTitleForUpdateEditor(dataTransformationDefinitionEntity.Name, 'Data Transformation');
             else
-                $scope.title = UtilsService.buildTitleForAddEditor('Data Record Type');
+                $scope.title = UtilsService.buildTitleForAddEditor('Data Transformation');
         }
 
         function insertDataTransformationDefinition() {
@@ -123,7 +123,7 @@
             var dataTransformationDefinitionObject = buildDataTransformationDefinitionObjFromScope();
             return VR_GenericData_DataTransformationDefinitionAPIService.AddDataTransformationDefinition(dataTransformationDefinitionObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Record Type", response)) {
+                if (VRNotificationService.notifyOnItemAdded("Data Transformation", response)) {
                     if ($scope.onDataTransformationDefinitionAdded != undefined)
                         $scope.onDataTransformationDefinitionAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -138,7 +138,7 @@
             var dataTransformationDefinitionObject = buildDataTransformationDefinitionObjFromScope();
             VR_GenericData_DataTransformationDefinitionAPIService.UpdateDataTransformationDefinition(dataTransformationDefinitionObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Record Type", response)) {
+                if (VRNotificationService.notifyOnItemUpdated("Data Transformation", response)) {
                     if ($scope.onDataTransformationDefinitionUpdated != undefined)
                         $scope.onDataTransformationDefinitionUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();

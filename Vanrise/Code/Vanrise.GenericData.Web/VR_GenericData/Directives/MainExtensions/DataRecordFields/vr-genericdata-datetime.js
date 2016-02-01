@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataBooleanSelective', ['UtilsService',
+app.directive('vrGenericdataDatetime', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {
@@ -12,7 +12,7 @@ app.directive('vrGenericdataBooleanSelective', ['UtilsService',
 
                 var ctrl = this;
 
-                var ctor = new booleanTypeCtor(ctrl, $scope);
+                var ctor = new datetimeTypeCtor(ctrl, $scope);
                 ctor.initializeController();
 
             },
@@ -26,12 +26,12 @@ app.directive('vrGenericdataBooleanSelective', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/SelectiveBooleanDirectiveTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/DatetimeDirectiveTemplate.html';
             }
 
         };
 
-        function booleanTypeCtor(ctrl, $scope) {
+        function datetimeTypeCtor(ctrl, $scope) {
 
             function initializeController() {
                 defineAPI();
@@ -40,11 +40,13 @@ app.directive('vrGenericdataBooleanSelective', ['UtilsService',
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) { }
+                api.load = function (payload) {
+
+                }
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBooleanType,Vanrise.GenericData.MainExtensions",
+                        $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldDateTimeType,Vanrise.GenericData.MainExtensions",
                     };
                 }
 

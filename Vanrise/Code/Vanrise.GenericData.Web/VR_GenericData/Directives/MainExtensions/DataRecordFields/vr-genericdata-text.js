@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataTextSelective', ['UtilsService',
+app.directive('vrGenericdataText', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {
@@ -26,7 +26,7 @@ app.directive('vrGenericdataTextSelective', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/SelectiveTextDirectiveTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/TextDirectiveTemplate.html';
             }
 
         };

@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataNumberSelective', ['UtilsService',
+app.directive('vrGenericdataBoolean', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {
@@ -12,7 +12,7 @@ app.directive('vrGenericdataNumberSelective', ['UtilsService',
 
                 var ctrl = this;
 
-                var ctor = new numberTypeCtor(ctrl, $scope);
+                var ctor = new booleanTypeCtor(ctrl, $scope);
                 ctor.initializeController();
 
             },
@@ -26,12 +26,12 @@ app.directive('vrGenericdataNumberSelective', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/SelectiveNumberDirectiveTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/BooleanDirectiveTemplate.html';
             }
 
         };
 
-        function numberTypeCtor(ctrl, $scope) {
+        function booleanTypeCtor(ctrl, $scope) {
 
             function initializeController() {
                 defineAPI();
@@ -44,7 +44,7 @@ app.directive('vrGenericdataNumberSelective', ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType, Vanrise.GenericData.MainExtensions",
+                        $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBooleanType,Vanrise.GenericData.MainExtensions",
                     };
                 }
 
