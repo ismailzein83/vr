@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    DataTransformationDefinitionManagementController.$inject = ['$scope', 'VR_GenericData_DataRecordTypeService'];
+    DataTransformationDefinitionManagementController.$inject = ['$scope', 'VR_GenericData_DataTransformationDefinitionService'];
 
-    function DataTransformationDefinitionManagementController($scope, VR_GenericData_DataRecordTypeService) {
+    function DataTransformationDefinitionManagementController($scope, VR_GenericData_DataTransformationDefinitionService) {
 
         var gridAPI;
         var filter = {};
@@ -27,7 +27,7 @@
                     gridAPI.onDataTransformationDefinitionAdded(onDataTransformationDefinitionObj);
                 };
 
-                VR_GenericData_DataRecordTypeService.addDataTransformationDefinition(onDataTransformationDefinitionAdded);
+                VR_GenericData_DataTransformationDefinitionService.addDataTransformationDefinition(onDataTransformationDefinitionAdded);
             };
         }
 

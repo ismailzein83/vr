@@ -10,7 +10,6 @@
             GetFilteredDataTransformationDefinitions: GetFilteredDataTransformationDefinitions,
             AddDataTransformationDefinition: AddDataTransformationDefinition,
             UpdateDataTransformationDefinition: UpdateDataTransformationDefinition,
-            GetDataTransformationDefinitionInfo: GetDataTransformationDefinitionInfo
         });
         function GetFilteredDataTransformationDefinitions(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataTransformationDefinition', 'GetFilteredDataTransformationDefinitions'), input);

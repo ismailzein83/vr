@@ -169,9 +169,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.GenericData.Data", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.GenericData.Data.SQL", "Vanrise.GenericData.Data.SQL\Vanrise.GenericData.Data.SQL.csproj", "{00BCE586-BFFB-4679-92B7-9B65988FE346}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.GenericData.Transformation.Data", "Vanrise.GenericData.Transformation.Data\Vanrise.GenericData.Transformation.Data.csproj", "{48792BE4-BE79-40F3-9B6A-6A60504281A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.GenericData.Transformation.Data.SQL", "Vanrise.GenericData.Transformation.Data.SQL\Vanrise.GenericData.Transformation.Data.SQL.csproj", "{47FEAB28-E8CF-4F2E-9EE4-04E79D28717A}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 70
+		SccNumberOfProjects = 72
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -451,6 +455,14 @@ Global
 		SccProjectTopLevelParentUniqueName69 = Vanrise.sln
 		SccProjectName69 = Vanrise.GenericData.Data.SQL
 		SccLocalPath69 = Vanrise.GenericData.Data.SQL
+		SccProjectUniqueName70 = Vanrise.GenericData.Transformation.Data\\Vanrise.GenericData.Transformation.Data.csproj
+		SccProjectTopLevelParentUniqueName70 = Vanrise.sln
+		SccProjectName70 = Vanrise.GenericData.Transformation.Data
+		SccLocalPath70 = Vanrise.GenericData.Transformation.Data
+		SccProjectUniqueName71 = Vanrise.GenericData.Transformation.Data.SQL\\Vanrise.GenericData.Transformation.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName71 = Vanrise.sln
+		SccProjectName71 = Vanrise.GenericData.Transformation.Data.SQL
+		SccLocalPath71 = Vanrise.GenericData.Transformation.Data.SQL
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1033,6 +1045,22 @@ Global
 		{00BCE586-BFFB-4679-92B7-9B65988FE346}.Release|Any CPU.Build.0 = Release|Any CPU
 		{00BCE586-BFFB-4679-92B7-9B65988FE346}.Release|x64.ActiveCfg = Release|Any CPU
 		{00BCE586-BFFB-4679-92B7-9B65988FE346}.Release|x86.ActiveCfg = Release|Any CPU
+		{48792BE4-BE79-40F3-9B6A-6A60504281A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48792BE4-BE79-40F3-9B6A-6A60504281A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48792BE4-BE79-40F3-9B6A-6A60504281A6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{48792BE4-BE79-40F3-9B6A-6A60504281A6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{48792BE4-BE79-40F3-9B6A-6A60504281A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48792BE4-BE79-40F3-9B6A-6A60504281A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48792BE4-BE79-40F3-9B6A-6A60504281A6}.Release|x64.ActiveCfg = Release|Any CPU
+		{48792BE4-BE79-40F3-9B6A-6A60504281A6}.Release|x86.ActiveCfg = Release|Any CPU
+		{47FEAB28-E8CF-4F2E-9EE4-04E79D28717A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47FEAB28-E8CF-4F2E-9EE4-04E79D28717A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47FEAB28-E8CF-4F2E-9EE4-04E79D28717A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{47FEAB28-E8CF-4F2E-9EE4-04E79D28717A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{47FEAB28-E8CF-4F2E-9EE4-04E79D28717A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47FEAB28-E8CF-4F2E-9EE4-04E79D28717A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47FEAB28-E8CF-4F2E-9EE4-04E79D28717A}.Release|x64.ActiveCfg = Release|Any CPU
+		{47FEAB28-E8CF-4F2E-9EE4-04E79D28717A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1111,5 +1139,7 @@ Global
 		{D34D2D0A-6AA6-40C2-BBC9-1D1A6B482773} = {6B701700-ECEA-40F9-B034-5E5C41C1A85A}
 		{2C487E04-E583-411A-B116-F4485C78A572} = {6B701700-ECEA-40F9-B034-5E5C41C1A85A}
 		{00BCE586-BFFB-4679-92B7-9B65988FE346} = {6B701700-ECEA-40F9-B034-5E5C41C1A85A}
+		{48792BE4-BE79-40F3-9B6A-6A60504281A6} = {768DBB47-FFE4-4BAE-A289-963CFB561B64}
+		{47FEAB28-E8CF-4F2E-9EE4-04E79D28717A} = {768DBB47-FFE4-4BAE-A289-963CFB561B64}
 	EndGlobalSection
 EndGlobal
