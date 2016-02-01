@@ -26,7 +26,7 @@ app.directive('vrGenericdataChoicesSelective', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/Common/Directives/MainExtensions/GenericDataRecord/Templates/SelectiveChoicesDirectiveTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/SelectiveChoicesDirectiveTemplate.html';
             }
 
         };
@@ -54,7 +54,8 @@ app.directive('vrGenericdataChoicesSelective', ['UtilsService',
 
             function AddChoice(choice) {
                 var obj = {
-                    Choice: choice
+                    Value: ctrl.values.length+1,
+                    Text: choice
                 }
                 return obj;
             }
@@ -70,7 +71,7 @@ app.directive('vrGenericdataChoicesSelective', ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Common.MainExtensions.DataRecordFieldChoicesType, Vanrise.Common.MainExtensions",
+                        $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType, Vanrise.GenericData.MainExtensions",
                         Choices: ctrl.values
                     };
                 }

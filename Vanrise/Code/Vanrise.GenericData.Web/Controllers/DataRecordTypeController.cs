@@ -9,6 +9,7 @@ using Vanrise.Web.Base;
 
 namespace Vanrise.GenericData.Web.Controllers
 {
+    [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "DataRecordType")]
     public class DataRecordTypeController:BaseAPIController
     {

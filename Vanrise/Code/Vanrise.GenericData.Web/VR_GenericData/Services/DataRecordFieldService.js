@@ -2,36 +2,48 @@
 
     'use strict';
 
-    DataRecordFieldService.$inject = ['VRModalService'];
+    DataRecordFieldService.$inject = ['VRModalService','VRNotificationService'];
 
-    function DataRecordFieldService(VRModalService) {
+    function DataRecordFieldService(VRModalService, VRNotificationService) {
         return ({
             addDataRecordField: addDataRecordField,
             editDataRecordField: editDataRecordField,
+            deleteDataRecordField: deleteDataRecordField
         });
 
-        function addDataRecordField(onDataRecordFieldAdded) {
+        function addDataRecordField(onDataRecordFieldAdded, existingFields) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onDataRecordFieldAdded = onDataRecordFieldAdded;
             };
-
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataRecordFieldEditor.html', null, modalSettings);
+            var modalParameters = {
+                ExistingFields: existingFields
+            };
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataRecordFieldEditor.html', modalParameters, modalSettings);
         }
 
-        function editDataRecordField(dataRecordField, onDataRecordTypeUpdated) {
+        function editDataRecordField(dataRecordField, onDataRecordFieldUpdated, existingFields) {
             var modalParameters = {
-                DataRecordField: dataRecordField
+                DataRecordField: dataRecordField,
+                ExistingFields: existingFields
             };
 
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onDataRecordTypeUpdated = onDataRecordTypeUpdated;
+                modalScope.onDataRecordFieldUpdated = onDataRecordFieldUpdated;
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataRecordFieldEditor.html', modalParameters, modalSettings);
+        }
+        function deleteDataRecordField($scope, dataRecordFieldObj, onDataRecordFieldDeleted) {
+            VRNotificationService.showConfirmation()
+                .then(function (response) {
+                    if (response) {
+                       onDataRecordFieldDeleted(dataRecordFieldObj);
+                    }
+                });
         }
     };
 

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNotificationService", "VR_GenericData_DataRecordFieldService",
-    function (UtilsService, VRNotificationService, VR_GenericData_DataRecordFieldService) {
+app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNotificationService", "VR_GenericData_DataRecordFieldService","VR_GenericData_DataRecordTypeAPIService",
+    function (UtilsService, VRNotificationService, VR_GenericData_DataRecordFieldService, VR_GenericData_DataRecordTypeAPIService) {
 
         var directiveDefinitionObject = {
 
@@ -32,18 +32,19 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
 
             function initializeController() {
                 ctrl.datasource = [];
+                ctrl.dataRecordFieldTypeTemplates = [];
                 ctrl.isValid = function () {
-
-                    if (ctrl.datasource.length > 0)
+                    if (ctrl.datasource !=undefined && ctrl.datasource.length > 0)
                         return null;
                     return "You Should Select at least one filter type ";
                 }
                 ctrl.addDataRecordField = function () {
                     var onDataRecordFieldAdded = function (dataRecordField) {
+                        addNeededFields(dataRecordField);
                         ctrl.datasource.push(dataRecordField);
                     }
 
-                    VR_GenericData_DataRecordFieldService.addDataRecordField(onDataRecordFieldAdded);
+                    VR_GenericData_DataRecordFieldService.addDataRecordField(onDataRecordFieldAdded , ctrl.datasource);
                 };
                 
                 defineMenuActions();
@@ -60,33 +61,42 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                     return obj;
                 }
                 api.load = function (payload) {
-                    if(payload != undefined)
-                    {
-                        if(payload.Fields && payload.Fields.length > 0)
-                        {
-                            for(var i=0; i<payload.Fields.length;i++)
+
+                      return  VR_GenericData_DataRecordTypeAPIService.GetDataRecordFieldTypeTemplates().then(function (response) {
+                            angular.forEach(response, function (item) {
+                                ctrl.dataRecordFieldTypeTemplates.push(item);
+                            });
+                            if(payload != undefined)
                             {
-                                ctrl.datasource.push(payload.Fields[i]);
+                                if (payload.Fields && payload.Fields.length > 0) {
+                                    for (var i = 0; i < payload.Fields.length; i++) {
+                                        var dataItem = payload.Fields[i];
+                                        addNeededFields(dataItem);
+                                        ctrl.datasource.push(dataItem);
+                                    }
+                                }
                             }
-                        }
-                       
-                    }
+                        });
                 }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+            function addNeededFields(dataItem)
+            {
+                var template = UtilsService.getItemByVal(ctrl.dataRecordFieldTypeTemplates, dataItem.Type.ConfigId, "TemplateConfigID");
+                dataItem.TypeDescription = template != undefined ? template.Name : "";
             }
             function defineMenuActions() {
                 var defaultMenuActions = [
                 {
                     name: "Edit",
                     clicked: editDataRecordField,
-                }//,
-                //{
-                //    name: "Delete",
-                //    clicked: deleteDataRecordField,
-                    //}
-                    ];
+                },
+                {
+                    name: "Delete",
+                    clicked: deleteDataRecordField,
+                }];
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
@@ -95,19 +105,22 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
 
             function editDataRecordField(dataRecordFieldObj) {
                 var onDataRecordFieldUpdated = function (dataRecordField) {
-                 ///   gridAPI.itemUpdated(dataRecordField);
+                    addNeededFields(dataRecordField);
+                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataRecordFieldObj.Name, 'Name');
+                    ctrl.datasource[index] = dataRecordField;
                 }
 
-                VR_GenericData_DataRecordFieldService.editDataRecordField(dataRecordFieldObj.Entity, onDataRecordFieldUpdated);
+                VR_GenericData_DataRecordFieldService.editDataRecordField(dataRecordFieldObj, onDataRecordFieldUpdated , ctrl.datasource);
             }
 
-            //function deleteDataRecordField(dataRecordFieldObj) {
-            //    var onDataRecordFieldDeleted = function (dataRecordField) {
-            //        gridAPI.itemDeleted(dataRecordField);
-            //    };
+            function deleteDataRecordField(dataRecordFieldObj) {
+                var onDataRecordFieldDeleted = function (dataRecordField) {
+                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataRecordFieldObj.Name, 'Name');
+                    ctrl.datasource.splice(index, 1);
+                };
 
-            //    VR_GenericData_DataRecordFieldService.deleteDataRecordField($scope, dataRecordFieldObj, onDataRecordFieldDeleted);
-            //}
+                VR_GenericData_DataRecordFieldService.deleteDataRecordField($scope, dataRecordFieldObj, onDataRecordFieldDeleted);
+            }
         }
 
         return directiveDefinitionObject;

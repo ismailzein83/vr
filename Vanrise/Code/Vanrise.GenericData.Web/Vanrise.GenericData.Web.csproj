@@ -156,6 +156,7 @@
     <Content Include="VR_GenericData\Directives\RecordField\vr-genericdata-datarecordfield-management.js" />
     <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeGrid.html" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
+    <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-selector.js" />
     <Content Include="VR_GenericData\Services\DataRecordFieldService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordTypeAPIService.js" />
     <Content Include="VR_GenericData\Services\DataRecordTypeService.js" />

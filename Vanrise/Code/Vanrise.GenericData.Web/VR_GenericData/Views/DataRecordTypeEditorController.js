@@ -10,6 +10,7 @@
         var dataRecordTypeEntity;
         var dataRecordTypeId;
         var dataRecordFieldAPI;
+        var dataRecordFieldReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
 
@@ -28,8 +29,7 @@
 
             $scope.scopeModal.onDataRecordFieldDirectiveReady = function (api) {
                 dataRecordFieldAPI = api;
-                var setLoader = function (value) { $scope.scopeModal.isLoadingDirective = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordFieldAPI, undefined, setLoader);
+                dataRecordFieldReadyPromiseDeferred.resolve();
             }
 
             $scope.scopeModal.SaveDataRecordType = function () {
@@ -68,7 +68,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordField])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -84,14 +84,28 @@
         }
 
         function buildDataRecordTypeObjFromScope() {
-
+            var obj =  dataRecordFieldAPI.getData();
             var dataRecordType = {
                 Name: $scope.scopeModal.name,
-                DataRecordTypeId : dataRecordTypeId
+                DataRecordTypeId: dataRecordTypeId,
+                Fields: obj != undefined? obj.Fields:undefined
             }
             return dataRecordType;
         }
+        function loadDataRecordField()
+        {
 
+            var loadDataRecordFieldPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            dataRecordFieldReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = (dataRecordTypeEntity != undefined) ? { Fields: dataRecordTypeEntity.Fields } : undefined
+
+                    VRUIUtilsService.callDirectiveLoad(dataRecordFieldAPI, directivePayload, loadDataRecordFieldPromiseDeferred);
+                });
+
+            return loadDataRecordFieldPromiseDeferred.promise;
+        }
         function loadFilterBySection() {
             if (dataRecordTypeEntity != undefined) {
                 $scope.scopeModal.name = dataRecordTypeEntity.Name;
@@ -104,6 +118,7 @@
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Data Record Type');
         }
+
         function insertDataRecordType() {
 
             var dataRecordTypeObject = buildDataRecordTypeObjFromScope();

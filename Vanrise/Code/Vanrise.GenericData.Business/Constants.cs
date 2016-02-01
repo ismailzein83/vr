@@ -8,6 +8,6 @@ namespace Vanrise.GenericData.Business
 {
     public class Constants
     {
-        public const string DataRecordFieldConfigType = "VRCommon__DataRecordFieldType";
+        public const string DataRecordFieldConfigType = "VRGeneric__DataRecordFieldType";
     }
 }

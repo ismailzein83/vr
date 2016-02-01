@@ -26,7 +26,7 @@ app.directive('vrGenericdataBooleanSelective', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/Common/Directives/MainExtensions/GenericDataRecord/Templates/SelectiveBooleanDirectiveTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/SelectiveBooleanDirectiveTemplate.html';
             }
 
         };
@@ -44,7 +44,7 @@ app.directive('vrGenericdataBooleanSelective', ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Common.MainExtensions.DataRecordFieldBooleanType, Vanrise.Common.MainExtensions",
+                        $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBooleanType,Vanrise.GenericData.MainExtensions",
                     };
                 }
 

@@ -8,6 +8,8 @@
 
         var isEditMode;
         var dataRecordFieldEntity;
+        var existingFields;
+
         var directiveReadyAPI;
         var directiveReadyPromiseDeferred;
 
@@ -19,7 +21,8 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                dataRecordFieldEntity = parameters.DataRecordFieldEntity;
+                dataRecordFieldEntity = parameters.DataRecordField;
+                existingFields = parameters.ExistingFields;
             }
             isEditMode = (dataRecordFieldEntity != undefined);
         }
@@ -36,7 +39,10 @@
                 }
             };
 
-
+            $scope.scopeModal.validateName = function()
+            {
+                return validateName();
+            }
 
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
@@ -94,7 +100,14 @@
             });
         }
 
-
+        function validateName()
+        {
+            if (isEditMode && $scope.scopeModal.name == dataRecordFieldEntity.Name)
+                return null;
+            else if (UtilsService.getItemIndexByVal(existingFields, $scope.scopeModal.name, 'Name') != -1)
+                return 'Same Name Exist.';
+            return null;
+        }
 
         function buildDataRecordFieldObjectObjFromScope() {
             var dataRecordField = {};
@@ -117,7 +130,6 @@
 
         function updateDataRecordField() {
             var dataRecordFieldObject = buildDataRecordFieldObjectObjFromScope();
-            dataRecordFieldObject.ID = dataRecordFieldID;
         //    if (VRNotificationService.notifyOnItemUpdated("Data Record Field", undefined, "Name")) {
                 if ($scope.onDataRecordFieldUpdated != undefined)
                     $scope.onDataRecordFieldUpdated(dataRecordFieldObject);

@@ -26,7 +26,7 @@ app.directive('vrGenericdataNumberSelective', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/Common/Directives/MainExtensions/GenericDataRecord/Templates/SelectiveNumberDirectiveTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/SelectiveNumberDirectiveTemplate.html';
             }
 
         };
@@ -44,7 +44,7 @@ app.directive('vrGenericdataNumberSelective', ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Common.MainExtensions.DataRecordFieldNumberType, Vanrise.Common.MainExtensions",
+                        $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType, Vanrise.GenericData.MainExtensions",
                     };
                 }
 

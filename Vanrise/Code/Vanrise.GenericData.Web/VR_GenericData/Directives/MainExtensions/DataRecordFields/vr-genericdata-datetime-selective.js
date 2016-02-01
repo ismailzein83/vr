@@ -26,7 +26,7 @@ app.directive('vrGenericdataDatetimeSelective', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/Common/Directives/MainExtensions/GenericDataRecord/Templates/SelectiveDatetimeDirectiveTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/SelectiveDatetimeDirectiveTemplate.html';
             }
 
         };
@@ -46,7 +46,7 @@ app.directive('vrGenericdataDatetimeSelective', ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Common.MainExtensions.DataRecordFieldDateTimeType,Vanrise.Common.MainExtensions",
+                        $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldDateTimeType,Vanrise.GenericData.MainExtensions",
                     };
                 }
 
