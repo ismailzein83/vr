@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-NumberProfilingProcessInputController.$inject = ['$scope', 'UtilsService', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRCommon_HourEnum', 'VRValidationService', 'VRUIUtilsService'];
+NumberProfilingProcessInputController.$inject = ['$scope', 'UtilsService', 'CDRAnalysis_FA_PeriodAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRCommon_HourEnum', 'VRValidationService', 'VRUIUtilsService'];
 
-function NumberProfilingProcessInputController($scope, UtilsService, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, VRCommon_HourEnum, VRValidationService, VRUIUtilsService) {
+function NumberProfilingProcessInputController($scope, UtilsService, CDRAnalysis_FA_PeriodAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, VRCommon_HourEnum, VRValidationService, VRUIUtilsService) {
 
     var prefixDirectiveAPI;
     var prefixReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -128,7 +128,7 @@ function NumberProfilingProcessInputController($scope, UtilsService, StrategyAPI
     }
 
     function loadPeriods() {
-        return StrategyAPIService.GetPeriods().then(function (response) {
+        return CDRAnalysis_FA_PeriodAPIService.GetPeriods().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.periods.push(itm);
             });

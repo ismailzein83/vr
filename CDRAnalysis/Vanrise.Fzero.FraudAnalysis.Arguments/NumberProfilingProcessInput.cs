@@ -6,9 +6,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 {
     public class NumberProfilingProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
-        public IEnumerable<string> FixedPrefixes { get; set; }
-
-        public int PrefixLength { get; set; }
 
         public NumberProfileParameters Parameters { get; set; }
 

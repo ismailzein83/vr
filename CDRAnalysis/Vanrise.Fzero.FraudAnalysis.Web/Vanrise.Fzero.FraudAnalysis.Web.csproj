@@ -225,16 +225,12 @@
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-fraudanalysis-assignstrategy.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-fraudanalysis-numberprofiling.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-fraudanalysis-excutestrategy.js" />
-    <Content Include="FraudAnalysis\Directives\FixedPrefixes\Templates\DefineFixedPrefixesGrid.html" />
     <Content Include="FraudAnalysis\Directives\Period\cdranalysis-fa-period-selector.js" />
     <Content Include="FraudAnalysis\Directives\Strategy\cdranalysis-fa-strategy-grid.js" />
     <Content Include="FraudAnalysis\Directives\Strategy\cdranalysis-fa-strategy-selector.js" />
     <Content Include="FraudAnalysis\Directives\Strategy\Templates\StrategyGridTemplate.html" />
-    <Content Include="FraudAnalysis\Directives\vr-fzero-fraudanalysis-fixedprefixes-grid.js" />
-    <Content Include="FraudAnalysis\Directives\vr-fzero-fraudanalysis-fixedprefixes-selector.js" />
     <Content Include="FraudAnalysis\Services\APIServices\AccountCaseAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\AccountCaseHistoryAPIService.js" />
-    <Content Include="FraudAnalysis\Services\APIServices\DefineFixedPrefixesAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\PeriodAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\RelatedNumberAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyExecutionAPIService.js" />
@@ -245,10 +241,6 @@
     <Content Include="FraudAnalysis\Services\StrategyService.js" />
     <Content Include="FraudAnalysis\Views\Dialogs\NewNumberPrefixDialog.html" />
     <Content Include="FraudAnalysis\Views\Dialogs\NewNumberPrefixDialogController.js" />
-    <Content Include="FraudAnalysis\Views\FixedPrefixes\DefineFixedPrefixesEditor.html" />
-    <Content Include="FraudAnalysis\Views\FixedPrefixes\DefineFixedPrefixesEditorController.js" />
-    <Content Include="FraudAnalysis\Views\FixedPrefixes\DefineFixedPrefixesManagement.html" />
-    <Content Include="FraudAnalysis\Views\FixedPrefixes\DefineFixedPrefixesManagementController.js" />
     <Content Include="FraudAnalysis\Services\APIServices\NumberProfileAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\NormalCDRAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\ReportingAPIService.js" />

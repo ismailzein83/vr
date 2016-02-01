@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrCdrFraudanalysisNumberprofiling", ["UtilsService", "VRUIUtilsService", "VRNotificationService", "StrategyAPIService", "VRCommon_HourEnum", function (UtilsService, VRUIUtilsService, VRNotificationService, StrategyAPIService, VRCommon_HourEnum) {
+app.directive("vrCdrFraudanalysisNumberprofiling", ["UtilsService", "VRUIUtilsService", "VRNotificationService", "CDRAnalysis_FA_PeriodAPIService", "VRCommon_HourEnum", function (UtilsService, VRUIUtilsService, VRNotificationService, CDRAnalysis_FA_PeriodAPIService, VRCommon_HourEnum) {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -84,7 +84,7 @@ app.directive("vrCdrFraudanalysisNumberprofiling", ["UtilsService", "VRUIUtilsSe
                 if (payload != undefined && payload.data != undefined) {
                     data = payload.data;
                 }
-              return  StrategyAPIService.GetPeriods().then(function (response) {
+                return CDRAnalysis_FA_PeriodAPIService.GetPeriods().then(function (response) {
                     $scope.periods.length = 0;
                     angular.forEach(response, function (itm) {
                         $scope.periods.push(itm);

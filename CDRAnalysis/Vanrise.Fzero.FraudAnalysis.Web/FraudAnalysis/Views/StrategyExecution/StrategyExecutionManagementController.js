@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-StrategyExecutionManagementController.$inject = ['$scope', 'StrategyExecutionAPIService', 'VR_Sec_UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService', 'BusinessProcessService', 'BusinessProcessAPIService', 'StrategyAPIService'];
+StrategyExecutionManagementController.$inject = ['$scope', 'CDRAnalysis_FA_PeriodAPIService', 'StrategyExecutionAPIService', 'VR_Sec_UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService', 'BusinessProcessService', 'BusinessProcessAPIService', 'StrategyAPIService'];
 
-function StrategyExecutionManagementController($scope, StrategyExecutionAPIService, VR_Sec_UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService, BusinessProcessService, BusinessProcessAPIService, StrategyAPIService) {
+function StrategyExecutionManagementController($scope, CDRAnalysis_FA_PeriodAPIService, StrategyExecutionAPIService, VR_Sec_UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService, BusinessProcessService, BusinessProcessAPIService, StrategyAPIService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
@@ -26,7 +26,7 @@ function StrategyExecutionManagementController($scope, StrategyExecutionAPIServi
 
         $scope.gridMenuActions = [];
 
-       
+
         $scope.strategies = [];
         $scope.periods = [];
 
@@ -57,7 +57,7 @@ function StrategyExecutionManagementController($scope, StrategyExecutionAPIServi
             return retrieveData();
         }
 
-        
+
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
@@ -87,7 +87,7 @@ function StrategyExecutionManagementController($scope, StrategyExecutionAPIServi
         ;
     }
 
-    
+
 
     function load() {
         $scope.isInitializing = true;
@@ -127,7 +127,7 @@ function StrategyExecutionManagementController($scope, StrategyExecutionAPIServi
 
 
     function loadPeriods() {
-        return StrategyAPIService.GetPeriods()
+        return CDRAnalysis_FA_PeriodAPIService.GetPeriods()
             .then(function (response) {
                 angular.forEach(response, function (item) {
                     $scope.periods.push({

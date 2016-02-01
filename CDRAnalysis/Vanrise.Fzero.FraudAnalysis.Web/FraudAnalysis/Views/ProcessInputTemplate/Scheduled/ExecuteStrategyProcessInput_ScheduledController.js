@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-ExecuteStrategyProcessInput_Scheduled.$inject = ['$scope', '$http', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+ExecuteStrategyProcessInput_Scheduled.$inject = ['$scope', '$http', 'CDRAnalysis_FA_PeriodAPIService', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-function ExecuteStrategyProcessInput_Scheduled($scope, $http, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+function ExecuteStrategyProcessInput_Scheduled($scope, $http, CDRAnalysis_FA_PeriodAPIService, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
     var pageLoaded = false;
 
     var prefixDirectiveAPI;
@@ -85,7 +85,7 @@ function ExecuteStrategyProcessInput_Scheduled($scope, $http, StrategyAPIService
         $scope.isGettingData = true;
         $scope.periods.length = 0;
         $scope.periods = [];
-        StrategyAPIService.GetPeriods().then(function (response) {
+        CDRAnalysis_FA_PeriodAPIService.GetPeriods().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.periods.push(itm);
             });

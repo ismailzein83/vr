@@ -15,10 +15,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public string Prefix { get; set; }
     }
-    public class NumberPrefixDetail
-    {
-        public NumberPrefix Entity { get; set; }
-    }
 
     public class NumberPrefixInfo
     {

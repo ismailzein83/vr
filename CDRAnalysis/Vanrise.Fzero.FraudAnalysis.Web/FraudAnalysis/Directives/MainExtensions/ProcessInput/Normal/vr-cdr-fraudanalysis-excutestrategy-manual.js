@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCdrFraudanalysisExcutestrategyManual", ["UtilsService", "StrategyAPIService", "VRValidationService", function (UtilsService, StrategyAPIService, VRValidationService ) {
-  
+app.directive("vrCdrFraudanalysisExcutestrategyManual", ["UtilsService", "StrategyAPIService", "VRValidationService", "CDRAnalysis_FA_PeriodAPIService", function (UtilsService, StrategyAPIService, VRValidationService, CDRAnalysis_FA_PeriodAPIService) {
+
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -46,9 +46,9 @@ app.directive("vrCdrFraudanalysisExcutestrategyManual", ["UtilsService", "Strate
             $scope.selectedStrategies = [];
             $scope.selectedStrategyIds = [];
             $scope.periods = [];
-          
+
             $scope.selectedPeriodChanged = function () {
-              
+
                 if ($scope.selectedPeriod != undefined && firstTimeToload == true) {
                     $scope.isLoadingData = true;
                     $scope.strategies.length = 0;
@@ -62,7 +62,7 @@ app.directive("vrCdrFraudanalysisExcutestrategyManual", ["UtilsService", "Strate
 
         function defineAPI() {
 
-           
+
             var api = {};
             api.getData = function () {
 
@@ -102,24 +102,24 @@ app.directive("vrCdrFraudanalysisExcutestrategyManual", ["UtilsService", "Strate
                 return $scope.createProcessInputObjects;
 
             };
-           
+
             api.load = function (payload) {
                 var promises = [];
                 var data;
                 if (payload != undefined && payload.data != undefined)
                     data = payload.data;
-                var loadPeriods =   StrategyAPIService.GetPeriods().then(function (response) {
+                var loadPeriods = CDRAnalysis_FA_PeriodAPIService.GetPeriods().then(function (response) {
                     angular.forEach(response, function (itm) {
                         $scope.periods.push(itm);
                     });
                 })
-                promises.push(loadPeriods);    
+                promises.push(loadPeriods);
                 firstTimeToload = true;
                 return UtilsService.waitMultiplePromises(promises);
 
             }
 
-            
+
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
