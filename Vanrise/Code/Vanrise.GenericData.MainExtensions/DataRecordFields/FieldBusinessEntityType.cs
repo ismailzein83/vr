@@ -10,5 +10,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     public class FieldBusinessEntityType : DataRecordFieldType
     {
         public int BusinessEntityDefinitionId { get; set; }
+
+        public override Type GetRuntimeType()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

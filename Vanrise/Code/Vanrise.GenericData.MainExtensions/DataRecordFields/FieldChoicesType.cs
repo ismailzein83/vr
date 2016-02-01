@@ -10,6 +10,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     public class FieldChoicesType : DataRecordFieldType
     {
         public List<Choice> Choices { get; set; }
+
+        public override Type GetRuntimeType()
+        {
+            return typeof(int);
+        }
     }
 
     public class Choice

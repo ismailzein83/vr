@@ -9,5 +9,7 @@ namespace Vanrise.GenericData.Entities
     public abstract class DataRecordFieldType
     {
         public int ConfigId { get; set; }
+
+        public abstract Type GetRuntimeType();
     }
 }

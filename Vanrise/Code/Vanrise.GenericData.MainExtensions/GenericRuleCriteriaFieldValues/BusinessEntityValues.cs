@@ -14,6 +14,12 @@ namespace Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues
 
         public override IEnumerable<object> GetValues()
         {
+            dynamic dynVar = new { };
+            dynVar.Id = 4;
+            dynVar.Name = "teerr";
+            dynVar.Id = dynVar.Name;
+            int i = dynVar.Tss;
+            //DisplayValues(dynVar.Id, dynVar.Name);
             var context = new BusinessEntityGroupContext();
             return this.BusinessEntityGroup.GetIds(context);
         }

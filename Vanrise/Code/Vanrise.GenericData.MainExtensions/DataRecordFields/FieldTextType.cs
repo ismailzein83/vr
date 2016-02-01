@@ -9,5 +9,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldTextType : DataRecordFieldType
     {
+        public override Type GetRuntimeType()
+        {
+            return typeof(string);
+        }
     }
 }
