@@ -42,6 +42,11 @@ namespace Vanrise.GenericData.Business
 
             return null;
         }
+        public IEnumerable<DataRecordTypeInfo> GetDataRecordTypeInfo(DataRecordTypeInfoFilter filter)
+        {
+            var dataRecordTypes = GetCachedDataRecordTypes();
+            return dataRecordTypes.MapRecords(DataRecordTypeInfoMapper);
+        }
         public Vanrise.Entities.InsertOperationOutput<DataRecordTypeDetail> AddDataRecordType(DataRecordType dataRecordType)
         {
             InsertOperationOutput<DataRecordTypeDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<DataRecordTypeDetail>();
@@ -135,7 +140,13 @@ namespace Vanrise.GenericData.Business
             dataRecordTypeDetail.ParentName = GetDataRecordTypeName(dataRecordTypeObject.ParentId);
             return dataRecordTypeDetail;
         }
-
+        private DataRecordTypeInfo DataRecordTypeInfoMapper(DataRecordType dataRecordTypeObject)
+        {
+            DataRecordTypeInfo dataRecordTypeInfo = new DataRecordTypeInfo();
+            dataRecordTypeInfo.DataRecordTypeId = dataRecordTypeObject.DataRecordTypeId;
+            dataRecordTypeInfo.Name =  dataRecordTypeObject.Name;
+            return dataRecordTypeInfo;
+        }
         #endregion
     }
 }

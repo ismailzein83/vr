@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatarecordtypeSelector', ['WhS_BE_RateTypeAPIService', 'WhS_BE_RateTypeService', 'UtilsService', '$compile', 'VRUIUtilsService', function (WhS_BE_RateTypeAPIService, WhS_BE_RateTypeService, UtilsService, $compile, VRUIUtilsService) {
+app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecordTypeAPIService', 'UtilsService', '$compile', 'VRUIUtilsService', function (VR_GenericData_DataRecordTypeAPIService, UtilsService, $compile, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -27,7 +27,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['WhS_BE_RateTypeAPIService
 
 
             ctrl.datasource = [];
-            var ctor = new rateTypeCtor(ctrl, $scope, WhS_BE_RateTypeAPIService, $attrs);
+            var ctor = new recordTypeCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
         controllerAs: 'ctrl',
@@ -47,7 +47,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['WhS_BE_RateTypeAPIService
     function getTemplate(attrs) {
         var label;
         if (attrs.hidelabel == undefined)
-            label = 'label="RateType"';
+            label = 'label="Record Type"';
         var disabled = "";
         if (attrs.isdisabled)
             disabled = "vr-disabled='true'"
@@ -59,32 +59,18 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['WhS_BE_RateTypeAPIService
         var hideselectedvaluessection = "";
         if (attrs.hideselectedvaluessection != undefined)
             hideselectedvaluessection = "hideselectedvaluessection";
-        var addCliked = '';
-        if (attrs.showaddbutton != undefined)
-            addCliked = 'onaddclicked="ctrl.addNewRateType"';
-
         var multipleselection = "";
         if (attrs.ismultipleselection != undefined)
             multipleselection = "ismultipleselection"
 
-        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="RateTypeId"'
-               + 'entityname="RateType" ' + label + ' ' + addCliked + '></vr-select>';
+        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DataRecordTypeId"'
+               + 'entityname="Record Type" ' + label + '></vr-select>';
 
     }
-    function rateTypeCtor(ctrl, $scope, WhS_BE_RateTypeAPIService, $attrs) {
+    function recordTypeCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
-            ctrl.addNewRateType = function () {
-                var onRateTypeAdded = function (rateTypeObj) {
-                    ctrl.datasource.push(rateTypeObj)
-                    if ($attrs.ismultipleselection != undefined)
-                        ctrl.selectedvalues.push(rateTypeObj);
-                    else
-                        ctrl.selectedvalues = rateTypeObj;
-                };
-                WhS_BE_RateTypeService.addRateType(onRateTypeAdded);
-            }
-
+         
             defineAPI();
         }
 
@@ -92,22 +78,22 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['WhS_BE_RateTypeAPIService
             var api = {};
 
             api.getSelectedIds = function () {
-                return VRUIUtilsService.getIdSelectedIds('RateTypeId', $attrs, ctrl);
+                return VRUIUtilsService.getIdSelectedIds('DataRecordTypeId', $attrs, ctrl);
             }
             api.load = function (payload) {
 
                 var selectedIds;
-                if (payload != undefined) {
+                if (payload != undefined) { 
                     selectedIds = payload.selectedIds;
                 }
 
-                return WhS_BE_RateTypeAPIService.GetAllRateTypes().then(function (response) {
+                return VR_GenericData_DataRecordTypeAPIService.GetDataRecordTypeInfo().then(function (response) {
                     angular.forEach(response, function (item) {
                         ctrl.datasource.push(item);
 
                     });
                     if (selectedIds != undefined)
-                        VRUIUtilsService.setSelectedValues(selectedIds, 'RateTypeId', $attrs, ctrl);
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'DataRecordTypeId', $attrs, ctrl);
 
                 });
             }

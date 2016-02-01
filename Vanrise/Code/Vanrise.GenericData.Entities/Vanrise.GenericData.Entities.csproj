@@ -53,6 +53,8 @@
     <Compile Include="DataRecords\DataRecordFieldType.cs" />
     <Compile Include="DataRecords\DataRecordType.cs" />
     <Compile Include="DataRecords\DataRecordTypeDetail.cs" />
+    <Compile Include="DataRecords\DataRecordTypeInfo.cs" />
+    <Compile Include="DataRecords\DataRecordTypeInfoFilter.cs" />
     <Compile Include="DataRecords\DataRecordTypeQuery.cs" />
     <Compile Include="DataRecords\DataRecordTypeReference.cs" />
     <Compile Include="DataRecords\IDataRecordTypeReferenceContext.cs" />

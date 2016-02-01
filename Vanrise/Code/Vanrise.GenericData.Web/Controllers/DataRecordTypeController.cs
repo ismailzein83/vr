@@ -50,5 +50,13 @@ namespace Vanrise.GenericData.Web.Controllers
             DataRecordTypeManager manager = new DataRecordTypeManager();
             return manager.GetDataRecordFieldTypeTemplates();
         }
+        [HttpGet]
+        [Route("GetDataRecordTypeInfo")]
+        public IEnumerable<DataRecordTypeInfo> GetDataRecordTypeInfo(string serializedFilter = null)
+        {
+            DataRecordTypeInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<DataRecordTypeInfoFilter>(serializedFilter) : null;
+            DataRecordTypeManager manager = new DataRecordTypeManager();
+            return manager.GetDataRecordTypeInfo(filter);
+        }
     }
 }
