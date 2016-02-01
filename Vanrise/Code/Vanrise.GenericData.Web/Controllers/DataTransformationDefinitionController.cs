@@ -10,7 +10,7 @@ using Vanrise.Web.Base;
 namespace Vanrise.GenericData.Web.Controllers
 {
     [JSONWithTypeAttribute]
-    [RoutePrefix(Constants.ROUTE_PREFIX + "DataRecordType")]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "DataTransformationDefinition")]
     public class DataTransformationDefinitionController : BaseAPIController
     {
         [HttpGet]

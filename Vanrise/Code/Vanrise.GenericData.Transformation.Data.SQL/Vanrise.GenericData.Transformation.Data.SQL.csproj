@@ -46,7 +46,32 @@
     <Compile Include="DataTransformationDefinitionDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
+      <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
+      <Name>Vanrise.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data.SQL\Vanrise.Data.SQL.csproj">
+      <Project>{4ab70e59-2c65-4167-8d5f-897702cf161b}</Project>
+      <Name>Vanrise.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
+      <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
+      <Name>Vanrise.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Transformation.Data\Vanrise.GenericData.Transformation.Data.csproj">
+      <Project>{48792be4-be79-40f3-9b6a-6a60504281a6}</Project>
+      <Name>Vanrise.GenericData.Transformation.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Transformation.Entities\Vanrise.GenericData.Transformation.Entities.csproj">
+      <Project>{e8b1931e-f1f5-4937-9cb0-a7d0cf5edcb1}</Project>
+      <Name>Vanrise.GenericData.Transformation.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

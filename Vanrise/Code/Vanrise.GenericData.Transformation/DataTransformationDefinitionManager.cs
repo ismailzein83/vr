@@ -12,6 +12,7 @@ namespace Vanrise.GenericData.Transformation
 {
     public class DataTransformationDefinitionManager
     {
+    
         #region Public Methods
         public IDataRetrievalResult<DataTransformationDefinitionDetail> GetFilteredDataTransformationDefinitions(DataRetrievalInput<DataTransformationDefinitionQuery> input)
         {
