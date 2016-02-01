@@ -187,6 +187,8 @@
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordTypeEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordTypeManagement.html" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordTypeManagementController.js" />
+    <Content Include="VR_GenericData\Views\GenericRuleDefinition\GenericRuleDefinitionEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericRuleDefinition\GenericRuleDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericRuleDefinition\GenericRuleDefinitionManagement.html" />
     <Content Include="VR_GenericData\Views\GenericRuleDefinition\GenericRuleDefinitionManagementController.js" />
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleEditor.html" />
