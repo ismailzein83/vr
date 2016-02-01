@@ -70,21 +70,23 @@
 
         function loadFilterBySection() {
             if (dataRecordTypeEntity != undefined) {
-                $scope.scopeModal.name = dataRecordTypeEntity.Name;
+                $scope.scopeModal.name = dataRecordTypeEntity.key;
             }
         }
+
         function setTitle() {
             if (isEditMode && dataRecordTypeEntity != undefined)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(dataRecordTypeEntity.Name, 'Data Record Type');
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Data Record Type');
         }
+
         function loadDataRecordTypeSelector() {
             var loadDataRecordTypePromiseDeferred = UtilsService.createPromiseDeferred();
 
             directiveReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = (dataRecordTypeEntity != undefined) ? { Types: dataRecordTypeEntity.Types } : undefined
+                    var directivePayload = (dataRecordTypeEntity != undefined) ? {selectedIds: dataRecordTypeEntity.value } : undefined
                     VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, directivePayload, loadDataRecordTypePromiseDeferred);
                 });
 
@@ -92,9 +94,9 @@
         }
 
         function validateName() {
-            if (isEditMode && $scope.scopeModal.name == dataRecordTypeEntity.Name)
+            if (isEditMode && $scope.scopeModal.name == dataRecordTypeEntity.key)
                 return null;
-            else if (UtilsService.getItemIndexByVal(existingTypes, $scope.scopeModal.name, 'Name') != -1)
+            else if (UtilsService.getItemIndexByVal(existingTypes, $scope.scopeModal.name, 'key') != -1)
                 return 'Same Name Exist.';
             return null;
         }

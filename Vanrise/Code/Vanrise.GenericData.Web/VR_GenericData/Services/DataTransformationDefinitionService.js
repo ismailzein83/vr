@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataTransformationDefinitionService.$inject = ['VRModalService'];
+    DataTransformationDefinitionService.$inject = ['VRModalService','VRNotificationService'];
 
-    function DataTransformationDefinitionService(VRModalService) {
+    function DataTransformationDefinitionService(VRModalService, VRNotificationService) {
         return ({
             addDataTransformationDefinition: addDataTransformationDefinition,
             editDataTransformationDefinition: editDataTransformationDefinition,

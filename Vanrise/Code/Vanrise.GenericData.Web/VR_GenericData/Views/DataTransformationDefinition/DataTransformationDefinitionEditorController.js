@@ -84,22 +84,23 @@
         }
 
         function buildDataTransformationDefinitionObjFromScope() {
-            var obj = dataRecordFieldAPI.getData();
+            var obj = dataRecordTypeAPI.getData();
             var dataTransformationDefinition = {
                 Name: $scope.scopeModal.name,
+                Title: $scope.scopeModal.title,
                 DataTransformationDefinitionId: dataTransformationDefinitionId,
-                Fields: obj != undefined ? obj.Fields : undefined
+                RecordTypes: obj != undefined ? obj.RecordTypes : undefined
             }
             return dataTransformationDefinition;
         }
 
         function loadDataRecordType() {
-
+            console.log(dataTransformationDefinitionEntity);
             var loadDataRecordTypePromiseDeferred = UtilsService.createPromiseDeferred();
 
             dataRecordTypeReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = (dataTransformationDefinitionEntity != undefined) ? { Types: dataTransformationDefinitionEntity.Types } : undefined
+                    var directivePayload = (dataTransformationDefinitionEntity != undefined) ? { RecordTypes: dataTransformationDefinitionEntity.RecordTypes } : undefined
 
                     VRUIUtilsService.callDirectiveLoad(dataRecordTypeAPI, directivePayload, loadDataRecordTypePromiseDeferred);
                 });
@@ -110,6 +111,7 @@
         function loadFilterBySection() {
             if (dataTransformationDefinitionEntity != undefined) {
                 $scope.scopeModal.name = dataTransformationDefinitionEntity.Name;
+                $scope.scopeModal.title = dataTransformationDefinitionEntity.Title;
             }
         }
 

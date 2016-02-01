@@ -44,7 +44,7 @@ namespace Vanrise.GenericData.Transformation.Data.SQL
             {
                 serializedObj = Vanrise.Common.Serializer.Serialize(dataTransformationDefinition);
             }
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataRecordType_Insert", out dataTransformationDefinitionID, dataTransformationDefinition.Name, dataTransformationDefinition.Title, serializedObj);
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataTransformationDefinition_Insert", out dataTransformationDefinitionID, dataTransformationDefinition.Name, dataTransformationDefinition.Title, serializedObj);
             dataTransformationDefinitionId = (recordesEffected > 0) ? (int)dataTransformationDefinitionID : -1;
 
             return (recordesEffected > 0);

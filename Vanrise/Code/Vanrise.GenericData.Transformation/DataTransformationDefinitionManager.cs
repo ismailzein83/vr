@@ -29,13 +29,11 @@ namespace Vanrise.GenericData.Transformation
             var dataDataTransformationDefinitions = GetCachedDataTransformationDefinitions();
             return dataDataTransformationDefinitions.GetRecord(dataTransformationDefinitionId);
         }
-        public string GetDataTransformationDefinitionName(int? dataTransformationDefinitionId)
+        public string GetDataTransformationDefinitionName(int dataTransformationDefinitionId)
         {
-            if (dataTransformationDefinitionId == null)
-                return null;
             var dataTransformationDefinitions = GetCachedDataTransformationDefinitions();
 
-            DataTransformationDefinition dataTransformationDefinition = dataTransformationDefinitions.GetRecord((int)dataTransformationDefinitionId);
+            DataTransformationDefinition dataTransformationDefinition = dataTransformationDefinitions.GetRecord(dataTransformationDefinitionId);
 
             if (dataTransformationDefinition != null)
                 return dataTransformationDefinition.Name;
