@@ -31,7 +31,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public List<string> GetLeafPrefixes()
         {
             var cachedPrefixes = GetCachedNumberPrefixes();
-            List<NumberPrefix> prefixes = cachedPrefixes.Prefixes;
+            List<NumberPrefix> prefixes = cachedPrefixes.Prefixes.ToList();
             foreach (var i in cachedPrefixes.Prefixes)
             {
                 foreach (var j in cachedPrefixes.Prefixes)
