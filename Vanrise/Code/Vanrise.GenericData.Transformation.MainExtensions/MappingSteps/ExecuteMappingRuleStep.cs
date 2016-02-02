@@ -13,11 +13,6 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
     {
         public string Target { get; set; }
 
-        public override void Execute(IMappingStepExecutionContext context)
-        {
-            
-        }
-
         public override void GenerateExecutionCode(IDataTransformationCodeContext context)
         {
             var genericRuleDefinitionManager = new GenericRuleDefinitionManager();

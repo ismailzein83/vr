@@ -100,6 +100,7 @@ namespace Vanrise.GenericData.Transformation
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
               () =>
               {
+                  var dataTransformationDefinition = GetDataTransformationDefinition(dataTransformationDefinitionId);
                   throw new NotImplementedException();
                   return new DataTransformationRuntimeType();
               });

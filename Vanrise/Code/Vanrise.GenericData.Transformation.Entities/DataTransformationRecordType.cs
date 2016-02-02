@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Transformation.Entities
 {
-    public abstract class MappingStep
+    public class DataTransformationRecordType
     {
-        public abstract void GenerateExecutionCode(IDataTransformationCodeContext context);
+        public string RecordName { get; set; }
+
+        public int DataRecordTypeId { get; set; }
     }
 }

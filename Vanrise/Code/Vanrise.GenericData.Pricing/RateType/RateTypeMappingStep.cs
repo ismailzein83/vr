@@ -18,22 +18,6 @@ namespace Vanrise.GenericData.Pricing
 
         public string RateTypeId { get; set; }
 
-        public override void Execute(IMappingStepExecutionContext context)
-        {
-            //var ruleTarget = CreateGenericRuleTarget(context);
-            //var sourceRecord = context.GetDataRecord(this.SourceRecordName);
-            //var ruleContext = new RateTypeRuleContext
-            //{
-            //    NormalRate = sourceRecord.GetFieldValue<Decimal>(this.NormalRateFieldName),
-            //    RatesByRateType = sourceRecord.GetFieldValue<Dictionary<int, Decimal>>(this.RatesByRateTypeFieldName)
-            //};
-            //var ruleManager = new RateTypeRuleManager();
-            //ruleManager.ApplyRateTypeRule(ruleContext, this.RuleDefinitionId, ruleTarget);
-            //var targetRecord = context.GetDataRecord(this.TargetRecordName);
-            //targetRecord[this.EffectiveRateFieldName] = ruleContext.EffectiveRate;
-            //targetRecord[this.RateTypeFieldName] = ruleContext.RateTypeId;
-        }
-
         public override void GenerateExecutionCode(IDataTransformationCodeContext context)
         {
             string ruleTargetVariableName;
