@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordFieldTypeSelectiveDirective.$inject = ['VR_GenericData_DataRecordFieldTypeConfigAPIService'];
+    DataRecordFieldTypeSelectiveDirective.$inject = ['VR_GenericData_DataRecordFieldTypeConfigAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function DataRecordFieldTypeSelectiveDirective(VR_GenericData_DataRecordFieldTypeConfigAPIService) {
+    function DataRecordFieldTypeSelectiveDirective(VR_GenericData_DataRecordFieldTypeConfigAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope:
@@ -21,7 +21,7 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/RecordField/Templates/DataRecordFieldManagement.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/RecordField/Templates/DataRecordFieldTypeSelectiveTemplate.html"
         };
 
         function DataRecordFieldTypeSelective($scope, ctrl, $attrs) {
@@ -31,13 +31,13 @@
 
             var directiveAPI;
             var directiveReadyDeferred;
-            var directivePayload;
 
             function initializeController() {
-                ctrl.dataRecordFieldTypeTemplates = [];
-                ctrl.selectedDataRecordFieldTypeTemplate;
 
-                ctrl.onSelectorReady = function (api) {
+                $scope.fieldTypeConfigs = [];
+                $scope.selectedFieldTypeConfig;
+
+                $scope.onSelectorReady = function (api) {
                     selectorAPI = api;
 
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -45,12 +45,12 @@
                     }
                 };
 
-                ctrl.onDirectiveReady = function (api) {
+                $scope.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     var setLoader = function (value) {
-                        ctrl.isLoadingDirective = value
+                        $scope.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, $scope.selectedFieldTypeConfig.DataRecordFieldTypeConfigId, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -59,21 +59,20 @@
                 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
-                    var selectedId;
+                    var configId;
 
                     if (payload != undefined) {
-                        selectedId = payload.selectedId;
-                        directivePayload = payload.dataRecordFieldType;
+                        configId = payload.configId;
                     }
 
                     return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
                         if (response) {
                             for (var i = 0; i < response.length; i++) {
-                                ctrl.dataRecordFieldTypeTemplates.push(item);
+                                $scope.fieldTypeConfigs.push(response[i]);
                             }
 
-                            if (selectedId != undefined) {
-                                ctrl.selectedDataRecordFieldTypeTemplate = UtilsService.getItemByValue(ctrl.dataRecordFieldTypeTemplates, selectedId, 'TemplateConfigID');
+                            if (configId != undefined) {
+                                $scope.selectedFieldTypeConfig = UtilsService.getItemByValue($scope.fieldTypeConfigs, configId, 'DataRecordFieldTypeConfigId');
                             }
                         }
                     });
@@ -82,13 +81,15 @@
                 api.getData = function () {
                     var data = null;
 
-                    if (ctrl.selectedDataRecordFieldTypeTemplate != undefined) {
+                    if ($scope.selectedFieldTypeConfig != undefined) {
                         data = directiveAPI.getData();
-                        data.ConfigId = ctrl.selectedDataRecordFieldTypeTemplate.TemplateConfigID;
+                        data.DataRecordFieldTypeConfigId = $scope.selectedFieldTypeConfig.DataRecordFieldTypeConfigId;
                     }
 
                     return data;
                 };
+
+                return api;
             }
         }
     }

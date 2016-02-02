@@ -11,6 +11,9 @@
         var criteriaFieldName;
         var criteriaFieldEntity;
 
+        var dataRecordFieldTypeSelectiveAPI;
+        var dataRecordFieldTypeSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -29,6 +32,11 @@
 
         function defineScope() {
             $scope.behaviorTypes = UtilsService.getArrayEnum(VR_GenericData_MappingRuleStructureBehaviorTypeEnum);
+
+            $scope.onDataRecordFieldTypeSelectiveReady = function (api) {
+                dataRecordFieldTypeSelectiveAPI = api;
+                dataRecordFieldTypeSelectiveReadyDeferred.resolve();
+            };
 
             $scope.save = function () {
                 if (isEditMode)
@@ -82,7 +90,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordFieldTypeSelective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -99,6 +107,21 @@
                 }
                 $scope.fieldName = criteriaFieldEntity.FieldName;
                 $scope.fieldTitle = criteriaFieldEntity.Title;
+            }
+            function loadDataRecordFieldTypeSelective() {
+                var dataRecordFieldTypeSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                dataRecordFieldTypeSelectiveReadyDeferred.promise.then(function () {
+                    var payload;
+
+                    if (criteriaFieldEntity != undefined && criteriaFieldEntity.CriteriaDefinition != null) {
+                        payload.configId = criteriaFieldEntity.FieldType;
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(dataRecordFieldTypeSelectiveAPI, payload, dataRecordFieldTypeSelectiveLoadDeferred);
+                });
+
+                return dataRecordFieldTypeSelectiveLoadDeferred.promise;
             }
         }
 
